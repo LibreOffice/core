@@ -892,7 +892,7 @@ OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) c
     // But at import time some text is not present there yet
     // we have to collect them 1 by 1
 
-    OUString sRet = "";
+    OUString sRet = u""_ustr;
 
     for (size_type nIdx = rPosStart; nIdx <= rPosEnd; ++nIdx)
     {
@@ -2341,9 +2341,9 @@ OUString SwRangeRedline::GetDescr(bool bSimplified)
     {
         if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default))
         {
-            sDescr = ( bSimplified ? "" : SwResId(STR_START_QUOTE) )
+            sDescr = ( bSimplified ? u""_ustr : SwResId(STR_START_QUOTE) )
                 + pTextAttr->GetFormatField().GetField()->GetFieldName()
-                + ( bSimplified ? "" : SwResId(STR_END_QUOTE) );
+                + ( bSimplified ? u""_ustr : SwResId(STR_END_QUOTE) );
         }
     }
 

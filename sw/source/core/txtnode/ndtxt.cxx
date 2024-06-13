@@ -4211,7 +4211,7 @@ void SwTextNode::SetAttrOutlineLevel(int nLevel)
 void SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
 {
     const SfxGrabBagItem & rGrabBagItem = GetAttr(RES_PARATR_GRABBAG);
-    auto it = rGrabBagItem.GetGrabBag().find("OutlineContentVisibleAttr");
+    auto it = rGrabBagItem.GetGrabBag().find(u"OutlineContentVisibleAttr"_ustr);
     if (it != rGrabBagItem.GetGrabBag().end())
         it->second >>= bOutlineContentVisibleAttr;
 }
@@ -4219,7 +4219,7 @@ void SwTextNode::GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr)
 void SwTextNode::SetAttrOutlineContentVisible(bool bVisible)
 {
     SfxGrabBagItem aGrabBagItem(RES_PARATR_GRABBAG);
-    aGrabBagItem.GetGrabBag()["OutlineContentVisibleAttr"] <<= bVisible;
+    aGrabBagItem.GetGrabBag()[u"OutlineContentVisibleAttr"_ustr] <<= bVisible;
     SetAttr(aGrabBagItem);
 }
 

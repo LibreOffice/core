@@ -589,7 +589,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
 
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                     uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
-                        "URL", aNewLinkURL) };
+                        u"URL"_ustr, aNewLinkURL) };
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;
@@ -674,7 +674,7 @@ void SwOLENode::CheckFileLink_Impl()
             {
                 uno::Reference<beans::XPropertySet> xSet(xObject->getComponent(), uno::UNO_QUERY);
                 if (xSet.is())
-                    xSet->getPropertyValue("FrameURL") >>= aLinkURL;
+                    xSet->getPropertyValue(u"FrameURL"_ustr) >>= aLinkURL;
                 bIFrame = true;
             }
         }
@@ -1278,7 +1278,7 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwOLELRUCache::SwOLELRUCache()
-    : utl::ConfigItem("Office.Common/Cache")
+    : utl::ConfigItem(u"Office.Common/Cache"_ustr)
     , m_nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );
@@ -1287,7 +1287,7 @@ SwOLELRUCache::SwOLELRUCache()
 
 uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
 {
-    Sequence< OUString > aNames { "Writer/OLE_Objects" };
+    Sequence< OUString > aNames { u"Writer/OLE_Objects"_ustr };
     return aNames;
 }
 

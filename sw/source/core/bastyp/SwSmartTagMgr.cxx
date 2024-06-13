@@ -33,7 +33,7 @@ SwSmartTagMgr& SwSmartTagMgr::Get()
     if (!spTheSwSmartTagMgr)
     {
         OUString sModuleName
-            = !comphelper::IsFuzzing() ? SwDocShell::Factory().GetModuleName() : "Writer";
+            = !comphelper::IsFuzzing() ? SwDocShell::Factory().GetModuleName() : u"Writer"_ustr;
         spTheSwSmartTagMgr = new SwSmartTagMgr(sModuleName);
         spTheSwSmartTagMgr->Init(u"Writer");
     }

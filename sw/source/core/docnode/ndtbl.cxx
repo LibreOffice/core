@@ -4641,7 +4641,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
             SwTable* pTable = SwTable::FindTable(pFrameFormat);
             if (pTable->GetTableStyleName() == pReleasedFormat->GetName())
             {
-                pTable->SetTableStyleName("");
+                pTable->SetTableStyleName(u""_ustr);
                 vAffectedTables.push_back(pTable);
             }
         }

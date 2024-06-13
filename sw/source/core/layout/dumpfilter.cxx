@@ -139,7 +139,7 @@ namespace sw
     // XServiceInfo
     OUString LayoutDumpFilter::getImplementationName(  )
     {
-        return "com.sun.star.comp.Writer.LayoutDump";
+        return u"com.sun.star.comp.Writer.LayoutDump"_ustr;
     }
 
     sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
@@ -149,7 +149,7 @@ namespace sw
 
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
     {
-        return { "com.sun.star.document.ExportFilter" };
+        return { u"com.sun.star.document.ExportFilter"_ustr };
     }
 
 } // Namespace sw

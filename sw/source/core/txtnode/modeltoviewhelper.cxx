@@ -289,7 +289,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                             {
                                 // add a ZWSP before the expanded field in replace mode
                                 aFieldResult.m_sExpand = ((eMode & ExpandMode::ReplaceMode)
-                                    ? OUString(CHAR_ZWSP) : OUString("")) +
+                                    ? OUString(CHAR_ZWSP) : u""_ustr) +
                                       static_txtattr_cast<SwTextField const*>(pAttr)->
                                       GetFormatField().GetField()->ExpandField(true, pLayout);
                                 aFieldResult.m_eType = FieldResult::FIELD;

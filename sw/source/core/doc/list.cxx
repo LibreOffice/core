@@ -42,7 +42,7 @@ SwList::SwList( OUString sListId,
             // crashtesting ooo84576-1.odt, which manages to trigger a broken document structure
             // in our code. This is just a workaround to prevent an infinite loop leading to OOM.
             SAL_WARN("sw.core", "corrupt document structure, bailing out of infinite loop");
-            throw css::uno::RuntimeException("corrupt document structure, bailing out of infinite loop");
+            throw css::uno::RuntimeException(u"corrupt document structure, bailing out of infinite loop"_ustr);
         }
         aVisited[static_cast<sal_Int32>(nIndex)] = true;
         SwPaM aPam( *pNode, *pNode->EndOfSectionNode() );

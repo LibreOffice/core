@@ -46,7 +46,7 @@
 
 
 SwAttrPool::SwAttrPool(SwDoc* pD)
-: SfxItemPool("SWG")
+: SfxItemPool(u"SWG"_ustr)
 , m_pDoc(pD)
 {
     registerItemInfoPackage(getItemInfoPackageSwAttributes());

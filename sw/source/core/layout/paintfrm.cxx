@@ -7814,7 +7814,7 @@ const vcl::Font& SwPageFrame::GetEmptyPageFont()
         tmp.SetFontSize( Size( 0, 80 * 20 )); // == 80 pt
         tmp.SetWeight( WEIGHT_BOLD );
         tmp.SetStyleName(OUString());
-        tmp.SetFamilyName("Noto Sans");
+        tmp.SetFamilyName(u"Noto Sans"_ustr);
         tmp.SetFamily( FAMILY_SWISS );
         tmp.SetTransparent( true );
         tmp.SetColor( COL_GRAY );

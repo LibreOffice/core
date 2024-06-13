@@ -483,7 +483,7 @@ void SwUndoDelLayFormat::RedoForRollback()
 
 SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, const SwFrameFormat& rNewFrameFormat )
     : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), m_pFrameFormat( &rFlyFormat ),
-    m_DerivedFromFormatName( rFlyFormat.IsDefault() ? "" : rFlyFormat.DerivedFrom()->GetName() ),
+    m_DerivedFromFormatName( rFlyFormat.IsDefault() ? u""_ustr : rFlyFormat.DerivedFrom()->GetName() ),
     m_NewFormatName( rNewFrameFormat.GetName() ),
     m_oItemSet( std::in_place, *rFlyFormat.GetAttrSet().GetPool(),
                 rFlyFormat.GetAttrSet().GetRanges() ),

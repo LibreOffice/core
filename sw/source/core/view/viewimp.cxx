@@ -271,7 +271,7 @@ void SwViewShellImp::MakeDrawView()
                 pOutDevForDrawView) );
         }
 
-        GetDrawView()->SetActiveLayer("Heaven");
+        GetDrawView()->SetActiveLayer(u"Heaven"_ustr);
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         Init(pSwViewOption);
 

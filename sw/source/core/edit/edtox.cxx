@@ -306,7 +306,7 @@ void SwEditShell::ApplyAutoMark()
 
         i18nutil::SearchOptions2 aSearchOpt(
                             SearchFlags::LEV_RELAXED,
-                            "", "",
+                            u""_ustr, u""_ustr,
                             SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
                             TransliterationFlags::NONE,

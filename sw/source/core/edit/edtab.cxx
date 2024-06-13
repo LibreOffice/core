@@ -123,7 +123,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
     EndAllAction();
 
     OUString parameter = " Columns : " + OUString::number( nCols ) + " , Rows : " + OUString::number( nRows ) + " ";
-    collectUIInformation("CREATE_TABLE", parameter);
+    collectUIInformation(u"CREATE_TABLE"_ustr, parameter);
 
     return *pTable;
 }

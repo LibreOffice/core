@@ -1041,8 +1041,8 @@ short SwShellCursor::MaxReplaceArived()
             }
             vActionCounts.push_back(nActCnt);
         }
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDlg->getDialog(), "modules/swriter/ui/asksearchdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xDialog(xBuilder->weld_message_dialog("AskSearchDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDlg->getDialog(), u"modules/swriter/ui/asksearchdialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xDialog(xBuilder->weld_message_dialog(u"AskSearchDialog"_ustr));
         nRet = xDialog->run();
         auto pActionCount = vActionCounts.begin();
         for(SwViewShell& rShell : const_cast< SwCursorShell* >( GetShell() )->GetRingContainer())

@@ -222,7 +222,7 @@ static std::map<sal_uInt16,OUString> & GetItemWhichMap()
 
 static OUString lcl_dbg_out(const SfxPoolItem & rItem)
 {
-    OUString aStr("[ ");
+    OUString aStr(u"[ "_ustr);
 
     auto & rWhichMap = GetItemWhichMap();
     auto it = rWhichMap.find(rItem.Which());
@@ -243,7 +243,7 @@ const char * dbg_out(const SfxPoolItem & rItem)
 
 const char * dbg_out(const SfxPoolItem * pItem)
 {
-    return dbg_out(pItem ? lcl_dbg_out(*pItem) : OUString("(nil)"));
+    return dbg_out(pItem ? lcl_dbg_out(*pItem) : u"(nil)"_ustr);
 }
 
 static OUString lcl_dbg_out(const SfxItemSet & rSet)
@@ -737,30 +737,30 @@ static OUString lcl_TokenType2Str(FormTokenType nType)
     switch(nType)
     {
     case TOKEN_ENTRY_NO:
-        return "NO";
+        return u"NO"_ustr;
     case TOKEN_ENTRY_TEXT:
-        return "ENTRY_TEXT";
+        return u"ENTRY_TEXT"_ustr;
     case TOKEN_ENTRY:
-        return "ENTRY";
+        return u"ENTRY"_ustr;
     case TOKEN_TAB_STOP:
-        return "TAB_STOP";
+        return u"TAB_STOP"_ustr;
     case TOKEN_TEXT:
-        return "TOKEN_TEXT";
+        return u"TOKEN_TEXT"_ustr;
     case TOKEN_PAGE_NUMS:
-        return "NUMS";
+        return u"NUMS"_ustr;
     case TOKEN_CHAPTER_INFO:
-        return "CHAPTER_INFO";
+        return u"CHAPTER_INFO"_ustr;
     case TOKEN_LINK_START:
-        return "LINK_START";
+        return u"LINK_START"_ustr;
     case TOKEN_LINK_END:
-        return "LINK_END";
+        return u"LINK_END"_ustr;
     case TOKEN_AUTHORITY:
-        return "AUTHORITY";
+        return u"AUTHORITY"_ustr;
     case TOKEN_END:
-        return "END";
+        return u"END"_ustr;
     default:
         OSL_FAIL("should not be reached");
-        return "??";
+        return u"??"_ustr;
     }
 }
 

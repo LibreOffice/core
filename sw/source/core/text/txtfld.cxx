@@ -308,7 +308,7 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     }
     if( !pRet )
     {
-        auto pFieldPortion = new SwFieldPortion( "" );
+        auto pFieldPortion = new SwFieldPortion( u""_ustr );
         if (pHint->Which() == RES_TXTATR_CONTENTCONTROL)
         {
             pFieldPortion->SetContentControl(true);
@@ -383,7 +383,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             {
                 SfxGrabBagItem aGrabBag = pCleanedSet->Get(RES_CHRATR_GRABBAG, /*bSrchInParent=*/false);
                 std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-                auto aIterator = rMap.find("CharShadingMarker");
+                auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
                 if (aIterator != rMap.end())
                     aIterator->second >>= bShadingWasImported;
             }

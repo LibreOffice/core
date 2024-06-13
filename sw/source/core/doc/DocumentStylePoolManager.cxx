@@ -1988,7 +1988,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
-                aFormat.SetListFormat("", ".", n);
+                aFormat.SetListFormat(u""_ustr, u"."_ustr, n);
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFormat.SetAbsLSpace( *pArr + 357 ); // 357 is indent of 0.63 cm
@@ -2030,7 +2030,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             sal_uInt16 nSpace = 357; // indent of 0.63 cm
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
-                aFormat.SetListFormat("", ".", n);
+                aFormat.SetListFormat(u""_ustr, u"."_ustr, n);
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     nSpace += pArr[ n ];
@@ -2073,7 +2073,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
-                aFormat.SetListFormat("", ".", n);
+                aFormat.SetListFormat(u""_ustr, u"."_ustr, n);
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFormat.SetAbsLSpace( (n+1) * nOffs + 357 ); // 357 is indent of 0.63 cm
@@ -2119,7 +2119,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
-                aFormat.SetListFormat("", ".", n);
+                aFormat.SetListFormat(u""_ustr, u"."_ustr, n);
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFormat.SetAbsLSpace( *pArr );
@@ -2152,7 +2152,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetStart( 1 );
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetNumAdjust( SvxAdjust::Right );
-            aFormat.SetListFormat("", ".", 0);
+            aFormat.SetListFormat(u""_ustr, u"."_ustr, 0);
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2176,7 +2176,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             aFormat.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             aFormat.SetIncludeUpperLevels( 1 );
-            aFormat.SetListFormat("", ".", 1);
+            aFormat.SetListFormat(u""_ustr, u"."_ustr, 1);
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2194,7 +2194,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             aFormat.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
             aFormat.SetIncludeUpperLevels( 1 );
-            aFormat.SetListFormat("", u")"_ustr, 2);
+            aFormat.SetListFormat(u""_ustr, u")"_ustr, 2);
             aFormat.SetNumAdjust( SvxAdjust::Left );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2230,7 +2230,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             for (sal_uInt16 n = 3; n < MAXLEVEL; ++n)
             {
                 aFormat.SetStart( n+1 );
-                aFormat.SetListFormat("", "", n);
+                aFormat.SetListFormat(u""_ustr, u""_ustr, n);
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {

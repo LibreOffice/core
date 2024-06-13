@@ -288,7 +288,7 @@ SwXMLTextBlockParContext::~SwXMLTextBlockParContext()
 SwXMLBlockListImport::SwXMLBlockListImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks &rBlocks )
-:   SvXMLImport( rContext, "", SvXMLImportFlags::NONE ),
+:   SvXMLImport( rContext, u""_ustr, SvXMLImportFlags::NONE ),
     m_rBlockList (rBlocks)
 {
 }
@@ -310,7 +310,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString & rNewText,
     bool bNewTextOnly )
-:   SvXMLImport(rContext, "", SvXMLImportFlags::ALL ),
+:   SvXMLImport(rContext, u""_ustr, SvXMLImportFlags::ALL ),
     m_bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )
 {

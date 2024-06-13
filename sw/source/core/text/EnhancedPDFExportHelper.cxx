@@ -854,7 +854,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             SwFlyFrameFormat const& rFly(*static_cast<SwFlyFrame const*>(pFrame)->GetFormat());
             OUString const sep(
                 (rFly.GetObjTitle().isEmpty() || rFly.GetObjDescription().isEmpty())
-                ? OUString() : OUString(" - "));
+                ? OUString() : u" - "_ustr);
             OUString const altText(rFly.GetObjTitle() + sep + rFly.GetObjDescription());
             if (!altText.isEmpty())
             {
@@ -2402,9 +2402,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
                         OUString title;
-                        xShapePropSet->getPropertyValue("Title") >>= title;
+                        xShapePropSet->getPropertyValue(u"Title"_ustr) >>= title;
                         OUString description;
-                        xShapePropSet->getPropertyValue("Description") >>= description;
+                        xShapePropSet->getPropertyValue(u"Description"_ustr) >>= description;
                         OUString const altText(title.isEmpty()
                             ? description
                             : description.isEmpty()
@@ -2412,10 +2412,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                                 : OUString::Concat(title) + OUString::Concat("\n") + OUString::Concat(description));
 
                         OUString aMediaURL;
-                        xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+                        xShapePropSet->getPropertyValue(u"MediaURL"_ustr) >>= aMediaURL;
                         if (!aMediaURL.isEmpty())
                         {
-                            OUString const mimeType(xShapePropSet->getPropertyValue("MediaMimeType").get<OUString>());
+                            OUString const mimeType(xShapePropSet->getPropertyValue(u"MediaMimeType"_ustr).get<OUString>());
                             const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
                             tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
@@ -2425,7 +2425,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                                 {
                                     // Embedded media.
                                     OUString aTempFileURL;
-                                    xShapePropSet->getPropertyValue("PrivateTempFileURL") >>= aTempFileURL;
+                                    xShapePropSet->getPropertyValue(u"PrivateTempFileURL"_ustr) >>= aTempFileURL;
                                     pPDFExtOutDevData->SetScreenStream(nScreenId, aTempFileURL);
                                 }
                                 else
@@ -2509,7 +2509,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             // #i44368# Links in Header/Footer
                             if ( bHeaderFooter )
                             {
-                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, "", true, content);
+                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, u""_ustr, true, content);
                             }
                         }
                     }

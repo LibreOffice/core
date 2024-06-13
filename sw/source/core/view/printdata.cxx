@@ -178,74 +178,74 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // load the writer PrinterOptions into the custom tab
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
-    m_aUIProperties[nIdx++].Value <<= OUString("modules/swriter/ui/printeroptions.ui");
+    m_aUIProperties[nIdx++].Value <<= u"modules/swriter/ui/printeroptions.ui"_ustr;
 
     // create "writer" section (new tab page in dialog)
     SvtModuleOptions aModOpt;
     OUString aAppGroupname( SwResId( STR_PRINTOPTUI_PRODUCTNAME) );
     aAppGroupname = aAppGroupname.replaceFirst( "%s", aModOpt.GetModuleName( SvtModuleOptions::EModule::WRITER ) );
-    m_aUIProperties[ nIdx++ ].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
+    m_aUIProperties[ nIdx++ ].Value = setGroupControlOpt(u"tabcontrol-page2"_ustr, aAppGroupname, u".HelpID:vcl:PrintDialog:TabPage:AppPage"_ustr);
 
     // create sub section for Contents
-    m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("contents", SwResId( STR_PRINTOPTUI_CONTENTS), OUString());
+    m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt(u"contents"_ustr, SwResId( STR_PRINTOPTUI_CONTENTS), OUString());
 
     // create a bool option for background
     bool bDefaultVal = rDefaultPrintData.IsPrintPageBackground();
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("pagebackground", SwResId( STR_PRINTOPTUI_PAGE_BACKGROUND),
-                                                        ".HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox",
-                                                        "PrintPageBackground",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"pagebackground"_ustr, SwResId( STR_PRINTOPTUI_PAGE_BACKGROUND),
+                                                        u".HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox"_ustr,
+                                                        u"PrintPageBackground"_ustr,
                                                         bDefaultVal);
 
     // create a bool option for pictures/graphics AND OLE and drawing objects as well
     bDefaultVal = rDefaultPrintData.IsPrintGraphic();
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("pictures", SwResId( STR_PRINTOPTUI_PICTURES),
-                                                        ".HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox",
-                                                        "PrintPicturesAndObjects",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"pictures"_ustr, SwResId( STR_PRINTOPTUI_PICTURES),
+                                                        u".HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox"_ustr,
+                                                        u"PrintPicturesAndObjects"_ustr,
                                                          bDefaultVal);
     if (!bWeb)
     {
         // create a bool option for hidden text
         bDefaultVal = rDefaultPrintData.IsPrintHiddenText();
-        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("hiddentext", SwResId( STR_PRINTOPTUI_HIDDEN),
-                                                            ".HelpID:vcl:PrintDialog:PrintHiddenText:CheckBox",
-                                                            "PrintHiddenText",
+        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"hiddentext"_ustr, SwResId( STR_PRINTOPTUI_HIDDEN),
+                                                            u".HelpID:vcl:PrintDialog:PrintHiddenText:CheckBox"_ustr,
+                                                            u"PrintHiddenText"_ustr,
                                                             bDefaultVal);
 
         // create a bool option for place holder
         bDefaultVal = rDefaultPrintData.IsPrintTextPlaceholder();
-        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("placeholders", SwResId( STR_PRINTOPTUI_TEXT_PLACEHOLDERS),
-                                                            ".HelpID:vcl:PrintDialog:PrintTextPlaceholder:CheckBox",
-                                                            "PrintTextPlaceholder",
+        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"placeholders"_ustr, SwResId( STR_PRINTOPTUI_TEXT_PLACEHOLDERS),
+                                                            u".HelpID:vcl:PrintDialog:PrintTextPlaceholder:CheckBox"_ustr,
+                                                            u"PrintTextPlaceholder"_ustr,
                                                             bDefaultVal);
     }
 
     // create a bool option for controls
     bDefaultVal = rDefaultPrintData.IsPrintControl();
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("formcontrols", SwResId( STR_PRINTOPTUI_FORM_CONTROLS),
-                                                        ".HelpID:vcl:PrintDialog:PrintControls:CheckBox",
-                                                        "PrintControls",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"formcontrols"_ustr, SwResId( STR_PRINTOPTUI_FORM_CONTROLS),
+                                                        u".HelpID:vcl:PrintDialog:PrintControls:CheckBox"_ustr,
+                                                        u"PrintControls"_ustr,
                                                         bDefaultVal);
 
     // create sub section for Color
-    m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("color", SwResId( STR_PRINTOPTUI_COLOR), OUString());
+    m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt(u"color"_ustr, SwResId( STR_PRINTOPTUI_COLOR), OUString());
 
     // create a bool option for printing text with black font color
     bDefaultVal = rDefaultPrintData.IsPrintBlackFont();
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("textinblack", SwResId( STR_PRINTOPTUI_PRINT_BLACK),
-                                                        ".HelpID:vcl:PrintDialog:PrintBlackFonts:CheckBox",
-                                                        "PrintBlackFonts",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"textinblack"_ustr, SwResId( STR_PRINTOPTUI_PRINT_BLACK),
+                                                        u".HelpID:vcl:PrintDialog:PrintBlackFonts:CheckBox"_ustr,
+                                                        u"PrintBlackFonts"_ustr,
                                                         bDefaultVal);
 
     if (!bWeb)
     {
         // create subgroup for misc options
-        m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt("pages", SwResId( STR_PRINTOPTUI_PAGES_TEXT), OUString());
+        m_aUIProperties[ nIdx++ ].Value = setSubgroupControlOpt(u"pages"_ustr, SwResId( STR_PRINTOPTUI_PAGES_TEXT), OUString());
 
         // create a bool option for printing automatically inserted blank pages
         bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
-        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("autoblankpages", SwResId( STR_PRINTOPTUI_PRINT_BLANK),
-                                                            ".HelpID:vcl:PrintDialog:PrintEmptyPages:CheckBox",
-                                                            "PrintEmptyPages",
+        m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"autoblankpages"_ustr, SwResId( STR_PRINTOPTUI_PRINT_BLANK),
+                                                            u".HelpID:vcl:PrintDialog:PrintEmptyPages:CheckBox"_ustr,
+                                                            u"PrintEmptyPages"_ustr,
                                                             bDefaultVal);
     }
 
@@ -253,9 +253,9 @@ SwPrintUIOptions::SwPrintUIOptions(
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
     vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
     aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup";
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("printpaperfromsetup", SwResId( STR_PRINTOPTUI_ONLY_PAPER),
-                                                        ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox",
-                                                        "PrintPaperFromSetup",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"printpaperfromsetup"_ustr, SwResId( STR_PRINTOPTUI_ONLY_PAPER),
+                                                        u".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox"_ustr,
+                                                        u"PrintPaperFromSetup"_ustr,
                                                         bDefaultVal,
                                                         aPaperTrayOpt);
 
@@ -263,7 +263,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt( "printrange",
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt( u"printrange"_ustr,
                                                           SwResId( STR_PRINTOPTUI_PAGES_TEXT ),
                                                           OUString(),
                                                           aPrintRangeOpt );
@@ -274,10 +274,10 @@ SwPrintUIOptions::SwPrintUIOptions(
                                         SwResId( STR_PRINTOPTUI_PRINTPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTSELECTION ) };
     uno::Sequence< sal_Bool > aChoicesDisabled{ false, false, !bHasSelection };
-    uno::Sequence< OUString > aHelpIds{ ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
-                                        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
-                                        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" };
-    uno::Sequence< OUString > aWidgetIds{ "rbAllPages", "rbRangePages", "rbRangeSelection" };
+    uno::Sequence< OUString > aHelpIds{ u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
+                                        u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
+                                        u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr };
+    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices, 0 /* always default to 'All pages' */,
@@ -285,17 +285,17 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // show an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
-    m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
-                                                      ".HelpID:vcl:PrintDialog:PageRange:Edit",
-                                                      "PageRange",
+    m_aUIProperties[nIdx++].Value = setEditControlOpt(u"pagerange"_ustr, OUString(),
+                                                      u".HelpID:vcl:PrintDialog:PageRange:Edit"_ustr,
+                                                      u"PageRange"_ustr,
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
 
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
-    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                            OUString(),
                                                            uno::Sequence<OUString>(),
-                                                           "EvenOdd",
+                                                           u"EvenOdd"_ustr,
                                                            uno::Sequence<OUString>(),
                                                            0,
                                                            uno::Sequence< sal_Bool >(),
@@ -308,14 +308,14 @@ SwPrintUIOptions::SwPrintUIOptions(
                  SwResId( STR_PRINTOPTUI_PLACE_END),
                  SwResId( STR_PRINTOPTUI_PLACE_PAGE),
                  SwResId( STR_PRINTOPTUI_PLACE_MARGINS) };
-    aHelpIds = { ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText",
-                 ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox" };
-    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( "PrintProspect", 0, false );
+    aHelpIds = { u".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText"_ustr,
+                 u".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox"_ustr };
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( u"PrintProspect"_ustr, 0, false );
     aAnnotOpt.mbEnabled = bHasPostIts;
-    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("writercomments",
+    m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"writercomments"_ustr,
                                                            SwResId( STR_PRINTOPTUI_COMMENTS),
                                                            aHelpIds,
-                                                           "PrintAnnotationMode",
+                                                           u"PrintAnnotationMode"_ustr,
                                                            aChoices,
                                                            bHasPostIts ? static_cast<sal_uInt16>(nPrintPostIts) : 0,
                                                            uno::Sequence< sal_Bool >(),
@@ -328,8 +328,8 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a bool option for brochure
     bDefaultVal = rDefaultPrintData.IsPrintProspect();
     static constexpr OUString aBrochurePropertyName( u"PrintProspect"_ustr );
-    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("brochure", SwResId( STR_PRINTOPTUI_BROCHURE),
-                                                        ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox",
+    m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt(u"brochure"_ustr, SwResId( STR_PRINTOPTUI_BROCHURE),
+                                                        u".HelpID:vcl:PrintDialog:PrintProspect:CheckBox"_ustr,
                                                         aBrochurePropertyName,
                                                         bDefaultVal,
                                                         aPageSetOpt);
@@ -340,16 +340,16 @@ SwPrintUIOptions::SwPrintUIOptions(
         uno::Sequence< OUString > aBRTLChoices{ SwResId( STR_PRINTOPTUI_LEFT_SCRIPT),
                                                 SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT) };
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
-        uno::Sequence<OUString> aBRTLHelpIds { ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" };
+        uno::Sequence<OUString> aBRTLHelpIds { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
         aBrochureRTLOpt.maGroupHint = "LayoutPage";
         // RTL brochure choices
         //      0 : left-to-right
         //      1 : right-to-left
         const sal_Int16 nBRTLChoice = rDefaultPrintData.IsPrintProspectRTL() ? 1 : 0;
-        m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("scriptdirection",
+        m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"scriptdirection"_ustr,
                                                                OUString(),
                                                                aBRTLHelpIds,
-                                                               "PrintProspectRTL",
+                                                               u"PrintProspectRTL"_ustr,
                                                                aBRTLChoices,
                                                                nBRTLChoice,
                                                                uno::Sequence< sal_Bool >(),
@@ -413,7 +413,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     bool bChanged = processProperties( i_rNewProp );
 
     uno::Reference< awt::XDevice >  xRenderDevice;
-    uno::Any aVal( getValue( "RenderDevice" ) );
+    uno::Any aVal( getValue( u"RenderDevice"_ustr ) );
     aVal >>= xRenderDevice;
 
     VclPtr< OutputDevice > pOut;

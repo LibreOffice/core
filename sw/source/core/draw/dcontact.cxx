@@ -1462,7 +1462,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                         {
                             // --> #i102752#
                             // assure that a ShapePropertyChangeNotifier exists
-                            maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange("AnchorType");
+                            maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange(u"AnchorType"_ustr);
                         }
                         else
                             SAL_WARN("sw.core", "SwDrawContact::Modify: no draw object here?");

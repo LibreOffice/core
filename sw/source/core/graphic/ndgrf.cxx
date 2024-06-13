@@ -585,7 +585,7 @@ void SwGrfNode::ReleaseLink()
 
     getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
     mxLink.clear();
-    aLocalGraphic.setOriginURL("");
+    aLocalGraphic.setOriginURL(u""_ustr);
 
     // #i15508# added extra processing after getting rid of the link. Use whatever is
     // known from the formerly linked graphic to get to a state as close to a directly

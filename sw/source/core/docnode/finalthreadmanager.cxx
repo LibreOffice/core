@@ -271,7 +271,7 @@ FinalThreadManager::~FinalThreadManager()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL FinalThreadManager::getImplementationName()
 {
-    return "com.sun.star.util.comp.FinalThreadManager";
+    return u"com.sun.star.util.comp.FinalThreadManager"_ustr;
 }
 
 sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceNa
 
 css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.JobManager" };
+    return { u"com.sun.star.util.JobManager"_ustr };
 }
 
 // css::util::XJobManager:

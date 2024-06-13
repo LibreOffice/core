@@ -314,7 +314,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     {
         m_rInf.ApplyAutoColor();
         GetOut().DrawStretchText( aPos, nDiff,
-            "  ", 0, 2 );
+            u"  "_ustr, 0, 2 );
     }
     rPos.setX( m_rInf.GetPos().X() + m_rInf.GetWidth() );
 }

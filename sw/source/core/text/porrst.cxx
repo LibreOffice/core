@@ -298,7 +298,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.CalcRect( *this, &aClipRect );
         SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
         aClip.ChgClip( aClipRect );
-        rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
+        rInf.DrawText(u"  "_ustr, *this, TextFrameIndex(0), TextFrameIndex(2), true );
     }
 }
 
@@ -716,7 +716,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     // init font: we want OpenSymbol to ensure it doesn't look too crazy;
     // thin and a bit higher than the surrounding text
     auto const nOrigAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
-    rFont.SetName("OpenSymbol", rFont.GetActual());
+    rFont.SetName(u"OpenSymbol"_ustr, rFont.GetActual());
     Size aSize(rFont.GetSize(rFont.GetActual()));
     // use also the external leading (line gap) of the portion, but don't use
     // 100% of it because i can't figure out how to baseline align that

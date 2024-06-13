@@ -2383,7 +2383,7 @@ bool SwTable::CanConvertSubtables() const
     // (same for table box formulas and charts)
     SwDoc *const pDoc(GetFrameFormat()->GetDoc());
     SwFieldType const*const pTableFields(
-        pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, "", false));
+        pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, u""_ustr, false));
     std::vector<SwFormatField*> vFields;
     pTableFields->GatherFields(vFields);
     if (!vFields.empty())

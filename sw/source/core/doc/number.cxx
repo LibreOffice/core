@@ -81,7 +81,7 @@ const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
 
 OUString SwNumRule::GetOutlineRuleName()
 {
-    return "Outline";
+    return u"Outline"_ustr;
 }
 
 const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
@@ -1292,9 +1292,9 @@ namespace numfunc
     }
 
     SwDefBulletConfig::SwDefBulletConfig()
-        : ConfigItem( "Office.Writer/Numbering/DefaultBulletList" ),
+        : ConfigItem( u"Office.Writer/Numbering/DefaultBulletList"_ustr ),
           // default bullet font is now OpenSymbol
-          msFontname( OUString("OpenSymbol") ),
+          msFontname( u"OpenSymbol"_ustr ),
           mbUserDefinedFontname( false ),
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE )
@@ -1490,7 +1490,7 @@ namespace numfunc
     }
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
-        : ConfigItem( "Office.Writer/Numbering/UserInterfaceBehavior" ),
+        : ConfigItem( u"Office.Writer/Numbering/UserInterfaceBehavior"_ustr ),
           mbChangeIndentOnTabAtFirstPosOfFirstListItem( true )
     {
         SetToDefault();
@@ -1507,7 +1507,7 @@ namespace numfunc
 
     css::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
     {
-        css::uno::Sequence<OUString> aPropNames { "ChangeIndentOnTabAtFirstPosOfFirstListItem" };
+        css::uno::Sequence<OUString> aPropNames { u"ChangeIndentOnTabAtFirstPosOfFirstListItem"_ustr };
 
         return aPropNames;
     }

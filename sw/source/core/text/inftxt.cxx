@@ -1307,7 +1307,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
                 SwXTextRange::CreateXTextRange(pFrame->GetDoc(), aPosition, &aMarkPosition));
 
     OUString sCurrentCharStyle;
-    xRange->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
+    xRange->getPropertyValue(u"CharStyleName"_ustr) >>= sCurrentCharStyle;
 
     std::optional<OUString> sCSNumberOrDF; // CS number or "df" or not used
     std::optional<Color> aFillColor;
@@ -1679,7 +1679,7 @@ bool SwTextFormatInfo::IsHyphenate() const
         if (pShell)
         {
             pShell->AppendInfoBarWhenReady(
-                "hyphenationmissing", SwResId(STR_HYPH_MISSING),
+                u"hyphenationmissing"_ustr, SwResId(STR_HYPH_MISSING),
                 SwResId(STR_HYPH_MISSING_DETAIL)
                     .replaceFirst("%1", LanguageTag::convertToBcp47( g_pBreakIt->GetLocale(eTmp))),
                 InfobarType::WARNING);

@@ -38,9 +38,9 @@ DateFormFieldButton::~DateFormFieldButton() { disposeOnce(); }
 void DateFormFieldButton::LaunchPopup()
 {
     m_xFieldPopupBuilder
-        = Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/calendar.ui");
-    m_xFieldPopup = m_xFieldPopupBuilder->weld_popover("Calendar");
-    m_xCalendar = m_xFieldPopupBuilder->weld_calendar("date");
+        = Application::CreateBuilder(GetFrameWeld(), u"modules/swriter/ui/calendar.ui"_ustr);
+    m_xFieldPopup = m_xFieldPopupBuilder->weld_popover(u"Calendar"_ustr);
+    m_xCalendar = m_xFieldPopupBuilder->weld_calendar(u"date"_ustr);
     if (m_pDateFieldmark)
     {
         std::pair<bool, double> aResult = m_pDateFieldmark->GetCurrentDate();

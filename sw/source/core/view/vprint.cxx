@@ -638,7 +638,7 @@ SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
 {
     if ( pDV )
     {
-        bPrintControls = pDV->IsLayerPrintable( "Controls" );
+        bPrintControls = pDV->IsLayerPrintable( u"Controls"_ustr );
     }
 }
 
@@ -646,7 +646,7 @@ SwDrawViewSave::~SwDrawViewSave()
 {
     if ( pDV )
     {
-        pDV->SetLayerPrintable( "Controls", bPrintControls );
+        pDV->SetLayerPrintable( u"Controls"_ustr, bPrintControls );
     }
 }
 
@@ -667,11 +667,11 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExpor
     // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
     if ( !IsPreview() )
     {
-        pDrawView->SetLayerPrintable( "Controls", rOptions.m_bPrintControl );
+        pDrawView->SetLayerPrintable( u"Controls"_ustr, rOptions.m_bPrintControl );
     }
     else
     {
-        pDrawView->SetLayerVisible( "Controls", rOptions.m_bPrintControl );
+        pDrawView->SetLayerVisible( u"Controls"_ustr, rOptions.m_bPrintControl );
     }
 }
 

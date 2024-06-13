@@ -118,7 +118,7 @@ SwDrawModel::~SwDrawModel()
 rtl::Reference<SdrPage> SwDrawModel::AllocPage(bool bMasterPage)
 {
     rtl::Reference<SwDPage> pPage = new SwDPage(*this, bMasterPage);
-    pPage->SetName("Controls");
+    pPage->SetName(u"Controls"_ustr);
     return pPage;
 }
 

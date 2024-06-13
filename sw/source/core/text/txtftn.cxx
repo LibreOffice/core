@@ -793,7 +793,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     SwTextFootnote  *pFootnote = static_cast<SwTextFootnote*>(pHint);
 
     if( !m_pFrame->IsFootnoteAllowed() )
-        return new SwFootnotePortion("", pFootnote);
+        return new SwFootnotePortion(u""_ustr, pFootnote);
 
     const SwFormatFootnote& rFootnote = pFootnote->GetFootnote();
     SwDoc *const pDoc = &m_pFrame->GetDoc();
@@ -969,12 +969,12 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     const rtl::Reference<SwXTextRange> xAnchor = rFootnote.getAnchor(*pDoc);
     if (xAnchor.is())
     {
-        auto aAny = xAnchor->getPropertyValue("CharFontCharSet");
+        auto aAny = xAnchor->getPropertyValue(u"CharFontCharSet"_ustr);
         sal_Int16 eCharSet;
         if ((aAny >>= eCharSet) && eCharSet == awt::CharSet::SYMBOL)
         {
             OUString aFontName;
-            aAny = xAnchor->getPropertyValue("CharFontName");
+            aAny = xAnchor->getPropertyValue(u"CharFontName"_ustr);
             if (aAny  >>= aFontName)
             {
                 pNumFnt->SetName(aFontName, SwFontScript::Latin);

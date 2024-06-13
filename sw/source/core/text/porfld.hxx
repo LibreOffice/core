@@ -245,7 +245,7 @@ class SwFieldFormDatePortion : public SwFieldPortion
 {
 public:
     explicit SwFieldFormDatePortion(sw::mark::IFieldmark *pFieldMark, bool bStart)
-        : SwFieldPortion("")
+        : SwFieldPortion(u""_ustr)
         , m_pFieldMark(pFieldMark)
         , m_bStart(bStart)
     {

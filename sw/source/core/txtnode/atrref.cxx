@@ -182,7 +182,7 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString
    *this->SetLockExpandFlag(false);
    *this->SetDontExpand(false);
    */
-    if (rIDCO.InsertString(aMarkers, "XY"))
+    if (rIDCO.InsertString(aMarkers, u"XY"_ustr))
     {
         SwPaM aPasteEnd(SwPosition(rTextNode, *this->End()));
         aPasteEnd.Move(fnMoveBackward, GoInContent);

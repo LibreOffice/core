@@ -463,26 +463,26 @@ const std::vector<OUString>& SwStyleNameMapper::GetCellStyleUINameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     static const std::vector<OUString> s_aTextProgNameArray = {
-        "Standard", // RES_POOLCOLL_STANDARD
-        "Text body",
-        "First line indent",
-        "Hanging indent",
-        "Text body indent",
-        "Salutation",
-        "Signature",
-        "List Indent", // RES_POOLCOLL_CONFRONTATION
-        "Marginalia",
-        "Heading",
-        "Heading 1",
-        "Heading 2",
-        "Heading 3",
-        "Heading 4",
-        "Heading 5",
-        "Heading 6",
-        "Heading 7",
-        "Heading 8",
-        "Heading 9",
-        "Heading 10", // RES_POOLCOLL_TEXT_END
+        u"Standard"_ustr, // RES_POOLCOLL_STANDARD
+        u"Text body"_ustr,
+        u"First line indent"_ustr,
+        u"Hanging indent"_ustr,
+        u"Text body indent"_ustr,
+        u"Salutation"_ustr,
+        u"Signature"_ustr,
+        u"List Indent"_ustr, // RES_POOLCOLL_CONFRONTATION
+        u"Marginalia"_ustr,
+        u"Heading"_ustr,
+        u"Heading 1"_ustr,
+        u"Heading 2"_ustr,
+        u"Heading 3"_ustr,
+        u"Heading 4"_ustr,
+        u"Heading 5"_ustr,
+        u"Heading 6"_ustr,
+        u"Heading 7"_ustr,
+        u"Heading 8"_ustr,
+        u"Heading 9"_ustr,
+        u"Heading 10"_ustr, // RES_POOLCOLL_TEXT_END
     };
     return s_aTextProgNameArray;
 }
@@ -490,47 +490,47 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 {
     static const std::vector<OUString> s_aListsProgNameArray = {
-        "List", // STR_POCO_PRGM_NUMBER_BULLET_BASE
-        "Numbering 1 Start", // STR_POCO_PRGM_NUM_LEVEL1S
-        "Numbering 1",
-        "Numbering 1 End",
-        "Numbering 1 Cont.",
-        "Numbering 2 Start",
-        "Numbering 2",
-        "Numbering 2 End",
-        "Numbering 2 Cont.",
-        "Numbering 3 Start",
-        "Numbering 3",
-        "Numbering 3 End",
-        "Numbering 3 Cont.",
-        "Numbering 4 Start",
-        "Numbering 4",
-        "Numbering 4 End",
-        "Numbering 4 Cont.",
-        "Numbering 5 Start",
-        "Numbering 5",
-        "Numbering 5 End",
-        "Numbering 5 Cont.",
-        "List 1 Start",
-        "List 1",
-        "List 1 End",
-        "List 1 Cont.",
-        "List 2 Start",
-        "List 2",
-        "List 2 End",
-        "List 2 Cont.",
-        "List 3 Start",
-        "List 3",
-        "List 3 End",
-        "List 3 Cont.",
-        "List 4 Start",
-        "List 4",
-        "List 4 End",
-        "List 4 Cont.",
-        "List 5 Start",
-        "List 5",
-        "List 5 End",
-        "List 5 Cont.", // STR_POCO_PRGM_BULLET_NONUM5
+        u"List"_ustr, // STR_POCO_PRGM_NUMBER_BULLET_BASE
+        u"Numbering 1 Start"_ustr, // STR_POCO_PRGM_NUM_LEVEL1S
+        u"Numbering 1"_ustr,
+        u"Numbering 1 End"_ustr,
+        u"Numbering 1 Cont."_ustr,
+        u"Numbering 2 Start"_ustr,
+        u"Numbering 2"_ustr,
+        u"Numbering 2 End"_ustr,
+        u"Numbering 2 Cont."_ustr,
+        u"Numbering 3 Start"_ustr,
+        u"Numbering 3"_ustr,
+        u"Numbering 3 End"_ustr,
+        u"Numbering 3 Cont."_ustr,
+        u"Numbering 4 Start"_ustr,
+        u"Numbering 4"_ustr,
+        u"Numbering 4 End"_ustr,
+        u"Numbering 4 Cont."_ustr,
+        u"Numbering 5 Start"_ustr,
+        u"Numbering 5"_ustr,
+        u"Numbering 5 End"_ustr,
+        u"Numbering 5 Cont."_ustr,
+        u"List 1 Start"_ustr,
+        u"List 1"_ustr,
+        u"List 1 End"_ustr,
+        u"List 1 Cont."_ustr,
+        u"List 2 Start"_ustr,
+        u"List 2"_ustr,
+        u"List 2 End"_ustr,
+        u"List 2 Cont."_ustr,
+        u"List 3 Start"_ustr,
+        u"List 3"_ustr,
+        u"List 3 End"_ustr,
+        u"List 3 Cont."_ustr,
+        u"List 4 Start"_ustr,
+        u"List 4"_ustr,
+        u"List 4 End"_ustr,
+        u"List 4 Cont."_ustr,
+        u"List 5 Start"_ustr,
+        u"List 5"_ustr,
+        u"List 5 End"_ustr,
+        u"List 5 Cont."_ustr, // STR_POCO_PRGM_BULLET_NONUM5
     };
     return s_aListsProgNameArray;
 }
@@ -538,27 +538,27 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
 {
     static const std::vector<OUString> s_aExtraProgNameArray = {
-        "Header and Footer", // RES_POOLCOLL_EXTRA_BEGIN
-        "Header",
-        "Header left",
-        "Header right",
-        "Footer",
-        "Footer left",
-        "Footer right",
-        "Table Contents",
-        "Table Heading",
-        "Caption",
-        "Illustration",
-        "Table",
-        "Text",
-        "Figure", // RES_POOLCOLL_LABEL_FIGURE
-        "Frame contents",
-        "Footnote",
-        "Addressee",
-        "Sender",
-        "Endnote",
-        "Drawing",
-        "Comment", // RES_POOLCOLL_COMMENT
+        u"Header and Footer"_ustr, // RES_POOLCOLL_EXTRA_BEGIN
+        u"Header"_ustr,
+        u"Header left"_ustr,
+        u"Header right"_ustr,
+        u"Footer"_ustr,
+        u"Footer left"_ustr,
+        u"Footer right"_ustr,
+        u"Table Contents"_ustr,
+        u"Table Heading"_ustr,
+        u"Caption"_ustr,
+        u"Illustration"_ustr,
+        u"Table"_ustr,
+        u"Text"_ustr,
+        u"Figure"_ustr, // RES_POOLCOLL_LABEL_FIGURE
+        u"Frame contents"_ustr,
+        u"Footnote"_ustr,
+        u"Addressee"_ustr,
+        u"Sender"_ustr,
+        u"Endnote"_ustr,
+        u"Drawing"_ustr,
+        u"Comment"_ustr, // RES_POOLCOLL_COMMENT
     };
     return s_aExtraProgNameArray;
 }
@@ -566,42 +566,42 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
 {
     static const std::vector<OUString> s_aRegisterProgNameArray = {
-        "Index", // STR_POCO_PRGM_REGISTER_BASE
-        "Index Heading", // STR_POCO_PRGM_TOX_IDXH
-        "Index 1",
-        "Index 2",
-        "Index 3",
-        "Index Separator",
-        "Contents Heading",
-        "Contents 1",
-        "Contents 2",
-        "Contents 3",
-        "Contents 4",
-        "Contents 5",
-        "User Index Heading",
-        "User Index 1",
-        "User Index 2",
-        "User Index 3",
-        "User Index 4",
-        "User Index 5",
-        "Contents 6",
-        "Contents 7",
-        "Contents 8",
-        "Contents 9",
-        "Contents 10",
-        "Figure Index Heading",
-        "Figure Index 1",
-        "Object index heading",
-        "Object index 1",
-        "Table index heading",
-        "Table index 1",
-        "Bibliography Heading",
-        "Bibliography 1",
-        "User Index 6",
-        "User Index 7",
-        "User Index 8",
-        "User Index 9",
-        "User Index 10", // STR_POCO_PRGM_TOX_USER10
+        u"Index"_ustr, // STR_POCO_PRGM_REGISTER_BASE
+        u"Index Heading"_ustr, // STR_POCO_PRGM_TOX_IDXH
+        u"Index 1"_ustr,
+        u"Index 2"_ustr,
+        u"Index 3"_ustr,
+        u"Index Separator"_ustr,
+        u"Contents Heading"_ustr,
+        u"Contents 1"_ustr,
+        u"Contents 2"_ustr,
+        u"Contents 3"_ustr,
+        u"Contents 4"_ustr,
+        u"Contents 5"_ustr,
+        u"User Index Heading"_ustr,
+        u"User Index 1"_ustr,
+        u"User Index 2"_ustr,
+        u"User Index 3"_ustr,
+        u"User Index 4"_ustr,
+        u"User Index 5"_ustr,
+        u"Contents 6"_ustr,
+        u"Contents 7"_ustr,
+        u"Contents 8"_ustr,
+        u"Contents 9"_ustr,
+        u"Contents 10"_ustr,
+        u"Figure Index Heading"_ustr,
+        u"Figure Index 1"_ustr,
+        u"Object index heading"_ustr,
+        u"Object index 1"_ustr,
+        u"Table index heading"_ustr,
+        u"Table index 1"_ustr,
+        u"Bibliography Heading"_ustr,
+        u"Bibliography 1"_ustr,
+        u"User Index 6"_ustr,
+        u"User Index 7"_ustr,
+        u"User Index 8"_ustr,
+        u"User Index 9"_ustr,
+        u"User Index 10"_ustr, // STR_POCO_PRGM_TOX_USER10
     };
     return s_aRegisterProgNameArray;
 }
@@ -609,9 +609,9 @@ const std::vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
 {
     static const std::vector<OUString> s_aDocProgNameArray = {
-        "Title", // STR_POCO_PRGM_DOC_TITLE
-        "Subtitle",
-        "Appendix",
+        u"Title"_ustr, // STR_POCO_PRGM_DOC_TITLE
+        u"Subtitle"_ustr,
+        u"Appendix"_ustr,
     };
     return s_aDocProgNameArray;
 }
@@ -619,11 +619,11 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
 {
     static const std::vector<OUString> s_aHTMLProgNameArray = {
-        "Quotations",
-        "Preformatted Text",
-        "Horizontal Line",
-        "List Contents",
-        "List Heading", // STR_POCO_PRGM_HTML_DT
+        u"Quotations"_ustr,
+        u"Preformatted Text"_ustr,
+        u"Horizontal Line"_ustr,
+        u"List Contents"_ustr,
+        u"List Heading"_ustr, // STR_POCO_PRGM_HTML_DT
     };
     return s_aHTMLProgNameArray;
 }
@@ -631,13 +631,13 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
 {
     static const std::vector<OUString> s_aFrameFormatProgNameArray = {
-        "Frame", // RES_POOLFRM_FRAME
-        "Graphics",
-        "OLE",
-        "Formula",
-        "Marginalia",
-        "Watermark",
-        "Labels", // RES_POOLFRM_LABEL
+        u"Frame"_ustr, // RES_POOLFRM_FRAME
+        u"Graphics"_ustr,
+        u"OLE"_ustr,
+        u"Formula"_ustr,
+        u"Marginalia"_ustr,
+        u"Watermark"_ustr,
+        u"Labels"_ustr, // RES_POOLFRM_LABEL
     };
     return s_aFrameFormatProgNameArray;
 }
@@ -645,23 +645,23 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
 {
     static const std::vector<OUString> s_aChrFormatProgNameArray = {
-        "Footnote Symbol", // RES_POOLCHR_FOOTNOTE
-        "Page Number",
-        "Caption characters",
-        "Drop Caps",
-        "Numbering Symbols",
-        "Bullet Symbols",
-        "Internet link",
-        "Visited Internet Link",
-        "Placeholder",
-        "Index Link",
-        "Endnote Symbol",
-        "Line numbering",
-        "Main index entry",
-        "Footnote anchor",
-        "Endnote anchor",
-        "Rubies", // RES_POOLCHR_RUBYTEXT
-        "Vertical Numbering Symbols", // RES_POOLCHR_VERT_NUMBER
+        u"Footnote Symbol"_ustr, // RES_POOLCHR_FOOTNOTE
+        u"Page Number"_ustr,
+        u"Caption characters"_ustr,
+        u"Drop Caps"_ustr,
+        u"Numbering Symbols"_ustr,
+        u"Bullet Symbols"_ustr,
+        u"Internet link"_ustr,
+        u"Visited Internet Link"_ustr,
+        u"Placeholder"_ustr,
+        u"Index Link"_ustr,
+        u"Endnote Symbol"_ustr,
+        u"Line numbering"_ustr,
+        u"Main index entry"_ustr,
+        u"Footnote anchor"_ustr,
+        u"Endnote anchor"_ustr,
+        u"Rubies"_ustr, // RES_POOLCHR_RUBYTEXT
+        u"Vertical Numbering Symbols"_ustr, // RES_POOLCHR_VERT_NUMBER
     };
     return s_aChrFormatProgNameArray;
 }
@@ -669,15 +669,15 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
 {
     static const std::vector<OUString> s_aHTMLChrFormatProgNameArray = {
-        "Emphasis", // RES_POOLCHR_HTML_EMPHASIS
-        "Citation",
-        "Strong Emphasis",
-        "Source Text",
-        "Example",
-        "User Entry",
-        "Variable",
-        "Definition",
-        "Teletype", // RES_POOLCHR_HTML_TELETYPE
+        u"Emphasis"_ustr, // RES_POOLCHR_HTML_EMPHASIS
+        u"Citation"_ustr,
+        u"Strong Emphasis"_ustr,
+        u"Source Text"_ustr,
+        u"Example"_ustr,
+        u"User Entry"_ustr,
+        u"Variable"_ustr,
+        u"Definition"_ustr,
+        u"Teletype"_ustr, // RES_POOLCHR_HTML_TELETYPE
     };
     return s_aHTMLChrFormatProgNameArray;
 }
@@ -685,16 +685,16 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
 {
     static const std::vector<OUString> s_aPageDescProgNameArray = {
-        "Standard", // STR_POOLPAGE_PRGM_STANDARD
-        "First Page",
-        "Left Page",
-        "Right Page",
-        "Envelope",
-        "Index",
-        "HTML",
-        "Footnote",
-        "Endnote", // STR_POOLPAGE_PRGM_ENDNOTE
-        "Landscape",
+        u"Standard"_ustr, // STR_POOLPAGE_PRGM_STANDARD
+        u"First Page"_ustr,
+        u"Left Page"_ustr,
+        u"Right Page"_ustr,
+        u"Envelope"_ustr,
+        u"Index"_ustr,
+        u"HTML"_ustr,
+        u"Footnote"_ustr,
+        u"Endnote"_ustr, // STR_POOLPAGE_PRGM_ENDNOTE
+        u"Landscape"_ustr,
     };
     return s_aPageDescProgNameArray;
 }
@@ -702,17 +702,17 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
     static const std::vector<OUString> s_aNumRuleProgNameArray = {
-        "No List",
-        "Numbering 123", // STR_POOLNUMRULE_PRGM_NUM1
-        "Numbering ABC",
-        "Numbering abc",
-        "Numbering IVX",
-        "Numbering ivx",
-        "List 1",
-        "List 2",
-        "List 3",
-        "List 4",
-        "List 5", // STR_POOLNUMRULE_PRGM_BUL5
+        u"No List"_ustr,
+        u"Numbering 123"_ustr, // STR_POOLNUMRULE_PRGM_NUM1
+        u"Numbering ABC"_ustr,
+        u"Numbering abc"_ustr,
+        u"Numbering IVX"_ustr,
+        u"Numbering ivx"_ustr,
+        u"List 1"_ustr,
+        u"List 2"_ustr,
+        u"List 3"_ustr,
+        u"List 4"_ustr,
+        u"List 5"_ustr, // STR_POOLNUMRULE_PRGM_BUL5
     };
     return s_aNumRuleProgNameArray;
 }
@@ -723,33 +723,33 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
     // sw/source/core/doc/DocumentStylePoolManager.cxx and MUST match the order of
     // RES_POOL_TABLESTYLE_TYPE in sw/inc/poolfmt.hxx
     static const std::vector<OUString> s_aTableStyleProgNameArray = {
-        "Default Style",       // RES_POOLTABLESTYLE_DEFAULT
-        "3D",                  // RES_POOLTABLESTYLE_3D
-        "Black 1",             // RES_POOLTABLESTYLE_BLACK1
-        "Black 2",             // RES_POOLTABLESTYLE_BLACK2
-        "Blue",                // RES_POOLTABLESTYLE_BLUE
-        "Brown",               // RES_POOLTABLESTYLE_BROWN
-        "Currency",            // RES_POOLTABLESTYLE_CURRENCY
-        "Currency 3D",         // RES_POOLTABLESTYLE_CURRENCY_3D
-        "Currency Gray",       // RES_POOLTABLESTYLE_CURRENCY_GRAY
-        "Currency Lavender",   // RES_POOLTABLESTYLE_CURRENCY_LAVENDER
-        "Currency Turquoise",  // RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
-        "Gray",                // RES_POOLTABLESTYLE_GRAY
-        "Green",               // RES_POOLTABLESTYLE_GREEN
-        "Lavender",            // RES_POOLTABLESTYLE_LAVENDER
-        "Red",                 // RES_POOLTABLESTYLE_RED
-        "Turquoise",           // RES_POOLTABLESTYLE_TURQUOISE
-        "Yellow",              // RES_POOLTABLESTYLE_YELLOW
-        "Academic",            // RES_POOLTABLESTYLE_LO6_ACADEMIC
-        "Box List Blue",       // RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
-        "Box List Green",      // RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
-        "Box List Red",        // RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
-        "Box List Yellow",     // RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
-        "Elegant",             // RES_POOLTABLESTYLE_LO6_ELEGANT
-        "Financial",           // RES_POOLTABLESTYLE_LO6_FINANCIAL
-        "Simple Grid Columns", // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
-        "Simple Grid Rows",    // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
-        "Simple List Shaded",  // RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
+        u"Default Style"_ustr,       // RES_POOLTABLESTYLE_DEFAULT
+        u"3D"_ustr,                  // RES_POOLTABLESTYLE_3D
+        u"Black 1"_ustr,             // RES_POOLTABLESTYLE_BLACK1
+        u"Black 2"_ustr,             // RES_POOLTABLESTYLE_BLACK2
+        u"Blue"_ustr,                // RES_POOLTABLESTYLE_BLUE
+        u"Brown"_ustr,               // RES_POOLTABLESTYLE_BROWN
+        u"Currency"_ustr,            // RES_POOLTABLESTYLE_CURRENCY
+        u"Currency 3D"_ustr,         // RES_POOLTABLESTYLE_CURRENCY_3D
+        u"Currency Gray"_ustr,       // RES_POOLTABLESTYLE_CURRENCY_GRAY
+        u"Currency Lavender"_ustr,   // RES_POOLTABLESTYLE_CURRENCY_LAVENDER
+        u"Currency Turquoise"_ustr,  // RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
+        u"Gray"_ustr,                // RES_POOLTABLESTYLE_GRAY
+        u"Green"_ustr,               // RES_POOLTABLESTYLE_GREEN
+        u"Lavender"_ustr,            // RES_POOLTABLESTYLE_LAVENDER
+        u"Red"_ustr,                 // RES_POOLTABLESTYLE_RED
+        u"Turquoise"_ustr,           // RES_POOLTABLESTYLE_TURQUOISE
+        u"Yellow"_ustr,              // RES_POOLTABLESTYLE_YELLOW
+        u"Academic"_ustr,            // RES_POOLTABLESTYLE_LO6_ACADEMIC
+        u"Box List Blue"_ustr,       // RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
+        u"Box List Green"_ustr,      // RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
+        u"Box List Red"_ustr,        // RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
+        u"Box List Yellow"_ustr,     // RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
+        u"Elegant"_ustr,             // RES_POOLTABLESTYLE_LO6_ELEGANT
+        u"Financial"_ustr,           // RES_POOLTABLESTYLE_LO6_FINANCIAL
+        u"Simple Grid Columns"_ustr, // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
+        u"Simple Grid Rows"_ustr,    // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
+        u"Simple List Shaded"_ustr,  // RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
     };
     return s_aTableStyleProgNameArray;
 }

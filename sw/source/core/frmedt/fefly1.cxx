@@ -1794,7 +1794,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
         if( xModel.is() )
         {
             uno::Any aVal;
-            OUString sName("ButtonType");
+            OUString sName(u"ButtonType"_ustr);
             uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
 
             uno::Reference< beans::XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
@@ -1948,7 +1948,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
     DelSelectedObj();
 
     GetDoc()->getIDocumentContentOperations().InsertGraphic(
-        *GetCursor(), rGrfName, "", pGrf, &aFrameSet, nullptr, nullptr);
+        *GetCursor(), rGrfName, u""_ustr, pGrf, &aFrameSet, nullptr, nullptr);
 
     EndUndo();
     EndAllAction();
@@ -2220,7 +2220,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         {
             try
             {
-                aBaseline = xSet->getPropertyValue("BaseLine");
+                aBaseline = xSet->getPropertyValue(u"BaseLine"_ustr);
             }
             catch ( uno::Exception& )
             {

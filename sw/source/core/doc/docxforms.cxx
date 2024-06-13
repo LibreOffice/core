@@ -62,16 +62,16 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             xModule.set(pShell->GetModel(), css::uno::UNO_QUERY);
         OSL_ENSURE( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
         if ( xModule.is() )
-            xModule->setIdentifier( "com.sun.star.xforms.XMLFormDocument" );
+            xModule->setIdentifier( u"com.sun.star.xforms.XMLFormDocument"_ustr );
 
         // create default model
         if( bCreateDefaultModel && mxXForms.is() )
         {
-            OUString sName("Model 1");
+            OUString sName(u"Model 1"_ustr);
             Reference<XModel2> xModel = xforms::Model::create( comphelper::getProcessComponentContext() );
             xModel->setID( sName );
             Reference<XFormsUIHelper1>( xModel, uno::UNO_QUERY_THROW )->newInstance(
-                "Instance 1",
+                u"Instance 1"_ustr,
                 OUString(), true );
             xModel->initialize();
             mxXForms->insertByName( sName, Any( xModel ) );

@@ -1272,7 +1272,7 @@ namespace //local functions originally from docfmt.cxx
                         {
                             // Get the item set that holds all the changes properties
                             const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                            xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, pChangesSet));
+                            xExtra.reset(new SwRedlineExtraData_FormatColl(u""_ustr, USHRT_MAX, pChangesSet));
                             break;
                         }
                     }
@@ -1308,7 +1308,7 @@ namespace //local functions originally from docfmt.cxx
             // which doesn't handle invalid/dontcare items so clear them here
             aSet.ClearInvalidItems();
 
-            xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, &aSet));
+            xExtra.reset(new SwRedlineExtraData_FormatColl(u""_ustr, USHRT_MAX, &aSet));
         }
 
         if (xExtra)

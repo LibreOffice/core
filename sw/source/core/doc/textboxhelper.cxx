@@ -603,10 +603,10 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         // TextRotateAngle values -90 and -270 to emulate these text directions of frames.
         // ToDo: Is TextPreRotateAngle needed for diagrams or can it be removed?
         comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
-        auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+        auto it = aCustomShapeGeometry.find(u"TextPreRotateAngle"_ustr);
         if (it == aCustomShapeGeometry.end())
         {
-            it = aCustomShapeGeometry.find("TextRotateAngle");
+            it = aCustomShapeGeometry.find(u"TextRotateAngle"_ustr);
         }
 
         if (it != aCustomShapeGeometry.end())

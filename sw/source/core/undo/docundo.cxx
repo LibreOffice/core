@@ -279,7 +279,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 
     assert(SwUndoId::END != eUndoId);
     OUString comment( (SwUndoId::START == eUndoId)
-        ?   OUString("??")
+        ?   u"??"_ustr
         :   GetUndoComment(eUndoId) );
     if (pRewriter)
     {

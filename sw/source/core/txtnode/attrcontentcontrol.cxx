@@ -664,8 +664,8 @@ void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlList
     {
         const SwContentControlListItem& rItem = rItems[i];
         pRet[i] = {
-            comphelper::makePropertyValue("DisplayText", rItem.m_aDisplayText),
-            comphelper::makePropertyValue("Value", rItem.m_aValue),
+            comphelper::makePropertyValue(u"DisplayText"_ustr, rItem.m_aDisplayText),
+            comphelper::makePropertyValue(u"Value"_ustr, rItem.m_aValue),
         };
     }
 
@@ -683,12 +683,12 @@ SwContentControlListItem::ItemsFromAny(const css::uno::Any& rVal)
     {
         comphelper::SequenceAsHashMap aMap(rItem);
         SwContentControlListItem aItem;
-        auto it = aMap.find("DisplayText");
+        auto it = aMap.find(u"DisplayText"_ustr);
         if (it != aMap.end())
         {
             it->second >>= aItem.m_aDisplayText;
         }
-        it = aMap.find("Value");
+        it = aMap.find(u"Value"_ustr);
         if (it != aMap.end())
         {
             it->second >>= aItem.m_aValue;

@@ -849,7 +849,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if (bPDFExport)
     {
-        rInf.DrawText(" ", *this, TextFrameIndex(0), TextFrameIndex(1));
+        rInf.DrawText(u" "_ustr, *this, TextFrameIndex(0), TextFrameIndex(1));
     }
     else
     {

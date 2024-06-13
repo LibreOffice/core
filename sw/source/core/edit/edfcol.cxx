@@ -208,7 +208,7 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
             if (!xContentEnumerationAccess.is())
                 continue;
 
-            uno::Reference<container::XEnumeration> xEnumeration = xContentEnumerationAccess->createContentEnumeration("com.sun.star.text.TextContent");
+            uno::Reference<container::XEnumeration> xEnumeration = xContentEnumerationAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
             if (!xEnumeration->hasMoreElements())
                 continue;
 
@@ -414,7 +414,7 @@ std::pair<bool, OUString> lcl_MakeParagraphSignatureFieldText(const SignatureDes
             assert(aInfo.GetSigningCertificate()); // it was valid
             msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.GetSigningCertificate()->X509Subject + ", " +
                 aDescr.msDate;
-            msg += (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : OUString(": "));
+            msg += (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : u": "_ustr);
             msg += (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
         }
     }
@@ -787,7 +787,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
@@ -930,13 +930,13 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     uno::Reference<beans::XPropertySet> xFooterPropertySet(xFooterParagraphCursor, uno::UNO_QUERY_THROW);
                     if (rResult.msName == "BOLD")
                     {
-                        xHeaderPropertySet->setPropertyValue("CharWeight", uno::Any(awt::FontWeight::BOLD));
-                        xFooterPropertySet->setPropertyValue("CharWeight", uno::Any(awt::FontWeight::BOLD));
+                        xHeaderPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+                        xFooterPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
                     }
                     else
                     {
-                        xHeaderPropertySet->setPropertyValue("CharWeight", uno::Any(awt::FontWeight::NORMAL));
-                        xFooterPropertySet->setPropertyValue("CharWeight", uno::Any(awt::FontWeight::NORMAL));
+                        xHeaderPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
+                        xFooterPropertySet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::NORMAL));
                     }
                 }
                 break;
@@ -969,7 +969,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     std::vector<OUString> aPageStyles = lcl_getUsedPageStyles(this);
     OUString aPageStyleString = aPageStyles.back();
@@ -1004,9 +1004,9 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
         // Check font weight
         uno::Reference<beans::XPropertySet> xParagraphPropertySet(xTextPortionEnumerationAccess, uno::UNO_QUERY_THROW);
-        uno::Any aAny = xParagraphPropertySet->getPropertyValue("CharWeight");
+        uno::Any aAny = xParagraphPropertySet->getPropertyValue(u"CharWeight"_ustr);
 
-        OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? OUString("BOLD") : OUString("NORMAL");
+        OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? u"BOLD"_ustr : u"NORMAL"_ustr;
 
         aResult.emplace_back(svx::ClassificationType::PARAGRAPH, sWeight, sBlank, sBlank);
 
@@ -1102,7 +1102,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
@@ -1396,7 +1396,7 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
@@ -1410,9 +1410,9 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
 
-        OUString sWatermark = "";
+        OUString sWatermark = u""_ustr;
         bool bSuccess = false;
-        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, "com.sun.star.drawing.CustomShape", sWatermark, bSuccess);
+        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, u"com.sun.star.drawing.CustomShape"_ustr, sWatermark, bSuccess);
 
         if (xWatermark.is())
         {
@@ -1430,7 +1430,7 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
                 aItem.SetFont(aFont);
             if (xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor)
                 aItem.SetColor(nColor);
-            if (xPropertySet->getPropertyValue("Transformation") >>= aMatrix)
+            if (xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix)
                 aItem.SetAngle(lcl_GetAngle(aMatrix));
             if (xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
                 aItem.SetTransparency(nTransparency);
@@ -1450,7 +1450,7 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         return;
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-    OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
+    OUString aShapeServiceName = u"com.sun.star.drawing.CustomShape"_ustr;
     OUString sWatermark = WATERMARK_NAME;
     bool bSuccess = false;
     uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark, bSuccess);
@@ -1462,13 +1462,13 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         Color nColor = 0xc0c0c0;
         sal_Int16 nTransparency = 50;
         sal_Int16 nAngle = 45;
-        OUString aFont = "";
+        OUString aFont = u""_ustr;
 
         uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
         xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
         xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
         xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
-        xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+        xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
         nAngle = lcl_GetAngle(aMatrix);
 
         // If the header already contains a watermark, see if it its text is up to date.
@@ -1579,15 +1579,15 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, uno::Any(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, uno::Any(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::Any(WATERMARK_AUTO_SIZE));
-    xPropertySet->setPropertyValue("Transformation", uno::Any(aMatrix));
+    xPropertySet->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
 
     uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
     xTextRange->setString(rWatermark.GetText());
 
     uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-    xDefaulter->createCustomShapeDefaults("fontwork-plain-text");
+    xDefaulter->createCustomShapeDefaults(u"fontwork-plain-text"_ustr);
 
-    auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+    auto aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< uno::Sequence<beans::PropertyValue> >();
     auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -1598,15 +1598,15 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         return rValue.Name == "TextPath";
     });
     if (it == aGeomPropVec.end())
-        aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
+        aGeomPropVec.push_back(comphelper::makePropertyValue(u"TextPath"_ustr, aPropertyValues));
     else
         it->Value <<= aPropertyValues;
-    xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(comphelper::containerToSequence(aGeomPropVec)));
+    xPropertySet->setPropertyValue(u"CustomShapeGeometry"_ustr, uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 
     // tdf#108494, tdf#109313 the header height was switched to height of a watermark
     // and shape was moved to the lower part of a page, force position update
-    xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
-    xPropertySet->setPropertyValue("Transformation", uno::Any(aMatrix));
+    xPropertySet->getPropertyValue(u"Transformation"_ustr) >>= aMatrix;
+    xPropertySet->setPropertyValue(u"Transformation"_ustr, uno::Any(aMatrix));
 
     xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::Any(text::HoriOrientation::CENTER));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::Any(text::VertOrientation::CENTER));
@@ -1624,7 +1624,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)

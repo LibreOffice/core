@@ -779,7 +779,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 
             pThis->Width( nOldWidth - nSpaceOffs + 12 );
             {
-                SwTextSlot aDiffText( &aInf, this, true, false, "  " );
+                SwTextSlot aDiffText( &aInf, this, true, false, u"  "_ustr );
                 aInf.DrawText( *this, aInf.GetLen(), true );
             }
         }

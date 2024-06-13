@@ -361,7 +361,7 @@ OUString GetUndoComment(SwUndoId eId)
             break;
         case SwUndoId::REDLINE:
             SAL_INFO("sw.core", "Should NEVER be used/translated");
-            return "$1";
+            return u"$1"_ustr;
         case SwUndoId::ACCEPT_REDLINE:
             pId = STR_ACCEPT_REDLINE;
             break;

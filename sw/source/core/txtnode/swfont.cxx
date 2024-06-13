@@ -1217,7 +1217,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         }
 
         rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
-        rInf.SetTextIdxLen( "  ", TextFrameIndex(0), TextFrameIndex(2) );
+        rInf.SetTextIdxLen( u"  "_ustr, TextFrameIndex(0), TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 
@@ -1295,7 +1295,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
         const OUString oldStr = rInf.GetText();
         TextFrameIndex const nOldIdx = rInf.GetIdx();
         TextFrameIndex const nOldLen = rInf.GetLen();
-        rInf.SetTextIdxLen( "  ", TextFrameIndex(0), TextFrameIndex(2) );
+        rInf.SetTextIdxLen( u"  "_ustr, TextFrameIndex(0), TextFrameIndex(2) );
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( nullptr );
 

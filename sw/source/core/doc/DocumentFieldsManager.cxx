@@ -954,7 +954,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                     if (nShownSections == 1)
                     {
                         // This would be the last section, so set its condition to false, and avoid hiding it.
-                        pSect->SetCondition("0");
+                        pSect->SetCondition(u"0"_ustr);
                         bHide = false;
                     }
                     nShownSections--;

@@ -41,10 +41,10 @@ SwDateContentControlButton::~SwDateContentControlButton() { disposeOnce(); }
 
 void SwDateContentControlButton::LaunchPopup()
 {
-    m_xPopupBuilder = Application::CreateBuilder(GetFrameWeld(),
-                                                 "modules/swriter/ui/contentcontrolcalendar.ui");
-    m_xPopup = m_xPopupBuilder->weld_popover("Calendar");
-    m_xCalendar = m_xPopupBuilder->weld_calendar("date");
+    m_xPopupBuilder = Application::CreateBuilder(
+        GetFrameWeld(), u"modules/swriter/ui/contentcontrolcalendar.ui"_ustr);
+    m_xPopup = m_xPopupBuilder->weld_popover(u"Calendar"_ustr);
+    m_xCalendar = m_xPopupBuilder->weld_calendar(u"date"_ustr);
 
     // Read the doc model.
     if (m_pContentControl)

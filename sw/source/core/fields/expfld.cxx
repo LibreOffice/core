@@ -503,7 +503,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, OUString aName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     m_sName( std::move(aName) ),
-    m_sDelim( "." ),
+    m_sDelim( u"."_ustr ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )
 {
@@ -702,7 +702,7 @@ void SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( !sTmp.isEmpty() )
                 SetDelimiter( sTmp );
             else
-                SetDelimiter( " " );
+                SetDelimiter( u" "_ustr );
         }
         break;
     case FIELD_PROP_SHORT1:

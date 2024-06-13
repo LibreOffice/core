@@ -1281,7 +1281,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
         TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
     if (*m_aDelPam.GetPoint() != *m_aDelPam.GetMark())
     {   // tdf#137245 replace (not delete) to preserve any flys
-        m_pDoc->getIDocumentContentOperations().ReplaceRange(m_aDelPam, "", false);
+        m_pDoc->getIDocumentContentOperations().ReplaceRange(m_aDelPam, u""_ustr, false);
     }
 
     m_aDelPam.DeleteMark();
@@ -1567,7 +1567,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetBulletChar( cBullChar );
                         aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         // #i93908# clear suffix for bullet lists
-                        aFormat.SetListFormat("", "", n);
+                        aFormat.SetListFormat(u""_ustr, u""_ustr, n);
                         aFormat.SetFirstLineOffset( lBulletFirstLineOffset );
                         aFormat.SetAbsLSpace( nAbsPos );
                         if( !aFormat.GetCharFormat() )
@@ -1648,7 +1648,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
 
-                        const OUString sPrefix = n ? "" : aPrefix.getToken(0, u'\x0001', nPrefixIdx);
+                        const OUString sPrefix = n ? u""_ustr : aPrefix.getToken(0, u'\x0001', nPrefixIdx);
                         aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx )) ));
                         aFormat.SetListFormat(sPrefix, aPostfix.getToken(0, u'\x0001', nPostfixIdx), n);
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );

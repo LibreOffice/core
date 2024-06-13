@@ -687,7 +687,7 @@ void SwDoc::ClearDoc()
     InitTOXTypes();
 
     // create a dummy pagedesc for the layout
-    SwPageDesc* pDummyPgDsc = MakePageDesc("?DUMMY?");
+    SwPageDesc* pDummyPgDsc = MakePageDesc(u"?DUMMY?"_ustr);
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // create the first one over and over again (without attributes/style etc.
@@ -932,8 +932,8 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
     uno::Reference<beans::XPropertySet> const xRetSet(
         pRetShell->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xThisSet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
-    xRetSet->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag));
+    xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
+    xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));
 
     if( !bEmpty )
     {
