@@ -82,6 +82,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdograf.hxx>
 
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -1066,6 +1067,18 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
 
             applyAnnotationCommon(*pNewObject, xAnnotation);
             applyAnnotationProperties(*pNewObject, rInfo);
+        }
+        else if (rInfo.meType == sdr::annotation::AnnotationType::Stamp)
+        {
+            pNewObject = new SdrCircObj(rModel, SdrCircKind::Full, aRectangle);
+
+            rtl::Reference<SdrGrafObj> pGrafObject = new SdrGrafObj(rModel, Graphic(rInfo.maBitmapEx), aRectangle);
+            pNewObject = pGrafObject;
+
+            applyAnnotationCommon(*pNewObject, xAnnotation);
+
+            pGrafObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+            pGrafObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
         }
         else
         {

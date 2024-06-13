@@ -21,6 +21,7 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/TextAPI.hxx>
+#include <vcl/bitmapex.hxx>
 
 class SdrUndoAction;
 class SfxViewShell;
@@ -56,6 +57,7 @@ enum class AnnotationType
     Highlight,
     Line,
     FreeText,
+    Stamp
 };
 
 /** Annotation data that is used at annotation creation */
@@ -73,6 +75,8 @@ struct CreationInfo
 
     bool mbColor = false;
     Color maColor = COL_TRANSPARENT;
+
+    BitmapEx maBitmapEx;
 };
 
 /** Data of an annotation */

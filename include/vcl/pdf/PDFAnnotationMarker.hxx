@@ -14,6 +14,7 @@
 #include <tools/color.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <vcl/bitmapex.hxx>
 
 namespace vcl::pdf
 {
@@ -25,6 +26,12 @@ struct VCL_DLLPUBLIC PDFAnnotationMarker
 {
     float mnWidth = 0.0;
     Color maFillColor = COL_TRANSPARENT;
+};
+
+/** Stamp annotation marker - arbitrary bitmap as annotation */
+struct VCL_DLLPUBLIC PDFAnnotationMarkerStamp : public PDFAnnotationMarker
+{
+    BitmapEx maBitmapEx;
 };
 
 /** Free text annotation marker - showing text of the annotation in the document */
