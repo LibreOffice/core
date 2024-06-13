@@ -70,6 +70,7 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const
 {
     IDocumentSettingAccess const& rIDSA(rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess());
+    const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
     const bool bTabOverSpacing = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
     const bool bTabsRelativeToIndent = rIDSA.get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
 
@@ -145,7 +146,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // default tab stop.
         const SwTwips nOldRight = nMyRight;
         // Accept left-tabstops beyond the paragraph margin for bTabOverSpacing
-        if (bTabOverSpacing)
+        if (bTabOverSpacing || bTabOverMargin)
             nMyRight = 0;
         const SvxTabStop* pTabStop = m_aLineInf.GetTabStop( nSearchPos, nMyRight );
         if (!nMyRight)
@@ -419,7 +420,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             {
                 // handle this case in PostFormat
                 if ((bTabOverMargin || bTabOverSpacing) && GetTabPos() > rInf.Width()
-                    && (!m_bAutoTabStop || (!bTabOverMargin && rInf.X() > rInf.Width())))
+                    && (!m_bAutoTabStop || rInf.X() > rInf.Width()))
                 {
                     if (bTabOverMargin || GetTabPos() < nTextFrameWidth)
                     {
