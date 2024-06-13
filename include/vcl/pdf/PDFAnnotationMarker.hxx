@@ -27,6 +27,11 @@ struct VCL_DLLPUBLIC PDFAnnotationMarker
     Color maFillColor = COL_TRANSPARENT;
 };
 
+/** Free text annotation marker - showing text of the annotation in the document */
+struct VCL_DLLPUBLIC PDFAnnotationMarkerFreeText : public PDFAnnotationMarker
+{
+};
+
 struct VCL_DLLPUBLIC PDFAnnotationMarkerCircle : public PDFAnnotationMarker
 {
 };
