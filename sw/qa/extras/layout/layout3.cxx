@@ -584,6 +584,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658b)
         0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658c)
+{
+    createSwDoc("tdf158658c.rtf");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Word 2013 puts all tabs into one line, the last 17 of them are off the page
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabCenter']"_ostr,
+        1);
+    // the right tab is exactly at the margin of the paragraph
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
+        1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr,
+        20);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
 {
     createSwDoc("tdf155177-1-min.odt");
