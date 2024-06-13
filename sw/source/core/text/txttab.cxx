@@ -345,7 +345,7 @@ bool SwTabPortion::Format( SwTextFormatInfo &rInf )
         return PostFormat( rInf );
     if( pLastTab )
         pLastTab->PostFormat( rInf );
-    return PreFormat( rInf );
+    return PreFormat(rInf, pLastTab);
 }
 
 void SwTabPortion::FormatEOL( SwTextFormatInfo &rInf )
@@ -354,7 +354,7 @@ void SwTabPortion::FormatEOL( SwTextFormatInfo &rInf )
         PostFormat( rInf );
 }
 
-bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
+bool SwTabPortion::PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*const pLastTab)
 {
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
@@ -396,7 +396,8 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     // 1. Minimal width does not fit to line anymore.
     // 2. An underflow event was called for the tab portion.
     bool bFull = ( bTabCompat && rInf.IsUnderflow() ) ||
-                     ( rInf.Width() <= rInf.X() + PrtWidth() && rInf.X() <= rInf.Width() ) ;
+             (rInf.Width() <= rInf.X() + PrtWidth() && rInf.X() <= rInf.Width()
+              && (!bTabOverMargin || !pLastTab));
 
     // #95477# Rotated tab stops get the width of one blank
     const Degree10 nDir = rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
@@ -420,7 +421,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             {
                 // handle this case in PostFormat
                 if ((bTabOverMargin || bTabOverSpacing) && GetTabPos() > rInf.Width()
-                    && (!m_bAutoTabStop || rInf.X() > rInf.Width()))
+                    && (!m_bAutoTabStop || rInf.Width() <= rInf.X()))
                 {
                     if (bTabOverMargin || GetTabPos() < nTextFrameWidth)
                     {
