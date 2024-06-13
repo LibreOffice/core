@@ -151,7 +151,14 @@ ScLkUpdMode ScDocShell::GetLinkUpdateModeState() const
         }
     }
 
-    if (nSet == LM_ALWAYS
+    if (nSet != LM_NEVER
+        && (SvtSecurityOptions::isUntrustedReferer(
+                GetMedium() == nullptr ? OUString() : GetMedium()->GetName())
+            || (IsDocShared() && SvtSecurityOptions::isUntrustedReferer(GetSharedFileURL()))))
+    {
+        nSet = LM_NEVER;
+    }
+    else if (nSet == LM_ALWAYS
             && !(SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
                     GetMedium() == nullptr ? OUString() : GetMedium()->GetName())
                 || (IsDocShared()
