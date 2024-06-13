@@ -22,6 +22,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
+#include <unotools/securityoptions.hxx>
 #include "epptbase.hxx"
 
 using ::sax_fastparser::FSHelperPtr;
@@ -139,6 +140,7 @@ private:
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[OOXML_LAYOUT_SIZE];
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs; // map authors to remove personal info
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
     sal_Int32 mnLayoutFileIdMax;
 
@@ -158,6 +160,8 @@ private:
     /// Map of placeholder indexes for Master placeholders
     std::unordered_map< css::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
 
+    // Get author id to remove personal info
+    size_t GetInfoID( const OUString sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
     struct AuthorComments {
         sal_Int32 nId;
         sal_Int32 nLastIndex;
