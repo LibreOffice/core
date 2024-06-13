@@ -2293,10 +2293,12 @@ const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
 
 bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
-    if (*Start() < *rCmp.Start())
+    auto [pStart, pEnd] = StartEnd();
+    auto [pCmpStart, pCmpEnd] = rCmp.StartEnd();
+    if (*pStart < *pCmpStart)
         return true;
 
-    return *Start() == *rCmp.Start() && *End() < *rCmp.End();
+    return *pStart == *pCmpStart && *pEnd < *pCmpEnd;
 }
 
 const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) const
