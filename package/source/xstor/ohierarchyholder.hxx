@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -35,6 +36,7 @@
 #include <vector>
 
 class OHierarchyElement_Impl;
+class OStorage;
 
 typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
@@ -47,19 +49,19 @@ class OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransac
     std::mutex m_aMutex;
 
     ::rtl::Reference< OHierarchyElement_Impl > m_rParent;
-    css::uno::Reference< css::embed::XStorage > m_xOwnStorage;
-    css::uno::WeakReference< css::embed::XStorage > m_xWeakOwnStorage;
+    rtl::Reference< OStorage > m_xOwnStorage;
+    unotools::WeakReference< OStorage > m_xWeakOwnStorage;
 
     OHierarchyElementList_Impl m_aChildren;
 
     OWeakStorRefVector_Impl m_aOpenStreams;
 
 public:
-    explicit OHierarchyElement_Impl( css::uno::Reference< css::embed::XStorage > xStorage )
+    explicit OHierarchyElement_Impl(rtl::Reference< OStorage > xStorage )
     : m_xOwnStorage(std::move( xStorage ))
     {}
 
-    explicit OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage > xWeakStorage )
+    explicit OHierarchyElement_Impl( unotools::WeakReference< OStorage > xWeakStorage )
     : m_xWeakOwnStorage(std::move( xWeakStorage ))
     {}
 
@@ -92,12 +94,12 @@ public:
 
 class OHierarchyHolder_Impl : public ::cppu::OWeakObject
 {
-    css::uno::WeakReference< css::embed::XStorage > m_xWeakOwnStorage;
+    unotools::WeakReference< OStorage > m_xWeakOwnStorage;
     ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
-    explicit OHierarchyHolder_Impl( const css::uno::Reference< css::embed::XStorage >& xOwnStorage )
+    explicit OHierarchyHolder_Impl( const rtl::Reference< OStorage >& xOwnStorage )
     : m_xWeakOwnStorage( xOwnStorage )
-    , m_xChild( new OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage >( xOwnStorage ) ) )
+    , m_xChild( new OHierarchyElement_Impl( unotools::WeakReference< OStorage >( xOwnStorage ) ) )
     {}
 
     static std::vector<OUString> GetListPathFromString( std::u16string_view aPath );

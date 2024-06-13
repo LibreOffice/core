@@ -346,7 +346,10 @@ public:
             const OUString& aStreamName, sal_Int32 nOpenMode, const OUString& aPass ) override;
 
     virtual css::uno::Reference< css::embed::XStorage > SAL_CALL openStorageElement(
-            const OUString& aStorName, sal_Int32 nStorageMode ) override;
+            const OUString& aStorName, sal_Int32 nStorageMode ) override final;
+
+    rtl::Reference< OStorage > openStorageElement2(
+            const OUString& aStorName, sal_Int32 nStorageMode );
 
     virtual css::uno::Reference< css::io::XStream > SAL_CALL cloneStreamElement(
             const OUString& aStreamName ) override;

@@ -2299,6 +2299,12 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
 {
+    return openStorageElement2(aStorName, nStorageMode);
+}
+
+rtl::Reference< OStorage > OStorage::openStorageElement2(
+            const OUString& aStorName, sal_Int32 nStorageMode )
+{
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
@@ -2323,7 +2329,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
     // it's always possible to read written storage in this implementation
     nStorageMode |= embed::ElementModes::READ;
 
-    uno::Reference< embed::XStorage > xResult;
+    rtl::Reference< OStorage > xResult;
     try
     {
         SotElement_Impl *pElement = m_pImpl->FindElement( aStorName );
@@ -2386,8 +2392,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             pElement->m_xStorage->SetReadOnlyWrap(*pResultStorage);
 
             // before the storage disposes the stream it must deregister itself as listener
-            uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY_THROW );
-            MakeLinkToSubComponent_Impl( xStorageComponent );
+            MakeLinkToSubComponent_Impl( xResult );
         }
     }
     catch( const embed::InvalidStorageException& )
@@ -5384,8 +5389,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
     {
         // there are still storages in between
         if ( !m_rHierarchyHolder.is() )
-            m_rHierarchyHolder = new OHierarchyHolder_Impl(
-                uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
+            m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
 
         xResult = m_rHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
@@ -5424,8 +5428,7 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
     if ( !m_rHierarchyHolder.is() )
-        m_rHierarchyHolder = new OHierarchyHolder_Impl(
-            uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
+        m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
 
     m_rHierarchyHolder->RemoveStreamHierarchically( aListPath );
 }
@@ -5473,8 +5476,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
     {
         // there are still storages in between
         if ( !m_rHierarchyHolder.is() )
-            m_rHierarchyHolder = new OHierarchyHolder_Impl(
-                uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
+            m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
 
         xResult = m_rHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
