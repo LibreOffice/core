@@ -455,6 +455,36 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161571PiechartCustomPosDataLabels)
+{
+    // FIXME: validation error in OOXML export
+    skipValidation();
+
+    loadFromFile(u"xlsx/tdf161607PieChartLeaderLinesColorWidth.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test custom position of data label (xlsx)
+    assertXPath(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl[2]/c:idx"_ostr,
+        "val"_ostr, u"1"_ustr);
+    OUString aXVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/"
+                              "c:dLbl[2]/c:layout/c:manualLayout/c:x"_ostr,
+                              "val"_ostr);
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.13500189609404625, nX, 1e-7);
+
+    OUString aYVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/"
+                              "c:dLbl[2]/c:layout/c:manualLayout/c:y"_ostr,
+                              "val"_ostr);
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15994818221025045, nY, 1e-7);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabelMultipleSeries)
 {
     loadFromFile(u"pptx/tdf115107-2.pptx");
