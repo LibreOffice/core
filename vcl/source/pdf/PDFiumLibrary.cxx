@@ -170,6 +170,36 @@ static_assert(static_cast<int>(vcl::pdf::PDFAnnotAActionType::Calculate)
                   == FPDF_ANNOT_AACTION_CALCULATE,
               "PDFAnnotAActionType::Calculate) value mismatch");
 
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Unknown) == FPDF_ANNOT_UNKNOWN);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Text) == FPDF_ANNOT_TEXT);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Link) == FPDF_ANNOT_LINK);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::FreeText) == FPDF_ANNOT_FREETEXT);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Line) == FPDF_ANNOT_LINE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Square) == FPDF_ANNOT_SQUARE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Circle) == FPDF_ANNOT_CIRCLE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Polygon) == FPDF_ANNOT_POLYGON);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Polyline) == FPDF_ANNOT_POLYLINE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Highlight) == FPDF_ANNOT_HIGHLIGHT);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Underline) == FPDF_ANNOT_UNDERLINE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Squiggly) == FPDF_ANNOT_SQUIGGLY);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Strikeout) == FPDF_ANNOT_STRIKEOUT);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Stamp) == FPDF_ANNOT_STAMP);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Caret) == FPDF_ANNOT_CARET);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Ink) == FPDF_ANNOT_INK);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Popup) == FPDF_ANNOT_POPUP);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::FileAttachment) == FPDF_ANNOT_FILEATTACHMENT);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Sound) == FPDF_ANNOT_SOUND);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Movie) == FPDF_ANNOT_MOVIE);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Widget) == FPDF_ANNOT_WIDGET);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Screen) == FPDF_ANNOT_SCREEN);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Printermark) == FPDF_ANNOT_PRINTERMARK);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Trapnet) == FPDF_ANNOT_TRAPNET);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Watermark) == FPDF_ANNOT_WATERMARK);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Threed) == FPDF_ANNOT_THREED);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Richmedia) == FPDF_ANNOT_RICHMEDIA);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::XFAWidget) == FPDF_ANNOT_XFAWIDGET);
+static_assert(int(vcl::pdf::PDFAnnotationSubType::Redact) == FPDF_ANNOT_REDACT);
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
