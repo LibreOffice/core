@@ -1507,9 +1507,9 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
         std::vector<OUString> aClrMap;
         aClrMap.reserve(12);
+        uno::Sequence<beans::PropertyValue> aClrMapPropValue;
         if(aGrabBag.hasElements())
         {
-            uno::Sequence<beans::PropertyValue> aClrMapPropValue;
             for (const auto& rProp : aGrabBag)
             {
                 if (rProp.Name == "OOXColorMap")
@@ -1518,7 +1518,10 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                     break;
                 }
             }
+        }
 
+        if (aClrMapPropValue.getLength())
+        {
             OUString sName;
             sal_Int32 nToken = XML_TOKEN_INVALID;
             for(const auto& item : aClrMapPropValue)
@@ -1541,6 +1544,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                 }
                 aClrMap.push_back(sName);
             }
+            assert(aClrMap.size() == 12 && "missing entries for ClrMap");
         }
         else
         {
