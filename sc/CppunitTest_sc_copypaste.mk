@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_copypaste, \
     i18nlangtag \
     sal \
     sc \
+    scqahelper \
     sfx \
     subsequenttest \
     svl \
