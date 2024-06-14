@@ -1119,6 +1119,20 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         aNewPosition = RelativePositionHelper::getCenterOfAnchoredObject(
                 awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY))
                 , aTitleUnrotatedSize, aRelativePosition.Anchor, fAnglePi );
+
+        const bool bInfiniteY = std::isinf(aRelativePosition.Secondary);
+        if (bInfiniteY)
+        {
+            SAL_WARN("chart2", "infinite aRelativePosition.Secondary position, using ALIGN_BOTTOM");
+            aNewPosition.Y = rRemainingSpace.Y + rRemainingSpace.Height - aTitleSize.Height/2 - nYDistance;
+        }
+
+        const bool bInfiniteX = std::isinf(aRelativePosition.Primary);
+        if (bInfiniteX)
+        {
+            SAL_WARN("chart2", "infinite aRelativePosition.Primary position, using ALIGN_RIGHT");
+            aNewPosition.X = rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance;
+        }
     }
     else //auto position
     {
