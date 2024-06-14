@@ -441,7 +441,7 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
         case HtmlTokenId::TABLEDATA_ON:
         {
             ++mnCellInRow;
-            DBG_ASSERT(mpActDefault, "TABLEDATA_OFF: pActDefault==0");
+            assert(mpActDefault);
             RowColSpan aRowColSpan = lcl_GetRowColSpan(options);
             mpActDefault->mnColSpan = aRowColSpan.mnColSpan;
             mpActDefault->mnRowSpan = aRowColSpan.mnRowSpan;
