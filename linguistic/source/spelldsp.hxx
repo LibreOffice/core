@@ -69,7 +69,7 @@ class SpellCheckerDispatcher :
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
-                    const css::beans::PropertyValues& aProperties);
+                    const css::beans::PropertyValues& aProperties, bool& rConvertApostrophe);
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
