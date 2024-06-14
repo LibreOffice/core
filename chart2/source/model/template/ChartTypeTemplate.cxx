@@ -220,7 +220,8 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
             for( auto const & j : i )
             {
                 if( nIndex >= nFormerSeriesCount )
-                    lcl_applyDefaultStyle( j, nIndex++, xDiagram );
+                    lcl_applyDefaultStyle( j, nIndex, xDiagram );
+                nIndex++;
             }
 
         // remove charttype groups from all coordinate systems
