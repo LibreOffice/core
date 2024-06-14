@@ -334,8 +334,8 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
 /*-----------------------------------------------*/
 bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFile )
 {
-    if (sURL.matchIgnoreAsciiCase(".component:"))
-        return false; // No UCB content for .component URLs
+    if (sURL.matchIgnoreAsciiCase(".component:") || sURL.matchIgnoreAsciiCase("private:factory/"))
+        return false; // No UCB content for .component URLs and factory URLs
 
     OUString referer(getUnpackedValueOrDefault(PROP_REFERRER, OUString()));
     if (SvtSecurityOptions::isUntrustedReferer(referer)) {
