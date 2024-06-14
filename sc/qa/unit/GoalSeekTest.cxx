@@ -46,6 +46,31 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161511)
     CPPUNIT_ASSERT_EQUAL(0.0, res.Result);
 }
 
+CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf68034)
+{
+    createScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"=SQRT(B1)");
+
+    table::CellAddress aVariableCell;
+    aVariableCell.Sheet = 0;
+    aVariableCell.Row = 0;
+    aVariableCell.Column = 1;
+    table::CellAddress aFormulaCell;
+    aFormulaCell.Sheet = 0;
+    aFormulaCell.Row = 0;
+    aFormulaCell.Column = 0;
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "2");
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(4.0, res.Result);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
