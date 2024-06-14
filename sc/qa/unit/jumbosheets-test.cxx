@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapixml_test.hxx>
+#include "helper/qahelper.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 
 /* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScJumboSheetsTest : public UnoApiXmlTest
+class ScJumboSheetsTest : public ScModelTestBase
 {
 public:
     ScJumboSheetsTest();
@@ -66,27 +66,25 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void testRoundtripColumn2000(std::u16string_view name, const char* format);
-    void testRoundtripNamedRanges(std::u16string_view name, const char* format);
+    void testRoundtripColumn2000(const char* name, const char* format);
+    void testRoundtripNamedRanges(const char* name, const char* format);
 };
 
 void ScJumboSheetsTest::testRoundtripColumn2000Ods()
 {
-    testRoundtripColumn2000(u"ods/value-in-column-2000.ods", "calc8");
+    testRoundtripColumn2000("ods/value-in-column-2000.ods", "calc8");
 }
 
 void ScJumboSheetsTest::testRoundtripColumn2000Xlsx()
 {
-    testRoundtripColumn2000(u"xlsx/value-in-column-2000.xlsx", "Calc Office Open XML");
+    testRoundtripColumn2000("xlsx/value-in-column-2000.xlsx", "Calc Office Open XML");
 }
 
-void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const char* format)
+void ScJumboSheetsTest::testRoundtripColumn2000(const char* name, const char* format)
 {
-    loadFromFile(name);
+    createScDoc(name);
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         // Check the value at BXX1 (2000th column).
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(1999, 0, 0));
         // Check the formula referencing the value.
@@ -98,10 +96,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
 
     saveAndReload(OUString::createFromAscii(format));
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         // Check again.
         CPPUNIT_ASSERT_EQUAL(-5.0, pDoc->GetValue(1999, 0, 0));
         CPPUNIT_ASSERT_EQUAL(u"=BXX1"_ustr, pDoc->GetFormula(0, 0, 0));
@@ -112,11 +107,9 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, const 
 
 void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 {
-    loadFromFile(u"ods/sum-whole-column-row.ods");
+    createScDoc("ods/sum-whole-column-row.ods");
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         // Check the formula referencing the whole-row range.
         CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
         // Check the formula referencing the whole-column range.
@@ -125,10 +118,7 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 
     saveAndReload(u"calc8"_ustr);
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -146,13 +136,10 @@ void ScJumboSheetsTest::testRoundtripColumnRangeOds()
 
 void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
 {
-    loadFromFile(u"ods/sum-whole-column-row.ods");
+    createScDoc("ods/sum-whole-column-row.ods");
     saveAndReload(u"Calc Office Open XML"_ustr);
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         CPPUNIT_ASSERT_EQUAL(u"=SUM(2:2)"_ustr, pDoc->GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(u"=SUM(C:C)"_ustr, pDoc->GetFormula(1, 0, 0));
         xmlDocUniquePtr pXmlDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
@@ -164,9 +151,9 @@ void ScJumboSheetsTest::testRoundtripColumnRangeXlsx()
     }
 }
 
-void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const char* format)
+void ScJumboSheetsTest::testRoundtripNamedRanges(const char* name, const char* format)
 {
-    loadFromFile(name);
+    createScDoc(name);
 
     std::pair<OUString, OUString> ranges[] = { { "CELLBXX1", "$Sheet1.$BXX$1" },
                                                { "CELLSA4_AMJ4", "$Sheet1.$A$4:$AMJ$4" },
@@ -177,9 +164,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const
                                                { "COLUMN_E", "$Sheet1.$E:$E" },
                                                { "ROW_4", "$Sheet1.$4:$4" } };
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)
         {
             ScRangeData* rangeData = pDoc->GetRangeName()->findByUpperName(range.first);
@@ -190,9 +175,7 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const
 
     saveAndReload(OUString::createFromAscii(format));
     {
-        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-        CPPUNIT_ASSERT(pModelObj);
-        ScDocument* pDoc = pModelObj->GetDocument();
+        ScDocument* pDoc = getScDoc();
         for (const auto& range : ranges)
         {
             ScRangeData* rangeData = pDoc->GetRangeName()->findByUpperName(range.first);
@@ -204,23 +187,21 @@ void ScJumboSheetsTest::testRoundtripNamedRanges(std::u16string_view name, const
 
 void ScJumboSheetsTest::testRoundtripNamedRangesOds()
 {
-    testRoundtripNamedRanges(u"ods/ranges-column-2000.ods", "calc8");
+    testRoundtripNamedRanges("ods/ranges-column-2000.ods", "calc8");
 }
 
 void ScJumboSheetsTest::testRoundtripNamedRangesXlsx()
 {
-    testRoundtripNamedRanges(u"ods/ranges-column-2000.ods", "Calc Office Open XML");
+    testRoundtripNamedRanges("ods/ranges-column-2000.ods", "Calc Office Open XML");
 }
 
 void ScJumboSheetsTest::testNamedRangeNameConflict()
 {
     // The document contains named ranges named 'num1' and 'num2', that should be still treated
     // as named references even though with 16k columns those are normally NUM1 and NUM2 cells.
-    loadFromFile(u"ods/named-range-conflict.ods");
+    createScDoc("ods/named-range-conflict.ods");
 
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    ScDocument* pDoc = pModelObj->GetDocument();
+    ScDocument* pDoc = getScDoc();
     pDoc->CalcAll();
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(10022, 0, 0)); // NUM1
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(10022, 1, 0)); // NUM2
@@ -238,12 +219,9 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
 
 void ScJumboSheetsTest::testTdf134553()
 {
-    loadFromFile(u"xlsx/tdf134553.xlsx");
+    createScDoc("xlsx/tdf134553.xlsx");
 
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    ScDocument* pDoc = pModelObj->GetDocument();
-
+    ScDocument* pDoc = getScDoc();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     const SdrPage* pPage = pDrawLayer->GetPage(0);
     const SdrObject* pOleObj = pPage->GetObj(0);
@@ -264,9 +242,7 @@ void ScJumboSheetsTest::testTdf134553()
     CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
     CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
 
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    CPPUNIT_ASSERT(pViewData);
-    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    ScTabViewShell* pViewShell = getViewShell();
     pViewShell->SelectObject(u"Diagram 1");
 
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
@@ -290,29 +266,23 @@ void ScJumboSheetsTest::testTdf134553()
 void ScJumboSheetsTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
-    loadFromFile(u"xlsx/tdf134392.xlsx");
+    createScDoc("xlsx/tdf134392.xlsx");
 
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    ScDocument* pDoc = pModelObj->GetDocument();
+    ScDocument* pDoc = getScDoc();
     pDoc->CalcAll(); // perform hard re-calculation.
 }
 
 void ScJumboSheetsTest::testTdf147509()
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-
-    ScDocument* pDoc = pModelObj->GetDocument();
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
 
     pDoc->SetString(0, 0, 0, u"A"_ustr);
     pDoc->SetString(1, 0, 0, u"B"_ustr);
 
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    CPPUNIT_ASSERT(pViewData);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewData->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pViewData->GetCurY());
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewShell->GetViewData().GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pViewShell->GetViewData().GetCurY());
 
     dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, {});
 
@@ -329,34 +299,31 @@ void ScJumboSheetsTest::testTdf147509()
 
 void ScJumboSheetsTest::testTdf133033()
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    createScDoc();
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
 
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    CPPUNIT_ASSERT(pViewData);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewData->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), pViewData->GetCurY());
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pViewShell->GetViewData().GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), pViewShell->GetViewData().GetCurY());
 }
 
 void ScJumboSheetsTest::testTdf109061()
 {
     // Without the fix in place, the file would have crashed
-    loadFromFile(u"xlsx/tdf109061.xlsx");
+    createScDoc("xlsx/tdf109061.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    ScDocument* pDoc = pModelObj->GetDocument();
     pDoc->CalcAll(); // perform hard re-calculation.
 
     CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(1, 3, 0));
 }
 
 ScJumboSheetsTest::ScJumboSheetsTest()
-    : UnoApiXmlTest(u"/sc/qa/unit/data/"_ustr)
+    : ScModelTestBase(u"/sc/qa/unit/data/"_ustr)
 {
 }
 
