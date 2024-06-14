@@ -377,6 +377,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/icc/icc_transform \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_decoder \
     UnpackedTarball/pdfium/core/fxcodec/jpeg/jpeg_common \
+    UnpackedTarball/pdfium/core/fxcodec/data_and_bytes_consumed \
 ))
 
 # fxcrt

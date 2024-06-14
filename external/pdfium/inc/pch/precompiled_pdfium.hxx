@@ -82,6 +82,8 @@
 #include <constants/stream_dict_common.h>
 #include <constants/transparency.h>
 #include <core/fdrm/fx_crypt.h>
+#include <core/fdrm/fx_crypt_aes.h>
+#include <core/fdrm/fx_crypt_sha.h>
 #include <core/fpdfapi/cmaps/CNS1/cmaps_cns1.h>
 #include <core/fpdfapi/cmaps/GB1/cmaps_gb1.h>
 #include <core/fpdfapi/cmaps/Japan1/cmaps_japan1.h>
@@ -244,6 +246,7 @@
 #include <core/fpdftext/unicodenormalizationdata.h>
 #include <core/fxcodec/basic/basicmodule.h>
 #include <core/fxcodec/cfx_codec_memory.h>
+#include <core/fxcodec/data_and_bytes_consumed.h>
 #include <core/fxcodec/fax/faxmodule.h>
 #include <core/fxcodec/flate/flatemodule.h>
 #include <core/fxcodec/fx_codec.h>
