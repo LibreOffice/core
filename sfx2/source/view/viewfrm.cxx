@@ -1639,8 +1639,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
 
                     //what's new dialog
-                    if (utl::isProductVersionUpgraded() && !IsInModalMode())
+                    static bool wantsWhatsNew = utl::isProductVersionUpgraded() && !IsInModalMode();
+                    if (wantsWhatsNew)
                     {
+                        wantsWhatsNew = false;
                         if (officecfg::Setup::Product::WhatsNew::get())
                         {
                             VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
@@ -1652,22 +1654,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                             }
                             bIsInfobarShown = true;
                             bIsWhatsNewShown = true;
-                        }
-
-                        //update lastversion
-                        OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-                        try
-                        {
-                            std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                                comphelper::ConfigurationChanges::create());
-                            officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
-                            batch->commit();
-                        }
-                        catch (css::lang::IllegalArgumentException&)
-                        { //If the value was readOnly.
-                            SAL_WARN("desktop.updater", "Updating property ooSetupLastVersion to version "
-                                                            << sSetupVersion
-                                                            << " failed (read-only property?)");
                         }
                     }
 

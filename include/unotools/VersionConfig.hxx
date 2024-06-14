@@ -9,25 +9,14 @@
  */
 #pragma once
 
-#include <unotools/configmgr.hxx>
-#include <o3tl/string_view.hxx>
+#include <sal/config.h>
+
+#include <unotools/unotoolsdllapi.h>
 
 namespace utl
 {
 /** This method is called when there's a need to determine if the
  * current version of LibreOffice has been upgraded to a newer one.
-
-    @param aUpdateVersion This variable is used to determine if
-    LibreOffice's previous version should be updated.
  */
-static bool isProductVersionUpgraded()
-{
-    OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-    sal_Int32 iCurrent = o3tl::toInt32(o3tl::getToken(sSetupVersion, 0, '.')) * 10
-                         + o3tl::toInt32(o3tl::getToken(sSetupVersion, 1, '.'));
-    OUString sLastVersion = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
-    sal_Int32 iLast = o3tl::toInt32(o3tl::getToken(sLastVersion, 0, '.')) * 10
-                      + o3tl::toInt32(o3tl::getToken(sLastVersion, 1, '.'));
-    return (iCurrent > iLast);
-}
+bool UNOTOOLS_DLLPUBLIC isProductVersionUpgraded();
 }
