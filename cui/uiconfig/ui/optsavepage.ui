@@ -221,7 +221,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="userautosave">
-                <property name="label" translatable="yes" context="optsavepage|userautosave">Automatically save the document too</property>
+                <property name="label" translatable="yes" context="optsavepage|userautosave">Automatically save the document instead</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -230,7 +230,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="userautosave-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that the office suite saves all open documents when saving auto recovery information. Uses the same time interval as AutoRecovery does.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that the office suite saves the modified document itself, instead of creaing a temporary AutoRecovery version. Uses the same time interval as AutoRecovery does.</property>
                   </object>
                 </child>
               </object>
