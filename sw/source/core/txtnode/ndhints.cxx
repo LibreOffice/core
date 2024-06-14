@@ -405,24 +405,9 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
 void SwpHints::Resort() const
 {
-    if (m_bStartMapNeedsSorting)
-    {
-        auto & rStartMap = const_cast<SwpHints*>(this)->m_HintsByStart;
-        std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
-        m_bStartMapNeedsSorting = false;
-    }
-    if (m_bEndMapNeedsSorting)
-    {
-        auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
-        std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd());
-        m_bEndMapNeedsSorting = false;
-    }
-    if (m_bWhichMapNeedsSorting)
-    {
-        auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
-        std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart());
-        m_bWhichMapNeedsSorting = false;
-    }
+    ResortStartMap();
+    ResortEndMap();
+    ResortWhichMap();
 }
 
 void SwpHints::ResortStartMap() const
