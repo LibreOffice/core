@@ -557,8 +557,6 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
     ZipEntry const& rEntry, ::rtl::Reference<EncryptionData> const& rData,
     rtl::Reference<comphelper::RefCountedMutex> const& rMutex)
 {
-    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
-
     if (rData.is() && rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
     {
         try // the only way to find out: decrypt the whole stream, which will
@@ -579,6 +577,8 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
     }
     else if (rData.is() && rData->m_aKey.hasElements())
     {
+        ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
+
         css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
         sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
@@ -733,8 +733,18 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     static const sal_Int32 nThreadingThreshold = 10000;
 
     // "encrypted-package" is the only data stream, no point in threading it
-    if (rEntry.sPath != "encrypted-package" && nThreadingThreshold < xSrcStream->available())
+    if (nThreadingThreshold < xSrcStream->available()
+        && rEntry.sPath != "encrypted-package"
+        // tdf#160888 no threading for AEAD streams:
+        // 1. the whole stream must be read immediately to verify tag
+        // 2. XBufferedThreadedStream uses same m_aMutexHolder->GetMutex()
+        //    => caller cannot read without deadlock
+        && (nStreamMode != UNBUFF_STREAM_DATA
+            || !rData.is()
+            || rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C))
+    {
         xBufStream = new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
+    }
     else
 #endif
         xBufStream = new XBufferedStream(xSrcStream);
