@@ -162,9 +162,13 @@ const sal_Int32* SwTextRefMark::GetEnd() const
 
 void SwTextRefMark::SetEnd(sal_Int32 n)
 {
-    *m_pEnd = n;
-    if (m_pHints)
-        m_pHints->EndPosChanged();
+    if (*m_pEnd != n)
+    {
+        sal_Int32 nOldEndPos = *m_pEnd;
+        *m_pEnd = n;
+        if (m_pHints)
+            m_pHints->EndPosChanged(Which(), GetStart(), nOldEndPos, *m_pEnd);
+    }
 }
 
 void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString aContent)

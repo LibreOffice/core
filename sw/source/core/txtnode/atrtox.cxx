@@ -56,9 +56,13 @@ const sal_Int32* SwTextTOXMark::GetEnd() const
 
 void SwTextTOXMark::SetEnd(sal_Int32 n)
 {
-    *m_pEnd = n;
-    if (m_pHints)
-        m_pHints->EndPosChanged();
+    if (*m_pEnd != n)
+    {
+        sal_Int32 nOldEndPos = *m_pEnd;
+        *m_pEnd = n;
+        if (m_pHints)
+            m_pHints->EndPosChanged(Which(), GetStart(), nOldEndPos, *m_pEnd);
+    }
 }
 
 void SwTextTOXMark::CopyTOXMark( SwDoc& rDoc )

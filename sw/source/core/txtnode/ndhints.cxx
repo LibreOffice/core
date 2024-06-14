@@ -64,6 +64,33 @@ static bool CompareSwpHtStart( const SwTextAttr* lhs, const SwTextAttr* rhs )
     return ( rHt1.GetStart() < rHt2.GetStart() );
 }
 
+/// sort order: Start
+/// (char style: sort number), at last the pointer
+namespace {
+struct CompareSwpHtStartOnly
+{
+    bool operator()( const SwTextAttr* lhs, sal_Int32 rhs ) const
+    {
+        return lhs->GetStart() < rhs;
+    }
+    bool operator()( sal_Int32 lhs, const SwTextAttr* rhs ) const
+    {
+        return lhs < rhs->GetStart();
+    }
+};
+struct CompareSwpHtEndOnly
+{
+    bool operator()( const SwTextAttr* lhs, sal_Int32 rhs ) const
+    {
+        return lhs->GetAnyEnd() < rhs;
+    }
+    bool operator()( sal_Int32 lhs, const SwTextAttr* rhs ) const
+    {
+        return lhs < rhs->GetAnyEnd();
+    }
+};
+}
+
 /// sort order: Which, Start, End(reverse) at last the pointer
 bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const sal_uInt16 nWhich ) const
 {
@@ -99,6 +126,22 @@ bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const SwTextAttr
     if ( nEnd1 < nEnd2 )
         return false;
     return reinterpret_cast<sal_IntPtr>(&rHt1) < reinterpret_cast<sal_IntPtr>(&rHt2);
+}
+bool CompareSwpHtWhichStart::operator()( const SwTextAttr* lhs, const WhichStartPair rhs ) const
+{
+    if ( lhs->Which() < rhs.first )
+        return true;
+    if ( lhs->Which() > rhs.first )
+        return false;
+    return lhs->GetStart() < rhs.second;
+}
+bool CompareSwpHtWhichStart::operator()( const WhichStartPair lhs, const SwTextAttr* rhs ) const
+{
+    if ( lhs.first < rhs->Which() )
+        return true;
+    if ( lhs.first > rhs->Which() )
+        return false;
+    return lhs.second < rhs->GetStart();
 }
 
 /// sort order: End, Start(reverse), Which
@@ -149,12 +192,9 @@ void SwpHints::Insert(SwTextAttr* pHt)
     assert( pHt->m_pHints == nullptr );
     pHt->m_pHints = this;
 
-    if (m_bStartMapNeedsSorting)
-        ResortStartMap();
-    if (m_bEndMapNeedsSorting)
-        ResortEndMap();
-    if (m_bWhichMapNeedsSorting)
-        ResortWhichMap();
+    ResortStartMap();
+    ResortEndMap();
+    ResortWhichMap();
 
     auto it1 = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), pHt, CompareSwpHtStart);
     m_HintsByStart.insert(it1, pHt);
@@ -412,37 +452,64 @@ void SwpHints::Resort() const
 
 void SwpHints::ResortStartMap() const
 {
-    if (m_bStartMapNeedsSorting)
+    if (m_StartMapNeedsSortingRange.first != SAL_MAX_INT32)
     {
         auto & rStartMap = const_cast<SwpHints*>(this)->m_HintsByStart;
-        std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
-        m_bStartMapNeedsSorting = false;
+        if (m_StartMapNeedsSortingRange.first == -1)
+            std::sort(rStartMap.begin(), rStartMap.end(), CompareSwpHtStart);
+        else
+        {
+            // only need to sort a partial range of the array
+            auto it1 = std::lower_bound(rStartMap.begin(), rStartMap.end(), m_StartMapNeedsSortingRange.first, CompareSwpHtStartOnly());
+            auto it2 = std::upper_bound(rStartMap.begin(), rStartMap.end(), m_StartMapNeedsSortingRange.second, CompareSwpHtStartOnly());
+            std::sort(rStartMap.begin() + std::distance(rStartMap.begin(), it1),
+                      rStartMap.begin() + std::distance(rStartMap.begin(), it2), CompareSwpHtStart);
+        }
+        m_StartMapNeedsSortingRange = { SAL_MAX_INT32, -1 };
     }
 }
 
 void SwpHints::ResortEndMap() const
 {
-    if (m_bEndMapNeedsSorting)
+    if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
     {
         auto & rEndMap = const_cast<SwpHints*>(this)->m_HintsByEnd;
-        std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd());
-        m_bEndMapNeedsSorting = false;
+        if (m_EndMapNeedsSortingRange.first == -1)
+            std::sort(rEndMap.begin(), rEndMap.end(), CompareSwpHtEnd());
+        else
+        {
+            // only need to sort a partial range of the array
+            auto it1 = std::lower_bound(rEndMap.begin(), rEndMap.end(), m_EndMapNeedsSortingRange.first, CompareSwpHtEndOnly());
+            auto it2 = std::upper_bound(rEndMap.begin(), rEndMap.end(), m_EndMapNeedsSortingRange.second, CompareSwpHtEndOnly());
+            std::sort(rEndMap.begin() + std::distance(rEndMap.begin(), it1),
+                      rEndMap.begin() + std::distance(rEndMap.begin(), it2), CompareSwpHtEnd());
+        }
+        m_EndMapNeedsSortingRange = { SAL_MAX_INT32, -1 };
     }
 }
 
 void SwpHints::ResortWhichMap() const
 {
-    if (m_bWhichMapNeedsSorting)
+    if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
     {
         auto & rWhichStartMap = const_cast<SwpHints*>(this)->m_HintsByWhichAndStart;
-        std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart());
-        m_bWhichMapNeedsSorting = false;
+        if (m_WhichMapNeedsSortingRange.first.first == -1)
+            std::sort(rWhichStartMap.begin(), rWhichStartMap.end(), CompareSwpHtWhichStart());
+        else
+        {
+            // only need to sort a partial range of the array
+            auto it1 = std::lower_bound(rWhichStartMap.begin(), rWhichStartMap.end(), m_WhichMapNeedsSortingRange.first, CompareSwpHtWhichStart());
+            auto it2 = std::upper_bound(rWhichStartMap.begin(), rWhichStartMap.end(), m_WhichMapNeedsSortingRange.second, CompareSwpHtWhichStart());
+            std::sort(rWhichStartMap.begin() + std::distance(rWhichStartMap.begin(), it1),
+                      rWhichStartMap.begin() + std::distance(rWhichStartMap.begin(), it2), CompareSwpHtWhichStart());
+        }
+        m_WhichMapNeedsSortingRange = { { SAL_MAX_INT32, -1 }, { -1, -1 } };
     }
 }
 
 size_t SwpHints::GetFirstPosSortedByWhichAndStart( sal_uInt16 nWhich ) const
 {
-    if (m_bWhichMapNeedsSorting)
+    if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
         ResortWhichMap();
     auto it = std::lower_bound(m_HintsByWhichAndStart.begin(), m_HintsByWhichAndStart.end(), nWhich, CompareSwpHtWhichStart());
     if ( it == m_HintsByWhichAndStart.end() )
@@ -452,7 +519,7 @@ size_t SwpHints::GetFirstPosSortedByWhichAndStart( sal_uInt16 nWhich ) const
 
 int SwpHints::GetLastPosSortedByEnd( sal_Int32 nEndPos ) const
 {
-    if (m_bEndMapNeedsSorting)
+    if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
         ResortEndMap();
     auto it = std::upper_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), nEndPos, CompareSwpHtEnd());
     return it - m_HintsByEnd.begin() - 1;
@@ -460,7 +527,7 @@ int SwpHints::GetLastPosSortedByEnd( sal_Int32 nEndPos ) const
 
 size_t SwpHints::GetIndexOf( const SwTextAttr *pHt ) const
 {
-    if (m_bStartMapNeedsSorting)
+    if (m_StartMapNeedsSortingRange.first != SAL_MAX_INT32)
         ResortStartMap();
     auto it = std::lower_bound(m_HintsByStart.begin(), m_HintsByStart.end(), const_cast<SwTextAttr*>(pHt), CompareSwpHtStart);
     if ( it == m_HintsByStart.end() || *it != pHt )

@@ -81,9 +81,13 @@ const sal_Int32* SwTextAttrEnd::GetEnd() const
 
 void SwTextAttrEnd::SetEnd(sal_Int32 n)
 {
-    m_nEnd = n;
-    if (m_pHints)
-        m_pHints->EndPosChanged();
+    if (m_nEnd != n)
+    {
+        sal_Int32 nOldEndPos = m_nEnd;
+        m_nEnd = n;
+        if (m_pHints)
+            m_pHints->EndPosChanged(Which(), GetStart(), nOldEndPos, m_nEnd);
+    }
 }
 
 void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const

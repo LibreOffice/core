@@ -98,9 +98,6 @@ SwpHints::SwpHints(const SwTextNode& rParent)
     , m_bHiddenByParaField(false)
     , m_bFootnote(false)
     , m_bDDEFields(false)
-    , m_bStartMapNeedsSorting(false)
-    , m_bEndMapNeedsSorting(false)
-    , m_bWhichMapNeedsSorting(false)
 {
 }
 
@@ -3390,7 +3387,7 @@ bool SwpHints::TryInsertHint(
 
 void SwpHints::DeleteAtPos( const size_t nPos )
 {
-    assert(!m_bStartMapNeedsSorting && "deleting at pos and the list needs sorting?");
+    assert(m_StartMapNeedsSortingRange.first == SAL_MAX_INT32 && "deleting at pos and the list needs sorting?");
 
     SwTextAttr *pHint = Get(nPos);
     assert( pHint->m_pHints == this );
@@ -3401,11 +3398,11 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     SwTextAttr *pHt = m_HintsByStart[ nPos ];
     m_HintsByStart.erase( m_HintsByStart.begin() + nPos );
 
-    if (m_bStartMapNeedsSorting)
+    if (m_StartMapNeedsSortingRange.first != SAL_MAX_INT32)
         ResortStartMap();
-    if (m_bEndMapNeedsSorting)
+    if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
         ResortEndMap();
-    if (m_bWhichMapNeedsSorting)
+    if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
         ResortWhichMap();
 
     auto findIt = std::lower_bound(m_HintsByEnd.begin(), m_HintsByEnd.end(), pHt, CompareSwpHtEnd());

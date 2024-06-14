@@ -57,10 +57,14 @@ struct CompareSwpHtEnd
     bool operator()( sal_Int32 nEndPos, const SwTextAttr* rhs ) const;
     bool operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const;
 };
+typedef std::pair<sal_Int32, sal_Int32> WhichStartPair;
 struct CompareSwpHtWhichStart
 {
     bool operator()( const SwTextAttr* lhs, const sal_uInt16 nWhich ) const;
     bool operator()( const SwTextAttr* lhs, const SwTextAttr* rhs ) const;
+    // used when we sort only a partial range of the map
+    bool operator()( const SwTextAttr* lhs, const WhichStartPair nWhich ) const;
+    bool operator()( const WhichStartPair nWhich, const SwTextAttr* lhs ) const;
 };
 
 /// An SwTextAttr container, stores all directly formatted text portions for a text node.
@@ -89,9 +93,11 @@ private:
     bool          m_bFootnote            : 1;   ///< footnotes
     bool          m_bDDEFields           : 1;   ///< the TextNode has DDE fields
     // Sort on demand to avoid O(n^2) behaviour
-    mutable bool  m_bStartMapNeedsSorting : 1;
-    mutable bool  m_bEndMapNeedsSorting : 1;
-    mutable bool  m_bWhichMapNeedsSorting : 1;
+    // SAL_MAX_INT32 means nothing needs sorting, -1 means everything needs sorting
+    mutable std::pair<sal_Int32, sal_Int32> m_StartMapNeedsSortingRange { SAL_MAX_INT32, -1 };
+    mutable std::pair<sal_Int32, sal_Int32> m_EndMapNeedsSortingRange { SAL_MAX_INT32, -1 };
+    // we are storing pairs of { Which, Start } here
+    mutable std::pair<WhichStartPair, WhichStartPair> m_WhichMapNeedsSortingRange { { SAL_MAX_INT32, -1 }, { -1, -1 } };
 
     /// records a new attribute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
@@ -143,8 +149,8 @@ public:
     bool Contains( const SwTextAttr *pHt ) const;
     SwTextAttr * Get( size_t nPos ) const
     {
-        assert( !(nPos != 0 && m_bStartMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
-        if (m_bStartMapNeedsSorting)
+        assert( !(nPos != 0 && m_StartMapNeedsSortingRange.first != SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_StartMapNeedsSortingRange.first != SAL_MAX_INT32)
             ResortStartMap();
         return m_HintsByStart[nPos];
     }
@@ -157,8 +163,8 @@ public:
     int GetLastPosSortedByEnd(sal_Int32 nEndPos) const;
     SwTextAttr * GetSortedByEnd( size_t nPos ) const
     {
-        assert( !(nPos != 0 && m_bEndMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
-        if (m_bEndMapNeedsSorting)
+        assert( !(nPos != 0 && m_EndMapNeedsSortingRange.first != SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
             ResortEndMap();
         return m_HintsByEnd[nPos];
     }
@@ -166,8 +172,8 @@ public:
     size_t GetFirstPosSortedByWhichAndStart(sal_uInt16 nWhich) const;
     SwTextAttr * GetSortedByWhichAndStart( size_t nPos ) const
     {
-        assert( !(nPos != 0 && m_bWhichMapNeedsSorting) && "going to trigger a resort in the middle of an iteration, that's bad" );
-        if (m_bWhichMapNeedsSorting)
+        assert( !(nPos != 0 && m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
             ResortWhichMap();
         return m_HintsByWhichAndStart[nPos];
     }
@@ -175,11 +181,11 @@ public:
     /// Trigger the sorting if necessary
     void SortIfNeedBe() const
     {
-        if (m_bStartMapNeedsSorting)
+        if (m_StartMapNeedsSortingRange.first != SAL_MAX_INT32)
             ResortStartMap();
-        if (m_bEndMapNeedsSorting)
+        if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
             ResortEndMap();
-        if (m_bWhichMapNeedsSorting)
+        if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
             ResortWhichMap();
     }
     SwTextAttr * Cut( const size_t nPosInStart )
@@ -209,8 +215,22 @@ public:
     bool CalcHiddenParaField() const; // changes mutable state
 
     // Marks the hint-maps as needing sorting because the position of something has changed
-    void StartPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; m_bWhichMapNeedsSorting = true; }
-    void EndPosChanged() const { m_bStartMapNeedsSorting = true; m_bEndMapNeedsSorting = true; m_bWhichMapNeedsSorting = true; }
+    void StartPosChanged() const
+    {
+        m_StartMapNeedsSortingRange = { -1, -1 };
+        m_EndMapNeedsSortingRange = { -1, -1 };
+        m_WhichMapNeedsSortingRange = { { -1, -1 }, { -1, -1 } };
+    }
+    void EndPosChanged(sal_uInt16 nWhich, sal_Int32 nStartPos, sal_Int32 nOldEndPos, sal_Int32 nNewEndPos) const
+    {
+        m_StartMapNeedsSortingRange = { std::min(nStartPos, m_StartMapNeedsSortingRange.first),
+                                        std::max(nStartPos, m_StartMapNeedsSortingRange.second) };
+        m_EndMapNeedsSortingRange = { std::min(std::min(nOldEndPos, nNewEndPos), m_EndMapNeedsSortingRange.first),
+                                      std::max(std::max(nOldEndPos, nNewEndPos), m_EndMapNeedsSortingRange.second) };
+        WhichStartPair aPair { sal_Int32(nWhich), nStartPos };
+        m_WhichMapNeedsSortingRange = { std::min(aPair, m_WhichMapNeedsSortingRange.first),
+                                        std::max(aPair, m_WhichMapNeedsSortingRange.second) };
+    }
 };
 
 #endif
