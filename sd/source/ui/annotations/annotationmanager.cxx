@@ -90,6 +90,8 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xlntrit.hxx>
 
 #include <memory>
 
@@ -982,6 +984,8 @@ void applyAnnotationProperties(SdrObject& rObject, sdr::annotation::CreationInfo
     {
         rObject.SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
         rObject.SetMergedItem(XLineColorItem(OUString(), rInfo.maColor));
+        sal_uInt16 nTransparence = 100.0 - (rInfo.maColor.GetAlpha() / 255.0) * 100.0;
+        rObject.SetMergedItem(XLineTransparenceItem(nTransparence));
     }
     rObject.SetMergedItem(XLineWidthItem(rInfo.mnWidth));
 
@@ -989,6 +993,8 @@ void applyAnnotationProperties(SdrObject& rObject, sdr::annotation::CreationInfo
     {
         rObject.SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
         rObject.SetMergedItem(XFillColorItem(OUString(), rInfo.maFillColor));
+        sal_uInt16 nTransparence = 100.0 - (rInfo.maFillColor.GetAlpha() / 255.0) * 100.0;
+        rObject.SetMergedItem(XFillTransparenceItem(nTransparence));
     }
 }
 
@@ -1056,7 +1062,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         }
         else if (rInfo.meType == sdr::annotation::AnnotationType::Square)
         {
-            pNewObject = new SdrRectObj(rModel, SdrObjKind::Rectangle, aRectangle);
+            pNewObject = new SdrRectObj(rModel, aRectangle);
 
             applyAnnotationCommon(*pNewObject, xAnnotation);
             applyAnnotationProperties(*pNewObject, rInfo);
@@ -1070,8 +1076,6 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         }
         else if (rInfo.meType == sdr::annotation::AnnotationType::Stamp)
         {
-            pNewObject = new SdrCircObj(rModel, SdrCircKind::Full, aRectangle);
-
             rtl::Reference<SdrGrafObj> pGrafObject = new SdrGrafObj(rModel, Graphic(rInfo.maBitmapEx), aRectangle);
             pNewObject = pGrafObject;
 
