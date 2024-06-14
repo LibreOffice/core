@@ -12,19 +12,6 @@ index 31564f45f..5858549ef 100644
  
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(/*depth=*/0, doc->GetRoot(), &unsupported);
-diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
-index 9dd4256d7..949d65830 100644
---- a/third_party/libopenjpeg/openjpeg.c
-+++ b/third_party/libopenjpeg/openjpeg.c
-@@ -358,7 +358,7 @@ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
-     return OPJ_FALSE;
- }
- 
--OPJ_API OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
-+OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
-         OPJ_BOOL strict)
- {
-     if (p_codec) {
 diff --git a/core/fxge/cfx_face.cpp b/core/fxge/cfx_face.cpp
 index 7d9cd0f44..0d0a311aa 100644
 --- a/core/fxge/cfx_face.cpp
@@ -38,3 +25,42 @@ index 7d9cd0f44..0d0a311aa 100644
  }
  
  FX_RECT CFX_Face::GetCharBBox(uint32_t code, int glyph_index) {
+diff --git a/core/fpdfdoc/cpdf_action.cpp b/core/fpdfdoc/cpdf_action.cpp
+index a5b687d76..076a260d5 100644
+--- a/core/fpdfdoc/cpdf_action.cpp
++++ b/core/fpdfdoc/cpdf_action.cpp
+@@ -21,7 +21,7 @@
+ 
+ namespace {
+ 
+-constexpr auto kActionTypeStrings = fxcrt::ToArray<const char*>({
++std::array<const char*, 18> kActionTypeStrings = {
+     "GoTo",
+     "GoToR",
+     "GoToE",
+@@ -40,7 +40,7 @@ constexpr auto kActionTypeStrings = fxcrt::ToArray<const char*>({
+     "Rendition",
+     "Trans",
+     "GoTo3DView",
+-});
++};
+ 
+ }  // namespace
+ 
+diff --git a/core/fpdfdoc/cpdf_dest.cpp b/core/fpdfdoc/cpdf_dest.cpp
+index 8026a75d5..34c20d62f 100644
+--- a/core/fpdfdoc/cpdf_dest.cpp
++++ b/core/fpdfdoc/cpdf_dest.cpp
+@@ -21,9 +21,9 @@ namespace {
+ 
+ // These arrays are indexed by the PDFDEST_VIEW_* constants.
+ 
+-constexpr auto kZoomModes =
+-    fxcrt::ToArray<const char*>({"Unknown", "XYZ", "Fit", "FitH", "FitV",
+-                                 "FitR", "FitB", "FitBH", "FitBV"});
++std::array<const char*, 9>  kZoomModes = {
++    "Unknown", "XYZ", "Fit", "FitH", "FitV",
++                                 "FitR", "FitB", "FitBH", "FitBV"};
+ 
+ constexpr auto kZoomModeMaxParamCount =
+     fxcrt::ToArray<const uint8_t>({0, 3, 0, 1, 1, 4, 0, 1, 1});
