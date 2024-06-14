@@ -1031,6 +1031,11 @@ bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
     bool bRet = !pCursor->IsSelOvr();
     if( bRet )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+    if (&pCursor->GetPoint()->GetNode() != pTNd)
+    {
+        // tdf#161346 failed to move to field
+        return false;
+    }
     return bRet;
 }
 
