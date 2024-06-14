@@ -199,9 +199,18 @@ sal_Bool SAL_CALL
             const css::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties );
+    // for historical reasons, the word can be only with ASCII apostrophe in the dictionaries,
+    // so as a fallback, convert typographical apostrophes to avoid annoying users, if they
+    // have old (user) dictionaries only with the obsolete ASCII apostrophe.
+    bool bConvert = false;
+    bool bRet = isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, bConvert );
+    if (!bRet && bConvert)
+    {
+        // fallback: convert the apostrophes
+        bRet = isValid_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties, bConvert );
+    }
+    return bRet;
 }
-
 
 Reference< XSpellAlternatives > SAL_CALL
     SpellCheckerDispatcher::spell( const OUString& rWord, const Locale& rLocale,
@@ -249,7 +258,8 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
 bool SpellCheckerDispatcher::isValid_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
-            const PropertyValues& rProperties)
+            const PropertyValues& rProperties,
+            bool& rConvertApostrophe)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -267,11 +277,21 @@ bool SpellCheckerDispatcher::isValid_Impl(
         OUString aChkWord( rWord );
         Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
-        // replace typographical apostroph by ascii apostroph
+        // replace typographical apostrophe by ASCII apostrophe only as a fallback
+        // for old user dictionaries before the time of the default typographical apostrophe
+        // (Note: otherwise also no problem with non-Unicode Hunspell dictionaries, because
+        // the character conversion converts also the typographical apostrophe to the ASCII one)
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
         DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpected length of quotation mark" );
-        if (!aSingleQuote.isEmpty())
-            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
+        if (!aSingleQuote.isEmpty() && aChkWord.indexOf(aSingleQuote[0]) > -1)
+        {
+            // tdf#150582 first check with the original typographical apostrophe,
+            // and convert it only on the second try
+            if (rConvertApostrophe)
+                aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
+            else
+                rConvertApostrophe = true;
+        }
 
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
