@@ -97,11 +97,11 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
 }
 
 SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/optcompatpage.ui", "OptCompatPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/optcompatpage.ui"_ustr, u"OptCompatPage"_ustr, &rSet)
     , m_pWrtShell(nullptr)
-    , m_xMain(m_xBuilder->weld_frame("compatframe"))
-    , m_xOptionsLB(m_xBuilder->weld_tree_view("options"))
-    , m_xDefaultPB(m_xBuilder->weld_button("default"))
+    , m_xMain(m_xBuilder->weld_frame(u"compatframe"_ustr))
+    , m_xOptionsLB(m_xBuilder->weld_tree_view(u"options"_ustr))
+    , m_xDefaultPB(m_xBuilder->weld_button(u"default"_ustr))
 {
     m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
@@ -146,8 +146,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"modules/swriter/ui/querydefaultcompatdialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"QueryDefaultCompatDialog"_ustr));
     if (xQueryBox->run() != RET_YES)
         return;
 

@@ -11,9 +11,9 @@
 
 SwMessageAndEditDialog::SwMessageAndEditDialog(weld::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription)
-    : MessageDialogController(pParent, rUIXMLDescription, rID, "grid")
-    , m_xEdit(m_xBuilder->weld_entry("edit"))
-    , m_xOKPB(m_xBuilder->weld_button("ok"))
+    : MessageDialogController(pParent, rUIXMLDescription, rID, u"grid"_ustr)
+    , m_xEdit(m_xBuilder->weld_entry(u"edit"_ustr))
+    , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
 {
 }
 

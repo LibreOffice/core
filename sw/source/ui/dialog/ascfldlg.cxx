@@ -56,17 +56,17 @@ const sal_Int32 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
-    : SfxDialogController(pParent, "modules/swriter/ui/asciifilterdialog.ui", "AsciiFilterDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/asciifilterdialog.ui"_ustr, u"AsciiFilterDialog"_ustr)
     , m_bSaveLineStatus(true)
-    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
-    , m_xFontFT(m_xBuilder->weld_label("fontft"))
-    , m_xFontLB(m_xBuilder->weld_combo_box("font"))
-    , m_xLanguageFT(m_xBuilder->weld_label("languageft"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
-    , m_xCRLF_RB(m_xBuilder->weld_radio_button("crlf"))
-    , m_xCR_RB(m_xBuilder->weld_radio_button("cr"))
-    , m_xLF_RB(m_xBuilder->weld_radio_button("lf"))
-    , m_xIncludeBOM_CB(m_xBuilder->weld_check_button("includebom"))
+    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"charset"_ustr)))
+    , m_xFontFT(m_xBuilder->weld_label(u"fontft"_ustr))
+    , m_xFontLB(m_xBuilder->weld_combo_box(u"font"_ustr))
+    , m_xLanguageFT(m_xBuilder->weld_label(u"languageft"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
+    , m_xCRLF_RB(m_xBuilder->weld_radio_button(u"crlf"_ustr))
+    , m_xCR_RB(m_xBuilder->weld_radio_button(u"cr"_ustr))
+    , m_xLF_RB(m_xBuilder->weld_radio_button(u"lf"_ustr))
+    , m_xIncludeBOM_CB(m_xBuilder->weld_check_button(u"includebom"_ustr))
 {
     m_xFontLB->make_sorted();
 
@@ -75,7 +75,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
         if (aDlgOpt.Exists())
         {
-            css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+            css::uno::Any aUserItem = aDlgOpt.GetUserItem(u"UserItem"_ustr);
             aUserItem >>= m_sExtraData;
         }
 
@@ -266,7 +266,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
-    aDlgOpt.SetUserItem("UserItem", uno::Any(m_sExtraData));
+    aDlgOpt.SetUserItem(u"UserItem"_ustr, uno::Any(m_sExtraData));
 }
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )

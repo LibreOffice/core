@@ -35,10 +35,10 @@ IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 }
 
 SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell)
-    : GenericDialogController(pParent, "modules/swriter/ui/columnwidth.ui", "ColumnWidthDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/columnwidth.ui"_ustr, u"ColumnWidthDialog"_ustr)
     , m_xFnc(new SwTableFUNC(pShell))
-    , m_xColNF(m_xBuilder->weld_spin_button("column"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
+    , m_xColNF(m_xBuilder->weld_spin_button(u"column"_ustr))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::CM))
 {
     m_xFnc->InitTabCols();
     bool bIsWeb = m_xFnc->GetShell()

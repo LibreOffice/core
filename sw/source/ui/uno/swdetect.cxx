@@ -94,10 +94,10 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             rtl::Reference<SotStorage> aStorage = new SotStorage ( pInStrm, false );
             if ( !aStorage->GetError() )
             {
-                bIsDetected = aStorage->IsContained( "WordDocument" );
+                bIsDetected = aStorage->IsContained( u"WordDocument"_ustr );
                 if ( bIsDetected && aTypeName.startsWith( "writer_MS_Word_97" ) )
                 {
-                    bIsDetected = ( aStorage->IsContained("0Table") || aStorage->IsContained("1Table") );
+                    bIsDetected = ( aStorage->IsContained(u"0Table"_ustr) || aStorage->IsContained(u"1Table"_ustr) );
 
                     // If we are checking the template type, and the document is not a .dot, don't
                     // mis-detect it.
@@ -117,7 +117,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         if (aParser.getExtension().toAsciiLowerCase() != "dot")
                         {
                             rtl::Reference<SotStorageStream> xWordDocument
-                                = aStorage->OpenSotStream("WordDocument", StreamMode::STD_READ);
+                                = aStorage->OpenSotStream(u"WordDocument"_ustr, StreamMode::STD_READ);
                             xWordDocument->Seek(10);
                             if (xWordDocument->Tell() == 10)
                             {
@@ -146,7 +146,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SwFilterDetect::getImplementationName()
 {
-    return "com.sun.star.comp.writer.FormatDetector";
+    return u"com.sun.star.comp.writer.FormatDetector"_ustr;
 }
 
 /* XServiceInfo */
@@ -158,7 +158,7 @@ sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ExtendedTypeDetection", "com.sun.star.text.FormatDetector", "com.sun.star.text.W4WFormatDetector" };
+    return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr, u"com.sun.star.text.FormatDetector"_ustr, u"com.sun.star.text.W4WFormatDetector"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

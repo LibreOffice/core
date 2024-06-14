@@ -37,18 +37,18 @@ std::unique_ptr<SfxTabPage> SwDocStatPage::Create(weld::Container* pPage, weld::
 }
 
 SwDocStatPage::SwDocStatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/statisticsinfopage.ui", "StatisticsInfoPage", &rSet)
-    , m_xPageNo(m_xBuilder->weld_label("nopages"))
-    , m_xTableNo(m_xBuilder->weld_label("notables"))
-    , m_xGrfNo(m_xBuilder->weld_label("nogrfs"))
-    , m_xOLENo(m_xBuilder->weld_label("nooles"))
-    , m_xParaNo(m_xBuilder->weld_label("noparas"))
-    , m_xWordNo(m_xBuilder->weld_label("nowords"))
-    , m_xCharNo(m_xBuilder->weld_label("nochars"))
-    , m_xCharExclSpacesNo(m_xBuilder->weld_label("nocharsexspaces"))
-    , m_xLineLbl(m_xBuilder->weld_label("lineft"))
-    , m_xLineNo(m_xBuilder->weld_label("nolines"))
-    , m_xUpdatePB(m_xBuilder->weld_button("update"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/statisticsinfopage.ui"_ustr, u"StatisticsInfoPage"_ustr, &rSet)
+    , m_xPageNo(m_xBuilder->weld_label(u"nopages"_ustr))
+    , m_xTableNo(m_xBuilder->weld_label(u"notables"_ustr))
+    , m_xGrfNo(m_xBuilder->weld_label(u"nogrfs"_ustr))
+    , m_xOLENo(m_xBuilder->weld_label(u"nooles"_ustr))
+    , m_xParaNo(m_xBuilder->weld_label(u"noparas"_ustr))
+    , m_xWordNo(m_xBuilder->weld_label(u"nowords"_ustr))
+    , m_xCharNo(m_xBuilder->weld_label(u"nochars"_ustr))
+    , m_xCharExclSpacesNo(m_xBuilder->weld_label(u"nocharsexspaces"_ustr))
+    , m_xLineLbl(m_xBuilder->weld_label(u"lineft"_ustr))
+    , m_xLineNo(m_xBuilder->weld_label(u"nolines"_ustr))
+    , m_xUpdatePB(m_xBuilder->weld_button(u"update"_ustr))
 {
     Update();
     m_xUpdatePB->connect_clicked(LINK(this, SwDocStatPage, UpdateHdl));

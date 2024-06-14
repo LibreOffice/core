@@ -27,8 +27,8 @@
 #include <sfx2/tabdlg.hxx>
 
 SwNumFormatDlg::SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/formatnumberdialog.ui", "FormatNumberDialog")
-    , m_xContent( m_xBuilder->weld_container("content") )
+    : SfxSingleTabDialogController(pParent, &rSet, u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr)
+    , m_xContent( m_xBuilder->weld_container(u"content"_ustr) )
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

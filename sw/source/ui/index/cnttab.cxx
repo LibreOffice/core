@@ -91,7 +91,7 @@ static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString&
                 FileDialogFlags::NONE, pParent);
     uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
-    xFP->appendFilter( rFileString, "*.sdi" );
+    xFP->appendFilter( rFileString, u"*.sdi"_ustr );
     xFP->setCurrentFilter( rFileString ) ;
 
     if( !rURL.isEmpty() )
@@ -206,7 +206,7 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet& rSet,
                                          SwWrtShell &rShell, SwTOXBase* pCurTOX,
                                          sal_uInt16 nToxType, bool bGlobal)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/tocdialog.ui", "TocDialog", &rSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/tocdialog.ui"_ustr, u"TocDialog"_ustr, &rSet)
     , m_pMgr( new SwTOXMgr( &rShell ) )
     , m_rWrtShell(rShell)
     , m_pParamTOXBase(pCurTOX)
@@ -215,7 +215,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
     , m_bEditTOX(false)
     , m_bExampleCreated(false)
     , m_bGlobalFlag(bGlobal)
-    , m_xShowExampleCB(m_xBuilder->weld_check_button("showexample"))
+    , m_xShowExampleCB(m_xBuilder->weld_check_button(u"showexample"_ustr))
 {
     m_eCurrentTOXType.eType = TOX_CONTENT;
     m_eCurrentTOXType.nIndex = 0;
@@ -267,19 +267,19 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
                 }
                 else
                 {
-                    m_vTypeData[nArrayIndex].m_pDescription->SetAuthBrackets("[]");
+                    m_vTypeData[nArrayIndex].m_pDescription->SetAuthBrackets(u"[]"_ustr);
                 }
             }
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage("index", SwTOXSelectTabPage::Create, nullptr);
-    AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
-    AddTabPage("columns", SwColumnPage::Create, nullptr);
-    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);
+    AddTabPage(u"index"_ustr, SwTOXSelectTabPage::Create, nullptr);
+    AddTabPage(u"styles"_ustr, SwTOXStylesTabPage::Create, nullptr);
+    AddTabPage(u"columns"_ustr, SwColumnPage::Create, nullptr);
+    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"entries"_ustr, SwTOXEntryTabPage::Create, nullptr);
     if (!pCurTOX)
-        SetCurPageId("index");
+        SetCurPageId(u"index"_ustr);
 
     m_xShowExampleCB->connect_toggled(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
     m_xShowExampleCB->set_active(SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
@@ -379,7 +379,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
             }
             else
             {
-                m_vTypeData[nIndex].m_pDescription->SetAuthBrackets("[]");
+                m_vTypeData[nIndex].m_pDescription->SetAuthBrackets(u"[]"_ustr);
             }
         }
         else if(TOX_INDEX == eType.eType)
@@ -423,7 +423,7 @@ void SwMultiTOXTabDialog::ShowPreview()
         if(!m_xExampleFrame && !m_bExampleCreated)
         {
             m_bExampleCreated = true;
-            OUString sTemplate("internal/idxexample.odt");
+            OUString sTemplate(u"internal/idxexample.odt"_ustr);
 
             SvtPathOptions aOpt;
             bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::Paths::Template );
@@ -442,7 +442,7 @@ void SwMultiTOXTabDialog::ShowPreview()
             {
                 Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 m_xExampleFrame.reset(new SwOneExampleFrame(EX_SHOW_ONLINE_LAYOUT | EX_LOCALIZE_TOC_STRINGS, &aLink, &sTemplate));
-                m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, "example", *m_xExampleFrame));
+                m_xExampleFrameWin.reset(new weld::CustomWeld(*m_xBuilder, u"example"_ustr, *m_xExampleFrame));
             }
             m_xShowExampleCB->set_visible(m_xExampleFrame != nullptr);
         }
@@ -504,12 +504,12 @@ public:
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             SwWrtShell const & rWrtSh, OUString rStringArr[])
-    : SfxDialogController(pParent, "modules/swriter/ui/assignstylesdialog.ui", "AssignStylesDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/assignstylesdialog.ui"_ustr, u"AssignStylesDialog"_ustr)
     , m_pStyleArr(rStringArr)
-    , m_xOk(m_xBuilder->weld_button("ok"))
-    , m_xLeftPB(m_xBuilder->weld_button("left"))
-    , m_xRightPB(m_xBuilder->weld_button("right"))
-    , m_xHeaderTree(m_xBuilder->weld_tree_view("styles"))
+    , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xLeftPB(m_xBuilder->weld_button(u"left"_ustr))
+    , m_xRightPB(m_xBuilder->weld_button(u"right"_ustr))
+    , m_xHeaderTree(m_xBuilder->weld_tree_view(u"styles"_ustr))
 {
     m_xOk->connect_clicked(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     m_xLeftPB->connect_clicked(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -754,53 +754,53 @@ void SwAddStylesDlg_Impl::ToggleOn(int nEntry, int nToggleColumn)
 }
 
 SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocindexpage.ui", "TocIndexPage", &rAttrSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/tocindexpage.ui"_ustr, u"TocIndexPage"_ustr, &rAttrSet)
     , m_sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
-    , m_xTitleED(m_xBuilder->weld_entry("title"))
-    , m_xTypeFT(m_xBuilder->weld_label("typeft"))
-    , m_xTypeLB(m_xBuilder->weld_combo_box("type"))
-    , m_xReadOnlyCB(m_xBuilder->weld_check_button("readonly"))
-    , m_xAreaFrame(m_xBuilder->weld_widget("areaframe"))
-    , m_xAreaLB(m_xBuilder->weld_combo_box("scope"))
-    , m_xLevelFT(m_xBuilder->weld_label("levelft"))
-    , m_xLevelNF(m_xBuilder->weld_spin_button("level"))
-    , m_xCreateFrame(m_xBuilder->weld_widget("createframe"))
-    , m_xFromHeadingsCB(m_xBuilder->weld_check_button("fromheadings"))
-    , m_xStylesCB(m_xBuilder->weld_check_button("stylescb"))
-    , m_xAddStylesCB(m_xBuilder->weld_check_button("addstylescb"))
-    , m_xAddStylesPB(m_xBuilder->weld_button("styles"))
-    , m_xFromTablesCB(m_xBuilder->weld_check_button("fromtables"))
-    , m_xFromFramesCB(m_xBuilder->weld_check_button("fromframes"))
-    , m_xFromGraphicsCB(m_xBuilder->weld_check_button("fromgraphics"))
-    , m_xFromOLECB(m_xBuilder->weld_check_button("fromoles"))
-    , m_xLevelFromChapterCB(m_xBuilder->weld_check_button("uselevel"))
-    , m_xFromCaptionsRB(m_xBuilder->weld_radio_button("captions"))
-    , m_xFromObjectNamesRB(m_xBuilder->weld_radio_button("objnames"))
-    , m_xCaptionSequenceFT(m_xBuilder->weld_label("categoryft"))
-    , m_xCaptionSequenceLB(m_xBuilder->weld_combo_box("category"))
-    , m_xDisplayTypeFT(m_xBuilder->weld_label("displayft"))
-    , m_xDisplayTypeLB(m_xBuilder->weld_combo_box("display"))
-    , m_xParaStyleCB(m_xBuilder->weld_check_button("useparastyle"))
-    , m_xParaStyleLB(m_xBuilder->weld_combo_box("parastyle"))
-    , m_xTOXMarksCB(m_xBuilder->weld_check_button("indexmarks"))
-    , m_xIdxOptionsFrame(m_xBuilder->weld_widget("optionsframe"))
-    , m_xCollectSameCB(m_xBuilder->weld_check_button("combinesame"))
-    , m_xUseFFCB(m_xBuilder->weld_check_button("useff"))
-    , m_xUseDashCB(m_xBuilder->weld_check_button("usedash"))
-    , m_xCaseSensitiveCB(m_xBuilder->weld_check_button("casesens"))
-    , m_xInitialCapsCB(m_xBuilder->weld_check_button("initcaps"))
-    , m_xKeyAsEntryCB(m_xBuilder->weld_check_button("keyasentry"))
-    , m_xFromFileCB(m_xBuilder->weld_check_button("fromfile"))
-    , m_xAutoMarkPB(m_xBuilder->weld_menu_button("file"))
-    , m_xFromObjCLB(m_xBuilder->weld_tree_view("objects"))
-    , m_xFromObjFrame(m_xBuilder->weld_widget("objectframe"))
-    , m_xSequenceCB(m_xBuilder->weld_check_button("numberentries"))
-    , m_xBracketLB(m_xBuilder->weld_combo_box("brackets"))
-    , m_xAuthorityFrame(m_xBuilder->weld_widget("authframe"))
-    , m_xSortFrame(m_xBuilder->weld_widget("sortframe"))
-    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
-    , m_xSortAlgorithmLB(m_xBuilder->weld_combo_box("keytype"))
+    , m_xTitleED(m_xBuilder->weld_entry(u"title"_ustr))
+    , m_xTypeFT(m_xBuilder->weld_label(u"typeft"_ustr))
+    , m_xTypeLB(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , m_xReadOnlyCB(m_xBuilder->weld_check_button(u"readonly"_ustr))
+    , m_xAreaFrame(m_xBuilder->weld_widget(u"areaframe"_ustr))
+    , m_xAreaLB(m_xBuilder->weld_combo_box(u"scope"_ustr))
+    , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
+    , m_xLevelNF(m_xBuilder->weld_spin_button(u"level"_ustr))
+    , m_xCreateFrame(m_xBuilder->weld_widget(u"createframe"_ustr))
+    , m_xFromHeadingsCB(m_xBuilder->weld_check_button(u"fromheadings"_ustr))
+    , m_xStylesCB(m_xBuilder->weld_check_button(u"stylescb"_ustr))
+    , m_xAddStylesCB(m_xBuilder->weld_check_button(u"addstylescb"_ustr))
+    , m_xAddStylesPB(m_xBuilder->weld_button(u"styles"_ustr))
+    , m_xFromTablesCB(m_xBuilder->weld_check_button(u"fromtables"_ustr))
+    , m_xFromFramesCB(m_xBuilder->weld_check_button(u"fromframes"_ustr))
+    , m_xFromGraphicsCB(m_xBuilder->weld_check_button(u"fromgraphics"_ustr))
+    , m_xFromOLECB(m_xBuilder->weld_check_button(u"fromoles"_ustr))
+    , m_xLevelFromChapterCB(m_xBuilder->weld_check_button(u"uselevel"_ustr))
+    , m_xFromCaptionsRB(m_xBuilder->weld_radio_button(u"captions"_ustr))
+    , m_xFromObjectNamesRB(m_xBuilder->weld_radio_button(u"objnames"_ustr))
+    , m_xCaptionSequenceFT(m_xBuilder->weld_label(u"categoryft"_ustr))
+    , m_xCaptionSequenceLB(m_xBuilder->weld_combo_box(u"category"_ustr))
+    , m_xDisplayTypeFT(m_xBuilder->weld_label(u"displayft"_ustr))
+    , m_xDisplayTypeLB(m_xBuilder->weld_combo_box(u"display"_ustr))
+    , m_xParaStyleCB(m_xBuilder->weld_check_button(u"useparastyle"_ustr))
+    , m_xParaStyleLB(m_xBuilder->weld_combo_box(u"parastyle"_ustr))
+    , m_xTOXMarksCB(m_xBuilder->weld_check_button(u"indexmarks"_ustr))
+    , m_xIdxOptionsFrame(m_xBuilder->weld_widget(u"optionsframe"_ustr))
+    , m_xCollectSameCB(m_xBuilder->weld_check_button(u"combinesame"_ustr))
+    , m_xUseFFCB(m_xBuilder->weld_check_button(u"useff"_ustr))
+    , m_xUseDashCB(m_xBuilder->weld_check_button(u"usedash"_ustr))
+    , m_xCaseSensitiveCB(m_xBuilder->weld_check_button(u"casesens"_ustr))
+    , m_xInitialCapsCB(m_xBuilder->weld_check_button(u"initcaps"_ustr))
+    , m_xKeyAsEntryCB(m_xBuilder->weld_check_button(u"keyasentry"_ustr))
+    , m_xFromFileCB(m_xBuilder->weld_check_button(u"fromfile"_ustr))
+    , m_xAutoMarkPB(m_xBuilder->weld_menu_button(u"file"_ustr))
+    , m_xFromObjCLB(m_xBuilder->weld_tree_view(u"objects"_ustr))
+    , m_xFromObjFrame(m_xBuilder->weld_widget(u"objectframe"_ustr))
+    , m_xSequenceCB(m_xBuilder->weld_check_button(u"numberentries"_ustr))
+    , m_xBracketLB(m_xBuilder->weld_combo_box(u"brackets"_ustr))
+    , m_xAuthorityFrame(m_xBuilder->weld_widget(u"authframe"_ustr))
+    , m_xSortFrame(m_xBuilder->weld_widget(u"sortframe"_ustr))
+    , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"lang"_ustr)))
+    , m_xSortAlgorithmLB(m_xBuilder->weld_combo_box(u"keytype"_ustr))
 {
     m_sAddStyleUser = m_xStylesCB->get_label();
     m_pIndexEntryWrapper.reset(new IndexEntrySupplierWrapper());
@@ -1471,7 +1471,7 @@ IMPL_LINK_NOARG(SwTOXSelectTabPage, AddStylesHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwTOXSelectTabPage, MenuEnableHdl, weld::Toggleable&, void)
 {
-    m_xAutoMarkPB->set_item_sensitive("edit", !m_sAutoMarkURL.isEmpty());
+    m_xAutoMarkPB->set_item_sensitive(u"edit"_ustr, !m_sAutoMarkURL.isEmpty());
 }
 
 IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OUString&, rIdent, void)
@@ -1527,11 +1527,11 @@ class SwTOXEdit : public SwTOXWidget
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 public:
     SwTOXEdit(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
-        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), "modules/swriter/ui/toxentrywidget.ui"))
+        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), u"modules/swriter/ui/toxentrywidget.ui"_ustr))
         , m_aFormToken(rToken)
         , m_bNextControl(false)
         , m_pParent(pTokenWin)
-        , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         m_xEntry->connect_changed(LINK(this, SwTOXEdit, ModifyHdl));
         m_xEntry->connect_key_press(LINK(this, SwTOXEdit, KeyInputHdl));
@@ -1688,11 +1688,11 @@ class SwTOXButton : public SwTOXWidget
     std::unique_ptr<weld::ToggleButton> m_xButton;
 public:
     SwTOXButton(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
-        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), "modules/swriter/ui/toxbuttonwidget.ui"))
+        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), u"modules/swriter/ui/toxbuttonwidget.ui"_ustr))
         , m_aFormToken(rToken)
         , m_bNextControl(false)
         , m_pParent(pTokenWin)
-        , m_xButton(m_xBuilder->weld_toggle_button("button"))
+        , m_xButton(m_xBuilder->weld_toggle_button(u"button"_ustr))
     {
         m_xButton->connect_key_press(LINK(this, SwTOXButton, KeyInputHdl));
         m_xButton->connect_focus_in(LINK(this, SwTOXButton, FocusInHdl));
@@ -1905,58 +1905,58 @@ namespace
 }
 
 SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocentriespage.ui", "TocEntriesPage", &rAttrSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/tocentriespage.ui"_ustr, u"TocEntriesPage"_ustr, &rAttrSet)
     , m_sDelimStr(SwResId(STR_DELIM))
     , m_sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
     , m_pCurrentForm(nullptr)
     , m_bInLevelHdl(false)
-    , m_xTypeFT(m_xBuilder->weld_label("typeft"))
-    , m_xLevelFT(m_xBuilder->weld_label("levelft"))
-    , m_xLevelLB(m_xBuilder->weld_tree_view("level"))
-    , m_xAllLevelsPB(m_xBuilder->weld_button("all"))
-    , m_xEntryNoPB(m_xBuilder->weld_button("chapterno"))
-    , m_xEntryPB(m_xBuilder->weld_button("entrytext"))
-    , m_xTabPB(m_xBuilder->weld_button("tabstop"))
-    , m_xChapterInfoPB(m_xBuilder->weld_button("chapterinfo"))
-    , m_xPageNoPB(m_xBuilder->weld_button("pageno"))
-    , m_xHyperLinkPB(m_xBuilder->weld_button("hyperlink"))
-    , m_xFieldBox(m_xBuilder->weld_widget("fieldbox"))
-    , m_xAuthFieldsLB(m_xBuilder->weld_combo_box("authfield"))
-    , m_xAuthInsertPB(m_xBuilder->weld_button("insert"))
-    , m_xAuthRemovePB(m_xBuilder->weld_button("remove"))
-    , m_xCharStyleLB(m_xBuilder->weld_combo_box("charstyle"))
-    , m_xEditStylePB(m_xBuilder->weld_button("edit"))
-    , m_xChapterEntryFT(m_xBuilder->weld_label("chapterentryft"))
-    , m_xChapterEntryLB(m_xBuilder->weld_combo_box("chapterentry"))
-    , m_xNumberFormatFT(m_xBuilder->weld_label("numberformatft"))
-    , m_xNumberFormatLB(m_xBuilder->weld_combo_box("numberformat"))
-    , m_xEntryOutlineLevelFT(m_xBuilder->weld_label("entryoutlinelevelft"))
-    , m_xEntryOutlineLevelNF(m_xBuilder->weld_spin_button("entryoutlinelevel"))
-    , m_xFillCharFT(m_xBuilder->weld_label("fillcharft"))
-    , m_xFillCharCB(m_xBuilder->weld_combo_box("fillchar"))
-    , m_xTabPosFT(m_xBuilder->weld_label("tabstopposft"))
-    , m_xTabPosMF(m_xBuilder->weld_metric_spin_button("tabstoppos", FieldUnit::CM))
-    , m_xAutoRightCB(m_xBuilder->weld_check_button("alignright"))
-    , m_xFormatFrame(m_xBuilder->weld_widget("formatframe"))
-    , m_xMainEntryStyleFT(m_xBuilder->weld_label("mainstyleft"))
-    , m_xMainEntryStyleLB(m_xBuilder->weld_combo_box("mainstyle"))
-    , m_xAlphaDelimCB(m_xBuilder->weld_check_button("alphadelim"))
-    , m_xCommaSeparatedCB(m_xBuilder->weld_check_button("commasep"))
-    , m_xRelToStyleCB(m_xBuilder->weld_check_button("reltostyle"))
-    , m_xSortingFrame(m_xBuilder->weld_widget("sortingframe"))
-    , m_xSortDocPosRB(m_xBuilder->weld_radio_button("sortpos"))
-    , m_xSortContentRB(m_xBuilder->weld_radio_button("sortcontents"))
-    , m_xSortKeyFrame(m_xBuilder->weld_widget("sortkeyframe"))
-    , m_xFirstKeyLB(m_xBuilder->weld_combo_box("key1lb"))
-    , m_xFirstSortUpRB(m_xBuilder->weld_toggle_button("up1cb"))
-    , m_xFirstSortDownRB(m_xBuilder->weld_toggle_button("down1cb"))
-    , m_xSecondKeyLB(m_xBuilder->weld_combo_box("key2lb"))
-    , m_xSecondSortUpRB(m_xBuilder->weld_toggle_button("up2cb"))
-    , m_xSecondSortDownRB(m_xBuilder->weld_toggle_button("down2cb"))
-    , m_xThirdKeyLB(m_xBuilder->weld_combo_box("key3lb"))
-    , m_xThirdSortUpRB(m_xBuilder->weld_toggle_button("up3cb"))
-    , m_xThirdSortDownRB(m_xBuilder->weld_toggle_button("down3cb"))
-    , m_xTokenWIN(new SwTokenWindow(m_xBuilder->weld_container("token")))
+    , m_xTypeFT(m_xBuilder->weld_label(u"typeft"_ustr))
+    , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
+    , m_xLevelLB(m_xBuilder->weld_tree_view(u"level"_ustr))
+    , m_xAllLevelsPB(m_xBuilder->weld_button(u"all"_ustr))
+    , m_xEntryNoPB(m_xBuilder->weld_button(u"chapterno"_ustr))
+    , m_xEntryPB(m_xBuilder->weld_button(u"entrytext"_ustr))
+    , m_xTabPB(m_xBuilder->weld_button(u"tabstop"_ustr))
+    , m_xChapterInfoPB(m_xBuilder->weld_button(u"chapterinfo"_ustr))
+    , m_xPageNoPB(m_xBuilder->weld_button(u"pageno"_ustr))
+    , m_xHyperLinkPB(m_xBuilder->weld_button(u"hyperlink"_ustr))
+    , m_xFieldBox(m_xBuilder->weld_widget(u"fieldbox"_ustr))
+    , m_xAuthFieldsLB(m_xBuilder->weld_combo_box(u"authfield"_ustr))
+    , m_xAuthInsertPB(m_xBuilder->weld_button(u"insert"_ustr))
+    , m_xAuthRemovePB(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xCharStyleLB(m_xBuilder->weld_combo_box(u"charstyle"_ustr))
+    , m_xEditStylePB(m_xBuilder->weld_button(u"edit"_ustr))
+    , m_xChapterEntryFT(m_xBuilder->weld_label(u"chapterentryft"_ustr))
+    , m_xChapterEntryLB(m_xBuilder->weld_combo_box(u"chapterentry"_ustr))
+    , m_xNumberFormatFT(m_xBuilder->weld_label(u"numberformatft"_ustr))
+    , m_xNumberFormatLB(m_xBuilder->weld_combo_box(u"numberformat"_ustr))
+    , m_xEntryOutlineLevelFT(m_xBuilder->weld_label(u"entryoutlinelevelft"_ustr))
+    , m_xEntryOutlineLevelNF(m_xBuilder->weld_spin_button(u"entryoutlinelevel"_ustr))
+    , m_xFillCharFT(m_xBuilder->weld_label(u"fillcharft"_ustr))
+    , m_xFillCharCB(m_xBuilder->weld_combo_box(u"fillchar"_ustr))
+    , m_xTabPosFT(m_xBuilder->weld_label(u"tabstopposft"_ustr))
+    , m_xTabPosMF(m_xBuilder->weld_metric_spin_button(u"tabstoppos"_ustr, FieldUnit::CM))
+    , m_xAutoRightCB(m_xBuilder->weld_check_button(u"alignright"_ustr))
+    , m_xFormatFrame(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xMainEntryStyleFT(m_xBuilder->weld_label(u"mainstyleft"_ustr))
+    , m_xMainEntryStyleLB(m_xBuilder->weld_combo_box(u"mainstyle"_ustr))
+    , m_xAlphaDelimCB(m_xBuilder->weld_check_button(u"alphadelim"_ustr))
+    , m_xCommaSeparatedCB(m_xBuilder->weld_check_button(u"commasep"_ustr))
+    , m_xRelToStyleCB(m_xBuilder->weld_check_button(u"reltostyle"_ustr))
+    , m_xSortingFrame(m_xBuilder->weld_widget(u"sortingframe"_ustr))
+    , m_xSortDocPosRB(m_xBuilder->weld_radio_button(u"sortpos"_ustr))
+    , m_xSortContentRB(m_xBuilder->weld_radio_button(u"sortcontents"_ustr))
+    , m_xSortKeyFrame(m_xBuilder->weld_widget(u"sortkeyframe"_ustr))
+    , m_xFirstKeyLB(m_xBuilder->weld_combo_box(u"key1lb"_ustr))
+    , m_xFirstSortUpRB(m_xBuilder->weld_toggle_button(u"up1cb"_ustr))
+    , m_xFirstSortDownRB(m_xBuilder->weld_toggle_button(u"down1cb"_ustr))
+    , m_xSecondKeyLB(m_xBuilder->weld_combo_box(u"key2lb"_ustr))
+    , m_xSecondSortUpRB(m_xBuilder->weld_toggle_button(u"up2cb"_ustr))
+    , m_xSecondSortDownRB(m_xBuilder->weld_toggle_button(u"down2cb"_ustr))
+    , m_xThirdKeyLB(m_xBuilder->weld_combo_box(u"key3lb"_ustr))
+    , m_xThirdSortUpRB(m_xBuilder->weld_toggle_button(u"up3cb"_ustr))
+    , m_xThirdSortDownRB(m_xBuilder->weld_toggle_button(u"down3cb"_ustr))
+    , m_xTokenWIN(new SwTokenWindow(m_xBuilder->weld_container(u"token"_ustr)))
 {
     const OUString sNoCharSortKey(SwResId(STR_NOSORTKEY));
 
@@ -2758,12 +2758,12 @@ SwTokenWindow::SwTokenWindow(std::unique_ptr<weld::Container> xParent)
     , m_aAdjustPositionsIdle("SwTokenWindow m_aAdjustPositionsIdle")
     , m_pParent(nullptr)
     , m_xParentWidget(std::move(xParent))
-    , m_xBuilder(Application::CreateBuilder(m_xParentWidget.get(), "modules/swriter/ui/tokenwidget.ui"))
-    , m_xContainer(m_xBuilder->weld_container("TokenWidget"))
-    , m_xLeftScrollWin(m_xBuilder->weld_button("left"))
-    , m_xCtrlParentWin(m_xBuilder->weld_container("ctrl"))
-    , m_xScrollWin(m_xBuilder->weld_scrolled_window("scrollwin"))
-    , m_xRightScrollWin(m_xBuilder->weld_button("right"))
+    , m_xBuilder(Application::CreateBuilder(m_xParentWidget.get(), u"modules/swriter/ui/tokenwidget.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"TokenWidget"_ustr))
+    , m_xLeftScrollWin(m_xBuilder->weld_button(u"left"_ustr))
+    , m_xCtrlParentWin(m_xBuilder->weld_container(u"ctrl"_ustr))
+    , m_xScrollWin(m_xBuilder->weld_scrolled_window(u"scrollwin"_ustr))
+    , m_xRightScrollWin(m_xBuilder->weld_button(u"right"_ustr))
 {
     m_xScrollWin->connect_hadjustment_changed(LINK(this, SwTokenWindow, ScrollHdl));
     m_xCtrlParentWin->connect_size_allocate(LINK(this, SwTokenWindow, AdjustPositionsHdl));
@@ -3535,12 +3535,12 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
 }
 
 SwTOXStylesTabPage::SwTOXStylesTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/tocstylespage.ui", "TocStylesPage", &rAttrSet)
-    , m_xLevelLB(m_xBuilder->weld_tree_view("levels"))
-    , m_xAssignBT(m_xBuilder->weld_button("assign"))
-    , m_xParaLayLB(m_xBuilder->weld_tree_view("styles"))
-    , m_xStdBT(m_xBuilder->weld_button("default"))
-    , m_xEditStyleBT(m_xBuilder->weld_button("edit"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/tocstylespage.ui"_ustr, u"TocStylesPage"_ustr, &rAttrSet)
+    , m_xLevelLB(m_xBuilder->weld_tree_view(u"levels"_ustr))
+    , m_xAssignBT(m_xBuilder->weld_button(u"assign"_ustr))
+    , m_xParaLayLB(m_xBuilder->weld_tree_view(u"styles"_ustr))
+    , m_xStdBT(m_xBuilder->weld_button(u"default"_ustr))
+    , m_xEditStyleBT(m_xBuilder->weld_button(u"edit"_ustr))
 {
     m_xParaLayLB->make_sorted();
     auto nHeight = m_xLevelLB->get_height_rows(16);
@@ -4072,11 +4072,11 @@ bool SwEntryBrowseBox::IsModified()const
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, OUString aAutoMarkURL,
         bool bCreate)
-    : GenericDialogController(pParent, "modules/swriter/ui/createautomarkdialog.ui", "CreateAutomarkDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/createautomarkdialog.ui"_ustr, u"CreateAutomarkDialog"_ustr)
     , m_sAutoMarkURL(std::move(aAutoMarkURL))
     , m_bCreateMode(bCreate)
-    , m_xOKPB(m_xBuilder->weld_button("ok"))
-    , m_xTable(m_xBuilder->weld_container("area"))
+    , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xTable(m_xBuilder->weld_container(u"area"_ustr))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
     , m_xEntriesBB(VclPtr<SwEntryBrowseBox>::Create(m_xTableCtrlParent))
 {

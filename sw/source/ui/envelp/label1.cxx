@@ -87,7 +87,7 @@ void SwLabDlg::PageCreated(const OUString &rId, SfxTabPage &rPage)
 
 SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
                                 SwDBManager* pDBManager_, bool bLabel)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/labeldialog.ui", "LabelDialog", &rSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/labeldialog.ui"_ustr, u"LabelDialog"_ustr, &rSet)
     , m_pDBManager(pDBManager_)
     , m_pPrtPage(nullptr)
     , m_aTypeIds(50, 10)
@@ -132,20 +132,20 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
     if (m_xExampleSet)
         m_xExampleSet->Put(aItem);
 
-    AddTabPage("format", SwLabFormatPage::Create, nullptr);
-    AddTabPage("options", SwLabPrtPage::Create, nullptr);
-    AddTabPage("labels", SwLabPage::Create, nullptr);
+    AddTabPage(u"format"_ustr, SwLabFormatPage::Create, nullptr);
+    AddTabPage(u"options"_ustr, SwLabPrtPage::Create, nullptr);
+    AddTabPage(u"labels"_ustr, SwLabPage::Create, nullptr);
     m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
 
     if (m_bLabel)
     {
-        RemoveTabPage("business");
-        RemoveTabPage("private");
+        RemoveTabPage(u"business"_ustr);
+        RemoveTabPage(u"private"_ustr);
     }
     else
     {
-        AddTabPage("business", SwBusinessDataPage::Create, nullptr );
-        AddTabPage("private", SwPrivateDataPage::Create, nullptr);
+        AddTabPage(u"business"_ustr, SwBusinessDataPage::Create, nullptr );
+        AddTabPage(u"private"_ustr, SwPrivateDataPage::Create, nullptr);
         m_xDialog->set_title(m_sBusinessCardDlg);
     }
 }
@@ -208,22 +208,22 @@ Printer *SwLabDlg::GetPrt()
 }
 
 SwLabPage::SwLabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/cardmediumpage.ui", "CardMediumPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/cardmediumpage.ui"_ustr, u"CardMediumPage"_ustr, &rSet)
     , m_pDBManager(nullptr)
     , m_aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
-    , m_xAddressFrame(m_xBuilder->weld_widget("addressframe"))
-    , m_xAddrBox(m_xBuilder->weld_check_button("address"))
-    , m_xWritingEdit(m_xBuilder->weld_text_view("textview"))
-    , m_xDatabaseLB(m_xBuilder->weld_combo_box("database"))
-    , m_xTableLB(m_xBuilder->weld_combo_box("table"))
-    , m_xInsertBT(m_xBuilder->weld_button("insert"))
-    , m_xDBFieldLB(m_xBuilder->weld_combo_box("field"))
-    , m_xContButton(m_xBuilder->weld_radio_button("continuous"))
-    , m_xSheetButton(m_xBuilder->weld_radio_button("sheet"))
-    , m_xMakeBox(m_xBuilder->weld_combo_box("brand"))
-    , m_xTypeBox(m_xBuilder->weld_combo_box("type"))
-    , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box("hiddentype"))
-    , m_xFormatInfo(m_xBuilder->weld_label("formatinfo"))
+    , m_xAddressFrame(m_xBuilder->weld_widget(u"addressframe"_ustr))
+    , m_xAddrBox(m_xBuilder->weld_check_button(u"address"_ustr))
+    , m_xWritingEdit(m_xBuilder->weld_text_view(u"textview"_ustr))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box(u"database"_ustr))
+    , m_xTableLB(m_xBuilder->weld_combo_box(u"table"_ustr))
+    , m_xInsertBT(m_xBuilder->weld_button(u"insert"_ustr))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box(u"field"_ustr))
+    , m_xContButton(m_xBuilder->weld_radio_button(u"continuous"_ustr))
+    , m_xSheetButton(m_xBuilder->weld_radio_button(u"sheet"_ustr))
+    , m_xMakeBox(m_xBuilder->weld_combo_box(u"brand"_ustr))
+    , m_xTypeBox(m_xBuilder->weld_combo_box(u"type"_ustr))
+    , m_xHiddenSortTypeBox(m_xBuilder->weld_combo_box(u"hiddentype"_ustr))
+    , m_xFormatInfo(m_xBuilder->weld_label(u"formatinfo"_ustr))
 {
     weld::WaitObject aWait(GetFrameWeld());
 
@@ -380,9 +380,9 @@ IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBox&, void)
 
 void SwLabPage::DisplayFormat()
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
-    std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog("SpinDialog"));
-    std::unique_ptr<weld::MetricSpinButton> xField(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/spinbox.ui"_ustr));
+    std::unique_ptr<weld::Dialog> xTopLevel(xBuilder->weld_dialog(u"SpinDialog"_ustr));
+    std::unique_ptr<weld::MetricSpinButton> xField(xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::CM));
     SetFieldUnit(*xField, ::GetDfltMetric(false));
     xField->set_digits(2);
     xField->set_range(0, INT_MAX - 1, FieldUnit::NONE);
@@ -533,25 +533,25 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
 }
 
 SwPrivateDataPage::SwPrivateDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/privateuserpage.ui", "PrivateUserPage", &rSet)
-    , m_xFirstNameED(m_xBuilder->weld_entry("firstname"))
-    , m_xNameED(m_xBuilder->weld_entry("lastname"))
-    , m_xShortCutED(m_xBuilder->weld_entry("shortname"))
-    , m_xFirstName2ED(m_xBuilder->weld_entry("firstname2"))
-    , m_xName2ED(m_xBuilder->weld_entry("lastname2"))
-    , m_xShortCut2ED(m_xBuilder->weld_entry("shortname2"))
-    , m_xStreetED(m_xBuilder->weld_entry("street"))
-    , m_xZipED(m_xBuilder->weld_entry("izip"))
-    , m_xCityED(m_xBuilder->weld_entry("icity"))
-    , m_xCountryED(m_xBuilder->weld_entry("country"))
-    , m_xStateED(m_xBuilder->weld_entry("state"))
-    , m_xTitleED(m_xBuilder->weld_entry("title"))
-    , m_xProfessionED(m_xBuilder->weld_entry("job"))
-    , m_xPhoneED(m_xBuilder->weld_entry("phone"))
-    , m_xMobilePhoneED(m_xBuilder->weld_entry("mobile"))
-    , m_xFaxED(m_xBuilder->weld_entry("fax"))
-    , m_xHomePageED(m_xBuilder->weld_entry("url"))
-    , m_xMailED(m_xBuilder->weld_entry("email"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/privateuserpage.ui"_ustr, u"PrivateUserPage"_ustr, &rSet)
+    , m_xFirstNameED(m_xBuilder->weld_entry(u"firstname"_ustr))
+    , m_xNameED(m_xBuilder->weld_entry(u"lastname"_ustr))
+    , m_xShortCutED(m_xBuilder->weld_entry(u"shortname"_ustr))
+    , m_xFirstName2ED(m_xBuilder->weld_entry(u"firstname2"_ustr))
+    , m_xName2ED(m_xBuilder->weld_entry(u"lastname2"_ustr))
+    , m_xShortCut2ED(m_xBuilder->weld_entry(u"shortname2"_ustr))
+    , m_xStreetED(m_xBuilder->weld_entry(u"street"_ustr))
+    , m_xZipED(m_xBuilder->weld_entry(u"izip"_ustr))
+    , m_xCityED(m_xBuilder->weld_entry(u"icity"_ustr))
+    , m_xCountryED(m_xBuilder->weld_entry(u"country"_ustr))
+    , m_xStateED(m_xBuilder->weld_entry(u"state"_ustr))
+    , m_xTitleED(m_xBuilder->weld_entry(u"title"_ustr))
+    , m_xProfessionED(m_xBuilder->weld_entry(u"job"_ustr))
+    , m_xPhoneED(m_xBuilder->weld_entry(u"phone"_ustr))
+    , m_xMobilePhoneED(m_xBuilder->weld_entry(u"mobile"_ustr))
+    , m_xFaxED(m_xBuilder->weld_entry(u"fax"_ustr))
+    , m_xHomePageED(m_xBuilder->weld_entry(u"url"_ustr))
+    , m_xMailED(m_xBuilder->weld_entry(u"email"_ustr))
 {
     SetExchangeSupport();
 }
@@ -630,21 +630,21 @@ void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
 }
 
 SwBusinessDataPage::SwBusinessDataPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/businessdatapage.ui", "BusinessDataPage", &rSet)
-    , m_xCompanyED(m_xBuilder->weld_entry("company"))
-    , m_xCompanyExtED(m_xBuilder->weld_entry("company2"))
-    , m_xSloganED(m_xBuilder->weld_entry("slogan"))
-    , m_xStreetED(m_xBuilder->weld_entry("street"))
-    , m_xZipED(m_xBuilder->weld_entry("izip"))
-    , m_xCityED(m_xBuilder->weld_entry("icity"))
-    , m_xCountryED(m_xBuilder->weld_entry("country"))
-    , m_xStateED(m_xBuilder->weld_entry("state"))
-    , m_xPositionED(m_xBuilder->weld_entry("position"))
-    , m_xPhoneED(m_xBuilder->weld_entry("phone"))
-    , m_xMobilePhoneED(m_xBuilder->weld_entry("mobile"))
-    , m_xFaxED(m_xBuilder->weld_entry("fax"))
-    , m_xHomePageED(m_xBuilder->weld_entry("url"))
-    , m_xMailED(m_xBuilder->weld_entry("email"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/businessdatapage.ui"_ustr, u"BusinessDataPage"_ustr, &rSet)
+    , m_xCompanyED(m_xBuilder->weld_entry(u"company"_ustr))
+    , m_xCompanyExtED(m_xBuilder->weld_entry(u"company2"_ustr))
+    , m_xSloganED(m_xBuilder->weld_entry(u"slogan"_ustr))
+    , m_xStreetED(m_xBuilder->weld_entry(u"street"_ustr))
+    , m_xZipED(m_xBuilder->weld_entry(u"izip"_ustr))
+    , m_xCityED(m_xBuilder->weld_entry(u"icity"_ustr))
+    , m_xCountryED(m_xBuilder->weld_entry(u"country"_ustr))
+    , m_xStateED(m_xBuilder->weld_entry(u"state"_ustr))
+    , m_xPositionED(m_xBuilder->weld_entry(u"position"_ustr))
+    , m_xPhoneED(m_xBuilder->weld_entry(u"phone"_ustr))
+    , m_xMobilePhoneED(m_xBuilder->weld_entry(u"mobile"_ustr))
+    , m_xFaxED(m_xBuilder->weld_entry(u"fax"_ustr))
+    , m_xHomePageED(m_xBuilder->weld_entry(u"url"_ustr))
+    , m_xMailED(m_xBuilder->weld_entry(u"email"_ustr))
 {
     SetExchangeSupport();
 }

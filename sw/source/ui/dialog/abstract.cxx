@@ -20,9 +20,10 @@
 #include <abstract.hxx>
 
 SwInsertAbstractDlg::SwInsertAbstractDlg(weld::Window* pParent)
-    : SfxDialogController(pParent, "modules/swriter/ui/abstractdialog.ui", "AbstractDialog")
-    , m_xLevelNF(m_xBuilder->weld_spin_button("outlines"))
-    , m_xParaNF(m_xBuilder->weld_spin_button("paras"))
+    : SfxDialogController(pParent, u"modules/swriter/ui/abstractdialog.ui"_ustr,
+                          u"AbstractDialog"_ustr)
+    , m_xLevelNF(m_xBuilder->weld_spin_button(u"outlines"_ustr))
+    , m_xParaNF(m_xBuilder->weld_spin_button(u"paras"_ustr))
 {
 }
 

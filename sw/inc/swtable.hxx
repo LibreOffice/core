@@ -284,7 +284,7 @@ public:
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.
     bool MakeCopy( SwDoc&, const SwPosition&, const SwSelBoxes&,
-                    bool bCpyName = false, const OUString& rStyleName = "" ) const;
+                    bool bCpyName = false, const OUString& rStyleName = u""_ustr ) const;
     // Copy table in this
     bool InsTable( const SwTable& rCpyTable, const SwNodeIndex&,
                     SwUndoTableCpyTable* pUndo );

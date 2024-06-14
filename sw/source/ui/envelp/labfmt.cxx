@@ -282,24 +282,24 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 }
 
 SwLabFormatPage::SwLabFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/labelformatpage.ui", "LabelFormatPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/labelformatpage.ui"_ustr, u"LabelFormatPage"_ustr, &rSet)
     , m_aPreviewIdle("SwLabFormatPage Preview")
     , m_aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
     , m_bModified(false)
-    , m_xMakeFI(m_xBuilder->weld_label("make"))
-    , m_xTypeFI(m_xBuilder->weld_label("type"))
-    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
-    , m_xHDistField(m_xBuilder->weld_metric_spin_button("hori", FieldUnit::CM))
-    , m_xVDistField(m_xBuilder->weld_metric_spin_button("vert", FieldUnit::CM))
-    , m_xWidthField(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
-    , m_xHeightField(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
-    , m_xLeftField(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
-    , m_xUpperField(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
-    , m_xColsField(m_xBuilder->weld_spin_button("cols"))
-    , m_xRowsField(m_xBuilder->weld_spin_button("rows"))
-    , m_xPWidthField(m_xBuilder->weld_metric_spin_button("pagewidth", FieldUnit::CM))
-    , m_xPHeightField(m_xBuilder->weld_metric_spin_button("pageheight", FieldUnit::CM))
-    , m_xSavePB(m_xBuilder->weld_button("save"))
+    , m_xMakeFI(m_xBuilder->weld_label(u"make"_ustr))
+    , m_xTypeFI(m_xBuilder->weld_label(u"type"_ustr))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreview))
+    , m_xHDistField(m_xBuilder->weld_metric_spin_button(u"hori"_ustr, FieldUnit::CM))
+    , m_xVDistField(m_xBuilder->weld_metric_spin_button(u"vert"_ustr, FieldUnit::CM))
+    , m_xWidthField(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::CM))
+    , m_xHeightField(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::CM))
+    , m_xLeftField(m_xBuilder->weld_metric_spin_button(u"left"_ustr, FieldUnit::CM))
+    , m_xUpperField(m_xBuilder->weld_metric_spin_button(u"top"_ustr, FieldUnit::CM))
+    , m_xColsField(m_xBuilder->weld_spin_button(u"cols"_ustr))
+    , m_xRowsField(m_xBuilder->weld_spin_button(u"rows"_ustr))
+    , m_xPWidthField(m_xBuilder->weld_metric_spin_button(u"pagewidth"_ustr, FieldUnit::CM))
+    , m_xPHeightField(m_xBuilder->weld_metric_spin_button(u"pageheight"_ustr, FieldUnit::CM))
+    , m_xSavePB(m_xBuilder->weld_button(u"save"_ustr))
 {
     SetExchangeSupport();
 
@@ -513,13 +513,13 @@ IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
 }
 
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabDlg* pParent, SwLabRec& rRec)
-    : GenericDialogController(pParent->getDialog(), "modules/swriter/ui/savelabeldialog.ui", "SaveLabelDialog")
+    : GenericDialogController(pParent->getDialog(), u"modules/swriter/ui/savelabeldialog.ui"_ustr, u"SaveLabelDialog"_ustr)
     , m_bSuccess(false)
     , m_pLabDialog(pParent)
     , m_rLabRec(rRec)
-    , m_xMakeCB(m_xBuilder->weld_combo_box("brand"))
-    , m_xTypeED(m_xBuilder->weld_entry("type"))
-    , m_xOKPB(m_xBuilder->weld_button("ok"))
+    , m_xMakeCB(m_xBuilder->weld_combo_box(u"brand"_ustr))
+    , m_xTypeED(m_xBuilder->weld_entry(u"type"_ustr))
+    , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xOKPB->connect_clicked(LINK(this, SwSaveLabelDlg, OkHdl));
     m_xMakeCB->connect_changed(LINK(this, SwSaveLabelDlg, ModifyComboHdl));
@@ -547,14 +547,14 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, weld::Button&, void)
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/swriter/ui/cannotsavelabeldialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("CannotSaveLabelDialog"));
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), u"modules/swriter/ui/cannotsavelabeldialog.ui"_ustr));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"CannotSaveLabelDialog"_ustr));
             xBox->run();
             return;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "modules/swriter/ui/querysavelabeldialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QuerySaveLabelDialog"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), u"modules/swriter/ui/querysavelabeldialog.ui"_ustr));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog(u"QuerySaveLabelDialog"_ustr));
         xQuery->set_primary_text(xQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
         xQuery->set_secondary_text(xQuery->get_secondary_text().

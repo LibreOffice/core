@@ -25,10 +25,11 @@ SplitTable_HeadlineOption SwSplitTableDlg::m_eRememberedSplitOption
     = SplitTable_HeadlineOption::ContentCopy;
 
 SwSplitTableDlg::SwSplitTableDlg(weld::Window* pParent, SwWrtShell& rSh)
-    : GenericDialogController(pParent, "modules/swriter/ui/splittable.ui", "SplitTableDialog")
-    , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
-    , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button("customheading"))
-    , m_xBorderCopyRB(m_xBuilder->weld_radio_button("noheading"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/splittable.ui"_ustr,
+                              u"SplitTableDialog"_ustr)
+    , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button(u"customheadingapplystyle"_ustr))
+    , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button(u"customheading"_ustr))
+    , m_xBorderCopyRB(m_xBuilder->weld_radio_button(u"noheading"_ustr))
     , m_rShell(rSh)
     , m_nSplit(SplitTable_HeadlineOption::ContentCopy)
 {

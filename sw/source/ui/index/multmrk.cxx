@@ -22,12 +22,12 @@
 #include <wrtsh.hxx>
 
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
-    : GenericDialogController(pParent, "modules/swriter/ui/selectindexdialog.ui",
-                              "SelectIndexDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/selectindexdialog.ui"_ustr,
+                              u"SelectIndexDialog"_ustr)
     , m_rMgr(rTOXMgr)
     , m_nPos(0)
-    , m_xTextFT(m_xBuilder->weld_label("type"))
-    , m_xTOXLB(m_xBuilder->weld_tree_view("treeview"))
+    , m_xTextFT(m_xBuilder->weld_label(u"type"_ustr))
+    , m_xTOXLB(m_xBuilder->weld_tree_view(u"treeview"_ustr))
 {
     m_xTOXLB->set_size_request(m_xTOXLB->get_approximate_digit_width() * 32,
                                m_xTOXLB->get_height_rows(8));

@@ -116,20 +116,20 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/envdialog.ui", "EnvDialog", &rSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/envdialog.ui"_ustr, u"EnvDialog"_ustr, &rSet)
     , m_aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
     , m_pSh(pWrtSh)
     , m_pPrinter(pPrt)
-    , m_xModify(m_xBuilder->weld_button("modify"))
+    , m_xModify(m_xBuilder->weld_button(u"modify"_ustr))
 {
     if (!bInsert)
     {
         GetUserButton()->set_label(m_xModify->get_label());
     }
 
-    AddTabPage("envelope", SwEnvPage::Create, nullptr);
-    AddTabPage("format", SwEnvFormatPage::Create, nullptr);
-    AddTabPage("printer", SwEnvPrtPage::Create, nullptr);
+    AddTabPage(u"envelope"_ustr, SwEnvPage::Create, nullptr);
+    AddTabPage(u"format"_ustr, SwEnvFormatPage::Create, nullptr);
+    AddTabPage(u"printer"_ustr, SwEnvPrtPage::Create, nullptr);
 }
 
 SwEnvDlg::~SwEnvDlg()
@@ -176,17 +176,17 @@ short SwEnvDlg::Ok()
 }
 
 SwEnvPage::SwEnvPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/envaddresspage.ui", "EnvAddressPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/envaddresspage.ui"_ustr, u"EnvAddressPage"_ustr, &rSet)
     , m_pDialog(nullptr)
     , m_pSh(nullptr)
-    , m_xAddrEdit(m_xBuilder->weld_text_view("addredit"))
-    , m_xDatabaseLB(m_xBuilder->weld_combo_box("database"))
-    , m_xTableLB(m_xBuilder->weld_combo_box("table"))
-    , m_xDBFieldLB(m_xBuilder->weld_combo_box("field"))
-    , m_xInsertBT(m_xBuilder->weld_button("insert"))
-    , m_xSenderBox(m_xBuilder->weld_check_button("sender"))
-    , m_xSenderEdit(m_xBuilder->weld_text_view("senderedit"))
-    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
+    , m_xAddrEdit(m_xBuilder->weld_text_view(u"addredit"_ustr))
+    , m_xDatabaseLB(m_xBuilder->weld_combo_box(u"database"_ustr))
+    , m_xTableLB(m_xBuilder->weld_combo_box(u"table"_ustr))
+    , m_xDBFieldLB(m_xBuilder->weld_combo_box(u"field"_ustr))
+    , m_xInsertBT(m_xBuilder->weld_button(u"insert"_ustr))
+    , m_xSenderBox(m_xBuilder->weld_check_button(u"sender"_ustr))
+    , m_xSenderEdit(m_xBuilder->weld_text_view(u"senderedit"_ustr))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreview))
 {
     auto nTextBoxHeight(m_xAddrEdit->get_height_rows(10));
     auto nTextBoxWidth(m_xAddrEdit->get_approximate_digit_width() * 25);

@@ -469,22 +469,22 @@ SwDropCapsDlg::SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet)
 }
 
 SwDropCapsPage::SwDropCapsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/dropcapspage.ui", "DropCapPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/dropcapspage.ui"_ustr, u"DropCapPage"_ustr, &rSet)
     , m_bModified(false)
     , m_bFormat(true)
-    , m_xDropCapsBox(m_xBuilder->weld_check_button("checkCB_SWITCH"))
-    , m_xWholeWordCB(m_xBuilder->weld_check_button("checkCB_WORD"))
-    , m_xSwitchText(m_xBuilder->weld_label("labelFT_DROPCAPS"))
-    , m_xDropCapsField(m_xBuilder->weld_spin_button("spinFLD_DROPCAPS"))
-    , m_xLinesText(m_xBuilder->weld_label("labelTXT_LINES"))
-    , m_xLinesField(m_xBuilder->weld_spin_button("spinFLD_LINES"))
-    , m_xDistanceText(m_xBuilder->weld_label("labelTXT_DISTANCE"))
-    , m_xDistanceField(m_xBuilder->weld_metric_spin_button("spinFLD_DISTANCE", FieldUnit::CM))
-    , m_xTextText(m_xBuilder->weld_label("labelTXT_TEXT"))
-    , m_xTextEdit(m_xBuilder->weld_entry("entryEDT_TEXT"))
-    , m_xTemplateText(m_xBuilder->weld_label("labelTXT_TEMPLATE"))
-    , m_xTemplateBox(m_xBuilder->weld_combo_box("comboBOX_TEMPLATE"))
-    , m_xPict(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aPict))
+    , m_xDropCapsBox(m_xBuilder->weld_check_button(u"checkCB_SWITCH"_ustr))
+    , m_xWholeWordCB(m_xBuilder->weld_check_button(u"checkCB_WORD"_ustr))
+    , m_xSwitchText(m_xBuilder->weld_label(u"labelFT_DROPCAPS"_ustr))
+    , m_xDropCapsField(m_xBuilder->weld_spin_button(u"spinFLD_DROPCAPS"_ustr))
+    , m_xLinesText(m_xBuilder->weld_label(u"labelTXT_LINES"_ustr))
+    , m_xLinesField(m_xBuilder->weld_spin_button(u"spinFLD_LINES"_ustr))
+    , m_xDistanceText(m_xBuilder->weld_label(u"labelTXT_DISTANCE"_ustr))
+    , m_xDistanceField(m_xBuilder->weld_metric_spin_button(u"spinFLD_DISTANCE"_ustr, FieldUnit::CM))
+    , m_xTextText(m_xBuilder->weld_label(u"labelTXT_TEXT"_ustr))
+    , m_xTextEdit(m_xBuilder->weld_entry(u"entryEDT_TEXT"_ustr))
+    , m_xTemplateText(m_xBuilder->weld_label(u"labelTXT_TEMPLATE"_ustr))
+    , m_xTemplateBox(m_xBuilder->weld_combo_box(u"comboBOX_TEMPLATE"_ustr))
+    , m_xPict(new weld::CustomWeld(*m_xBuilder, u"drawingareaWN_EXAMPLE"_ustr, m_aPict))
 {
     m_aPict.SetDropCapsPage(this);
 
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl, weld::Toggleable&, void)
         m_xDropCapsField->grab_focus();
     }
     else
-        m_aPict.SetText("");
+        m_aPict.SetText(u""_ustr);
 
     m_bModified = true;
 }

@@ -355,7 +355,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         }
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_STYLES)
         {
-            lcl_SetProp(xInfo, xIdxProps, "ParaStyleHeading", pForm->GetTemplate(0));
+            lcl_SetProp(xInfo, xIdxProps, u"ParaStyleHeading"_ustr, pForm->GetTemplate(0));
             sal_uInt16 nOffset = 0;
             sal_uInt16 nEndLevel = 2;
             switch(m_eCurrentTOXType.eType)
@@ -364,7 +364,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 {
                     nOffset = 1;
                     nEndLevel = 4;
-                    lcl_SetProp(xInfo, xIdxProps, "ParaStyleSeparator", pForm->GetTemplate(1));
+                    lcl_SetProp(xInfo, xIdxProps, u"ParaStyleSeparator"_ustr, pForm->GetTemplate(1));
                 }
                 break;
                 case TOX_CONTENT :

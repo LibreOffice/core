@@ -52,18 +52,18 @@ static tools::Long lUserW = 5669; // 10 cm
 static tools::Long lUserH = 5669; // 10 cm
 
 SwEnvFormatPage::SwEnvFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/envformatpage.ui", "EnvFormatPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/envformatpage.ui"_ustr, u"EnvFormatPage"_ustr, &rSet)
     , m_pDialog(nullptr)
-    , m_xAddrLeftField(m_xBuilder->weld_metric_spin_button("leftaddr", FieldUnit::CM))
-    , m_xAddrTopField(m_xBuilder->weld_metric_spin_button("topaddr", FieldUnit::CM))
-    , m_xAddrEditButton(m_xBuilder->weld_menu_button("addredit"))
-    , m_xSendLeftField(m_xBuilder->weld_metric_spin_button("leftsender", FieldUnit::CM))
-    , m_xSendTopField(m_xBuilder->weld_metric_spin_button("topsender", FieldUnit::CM))
-    , m_xSendEditButton(m_xBuilder->weld_menu_button("senderedit"))
-    , m_xSizeFormatBox(m_xBuilder->weld_combo_box("format"))
-    , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
-    , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
-    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
+    , m_xAddrLeftField(m_xBuilder->weld_metric_spin_button(u"leftaddr"_ustr, FieldUnit::CM))
+    , m_xAddrTopField(m_xBuilder->weld_metric_spin_button(u"topaddr"_ustr, FieldUnit::CM))
+    , m_xAddrEditButton(m_xBuilder->weld_menu_button(u"addredit"_ustr))
+    , m_xSendLeftField(m_xBuilder->weld_metric_spin_button(u"leftsender"_ustr, FieldUnit::CM))
+    , m_xSendTopField(m_xBuilder->weld_metric_spin_button(u"topsender"_ustr, FieldUnit::CM))
+    , m_xSendEditButton(m_xBuilder->weld_menu_button(u"senderedit"_ustr))
+    , m_xSizeFormatBox(m_xBuilder->weld_combo_box(u"format"_ustr))
+    , m_xSizeWidthField(m_xBuilder->weld_metric_spin_button(u"width"_ustr, FieldUnit::CM))
+    , m_xSizeHeightField(m_xBuilder->weld_metric_spin_button(u"height"_ustr, FieldUnit::CM))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreview))
 {
     SetExchangeSupport();
 

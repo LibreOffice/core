@@ -89,7 +89,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
         return false;
     }
 
-    OUString aPagePrefix("page=");
+    OUString aPagePrefix(u"page="_ustr);
     if (!xUriRef->getFragment().startsWith(aPagePrefix))
     {
         return false;
@@ -140,35 +140,35 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     , m_nLangForPhoneticReading(LANGUAGE_CHINESE_SIMPLIFIED)
     , m_bIsPhoneticReadingEnabled(false)
     , m_pSh(pWrtShell)
-    , m_xTypeFT(rBuilder.weld_label("typeft"))
-    , m_xTypeDCB(rBuilder.weld_combo_box("typecb"))
-    , m_xNewBT(rBuilder.weld_button("new"))
-    , m_xEntryED(rBuilder.weld_entry("entryed"))
-    , m_xSyncED(rBuilder.weld_button("sync"))
-    , m_xPhoneticFT0(rBuilder.weld_label("phonetic0ft"))
-    , m_xPhoneticED0(rBuilder.weld_entry("phonetic0ed"))
-    , m_xKey1FT(rBuilder.weld_label("key1ft"))
-    , m_xKey1DCB(rBuilder.weld_combo_box("key1cb"))
-    , m_xPhoneticFT1(rBuilder.weld_label("phonetic1ft"))
-    , m_xPhoneticED1(rBuilder.weld_entry("phonetic1ed"))
-    , m_xKey2FT(rBuilder.weld_label("key2ft"))
-    , m_xKey2DCB(rBuilder.weld_combo_box("key2cb"))
-    , m_xPhoneticFT2(rBuilder.weld_label("phonetic2ft"))
-    , m_xPhoneticED2(rBuilder.weld_entry("phonetic2ed"))
-    , m_xLevelFT(rBuilder.weld_label("levelft"))
-    , m_xLevelNF(rBuilder.weld_spin_button("levelnf"))
-    , m_xMainEntryCB(rBuilder.weld_check_button("mainentrycb"))
-    , m_xApplyToAllCB(rBuilder.weld_check_button("applytoallcb"))
-    , m_xSearchCaseSensitiveCB(rBuilder.weld_check_button("searchcasesensitivecb"))
-    , m_xSearchCaseWordOnlyCB(rBuilder.weld_check_button("searchcasewordonlycb"))
-    , m_xOKBT(bNewDlg ? rBuilder.weld_button("insert") : rBuilder.weld_button("ok"))
-    , m_xCloseBT(rBuilder.weld_button("close"))
-    , m_xDelBT(rBuilder.weld_button("delete"))
-    , m_xPrevSameBT(rBuilder.weld_button("first"))
-    , m_xNextSameBT(rBuilder.weld_button("last"))
-    , m_xPrevBT(rBuilder.weld_button("previous"))
-    , m_xNextBT(rBuilder.weld_button("next"))
-    , m_xForSelectedEntry(rBuilder.weld_label("selectedentrytitle"))
+    , m_xTypeFT(rBuilder.weld_label(u"typeft"_ustr))
+    , m_xTypeDCB(rBuilder.weld_combo_box(u"typecb"_ustr))
+    , m_xNewBT(rBuilder.weld_button(u"new"_ustr))
+    , m_xEntryED(rBuilder.weld_entry(u"entryed"_ustr))
+    , m_xSyncED(rBuilder.weld_button(u"sync"_ustr))
+    , m_xPhoneticFT0(rBuilder.weld_label(u"phonetic0ft"_ustr))
+    , m_xPhoneticED0(rBuilder.weld_entry(u"phonetic0ed"_ustr))
+    , m_xKey1FT(rBuilder.weld_label(u"key1ft"_ustr))
+    , m_xKey1DCB(rBuilder.weld_combo_box(u"key1cb"_ustr))
+    , m_xPhoneticFT1(rBuilder.weld_label(u"phonetic1ft"_ustr))
+    , m_xPhoneticED1(rBuilder.weld_entry(u"phonetic1ed"_ustr))
+    , m_xKey2FT(rBuilder.weld_label(u"key2ft"_ustr))
+    , m_xKey2DCB(rBuilder.weld_combo_box(u"key2cb"_ustr))
+    , m_xPhoneticFT2(rBuilder.weld_label(u"phonetic2ft"_ustr))
+    , m_xPhoneticED2(rBuilder.weld_entry(u"phonetic2ed"_ustr))
+    , m_xLevelFT(rBuilder.weld_label(u"levelft"_ustr))
+    , m_xLevelNF(rBuilder.weld_spin_button(u"levelnf"_ustr))
+    , m_xMainEntryCB(rBuilder.weld_check_button(u"mainentrycb"_ustr))
+    , m_xApplyToAllCB(rBuilder.weld_check_button(u"applytoallcb"_ustr))
+    , m_xSearchCaseSensitiveCB(rBuilder.weld_check_button(u"searchcasesensitivecb"_ustr))
+    , m_xSearchCaseWordOnlyCB(rBuilder.weld_check_button(u"searchcasewordonlycb"_ustr))
+    , m_xOKBT(bNewDlg ? rBuilder.weld_button(u"insert"_ustr) : rBuilder.weld_button(u"ok"_ustr))
+    , m_xCloseBT(rBuilder.weld_button(u"close"_ustr))
+    , m_xDelBT(rBuilder.weld_button(u"delete"_ustr))
+    , m_xPrevSameBT(rBuilder.weld_button(u"first"_ustr))
+    , m_xNextSameBT(rBuilder.weld_button(u"last"_ustr))
+    , m_xPrevBT(rBuilder.weld_button(u"previous"_ustr))
+    , m_xNextBT(rBuilder.weld_button(u"next"_ustr))
+    , m_xForSelectedEntry(rBuilder.weld_label(u"selectedentrytitle"_ustr))
 {
     m_xSyncED->show();
 
@@ -640,10 +640,10 @@ class SwNewUserIdxDlg : public weld::GenericDialogController
 
 public:
     explicit SwNewUserIdxDlg(SwIndexMarkPane* pPane, weld::Window* pParent)
-        : GenericDialogController(pParent, "modules/swriter/ui/newuserindexdialog.ui", "NewUserIndexDialog")
+        : GenericDialogController(pParent, u"modules/swriter/ui/newuserindexdialog.ui"_ustr, u"NewUserIndexDialog"_ustr)
         , m_pDlg(pPane)
-        , m_xOKPB(m_xBuilder->weld_button("ok"))
-        , m_xNameED(m_xBuilder->weld_entry("entry"))
+        , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
+        , m_xNameED(m_xBuilder->weld_entry(u"entry"_ustr))
     {
         m_xNameED->connect_changed(LINK(this, SwNewUserIdxDlg, ModifyHdl));
         m_xOKPB->set_sensitive(false);
@@ -1032,7 +1032,7 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
     SfxChildWindow* pChild, weld::Window *pParent,
     SfxChildWinInfo const * pInfo, bool bNew)
     : SfxModelessDialogController(_pBindings, pChild, pParent,
-        "modules/swriter/ui/indexentry.ui", "IndexEntryDialog")
+        u"modules/swriter/ui/indexentry.ui"_ustr, u"IndexEntryDialog"_ustr)
     , m_aContent(m_xDialog, *m_xBuilder, bNew, ::GetActiveWrtShell())
 {
     if (SwWrtShell* pWrtShell = ::GetActiveWrtShell())
@@ -1052,8 +1052,8 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 }
 
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark)
-    : SfxDialogController(pParent, "modules/swriter/ui/indexentry.ui",
-                          "IndexEntryDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/indexentry.ui"_ustr,
+                          u"IndexEntryDialog"_ustr)
     , m_aContent(m_xDialog, *m_xBuilder, false, &rSh)
 {
     m_aContent.ReInitDlg(rSh, pCurTOXMark);
@@ -1188,16 +1188,16 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
     , m_bNewEntry(bNewDlg)
     , m_bBibAccessInitialized(false)
     , m_pSh(nullptr)
-    , m_xFromComponentRB(rBuilder.weld_radio_button("frombibliography"))
-    , m_xFromDocContentRB(rBuilder.weld_radio_button("fromdocument"))
-    , m_xAuthorFI(rBuilder.weld_label("author"))
-    , m_xTitleFI(rBuilder.weld_label("title"))
-    , m_xEntryED(rBuilder.weld_entry("entryed"))
-    , m_xEntryLB(rBuilder.weld_combo_box("entrylb"))
-    , m_xActionBT(rBuilder.weld_button(m_bNewEntry ? OUString("insert") : OUString("modify")))
-    , m_xCloseBT(rBuilder.weld_button("close"))
-    , m_xCreateEntryPB(rBuilder.weld_button("new"))
-    , m_xEditEntryPB(rBuilder.weld_button("edit"))
+    , m_xFromComponentRB(rBuilder.weld_radio_button(u"frombibliography"_ustr))
+    , m_xFromDocContentRB(rBuilder.weld_radio_button(u"fromdocument"_ustr))
+    , m_xAuthorFI(rBuilder.weld_label(u"author"_ustr))
+    , m_xTitleFI(rBuilder.weld_label(u"title"_ustr))
+    , m_xEntryED(rBuilder.weld_entry(u"entryed"_ustr))
+    , m_xEntryLB(rBuilder.weld_combo_box(u"entrylb"_ustr))
+    , m_xActionBT(rBuilder.weld_button(m_bNewEntry ? u"insert"_ustr : u"modify"_ustr))
+    , m_xCloseBT(rBuilder.weld_button(u"close"_ustr))
+    , m_xCreateEntryPB(rBuilder.weld_button(u"new"_ustr))
+    , m_xEditEntryPB(rBuilder.weld_button(u"edit"_ustr))
 {
     m_xActionBT->show();
     m_xFromComponentRB->set_visible(m_bNewEntry);
@@ -1409,7 +1409,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
             uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
             m_xBibAccess = frame::Bibliography::create( xContext );
             uno::Reference< beans::XPropertySet >  xPropSet(m_xBibAccess, uno::UNO_QUERY);
-            OUString uPropName("BibliographyDataFieldNames");
+            OUString uPropName(u"BibliographyDataFieldNames"_ustr);
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
                 uno::Any aNames = xPropSet->getPropertyValue(uPropName);
@@ -1589,14 +1589,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         SwWrtShell& rSh,
         bool bNewEntry,
         bool bCreate)
-    : GenericDialogController(pParent, "modules/swriter/ui/createauthorentry.ui", "CreateAuthorEntryDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/createauthorentry.ui"_ustr, u"CreateAuthorEntryDialog"_ustr)
     , m_rWrtSh(rSh)
     , m_bNewEntryMode(bNewEntry)
     , m_bNameAllowed(true)
-    , m_xOKBT(m_xBuilder->weld_button("ok"))
-    , m_xBox(m_xBuilder->weld_container("box"))
-    , m_xLeft(m_xBuilder->weld_container("leftgrid"))
-    , m_xRight(m_xBuilder->weld_container("rightgrid"))
+    , m_xOKBT(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
+    , m_xLeft(m_xBuilder->weld_container(u"leftgrid"_ustr))
+    , m_xRight(m_xBuilder->weld_container(u"rightgrid"_ustr))
     , m_pTargetURLField(nullptr)
 {
     bool bLeft = true;
@@ -1604,11 +1604,11 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
     for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         //m_xBox parent just to have some parent during setup, added contents are not directly visible under m_xBox
-        m_aBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), "modules/swriter/ui/bibliofragment.ui"));
+        m_aBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), u"modules/swriter/ui/bibliofragment.ui"_ustr));
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        m_aOrigContainers.emplace_back(m_aBuilders.back()->weld_container("biblioentry"));
-        m_aFixedTexts.emplace_back(m_aBuilders.back()->weld_label("label"));
+        m_aOrigContainers.emplace_back(m_aBuilders.back()->weld_container(u"biblioentry"_ustr));
+        m_aFixedTexts.emplace_back(m_aBuilders.back()->weld_label(u"label"_ustr));
         if (bLeft)
             m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), m_xLeft.get());
         else
@@ -1619,7 +1619,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         m_aFixedTexts.back()->show();
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            m_xTypeListBox = m_aBuilders.back()->weld_combo_box("listbox");
+            m_xTypeListBox = m_aBuilders.back()->weld_combo_box(u"listbox"_ustr);
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xLeft.get());
             else
@@ -1644,7 +1644,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            m_xIdentifierBox = m_aBuilders.back()->weld_combo_box("combobox");
+            m_xIdentifierBox = m_aBuilders.back()->weld_combo_box(u"combobox"_ustr);
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xLeft.get());
             else
@@ -1672,7 +1672,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else if (AUTH_FIELD_TARGET_TYPE == aCurInfo.nToxField)
         {
-            m_xTargetTypeListBox = m_aBuilders.back()->weld_combo_box("listbox-target-type");
+            m_xTargetTypeListBox = m_aBuilders.back()->weld_combo_box(u"listbox-target-type"_ustr);
             if (bLeft)
                 m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xLeft.get());
             else
@@ -1697,8 +1697,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         }
         else
         {
-            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("vbox");
-            m_pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
+            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box(u"vbox"_ustr);
+            m_pEdits[nIndex] = m_aBuilders.back()->weld_entry(u"entry"_ustr);
 
             if (AUTH_FIELD_TARGET_URL == aCurInfo.nToxField)
             {
@@ -1718,14 +1718,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             m_pBoxes[nIndex]->set_hexpand(true);
             if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
-                m_xLocalBrowseButton = m_aBuilders.back()->weld_button("browse");
+                m_xLocalBrowseButton = m_aBuilders.back()->weld_button(u"browse"_ustr);
                 m_xLocalBrowseButton->connect_clicked(
                     LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
-                m_xLocalPageCB = m_aBuilders.back()->weld_check_button("pagecb");
+                m_xLocalPageCB = m_aBuilders.back()->weld_check_button(u"pagecb"_ustr);
                 // Distinguish different instances of this for ui-testing.
                 m_xLocalPageCB->set_buildable_name(m_xLocalPageCB->get_buildable_name()
                                                    + "-local-visible");
-                m_xLocalPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
+                m_xLocalPageSB = m_aBuilders.back()->weld_spin_button(u"pagesb"_ustr);
             }
 
             // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
@@ -1928,7 +1928,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                        SfxChildWinInfo const * pInfo,
                                        bool bNew)
     : SfxModelessDialogController(_pBindings, pChild, pParent,
-        "modules/swriter/ui/bibliographyentry.ui", "BibliographyEntryDialog")
+        u"modules/swriter/ui/bibliographyentry.ui"_ustr, u"BibliographyEntryDialog"_ustr)
     , m_aContent(*this, *m_xBuilder, bNew)
 {
     Initialize(pInfo);
@@ -1948,8 +1948,8 @@ void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 }
 
 SwAuthMarkModalDlg::SwAuthMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh)
-    : SfxDialogController(pParent, "modules/swriter/ui/bibliographyentry.ui",
-                          "BibliographyEntryDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/bibliographyentry.ui"_ustr,
+                          u"BibliographyEntryDialog"_ustr)
     , m_aContent(*this, *m_xBuilder, false)
 {
     m_aContent.ReInitDlg(rSh);

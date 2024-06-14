@@ -536,7 +536,7 @@ OUString AbstractSwBreakDlg_Impl::GetTemplateName()
     if (pDlg)
         return pDlg->GetTemplateName();
 
-    return "";
+    return u""_ustr;
 }
 
 sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()

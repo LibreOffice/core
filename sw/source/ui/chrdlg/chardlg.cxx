@@ -40,8 +40,8 @@ using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     SwCharDlgMode nDialogMode, const OUString* pStr)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/characterproperties.ui",
-                             "CharacterPropertiesDialog", &rCoreSet, pStr != nullptr)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/characterproperties.ui"_ustr,
+                             u"CharacterPropertiesDialog"_ustr, &rCoreSet, pStr != nullptr)
     , m_rView(rVw)
     , m_nDialogMode(nDialogMode)
 {
@@ -50,25 +50,25 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCore
         m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
-    AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-    AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-    AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
+    AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
+    AddTabPage(u"asianlayout"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
+    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+    AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
 
     if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {
-        RemoveTabPage("asianlayout");
+        RemoveTabPage(u"asianlayout"_ustr);
     }
     else
     {
         if (!SvtCJKOptions::IsDoubleLinesEnabled())
-            RemoveTabPage("asianlayout");
+            RemoveTabPage(u"asianlayout"_ustr);
     }
 
     if (m_nDialogMode != SwCharDlgMode::Std)
-        RemoveTabPage("borders");
+        RemoveTabPage(u"borders"_ustr);
 }
 
 SwCharDlg::~SwCharDlg()

@@ -25,17 +25,17 @@
 #include <labimg.hxx>
 
 SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/labeloptionspage.ui", "LabelOptionsPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/labeloptionspage.ui"_ustr, u"LabelOptionsPage"_ustr, &rSet)
     , m_pPrinter(nullptr)
-    , m_xPageButton(m_xBuilder->weld_radio_button("entirepage"))
-    , m_xSingleButton(m_xBuilder->weld_radio_button("singlelabel"))
-    , m_xSingleGrid(m_xBuilder->weld_widget("singlegrid"))
-    , m_xPrinterFrame(m_xBuilder->weld_widget("printerframe"))
-    , m_xColField(m_xBuilder->weld_spin_button("cols"))
-    , m_xRowField(m_xBuilder->weld_spin_button("rows"))
-    , m_xSynchronCB(m_xBuilder->weld_check_button("synchronize"))
-    , m_xPrinterInfo(m_xBuilder->weld_label("printername"))
-    , m_xPrtSetup(m_xBuilder->weld_button("setup"))
+    , m_xPageButton(m_xBuilder->weld_radio_button(u"entirepage"_ustr))
+    , m_xSingleButton(m_xBuilder->weld_radio_button(u"singlelabel"_ustr))
+    , m_xSingleGrid(m_xBuilder->weld_widget(u"singlegrid"_ustr))
+    , m_xPrinterFrame(m_xBuilder->weld_widget(u"printerframe"_ustr))
+    , m_xColField(m_xBuilder->weld_spin_button(u"cols"_ustr))
+    , m_xRowField(m_xBuilder->weld_spin_button(u"rows"_ustr))
+    , m_xSynchronCB(m_xBuilder->weld_check_button(u"synchronize"_ustr))
+    , m_xPrinterInfo(m_xBuilder->weld_label(u"printername"_ustr))
+    , m_xPrtSetup(m_xBuilder->weld_button(u"setup"_ustr))
 {
     SetExchangeSupport();
 
@@ -46,7 +46,7 @@ SwLabPrtPage::SwLabPrtPage(weld::Container* pPage, weld::DialogController* pCont
     m_xPrtSetup->connect_clicked(LINK(this, SwLabPrtPage, PrtSetupHdl));
 
     SvtCommandOptions aCmdOpts;
-    if (aCmdOpts.LookupDisabled("Print"))
+    if (aCmdOpts.LookupDisabled(u"Print"_ustr))
     {
         m_xPrinterFrame->hide();
     }

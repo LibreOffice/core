@@ -36,9 +36,9 @@ private:
 public:
     SwStringInputDlg(weld::Window* pParent, const OUString& rTitle, const OUString& rEditTitle,
                      const OUString& rDefault)
-        : SfxDialogController(pParent, "modules/swriter/ui/stringinput.ui", "StringInputDialog")
-        , m_xLabel(m_xBuilder->weld_label("name"))
-        , m_xEdInput(m_xBuilder->weld_entry("edit"))
+        : SfxDialogController(pParent, u"modules/swriter/ui/stringinput.ui"_ustr, u"StringInputDialog"_ustr)
+        , m_xLabel(m_xBuilder->weld_label(u"name"_ustr))
+        , m_xEdInput(m_xBuilder->weld_entry(u"edit"_ustr))
     {
         m_xLabel->set_label(rEditTitle);
         m_xDialog->set_title(rTitle);
@@ -53,7 +53,7 @@ public:
 // AutoFormat-Dialogue:
 SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell, bool bAutoFormat,
                                  const SwTableAutoFormat* pSelFormat)
-    : SfxDialogController(pParent, "modules/swriter/ui/autoformattable.ui", "AutoFormatTableDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/autoformattable.ui"_ustr, u"AutoFormatTableDialog"_ustr)
     , m_aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
     , m_aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))
     , m_aStrClose(SwResId(STR_BTN_AUTOFORMAT_CLOSE))
@@ -67,17 +67,17 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell, b
     , m_bCoreDataChanged(false)
     , m_bSetAutoFormat(bAutoFormat)
     , m_xTableTable(new SwTableAutoFormatTable)
-    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
-    , m_xBtnNumFormat(m_xBuilder->weld_check_button("numformatcb"))
-    , m_xBtnBorder(m_xBuilder->weld_check_button("bordercb"))
-    , m_xBtnFont(m_xBuilder->weld_check_button("fontcb"))
-    , m_xBtnPattern(m_xBuilder->weld_check_button("patterncb"))
-    , m_xBtnAlignment(m_xBuilder->weld_check_button("alignmentcb"))
-    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
-    , m_xBtnAdd(m_xBuilder->weld_button("add"))
-    , m_xBtnRemove(m_xBuilder->weld_button("remove"))
-    , m_xBtnRename(m_xBuilder->weld_button("rename"))
-    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
+    , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
+    , m_xBtnNumFormat(m_xBuilder->weld_check_button(u"numformatcb"_ustr))
+    , m_xBtnBorder(m_xBuilder->weld_check_button(u"bordercb"_ustr))
+    , m_xBtnFont(m_xBuilder->weld_check_button(u"fontcb"_ustr))
+    , m_xBtnPattern(m_xBuilder->weld_check_button(u"patterncb"_ustr))
+    , m_xBtnAlignment(m_xBuilder->weld_check_button(u"alignmentcb"_ustr))
+    , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
+    , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
+    , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xBtnRename(m_xBuilder->weld_button(u"rename"_ustr))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
 {
     m_aWndPreview.DetectRTL(pWrtShell);
     m_xTableTable->Load();

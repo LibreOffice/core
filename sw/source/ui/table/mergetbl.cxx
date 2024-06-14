@@ -20,9 +20,10 @@
 #include <mergetbl.hxx>
 
 SwMergeTableDlg::SwMergeTableDlg(weld::Window* pParent, bool& rWithPrev)
-    : GenericDialogController(pParent, "modules/swriter/ui/mergetabledialog.ui", "MergeTableDialog")
+    : GenericDialogController(pParent, u"modules/swriter/ui/mergetabledialog.ui"_ustr,
+                              u"MergeTableDialog"_ustr)
     , m_rMergePrev(rWithPrev)
-    , m_xMergePrevRB(m_xBuilder->weld_radio_button("prev"))
+    , m_xMergePrevRB(m_xBuilder->weld_radio_button(u"prev"_ustr))
 {
     m_xMergePrevRB->set_active(true);
 }

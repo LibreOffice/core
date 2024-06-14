@@ -118,44 +118,44 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                sal_Int32 nCommandType,
                                const uno::Reference< XConnection>& _xConnection,
                                Sequence< Any > const * pSelection)
-    : SfxDialogController(pParent, "modules/swriter/ui/mailmerge.ui", "MailmergeDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/mailmerge.ui"_ustr, u"MailmergeDialog"_ustr)
     , m_pImpl(new SwMailMergeDlg_Impl)
     , m_rSh(rShell)
     , m_nMergeType(DBMGR_MERGE_EMAIL)
-    , m_xBeamerWin(m_xBuilder->weld_container("beamer"))
-    , m_xAllRB(m_xBuilder->weld_radio_button("all"))
-    , m_xMarkedRB(m_xBuilder->weld_radio_button("selected"))
-    , m_xFromRB(m_xBuilder->weld_radio_button("rbfrom"))
-    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
-    , m_xToNF(m_xBuilder->weld_spin_button("to"))
-    , m_xPrinterRB(m_xBuilder->weld_radio_button("printer"))
-    , m_xMailingRB(m_xBuilder->weld_radio_button("electronic"))
-    , m_xFileRB(m_xBuilder->weld_radio_button("file"))
-    , m_xPasswordCB(m_xBuilder->weld_check_button("passwd-check"))
-    , m_xSaveMergedDocumentFT(m_xBuilder->weld_label("savemergeddoclabel"))
-    , m_xSaveSingleDocRB(m_xBuilder->weld_radio_button("singledocument"))
-    , m_xSaveIndividualRB(m_xBuilder->weld_radio_button("individualdocuments"))
-    , m_xGenerateFromDataBaseCB(m_xBuilder->weld_check_button("generate"))
-    , m_xColumnFT(m_xBuilder->weld_label("fieldlabel"))
-    , m_xColumnLB(m_xBuilder->weld_combo_box("field"))
-    , m_xPasswordFT(m_xBuilder->weld_label("passwd-label"))
-    , m_xPasswordLB(m_xBuilder->weld_combo_box("passwd-combobox"))
-    , m_xPathFT(m_xBuilder->weld_label("pathlabel"))
-    , m_xPathED(m_xBuilder->weld_entry("path"))
-    , m_xPathPB(m_xBuilder->weld_button("pathpb"))
-    , m_xFilterFT(m_xBuilder->weld_label("fileformatlabel"))
-    , m_xFilterLB(m_xBuilder->weld_combo_box("fileformat"))
-    , m_xAddressFieldLB(m_xBuilder->weld_combo_box("address"))
-    , m_xSubjectFT(m_xBuilder->weld_label("subjectlabel"))
-    , m_xSubjectED(m_xBuilder->weld_entry("subject"))
-    , m_xFormatFT(m_xBuilder->weld_label("mailformatlabel"))
-    , m_xAttachFT(m_xBuilder->weld_label("attachmentslabel"))
-    , m_xAttachED(m_xBuilder->weld_entry("attachments"))
-    , m_xAttachPB(m_xBuilder->weld_button("attach"))
-    , m_xFormatHtmlCB(m_xBuilder->weld_check_button("html"))
-    , m_xFormatRtfCB(m_xBuilder->weld_check_button("rtf"))
-    , m_xFormatSwCB(m_xBuilder->weld_check_button("swriter"))
-    , m_xOkBTN(m_xBuilder->weld_button("ok"))
+    , m_xBeamerWin(m_xBuilder->weld_container(u"beamer"_ustr))
+    , m_xAllRB(m_xBuilder->weld_radio_button(u"all"_ustr))
+    , m_xMarkedRB(m_xBuilder->weld_radio_button(u"selected"_ustr))
+    , m_xFromRB(m_xBuilder->weld_radio_button(u"rbfrom"_ustr))
+    , m_xFromNF(m_xBuilder->weld_spin_button(u"from"_ustr))
+    , m_xToNF(m_xBuilder->weld_spin_button(u"to"_ustr))
+    , m_xPrinterRB(m_xBuilder->weld_radio_button(u"printer"_ustr))
+    , m_xMailingRB(m_xBuilder->weld_radio_button(u"electronic"_ustr))
+    , m_xFileRB(m_xBuilder->weld_radio_button(u"file"_ustr))
+    , m_xPasswordCB(m_xBuilder->weld_check_button(u"passwd-check"_ustr))
+    , m_xSaveMergedDocumentFT(m_xBuilder->weld_label(u"savemergeddoclabel"_ustr))
+    , m_xSaveSingleDocRB(m_xBuilder->weld_radio_button(u"singledocument"_ustr))
+    , m_xSaveIndividualRB(m_xBuilder->weld_radio_button(u"individualdocuments"_ustr))
+    , m_xGenerateFromDataBaseCB(m_xBuilder->weld_check_button(u"generate"_ustr))
+    , m_xColumnFT(m_xBuilder->weld_label(u"fieldlabel"_ustr))
+    , m_xColumnLB(m_xBuilder->weld_combo_box(u"field"_ustr))
+    , m_xPasswordFT(m_xBuilder->weld_label(u"passwd-label"_ustr))
+    , m_xPasswordLB(m_xBuilder->weld_combo_box(u"passwd-combobox"_ustr))
+    , m_xPathFT(m_xBuilder->weld_label(u"pathlabel"_ustr))
+    , m_xPathED(m_xBuilder->weld_entry(u"path"_ustr))
+    , m_xPathPB(m_xBuilder->weld_button(u"pathpb"_ustr))
+    , m_xFilterFT(m_xBuilder->weld_label(u"fileformatlabel"_ustr))
+    , m_xFilterLB(m_xBuilder->weld_combo_box(u"fileformat"_ustr))
+    , m_xAddressFieldLB(m_xBuilder->weld_combo_box(u"address"_ustr))
+    , m_xSubjectFT(m_xBuilder->weld_label(u"subjectlabel"_ustr))
+    , m_xSubjectED(m_xBuilder->weld_entry(u"subject"_ustr))
+    , m_xFormatFT(m_xBuilder->weld_label(u"mailformatlabel"_ustr))
+    , m_xAttachFT(m_xBuilder->weld_label(u"attachmentslabel"_ustr))
+    , m_xAttachED(m_xBuilder->weld_entry(u"attachments"_ustr))
+    , m_xAttachPB(m_xBuilder->weld_button(u"attach"_ustr))
+    , m_xFormatHtmlCB(m_xBuilder->weld_check_button(u"html"_ustr))
+    , m_xFormatRtfCB(m_xBuilder->weld_check_button(u"rtf"_ustr))
+    , m_xFormatSwCB(m_xBuilder->weld_check_button(u"swriter"_ustr))
+    , m_xOkBTN(m_xBuilder->weld_button(u"ok"_ustr))
 {
     //task #97066# mailing of form letters is currently not supported
     m_xMailingRB->hide();
@@ -188,14 +188,14 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             URL aURL;
             aURL.Complete = ".component:DB/DataSourceBrowser";
             uno::Reference<XDispatch> xD = m_xFrame->queryDispatch(aURL,
-                                           "",
+                                           u""_ustr,
                                            0x0C);
             if(xD.is()) {
                 Sequence<PropertyValue> aProperties
                 {
-                    comphelper::makePropertyValue("DataSourceName", rSourceName),
-                    comphelper::makePropertyValue("Command", rTableName),
-                    comphelper::makePropertyValue("CommandType", nCommandType),
+                    comphelper::makePropertyValue(u"DataSourceName"_ustr, rSourceName),
+                    comphelper::makePropertyValue(u"Command"_ustr, rTableName),
+                    comphelper::makePropertyValue(u"CommandType"_ustr, nCommandType),
                 };
                 xD->dispatch(aURL, aProperties);
                 m_xBeamerWin->show();
@@ -265,7 +265,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
         m_xPasswordLB->append_text(m_xAddressFieldLB->get_text(nEntry));
     }
 
-    m_xAddressFieldLB->set_active_text("EMAIL");
+    m_xAddressFieldLB->set_active_text(u"EMAIL"_ustr);
 
     OUString sPath(m_pModOpt->GetMailingPath());
     if(sPath.isEmpty()) {
@@ -280,8 +280,8 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
 
     if (!bColumn )
     {
-        m_xColumnLB->set_active_text("NAME");
-        m_xPasswordLB->set_active_text("PASSWORD");
+        m_xColumnLB->set_active_text(u"NAME"_ustr);
+        m_xPasswordLB->set_active_text(u"PASSWORD"_ustr);
     }
     else
     {
@@ -306,7 +306,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     }
     try {
         uno::Reference< container::XNameContainer> xFilterFactory(
-            xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
+            xMSF->createInstance(u"com.sun.star.document.FilterFactory"_ustr), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
         const OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags="
                                 + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT))
@@ -584,8 +584,8 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 }
 
 SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/mailmergedialog.ui", "MailMergeDialog")
-    , m_xThisDocRB(m_xBuilder->weld_radio_button("document"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/mailmergedialog.ui"_ustr, u"MailMergeDialog"_ustr)
+    , m_xThisDocRB(m_xBuilder->weld_radio_button(u"document"_ustr))
 {
 }
 
@@ -594,8 +594,8 @@ SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
 }
 
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/mergeconnectdialog.ui", "MergeConnectDialog")
-    , m_xUseExistingRB(m_xBuilder->weld_radio_button("existing"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/mergeconnectdialog.ui"_ustr, u"MergeConnectDialog"_ustr)
+    , m_xUseExistingRB(m_xBuilder->weld_radio_button(u"existing"_ustr))
 {
 }
 

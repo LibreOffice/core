@@ -36,14 +36,14 @@
 const WhichRangesContainer SwCondCollPage::s_aPageRg(svl::Items<FN_COND_COLL, FN_COND_COLL>);
 
 SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/conditionpage.ui"_ustr, u"ConditionPage"_ustr, &rSet)
     , m_pCmds(SwCondCollItem::GetCmds())
     , m_pFormat(nullptr)
-    , m_xTbLinks(m_xBuilder->weld_tree_view("links"))
-    , m_xStyleLB(m_xBuilder->weld_tree_view("styles"))
-    , m_xFilterLB(m_xBuilder->weld_combo_box("filter"))
-    , m_xRemovePB(m_xBuilder->weld_button("remove"))
-    , m_xAssignPB(m_xBuilder->weld_button("apply"))
+    , m_xTbLinks(m_xBuilder->weld_tree_view(u"links"_ustr))
+    , m_xStyleLB(m_xBuilder->weld_tree_view(u"styles"_ustr))
+    , m_xFilterLB(m_xBuilder->weld_combo_box(u"filter"_ustr))
+    , m_xRemovePB(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xAssignPB(m_xBuilder->weld_button(u"apply"_ustr))
 {
     m_xStyleLB->make_sorted();
     const auto nHeightRequest = m_xStyleLB->get_height_rows(12);
@@ -183,7 +183,7 @@ void SwCondCollPage::AssignRemove(const weld::Widget* pBtn)
     if (bAssEnabled)
         m_xTbLinks->set_text(nPos, m_xStyleLB->get_selected_text(), 1);
     else
-        m_xTbLinks->set_text(nPos, "", 1);
+        m_xTbLinks->set_text(nPos, u""_ustr, 1);
 }
 
 IMPL_LINK(SwCondCollPage, SelectTreeListBoxHdl, weld::TreeView&, rBox, void)

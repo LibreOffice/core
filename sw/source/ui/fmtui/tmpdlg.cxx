@@ -96,74 +96,74 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
         // character styles
         case SfxStyleFamily::Char:
         {
-            AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ));
-            AddTabPage("fonteffect", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ));
-            AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ));
-            AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
-            AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
-            AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
+            AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ));
+            AddTabPage(u"fonteffect"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ));
+            AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ));
+            AddTabPage(u"asianlayout"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
+            AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
+            AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
             if(m_nHtmlMode & HTMLMODE_ON || !SvtCJKOptions::IsDoubleLinesEnabled())
-                RemoveTabPage("asianlayout");
+                RemoveTabPage(u"asianlayout"_ustr);
         }
         break;
         // paragraph styles
         case SfxStyleFamily::Para:
         {
-            AddTabPage("indents", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH));
+            AddTabPage(u"indents"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH));
 
-            AddTabPage("alignment", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH));
+            AddTabPage(u"alignment"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH));
 
-            AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+            AddTabPage(u"textflow"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
-            AddTabPage("asiantypo",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+            AddTabPage(u"asiantypo"_ustr,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
 
-            AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
+            AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
 
-            AddTabPage("fonteffect", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
+            AddTabPage(u"fonteffect"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
 
-            AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
+            AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
 
-            AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
+            AddTabPage(u"asianlayout"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
 
-            AddTabPage("highlighting", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
+            AddTabPage(u"highlighting"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
 
-            AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+            AddTabPage(u"tabs"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
-            AddTabPage("outline", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
-            AddTabPage("dropcaps", SwDropCapsPage::Create, SwDropCapsPage::GetRanges );
+            AddTabPage(u"outline"_ustr, SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
+            AddTabPage(u"dropcaps"_ustr, SwDropCapsPage::Create, SwDropCapsPage::GetRanges );
 
             // add Area and Transparence TabPages
-            AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-            AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+            AddTabPage(u"area"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            AddTabPage(u"transparence"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
 
-            AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+            AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
-            AddTabPage("condition", SwCondCollPage::Create,
+            AddTabPage(u"condition"_ustr, SwCondCollPage::Create,
                                         SwCondCollPage::GetRanges );
             if( (!m_bNewStyle && RES_CONDTXTFMTCOLL != static_cast<SwDocStyleSheet&>(rBase).GetCollection()->Which())
             || m_nHtmlMode & HTMLMODE_ON )
-                RemoveTabPage("condition");
+                RemoveTabPage(u"condition"_ustr);
 
             if(m_nHtmlMode & HTMLMODE_ON)
             {
                 if (!officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get())
-                    RemoveTabPage("textflow");
-                RemoveTabPage("asiantypo");
-                RemoveTabPage("tabs");
-                RemoveTabPage("outline");
-                RemoveTabPage("asianlayout");
+                    RemoveTabPage(u"textflow"_ustr);
+                RemoveTabPage(u"asiantypo"_ustr);
+                RemoveTabPage(u"tabs"_ustr);
+                RemoveTabPage(u"outline"_ustr);
+                RemoveTabPage(u"asianlayout"_ustr);
                 if(!(m_nHtmlMode & HTMLMODE_FULL_STYLES))
                 {
-                    RemoveTabPage("background");
-                    RemoveTabPage("dropcaps");
+                    RemoveTabPage(u"background"_ustr);
+                    RemoveTabPage(u"dropcaps"_ustr);
                 }
             }
             else
             {
                 if(!SvtCJKOptions::IsAsianTypographyEnabled())
-                    RemoveTabPage("asiantypo");
+                    RemoveTabPage(u"asiantypo"_ustr);
                 if(!SvtCJKOptions::IsDoubleLinesEnabled())
-                    RemoveTabPage("asianlayout");
+                    RemoveTabPage(u"asianlayout"_ustr);
             }
         }
         break;
@@ -171,55 +171,55 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
         case SfxStyleFamily::Page:
         {
             // add Area and Transparence TabPages
-            AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-            AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
-            AddTabPage("header",  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
-            AddTabPage("footer", SvxFooterPage::Create, SvxFooterPage::GetRanges);
-            AddTabPage("page", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), pFact->GetTabPageRangesFunc(RID_SVXPAGE_PAGE));
+            AddTabPage(u"area"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            AddTabPage(u"transparence"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+            AddTabPage(u"header"_ustr,  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
+            AddTabPage(u"footer"_ustr, SvxFooterPage::Create, SvxFooterPage::GetRanges);
+            AddTabPage(u"page"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), pFact->GetTabPageRangesFunc(RID_SVXPAGE_PAGE));
             if (0 == ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell()))
             {
-                AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-                AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
-                AddTabPage("footnotes", SwFootNotePage::Create, SwFootNotePage::GetRanges );
-                AddTabPage("textgrid", SwTextGridPage::Create, SwTextGridPage::GetRanges );
+                AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+                AddTabPage(u"columns"_ustr, SwColumnPage::Create, SwColumnPage::GetRanges );
+                AddTabPage(u"footnotes"_ustr, SwFootNotePage::Create, SwFootNotePage::GetRanges );
+                AddTabPage(u"textgrid"_ustr, SwTextGridPage::Create, SwTextGridPage::GetRanges );
                 if(!SvtCJKOptions::IsAsianTypographyEnabled())
-                    RemoveTabPage("textgrid");
+                    RemoveTabPage(u"textgrid"_ustr);
             }
             else
             {
-                RemoveTabPage("borders");
-                RemoveTabPage("columns");
-                RemoveTabPage("footnotes");
-                RemoveTabPage("textgrid");
+                RemoveTabPage(u"borders"_ustr);
+                RemoveTabPage(u"columns"_ustr);
+                RemoveTabPage(u"footnotes"_ustr);
+                RemoveTabPage(u"textgrid"_ustr);
             }
         }
         break;
         // numbering styles
         case SfxStyleFamily::Pseudo:
         {
-            AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
-            AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
-            AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
-            AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
-            AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
-            AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
+            AddTabPage(u"numbering"_ustr, RID_SVXPAGE_PICK_SINGLE_NUM);
+            AddTabPage(u"bullets"_ustr, RID_SVXPAGE_PICK_BULLET);
+            AddTabPage(u"outline"_ustr, RID_SVXPAGE_PICK_NUM);
+            AddTabPage(u"graphics"_ustr, RID_SVXPAGE_PICK_BMP);
+            AddTabPage(u"customize"_ustr, RID_SVXPAGE_NUM_OPTIONS );
+            AddTabPage(u"position"_ustr, RID_SVXPAGE_NUM_POSITION );
         }
         break;
         case SfxStyleFamily::Frame:
         {
-            AddTabPage("type", SwFramePage::Create, SwFramePage::GetRanges);
-            AddTabPage("options", SwFrameAddPage::Create, SwFrameAddPage::GetRanges);
-            AddTabPage("wrap", SwWrapTabPage::Create, SwWrapTabPage::GetRanges);
+            AddTabPage(u"type"_ustr, SwFramePage::Create, SwFramePage::GetRanges);
+            AddTabPage(u"options"_ustr, SwFrameAddPage::Create, SwFrameAddPage::GetRanges);
+            AddTabPage(u"wrap"_ustr, SwWrapTabPage::Create, SwWrapTabPage::GetRanges);
 
             // add Area and Transparence TabPages
-            AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-            AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+            AddTabPage(u"area"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            AddTabPage(u"transparence"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
 
-            AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+            AddTabPage(u"borders"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
-            AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
+            AddTabPage(u"columns"_ustr, SwColumnPage::Create, SwColumnPage::GetRanges );
 
-            AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
+            AddTabPage(u"macros"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), nullptr);
         }
         break;
         default:
@@ -227,7 +227,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
     }
 
     if (bNew)
-        SetCurPageId("organizer");
+        SetCurPageId(u"organizer"_ustr);
     else if (!sPage.isEmpty())
         SetCurPageId(sPage);
 }
@@ -472,8 +472,8 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
 
         // collect character styles
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/comboboxfragment.ui"));
-        std::unique_ptr<weld::ComboBox> xCharFormatLB(xBuilder->weld_combo_box("combobox"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/comboboxfragment.ui"_ustr));
+        std::unique_ptr<weld::ComboBox> xCharFormatLB(xBuilder->weld_combo_box(u"combobox"_ustr));
         xCharFormatLB->clear();
         xCharFormatLB->append_text(SwViewShell::GetShellRes()->aStrNone);
         if (SwWrtShell* pSh = ::GetActiveWrtShell())

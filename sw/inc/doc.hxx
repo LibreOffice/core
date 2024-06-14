@@ -1296,7 +1296,7 @@ public:
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTable, bool bCpyName = false,
-                        bool bCorrPos = false, const OUString& rStyleName = "" );
+                        bool bCorrPos = false, const OUString& rStyleName = u""_ustr );
 
     void UnProtectCells( const OUString& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );

@@ -108,25 +108,25 @@ public:
 }
 
 SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/mailconfigpage.ui", "MailConfigPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/mailconfigpage.ui"_ustr, u"MailConfigPage"_ustr, &rSet)
     , m_pConfigItem(new SwMailMergeConfigItem)
-    , m_xDisplayNameED(m_xBuilder->weld_entry("displayname"))
-    , m_xDisplayNameImg(m_xBuilder->weld_widget("lockdisplayname"))
-    , m_xAddressED(m_xBuilder->weld_entry("address"))
-    , m_xAddressImg(m_xBuilder->weld_widget("lockaddress"))
-    , m_xReplyToCB(m_xBuilder->weld_check_button("replytocb"))
-    , m_xReplyToCBImg(m_xBuilder->weld_widget("lockreplytocb"))
-    , m_xReplyToFT(m_xBuilder->weld_label("replyto_label"))
-    , m_xReplyToED(m_xBuilder->weld_entry("replyto"))
-    , m_xReplyToImg(m_xBuilder->weld_widget("lockreplyto"))
-    , m_xServerED(m_xBuilder->weld_entry("server"))
-    , m_xServerImg(m_xBuilder->weld_widget("lockserver"))
-    , m_xPortNF(m_xBuilder->weld_spin_button("port"))
-    , m_xPortImg(m_xBuilder->weld_widget("lockport"))
-    , m_xSecureCB(m_xBuilder->weld_check_button("secure"))
-    , m_xSecureImg(m_xBuilder->weld_widget("locksecure"))
-    , m_xServerAuthenticationPB(m_xBuilder->weld_button("serverauthentication"))
-    , m_xTestPB(m_xBuilder->weld_button("test"))
+    , m_xDisplayNameED(m_xBuilder->weld_entry(u"displayname"_ustr))
+    , m_xDisplayNameImg(m_xBuilder->weld_widget(u"lockdisplayname"_ustr))
+    , m_xAddressED(m_xBuilder->weld_entry(u"address"_ustr))
+    , m_xAddressImg(m_xBuilder->weld_widget(u"lockaddress"_ustr))
+    , m_xReplyToCB(m_xBuilder->weld_check_button(u"replytocb"_ustr))
+    , m_xReplyToCBImg(m_xBuilder->weld_widget(u"lockreplytocb"_ustr))
+    , m_xReplyToFT(m_xBuilder->weld_label(u"replyto_label"_ustr))
+    , m_xReplyToED(m_xBuilder->weld_entry(u"replyto"_ustr))
+    , m_xReplyToImg(m_xBuilder->weld_widget(u"lockreplyto"_ustr))
+    , m_xServerED(m_xBuilder->weld_entry(u"server"_ustr))
+    , m_xServerImg(m_xBuilder->weld_widget(u"lockserver"_ustr))
+    , m_xPortNF(m_xBuilder->weld_spin_button(u"port"_ustr))
+    , m_xPortImg(m_xBuilder->weld_widget(u"lockport"_ustr))
+    , m_xSecureCB(m_xBuilder->weld_check_button(u"secure"_ustr))
+    , m_xSecureImg(m_xBuilder->weld_widget(u"locksecure"_ustr))
+    , m_xServerAuthenticationPB(m_xBuilder->weld_button(u"serverauthentication"_ustr))
+    , m_xTestPB(m_xBuilder->weld_button(u"test"_ustr))
 {
     m_xReplyToCB->connect_toggled(LINK(this, SwMailConfigPage, ReplyToHdl));
     m_xServerAuthenticationPB->connect_clicked(LINK(this, SwMailConfigPage, AuthenticationHdl));
@@ -147,8 +147,8 @@ std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, wel
 OUString SwMailConfigPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "displayname_label", "address_label", "replyto_label",
-                          "label2", "server_label",      "port_label" };
+    OUString labels[] = { u"label1"_ustr, u"displayname_label"_ustr, u"address_label"_ustr, u"replyto_label"_ustr,
+                          u"label2"_ustr, u"server_label"_ustr,      u"port_label"_ustr };
 
     for (const auto& label : labels)
     {
@@ -156,7 +156,7 @@ OUString SwMailConfigPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { "replytocb", "secure" };
+    OUString checkButton[] = { u"replytocb"_ustr, u"secure"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -164,7 +164,7 @@ OUString SwMailConfigPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString buttons[] = { "serverauthentication", "test" };
+    OUString buttons[] = { u"serverauthentication"_ustr, u"test"_ustr };
 
     for (const auto& btn : buttons)
     {
@@ -266,22 +266,22 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, weld::Toggleable&, rBox, void)
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
+    : SfxDialogController(pParent->GetFrameWeld(), u"modules/swriter/ui/testmailsettings.ui"_ustr, u"TestMailSettings"_ustr)
     , m_bStop(false)
     , m_pParent(pParent)
-    , m_xStopPB(m_xBuilder->weld_button("stop"))
-    , m_xErrorsED(m_xBuilder->weld_text_view("errors"))
-    , m_xResult1(m_xBuilder->weld_label("result1"))
-    , m_xResult2(m_xBuilder->weld_label("result2"))
-    , m_xImage1(m_xBuilder->weld_image("image1"))
-    , m_xImage2(m_xBuilder->weld_image("image2"))
-    , m_xImage3(m_xBuilder->weld_image("image3"))
-    , m_xImage4(m_xBuilder->weld_image("image4"))
+    , m_xStopPB(m_xBuilder->weld_button(u"stop"_ustr))
+    , m_xErrorsED(m_xBuilder->weld_text_view(u"errors"_ustr))
+    , m_xResult1(m_xBuilder->weld_label(u"result1"_ustr))
+    , m_xResult2(m_xBuilder->weld_label(u"result2"_ustr))
+    , m_xImage1(m_xBuilder->weld_image(u"image1"_ustr))
+    , m_xImage2(m_xBuilder->weld_image(u"image2"_ustr))
+    , m_xImage3(m_xBuilder->weld_image(u"image3"_ustr))
+    , m_xImage4(m_xBuilder->weld_image(u"image4"_ustr))
 {
     m_xErrorsED->set_size_request(m_xErrorsED->get_approximate_digit_width() * 72,
                                   m_xErrorsED->get_height_rows(8));
     m_sErrorServer = m_xErrorsED->get_text();
-    m_xErrorsED->set_text("");
+    m_xErrorsED->set_text(u""_ustr);
     m_sCompleted = m_xResult1->get_label();
     m_sFailed = m_xResult2->get_label();
 
@@ -351,7 +351,7 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_pConfigItem->GetInServerName(),
                         m_pParent->m_pConfigItem->GetInServerPort(),
-                        "Insecure");
+                        u"Insecure"_ustr);
             xInMailService->connect(xConnectionContext, xAuthenticator);
         }
         if(m_bStop)
@@ -381,7 +381,7 @@ void SwTestAccountSettingsDialog::Test()
                 new SwConnectionContext(
                     m_pParent->m_xServerED->get_text(),
                     m_pParent->m_xPortNF->get_value(),
-                    m_pParent->m_xSecureCB->get_active() ? OUString("Ssl") : OUString("Insecure"));
+                    m_pParent->m_xSecureCB->get_active() ? u"Ssl"_ustr : u"Insecure"_ustr);
         xMailService->connect(xConnectionContext, xAuthenticator);
         bIsLoggedIn = xMailService->isConnected();
         if( xInMailService.is() )
@@ -421,37 +421,37 @@ SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, const SfxItemSet& rSet)
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     weld::Window* pParent, SwMailMergeConfigItem& rItem)
-    : SfxDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr, u"AuthenticationSettingsDialog"_ustr)
     , m_rConfigItem(rItem)
-    , m_xAuthenticationCB(m_xBuilder->weld_check_button("authentication"))
-    , m_xAuthenticationImg(m_xBuilder->weld_widget("lockauthentication"))
-    , m_xSeparateAuthenticationRB(m_xBuilder->weld_radio_button("separateauthentication"))
-    , m_xSeparateAuthenticationImg(m_xBuilder->weld_widget("lockseparaauth"))
-    , m_xSMTPAfterPOPRB(m_xBuilder->weld_radio_button("smtpafterpop"))
-    , m_xSMTPAfterPOPImg(m_xBuilder->weld_widget("locksmtpafterpop"))
-    , m_xOutgoingServerFT(m_xBuilder->weld_label("label1"))
-    , m_xUserNameFT(m_xBuilder->weld_label("username_label"))
-    , m_xUserNameED(m_xBuilder->weld_entry("username"))
-    , m_xUserNameImg(m_xBuilder->weld_widget("lockusername"))
-    , m_xOutPasswordFT(m_xBuilder->weld_label("outpassword_label"))
-    , m_xOutPasswordED(m_xBuilder->weld_entry("outpassword"))
-    , m_xIncomingServerFT(m_xBuilder->weld_label("label2"))
-    , m_xServerFT(m_xBuilder->weld_label("server_label"))
-    , m_xServerED(m_xBuilder->weld_entry("server"))
-    , m_xServerImg(m_xBuilder->weld_widget("lockserver"))
-    , m_xPortFT(m_xBuilder->weld_label("port_label"))
-    , m_xPortNF(m_xBuilder->weld_spin_button("port"))
-    , m_xPortImg(m_xBuilder->weld_widget("lockport"))
-    , m_xProtocolFT(m_xBuilder->weld_label("label3"))
-    , m_xPOP3RB(m_xBuilder->weld_radio_button("pop3"))
-    , m_xPOP3Img(m_xBuilder->weld_widget("lockpop3"))
-    , m_xIMAPRB(m_xBuilder->weld_radio_button("imap"))
-    , m_xInUsernameFT(m_xBuilder->weld_label("inusername_label"))
-    , m_xInUsernameED(m_xBuilder->weld_entry("inusername"))
-    , m_xInUsernameImg(m_xBuilder->weld_widget("lockinusername"))
-    , m_xInPasswordFT(m_xBuilder->weld_label("inpassword_label"))
-    , m_xInPasswordED(m_xBuilder->weld_entry("inpassword"))
-    , m_xOKPB(m_xBuilder->weld_button("ok"))
+    , m_xAuthenticationCB(m_xBuilder->weld_check_button(u"authentication"_ustr))
+    , m_xAuthenticationImg(m_xBuilder->weld_widget(u"lockauthentication"_ustr))
+    , m_xSeparateAuthenticationRB(m_xBuilder->weld_radio_button(u"separateauthentication"_ustr))
+    , m_xSeparateAuthenticationImg(m_xBuilder->weld_widget(u"lockseparaauth"_ustr))
+    , m_xSMTPAfterPOPRB(m_xBuilder->weld_radio_button(u"smtpafterpop"_ustr))
+    , m_xSMTPAfterPOPImg(m_xBuilder->weld_widget(u"locksmtpafterpop"_ustr))
+    , m_xOutgoingServerFT(m_xBuilder->weld_label(u"label1"_ustr))
+    , m_xUserNameFT(m_xBuilder->weld_label(u"username_label"_ustr))
+    , m_xUserNameED(m_xBuilder->weld_entry(u"username"_ustr))
+    , m_xUserNameImg(m_xBuilder->weld_widget(u"lockusername"_ustr))
+    , m_xOutPasswordFT(m_xBuilder->weld_label(u"outpassword_label"_ustr))
+    , m_xOutPasswordED(m_xBuilder->weld_entry(u"outpassword"_ustr))
+    , m_xIncomingServerFT(m_xBuilder->weld_label(u"label2"_ustr))
+    , m_xServerFT(m_xBuilder->weld_label(u"server_label"_ustr))
+    , m_xServerED(m_xBuilder->weld_entry(u"server"_ustr))
+    , m_xServerImg(m_xBuilder->weld_widget(u"lockserver"_ustr))
+    , m_xPortFT(m_xBuilder->weld_label(u"port_label"_ustr))
+    , m_xPortNF(m_xBuilder->weld_spin_button(u"port"_ustr))
+    , m_xPortImg(m_xBuilder->weld_widget(u"lockport"_ustr))
+    , m_xProtocolFT(m_xBuilder->weld_label(u"label3"_ustr))
+    , m_xPOP3RB(m_xBuilder->weld_radio_button(u"pop3"_ustr))
+    , m_xPOP3Img(m_xBuilder->weld_widget(u"lockpop3"_ustr))
+    , m_xIMAPRB(m_xBuilder->weld_radio_button(u"imap"_ustr))
+    , m_xInUsernameFT(m_xBuilder->weld_label(u"inusername_label"_ustr))
+    , m_xInUsernameED(m_xBuilder->weld_entry(u"inusername"_ustr))
+    , m_xInUsernameImg(m_xBuilder->weld_widget(u"lockinusername"_ustr))
+    , m_xInPasswordFT(m_xBuilder->weld_label(u"inpassword_label"_ustr))
+    , m_xInPasswordED(m_xBuilder->weld_entry(u"inpassword"_ustr))
+    , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
 {
     m_xAuthenticationCB->connect_toggled( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
     Link<weld::Toggleable&,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
@@ -522,12 +522,12 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::Toggl
     if (bSeparate && m_xUserNameED->get_text().isEmpty())
         m_xUserNameED->set_text(m_rConfigItem.GetMailAddress());
     else if (!bSeparate && m_xUserNameED->get_text() == m_rConfigItem.GetMailAddress())
-        m_xUserNameED->set_text("");
+        m_xUserNameED->set_text(u""_ustr);
 
     if (bNotSeparate && m_xInUsernameED->get_text().isEmpty())
         m_xInUsernameED->set_text(m_rConfigItem.GetMailAddress());
     else if (!bNotSeparate && m_xInUsernameED->get_text() == m_rConfigItem.GetMailAddress())
-        m_xInUsernameED->set_text("");
+        m_xInUsernameED->set_text(u""_ustr);
 
     m_xOutgoingServerFT->set_sensitive(bSeparate);
     m_xUserNameFT->set_sensitive(bSeparate);

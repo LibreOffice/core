@@ -27,27 +27,27 @@
 #include <uitool.hxx>
 
 SwEnvPrtPage::SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/envprinterpage.ui", "EnvPrinterPage", &rSet)
-    , m_xUpper(m_xBuilder->weld_widget("upper"))
-    , m_xLower(m_xBuilder->weld_widget("lower"))
-    , m_xTopButton(m_xBuilder->weld_radio_button("top"))
-    , m_xBottomButton(m_xBuilder->weld_radio_button("bottom"))
-    , m_xRightField(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
-    , m_xDownField(m_xBuilder->weld_metric_spin_button("down", FieldUnit::CM))
-    , m_xPrinterInfo(m_xBuilder->weld_label("printername"))
-    , m_xPrtSetup(m_xBuilder->weld_button("setup"))
-    , m_aIdsL { m_xBuilder->weld_radio_button("horileftl"),
-                m_xBuilder->weld_radio_button("horicenterl"),
-                m_xBuilder->weld_radio_button("horirightl"),
-                m_xBuilder->weld_radio_button("vertleftl"),
-                m_xBuilder->weld_radio_button("vertcenterl"),
-                m_xBuilder->weld_radio_button("vertrightl") }
-    , m_aIdsU { m_xBuilder->weld_radio_button("horileftu"),
-                m_xBuilder->weld_radio_button("horicenteru"),
-                m_xBuilder->weld_radio_button("horirightu"),
-                m_xBuilder->weld_radio_button("vertleftu"),
-                m_xBuilder->weld_radio_button("vertcenteru"),
-                m_xBuilder->weld_radio_button("vertrightu") }
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/envprinterpage.ui"_ustr, u"EnvPrinterPage"_ustr, &rSet)
+    , m_xUpper(m_xBuilder->weld_widget(u"upper"_ustr))
+    , m_xLower(m_xBuilder->weld_widget(u"lower"_ustr))
+    , m_xTopButton(m_xBuilder->weld_radio_button(u"top"_ustr))
+    , m_xBottomButton(m_xBuilder->weld_radio_button(u"bottom"_ustr))
+    , m_xRightField(m_xBuilder->weld_metric_spin_button(u"right"_ustr, FieldUnit::CM))
+    , m_xDownField(m_xBuilder->weld_metric_spin_button(u"down"_ustr, FieldUnit::CM))
+    , m_xPrinterInfo(m_xBuilder->weld_label(u"printername"_ustr))
+    , m_xPrtSetup(m_xBuilder->weld_button(u"setup"_ustr))
+    , m_aIdsL { m_xBuilder->weld_radio_button(u"horileftl"_ustr),
+                m_xBuilder->weld_radio_button(u"horicenterl"_ustr),
+                m_xBuilder->weld_radio_button(u"horirightl"_ustr),
+                m_xBuilder->weld_radio_button(u"vertleftl"_ustr),
+                m_xBuilder->weld_radio_button(u"vertcenterl"_ustr),
+                m_xBuilder->weld_radio_button(u"vertrightl"_ustr) }
+    , m_aIdsU { m_xBuilder->weld_radio_button(u"horileftu"_ustr),
+                m_xBuilder->weld_radio_button(u"horicenteru"_ustr),
+                m_xBuilder->weld_radio_button(u"horirightu"_ustr),
+                m_xBuilder->weld_radio_button(u"vertleftu"_ustr),
+                m_xBuilder->weld_radio_button(u"vertcenteru"_ustr),
+                m_xBuilder->weld_radio_button(u"vertrightu"_ustr) }
 {
     SetExchangeSupport();
 

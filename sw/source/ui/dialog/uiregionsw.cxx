@@ -330,34 +330,34 @@ OUString SectRepr::GetSubRegion() const
 
 // dialog edit regions
 SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
-    : SfxDialogController(pParent, "modules/swriter/ui/editsectiondialog.ui",
-                          "EditSectionDialog")
+    : SfxDialogController(pParent, u"modules/swriter/ui/editsectiondialog.ui"_ustr,
+                          u"EditSectionDialog"_ustr)
     , m_bSubRegionsFilled(false)
     , m_rSh(rWrtSh)
     , m_bDontCheckPasswd(true)
-    , m_xCurName(m_xBuilder->weld_entry("curname"))
-    , m_xTree(m_xBuilder->weld_tree_view("tree"))
-    , m_xFileCB(m_xBuilder->weld_check_button("link"))
-    , m_xDDECB(m_xBuilder->weld_check_button("dde"))
-    , m_xDDEFrame(m_xBuilder->weld_widget("ddedepend"))
-    , m_xFileNameFT(m_xBuilder->weld_label("filenameft"))
-    , m_xDDECommandFT(m_xBuilder->weld_label("ddeft"))
-    , m_xFileNameED(m_xBuilder->weld_entry("filename"))
-    , m_xFilePB(m_xBuilder->weld_button("file"))
-    , m_xSubRegionFT(m_xBuilder->weld_label("sectionft"))
-    , m_xSubRegionED(m_xBuilder->weld_combo_box("section"))
-    , m_xProtectCB(m_xBuilder->weld_check_button("protect"))
-    , m_xPasswdCB(m_xBuilder->weld_check_button("withpassword"))
-    , m_xPasswdPB(m_xBuilder->weld_button("password"))
-    , m_xHideCB(m_xBuilder->weld_check_button("hide"))
-    , m_xConditionFT(m_xBuilder->weld_label("conditionft"))
-    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("condition")))
-    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editinro"))
-    , m_xOK(m_xBuilder->weld_button("ok"))
-    , m_xOptionsPB(m_xBuilder->weld_button("options"))
-    , m_xDismiss(m_xBuilder->weld_button("remove"))
-    , m_xHideFrame(m_xBuilder->weld_widget("hideframe"))
-    , m_xLinkFrame(m_xBuilder->weld_frame("linkframe"))
+    , m_xCurName(m_xBuilder->weld_entry(u"curname"_ustr))
+    , m_xTree(m_xBuilder->weld_tree_view(u"tree"_ustr))
+    , m_xFileCB(m_xBuilder->weld_check_button(u"link"_ustr))
+    , m_xDDECB(m_xBuilder->weld_check_button(u"dde"_ustr))
+    , m_xDDEFrame(m_xBuilder->weld_widget(u"ddedepend"_ustr))
+    , m_xFileNameFT(m_xBuilder->weld_label(u"filenameft"_ustr))
+    , m_xDDECommandFT(m_xBuilder->weld_label(u"ddeft"_ustr))
+    , m_xFileNameED(m_xBuilder->weld_entry(u"filename"_ustr))
+    , m_xFilePB(m_xBuilder->weld_button(u"file"_ustr))
+    , m_xSubRegionFT(m_xBuilder->weld_label(u"sectionft"_ustr))
+    , m_xSubRegionED(m_xBuilder->weld_combo_box(u"section"_ustr))
+    , m_xProtectCB(m_xBuilder->weld_check_button(u"protect"_ustr))
+    , m_xPasswdCB(m_xBuilder->weld_check_button(u"withpassword"_ustr))
+    , m_xPasswdPB(m_xBuilder->weld_button(u"password"_ustr))
+    , m_xHideCB(m_xBuilder->weld_check_button(u"hide"_ustr))
+    , m_xConditionFT(m_xBuilder->weld_label(u"conditionft"_ustr))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry(u"condition"_ustr)))
+    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button(u"editinro"_ustr))
+    , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xOptionsPB(m_xBuilder->weld_button(u"options"_ustr))
+    , m_xDismiss(m_xBuilder->weld_button(u"remove"_ustr))
+    , m_xHideFrame(m_xBuilder->weld_widget(u"hideframe"_ustr))
+    , m_xLinkFrame(m_xBuilder->weld_frame(u"linkframe"_ustr))
 {
     m_xTree->set_size_request(-1, m_xTree->get_height_rows(16));
     m_xFileCB->set_state(TRISTATE_FALSE);
@@ -715,7 +715,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         const OUString aFile = pRepr->GetFile();
         const OUString sSub = pRepr->GetSubRegion();
         m_xSubRegionED->clear();
-        m_xSubRegionED->append_text(""); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
+        m_xSubRegionED->append_text(u""_ustr); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
         m_bSubRegionsFilled = false;
         if( !aFile.isEmpty() || !sSub.isEmpty() )
         {
@@ -1012,7 +1012,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl, weld::Button&, void)
 {
     if(!CheckPasswd())
         return;
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(m_xDialog.get(), "swriter"));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(m_xDialog.get(), u"swriter"_ustr));
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
 }
 
@@ -1129,7 +1129,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
     rEdit.select_region(nStartPos, nEndPos);
     SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     m_xSubRegionED->clear();
-    m_xSubRegionED->append_text(""); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
+    m_xSubRegionED->append_text(u""_ustr); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
     m_bSubRegionsFilled = false;
     if (m_xDDECB->get_active())
     {
@@ -1380,28 +1380,28 @@ static void lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox )
 
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
             weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/insertsectiondialog.ui",
-                             "InsertSectionDialog",&rSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/insertsectiondialog.ui"_ustr,
+                             u"InsertSectionDialog"_ustr,&rSet)
     , m_rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
-    AddTabPage("columns",   SwColumnPage::Create, nullptr);
-    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
-    AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
+    AddTabPage(u"section"_ustr, SwInsertSectionTabPage::Create, nullptr);
+    AddTabPage(u"columns"_ustr,   SwColumnPage::Create, nullptr);
+    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"notes"_ustr, SwSectionFootnoteEndTabPage::Create, nullptr);
+    AddTabPage(u"indents"_ustr, SwSectionIndentTabPage::Create, nullptr);
 
     tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
 
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {
-        RemoveTabPage("notes");
-        RemoveTabPage("indents");
+        RemoveTabPage(u"notes"_ustr);
+        RemoveTabPage(u"indents"_ustr);
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage("columns");
+            RemoveTabPage(u"columns"_ustr);
     }
-    SetCurPageId("section");
+    SetCurPageId(u"section"_ustr);
 }
 
 SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
@@ -1474,26 +1474,26 @@ short SwInsertSectionTabDialog::Ok()
 }
 
 SwInsertSectionTabPage::SwInsertSectionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/sectionpage.ui", "SectionPage", &rAttrSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/sectionpage.ui"_ustr, u"SectionPage"_ustr, &rAttrSet)
     , m_pWrtSh(nullptr)
-    , m_xCurName(m_xBuilder->weld_entry_tree_view("sectionnames", "sectionnames-entry",
-                                                  "sectionnames-list"))
-    , m_xFileCB(m_xBuilder->weld_check_button("link"))
-    , m_xDDECB(m_xBuilder->weld_check_button("dde"))
-    , m_xDDECommandFT(m_xBuilder->weld_label("ddelabel"))
-    , m_xFileNameFT(m_xBuilder->weld_label("filelabel"))
-    , m_xFileNameED(m_xBuilder->weld_entry("filename"))
-    , m_xFilePB(m_xBuilder->weld_button("selectfile"))
-    , m_xSubRegionFT(m_xBuilder->weld_label("sectionlabel"))
-    , m_xSubRegionED(m_xBuilder->weld_combo_box("sectionname"))
-    , m_xProtectCB(m_xBuilder->weld_check_button("protect"))
-    , m_xPasswdCB(m_xBuilder->weld_check_button("withpassword"))
-    , m_xPasswdPB(m_xBuilder->weld_button("selectpassword"))
-    , m_xHideCB(m_xBuilder->weld_check_button("hide"))
-    , m_xConditionFT(m_xBuilder->weld_label("condlabel"))
-    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("withcond")))
+    , m_xCurName(m_xBuilder->weld_entry_tree_view(u"sectionnames"_ustr, u"sectionnames-entry"_ustr,
+                                                  u"sectionnames-list"_ustr))
+    , m_xFileCB(m_xBuilder->weld_check_button(u"link"_ustr))
+    , m_xDDECB(m_xBuilder->weld_check_button(u"dde"_ustr))
+    , m_xDDECommandFT(m_xBuilder->weld_label(u"ddelabel"_ustr))
+    , m_xFileNameFT(m_xBuilder->weld_label(u"filelabel"_ustr))
+    , m_xFileNameED(m_xBuilder->weld_entry(u"filename"_ustr))
+    , m_xFilePB(m_xBuilder->weld_button(u"selectfile"_ustr))
+    , m_xSubRegionFT(m_xBuilder->weld_label(u"sectionlabel"_ustr))
+    , m_xSubRegionED(m_xBuilder->weld_combo_box(u"sectionname"_ustr))
+    , m_xProtectCB(m_xBuilder->weld_check_button(u"protect"_ustr))
+    , m_xPasswdCB(m_xBuilder->weld_check_button(u"withpassword"_ustr))
+    , m_xPasswdPB(m_xBuilder->weld_button(u"selectpassword"_ustr))
+    , m_xHideCB(m_xBuilder->weld_check_button(u"hide"_ustr))
+    , m_xConditionFT(m_xBuilder->weld_label(u"condlabel"_ustr))
+    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry(u"withcond"_ustr)))
     // edit in readonly sections
-    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editable"))
+    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button(u"editable"_ustr))
 {
     m_xCurName->make_sorted();
     m_xCurName->set_height_request_by_rows(12);
@@ -1514,7 +1514,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(weld::Container* pPage, weld::Dia
     // because it does not contain any usable files (documents).
     if(comphelper::LibreOfficeKit::isActive())
     {
-        m_xBuilder->weld_label("label1")->hide(); // Link
+        m_xBuilder->weld_label(u"label1"_ustr)->hide(); // Link
         m_xFileCB->hide();
         m_xDDECB->hide();
         m_xDDECommandFT->hide();
@@ -1737,7 +1737,7 @@ IMPL_LINK(SwInsertSectionTabPage, UseFileHdl, weld::Toggleable&, rButton, void)
 
 IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, weld::Button&, void)
 {
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), "swriter"));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetFrameWeld(), u"swriter"_ustr));
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 
@@ -1792,27 +1792,27 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 }
 
 SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/footnotesendnotestabpage.ui", "FootnotesEndnotesTabPage", &rAttrSet)
-    , m_xFootnoteNtAtTextEndCB(m_xBuilder->weld_check_button("ftnntattextend"))
-    , m_xFootnoteNtNumCB(m_xBuilder->weld_check_button("ftnntnum"))
-    , m_xFootnoteOffsetLbl(m_xBuilder->weld_label("ftnoffset_label"))
-    , m_xFootnoteOffsetField(m_xBuilder->weld_spin_button("ftnoffset"))
-    , m_xFootnoteNtNumFormatCB(m_xBuilder->weld_check_button("ftnntnumfmt"))
-    , m_xFootnotePrefixFT(m_xBuilder->weld_label("ftnprefix_label"))
-    , m_xFootnotePrefixED(m_xBuilder->weld_entry("ftnprefix"))
-    , m_xFootnoteNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("ftnnumviewbox")))
-    , m_xFootnoteSuffixFT(m_xBuilder->weld_label("ftnsuffix_label"))
-    , m_xFootnoteSuffixED(m_xBuilder->weld_entry("ftnsuffix"))
-    , m_xEndNtAtTextEndCB(m_xBuilder->weld_check_button("endntattextend"))
-    , m_xEndNtNumCB(m_xBuilder->weld_check_button("endntnum"))
-    , m_xEndOffsetLbl(m_xBuilder->weld_label("endoffset_label"))
-    , m_xEndOffsetField(m_xBuilder->weld_spin_button("endoffset"))
-    , m_xEndNtNumFormatCB(m_xBuilder->weld_check_button("endntnumfmt"))
-    , m_xEndPrefixFT(m_xBuilder->weld_label("endprefix_label"))
-    , m_xEndPrefixED(m_xBuilder->weld_entry("endprefix"))
-    , m_xEndNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("endnumviewbox")))
-    , m_xEndSuffixFT(m_xBuilder->weld_label("endsuffix_label"))
-    , m_xEndSuffixED(m_xBuilder->weld_entry("endsuffix"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/footnotesendnotestabpage.ui"_ustr, u"FootnotesEndnotesTabPage"_ustr, &rAttrSet)
+    , m_xFootnoteNtAtTextEndCB(m_xBuilder->weld_check_button(u"ftnntattextend"_ustr))
+    , m_xFootnoteNtNumCB(m_xBuilder->weld_check_button(u"ftnntnum"_ustr))
+    , m_xFootnoteOffsetLbl(m_xBuilder->weld_label(u"ftnoffset_label"_ustr))
+    , m_xFootnoteOffsetField(m_xBuilder->weld_spin_button(u"ftnoffset"_ustr))
+    , m_xFootnoteNtNumFormatCB(m_xBuilder->weld_check_button(u"ftnntnumfmt"_ustr))
+    , m_xFootnotePrefixFT(m_xBuilder->weld_label(u"ftnprefix_label"_ustr))
+    , m_xFootnotePrefixED(m_xBuilder->weld_entry(u"ftnprefix"_ustr))
+    , m_xFootnoteNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(u"ftnnumviewbox"_ustr)))
+    , m_xFootnoteSuffixFT(m_xBuilder->weld_label(u"ftnsuffix_label"_ustr))
+    , m_xFootnoteSuffixED(m_xBuilder->weld_entry(u"ftnsuffix"_ustr))
+    , m_xEndNtAtTextEndCB(m_xBuilder->weld_check_button(u"endntattextend"_ustr))
+    , m_xEndNtNumCB(m_xBuilder->weld_check_button(u"endntnum"_ustr))
+    , m_xEndOffsetLbl(m_xBuilder->weld_label(u"endoffset_label"_ustr))
+    , m_xEndOffsetField(m_xBuilder->weld_spin_button(u"endoffset"_ustr))
+    , m_xEndNtNumFormatCB(m_xBuilder->weld_check_button(u"endntnumfmt"_ustr))
+    , m_xEndPrefixFT(m_xBuilder->weld_label(u"endprefix_label"_ustr))
+    , m_xEndPrefixED(m_xBuilder->weld_entry(u"endprefix"_ustr))
+    , m_xEndNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box(u"endnumviewbox"_ustr)))
+    , m_xEndSuffixFT(m_xBuilder->weld_label(u"endsuffix_label"_ustr))
+    , m_xEndSuffixED(m_xBuilder->weld_entry(u"endsuffix"_ustr))
 {
     m_xFootnoteNumViewBox->Reload(SwInsertNumTypes::Extended);
     m_xEndNumViewBox->Reload(SwInsertNumTypes::Extended);
@@ -2030,24 +2030,24 @@ IMPL_LINK( SwSectionFootnoteEndTabPage, FootEndHdl, weld::Toggleable&, rBox, voi
 
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh)
-    : SfxTabDialogController(pParent, "modules/swriter/ui/formatsectiondialog.ui",
-                             "FormatSectionDialog", &rSet)
+    : SfxTabDialogController(pParent, u"modules/swriter/ui/formatsectiondialog.ui"_ustr,
+                             u"FormatSectionDialog"_ustr, &rSet)
     , m_rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage("columns",   SwColumnPage::Create, nullptr);
-    AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
-    AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
+    AddTabPage(u"columns"_ustr,   SwColumnPage::Create, nullptr);
+    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"notes"_ustr, SwSectionFootnoteEndTabPage::Create, nullptr);
+    AddTabPage(u"indents"_ustr, SwSectionIndentTabPage::Create, nullptr);
 
     tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {
-        RemoveTabPage("notes");
-        RemoveTabPage("indents");
+        RemoveTabPage(u"notes"_ustr);
+        RemoveTabPage(u"indents"_ustr);
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
-            RemoveTabPage("columns");
+            RemoveTabPage(u"columns"_ustr);
     }
 }
 
@@ -2073,10 +2073,10 @@ void SwSectionPropertyTabDialog::PageCreated(const OUString& rId, SfxTabPage &rP
 }
 
 SwSectionIndentTabPage::SwSectionIndentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/indentpage.ui", "IndentPage", &rAttrSet)
-    , m_xBeforeMF(m_xBuilder->weld_metric_spin_button("before", FieldUnit::CM))
-    , m_xAfterMF(m_xBuilder->weld_metric_spin_button("after", FieldUnit::CM))
-    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/indentpage.ui"_ustr, u"IndentPage"_ustr, &rAttrSet)
+    , m_xBeforeMF(m_xBuilder->weld_metric_spin_button(u"before"_ustr, FieldUnit::CM))
+    , m_xAfterMF(m_xBuilder->weld_metric_spin_button(u"after"_ustr, FieldUnit::CM))
+    , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin))
 {
     Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
     m_xBeforeMF->connect_value_changed(aLk);
@@ -2117,8 +2117,8 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     }
     else
     {
-        m_xBeforeMF->set_text("");
-        m_xAfterMF->set_text("");
+        m_xBeforeMF->set_text(u""_ustr);
+        m_xAfterMF->set_text(u""_ustr);
     }
     m_xBeforeMF->save_value();
     m_xAfterMF->save_value();

@@ -41,26 +41,26 @@ const WhichRangesContainer SwParagraphNumTabPage::s_aPageRg(
                FN_NUMBER_NEWSTART_AT>);
 
 SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttr)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/numparapage.ui", "NumParaPage", &rAttr)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/numparapage.ui"_ustr, u"NumParaPage"_ustr, &rAttr)
     , msOutlineNumbering(SwResId(STR_OUTLINE_NUMBERING ))
     , m_bModified(false)
     , m_bCurNumrule(false)
-    , m_xOutlineStartBX(m_xBuilder->weld_widget("boxOUTLINE"))
-    , m_xOutlineLvLB(m_xBuilder->weld_combo_box("comboLB_OUTLINE_LEVEL"))
-    , m_xNumberStyleBX(m_xBuilder->weld_widget("boxNUMBER_STYLE"))
-    , m_xNumberStyleLB(m_xBuilder->weld_combo_box("comboLB_NUMBER_STYLE"))
-    , m_xEditNumStyleBtn(m_xBuilder->weld_button("editnumstyle"))
-    , m_xListLvBX(m_xBuilder->weld_widget("boxLIST_LEVEL"))
-    , m_xListLvLB(m_xBuilder->weld_combo_box("comboLB_LIST_LEVEL"))
-    , m_xNewStartCB(m_xBuilder->weld_check_button("checkCB_NEW_START"))
-    , m_xNewStartBX(m_xBuilder->weld_widget("boxNEW_START"))
-    , m_xNewStartNumberCB(m_xBuilder->weld_check_button("checkCB_NUMBER_NEW_START"))
-    , m_xNewStartNF(m_xBuilder->weld_spin_button("spinNF_NEW_START"))
-    , m_xCountParaFram(m_xBuilder->weld_widget("frameFL_COUNT_PARA"))
-    , m_xCountParaCB(m_xBuilder->weld_check_button("checkCB_COUNT_PARA"))
-    , m_xRestartParaCountCB(m_xBuilder->weld_check_button("checkCB_RESTART_PARACOUNT"))
-    , m_xRestartBX(m_xBuilder->weld_widget("boxRESTART_NO"))
-    , m_xRestartNF(m_xBuilder->weld_spin_button("spinNF_RESTART_PARA"))
+    , m_xOutlineStartBX(m_xBuilder->weld_widget(u"boxOUTLINE"_ustr))
+    , m_xOutlineLvLB(m_xBuilder->weld_combo_box(u"comboLB_OUTLINE_LEVEL"_ustr))
+    , m_xNumberStyleBX(m_xBuilder->weld_widget(u"boxNUMBER_STYLE"_ustr))
+    , m_xNumberStyleLB(m_xBuilder->weld_combo_box(u"comboLB_NUMBER_STYLE"_ustr))
+    , m_xEditNumStyleBtn(m_xBuilder->weld_button(u"editnumstyle"_ustr))
+    , m_xListLvBX(m_xBuilder->weld_widget(u"boxLIST_LEVEL"_ustr))
+    , m_xListLvLB(m_xBuilder->weld_combo_box(u"comboLB_LIST_LEVEL"_ustr))
+    , m_xNewStartCB(m_xBuilder->weld_check_button(u"checkCB_NEW_START"_ustr))
+    , m_xNewStartBX(m_xBuilder->weld_widget(u"boxNEW_START"_ustr))
+    , m_xNewStartNumberCB(m_xBuilder->weld_check_button(u"checkCB_NUMBER_NEW_START"_ustr))
+    , m_xNewStartNF(m_xBuilder->weld_spin_button(u"spinNF_NEW_START"_ustr))
+    , m_xCountParaFram(m_xBuilder->weld_widget(u"frameFL_COUNT_PARA"_ustr))
+    , m_xCountParaCB(m_xBuilder->weld_check_button(u"checkCB_COUNT_PARA"_ustr))
+    , m_xRestartParaCountCB(m_xBuilder->weld_check_button(u"checkCB_RESTART_PARACOUNT"_ustr))
+    , m_xRestartBX(m_xBuilder->weld_widget(u"boxRESTART_NO"_ustr))
+    , m_xRestartNF(m_xBuilder->weld_spin_button(u"spinNF_RESTART_PARA"_ustr))
 {
     m_xNewStartCB->set_state(TRISTATE_FALSE);
     m_xNewStartNumberCB->set_state(TRISTATE_FALSE);
@@ -246,12 +246,12 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
         if( aStyle == "Outline")
         {
-            if (m_xNumberStyleLB->find_id("pseudo") == -1)
+            if (m_xNumberStyleLB->find_id(u"pseudo"_ustr) == -1)
             {
                 // tdf#145804 show "Chapter Numbering"
-                m_xNumberStyleLB->append("pseudo", msOutlineNumbering);
+                m_xNumberStyleLB->append(u"pseudo"_ustr, msOutlineNumbering);
             }
-            m_xNumberStyleLB->set_active_id("pseudo");
+            m_xNumberStyleLB->set_active_id(u"pseudo"_ustr);
             m_xNumberStyleLB->save_value();
         }
         else

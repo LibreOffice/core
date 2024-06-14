@@ -47,8 +47,8 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
                     bool bDraw,
                     const OUString& sDefPage)
     : SfxTabDialogController(pParent,
-                 "modules/swriter/ui/paradialog.ui",
-                 "ParagraphPropertiesDialog",
+                 u"modules/swriter/ui/paradialog.ui"_ustr,
+                 u"ParagraphPropertiesDialog"_ustr,
                  &rCoreSet,  nullptr != pTitle)
     , m_rView(rVw)
     , m_bDrawParaDlg(bDraw)
@@ -65,77 +65,77 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage("labelTP_PARA_STD", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),
+    AddTabPage(u"labelTP_PARA_STD"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),
                                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage("labelTP_PARA_ALIGN", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
+    AddTabPage(u"labelTP_PARA_ALIGN"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
                                       pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH));
 
     if (!m_bDrawParaDlg && (!bHtmlMode || officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get()))
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-        AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),
+        AddTabPage(u"textflow"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),
                                pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH));
 
     }
     else
-        RemoveTabPage("textflow");
+        RemoveTabPage(u"textflow"_ustr);
 
     if(!bHtmlMode && SvtCJKOptions::IsAsianTypographyEnabled())
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-        AddTabPage( "labelTP_PARA_ASIAN",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
+        AddTabPage( u"labelTP_PARA_ASIAN"_ustr,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
                                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
     }
     else
-        RemoveTabPage("labelTP_PARA_ASIAN");
+        RemoveTabPage(u"labelTP_PARA_ASIAN"_ustr);
 
     if(bHtmlMode)
-        RemoveTabPage("labelTP_TABULATOR");
+        RemoveTabPage(u"labelTP_TABULATOR"_ustr);
     else
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-        AddTabPage( "labelTP_TABULATOR", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+        AddTabPage( u"labelTP_TABULATOR"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
     }
 
     // remove unwanted tabs for draw text box paragraph properties
     if (m_bDrawParaDlg)
     {
-        RemoveTabPage("labelTP_NUMPARA");
-        RemoveTabPage("labelTP_DROPCAPS");
-        RemoveTabPage("labelTP_BORDER");
-        RemoveTabPage("area");
-        RemoveTabPage("transparence");
+        RemoveTabPage(u"labelTP_NUMPARA"_ustr);
+        RemoveTabPage(u"labelTP_DROPCAPS"_ustr);
+        RemoveTabPage(u"labelTP_BORDER"_ustr);
+        RemoveTabPage(u"area"_ustr);
+        RemoveTabPage(u"transparence"_ustr);
     }
     else
     {
         if(!(nDialogMode & DLG_ENVELOP))
-            AddTabPage("labelTP_NUMPARA", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
+            AddTabPage(u"labelTP_NUMPARA"_ustr, SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
         else
-            RemoveTabPage("labelTP_NUMPARA");
+            RemoveTabPage(u"labelTP_NUMPARA"_ustr);
 
-        AddTabPage("labelTP_DROPCAPS",  SwDropCapsPage::Create, SwDropCapsPage::GetRanges);
+        AddTabPage(u"labelTP_DROPCAPS"_ustr,  SwDropCapsPage::Create, SwDropCapsPage::GetRanges);
 
         if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
         {
             // add Area and Transparence TabPages
-            AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
-            AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+            AddTabPage(u"area"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            AddTabPage(u"transparence"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
         }
         else
         {
-            RemoveTabPage("area");
-            RemoveTabPage("transparence");
+            RemoveTabPage(u"area"_ustr);
+            RemoveTabPage(u"transparence"_ustr);
         }
 
         OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-        AddTabPage("labelTP_BORDER", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+        AddTabPage(u"labelTP_BORDER"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
     }
 
     if (!sDefPage.isEmpty())

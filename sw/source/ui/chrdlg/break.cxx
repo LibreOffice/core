@@ -126,17 +126,17 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
 }
 
 SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
-    : GenericDialogController(pParent, "modules/swriter/ui/insertbreak.ui", "BreakDialog")
-    , m_xLineBtn(m_xBuilder->weld_radio_button("linerb"))
-    , m_xLineClearText(m_xBuilder->weld_label("clearft"))
-    , m_xLineClearBox(m_xBuilder->weld_combo_box("clearlb"))
-    , m_xColumnBtn(m_xBuilder->weld_radio_button("columnrb"))
-    , m_xPageBtn(m_xBuilder->weld_radio_button("pagerb"))
-    , m_xPageCollText(m_xBuilder->weld_label("styleft"))
-    , m_xPageCollBox(m_xBuilder->weld_combo_box("stylelb"))
-    , m_xPageNumBox(m_xBuilder->weld_check_button("pagenumcb"))
-    , m_xPageNumEdit(m_xBuilder->weld_spin_button("pagenumsb"))
-    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    : GenericDialogController(pParent, u"modules/swriter/ui/insertbreak.ui"_ustr, u"BreakDialog"_ustr)
+    , m_xLineBtn(m_xBuilder->weld_radio_button(u"linerb"_ustr))
+    , m_xLineClearText(m_xBuilder->weld_label(u"clearft"_ustr))
+    , m_xLineClearBox(m_xBuilder->weld_combo_box(u"clearlb"_ustr))
+    , m_xColumnBtn(m_xBuilder->weld_radio_button(u"columnrb"_ustr))
+    , m_xPageBtn(m_xBuilder->weld_radio_button(u"pagerb"_ustr))
+    , m_xPageCollText(m_xBuilder->weld_label(u"styleft"_ustr))
+    , m_xPageCollBox(m_xBuilder->weld_combo_box(u"stylelb"_ustr))
+    , m_xPageNumBox(m_xBuilder->weld_check_button(u"pagenumcb"_ustr))
+    , m_xPageNumEdit(m_xBuilder->weld_spin_button(u"pagenumsb"_ustr))
+    , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_rSh(rS)
     , m_nKind(0)
     , m_bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
@@ -156,7 +156,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     for (size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = m_rSh.GetPageDesc(i);
-        ::InsertStringSorted("", rPageDesc.GetName(), *m_xPageCollBox, 1 );
+        ::InsertStringSorted(u""_ustr, rPageDesc.GetName(), *m_xPageCollBox, 1 );
     }
 
     OUString aFormatName;
@@ -164,12 +164,12 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     {
         aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName );
         if (m_xPageCollBox->find_text(aFormatName) == -1)
-            ::InsertStringSorted("", aFormatName, *m_xPageCollBox, 1 );
+            ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1 );
     }
     //add landscape page
     aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFormatName );
     if (m_xPageCollBox->find_text(aFormatName) == -1)
-        ::InsertStringSorted("", aFormatName, *m_xPageCollBox, 1);
+        ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1);
     CheckEnable();
     m_xPageNumEdit->set_text(OUString());
 }

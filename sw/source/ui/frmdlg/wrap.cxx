@@ -52,7 +52,7 @@ const WhichRangesContainer SwWrapTabPage::s_aWrapPageRg(svl::Items<
 
 SwWrapDlg::SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
     : SwWrapDlgBase{rSet}, // this is an async dialog, so we need to store a copy of the rSet
-      SfxSingleTabDialogController(pParent, &maInputSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
+      SfxSingleTabDialogController(pParent, &maInputSet, u"modules/swriter/ui/wrapdialog.ui"_ustr, u"WrapDialog"_ustr)
 {
     // create TabPage
     auto xNewPage = SwWrapTabPage::Create(get_content_area(), this, &maInputSet);
@@ -63,7 +63,7 @@ SwWrapDlg::SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* 
 }
 
 SwWrapTabPage::SwWrapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/wrappage.ui", "WrapPage", &rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/wrappage.ui"_ustr, u"WrapPage"_ustr, &rSet)
     , m_nAnchorId(RndStdIds::FLY_AT_PARA)
     , m_nHtmlMode(0)
     , m_pWrtSh(nullptr)
@@ -72,27 +72,27 @@ SwWrapTabPage::SwWrapTabPage(weld::Container* pPage, weld::DialogController* pCo
     , m_bHtmlMode(false)
     , m_bDrawMode(false)
     , m_bContourImage(false)
-    , m_xNoWrapImg(m_xBuilder->weld_image("noneimg"))
-    , m_xNoWrapRB(m_xBuilder->weld_radio_button("none"))
-    , m_xWrapLeftImg(m_xBuilder->weld_image("beforeimg"))
-    , m_xWrapLeftRB(m_xBuilder->weld_radio_button("before"))
-    , m_xWrapRightImg(m_xBuilder->weld_image("afterimg"))
-    , m_xWrapRightRB(m_xBuilder->weld_radio_button("after"))
-    , m_xWrapParallelImg(m_xBuilder->weld_image("parallelimg"))
-    , m_xWrapParallelRB(m_xBuilder->weld_radio_button("parallel"))
-    , m_xWrapThroughImg(m_xBuilder->weld_image("throughimg"))
-    , m_xWrapThroughRB(m_xBuilder->weld_radio_button("through"))
-    , m_xIdealWrapImg(m_xBuilder->weld_image("optimalimg"))
-    , m_xIdealWrapRB(m_xBuilder->weld_radio_button("optimal"))
-    , m_xLeftMarginED(m_xBuilder->weld_metric_spin_button("left", FieldUnit::CM))
-    , m_xRightMarginED(m_xBuilder->weld_metric_spin_button("right", FieldUnit::CM))
-    , m_xTopMarginED(m_xBuilder->weld_metric_spin_button("top", FieldUnit::CM))
-    , m_xBottomMarginED(m_xBuilder->weld_metric_spin_button("bottom", FieldUnit::CM))
-    , m_xWrapAnchorOnlyCB(m_xBuilder->weld_check_button("anchoronly"))
-    , m_xWrapTransparentCB(m_xBuilder->weld_check_button("transparent"))
-    , m_xWrapOutlineCB(m_xBuilder->weld_check_button("outline"))
-    , m_xWrapOutsideCB(m_xBuilder->weld_check_button("outside"))
-    , m_xAllowOverlapCB(m_xBuilder->weld_check_button("allowoverlap"))
+    , m_xNoWrapImg(m_xBuilder->weld_image(u"noneimg"_ustr))
+    , m_xNoWrapRB(m_xBuilder->weld_radio_button(u"none"_ustr))
+    , m_xWrapLeftImg(m_xBuilder->weld_image(u"beforeimg"_ustr))
+    , m_xWrapLeftRB(m_xBuilder->weld_radio_button(u"before"_ustr))
+    , m_xWrapRightImg(m_xBuilder->weld_image(u"afterimg"_ustr))
+    , m_xWrapRightRB(m_xBuilder->weld_radio_button(u"after"_ustr))
+    , m_xWrapParallelImg(m_xBuilder->weld_image(u"parallelimg"_ustr))
+    , m_xWrapParallelRB(m_xBuilder->weld_radio_button(u"parallel"_ustr))
+    , m_xWrapThroughImg(m_xBuilder->weld_image(u"throughimg"_ustr))
+    , m_xWrapThroughRB(m_xBuilder->weld_radio_button(u"through"_ustr))
+    , m_xIdealWrapImg(m_xBuilder->weld_image(u"optimalimg"_ustr))
+    , m_xIdealWrapRB(m_xBuilder->weld_radio_button(u"optimal"_ustr))
+    , m_xLeftMarginED(m_xBuilder->weld_metric_spin_button(u"left"_ustr, FieldUnit::CM))
+    , m_xRightMarginED(m_xBuilder->weld_metric_spin_button(u"right"_ustr, FieldUnit::CM))
+    , m_xTopMarginED(m_xBuilder->weld_metric_spin_button(u"top"_ustr, FieldUnit::CM))
+    , m_xBottomMarginED(m_xBuilder->weld_metric_spin_button(u"bottom"_ustr, FieldUnit::CM))
+    , m_xWrapAnchorOnlyCB(m_xBuilder->weld_check_button(u"anchoronly"_ustr))
+    , m_xWrapTransparentCB(m_xBuilder->weld_check_button(u"transparent"_ustr))
+    , m_xWrapOutlineCB(m_xBuilder->weld_check_button(u"outline"_ustr))
+    , m_xWrapOutsideCB(m_xBuilder->weld_check_button(u"outside"_ustr))
+    , m_xAllowOverlapCB(m_xBuilder->weld_check_button(u"allowoverlap"_ustr))
 {
     SetExchangeSupport();
 
