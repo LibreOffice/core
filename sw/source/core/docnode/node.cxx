@@ -1002,14 +1002,8 @@ void SwStartNode::CheckSectionCondColl() const
 void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     const char* pName = "???";
-    switch (GetNodeType())
+    switch(GetStartNodeType())
     {
-    case SwNodeType::Table:
-        pName = "table";
-        break;
-    default:
-        switch(GetStartNodeType())
-        {
         case SwNormalStartNode:
             pName = "start";
             break;
@@ -1028,8 +1022,6 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         case SwFooterStartNode:
             pName = "footer";
             break;
-        }
-        break;
     }
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
