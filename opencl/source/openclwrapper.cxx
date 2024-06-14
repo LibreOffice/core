@@ -86,17 +86,20 @@ OString generateMD5(const void* pData, size_t length)
     return aBuffer.makeStringAndClear();
 }
 
-OString const & getCacheFolder()
+// workaround segfault with XCode 14
+OString get_CacheFolder_impl()
 {
-    static OString const aCacheFolder = []()
-    {
         OUString url(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"_ustr);
         rtl::Bootstrap::expandMacros(url);
 
         osl::Directory::create(url);
 
         return OUStringToOString(url, RTL_TEXTENCODING_UTF8);
-    }();
+}
+
+OString const & getCacheFolder()
+{
+    static OString const aCacheFolder = get_CacheFolder_impl();
     return aCacheFolder;
 }
 
