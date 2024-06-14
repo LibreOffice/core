@@ -617,7 +617,7 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
     return lcl_DoUpdateParagraphSignatureField(*pDoc, xField, sDisplayText);
 }
 
-void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove)
+void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove, const uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames)
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     if (!pDocShell)
@@ -628,8 +628,10 @@ void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTe
     // Check if the paragraph is signed.
     try
     {
-        const std::pair<OUString, OUString> pair = lcl_getRDF(xModel, xParagraph, ParagraphSignatureLastIdRDFName);
-        if (pair.second.isEmpty())
+        const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+        std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, rGraphNames, xSubject);
+        const auto it = aStatements.find(ParagraphSignatureLastIdRDFName);
+        if (it == aStatements.end() || it->second.isEmpty())
             return;
     }
     catch (const ::css::uno::Exception&)
@@ -1847,8 +1849,13 @@ void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDont
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+
+    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
     rtl::Reference<SwXParagraph> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode, nullptr);
-    lcl_ValidateParagraphSignatures(*GetDoc(), xParentText, updateDontRemove);
+    lcl_ValidateParagraphSignatures(*GetDoc(), xParentText, updateDontRemove, aGraphNames);
 }
 
 void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
@@ -1884,10 +1891,11 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
     if (!xParagraphs.is())
         return;
+    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, updateDontRemove);
+        lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, updateDontRemove, aGraphNames);
     }
 }
 
@@ -1939,7 +1947,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
     static constexpr OUString sBlank(u""_ustr);
     const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-
+    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParaOrTable(xParagraphs->nextElement(), uno::UNO_QUERY);
@@ -1948,7 +1956,9 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
         try
         {
             const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph);
-            const OUString sFieldNames = lcl_getRDF(xModel, xSubject, ParagraphClassificationFieldNamesRDFName).second;
+            std::map<OUString, OUString> aParagraphStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
+            auto it = aParagraphStatements.find(ParagraphClassificationFieldNamesRDFName);
+            const OUString sFieldNames = (it != aParagraphStatements.end()) ? it->second : OUString();
 
             std::vector<svx::ClassificationResult> aResults;
             if (!sFieldNames.isEmpty())
@@ -1961,9 +1971,14 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     if (sCurFieldName.isEmpty())
                         break;
 
-                    const std::pair<OUString, OUString> fieldNameValue = lcl_getRDF(xModel, xSubject, sCurFieldName);
-                    const OUString sName = fieldNameValue.first;
-                    const OUString sValue = fieldNameValue.second;
+                    OUString sName;
+                    OUString sValue;
+                    it = aParagraphStatements.find(sCurFieldName);
+                    if (it != aParagraphStatements.end())
+                    {
+                        sName = it->first;
+                        sValue = it->second;
+                    }
 
                     if (aKeyCreator.isMarkingTextKey(sName))
                     {
@@ -1998,7 +2013,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
             // Get Signatures
             std::map<OUString, SignatureDescr> aSignatures;
-            for (const auto& pair : lcl_getRDFStatements(xModel, uno::Reference<css::text::XTextContent>(xParagraph)))
+            for (const auto& pair : aParagraphStatements)
             {
                 const OUString& sName = pair.first;
                 if (sName.startsWith(ParagraphSignatureRDFNamespace))
@@ -2039,7 +2054,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                 }
             }
 
-            lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, true); // Validate and Update signatures.
+            lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, true, aGraphNames); // Validate and Update signatures.
         }
         catch (const std::exception&)
         {
