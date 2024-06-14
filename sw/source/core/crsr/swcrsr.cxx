@@ -2370,6 +2370,19 @@ void SwCursor::RestoreSavePos()
 
 bool SwCursor::IsInHyphenatedWord(SwRootFrame const& rLayout) const
 {
+    // skip, if the selected text contains multiple nodes, long text or space,
+    // or not in word starting or word ending positions
+    if ( HasMark() && ( GetPoint()->GetNode() != GetMark()->GetNode() ||
+            abs(GetPoint()->GetContentIndex() - GetMark()->GetContentIndex()) > 100 ||
+            GetText().indexOf(' ') > -1 ||
+            !( IsStartWordWT(css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, &rLayout) ||
+                    IsEndWordWT(css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, &rLayout) ) ) )
+        return false;
+
+    // skip, if no selection and the cursor is not in a word
+    if ( !HasMark() && !IsInWordWT(css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, &rLayout) )
+        return false;
+
     bool bRet = false;
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, true);
@@ -2377,7 +2390,7 @@ bool SwCursor::IsInHyphenatedWord(SwRootFrame const& rLayout) const
         &rLayout, GetPoint(), &tmp);
     if( pFrame && pFrame->IsTextFrame() )
     {
-        SwPaM aPam( *GetPoint(), *GetMark() );
+        SwPaM aPam( *GetPoint() );
         bRet = static_cast<SwTextFrame const*>(pFrame)->IsInHyphenatedWord( &aPam, HasMark() );
     }
     return bRet;
