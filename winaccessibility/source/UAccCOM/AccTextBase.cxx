@@ -438,25 +438,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long 
     if(!pRXText.is())
         return E_FAIL;
 
-    if (endOffset < -1 || endOffset < startOffset )
-    {
+    if (endOffset == -1)
+        endOffset = pRXText->getCharacterCount();
+
+    if (endOffset < 0 || endOffset < startOffset)
         return E_FAIL;
-    }
 
-    OUString ouStr;
-    if (endOffset == -1 )
-    {
-        long nLen=0;
-        if(SUCCEEDED(get_characterCount(&nLen)))
-        {
-            ouStr = pRXText->getTextRange(0, nLen);
-        }
-    }
-    else
-    {
-        ouStr = pRXText->getTextRange(startOffset, endOffset);
-    }
-
+    const OUString ouStr = pRXText->getTextRange(startOffset, endOffset);
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     return S_OK;
