@@ -80,11 +80,10 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     double fTargetVal = 0.0;
     {
         CellType eFType = GetCellType(nFCol, nFRow, nFTab);
-        CellType eVType = GetCellType(nVCol, nVRow, nVTab);
         // #i108005# convert target value to number using default format,
         // as previously done in ScInterpreter::GetDouble
         sal_uInt32 nFIndex = 0;
-        if ( eFType == CELLTYPE_FORMULA && eVType == CELLTYPE_VALUE &&
+        if ( eFType == CELLTYPE_FORMULA && FetchTable(nVTab) && ValidColRow(nVCol, nVRow) &&
              GetFormatTable()->IsNumberFormat( sValStr, nFIndex, fTargetVal ) )
         {
             ScAddress aFormulaAdr( nFCol, nFRow, nFTab );
@@ -94,28 +93,30 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     if (pFormula)
     {
         bool bDoneIteration = false;
-        ScAddress aValueAdr( nVCol, nVRow, nVTab );
-        double* pVCell = GetValueCell( aValueAdr );
-
-        ScRange aVRange( aValueAdr, aValueAdr );    // for SetDirty
-        // Original value to be restored later if necessary
-        double fSaveVal = *pVCell;
+        const ScAddress aValueAdr(nVCol, nVRow, nVTab);
+        const ScRange aVRange(aValueAdr, aValueAdr); // for SetDirty
 
         const sal_uInt16 nMaxIter = 100;
         const double fEps = 1E-10;
         const double fDelta = 1E-6;
 
-        double fBestX, fXPrev;
-        double fBestF, fFPrev;
-        fBestX = fXPrev = fSaveVal;
+        double fXPrev = GetValue(aValueAdr);
+        double fBestX = fXPrev;
+
+        // Original value to be restored later if necessary
+        const ScCellValue aSaveVal(GetRefCellValue(aValueAdr));
+        const bool changeCellType = aSaveVal.getType() != CELLTYPE_VALUE;
+        if (changeCellType)
+            SetValue(aValueAdr, fXPrev);
+        double* pVCell = GetValueCell(aValueAdr);
 
         pFormula->Interpret();
         bool bError = ( pFormula->GetErrCode() != FormulaError::NONE );
         // bError always corresponds with fF
 
-        fFPrev = pFormula->GetValue() - fTargetVal;
+        double fFPrev = pFormula->GetValue() - fTargetVal;
 
-        fBestF = fabs( fFPrev );
+        double fBestF = fabs( fFPrev );
         if ( fBestF < fDelta )
             bDoneIteration = true;
 
@@ -238,7 +239,10 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         {
             nX = fBestX;
         }
-        *pVCell = fSaveVal;
+        if (changeCellType)
+            aSaveVal.commit(*this, aValueAdr);
+        else
+            *pVCell = aSaveVal.getDouble();
         SetDirty( aVRange, false );
         pFormula->Interpret();
     }
