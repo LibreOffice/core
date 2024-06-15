@@ -68,6 +68,7 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     mutable Reference<awt::XDevice>         mxDevice;
     SfxViewShell*                           mpViewShell;
     SfxObjectShell*                         mpObjectShell;
+    bool        m_bJobStarted;
     bool        m_bOrigStatus;
     bool        m_bNeedsChange;
     bool        m_bApi;
@@ -114,6 +115,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     , mpLastPrinter( nullptr )
     , mpViewShell( pView )
     , mpObjectShell(nullptr)
+    , m_bJobStarted( false )
     , m_bOrigStatus( false )
     , m_bNeedsChange( false )
     , m_bApi(i_bApi)
@@ -291,6 +293,8 @@ void SfxPrinterController::jobStarted()
     if ( !mpObjectShell )
         return;
 
+    m_bJobStarted = true;
+
     m_bOrigStatus = mpObjectShell->IsEnableSetModified();
 
     // check configuration: shall update of printing information in DocInfo set the document to "modified"?
@@ -348,10 +352,13 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
         }
         case view::PrintableState_JOB_ABORTED :
         {
-            // printing not successful, reset DocInfo
-            uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
-            xDocProps->setPrintedBy(m_aLastPrintedBy);
-            xDocProps->setPrintDate(m_aLastPrinted);
+            // printing not successful, reset DocInfo if the job started and so DocInfo was modified
+            if (m_bJobStarted)
+            {
+                uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
+                xDocProps->setPrintedBy(m_aLastPrintedBy);
+                xDocProps->setPrintDate(m_aLastPrinted);
+            }
             break;
         }
 
