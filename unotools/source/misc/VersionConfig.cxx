@@ -11,6 +11,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 
 #include <o3tl/string_view.hxx>
@@ -35,9 +36,10 @@ bool isProductVersionUpgraded()
             //update lastversion
             try
             {
-                std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                    comphelper::ConfigurationChanges::create());
+                auto batch(comphelper::ConfigurationChanges::create());
                 officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                // tdf#35568: an upgrade must repeat the first run routine
+                officecfg::Office::Common::Misc::FirstRun::set(true, batch);
                 batch->commit();
             }
             catch (css::lang::IllegalArgumentException&)
