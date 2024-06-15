@@ -91,7 +91,7 @@ namespace /* private */
     {
         std::wstring tmp = L"CLSID\\";
         tmp += ClsidToString(Guid);
-        return DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
+        return DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
     }
 
     HRESULT RegisterColumnHandler(const wchar_t* ModuleFileName)
@@ -114,7 +114,7 @@ namespace /* private */
         std::wstring tmp = L"Folder\\shellex\\ColumnHandlers\\";
         tmp += ClsidToString(CLSID_COLUMN_HANDLER);
 
-        if (!DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str()))
+        if (!DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str()))
             return E_FAIL;
 
         return UnregisterComComponent(CLSID_COLUMN_HANDLER);
@@ -152,16 +152,14 @@ namespace /* private */
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
             SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
 
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+            DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str());
 
             // if there are no further subkey below .ext\\shellex
             // delete the whole subkey
             tmp = SHELLEX_ENTRY;
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
 
-            bool HasSubKeys = true;
-            if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), HasSubKeys) && !HasSubKeys)
-                DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
         }
         return UnregisterComComponent(CLSID_INFOTIP_HANDLER);
     }
@@ -193,21 +191,17 @@ namespace /* private */
             FwdKeyEntry = FORWARD_PROPSHEET_MYPROPSHEET_ENTRY;
             SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
 
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
+            DeleteRegistryTree(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
 
             FwdKeyEntry = FORWARD_PROPSHEET_ENTRY;
             SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
 
-            bool HasSubKeys = true;
-            if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str(), HasSubKeys) && !HasSubKeys)
-                DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
+            DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
 
             FwdKeyEntry = FORWARD_SHELLEX_ENTRY;
             SubstitutePlaceholder(FwdKeyEntry, FORWARDKEY_PLACEHOLDER, OOFileExtensionTable[i].RegistryForwardKey);
 
-            HasSubKeys = true;
-            if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str(), HasSubKeys) && !HasSubKeys)
-                DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
+            DeleteRegistryKey(HKEY_CLASSES_ROOT, FwdKeyEntry.c_str());
         }
 
         return UnregisterComComponent(CLSID_PROPERTYSHEET_HANDLER);
@@ -246,16 +240,14 @@ namespace /* private */
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
             SubstitutePlaceholder(tmp, GUID_PLACEHOLDER, iid);
 
-            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+            DeleteRegistryTree(HKEY_CLASSES_ROOT, tmp.c_str());
 
             // if there are no further subkey below .ext\\shellex
             // delete the whole subkey
             tmp = SHELLEX_ENTRY;
             SubstitutePlaceholder(tmp, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionU);
 
-            bool HasSubKeys = true;
-            if (HasSubkeysRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str(), HasSubKeys) && !HasSubKeys)
-                DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
+            DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str());
         }
         return UnregisterComComponent(CLSID_THUMBVIEWER_HANDLER);
     }
@@ -275,22 +267,8 @@ namespace /* private */
 
     HRESULT UnapproveShellExtension(const CLSID& Clsid)
     {
-        HKEY hkey;
-
-        LONG rc = RegOpenKeyW(
-            HKEY_LOCAL_MACHINE,
-            SHELL_EXTENSION_APPROVED_KEY_NAME,
-            &hkey);
-
-        if (ERROR_SUCCESS == rc)
-        {
-            rc = RegDeleteValueW(
-                hkey,
-                ClsidToString(Clsid).c_str());
-
-            rc |= RegCloseKey(hkey);
-        }
-
+        LSTATUS rc = RegDeleteKeyValueW(HKEY_LOCAL_MACHINE, SHELL_EXTENSION_APPROVED_KEY_NAME,
+                                        ClsidToString(Clsid).c_str());
         return rc == ERROR_SUCCESS ? S_OK : E_FAIL;
     }
 
