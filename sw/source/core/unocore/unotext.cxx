@@ -1009,6 +1009,10 @@ SwXText::compareRegionStarts(
     {
         throw lang::IllegalArgumentException();
     }
+    SwXTextRange* pSwXTextRange1 = dynamic_cast<SwXTextRange*>(xRange1.get());
+    SwXTextRange* pSwXTextRange2 = dynamic_cast<SwXTextRange*>(xRange2.get());
+    if (pSwXTextRange1 && pSwXTextRange2)
+        return pSwXTextRange1->compareRegionStarts(*pSwXTextRange2);
     const uno::Reference<text::XTextRange> xStart1 = xRange1->getStart();
     const uno::Reference<text::XTextRange> xStart2 = xRange2->getStart();
 

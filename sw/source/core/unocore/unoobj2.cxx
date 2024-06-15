@@ -1116,6 +1116,64 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode)
     return false;
 }
 
+sal_Int16 SwXTextRange::compareRegionStarts(SwXTextRange& rhs)
+{
+    std::optional<SwPaM> oPam1, oPam2;
+    GetStartPaM(oPam1);
+    rhs.GetStartPaM(oPam2);
+
+    sal_Int16 nCompare = 0;
+    SwPosition const*const pStart1 = oPam1->Start();
+    SwPosition const*const pStart2 = oPam2->Start();
+    if (*pStart1 < *pStart2)
+    {
+        nCompare = 1;
+    }
+    else if (*pStart1 > *pStart2)
+    {
+        nCompare = -1;
+    }
+    else
+    {
+        OSL_ENSURE(*pStart1 == *pStart2,
+                "SwPositions should be equal here");
+        nCompare = 0;
+    }
+
+    return nCompare;
+}
+
+void SwXTextRange::GetStartPaM(std::optional<SwPaM>& roPaM)
+{
+    ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
+    if (!m_pImpl->m_xParentText.is())
+    {
+        getText();
+    }
+    if(pBkmk)
+    {
+        roPaM.emplace(pBkmk->GetMarkStart());
+    }
+    else if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
+    {
+        // start and end are this, if it's a table
+        roPaM.emplace(GetDoc().GetNodes());
+        GetPositions(*roPaM, sw::TextRangeMode::RequireTextNode);
+    }
+    else if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition
+            && m_pImpl->m_pTableOrSectionFormat)
+    {
+        auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
+        roPaM.emplace(*pSectFormat->GetContent().GetContentIdx());
+        roPaM->Move( fnMoveForward, GoInContent );
+        assert(roPaM->GetPoint()->GetNode() < *pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+    }
+    else
+    {
+        throw uno::RuntimeException(u"disposed?"_ustr);
+    }
+}
+
 namespace sw {
 
 bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,

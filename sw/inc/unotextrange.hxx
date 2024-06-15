@@ -102,6 +102,7 @@ private:
     void    DeleteAndInsert(
                 std::u16string_view aText, ::sw::DeleteAndInsertMode eMode);
     void    Invalidate();
+    void    GetStartPaM(std::optional<SwPaM>& roPaM);
 
     virtual ~SwXTextRange() override;
 
@@ -127,6 +128,8 @@ public:
           SwDoc& GetDoc();
     bool GetPositions(SwPaM & rToFill,
         ::sw::TextRangeMode eMode = ::sw::TextRangeMode::RequireTextNode) const;
+
+    sal_Int16 compareRegionStarts(SwXTextRange& rhs);
 
     static rtl::Reference< SwXTextRange > CreateXTextRange(
             SwDoc & rDoc,
