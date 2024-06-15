@@ -570,7 +570,7 @@ public:
                                 const AlphaMask& rAlphaMask);
 
     // access to SystemDependentDataHolder, to support overload in derived class(es)
-    SAL_DLLPRIVATE const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
+    const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 
 public:
     /** ReassignWithSize and recalculate bitmap.

@@ -33,6 +33,8 @@ class PolygonStrokePrimitive2D;
 class LineRectanglePrimitive2D;
 class FilledRectanglePrimitive2D;
 class SingleLinePrimitive2D;
+class FillGradientPrimitive2D;
+class FillGraphicPrimitive2D;
 }
 
 namespace drawinglayer::processor2d
@@ -73,16 +75,31 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const primitive2d::FilledRectanglePrimitive2D& rFilledRectanglePrimitive2D);
     void
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
+    void processFillGradientPrimitive2D(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processFillGraphicPrimitive2D(
+        const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
      */
     virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
-protected:
-    // local protected minimal constructor for usage in derivates, e.g. helpers
-    CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation);
+    // helpers for gradients
+    void processFillGradientPrimitive2D_fallback_decompose(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processFillGradientPrimitive2D_drawOutputRange(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    bool processFillGradientPrimitive2D_isCompletelyBordered(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processFillGradientPrimitive2D_linear_axial(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processFillGradientPrimitive2D_radial_elliptical(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+    void processFillGradientPrimitive2D_square_rect(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
 
+protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     void setRenderTarget(cairo_t* mpNewRT) { mpRT = mpNewRT; }
     bool hasRenderTarget() const { return nullptr != mpRT; }

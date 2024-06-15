@@ -77,6 +77,7 @@ endif
 ifeq ($(USE_HEADLESS_CODE),TRUE)
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/cairopixelprocessor2d \
+    drawinglayer/source/processor2d/SDPRProcessor2dTools \
 ))
 endif
 

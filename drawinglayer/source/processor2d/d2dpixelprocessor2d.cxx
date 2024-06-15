@@ -1803,7 +1803,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
 {
     BitmapEx aPreparedBitmap;
     basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
-    static double fBigDiscreteArea(300.0 * 300.0);
+    constexpr double fBigDiscreteArea(300.0 * 300.0);
 
     // use tooling to do various checks and prepare tiled rendering, see
     // description of method, parameters and return value there

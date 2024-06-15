@@ -9,6 +9,7 @@
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <map>
@@ -730,6 +731,19 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
 
     // apply the change to color stops
     *this = aNewColorStops;
+}
+
+void BColorStops::tryToApplyBColorModifierStack(const BColorModifierStack& rBColorModifierStack)
+{
+    if (0 == rBColorModifierStack.count())
+        // no content on stack, done
+        return;
+
+    for (auto& candidate : *this)
+    {
+        candidate = BColorStop(candidate.getStopOffset(),
+                               rBColorModifierStack.getModifiedColor(candidate.getStopColor()));
+    }
 }
 
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)

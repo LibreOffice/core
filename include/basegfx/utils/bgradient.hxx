@@ -18,6 +18,11 @@
 
 namespace basegfx
 {
+class BColorModifierStack;
+}
+
+namespace basegfx
+{
 /* MCGR: Provide ColorStop definition
 
         This is the needed combination of offset and color:
@@ -256,6 +261,9 @@ public:
 
     // apply Steps as 'hard' color stops
     void doApplySteps(sal_uInt16 nStepCount);
+
+    // Apply BColorModifierStack changes
+    void tryToApplyBColorModifierStack(const BColorModifierStack& rBColorModifierStack);
 };
 
 class BASEGFX_DLLPUBLIC BGradient final

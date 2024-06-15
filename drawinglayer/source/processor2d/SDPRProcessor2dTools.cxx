@@ -184,7 +184,7 @@ bool prepareBitmapForDirectRender(
         basegfx::B2DRange aDiscreteRange(basegfx::B2DRange::getUnitB2DRange());
         aDiscreteRange.transform(aLocalTransform);
 
-        if (!rDiscreteViewPort.overlaps(rDiscreteViewPort))
+        if (!aDiscreteRange.overlaps(rDiscreteViewPort))
         {
             // we have a Viewport and visible range of geometry is outside -> not visible, done
             return false;

@@ -837,7 +837,7 @@ public:
 
      @returns the global instance of the SystemDependentDataManager
     */
-    SAL_DLLPRIVATE static basegfx::SystemDependentDataManager& GetSystemDependentDataManager();
+    static basegfx::SystemDependentDataManager& GetSystemDependentDataManager();
 
     /** Get the first top-level window of the application.
 
