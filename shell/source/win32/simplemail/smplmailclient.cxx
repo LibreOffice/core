@@ -64,19 +64,12 @@ namespace /* private */
     OUString getAlternativeSenddocUrl()
     {
         OUString altSenddocUrl;
-        HKEY hkey;
-        LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
+        wchar_t buf[EXTENDED_MAX_PATH];
+        DWORD bufSize(sizeof(buf));
+        LSTATUS lret = RegGetValueW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient",
+                                    nullptr, RRF_RT_REG_SZ, nullptr, buf, &bufSize);
         if (lret == ERROR_SUCCESS)
-        {
-            wchar_t buff[EXTENDED_MAX_PATH];
-            LONG sz = sizeof(buff);
-            lret = RegQueryValueW(hkey, nullptr, buff, &sz);
-            if (lret == ERROR_SUCCESS)
-            {
-                osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(buff)), altSenddocUrl);
-            }
-            RegCloseKey(hkey);
-        }
+            osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(buf)), altSenddocUrl);
         return altSenddocUrl;
     }
 
