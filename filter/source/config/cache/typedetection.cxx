@@ -928,7 +928,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
         {
             // tdf#161573: do not interact with the user about possible unrelated failures (e.g.,
             // missing file). If needed, that will happen later, in the main detection phase.
-            auto aInteraction(rDescriptor.getValue(utl::MediaDescriptor::PROP_INTERACTIONHANDLER));
+            auto aInteraction(rDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER]);
             rDescriptor.erase(utl::MediaDescriptor::PROP_INTERACTIONHANDLER);
             comphelper::ScopeGuard interactionHelperGuard([&rDescriptor, &aInteraction]
                 { rDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] = aInteraction; });
