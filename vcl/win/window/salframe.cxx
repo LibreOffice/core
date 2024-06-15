@@ -2652,22 +2652,15 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aMouseSettings.SetStartDragWidth( nDragWidth );
     if ( nDragHeight )
         aMouseSettings.SetStartDragHeight( nDragHeight );
-    HKEY hRegKey;
-    if ( RegOpenKeyW( HKEY_CURRENT_USER,
-                      L"Control Panel\\Desktop",
-                      &hRegKey ) == ERROR_SUCCESS )
     {
         wchar_t aValueBuf[10];
         DWORD   nValueSize = sizeof( aValueBuf );
-        DWORD   nType;
-        if ( RegQueryValueExW( hRegKey, L"MenuShowDelay", nullptr,
-                               &nType, reinterpret_cast<LPBYTE>(aValueBuf), &nValueSize ) == ERROR_SUCCESS )
+        if (RegGetValueW(HKEY_CURRENT_USER, L"Control Panel\\Desktop", L"MenuShowDelay",
+                         RRF_RT_REG_SZ, nullptr, reinterpret_cast<LPVOID>(aValueBuf), &nValueSize)
+            == ERROR_SUCCESS)
         {
-            if ( nType == REG_SZ )
-                aMouseSettings.SetMenuDelay( static_cast<sal_uLong>(ImplW2I( aValueBuf )) );
+            aMouseSettings.SetMenuDelay( static_cast<sal_uLong>(ImplW2I( aValueBuf )) );
         }
-
-        RegCloseKey( hRegKey );
     }
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
@@ -2949,30 +2942,22 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetDragFullOptions( nDragFullOptions );
     }
 
-    if ( RegOpenKeyW( HKEY_CURRENT_USER,
-                      L"Control Panel\\International\\Calendars\\TwoDigitYearMax",
-                      &hRegKey ) == ERROR_SUCCESS )
     {
         wchar_t aValueBuf[10];
-        DWORD   nValue;
         DWORD   nValueSize = sizeof( aValueBuf );
-        DWORD   nType;
-        if ( RegQueryValueExW( hRegKey, L"1", nullptr,
-                               &nType, reinterpret_cast<LPBYTE>(aValueBuf), &nValueSize ) == ERROR_SUCCESS )
+        if (RegGetValueW(HKEY_CURRENT_USER,
+                         L"Control Panel\\International\\Calendars\\TwoDigitYearMax", L"1",
+                         RRF_RT_REG_SZ, nullptr, reinterpret_cast<LPVOID>(aValueBuf), &nValueSize)
+            == ERROR_SUCCESS)
         {
-            if ( nType == REG_SZ )
+            DWORD nValue = static_cast<sal_uLong>(ImplW2I(aValueBuf));
+            if ((nValue > 1000) && (nValue < 10000))
             {
-                nValue = static_cast<sal_uLong>(ImplW2I( aValueBuf ));
-                if ( (nValue > 1000) && (nValue < 10000) )
-                {
-                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Office::Common::DateFormat::TwoDigitYear::set(static_cast<sal_Int32>(nValue-99), batch);
-                    batch->commit();
-                }
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::DateFormat::TwoDigitYear::set(static_cast<sal_Int32>(nValue-99), batch);
+                batch->commit();
             }
         }
-
-        RegCloseKey( hRegKey );
     }
 
     rSettings.SetMouseSettings( aMouseSettings );
