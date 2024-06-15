@@ -19,7 +19,9 @@
 
 #include <sal/types.h>
 
+#include <cassert>
 #include <stdio.h>
+#include <string_view>
 #include "inprocembobj.h"
 #include <embservconst.h>
 
@@ -44,76 +46,33 @@ static ULONG g_nLock = 0;
 
 
 namespace {
-    void FillCharFromInt( int nValue, wchar_t* pBuf, int nLen )
-    {
-        int nInd = 0;
-        while( nInd < nLen )
-        {
-            char nSign = ( nValue / ( 1 << ( ( nLen - nInd - 1 ) * 4 ) ) ) % 16;
-            if ( nSign >= 0 && nSign <= 9 )
-                pBuf[nInd] = nSign + L'0';
-            else if (nSign >= 10)
-                pBuf[nInd] = nSign - 10 + L'a';
-
-            nInd++;
-        }
-    }
-
-    int GetStringFromClassID( const GUID& guid, wchar_t* pBuf, int nLen )
-    {
-        // is not allowed to insert
-        if ( nLen < 38 )
-            return 0;
-
-        pBuf[0] = L'{';
-        FillCharFromInt( guid.Data1, &pBuf[1], 8 );
-        pBuf[9] = L'-';
-        FillCharFromInt( guid.Data2, &pBuf[10], 4 );
-        pBuf[14] = L'-';
-        FillCharFromInt( guid.Data3, &pBuf[15], 4 );
-        pBuf[19] = L'-';
-
-        int nInd = 0;
-        for ( nInd = 0; nInd < 2 ; nInd++ )
-            FillCharFromInt( guid.Data4[nInd], &pBuf[20 + 2*nInd], 2 );
-        pBuf[24] = L'-';
-        for ( nInd = 2; nInd < 8 ; nInd++ )
-            FillCharFromInt( guid.Data4[nInd], &pBuf[20 + 1 + 2*nInd], 2 );
-        pBuf[37] = L'}';
-
-        return 38;
-    }
-
     HRESULT WriteLibraryToRegistry( const wchar_t* pLibrary, DWORD nLen )
     {
         HRESULT hRes = E_FAIL;
         if ( pLibrary && nLen )
         {
-            HKEY hKey = nullptr;
-
             hRes = S_OK;
             for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
             {
-                const wchar_t pSubKeyTemplate[] = L"Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
-                wchar_t pSubKey[std::size(pSubKeyTemplate)];
-                wcsncpy(pSubKey, pSubKeyTemplate, std::size(pSubKeyTemplate));
-
-                int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
+                constexpr std::wstring_view prefix(L"Software\\Classes\\CLSID\\");
+                constexpr std::wstring_view suffix(L"\\InprocHandler32");
+                constexpr size_t guidStringSize
+                    = std::size(L"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}");
+                constexpr size_t bufsize = prefix.size() + guidStringSize + suffix.size();
+                wchar_t pSubKey[bufsize];
+                wchar_t *pos = pSubKey, *end = pSubKey + std::size(pSubKey);
+                pos += prefix.copy(pos, prefix.size());
+                int nGuidLen = StringFromGUID2(*guidList[nInd], pos, end - pos);
 
                 bool bLocalSuccess = false;
-                if ( nGuidLen == 38 )
+                if (nGuidLen == guidStringSize)
                 {
-                    if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE, pSubKey, &hKey ) )
-                    {
-                        if ( ERROR_SUCCESS == RegSetValueExW( hKey, L"", 0, REG_SZ, reinterpret_cast<const BYTE*>(pLibrary), nLen*sizeof(wchar_t) ) )
-                            bLocalSuccess = true;
-                    }
-
-                    if ( hKey )
-                    {
-                        RegCloseKey( hKey );
-                        hKey = nullptr;
-                    }
+                    pos += nGuidLen - 1;
+                    pos += suffix.copy(pos, suffix.size());
+                    assert(pos == end - 1);
+                    *pos = 0;
+                    if (ERROR_SUCCESS == RegSetValueExW(HKEY_LOCAL_MACHINE, pSubKey, 0, REG_SZ, reinterpret_cast<const BYTE*>(pLibrary), nLen*sizeof(wchar_t)))
+                        bLocalSuccess = true;
                 }
 
                 if ( !bLocalSuccess )
