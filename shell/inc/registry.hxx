@@ -37,12 +37,12 @@ bool SetRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath
 /** Deletes the specified registry key and all of its subkeys
     Returns true on success
 */
-bool DeleteRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName);
+bool DeleteRegistryTree(HKEY RootKey, const Filepath_char_t* KeyName);
 
-/** May be used to determine if the specified registry key has subkeys
-    The function returns true on success else if an error occurs false
+/** Deletes the specified registry key (only if it has no subkeys)
+    Returns true on success
 */
-bool HasSubkeysRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, bool& bResult);
+bool DeleteRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName);
 
 /** Converts a GUID to its string representation
 */
