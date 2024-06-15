@@ -30,7 +30,7 @@
 
 bool SetRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, const Filepath_char_t* Value)
 {
-    int rc = RegSetKeyValueW(RootKey, KeyName, ValueName, REG_SZ, reinterpret_cast<LPCVOID>(Value),
+    int rc = RegSetKeyValueW(RootKey, KeyName, ValueName, REG_SZ, Value,
                              (wcslen(Value) + 1) * sizeof(*Value));
     return (ERROR_SUCCESS == rc);
 }
@@ -59,7 +59,7 @@ bool QueryRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepa
 {
     DWORD dwBytes = dwBufLen * sizeof(*pszData);
     LSTATUS rc = RegGetValueW(RootKey, KeyName, ValueName, RRF_RT_REG_SZ, nullptr,
-                              reinterpret_cast<LPBYTE>(pszData), &dwBytes);
+                              pszData, &dwBytes);
     return (ERROR_SUCCESS == rc);
 }
 

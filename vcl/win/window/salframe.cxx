@@ -2656,7 +2656,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         wchar_t aValueBuf[10];
         DWORD   nValueSize = sizeof( aValueBuf );
         if (RegGetValueW(HKEY_CURRENT_USER, L"Control Panel\\Desktop", L"MenuShowDelay",
-                         RRF_RT_REG_SZ, nullptr, reinterpret_cast<LPVOID>(aValueBuf), &nValueSize)
+                         RRF_RT_REG_SZ, nullptr, aValueBuf, &nValueSize)
             == ERROR_SUCCESS)
         {
             aMouseSettings.SetMenuDelay( static_cast<sal_uLong>(ImplW2I( aValueBuf )) );
@@ -2947,7 +2947,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         DWORD   nValueSize = sizeof( aValueBuf );
         if (RegGetValueW(HKEY_CURRENT_USER,
                          L"Control Panel\\International\\Calendars\\TwoDigitYearMax", L"1",
-                         RRF_RT_REG_SZ, nullptr, reinterpret_cast<LPVOID>(aValueBuf), &nValueSize)
+                         RRF_RT_REG_SZ, nullptr, aValueBuf, &nValueSize)
             == ERROR_SUCCESS)
         {
             DWORD nValue = static_cast<sal_uLong>(ImplW2I(aValueBuf));
