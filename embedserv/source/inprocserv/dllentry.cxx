@@ -71,7 +71,7 @@ namespace {
                     pos += suffix.copy(pos, suffix.size());
                     assert(pos == end - 1);
                     *pos = 0;
-                    if (ERROR_SUCCESS == RegSetValueExW(HKEY_LOCAL_MACHINE, pSubKey, 0, REG_SZ, reinterpret_cast<const BYTE*>(pLibrary), nLen*sizeof(wchar_t)))
+                    if (ERROR_SUCCESS == RegSetKeyValueW(HKEY_LOCAL_MACHINE, pSubKey, nullptr, REG_SZ, pLibrary, nLen*sizeof(wchar_t)))
                         bLocalSuccess = true;
                 }
 
