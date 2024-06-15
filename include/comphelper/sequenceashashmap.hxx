@@ -405,7 +405,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             return m_aMap.find(rKey);
         }
 
-        bool contains(const OUString& rKey)
+        bool contains(const OUString& rKey) const
         {
             return m_aMap.contains(rKey);
         }
