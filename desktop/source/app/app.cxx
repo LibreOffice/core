@@ -2540,6 +2540,9 @@ IMPL_STATIC_LINK_NOARG(Desktop, AsyncInitFirstRun, Timer *, void)
     {
         Reference< XJobExecutor > xExecutor = theJobExecutor::get( ::comphelper::getProcessComponentContext() );
         xExecutor->trigger( u"onFirstRunInitialization"_ustr );
+        auto batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::FirstRun::set(false, batch);
+        batch->commit();
     }
     catch(const css::uno::Exception&)
     {
@@ -2608,24 +2611,12 @@ void Desktop::CheckFirstRun( )
 #ifdef _WIN32
     // Check if Quickstarter should be started (on Windows only)
     OUString sRootKey = ReplaceStringHookProc("Software\\%OOOVENDOR\\%PRODUCTNAME\\%PRODUCTVERSION");
-    WCHAR szValue[8192];
-    DWORD nValueSize = sizeof(szValue);
-    HKEY hKey;
-    if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), &hKey))
+    if (ERROR_SUCCESS == RegGetValueW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), L"RunQuickstartAtFirstStart", RRF_RT_ANY, nullptr, nullptr, nullptr))
     {
-        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"RunQuickstartAtFirstStart", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
-        {
-            css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
-            RegCloseKey( hKey );
-        }
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
     }
 #endif
-
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::FirstRun::set(false, batch);
-    batch->commit();
 }
 
 }
