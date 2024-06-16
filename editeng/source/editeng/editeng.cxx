@@ -322,8 +322,7 @@ EEHorizontalTextDirection EditEngine::GetDefaultHorizontalTextDirection() const
 
 SvtScriptType EditEngine::GetScriptType( const ESelection& rSelection ) const
 {
-    EditSelection aSel(getImpl().CreateSel(rSelection));
-    return getImpl().GetItemScriptType( aSel );
+    return getImpl().GetScriptType( rSelection );
 }
 
 editeng::LanguageSpan EditEngine::GetLanguage(const EditPaM& rPaM) const

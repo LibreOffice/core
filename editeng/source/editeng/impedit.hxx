@@ -751,6 +751,7 @@ private:
 
     void                InitScriptTypes( sal_Int32 nPara );
     sal_uInt16          GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
+    SvtScriptType       GetScriptType( const ESelection& rSel );
     SvtScriptType       GetItemScriptType( const EditSelection& rSel ) const;
     bool                IsScriptChange( const EditPaM& rPaM ) const;
     bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;

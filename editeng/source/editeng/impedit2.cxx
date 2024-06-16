@@ -1848,6 +1848,12 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
     return nScriptType ? nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
+SvtScriptType ImpEditEngine::GetScriptType( const ESelection& rSel )
+{
+    EditSelection aSel(CreateSel(rSel));
+    return GetItemScriptType( aSel );
+}
+
 SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
 {
     EditSelection aSel( rSel );
