@@ -335,8 +335,16 @@ sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pO
 void SdrPaintView::TheresNewMapMode()
 {
     if (mpActualOutDev) {
-        mnHitTolLog=static_cast<sal_uInt16>(mpActualOutDev->PixelToLogic(Size(mnHitTolPix,0)).Width());
-        mnMinMovLog=static_cast<sal_uInt16>(mpActualOutDev->PixelToLogic(Size(mnMinMovPix,0)).Width());
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            mnHitTolLog=static_cast<sal_uInt16>(OutputDevice::LogicToLogic(Size(mnHitTolPix,0), MapMode(MapUnit::MapPixel), mpActualOutDev->GetMapMode()).Width());
+            mnMinMovLog=static_cast<sal_uInt16>(OutputDevice::LogicToLogic(Size(mnMinMovPix,0), MapMode(MapUnit::MapPixel), mpActualOutDev->GetMapMode()).Width());
+        }
+        else
+        {
+            mnHitTolLog=static_cast<sal_uInt16>(mpActualOutDev->PixelToLogic(Size(mnHitTolPix,0)).Width());
+            mnMinMovLog=static_cast<sal_uInt16>(mpActualOutDev->PixelToLogic(Size(mnMinMovPix,0)).Width());
+        }
     }
 }
 
