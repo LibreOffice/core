@@ -691,7 +691,8 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( std::u16string_view sAuth
 
         if( pPage )
         {
-            for (auto const& xAnnotation : pPage->getAnnotations())
+            sdr::annotation::AnnotationVector aAnnotations( pPage->getAnnotations() ); // intentionally copy
+            for (auto const& xAnnotation : aAnnotations)
             {
                 if( xAnnotation->getAuthor() == sAuthor )
                 {
