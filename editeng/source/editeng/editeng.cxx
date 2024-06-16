@@ -126,9 +126,7 @@ EditUndoManager* EditEngine::SetUndoManager(EditUndoManager* pNew)
 
 void EditEngine::UndoActionStart( sal_uInt16 nId )
 {
-    DBG_ASSERT(!getImpl().IsInUndo(), "Calling UndoActionStart in Undomode!");
-    if (!getImpl().IsInUndo())
-        getImpl().UndoActionStart(nId);
+    getImpl().UndoActionStart(nId);
 }
 
 void EditEngine::UndoActionStart(sal_uInt16 nId, const ESelection& rSel)
@@ -138,9 +136,7 @@ void EditEngine::UndoActionStart(sal_uInt16 nId, const ESelection& rSel)
 
 void EditEngine::UndoActionEnd()
 {
-    DBG_ASSERT(!getImpl().IsInUndo(), "Calling UndoActionEnd in Undomode!");
-    if (!getImpl().IsInUndo())
-        getImpl().UndoActionEnd();
+    getImpl().UndoActionEnd();
 }
 
 bool EditEngine::HasTriedMergeOnLastAddUndo() const

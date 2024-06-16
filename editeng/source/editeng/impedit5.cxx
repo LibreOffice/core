@@ -234,6 +234,7 @@ ViewShellId ImpEditEngine::CreateViewShellId()
 
 void ImpEditEngine::UndoActionStart( sal_uInt16 nId, const ESelection& aSel )
 {
+    DBG_ASSERT(IsInUndo(), "Calling UndoActionStart in Undomode!");
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
@@ -253,6 +254,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId )
 
 void ImpEditEngine::UndoActionEnd()
 {
+    DBG_ASSERT(!IsInUndo(), "Calling UndoActionEnd in Undomode!");
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().LeaveListAction();
