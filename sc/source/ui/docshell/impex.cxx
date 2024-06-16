@@ -2066,7 +2066,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         for( ;; )
         {
             //! allow unicode
-            rStrm.ReadLine( aByteLine );
+            (void)rStrm.ReadLine( aByteLine );
             aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.eof() )
                 break;
