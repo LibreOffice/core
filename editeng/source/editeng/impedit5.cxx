@@ -20,6 +20,7 @@
 #include <memory>
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
+#include <editeng/txtrange.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/app.hxx>
 #include <utility>
@@ -786,6 +787,24 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
     }
     mbFormatted = false;
     // Portion does not need to be invalidated here, happens elsewhere.
+}
+
+void ImpEditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
+{
+    bool bSimple(false);
+
+    if(pLinePolyPolygon && 1 == rPolyPolygon.count())
+    {
+        if(rPolyPolygon.getB2DPolygon(0).isClosed())
+        {
+            // open polygon
+            bSimple = true;
+        }
+    }
+
+    TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, true );
+    SetTextRanger( std::unique_ptr<TextRanger>(pRanger) );
+    maPaperSize = pRanger->GetBoundRect().GetSize();
 }
 
 IdleFormattter::IdleFormattter()

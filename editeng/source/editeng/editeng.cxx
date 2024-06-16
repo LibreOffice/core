@@ -522,20 +522,7 @@ void EditEngine::SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 
 void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon)
 {
-    bool bSimple(false);
-
-    if(pLinePolyPolygon && 1 == rPolyPolygon.count())
-    {
-        if(rPolyPolygon.getB2DPolygon(0).isClosed())
-        {
-            // open polygon
-            bSimple = true;
-        }
-    }
-
-    TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, true );
-    getImpl().SetTextRanger( std::unique_ptr<TextRanger>(pRanger) );
-    getImpl().SetPaperSize( pRanger->GetBoundRect().GetSize() );
+    getImpl().SetPolygon(rPolyPolygon, pLinePolyPolygon);
 }
 
 void EditEngine::ClearPolygon()

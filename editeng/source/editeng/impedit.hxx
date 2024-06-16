@@ -943,7 +943,8 @@ public:
     const ViewsType& GetEditViews() const { return maEditViews; }
 
     const Size& GetPaperSize() const { return maPaperSize; }
-    void SetPaperSize(const Size& rSize) { maPaperSize = rSize; }
+
+    void                    SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
 
     void                    SetVertical( bool bVertical);
     bool                    IsEffectivelyVertical() const                      { return GetEditDoc().IsEffectivelyVertical(); }
