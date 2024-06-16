@@ -879,20 +879,12 @@ void EditEngine::SetText( const OUString& rText )
 
 ErrCode EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
-    bool bUndoEnabled = getImpl().IsUndoEnabled();
-    getImpl().EnableUndo(false);
-    getImpl().SetText(OUString());
-    EditPaM aPaM(getImpl().GetEditDoc().GetStartPaM());
-    getImpl().Read(rInput, rBaseURL, eFormat, EditSelection(aPaM, aPaM), pHTTPHeaderAttrs);
-    getImpl().EnableUndo(bUndoEnabled);
-    return rInput.GetError();
+    return getImpl().Read(rInput, rBaseURL, eFormat, pHTTPHeaderAttrs);
 }
 
 void EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
-    EditPaM aStartPaM(getImpl().GetEditDoc().GetStartPaM());
-    EditPaM aEndPaM(getImpl().GetEditDoc().GetEndPaM());
-    getImpl().Write(rOutput, eFormat, EditSelection(aStartPaM, aEndPaM));
+    getImpl().Write(rOutput, eFormat);
 }
 
 std::unique_ptr<EditTextObject> EditEngine::CreateTextObject()

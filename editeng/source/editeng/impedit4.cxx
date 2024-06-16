@@ -84,6 +84,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 
+ErrCode ImpEditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+{
+    bool bUndoEnabled = IsUndoEnabled();
+    EnableUndo(false);
+    SetText(OUString());
+    EditPaM aPaM(maEditDoc.GetStartPaM());
+    Read(rInput, rBaseURL, eFormat, EditSelection(aPaM, aPaM), pHTTPHeaderAttrs);
+    EnableUndo(bUndoEnabled);
+    return rInput.GetError();
+}
+
 EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs)
 {
     bool _bUpdate = SetUpdateLayout( false );
@@ -175,6 +186,13 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
         return aSel.Min();
     }
     return xPrsr->GetCurSelection().Max();
+}
+
+void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
+{
+    EditPaM aStartPaM(maEditDoc.GetStartPaM());
+    EditPaM aEndPaM(maEditDoc.GetEndPaM());
+    Write(rOutput, eFormat, EditSelection(aStartPaM, aEndPaM));
 }
 
 void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel)

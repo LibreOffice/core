@@ -1032,7 +1032,9 @@ public:
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
     bool            UpdateFields();
 
-    EditPaM         Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr);
+    ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    EditPaM         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr);
+    void            Write( SvStream& rOutput, EETextFormat eFormat );
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
 
     std::unique_ptr<EditTextObject> CreateTextObject();
