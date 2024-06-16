@@ -771,7 +771,7 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
         return ;
     }
 
-    // Related tdf#158914: check if focussed cell has changed
+    // Related tdf#158914: check if focused cell has changed
     // Some accessiblity tools, such as NVDA on Windows, appear to need
     // a value changed notification before it will refetch a cell's
     // accessible text. While Notify() is able to fire text and value changed
