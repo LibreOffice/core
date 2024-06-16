@@ -130,7 +130,7 @@ sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUS
         nDicVersion = DIC_VERSION_7;
 
         // 1st skip magic / header line
-        rStream.ReadLine(aLine);
+        (void)rStream.ReadLine(aLine);
 
         // 2nd line: language all | en-US | pt-BR ...
         while ((bSuccess = rStream.ReadLine(aLine)))
