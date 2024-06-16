@@ -2951,6 +2951,8 @@ css::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
                            [](const std::unique_ptr<SwFieldType>& pType) {
                                return pType->Which() == SwFieldIds::Postit;
                             });
+    if (fieldTypeIt == pFieldTypes->end())
+        return aRet;
     const SwFieldType & rCurType = **fieldTypeIt;
     std::vector<SwFormatField*> vFormatFields;
     rCurType.GatherFields(vFormatFields);
