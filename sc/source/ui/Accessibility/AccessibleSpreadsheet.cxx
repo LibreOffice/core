@@ -777,7 +777,7 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
     // accessible text. While Notify() is able to fire text and value changed
     // notifications, it seems to be rarely called and when it is called,
     // such as when undoing a cell, it can be called before the cell's
-    // accessible taxt has been updated.
+    // accessible text has been updated.
     // So before a cell loses focus, check if any accessible text changes
     // have occurred and fire text and value changed notifications if needed.
     ScDocument* pScDoc= GetDocument(mpViewShell);
