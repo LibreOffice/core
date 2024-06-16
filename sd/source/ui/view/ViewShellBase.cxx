@@ -991,9 +991,25 @@ int ViewShellBase::getEditMode() const
         switch ( pDrawViewShell->GetEditMode() )
         {
         case EditMode::Page:
-            return 0;
+            switch (pDrawViewShell->GetPageKind())
+            {
+                case PageKind::Standard:
+                    return 0;
+                case PageKind::Notes:
+                    return 2;
+                default:
+                    assert(!"Unhandled page kind");
+                    return 0;
+            }
         case EditMode::MasterPage:
-            return 1;
+            switch (pDrawViewShell->GetPageKind())
+            {
+                case PageKind::Standard:
+                    return 1;
+                default:
+                    assert(!"Unhandled page kind");
+                    return 1;
+            }
         }
     }
 
