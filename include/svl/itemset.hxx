@@ -101,17 +101,13 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     // the set SfxPoolItems, indexed by WhichID
     PoolItemMap         m_aPoolItemMap;
 
-    // Notification-Callback mechanism for SwAttrSet in SW, functionPtr for callback
-    std::function<void(const SfxPoolItem*, const SfxPoolItem*)> m_aCallback;
-
     // helpers to keep m_nRegister up-to-date
     void checkRemovePoolRegistration(const SfxPoolItem* pItem);
     void checkAddPoolRegistration(const SfxPoolItem* pItem);
 
 protected:
     // Notification-Callback mechanism for SwAttrSet in SW
-    void setCallback(const std::function<void(const SfxPoolItem*, const SfxPoolItem*)> &func) { m_aCallback = func; }
-    void clearCallback() { m_aCallback = nullptr; }
+    virtual void Changed(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const;
 
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, bool bPassingOwnership );
     const SfxPoolItem* PutImplAsTargetWhich( const SfxPoolItem&, sal_uInt16 nTargetWhich, bool bPassingOwnership );

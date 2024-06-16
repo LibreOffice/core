@@ -271,7 +271,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
 #endif
 , m_aWhichRanges(rPool.GetMergedIdRanges())
 , m_aPoolItemMap()
-, m_aCallback()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
@@ -289,7 +288,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 #endif
 , m_aWhichRanges(std::move(wids))
 , m_aPoolItemMap()
-, m_aCallback()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
@@ -308,7 +306,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 #endif
 , m_aWhichRanges( rASet.m_aWhichRanges )
 , m_aPoolItemMap()
-, m_aCallback(rASet.m_aCallback)
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
@@ -334,7 +331,6 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
 #endif
 , m_aWhichRanges( std::move(rASet.m_aWhichRanges) )
 , m_aPoolItemMap( std::move(rASet.m_aPoolItemMap) )
-, m_aCallback(rASet.m_aCallback)
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
@@ -354,7 +350,6 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     rASet.m_pParent = nullptr;
     rASet.m_nRegister = 0;
     rASet.m_aWhichRanges.reset();
-    rASet.m_aCallback = nullptr;
 
     assert(m_aWhichRanges.validRanges2());
 }
@@ -768,10 +763,7 @@ void SfxItemSet::ClearSingleItem_PrepareRemove(const SfxPoolItem* pItem)
         return;
 
     // Notification-Callback
-    if(m_aCallback)
-    {
-        m_aCallback(pItem, nullptr);
-    }
+    Changed(pItem, nullptr);
 
     // check register for remove
     checkRemovePoolRegistration(pItem);
@@ -1000,10 +992,7 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, bool bPassingOw
     const SfxPoolItem* pNew(implCreateItemEntry(*GetPool(), &rItem, bPassingOwnership));
 
     // Notification-Callback
-    if(m_aCallback)
-    {
-        m_aCallback(pEntry, pNew);
-    }
+    Changed(pEntry, pNew);
 
     // check register for add/remove. add first so that unregister/register
     // is avoided when an Item is replaced (increase, decrease, do not reach 0)
@@ -1327,6 +1316,13 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
     // Get the Default from the Pool and return
     assert(m_pPool);
     return GetPool()->GetUserOrPoolDefaultItem(nWhich);
+}
+
+/**
+ * Notification callback
+ */
+void SfxItemSet::Changed(const SfxPoolItem*, const SfxPoolItem*) const
+{
 }
 
 /**

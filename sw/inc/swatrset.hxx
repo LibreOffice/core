@@ -165,19 +165,9 @@ class SW_DLLPUBLIC SwAttrSet final : public SfxItemSet
     SwAttrSet *m_pOldSet;
     SwAttrSet *m_pNewSet;
 
-    // helper class for change callback & local instance
-    // needed to forward the processing call to the correct instance
-    class callbackHolder final
-    {
-    private:
-        SwAttrSet* m_Set;
-    public:
-        callbackHolder(SwAttrSet* pSet) : m_Set(pSet) {}
-        void operator () (const SfxPoolItem* pOld, const SfxPoolItem* pNew) { m_Set->changeCallback(pOld, pNew); }
-    } m_aCallbackHolder;
-
     // processor for change callback
-    void changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const;
+    virtual void Changed(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const override;
+
 public:
     SwAttrSet( SwAttrPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwAttrSet( SwAttrPool&, const WhichRangesContainer& nWhichPairTable );

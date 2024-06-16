@@ -88,9 +88,9 @@ SwAttrPool::~SwAttrPool()
 }
 
 /// Notification callback
-void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const
+void SwAttrSet::Changed(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const
 {
-    // will have no effect, return
+    // when neither pOld nor pNew is set, no need to do anything so return
     if (nullptr == m_pOldSet && nullptr == m_pNewSet)
         return;
 
@@ -168,7 +168,6 @@ SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 )
     , m_pOldSet( nullptr )
     , m_pNewSet( nullptr )
-    , m_aCallbackHolder(this)
 {
 }
 
@@ -176,7 +175,6 @@ SwAttrSet::SwAttrSet( SwAttrPool& rPool, const WhichRangesContainer& nWhichPairT
     : SfxItemSet( rPool, nWhichPairTable )
     , m_pOldSet( nullptr )
     , m_pNewSet( nullptr )
-    , m_aCallbackHolder(this)
 {
 }
 
@@ -184,7 +182,6 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
     : SfxItemSet( rSet )
     , m_pOldSet( nullptr )
     , m_pNewSet( nullptr )
-    , m_aCallbackHolder(this)
 {
 }
 
@@ -232,15 +229,9 @@ SwAttrSet SwAttrSet::CloneAsValue( bool bItems ) const
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    // direct call when neither pOld nor pNew is set, no need for callback
-    if (nullptr == pOld && nullptr == pNew)
-        return nullptr != SfxItemSet::Put( rAttr );
-
     m_pNewSet = pNew;
     m_pOldSet = pOld;
-    setCallback(m_aCallbackHolder);
     bool bRet = nullptr != SfxItemSet::Put( rAttr );
-    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return bRet;
 }
@@ -248,15 +239,9 @@ bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
 bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    // direct call when neither pOld nor pNew is set, no need for callback
-    if (nullptr == pOld && nullptr == pNew)
-        return SfxItemSet::Put( rSet );
-
     m_pNewSet = pNew;
     m_pOldSet = pOld;
-    setCallback(m_aCallbackHolder);
     bool bRet = SfxItemSet::Put( rSet );
-    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return bRet;
 }
@@ -264,15 +249,9 @@ bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
                                     SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    // direct call when neither pOld nor pNew is set, no need for callback
-    if (nullptr == pOld && nullptr == pNew)
-        return SfxItemSet::ClearItem( nWhich );
-
     m_pNewSet = pNew;
     m_pOldSet = pOld;
-    setCallback(m_aCallbackHolder);
     sal_uInt16 nRet = SfxItemSet::ClearItem( nWhich );
-    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return nRet;
 }
@@ -283,20 +262,10 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
     OSL_ENSURE( nWhich1 <= nWhich2, "no valid range" );
     sal_uInt16 nRet = 0;
 
-    // direct call when neither pOld nor pNew is set, no need for callback
-    if (nullptr == pOld && nullptr == pNew)
-    {
-        for( ; nWhich1 <= nWhich2; ++nWhich1 )
-            nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
-        return nRet;
-    }
-
     m_pNewSet = pNew;
     m_pOldSet = pOld;
-    setCallback(m_aCallbackHolder);
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
         nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
-    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return nRet;
 }
@@ -304,18 +273,9 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
 int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
                              SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    // direct call when neither pOld nor pNew is set, no need for callback
-    if (nullptr == pOld && nullptr == pNew)
-    {
-        SfxItemSet::Intersect( rSet );
-        return 0; // as below when neither pOld nor pNew is set
-    }
-
     m_pNewSet = pNew;
     m_pOldSet = pOld;
-    setCallback(m_aCallbackHolder);
     SfxItemSet::Intersect( rSet );
-    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return pNew ? pNew->Count() : pOld->Count();
 }
