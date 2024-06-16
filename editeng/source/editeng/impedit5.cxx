@@ -809,6 +809,58 @@ void ImpEditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, cons
     maPaperSize = pRanger->GetBoundRect().GetSize();
 }
 
+void ImpEditEngine::InsertView(EditView* pEditView, size_t nIndex)
+{
+    if (nIndex > maEditViews.size())
+        nIndex = maEditViews.size();
+
+    maEditViews.insert(maEditViews.begin()+nIndex, pEditView);
+
+    EditSelection aStartSel = maEditDoc.GetStartPaM();
+    pEditView->getImpl().SetEditSelection( aStartSel );
+    if (!mpActiveView)
+        SetActiveView(pEditView);
+
+    pEditView->getImpl().AddDragAndDropListeners();
+}
+
+EditView* ImpEditEngine::RemoveView( EditView* pView )
+{
+    pView->HideCursor();
+    EditView* pRemoved = nullptr;
+    ImpEditEngine::ViewsType::iterator it = std::find(maEditViews.begin(), maEditViews.end(), pView);
+
+    DBG_ASSERT( it != maEditViews.end(), "RemoveView with invalid index" );
+    if (it != maEditViews.end())
+    {
+        pRemoved = *it;
+        maEditViews.erase(it);
+        if (mpActiveView == pView)
+        {
+            SetActiveView(nullptr);
+            GetSelEngine().SetCurView(nullptr);
+        }
+        pView->getImpl().RemoveDragAndDropListeners();
+
+    }
+    return pRemoved;
+}
+
+void ImpEditEngine::RemoveView(size_t nIndex)
+{
+    if (nIndex >= maEditViews.size())
+        return;
+
+    EditView* pView = maEditViews[nIndex];
+    if ( pView )
+        RemoveView( pView );
+}
+
+bool ImpEditEngine::HasView( EditView* pView ) const
+{
+    return std::find(maEditViews.begin(), maEditViews.end(), pView) != maEditViews.end();
+}
+
 IdleFormattter::IdleFormattter()
     : Idle("editeng::ImpEditEngine aIdleFormatter")
 {

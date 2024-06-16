@@ -217,52 +217,17 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
 
 void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
 {
-    if (nIndex > getImpl().GetEditViews().size())
-        nIndex = getImpl().GetEditViews().size();
-
-    ImpEditEngine::ViewsType& rViews = getImpl().GetEditViews();
-    rViews.insert(rViews.begin()+nIndex, pEditView);
-
-    EditSelection aStartSel = getImpl().GetEditDoc().GetStartPaM();
-    pEditView->getImpl().SetEditSelection( aStartSel );
-    if (!getImpl().GetActiveView())
-        getImpl().SetActiveView(pEditView);
-
-    pEditView->getImpl().AddDragAndDropListeners();
+    getImpl().InsertView(pEditView, nIndex);
 }
 
 EditView* EditEngine::RemoveView( EditView* pView )
 {
-    pView->HideCursor();
-    EditView* pRemoved = nullptr;
-    ImpEditEngine::ViewsType& rViews = getImpl().GetEditViews();
-    ImpEditEngine::ViewsType::iterator it = std::find(rViews.begin(), rViews.end(), pView);
-
-    DBG_ASSERT( it != rViews.end(), "RemoveView with invalid index" );
-    if (it != rViews.end())
-    {
-        pRemoved = *it;
-        rViews.erase(it);
-        if (getImpl().GetActiveView() == pView)
-        {
-            getImpl().SetActiveView(nullptr);
-            getImpl().GetSelEngine().SetCurView(nullptr);
-        }
-        pView->getImpl().RemoveDragAndDropListeners();
-
-    }
-    return pRemoved;
+    return getImpl().RemoveView(pView);
 }
 
 void EditEngine::RemoveView(size_t nIndex)
 {
-    ImpEditEngine::ViewsType& rViews = getImpl().GetEditViews();
-    if (nIndex >= rViews.size())
-        return;
-
-    EditView* pView = rViews[nIndex];
-    if ( pView )
-        RemoveView( pView );
+    getImpl().RemoveView(nIndex);
 }
 
 EditView* EditEngine::GetView(size_t nIndex) const
@@ -277,8 +242,7 @@ size_t EditEngine::GetViewCount() const
 
 bool EditEngine::HasView( EditView* pView ) const
 {
-    ImpEditEngine::ViewsType const& rViews = getImpl().GetEditViews();
-    return std::find(rViews.begin(), rViews.end(), pView) != rViews.end();
+    return getImpl().HasView(pView);
 }
 
 EditView* EditEngine::GetActiveView() const
