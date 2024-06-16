@@ -40,11 +40,13 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/decoview.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/virdev.hxx>
 
 #include <strings.hrc>
 #include "annotationwindow.hxx"
@@ -278,10 +280,7 @@ void AnnotationWindow::InitControls()
     if (mbReadonly)
         mxMenuButton->hide();
     else
-    {
-        mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
         mxMenuButton->connect_selected(LINK(this, AnnotationWindow, MenuItemSelectedHdl));
-    }
 
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     nCntrl |= EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS | EEControlBits::NOCOLORS;
@@ -556,6 +555,32 @@ void AnnotationWindow::SetColor()
 
     mxPopover->set_background(maColor);
     mxMenuButton->set_background(maColor);
+
+    ScopedVclPtrInstance<VirtualDevice> xVirDev;
+    xVirDev->SetLineColor();
+    xVirDev->SetFillColor(maColor);
+
+    Size aSize(METABUTTON_WIDTH, METABUTTON_HEIGHT);
+    ::tools::Rectangle aRect(Point(0, 0), aSize);
+    xVirDev->SetOutputSizePixel(aSize);
+    xVirDev->DrawRect(aRect);
+
+    ::tools::Rectangle aSymbolRect(aRect);
+    // 25% distance to the left and right button border
+    const ::tools::Long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
+    aSymbolRect.AdjustLeft(nBorderDistanceLeftAndRight );
+    aSymbolRect.AdjustRight( -nBorderDistanceLeftAndRight );
+    // 40% distance to the top button border
+    const ::tools::Long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
+    aSymbolRect.AdjustTop(nBorderDistanceTop );
+    // 15% distance to the bottom button border
+    const ::tools::Long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
+    aSymbolRect.AdjustBottom( -nBorderDistanceBottom );
+    DecorationView aDecoView(xVirDev.get());
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, COL_BLACK,
+                         DrawSymbolFlags::NONE);
+    mxMenuButton->set_image(xVirDev);
+    mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height() + 4);
 
     mxMeta->set_font_color(bHighContrast ? maColorLight : maColorDark);
 
