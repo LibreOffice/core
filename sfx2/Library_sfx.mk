@@ -78,6 +78,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
 
 $(eval $(call gb_Library_use_externals,sfx,\
     boost_headers \
+    frozen \
     icu_headers \
     icui18n \
     icuuc \
