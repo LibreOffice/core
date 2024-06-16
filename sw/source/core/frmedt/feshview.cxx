@@ -239,7 +239,12 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     {
         // tolerance limit of Drawing-SS
         const auto nHdlSizePixel = Imp()->GetDrawView()->GetMarkHdlSizePixel();
-        const short nMinMove = static_cast<short>(GetOut()->PixelToLogic(Size(nHdlSizePixel/2, 0)).Width());
+        short nMinMove;
+        if (comphelper::LibreOfficeKit::isActive())
+            nMinMove = static_cast<short>(OutputDevice::LogicToLogic(Size(nHdlSizePixel/2,0), MapMode(MapUnit::MapPixel), GetOut()->GetMapMode()).Width());
+        else
+            nMinMove = static_cast<short>(GetOut()->PixelToLogic(Size(nHdlSizePixel/2, 0)).Width());
+
         pDView->MarkObj( rPt, nMinMove, bAddSelect, bEnterGroup );
     }
 
