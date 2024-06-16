@@ -4664,6 +4664,19 @@ void ImpEditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
         FormatAndLayout();
 }
 
+void ImpEditEngine::SetParagraphText(sal_Int32 nPara, const OUString& rTxt)
+{
+    std::optional<EditSelection> pSel = SelectParagraph(nPara);
+    if ( pSel )
+    {
+        UndoActionStart(EDITUNDO_INSERT);
+        ImpInsertText(*pSel, rTxt);
+        UndoActionEnd();
+        if (IsUpdateLayout())
+            FormatAndLayout();
+    }
+}
+
 EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
 {
     EditPaM aPaM;

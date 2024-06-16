@@ -1097,6 +1097,7 @@ public:
     void            InsertParagraph(sal_Int32 nPara, const OUString& rTxt);
     EditPaM         InsertParagraph( sal_Int32 nPara );
     std::optional<EditSelection> SelectParagraph( sal_Int32 nPara );
+    void            SetParagraphText(sal_Int32 nPara, const OUString& rTxt);
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { maStatusHdlLink = rLink; }
     const Link<EditStatus&,void>& GetStatusEventHdl() const               { return maStatusHdlLink; }

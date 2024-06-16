@@ -1039,15 +1039,7 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 {
-    std::optional<EditSelection> pSel = getImpl().SelectParagraph(nPara);
-    if ( pSel )
-    {
-        getImpl().UndoActionStart(EDITUNDO_INSERT);
-        getImpl().ImpInsertText(*pSel, rTxt);
-        getImpl().UndoActionEnd();
-        if (getImpl().IsUpdateLayout())
-            getImpl().FormatAndLayout();
-    }
+    getImpl().SetParagraphText(nPara, rTxt);
 }
 
 void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
