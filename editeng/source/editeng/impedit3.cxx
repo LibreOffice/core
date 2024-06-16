@@ -94,6 +94,10 @@ constexpr OUString CH_HYPH = u"-"_ustr;
 
 constexpr tools::Long WRONG_SHOW_MIN = 5;
 
+#if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
+bool ImpEditEngine::bDebugPaint = false;
+#endif
+
 namespace {
 
 struct TabInfo
@@ -3399,6 +3403,92 @@ Point ImpEditEngine::MoveToNextLine(
     }
 
     return rMovePos - aOld;
+}
+
+void ImpEditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
+{
+    // Create with 2 points, as with positive points it will end up with
+    // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
+    tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
+    if( rOutDev.GetConnectMetaFile() )
+        rOutDev.Push();
+    Point aStartPos( rStartPos );
+    if ( IsEffectivelyVertical() )
+    {
+        aStartPos.AdjustX(GetPaperSize().Width() );
+        rStartPos.RotateAround(aStartPos, nOrientation);
+    }
+    Paint(rOutDev, aBigRect, aStartPos, false, nOrientation);
+    if (rOutDev.GetConnectMetaFile())
+        rOutDev.Pop();
+}
+
+void ImpEditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
+{
+#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
+    if ( bDebugPaint )
+        DumpData(false);
+#endif
+
+    // Align to the pixel boundary, so that it becomes exactly the same
+    // as Paint ()
+    tools::Rectangle aOutRect( rOutDev.LogicToPixel( rOutRect ) );
+    aOutRect = rOutDev.PixelToLogic( aOutRect );
+
+    Point aStartPos;
+    if ( !IsEffectivelyVertical() )
+    {
+        aStartPos.setX( aOutRect.Left() - rStartDocPos.X() );
+        aStartPos.setY( aOutRect.Top() - rStartDocPos.Y() );
+    }
+    else
+    {
+        aStartPos.setX( aOutRect.Right() + rStartDocPos.Y() );
+        aStartPos.setY( aOutRect.Top() - rStartDocPos.X() );
+    }
+
+    bool bClipRegion = rOutDev.IsClipRegion();
+    bool bMetafile = rOutDev.GetConnectMetaFile();
+    vcl::Region aOldRegion = rOutDev.GetClipRegion();
+
+    // If one existed => intersection!
+    // Use Push/pop for creating the Meta file
+    if ( bMetafile )
+        rOutDev.Push();
+
+    // Always use the Intersect method, it is a must for Metafile!
+    if ( bClip )
+    {
+        // Clip only if necessary...
+        if (!IsFormatted())
+            FormatDoc();
+        tools::Long nTextWidth = !IsEffectivelyVertical() ? CalcTextWidth(true) : GetTextHeight();
+        if ( rStartDocPos.X() || rStartDocPos.Y() ||
+             ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
+             ( rOutRect.GetWidth() < nTextWidth ) )
+        {
+            // Some printer drivers cause problems if characters graze the
+            // ClipRegion, therefore rather add a pixel more ...
+            tools::Rectangle aClipRect( aOutRect );
+            if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
+            {
+                Size aPixSz( 1, 0 );
+                aPixSz = rOutDev.PixelToLogic( aPixSz );
+                aClipRect.AdjustRight(aPixSz.Width() );
+                aClipRect.AdjustBottom(aPixSz.Width() );
+            }
+            rOutDev.IntersectClipRegion( aClipRect );
+        }
+    }
+
+    Paint(rOutDev, aOutRect, aStartPos);
+
+    if ( bMetafile )
+        rOutDev.Pop();
+    else if ( bClipRegion )
+        rOutDev.SetClipRegion( aOldRegion );
+    else
+        rOutDev.SetClipRegion();
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication

@@ -81,10 +81,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
 
-#if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
-static bool bDebugPaint = false;
-#endif
-
 static rtl::Reference<SfxItemPool> pGlobalPool;
 
 ImpEditEngine& EditEngine::getImpl() const
@@ -206,20 +202,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
 
 void EditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
-    // Create with 2 points, as with positive points it will end up with
-    // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
-    tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
-    if( rOutDev.GetConnectMetaFile() )
-        rOutDev.Push();
-    Point aStartPos( rStartPos );
-    if ( IsEffectivelyVertical() )
-    {
-        aStartPos.AdjustX(GetPaperSize().Width() );
-        rStartPos.RotateAround(aStartPos, nOrientation);
-    }
-    getImpl().Paint(rOutDev, aBigRect, aStartPos, false, nOrientation);
-    if (rOutDev.GetConnectMetaFile())
-        rOutDev.Pop();
+    getImpl().Draw(rOutDev, rStartPos, nOrientation);
 }
 
 void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos )
@@ -229,67 +212,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
 
 void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
 {
-#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
-    if ( bDebugPaint )
-        DumpData(this, false);
-#endif
-
-    // Align to the pixel boundary, so that it becomes exactly the same
-    // as Paint ()
-    tools::Rectangle aOutRect( rOutDev.LogicToPixel( rOutRect ) );
-    aOutRect = rOutDev.PixelToLogic( aOutRect );
-
-    Point aStartPos;
-    if ( !IsEffectivelyVertical() )
-    {
-        aStartPos.setX( aOutRect.Left() - rStartDocPos.X() );
-        aStartPos.setY( aOutRect.Top() - rStartDocPos.Y() );
-    }
-    else
-    {
-        aStartPos.setX( aOutRect.Right() + rStartDocPos.Y() );
-        aStartPos.setY( aOutRect.Top() - rStartDocPos.X() );
-    }
-
-    bool bClipRegion = rOutDev.IsClipRegion();
-    bool bMetafile = rOutDev.GetConnectMetaFile();
-    vcl::Region aOldRegion = rOutDev.GetClipRegion();
-
-    // If one existed => intersection!
-    // Use Push/pop for creating the Meta file
-    if ( bMetafile )
-        rOutDev.Push();
-
-    // Always use the Intersect method, it is a must for Metafile!
-    if ( bClip )
-    {
-        // Clip only if necessary...
-        if ( rStartDocPos.X() || rStartDocPos.Y() ||
-             ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
-             ( rOutRect.GetWidth() < static_cast<tools::Long>(CalcTextWidth()) ) )
-        {
-            // Some printer drivers cause problems if characters graze the
-            // ClipRegion, therefore rather add a pixel more ...
-            tools::Rectangle aClipRect( aOutRect );
-            if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
-            {
-                Size aPixSz( 1, 0 );
-                aPixSz = rOutDev.PixelToLogic( aPixSz );
-                aClipRect.AdjustRight(aPixSz.Width() );
-                aClipRect.AdjustBottom(aPixSz.Width() );
-            }
-            rOutDev.IntersectClipRegion( aClipRect );
-        }
-    }
-
-    getImpl().Paint(rOutDev, aOutRect, aStartPos);
-
-    if ( bMetafile )
-        rOutDev.Pop();
-    else if ( bClipRegion )
-        rOutDev.SetClipRegion( aOldRegion );
-    else
-        rOutDev.SetClipRegion();
+    getImpl().Draw(rOutDev, rOutRect, rStartDocPos, bClip);
 }
 
 void EditEngine::InsertView(EditView* pEditView, size_t nIndex)
@@ -1046,9 +969,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
-                    bDebugPaint = !bDebugPaint;
+                    ImpEditEngine::bDebugPaint = !ImpEditEngine::bDebugPaint;
                     OStringBuffer aInfo("DebugPaint: ");
-                    aInfo.append(bDebugPaint ? "On" : "Off");
+                    aInfo.append(ImpEditEngine::bDebugPaint ? "On" : "Off");
                     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pEditView->GetWindow()->GetFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   OStringToOUString(aInfo, RTL_TEXTENCODING_ASCII_US)));
@@ -1061,7 +984,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             case KEY_F12:
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-                    DumpData(this, true);
+                    getImpl().DumpData(true);
                 bDone = false;
             }
             break;

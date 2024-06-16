@@ -649,10 +649,6 @@ public:
 
     void SetLOKSpecialPaperSize(const Size& rSize);
     const Size& GetLOKSpecialPaperSize() const;
-
-#ifdef DBG_UTIL
-    SAL_DLLPRIVATE static void DumpData(const EditEngine* pEE, bool bInfoBox);
-#endif
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX

@@ -328,11 +328,8 @@ static void DbgOutItemSet(FILE* fp, const SfxItemSet& rSet, bool bSearchInParent
     }
 }
 
-void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
+void ImpEditEngine::DumpData(bool bInfoBox)
 {
-    if (!pEE)
-        return;
-
     FILE* fp = fopen( "editenginedump.log", "w" );
     if ( fp == nullptr )
     {
@@ -340,14 +337,14 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         return;
     }
 
-    const SfxItemPool& rPool = *pEE->GetEmptyItemSet().GetPool();
+    const SfxItemPool& rPool = *GetEmptyItemSet().GetPool();
 
     fprintf( fp, "================================================================================" );
     fprintf( fp, "\n==================   Document   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    for ( sal_Int32 nPortion = 0; nPortion < pEE->getImpl().GetParaPortions().Count(); nPortion++)
+    for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++)
     {
-        ParaPortion const& rPPortion = pEE->getImpl().GetParaPortions().getRef(nPortion);
+        ParaPortion const& rPPortion = GetParaPortions().getRef(nPortion);
         fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
                  nPortion, rPPortion.GetNode()->Len(), rPPortion.IsInvalid(),
                  OUStringToOString(rPPortion.GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
@@ -434,9 +431,9 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         fprintf( fp, "\n-----------------------------------------------------------------------------" );
     }
 
-    if (pEE->getImpl().GetStyleSheetPool())
+    if (GetStyleSheetPool())
     {
-        SfxStyleSheetIterator aIter(pEE->getImpl().GetStyleSheetPool(), SfxStyleFamily::All);
+        SfxStyleSheetIterator aIter(GetStyleSheetPool(), SfxStyleFamily::All);
         sal_uInt16 nStyles = aIter.Count();
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
@@ -458,21 +455,21 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    DbgOutItemSet(fp, pEE->getImpl().GetEmptyItemSet(), true, true);
+    DbgOutItemSet(fp, GetEmptyItemSet(), true, true);
 
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
     fprintf( fp, "\n================================================================================" );
-    fprintf( fp, "\nControl: %x", unsigned( pEE->GetControlWord() ) );
-    fprintf( fp, "\nRefMapMode: %i", int( pEE->getImpl().mpRefDev->GetMapMode().GetMapUnit()));
-    fprintf( fp, "\nPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetPaperSize().Width()), sal_Int64(pEE->GetPaperSize().Height()) );
-    fprintf( fp, "\nMaxAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(pEE->GetMaxAutoPaperSize().Width()), sal_Int64(pEE->GetMaxAutoPaperSize().Height()) );
-    fprintf( fp, "\nMinAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64 , sal_Int64(pEE->GetMinAutoPaperSize().Width()), sal_Int64(pEE->GetMinAutoPaperSize().Height()) );
-    fprintf( fp, "\nCalculateLayout: %i", pEE->IsUpdateLayout() );
-    fprintf( fp, "\nNumber of Views: %" SAL_PRI_SIZET "i", pEE->GetViewCount() );
-    for ( size_t nView = 0; nView < pEE->GetViewCount(); nView++ )
+    fprintf( fp, "\nControl: %x", unsigned( GetStatus().GetControlWord() ) );
+    fprintf( fp, "\nRefMapMode: %i", int( mpRefDev->GetMapMode().GetMapUnit()));
+    fprintf( fp, "\nPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(GetPaperSize().Width()), sal_Int64(GetPaperSize().Height()) );
+    fprintf( fp, "\nMaxAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64, sal_Int64(GetMaxAutoPaperSize().Width()), sal_Int64(GetMaxAutoPaperSize().Height()) );
+    fprintf( fp, "\nMinAutoPaperSize: %" SAL_PRIdINT64 " x %" SAL_PRIdINT64 , sal_Int64(GetMinAutoPaperSize().Width()), sal_Int64(GetMinAutoPaperSize().Height()) );
+    fprintf( fp, "\nCalculateLayout: %i", IsUpdateLayout() );
+    fprintf( fp, "\nNumber of Views: %" SAL_PRI_SIZET "i", GetEditViews().size() );
+    for ( size_t nView = 0; nView < GetEditViews().size(); nView++ )
     {
-        EditView* pV = pEE->GetView( nView );
+        EditView* pV = GetEditViews()[nView];
         assert(pV && "View not found!");
         fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         tools::Rectangle aR( pV->GetOutputArea() );
@@ -484,12 +481,12 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         ESelection aSel = pV->GetSelection();
         fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }
-    if ( pEE->GetActiveView() )
+    if ( GetActiveView() )
     {
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Current View   ===========================================" );
         fprintf( fp, "\n================================================================================" );
-        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), true, false );
+        DbgOutItemSet( fp, GetActiveView()->GetAttribs(), true, false );
     }
     fclose( fp );
     if ( bInfoBox )

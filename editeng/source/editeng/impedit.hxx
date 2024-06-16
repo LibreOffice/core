@@ -985,6 +985,8 @@ public:
     void FormatDoc();
     void FormatFullDoc();
 
+    void                    Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
+    void                    Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void                    UpdateViews( EditView* pCurView = nullptr );
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void                    Paint(OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, Degree10 nOrientation = 0_deg10);
@@ -1359,6 +1361,13 @@ public:
     // Offset of the rectangle's direction-aware corners in document coordinates
     tools::Long getBottomDocOffset(const tools::Rectangle& rect) const;
     Size getTopLeftDocOffset(const tools::Rectangle& rect) const;
+
+#ifdef DBG_UTIL
+    void DumpData(bool bInfoBox);
+#endif
+#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
+    static bool bDebugPaint;
+#endif
 };
 
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
