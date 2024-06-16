@@ -4619,6 +4619,51 @@ tools::Long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
     return nTotalSpace / (nTotalLineCount-1);
 }
 
+void ImpEditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj, bool bAppend )
+{
+    if ( nPara > maEditDoc.Count() )
+    {
+        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
+        nPara = maEditDoc.Count();
+    }
+
+    UndoActionStart(EDITUNDO_INSERT);
+
+    // No Undo compounding needed.
+    EditPaM aPaM(InsertParagraph(nPara));
+    // When InsertParagraph from the outside, no hard attributes
+    // should be taken over!
+    RemoveCharAttribs(nPara);
+    InsertText(rTxtObj, EditSelection(aPaM, aPaM));
+
+    if ( bAppend && nPara )
+        ConnectContents(nPara - 1, /*bBackwards=*/false);
+
+    UndoActionEnd();
+
+    if (IsUpdateLayout())
+        FormatAndLayout();
+}
+
+void ImpEditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
+{
+    if ( nPara > maEditDoc.Count() )
+    {
+        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
+        nPara = maEditDoc.Count();
+    }
+
+    UndoActionStart(EDITUNDO_INSERT);
+    EditPaM aPaM(InsertParagraph(nPara));
+    // When InsertParagraph from the outside, no hard attributes
+    // should be taken over!
+    RemoveCharAttribs(nPara);
+    UndoActionEnd();
+    ImpInsertText(EditSelection(aPaM, aPaM), rTxt);
+    if (IsUpdateLayout())
+        FormatAndLayout();
+}
+
 EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
 {
     EditPaM aPaM;

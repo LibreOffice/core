@@ -1093,6 +1093,8 @@ public:
 
 //  OV-Special
     void            InvalidateFromParagraph( sal_Int32 nFirstInvPara );
+    void            InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj, bool bAppend );
+    void            InsertParagraph(sal_Int32 nPara, const OUString& rTxt);
     EditPaM         InsertParagraph( sal_Int32 nPara );
     std::optional<EditSelection> SelectParagraph( sal_Int32 nPara );
 

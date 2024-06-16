@@ -1029,47 +1029,12 @@ bool EditEngine::IsInSelectionMode() const
 
 void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj, bool bAppend )
 {
-    if ( nPara > GetParagraphCount() )
-    {
-        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
-        nPara = GetParagraphCount();
-    }
-
-    getImpl().UndoActionStart(EDITUNDO_INSERT);
-
-    // No Undo compounding needed.
-    EditPaM aPaM(getImpl().InsertParagraph(nPara));
-    // When InsertParagraph from the outside, no hard attributes
-    // should be taken over!
-    getImpl().RemoveCharAttribs(nPara);
-    getImpl().InsertText(rTxtObj, EditSelection(aPaM, aPaM));
-
-    if ( bAppend && nPara )
-        getImpl().ConnectContents(nPara - 1, /*bBackwards=*/false);
-
-    getImpl().UndoActionEnd();
-
-    if (getImpl().IsUpdateLayout())
-        getImpl().FormatAndLayout();
+    getImpl().InsertParagraph(nPara, rTxtObj, bAppend);
 }
 
 void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 {
-    if ( nPara > GetParagraphCount() )
-    {
-        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
-        nPara = GetParagraphCount();
-    }
-
-    getImpl().UndoActionStart(EDITUNDO_INSERT);
-    EditPaM aPaM(getImpl().InsertParagraph(nPara));
-    // When InsertParagraph from the outside, no hard attributes
-    // should be taken over!
-    getImpl().RemoveCharAttribs(nPara);
-    getImpl().UndoActionEnd();
-    getImpl().ImpInsertText(EditSelection(aPaM, aPaM), rTxt);
-    if (getImpl().IsUpdateLayout())
-        getImpl().FormatAndLayout();
+    getImpl().InsertParagraph(nPara, rTxt);
 }
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
