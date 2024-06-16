@@ -1983,8 +1983,8 @@ public:
     bool               Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                                SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                                const OUString& sValStr, double& nX, bool setNA = true);
-    ScGoalSeekSettings GetGoalSeekSettings() { return maGoalSeekSettings; }
-    void               SetGoalSeekSettings(ScGoalSeekSettings aNewSettings) { maGoalSeekSettings = aNewSettings; }
+    const ScGoalSeekSettings& GetGoalSeekSettings() { return maGoalSeekSettings; }
+    void               SetGoalSeekSettings(const ScGoalSeekSettings& rNewSettings) { maGoalSeekSettings = rNewSettings; }
 
     SC_DLLPUBLIC void           ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                                        ScEditDataArray* pDataArray = nullptr, bool* pIsChanged = nullptr );

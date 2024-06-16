@@ -96,14 +96,14 @@ void ScSolverDlg::Init()
     OUString aStr(theFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
 
     // If Goal Seek settings are stored in the document, restore them
-    ScGoalSeekSettings aSettings = pDoc->GetGoalSeekSettings();
-    if (aSettings.bDefined)
+    const ScGoalSeekSettings& rSettings = pDoc->GetGoalSeekSettings();
+    if (rSettings.bDefined)
     {
-        OUString sFormulaString(aSettings.aFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
-        OUString sVariableString(aSettings.aVariableCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString sFormulaString(rSettings.aFormulaCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString sVariableString(rSettings.aVariableCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
         m_xEdFormulaCell->SetText(sFormulaString);
         m_xEdVariableCell->SetText(sVariableString);
-        m_xEdTargetVal->set_text(aSettings.sTargetValue);
+        m_xEdTargetVal->set_text(rSettings.sTargetValue);
     }
     else
     {
