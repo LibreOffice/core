@@ -861,6 +861,16 @@ bool ImpEditEngine::HasView( EditView* pView ) const
     return std::find(maEditViews.begin(), maEditViews.end(), pView) != maEditViews.end();
 }
 
+void ImpEditEngine::SetDefTab( sal_uInt16 nDefTab )
+{
+    maEditDoc.SetDefTab(nDefTab);
+    if (IsFormatted())
+    {
+        FormatFullDoc();
+        UpdateViews();
+    }
+}
+
 IdleFormattter::IdleFormattter()
     : Idle("editeng::ImpEditEngine aIdleFormatter")
 {

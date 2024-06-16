@@ -257,12 +257,7 @@ void EditEngine::SetActiveView(EditView* pView)
 
 void EditEngine::SetDefTab( sal_uInt16 nDefTab )
 {
-    getImpl().GetEditDoc().SetDefTab(nDefTab);
-    if (getImpl().IsFormatted())
-    {
-        getImpl().FormatFullDoc();
-        getImpl().UpdateViews();
-    }
+    getImpl().SetDefTab(nDefTab);
 }
 
 void EditEngine::SetPaperSize(const Size& rNewSize)

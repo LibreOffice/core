@@ -1366,6 +1366,8 @@ public:
     tools::Long getBottomDocOffset(const tools::Rectangle& rect) const;
     Size getTopLeftDocOffset(const tools::Rectangle& rect) const;
 
+    void SetDefTab( sal_uInt16 nDefTab );
+
 #ifdef DBG_UTIL
     void DumpData(bool bInfoBox);
 #endif
