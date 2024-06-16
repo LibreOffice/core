@@ -2522,6 +2522,26 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     return aStartPaM;
 }
 
+void ImpEditEngine::RemoveParagraph( sal_Int32 nPara )
+{
+    DBG_ASSERT(maEditDoc.Count() > 1, "The first paragraph should not be deleted!");
+    if (maEditDoc.Count() <= 1)
+        return;
+
+    ContentNode* pNode = maEditDoc.GetObject(nPara);
+    const ParaPortion* pPortion = maParaPortionList.SafeGetObject(nPara);
+    DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
+    if ( pNode && pPortion )
+    {
+        // No Undo encapsulation needed.
+        ImpRemoveParagraph(nPara);
+        InvalidateFromParagraph(nPara);
+        UpdateSelections();
+        if (IsUpdateLayout())
+            FormatAndLayout();
+    }
+}
+
 void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 {
     assert(maEditDoc.GetObject(nPara));

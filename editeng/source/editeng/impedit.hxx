@@ -1374,6 +1374,7 @@ public:
 
     bool PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin );
     static bool IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    void RemoveParagraph( sal_Int32 nPara );
 
 #ifdef DBG_UTIL
     void DumpData(bool bInfoBox);

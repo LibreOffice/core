@@ -982,22 +982,7 @@ std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( sal_Int32 nPara, s
 
 void EditEngine::RemoveParagraph( sal_Int32 nPara )
 {
-    DBG_ASSERT(getImpl().GetEditDoc().Count() > 1, "The first paragraph should not be deleted!");
-    if (getImpl().GetEditDoc().Count() <= 1)
-        return;
-
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
-    const ParaPortion* pPortion = getImpl().GetParaPortions().SafeGetObject(nPara);
-    DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
-    if ( pNode && pPortion )
-    {
-        // No Undo encapsulation needed.
-        getImpl().ImpRemoveParagraph(nPara);
-        getImpl().InvalidateFromParagraph(nPara);
-        getImpl().UpdateSelections();
-        if (getImpl().IsUpdateLayout())
-            getImpl().FormatAndLayout();
-    }
+    getImpl().RemoveParagraph(nPara);
 }
 
 sal_Int32 EditEngine::GetTextLen( sal_Int32 nPara ) const
