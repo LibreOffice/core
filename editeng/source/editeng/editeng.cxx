@@ -262,36 +262,7 @@ void EditEngine::SetDefTab( sal_uInt16 nDefTab )
 
 void EditEngine::SetPaperSize(const Size& rNewSize)
 {
-    Size aOldSize = getImpl().GetPaperSize();
-    getImpl().SetValidPaperSize(rNewSize);
-    Size aNewSize = getImpl().GetPaperSize();
-
-    bool bAutoPageSize = getImpl().GetStatus().AutoPageSize();
-    if ( !(bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() )) )
-        return;
-
-    for (EditView* pView : getImpl().maEditViews)
-    {
-        if ( bAutoPageSize )
-            pView->getImpl().RecalcOutputArea();
-        else if (pView->getImpl().DoAutoSize())
-        {
-            pView->getImpl().ResetOutputArea(tools::Rectangle(pView->getImpl().GetOutputArea().TopLeft(), aNewSize));
-        }
-    }
-
-    if ( bAutoPageSize || getImpl().IsFormatted() )
-    {
-        // Changing the width has no effect for AutoPageSize, as this is
-        // determined by the text width.
-        // Optimization first after Vobis delivery was enabled ...
-        getImpl().FormatFullDoc();
-
-        getImpl().UpdateViews(getImpl().GetActiveView());
-
-        if (getImpl().IsUpdateLayout() && getImpl().GetActiveView())
-            getImpl().mpActiveView->ShowCursor(false, false);
-    }
+    getImpl().SetPaperSize(rNewSize);
 }
 
 const Size& EditEngine::GetPaperSize() const

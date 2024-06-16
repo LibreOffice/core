@@ -874,8 +874,6 @@ private:
 
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
-    void                SetValidPaperSize( const Size& rSz );
-
     css::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
 
@@ -946,7 +944,9 @@ public:
     void RemoveView(size_t nIndex);
     bool HasView( EditView* pView ) const;
 
+    void SetValidPaperSize( const Size& rSz );
     const Size& GetPaperSize() const { return maPaperSize; }
+    void SetPaperSize(const Size& rNewSize);
 
     void                    SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
 

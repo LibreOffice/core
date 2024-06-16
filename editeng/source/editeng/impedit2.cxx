@@ -4505,6 +4505,40 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     }
 }
 
+void ImpEditEngine::SetPaperSize(const Size& rNewSize)
+{
+    Size aOldSize = maPaperSize;
+    SetValidPaperSize(rNewSize);
+    Size aNewSize = maPaperSize;
+
+    bool bAutoPageSize = GetStatus().AutoPageSize();
+    if ( !(bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() )) )
+        return;
+
+    for (EditView* pView : maEditViews)
+    {
+        if ( bAutoPageSize )
+            pView->getImpl().RecalcOutputArea();
+        else if (pView->getImpl().DoAutoSize())
+        {
+            pView->getImpl().ResetOutputArea(tools::Rectangle(pView->getImpl().GetOutputArea().TopLeft(), aNewSize));
+        }
+    }
+
+    if ( bAutoPageSize || IsFormatted() )
+    {
+        // Changing the width has no effect for AutoPageSize, as this is
+        // determined by the text width.
+        // Optimization first after Vobis delivery was enabled ...
+        FormatFullDoc();
+
+        UpdateViews(mpActiveView);
+
+        if (IsUpdateLayout() && mpActiveView)
+            mpActiveView->ShowCursor(false, false);
+    }
+}
+
 void ImpEditEngine::SetValidPaperSize( const Size& rNewSz )
 {
     maPaperSize = rNewSz;
