@@ -1369,6 +1369,9 @@ public:
 
     void SetDefTab( sal_uInt16 nDefTab );
 
+    bool PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin );
+    static bool IsSimpleCharInput( const KeyEvent& rKeyEvent );
+
 #ifdef DBG_UTIL
     void DumpData(bool bInfoBox);
 #endif

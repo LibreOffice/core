@@ -19,10 +19,16 @@
 
 #include <memory>
 #include "impedit.hxx"
+#include <comphelper/lok.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/txtrange.hxx>
+#include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/window.hxx>
 #include <utility>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
@@ -869,6 +875,454 @@ void ImpEditEngine::SetDefTab( sal_uInt16 nDefTab )
         FormatFullDoc();
         UpdateViews();
     }
+}
+
+bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin )
+{
+    DBG_ASSERT( pEditView, "no View - no cookie !" );
+
+    bool bDone = true;
+
+    bool bModified  = false;
+    bool bMoved     = false;
+    bool bAllowIdle = true;
+    bool bReadOnly  = pEditView->IsReadOnly();
+
+    CursorFlags aNewCursorFlags;
+    bool bSetCursorFlags = true;
+
+    EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
+    DBG_ASSERT( !aCurSel.IsInvalid(), "Blinde Selection in EditEngine::PostKeyEvent" );
+
+    OUString aAutoText(maAutoCompleteText);
+    if (!maAutoCompleteText.isEmpty())
+        SetAutoCompleteText(OUString(), true);
+
+    sal_uInt16 nCode = rKeyEvent.GetKeyCode().GetCode();
+    KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
+    if ( eFunc != KeyFuncType::DONTKNOW )
+    {
+        switch ( eFunc )
+        {
+            case KeyFuncType::UNDO:
+            {
+                if ( !bReadOnly )
+                    pEditView->Undo();
+                return true;
+            }
+            case KeyFuncType::REDO:
+            {
+                if ( !bReadOnly )
+                    pEditView->Redo();
+                return true;
+            }
+
+            default:    // is then possible edited below.
+                        eFunc = KeyFuncType::DONTKNOW;
+        }
+    }
+
+    if ( eFunc == KeyFuncType::DONTKNOW )
+    {
+        switch ( nCode )
+        {
+#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
+            case KEY_F1:
+            {
+                if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                {
+                    sal_Int32 nParas = maEditDoc.Count();
+                    Point aPos;
+                    Point aViewStart( pEditView->GetOutputArea().TopLeft() );
+                    tools::Long n20 = 40 * mnOnePixelInRef;
+                    for ( sal_Int32 n = 0; n < nParas; n++ )
+                    {
+                        if (!IsFormatted())
+                            FormatDoc();
+                        tools::Long nH = GetParaHeight(n);
+                        Point P1( aViewStart.X() + n20 + n20*(n%2), aViewStart.Y() + aPos.Y() );
+                        Point P2( P1 );
+                        P2.AdjustX(n20 );
+                        P2.AdjustY(nH );
+                        pEditView->GetWindow()->GetOutDev()->SetLineColor();
+                        pEditView->GetWindow()->GetOutDev()->SetFillColor( (n%2) ? COL_YELLOW : COL_LIGHTGREEN );
+                        pEditView->GetWindow()->GetOutDev()->DrawRect( tools::Rectangle( P1, P2 ) );
+                        aPos.AdjustY(nH );
+                    }
+                }
+                bDone = false;
+            }
+            break;
+            case KEY_F11:
+            {
+                if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                {
+                    ImpEditEngine::bDebugPaint = !ImpEditEngine::bDebugPaint;
+                    OStringBuffer aInfo("DebugPaint: ");
+                    aInfo.append(ImpEditEngine::bDebugPaint ? "On" : "Off");
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pEditView->GetWindow()->GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  OStringToOUString(aInfo, RTL_TEXTENCODING_ASCII_US)));
+                    xInfoBox->run();
+
+                }
+                bDone = false;
+            }
+            break;
+            case KEY_F12:
+            {
+                if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                    DumpData(true);
+                bDone = false;
+            }
+            break;
+#endif
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            case KEY_HOME:
+            case KEY_END:
+            case KEY_PAGEUP:
+            case KEY_PAGEDOWN:
+            case css::awt::Key::MOVE_WORD_FORWARD:
+            case css::awt::Key::SELECT_WORD_FORWARD:
+            case css::awt::Key::MOVE_WORD_BACKWARD:
+            case css::awt::Key::SELECT_WORD_BACKWARD:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::MOVE_TO_END_OF_LINE:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case css::awt::Key::SELECT_TO_END_OF_LINE:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+            {
+                if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
+                {
+                    if ( ImpEditEngine::DoVisualCursorTraveling() && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
+                        bSetCursorFlags = false;    // Will be manipulated within visual cursor move
+
+                    aCurSel = MoveCursor( rKeyEvent, pEditView );
+
+                    if ( aCurSel.HasRange() ) {
+                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+                        pEditView->getImpl().CutCopy( aSelection, false );
+                    }
+
+                    bMoved = true;
+                    if ( nCode == KEY_HOME )
+                        aNewCursorFlags.bStartOfLine = true;
+                    else if ( nCode == KEY_END )
+                        aNewCursorFlags.bEndOfLine = true;
+
+                }
+#if OSL_DEBUG_LEVEL > 1
+                GetLanguage(getImpl().GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex());
+#endif
+            }
+            break;
+            case KEY_BACKSPACE:
+            case KEY_DELETE:
+            case css::awt::Key::DELETE_WORD_BACKWARD:
+            case css::awt::Key::DELETE_WORD_FORWARD:
+            case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+            {
+                if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
+                {
+                    // check if we are behind a bullet and using the backspace key
+                    ContentNode *pNode = aCurSel.Min().GetNode();
+                    const SvxNumberFormat *pFmt = GetNumberFormat( pNode );
+                    if (pFmt && nCode == KEY_BACKSPACE &&
+                        !aCurSel.HasRange() && aCurSel.Min().GetIndex() == 0)
+                    {
+                        // if the bullet is still visible, just make it invisible.
+                        // Otherwise continue as usual.
+
+
+                        sal_Int32 nPara = maEditDoc.GetPos( pNode );
+                        SfxBoolItem aBulletState(GetParaAttrib(nPara, EE_PARA_BULLETSTATE));
+
+                        if ( aBulletState.GetValue() )
+                        {
+
+                            aBulletState.SetValue( false );
+                            SfxItemSet aSet( GetParaAttribs( nPara ) );
+                            aSet.Put( aBulletState );
+                            SetParaAttribs( nPara, aSet );
+
+                            // have this and the following paragraphs formatted and repainted.
+                            // (not painting a numbering in the list may cause the following
+                            // numberings to have different numbers than before and thus the
+                            // length may have changed as well )
+                            FormatAndLayout(mpActiveView);
+
+                            break;
+                        }
+                    }
+
+                    sal_uInt8 nDel = 0;
+                    DeleteMode nMode = DeleteMode::Simple;
+                    switch( nCode )
+                    {
+                    case css::awt::Key::DELETE_WORD_BACKWARD:
+                        nMode = DeleteMode::RestOfWord;
+                        nDel = DEL_LEFT;
+                        break;
+                    case css::awt::Key::DELETE_WORD_FORWARD:
+                        nMode = DeleteMode::RestOfWord;
+                        nDel = DEL_RIGHT;
+                        break;
+                    case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+                        nMode = DeleteMode::RestOfContent;
+                        nDel = DEL_LEFT;
+                        break;
+                    case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+                        nMode = DeleteMode::RestOfContent;
+                        nDel = DEL_RIGHT;
+                        break;
+                    default:
+                        nDel = ( nCode == KEY_DELETE ) ? DEL_RIGHT : DEL_LEFT;
+                        nMode = rKeyEvent.GetKeyCode().IsMod1() ? DeleteMode::RestOfWord : DeleteMode::Simple;
+                        if ( ( nMode == DeleteMode::RestOfWord ) && rKeyEvent.GetKeyCode().IsShift() )
+                            nMode = DeleteMode::RestOfContent;
+                        break;
+                    }
+
+                    pEditView->getImpl().DrawSelectionXOR();
+                    UndoActionStart( EDITUNDO_DELETE );
+                    aCurSel = DeleteLeftOrRight( aCurSel, nDel, nMode );
+                    UndoActionEnd();
+                    bModified = true;
+                    bAllowIdle = false;
+                }
+            }
+            break;
+            case KEY_TAB:
+            {
+                if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
+                {
+                    bool bShift = rKeyEvent.GetKeyCode().IsShift();
+                    if ( !bShift )
+                    {
+                        bool bSel = pEditView->HasSelection();
+                        if ( bSel )
+                            UndoActionStart( EDITUNDO_INSERT );
+                        if ( GetStatus().DoAutoCorrect() )
+                            aCurSel = AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
+                        aCurSel = InsertTab( aCurSel );
+                        if ( bSel )
+                            UndoActionEnd();
+                        bModified = true;
+                    }
+                }
+                else
+                    bDone = false;
+            }
+            break;
+            case KEY_RETURN:
+            {
+                if ( !bReadOnly )
+                {
+                    pEditView->getImpl().DrawSelectionXOR();
+                    if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
+                    {
+                        UndoActionStart( EDITUNDO_INSERT );
+                        if ( rKeyEvent.GetKeyCode().IsShift() )
+                        {
+                            aCurSel = AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
+                            aCurSel = InsertLineBreak( aCurSel );
+                        }
+                        else
+                        {
+                            if (aAutoText.isEmpty())
+                            {
+                                if (GetStatus().DoAutoCorrect())
+                                    aCurSel = AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
+                                aCurSel = InsertParaBreak( aCurSel );
+                            }
+                            else
+                            {
+                                DBG_ASSERT( !aCurSel.HasRange(), "Selection on complete?!" );
+                                EditPaM aStart = WordLeft(aCurSel.Max());
+                                EditSelection aSelection(aStart, aCurSel.Max());
+                                aCurSel = InsertText(aSelection, aAutoText);
+                                SetAutoCompleteText( OUString(), true );
+                            }
+                        }
+                        UndoActionEnd();
+                        bModified = true;
+                    }
+                }
+            }
+            break;
+            case KEY_INSERT:
+            {
+                if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
+                    pEditView->SetInsertMode( !pEditView->IsInsertMode() );
+            }
+            break;
+            default:
+            {
+                #if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
+                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                    {
+                        SfxItemSet aAttribs = pEditView->GetAttribs();
+                        const SvxFrameDirectionItem& rCurrentWritingMode = (const SvxFrameDirectionItem&)aAttribs.Get( EE_PARA_WRITINGDIR );
+                        SvxFrameDirectionItem aNewItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
+                        if ( rCurrentWritingMode.GetValue() != SvxFrameDirection::Horizontal_RL_TB )
+                            aNewItem.SetValue( SvxFrameDirection::Horizontal_RL_TB );
+                        aAttribs.Put( aNewItem );
+                        pEditView->SetAttribs( aAttribs );
+                    }
+                #endif
+                if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
+                {
+                    sal_Unicode nCharCode = rKeyEvent.GetCharCode();
+                    pEditView->getImpl().DrawSelectionXOR();
+                    // Autocorrection?
+                    if (GetStatus().DoAutoCorrect() &&
+                        (SvxAutoCorrect::IsAutoCorrectChar(nCharCode) ||
+                            IsNbspRunNext()))
+                    {
+                        aCurSel = AutoCorrect(
+                            aCurSel, nCharCode, !pEditView->IsInsertMode(), pFrameWin );
+                    }
+                    else
+                    {
+                        aCurSel = InsertTextUserInput( aCurSel, nCharCode, !pEditView->IsInsertMode() );
+                    }
+                    // AutoComplete ???
+                    if ( GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
+                    {
+                        // Only at end of word...
+                        sal_Int32 nIndex = aCurSel.Max().GetIndex();
+                        if ((nIndex >= aCurSel.Max().GetNode()->Len()) ||
+                             (maWordDelimiters.indexOf(aCurSel.Max().GetNode()->GetChar(nIndex)) != -1))
+                        {
+                            EditPaM aStart(WordLeft(aCurSel.Max()));
+                            OUString aWord = GetSelected(EditSelection(aStart, aCurSel.Max()));
+                            if ( aWord.getLength() >= 3 )
+                            {
+                                OUString aComplete;
+
+                                LanguageType eLang = GetLanguage(EditPaM( aStart.GetNode(), aStart.GetIndex()+1)).nLang;
+                                LanguageTag aLanguageTag( eLang);
+
+                                if (!mxLocaleDataWrapper.isInitialized())
+                                    mxLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
+                                else
+                                    mxLocaleDataWrapper.changeLocale( aLanguageTag);
+
+                                if (!mxTransliterationWrapper.isInitialized())
+                                    mxTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang);
+                                else
+                                    mxTransliterationWrapper.changeLocale( eLang);
+
+                                const ::utl::TransliterationWrapper* pTransliteration = mxTransliterationWrapper.get();
+                                css::uno::Sequence< css::i18n::CalendarItem2 > xItem = mxLocaleDataWrapper->getDefaultCalendarDays();
+                                sal_Int32 nCount = xItem.getLength();
+                                const css::i18n::CalendarItem2* pArr = xItem.getConstArray();
+                                for( sal_Int32 n = 0; n <= nCount; ++n )
+                                {
+                                    const OUString& rDay = pArr[n].FullName;
+                                    if( pTransliteration->isMatch( aWord, rDay) )
+                                    {
+                                        aComplete = rDay;
+                                        break;
+                                    }
+                                }
+
+                                if ( aComplete.isEmpty() )
+                                {
+                                    xItem = mxLocaleDataWrapper->getDefaultCalendarMonths();
+                                    sal_Int32 nMonthCount = xItem.getLength();
+                                    const css::i18n::CalendarItem2* pMonthArr = xItem.getConstArray();
+                                    for( sal_Int32 n = 0; n <= nMonthCount; ++n )
+                                    {
+                                        const OUString& rMon = pMonthArr[n].FullName;
+                                        if( pTransliteration->isMatch( aWord, rMon) )
+                                        {
+                                            aComplete = rMon;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if( !aComplete.isEmpty() && ( ( aWord.getLength() + 1 ) < aComplete.getLength() ) )
+                                {
+                                    SetAutoCompleteText( aComplete, false );
+                                    Point aPos = PaMtoEditCursor( aCurSel.Max() ).TopLeft();
+                                    aPos = pEditView->getImpl().GetWindowPos( aPos );
+                                    aPos = pEditView->getImpl().GetWindow()->LogicToPixel( aPos );
+                                    aPos = pEditView->GetWindow()->OutputToScreenPixel( aPos );
+                                    aPos.AdjustY( -3 );
+                                    Help::ShowQuickHelp( pEditView->GetWindow(), tools::Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
+                                }
+                            }
+                        }
+                    }
+                    bModified = true;
+                }
+                else
+                    bDone = false;
+            }
+        }
+    }
+
+    pEditView->getImpl().SetEditSelection( aCurSel );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        pEditView->getImpl().DrawSelectionXOR();
+    }
+    UpdateSelections();
+
+    if ( ( !IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
+         ( IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
+    {
+        pEditView->getImpl().mnTravelXPos = TRAVEL_X_DONTKNOW;
+    }
+
+    if ( /* ( nCode != KEY_HOME ) && ( nCode != KEY_END ) && */
+        ( !IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ) ||
+         ( IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ))
+    {
+        pEditView->getImpl().SetCursorBidiLevel( CURSOR_BIDILEVEL_DONTKNOW );
+    }
+
+    if (bSetCursorFlags)
+        pEditView->getImpl().maExtraCursorFlags = aNewCursorFlags;
+
+    if ( bModified )
+    {
+        DBG_ASSERT( !bReadOnly, "ReadOnly but modified???" );
+        // Idle-Formatter only when AnyInput.
+        if ( bAllowIdle && GetStatus().UseIdleFormatter()
+                && Application::AnyInput( VclInputFlags::KEYBOARD) )
+            IdleFormatAndLayout( pEditView );
+        else
+            FormatAndLayout( pEditView );
+    }
+    else if ( bMoved )
+    {
+        bool bGotoCursor = pEditView->getImpl().DoAutoScroll();
+        pEditView->getImpl().ShowCursor( bGotoCursor, true );
+        CallStatusHdl();
+    }
+
+    return bDone;
+}
+
+bool ImpEditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
+{
+    return EditEngine::IsPrintable( rKeyEvent.GetCharCode() ) &&
+        ( KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) &&
+        ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) );
 }
 
 IdleFormattter::IdleFormattter()
