@@ -27,17 +27,17 @@
 
 #include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
 
-static const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
-    &OID_WriterTextServer,
-    &OID_WriterOASISTextServer,
-    &OID_CalcServer,
-    &OID_CalcOASISServer,
-    &OID_DrawingServer,
-    &OID_DrawingOASISServer,
-    &OID_PresentationServer,
-    &OID_PresentationOASISServer,
-    &OID_MathServer,
-    &OID_MathOASISServer
+static constexpr GUID guidList[] = {
+    OID_WriterTextServer,
+    OID_WriterOASISTextServer,
+    OID_CalcServer,
+    OID_CalcOASISServer,
+    OID_DrawingServer,
+    OID_DrawingOASISServer,
+    OID_PresentationServer,
+    OID_PresentationOASISServer,
+    OID_MathServer,
+    OID_MathOASISServer
 };
 
 static HINSTANCE g_hInstance = nullptr;
@@ -52,7 +52,7 @@ namespace {
         if ( pLibrary && nLen )
         {
             hRes = S_OK;
-            for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
+            for (auto& guid : guidList)
             {
                 constexpr std::wstring_view prefix(L"Software\\Classes\\CLSID\\");
                 constexpr std::wstring_view suffix(L"\\InprocHandler32");
@@ -62,7 +62,7 @@ namespace {
                 wchar_t pSubKey[bufsize];
                 wchar_t *pos = pSubKey, *end = pSubKey + std::size(pSubKey);
                 pos += prefix.copy(pos, prefix.size());
-                int nGuidLen = StringFromGUID2(*guidList[nInd], pos, end - pos);
+                int nGuidLen = StringFromGUID2(guid, pos, end - pos);
 
                 bool bLocalSuccess = false;
                 if (nGuidLen == guidStringSize)
@@ -136,8 +136,8 @@ extern "C" BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lp
 
 STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 {
-    for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
-         if ( *guidList[nInd] == rclsid )
+    for (auto& guid : guidList)
+         if ( guid == rclsid )
          {
             if ( !IsEqualIID( riid, IID_IUnknown ) && !IsEqualIID( riid, IID_IClassFactory ) )
                 return E_NOINTERFACE;

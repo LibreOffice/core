@@ -26,10 +26,10 @@
 
 #include <common.h>
 
-OUString getFilterNameFromGUID_Impl(GUID const*);
+OUString getFilterNameFromGUID_Impl(GUID const&);
 
-std::u16string_view getServiceNameFromGUID_Impl(GUID const*);
+std::u16string_view getServiceNameFromGUID_Impl(GUID const&);
 
-wchar_t const* getStorageTypeFromGUID_Impl(GUID const* guid);
+wchar_t const* getStorageTypeFromGUID_Impl(GUID const& guid);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

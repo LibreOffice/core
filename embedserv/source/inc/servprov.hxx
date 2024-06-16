@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <vector>
 
 class EmbedProviderFactory_Impl;
 
@@ -44,7 +45,7 @@ public:
 
 protected:
 
-    CComPtr< EmbedProviderFactory_Impl > m_pOLEFactories[ SUPPORTED_FACTORIES_NUM ];
+    std::vector<CComPtr<EmbedProviderFactory_Impl>> m_pOLEFactories;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
@@ -52,7 +53,7 @@ class EmbedProviderFactory_Impl : public IClassFactory
 {
 public:
 
-    EmbedProviderFactory_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory, const GUID* pGuid);
+    EmbedProviderFactory_Impl(const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid);
     virtual ~EmbedProviderFactory_Impl();
 
     bool registerClass();

@@ -28,19 +28,17 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
-using namespace com::sun::star;
-
-const GUID* const guidList[ SUPPORTED_FACTORIES_NUM ] = {
-    &OID_WriterTextServer,
-    &OID_WriterOASISTextServer,
-    &OID_CalcServer,
-    &OID_CalcOASISServer,
-    &OID_DrawingServer,
-    &OID_DrawingOASISServer,
-    &OID_PresentationServer,
-    &OID_PresentationOASISServer,
-    &OID_MathServer,
-    &OID_MathOASISServer
+static constexpr GUID guidList[] = {
+    OID_WriterTextServer,
+    OID_WriterOASISTextServer,
+    OID_CalcServer,
+    OID_CalcOASISServer,
+    OID_DrawingServer,
+    OID_DrawingOASISServer,
+    OID_PresentationServer,
+    OID_PresentationOASISServer,
+    OID_MathServer,
+    OID_MathOASISServer
 };
 
 static void o2u_attachCurrentThread()
@@ -61,23 +59,18 @@ static void o2u_attachCurrentThread()
 
 // EmbedServer_Impl
 
-EmbedServer_Impl::EmbedServer_Impl( const uno::Reference<lang::XMultiServiceFactory>& xFactory):
+EmbedServer_Impl::EmbedServer_Impl( const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory):
     m_xFactory( xFactory)
 {
-    for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
-    {
-        m_pOLEFactories[nInd] = new EmbedProviderFactory_Impl( m_xFactory, guidList[nInd] );
-        m_pOLEFactories[nInd]->registerClass();
-    }
+    m_pOLEFactories.reserve(std::size(guidList));
+    std::transform(std::begin(guidList), std::end(guidList), std::back_inserter(m_pOLEFactories),
+                   [this](auto& guid) { return new EmbedProviderFactory_Impl(m_xFactory, guid); });
 }
 
 EmbedServer_Impl::~EmbedServer_Impl()
 {
-    for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
-    {
-        if ( m_pOLEFactories[nInd] )
-            m_pOLEFactories[nInd]->deregisterClass();
-    }
+    for (auto& factory : m_pOLEFactories)
+        factory->deregisterClass();
 }
 
 OUString EmbedServer_Impl::getImplementationName()
@@ -98,9 +91,9 @@ css::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
 
 // EmbedProviderFactory_Impl
 
-EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const uno::Reference<lang::XMultiServiceFactory>& xFactory, const GUID* pGuid)
+EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid)
     : m_refCount( 0 )
-    , m_guid( *pGuid )
+    , m_guid( guid )
     , m_xFactory( xFactory )
 {
 }
@@ -186,7 +179,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embedserv_EmbedServer(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    auto msf = uno::Reference<lang::XMultiServiceFactory>(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    auto msf = css::uno::Reference<css::lang::XMultiServiceFactory>(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
     return cppu::acquire(new EmbedServer_Impl(msf));
 }
 

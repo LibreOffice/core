@@ -198,7 +198,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 3 : 2 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = "FilterName";
-    pArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );
 
     if ( xStream.is() )
     {
@@ -237,7 +237,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Imp
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = "FilterName";
-    pArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );
 
     if ( xStream.is() )
     {
@@ -394,7 +394,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         if ( m_xFactory.is() && pStg )
         {
             uno::Reference< frame::XModel > aDocument(
-                            m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                            m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( m_guid )) ),
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -416,7 +416,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                 if ( hr == S_OK )
                 {
-                    wchar_t const * aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
+                    wchar_t const * aCurType = getStorageTypeFromGUID_Impl( m_guid ); // ???
                     CLIPFORMAT cf = static_cast<CLIPFORMAT>(RegisterClipboardFormatW( L"Embedded Object" ));
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
@@ -529,7 +529,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( xTempIn.is() )
         {
             uno::Reference< frame::XModel > aDocument(
-                                                m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                                                m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( m_guid )) ),
                                                 uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -736,7 +736,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
 
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
-    std::u16string_view aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    std::u16string_view aCurType = getServiceNameFromGUID_Impl( m_guid ); // ???
     CLIPFORMAT cf = static_cast<CLIPFORMAT>(RegisterClipboardFormatW( L"Embedded Object" ));
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
@@ -762,7 +762,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
 
 
     uno::Reference< frame::XModel > aDocument(
-                    m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                    m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( m_guid )) ),
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {
@@ -787,7 +787,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
 
         if ( hr == S_OK )
         {
-            aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+            aCurType = getServiceNameFromGUID_Impl( m_guid ); // ???
             cf = static_cast<CLIPFORMAT>(RegisterClipboardFormatW( L"Embedded Object" ));
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
