@@ -977,22 +977,7 @@ void EditEngine::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink
 
 std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
 {
-    DBG_ASSERT(0 <= nPara && nPara < getImpl().GetEditDoc().Count(), "CreateTextObject: Startpara out of Range");
-    DBG_ASSERT(nParas <= getImpl().GetEditDoc().Count() - nPara, "CreateTextObject: Endpara out of Range");
-
-    ContentNode* pStartNode = getImpl().GetEditDoc().GetObject(nPara);
-    ContentNode* pEndNode = getImpl().GetEditDoc().GetObject(nPara + nParas - 1);
-    DBG_ASSERT( pStartNode, "Start-Paragraph does not exist: CreateTextObject" );
-    DBG_ASSERT( pEndNode, "End-Paragraph does not exist: CreateTextObject" );
-
-    if ( pStartNode && pEndNode )
-    {
-        EditSelection aTmpSel;
-        aTmpSel.Min() = EditPaM( pStartNode, 0 );
-        aTmpSel.Max() = EditPaM( pEndNode, pEndNode->Len() );
-        return getImpl().CreateTextObject(aTmpSel);
-    }
-    return nullptr;
+    return getImpl().CreateTextObject(nPara, nParas);
 }
 
 void EditEngine::RemoveParagraph( sal_Int32 nPara )

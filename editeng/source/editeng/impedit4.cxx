@@ -1028,6 +1028,26 @@ std::unique_ptr<EditTextObject> ImpEditEngine::GetEmptyTextObject()
     return CreateTextObject( aEmptySel );
 }
 
+std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
+{
+    DBG_ASSERT(0 <= nPara && nPara < maEditDoc.Count(), "CreateTextObject: Startpara out of Range");
+    DBG_ASSERT(nParas <= maEditDoc.Count() - nPara, "CreateTextObject: Endpara out of Range");
+
+    ContentNode* pStartNode = maEditDoc.GetObject(nPara);
+    ContentNode* pEndNode = maEditDoc.GetObject(nPara + nParas - 1);
+    DBG_ASSERT( pStartNode, "Start-Paragraph does not exist: CreateTextObject" );
+    DBG_ASSERT( pEndNode, "End-Paragraph does not exist: CreateTextObject" );
+
+    if ( pStartNode && pEndNode )
+    {
+        EditSelection aTmpSel;
+        aTmpSel.Min() = EditPaM( pStartNode, 0 );
+        aTmpSel.Max() = EditPaM( pEndNode, pEndNode->Len() );
+        return CreateTextObject(aTmpSel);
+    }
+    return nullptr;
+}
+
 std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject()
 {
     EditSelection aCompleteSelection;

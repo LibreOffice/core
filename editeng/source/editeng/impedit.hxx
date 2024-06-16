@@ -1037,6 +1037,7 @@ public:
     void            Write( SvStream& rOutput, EETextFormat eFormat );
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
 
+    std::unique_ptr<EditTextObject> CreateTextObject(sal_Int32 nPara, sal_Int32 nParas);
     std::unique_ptr<EditTextObject> CreateTextObject();
     std::unique_ptr<EditTextObject> CreateTextObject(const EditSelection& rSel);
     void            SetText( const EditTextObject& rTextObject );
