@@ -48,7 +48,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
                std::function<void (const OUString&)> aDeckActivationFunctor,
                PopupMenuProvider  aPopupMenuProvider,
-               SidebarController* rParentSidebarController
+               SidebarController& rParentSidebarController
               )
     : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
     , mxFrame(rxFrame)
@@ -58,7 +58,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
     , maPopupMenuProvider(std::move(aPopupMenuProvider))
-    , pParentSidebarController(rParentSidebarController)
+    , mrParentSidebarController(rParentSidebarController)
 {
     set_id("TabBar"); // for uitest
 
@@ -127,7 +127,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     maItems.clear();
     for (auto const& deck : rDecks)
     {
-        std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId);
+        std::shared_ptr<DeckDescriptor> xDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(deck.msId);
         if (xDescriptor == nullptr)
         {
             OSL_ASSERT(xDescriptor!=nullptr);
@@ -153,7 +153,7 @@ void TabBar::UpdateButtonIcons()
 {
     for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
         if (!xDeckDescriptor)
             continue;
         item->mxButton->set_item_image("toggle", GetItemImage(*xDeckDescriptor));
@@ -297,13 +297,13 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 
     maItems[nIndex]->mbIsHidden = ! maItems[nIndex]->mbIsHidden;
 
-    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex]->msDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(maItems[nIndex]->msDeckId);
     if (xDeckDescriptor)
     {
         xDeckDescriptor->mbIsEnabled = ! maItems[nIndex]->mbIsHidden;
 
         Context aContext;
-        aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
+        aContext.msApplication = mrParentSidebarController.GetCurrentContext().msApplication;
         // leave aContext.msContext on default 'any' ... this func is used only for decks
         // and we don't have context-sensitive decks anyway
 
@@ -319,7 +319,7 @@ void TabBar::RestoreHideFlags()
         if (item->mbIsHidden != item->mbIsHiddenByDefault)
         {
             item->mbIsHidden = item->mbIsHiddenByDefault;
-            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+            std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
             if (xDeckDescriptor)
                 xDeckDescriptor->mbIsEnabled = !item->mbIsHidden;
 
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 
     for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
 
         if (!xDeckDescriptor)
             continue;
