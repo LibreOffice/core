@@ -1054,7 +1054,7 @@ public:
     sal_uInt32      CalcParaWidth( sal_Int32 nParagraph, bool bIgnoreExtraSpace );
     sal_uInt32      CalcLineWidth(ParaPortion const& rPortion, EditLine const& rLine, bool bIgnoreExtraSpace);
     sal_Int32       GetLineCount( sal_Int32 nParagraph );
-    sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
+    sal_Int32       GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine );
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
     sal_uInt16      GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine );

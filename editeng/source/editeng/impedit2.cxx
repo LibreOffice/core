@@ -3666,8 +3666,10 @@ sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph )
     return -1;
 }
 
-sal_Int32 ImpEditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
+sal_Int32 ImpEditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine )
 {
+    if (!IsFormatted())
+        FormatDoc();
     OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineLen: Out of range");
     const ParaPortion* pPPortion = GetParaPortions().SafeGetObject(nParagraph);
     OSL_ENSURE(pPPortion, "Paragraph not found: GetLineLen");
