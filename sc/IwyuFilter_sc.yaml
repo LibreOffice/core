@@ -257,7 +257,6 @@ excludelist:
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/chart2/data/DataSequenceRole.hpp
     - com/sun/star/chart2/data/XDataSequence.hpp
-    - com/sun/star/chart2/data/XDataSequence.hpp
     - com/sun/star/chart2/data/XNumericalDataSequence.hpp
     - com/sun/star/chart2/data/XTextualDataSequence.hpp
     - com/sun/star/lang/XServiceInfo.hpp
