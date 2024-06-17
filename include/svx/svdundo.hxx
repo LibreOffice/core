@@ -94,10 +94,10 @@ class SVXCORE_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
     std::vector<std::unique_ptr<SdrUndoAction>> maActions;
 
     // No expanded description of the Action (contains %O)
-    OUString aComment;
-    OUString aObjDescription;
+    OUString m_aComment;
+    OUString m_aObjDescription;
 
-    SdrRepeatFunc eFunction;
+    SdrRepeatFunc m_eFunction;
 
 public:
     SdrUndoGroup(SdrModel& rNewMod);
@@ -107,8 +107,8 @@ public:
     SdrUndoAction* GetAction(sal_Int32 nNum) const { return maActions[nNum].get(); }
     void AddAction(std::unique_ptr<SdrUndoAction> pAct);
 
-    void SetComment(const OUString& rStr) { aComment=rStr; }
-    void SetObjDescription(const OUString& rStr) { aObjDescription=rStr; }
+    void SetComment(const OUString& rStr) { m_aComment=rStr; }
+    void SetObjDescription(const OUString& rStr) { m_aObjDescription=rStr; }
     virtual OUString GetComment() const override;
     virtual OUString GetSdrRepeatComment() const override;
 
@@ -117,7 +117,7 @@ public:
 
     virtual bool CanSdrRepeat(SdrView& rView) const override;
     virtual void SdrRepeat(SdrView& rView) override;
-    void SetRepeatFunction(SdrRepeatFunc eFunc) { eFunction=eFunc; }
+    void SetRepeatFunction(SdrRepeatFunc eFunc) { m_eFunction=eFunc; }
 };
 
 /**

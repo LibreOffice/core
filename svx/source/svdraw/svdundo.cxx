@@ -110,7 +110,7 @@ ViewShellId SdrUndoAction::GetViewShellId() const
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
-    eFunction(SdrRepeatFunc::NONE)
+    m_eFunction(SdrRepeatFunc::NONE)
 {}
 
 SdrUndoGroup::~SdrUndoGroup()
@@ -136,12 +136,12 @@ void SdrUndoGroup::Redo()
 
 OUString SdrUndoGroup::GetComment() const
 {
-    return aComment.replaceAll("%1", aObjDescription);
+    return m_aComment.replaceAll("%1", m_aObjDescription);
 }
 
 bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
-    switch (eFunction)
+    switch (m_eFunction)
     {
     case SdrRepeatFunc::NONE           :  return false;
     case SdrRepeatFunc::Delete         :  return rView.GetMarkedObjectList().GetMarkCount() != 0;
@@ -166,7 +166,7 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 
 void SdrUndoGroup::SdrRepeat(SdrView& rView)
 {
-    switch (eFunction)
+    switch (m_eFunction)
     {
     case SdrRepeatFunc::NONE            :  break;
     case SdrRepeatFunc::Delete          :  rView.DeleteMarked();                break;
@@ -190,7 +190,7 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 
 OUString SdrUndoGroup::GetSdrRepeatComment() const
 {
-    return aComment.replaceAll("%1", SvxResId(STR_ObjNameSingulPlural));
+    return m_aComment.replaceAll("%1", SvxResId(STR_ObjNameSingulPlural));
 }
 
 SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
