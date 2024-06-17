@@ -828,16 +828,6 @@ sal_uInt32 EditEngine::GetTextHeight() const
     return nHeight;
 }
 
-sal_uInt32 EditEngine::GetTextHeightNTP() const
-{
-    ensureDocumentFormatted();
-
-    if (IsEffectivelyVertical())
-        return getImpl().CalcTextWidth(true);
-
-    return getImpl().GetTextHeightNTP();
-}
-
 sal_uInt32 EditEngine::CalcTextWidth()
 {
     ensureDocumentFormatted();

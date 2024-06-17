@@ -282,7 +282,6 @@ public:
     OUString        GetText( const ESelection& rSelection ) const;
     sal_Int32       GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
-    SAL_DLLPRIVATE sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
 
     OUString        GetText( sal_Int32 nParagraph ) const;

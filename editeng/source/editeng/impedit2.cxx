@@ -3538,13 +3538,6 @@ sal_uInt32 ImpEditEngine::CalcLineWidth(ParaPortion const& rPortion, EditLine co
     return nWidth;
 }
 
-sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
-{
-    assert( IsUpdateLayout() && "Should not be used for Update=FALSE: GetTextHeight" );
-    DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
-    return mnCurTextHeightNTP;
-}
-
 tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 {
     tools::Long nHeight = 0;

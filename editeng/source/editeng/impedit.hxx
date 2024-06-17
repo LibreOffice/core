@@ -1050,7 +1050,6 @@ public:
 
     tools::Long     CalcTextHeight( tools::Long* pHeightNTP );
     sal_uInt32      GetTextHeight() const;
-    sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
     sal_uInt32      CalcParaWidth( sal_Int32 nParagraph, bool bIgnoreExtraSpace );
     sal_uInt32      CalcLineWidth(ParaPortion const& rPortion, EditLine const& rLine, bool bIgnoreExtraSpace);
