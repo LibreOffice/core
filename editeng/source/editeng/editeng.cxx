@@ -1092,16 +1092,7 @@ SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 
 
 void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
-    const EERemoveParaAttribsMode eMode = bRemoveParaAttribs?
-        EERemoveParaAttribsMode::RemoveAll :
-        EERemoveParaAttribsMode::RemoveCharItems;
-
-    getImpl().UndoActionStart(EDITUNDO_RESETATTRIBS);
-    EditSelection aSel(getImpl().ConvertSelection(rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos));
-    getImpl().RemoveCharAttribs(aSel, eMode, nWhich);
-    getImpl().UndoActionEnd();
-    if (getImpl().IsUpdateLayout())
-        getImpl().FormatAndLayout();
+    getImpl().RemoveAttribs(rSelection, bRemoveParaAttribs, nWhich);
 }
 
 vcl::Font EditEngine::GetStandardFont( sal_Int32 nPara )

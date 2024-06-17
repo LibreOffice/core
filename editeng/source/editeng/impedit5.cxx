@@ -591,6 +591,20 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
     }
 }
 
+void ImpEditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    const EERemoveParaAttribsMode eMode = bRemoveParaAttribs?
+        EERemoveParaAttribsMode::RemoveAll :
+        EERemoveParaAttribsMode::RemoveCharItems;
+
+    UndoActionStart(EDITUNDO_RESETATTRIBS);
+    EditSelection aSel(ConvertSelection(rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos));
+    RemoveCharAttribs(aSel, eMode, nWhich);
+    UndoActionEnd();
+    if (IsUpdateLayout())
+        FormatAndLayout();
+}
+
 void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMode eMode, sal_uInt16 nWhich )
 {
     aSel.Adjust( maEditDoc );
