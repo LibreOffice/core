@@ -61,7 +61,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ::std::function<void (const OUString& rsDeckId)> aDeckActivationFunctor,
         PopupMenuProvider aPopupMenuProvider,
-        SidebarController* rParentSidebarController);
+        SidebarController& rParentSidebarController);
 
     weld::Container* GetContainer() { return m_xContainer.get(); }
 
@@ -127,7 +127,7 @@ private:
 
     DECL_LINK(OnToolboxClicked, weld::Toggleable&, void);
 
-    SidebarController* pParentSidebarController;
+    SidebarController& mrParentSidebarController;
 };
 
 
