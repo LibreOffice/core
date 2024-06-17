@@ -229,6 +229,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf141171)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf161346)
+{
+    // this crashed
+    vcl::filter::PDFDocument aDocument;
+    load(u"fdo47811-1_Word2013.docx", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
 {
     vcl::filter::PDFDocument aDocument;
