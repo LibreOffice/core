@@ -3682,8 +3682,10 @@ sal_Int32 ImpEditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine )
     return -1;
 }
 
-void ImpEditEngine::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const
+void ImpEditEngine::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine )
 {
+    if (!IsFormatted())
+        FormatDoc();
     OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
     const ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineBoundaries" );
@@ -3706,7 +3708,9 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
         // we explicitly allow for the index to point at the character right behind the text
         const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
         OSL_ENSURE( bValidIndex, "GetLineNumberAtIndex: invalid index" );
-        const sal_Int32 nLineCount = maParaPortionList.SafeGetObject(nPara)->GetLines().Count();
+        const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nPara);
+        const EditLineList& rLineList = pPPortion->GetLines();
+        const sal_Int32 nLineCount = rLineList.Count();
         if (nIndex == pNode->Len())
             nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
         else if (bValidIndex)   // nIndex < pNode->Len()
@@ -3714,7 +3718,9 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
             sal_Int32 nStart = -1, nEnd = -1;
             for (sal_Int32 i = 0;  i < nLineCount && nLineNo == -1;  ++i)
             {
-                GetLineBoundaries( nStart, nEnd, nPara, i );
+                const EditLine& rLine = rLineList[i];
+                nStart = rLine.GetStart();
+                nEnd   = rLine.GetEnd();
                 if (nStart >= 0 && nStart <= nIndex && nEnd >= 0 && nIndex < nEnd)
                     nLineNo = i;
             }

@@ -438,7 +438,6 @@ sal_Int32 EditEngine::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
 
 void EditEngine::GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const
 {
-    ensureDocumentFormatted();
     return getImpl().GetLineBoundaries(rStart, rEnd, nParagraph, nLine);
 }
 
