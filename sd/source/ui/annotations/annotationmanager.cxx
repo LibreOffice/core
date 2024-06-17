@@ -95,15 +95,7 @@
 
 #include <memory>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::geometry;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::office;
+using namespace css;
 
 namespace sd
 {
@@ -148,7 +140,7 @@ css::util::DateTime getCurrentDateTime()
             aCurrentDate.GetYear(), false );
 }
 
-OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotation )
+OUString getAnnotationDateTimeString(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
     OUString sRet;
     if( xAnnotation.is() )
@@ -209,20 +201,20 @@ void AnnotationManagerImpl::init()
     try
     {
         addListener();
-        mxView.set(mrBase.GetController(), UNO_QUERY);
+        mxView.set(mrBase.GetController(), uno::UNO_QUERY);
     }
-    catch( Exception& )
+    catch (uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::AnnotationManagerImpl()" );
     }
 
     try
     {
-        Reference<XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), UNO_QUERY_THROW );
-        Reference<XEventListener> xListener( this );
+        uno::Reference<document::XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XEventListener> xListener( this );
         xModel->addEventListener( xListener );
     }
-    catch( Exception& )
+    catch (uno::Exception&)
     {
     }
 }
@@ -232,11 +224,11 @@ void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
 {
     try
     {
-        Reference<XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), UNO_QUERY_THROW );
-        Reference<XEventListener> xListener( this );
+        uno::Reference<document::XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XEventListener> xListener( this );
         xModel->removeEventListener( xListener );
     }
-    catch( Exception& )
+    catch (uno::Exception&)
     {
     }
 
@@ -266,7 +258,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
     // consists of only one event - 'OnAnnotationRemoved'
     if ( aEvent.EventName == "OnAnnotationRemoved" )
     {
-        Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
+        uno::Reference<office::XAnnotation> xAnnotation( aEvent.Source, uno::UNO_QUERY );
         if ( auto pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get()) )
         {
             LOKCommentNotify(sdr::annotation::CommentNotificationType::Remove, &mrBase, *pAnnotation);
@@ -393,7 +385,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
                 const SfxPoolItem*  pPoolItem = nullptr;
                 if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                 {
-                    uno::Reference<XAnnotation> xTmpAnnotation;
+                    uno::Reference<office::XAnnotation> xTmpAnnotation;
                     if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
                     {
                         xAnnotation = dynamic_cast<sdr::annotation::Annotation*>(xTmpAnnotation.get());
@@ -465,7 +457,7 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
         if (!sText.isEmpty())
         {
             // TODO: Not allow other authors to change others' comments ?
-            Reference<XText> xText(xAnnotation->getTextRange());
+            uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             xText->setString(sText);
         }
 
@@ -505,7 +497,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 
             for (const auto& rxAnnotation : aAnnotations)
             {
-                RealPoint2D aRealPoint2D(rxAnnotation->getPosition());
+                geometry::RealPoint2D aRealPoint2D(rxAnnotation->getPosition());
                 Point aPoint(::tools::Long(aRealPoint2D.X * 100.0), ::tools::Long(aRealPoint2D.Y * 100.0));
                 Size aSize(fWidth, fHeight);
 
@@ -546,7 +538,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 
     if (!rText.isEmpty())
     {
-        Reference<XText> xText(xAnnotation->getTextRange());
+        uno::Reference<text::XText> xText(xAnnotation->getTextRange());
         xText->setString(rText);
     }
 
@@ -556,7 +548,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     xAnnotation->setDateTime( getCurrentDateTime() );
 
     // set position
-    RealPoint2D aPosition(x / 100.0, y / 100.0);
+    geometry::RealPoint2D aPosition(x / 100.0, y / 100.0);
     xAnnotation->setPosition(aPosition);
     xAnnotation->setSize({5.0, 5.0});
 
@@ -588,7 +580,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
         }
         else if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
         {
-            uno::Reference<XAnnotation> xTmpAnnotation;
+            uno::Reference<office::XAnnotation> xTmpAnnotation;
             if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
             {
                 xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
@@ -1149,7 +1141,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
             break;
 
         case EventMultiplexerEventId::MainViewAdded:
-            mxView.set( mrBase.GetController(), UNO_QUERY );
+            mxView.set(mrBase.GetController(), uno::UNO_QUERY);
             onSelectionChanged();
             break;
 

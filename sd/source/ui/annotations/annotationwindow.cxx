@@ -59,11 +59,7 @@
 
 #include <memory>
 
-using namespace ::sd;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::office;
-using namespace ::com::sun::star::text;
+using namespace css;
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
@@ -209,7 +205,7 @@ void AnnotationTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 // see SwAnnotationWin in sw for something similar
 AnnotationWindow::AnnotationWindow(weld::Window* pParent, const ::tools::Rectangle& rRect,
                                    DrawDocShell* pDocShell,
-                                   const Reference<XAnnotation>& xAnnotation)
+                                   const uno::Reference<office::XAnnotation>& xAnnotation)
     : mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/annotation.ui"_ustr))
     , mxPopover(mxBuilder->weld_popover(u"Annotation"_ustr))
     , mxContainer(mxBuilder->weld_widget(u"container"_ustr))
@@ -307,13 +303,13 @@ IMPL_LINK(AnnotationWindow, MenuItemSelectedHdl, const OUString&, rIdent, void)
 
     if (rIdent == ".uno:ReplyToAnnotation")
     {
-        const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( mxAnnotation ) );
+        const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, uno::Any(mxAnnotation));
         pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                 SfxCallMode::ASYNCHRON, { &aItem });
     }
     else if (rIdent == ".uno:DeleteAnnotation")
     {
-        const SfxUnoAnyItem aItem( SID_DELETE_POSTIT, Any( mxAnnotation ) );
+        const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, uno::Any(mxAnnotation));
         pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                 { &aItem });
     }
@@ -484,17 +480,17 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, v
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
-sdr::annotation::TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
+sdr::annotation::TextApiObject* getTextApiObject(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
     if( xAnnotation.is() )
     {
-        Reference< XText > xText( xAnnotation->getTextRange() );
+        uno::Reference<text::XText> xText( xAnnotation->getTextRange() );
         return sdr::annotation::TextApiObject::getImplementation(xText);
     }
     return nullptr;
 }
 
-void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotation )
+void AnnotationWindow::setAnnotation(const uno::Reference<office::XAnnotation>& xAnnotation)
 {
     if( (xAnnotation == mxAnnotation) || !xAnnotation.is() )
         return;
@@ -567,7 +563,7 @@ void AnnotationWindow::SetColor()
 
 void AnnotationWindow::SaveToDocument()
 {
-    Reference< XAnnotation > xAnnotation( mxAnnotation );
+    uno::Reference<office::XAnnotation> xAnnotation(mxAnnotation);
 
     // write changed text back to annotation
     if (mpOutliner->IsModified())
@@ -735,13 +731,13 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
 
         if (sId == ".uno:ReplyToAnnotation")
         {
-            const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( xAnnotation ) );
+            const SfxUnoAnyItem aItem(SID_REPLYTO_POSTIT, uno::Any(xAnnotation));
             pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                     SfxCallMode::ASYNCHRON, { &aItem });
         }
         else if (sId == ".uno:DeleteAnnotation")
         {
-            const SfxUnoAnyItem aItem( SID_DELETE_POSTIT, Any( xAnnotation ) );
+            const SfxUnoAnyItem aItem(SID_DELETE_POSTIT, uno::Any(xAnnotation));
             pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                     { &aItem });
         }
