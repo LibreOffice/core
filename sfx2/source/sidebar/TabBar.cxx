@@ -334,23 +334,6 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
     if (!mxMenuButton->get_active())
         return;
 
-    std::vector<DeckMenuData> aMenuData;
-
-    for (auto const& item : maItems)
-    {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
-
-        if (!xDeckDescriptor)
-            continue;
-
-        DeckMenuData aData;
-        aData.msDisplayName = xDeckDescriptor->msTitle;
-        aData.mbIsCurrentDeck = item->mxButton->get_item_active(u"toggle"_ustr);
-        aData.mbIsActive = !item->mbIsHidden;
-        aData.mbIsEnabled = item->mxButton->get_sensitive();
-        aMenuData.push_back(aData);
-    }
-
     for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
     {
         OUString sIdent = mxMainMenu->get_id(i);
@@ -367,30 +350,39 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
     sal_Int32 nIndex (0);
-    for (const auto& rItem : aMenuData)
+    for (auto const& rItem : maItems)
     {
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor
+            = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(rItem->msDeckId);
+
+        if (!xDeckDescriptor)
+            continue;
+
+        const OUString sDisplayName = xDeckDescriptor->msTitle;
         OUString sIdent("select" + OUString::number(nIndex));
-        mxMainMenu->insert(nIndex, sIdent, rItem.msDisplayName,
-                     nullptr, nullptr, nullptr, TRISTATE_FALSE);
-        mxMainMenu->set_active(sIdent, rItem.mbIsCurrentDeck);
-        mxMainMenu->set_sensitive(sIdent, rItem.mbIsEnabled && rItem.mbIsActive);
+        const bool bCurrentDeck = rItem->mxButton->get_item_active(u"toggle"_ustr);
+        const bool bActive = !rItem->mbIsHidden;
+        const bool bEnabled = rItem->mxButton->get_sensitive();
+        mxMainMenu->insert(nIndex, sIdent, sDisplayName, nullptr, nullptr, nullptr, TRISTATE_FALSE);
+        mxMainMenu->set_active(sIdent, bCurrentDeck);
+        mxMainMenu->set_sensitive(sIdent, bEnabled && bActive);
 
         if (!comphelper::LibreOfficeKit::isActive())
         {
-            if (rItem.mbIsCurrentDeck)
+            if (bCurrentDeck)
             {
                 // Don't allow the currently visible deck to be disabled.
                 OUString sSubIdent("nocustomize" + OUString::number(nIndex));
-                mxSubMenu->insert(nIndex, sSubIdent, rItem.msDisplayName,
-                                          nullptr, nullptr, nullptr, TRISTATE_FALSE);
+                mxSubMenu->insert(nIndex, sSubIdent, sDisplayName, nullptr, nullptr, nullptr,
+                                  TRISTATE_FALSE);
                 mxSubMenu->set_active(sSubIdent, true);
             }
             else
             {
                 OUString sSubIdent("customize" + OUString::number(nIndex));
-                mxSubMenu->insert(nIndex, sSubIdent, rItem.msDisplayName,
-                                          nullptr, nullptr, nullptr, TRISTATE_TRUE);
-                mxSubMenu->set_active(sSubIdent, rItem.mbIsEnabled && rItem.mbIsActive);
+                mxSubMenu->insert(nIndex, sSubIdent, sDisplayName, nullptr, nullptr, nullptr,
+                                  TRISTATE_TRUE);
+                mxSubMenu->set_active(sSubIdent, bEnabled && bActive);
             }
         }
 
