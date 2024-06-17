@@ -1059,6 +1059,7 @@ public:
     sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex );
     sal_uInt16      GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine );
     sal_uInt32 GetParaHeight(sal_Int32 nParagraph) const;
+    Point           GetDocPosTopLeft( sal_Int32 nParagraph );
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags = GetAttribsFlags::ALL ) const;
     SfxItemSet      GetAttribs( EditSelection aSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All  );

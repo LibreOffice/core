@@ -3747,6 +3747,39 @@ sal_uInt16 ImpEditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
     return 0xFFFF;
 }
 
+Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
+{
+    const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nParagraph);
+    DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
+    Point aPoint;
+    if ( pPPortion )
+    {
+        // If someone calls GetLineHeight() with an empty Engine.
+        DBG_ASSERT(IsFormatted() || !IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!");
+        if (!IsFormatted())
+            FormatAndLayout();
+        if (pPPortion->GetLines().Count())
+        {
+            // Correct it if large Bullet.
+            const EditLine& rFirstLine = pPPortion->GetLines()[0];
+            aPoint.setX( rFirstLine.GetStartPosX() );
+        }
+        else
+        {
+            const SvxLRSpaceItem& rLRItem = GetLRSpaceItem(pPPortion->GetNode());
+            sal_Int32 nSpaceBefore = 0;
+            GetSpaceBeforeAndMinLabelWidth(pPPortion->GetNode(), &nSpaceBefore);
+            short nX = static_cast<short>(rLRItem.GetTextLeft()
+                            + rLRItem.GetTextFirstLineOffset()
+                            + nSpaceBefore);
+
+            aPoint.setX(scaleXSpacingValue(nX));
+        }
+        aPoint.setY(maParaPortionList.GetYOffset(pPPortion));
+    }
+    return aPoint;
+}
+
 sal_uInt32 ImpEditEngine::GetParaHeight(sal_Int32 nParagraph) const
 {
     sal_uInt32 nHeight = 0;

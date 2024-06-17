@@ -1192,35 +1192,7 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 
 Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 {
-    const ParaPortion* pPPortion = getImpl().GetParaPortions().SafeGetObject(nParagraph);
-    DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
-    Point aPoint;
-    if ( pPPortion )
-    {
-        // If someone calls GetLineHeight() with an empty Engine.
-        DBG_ASSERT(getImpl().IsFormatted() || !getImpl().IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!");
-        if (!getImpl().IsFormatted())
-            getImpl().FormatAndLayout();
-        if (pPPortion->GetLines().Count())
-        {
-            // Correct it if large Bullet.
-            const EditLine& rFirstLine = pPPortion->GetLines()[0];
-            aPoint.setX( rFirstLine.GetStartPosX() );
-        }
-        else
-        {
-            const SvxLRSpaceItem& rLRItem = getImpl().GetLRSpaceItem(pPPortion->GetNode());
-            sal_Int32 nSpaceBefore = 0;
-            getImpl().GetSpaceBeforeAndMinLabelWidth(pPPortion->GetNode(), &nSpaceBefore);
-            short nX = static_cast<short>(rLRItem.GetTextLeft()
-                            + rLRItem.GetTextFirstLineOffset()
-                            + nSpaceBefore);
-
-            aPoint.setX(getImpl().scaleXSpacingValue(nX));
-        }
-        aPoint.setY(getImpl().GetParaPortions().GetYOffset(pPPortion));
-    }
-    return aPoint;
+    return getImpl().GetDocPosTopLeft(nParagraph);
 }
 
 const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 ) const
