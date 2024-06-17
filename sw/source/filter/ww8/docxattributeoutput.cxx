@@ -6695,18 +6695,18 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
             nWwId == ww::stiEmphasis )
         return true;
 
-    static o3tl::sorted_vector<OUString, OUStringIgnoreCase> const aAllowlist
+    static o3tl::sorted_vector<std::u16string_view, OUStringIgnoreCase> const aAllowlist
     {
-        u"No Spacing"_ustr,
-        u"List Paragraph"_ustr,
-        u"Quote"_ustr,
-        u"Intense Quote"_ustr,
-        u"Subtle Emphasis"_ustr,
-        u"Intense Emphasis"_ustr,
-        u"Subtle Reference"_ustr,
-        u"Intense Reference"_ustr,
-        u"Book Title"_ustr,
-        u"TOC Heading"_ustr,
+        u"No Spacing",
+        u"List Paragraph",
+        u"Quote",
+        u"Intense Quote",
+        u"Subtle Emphasis",
+        u"Intense Emphasis",
+        u"Subtle Reference",
+        u"Intense Reference",
+        u"Book Title",
+        u"TOC Heading",
     };
     // Not custom style? Then we have a list of standard styles which should be qFormat.
     return aAllowlist.find(rName) != aAllowlist.end();
