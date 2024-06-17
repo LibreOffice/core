@@ -1334,7 +1334,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             {
                 if (m_nKeyDerivationFunctionID == xml::crypto::KDFID::PBKDF2)
                 {   // if there is only one KDF invocation, increase the safety margin
-                    oPBKDF2IterationCount.emplace(officecfg::Office::Common::Misc::ExperimentalMode::get() ? 600000 : 100000);
+                    oPBKDF2IterationCount.emplace(m_xRootFolder->hasByName(u"encrypted-package"_ustr) ? 600000 : 100000);
                 }
                 else
                 {
