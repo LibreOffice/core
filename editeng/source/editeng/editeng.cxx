@@ -454,24 +454,7 @@ sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph )
 
 tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
 {
-    ensureDocumentFormatted();
-    Point aPnt = GetDocPosTopLeft( nPara );
-
-    if( IsEffectivelyVertical() )
-    {
-        sal_Int32 nTextHeight = getImpl().GetTextHeight();
-        sal_Int32 nParaWidth = getImpl().CalcParaWidth(nPara, true);
-        sal_Int32 nParaHeight = getImpl().GetParaHeight(nPara);
-
-        return tools::Rectangle( nTextHeight - aPnt.Y() - nParaHeight, 0, nTextHeight - aPnt.Y(), nParaWidth );
-    }
-    else
-    {
-        sal_Int32 nParaWidth = getImpl().CalcParaWidth( nPara, true );
-        sal_Int32 nParaHeight = getImpl().GetParaHeight( nPara );
-
-        return tools::Rectangle( 0, aPnt.Y(), nParaWidth, aPnt.Y() + nParaHeight );
-    }
+    return getImpl().GetParaBounds(nPara);
 }
 
 sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const

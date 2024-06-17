@@ -3747,6 +3747,29 @@ sal_uInt16 ImpEditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
     return 0xFFFF;
 }
 
+tools::Rectangle ImpEditEngine::GetParaBounds( sal_Int32 nPara )
+{
+    if (!IsFormatted())
+        FormatDoc();
+    Point aPnt = GetDocPosTopLeft( nPara );
+
+    if( IsEffectivelyVertical() )
+    {
+        sal_Int32 nTextHeight = GetTextHeight();
+        sal_Int32 nParaWidth = CalcParaWidth(nPara, true);
+        sal_Int32 nParaHeight = GetParaHeight(nPara);
+
+        return tools::Rectangle( nTextHeight - aPnt.Y() - nParaHeight, 0, nTextHeight - aPnt.Y(), nParaWidth );
+    }
+    else
+    {
+        sal_Int32 nParaWidth = CalcParaWidth( nPara, true );
+        sal_Int32 nParaHeight = GetParaHeight( nPara );
+
+        return tools::Rectangle( 0, aPnt.Y(), nParaWidth, aPnt.Y() + nParaHeight );
+    }
+}
+
 Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 {
     const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nParagraph);
