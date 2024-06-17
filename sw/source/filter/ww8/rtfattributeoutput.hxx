@@ -666,9 +666,6 @@ private:
 
     editeng::WordPageMargins m_aPageMargins;
 
-    /// map authors to remove personal info
-    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
-
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
 

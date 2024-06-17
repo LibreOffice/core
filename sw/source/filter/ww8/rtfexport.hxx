@@ -23,6 +23,8 @@
 #include <memory>
 #include "wrtww8.hxx"
 
+#include <unotools/securityoptions.hxx>
+
 class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
@@ -202,6 +204,12 @@ public:
 
     const SfxItemSet* GetFirstPageItemSet() const { return m_pFirstPageItemSet; }
 
+    // Get author id to remove personal info
+    size_t GetInfoID(const OUString sPersonalInfo) const
+    {
+        return mpAuthorIDs->GetInfoID(sPersonalInfo);
+    }
+
 private:
     void WriteFonts();
     void WriteStyles();
@@ -229,6 +237,8 @@ private:
     std::unique_ptr<SvMemoryStream> m_pStream;
     /// Item set of the first page during export of a follow page format.
     const SfxItemSet* m_pFirstPageItemSet = nullptr;
+    /// map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX

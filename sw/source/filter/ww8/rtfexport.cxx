@@ -56,6 +56,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <xmloff/odffields.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
@@ -272,6 +273,11 @@ void RtfExport::WriteRevTab()
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
 
+    bool bRemoveCommentAuthorDates
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
     // Now write the table
     Strm()
         .WriteChar('{')
@@ -283,7 +289,12 @@ void RtfExport::WriteRevTab()
         const OUString* pAuthor = GetRedline(i);
         Strm().WriteChar('{');
         if (pAuthor)
-            Strm().WriteOString(msfilter::rtfutil::OutString(*pAuthor, m_eDefaultEncoding));
+        {
+            OUString sAuthor(bRemoveCommentAuthorDates
+                                 ? "Author" + OUString::number(GetInfoID(*pAuthor))
+                                 : *pAuthor);
+            Strm().WriteOString(msfilter::rtfutil::OutString(sAuthor, m_eDefaultEncoding));
+        }
         Strm().WriteOString(";}");
     }
     Strm().WriteChar('}').WriteOString(SAL_NEWLINE_STRING);
@@ -1155,6 +1166,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument,
     , m_eCurrentEncoding(m_eDefaultEncoding)
     , m_bRTFFlySyntax(false)
     , m_nCurrentNodeIndex(0)
+    , mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     m_bExportModeRTF = true;
     // the attribute output for the document
