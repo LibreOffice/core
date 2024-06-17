@@ -449,7 +449,6 @@ sal_Int32 EditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) 
 sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph )
 {
     // If someone calls GetLineHeight() with an empty Engine.
-    ensureDocumentFormatted();
     return getImpl().GetLineHeight( nParagraph, 0 );
 }
 

@@ -3733,6 +3733,8 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
 
 sal_uInt16 ImpEditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
+    if (!IsFormatted())
+        FormatDoc();
     OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
     ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineHeight" );
