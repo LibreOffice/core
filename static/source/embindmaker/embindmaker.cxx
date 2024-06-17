@@ -795,14 +795,34 @@ void dumpWrapperClassMembers(std::ostream& out, rtl::Reference<TypeManager> cons
             }
             out << " " << param.name;
         }
-        out << ") override { return call<";
-        dumpType(out, manager, meth.returnType);
-        out << ">(\"" << meth.name << "\"";
-        for (auto const& param : meth.parameters)
+        out << ") override {";
+        if (meth.returnType == "any" || meth.returnType.startsWith("[]"))
         {
-            out << ", " << param.name;
+            out << "\n"
+                   "        auto & the_ptr = call<";
+            dumpType(out, manager, meth.returnType);
+            out << " const &>(\"" << meth.name << "\"";
+            for (auto const& param : meth.parameters)
+            {
+                out << ", " << param.name;
+            }
+            out << ");\n"
+                   "        auto const the_copy(the_ptr);\n"
+                   "        delete &the_ptr;\n"
+                   "        return the_copy;\n"
+                   "    }\n";
         }
-        out << "); }\n";
+        else
+        {
+            out << " return call<";
+            dumpType(out, manager, meth.returnType);
+            out << ">(\"" << meth.name << "\"";
+            for (auto const& param : meth.parameters)
+            {
+                out << ", " << param.name;
+            }
+            out << "); }\n";
+        }
     }
 }
 

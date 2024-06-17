@@ -658,6 +658,19 @@ Module.addOnPostRun(function() {
             },
             trigger(event) { console.log('Ola ' + event); }
         });
+    {
+        const s = css.lang.XTypeProvider.query(obj).getTypes();
+        console.assert(s.size() === 3);
+        console.assert(s.get(0).toString() === 'com.sun.star.lang.XTypeProvider');
+        console.assert(s.get(1).toString() === 'com.sun.star.task.XJob');
+        console.assert(s.get(2).toString() === 'com.sun.star.task.XJobExecutor');
+        s.delete();
+    }
+    {
+        const s = css.lang.XTypeProvider.query(obj).getImplementationId();
+        console.assert(s.size() === 0);
+        s.delete();
+    }
     test.passJob(css.task.XJob.query(obj));
     test.passJobExecutor(css.task.XJobExecutor.query(obj));
     test.passInterface(obj);

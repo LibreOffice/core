@@ -17,11 +17,6 @@ Module.unoObject = function(interfaces, obj) {
     Module.initUno();
     interfaces = ['com.sun.star.lang.XTypeProvider'].concat(interfaces);
     obj.impl_refcount = 0;
-    obj.impl_types = new Module.uno_Sequence_type(interfaces.length, Module.uno_Sequence.FromSize);
-    for (let i = 0; i !== interfaces.length; ++i) {
-        obj.impl_types.set(i, Module.uno_Type.Interface(interfaces[i]));
-    }
-    obj.impl_implementationId = new Module.uno_Sequence_byte([]);
     obj.queryInterface = function(type) {
         for (const i in obj.impl_typemap) {
             if (i === type.toString()) {
@@ -39,12 +34,16 @@ Module.unoObject = function(interfaces, obj) {
             for (const i in obj.impl_interfaces) {
                 obj.impl_interfaces[i].delete();
             }
-            obj.impl_types.delete();
-            obj.impl_implementationId.delete();
         }
     };
-    obj.getTypes = function() { return obj.impl_types; };
-    obj.getImplementationId = function() { return obj.impl_implementationId; };
+    obj.getTypes = function() {
+        const types = new Module.uno_Sequence_type(interfaces.length, Module.uno_Sequence.FromSize);
+        for (let i = 0; i !== interfaces.length; ++i) {
+            types.set(i, Module.uno_Type.Interface(interfaces[i]));
+        }
+        return types;
+    };
+    obj.getImplementationId = function() { return new Module.uno_Sequence_byte([]) };
     obj.impl_interfaces = {};
     interfaces.forEach((i) => {
         obj.impl_interfaces[i] = Module['uno_Type_' + i.replace(/\./g, '$')].implement(obj);
