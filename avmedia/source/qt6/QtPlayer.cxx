@@ -13,6 +13,7 @@
 #include <QtMultimedia/QAudioOutput>
 #include <QtMultimedia/QMediaMetaData>
 #include <QtMultimediaWidgets/QVideoWidget>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -20,6 +21,7 @@
 #include <rtl/string.hxx>
 #include <tools/link.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
@@ -47,6 +49,7 @@ namespace avmedia::qt
 QtPlayer::QtPlayer()
     : QtPlayer_BASE(m_aMutex)
     , m_lListener(m_aMutex)
+    , m_pMediaWidgetParent(nullptr)
 {
 }
 
@@ -197,6 +200,9 @@ uno::Reference<::media::XPlayerWindow>
 {
     osl::MutexGuard aGuard(m_aMutex);
 
+    if (rArguments.getLength() > 1)
+        rArguments[1] >>= m_aPlayerWidgetRect;
+
     if (rArguments.getLength() <= 2)
     {
         uno::Reference<::media::XPlayerWindow> xRet = new ::avmedia::gstreamer::Window;
@@ -213,18 +219,20 @@ uno::Reference<::media::XPlayerWindow>
     if (!pParentEnvData)
         return nullptr;
 
-    QWidget* pParent = static_cast<QWidget*>(pParentEnvData->pWidget);
-    QVideoWidget* pVideoWidget = new QVideoWidget(pParent);
-    pVideoWidget->setAspectRatioMode(Qt::IgnoreAspectRatio);
-    pVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_pMediaWidgetParent = static_cast<QWidget*>(pParentEnvData->pWidget);
+    assert(m_pMediaWidgetParent);
 
-    assert(!m_xMediaPlayer->videoOutput() && "Video widget already set.");
-    m_xMediaPlayer->setVideoOutput(pVideoWidget);
-
-    // retrieve the layout (which is set in the QtObjectWidget ctor)
-    QLayout* pLayout = pParent->layout();
-    assert(pLayout);
-    pLayout->addWidget(pVideoWidget);
+    // while media is loading, QMediaPlayer::hasVideo doesn't yet return
+    // whether media actually has video; defer creating audio/video widget
+    if (m_xMediaPlayer->mediaStatus() == QMediaPlayer::LoadingMedia)
+    {
+        connect(m_xMediaPlayer.get(), &QMediaPlayer::mediaStatusChanged, this,
+                &QtPlayer::createMediaPlayerWidget, Qt::SingleShotConnection);
+    }
+    else
+    {
+        createMediaPlayerWidget();
+    }
 
     uno::Reference<::media::XPlayerWindow> xRet = new ::avmedia::gstreamer::Window;
     return xRet;
@@ -318,6 +326,55 @@ void QtPlayer::notifyIfReady(QMediaPlayer::MediaStatus)
         xThis->notifyListeners();
         xThis->uninstallNotify();
     }
+}
+
+void QtPlayer::createMediaPlayerWidget()
+{
+    assert(m_xMediaPlayer);
+    assert(m_xMediaPlayer->mediaStatus() != QMediaPlayer::LoadingMedia
+           && "Media is still loading, detecting video availability not possible.");
+
+    assert(m_pMediaWidgetParent && "Parent for media widget not set");
+
+    // if media contains video, show the video output,
+    // otherwise show an audio icon as a placeholder
+    QWidget* pWidget;
+    if (m_xMediaPlayer->hasVideo())
+    {
+        QVideoWidget* pVideoWidget = new QVideoWidget(m_pMediaWidgetParent);
+        pVideoWidget->setAspectRatioMode(Qt::IgnoreAspectRatio);
+
+        assert(!m_xMediaPlayer->videoOutput() && "Video output already set.");
+        m_xMediaPlayer->setVideoOutput(pVideoWidget);
+
+        pWidget = pVideoWidget;
+    }
+    else
+    {
+        BitmapEx aPlaceholderIcon(u"avmedia/res/avaudiologo.png"_ustr);
+        SvMemoryStream aMemoryStream;
+        vcl::PngImageWriter aWriter(aMemoryStream);
+        aWriter.write(aPlaceholderIcon);
+        QPixmap aAudioPixmap;
+        aAudioPixmap.loadFromData(static_cast<const uchar*>(aMemoryStream.GetData()),
+                                  aMemoryStream.TellEnd());
+        assert(!aAudioPixmap.isNull() && "Failed to load audio logo");
+        aAudioPixmap
+            = aAudioPixmap.scaled(QSize(m_aPlayerWidgetRect.Width, m_aPlayerWidgetRect.Height));
+
+        QLabel* pLabel = new QLabel;
+        pLabel->setPixmap(aAudioPixmap);
+        pWidget = pLabel;
+    }
+
+    assert(pWidget);
+    pWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // retrieve the layout (which is set in the QtObjectWidget ctor)
+    QLayout* pLayout = m_pMediaWidgetParent->layout();
+    assert(pLayout);
+    assert(pLayout->count() == 0 && "Layout already has a widget set");
+    pLayout->addWidget(pWidget);
 }
 
 void QtPlayer::notifyListeners()

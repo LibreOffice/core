@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <QtMultimedia/QMediaPlayer>
+#include <QtWidgets/QWidget>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -71,6 +72,12 @@ private:
     std::unique_ptr<QMediaPlayer> m_xMediaPlayer;
     comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 
+    // area to use for the player widget
+    css::awt::Rectangle m_aPlayerWidgetRect;
+
+    QWidget* m_pMediaWidgetParent;
+
+    void createMediaPlayerWidget();
     bool isReadyToPlay();
 
     void installNotify();
