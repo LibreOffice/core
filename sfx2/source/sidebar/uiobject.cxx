@@ -40,7 +40,7 @@ void TabBarUIObject::execute(const OUString& rAction, const StringMap& rParamete
     if (rAction == "CLICK")
     {
         if (rParameters.find(u"POS"_ustr) != rParameters.end())
-            mxTabBar->pParentSidebarController->OpenThenToggleDeck(
+            mxTabBar->mrParentSidebarController.OpenThenToggleDeck(
                 mxTabBar->GetDeckIdForIndex(rParameters.find(u"POS"_ustr)->second.toInt32()));
     }
     else
