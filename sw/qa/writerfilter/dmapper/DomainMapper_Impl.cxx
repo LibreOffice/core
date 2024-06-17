@@ -437,6 +437,41 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreakSectEnd)
     CPPUNIT_ASSERT_EQUAL(u"LineBreak"_ustr,
                          xPortion->getPropertyValue("TextPortionType").get<OUString>());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
+{
+    // Given a document with a first paragraph, its paragraph style has a numbering:
+    // When loading the document:
+    loadFromFile(u"para-style-lost-numbering.docx");
+
+    // Then make sure that the paragraph style name has no unexpected leading whitespace:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    OUString aParaStyleName;
+    xPara->getPropertyValue("ParaStyleName") >>= aParaStyleName;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Signature
+    // - Actual  :  Signature
+    // i.e. there was an unwanted space at the start.
+    CPPUNIT_ASSERT_EQUAL(u"Signature"_ustr, aParaStyleName);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    // Also make sure the paragraph style has a numbering associated with it:
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Signature"_ustr),
+                                               uno::UNO_QUERY);
+    OUString aNumberingStyleName;
+    // Without the accompanying fix in place, this test would have failed, the WWNum14 list was set
+    // only as direct formatting, not at a style level.
+    xStyle->getPropertyValue("NumberingStyleName") >>= aNumberingStyleName;
+    CPPUNIT_ASSERT(!aNumberingStyleName.isEmpty());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

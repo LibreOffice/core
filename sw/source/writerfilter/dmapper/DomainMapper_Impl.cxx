@@ -7015,7 +7015,12 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
         {   // practical case: Word wrote i18n name to TOC field, but it doesn't
             // exist in styles.xml; tdf#153083 clone it for best roundtrip
             assert(convertedStyleName == pStyle->m_sConvertedStyleName);
-            return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+            if (rTOCStyleName != pStyle->m_sStyleName)
+            {
+                // rTOCStyleName is localized, pStyle->m_sStyleName is not. They don't match, so
+                // make sense to clone the style.
+                return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+            }
         }
     }
     // theoretical case: what OOXML says
@@ -7212,6 +7217,11 @@ void DomainMapper_Impl::handleToc
                 nLevel = o3tl::toInt32(o3tl::getToken(sTemplate, 0, tsep, nPosition ));
                 if( !nLevel )
                     nLevel = 1;
+
+                // The separator can be ',' or ', ': make sure the leading space doesn't end up in
+                // the style name.
+                sStyleName = sStyleName.trim();
+
                 if( !sStyleName.isEmpty() )
                     aMap.emplace(nLevel, sStyleName);
             }
