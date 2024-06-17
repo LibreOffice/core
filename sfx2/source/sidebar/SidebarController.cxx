@@ -120,8 +120,7 @@ SidebarController::SidebarController (
               mpParentWindow,
               mxFrame,
               [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](weld::Menu& rMainMenu, weld::Menu& rSubMenu,
-                     const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rMainMenu, rSubMenu, rMenuData); },
+              [this](weld::Menu& rMainMenu, weld::Menu& rSubMenu) { return this->ConnectMenuActivateHandlers(rMainMenu, rSubMenu); },
               *this)),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(OUString(), OUString()),
@@ -634,6 +633,8 @@ void collectUIInformation(const OUString& rDeckId)
 
 }
 
+bool SidebarController::IsDocked() const { return !mpParentWindow->IsFloatingMode(); }
+
 void SidebarController::OpenThenToggleDeck (
     const OUString& rsDeckId)
 {
@@ -1109,67 +1110,10 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
     }
 }
 
-void SidebarController::ShowPopupMenu(
-    weld::Menu& rMainMenu, weld::Menu& rSubMenu,
-    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+void SidebarController::ConnectMenuActivateHandlers(weld::Menu& rMainMenu, weld::Menu& rSubMenu) const
 {
-    PopulatePopupMenus(rMainMenu, rSubMenu, rMenuData);
     rMainMenu.connect_activate(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
     rSubMenu.connect_activate(LINK(const_cast<SidebarController*>(this), SidebarController, OnSubMenuItemSelected));
-}
-
-void SidebarController::PopulatePopupMenus(weld::Menu& rMenu, weld::Menu& rCustomizationMenu,
-                                           const std::vector<TabBar::DeckMenuData>& rMenuData) const
-{
-    // Add one entry for every tool panel element to individually make
-    // them visible or hide them.
-    sal_Int32 nIndex (0);
-    for (const auto& rItem : rMenuData)
-    {
-        OUString sIdent("select" + OUString::number(nIndex));
-        rMenu.insert(nIndex, sIdent, rItem.msDisplayName,
-                     nullptr, nullptr, nullptr, TRISTATE_FALSE);
-        rMenu.set_active(sIdent, rItem.mbIsCurrentDeck);
-        rMenu.set_sensitive(sIdent, rItem.mbIsEnabled && rItem.mbIsActive);
-
-        if (!comphelper::LibreOfficeKit::isActive())
-        {
-            if (rItem.mbIsCurrentDeck)
-            {
-                // Don't allow the currently visible deck to be disabled.
-                OUString sSubIdent("nocustomize" + OUString::number(nIndex));
-                rCustomizationMenu.insert(nIndex, sSubIdent, rItem.msDisplayName,
-                                          nullptr, nullptr, nullptr, TRISTATE_FALSE);
-                rCustomizationMenu.set_active(sSubIdent, true);
-            }
-            else
-            {
-                OUString sSubIdent("customize" + OUString::number(nIndex));
-                rCustomizationMenu.insert(nIndex, sSubIdent, rItem.msDisplayName,
-                                          nullptr, nullptr, nullptr, TRISTATE_TRUE);
-                rCustomizationMenu.set_active(sSubIdent, rItem.mbIsEnabled && rItem.mbIsActive);
-            }
-        }
-
-        ++nIndex;
-    }
-
-    bool bHideLock = true;
-    bool bHideUnLock = true;
-    // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        // Add entry for docking or un-docking the tool panel.
-        if (mpParentWindow->IsFloatingMode())
-            bHideLock = false;
-        else
-            bHideUnLock = false;
-    }
-    rMenu.set_visible("locktaskpanel", !bHideLock);
-    rMenu.set_visible("unlocktaskpanel", !bHideUnLock);
-
-    // No Restore or Customize options for LoKit.
-    rMenu.set_visible("customization", !comphelper::LibreOfficeKit::isActive());
 }
 
 IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, void)

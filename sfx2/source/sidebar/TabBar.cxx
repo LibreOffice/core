@@ -47,7 +47,7 @@ namespace sfx2::sidebar {
 TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
                std::function<void (const OUString&)> aDeckActivationFunctor,
-               PopupMenuProvider  aPopupMenuProvider,
+               PopupMenuSignalConnectFunction aPopupMenuSignalConnectFunction,
                SidebarController& rParentSidebarController
               )
     : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
@@ -57,7 +57,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
-    , maPopupMenuProvider(std::move(aPopupMenuProvider))
+    , maPopupMenuSignalConnectFunction(std::move(aPopupMenuSignalConnectFunction))
     , mrParentSidebarController(rParentSidebarController)
 {
     set_id("TabBar"); // for uitest
@@ -374,7 +374,57 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
             mxSubMenu->remove(sIdent);
     }
 
-    maPopupMenuProvider(*mxMainMenu, *mxSubMenu, aMenuData);
+    // Add one entry for every tool panel element to individually make
+    // them visible or hide them.
+    sal_Int32 nIndex (0);
+    for (const auto& rItem : aMenuData)
+    {
+        OUString sIdent("select" + OUString::number(nIndex));
+        mxMainMenu->insert(nIndex, sIdent, rItem.msDisplayName,
+                     nullptr, nullptr, nullptr, TRISTATE_FALSE);
+        mxMainMenu->set_active(sIdent, rItem.mbIsCurrentDeck);
+        mxMainMenu->set_sensitive(sIdent, rItem.mbIsEnabled && rItem.mbIsActive);
+
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            if (rItem.mbIsCurrentDeck)
+            {
+                // Don't allow the currently visible deck to be disabled.
+                OUString sSubIdent("nocustomize" + OUString::number(nIndex));
+                mxSubMenu->insert(nIndex, sSubIdent, rItem.msDisplayName,
+                                          nullptr, nullptr, nullptr, TRISTATE_FALSE);
+                mxSubMenu->set_active(sSubIdent, true);
+            }
+            else
+            {
+                OUString sSubIdent("customize" + OUString::number(nIndex));
+                mxSubMenu->insert(nIndex, sSubIdent, rItem.msDisplayName,
+                                          nullptr, nullptr, nullptr, TRISTATE_TRUE);
+                mxSubMenu->set_active(sSubIdent, rItem.mbIsEnabled && rItem.mbIsActive);
+            }
+        }
+
+        ++nIndex;
+    }
+
+    bool bHideLock = true;
+    bool bHideUnLock = true;
+    // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // Add entry for docking or un-docking the tool panel.
+        if (!mrParentSidebarController.IsDocked())
+            bHideLock = false;
+        else
+            bHideUnLock = false;
+    }
+    mxMainMenu->set_visible("locktaskpanel", !bHideLock);
+    mxMainMenu->set_visible("unlocktaskpanel", !bHideUnLock);
+
+    // No Restore or Customize options for LoKit.
+    mxMainMenu->set_visible("customization", !comphelper::LibreOfficeKit::isActive());
+
+    maPopupMenuSignalConnectFunction(*mxMainMenu, *mxSubMenu);
 }
 
 void TabBar::EnableMenuButton(const bool bEnable)
