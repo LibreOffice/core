@@ -41,18 +41,6 @@ class TabBar final : public InterimItemWindow
 {
     friend class TabBarUIObject;
 public:
-    /** DeckMenuData has entries for display name, and a flag:
-         - isCurrentDeck for the deck selection data
-         - isEnabled     for the show/hide menu
-    */
-    class DeckMenuData
-    {
-    public:
-        OUString msDisplayName;
-        bool mbIsCurrentDeck;
-        bool mbIsActive;
-        bool mbIsEnabled;
-    };
     typedef ::std::function<void (
             weld::Menu& rMainMenu, weld::Menu& rSubMenu)> PopupMenuSignalConnectFunction;
     TabBar (
