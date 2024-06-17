@@ -1167,75 +1167,7 @@ void EditEngine::SetSingleLine(bool bValue)
 
 void EditEngine::SetControlWord( EEControlBits nWord )
 {
-
-    if (nWord == getImpl().GetStatus().GetControlWord())
-        return;
-
-    EEControlBits nPrev = getImpl().GetStatus().GetControlWord();
-    getImpl().GetStatus().GetControlWord() = nWord;
-
-    EEControlBits nChanges = nPrev ^ nWord;
-    if (getImpl().IsFormatted())
-    {
-        // possibly reformat:
-        if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
-             ( nChanges & EEControlBits::ONECHARPERLINE ) ||
-             ( nChanges & EEControlBits::STRETCHING ) ||
-             ( nChanges & EEControlBits::OUTLINER ) ||
-             ( nChanges & EEControlBits::NOCOLORS ) ||
-             ( nChanges & EEControlBits::OUTLINER2 ) )
-        {
-            if ( nChanges & EEControlBits::USECHARATTRIBS )
-            {
-                getImpl().GetEditDoc().CreateDefFont(true);
-            }
-
-            getImpl().FormatFullDoc();
-            getImpl().UpdateViews(getImpl().GetActiveView());
-        }
-    }
-
-    bool bSpellingChanged = bool(nChanges & EEControlBits::ONLINESPELLING);
-
-    if ( !bSpellingChanged )
-        return;
-
-    getImpl().StopOnlineSpellTimer();
-    if (nWord & EEControlBits::ONLINESPELLING)
-    {
-        // Create WrongList, start timer...
-        sal_Int32 nNodes = getImpl().GetEditDoc().Count();
-        for (sal_Int32 nNode = 0; nNode < nNodes; nNode++)
-        {
-            ContentNode* pNode = getImpl().GetEditDoc().GetObject(nNode);
-            pNode->CreateWrongList();
-        }
-        if (getImpl().IsFormatted())
-            getImpl().StartOnlineSpellTimer();
-    }
-    else
-    {
-        tools::Long nY = 0;
-        sal_Int32 nNodes = getImpl().GetEditDoc().Count();
-        for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++)
-        {
-            ContentNode* pNode = getImpl().GetEditDoc().GetObject(nNode);
-            ParaPortion const& rPortion = getImpl().GetParaPortions().getRef(nNode);
-            bool bWrongs = false;
-            if (pNode->GetWrongList() != nullptr)
-                bWrongs = !pNode->GetWrongList()->empty();
-            pNode->DestroyWrongList();
-            if ( bWrongs )
-            {
-                getImpl().maInvalidRect.SetLeft(0);
-                getImpl().maInvalidRect.SetRight(getImpl().GetPaperSize().Width());
-                getImpl().maInvalidRect.SetTop(nY + 1);
-                getImpl().maInvalidRect.SetBottom(nY + rPortion.GetHeight() - 1);
-                getImpl().UpdateViews(getImpl().mpActiveView);
-            }
-            nY += rPortion.GetHeight();
-        }
-    }
+    getImpl().SetControlWord(nWord);
 }
 
 EEControlBits EditEngine::GetControlWord() const

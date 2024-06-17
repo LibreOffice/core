@@ -1172,6 +1172,7 @@ public:
     const MapMode&      GetRefMapMode() const { return mpRefDev->GetMapMode(); }
     void                SetRefMapMode(const MapMode& rMapMode);
 
+    void SetControlWord( EEControlBits nWord );
     InternalEditStatus& GetStatus() { return maStatus; }
     InternalEditStatus const& GetStatus() const{ return maStatus; }
 

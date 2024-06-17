@@ -1339,6 +1339,79 @@ bool ImpEditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
         ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) );
 }
 
+void ImpEditEngine::SetControlWord( EEControlBits nWord )
+{
+
+    if (nWord == maStatus.GetControlWord())
+        return;
+
+    EEControlBits nPrev = maStatus.GetControlWord();
+    maStatus.GetControlWord() = nWord;
+
+    EEControlBits nChanges = nPrev ^ nWord;
+    if (IsFormatted())
+    {
+        // possibly reformat:
+        if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
+             ( nChanges & EEControlBits::ONECHARPERLINE ) ||
+             ( nChanges & EEControlBits::STRETCHING ) ||
+             ( nChanges & EEControlBits::OUTLINER ) ||
+             ( nChanges & EEControlBits::NOCOLORS ) ||
+             ( nChanges & EEControlBits::OUTLINER2 ) )
+        {
+            if ( nChanges & EEControlBits::USECHARATTRIBS )
+            {
+                maEditDoc.CreateDefFont(true);
+            }
+
+            FormatFullDoc();
+            UpdateViews(mpActiveView);
+        }
+    }
+
+    bool bSpellingChanged = bool(nChanges & EEControlBits::ONLINESPELLING);
+
+    if ( !bSpellingChanged )
+        return;
+
+    StopOnlineSpellTimer();
+    if (nWord & EEControlBits::ONLINESPELLING)
+    {
+        // Create WrongList, start timer...
+        sal_Int32 nNodes = maEditDoc.Count();
+        for (sal_Int32 nNode = 0; nNode < nNodes; nNode++)
+        {
+            ContentNode* pNode = maEditDoc.GetObject(nNode);
+            pNode->CreateWrongList();
+        }
+        if (IsFormatted())
+            StartOnlineSpellTimer();
+    }
+    else
+    {
+        tools::Long nY = 0;
+        sal_Int32 nNodes = maEditDoc.Count();
+        for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++)
+        {
+            ContentNode* pNode = maEditDoc.GetObject(nNode);
+            ParaPortion const& rPortion = maParaPortionList.getRef(nNode);
+            bool bWrongs = false;
+            if (pNode->GetWrongList() != nullptr)
+                bWrongs = !pNode->GetWrongList()->empty();
+            pNode->DestroyWrongList();
+            if ( bWrongs )
+            {
+                maInvalidRect.SetLeft(0);
+                maInvalidRect.SetRight(GetPaperSize().Width());
+                maInvalidRect.SetTop(nY + 1);
+                maInvalidRect.SetBottom(nY + rPortion.GetHeight() - 1);
+                UpdateViews(mpActiveView);
+            }
+            nY += rPortion.GetHeight();
+        }
+    }
+}
+
 IdleFormattter::IdleFormattter()
     : Idle("editeng::ImpEditEngine aIdleFormatter")
 {
