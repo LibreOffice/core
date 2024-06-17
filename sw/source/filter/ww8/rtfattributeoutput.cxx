@@ -626,13 +626,19 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
     if (!pRedline)
         return;
 
+    bool bRemoveCommentAuthorDates
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
     if (pRedline->GetType() == RedlineType::Insert)
     {
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVISED);
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTH);
         m_aRun->append(static_cast<sal_Int32>(
             m_rExport.GetRedline(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()))));
-        m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTM);
+        if (!bRemoveCommentAuthorDates)
+            m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTM);
     }
     else if (pRedline->GetType() == RedlineType::Delete)
     {
@@ -640,9 +646,11 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTHDEL);
         m_aRun->append(static_cast<sal_Int32>(
             m_rExport.GetRedline(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()))));
-        m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTMDEL);
+        if (!bRemoveCommentAuthorDates)
+            m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTMDEL);
     }
-    m_aRun->append(static_cast<sal_Int32>(sw::ms::DateTime2DTTM(pRedline->GetTimeStamp())));
+    if (!bRemoveCommentAuthorDates)
+        m_aRun->append(static_cast<sal_Int32>(sw::ms::DateTime2DTTM(pRedline->GetTimeStamp())));
     m_aRun->append(' ');
 }
 
@@ -4091,10 +4099,10 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
         return;
     }
     OUString sAuthor(bRemoveCommentAuthorDates
-                         ? "Author" + OUString::number(mpAuthorIDs->GetInfoID(rPField.GetPar1()))
+                         ? "Author" + OUString::number(m_rExport.GetInfoID(rPField.GetPar1()))
                          : rPField.GetPar1());
     OUString sInitials(bRemoveCommentAuthorDates
-                           ? "A" + OUString::number(mpAuthorIDs->GetInfoID(rPField.GetPar1()))
+                           ? "A" + OUString::number(m_rExport.GetInfoID(rPField.GetPar1()))
                            : rPField.GetInitials());
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNID " ");
     m_aRunText->append(OUStringToOString(sInitials, m_rExport.GetCurrentEncoding()));
@@ -4168,7 +4176,6 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_nParaBeforeSpacing(0)
     , m_bParaAfterAutoSpacing(false)
     , m_nParaAfterSpacing(0)
-    , mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
 }
 

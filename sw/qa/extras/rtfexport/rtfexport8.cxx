@@ -480,6 +480,29 @@ CPPUNIT_TEST_FIXTURE(Test, testNotesAuthorDate)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRtfContent.indexOf("\\atndate", 0));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testChangesAuthor)
+{
+    createSwDoc("text-change-tracking.rtf");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // Remove all personal info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+    saveAndReload(mpFilter);
+
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
+
+    // Make sure user name was anonymized
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
+                         aRtfContent.indexOf("\\revtbl {Unknown;}{Max Mustermann;}", 0));
+    CPPUNIT_ASSERT(aRtfContent.indexOf("\\revtbl {Author1;}{Author2;}", 0) >= 0);
+
+    // Make sure no date is set
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRtfContent.indexOf("\\revdttmdel", 0));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf158982)
 {
     auto verify = [this]() {
