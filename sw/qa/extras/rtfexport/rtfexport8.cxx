@@ -28,6 +28,7 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -451,6 +452,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158978)
     verify();
     saveAndReload(mpFilter);
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNotesAuthorDate)
+{
+    createSwDoc("text-with-comment.rtf");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // Remove all personal info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+    saveAndReload(mpFilter);
+
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
+
+    // Make sure user name was anonymized
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRtfContent.indexOf("\\atnauthor Max Mustermann", 0));
+    CPPUNIT_ASSERT(aRtfContent.indexOf("\\atnauthor Author1", 0) >= 0);
+
+    // Make sure user initials were anonymized
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRtfContent.indexOf("\\atnid MM", 0));
+    CPPUNIT_ASSERT(aRtfContent.indexOf("\\atnid A1", 0) >= 0);
+
+    // Make sure no date is set
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRtfContent.indexOf("\\atndate", 0));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158982)

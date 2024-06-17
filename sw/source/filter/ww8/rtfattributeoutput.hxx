@@ -30,6 +30,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <editeng/boxitem.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <optional>
 
@@ -664,6 +665,9 @@ private:
     sal_Int32 m_nParaAfterSpacing;
 
     editeng::WordPageMargins m_aPageMargins;
+
+    /// map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
 
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
