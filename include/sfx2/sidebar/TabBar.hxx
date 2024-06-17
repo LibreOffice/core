@@ -54,13 +54,12 @@ public:
         bool mbIsEnabled;
     };
     typedef ::std::function<void (
-            weld::Menu& rMainMenu, weld::Menu& rSubMenu,
-            const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
+            weld::Menu& rMainMenu, weld::Menu& rSubMenu)> PopupMenuSignalConnectFunction;
     TabBar (
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ::std::function<void (const OUString& rsDeckId)> aDeckActivationFunctor,
-        PopupMenuProvider aPopupMenuProvider,
+        PopupMenuSignalConnectFunction aPopupMenuSignalConnectFunction,
         SidebarController& rParentSidebarController);
 
     weld::Container* GetContainer() { return m_xContainer.get(); }
@@ -119,7 +118,7 @@ private:
     typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
-    PopupMenuProvider maPopupMenuProvider;
+    PopupMenuSignalConnectFunction maPopupMenuSignalConnectFunction;
 
     void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;

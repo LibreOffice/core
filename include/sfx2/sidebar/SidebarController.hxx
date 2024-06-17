@@ -113,6 +113,8 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
+    bool IsDocked() const;
+
     void OpenThenSwitchToDeck(std::u16string_view rsDeckId);
     void OpenThenToggleDeck(const OUString& rsDeckId);
 
@@ -251,14 +253,8 @@ private:
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);
 
-    void ShowPopupMenu (
-        weld::Menu& rMainMenu,
-        weld::Menu& rSubMenu,
-        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    void PopulatePopupMenus(
-        weld::Menu& rMainButton,
-        weld::Menu& rSubMenu,
-        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
+    void ConnectMenuActivateHandlers(weld::Menu& rMainMenu, weld::Menu& rSubMenu) const;
+
     DECL_DLLPRIVATE_LINK(OnMenuItemSelected, const OUString&, void);
     DECL_DLLPRIVATE_LINK(OnSubMenuItemSelected, const OUString&, void);
     void BroadcastPropertyChange();
