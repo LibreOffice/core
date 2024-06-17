@@ -452,13 +452,6 @@ private:
     void                AppendExt( double fData );
     void                AppendExt( const OUString& rString );
 
-    std::optional<std::pair<sal_uInt16, sal_uInt16>> InsertDde(const OUString& rApplic, const OUString& rTopic, const OUString& rItem)
-    {
-        if (!mxData->mpLinkMgr)
-            return {};
-        return mxData->mpLinkMgr->InsertDde(rApplic, rTopic, rItem);
-    }
-
 private:
     typedef std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
     typedef std::shared_ptr< XclExpCompData >             XclExpCompDataRef;
@@ -1299,14 +1292,15 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
     if( mxData->mbOk ) mxData->mbOk = !aApplic.isEmpty() && !aTopic.isEmpty() && !aItem.isEmpty();
     if( mxData->mbOk )
     {
-        const auto oResult = InsertDde(aApplic, aTopic, aItem);
-
-        if ( oResult ) {
-            AppendNameXToken( oResult->first, oResult->second, rTokData.mnSpaces );
+        if ( mxData->mpLinkMgr )
+        {
+            if( const auto& rResult = mxData->mpLinkMgr->InsertDde( aApplic, aTopic, aItem ) )
+                AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab, rTokData.mnSpaces );
+            else
+                AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
         }
-        else {
-            AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
-        }
+        else
+                AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
     }
 }
 
@@ -2225,12 +2219,12 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             }
 
             // insert the new external name and create the tNameX token
-            if (const OUString* pFile = rExtRefMgr.getExternalFileName( nFileId )) {
-
-
-                const auto oResult = mxData->mpLinkMgr->InsertExtName( *pFile, aName, xArray );
-                if( oResult ) {
-                    AppendNameXToken( oResult->first, oResult->second, rTokData.mnSpaces );
+            const OUString* pFile = rExtRefMgr.getExternalFileName( nFileId );
+            if ( pFile )
+            {
+                if ( const auto& rResult = mxData->mpLinkMgr->InsertExtName( *pFile, aName, xArray ) )
+                {
+                    AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab, rTokData.mnSpaces );
                     return;
                 }
             }
@@ -2441,10 +2435,9 @@ void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFunc
     OUString aXclFuncName;
     if( mxData->mpLinkMgr && ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
     {
-        const auto oResult = mxData->mpLinkMgr->InsertAddIn( aXclFuncName );
-        if (oResult)
+        if ( const auto& rResult = mxData->mpLinkMgr->InsertAddIn( aXclFuncName ) )
         {
-            AppendNameXToken(oResult->first, oResult->second);
+            AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab );
             return;
         }
     }
@@ -2455,14 +2448,13 @@ void XclExpFmlaCompImpl::AppendEuroToolCallToken( const XclExpExtFuncData& rExtF
 {
     if ( mxData->mpLinkMgr )
     {
-        const auto oResult = mxData->mpLinkMgr->InsertEuroTool( rExtFuncData.maFuncName );
-        if ( oResult )
-        {
-            AppendNameXToken( oResult->first, oResult->second );
-            return;
-        }
+        if( const auto& rResult = mxData->mpLinkMgr->InsertEuroTool( rExtFuncData.maFuncName ) )
+            AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab );
+        else
+            AppendMacroCallToken( rExtFuncData );
     }
-    AppendMacroCallToken( rExtFuncData );
+    else
+        AppendMacroCallToken( rExtFuncData );
 }
 
 void XclExpFmlaCompImpl::AppendOperatorTokenId( sal_uInt8 nTokenId, const XclExpOperandListRef& rxOperands, sal_uInt8 nSpaces )
