@@ -2296,8 +2296,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
                     rParam.aRefFormulaCell.Tab(),
                     nDestCol, nDestRow, nDestTab,
                     aTargetValStr,
-                    nSolveResult,
-                    false); // Do not set #NA! on error
+                    nSolveResult);
 
     GetFrameWin()->LeaveWait();
 
