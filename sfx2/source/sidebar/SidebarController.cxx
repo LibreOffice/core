@@ -122,7 +122,7 @@ SidebarController::SidebarController (
               [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
               [this](weld::Menu& rMainMenu, weld::Menu& rSubMenu,
                      const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rMainMenu, rSubMenu, rMenuData); },
-              this)),
+              *this)),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(OUString(), OUString()),
       mnRequestedForceFlags(SwitchFlag_NoForce),
