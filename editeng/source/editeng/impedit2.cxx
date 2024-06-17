@@ -263,6 +263,12 @@ EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
     return aPaM;
 }
 
+OUString ImpEditEngine::GetText( const ESelection& rESelection )
+{
+    EditSelection aSel = CreateSel(rESelection);
+    return GetSelected(aSel);
+}
+
 OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
 {
     if ( !rSel.HasRange() )

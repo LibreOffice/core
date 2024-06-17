@@ -407,8 +407,7 @@ OUString EditEngine::GetText( LineEnd eEnd ) const
 
 OUString EditEngine::GetText( const ESelection& rESelection ) const
 {
-    EditSelection aSel = getImpl().CreateSel(rESelection);
-    return getImpl().GetSelected(aSel);
+    return getImpl().GetText(rESelection);
 }
 
 sal_Int32 EditEngine::GetTextLen() const

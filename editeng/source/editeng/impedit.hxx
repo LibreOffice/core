@@ -1003,6 +1003,7 @@ public:
     bool                    Command(const CommandEvent& rCEvt, EditView* pView);
 
     EditSelectionEngine&    GetSelEngine() { return maSelEngine; }
+    OUString                GetText( const ESelection& rESelection );
     OUString                GetSelected( const EditSelection& rSel ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
