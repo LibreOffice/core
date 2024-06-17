@@ -37,7 +37,7 @@ Module.unoObject = function(interfaces, obj) {
     obj.release = function() {
         if (--obj.impl_refcount === 0) {
             for (const i in obj.impl_interfaces) {
-                i.delete();
+                obj.impl_interfaces[i].delete();
             }
             obj.impl_types.delete();
             obj.impl_implementationId.delete();
