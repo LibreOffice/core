@@ -55,7 +55,7 @@ QtFrameGrabber::QtFrameGrabber(const QUrl& rSourceUrl)
     m_xMediaPlayer->setVideoSink(m_xVideoSink.get());
 
     connect(m_xMediaPlayer.get(), &QMediaPlayer::errorOccurred, this,
-            &QtFrameGrabber::onErrorOccured, Qt::BlockingQueuedConnection);
+            &QtFrameGrabber::onErrorOccured, Qt::SingleShotConnection);
 }
 
 void QtFrameGrabber::onErrorOccured(QMediaPlayer::Error eError, const QString& rErrorString)
@@ -72,9 +72,6 @@ void QtFrameGrabber::onVideoFrameChanged(const QVideoFrame& rFrame)
 {
     std::lock_guard aLock(m_aMutex);
 
-    disconnect(m_xVideoSink.get(), &QVideoSink::videoFrameChanged, this,
-               &QtFrameGrabber::onVideoFrameChanged);
-
     const QImage aImage = rFrame.toImage();
     m_xGraphic = toXGraphic(aImage);
     m_bWaitingForFrame = false;
@@ -90,7 +87,7 @@ css::uno::Reference<css::graphic::XGraphic> SAL_CALL QtFrameGrabber::grabFrame(d
     // until the first frame has been received
     m_bWaitingForFrame = true;
     connect(m_xVideoSink.get(), &QVideoSink::videoFrameChanged, this,
-            &QtFrameGrabber::onVideoFrameChanged, Qt::BlockingQueuedConnection);
+            &QtFrameGrabber::onVideoFrameChanged, Qt::SingleShotConnection);
     m_xMediaPlayer->play();
     while (m_bWaitingForFrame)
     {
