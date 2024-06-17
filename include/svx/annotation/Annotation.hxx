@@ -174,6 +174,8 @@ public:
 
     CreationInfo const& getCreationInfo() { return maCreationInfo; }
     void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
+
+    SdrObject* findAnnotationObject();
 };
 
 /** Vector of annotations */
