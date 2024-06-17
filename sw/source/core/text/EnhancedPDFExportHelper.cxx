@@ -2227,7 +2227,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // be deleted again in JumpToSwMark.
                     SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
-                    OUString const altText(mrSh.GetSelText());
+                    OUString altText(p->rINetAttr.GetINetFormat().GetName());
+                    if (altText.isEmpty())
+                        altText = mrSh.GetSelText();
 
                     const SwPageFrame* pSelectionPage =
                         static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
