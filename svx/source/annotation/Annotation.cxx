@@ -8,6 +8,7 @@
  */
 
 #include <svx/annotation/Annotation.hxx>
+#include <svx/annotation/ObjectAnnotationData.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
@@ -198,6 +199,20 @@ void SAL_CALL Annotation::disposing()
         m_TextRange->dispose();
         m_TextRange.clear();
     }
+}
+
+SdrObject* Annotation::findAnnotationObject()
+{
+    SdrPage const* pPage = getPage();
+
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SdrObject* pObject = pPage->GetObj(i);
+        if (pObject->isAnnotationObject()
+            && pObject->getAnnotationData()->mxAnnotation.get() == this)
+            return pObject;
+    }
+    return nullptr;
 }
 
 } // namespace sdr::annotation

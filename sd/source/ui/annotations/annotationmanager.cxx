@@ -181,24 +181,6 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     return sRet;
 }
 
-namespace
-{
-
-SdrObject* findAnnotationObjectMatching(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
-{
-    SdrPage const* pPage = xAnnotation->getPage();
-
-    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
-    {
-        SdrObject* pObject = pPage->GetObj(i);
-        if (pObject->isAnnotationObject() && pObject->getAnnotationData()->mxAnnotation == xAnnotation)
-            return pObject;
-    }
-    return nullptr;
-}
-
-} // end anonymous ns
-
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mpDoc( rViewShellBase.GetDocument() )
@@ -456,7 +438,7 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
         auto pSdAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
         pSdAnnotation->createChangeUndo();
 
-        SdrObject* pObject = findAnnotationObjectMatching(xAnnotation);
+        SdrObject* pObject = xAnnotation->findAnnotationObject();
         if (pObject && nPositionX >= 0 && nPositionY >= 0)
         {
             double fX = convertTwipToMm100(nPositionX);
@@ -1017,7 +999,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
     bool bAnnotatonInserted = false;
     for (auto const& xAnnotation : mxCurrentPage->getAnnotations())
     {
-        SdrObject* pObject = findAnnotationObjectMatching(xAnnotation);
+        SdrObject* pObject = xAnnotation->findAnnotationObject();
 
         if (pObject)
             continue;
