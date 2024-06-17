@@ -332,11 +332,8 @@ editeng::LanguageSpan EditEngine::GetLanguage(const EditPaM& rPaM) const
 
 editeng::LanguageSpan EditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject( nPara );
-    DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
-    return pNode ? getImpl().GetLanguage( EditPaM( pNode, nPos ) ) : editeng::LanguageSpan{};
+    return getImpl().GetLanguage( nPara, nPos );
 }
-
 
 void EditEngine::TransliterateText( const ESelection& rSelection, TransliterationFlags nTransliterationMode )
 {

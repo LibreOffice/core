@@ -1203,6 +1203,7 @@ public:
     void SetDefaultLanguage(LanguageType eLang) { meDefLanguage = eLang; }
     LanguageType GetDefaultLanguage() const { return meDefLanguage; }
 
+    editeng::LanguageSpan GetLanguage( sal_Int32 nPara, sal_Int32 nPos );
     editeng::LanguageSpan GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
     css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 

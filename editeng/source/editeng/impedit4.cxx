@@ -1460,6 +1460,13 @@ void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRan
     }
 }
 
+editeng::LanguageSpan ImpEditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos )
+{
+    ContentNode* pNode = maEditDoc.GetObject( nPara );
+    DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
+    return pNode ? GetLanguage( EditPaM( pNode, nPos ) ) : editeng::LanguageSpan{};
+}
+
 editeng::LanguageSpan ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos ) const
 {
     short nScriptTypeI18N = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
