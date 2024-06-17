@@ -22,6 +22,8 @@
 #include <editeng/borderline.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
@@ -62,12 +64,30 @@ CellBorderStylePopup::~CellBorderStylePopup()
 
 void CellBorderStylePopup::Initialize()
 {
+    // Tooltip values now controlled in svx/strings.hrc instead of sc/uiconfig/scalc/ui/floatingborderstyle.ui
     mxTBBorder1->connect_clicked ( LINK(this, CellBorderStylePopup, TB1SelectHdl) );
+    mxTBBorder1->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_TABLE_PRESET_NONE));
+    mxTBBorder1->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
+    mxTBBorder1->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER));
+    mxTBBorder1->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_TABLE_PRESET_THICK));
 
     mxTBBorder2->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
+    mxTBBorder2->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT));
+    mxTBBorder2->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT));
+    mxTBBorder2->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP));
+    mxTBBorder2->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM));
+
     mxTBBorder3->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
+    mxTBBorder3->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP));
+    mxTBBorder3->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN));
+    mxTBBorder3->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM));
+    mxTBBorder3->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT));
 
     mxTBBorder4->connect_clicked ( LINK(this, CellBorderStylePopup, TB4SelectHdl) );
+    mxTBBorder4->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_TABLE_PRESET_THICKBOTTOM));
+    mxTBBorder4->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_DOUBLEBOTTOM));
+    mxTBBorder4->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPTHICKBOTTOM));
+    mxTBBorder4->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPDOUBLEBOTTOM));
 }
 
 IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
