@@ -428,7 +428,6 @@ void EditEngine::ensureDocumentFormatted() const
 
 sal_Int32 EditEngine::GetLineCount( sal_Int32 nParagraph ) const
 {
-    ensureDocumentFormatted();
     return getImpl().GetLineCount(nParagraph);
 }
 

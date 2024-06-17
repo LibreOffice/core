@@ -3653,8 +3653,10 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     return nCurrentTextHeight;
 }
 
-sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph ) const
+sal_Int32 ImpEditEngine::GetLineCount( sal_Int32 nParagraph )
 {
+    if (!IsFormatted())
+        FormatDoc();
     OSL_ENSURE(GetParaPortions().exists(nParagraph), "GetLineCount: Out of range");
     const ParaPortion* pPPortion = GetParaPortions().SafeGetObject(nParagraph);
     OSL_ENSURE( pPPortion, "Paragraph not found: GetLineCount" );
@@ -3702,7 +3704,7 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
         // we explicitly allow for the index to point at the character right behind the text
         const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
         OSL_ENSURE( bValidIndex, "GetLineNumberAtIndex: invalid index" );
-        const sal_Int32 nLineCount = GetLineCount( nPara );
+        const sal_Int32 nLineCount = maParaPortionList.SafeGetObject(nPara)->GetLines().Count();
         if (nIndex == pNode->Len())
             nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
         else if (bValidIndex)   // nIndex < pNode->Len()

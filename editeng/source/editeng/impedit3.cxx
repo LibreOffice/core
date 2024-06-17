@@ -637,10 +637,9 @@ void ImpEditEngine::CheckPageOverflow()
     tools::Long nTxtHeight = CalcTextHeight(nullptr);
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
-    sal_uInt32 nParaCount = GetParaPortions().Count();
-    sal_uInt32 nFirstLineCount = GetLineCount(0);
+    sal_uInt32 nParaCount = maParaPortionList.Count();
     bool bOnlyOneEmptyPara = (nParaCount == 1) &&
-                            (nFirstLineCount == 1) &&
+                            (maParaPortionList.SafeGetObject(0)->GetLines().Count() == 1) &&
                             (GetLineLen(0,0) == 0);
 
     if (nTxtHeight > nBoxHeight && !bOnlyOneEmptyPara)
