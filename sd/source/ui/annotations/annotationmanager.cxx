@@ -73,6 +73,7 @@
 #include <drawdoc.hxx>
 #include <svx/annotation/TextAPI.hxx>
 #include <svx/annotation/AnnotationObject.hxx>
+#include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 #include <optsitem.hxx>
 #include <sdmod.hxx>
@@ -1003,12 +1004,18 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         return;
 
     sal_Int32 nIndex = 1;
+    bool bAnnotatonInserted = false;
     for (auto const& xAnnotation : mxCurrentPage->getAnnotations())
     {
         SdrObject* pObject = findAnnotationObjectMatching(xAnnotation);
 
         if (pObject)
             continue;
+
+        if (!bAnnotatonInserted && mpDoc->IsUndoEnabled())
+            mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_INSERT));
+
+        bAnnotatonInserted = true;
 
         auto const& rInfo = xAnnotation->getCreationInfo();
 
@@ -1112,6 +1119,9 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
 
         nIndex++;
     }
+
+    if (bAnnotatonInserted && mpDoc->IsUndoEnabled())
+        mpDoc->EndUndo();
 }
 
 void AnnotationManagerImpl::addListener()
