@@ -72,7 +72,7 @@ using namespace formula;
 */
 bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                        const OUString& sValStr, double& nX, bool setNA)
+                        const OUString& sValStr, double& nX)
 {
     bool bRet = false;
     nX = 0.0;
@@ -246,8 +246,6 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         SetDirty( aVRange, false );
         pFormula->Interpret();
     }
-    if (!bRet && setNA)
-        SetError(nVCol, nVRow, nVTab, FormulaError::NotAvailable);
     return bRet;
 }
 

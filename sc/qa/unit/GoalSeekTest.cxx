@@ -44,6 +44,7 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161511)
     // Without the fix in place, this test would have crashed
     sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "100");
     CPPUNIT_ASSERT_EQUAL(0.0, res.Result);
+    CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
 }
 
 CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf68034)
@@ -69,6 +70,43 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf68034)
     // - Expected: 4
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(4.0, res.Result);
+    CPPUNIT_ASSERT_EQUAL(0.0, res.Divergence);
+}
+
+CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161616)
+{
+    createScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"250");
+    insertStringToCell(u"B1"_ustr, u"0.25");
+    insertStringToCell(u"C1"_ustr, u"200");
+    insertStringToCell(u"D1"_ustr, u"= A1 * B1 / C1");
+
+    table::CellAddress aVariableCell;
+    aVariableCell.Sheet = 0;
+    aVariableCell.Row = 0;
+    aVariableCell.Column = 3;
+    table::CellAddress aFormulaCell;
+    aFormulaCell.Sheet = 0;
+    aFormulaCell.Row = 0;
+    aFormulaCell.Column = 4;
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "100");
+    CPPUNIT_ASSERT_EQUAL(0.0, res.Result);
+    CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"250"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"0.25"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"200"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0.3125
+    // - Actual  : #N/A
+    CPPUNIT_ASSERT_EQUAL(u"0.3125"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
