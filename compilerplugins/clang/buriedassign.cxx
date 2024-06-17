@@ -87,8 +87,6 @@ public:
             return;
         if (fn == SRCDIR "/basic/source/sbx/sbxvalue.cxx")
             return;
-        if (fn == SRCDIR "/basic/source/sbx/sbxvalue.cxx")
-            return;
         if (fn == SRCDIR "/sfx2/source/dialog/templdlg.cxx")
             return;
         if (fn == SRCDIR "/sfx2/source/view/viewfrm.cxx")
