@@ -3698,8 +3698,10 @@ void ImpEditEngine::GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int3
     }
 }
 
-sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const
+sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex )
 {
+    if (!IsFormatted())
+        FormatDoc();
     sal_Int32 nLineNo = -1;
     const ContentNode* pNode = GetEditDoc().GetObject( nPara );
     OSL_ENSURE( pNode, "GetLineNumberAtIndex: invalid paragraph index" );

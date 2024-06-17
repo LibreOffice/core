@@ -443,7 +443,6 @@ void EditEngine::GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& 
 
 sal_Int32 EditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    ensureDocumentFormatted();
     return getImpl().GetLineNumberAtIndex(nPara, nIndex);
 }
 
