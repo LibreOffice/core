@@ -409,7 +409,7 @@ IMPL_LINK_NOARG(ScFunctionWin, ModifyHdl, weld::Entry&, void)
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Processes key inputs when the serch entry has focus
+#*  Function:   Processes key inputs when the search entry has focus
 #*
 #************************************************************************/
 
