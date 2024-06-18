@@ -2861,7 +2861,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     std::unique_ptr<weld::TreeIter> xContainer = getEntryFromContainer(xNames);
     if (xContainer)
     {
-        // a table or query as been replaced
+        // a table or query has been replaced
         OUString aName = ::comphelper::getString(_rEvent.Accessor);
 
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
