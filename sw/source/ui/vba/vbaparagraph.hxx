@@ -51,6 +51,8 @@ public:
 
 typedef CollTestImplHelper< ooo::vba::word::XParagraphs > SwVbaParagraphs_BASE;
 
+/// Provides ooo.vba.word.Paragraphs, for example:
+/// ActiveDocument.Paragraphs
 class SwVbaParagraphs : public SwVbaParagraphs_BASE
 {
 private:
