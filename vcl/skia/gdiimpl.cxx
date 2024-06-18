@@ -732,7 +732,7 @@ void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor
 
     // tdf#148569 set extra drawing constraints when scaling
     // Previously, setting stroke width and cap was only done when running
-    // unit tests. But the same drawing contraints are necessary when running
+    // unit tests. But the same drawing constraints are necessary when running
     // with a Retina display on macOS.
     if (mScaling != 1)
     {
