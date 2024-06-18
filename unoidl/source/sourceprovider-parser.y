@@ -2439,7 +2439,7 @@ ctor:
                       @2, yyscanner,
                       ("single-interface--based service " + data->currentName
                        + " constructor " + pad->constructors.back().name
-                       + " has similar paramete list to constructor "
+                       + " has similar parameter list to constructor "
                        + i->name));
                   YYERROR;
               }
