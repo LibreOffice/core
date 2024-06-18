@@ -1107,7 +1107,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     auto xSimpleText = xTextDocument->getText();
     xSimpleText->insertString(xSimpleText->getStart(), u"Abc aBc abC"_ustr, false);
 
-    // Create a search descriptor and find all occurencies of search string
+    // Create a search descriptor and find all occurrences of search string
     css::uno::Reference<css::util::XSearchable> xSearchable(mxComponent, css::uno::UNO_QUERY_THROW);
     auto xSearchDescriptor = xSearchable->createSearchDescriptor();
     xSearchDescriptor->setPropertyValue(u"SearchStyles"_ustr, css::uno::Any(false));
