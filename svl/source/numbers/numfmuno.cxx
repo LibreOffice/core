@@ -425,7 +425,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
         // casing. The only clean way is to just use PutEntry() and ignore the
         // duplicate case, which clients can't because the API doesn't provide
         // the information.
-        // Try just another possibilty here, without any guarantee.
+        // Try just another possibility here, without any guarantee.
 
         // Use only ASCII upper, because keywords are only those.
         // Do not transliterate any quoted literals.
