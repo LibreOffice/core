@@ -8853,7 +8853,7 @@ uno::Type SAL_CALL ScCellFormatsObj::getElementType()
 sal_Bool SAL_CALL ScCellFormatsObj::hasElements()
 {
     SolarMutexGuard aGuard;
-    return ( getCount() != 0 );     //! always greater then zero ??
+    return ( getCount() != 0 );     //! always greater than zero ??
 }
 
 // XEnumerationAccess
