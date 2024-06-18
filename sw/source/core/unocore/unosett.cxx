@@ -1050,7 +1050,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_bOwnNumRuleCreated(false)
 {
     if (!m_pDocShell->GetDoc())
-        throw uno::RuntimeException(u"Unitialized shell passed to SwXNumberingRules constructor"_ustr);
+        throw uno::RuntimeException(u"Uninitialized shell passed to SwXNumberingRules constructor"_ustr);
     m_pImpl->StartListening(GetPageDescNotifier(m_pDocShell->GetDoc()));
 }
 
