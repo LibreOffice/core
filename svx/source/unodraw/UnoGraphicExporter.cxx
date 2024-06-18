@@ -886,7 +886,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             // calculate bound rect for all shapes
             // tdf#126319 I did not convert all rendering to primitives,
-            // that would be to much for this fix. But I  did so for the
+            // that would be too much for this fix. But I  did so for the
             // range calculation to get a valid high quality range.
             // Based on that the conversion is reliable. With the BoundRect
             // fetched from the Metafile it was just not possible to get the
