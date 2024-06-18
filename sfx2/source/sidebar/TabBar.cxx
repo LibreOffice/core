@@ -57,7 +57,6 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxContents(mxAuxBuilder->weld_widget(u"TabBarContents"_ustr))
     , mxMeasureBox(mxAuxBuilder->weld_widget(u"measure"_ustr))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
-    , maPopupMenuSignalConnectFunction(std::move(aPopupMenuSignalConnectFunction))
     , mrParentSidebarController(rParentSidebarController)
 {
     set_id(u"TabBar"_ustr); // for uitest
@@ -72,6 +71,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     mxMenuButton = mxAuxBuilder->weld_menu_button(u"menubutton"_ustr);
     mxMainMenu = mxAuxBuilder->weld_menu(u"mainmenu"_ustr);
     mxSubMenu = mxAuxBuilder->weld_menu(u"submenu"_ustr);
+    aPopupMenuSignalConnectFunction(*mxMainMenu, *mxSubMenu);
 
     gDefaultWidth = m_xContainer->get_preferred_size().Width();
 
@@ -405,8 +405,6 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 
     // No Restore or Customize options for LoKit.
     mxMainMenu->set_visible(u"customization"_ustr, !comphelper::LibreOfficeKit::isActive());
-
-    maPopupMenuSignalConnectFunction(*mxMainMenu, *mxSubMenu);
 }
 
 void TabBar::EnableMenuButton(const bool bEnable)

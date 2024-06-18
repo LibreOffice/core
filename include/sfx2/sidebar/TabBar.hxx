@@ -106,7 +106,6 @@ private:
     typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
-    PopupMenuSignalConnectFunction maPopupMenuSignalConnectFunction;
 
     void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
