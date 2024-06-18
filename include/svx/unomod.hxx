@@ -38,7 +38,7 @@ class SVXCORE_DLLPUBLIC SvxUnoDrawMSFactory : public css::lang::XMultiServiceFac
 {
 protected:
     /** abstract SdrModel provider */
-    // Every App has a DrwingLayer as internal Tooling, thus ist is
+    // Every App has a DrawingLayer as internal Tooling, thus ist is
     // not too hard to asl a UnoModel to hand back a DrawingLayer Model in the
     // form of an SdrModel. Thus, returning a reference and make usages
     // safer and easier is justified.
