@@ -180,7 +180,6 @@
 #include <unofield.hxx>
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
-#include <unocontentcontrol.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
