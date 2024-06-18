@@ -96,7 +96,7 @@ void XMLHatchStyleImport::importXML(
             {
                 // tdf#161327. We keep reading unit-less values as being in 1/10th of a degree for
                 // backward compatibility for now. Values with unit are imported correctly.
-                // For how to make it version dependend see import of XML_GRADIENT_ANGLE, for example.
+                // For how to make it version dependent see import of XML_GRADIENT_ANGLE, for example.
                 sal_Int16 nAngle;
                 bool const bRet
                     = ::sax::Converter::convert10thDegAngle(nAngle, aIter.toView(), true);
