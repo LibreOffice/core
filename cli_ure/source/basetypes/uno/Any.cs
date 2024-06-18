@@ -72,7 +72,7 @@ public struct Any
     }
 
     /** sets the type and value.
-       <p>If the arguments ar invalid then an exception is thrown.</p>
+       <p>If the arguments are invalid then an exception is thrown.</p>
        @exception System.Exception
      */
     public void setValue(Type type, object value)
