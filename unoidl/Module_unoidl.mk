@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,unoidl))
 
 # unoidl-check is needed as a component of the ODK / SDK package and
 # a build-tool. In case of cross-compiling a build-native tool must
-# be provided in addtion to the ODK one (!CROSS_COMPILING phase).
+# be provided in addition to the ODK one (!CROSS_COMPILING phase).
 
 $(eval $(call gb_Module_add_targets,unoidl, \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
