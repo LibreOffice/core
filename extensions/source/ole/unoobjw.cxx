@@ -1278,7 +1278,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
 void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
     unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
-    // Parameters come in in reverse order in pdispparams. There might be less parameters than
+    // Parameters come in reverse order in pdispparams. There might be less parameters than
     // expected. In that case, assume they are "optional" (but can't be marked as such in UNO IDL),
     // and fill in the rest with empty Anys. There might also be more than expected. In that case,
     // assume the oovbaapi UNO IDL hasn't kept up with added optional parameters in MSO, and just
