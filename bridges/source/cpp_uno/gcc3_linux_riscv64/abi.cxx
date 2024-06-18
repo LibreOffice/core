@@ -123,8 +123,8 @@ ReturnKind getReturnKind(const typelib_TypeDescription* pTypeDescr)
     integer take 16 bytes rather than 12 bytes.
 
     There is also another complex problem. e.g. Two 4 byte integer is compacted
-    in a0, but two 4 byte float is seperately set in fa0 and fa1. However, return
-    size is 8 bytes. We need to cut the lower 32bit of fa0 and fa1 seperately and
+    in a0, but two 4 byte float is separately set in fa0 and fa1. However, return
+    size is 8 bytes. We need to cut the lower 32bit of fa0 and fa1 separately and
     combine them in 8 bytes.
 */
 void fillUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, double* fret,
