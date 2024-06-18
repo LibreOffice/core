@@ -1207,18 +1207,26 @@ void DocxExport::WriteSettings()
         pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
     const SvxHyphenZoneItem* pZoneItem;
     bool bHyphenationKeep = false;
+    bool bHyphenationZone = false;
     if (pColl && (pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false)))
     {
         if (pZoneItem->IsNoCapsHyphenation())
             pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
 
         if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
+        {
             pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
                                          OString::number(nHyphenZone));
+            bHyphenationZone = true;
+        }
 
         if ( pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
             bHyphenationKeep = true;
     }
+
+    // export 0, if hyphenation zone is not defined (otherwise it would be the default 360 twips)
+    if ( !bHyphenationZone )
+        pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val), "0");
 
     // Even and Odd Headers
     if( m_aSettings.evenAndOddHeaders )
