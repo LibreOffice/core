@@ -316,7 +316,7 @@ STDMETHODIMP CCallback::inoutSeqAny(LPSAFEARRAY *pArray)
     hr= SafeArrayGetUBound( *pArray, 1, &ubound);
     long count= ubound - lbound + 1;
 
-    // the Array is supposet to contain variants
+    // the Array is supposed to contain variants
     CComVariant var;
     for( long i=0; i<count; i++)
     {
