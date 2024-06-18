@@ -47,6 +47,31 @@ CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf161511)
     CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
 }
 
+CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf37341)
+{
+    createScDoc("ods/tdf37341.ods");
+
+    // E7
+    table::CellAddress aVariableCell;
+    aVariableCell.Sheet = 0;
+    aVariableCell.Row = 6;
+    aVariableCell.Column = 4;
+
+    // F111
+    table::CellAddress aFormulaCell;
+    aFormulaCell.Sheet = 0;
+    aFormulaCell.Row = 110;
+    aFormulaCell.Column = 5;
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // Without the fix in place, this test would have hung here
+    sheet::GoalResult res = pModelObj->seekGoal(aFormulaCell, aVariableCell, "0");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(11778.08775, res.Result, 0.0001);
+    CPPUNIT_ASSERT_EQUAL(DBL_MAX, res.Divergence);
+}
+
 CPPUNIT_TEST_FIXTURE(ScGoalSeekTest, testTdf68034)
 {
     createScDoc();
