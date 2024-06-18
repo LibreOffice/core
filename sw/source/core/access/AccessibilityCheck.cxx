@@ -565,7 +565,7 @@ private:
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
@@ -720,7 +720,7 @@ public:
 
         o3tl::remove_duplicates(aFormattings);
         auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
         pIssue->setIssueObject(IssueObject::TEXT);
         pIssue->setNode(pTextNode);
         SwDoc& rDocument = pTextNode->GetDoc();
@@ -772,7 +772,7 @@ public:
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();

@@ -123,10 +123,11 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     m_xExpanders[3] = m_xBuilder->weld_expander(u"expand_no_alt"_ustr);
     m_xExpanders[4] = m_xBuilder->weld_expander(u"expand_table"_ustr);
     m_xExpanders[5] = m_xBuilder->weld_expander(u"expand_formatting"_ustr);
-    m_xExpanders[6] = m_xBuilder->weld_expander(u"expand_hyperlink"_ustr);
-    m_xExpanders[7] = m_xBuilder->weld_expander(u"expand_fakes"_ustr);
-    m_xExpanders[8] = m_xBuilder->weld_expander(u"expand_numbering"_ustr);
-    m_xExpanders[9] = m_xBuilder->weld_expander(u"expand_other"_ustr);
+    m_xExpanders[6] = m_xBuilder->weld_expander(u"expand_direct_formatting"_ustr);
+    m_xExpanders[7] = m_xBuilder->weld_expander(u"expand_hyperlink"_ustr);
+    m_xExpanders[8] = m_xBuilder->weld_expander(u"expand_fakes"_ustr);
+    m_xExpanders[9] = m_xBuilder->weld_expander(u"expand_numbering"_ustr);
+    m_xExpanders[10] = m_xBuilder->weld_expander(u"expand_other"_ustr);
 
     m_xBoxes[0] = m_xBuilder->weld_box(u"box_document"_ustr);
     m_xBoxes[1] = m_xBuilder->weld_box(u"box_styles"_ustr);
@@ -134,10 +135,11 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     m_xBoxes[3] = m_xBuilder->weld_box(u"box_no_alt"_ustr);
     m_xBoxes[4] = m_xBuilder->weld_box(u"box_table"_ustr);
     m_xBoxes[5] = m_xBuilder->weld_box(u"box_formatting"_ustr);
-    m_xBoxes[6] = m_xBuilder->weld_box(u"box_hyperlink"_ustr);
-    m_xBoxes[7] = m_xBuilder->weld_box(u"box_fakes"_ustr);
-    m_xBoxes[8] = m_xBuilder->weld_box(u"box_numbering"_ustr);
-    m_xBoxes[9] = m_xBuilder->weld_box(u"box_other"_ustr);
+    m_xBoxes[6] = m_xBuilder->weld_box(u"box_direct_formatting"_ustr);
+    m_xBoxes[7] = m_xBuilder->weld_box(u"box_hyperlink"_ustr);
+    m_xBoxes[8] = m_xBuilder->weld_box(u"box_fakes"_ustr);
+    m_xBoxes[9] = m_xBuilder->weld_box(u"box_numbering"_ustr);
+    m_xBoxes[10] = m_xBuilder->weld_box(u"box_other"_ustr);
 
     mxUpdateLinkButton->connect_activate_link(
         LINK(this, A11yCheckIssuesPanel, UpdateLinkButtonClicked));
@@ -243,7 +245,8 @@ void A11yCheckIssuesPanel::populateIssues()
 
     removeAllEntries();
 
-    std::vector<sal_Int32> nIndices(10, 0);
+    std::vector<sal_Int32> nIndices(11, 0);
+    sal_Int32 nDirectFormats = 0;
 
     for (std::shared_ptr<sfx::AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
     {
@@ -284,6 +287,12 @@ void A11yCheckIssuesPanel::populateIssues()
                 addEntryForGroup(AccessibilityCheckGroups::Formatting, nIndices, pIssue);
             }
             break;
+            case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
+            {
+                addEntryForGroup(AccessibilityCheckGroups::DirectFormatting, nIndices, pIssue);
+                nDirectFormats++;
+            }
+            break;
             case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
             case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
             {
@@ -314,6 +323,14 @@ void A11yCheckIssuesPanel::populateIssues()
             break;
         };
     }
+
+    // add DirectFormats (if have) as last element to Formatting AccessibilityCheckGroup
+    if (nDirectFormats > 0)
+    {
+        size_t nGroupFormatIndex = size_t(AccessibilityCheckGroups::Formatting);
+        nIndices[nGroupFormatIndex]++;
+    }
+
     size_t nGroupIndex = 0;
     for (sal_Int32 nIndex : nIndices)
     {
