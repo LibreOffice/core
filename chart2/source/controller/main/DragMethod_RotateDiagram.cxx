@@ -173,7 +173,7 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
 }
 void DragMethod_RotateDiagram::CreateOverlayGeometry(
     sdr::overlay::OverlayManager& rOverlayManager,
-    const sdr::contact::ObjectContact& rObjectContact)
+    const sdr::contact::ObjectContact& rObjectContact, bool /* bIsGeometrySizeValid */)
 {
     ::basegfx::B3DHomMatrix aCurrentTransform;
     aCurrentTransform.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,

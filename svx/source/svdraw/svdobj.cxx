@@ -1471,6 +1471,11 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     SetBoundAndSnapRectsDirty();
 }
 
+bool SdrObject::IsSizeValid(Size /* aTargetSize */)
+{
+    return true;
+}
+
 void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
 {
     if (nAngle)

@@ -78,7 +78,7 @@ public:
     // for migration from XOR to overlay
     virtual void CreateOverlayGeometry(
         sdr::overlay::OverlayManager& rOverlayManager,
-        const sdr::contact::ObjectContact& rObjectContact) override;
+        const sdr::contact::ObjectContact& rObjectContact, bool IsGeometrySizeValid=true) override;
 };
 
 // Derivative of SdrDragMethod for spinning 3D objects

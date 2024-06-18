@@ -92,7 +92,7 @@ SdrDragEntryPolyPolygon::~SdrDragEntryPolyPolygon()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid)
 {
     drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
@@ -118,9 +118,13 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
             aColB,
             fStripeLength);
 
-        const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
-        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
+        basegfx::BColor aHilightColor;
+        if (IsDragSizeValid)
+            aHilightColor = SvtOptionsDrawinglayer::getHilightColor().getBColor();
+        else
+            aHilightColor = basegfx::BColor(1.0, 0, 0);
 
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
             std::move(aCopy),
             aHilightColor,
@@ -164,7 +168,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod&)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod&, bool /* IsDragSizeValid */)
 {
     const SdrObject* pSource = &maOriginal;
 
@@ -194,7 +198,7 @@ SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool /* IsDragSizeValid */)
 {
     return drawinglayer::primitive2d::Primitive2DContainer {
             new drawinglayer::primitive2d::TransformPrimitive2D(
@@ -215,7 +219,7 @@ SdrDragEntryPointGlueDrag::~SdrDragEntryPointGlueDrag()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool /* IsDragSizeValid */)
 {
     drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
@@ -647,9 +651,9 @@ SdrDragMethod::~SdrDragMethod()
     clearSdrDragEntries();
 }
 
-void SdrDragMethod::Show()
+void SdrDragMethod::Show(bool IsValidSize)
 {
-    getSdrDragView().ShowDragObj();
+    getSdrDragView().ShowDragObj(IsValidSize);
 }
 
 void SdrDragMethod::Hide()
@@ -671,7 +675,7 @@ typedef std::map< const SdrObject*, SdrObject* > SdrObjectAndCloneMap;
 
 void SdrDragMethod::CreateOverlayGeometry(
     sdr::overlay::OverlayManager& rOverlayManager,
-    const sdr::contact::ObjectContact& rObjectContact)
+    const sdr::contact::ObjectContact& rObjectContact, bool bIsGeometrySizeValid)
 {
     // We do client-side object manipulation with the Kit API
     if (comphelper::LibreOfficeKit::isActive())
@@ -754,7 +758,8 @@ void SdrDragMethod::CreateOverlayGeometry(
 
         for(auto & pCandidate: maSdrDragEntries)
         {
-            const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));
+            const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(
+                    pCandidate->createPrimitive2DSequenceInCurrentState(*this, bIsGeometrySizeValid));
 
             if(!aCandidateResult.empty())
             {
@@ -2002,7 +2007,13 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
             DragStat().NextMove(aPnt);
             aXFact=aNewXFact;
             aYFact=aNewYFact;
-            Show();
+
+            aNewXFact = double(aNewXFact) > 0 ? aNewXFact : Fraction(1, 1);
+            aNewYFact = double(aNewYFact) > 0 ? aNewYFact : Fraction(1, 1);
+            Size aTargetSize(
+                    GetMarkedRect().GetSize().scale(aNewXFact.GetNumerator(), aNewXFact.GetDenominator(),
+                                                    aNewYFact.GetNumerator(), aNewYFact.GetDenominator()));
+            Show(getSdrDragView().IsMarkedObjSizeValid(aTargetSize));
         }
     }
 }

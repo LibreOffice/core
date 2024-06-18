@@ -795,7 +795,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
     return bRet;
 }
 
-void SdrDragView::ShowDragObj()
+void SdrDragView::ShowDragObj(bool IsSizeValid)
 {
     if(!mpCurrentSdrDragMethod || maDragStat.IsShown())
         return;
@@ -823,7 +823,7 @@ void SdrDragView::ShowDragObj()
                 {
                     mpCurrentSdrDragMethod->CreateOverlayGeometry(
                         *xOverlayManager,
-                        rPageWindow.GetObjectContact());
+                        rPageWindow.GetObjectContact(), IsSizeValid);
 
                     // #i101679# Force changed overlay to be shown
                     xOverlayManager->flush();

@@ -62,7 +62,7 @@ protected:
 
 protected:
     virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
-    SAL_DLLPRIVATE void ShowDragObj();
+    SAL_DLLPRIVATE void ShowDragObj(bool IsSizeValid=true);
     SAL_DLLPRIVATE void HideDragObj();
     bool ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
 

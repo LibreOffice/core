@@ -41,7 +41,7 @@ public:
     SdrDragEntry();
     virtual ~SdrDragEntry();
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) = 0;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) = 0;
 
     // data read access
     bool getAddToTransparent() const { return mbAddToTransparent; }
@@ -57,7 +57,7 @@ public:
     SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon);
     virtual ~SdrDragEntryPolyPolygon() override;
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) override;
 };
 
 
@@ -80,7 +80,7 @@ public:
     const SdrObject& getOriginal() const { return maOriginal; }
     SdrObject* getClone() { return mxClone.get(); }
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) override;
 };
 
 
@@ -93,7 +93,7 @@ public:
     SdrDragEntryPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer&& rSequence);
     virtual ~SdrDragEntryPrimitive2DSequence() override;
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) override;
 };
 
 
@@ -107,7 +107,7 @@ public:
     SdrDragEntryPointGlueDrag(std::vector< basegfx::B2DPoint >&& rPositions, bool bIsPointDrag);
     virtual ~SdrDragEntryPointGlueDrag() override;
 
-    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod, bool IsDragSizeValid=true) override;
 };
 
 
@@ -190,7 +190,7 @@ public:
     // #i58950# virtual destructor was missing
     virtual ~SdrDragMethod();
 
-    void Show();
+    void Show(bool IsValidSize=true);
     void Hide();
     bool IsShiftPressed() const { return mbShiftPressed; }
     void SetShiftPressed(bool bShiftPressed) { mbShiftPressed = bShiftPressed; }
@@ -203,7 +203,7 @@ public:
 
     virtual void CreateOverlayGeometry(
         sdr::overlay::OverlayManager& rOverlayManager,
-        const sdr::contact::ObjectContact& rObjectContact);
+        const sdr::contact::ObjectContact& rObjectContact, bool bIsGeometrySizeValid=true);
     SAL_DLLPRIVATE void destroyOverlayGeometry();
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() const;

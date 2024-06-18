@@ -974,6 +974,13 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     pSh->EndAllAction();
 }
 
+bool SwVirtFlyDrawObj::IsSizeValid(Size aTargetSize)
+{
+    SwBorderAttrAccess aAccess( SwFrame::GetCache(), GetFlyFrame() );
+    const SwBorderAttrs &rAttrs = *aAccess.Get();
+    return GetFlyFrame()->IsResizeValid(&rAttrs, aTargetSize);
+}
+
 void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     const SwFrame* pTmpFrame = GetFlyFrame()->GetAnchorFrame();

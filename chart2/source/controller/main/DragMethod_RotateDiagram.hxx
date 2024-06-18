@@ -54,7 +54,7 @@ public:
 
     virtual void CreateOverlayGeometry(
         sdr::overlay::OverlayManager& rOverlayManager,
-        const sdr::contact::ObjectContact& rObjectContact) override;
+        const sdr::contact::ObjectContact& rObjectContact, bool bIsGeometrySizeValid=true) override;
 
 private:
     E3dScene*   m_pScene;

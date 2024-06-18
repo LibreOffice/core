@@ -523,6 +523,7 @@ public:
     /// Nbc means "no broadcast".
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual bool IsSizeValid(Size aTargetSize);
     virtual void NbcCrop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) = 0;
     // Utility for call sites that don't have sin and cos handy

@@ -2431,6 +2431,73 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
     return 0;
 }
 
+bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
+{
+    SwFormatFrameSize rFrameSz = GetFormat()->GetFrameSize();
+    Size aFrameSize = rFrameSz.GetSize();
+    bool bAutosizeHeight = !HasFixSize() && IsMinHeight();
+    bool bAutosizeWidth =  !m_bFormatHeightOnly && rFrameSz.GetWidthSizeType() == SwFrameSize::Minimum;
+
+    if (!bAutosizeHeight && !bAutosizeWidth)
+        return true;
+
+    bool bIsValidResize = true;
+
+    /**
+    if (either AutoSizeWidth or AutoSizeHeight, not both),
+        if the autosize dimention goes smaller than min value and the other dimention changed
+            return valid
+        else
+            remember invalid
+    */
+    tools::Long nMinFrameHeight = 0;
+    if (bAutosizeHeight)
+    {
+        const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
+        rFrameSz.SetHeight(aTargetSize.Height());
+        rFrameSz.SetWidth(aTargetSize.Width());
+        Size aRelSize( CalcRel( rFrameSz ) );
+
+        tools::Long nMinHeight = 0;
+        SwRectFnSet aRectFnSet(this);
+        nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
+        SwTwips nRemaining = CalcContentHeight(pAttrs, nMinHeight, nUL);
+        nMinFrameHeight = nRemaining + nUL;
+
+        if (nMinHeight < nMinFrameHeight)
+        {
+            bIsValidResize = false;
+            // if height less than minHeight and width changed when not AutoSizeWidth
+            if (!bAutosizeWidth && aTargetSize.Width() != aFrameSize.Width())
+                return true;
+        }
+    }
+
+    tools::Long nMinFrameWidth = 0;
+    if (bAutosizeWidth)
+    {
+        const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
+        const SwTwips nAutoWidth = lcl_CalcAutoWidth( *this );
+        nMinFrameWidth = nAutoWidth + nLR;
+
+        if (aTargetSize.Width() < nMinFrameWidth)
+            bIsValidResize = false;
+        if (!bAutosizeHeight && aTargetSize.Height() != aFrameSize.Height())
+            return true;
+    }
+
+    // if not valid resize, and both AutoSizeWidth and AutoSizeHeight,
+    // then consider resize is valid if any one of the dimentions was changed from it's original size
+    // (the frame's dimentions), and the destination dimention is a valid one.
+    if (bAutosizeWidth && bAutosizeHeight && !bIsValidResize)
+    {
+        return (aTargetSize.Width() != aFrameSize.Width() && aTargetSize.Width() >= nMinFrameWidth) ||
+            (aTargetSize.Height() != aFrameSize.Height() && aTargetSize.Height() >= nMinFrameHeight);
+    }
+
+    return bIsValidResize;
+}
+
 Size SwFlyFrame::ChgSize( const Size& aNewSize )
 {
     // #i53298#

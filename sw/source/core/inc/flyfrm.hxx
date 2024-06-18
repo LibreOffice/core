@@ -182,6 +182,7 @@ public:
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 #endif
 
+    bool    IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize);
     SwTwips Shrink_( SwTwips, bool bTst );
     SwTwips Grow_  ( SwTwips, bool bTst );
     void    Invalidate_( SwPageFrame const *pPage = nullptr );

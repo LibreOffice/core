@@ -116,6 +116,7 @@ public:
     virtual       void       NbcMove  (const Size& rSiz) override;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact) override;
+    virtual       bool       IsSizeValid(Size aTargetSize) override;
     virtual       void       NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       Move  (const Size& rSiz) override;
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
