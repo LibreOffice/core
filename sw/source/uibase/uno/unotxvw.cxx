@@ -258,7 +258,7 @@ uno::Any SwXTextView::getSelection()
     uno::Reference< uno::XInterface >  aRef;
     if(GetView())
     {
-        //force immediat shell update
+        //force immediate shell update
         m_pView->StopShellTimer();
         //Generating an interface from the current selection.
         SwWrtShell& rSh = m_pView->GetWrtShell();
@@ -1658,7 +1658,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
 {
     SolarMutexGuard aGuard;
 
-    //force immediat shell update
+    //force immediate shell update
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
     if ( GetView()->GetShellMode() == ShellMode::DrawText )
@@ -1682,7 +1682,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
 {
     SolarMutexGuard aGuard;
 
-    //force immediat shell update
+    //force immediate shell update
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
     if ( GetView()->GetShellMode() == ShellMode::DrawText )
