@@ -561,27 +561,6 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
     CPPUNIT_ASSERT(!rDoc.RowHidden(4, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf131562)
-{
-    loadFromFile(u"tdf131562.xlsm");
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, rDoc.GetString(ScAddress(0, 3, 0)));
-
-    executeMacro(
-        u"vnd.sun.Star.script:VBAProject.Munka1.numberconcat?language=Basic&location=document"_ustr);
-
-    //Without the fix in place, the macro wouldn't have concatenated 1 and " ."
-    CPPUNIT_ASSERT_EQUAL(u"1 ."_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1 .cat"_ustr, rDoc.GetString(ScAddress(0, 3, 0)));
-}
-
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
 {
     loadFromFile(u"tdf52602.xls");
