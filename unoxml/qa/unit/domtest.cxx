@@ -87,7 +87,7 @@ struct ErrorHandler
 {
     sal_uInt32 mnErrCount;
 //    sal_uInt32 mnFatalCount;  // No fatal error counter, as lib2xml doesn't distinguish between error and fatal error
-                                // (see See xmlFatalErrMsg from lib2xml/parse.c and __xmlRaiseError from lib2xml/error.c)
+                                // (See xmlFatalErrMsg from lib2xml/parse.c and __xmlRaiseError from lib2xml/error.c)
     sal_uInt32 mnWarnCount;
 
     bool noErrors() const { return !mnErrCount /*&& !mnFatalCount*/ && !mnWarnCount; }
