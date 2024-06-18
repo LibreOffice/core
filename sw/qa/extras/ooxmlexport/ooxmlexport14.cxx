@@ -801,6 +801,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyph
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
+{
+    loadAndSave("fdo76163.docx");
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:consecutiveHyphenLimit"_ostr, "val"_ostr, u"1"_ustr);
+
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    // This was false (value 0)
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(1), getProperty<sal_Int16>(xStyle, u"ParaHyphenationMaxHyphens"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
 {
     loadAndSave("tdf121658.docx");

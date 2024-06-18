@@ -1220,6 +1220,10 @@ void DocxExport::WriteSettings()
             bHyphenationZone = true;
         }
 
+        if ( sal_Int16 nMaxHyphens = pZoneItem->GetMaxHyphens() )
+            pFS->singleElementNS(XML_w, XML_consecutiveHyphenLimit, FSNS(XML_w, XML_val),
+                                         OString::number(nMaxHyphens));
+
         if ( pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
             bHyphenationKeep = true;
     }
