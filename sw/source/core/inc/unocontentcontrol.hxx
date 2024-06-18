@@ -29,7 +29,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
