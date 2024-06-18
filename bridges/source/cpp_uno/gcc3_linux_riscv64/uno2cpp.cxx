@@ -426,7 +426,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                                void* pReturn, void* pArgs[], uno_Any** ppException)
 {
     BRIDGE_LOG("In unoInterfaceProxyDispatch:\n");
-    BRIDGE_LOG("pMemberDescr = %p, pReturn = %p, pArgs = %p, ppExeption = %p\n", pMemberDescr,
+    BRIDGE_LOG("pMemberDescr = %p, pReturn = %p, pArgs = %p, ppException = %p\n", pMemberDescr,
                pReturn, pArgs, ppException);
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy* pThis
