@@ -16,7 +16,6 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <comphelper/propertyvalue.hxx>
