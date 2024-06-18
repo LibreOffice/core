@@ -977,7 +977,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aStrRang
 
     rtl::Reference<ScCellRangesBase> pObj = new ScCellRangesObj(pDocSh, *aRangeList);
 
-    // SetCursorOnly tells the range the specific cells selected are irelevant - maybe could rename?
+    // SetCursorOnly tells the range the specific cells selected are irrelevant - maybe could rename?
     pObj->SetCursorOnly(true);
 
     return uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
