@@ -794,6 +794,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149421_default, "tdf146171.docx")
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(360), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf161628, "tdf132599_frames_on_right_pages_no_hyphenation.fodt")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    // This was 360 after the second import (missing export of zero hyphenation zone)
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
 {
     loadAndSave("tdf121658.docx");
