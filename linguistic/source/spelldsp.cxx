@@ -59,8 +59,6 @@ class ProposalList
 {
     std::vector< OUString > aVec;
 
-    bool    HasEntry( std::u16string_view rText ) const;
-
 public:
     ProposalList()  {}
     ProposalList(const ProposalList&) = delete;
@@ -68,7 +66,7 @@ public:
 
     size_t  Count() const;
     void    Prepend( const OUString &rText );
-    void    Append( const OUString &rNew );
+    void    Append( const OUString &rNew, bool bPrepend = false );
     void    Append( const std::vector< OUString > &rNew );
     void    Append( const Sequence< OUString > &rNew );
     std::vector< OUString > GetVector() const;
@@ -76,28 +74,29 @@ public:
 
 }
 
-bool ProposalList::HasEntry( std::u16string_view rText ) const
+void ProposalList::Prepend( const OUString &rText )
+{
+    Append( rText, /*bPrepend=*/true );
+}
+
+void ProposalList::Append( const OUString &rOrig, bool bPrepend )
 {
     bool bFound = false;
+    // convert ASCII apostrophe to the typographic one
+    const OUString &rText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
     size_t nCnt = aVec.size();
     for (size_t i = 0;  !bFound && i < nCnt;  ++i)
     {
         if (aVec[i] == rText)
             bFound = true;
     }
-    return bFound;
-}
-
-void ProposalList::Prepend( const OUString &rText )
-{
-    if (!HasEntry( rText ))
-        aVec.insert( aVec.begin(), rText );
-}
-
-void ProposalList::Append( const OUString &rText )
-{
-    if (!HasEntry( rText ))
-        aVec.push_back( rText );
+    if (!bFound)
+    {
+        if ( bPrepend )
+            aVec.insert( aVec.begin(), rText );
+        else
+            aVec.push_back( rText );
+    }
 }
 
 void ProposalList::Append( const std::vector< OUString > &rNew )
@@ -106,18 +105,14 @@ void ProposalList::Append( const std::vector< OUString > &rNew )
     for ( size_t i = 0;  i < nLen;  ++i)
     {
         const OUString &rText = rNew[i];
-        if (!HasEntry( rText ))
-            Append( rText );
+        Append( rText );
     }
 }
 
 void ProposalList::Append( const Sequence< OUString > &rNew )
 {
     for (const OUString& rText : rNew)
-    {
-        if (!HasEntry( rText ))
-            Append( rText );
-    }
+        Append( rText );
 }
 
 size_t ProposalList::Count() const
