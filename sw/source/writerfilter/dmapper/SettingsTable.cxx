@@ -93,6 +93,7 @@ struct SettingsTable_Impl
     bool                m_bAutoHyphenation;
     bool                m_bNoHyphenateCaps;
     sal_Int16           m_nHyphenationZone;
+    sal_Int16           m_nConsecutiveHyphenLimit;
     sal_Int16           m_nUseWord2013TrackBottomHyphenation;
     sal_Int16           m_nAllowHyphenationAtTrackBottom;
     bool                m_bWidowControl;
@@ -142,6 +143,7 @@ struct SettingsTable_Impl
     , m_bAutoHyphenation(false)
     , m_bNoHyphenateCaps(false)
     , m_nHyphenationZone( 360 ) // default is 1/4 in
+    , m_nConsecutiveHyphenLimit(0)
     , m_nUseWord2013TrackBottomHyphenation(-1)
     , m_nAllowHyphenationAtTrackBottom(-1)
     , m_bWidowControl(false)
@@ -297,6 +299,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     break;
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
         m_pImpl->m_nHyphenationZone = nIntValue;
+    break;
+    case NS_ooxml::LN_CT_Settings_consecutiveHyphenLimit:
+        m_pImpl->m_nConsecutiveHyphenLimit = nIntValue;
     break;
     case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
     // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
@@ -556,6 +561,11 @@ sal_Int16 SettingsTable::GetHyphenationZone() const
     return m_pImpl->m_nHyphenationZone;
 }
 
+sal_Int16 SettingsTable::GetConsecutiveHyphenLimit() const
+{
+    return m_pImpl->m_nConsecutiveHyphenLimit;
+}
+
 bool SettingsTable::GetHyphenationKeep() const
 {
     // if allowHyphenationAtTrackBottom is not true and useWord2013TrackBottomHyphenation is
@@ -715,6 +725,11 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
         xPropertySet->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(GetHyphenationZone()));
+    }
+    if (m_pImpl->m_nConsecutiveHyphenLimit)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any(GetConsecutiveHyphenLimit()));
     }
     if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, u"ParaWidows"_ustr) && lcl_isDefault(xPropertyState, u"ParaOrphans"_ustr))
     {
