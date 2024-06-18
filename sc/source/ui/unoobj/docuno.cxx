@@ -40,7 +40,6 @@
 #include <svx/svxids.hrc>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
