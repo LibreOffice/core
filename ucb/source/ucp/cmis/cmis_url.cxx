@@ -10,12 +10,30 @@
 #include <sal/config.h>
 
 #include <rtl/uri.hxx>
+#include <officecfg/Office/Security.hxx>
 #include <tools/urlobj.hxx>
 
 #include "cmis_url.hxx"
 
 namespace cmis
 {
+
+    static OUString CheckInsecureProtocol(OUString const& rURL)
+    {
+        OUString rest;
+        if (rURL.startsWithIgnoreAsciiCase("http://", &rest))
+        {
+            if (!officecfg::Office::Security::Net::AllowInsecureProtocols::get())
+            {
+                // "http" not allowed -> immediately redirect to "https",
+                // better than showing confusing error to user
+                return "https://" + rest;
+            }
+        }
+        return rURL;
+    }
+
+
     URL::URL( std::u16string_view urlStr )
     {
         INetURLObject aUrl( urlStr );
@@ -23,7 +41,7 @@ namespace cmis
         // Decode the authority to get the binding URL and repository id
         OUString sDecodedHost = aUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset );
         INetURLObject aHostUrl( sDecodedHost );
-        m_sBindingUrl = aHostUrl.GetURLNoMark( );
+        m_sBindingUrl = CheckInsecureProtocol(aHostUrl.GetURLNoMark());
         m_sRepositoryId = aHostUrl.GetMark( );
 
         m_sUser = aUrl.GetUser( INetURLObject::DecodeMechanism::WithCharset );

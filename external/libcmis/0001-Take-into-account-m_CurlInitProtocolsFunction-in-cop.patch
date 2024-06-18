@@ -1,0 +1,25 @@
+From 98e7e9f15449e0c8eaa12776c6c126ea0411002e Mon Sep 17 00:00:00 2001
+From: Julien Nabet <serval2412@yahoo.fr>
+Date: Fri, 23 Feb 2024 21:59:12 +0100
+Subject: [PATCH] Take into account m_CurlInitProtocolsFunction in copy
+ constructor HttpSession
+
+---
+ src/libcmis/http-session.cxx | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index 8d427a4..79bcc08 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -183,6 +183,7 @@ HttpSession::HttpSession( string username, string password, bool noSslCheck,
+ 
+ HttpSession::HttpSession( const HttpSession& copy ) :
+     m_curlHandle( NULL ),
++    m_CurlInitProtocolsFunction( copy.m_CurlInitProtocolsFunction ),
+     m_no100Continue( copy.m_no100Continue ),
+     m_oauth2Handler( copy.m_oauth2Handler ),
+     m_username( copy.m_username ),
+-- 
+2.45.1
+
