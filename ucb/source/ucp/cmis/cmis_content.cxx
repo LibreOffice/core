@@ -268,7 +268,7 @@ namespace cmis
         m_pSession( nullptr ),
         m_pObject(std::move( pObject )),
         m_sURL( Identifier->getContentIdentifier( ) ),
-        m_aURL( Identifier->getContentIdentifier( ) ),
+        m_aURL( m_sURL ),
         m_bTransient( false ),
         m_bIsFolder( false )
     {
@@ -285,7 +285,7 @@ namespace cmis
         m_pProvider( pProvider ),
         m_pSession( nullptr ),
         m_sURL( Identifier->getContentIdentifier( ) ),
-        m_aURL( Identifier->getContentIdentifier( ) ),
+        m_aURL( m_sURL ),
         m_bTransient( true ),
         m_bIsFolder( bIsFolder )
     {
