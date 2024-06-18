@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckParagraphIssues)
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckBackgroundImage)
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testNumberingCheck)
@@ -315,8 +315,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     auto aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     checkIssuePosition(aIssues[0], __LINE__, 0, 32, SwNodeOffset(9));
     checkIssuePosition(aIssues[1], __LINE__, 33, 136, SwNodeOffset(9));
 
@@ -334,8 +334,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
 
     aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     checkIssuePosition(aIssues[0], __LINE__, 0, 32, SwNodeOffset(9));
     checkIssuePosition(aIssues[1], __LINE__, 0, 103, SwNodeOffset(10));
 
@@ -354,9 +354,9 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
     checkIssuePosition(aIssues[0], __LINE__, 0, 32, SwNodeOffset(9));
     checkIssuePosition(aIssues[1], __LINE__, 0, 23, SwNodeOffset(10));
     checkIssuePosition(aIssues[2], __LINE__, 0, 80, SwNodeOffset(11));
@@ -371,8 +371,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     checkIssuePosition(aIssues[0], __LINE__, 0, 32, SwNodeOffset(9));
     checkIssuePosition(aIssues[1], __LINE__, 0, 103, SwNodeOffset(10));
 
@@ -386,8 +386,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
         getParagraph(1)->getString());
     aIssues = scanAccessibilityIssuesOnNodes(pDoc);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     checkIssuePosition(aIssues[0], __LINE__, 0, 32, SwNodeOffset(9));
     checkIssuePosition(aIssues[1], __LINE__, 33, 136, SwNodeOffset(9));
 }

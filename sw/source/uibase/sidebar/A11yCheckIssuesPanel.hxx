@@ -51,10 +51,11 @@ enum class AccessibilityCheckGroups : size_t
     NoAlt = 3,
     Table = 4,
     Formatting = 5,
-    Hyperlink = 6,
-    Fakes = 7,
-    Numbering = 8,
-    Other = 9,
+    DirectFormatting = 6,
+    Hyperlink = 7,
+    Fakes = 8,
+    Numbering = 9,
+    Other = 10,
     LAST = Other
 };
 
@@ -75,9 +76,9 @@ public:
     virtual ~A11yCheckIssuesPanel() override;
 
 private:
-    std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 10> m_aEntries;
-    std::array<std::unique_ptr<weld::Expander>, 10> m_xExpanders;
-    std::array<std::unique_ptr<weld::Box>, 10> m_xBoxes;
+    std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
+    std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
+    std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;
     std::unique_ptr<weld::Box> mxAccessibilityBox;
     std::unique_ptr<weld::Box> mxUpdateBox;
     std::unique_ptr<weld::LinkButton> mxUpdateLinkButton;
