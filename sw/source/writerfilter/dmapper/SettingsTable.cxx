@@ -141,7 +141,7 @@ struct SettingsTable_Impl
     , m_bNoColumnBalance(false)
     , m_bAutoHyphenation(false)
     , m_bNoHyphenateCaps(false)
-    , m_nHyphenationZone(0)
+    , m_nHyphenationZone( 360 ) // default is 1/4 in
     , m_nUseWord2013TrackBottomHyphenation(-1)
     , m_nAllowHyphenationAtTrackBottom(-1)
     , m_bWidowControl(false)
