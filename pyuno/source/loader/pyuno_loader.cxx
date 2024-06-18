@@ -270,7 +270,7 @@ pyuno_Loader_get_implementation(
     if (officecfg::Office::Common::Security::Scripting::DisablePythonRuntime::get(ctx))
         return nullptr;
 
-    // tdf#114815 init python only once, via single-instace="true" in pythonloader.component
+    // tdf#114815 init python only once, via single-instance="true" in pythonloader.component
     pythonInit();
 
     Reference< XInterface > ret;
