@@ -128,7 +128,7 @@
   new reference type library is taken from the release source tree OOD680m5.
 
 04/03/07 (JSC): TaskID=i76046
-  update reference type library with the rleased version of OO0.2.2.0. The new
+  update reference type library with the released version of OO0.2.2.0. The new
   reference type library is taken from the release source tree OOF680 m14.
 
 06/13/07 (MBA): TaskID=i26672
@@ -136,7 +136,7 @@
   never documented properties.
 
 09/26/07 (JSC): TaskID=i80473
-  update reference type library with the rleased version of OO.org 2.3. The new
+  update reference type library with the released version of OO.org 2.3. The new
   reference type library is taken from the release source tree OOG680 m5.
 
 03/17/08 (TL, JSC): TaskID=i85576
