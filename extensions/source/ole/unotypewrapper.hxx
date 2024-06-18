@@ -22,7 +22,7 @@
 
 #include "comifaces.hxx"
 
-/* creates a UnoTypWrapper and sets the Name property to the value
+/* creates a UnoTypeWrapper and sets the Name property to the value
    specified by sTypeName.
    Returns true if the object could be created and initialized.
  */
