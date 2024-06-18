@@ -524,12 +524,12 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
                             ( sEnd[0] == 'a' || sEnd[0] == 'o' || sEnd[0] == 'r' ) )
             {
                auto aExtendedSuffixes = comphelper::sequenceToContainer< std::vector<OUString> >(aSuffixes);
-               aExtendedSuffixes.push_back("as"); // plural form of 'a'
-               aExtendedSuffixes.push_back("os"); // plural form of 'o'
-               aExtendedSuffixes.push_back("ra"); // alternative form of 'a'
-               aExtendedSuffixes.push_back("ro"); // alternative form of 'o'
-               aExtendedSuffixes.push_back("ras"); // alternative form of "as"
-               aExtendedSuffixes.push_back("ros"); // alternative form of "os"
+               aExtendedSuffixes.push_back(u"as"_ustr); // plural form of 'a'
+               aExtendedSuffixes.push_back(u"os"_ustr); // plural form of 'o'
+               aExtendedSuffixes.push_back(u"ra"_ustr); // alternative form of 'a'
+               aExtendedSuffixes.push_back(u"ro"_ustr); // alternative form of 'o'
+               aExtendedSuffixes.push_back(u"ras"_ustr); // alternative form of "as"
+               aExtendedSuffixes.push_back(u"ros"_ustr); // alternative form of "os"
                aSuffixes = comphelper::containerToSequence(aExtendedSuffixes);
             }
 
@@ -552,7 +552,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
                                 rDoc.Delete( nNumEnd + 1, nNumEnd + 2 );
                                 nSuffixChanged = -1;
                             }
-                            rDoc.Insert( nNumEnd + 1, "." );
+                            rDoc.Insert( nNumEnd + 1, u"."_ustr );
                             nNumberChanged = 1;
                         }
 

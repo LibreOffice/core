@@ -624,8 +624,8 @@ SfxDocumentDescPage::SfxDocumentDescPage(weld::Container* pPage, weld::DialogCon
     , m_xTitleEd(m_xBuilder->weld_entry(u"title"_ustr))
     , m_xThemaEd(m_xBuilder->weld_entry(u"subject"_ustr))
     , m_xKeywordsEd(m_xBuilder->weld_entry(u"keywords"_ustr))
-    , m_xMoreTypes(m_xBuilder->weld_combo_box("cbMoreTypes"))
-    , m_xMoreValue(m_xBuilder->weld_entry("edMoreValue"))
+    , m_xMoreTypes(m_xBuilder->weld_combo_box(u"cbMoreTypes"_ustr))
+    , m_xMoreValue(m_xBuilder->weld_entry(u"edMoreValue"_ustr))
     , m_xCommentEd(m_xBuilder->weld_text_view(u"comments"_ustr))
 {
     m_xCommentEd->set_size_request(-1, //m_xKeywordsEd->get_preferred_size().Width(),

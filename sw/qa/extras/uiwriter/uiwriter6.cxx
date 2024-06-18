@@ -1510,8 +1510,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
-    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
-    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTableNames->hasByName(u"Table1"_ustr));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName(u"Table1"_ustr),
+                                             uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable1->getColumns()->getCount());
 
@@ -1577,8 +1578,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
-    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
-    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTableNames->hasByName(u"Table1"_ustr));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName(u"Table1"_ustr),
+                                             uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable1->getColumns()->getCount());
 
@@ -1812,7 +1814,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
     CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType);
 
     // remove selection
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     // select text frame by clicking on it at the right side of the bottom cell
     auto pRow2 = pRow1->GetNext();
@@ -1873,7 +1875,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426)
     CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType);
 
     // remove selection
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     // select text frame by clicking on it at the right side of the bottom right cell
     auto pRow2 = pRow1->GetNext();
@@ -2028,7 +2030,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
 
     // select the text frame instead of the image
     // by pressing Escape
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     // Then make sure that the cursor in the table:
     SelectionType eType2 = pWrtShell->GetSelectionType();
@@ -2037,13 +2039,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
     CPPUNIT_ASSERT(bCursorInTable);
 
     // select the text frame by pressing Escape again
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     eType2 = pWrtShell->GetSelectionType();
     CPPUNIT_ASSERT_EQUAL(SelectionType::Frame, eType2);
 
     // deselect the text frame by pressing Escape again
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     eType2 = pWrtShell->GetSelectionType();
     // The text cursor is after the floating table
@@ -2066,7 +2068,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
     xCtrl->select(uno::Any(xShape));
 
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     // Then make sure that the cursor in the table:
     SelectionType eType2 = pWrtShell->GetSelectionType();
@@ -2081,7 +2083,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     uno::Reference<drawing::XShape> xShape2(getShapeByName(u"Objet11"));
     xCtrl->select(uno::Any(xShape2));
 
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     SwTextNode* pTextNode2 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // This was false (lost text cursor inside the frame of the formula)
@@ -2089,19 +2091,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     SwTableNode* pTableNode = pWrtShell->GetCursor()->GetPointNode().FindTableNode();
     SwTable& rTable = pTableNode->GetTable();
     // cursor in the same cell
-    bool bSameBox = pTextNode2->GetTableBox() == rTable.GetTableBox("A1");
+    bool bSameBox = pTextNode2->GetTableBox() == rTable.GetTableBox(u"A1"_ustr);
     CPPUNIT_ASSERT(bSameBox);
 
     uno::Reference<drawing::XShape> xShape3(getShapeByName(u"Objet10"));
     xCtrl->select(uno::Any(xShape3));
 
-    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
 
     SwTextNode* pTextNode3 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // This was false (lost text cursor inside the frame of the formula)
     CPPUNIT_ASSERT(pTextNode3->GetTableBox());
     // cursor in the same cell
-    bSameBox = pTextNode3->GetTableBox() == rTable.GetTableBox("B1");
+    bSameBox = pTextNode3->GetTableBox() == rTable.GetTableBox(u"B1"_ustr);
     CPPUNIT_ASSERT(bSameBox);
 }
 

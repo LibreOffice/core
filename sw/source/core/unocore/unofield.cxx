@@ -2980,7 +2980,7 @@ css::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
 
 void SAL_CALL SwXTextFieldTypes::removeByUniqueID(const OUString& /*ID*/)
 {
-    throw uno::RuntimeException("unsupported");
+    throw uno::RuntimeException(u"unsupported"_ustr);
 }
 
 class SwXFieldEnumeration::Impl

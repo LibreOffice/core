@@ -1024,7 +1024,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetRightBottomAlignedMultiLineTextRect)
 CPPUNIT_TEST_FIXTURE(VclTextTest, testPartialTextArraySizeMatch)
 {
     OUString aWater = u"Water"_ustr;
-    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);

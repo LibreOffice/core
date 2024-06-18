@@ -97,21 +97,21 @@ IMPL_LINK(SwFootNotePage, LineColorSelected_Impl, ColorListBox&, rColorBox, void
 SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/footnoteareapage.ui"_ustr, u"FootnoteAreaPage"_ustr, &rSet)
     , m_lMaxHeight(0)
-    , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button("maxheightpage"))
-    , m_xMaxHeightBtn(m_xBuilder->weld_radio_button("maxheight"))
-    , m_xMaxHeightEdit(m_xBuilder->weld_metric_spin_button("maxheightsb", FieldUnit::CM))
-    , m_xDistLabel(m_xBuilder->weld_label("spacetotextlabel"))
-    , m_xDistEdit(m_xBuilder->weld_metric_spin_button("spacetotext", FieldUnit::CM))
-    , m_xLinePosLabel(m_xBuilder->weld_label("positionlabel"))
-    , m_xLinePosBox(m_xBuilder->weld_combo_box("position"))
-    , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button("style")))
-    , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button("thickness", FieldUnit::POINT))
-    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+    , m_xMaxHeightPageBtn(m_xBuilder->weld_radio_button(u"maxheightpage"_ustr))
+    , m_xMaxHeightBtn(m_xBuilder->weld_radio_button(u"maxheight"_ustr))
+    , m_xMaxHeightEdit(m_xBuilder->weld_metric_spin_button(u"maxheightsb"_ustr, FieldUnit::CM))
+    , m_xDistLabel(m_xBuilder->weld_label(u"spacetotextlabel"_ustr))
+    , m_xDistEdit(m_xBuilder->weld_metric_spin_button(u"spacetotext"_ustr, FieldUnit::CM))
+    , m_xLinePosLabel(m_xBuilder->weld_label(u"positionlabel"_ustr))
+    , m_xLinePosBox(m_xBuilder->weld_combo_box(u"position"_ustr))
+    , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button(u"style"_ustr)))
+    , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button(u"thickness"_ustr, FieldUnit::POINT))
+    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button(u"color"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
-    , m_xLineLengthLabel(m_xBuilder->weld_label("lengthlabel"))
-    , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button("length", FieldUnit::PERCENT))
-    , m_xLineDistLabel(m_xBuilder->weld_label("spacingtocontentslabel"))
-    , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button("spacingtocontents", FieldUnit::CM))
+    , m_xLineLengthLabel(m_xBuilder->weld_label(u"lengthlabel"_ustr))
+    , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button(u"length"_ustr, FieldUnit::PERCENT))
+    , m_xLineDistLabel(m_xBuilder->weld_label(u"spacingtocontentslabel"_ustr))
+    , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button(u"spacingtocontents"_ustr, FieldUnit::CM))
 {
     SetExchangeSupport();
     FieldUnit aMetric = ::GetDfltMetric(false);
@@ -125,7 +125,7 @@ SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* p
     bool bContinuousEndnotes = false;
     if (const SfxGrabBagItem* pGragbagItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
-        auto it = pGragbagItem->GetGrabBag().find("ContinuousEndnotes");
+        auto it = pGragbagItem->GetGrabBag().find(u"ContinuousEndnotes"_ustr);
         if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= bContinuousEndnotes;

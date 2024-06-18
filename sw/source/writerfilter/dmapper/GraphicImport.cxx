@@ -1954,54 +1954,54 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
             }
 
             // copy the image fill area properties
-            xGraphicObject->setPropertyValue("FillBackground",
-                                             xShapeProps->getPropertyValue("FillBackground"));
-            xGraphicObject->setPropertyValue("FillBitmap",
-                                             xShapeProps->getPropertyValue("FillBitmap"));
+            xGraphicObject->setPropertyValue(u"FillBackground"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBackground"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmap"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmap"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillBitmapLogicalSize", xShapeProps->getPropertyValue("FillBitmapLogicalSize"));
-            xGraphicObject->setPropertyValue("FillBitmapMode",
-                                             xShapeProps->getPropertyValue("FillBitmapMode"));
-            xGraphicObject->setPropertyValue("FillBitmapOffsetX",
-                                             xShapeProps->getPropertyValue("FillBitmapOffsetX"));
+                u"FillBitmapLogicalSize"_ustr, xShapeProps->getPropertyValue(u"FillBitmapLogicalSize"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapMode"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapMode"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapOffsetX"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapOffsetX"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillBitmapPositionOffsetX",
-                xShapeProps->getPropertyValue("FillBitmapPositionOffsetX"));
+                u"FillBitmapPositionOffsetX"_ustr,
+                xShapeProps->getPropertyValue(u"FillBitmapPositionOffsetX"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillBitmapPositionOffsetY",
-                xShapeProps->getPropertyValue("FillBitmapPositionOffsetY"));
+                u"FillBitmapPositionOffsetY"_ustr,
+                xShapeProps->getPropertyValue(u"FillBitmapPositionOffsetY"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillBitmapRectanglePoint",
-                xShapeProps->getPropertyValue("FillBitmapRectanglePoint"));
-            xGraphicObject->setPropertyValue("FillBitmapSizeX",
-                                             xShapeProps->getPropertyValue("FillBitmapSizeX"));
-            xGraphicObject->setPropertyValue("FillBitmapSizeY",
-                                             xShapeProps->getPropertyValue("FillBitmapSizeY"));
-            xGraphicObject->setPropertyValue("FillBitmapStretch",
-                                             xShapeProps->getPropertyValue("FillBitmapStretch"));
-            xGraphicObject->setPropertyValue("FillBitmapTile",
-                                             xShapeProps->getPropertyValue("FillBitmapTile"));
-            xGraphicObject->setPropertyValue("FillBitmapURL",
-                                             xShapeProps->getPropertyValue("FillBitmapURL"));
-            xGraphicObject->setPropertyValue("FillColor",
-                                             xShapeProps->getPropertyValue("FillColor"));
-            xGraphicObject->setPropertyValue("FillColor2",
-                                             xShapeProps->getPropertyValue("FillColor2"));
-            xGraphicObject->setPropertyValue("FillComplexColor",
-                                             xShapeProps->getPropertyValue("FillComplexColor"));
-            xGraphicObject->setPropertyValue("FillGradient",
-                                             xShapeProps->getPropertyValue("FillGradient"));
+                u"FillBitmapRectanglePoint"_ustr,
+                xShapeProps->getPropertyValue(u"FillBitmapRectanglePoint"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapSizeX"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapSizeX"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapSizeY"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapSizeY"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapStretch"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapStretch"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapTile"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapTile"_ustr));
+            xGraphicObject->setPropertyValue(u"FillBitmapURL"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillBitmapURL"_ustr));
+            xGraphicObject->setPropertyValue(u"FillColor"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillColor"_ustr));
+            xGraphicObject->setPropertyValue(u"FillColor2"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillColor2"_ustr));
+            xGraphicObject->setPropertyValue(u"FillComplexColor"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillComplexColor"_ustr));
+            xGraphicObject->setPropertyValue(u"FillGradient"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillGradient"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillGradientStepCount", xShapeProps->getPropertyValue("FillGradientStepCount"));
-            xGraphicObject->setPropertyValue("FillHatch",
-                                             xShapeProps->getPropertyValue("FillHatch"));
-            xGraphicObject->setPropertyValue("FillStyle",
-                                             xShapeProps->getPropertyValue("FillStyle"));
-            xGraphicObject->setPropertyValue("FillTransparence",
-                                             xShapeProps->getPropertyValue("FillTransparence"));
+                u"FillGradientStepCount"_ustr, xShapeProps->getPropertyValue(u"FillGradientStepCount"_ustr));
+            xGraphicObject->setPropertyValue(u"FillHatch"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillHatch"_ustr));
+            xGraphicObject->setPropertyValue(u"FillStyle"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
+            xGraphicObject->setPropertyValue(u"FillTransparence"_ustr,
+                                             xShapeProps->getPropertyValue(u"FillTransparence"_ustr));
             xGraphicObject->setPropertyValue(
-                "FillTransparenceGradient",
-                xShapeProps->getPropertyValue("FillTransparenceGradient"));
+                u"FillTransparenceGradient"_ustr,
+                xShapeProps->getPropertyValue(u"FillTransparenceGradient"_ustr));
 
             m_pImpl->applyZOrder(xGraphicObject);
 

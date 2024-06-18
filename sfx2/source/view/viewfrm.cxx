@@ -1645,7 +1645,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         wantsWhatsNew = false;
                         if (officecfg::Setup::Product::WhatsNew::get())
                         {
-                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
+                            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(u"whatsnew"_ustr, u""_ustr, SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
                             if (pInfoBar)
                             {
                                 weld::Button& rWhatsNewButton = pInfoBar->addButton();

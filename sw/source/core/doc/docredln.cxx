@@ -1012,7 +1012,7 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
                 continue;
             }
 
-            OUString sPairTrimmed = "";
+            OUString sPairTrimmed = u""_ustr;
             SwRedlineTable::size_type nPairStart = nPosAct;
             SwRedlineTable::size_type nPairEnd = nPosAct;
 

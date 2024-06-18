@@ -33,7 +33,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/dmapper/data/")
+        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreakSectEnd)
     // - Actual  : Text
     // i.e. the clearing break at sect end was lost, leading to text overlap.
     CPPUNIT_ASSERT_EQUAL(u"LineBreak"_ustr,
-                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+                         xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)

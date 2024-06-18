@@ -235,7 +235,7 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetDocHdl, ValueSet*, void)
     OUString sFont(aCustomBullets[nSelItem].second);
     auto aArgs(comphelper::InitPropertySequence(
         { { "BulletChar", css::uno::Any(nChar) }, { "BulletFont", css::uno::Any(sFont) } }));
-    mrController.dispatchCommand(".uno:SetBullet", aArgs);
+    mrController.dispatchCommand(u".uno:SetBullet"_ustr, aArgs);
     mrController.EndPopupMode();
 }
 

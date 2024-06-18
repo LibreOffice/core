@@ -23,7 +23,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/sw/qa/writerfilter/rtftok/data/")
+        : UnoApiXmlTest(u"/sw/qa/writerfilter/rtftok/data/"_ustr)
     {
     }
 };

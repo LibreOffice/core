@@ -758,7 +758,7 @@ namespace frm
             m_bProdStarted = false;
 
             OUString referer;
-            getPropertyValue("Referer") >>= referer;
+            getPropertyValue(u"Referer"_ustr) >>= referer;
             if (!SvtSecurityOptions::isUntrustedReferer(referer)) {
                 // Kick off download (caution: can be synchronous).
                 m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));

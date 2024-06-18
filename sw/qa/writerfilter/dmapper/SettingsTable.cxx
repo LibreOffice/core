@@ -24,7 +24,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/sw/qa/writerfilter/dmapper/data/")
+        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -102,9 +102,9 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnoteAtSectionEnd)
     xParaEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSection;
-    xPara->getPropertyValue("TextSection") >>= xSection;
+    xPara->getPropertyValue(u"TextSection"_ustr) >>= xSection;
     bool bEndnoteIsCollectAtTextEnd = false;
-    xSection->getPropertyValue("EndnoteIsCollectAtTextEnd") >>= bEndnoteIsCollectAtTextEnd;
+    xSection->getPropertyValue(u"EndnoteIsCollectAtTextEnd"_ustr) >>= bEndnoteIsCollectAtTextEnd;
     // Without the accompanying fix in place, this test would have failed, endnotes were always at
     // document end.
     CPPUNIT_ASSERT(bEndnoteIsCollectAtTextEnd);

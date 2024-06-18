@@ -49,21 +49,21 @@ ModuleController::ModuleController(const rtl::Reference<::sd::DrawController>& r
         mpResourceToFactoryMap member.
     */
     ProcessFactory(
-        "com.sun.star.drawing.framework.BasicPaneFactory",
-        { "private:resource/pane/CenterPane",
-          "private:resource/pane/LeftImpressPane",
-          "private:resource/pane/BottomImpressPane",
-          "private:resource/pane/LeftDrawPane" });
+        u"com.sun.star.drawing.framework.BasicPaneFactory"_ustr,
+        { u"private:resource/pane/CenterPane"_ustr,
+          u"private:resource/pane/LeftImpressPane"_ustr,
+          u"private:resource/pane/BottomImpressPane"_ustr,
+          u"private:resource/pane/LeftDrawPane"_ustr });
     ProcessFactory(
-        "com.sun.star.drawing.framework.BasicViewFactory",
-        { "private:resource/view/ImpressView",
-          "private:resource/view/GraphicView",
-          "private:resource/view/OutlineView",
-          "private:resource/view/NotesView",
-          "private:resource/view/NotesPanelView",
-          "private:resource/view/HandoutView",
-          "private:resource/view/SlideSorter",
-        "private:resource/view/PresentationView" });
+        u"com.sun.star.drawing.framework.BasicViewFactory"_ustr,
+        { u"private:resource/view/ImpressView"_ustr,
+          u"private:resource/view/GraphicView"_ustr,
+          u"private:resource/view/OutlineView"_ustr,
+          u"private:resource/view/NotesView"_ustr,
+          u"private:resource/view/NotesPanelView"_ustr,
+          u"private:resource/view/HandoutView"_ustr,
+          u"private:resource/view/SlideSorter"_ustr,
+        u"private:resource/view/PresentationView"_ustr });
     ProcessFactory(
         u"com.sun.star.drawing.framework.BasicToolBarFactory"_ustr,
         { u"private:resource/toolbar/ViewTabBar"_ustr });

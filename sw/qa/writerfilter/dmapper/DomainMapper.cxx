@@ -26,7 +26,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/dmapper/data/")
+        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -176,9 +176,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorder)
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextTable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xCell(xPara->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell(xPara->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     sal_Int32 nLeftBorderDistance{};
-    xCell->getPropertyValue("LeftBorderDistance") >>= nLeftBorderDistance;
+    xCell->getPropertyValue(u"LeftBorderDistance"_ustr) >>= nLeftBorderDistance;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 203
     // - Actual  : 0

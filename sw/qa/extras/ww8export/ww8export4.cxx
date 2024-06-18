@@ -61,21 +61,21 @@ DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc
     // given a default paragraph style with a left indent of 2 inches,
     // the comment should ignore the indent, but the textbox must not.
     uno::Reference<beans::XPropertySet> xRun(
-        getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 3), "TextField"));
-    uno::Reference<text::XText> xComment(getProperty<uno::Reference<text::XText>>(xRun, "TextRange"));
+        getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 3), u"TextField"_ustr));
+    uno::Reference<text::XText> xComment(getProperty<uno::Reference<text::XText>>(xRun, u"TextRange"_ustr));
     uno::Reference<beans::XPropertySet> xParagraph(getParagraphOfText(1, xComment), uno::UNO_QUERY);
     // The comment was indented by 4001 (2 inches) instead of nothing
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, u"ParaLeftMargin"_ustr));
 
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShape2->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.TextShape"_ustr, xShape2->getShapeType());
     uno::Reference<text::XTextRange> xTextbox(xShape2, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xTBPara(xTextbox, uno::UNO_QUERY);
     // Textbox paragraphs had no indent instead of 5080 (2 inches - the same as normal paragraphs).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xTBPara, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xTBPara, u"ParaLeftMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("sanity check: normal paragraph's indent", sal_Int32(5080),
-                                 getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+                                 getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf160049_anchorMargin, "tdf160049_anchorMargin.doc")
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         pWrtShell->SplitNode();
         pWrtShell->Up(/*bSelect=*/false);
-        pWrtShell->Insert("x");
+        pWrtShell->Insert(u"x"_ustr);
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
         SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
         pWrtShell->StartAction();
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
     }
 
     // When saving to DOC:
-    saveAndReload("MS Word 97");
+    saveAndReload(u"MS Word 97"_ustr);
 
     // Then make sure the endnote position is section end:
     SwDoc* pDoc = getSwDoc();

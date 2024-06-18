@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialKoreanJamoComposition)
 {
     OUString aStr = u"은"_ustr;
-    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
@@ -664,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialKoreanJamoComposition)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialArabicComposition)
 {
     OUString aStr = u"سُكُونْ"_ustr;
-    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);

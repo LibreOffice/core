@@ -766,7 +766,7 @@ void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XP
         {
             std::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
             if ( pProp )
-                xSection->setPropertyValue( "WritingMode", pProp->second );
+                xSection->setPropertyValue( u"WritingMode"_ustr, pProp->second );
 
             if (rDM_Impl.GetSettingsTable()->GetEndnoteIsCollectAtSectionEnd())
             {

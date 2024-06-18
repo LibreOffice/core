@@ -21,7 +21,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/ooxml/data/")
+        : UnoApiTest(u"/sw/qa/writerfilter/ooxml/data/"_ustr)
     {
     }
 };

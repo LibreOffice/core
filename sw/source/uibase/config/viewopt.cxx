@@ -212,7 +212,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 SwTwips SwViewOption::GetPostItsWidth(const OutputDevice* pOut)
 {
     assert(pOut && "no Outdev");
-    return pOut->GetTextWidth("  ");
+    return pOut->GetTextWidth(u"  "_ustr);
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript ) const

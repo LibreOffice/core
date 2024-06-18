@@ -1980,8 +1980,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 if (nContentType == ContentTypeId::POSTIT)
                 {
                     const SwViewOption* m_pViewOpt = m_pActiveShell->GetViewOptions();
-                    xPop->set_active("showcomments", m_pViewOpt->IsPostIts());
-                    xPop->set_active("showresolvedcomments", m_pViewOpt->IsResolvedPostIts());
+                    xPop->set_active(u"showcomments"_ustr, m_pViewOpt->IsPostIts());
+                    xPop->set_active(u"showresolvedcomments"_ustr, m_pViewOpt->IsResolvedPostIts());
                     bRemovePostItEntries = false;
                 }
                 else if (nContentType == ContentTypeId::FOOTNOTE)
@@ -2014,8 +2014,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemovePostItEntries)
     {
-        xPop->remove("showcomments");
-        xPop->remove("showresolvedcomments");
+        xPop->remove(u"showcomments"_ustr);
+        xPop->remove(u"showresolvedcomments"_ustr);
         xPop->remove(OUString::number(602));
     }
 

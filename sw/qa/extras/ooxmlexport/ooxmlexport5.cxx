@@ -318,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeleft)
 CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 {
     loadAndSave("ooo96040-2.odt");
-    parseExport("word/document.xml");
+    parseExport(u"word/document.xml"_ustr);
 
     // Check tdf#161202 - this document has all kinds of tables inside hidden sections.
     // The page count must be 13, but for unclear reason, it is 12 in some tests on Linux

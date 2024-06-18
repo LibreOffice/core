@@ -33,7 +33,7 @@ class AnnotationTest : public SdModelTestBase
 {
 public:
     AnnotationTest()
-        : SdModelTestBase("/sd/qa/unit/data/")
+        : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
 };
@@ -52,9 +52,9 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotation)
         rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
         CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
-        xAnnotation->setAuthor("A");
+        xAnnotation->setAuthor(u"A"_ustr);
         uno::Reference<text::XText> xText(xAnnotation->getTextRange());
-        xText->setString("X");
+        xText->setString(u"X"_ustr);
 
         xAnnotation->setPosition(geometry::RealPoint2D(0.0, 0.0));
         xAnnotation->setSize(geometry::RealSize2D(10.0, 10.0));
@@ -72,9 +72,9 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotation)
         rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
         CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 
-        xAnnotation->setAuthor("B");
+        xAnnotation->setAuthor(u"B"_ustr);
         uno::Reference<text::XText> xText(xAnnotation->getTextRange());
-        xText->setString("XXX");
+        xText->setString(u"XXX"_ustr);
 
         xAnnotation->setPosition(geometry::RealPoint2D(10.0, 10.0));
         xAnnotation->setSize(geometry::RealSize2D(10.0, 10.0));
@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsert)
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
@@ -117,9 +117,9 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "Id", uno::Any(OUString::number(xAnnotation->GetId())) },
     }));
-    dispatchCommand(mxComponent, ".uno:DeleteAnnotation", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
@@ -156,8 +156,8 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
@@ -169,24 +169,24 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
 
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
 
-    dispatchCommand(mxComponent, ".uno:DeleteAnnotation", {});
+    dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
 
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
@@ -209,7 +209,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationUpdate)
     aArgs = comphelper::InitPropertySequence({
         { "Text", uno::Any(u"Comment"_ustr) },
     });
-    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     SdrObject* pObject = pPage->GetObj(0);
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationUpdate)
                                                { "PositionX", uno::Any(sal_Int32(1440)) },
                                                { "PositionY", uno::Any(sal_Int32(14400)) } });
 
-    dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+    dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, pAnnotationData->mxAnnotation->getPosition().X, 1E-4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(254.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);

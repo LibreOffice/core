@@ -20,7 +20,7 @@ class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiTest("/sw/qa/writerfilter/rtftok/data/")
+        : UnoApiTest(u"/sw/qa/writerfilter/rtftok/data/"_ustr)
     {
     }
 };

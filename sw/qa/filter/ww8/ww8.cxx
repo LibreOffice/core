@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SplitNode();
     pWrtShell->Up(/*bSelect=*/false);
-    pWrtShell->Insert("x");
+    pWrtShell->Insert(u"x"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
     pWrtShell->StartAction();
@@ -588,15 +588,15 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
     pWrtShell->InsertFootnote(OUString(), /*bEndNote=*/true);
 
     // When saving to DOCX:
-    save("Office Open XML Text");
+    save(u"Office Open XML Text"_ustr);
 
     // Then make sure the endnote position is section end:
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
     OUString aPos = getXPath(pXmlDoc, "/w:settings/w:endnotePr/w:pos"_ostr, "val"_ostr);
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '/w:settings/w:endnotePr/w:pos' number of nodes is incorrect
     // i.e. the default position was used: document end.
-    CPPUNIT_ASSERT_EQUAL(OUString("sectEnd"), aPos);
+    CPPUNIT_ASSERT_EQUAL(u"sectEnd"_ustr, aPos);
 }
 }
 

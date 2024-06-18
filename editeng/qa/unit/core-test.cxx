@@ -810,7 +810,7 @@ void Test::testHTMLPaste()
     EditDoc& rDoc = aEditEngine.GetEditDoc();
     //OString aHTML("<!DOCTYPE html>\n<html><body>test</body></html>"_ostr);
     std::vector<OString> aContent({ "<!DOCTYPE html>\n<html><body>test</body></html>"_ostr });
-    std::vector<OUString> aMime({ "text/html" });
+    std::vector<OUString> aMime({ u"text/html"_ustr });
 
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
     // When trying to paste HTML:
@@ -830,7 +830,7 @@ void Test::testHTMLFragmentPaste()
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
     std::vector<OString> aContent({ "a<b>b</b>c"_ostr });
-    std::vector<OUString> aMime({ "text/html" });
+    std::vector<OUString> aMime({ u"text/html"_ustr });
 
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
 
@@ -852,7 +852,7 @@ void Test::testRTFPaste()
     EditDoc& rDoc = aEditEngine.GetEditDoc();
     std::vector<OString> aContent(
         { "{\\rtf1\\adeflang1025\\ansi{\\ul www.libreoffice.org}}"_ostr });
-    std::vector<OUString> aMime({ "text/richtext" });
+    std::vector<OUString> aMime({ u"text/richtext"_ustr });
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
 
     // When trying to paste HTML:
@@ -863,7 +863,7 @@ void Test::testRTFPaste()
     // - Expected: www.libreoffice.org
     // - Actual  :
     // i.e. RTF and plain text paste worked, but not HTML.
-    CPPUNIT_ASSERT_EQUAL(OUString("www.libreoffice.org"),
+    CPPUNIT_ASSERT_EQUAL(u"www.libreoffice.org"_ustr,
                          rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
@@ -886,8 +886,8 @@ void Test::testRTFHTMLPaste()
           "</head><body lang=\"de-DE\" link=\"#000080\" vlink=\"#800000\" dir=\"ltr\">"
           "<p style=\"line-height: 100%; margin-bottom: 0cm\">abc</p></body></html>"_ostr });
     std::vector<OUString> aMime(
-        { "text/richtext",
-          "application/x-openoffice-html-simple;windows_formatname=\"HTML Format\"" });
+        { u"text/richtext"_ustr,
+          u"application/x-openoffice-html-simple;windows_formatname=\"HTML Format\""_ustr });
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
 
     // When trying to paste HTML:
@@ -897,7 +897,7 @@ void Test::testRTFHTMLPaste()
     // expected "abc"
     // wrong: www.libreoffice.org
     // i.e. HTML is preferred over HTML.
-    CPPUNIT_ASSERT_EQUAL(OUString("abc"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 void Test::testMultiParaSelCopyPaste()
 {

@@ -323,19 +323,19 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue(u"TabOverSpacing"_ustr, uno::Any(true));
     xSettings->setPropertyValue(u"UnbreakableNumberings"_ustr, uno::Any(true));
 
-    xSettings->setPropertyValue("ClippedPictures", uno::Any(true));
-    xSettings->setPropertyValue("BackgroundParaOverDrawings", uno::Any(true));
-    xSettings->setPropertyValue("TreatSingleColumnBreakAsPageBreak", uno::Any(true));
-    xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::Any(true));
-    xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::Any(true));
-    xSettings->setPropertyValue("DisableOffPagePositioning", uno::Any(true));
-    xSettings->setPropertyValue("DropCapPunctuation", uno::Any(true));
-    xSettings->setPropertyValue("PaintHellOverHeaderFooter", uno::Any(true));
+    xSettings->setPropertyValue(u"ClippedPictures"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"BackgroundParaOverDrawings"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"TreatSingleColumnBreakAsPageBreak"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"PropLineSpacingShrinksFirstLine"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotCaptureDrawObjsOnPage"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"DisableOffPagePositioning"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"DropCapPunctuation"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"PaintHellOverHeaderFooter"_ustr, uno::Any(true));
 
     // rely on default for HyphenateURLs=false
     // rely on default for APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH=true
-    xSettings->setPropertyValue("DoNotMirrorRtlDrawObjs", uno::Any(true));
-    xSettings->setPropertyValue("ContinuousEndnotes", uno::Any(true));
+    xSettings->setPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr, uno::Any(true));
+    xSettings->setPropertyValue(u"ContinuousEndnotes"_ustr, uno::Any(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)

@@ -30,7 +30,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/sw/qa/writerfilter/dmapper/data/")
+        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -242,11 +242,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorderSpacing)
     uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xText->createEnumeration();
     uno::Reference<text::XTextTable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xCell(xPara->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xCell(xPara->getCellByName(u"A1"_ustr),
+                                                        uno::UNO_QUERY);
     xParaEnum = xCell->createEnumeration();
     uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nTopBorderDistance{};
-    xParaProps->getPropertyValue("TopBorderDistance") >>= nTopBorderDistance;
+    xParaProps->getPropertyValue(u"TopBorderDistance"_ustr) >>= nTopBorderDistance;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 35
     // - Actual  : 0

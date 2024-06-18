@@ -2176,7 +2176,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                     vcl::pdf::PDFNote aNote;
                     // The title should consist of the author and the date:
-                    aNote.maTitle = pField->GetPar1() + ", " + sDate + ", " + (pField->GetResolved() ? SwResId(STR_RESOLVED) : "");
+                    aNote.maTitle = pField->GetPar1() + ", " + sDate + ", " + (pField->GetResolved() ? SwResId(STR_RESOLVED) : u""_ustr);
                     // Guess what the contents contains...
                     aNote.maContents = pField->GetText();
 

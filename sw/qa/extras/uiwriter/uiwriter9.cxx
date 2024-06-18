@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
         size_t(1), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
 
     pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
-                                                                            "");
+                                                                            u""_ustr);
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
@@ -667,13 +667,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     CPPUNIT_ASSERT(!pWrtShell->HasSelection());
 
     // Undo and check, that the "Text" is selected
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // Without the fix, this would fail
     CPPUNIT_ASSERT(pWrtShell->HasSelection());
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, pWrtShell->GetSelText());
 
     // Redo and check, that the "Word" is selected
-    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell->HasSelection());
     CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
 }

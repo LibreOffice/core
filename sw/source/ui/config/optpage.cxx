@@ -2570,15 +2570,15 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin, cons
 }
 
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, "modules/swriter/ui/optcomparison.ui", "OptComparison", &rSet)
-    , m_xAutoRB(m_xBuilder->weld_radio_button("auto"))
-    , m_xWordRB(m_xBuilder->weld_radio_button("byword"))
-    , m_xCharRB(m_xBuilder->weld_radio_button("bycharacter"))
-    , m_xCompareModeImg(m_xBuilder->weld_widget("lockcomparemode"))
-    , m_xRsidCB(m_xBuilder->weld_check_button("useRSID"))
-    , m_xRsidImg(m_xBuilder->weld_widget("lockuseRSID"))
-    , m_xStoreRsidCB(m_xBuilder->weld_check_button("storeRSID"))
-    , m_xStoreRsidImg(m_xBuilder->weld_widget("lockstoreRSID"))
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/optcomparison.ui"_ustr, u"OptComparison"_ustr, &rSet)
+    , m_xAutoRB(m_xBuilder->weld_radio_button(u"auto"_ustr))
+    , m_xWordRB(m_xBuilder->weld_radio_button(u"byword"_ustr))
+    , m_xCharRB(m_xBuilder->weld_radio_button(u"bycharacter"_ustr))
+    , m_xCompareModeImg(m_xBuilder->weld_widget(u"lockcomparemode"_ustr))
+    , m_xRsidCB(m_xBuilder->weld_check_button(u"useRSID"_ustr))
+    , m_xRsidImg(m_xBuilder->weld_widget(u"lockuseRSID"_ustr))
+    , m_xStoreRsidCB(m_xBuilder->weld_check_button(u"storeRSID"_ustr))
+    , m_xStoreRsidImg(m_xBuilder->weld_widget(u"lockstoreRSID"_ustr))
 {
     Link<weld::Toggleable&,void> aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
     m_xAutoRB->connect_toggled( aLnk );
@@ -2606,7 +2606,7 @@ OUString SwCompareOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString radioButton[] = { "auto", "byword", "bycharacter" };
+    OUString radioButton[] = { u"auto"_ustr, u"byword"_ustr, u"bycharacter"_ustr };
 
     for (const auto& radio : radioButton)
     {

@@ -869,9 +869,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                "C DE");
+                u"C DE"_ustr);
     // 5 is empty and hidden
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
@@ -892,7 +892,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
     // 5 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
     // frame; ideally it should only be hidden when control codes are hidden
     // and be a full-height frame now, but that needs more work...
-    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
@@ -901,9 +901,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                "C DE");
+                u"C DE"_ustr);
     // 5 is empty and hidden
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
@@ -2339,7 +2339,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
 
     assertXPathContent(
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textarray/text"_ostr,
-        "hello");
+        u"hello"_ustr);
     // This failed, text color was #000000.
     assertXPath(
         pXmlDoc,

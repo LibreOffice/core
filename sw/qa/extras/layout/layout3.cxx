@@ -2765,7 +2765,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_page_break)
     assertXPath(pExportDump, "//page/body/txt"_ostr, 3);
     assertXPath(pExportDump, "//page/body/section"_ostr, 1);
 
-    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
     assertXPath(pExportDump, "//page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 6);
     assertXPath(pExportDump, "//page/body/section/txt"_ostr, 7);
     assertXPath(pExportDump, "//page/body/section/txt[1]/SwParaPortion"_ostr, 0);
@@ -2854,7 +2854,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
     assertXPath(pExportDump, "//page"_ostr, 1);
     assertXPath(pExportDump, "//page/body/txt"_ostr, 22);
     assertXPath(pExportDump, "//page/body/section"_ostr, 1);
-    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+    assertXPath(pExportDump, "//page/body/section/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
 
     // Show the section again
     xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));

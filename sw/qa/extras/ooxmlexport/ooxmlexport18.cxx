@@ -1053,12 +1053,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_h
     // and an overlapping blue rectangle anchored in the body text.
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("HeaderImage"),
-                         getProperty<OUString>(zOrder0, "LinkDisplayName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("BodyBlueRectangle"),
-                         getProperty<OUString>(zOrder1, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+    CPPUNIT_ASSERT_EQUAL(u"HeaderImage"_ustr,
+                         getProperty<OUString>(zOrder0, u"LinkDisplayName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"BodyBlueRectangle"_ustr,
+                         getProperty<OUString>(zOrder1, u"LinkDisplayName"_ustr));
     // The logo should not be opaque since it is in the header.
     CPPUNIT_ASSERT(!getProperty<bool>(zOrder0, u"Opaque"_ustr)); // logo should be invisible
     CPPUNIT_ASSERT(!getProperty<bool>(zOrder1, u"Opaque"_ustr));
@@ -1070,10 +1070,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder, "tdf100037_inlineZOrder.doc
     // an inline image should always be behind a heaven-layer floating object.
     uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
-    CPPUNIT_ASSERT_EQUAL(OUString("Image 2"), getProperty<OUString>(zOrder0, "LinkDisplayName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder1, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+    CPPUNIT_ASSERT_EQUAL(u"Image 2"_ustr, getProperty<OUString>(zOrder0, u"LinkDisplayName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder1, u"LinkDisplayName"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder2, "tdf100037_inlineZOrder2.docx")
@@ -1087,14 +1087,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder2, "tdf100037_inlineZOrder2.d
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder3(getShape(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, u"ZOrder"_ustr)); // higher
     // yellow textbox (Frame1) is the lowest
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder0, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder0, u"LinkDisplayName"_ustr));
     //CPPUNIT_ASSERT_EQUAL(OUString("Image1"), getProperty<OUString>(zOrder1, "Name"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), getProperty<OUString>(zOrder2, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, getProperty<OUString>(zOrder2, u"LinkDisplayName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("Image2"), getProperty<OUString>(zOrder3, "LinkDisplayName"));
 }
 
@@ -1109,14 +1109,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder3, "tdf100037_inlineZOrder3.d
     uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> zOrder3(getShape(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(zOrder3, u"ZOrder"_ustr)); // higher
     // blue textbox (Frame2) is the lowest
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), getProperty<OUString>(zOrder0, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, getProperty<OUString>(zOrder0, u"LinkDisplayName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("Image2"), getProperty<OUString>(zOrder1, "LinkDisplayName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Frame1"), getProperty<OUString>(zOrder2, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder2, u"LinkDisplayName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("Image1"), getProperty<OUString>(zOrder3, "LinkDisplayName"));
 }
 

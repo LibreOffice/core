@@ -32,7 +32,7 @@ class Test : public SwModelTestBase
 {
 public:
     Test()
-        : SwModelTestBase("/sw/qa/filter/ascii/data/")
+        : SwModelTestBase(u"/sw/qa/filter/ascii/data/"_ustr)
     {
     }
 };
@@ -48,8 +48,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
-    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
-    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTableNames->hasByName(u"Table1"_ustr));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName(u"Table1"_ustr),
+                                             uno::UNO_QUERY);
 
     pWrtShell->GotoTable(u"Table1"_ustr);
     pWrtShell->Insert(u"A"_ustr);
@@ -61,9 +62,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     pWrtShell->Insert(u"D"_ustr);
 
     // Select the whole table
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
     xTransferable->Copy(); // Ctl-C
@@ -95,9 +96,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
 
     // Add some newlines in the first two cells
     // and test to see if they're handled correctly
-    uno::Reference<text::XTextRange> xCellA1(xTable1->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellA1(xTable1->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     xCellA1->setString(u""_ustr);
-    uno::Reference<text::XTextRange> xCellB1(xTable1->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellB1(xTable1->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
     xCellB1->setString(u""_ustr);
 
     pWrtShell->GotoTable(u"Table1"_ustr);
@@ -115,9 +116,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
         = u"A"_ustr SAL_NEWLINE_STRING u"A1\tB"_ustr SAL_NEWLINE_STRING u"B1"_ustr SAL_NEWLINE_STRING u"B2"_ustr SAL_NEWLINE_STRING u"C\tD"_ustr SAL_NEWLINE_STRING u""_ustr;
 
     // Select the whole table
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     // Get the plain text version of the selection
     rtl::Reference<SwTransferable> xNewTransferable(new SwTransferable(*pWrtShell));

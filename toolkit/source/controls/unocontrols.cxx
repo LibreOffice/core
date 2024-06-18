@@ -62,7 +62,7 @@ uno::Reference< graphic::XGraphic >
 ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
     xOutGraphicObj = nullptr;
-    return ImageHelper::getGraphicFromURL_nothrow( _rURL, "" );
+    return ImageHelper::getGraphicFromURL_nothrow( _rURL, u""_ustr );
 }
 
 css::uno::Reference< css::graphic::XGraphic >

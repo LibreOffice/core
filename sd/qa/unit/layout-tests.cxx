@@ -333,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
     xmlDocUniquePtr pXmlDoc = load("odp/tdf156955.odp");
 
     // Make sure text box has the right size - without the fix it was 2759.
-    assertXPath(pXmlDoc, "/metafile/push/push/textarray[5]"_ostr, "y"_ostr, "3183");
+    assertXPath(pXmlDoc, "/metafile/push/push/textarray[5]"_ostr, "y"_ostr, u"3183"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)

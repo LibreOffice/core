@@ -69,13 +69,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155663)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Width);
         }
         CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Top);
+                             getProperty<text::GraphicCrop>(xShape, u"GraphicCrop"_ustr).Top);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Bottom);
+                             getProperty<text::GraphicCrop>(xShape, u"GraphicCrop"_ustr).Bottom);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Left);
+                             getProperty<text::GraphicCrop>(xShape, u"GraphicCrop"_ustr).Left);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
-                             getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Right);
+                             getProperty<text::GraphicCrop>(xShape, u"GraphicCrop"_ustr).Right);
     };
     createSwDoc("piccrop.rtf");
     verify();
@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0)
         // There should be no empty paragraph at the start
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, u"First page"_ustr);
     };
     createSwDoc("tdf158586_pageBreak0.rtf");
     verify();
@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0B)
         // There should be no empty paragraph at the start
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
+        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, u"First page"_ustr);
     };
     createSwDoc("tdf158586_pageBreak0B.rtf");
     verify();
@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1)
         xmlDocUniquePtr pLayout = parseLayoutDump();
         // on import there is a section on page 2; on reimport there is no section
         // (probably not an important difference?)
-        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, u"Second page"_ustr);
     };
     createSwDoc("tdf158586_pageBreak1.rtf");
     verify();
@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1header)
         xmlDocUniquePtr pLayout = parseLayoutDump();
         // on import there is a section on page 2; on reimport there is no section
         // (probably not an important difference?)
-        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, "Second page");
+        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, u"Second page"_ustr);
     };
     createSwDoc("tdf158586_pageBreak1_header.rtf");
     verify();
@@ -163,8 +163,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
         // The anchor and align properties are sufficient to define a frame
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, "1st page");
-        assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, "2nd page");
+        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, u"1st page"_ustr);
+        assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, u"2nd page"_ustr);
 
         CPPUNIT_ASSERT_EQUAL(2, getPages());
     };
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndRTF)
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         pWrtShell->SplitNode();
         pWrtShell->Up(/*bSelect=*/false);
-        pWrtShell->Insert("x");
+        pWrtShell->Insert(u"x"_ustr);
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
         SwSectionData aSection(SectionType::Content, pWrtShell->GetUniqueSectionName());
         pWrtShell->StartAction();
@@ -239,13 +239,15 @@ CPPUNIT_TEST_FIXTURE(Test, testAnnotationPar)
         // the problem was that the paragraph break following annotation was missing
         CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
         CPPUNIT_ASSERT_EQUAL(
-            OUString("Annotation"),
+            u"Annotation"_ustr,
             getProperty<OUString>(
-                getRun(getParagraph(1, "I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"),
+                getRun(getParagraph(
+                           1, u"I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"_ustr),
                        2),
-                "TextPortionType"));
+                u"TextPortionType"_ustr));
         CPPUNIT_ASSERT(
-            !getProperty<OUString>(getParagraph(2, "Xix\txaxa\tx-a\t\t\txix\tx xi = xa."), "ListId")
+            !getProperty<OUString>(getParagraph(2, u"Xix\txaxa\tx-a\t\t\txix\tx xi = xa."_ustr),
+                                   u"ListId"_ustr)
                  .isEmpty());
     };
     createSwDoc("tdf136445-1-min.rtf");
@@ -301,8 +303,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle1)
                                                              uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+                             getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops
@@ -332,8 +334,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle2)
                                                              uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+                             getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops
@@ -363,8 +365,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle3)
                                                              uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+                             getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops
@@ -393,8 +395,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_gradientAngle4)
                                                              uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                             getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+                             getProperty<drawing::FillStyle>(xFrame, u"FillStyle"_ustr));
+        awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, u"FillGradient"_ustr);
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops
@@ -421,11 +423,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158830)
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
         CPPUNIT_ASSERT_EQUAL(
             style::ParagraphAdjust_CENTER,
-            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
     };
     createSwDoc("tdf158830.rtf");
     verify();
@@ -441,11 +443,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158978)
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
         CPPUNIT_ASSERT_EQUAL(
             style::ParagraphAdjust_RIGHT,
-            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+            static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
     };
     createSwDoc("tdf158978.rtf");
     verify();
@@ -464,10 +466,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158982)
                                                         uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTables->getCount());
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(5), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
-                             getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+                             getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
     };
     createSwDoc("tdf158982.rtf");
     verify();

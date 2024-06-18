@@ -1254,7 +1254,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", nullptr, aError );
+        m_aEventNotifier.notifyDocumentEventAsync( u"OnSaveToFailed"_ustr, nullptr, aError );
 
         if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
@@ -1267,7 +1267,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
-    m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", nullptr, Any( _rURL ) );
+    m_aEventNotifier.notifyDocumentEventAsync( u"OnSaveToDone"_ustr, nullptr, Any( _rURL ) );
 }
 
 // XModifyBroadcaster

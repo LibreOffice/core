@@ -5012,7 +5012,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159817)
 // Tests that kerning is correctly applied across color changes
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf61444)
 {
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf61444.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -5061,7 +5061,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf61444)
 // tdf#124116 - Tests that track-changes inside a grapheme cluster does not break positioning
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124116TrackUntrack)
 {
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf124116-hebrew-track-untrack.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -5118,7 +5118,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124116TrackUntrack)
 // tdf#134226 - Tests that shaping is not broken by invisible spans
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf134226)
 {
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf134226-shadda-in-hidden-span.fodt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -5176,7 +5176,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf134226)
 // tdf#71956 - Tests that glyphs can be individually styled
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf71956)
 {
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf71956-styled-diacritics.fodt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 

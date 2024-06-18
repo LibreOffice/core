@@ -453,7 +453,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         *(m_rView.GetDocShell()->GetDoc()), aPos, &aPos));
 
                     OUString sName;
-                    xRange->getPropertyValue("HyperLinkName") >>= sName;
+                    xRange->getPropertyValue(u"HyperLinkName"_ustr) >>= sName;
                     if (!sName.isEmpty())
                     {
                         bScreenTip = true;

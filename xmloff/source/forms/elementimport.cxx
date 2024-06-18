@@ -571,7 +571,7 @@ namespace xmloff
             {
                 try {
                     props->setPropertyValue(
-                        "Referer", css::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
+                        u"Referer"_ustr, css::uno::Any(m_rFormImport.getGlobalContext().GetBaseURL()));
                 } catch (css::uno::Exception &) {
                     TOOLS_INFO_EXCEPTION("xmloff.forms", "setPropertyValue Referer failed");
                 }

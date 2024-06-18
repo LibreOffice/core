@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
     pWrtShell->FwdPara();
     pWrtShell->EndPara(/*bSelect=*/false);
     // expands autotext (via F3)
-    pWrtShell->Insert(" jacr");
+    pWrtShell->Insert(u" jacr"_ustr);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
@@ -2748,8 +2748,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
     // no way to set SwDocShell::m_nUpdateDocMode away from NO_UPDATE ?
     // pMasterDoc->getIDocumentLinksAdministration().UpdateLinks();
-    pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
-                                                                                  nullptr, "");
+    pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(
+        false, false, nullptr, u""_ustr);
     // note: this has called SwGetRefFieldType::UpdateGetReferences()
     SwFieldType const* const pType(
         pMasterDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef));
@@ -2803,8 +2803,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
     CPPUNIT_ASSERT_EQUAL(
         size_t(1),
         pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
-                                                                                  nullptr, "");
+    pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(
+        false, false, nullptr, u""_ustr);
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 

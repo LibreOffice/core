@@ -542,7 +542,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // open in viewmode
                 eCurrentEvent = CommandLineEvent::Start;
                 // start on the first slide unless a valid starting slide # was provided
-                m_startListParams = rest.toUInt32() > 0 ? rest : "1";
+                m_startListParams = rest.toUInt32() > 0 ? rest : u"1"_ustr;
             }
             else if ( oArg == "display" )
             {

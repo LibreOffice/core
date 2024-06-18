@@ -64,8 +64,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159897Broken_link)
     {
         auto xPara(getParagraph(i));
         auto xRun = getRun(xPara, 0);
-        OUString sURL = getProperty<OUString>(xRun, "HyperLinkURL");
-        CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), sURL);
+        OUString sURL = getProperty<OUString>(xRun, u"HyperLinkURL"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"https://libreoffice.org/"_ustr, sURL);
 
         OUString sText;
         switch (i)
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159897Broken_link)
                 break;
         }
 
-        OUString sScreenTip = getProperty<OUString>(xRun, "HyperLinkName");
+        OUString sScreenTip = getProperty<OUString>(xRun, u"HyperLinkName"_ustr);
         CPPUNIT_ASSERT_EQUAL(sText, sScreenTip);
     }
 }

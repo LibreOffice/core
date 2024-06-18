@@ -1579,7 +1579,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161054)
         CPPUNIT_ASSERT_EQUAL(u"a"_ustr, run->getString());
         uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
         double fCharHeight = 0;
-        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
         CPPUNIT_ASSERT_EQUAL(10.0, fCharHeight);
         // No more runs
         CPPUNIT_ASSERT_THROW(getRun(paragraph, 2), container::NoSuchElementException);
@@ -1593,7 +1593,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161054)
         CPPUNIT_ASSERT_EQUAL(u""_ustr, run->getString());
         uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
         double fCharHeight = 0;
-        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
         // Without the fix, this would fail with
         // - Expected: 10
         // - Actual  : 18
@@ -1610,7 +1610,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161054)
         CPPUNIT_ASSERT_EQUAL(u"c"_ustr, run->getString());
         uno::Reference<beans::XPropertySet> xPropSet(run, uno::UNO_QUERY_THROW);
         double fCharHeight = 0;
-        xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+        xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
         CPPUNIT_ASSERT_EQUAL(10.0, fCharHeight);
         // No more runs
         CPPUNIT_ASSERT_THROW(getRun(paragraph, 2), container::NoSuchElementException);

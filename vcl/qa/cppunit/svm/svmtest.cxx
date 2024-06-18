@@ -883,8 +883,8 @@ void SvmTest::checkTextArrayWithContext(const GDIMetaFile& rMetaFile)
                        { "length", "4" },
                        { "layoutcontextindex", "0" },
                        { "layoutcontextlength", "5" } });
-    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, "15 20 25 ");
-    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, "123456");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, u"15 20 25 "_ustr);
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, u"123456"_ustr);
 }
 
 void SvmTest::testTextArrayWithContext()
@@ -893,7 +893,7 @@ void SvmTest::testTextArrayWithContext()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawPartialTextArray(Point(4, 6), "123456", KernArraySpan(aDX), {}, 0, 5, 1, 4);
+    pVirtualDev->DrawPartialTextArray(Point(4, 6), u"123456"_ustr, KernArraySpan(aDX), {}, 0, 5, 1, 4);
 
     checkTextArrayWithContext(writeAndReadStream(aGDIMetaFile));
     checkTextArrayWithContext(readFile(u"textarraycontext.svm"));

@@ -400,7 +400,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     OUString referer;
-    getPropertyValue("Referer") >>= referer;
+    getPropertyValue(u"Referer"_ustr) >>= referer;
     if (SvtSecurityOptions::isUntrustedReferer(referer)) {
         return false;
     }

@@ -638,7 +638,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     const IDocumentSettingAccess& rIDSA = rMaster.getIDocumentSettingAccess();
     if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
     {
-        oGrabBag->GetGrabBag()["ContinuousEndnotes"] <<= true;
+        oGrabBag->GetGrabBag()[u"ContinuousEndnotes"_ustr] <<= true;
     }
 
     rSet.Put(*oGrabBag);

@@ -1508,7 +1508,7 @@ OUString ScIconSetFormat::getIconSetName( ScIconSetType eType )
     if (pMap)
         return pMap->aName;
 
-    return "";
+    return u""_ustr;
 }
 
 sal_Int32 ScIconSetFormat::getIconSetElements( ScIconSetType eType )

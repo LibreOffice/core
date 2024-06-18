@@ -319,18 +319,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.odt")
 {
     // given a numbered list with a non-escaping percent symbol in the prefix and suffix
-    CPPUNIT_ASSERT_EQUAL(OUString("(%)[%]"),
-                         getProperty<OUString>(getParagraph(3), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(u"(%)[%]"_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
 
     // tdf#149258 - NONE number should not export separator since LO doesn't currently show it
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("showing levels 1, 2, and 4", OUString("(%)1.1.1[%]"),
-                                 getProperty<OUString>(getParagraph(4), "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("showing levels 1, 2, and 4", u"(%)1.1.1[%]"_ustr,
+                                 getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
     if (isExported())
     {
-        xmlDocUniquePtr pXmlNum = parseExport("word/numbering.xml");
+        xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
         // The 3rd level is NONE. If we include the separator, MS Word will display it.
         assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText"_ostr, "val"_ostr,
-                    "(%)%1.%2.%3%4[%]");
+                    u"(%)%1.%2.%3%4[%]"_ustr);
     }
 }
 
@@ -570,8 +570,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
 {
     // given a document with an image background transparency (blue-white)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-                         getProperty<drawing::FillStyle>(getShape(1), "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), getProperty<Color>(getShape(1), "FillColor"));
+                         getProperty<drawing::FillStyle>(getShape(1), u"FillStyle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x729fcf), getProperty<Color>(getShape(1), u"FillColor"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
@@ -599,11 +599,11 @@ CPPUNIT_TEST_FIXTURE(Test, testScreenTip)
 {
     loadAndSave("tdf159897.docx");
 
-    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // Hyperlink with ScreenTip
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:hyperlink"_ostr, "tooltip"_ostr,
-                "This is a hyperlink");
+                u"This is a hyperlink"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)

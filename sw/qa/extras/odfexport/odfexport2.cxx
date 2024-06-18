@@ -239,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // last full line of the table is not hyphenated on page 1
@@ -248,14 +248,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
     // This was 2 (not handling hyphenation-keep in tables)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='page']"_ostr, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_default_paragraph_style)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="page" defined in default paragraph style
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_default_paragraph_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_default_paragraph_style)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="auto" defined in default paragraph style
@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_default_paragraph_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_text_body_style)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="page" defined in text body style
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_text_body_style)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_text_body_style)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
-    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
         return;
 
     // fo:hyphenation-keep="auto" defined in text body style
@@ -1689,13 +1689,13 @@ DECLARE_ODFEXPORT_TEST(testTdf160877, "tdf160877.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
-        getStyles("PageStyles")->getByName("Standard"), "HeaderTextFirst");
-    CPPUNIT_ASSERT_EQUAL(OUString("Classification: General Business"), xHeaderTextPage1->getString());
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), u"HeaderTextFirst"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Classification: General Business"_ustr, xHeaderTextPage1->getString());
 
     // Without the fix in place, this test would have failed with
     // - Expected: (Sign GB)Test
     // - Actual  : Test
-    CPPUNIT_ASSERT_EQUAL(OUString("(Sign GB)Test"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"(Sign GB)Test"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)

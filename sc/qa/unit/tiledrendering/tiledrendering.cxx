@@ -3972,9 +3972,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
 
     // Go to Cell B5000
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
-        comphelper::makePropertyValue("ToPoint", OUString("$B$5000")),
+        comphelper::makePropertyValue(u"ToPoint"_ustr, u"$B$5000"_ustr),
     };
-    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
     // Enter edit mode and select all text.
     aView.m_aTextSelectionResult.clear();

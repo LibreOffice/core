@@ -40,8 +40,9 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     // and asserts that the title doesn't change.
 
     // Load document
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", false) };
-    loadWithParams("private:factory/swriter", aLoadArgs);
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
+                                                                                 false) };
+    loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
@@ -58,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     xParser->parseStrict(printPreviewURL);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xModel->getCurrentController(),
                                                                uno::UNO_QUERY);
-    xDispatchProvider->queryDispatch(printPreviewURL, "", 0);
+    xDispatchProvider->queryDispatch(printPreviewURL, u""_ustr, 0);
     uno::Reference<frame::XTitle> xTitle2(xFrame, css::uno::UNO_QUERY);
     Scheduler::ProcessEventsToIdle();
 
@@ -71,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     xParser->parseStrict(closePreviewURL);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider2(xModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
-    xDispatchProvider2->queryDispatch(closePreviewURL, "", 0);
+    xDispatchProvider2->queryDispatch(closePreviewURL, u""_ustr, 0);
     uno::Reference<frame::XTitle> xTitle3(xFrame, css::uno::UNO_QUERY);
     Scheduler::ProcessEventsToIdle();
 
@@ -84,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkTitleSuggestedFileName)
     uno::Sequence<beans::PropertyValue> aArguments
         = { comphelper::makePropertyValue(u"SuggestedSaveAsName"_ustr, u"suggestedname.odt"_ustr),
             comphelper::makePropertyValue(u"Hidden"_ustr, false) };
-    loadWithParams("private:factory/swriter", aArguments);
+    loadWithParams(u"private:factory/swriter"_ustr, aArguments);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
@@ -100,8 +101,9 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     // Set the frame title, then cycle through default and print preview. Close the window
     // and check for infinite recursion.
 
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", false) };
-    loadWithParams("private:factory/swriter", aLoadArgs);
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
+                                                                                 false) };
+    loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
@@ -116,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     util::URL printPreviewURL;
     printPreviewURL.Complete = u".uno::PrintPreview"_ustr;
     xParser->parseStrict(printPreviewURL);
-    xDispatchProvider->queryDispatch(printPreviewURL, "", 0);
+    xDispatchProvider->queryDispatch(printPreviewURL, u""_ustr, 0);
     Scheduler::ProcessEventsToIdle();
 
     util::URL closePreviewURL;
@@ -124,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     xParser->parseStrict(closePreviewURL);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider2(xModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
-    xDispatchProvider2->queryDispatch(closePreviewURL, "", 0);
+    xDispatchProvider2->queryDispatch(closePreviewURL, u""_ustr, 0);
     Scheduler::ProcessEventsToIdle();
 
     util::URL closeDocURL;
@@ -137,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
 
     CPPUNIT_ASSERT_EQUAL(windowTitle, u"documentTitle"_ustr);
 
-    xDispatchProvider3->queryDispatch(closeDocURL, "", 0);
+    xDispatchProvider3->queryDispatch(closeDocURL, u""_ustr, 0);
     Scheduler::ProcessEventsToIdle();
 }
 }

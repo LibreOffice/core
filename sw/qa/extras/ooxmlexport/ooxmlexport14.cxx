@@ -1498,8 +1498,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
     loadAndReload("tdf160518_page_in_default_paragraph_style.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, "1");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, 0);
 }
 
@@ -1507,17 +1507,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_default_paragraph_style)
 {
     // default paragraph style contains hyphenation settings
     loadAndReload("tdf160518_auto_in_default_paragraph_style.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, "1");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, "val"_ostr, "1");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, "val"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
 {
     // text body style contains hyphenation settings
     loadAndReload("tdf160518_page_in_text_body_style.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, "1");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, 0);
 }
 
@@ -1525,9 +1525,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_text_body_style)
 {
     // text body  style contains hyphenation settings
     loadAndReload("tdf160518_auto_in_text_body_style.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, "1");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, "val"_ostr, "1");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']"_ostr, "val"_ostr, u"1"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)

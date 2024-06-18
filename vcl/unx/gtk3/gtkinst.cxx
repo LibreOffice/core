@@ -245,8 +245,10 @@ void GtkInstance::EnsureInit()
 
     ImplSVData* pSVData = ImplGetSVData();
 #ifdef GTK_TOOLKIT_NAME
+    // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
     pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
 #else
+    // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
     pSVData->maAppData.mxToolkitName = OUString("gtk3");
 #endif
 
