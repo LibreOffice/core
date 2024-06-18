@@ -35,12 +35,12 @@ public class WeakBase : XWeak, XTypeProvider
     // Contains all WeakAdapter which have been created in this class
     // They have to be notified when this object dies
     private WeakAdapter m_adapter = null;
-    
+
     protected static Hashtable s_types = new Hashtable();
     protected static Hashtable s_impl_ids = new Hashtable();
-    
+
     // XWeak impl
-    /** The returned XAdapter implementation can be used to keap a
+    /** The returned XAdapter implementation can be used to keep a
         weak reference to this object.
         
         @return a weak adapter
