@@ -52,7 +52,7 @@ public sealed class TypeArgumentsAttribute: System.Attribute
     /** initializes an instance with the specified value.
 
         @param parameters
-        arrayay of names representing the types.
+        array of names representing the types.
         It must not be null.
      */
     public TypeArgumentsAttribute(Type[] arguments)
