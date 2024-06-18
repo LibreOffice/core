@@ -127,9 +127,9 @@ struct SourceProviderType {
     Type type;
     OUString name; // TYPE_ENUM ... TYPE_PARAMETER
     SourceProviderEntity const * entity;
-        // TYPE_ENUM ... TYPE_INSTANTIATED_POLYMOPRHIC_STRUCT
+        // TYPE_ENUM ... TYPE_INSTANTIATED_POLYMORPHIC_STRUCT
     std::vector<SourceProviderType> subtypes;
-        // TYPE_SEQUENCE, TYPE_INSTANTIATED_POLYMOPRHIC_STRUCT
+        // TYPE_SEQUENCE, TYPE_INSTANTIATED_POLYMORPHIC_STRUCT
     OUString typedefName;
 };
 
