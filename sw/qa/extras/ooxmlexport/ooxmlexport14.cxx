@@ -787,6 +787,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149421, "tdf121661.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf149421_default, "tdf146171.docx")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    // This was 0 (not the default OOXML hyphenationZone)
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(360), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
 {
     loadAndSave("tdf121658.docx");
