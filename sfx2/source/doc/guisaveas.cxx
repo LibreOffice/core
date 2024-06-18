@@ -57,7 +57,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/json_writer.hxx>
-#include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
