@@ -1153,6 +1153,8 @@ void Test::testIsNumberFormat()
         { "20.3", true },
         { "2", true },
         { "test", false },
+        { "$0.12", true }, // tdf#48706
+        { "$.12", true }, // tdf#48706
         { "Jan1", false }, // tdf#34724
         { "1Jan", false }, // tdf#34724
         { "Jan1 2000", true }, // tdf#91420
