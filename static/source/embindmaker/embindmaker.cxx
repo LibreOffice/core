@@ -702,9 +702,25 @@ void dumpWrapperClassMembers(std::ostream& out, rtl::Reference<TypeManager> cons
     {
         out << "    ";
         dumpType(out, manager, attr.type);
-        out << " get" << attr.name << "() override { return call<";
-        dumpType(out, manager, attr.type);
-        out << ">(\"get" << attr.name << "\"); }\n";
+        out << " get" << attr.name << "() override {";
+        if (attr.type == "any" || attr.type.startsWith("[]"))
+        {
+            out << "\n"
+                   "        auto & the_ptr = call<";
+            dumpType(out, manager, attr.type);
+            out << " const &>(\"get" << attr.name
+                << "\");\n"
+                   "        auto const the_copy(the_ptr);\n"
+                   "        delete &the_ptr;\n"
+                   "        return the_copy;\n"
+                   "    }\n";
+        }
+        else
+        {
+            out << " return call<";
+            dumpType(out, manager, attr.type);
+            out << ">(\"get" << attr.name << "\"); }\n";
+        }
         if (!attr.readOnly)
         {
             out << "    void set" << attr.name << "(";
