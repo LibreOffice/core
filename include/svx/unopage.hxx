@@ -85,7 +85,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept;
 
     // Creating a SdrObject using it's Description.
-    // Can be used by derived classes to support their owen Shapes (e.g. Controls).
+    // Can be used by derived classes to support their own Shapes (e.g. Controls).
     /// @throws css::uno::RuntimeException
     virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
 
