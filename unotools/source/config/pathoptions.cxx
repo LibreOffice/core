@@ -204,7 +204,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
             ePath == SvtPathOptions::Paths::Storage
           )
         {
-            // These office paths have to be converted to system pates
+            // These office paths have to be converted to system paths
             OUString    aResult;
             osl::FileBase::getSystemPathFromFileURL( aPathValue, aResult );
             aPathValue = aResult;
