@@ -34,7 +34,7 @@ namespace uno {
     retain this information we use PolymorphicType which directly inherits from
     System.Type. The additional information about type parameters are passed
     as simple string when creating an instance of PolymorphicType. Usually one
-    only needs a PolymorphicType when a polymporphic type is put into an
+    only needs a PolymorphicType when a polymorphic type is put into an
     uno.Any. For example, let's assume there is a idl type PolyStruct:
     
     module test {
