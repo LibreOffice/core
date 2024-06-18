@@ -169,7 +169,7 @@ void fillUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, d
 /*
     Split zipped unoreturn to cpp func. This happens at the end of cpp2uno.
 
-    The data in pTarget will be extrat to return regs in privateSnippetExecutor:
+    The data in pTarget will be extracted to return regs in privateSnippetExecutor:
                   |  pTarget[0]  |  pTarget[1]  | return type |
     default cases |     $a0      |     $a1      |      0      |
     2 float       |     $fa0     |     $fa1     |      0      |
