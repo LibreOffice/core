@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-#properties needed for dbbaccess
+#properties needed for dbaccess
 
 jdbc.url=mysql://unoapi:3306/testDB
 jdbc.user=unoapi
