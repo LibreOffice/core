@@ -1377,7 +1377,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields3(
     PutData(aParam);
 }
 
-// Rest sind Properties
+// Rest are Properties
 
 // XPropertySet
 
