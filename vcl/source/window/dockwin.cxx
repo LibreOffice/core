@@ -789,6 +789,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
     if (bVisible)
         Show();
+
+    CallEventListeners(VclEventId::WindowToggleFloating);
 }
 
 void DockingWindow::SetFloatStyle( WinBits nStyle )
