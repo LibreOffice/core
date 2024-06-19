@@ -252,7 +252,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
     //  i ) There exist no localized entries ...                        =>  size of lOutNames/lOutValues will be the same like lInNames/lInValues!
-    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutNames/lOutValues will be some bytes greater then lInNames/lInValues.
+    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutNames/lOutValues will be some bytes greater than lInNames/lInValues.
     //  =>  I think we should make it fast for i). ii) is a special case and mustn't be SOOOO... fast.
     //      We should reserve same space for output list like input ones first.
     //      Follow algorithm looks for these borders and change it for ii) only!
