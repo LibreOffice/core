@@ -49,7 +49,7 @@ import util.utils;
 public class _XPropertySet {
 
     /**
-     * The object that is testsed.
+     * The object that is tested.
      */
     private final XPropertySet oObj;
 

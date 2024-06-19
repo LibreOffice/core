@@ -41,7 +41,7 @@ import lib.TestParameters;
 public class _XNamed {
 
     /**
-     * The object that is testsed.
+     * The object that is tested.
      */
     private final XNamed oObj;
 
