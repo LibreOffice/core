@@ -297,7 +297,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             if ( xObj.is()
               && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
             {
-                // Discussed with CL fue to the before GetPaintingPageView
+                // Discussed with CL due to the before GetPaintingPageView
                 // usage. Removed it, former fallback is used now
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
                 {
