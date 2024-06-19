@@ -17,6 +17,8 @@
 #include <sortedobjs.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <bodyfrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -110,6 +112,34 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyRelWithRounding)
     // - Actual  : 5714
     // i.e. 5714.88 was truncated, not rounded.
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(5715), nFlyWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingOffPage)
+{
+    // Given a document with a shape that is 1cm off the page:
+    createSwDoc("shape-left-padding-off-page.docx");
+
+    // When laying out that document:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure that the 2.5cm page margin + 2.5cm para margin and the 5cm shape left padding
+    // line up (with 1px tolerance):
+    auto pPage = pLayout->GetLower()->DynCastPageFrame();
+    auto pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    auto pTextFrame = pBody->GetLower()->DynCastTextFrame();
+    SwTwips nBodyLeft = pTextFrame->getFrameArea().Left() + pTextFrame->getFramePrintArea().Left();
+    CPPUNIT_ASSERT(pPage->GetSortedObjs());
+    SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPageObjs.size());
+    auto pFly = rPageObjs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pFly);
+    SwTwips nFlyLeft = pFly->getFrameArea().Left() + pFly->getFramePrintArea().Left();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 3119
+    // - Actual  : 2574
+    // i.e. the shape text had ~4cm left padding (visually) instead of 5cm.
+    CPPUNIT_ASSERT_GREATEREQUAL(nBodyLeft - MINFLY, nFlyLeft);
 }
 }
 
