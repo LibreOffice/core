@@ -230,7 +230,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="userautosave-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that the office suite saves the modified document itself, instead of creaing a temporary AutoRecovery version. Uses the same time interval as AutoRecovery does.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="userautosave">Specifies that the office suite saves the modified document itself, instead of creating a temporary AutoRecovery version. Uses the same time interval as AutoRecovery does.</property>
                   </object>
                 </child>
               </object>
