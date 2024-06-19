@@ -266,6 +266,7 @@ struct SubstreamContext
     bool bTextFrameInserted = false;
     bool bIsFirstRun = false;
     bool bIsOutsideAParagraph = true;
+    bool bDummyParaAddedForTableInSection = false; // tdf#161631
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
 };
 
@@ -658,7 +659,6 @@ private:
     // text ZWSPs to keep the change tracking of the image in Writer.)
     bool                            m_bRedlineImageInPreviousRun;
 
-    bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bIsLastSectionGroup;
     bool                            m_bUsingEnhancedFields;
 
@@ -770,7 +770,7 @@ public:
     void SetIsFirstParagraphInShape(bool bIsFirst);
     bool GetIsFirstParagraphInShape() const { return m_StreamStateStack.top().bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
-    bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
+    bool GetIsDummyParaAddedForTableInSection() const { return m_StreamStateStack.top().bDummyParaAddedForTableInSection; }
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
