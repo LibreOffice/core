@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis,\
 	external/libcmis/0001-cid-1545775-COPY_INSTEAD_OF_MOVE.patch \
 	external/libcmis/0001-Fix-warning-C4589-when-building-with-MSVC.patch \
+	external/libcmis/http-session-cleanup.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
