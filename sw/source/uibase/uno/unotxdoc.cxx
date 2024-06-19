@@ -2719,7 +2719,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
     OSL_ENSURE( nRet >= 0, "negative number of pages???" );
     // tdf#144989 the layout is complete now - prevent DoIdleJobs() from
-    // messing it up, particulary SwDocUpdateField::MakeFieldList_() unhiding
+    // messing it up, particularly SwDocUpdateField::MakeFieldList_() unhiding
     // sections
     pDoc->getIDocumentTimerAccess().BlockIdling();
 
