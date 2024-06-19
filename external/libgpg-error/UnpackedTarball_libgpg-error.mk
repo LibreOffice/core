@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-5.patch) \
 	$(if $(filter LINUX,$(OS)),external/libgpg-error/libgpgerror-bundled-soname.patch.1) \
 	external/libgpg-error/clang-cl.patch \
+	external/libgpg-error/undeclared-environ-macOS.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
