@@ -164,7 +164,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateBoolean() {
@@ -193,7 +193,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateByte() {
@@ -222,7 +222,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateShort() {
@@ -251,7 +251,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateInt() {
@@ -280,7 +280,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateLong() {
@@ -309,7 +309,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateFloat() {
@@ -338,7 +338,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateDouble() {
@@ -367,7 +367,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateString() {
@@ -398,7 +398,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateBytes() {
@@ -432,7 +432,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateDate() {
@@ -462,7 +462,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateTime() {
@@ -492,7 +492,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateTimestamp() {
@@ -523,7 +523,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateBinaryStream() {
@@ -560,7 +560,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateCharacterStream() {
@@ -597,7 +597,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateObject() {
@@ -630,7 +630,7 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Updates column with the appropriate type (if exists) and then
     * checks result with interface <code>XRow</code>.<p>
-    * Has OK status if column successfully updated, ahd the same
+    * Has OK status if column successfully updated, and the same
     * result returned.
     */
     public void _updateNumericObject() {
