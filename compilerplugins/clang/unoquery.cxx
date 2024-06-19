@@ -14,7 +14,7 @@
 
 // TODO it would be better if we were running some kind of nullability analysis here, where we marked
 // the results of expressions like Reference(..UNO_QUERY) as being nullable, and then looked for
-// places where we unconditionally deference the results of that expression.
+// places where we unconditionally dereference the results of that expression.
 
 namespace
 {
