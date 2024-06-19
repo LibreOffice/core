@@ -29,6 +29,7 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
@@ -37,7 +38,7 @@
 
 #if HAVE_FEATURE_SKIA
 #include <tools/sk_app/mac/WindowContextFactory_mac.h>
-#include <vcl/skia/SkiaHelper.hxx>
+#include <skia/osx/gdiimpl.hxx>
 #endif
 
 static bool bTotalScreenBounds = false;
@@ -233,6 +234,10 @@ bool AquaSharedAttributes::checkContext()
             maLayer.set(nullptr);
         }
 
+        // tdf#159175 no CGLayer is needed for an NSWindow when using Skia
+        if (SkiaHelper::isVCLSkiaEnabled() && mpFrame->getNSWindow())
+            return true;
+
         if (!maContextHolder.isSet())
         {
             const int nBitmapDepth = 32;
@@ -297,7 +302,7 @@ bool AquaSharedAttributes::checkContext()
  * associated window, if any; cf. drawRect event handling
  * on the frame.
  */
-void AquaSalGraphics::UpdateWindow( NSRect& )
+void AquaSalGraphics::UpdateWindow( NSRect& rRect )
 {
     if (!maShared.mpFrame)
     {
@@ -305,26 +310,65 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     }
 
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    if (maShared.maLayer.isSet() && pContext != nullptr)
+    if (!pContext)
     {
+        SAL_WARN_IF(!maShared.mpFrame->mbInitShow, "vcl", "UpdateWindow called with no NSGraphicsContext");
+        return;
+    }
+
+    CGImageRef img = nullptr;
+    CGPoint aImageOrigin = CGPointMake(0, 0);
+    bool bImageFlipped = false;
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+    {
+        // tdf#159175 no CGLayer is needed for an NSWindow when using Skia
+        // Get a CGImageRef directly from the Skia/Raster surface and draw
+        // that directly to the NSWindow.
+        // Note: Skia/Metal will always return a null CGImageRef since it
+        // draws directly to the NSWindow using the surface's CAMetalLayer.
+        AquaSkiaSalGraphicsImpl *pBackend = static_cast<AquaSkiaSalGraphicsImpl*>(mpBackend.get());
+        if (pBackend)
+            img = pBackend->createCGImageFromRasterSurface(rRect, aImageOrigin, bImageFlipped);
+    }
+    else
+#else
+    (void)rRect;
+#endif
+    if (maShared.maLayer.isSet())
+    {
+        maShared.applyXorContext();
+
+        const CGRect aRectPoints = { CGPointZero, maShared.maLayer.getSizePixels() };
+        CGContextSetBlendMode(maShared.maCSContextHolder.get(), kCGBlendModeCopy);
+        CGContextDrawLayerInRect(maShared.maCSContextHolder.get(), aRectPoints, maShared.maLayer.get());
+
+        img = CGBitmapContextCreateImage(maShared.maCSContextHolder.get());
+    }
+
+    if (img)
+    {
+        const float fScale = sal::aqua::getWindowScaling();
         CGContextHolder rCGContextHolder([pContext CGContext]);
 
         rCGContextHolder.saveState();
 
-        // Related: tdf#155092 translate Y coordinate for height differences
-        // When in live resize, the NSView's height may have changed before
-        // the CGLayer has been resized. This causes the CGLayer's content
-        // to be drawn just above or below the top left corner of the view
-        // so translate the Y coordinate by any difference between the
-        // NSView's height and the CGLayer's height.
-        NSView *pView = maShared.mpFrame->mpNSView;
-        if (pView)
+        CGRect aRect = CGRectMake(aImageOrigin.x / fScale, aImageOrigin.y / fScale, CGImageGetWidth(img) / fScale, CGImageGetHeight(img) / fScale);
+        if (bImageFlipped)
         {
+            // Related: tdf#155092 translate Y coordinate of flipped images
+            // When in live resize, the NSView's height may have changed before
+            // the surface has been resized. This causes flipped content
+            // to be drawn just above or below the top left corner of the view
+            // so translate the Y coordinate using the NSView's height.
             // Use the NSView's bounds, not its frame, to properly handle
             // any rotation and/or scaling that might have been already
-            // applied to the view
-            CGFloat fTranslateY = [pView bounds].size.height - maShared.maLayer.getSizePoints().height;
-            CGContextTranslateCTM(rCGContextHolder.get(), 0, fTranslateY);
+            // applied to the view.
+            NSView *pView = maShared.mpFrame->mpNSView;
+            if (pView)
+                aRect.origin.y = [pView bounds].size.height - aRect.origin.y - aRect.size.height;
+            else if (maShared.maLayer.isSet())
+                aRect.origin.y = maShared.maLayer.getSizePoints().height - aRect.origin.y - aRect.size.height;
         }
 
         CGMutablePathRef rClip = maShared.mpFrame->getClipPath();
@@ -335,23 +379,23 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
             CGContextClip(rCGContextHolder.get());
         }
 
-        maShared.applyXorContext();
-
-        const CGSize aSize = maShared.maLayer.getSizePoints();
-        const CGRect aRect = CGRectMake(0, 0, aSize.width,  aSize.height);
-        const CGRect aRectPoints = { CGPointZero, maShared.maLayer.getSizePixels() };
-        CGContextSetBlendMode(maShared.maCSContextHolder.get(), kCGBlendModeCopy);
-        CGContextDrawLayerInRect(maShared.maCSContextHolder.get(), aRectPoints, maShared.maLayer.get());
-
-        CGImageRef img = CGBitmapContextCreateImage(maShared.maCSContextHolder.get());
-        CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[maShared.mpFrame->getNSWindow() colorSpace] CGColorSpace]);
         CGContextSetBlendMode(rCGContextHolder.get(), kCGBlendModeCopy);
-        CGContextDrawImage(rCGContextHolder.get(), aRect, displayColorSpaceImage);
 
-        CGImageRelease(img);
-        CGImageRelease(displayColorSpaceImage);
+        NSWindow *pWindow = maShared.mpFrame->getNSWindow();
+        if (pWindow)
+        {
+            CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[maShared.mpFrame->getNSWindow() colorSpace] CGColorSpace]);
+            CGContextDrawImage(rCGContextHolder.get(), aRect, displayColorSpaceImage);
+            CGImageRelease(displayColorSpaceImage);
+        }
+        else
+        {
+            CGContextDrawImage(rCGContextHolder.get(), aRect, img);
+        }
 
         rCGContextHolder.restoreState();
+
+        CGImageRelease(img);
     }
     else
     {
