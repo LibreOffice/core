@@ -1049,6 +1049,11 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 maContextChangeUpdate.RequestCall();
                 break;
 
+            case VclEventId::WindowToggleFloating:
+                // make sure the appropriate "Dock" or "Undock" menu entry is shown
+                mpTabBar->UpdateMenus();
+                break;
+
             case VclEventId::ObjectDying:
                 dispose();
                 break;

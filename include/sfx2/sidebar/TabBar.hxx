@@ -73,6 +73,8 @@ public:
     /// Enables/Disables the menu button. Used by LoKit.
     void EnableMenuButton(const bool bEnable);
 
+    void UpdateMenus();
+
     virtual FactoryFunction GetUITestFactory() const override;
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
@@ -110,8 +112,6 @@ private:
     void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void UpdateButtonIcons();
-
-    DECL_LINK(OnToolboxClicked, weld::Toggleable&, void);
 
     SidebarController& mrParentSidebarController;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
