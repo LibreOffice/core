@@ -819,7 +819,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
                     {
                         SwPaM aPam( rTextNode );
                         // handle properties that are not part of the attribute
-                        // and thus only pretended to be paragraph attributes
+                        // and thus only pretending to be paragraph attributes
                         beans::PropertyState eTemp;
                         const bool bDone =
                             SwUnoCursorHelper::getCursorPropertyValue(
