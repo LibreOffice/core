@@ -45,7 +45,7 @@ public class Invocation extends TestCase {
     * <ul>
     *  <li> <code>'XSingleServiceFactory.createInstance.negative'</code> :
     *   for interface {@link _ifc.lang.XSingleServiceFactory} ;
-    *   <code>String</code> relation; If its value 'true' then
+    *   <code>String</code> relation; If its value is 'true' then
     *   <code>createInstance</code> method for the object isn't
     *   supported. In this case object doesn't support this method.</li>
     *  <li> <code>'XSingleServiceFactory.arguments'</code> :
