@@ -344,8 +344,11 @@ void ScDBFunc::ToggleAutoFilter()
             if (!bHeader)
             {
                 std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pViewData->GetDialogParent(),
-                                                          VclMessageType::Question,
-                                                          VclButtonsType::YesNo, ScResId(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
+                                                                                           VclMessageType::Question,
+                                                                                           VclButtonsType::YesNo,
+                                                                                           // header from first row?
+                                                                                           ScResId(STR_MSSG_MAKEAUTOFILTER_0),
+                                                                                           SfxViewShell::Current()));
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
