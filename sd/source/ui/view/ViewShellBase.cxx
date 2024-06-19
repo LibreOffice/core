@@ -1036,10 +1036,16 @@ void ViewShellBase::setEditMode(int nMode)
         switch ( nMode )
         {
         case 0:
+            pDrawViewShell->SetPageKind(PageKind::Standard);
             pDrawViewShell->ChangeEditMode(EditMode::Page, false);
             break;
         case 1:
+            pDrawViewShell->SetPageKind(PageKind::Standard);
             pDrawViewShell->ChangeEditMode(EditMode::MasterPage, false);
+            break;
+        case 2:
+            pDrawViewShell->SetPageKind(PageKind::Notes);
+            pDrawViewShell->ChangeEditMode(EditMode::Page, false);
             break;
         }
     }
