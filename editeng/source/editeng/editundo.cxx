@@ -72,7 +72,7 @@ bool EditUndoManager::Undo()
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->getImpl().GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
-    DBG_ASSERT( !aNewSel.DbgIsBuggy( mpEditEngine->GetEditDoc() ), "Broken selection afte Undo () ");
+    DBG_ASSERT( !aNewSel.DbgIsBuggy( mpEditEngine->GetEditDoc() ), "Broken selection after Undo () ");
 
     aNewSel.Min() = aNewSel.Max();
     mpEditEngine->GetActiveView()->getImpl().SetEditSelection( aNewSel );
