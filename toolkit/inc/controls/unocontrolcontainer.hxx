@@ -75,7 +75,7 @@ public:
     virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const css::uno::Any& aElement ) override;
 
     // css::container::XIdentifierAccess
-    virtual css::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifierr ) override;
+    virtual css::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifier ) override;
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     // css::container::XElementAccess
