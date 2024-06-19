@@ -173,7 +173,7 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
                 if (rc != osl::FileBase::E_None) {
                     SAL_WARN(
                         "unoidl",
-                        "getFileSatus in <" << directory_.getURL() << "> failed with " << +rc);
+                        "getFileStatus in <" << directory_.getURL() << "> failed with " << +rc);
                     continue;
                 }
                 auto const dir = stat.getFileType() == osl::FileStatus::Directory;
