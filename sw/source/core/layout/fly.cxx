@@ -2445,7 +2445,7 @@ bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
 
     /**
     if (either AutoSizeWidth or AutoSizeHeight, not both),
-        if the autosize dimention goes smaller than min value and the other dimention changed
+        if the autosize dimension goes smaller than min value and the other dimension changed
             return valid
         else
             remember invalid
@@ -2487,8 +2487,8 @@ bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
     }
 
     // if not valid resize, and both AutoSizeWidth and AutoSizeHeight,
-    // then consider resize is valid if any one of the dimentions was changed from it's original size
-    // (the frame's dimentions), and the destination dimention is a valid one.
+    // then consider resize is valid if any one of the dimensions was changed from it's original size
+    // (the frame's dimensions), and the destination dimension is a valid one.
     if (bAutosizeWidth && bAutosizeHeight && !bIsValidResize)
     {
         return (aTargetSize.Width() != aFrameSize.Width() && aTargetSize.Width() >= nMinFrameWidth) ||
