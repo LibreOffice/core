@@ -50,7 +50,7 @@ namespace connectivity::firebird
 
         /**
          * This ResultSet does not deal with the management of the SQLDA
-         * it is supplied with. The owner must mange its SQLDA appropriately
+         * it is supplied with. The owner must manage its SQLDA appropriately
          * and ensure that the ResultSet is destroyed before disposing of the
          * SQLDA.
          */
