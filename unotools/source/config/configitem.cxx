@@ -198,7 +198,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     // Algorithm:
     // Copy all names and values from in to out lists.
     // Look for special localized entries ... You can detect it as "XInterface" packed into an Any.
-    // Use this XInterface-object to read all localized values and pack it into Sequence< PropertValue >.
+    // Use this XInterface-object to read all localized values and pack it into Sequence< PropertyValue >.
     // Add this list to out lists then.
 
     nDestinationCounter = 0;
