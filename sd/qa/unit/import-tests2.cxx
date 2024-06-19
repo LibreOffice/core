@@ -77,6 +77,29 @@ protected:
     bool checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpected);
 };
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf160490)
+{
+    createSdImpressDoc("pptx/tdf160490.pptx");
+
+    uno::Reference<drawing::XShape> xShape1(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape1.is());
+    sal_Int32 nHeight1 = xShape1->getSize().Height;
+
+    // Without the fix in place, this test would have failed with
+    // Expected: placeholder height: 3730
+    // Actual  : placeholder height: 2627
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3730), nHeight1);
+
+    uno::Reference<drawing::XShape> xShape2(getShapeFromPage(0, 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape2.is());
+    sal_Int32 nHeight2 = xShape2->getSize().Height;
+
+    // Without the fix in place, this test would have failed with
+    // Expected: placeholder height: 3366
+    // Actual  : placeholder height: 2373
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3366), nHeight2);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)
 {
     createSdImpressDoc("pptx/tdf157285.pptx");
@@ -86,18 +109,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)
     sal_Int32 nHeight1 = xShape1->getSize().Height;
 
     // Without the fix in place, this test would have failed with
-    // Expected: placeholder height: 2541
+    // Expected: placeholder height: 2565
     // Actual  : placeholder height: 3435
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2541), nHeight1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2565), nHeight1);
 
     uno::Reference<drawing::XShape> xShape2(getShapeFromPage(1, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape2.is());
     sal_Int32 nHeight2 = xShape2->getSize().Height;
 
     // Without the fix in place, this test would have failed with
-    // Expected: placeholder height: 1169
+    // Expected: placeholder height: 1180
     // Actual  : placeholder height: 11303
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1169), nHeight2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1180), nHeight2);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf152186)

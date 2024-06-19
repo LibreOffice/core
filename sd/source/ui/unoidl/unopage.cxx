@@ -486,10 +486,10 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 
     ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
-    // OOXML placeholder with auto grow height
-    // do not set the height here yet
-    if (xShape->getSize().Height == 0)
-        aRect.setHeight(0);
+    // OOXML placeholder with "TextAutoGrowHeight" use the height set on the slide
+    sal_Int32 nHeight = xShape->getSize().Height;
+    if (nHeight != 0)
+        aRect.setHeight(nHeight);
 
     const awt::Point aPos( aRect.Left(), aRect.Top() );
     xShape->setPosition( aPos );
