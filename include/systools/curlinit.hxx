@@ -15,6 +15,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "opensslinit.hxx"
+#endif
 
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -23,12 +24,17 @@
 
 static void InitCurl_easy(CURL* const pCURL)
 {
+    CURLcode rc;
+    (void)rc;
+
+#if defined(LINUX) && !defined(SYSTEM_CURL)
     char const* const path = GetCABundleFile();
-    auto rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
+    rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
     if (rc != CURLE_OK) // only if OOM?
     {
         throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
     }
+#endif
 
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
     assert(pVersion);
@@ -49,14 +55,5 @@ static void InitCurl_easy(CURL* const pCURL)
     rc = curl_easy_setopt(pCURL, CURLOPT_USERAGENT, useragent.getStr());
     assert(rc == CURLE_OK);
 }
-
-#else
-
-static void InitCurl_easy(CURL* const)
-{
-    // these don't use OpenSSL so CAs work out of the box
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
