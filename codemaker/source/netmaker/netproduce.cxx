@@ -1171,7 +1171,7 @@ OString NetProducer::getNetName(std::string_view name)
             buffer.append(fullName);
     }
 
-    // if seqeunce, add [] to make array
+    // if sequence, add [] to make array
     while (dimensions--)
         buffer.append("[]");
 
