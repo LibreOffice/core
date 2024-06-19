@@ -73,14 +73,14 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     mxSubMenu = mxAuxBuilder->weld_menu("submenu");
     aPopupMenuSignalConnectFunction(*mxMainMenu, *mxSubMenu);
 
+    UpdateMenus();
+
     gDefaultWidth = m_xContainer->get_preferred_size().Width();
 
     // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
     mxMeasureBox->hide();
 
     SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
-
-    mxMenuButton->connect_toggled(LINK(this, TabBar, OnToolboxClicked));
 
 #ifdef DEBUG
     SetText(OUString("TabBar"));
@@ -147,6 +147,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     }
 
     UpdateButtonIcons();
+    UpdateMenus();
 }
 
 void TabBar::UpdateButtonIcons()
@@ -164,18 +165,21 @@ void TabBar::HighlightDeck(std::u16string_view rsDeckId)
 {
     for (auto const& item : maItems)
         item->mxButton->set_item_active("toggle", item->msDeckId == rsDeckId);
+    UpdateMenus();
 }
 
 void TabBar::RemoveDeckHighlight()
 {
     for (auto const& item : maItems)
         item->mxButton->set_item_active("toggle", false);
+    UpdateMenus();
 }
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
     UpdateButtonIcons();
+    UpdateMenus();
 
     InterimItemWindow::DataChanged(rDataChangedEvent);
 }
@@ -310,6 +314,7 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
         xDeckDescriptor->maContextList.ToggleVisibilityForContext(
             aContext, xDeckDescriptor->mbIsEnabled );
     }
+    UpdateMenus();
 }
 
 void TabBar::RestoreHideFlags()
@@ -325,6 +330,7 @@ void TabBar::RestoreHideFlags()
 
         }
     }
+    UpdateMenus();
 }
 
 void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
@@ -339,11 +345,8 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
+void TabBar::UpdateMenus()
 {
-    if (!mxMenuButton->get_active())
-        return;
-
     for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
     {
         OUString sIdent = mxMainMenu->get_id(i);
