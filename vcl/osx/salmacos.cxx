@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 
 #include <vcl/bitmap.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <quartz/salbmp.h>
 #include <quartz/salgdi.h>
@@ -504,6 +505,12 @@ bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
         aColorSpace = GetSalData()->mxRGBSpace;
 
         nFlags = uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGBitmapByteOrder32Host);
+    }
+
+    if (SkiaHelper::isVCLSkiaEnabled())
+    {
+        mpGraphics->SetVirDevGraphics(this, maLayer, nullptr, mnBitmapDepth);
+        return true;
     }
 
     // Allocate buffer for virtual device graphics as bitmap context to store graphics with highest required (scaled) resolution
