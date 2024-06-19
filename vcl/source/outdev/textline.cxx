@@ -28,6 +28,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <drawmode.hxx>
 #include <salgdi.hxx>
@@ -1036,7 +1037,12 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize())
+    if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize()
+    // tdf#153223 polyline with lineheight >0 not drawn when skia is off
+#ifdef MACOSX
+        || !SkiaHelper::isVCLSkiaEnabled()
+#endif
+       )
     {
         nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
         // tdf#124848 hairline
