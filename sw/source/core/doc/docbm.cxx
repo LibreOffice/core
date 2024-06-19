@@ -2100,8 +2100,6 @@ void DelBookmarks(
                     pREnd->AssignEndIndex( *pCNd );
             }
         }
-        if( lcl_Lower( *pREnd, rStt, oStartContentIdx ) )
-            break;
     }
 }
 
