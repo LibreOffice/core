@@ -105,7 +105,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     if (!bOldUpdateMode) // Reset only if the old value was false
         pFlowOutl->SetUpdateLayout(bOldUpdateMode);
 
-    // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
+    // NOTE: Must be called after mp*ChText and b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();
 
     // To check whether an overflow is underflow induced or not (useful in cursor checking)
