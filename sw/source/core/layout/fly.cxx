@@ -1986,7 +1986,27 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
         // consider vertical layout
         SwRectFnSet aRectFnSet(this);
-        aRectFnSet.SetXMargins( *this, rAttrs.CalcLeftLine(),
+        SwTwips nLeftLine = rAttrs.CalcLeftLine();
+
+        // The fly frame may be partially outside the page, check for this case.
+        SwPageFrame* pPageFrame = FindPageFrame();
+        SwFrameFormat* pFormat = GetFormat();
+        if (pPageFrame && pFormat)
+        {
+            const IDocumentSettingAccess& rIDSA = pFormat->getIDocumentSettingAccess();
+            bool bDoNotCaptureDrawObjsOnPage = rIDSA.get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
+            bool bLRTB = pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_LR_TB;
+            SwTwips nFlyLeft = getFrameArea().Left();
+            SwTwips nPageLeft = pPageFrame->getFrameArea().Left();
+            if (bDoNotCaptureDrawObjsOnPage && bLRTB && nFlyLeft < nPageLeft)
+            {
+                // It is outside: only start the left padding of the text inside the page frame,
+                // when we're in Word compatibility mode.
+                nLeftLine += (nPageLeft - nFlyLeft);
+            }
+        }
+
+        aRectFnSet.SetXMargins( *this, nLeftLine,
                                         rAttrs.CalcRightLine() );
         aRectFnSet.SetYMargins( *this, rAttrs.CalcTopLine(),
                                         rAttrs.CalcBottomLine() );
