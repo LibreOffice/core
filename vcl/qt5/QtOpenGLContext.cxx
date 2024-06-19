@@ -143,11 +143,9 @@ void QtOpenGLContext::initWindow()
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
         m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
+    assert(m_pChildWindow);
 
-    if (m_pChildWindow)
-    {
-        InitChildWindow(m_pChildWindow.get());
-    }
+    InitChildWindow(m_pChildWindow.get());
 
     m_pWindow
         = static_cast<QtObject*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->windowHandle();
