@@ -214,6 +214,7 @@ struct SubstreamContext
     bool bParaWithInlineObject = false;
     /// This is a continuation of already finished paragraph - e.g., first in an index section
     bool bRemoveThisParagraph = false;
+    bool bDummyParaAddedForTableInSection = false; // tdf#161631
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -630,7 +631,6 @@ private:
     bool                            m_bRedlineImageInPreviousRun;
 
     bool                            m_bIsFirstParaInShape = false;
-    bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsLastSectionGroup;
     bool                            m_bUsingEnhancedFields;
@@ -755,7 +755,7 @@ public:
     void SetIsFirstParagraphInShape(bool bIsFirst);
     bool GetIsFirstParagraphInShape() const { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
-    bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
+    bool GetIsDummyParaAddedForTableInSection() const { return m_StreamStateStack.top().bDummyParaAddedForTableInSection; }
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );

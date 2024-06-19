@@ -370,7 +370,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
-        m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsLastSectionGroup( false ),
         m_bUsingEnhancedFields( false ),
@@ -962,9 +961,8 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
-    m_bDummyParaAddedForTableInSection = bIsAdded;
+    m_StreamStateStack.top().bDummyParaAddedForTableInSection = bIsAdded;
 }
-
 
 void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
 {
