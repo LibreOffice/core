@@ -71,6 +71,11 @@
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="SetBorderStyle-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebarcellappearance|bordertype|accessible_name">Borders</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
