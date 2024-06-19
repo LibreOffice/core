@@ -438,7 +438,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
         case WID_SIMILARITY_EXCHANGE:   aValue >>= m_nLevExchange; break;
         case WID_SIMILARITY_ADD:        aValue >>= m_nLevAdd; break;
         case WID_SIMILARITY_REMOVE :    aValue >>= m_nLevRemove;break;
-    };
+    }
 
 }
 
