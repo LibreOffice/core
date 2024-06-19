@@ -13,18 +13,25 @@ from uitest.uihelper.common import get_state_as_dict
 class Test(UITestCase):
 
     def test_tab_navigation(self):
-        with self.ui_test.create_doc_in_start_center("writer"),\
-                self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
+        with self.ui_test.create_doc_in_start_center("writer"):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            for i in range(16):
-                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
-                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
+            with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
 
-            for i in reversed(range(16)):
-                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
-                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+
+                for i in range(16):
+                    self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
+
+                    xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
+
+                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], "0")
+
+                for i in reversed(range(16)):
+                    xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
+
+                    self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
 
 
 
