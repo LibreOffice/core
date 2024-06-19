@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -105,11 +104,10 @@ static Reference< XInterface > addFolder( Reference< XInterface > const & xRootF
 static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, Reference< XInputStream > const & xInput, const OUString& aName )
 {
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
-    Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
-    if( xSink.is() && xTunnel.is())
+    if( xSink.is() )
     {
         Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
-        xNameContainer->insertByName(encodeZipUri( aName ), Any(xTunnel));
+        xNameContainer->insertByName(encodeZipUri( aName ), Any(Reference< XInterface >( xSink, UNO_QUERY )));
         xSink->setInputStream( xInput );
     }
 }
