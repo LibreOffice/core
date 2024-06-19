@@ -1,0 +1,11 @@
++++ src/spawn-posix.c	2024-06-21 10:44:49.676834437 +0200
++++ src/spawn-posix.c	2024-06-21 10:45:09.008841639 +0200
+@@ -57,6 +57,8 @@
+ 
+ #include "gpgrt-int.h"
+ 
++/* (Only glibc's unistd.h declares this iff _GNU_SOURCE is used.)  */
++extern char **environ;
+ 
+ /* Definition for the gpgrt_spawn_actions_t.  Note that there is a
+  * different one for Windows.  */
