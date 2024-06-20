@@ -1,0 +1,17 @@
+--- libcmis/src/libcmis/session-factory.cxx.orig	2024-06-19 18:43:56.244832053 +0200
++++ libcmis/src/libcmis/session-factory.cxx	2024-06-20 11:46:26.518263605 +0200
+@@ -94,8 +94,13 @@
+                 {
+                     response = httpSession->httpGetRequest( bindingUrl );
+                 }
+-                catch ( const CurlException& )
++                catch (const CurlException& e)
+                 {
++                    if (strcmp(e.what(), "Invalid SSL certificate") == 0)
++                    {
++                        // no point in trying other protocols
++                        throw e.getCmisException();
++                    }
+                     // Could be SharePoint - needs NTLM authentication
+                     session = new SharePointSession( bindingUrl, username,
+                                                       password, verbose );

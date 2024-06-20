@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis,\
 	external/libcmis/http-session-cleanup.patch.1 \
+	external/libcmis/factory-no-retry-ssl.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
