@@ -987,8 +987,8 @@ auto CurlProcessor::ProcessRequestImpl(
     if (rc != CURLE_OK)
     {
         // TODO: is there any value in extracting CURLINFO_OS_ERRNO
-        SAL_WARN("ucb.ucp.webdav.curl",
-                 "curl_easy_perform failed: " << GetErrorString(rc, rSession.m_ErrorBuffer));
+        auto const errorString(GetErrorString(rc, rSession.m_ErrorBuffer));
+        SAL_WARN("ucb.ucp.webdav.curl", "curl_easy_perform failed: " << errorString);
         switch (rc)
         {
             case CURLE_UNSUPPORTED_PROTOCOL:
@@ -1013,7 +1013,8 @@ auto CurlProcessor::ProcessRequestImpl(
 #endif
                 throw DAVException(
                     DAVException::DAV_HTTP_CONNECT,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()),
+                    rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_REMOTE_ACCESS_DENIED:
             case CURLE_LOGIN_DENIED:
             case CURLE_AUTH_ERROR:

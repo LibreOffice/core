@@ -160,6 +160,16 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         ErrorResource aErrorResource(aId[eSource], aResLocale);
         if (!aErrorResource.getString(nErrorCode, aMessage))
             return;
+        if (nErrorCode == ERRCODE_INET_CONNECT)
+        {
+            OUString aMessage2;
+            aErrorResource.getString(ERRCODE_INET_CONNECT_MSG, aMessage2);
+            if (!aMessage2.isEmpty() && !rArguments[1].isEmpty())
+            {
+                aMessage2 = replaceMessageWithArguments(aMessage2, rArguments);
+                aMessage += "\n" + aMessage2;
+            }
+        }
     }
 
     aMessage = replaceMessageWithArguments( aMessage, rArguments );

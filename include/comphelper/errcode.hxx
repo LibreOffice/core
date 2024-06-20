@@ -366,5 +366,6 @@ enum class ErrCodeClass {
 #define ERRCODE_INET_WRITE               ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 4)
 #define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 5)
 #define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  6)
+#define ERRCODE_INET_CONNECT_MSG         ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  7)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
