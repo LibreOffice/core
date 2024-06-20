@@ -187,13 +187,13 @@ void AccessibilityIssue::gotoIssue() const
         case IssueObject::TEXT:
         {
             SwContentNode* pContentNode = TempIssueObject.m_pNode->GetContentNode();
-            SwPosition aPoint(*pContentNode, TempIssueObject.m_nStart);
-            SwPosition aMark(*pContentNode, TempIssueObject.m_nEnd);
+            SwPosition aStart(*pContentNode, TempIssueObject.m_nStart);
+            SwPosition aEnd(*pContentNode, TempIssueObject.m_nEnd);
             pWrtShell->StartAllAction();
             SwPaM* pPaM = pWrtShell->GetCursor();
-            *pPaM->GetPoint() = std::move(aPoint);
+            *pPaM->GetPoint() = std::move(aEnd);
             pPaM->SetMark();
-            *pPaM->GetMark() = std::move(aMark);
+            *pPaM->GetMark() = std::move(aStart);
             pWrtShell->EndAllAction();
 
             // bring issue to attention
