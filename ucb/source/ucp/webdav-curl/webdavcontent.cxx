@@ -3889,7 +3889,8 @@ Content::ResourceType Content::getResourceType(
             rResAccess->resetUri();
 
             // first check if the cached error can be mapped to DAVException::DAV_HTTP_TIMEOUT or mapped to DAVException::DAV_HTTP_CONNECT
-            if (aDAVOptions.getHttpResponseStatusCode() == USC_CONNECTION_TIMED_OUT
+            if (aDAVOptions.getHttpResponseStatusCode() == USC_CONNECT_FAILED
+                || aDAVOptions.getHttpResponseStatusCode() == USC_CONNECTION_TIMED_OUT
                 // can't get any reliable info without auth => cancel request
                 || aDAVOptions.getHttpResponseStatusCode() == USC_AUTH_FAILED
                 || aDAVOptions.getHttpResponseStatusCode() == USC_AUTHPROXY_FAILED)
@@ -3904,6 +3905,9 @@ Content::ResourceType Content::getResourceType(
                     DAVException::ExceptionCode e{};
                     switch (aDAVOptions.getHttpResponseStatusCode())
                     {
+                        case USC_CONNECT_FAILED:
+                            e = DAVException::DAV_HTTP_CONNECT;
+                            break;
                         case USC_CONNECTION_TIMED_OUT:
                             e = DAVException::DAV_HTTP_TIMEOUT;
                             break;
@@ -4057,7 +4061,7 @@ void Content::getResourceOptions(
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     // cache the internal unofficial status code
 
-                    aDAVOptions.setHttpResponseStatusCode( USC_CONNECTION_TIMED_OUT );
+                    aDAVOptions.setHttpResponseStatusCode(e.getError() == DAVException::DAV_HTTP_CONNECT ? USC_CONNECT_FAILED : USC_CONNECTION_TIMED_OUT);
                     // used only internally, so the text doesn't really matter..
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
@@ -4215,6 +4219,7 @@ void Content::getResourceOptions(
         if ( networkAccessAllowed != nullptr &&
              ( ( CachedResponseStatusCode == SC_NOT_FOUND ) ||
                ( CachedResponseStatusCode == SC_GONE ) ||
+               ( CachedResponseStatusCode == USC_CONNECT_FAILED ) ||
                ( CachedResponseStatusCode == USC_CONNECTION_TIMED_OUT ) ||
                ( CachedResponseStatusCode == USC_LOOKUP_FAILED ) ||
                ( CachedResponseStatusCode == USC_AUTH_FAILED ) ||
