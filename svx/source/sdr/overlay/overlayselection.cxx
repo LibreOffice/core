@@ -38,12 +38,17 @@ namespace sdr::overlay
 {
 
         // combine ranges geometrically to a single, ORed polygon
-        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
+        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges, bool bOffset)
         {
-            // Determines the offset in twips
-            Size aSize(1, 1);
-            aSize = o3tl::convert(aSize, o3tl::Length::px, o3tl::Length::twip);
-            const sal_Int32 nOffset = aSize.getWidth();
+            // Determines the offset in twips.
+            // The offset is only needed if the contrast outline is drawn
+            sal_Int32 nOffset(0);
+            if (bOffset)
+            {
+                Size aSize(1, 1);
+                aSize = o3tl::convert(aSize, o3tl::Length::px, o3tl::Length::twip);
+                nOffset = aSize.getWidth();
+            }
 
             const sal_uInt32 nCount(rRanges.size());
             basegfx::B2DPolyPolygon aRetval;
@@ -168,22 +173,25 @@ namespace sdr::overlay
                     if(mbBorder)
                     {
                         // External outline using themed color
-                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges(), mbContrastOutline));
                         const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
                             new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
                                 std::move(aPolyPolygon),
                                 aRGBColor));
 
-                        // tdf#161204 Outline with white color to provide contrast
-                        basegfx::B2DPolyPolygon aContrastPolyPolygon(impCombineRangesToContrastPolyPolygon(getRanges()));
-                        const drawinglayer::primitive2d::Primitive2DReference aContrastSelectionOutline(
-                            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                                std::move(aContrastPolyPolygon),
-                                basegfx::BColor(1.0, 1.0, 1.0)));
-
                         // add both to result
-                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
-                        aRetval.append(drawinglayer::primitive2d::Primitive2DContainer{aUnifiedTransparence, aContrastSelectionOutline});
+                        aRetval = drawinglayer::primitive2d::Primitive2DContainer {aUnifiedTransparence, aSelectionOutline};
+
+                        // tdf#161204 Outline with white color to provide contrast
+                        if (mbContrastOutline)
+                        {
+                            basegfx::B2DPolyPolygon aContrastPolyPolygon(impCombineRangesToContrastPolyPolygon(getRanges()));
+                            const drawinglayer::primitive2d::Primitive2DReference aContrastSelectionOutline(
+                                new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                                    std::move(aContrastPolyPolygon),
+                                    basegfx::BColor(1.0, 1.0, 1.0)));
+                            aRetval.append(drawinglayer::primitive2d::Primitive2DContainer{aContrastSelectionOutline});
+                        }
                     }
                     else
                     {
@@ -200,13 +208,15 @@ namespace sdr::overlay
             OverlayType eType,
             const Color& rColor,
             std::vector< basegfx::B2DRange >&& rRanges,
-            bool bBorder)
+            bool bBorder,
+            bool bContrastOutline)
         :   OverlayObject(rColor),
             meOverlayType(eType),
             maRanges(std::move(rRanges)),
             maLastOverlayType(eType),
             mnLastTransparence(0),
-            mbBorder(bBorder)
+            mbBorder(bBorder),
+            mbContrastOutline(bContrastOutline)
         {
             // no AA for selection overlays
             allowAntiAliase(false);
