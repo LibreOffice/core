@@ -250,7 +250,7 @@ void SwXMLExport::collectAutoStyles()
                 GetFormExport()->examineForms(xPage);
         }
 
-        GetTextParagraphExport()->collectTextAutoStylesAndNodeExportOrder(m_bShowProgress);
+        GetTextParagraphExport()->collectTextAutoStylesOptimized( m_bShowProgress );
     }
 
     mbAutoStylesCollected = true;

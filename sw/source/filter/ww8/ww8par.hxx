@@ -1421,7 +1421,7 @@ private:
 
     bool StyleExists(unsigned int nColl) const { return (nColl < m_vColl.size()); }
     SwWW8StyInf *GetStyle(sal_uInt16 nColl) const;
-    void FinalizeTextNode(SwPosition& rPos, bool bAddNew = true);
+    void AppendTextNode(SwPosition& rPos);
 
     void Read_HdFt(int nSect, const SwPageDesc *pPrev,
         const wwSection &rSection);

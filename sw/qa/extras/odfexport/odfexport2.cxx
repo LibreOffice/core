@@ -111,14 +111,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
-    OUString autostyle = getXPath(pXmlDoc, "//office:body/office:text/text:p[2]/text:span"_ostr,
-                                  "style-name"_ostr);
-    OString autostyle_span_xpath = "//style:style[@style:name='" + autostyle.toUtf8() + "']";
-
     // keep fo:hyphenate="false" in direct formatting
     assertXPath(
         pXmlDoc,
-        autostyle_span_xpath + "/style:text-properties",
+        "//style:style[@style:name='T3']/style:text-properties"_ostr,
         "hyphenate"_ostr, "false");
 
     // keep fo:hyphenate="false" in character style
@@ -1154,13 +1150,9 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
     loadAndReload("ParagraphMarkerMarkup.fodt");
     // Test that the markup stays at save-and-reload
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    OUString autostyle
-        = getXPath(pXmlDoc, "//office:body/office:text/text:p"_ostr, "marker-style-name"_ostr);
-    OString style_text_properties
-        = "/office:document-content/office:automatic-styles/style:style[@style:name='"
-          + autostyle.toUtf8() + "']/style:text-properties";
-    assertXPath(pXmlDoc, style_text_properties, "font-size"_ostr, "9pt");
-    assertXPath(pXmlDoc, style_text_properties, "color"_ostr, "#ff0000");
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p"_ostr, "marker-style-name"_ostr, "T2");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties"_ostr, "font-size"_ostr, "9pt");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='T2']/style:text-properties"_ostr, "color"_ostr, "#ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
@@ -1436,74 +1428,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
     // (in that order). The problem was, that text:bookmark-end was before text:bookmark-start.
     assertXPathChildren(pXmlDoc, "//office:text/text:list/text:list-item/text:p"_ostr, 1);
     assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark"_ostr);
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf160253_ordinary_numbering)
-{
-    // Given a document with a list, and an out-of-the-list paragraph in the middle, having an
-    // endnote, which has a paragraph in another list.
-    // Before the fix, this already failed with
-    //   Error: "list2916587379" is referenced by an IDREF, but not defined.
-    loadAndReload("tdf160253_ordinary_numbering.fodt");
-
-    // Make sure that the fourth paragraph has correct number - it was "1." before the fix
-    CPPUNIT_ASSERT_EQUAL(u"3."_ustr,
-                         getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
-
-    // Make sure that we emit an identifier for the first list, and refer to it in the continuation
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    // This failed before the fix, because 'xml:id' attribute wasn't emitted
-    OUString firstListId
-        = getXPath(pXmlDoc, "//office:body/office:text/text:list[1]"_ostr, "id"_ostr);
-    CPPUNIT_ASSERT(!firstListId.isEmpty());
-    assertXPath(pXmlDoc, "//office:body/office:text/text:list[2]"_ostr, "continue-list"_ostr,
-                firstListId);
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf160253_outline_numbering)
-{
-    // Given a document with an outline (chapter) numbering, and a paragraph in the middle, having
-    // an endnote, which has a paragraph in a list.
-    // Before the fix, this already failed with
-    //   Error: "list2916587379" is referenced by an IDREF, but not defined.
-    loadAndReload("tdf160253_outline_numbering.fodt");
-
-    // Make sure that the third paragraph has correct number - it was "1" before the fix
-    CPPUNIT_ASSERT_EQUAL(u"2"_ustr,
-                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
-
-    // The difference with the ordinary numbering is that for outline numbering, the list element
-    // isn't really necessary. It is a TODO to fix the output, and not export the list.
-    // xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    // assertXPath(pXmlDoc, "//office:body/office:text/text:list"_ostr, 0);
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
-{
-    // Given a table in a frame anchored to a page:
-    // it must not assert on export because of missing format for an exported table
-    loadAndReload("table_in_frame_to_page.fodt");
-
-    // Check also, that autostyles defined inside that frame are stored correctly. If not, then
-    // these paragraphs would refer to styles in <office::styles>, not in <office:automatic-styles>,
-    // without the 'italic' and 'bold' attributes.
-    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    OUString P1 = getXPath(
-        pXmlDoc,
-        "//office:body/office:text/draw:frame/draw:text-box/table:table/table:table-row[1]/"
-        "table:table-cell[1]/text:p"_ostr,
-        "style-name"_ostr);
-    assertXPath(pXmlDoc,
-                "//office:automatic-styles/style:style[@style:name='"_ostr + P1.toUtf8()
-                    + "']/style:text-properties",
-                "font-style"_ostr, u"italic"_ustr);
-    OUString P2
-        = getXPath(pXmlDoc, "//office:body/office:text/draw:frame/draw:text-box/text:p"_ostr,
-                   "style-name"_ostr);
-    assertXPath(pXmlDoc,
-                "//office:automatic-styles/style:style[@style:name='"_ostr + P2.toUtf8()
-                    + "']/style:text-properties",
-                "font-weight"_ostr, u"bold"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1851,8 +1851,11 @@ void XMLParaContext::endFastElement(sal_Int32 )
 
     if (m_xHints)
     {
-        bool bEmptyHints = false;
-        if (auto xCompare = xTxtImport->GetText().query<text::XTextRangeCompare>())
+        bool bSetNoFormatAttr = false;
+        uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
+        int nEmptyHints = 0;
+        uno::Reference<text::XTextRangeCompare> xCompare(xTxtImport->GetText(), uno::UNO_QUERY);
+        if (xCompare.is())
         {
             try
             {
@@ -1860,7 +1863,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                 {
                     if (xCompare->compareRegionStarts(pHint->GetStart(), pHint->GetEnd()) == 0)
                     {
-                        bEmptyHints = true;
+                        ++nEmptyHints;
                     }
                 }
             }
@@ -1869,9 +1872,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                 TOOLS_WARN_EXCEPTION("xmloff.text", "");
             }
         }
-        bool bSetNoFormatAttr = false;
-        uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
-        if (bEmptyHints || m_aMarkerStyleName.hasValue())
+        if (nEmptyHints > 0 || m_aMarkerStyleName.hasValue())
         {
             // We have at least one empty hint, then make try to ask the cursor to not upgrade our character
             // attributes to paragraph-level formatting, which would lead to incorrect rendering.
