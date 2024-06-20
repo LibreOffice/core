@@ -37,6 +37,8 @@
 #include <svl/sharedstring.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/util/DateTime.hpp>
+
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -94,21 +96,28 @@ void ScChangeTrackingExportHelper::WriteBigRange(const ScBigRange& rBigRange, XM
 
 void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction)
 {
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
+
     SvXMLElementExport aElemInfo (rExport, XML_NAMESPACE_OFFICE, XML_CHANGE_INFO, true, true);
 
     {
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
                                             XML_CREATOR, true,
                                             false );
-        rExport.Characters(pAction->GetUser());
+        rExport.Characters(bRemovePersonalInfo
+                               ? "Author" + OUString::number(rExport.GetInfoID(pAction->GetUser()))
+                               : pAction->GetUser());
     }
 
     {
         OUStringBuffer sDate;
-        ScXMLConverter::ConvertDateTimeToString(pAction->GetDateTimeUTC(), sDate);
-        SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
-                                          XML_DATE, true,
-                                          false );
+        ScXMLConverter::ConvertDateTimeToString(bRemovePersonalInfo
+                                                    ? util::DateTime(0, 0, 0, 12, 1, 1, 1970, true)
+                                                    : pAction->GetDateTimeUTC(),
+                                                sDate);
+        SvXMLElementExport aDateElem(rExport, XML_NAMESPACE_DC, XML_DATE, true, false);
         rExport.Characters(sDate.makeStringAndClear());
     }
 
