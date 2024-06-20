@@ -14,7 +14,6 @@
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
-#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -194,24 +193,10 @@ void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
     std::u16string_view rDBName,
     const bool bUsePreparedStatement)
 {
-    {
-        uno::Reference< XOfficeDatabaseDocument > xDocument(
-            m_xSFactory->createInstance(u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr),
-            UNO_QUERY_THROW);
-        uno::Reference< XStorable > xStorable(xDocument, UNO_QUERY_THROW);
+    createDBDocument(rDriverURL);
+    uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
 
-        uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
-        uno::Reference< XPropertySet > xPropertySet(xDataSource, UNO_QUERY_THROW);
-        xPropertySet->setPropertyValue(u"URL"_ustr, Any(rDriverURL));
-
-        xStorable->storeAsURL(maTempFile.GetURL(), uno::Sequence< beans::PropertyValue >());
-    }
-
-    uno::Reference< XOfficeDatabaseDocument > xDocument(
-        loadFromDesktop(maTempFile.GetURL()), UNO_QUERY_THROW);
-
-    uno::Reference< XConnection > xConnection =
-        getConnectionForDocument(xDocument);
+    uno::Reference< XConnection > xConnection = getConnectionForDocument(xDocument);
 
     setupTestTable(xConnection);
 

@@ -11,15 +11,15 @@
 
 #include <string_view>
 
-#include <cppunit/TestAssert.h>
-
 #include <test/unoapi_test.hxx>
-#include <unotools/tempfile.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
@@ -35,6 +35,8 @@ public:
     uno::Reference< XConnection >
         getConnectionForDocument(
             uno::Reference< XOfficeDatabaseDocument > const & xDocument);
+
+    void createDBDocument(const OUString& rDriverURL);
 };
 
 uno::Reference<XOfficeDatabaseDocument> DBTestBase::getDocumentForUrl(OUString const & url) {
@@ -53,6 +55,23 @@ uno::Reference< XConnection > DBTestBase::getConnectionForDocument(
     CPPUNIT_ASSERT(xConnection.is());
 
     return xConnection;
+}
+
+void DBTestBase::createDBDocument(const OUString& rDriverURL)
+{
+    uno::Reference< XOfficeDatabaseDocument > xDocument(
+        m_xSFactory->createInstance(u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr),
+        UNO_QUERY_THROW);
+    uno::Reference< com::sun::star::frame::XStorable > xStorable(xDocument, UNO_QUERY_THROW);
+
+    uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
+    uno::Reference< XPropertySet > xPropertySet(xDataSource, UNO_QUERY_THROW);
+    xPropertySet->setPropertyValue(u"URL"_ustr, Any(rDriverURL));
+
+    xStorable->storeAsURL(maTempFile.GetURL(), uno::Sequence< beans::PropertyValue >());
+
+    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    CPPUNIT_ASSERT(mxComponent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
