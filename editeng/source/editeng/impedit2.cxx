@@ -3856,7 +3856,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
 
     pDataObj->GetString() = convertLineEnd(GetSelected(aSelection), GetSystemLineEnd()); // System specific
 
-    WriteRTF( pDataObj->GetRTFStream(), aSelection );
+    WriteRTF( pDataObj->GetRTFStream(), aSelection, /*bClipboard=*/true );
     pDataObj->GetRTFStream().Seek( 0 );
 
     WriteXML( pDataObj->GetODFStream(), aSelection );

@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_l10n_targets,editeng,\
 
 $(eval $(call gb_Module_add_check_targets,editeng,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+		CppunitTest_editeng_editeng \
 		CppunitTest_editeng_core) \
 	CppunitTest_editeng_borderline \
 	CppunitTest_editeng_lookuptree \
