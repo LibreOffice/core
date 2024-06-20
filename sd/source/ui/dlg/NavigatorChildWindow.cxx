@@ -70,11 +70,6 @@ void SdNavigatorFloat::InitTreeLB(const SdDrawDocument* pDoc)
     m_xNavWin->InitTreeLB(pDoc);
 }
 
-void SdNavigatorFloat::FreshTree(const SdDrawDocument* pDoc)
-{
-    m_xNavWin->FreshTree(pDoc);
-}
-
 void SdNavigatorFloat::dispose()
 {
     m_xNavWin.reset();

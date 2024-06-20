@@ -92,7 +92,6 @@ public:
     SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* pMgr,
                      vcl::Window* pParent, SfxChildWinInfo* pInfo);
     void InitTreeLB(const SdDrawDocument* pDoc);
-    void FreshTree(const SdDrawDocument* pDoc);
     virtual void Activate() override;
     virtual void dispose() override;
     virtual ~SdNavigatorFloat() override;

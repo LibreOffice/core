@@ -283,13 +283,9 @@ class GtkSalData final : public GenericUnixSalData
     osl::Condition  m_aDispatchCondition;
     std::exception_ptr m_aException;
 
-    unotools::WeakReference<DocumentFocusListener> m_xDocumentFocusListener;
-
 public:
     GtkSalData();
     virtual ~GtkSalData() override;
-
-    rtl::Reference<DocumentFocusListener> GetDocumentFocusListener();
 
     void Init();
     virtual void Dispose() override;

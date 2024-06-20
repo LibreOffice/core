@@ -239,8 +239,6 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                 { SimpleMove( &SwWrtShell::BwdPara_, false/*bSelect*/ ); }
     void FwdSentence( bool bSelect = false )
                 { SimpleMove( &SwWrtShell::FwdSentence_, bSelect ); }
-    void EndSentence( bool bSelect = false )
-                { SimpleMove( &SwWrtShell::EndSentence_, bSelect ); }
     void BwdSentence( bool bSelect = false )
                 { SimpleMove( &SwWrtShell::BwdSentence_, bSelect ); }
 

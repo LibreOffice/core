@@ -150,7 +150,6 @@ public:
     const OUString& getTitle() const { return m_Title; }
     void        setTitle(const OUString& i_val) { m_Title = i_val; }
     sal_Int64   getFileSize() const { return m_nFileSize; }
-    void setFileSize(sal_Int64 i_val) { m_nFileSize = i_val; }
 
     /// reset user-specific data (author, modified-by, ...)
     void        resetUserData(const OUString & i_rAuthor);

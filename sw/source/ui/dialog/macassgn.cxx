@@ -100,32 +100,4 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     return aItem;
 }
 
-void SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh, const SvxMacroItem& rItem,
-                                     const std::function<void(const SvxMacroItem&)>& onItemSelectedFunc )
-{
-    SfxItemSetFixed<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG> aSet( rSh.GetAttrPool() );
-    aSet.Put( rItem );
-    aSet.Put( AddEvents( MACASSGN_INETFMT ) );
-
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractDialog> pMacroDlg( pFact->CreateEventConfigDialog(pParent, aSet,
-        rSh.GetView().GetViewFrame().GetFrame().GetFrameInterface() ) );
-    if ( !pMacroDlg )
-        return;
-    pMacroDlg->StartExecuteAsync(
-        [pMacroDlg, onItemSelectedFunc] (sal_Int32 nResult)->void
-        {
-            if (nResult == RET_OK)
-            {
-                const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-                if( const SvxMacroItem* pItem = pOutSet->GetItemIfSet( RES_FRMMACRO, false ))
-                {
-                    onItemSelectedFunc(*pItem);
-                }
-            }
-            pMacroDlg->disposeOnce();
-        }
-    );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

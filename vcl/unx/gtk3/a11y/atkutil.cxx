@@ -270,15 +270,4 @@ void DocumentFocusListener::detachRecursive(
     }
 }
 
-rtl::Reference<DocumentFocusListener> GtkSalData::GetDocumentFocusListener()
-{
-    rtl::Reference<DocumentFocusListener> xDFL = m_xDocumentFocusListener.get();
-    if (!xDFL)
-    {
-        xDFL = new DocumentFocusListener;
-        m_xDocumentFocusListener = xDFL.get();
-    }
-    return xDFL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,9 +39,6 @@ class WakeUpThread final
 public:
     WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& updatable);
     void stop();
-
-    static void joinThread();
-    static void startThread();
 };
 }
 
