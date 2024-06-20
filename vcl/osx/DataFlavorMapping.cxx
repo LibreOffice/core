@@ -586,9 +586,17 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
         OfficeOnlyTypes::const_iterator it = maOfficeOnlyTypes.find( oOOFlavor.MimeType );
 
         if( it == maOfficeOnlyTypes.end() )
-            sysFlavor = maOfficeOnlyTypes[ oOOFlavor.MimeType ] = OUStringToNSString( oOOFlavor.MimeType );
+        {
+            // tdf#161461 stop crashing by retaining NSString
+            // OUStringToNSString() returns an autoreleased NSString so it
+            // needs to be retained for the life of maOfficeOnlyTypes.
+            sysFlavor = maOfficeOnlyTypes[oOOFlavor.MimeType] =
+                [OUStringToNSString(oOOFlavor.MimeType) retain];
+        }
         else
+        {
             sysFlavor = it->second;
+        }
     }
 
     return sysFlavor;
