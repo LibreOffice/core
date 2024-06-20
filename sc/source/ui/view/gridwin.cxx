@@ -6701,7 +6701,7 @@ void ScGridWindow::UpdateCursorOverlay()
                     sdr::overlay::OverlayType::Solid,
                     aCursorColor,
                     std::move(aRanges),
-                    false));
+                    false, false));
 
                 xOverlayManager->add(*pOverlay);
                 mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
@@ -6790,7 +6790,7 @@ void ScGridWindow::UpdateSelectionOverlay()
                 sdr::overlay::OverlayType::Transparent,
                 aHighlight,
                 std::move(aRanges),
-                true));
+                true, true));
 
             xOverlayManager->add(*pOverlay);
             mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
@@ -6859,7 +6859,7 @@ void ScGridWindow::UpdateHighlightOverlay()
                 sdr::overlay::OverlayType::Transparent,
                 aHighlightColor,
                 std::move(aRanges),
-                false));
+                false, false));
 
             xOverlayManager->add(*pOverlay);
             mpOOHighlight.reset(new sdr::overlay::OverlayObjectList);
@@ -6973,7 +6973,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
             sdr::overlay::OverlayType::Solid,
             aHandleColor,
             std::move(aRanges),
-            false));
+            false, false));
 
         xOverlayManager->add(*pOverlay);
         mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
@@ -7119,7 +7119,7 @@ void ScGridWindow::UpdateDragRectOverlay()
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 std::move(aRanges),
-                false));
+                false, false));
 
             xOverlayManager->add(*pOverlay);
             mpOODragRect.reset(new sdr::overlay::OverlayObjectList);
@@ -7195,7 +7195,7 @@ void ScGridWindow::UpdateHeaderOverlay()
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 std::move(aRanges),
-                false));
+                false, false));
 
             xOverlayManager->add(*pOverlay);
             mpOOHeader.reset(new sdr::overlay::OverlayObjectList);
@@ -7265,7 +7265,7 @@ void ScGridWindow::UpdateShrinkOverlay()
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
                 std::move(aRanges),
-                false));
+                false, false));
 
             xOverlayManager->add(*pOverlay);
             mpOOShrink.reset(new sdr::overlay::OverlayObjectList);
@@ -7330,7 +7330,7 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
 
                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                         sdr::overlay::OverlayType::Transparent,
-                        aColor, std::move(aRanges), true));
+                        aColor, std::move(aRanges), true, false));
 
                 xOverlayManager->add(*pOverlay);
                 mpOOSparklineGroup->append(std::move(pOverlay));

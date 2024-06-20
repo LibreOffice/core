@@ -48,6 +48,7 @@ namespace sdr::overlay
             sal_uInt16                          mnLastTransparence;
 
             bool                                mbBorder : 1;
+            bool                                mbContrastOutline : 1;
 
             // geometry creation for OverlayObject, can use local *Last* values
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
@@ -57,7 +58,8 @@ namespace sdr::overlay
                 OverlayType eType,
                 const Color& rColor,
                 std::vector< basegfx::B2DRange >&& rRanges,
-                bool bBorder);
+                bool bBorder,
+                bool bContrastOutline = false);
             virtual ~OverlaySelection() override;
 
             // data read access
