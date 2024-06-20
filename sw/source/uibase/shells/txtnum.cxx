@@ -262,6 +262,8 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
     case FN_SVX_SET_OUTLINE:
         {
             const SfxUInt16Item* pIndexItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_INDEX );
+            if (!pIndexItem) // tdf#161653
+                pIndexItem = rReq.GetArg<SfxUInt16Item>(nSlot);
             const SfxStringItem* pCharItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_CHAR );
             const SfxStringItem* pFontItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_FONT );
 
