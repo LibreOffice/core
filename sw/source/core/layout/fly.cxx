@@ -2487,7 +2487,7 @@ bool SwFlyFrame::IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize)
     }
 
     // if not valid resize, and both AutoSizeWidth and AutoSizeHeight,
-    // then consider resize is valid if any one of the dimensions was changed from it's original size
+    // then consider resize is valid if any one of the dimensions was changed from its original size
     // (the frame's dimensions), and the destination dimension is a valid one.
     if (bAutosizeWidth && bAutosizeHeight && !bIsValidResize)
     {
