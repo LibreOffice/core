@@ -1151,6 +1151,7 @@ constexpr auto handlers = frozen::make_unordered_map<std::u16string_view, Payloa
     { u"CellProtection", IsActivePayload },
     { u"NormalMultiPaneGUI", IsActivePayload },
     { u"NotesMode", IsActivePayload },
+    { u"SlideMasterPage", IsActivePayload },
 
     { u"CharFontName", FontNamePayload },
 

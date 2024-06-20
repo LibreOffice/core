@@ -1067,7 +1067,12 @@ typedef enum
      *
      * Here all aproperties are same as described in svxruler.
      */
-    LOK_CALLBACK_VERTICAL_RULER_UPDATE = 73
+    LOK_CALLBACK_VERTICAL_RULER_UPDATE = 73,
+
+    /**
+    * Status of the document has changed notification
+    */
+    LOK_CALLBACK_STATUS_UPDATE = 74,
 
 }
 LibreOfficeKitCallbackType;
@@ -1245,6 +1250,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TOOLTIP";
     case LOK_CALLBACK_SHAPE_INNER_TEXT:
         return "LOK_CALLBACK_SHAPE_INNER_TEXT";
+    case LOK_CALLBACK_STATUS_UPDATE:
+        return "LOK_CALLBACK_STATUS_UPDATE";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

@@ -1502,6 +1502,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_CORE_LOG:
     case LOK_CALLBACK_TOOLTIP:
     case LOK_CALLBACK_SHAPE_INNER_TEXT:
+    case LOK_CALLBACK_STATUS_UPDATE:
     {
         // TODO: Implement me
         break;
