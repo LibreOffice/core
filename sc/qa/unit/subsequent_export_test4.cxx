@@ -1868,6 +1868,29 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf157318)
                          static_cast<sal_uInt16>(pDoc->GetRangeName(0)->size()));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testChangesAuthorDate)
+{
+    createScDoc("ods/change-tracking.ods");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // Remove all personal info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(
+        pXmlDoc,
+        "/office:document-content/office:body/office:spreadsheet/table:tracked-changes/table:cell-content-change[1]/office:change-info/dc:creator"_ostr,
+        u"Author1"_ustr);
+    assertXPathContent(
+        pXmlDoc,
+        "/office:document-content/office:body/office:spreadsheet/table:tracked-changes/table:cell-content-change[1]/office:change-info/dc:date"_ostr,
+        u"1970-01-01T12:00:00"_ustr);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
