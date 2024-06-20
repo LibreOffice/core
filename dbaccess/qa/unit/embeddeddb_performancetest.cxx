@@ -194,9 +194,6 @@ void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
     std::u16string_view rDBName,
     const bool bUsePreparedStatement)
 {
-    ::utl::TempFileNamed aFile;
-    aFile.EnableKillingFile();
-
     {
         uno::Reference< XOfficeDatabaseDocument > xDocument(
             m_xSFactory->createInstance(u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr),
@@ -207,11 +204,11 @@ void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
         uno::Reference< XPropertySet > xPropertySet(xDataSource, UNO_QUERY_THROW);
         xPropertySet->setPropertyValue(u"URL"_ustr, Any(rDriverURL));
 
-        xStorable->storeAsURL(aFile.GetURL(), uno::Sequence< beans::PropertyValue >());
+        xStorable->storeAsURL(maTempFile.GetURL(), uno::Sequence< beans::PropertyValue >());
     }
 
     uno::Reference< XOfficeDatabaseDocument > xDocument(
-        loadFromDesktop(aFile.GetURL()), UNO_QUERY_THROW);
+        loadFromDesktop(maTempFile.GetURL()), UNO_QUERY_THROW);
 
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);
