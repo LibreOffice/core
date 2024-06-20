@@ -929,6 +929,31 @@ bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
     return bRet;
 }
 
+void SfxItemSet::CollectHasItems(std::vector<sal_uInt16>& rItemWhichs) const
+{
+    for(auto const & rPair : m_aWhichRanges)
+    {
+        const sal_uInt16 nBeg = rPair.first;
+        const sal_uInt16 nEnd = rPair.second;
+        for( sal_uInt16 nWhich = nBeg; nWhich <= nEnd; ++nWhich )
+        {
+            bool bHasItem = false;
+            auto aHit(m_aPoolItemMap.find(nWhich));
+            if (aHit != m_aPoolItemMap.end())
+            {
+                bHasItem = !IsInvalidItem(aHit->second) && !IsDisabledItem(aHit->second);
+            }
+            else
+            {
+                if (m_pParent)
+                    bHasItem = SfxItemState::SET == m_pParent->GetItemState_ForWhichID( SfxItemState::DEFAULT, nWhich, true, nullptr);
+            }
+            if (bHasItem)
+                rItemWhichs.push_back( nWhich );
+        }
+    }
+}
+
 const SfxPoolItem* SfxItemSet::PutImplAsTargetWhich(const SfxPoolItem& rItem, sal_uInt16 nTargetWhich, bool bPassingOwnership)
 {
     if (0 == nTargetWhich || nTargetWhich == rItem.Which())

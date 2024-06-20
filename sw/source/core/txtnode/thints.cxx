@@ -3099,15 +3099,7 @@ bool SwpHints::TryInsertHint(
             rNode.SetCalcHiddenCharFlags();
 
         // fdo#71556: populate aWhichFormatAttr member of SwMsgPoolItem
-        const WhichRangesContainer& pRanges = pSet->GetRanges();
-        for(auto const & rPair : pRanges)
-        {
-            const sal_uInt16 nBeg = rPair.first;
-            const sal_uInt16 nEnd = rPair.second;
-            for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
-                if( pSet->HasItem( nSubElem ) )
-                    aWhichSublist.push_back( nSubElem );
-        }
+        pSet->CollectHasItems(aWhichSublist);
         break;
     }
     case RES_TXTATR_INETFMT:

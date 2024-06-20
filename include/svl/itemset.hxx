@@ -212,6 +212,7 @@ public:
     template<class T>
     bool                        HasItem(TypedWhichId<T> nWhich, const T** ppItem = nullptr) const
     { return HasItem(sal_uInt16(nWhich), reinterpret_cast<const SfxPoolItem**>(ppItem)); }
+    void                        CollectHasItems(std::vector<sal_uInt16>& rItemWhichs) const;
 
     void DisableItem(sal_uInt16 nWhich)
         { DisableOrInvalidateItem_ForWhichID(true, nWhich); }
