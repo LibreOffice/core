@@ -5182,7 +5182,7 @@ void ScInterpreter::ScXMatch()
     if (nParamCount >= 3)
     {
         sal_Int16 k = GetInt16();
-        if (k >= -1 && k <= 2)
+        if (k >= -1 && k <= 3)
             vsa.eMatchMode = static_cast<MatchMode>(k);
         else
         {
@@ -7937,7 +7937,7 @@ void ScInterpreter::ScXLookup()
     if ( nParamCount >= 5 )
     {
         sal_Int16 k = GetInt16();
-        if ( k >= -1 && k <= 2 )
+        if ( k >= -1 && k <= 3 )
             vsa.eMatchMode = static_cast<MatchMode>(k);
         else
         {
@@ -11722,10 +11722,11 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             break;
 
         case wildcard :
+        case regex :
             // this mode can only used with XLOOKUP/XMATCH
             if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH )
             {
-                // Wildcard search mode with binary search is not allowed
+                // Wildcard/Regex search mode with binary search is not allowed
                 if (vsa.eSearchMode == searchbasc || vsa.eSearchMode == searchbdesc)
                 {
                     PushNoValue();
@@ -11735,10 +11736,12 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
                 rEntry.eOp = SC_EQUAL;
                 if ( vsa.isStringSearch )
                 {
-                    if ( mrDoc.IsInVBAMode() )
+                    if (vsa.eMatchMode == wildcard && MayBeWildcard(vsa.sSearchStr.getString()))
                         rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
+                    else if (vsa.eMatchMode == regex && MayBeRegExp(vsa.sSearchStr.getString()))
+                        rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
                     else
-                        rParam.eSearchType = DetectSearchType(vsa.sSearchStr.getString(), mrDoc);
+                        rParam.eSearchType = utl::SearchParam::SearchType::Normal;
                 }
             }
             else
