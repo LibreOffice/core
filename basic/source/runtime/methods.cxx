@@ -111,13 +111,13 @@ using namespace com::sun::star::uno;
 
 static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 
+#if HAVE_FEATURE_SCRIPTING
+
 static sal_Int32 nanoSecToMilliSec(sal_Int64 nNanoSeconds)
 {
     // Rounding nanoseconds to milliseconds precision to avoid comparision inaccuracies
     return o3tl::convert(nNanoSeconds, 1, tools::Time::nanoPerMilli);
 }
-
-#if HAVE_FEATURE_SCRIPTING
 
 static void FilterWhiteSpace( OUString& rStr )
 {
