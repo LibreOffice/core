@@ -51,4 +51,8 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_writerfilter_ooxml))
 # by a link relation
 $(call gb_CppunitTest_get_target,sw_writerfilter_ooxml) : $(call gb_Library_get_target,sw_writerfilter)
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_writerfilter_ooxml,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
