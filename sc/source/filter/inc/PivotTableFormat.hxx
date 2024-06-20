@@ -71,8 +71,6 @@ public:
 class PivotTableReference : public WorkbookHelper
 {
 public:
-    PivotTableFormat const& mrFormat;
-
     std::optional<sal_uInt32> mnField;
     std::optional<sal_uInt32> mnCount;
     bool mbSelected = true;

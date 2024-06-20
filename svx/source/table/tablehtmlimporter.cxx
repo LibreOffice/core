@@ -134,7 +134,6 @@ private:
     HTMLCellDefaultVector maDefaultList;
     HTMLCellDefaultVector::iterator maDefaultIterator;
 
-    HtmlTokenId mnLastToken;
     bool mbNewDef;
 
     sal_Int32 mnCellStartPara;
@@ -163,7 +162,6 @@ SdrTableHTMLParser::SdrTableHTMLParser(SdrTableObj& rTableObj)
     : mrTableObj(rTableObj)
     , mpOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rTableObj.getSdrModelFromSdrObject()))
     , mrItemPool(rTableObj.getSdrModelFromSdrObject().GetItemPool())
-    , mnLastToken(HtmlTokenId::NONE)
     , mbNewDef(false)
     , mnCellStartPara(0)
     , mnRowCnt(0)
@@ -431,7 +429,6 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
     {
         case HtmlTokenId::TABLE_ON:
             maDefaultList.clear();
-            mnLastToken = pInfo->nToken;
             maLastEdge = maColumnEdges.begin();
             mnLastEdge = 0;
             break;
@@ -462,19 +459,16 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
                 InsertCell(mnCellStartPara, pInfo->aSelection.nEndPara);
             }
             NextColumn();
-            mnLastToken = pInfo->nToken;
         }
         break;
         case HtmlTokenId::TABLEROW_ON:
             mbNewDef = true;
             NewCellRow();
-            mnLastToken = pInfo->nToken;
             break;
         case HtmlTokenId::TABLEROW_OFF:
         {
             NextRow();
             mnCellInRow = -1;
-            mnLastToken = pInfo->nToken;
         }
         break;
         case HtmlTokenId::COL_ON:
@@ -488,7 +482,6 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
 
             mpInsDefault.reset(new HTMLCellDefault());
             mnLastEdge = nSize;
-            mnLastToken = pInfo->nToken;
         }
         break;
         case HtmlTokenId::COL_OFF:

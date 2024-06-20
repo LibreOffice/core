@@ -3068,6 +3068,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot ),
     mpKeywordTable( new NfKeywordTable )
 {
+    sal_Int32 nDxfId = 0;
     // Special number formatter for conversion.
     SvNumberFormatterPtr xFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ));
     xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
@@ -3091,21 +3092,21 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, mnDxfId).second)
+                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    mnDxfId++;
+                    nDxfId++;
                 }
                 for (auto& rColor : aFilterEntries.getTextColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, mnDxfId).second)
+                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    mnDxfId++;
+                    nDxfId++;
                 }
             }
         }
@@ -3139,7 +3140,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         aStyleName = pEntry->GetStyleName();
                     }
 
-                    if (maStyleNameToDxfId.emplace(aStyleName, mnDxfId).second)
+                    if (maStyleNameToDxfId.emplace(aStyleName, nDxfId).second)
                     {
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
@@ -3147,7 +3148,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         SfxItemSet& rSet = pStyle->GetItemSet();
                         fillDxfFrom(rSet, xFormatter);
-                        mnDxfId++;
+                        nDxfId++;
                     }
 
                 }
@@ -3170,8 +3171,8 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                 SfxItemSet& rItemSet = rFormat.pPattern->GetItemSet();
                 fillDxfFrom(rItemSet, xFormatter);
-                maPatternToDxfId.emplace(rFormat.pPattern.get(), mnDxfId);
-                mnDxfId++;
+                maPatternToDxfId.emplace(rFormat.pPattern.get(), nDxfId);
+                nDxfId++;
             }
         }
     }

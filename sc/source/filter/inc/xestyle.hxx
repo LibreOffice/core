@@ -770,7 +770,6 @@ public:
 
 private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
-    sal_Int32 mnDxfId = 0;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     std::map<Color, sal_Int32> maColorToDxfId;
     std::map<ScPatternAttr*, sal_Int32> maPatternToDxfId;

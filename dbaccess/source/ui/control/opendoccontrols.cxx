@@ -91,16 +91,15 @@ namespace dbaui
     // OpenButton
 
     OpenDocumentButton::OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const OUString& _rAsciiModuleName)
-        : m_sModule( _rAsciiModuleName )
-        , m_xControl(std::move(xControl))
+        : m_xControl(std::move(xControl))
     {
         // our label should equal the UI text of the "Open" command
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:Open"_ustr, m_sModule);
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:Open"_ustr, _rAsciiModuleName);
         OUString sLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         m_xControl->set_label(" " + sLabel.replaceAll("~", ""));
 
         // Place icon left of text and both centered in the button.
-        m_xControl->set_image(GetCommandIcon(u".uno:Open"_ustr, m_sModule));
+        m_xControl->set_image(GetCommandIcon(u".uno:Open"_ustr, _rAsciiModuleName));
     }
 
     // OpenDocumentListBox

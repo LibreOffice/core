@@ -41,11 +41,6 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
     bool mbIgnoreNotifications = false;
     bool mbInFocus = false;
 
-    /** stores the last used document color.
-        this is changed in onUpdateStyleSettings()
-    */
-    Color maDocColor = COL_WHITE;
-
     void removeListener();
     void addListener();
 

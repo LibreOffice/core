@@ -132,6 +132,8 @@ for d in definitionSet:
         continue
     if "::sfx2::sidebar::ControllerItem" in fieldType:
         continue
+    if "SvxRatioConnector" in fieldType:
+        continue
     if "(lambda at " in d[0]:
         continue
     onlyUsedInConstructorSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))

@@ -188,7 +188,6 @@ void NotesPanelView::onUpdateStyleSettings()
         pWindow->SetBackground(Wallpaper(aDocColor));
 
     maOutliner.SetBackgroundColor(aDocColor);
-    maDocColor = aDocColor;
 }
 
 void NotesPanelView::onResize()

@@ -127,7 +127,6 @@ PivotTableReference& PivotTableFormat::createReference()
 
 PivotTableReference::PivotTableReference(const PivotTableFormat& rFormat)
     : WorkbookHelper(rFormat)
-    , mrFormat(rFormat)
 {
 }
 void PivotTableReference::importReference(const oox::AttributeList& rAttribs)

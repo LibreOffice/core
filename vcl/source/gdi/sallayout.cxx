@@ -137,8 +137,6 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     mnMinCharPos  = rArgs.mnMinCharPos;
     mnEndCharPos  = rArgs.mnEndCharPos;
-    mnDrawMinCharPos = rArgs.mnDrawMinCharPos;
-    mnDrawEndCharPos = rArgs.mnDrawEndCharPos;
     mnOrientation = rArgs.mnOrientation;
     maLanguageTag = rArgs.maLanguageTag;
 }

@@ -601,7 +601,6 @@ private:
     std::vector<std::unique_ptr<DeletedNodeInfo>> maDeletedNodes;
     tools::Rectangle maInvalidRect;
     tools::Long mnCurTextHeight;
-    tools::Long mnCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16 mnOnePixelInRef;
 
     IdleFormattter maIdleFormatter;
@@ -893,7 +892,7 @@ private:
     const ParaPortionList&  GetParaPortions() const { return maParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return maParaPortionList; }
 
-    tools::Long Calc1ColumnTextHeight(tools::Long* pHeightNTP);
+    tools::Long Calc1ColumnTextHeight();
 
     void IdleFormatAndLayout(EditView* pCurView) { maIdleFormatter.DoIdleFormat(pCurView); }
 
@@ -1048,7 +1047,7 @@ public:
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos, EditView* pCurView );
 
-    tools::Long     CalcTextHeight( tools::Long* pHeightNTP );
+    tools::Long     CalcTextHeight();
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
     sal_uInt32      CalcParaWidth( sal_Int32 nParagraph, bool bIgnoreExtraSpace );

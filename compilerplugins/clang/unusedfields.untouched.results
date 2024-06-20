@@ -14,12 +14,10 @@ chart2/source/controller/inc/dlg_DataEditor.hxx:55
     chart::DataEditor m_xContext css::uno::Reference<css::uno::XComponentContext>
 chart2/source/controller/inc/RangeSelectionListener.hxx:65
     chart::RangeSelectionListener m_aControllerLockGuard ControllerLockGuardUNO
-chart2/source/inc/ModifyListenerCallBack.hxx:52
+chart2/source/inc/ModifyListenerCallBack.hxx:53
     chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
 comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<XInterface>
-comphelper/source/misc/logging.cxx:41
-    comphelper::EventLogger_Impl m_aContext Reference<XComponentContext>
 connectivity/source/drivers/evoab2/EApi.h:121
     EContactAddress address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
@@ -42,6 +40,8 @@ cui/source/inc/fileextcheckdlg.hxx:29
     FileExtCheckDialog m_pPerformCheck std::unique_ptr<weld::CheckButton>
 cui/source/inc/fileextcheckdlg.hxx:30
     FileExtCheckDialog m_pOk std::unique_ptr<weld::Button>
+cui/source/inc/paragrph.hxx:73
+    SvxStdParagraphTabPage m_xAbsDist std::unique_ptr<weld::Label>
 cui/source/options/optinet2.hxx:108
     SvxSecurityTabPage m_xCertPathImg std::unique_ptr<weld::Widget>
 cui/source/options/optinet2.hxx:109
@@ -59,7 +59,7 @@ embeddedobj/source/msole/olecomponent.hxx:53
 embeddedobj/source/msole/olecomponent.hxx:54
     OleComponent m_bModified _Bool
 embeddedobj/source/msole/olecomponent.hxx:55
-    OleComponent m_pNativeImpl OleComponentNative_Impl *
+    OleComponent m_pNativeImpl std::unique_ptr<OleComponentNative_Impl>
 embeddedobj/source/msole/olecomponent.hxx:57
     OleComponent m_pUnoOleObject OleEmbeddedObject *
 embeddedobj/source/msole/olecomponent.hxx:58
@@ -67,16 +67,12 @@ embeddedobj/source/msole/olecomponent.hxx:58
 embeddedobj/source/msole/olecomponent.hxx:59
     OleComponent m_pImplAdviseSink OleWrapperAdviseSink *
 embeddedobj/source/msole/olecomponent.hxx:61
-    OleComponent m_nOLEMiscFlags sal_Int32
-embeddedobj/source/msole/olecomponent.hxx:62
-    OleComponent m_nAdvConn sal_Int32
-embeddedobj/source/msole/olecomponent.hxx:64
     OleComponent m_aVerbList css::uno::Sequence<css::embed::VerbDescriptor>
-embeddedobj/source/msole/olecomponent.hxx:65
+embeddedobj/source/msole/olecomponent.hxx:62
     OleComponent m_aDataFlavors css::uno::Sequence<css::datatransfer::DataFlavor>
-embeddedobj/source/msole/olecomponent.hxx:67
+embeddedobj/source/msole/olecomponent.hxx:64
     OleComponent m_xContext css::uno::Reference<css::uno::XComponentContext>
-embeddedobj/source/msole/olecomponent.hxx:69
+embeddedobj/source/msole/olecomponent.hxx:66
     OleComponent m_bOleInitialized _Bool
 emfio/source/emfuno/xemfparser.cxx:49
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
@@ -86,6 +82,8 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:35
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:45
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
+framework/inc/dispatch/dispatchprovider.hxx:76
+    framework::DispatchProvider m_aProtocolHandlerCache HandlerCache
 helpcompiler/inc/HelpCompiler.hxx:200
     HelpCompiler lang const std::string
 include/basegfx/DrawCommands.hxx:143
@@ -110,143 +108,49 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:34
     Registry_Api acquire void (*)(RegHandle)
-include/sfx2/msg.hxx:116
-    SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:118
-    SfxType0 nAttribs sal_uInt16
-include/sfx2/msg.hxx:131
+include/sfx2/msg.hxx:133
     SfxType1 aAttrib SfxTypeAttrib[1]
-include/sfx2/msg.hxx:131
-    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:131
-    SfxType1 nAttribs sal_uInt16
-include/sfx2/msg.hxx:131
-    SfxType1 pType const std::type_info *
-include/sfx2/msg.hxx:132
+include/sfx2/msg.hxx:134
     SfxType2 aAttrib SfxTypeAttrib[2]
-include/sfx2/msg.hxx:132
-    SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:132
-    SfxType2 nAttribs sal_uInt16
-include/sfx2/msg.hxx:132
-    SfxType2 pType const std::type_info *
-include/sfx2/msg.hxx:133
+include/sfx2/msg.hxx:135
     SfxType3 aAttrib SfxTypeAttrib[3]
-include/sfx2/msg.hxx:133
-    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:133
-    SfxType3 nAttribs sal_uInt16
-include/sfx2/msg.hxx:133
-    SfxType3 pType const std::type_info *
-include/sfx2/msg.hxx:134
+include/sfx2/msg.hxx:136
     SfxType4 aAttrib SfxTypeAttrib[4]
-include/sfx2/msg.hxx:134
-    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:134
-    SfxType4 nAttribs sal_uInt16
-include/sfx2/msg.hxx:134
-    SfxType4 pType const std::type_info *
-include/sfx2/msg.hxx:135
+include/sfx2/msg.hxx:137
     SfxType5 aAttrib SfxTypeAttrib[5]
-include/sfx2/msg.hxx:135
-    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:135
-    SfxType5 nAttribs sal_uInt16
-include/sfx2/msg.hxx:135
-    SfxType5 pType const std::type_info *
-include/sfx2/msg.hxx:136
+include/sfx2/msg.hxx:138
     SfxType6 aAttrib SfxTypeAttrib[6]
-include/sfx2/msg.hxx:136
-    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:136
-    SfxType6 nAttribs sal_uInt16
-include/sfx2/msg.hxx:136
-    SfxType6 pType const std::type_info *
-include/sfx2/msg.hxx:137
+include/sfx2/msg.hxx:139
     SfxType7 aAttrib SfxTypeAttrib[7]
-include/sfx2/msg.hxx:137
-    SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:137
-    SfxType7 nAttribs sal_uInt16
-include/sfx2/msg.hxx:137
-    SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:138
+include/sfx2/msg.hxx:140
     SfxType8 aAttrib SfxTypeAttrib[8]
-include/sfx2/msg.hxx:138
-    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:138
-    SfxType8 nAttribs sal_uInt16
-include/sfx2/msg.hxx:138
-    SfxType8 pType const std::type_info *
-include/sfx2/msg.hxx:139
+include/sfx2/msg.hxx:141
+    SfxType9 aAttrib SfxTypeAttrib[9]
+include/sfx2/msg.hxx:142
     SfxType10 aAttrib SfxTypeAttrib[10]
-include/sfx2/msg.hxx:139
-    SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:139
-    SfxType10 nAttribs sal_uInt16
-include/sfx2/msg.hxx:139
-    SfxType10 pType const std::type_info *
-include/sfx2/msg.hxx:140
+include/sfx2/msg.hxx:143
     SfxType11 aAttrib SfxTypeAttrib[11]
-include/sfx2/msg.hxx:140
-    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:140
-    SfxType11 nAttribs sal_uInt16
-include/sfx2/msg.hxx:140
-    SfxType11 pType const std::type_info *
-include/sfx2/msg.hxx:142
+include/sfx2/msg.hxx:145
     SfxType13 aAttrib SfxTypeAttrib[13]
-include/sfx2/msg.hxx:142
-    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:142
-    SfxType13 nAttribs sal_uInt16
-include/sfx2/msg.hxx:142
-    SfxType13 pType const std::type_info *
-include/sfx2/msg.hxx:143
+include/sfx2/msg.hxx:146
     SfxType14 aAttrib SfxTypeAttrib[14]
-include/sfx2/msg.hxx:143
-    SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:143
-    SfxType14 nAttribs sal_uInt16
-include/sfx2/msg.hxx:143
-    SfxType14 pType const std::type_info *
-include/sfx2/msg.hxx:144
+include/sfx2/msg.hxx:147
     SfxType16 aAttrib SfxTypeAttrib[16]
-include/sfx2/msg.hxx:144
-    SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:144
-    SfxType16 nAttribs sal_uInt16
-include/sfx2/msg.hxx:144
-    SfxType16 pType const std::type_info *
-include/sfx2/msg.hxx:145
+include/sfx2/msg.hxx:148
     SfxType17 aAttrib SfxTypeAttrib[17]
-include/sfx2/msg.hxx:145
-    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:145
-    SfxType17 nAttribs sal_uInt16
-include/sfx2/msg.hxx:145
-    SfxType17 pType const std::type_info *
-include/sfx2/msg.hxx:146
+include/sfx2/msg.hxx:149
     SfxType23 aAttrib SfxTypeAttrib[23]
-include/sfx2/msg.hxx:146
-    SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:146
-    SfxType23 nAttribs sal_uInt16
-include/sfx2/msg.hxx:146
-    SfxType23 pType const std::type_info *
 include/svtools/genericasyncunodialog.hxx:54
     svt::OGenericUnoAsyncDialog::UnoAsyncDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/genericunodialog.hxx:154
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
-include/svx/dialog/ThemeColorEditDialog.hxx:23
+include/svx/dialog/ThemeColorEditDialog.hxx:26
     svx::ThemeColorEditDialog maColorSet model::ColorSet
 include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem SvxIMapDlgItem
-include/tools/inetstrm.hxx:40
-    INetMIMEMessageStream pMsgStrm std::unique_ptr<SvStream>
-include/unotest/macros_test.hxx:113
+include/unotest/macros_test.hxx:115
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
 include/vcl/commandevent.hxx:317
     CommandGesturePanData mfX const double
@@ -286,9 +190,9 @@ include/vcl/GestureEventZoom.hxx:28
     GestureEventZoom meEventType GestureEventZoomType
 include/vcl/GestureEventZoom.hxx:32
     GestureEventZoom mfScaleDelta double
-include/vcl/pdf/PDFAnnotationMarker.hxx:67
+include/vcl/pdf/PDFAnnotationMarker.hxx:79
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType PDFTextMarkerType
-include/vcl/uitest/uiobject.hxx:309
+include/vcl/uitest/uiobject.hxx:316
     TabPageUIObject mxTabPage VclPtr<TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
@@ -324,6 +228,12 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:77
     (anonymous namespace)::textcat_t output char[1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::no a char[2]
+oox/source/drawingml/scene3dhelper.cxx:476
+    oox::(anonymous namespace)::MSOLight fScale double
+oox/source/drawingml/scene3dhelper.cxx:477
+    oox::(anonymous namespace)::MSOLight fOffset double
+oox/source/drawingml/scene3dhelper.cxx:479
+    oox::(anonymous namespace)::MSOLight bDiffuse _Bool
 pyuno/source/module/pyuno_callable.cxx:45
     pyuno::(anonymous namespace)::PyUNO_callable ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:137
@@ -392,22 +302,44 @@ sc/inc/editutil.hxx:111
     ScEnginePoolHelper pEnginePool rtl::Reference<SfxItemPool>
 sc/inc/editutil.hxx:113
     ScEnginePoolHelper bDeleteEnginePool _Bool
-sc/inc/mtvelements.hxx:171
+sc/inc/mtvelements.hxx:172
     sc::ColumnBlockConstPosition miSparklinePos SparklineStoreType::const_iterator
-sc/inc/patattr.hxx:117
+sc/inc/patattr.hxx:138
     ScPatternAttr m_nSerialNumber sal_uInt32
-sc/inc/SolverSettings.hxx:168
+sc/inc/pivot/PivotTableFormats.hxx:44
+    sc::PivotTableFormat bSelected _Bool
+sc/inc/SolverSettings.hxx:241
     sc::SolverSettings SolverCodesToLOEngines std::map<OUString, OUString>
-sc/source/core/data/document.cxx:1234
+sc/source/core/data/document.cxx:1221
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1235
+sc/source/core/data/document.cxx:1222
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk ScBulkBroadcast
+sc/source/core/inc/interpre.hxx:83
+    VectorSearchArguments nTab2 SCTAB
+sc/source/core/inc/interpre.hxx:250
+    ScInterpreter maResultTokenMap ScResultTokenMap
+sc/source/filter/inc/PivotTableFormat.hxx:74
+    oox::xls::PivotTableReference mrFormat const PivotTableFormat &
 sc/source/filter/inc/sheetdatacontext.hxx:50
     oox::xls::SheetDataContext aReleaser SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:457
+sc/source/ui/inc/consdlg.hxx:69
+    ScConsolidateDlg m_xExpander std::unique_ptr<weld::Expander>
+sc/source/ui/inc/dbnamdlg.hxx:86
+    ScDbNameDlg m_xExpander std::unique_ptr<weld::Expander>
+sc/source/ui/inc/docsh.hxx:470
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
+sc/source/ui/inc/namedefdlg.hxx:56
+    ScNameDefDlg m_xExpander std::unique_ptr<weld::Expander>
+sc/source/ui/inc/namedlg.hxx:71
+    ScNameDlg m_xExpander std::unique_ptr<weld::Expander>
+sc/source/ui/inc/PivotLayoutDialog.hxx:88
+    ScPivotLayoutDialog mxOptions std::unique_ptr<weld::Expander>
+sc/source/ui/inc/PivotLayoutDialog.hxx:89
+    ScPivotLayoutDialog mxMore std::unique_ptr<weld::Expander>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:47
     ScPivotLayoutTreeListBase maDropTargetHelper ScPivotLayoutTreeDropTarget
+sc/source/ui/inc/pvfundlg.hxx:85
+    ScDPFunctionDlg mxExpander std::unique_ptr<weld::Expander>
 sd/source/ui/inc/CustomAnimationList.hxx:127
     sd::CustomAnimationList maDropTargetHelper CustomAnimationListDropTarget
 sd/source/ui/inc/custsdlg.hxx:68
@@ -420,19 +352,19 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:63
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/view/DocumentRenderer.cxx:1318
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1200
+sd/source/ui/view/viewshel.cxx:1245
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1201
+sd/source/ui/view/viewshel.cxx:1246
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1202
+sd/source/ui/view/viewshel.cxx:1247
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1203
+sd/source/ui/view/viewshel.cxx:1248
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:190
+sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:250
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:269
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:250
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell SfxObjectShellLock
@@ -476,7 +408,7 @@ svl/source/crypto/cryptosign.cxx:276
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
-svx/source/dialog/contimp.hxx:75
+svx/source/dialog/contimp.hxx:74
     SvxSuperContourDlg aContourItem SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:457
     (anonymous namespace)::WeldEditSource m_rEditAcc WeldEditAccessible &
@@ -492,7 +424,7 @@ sw/qa/extras/uiwriter/uiwriter5.cxx:67
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState SwCursorSaveState
-sw/source/core/frmedt/fetab.cxx:80
+sw/source/core/frmedt/fetab.cxx:93
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/inc/ftnboss.hxx:34
     SwSaveFootnoteHeight aGuard SwFrameDeleteGuard
@@ -502,16 +434,30 @@ sw/source/core/layout/dbg_lay.cxx:181
     SwImplEnterLeave m_nAction DbgAction
 sw/source/ui/envelp/swuilabimp.hxx:32
     SwLabPage m_xAddressFrame std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/condedit.hxx:43
-    ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:334
+sw/source/ui/inc/condedit.hxx:87
+    ConditionEdit m_aDropTargetHelper ConditionEditDropTarget<Entry>
+sw/source/uibase/inc/conttree.hxx:332
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
-sw/source/uibase/inc/frmpage.hxx:94
+sw/source/uibase/inc/convert.hxx:40
+    SwConvertTableDlg m_aStrTitle OUString
+sw/source/uibase/inc/convert.hxx:41
+    SwConvertTableDlg m_aStrLabel OUString
+sw/source/uibase/inc/convert.hxx:42
+    SwConvertTableDlg m_aStrClose OUString
+sw/source/uibase/inc/convert.hxx:43
+    SwConvertTableDlg m_aStrDelTitle OUString
+sw/source/uibase/inc/convert.hxx:44
+    SwConvertTableDlg m_aStrDelMsg OUString
+sw/source/uibase/inc/convert.hxx:45
+    SwConvertTableDlg m_aStrRenameTitle OUString
+sw/source/uibase/inc/convert.hxx:46
+    SwConvertTableDlg m_aStrInvalidFormat OUString
+sw/source/uibase/inc/convert.hxx:79
+    SwConvertTableDlg m_pShell SwWrtShell *
+sw/source/uibase/inc/frmpage.hxx:103
     SwFramePage m_xAnchorFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/insfnote.hxx:38
     SwInsFootNoteDlg m_xNumberFrame std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/mailmrge.hxx:72
-    SwMailMergeDlg m_xSingleJobsCB std::unique_ptr<weld::CheckButton>
 sw/source/uibase/inc/num.hxx:47
     SwNumPositionTabPage m_xPositionFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/pagenumberdlg.hxx:31
@@ -526,17 +472,17 @@ sw/source/uibase/inc/unodispatch.hxx:43
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard SolarMutexGuard
 sw/source/uibase/sidebar/ThemePanel.hxx:41
     sw::sidebar::ThemePanel mxListBoxFonts std::unique_ptr<weld::TreeView>
+sw/source/writerfilter/ooxml/OOXMLStreamImpl.hxx:41
+    writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 toolkit/source/awt/stylesettings.cxx:74
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:675
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:676
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
-uui/source/iahndl.hxx:64
-    InteractionHandlerData ServiceName OUString
 uui/source/openlocked.hxx:36
     vcl::OpenLockedQueryBox mxQuestionMarkImage std::unique_ptr<weld::Image>
-vcl/inc/jsdialog/jsdialogbuilder.hxx:728
+vcl/inc/jsdialog/jsdialogbuilder.hxx:737
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -546,11 +492,43 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
 vcl/inc/salprn.hxx:48
     SalPrinterQueueInfo moPortName std::optional<OUString>
-vcl/inc/sft.hxx:178
+vcl/inc/sft.hxx:179
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
 vcl/inc/skia/zone.hxx:29
     SkiaZone g SolarMutexGuard
-vcl/source/app/salvtables.cxx:246
+vcl/inc/unx/cpdmgr.hxx:45
+    psp::CPDPrinter id const char *
+vcl/inc/unx/cpdmgr.hxx:46
+    psp::CPDPrinter name const char *
+vcl/inc/unx/cpdmgr.hxx:47
+    psp::CPDPrinter info const char *
+vcl/inc/unx/cpdmgr.hxx:48
+    psp::CPDPrinter location const char *
+vcl/inc/unx/cpdmgr.hxx:49
+    psp::CPDPrinter make_and_model const char *
+vcl/inc/unx/cpdmgr.hxx:50
+    psp::CPDPrinter printer_state const char *
+vcl/inc/unx/cpdmgr.hxx:51
+    psp::CPDPrinter backend_name const char *
+vcl/inc/unx/cpdmgr.hxx:52
+    psp::CPDPrinter is_accepting_jobs _Bool
+vcl/inc/unx/cpdmgr.hxx:53
+    psp::CPDPrinter backend GDBusProxy *
+vcl/inc/unx/cpdmgr.hxx:59
+    psp::CPDManager m_pConnection GDBusConnection *
+vcl/inc/unx/cpdmgr.hxx:60
+    psp::CPDManager m_aPrintersChanged _Bool
+vcl/inc/unx/cpdmgr.hxx:61
+    psp::CPDManager m_tBackends std::vector<std::pair<std::string, gchar *> >
+vcl/inc/unx/cpdmgr.hxx:62
+    psp::CPDManager m_pBackends std::unordered_map<std::string, GDBusProxy *>
+vcl/inc/unx/cpdmgr.hxx:63
+    psp::CPDManager m_aSpoolFiles std::unordered_map<FILE *, OString, FPtrHash>
+vcl/inc/unx/cpdmgr.hxx:64
+    psp::CPDManager m_aCPDDestMap std::unordered_map<OUString, CPDPrinter *>
+vcl/inc/unx/cpdmgr.hxx:65
+    psp::CPDManager m_aDefaultContexts std::unordered_map<OUString, PPDContext>
+vcl/source/app/salvtables.cxx:245
     SalFlashAttention m_aOrigBackground Wallpaper
 vcl/source/fontsubset/ttcr.hxx:40
     vcl::longHorMetrics aw sal_uInt16
@@ -576,9 +554,9 @@ vcl/unx/gtk3/customcellrenderer.hxx:29
     CustomCellRendererClass parent_class GtkCellRendererTextClass
 vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-writerfilter/source/ooxml/OOXMLStreamImpl.hxx:41
-    writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
-xmloff/inc/XMLThemeContext.hxx:47
+xmlhelp/source/cxxhelp/inc/tvfactory.hxx:70
+    treeview::TVFactory m_xContext css::uno::Reference<css::uno::XComponentContext>
+xmloff/inc/XMLThemeContext.hxx:45
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
 xmlscript/source/xmldlg_imexp/imp_share.hxx:537
     xmlscript::BulletinBoardElement mxDialogImport rtl::Reference<DialogImport>

@@ -34,8 +34,6 @@ namespace dbaui
     class OpenDocumentButton
     {
     private:
-        OUString     m_sModule;
-
         std::unique_ptr<weld::Button> m_xControl;
     public:
         OpenDocumentButton(std::unique_ptr<weld::Button> xControl, const OUString& _rAsciiModuleName);

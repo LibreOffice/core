@@ -35,8 +35,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-TVFactory::TVFactory( uno::Reference< XComponentContext > xContext )
-    : m_xContext(std::move( xContext ))
+TVFactory::TVFactory()
 {
 }
 
@@ -123,9 +122,9 @@ TVFactory::getAvailableServiceNames( )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_help_TreeViewImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new TVFactory(context));
+    return cppu::acquire(new TVFactory);
 }
 
 

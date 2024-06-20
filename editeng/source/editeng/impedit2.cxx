@@ -110,7 +110,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mnBigTextObjectStart(20),
     meDefLanguage(LANGUAGE_DONTKNOW),
     mnCurTextHeight(0),
-    mnCurTextHeightNTP(0),
     maOnlineSpellTimer("editeng::ImpEditEngine aOnlineSpellTimer"),
     maStatusTimer("editeng::ImpEditEngine aStatusTimer"),
     mbKernAsianPunctuation(false),
@@ -681,7 +680,6 @@ void ImpEditEngine::Clear()
     EditSelection aSel( aPaM );
 
     mnCurTextHeight = 0;
-    mnCurTextHeightNTP = 0;
 
     ResetUndoManager();
 
@@ -740,10 +738,7 @@ void ImpEditEngine::SetText(const OUString& rText)
         }
     }
     if (rText.isEmpty())     // otherwise it must be invalidated later, !bFormatted is enough.
-    {
         mnCurTextHeight = 0;
-        mnCurTextHeightNTP = 0;
-    }
     EnableUndo( bUndoCurrentlyEnabled );
     OSL_ENSURE( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Undo after SetText?" );
 }
@@ -3538,11 +3533,9 @@ sal_uInt32 ImpEditEngine::CalcLineWidth(ParaPortion const& rPortion, EditLine co
     return nWidth;
 }
 
-tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
+tools::Long ImpEditEngine::Calc1ColumnTextHeight()
 {
     tools::Long nHeight = 0;
-    if (pHeightNTP)
-        *pHeightNTP = 0;
     // Pretend that we have ~infinite height to get total height
     comphelper::ValueRestorationGuard aGuard(mnCurTextHeight, std::numeric_limits<tools::Long>::max());
 
@@ -3551,8 +3544,6 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
         {
             // bottom coordinate does not belong to area, so no need to do +1
             nHeight = getBottomDocOffset(rInfo.aArea);
-            if (pHeightNTP && !rInfo.rPortion.IsEmpty())
-                *pHeightNTP = nHeight;
         }
         return CallbackResult::Continue;
     };
@@ -3560,12 +3551,12 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
     return nHeight;
 }
 
-tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
+tools::Long ImpEditEngine::CalcTextHeight()
 {
     assert( IsUpdateLayout() && "Should not be used when Update=FALSE: CalcTextHeight" );
 
     if (mnColumns <= 1)
-        return Calc1ColumnTextHeight(pHeightNTP); // All text fits into a single column - done!
+        return Calc1ColumnTextHeight(); // All text fits into a single column - done!
 
     // The final column height can be smaller than total height divided by number of columns (taking
     // into account first line offset and interline spacing, that aren't considered in positioning
@@ -3621,8 +3612,6 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         nTentativeColHeight += nWantedIncrease;
         nWantedIncrease = std::numeric_limits<tools::Long>::max();
         nCurrentTextHeight = 0;
-        if (pHeightNTP)
-            *pHeightNTP = 0;
         auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0), lastCol = sal_Int16(0)](
                                               const LineAreaInfo& rInfo) mutable {
             if (rInfo.pLine)
@@ -3636,13 +3625,6 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
                 }
                 // bottom coordinate does not belong to area, so no need to do +1
                 nCurrentTextHeight = std::max(getBottomDocOffset(rInfo.aArea), minHeight);
-                if (pHeightNTP)
-                {
-                    if (rInfo.rPortion.IsEmpty())
-                        *pHeightNTP = std::max(*pHeightNTP, minHeight);
-                    else
-                        *pHeightNTP = nCurrentTextHeight;
-                }
             }
             return CallbackResult::Continue;
         };

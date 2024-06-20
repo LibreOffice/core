@@ -525,8 +525,7 @@ void ImpEditEngine::FormatDoc()
     // One can also get into the formatting through UpdateMode ON=>OFF=>ON...
     // enable optimization first after Vobis delivery...
     {
-        tools::Long nNewHeightNTP;
-        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
+        tools::Long nNewHeight = CalcTextHeight();
         tools::Long nDiff = nNewHeight - mnCurTextHeight;
         if ( nDiff )
         {
@@ -536,7 +535,6 @@ void ImpEditEngine::FormatDoc()
         }
 
         mnCurTextHeight = nNewHeight;
-        mnCurTextHeightNTP = nNewHeightNTP;
 
         if ( maStatus.AutoPageSize() )
             CheckAutoPageSize();
@@ -634,7 +632,7 @@ void ImpEditEngine::CheckPageOverflow()
     tools::Long nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
-    tools::Long nTxtHeight = CalcTextHeight(nullptr);
+    tools::Long nTxtHeight = CalcTextHeight();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = maParaPortionList.Count();
