@@ -19,7 +19,6 @@ public:
     virtual ~RecordItemWindowBase();
 
     void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
-    void set_font(const vcl::Font& rFont) { m_xWidget->set_font(rFont); }
     void set_help_id(const OUString& rHelpId) { m_xWidget->set_help_id(rHelpId); }
 
 protected:

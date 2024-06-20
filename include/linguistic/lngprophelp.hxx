@@ -276,7 +276,6 @@ public:
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
     sal_Int16   GetCompoundMinLeading() const       { return nResHyphCompoundMinLeading; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
-    sal_Int16   GetTextHyphenZone() const           { return nResHyphTextHyphenZone; }
     bool IsNoHyphenateCaps() const { return bResNoHyphenateCaps; }
 };
 

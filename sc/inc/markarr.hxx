@@ -72,7 +72,6 @@ public:
     SCROW   GetMarkEnd( SCROW nRow, bool bUp ) const;
 
     void    Shift( SCROW nStartRow, tools::Long nOffset );
-    void    Intersect( const ScMarkArray& rOther );
 };
 
 class SC_DLLPUBLIC ScMarkArrayIter // iterate over selected range

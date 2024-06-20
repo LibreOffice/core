@@ -1814,15 +1814,6 @@ void SwPostItMgr::Hide()
     }
 }
 
-void SwPostItMgr::Show()
-{
-    for (auto const& postItField : mvPostItFields)
-    {
-        postItField->mbShow = true;
-    }
-    LayoutPostIts();
-}
-
 SwAnnotationWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) const
 {
     for (auto const& postItField : mvPostItFields)

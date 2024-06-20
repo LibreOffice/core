@@ -382,12 +382,8 @@ public:
                                        m_aCompareConfig.SetModified(); }
 
     bool    IsIgnorePieces() const { return m_aCompareConfig.m_bIgnorePieces; }
-    void        SetIgnorePieces( bool b ) { m_aCompareConfig.m_bIgnorePieces = b;
-                                            m_aCompareConfig.SetModified(); }
 
     sal_uInt16  GetPieceLen() const { return m_aCompareConfig.m_nPieceLen; }
-    void        SetPieceLen( sal_uInt16 nLen ) { m_aCompareConfig.m_nPieceLen = nLen;
-                                                 m_aCompareConfig.SetModified(); }
 
     bool IsStoreRsid() const
     {

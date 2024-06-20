@@ -174,7 +174,6 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         void Hide( std::u16string_view rAuthor );
         void Hide();
-        void Show();
         void UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* topNote);
         void ShowHideResolvedNotes(bool visible);
 

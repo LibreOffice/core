@@ -60,8 +60,6 @@ public:
     /** returns true if this smart tag is currently selected */
     bool isSelected() const { return mbSelected; }
 
-    ::sd::View& getView() const { return mrView; }
-
 protected:
     virtual sal_Int32 GetMarkablePointCount() const;
     virtual sal_Int32 GetMarkedPointCount() const;

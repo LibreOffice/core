@@ -1270,11 +1270,6 @@ public:
 
     void setScalingParameters(ScalingParameters const& rScalingParameters);
 
-    void resetScalingParameters()
-    {
-        setScalingParameters(ScalingParameters());
-    }
-
     ScalingParameters getScalingParameters()
     {
         return maScalingParameters;

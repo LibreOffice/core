@@ -176,11 +176,6 @@ public:
 
     bool IsEditingActive() const {return m_bEditing;}
 
-    void set_sensitive(bool bSensitive)
-    {
-        m_xTreeView->set_sensitive(bSensitive);
-    }
-
     void hide()
     {
         m_xTreeView->hide();

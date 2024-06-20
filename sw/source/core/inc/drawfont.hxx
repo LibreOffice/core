@@ -435,11 +435,6 @@ public:
         m_nLen = nNewLen;
     }
 
-    void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
-    {
-        m_nLayoutContext = nNew;
-    }
-
     void SetWrong(sw::WrongListIterator *const pNew)
     {
         m_pWrong = pNew;

@@ -364,9 +364,6 @@ public:
         return m_sPageStyleName;
     }
 
-    bool getFirstPageHeader() { return m_bFirstPageHeaderLinkToPrevious; }
-    bool getFirstPageFooter() { return m_bFirstPageFooterLinkToPrevious; }
-
     // @throws css::beans::UnknownPropertyException
     // @throws css::beans::PropertyVetoException
     // @throws css::lang::IllegalArgumentException
@@ -391,8 +388,6 @@ public:
     void SetPageNumber( sal_Int32 nSet )     { m_nPageNumber = nSet; }
     void SetPageNumberType( sal_Int32 nSet ) { m_nPageNumberType = nSet; }
     void SetBreakType( sal_Int32 nSet )      { m_nBreakType = nSet; }
-    // GetBreakType returns -1 if the breakType has not yet been identified for the section
-    sal_Int32 GetBreakType() const           { return m_nBreakType; }
 
     void SetLeftMargin( sal_Int32 nSet )   { m_nLeftMargin = nSet; }
     sal_Int32 GetLeftMargin() const        { return m_nLeftMargin; }

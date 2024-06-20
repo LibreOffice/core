@@ -95,8 +95,6 @@ private:
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
 
-    css::uno::Reference< css::beans::XPropertySet > getFirstCharacterPropertySet();
-
     css::uno::Reference< css::chart2::XTitle > getTitleObject();
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

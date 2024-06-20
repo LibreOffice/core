@@ -66,8 +66,6 @@ protected:
         }
     }
 
-    bool isRegistered() const { return mbIsRegistered; }
-
     void changeExisting(sal_Int64 nNewSize)
     {
         if (mbIsRegistered)

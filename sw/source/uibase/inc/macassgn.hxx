@@ -40,8 +40,6 @@ class SwMacroAssignDlg
 {
 public:
     static SfxEventNamesItem AddEvents(DlgEventType eType);
-    static void INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh, const SvxMacroItem& rItem,
-                              const std::function<void(const SvxMacroItem&)>& onItemSelectedFunc);
 };
 
 #endif

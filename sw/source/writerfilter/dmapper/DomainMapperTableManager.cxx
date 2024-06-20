@@ -410,14 +410,6 @@ uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePos
         return uno::Sequence< beans::PropertyValue >();
 }
 
-TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
-{
-    if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
-        return m_aTablePositions.back().get();
-    else
-        return nullptr;
-}
-
 const TableParagraphVectorPtr & DomainMapperTableManager::getCurrentParagraphs( )
 {
     return m_aParagraphsToEndTable.top( );
