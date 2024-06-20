@@ -145,6 +145,7 @@ class DAVException : public std::exception
     private:
         ExceptionCode   mExceptionCode;
         OUString   mData;
+        OUString   mMessage;
         sal_uInt16      mStatusCode;
 
     public:
@@ -160,6 +161,13 @@ class DAVException : public std::exception
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
+                       OUString aData, OUString message)
+             : mExceptionCode( inExceptionCode )
+             , mData(std::move( aData ))
+             , mMessage(std::move(message))
+             , mStatusCode( SC_NONE )
+         {};
+         DAVException( ExceptionCode inExceptionCode,
                        OUString aData,
                        sal_uInt16 nStatusCode )
             : mExceptionCode( inExceptionCode )
@@ -169,6 +177,7 @@ class DAVException : public std::exception
 
     const ExceptionCode & getError() const { return mExceptionCode; }
     const OUString & getData() const  { return mData; }
+    const OUString & getMessage() const { return mMessage; }
     sal_uInt16 getStatus() const { return mStatusCode; }
 };
 

@@ -108,6 +108,7 @@ const ErrMsgCode RID_ERRHDL[] =
     { NC_("RID_ERRHDL", "General OLE Error.") , ERRCODE_SFX_OLEGENERAL },
     { NC_("RID_ERRHDL", "The host name $(ARG1) could not be resolved.") , ERRCODE_INET_NAME_RESOLVE },
     { NC_("RID_ERRHDL", "Could not establish Internet connection to $(ARG1).") , ERRCODE_INET_CONNECT },
+    { NC_("RID_ERRHDL", "Client error message:\n$(ARG2)") , ERRCODE_INET_CONNECT_MSG },
     { NC_("RID_ERRHDL", "Error reading data from the Internet.\nServer error message: $(ARG1).") , ERRCODE_INET_READ },
     { NC_("RID_ERRHDL", "Error transferring data to the Internet.\nServer error message: $(ARG1).") , ERRCODE_INET_WRITE },
     { NC_("RID_ERRHDL", "General Internet error has occurred.") , ERRCODE_INET_GENERAL },

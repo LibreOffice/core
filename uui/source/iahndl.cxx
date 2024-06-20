@@ -498,6 +498,7 @@ UUIInteractionHelper::handleRequest_impl(
             {
                 nErrorCode = ERRCODE_INET_CONNECT;
                 aArguments.push_back(aConnectException.Server);
+                aArguments.push_back(aConnectException.Message);
             }
             else if (aAnyRequest >>= aReadException)
             {
