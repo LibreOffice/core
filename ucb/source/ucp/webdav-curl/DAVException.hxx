@@ -93,6 +93,7 @@ const sal_uInt16 SC_HTTP_VERSION_NOT_SUPPORTED       = 505;
 const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 
 // unofficial status codes only used internally by LO
+const sal_uInt16 USC_CONNECT_FAILED                  = 907;
 // used to cache the connection time out event
 const sal_uInt16 USC_CONNECTION_TIMED_OUT            = 908;
     // name resolution failed
