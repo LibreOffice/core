@@ -64,7 +64,6 @@ CellBorderStylePopup::~CellBorderStylePopup()
 
 void CellBorderStylePopup::Initialize()
 {
-    // Tooltip values now controlled in svx/strings.hrc instead of sc/uiconfig/scalc/ui/floatingborderstyle.ui
     mxTBBorder1->connect_clicked ( LINK(this, CellBorderStylePopup, TB1SelectHdl) );
     mxTBBorder1->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_TABLE_PRESET_NONE));
     mxTBBorder1->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
