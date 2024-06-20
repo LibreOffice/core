@@ -49,6 +49,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/annotation/Annotation.hxx>
+#include <svx/annotation/ObjectAnnotationData.hxx>
 #include <algorithm>
 #include <clonelist.hxx>
 #include <svl/hint.hxx>
@@ -150,14 +151,24 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         ? getSdrPageFromSdrObjList()->getSdrModelFromSdrPage()
         : getSdrObjectFromSdrObjList()->getSdrModelFromSdrObject());
 
-    for (const rtl::Reference<SdrObject>& pSO : rSrcList)
+    for (const rtl::Reference<SdrObject>& pSourceObject : rSrcList)
     {
-        rtl::Reference<SdrObject> pDO(pSO->CloneSdrObject(rTargetSdrModel));
+        rtl::Reference<SdrObject> pTargetObject(pSourceObject->CloneSdrObject(rTargetSdrModel));
 
-        if(pDO)
+        if (pTargetObject)
         {
-            NbcInsertObject(pDO.get(), SAL_MAX_SIZE);
-            aCloneList.AddPair(pSO.get(), pDO.get());
+            NbcInsertObject(pTargetObject.get(), SAL_MAX_SIZE);
+            aCloneList.AddPair(pSourceObject.get(), pTargetObject.get());
+            if (pSourceObject->isAnnotationObject())
+            {
+                pTargetObject->setAsAnnotationObject(true);
+                pTargetObject->SetPrintable(false);
+                rtl::Reference<sdr::annotation::Annotation> xNewAnnotation;
+                SdrPage* pPage = pTargetObject->getSdrPageFromSdrObject();
+                xNewAnnotation = pSourceObject->getAnnotationData()->mxAnnotation->clone(pPage);
+                pTargetObject->getAnnotationData()->mxAnnotation = xNewAnnotation;
+                pPage->addAnnotationNoNotify(xNewAnnotation, -1);
+            }
         }
 #ifdef DBG_UTIL
         else

@@ -53,7 +53,7 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference
 class SAL_DLLPUBLIC_RTTI Annotation final : public sdr::annotation::Annotation
 {
 public:
-    explicit Annotation( const css::uno::Reference<css::uno::XComponentContext>& context, SdPage* pPage );
+    explicit Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
@@ -82,6 +82,7 @@ public:
     virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
 
     void createChangeUndo();
+    rtl::Reference<sdr::annotation::Annotation> clone(SdrPage* pTargetPage) override;
 
 private:
     void createChangeUndoImpl(std::unique_lock<std::mutex>& g);

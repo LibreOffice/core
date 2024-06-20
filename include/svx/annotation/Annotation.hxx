@@ -176,6 +176,8 @@ public:
     void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
 
     SdrObject* findAnnotationObject();
+
+    virtual rtl::Reference<Annotation> clone(SdrPage* pTargetPage) = 0;
 };
 
 /** Vector of annotations */
