@@ -901,15 +901,18 @@ bool SwTextFrame::CalcPreps()
                 }
                 else if ( aRectFnSet.IsVert() )
                 {
+                    // Replicate the same overflow behavior that is used for horizontal portions.
+                    SwTwips const nTmp = sw::WIDOW_MAGIC - (getFrameArea().Left() + 10000);
+                    SwTwips nDiff = nTmp - getFrameArea().Width();
+
                     {
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                        aFrm.Width( aFrm.Width() + aFrm.Left() );
-                        aFrm.Left( 0 );
+                        aFrm.Width(nTmp);
                     }
 
                     {
                         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                        aPrt.Width( aPrt.Width() + getFrameArea().Left() );
+                        aPrt.Width(aPrt.Width() + nDiff);
                     }
 
                     SetWidow( true );
