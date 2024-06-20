@@ -4651,13 +4651,13 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
 
     // Temporarily switch regex search mode.
-    bool bOldWildCard = false;
+    bool bOldRegex = false;
     ScDocOptions aDocOpt = m_pDoc->GetDocOptions();
-    if (!aDocOpt.IsFormulaRegexEnabled())
+    if (aDocOpt.IsFormulaRegexEnabled())
     {
-        aDocOpt.SetFormulaRegexEnabled(true);
+        aDocOpt.SetFormulaRegexEnabled(false);
         m_pDoc->SetDocOptions(aDocOpt);
-        bOldWildCard = true;
+        bOldRegex = true;
     }
 
     m_pDoc->InsertTab(0, u"Test1"_ustr);
@@ -4677,7 +4677,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
     insertRangeData(m_pDoc, ScAddress(0, 0, 0), aData); // A1:B11
     m_pDoc->SetString(4, 14, 0, u"^bo.*"_ustr); // E15 - search regex string
 
-    m_pDoc->SetFormula(ScAddress(5, 14, 0), u"=XLOOKUP(E15;A$2:A$11;B$2:B$11;;2)"_ustr,
+    m_pDoc->SetFormula(ScAddress(5, 14, 0), u"=XLOOKUP(E15;A$2:A$11;B$2:B$11;;3)"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE_UI); // F15
 
     // Without the fix in place, this test would have failed with
@@ -4686,9 +4686,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
     CPPUNIT_ASSERT_EQUAL(10.81, m_pDoc->GetValue(5, 14, 0));
 
     // Switch back to wildcard mode if necessary.
-    if (bOldWildCard)
+    if (bOldRegex)
     {
-        aDocOpt.SetFormulaWildcardsEnabled(true);
+        aDocOpt.SetFormulaRegexEnabled(true);
         m_pDoc->SetDocOptions(aDocOpt);
     }
     m_pDoc->DeleteTab(0);
