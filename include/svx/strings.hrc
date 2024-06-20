@@ -1811,7 +1811,7 @@
 
 // strings related to borders
 #define RID_SVXSTR_TABLE_PRESET_NONE                NC_("RID_SVXSTR_TABLE_PRESET_NONE", "No Borders")
-#define RID_SVXSTR_TABLE_PRESET_OUTER               NC_("RID_SVXSTR_TABLE_PRESET_ONLYOUTER", "Outer Border") // Sidebar/toolbar
+#define RID_SVXSTR_TABLE_PRESET_OUTER               NC_("RID_SVXSTR_TABLE_PRESET_OUTER", "Outer Border") // Sidebar/toolbar
 #define RID_SVXSTR_TABLE_PRESET_ONLYOUTER           NC_("RID_SVXSTR_TABLE_PRESET_ONLYOUTER", "Outer Border Only") // Format dialog
 #define RID_SVXSTR_TABLE_PRESET_OUTERHORI           NC_("RID_SVXSTR_TABLE_PRESET_OUTERHORI", "Outer Border and Horizontal Lines")
 #define RID_SVXSTR_TABLE_PRESET_OUTERALL            NC_("RID_SVXSTR_TABLE_PRESET_OUTERALL", "Outer Border and All Inner Lines")
