@@ -770,7 +770,7 @@ private:
     EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     ErrCode             WriteText( SvStream& rOutput, EditSelection aSel );
-    ErrCode             WriteRTF( SvStream& rOutput, EditSelection aSel );
+    ErrCode             WriteRTF( SvStream& rOutput, EditSelection aSel, bool bClipboard );
     void                WriteXML(SvStream& rOutput, const EditSelection& rSel);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,

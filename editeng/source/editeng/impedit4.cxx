@@ -77,6 +77,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -206,7 +207,7 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
     if ( eFormat == EETextFormat::Text )
         WriteText( rOutput, rSel );
     else if ( eFormat == EETextFormat::Rtf )
-        WriteRTF( rOutput, rSel );
+        WriteRTF( rOutput, rSel, /*bClipboard=*/false );
     else if ( eFormat == EETextFormat::Xml )
         WriteXML( rOutput, rSel );
     else if ( eFormat == EETextFormat::Html )
@@ -291,7 +292,7 @@ void ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
     SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
 }
 
-ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
+ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bClipboard )
 {
     assert( IsUpdateLayout() && "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();
@@ -456,6 +457,50 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             nId++;
         }
 
+        // Collect used paragraph styles when copying to the clipboard.
+        std::set<SfxStyleSheetBase*> aUsedParagraphStyles;
+        if (bClipboard)
+        {
+            for (sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++)
+            {
+                ContentNode* pNode = maEditDoc.GetObject(nNode);
+                if (!pNode)
+                {
+                    continue;
+                }
+
+                SfxStyleSheet* pParaStyle = pNode->GetStyleSheet();
+                if (!pParaStyle)
+                {
+                    continue;
+                }
+
+                aUsedParagraphStyles.insert(pParaStyle);
+
+                const OUString& rParent = pParaStyle->GetParent();
+                if (!rParent.isEmpty())
+                {
+                    auto pParent = static_cast<SfxStyleSheet*>(
+                        GetStyleSheetPool()->Find(rParent, pParaStyle->GetFamily()));
+                    if (pParent)
+                    {
+                        aUsedParagraphStyles.insert(pParent);
+                    }
+                }
+
+                const OUString& rFollow = pParaStyle->GetFollow();
+                if (!rFollow.isEmpty())
+                {
+                    auto pFollow = static_cast<SfxStyleSheet*>(
+                        GetStyleSheetPool()->Find(rFollow, pParaStyle->GetFamily()));
+                    if (pFollow)
+                    {
+                        aUsedParagraphStyles.insert(pFollow);
+                    }
+                }
+            }
+        }
+
         if ( aSSSIterator->Count() )
         {
 
@@ -465,6 +510,11 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
                                      pStyle = aSSSIterator->Next() )
             {
+                if (bClipboard && !aUsedParagraphStyles.contains(pStyle))
+                {
+                    // Don't write unused paragraph styles in the clipboard case.
+                    continue;
+                }
 
                 rOutput << endl;
                 rOutput.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_S );
