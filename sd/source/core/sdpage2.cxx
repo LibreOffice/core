@@ -378,22 +378,6 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     // animations
     rSrcPage.cloneAnimations(*this);
 
-    // annotations
-    for (auto const& rSourceAnnotation : rSrcPage.maAnnotations)
-    {
-        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation = createAnnotation();
-        aNewAnnotation->setPosition(rSourceAnnotation->getPosition());
-        aNewAnnotation->setSize(rSourceAnnotation->getSize());
-        aNewAnnotation->setAuthor(rSourceAnnotation->getAuthor());
-        aNewAnnotation->setInitials(rSourceAnnotation->getInitials());
-        aNewAnnotation->setDateTime(rSourceAnnotation->getDateTime());
-        uno::Reference<css::text::XTextCopy> xSourceRange (rSourceAnnotation->getTextRange(), uno::UNO_QUERY);
-        uno::Reference<css::text::XTextCopy> xRange (aNewAnnotation->getTextRange(), uno::UNO_QUERY);
-        if(xSourceRange.is() && xRange.is())
-            xRange->copyText(xSourceRange);
-        addAnnotation(aNewAnnotation, -1);
-    }
-
     // fix user calls for duplicated slide
     SdrObjListIter aSourceIter( &rSrcPage, SdrIterMode::DeepWithGroups );
     SdrObjListIter aTargetIter( this, SdrIterMode::DeepWithGroups );

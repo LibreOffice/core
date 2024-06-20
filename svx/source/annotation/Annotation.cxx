@@ -205,6 +205,9 @@ SdrObject* Annotation::findAnnotationObject()
 {
     SdrPage const* pPage = getPage();
 
+    if (!pPage)
+        return nullptr;
+
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
         SdrObject* pObject = pPage->GetObj(i);

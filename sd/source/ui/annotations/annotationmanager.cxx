@@ -991,9 +991,24 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
     if (!mxCurrentPage.is() || !mpDoc)
         return;
 
-    auto xViewShell = mrBase.GetMainViewShell();
-    if (!xViewShell)
+    sd::DrawDocShell* pDocShell = dynamic_cast<sd::DrawDocShell*>(SfxObjectShell::Current());
+    sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+
+    if (!pViewShell)
+    {
+        pViewShell = mrBase.GetMainViewShell().get();
+        if (!pViewShell)
+            return;
+    }
+
+    auto* pView = pViewShell->GetView();
+    if (!pView)
         return;
+
+    if (!pView->GetSdrPageView())
+        return;
+
+    auto& rModel = pView->getSdrModelFromSdrView();
 
     sal_Int32 nIndex = 1;
     bool bAnnotatonInserted = false;
@@ -1010,9 +1025,6 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         bAnnotatonInserted = true;
 
         auto const& rInfo = xAnnotation->getCreationInfo();
-
-        auto* pView = xViewShell->GetView();
-        auto& rModel = pView->getSdrModelFromSdrView();
 
         auto aRealPoint2D = xAnnotation->getPosition();
         Point aPosition(::tools::Long(aRealPoint2D.X * 100.0), ::tools::Long(aRealPoint2D.Y * 100.0));

@@ -78,7 +78,7 @@ rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage*
     return xAnnotation;
 }
 
-Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdPage* pPage)
+Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdrPage* pPage)
     : sdr::annotation::Annotation(context, pPage)
 {
 }
@@ -228,6 +228,25 @@ void Annotation::createChangeUndo()
             "OnAnnotationChanged" ,
             xSource );
     }
+}
+
+rtl::Reference<sdr::annotation::Annotation> Annotation::clone(SdrPage* pTargetPage)
+{
+    rtl::Reference<sdr::annotation::Annotation> aNewAnnotation;
+    aNewAnnotation = new sd::Annotation(comphelper::getProcessComponentContext(), pTargetPage);
+    aNewAnnotation->setPosition(getPosition());
+    aNewAnnotation->setSize(getSize());
+    aNewAnnotation->setAuthor(getAuthor());
+    aNewAnnotation->setInitials(getInitials());
+    aNewAnnotation->setDateTime(getDateTime());
+    aNewAnnotation->setCreationInfo(getCreationInfo());
+
+    uno::Reference<css::text::XTextCopy> xSourceRange (getTextRange(), uno::UNO_QUERY);
+    uno::Reference<css::text::XTextCopy> xRange (aNewAnnotation->getTextRange(), uno::UNO_QUERY);
+    if (xSourceRange.is() && xRange.is())
+        xRange->copyText(xSourceRange);
+
+    return aNewAnnotation;
 }
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
