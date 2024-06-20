@@ -2121,6 +2121,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
     ScDocument* pDoc = getScDoc();
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    // first .uno:SelectAll selects the range, second all (tdf#161641)
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 

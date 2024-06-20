@@ -49,6 +49,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <inputwin.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <memory>
 
@@ -657,7 +658,31 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_SELECTALL:
             {
-                pTabViewShell->SelectAll();
+                SCTAB nTab = GetViewData().GetTabNo();
+                SCCOL nStartCol = GetViewData().GetCurX();
+                SCROW nStartRow = GetViewData().GetCurY();
+                SCCOL nEndCol = nStartCol;
+                SCROW nEndRow = nStartRow;
+                bool bCanMark = false;
+
+                ScMarkData& rMarkdata = GetViewData().GetMarkData();
+                const bool bSelectFirst(officecfg::Office::Calc::Input::SelectRangeBeforeAll::get());
+
+                if (bSelectFirst && !rMarkdata.IsMarked())
+                {
+                    const ScDocument& rDoc = GetViewData().GetDocument();
+                    rDoc.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
+                    bCanMark = nStartCol != nEndCol || nStartRow != nEndRow;
+                }
+
+                if (bCanMark)
+                {
+                    const ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
+                    pTabViewShell->MarkRange(aRange, false);
+                }
+                else
+                    pTabViewShell->SelectAll();
+
                 rReq.Done();
             }
             break;
