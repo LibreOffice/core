@@ -56,7 +56,7 @@ struct ScInterpreterContext;
 class ScJumpMatrix;
 struct ScRefCellValue;
 
-enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2 };
+enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2, regex=3 };
 enum SearchMode{ searchfwd=1, searchrev=-1, searchbasc=2, searchbdesc=-2 };
 
 struct VectorSearchArguments
