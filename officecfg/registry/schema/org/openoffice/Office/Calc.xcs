@@ -739,6 +739,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SelectRangeBeforeAll" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Disable to always select all</desc>
+          <label>Select range before all</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Grid">
       <info>
