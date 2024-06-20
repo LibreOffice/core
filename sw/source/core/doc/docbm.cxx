@@ -2099,6 +2099,8 @@ void DelBookmarks(
                 if (pCNd && !bStt)
                     pREnd->AssignEndIndex( *pCNd );
             }
+            if( lcl_Greater( *pRStt, rEnd, oEndContentIdx ) )
+                break;
         }
     }
 }
