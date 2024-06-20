@@ -2973,6 +2973,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf92091)
     CPPUNIT_ASSERT_GREATER(sal_Int32(110), nPor5Width);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf104209VertLTR)
+{
+    // Verify that vertical left-to-right text after a fly portion will overflow to the next page.
+    createSwDoc("tdf107209-vert-ltr.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout"_ostr,
+                "portion"_ostr, u"AAAAAAAAAAAAAAAAAAA"_ustr);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"BBBBBBBBBBBBBBBBBBBBBB"_ustr);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr, u"B"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf104209VertRTL)
+{
+    // Verify that vertical right-to-left text after a fly portion will overflow to the next page.
+    createSwDoc("tdf107209-vert-rtl.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout"_ostr,
+                "portion"_ostr, u"AAAAAAAAAAAAAAAAAAA"_ustr);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr, u"BBBBBBBBBBBBBBBBBBBBBB"_ustr);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr, u"B"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
