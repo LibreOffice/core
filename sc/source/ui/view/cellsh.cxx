@@ -233,6 +233,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = false;
                 break;
             case SID_CUT:               // cut
+            case SID_COPYDELETE:
                 bDisable = !bSimpleArea || GetObjectShell()->isContentExtractionLocked();
                 break;
             case FID_INS_CELL:          // insert cells, just simple selection

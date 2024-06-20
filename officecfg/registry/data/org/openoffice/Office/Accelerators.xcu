@@ -1525,6 +1525,12 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US" install:module="macosx">.uno:JumpToPrevTable</value>
           </prop>
         </node>
+        <node oor:name="X_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:CopyDelete</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="com.sun.star.chart2.ChartDocument" oor:op="replace">
         <node oor:name="C_MOD1" oor:op="replace">

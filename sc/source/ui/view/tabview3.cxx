@@ -606,6 +606,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
     rBindings.Invalidate( SID_PASTE_UNFORMATTED );
+    rBindings.Invalidate( SID_COPYDELETE );
 
     rBindings.Invalidate( FID_INS_ROW );
     rBindings.Invalidate( FID_INS_COLUMN );

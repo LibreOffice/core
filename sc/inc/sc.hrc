@@ -513,6 +513,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 
 #define SID_ACCEPT_FORMULA      (SID_KEYFUNC_START + 42)
 #define SID_START_FORMULA       (SID_KEYFUNC_START + 43)
+#define SID_COPYDELETE          (SID_KEYFUNC_START + 44)
 
 #define SID_KEYFUNC_END         (SID_KEYFUNC_START + 50)
 

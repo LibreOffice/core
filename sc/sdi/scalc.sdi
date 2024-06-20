@@ -6700,3 +6700,20 @@ SfxVoidItem MoveKeepInsertMode FID_MOVE_KEEP_INSERT_MODE
 
     GroupId = SfxGroupId::Application;
 ]
+
+SfxVoidItem CopyDelete SID_COPYDELETE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]

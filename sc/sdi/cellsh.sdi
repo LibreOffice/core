@@ -171,6 +171,7 @@ interface CellSelection
     SID_FOCUS_INPUTLINE [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_CUT             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COPY            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_COPYDELETE      [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_PASTE           [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_SPECIAL   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_UNFORMATTED [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
