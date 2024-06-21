@@ -3913,6 +3913,9 @@ Content::ResourceType Content::getResourceType(
                             break;
                         case USC_CONNECTION_TIMED_OUT:
                             e = DAVException::DAV_HTTP_TIMEOUT;
+                            throw DAVException(e,
+                                    ConnectionEndPointString(aHostName, nPort),
+                                    aDAVOptions.getHttpResponseStatusText());
                             break;
                         case USC_AUTH_FAILED:
                             e = DAVException::DAV_HTTP_AUTH;
@@ -4065,11 +4068,9 @@ void Content::getResourceOptions(
                     // cache the internal unofficial status code
 
                     aDAVOptions.setHttpResponseStatusCode(e.getError() == DAVException::DAV_HTTP_CONNECT ? USC_CONNECT_FAILED : USC_CONNECTION_TIMED_OUT);
-                    if (e.getError() == DAVException::DAV_HTTP_CONNECT)
-                    {   // ugly: this is not a HTTP status from the server but message
-                        // from libcurl but the string member is unused...
-                        aDAVOptions.setHttpResponseStatusText(e.getMessage());
-                    }
+                    // ugly: this is not a HTTP status from the server but message
+                    // from libcurl but the string member is unused...
+                    aDAVOptions.setHttpResponseStatusText(e.getMessage());
                     // used only internally, so the text doesn't really matter..
                     aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotFound );
