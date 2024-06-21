@@ -80,6 +80,15 @@ bool QtOpenGLContext::ImplInit()
     }
 
     m_pWindow->setSurfaceType(QSurface::OpenGLSurface);
+
+    // give window a transparent background, see
+    // https://doc.qt.io/qt-6/qwindow.html#setFormat
+    // Otherwise, slide content in a presentation using OpenGL transitions
+    // doesn't get updated with qt6 on Wayland
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+    m_pWindow->setFormat(format);
+
     m_pWindow->create();
 
     m_pContext = new QOpenGLContext(m_pWindow);

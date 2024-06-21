@@ -24,6 +24,7 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
+#include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
 class QtFrame;
@@ -36,7 +37,11 @@ class QtObject final : public QObject, public SalObject
 
     SystemEnvData m_aSystemData;
     QtFrame* m_pParent;
-    QtObjectWidget* m_pQWidget;
+
+    // window, required for OpenGL rendering
+    QWindow* m_pQWindow;
+    QWidget* m_pQWidget;
+
     QRegion m_pRegion;
     bool m_bForwardKey;
 

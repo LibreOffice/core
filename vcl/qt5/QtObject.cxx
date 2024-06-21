@@ -23,6 +23,7 @@
 #include <QtFrame.hxx>
 #include <QtWidget.hxx>
 
+#include <QtCore/QLibraryInfo>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QMouseEvent>
@@ -36,7 +37,19 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWidget = new QtObjectWidget(*this);
+    if (QLibraryInfo::version().majorVersion() > 5)
+    {
+        m_pQWindow = new QWindow;
+        m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
+    }
+    else
+    {
+        // with the qt5 VCL plugin, the above would cause issues with video playback (s. tdf#148864, tdf#125517),
+        // which is not a problem with the QtMultimedia approach that the qt6 VCL plugin uses;
+        // stay with the QtObjectWidget introduced in commit 4366e0605214260e55a937173b0c2e02225dc843
+        m_pQWidget = new QtObjectWidget(*this);
+        m_pQWindow = m_pQWidget->windowHandle();
+    }
 
     // set layout, used for video playback, see QtPlayer::createPlayerWindow
     QVBoxLayout* layout = new QVBoxLayout;
@@ -58,10 +71,7 @@ QtObject::~QtObject()
     }
 }
 
-QWindow* QtObject::windowHandle() const
-{
-    return m_pQWidget ? m_pQWidget->windowHandle() : nullptr;
-}
+QWindow* QtObject::windowHandle() const { return m_pQWindow; }
 
 void QtObject::ResetClipRegion()
 {
