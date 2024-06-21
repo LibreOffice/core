@@ -12125,7 +12125,7 @@ if test "$test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
         add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK4, gtk4 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo atk)
+    PKG_CHECK_MODULES(GTK4, gtk4 >= 4.10 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo atk)
     GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     FilterLibs "${GTK4_LIBS}"

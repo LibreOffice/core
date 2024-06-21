@@ -19,8 +19,6 @@
 #include <gtk/gtk.h>
 #include <o3tl/string_view.hxx>
 
-#if GTK_CHECK_VERSION(4, 9, 0)
-
 #include "a11y.hxx"
 #include "gtkaccessibleeventlistener.hxx"
 #include "gtkaccessibleregistry.hxx"
@@ -465,10 +463,8 @@ struct LoAccessibleClass
     GObjectClass parent_class;
 };
 
-#if GTK_CHECK_VERSION(4, 10, 0)
 static void lo_accessible_range_init(gpointer iface_, gpointer);
 static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, double fNewValue);
-#endif
 
 extern "C" {
 typedef GType (*GetGIfaceType)();
@@ -484,10 +480,8 @@ const struct
     { "Text", lo_accessible_text_init, gtk_accessible_text_get_type,
       cppu::UnoType<css::accessibility::XAccessibleText>::get },
 #endif
-#if GTK_CHECK_VERSION(4, 10, 0)
     { "Value", lo_accessible_range_init, gtk_accessible_range_get_type,
       cppu::UnoType<css::accessibility::XAccessibleValue>::get },
-#endif
 };
 
 static bool isOfType(css::uno::XInterface* xInterface, const css::uno::Type& rType)
@@ -628,13 +622,11 @@ static void lo_accessible_accessible_init(GtkAccessibleInterface* iface)
     iface->get_platform_state = lo_accessible_get_platform_state;
 }
 
-#if GTK_CHECK_VERSION(4, 10, 0)
 static void lo_accessible_range_init(gpointer iface_, gpointer)
 {
     auto const iface = static_cast<GtkAccessibleRangeInterface*>(iface_);
     iface->set_current_value = lo_accessible_range_set_current_value;
 }
-#endif
 
 // silence loplugin:unreffun
 #ifdef __GNUC__
@@ -815,7 +807,6 @@ static gboolean lo_accessible_get_platform_state(GtkAccessible* self,
     return false;
 }
 
-#if GTK_CHECK_VERSION(4, 10, 0)
 static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, double fNewValue)
 {
     // return 'true' in any case, since otherwise no proper AT-SPI DBus reply gets sent
@@ -856,7 +847,6 @@ static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, 
     xValue->setCurrentValue(aValue);
     return true;
 }
-#endif
 
 static void lo_accessible_init(LoAccessible* /*iface*/) {}
 
@@ -929,7 +919,5 @@ static void ooo_fixed_class_init(OOoFixedClass* /*klass*/) {}
 static void ooo_fixed_init(OOoFixed* /*area*/) {}
 
 GtkWidget* ooo_fixed_new() { return GTK_WIDGET(g_object_new(OOO_TYPE_FIXED, nullptr)); }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

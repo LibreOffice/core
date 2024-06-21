@@ -11236,15 +11236,10 @@ public:
         }
         g_list_free(pChildren);
 #else
-        GtkWidget* pChild;
-        if (gtk_check_version(4, 5, 0) == nullptr)
-        {
-            pChild = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
-            pChild = gtk_widget_get_first_child(pChild);
-            pChild = gtk_widget_get_first_child(pChild);
-        }
-        else
-            pChild = gtk_widget_get_last_child(GTK_WIDGET(m_pMenuButton));
+        GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(m_pMenuButton));
+        pChild = gtk_widget_get_first_child(pChild);
+        pChild = gtk_widget_get_first_child(pChild);
+
         g_object_ref(pChild);
         gtk_widget_unparent(pChild);
         gtk_button_set_child(GTK_BUTTON(m_pToggleButton), pChild);

@@ -12,8 +12,6 @@
 
 #include <cassert>
 
-#if GTK_CHECK_VERSION(4, 9, 0)
-
 std::map<css::accessibility::XAccessible*, LoAccessible*> GtkAccessibleRegistry::m_aMapping = {};
 
 LoAccessible*
@@ -55,7 +53,5 @@ void GtkAccessibleRegistry::remove(css::uno::Reference<css::accessibility::XAcce
     assert(xAcc.is());
     m_aMapping.erase(xAcc.get());
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

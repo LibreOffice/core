@@ -343,11 +343,7 @@ uno::Reference<::media::XPlayerWindow>
         return nullptr;
 
     m_pVideo = gtk_picture_new_for_paintable(GDK_PAINTABLE(m_pStream));
-#if GTK_CHECK_VERSION(4, 7, 2)
     gtk_picture_set_content_fit(GTK_PICTURE(m_pVideo), GTK_CONTENT_FIT_FILL);
-#else
-    gtk_picture_set_keep_aspect_ratio(GTK_PICTURE(m_pVideo), false);
-#endif
     gtk_widget_set_can_target(m_pVideo, false);
     gtk_widget_set_vexpand(m_pVideo, true);
     gtk_widget_set_hexpand(m_pVideo, true);

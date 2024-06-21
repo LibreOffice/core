@@ -992,11 +992,7 @@ void GtkSalFrame::InitCommon()
     m_pDrawingArea = m_pFixedContainer;
 #else
     m_pOverlay = GTK_OVERLAY(gtk_overlay_new());
-#if GTK_CHECK_VERSION(4,9,0)
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), nullptr ));
-#else
-    m_pFixedContainer = GTK_FIXED(gtk_fixed_new());
-#endif
     m_pDrawingArea = GTK_DRAWING_AREA(gtk_drawing_area_new());
 #endif
     if (GTK_IS_WINDOW(m_pWindow))

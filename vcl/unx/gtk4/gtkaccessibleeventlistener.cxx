@@ -15,8 +15,6 @@
 #include "gtkaccessibleeventlistener.hxx"
 #include "gtkaccessibleregistry.hxx"
 
-#if GTK_CHECK_VERSION(4, 9, 0)
-
 GtkAccessibleEventListener::GtkAccessibleEventListener(LoAccessible* pLoAccessible)
     : m_pLoAccessible(pLoAccessible)
 {
@@ -106,7 +104,5 @@ void GtkAccessibleEventListener::notifyEvent(
             break;
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
