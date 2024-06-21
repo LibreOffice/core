@@ -62,6 +62,7 @@
 
 #include <helper/accessibilityclient.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
+#include <atomic>
 
 using namespace ::com::sun::star;
 
@@ -118,7 +119,7 @@ public:
     bool                                mbSynthesizingVCLEvent  : 1;
     bool                                mbWithDefaultProps      : 1;
 
-    sal_uLong                           mnListenerLockLevel;
+    std::atomic<int>                    mnListenerLockLevel;
     sal_Int16                           mnWritingMode;
     sal_Int16                           mnContextWritingMode;
 
