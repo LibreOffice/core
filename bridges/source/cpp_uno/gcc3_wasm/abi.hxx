@@ -70,9 +70,9 @@ struct __cxa_exception
     std::type_info* exceptionType;
 #if 1 //MODIFIED: #ifdef __USING_WASM_EXCEPTIONS__
     // In wasm, destructors return their argument
-    void*(_LIBCXXABI_DTOR_FUNC* exceptionDestructor)(void*);
+    void*(/*MODIFIED: _LIBCXXABI_DTOR_FUNC*/ *exceptionDestructor)(void*);
 #else
-    void(_LIBCXXABI_DTOR_FUNC* exceptionDestructor)(void*);
+    void(/*MODIFIED: _LIBCXXABI_DTOR_FUNC*/ *exceptionDestructor)(void*);
 #endif
     void* /*MODIFIED: std::unexpected_handler*/ unexpectedHandler;
     std::terminate_handler terminateHandler;
