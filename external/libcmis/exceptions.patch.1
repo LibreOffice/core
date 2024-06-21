@@ -1,0 +1,171 @@
+--- libcmis/src/libcmis/http-session.cxx.orig	2024-06-21 12:22:36.083125022 +0200
++++ libcmis/src/libcmis/http-session.cxx	2024-06-21 13:08:37.403016695 +0200
+@@ -653,7 +653,8 @@
+         m_authProvided = authProvider->authenticationQuery( m_username, m_password );
+         if ( !m_authProvided )
+         {
+-            throw CurlException( "User cancelled authentication request" );
++            // report this as 401 so it becomes permissionDenied
++            throw CurlException("User cancelled authentication request", CURLE_OK, "", 401);
+         }
+     }
+ }
+@@ -762,6 +762,7 @@
+         if ( CURLE_SSL_CACERT == errCode )
+         {
+             vector< string > certificates;
++            string err(errBuff);
+ 
+             // We somehow need to rerun the request to get the certificate
+             curl_easy_setopt(m_curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
+@@ -814,7 +815,7 @@
+                 }
+                 else
+                 {
+-                    throw CurlException( "Invalid SSL certificate" );
++                    throw CurlException(err, CURLE_SSL_CACERT);
+                 }
+             }
+         }
+@@ -827,7 +828,6 @@
+ 
+ 
+ void HttpSession::checkOAuth2( string url )
+-try
+ {
+     if ( m_oauth2Handler )
+     {
+@@ -836,10 +836,6 @@
+             oauth2Authenticate( );
+     }
+ }
+-catch ( const libcmis::Exception& e )
+-{
+-    throw CurlException( e.what( ) );
+-}
+ 
+ long HttpSession::getHttpStatus( )
+ {
+@@ -906,15 +902,10 @@
+ }
+ 
+ void HttpSession::oauth2Refresh( )
+-try
+ {
+     const ScopeGuard<bool> inOauth2Guard(m_inOAuth2Authentication, true);
+     m_oauth2Handler->refresh( );
+ }
+-catch ( const libcmis::Exception& e )
+-{
+-    throw CurlException( e.what() );
+-}
+ 
+ void HttpSession::initProtocols( )
+ {
+@@ -981,11 +972,43 @@
+             break;
+         default:
+             msg = what();
+-            if ( !isCancelled( ) )
+-                msg += ": " + m_url;
+-            else
+-                type = "permissionDenied";
+-            break;
++            switch (m_code)
++            {
++                case CURLE_COULDNT_RESOLVE_PROXY:
++                case CURLE_COULDNT_RESOLVE_HOST:
++                    type = "dnsFailed";
++                    break;
++                case CURLE_COULDNT_CONNECT:
++                case CURLE_SSL_CONNECT_ERROR:
++                case CURLE_SSL_CERTPROBLEM:
++                case CURLE_SSL_CIPHER:
++                case CURLE_PEER_FAILED_VERIFICATION:
++#if CURL_AT_LEAST_VERSION(7, 19, 0)
++                case CURLE_SSL_ISSUER_ERROR:
++#endif
++                case CURLE_SSL_PINNEDPUBKEYNOTMATCH:
++                case CURLE_SSL_INVALIDCERTSTATUS:
++                case CURLE_FAILED_INIT:
++#if CURL_AT_LEAST_VERSION(7, 69, 0)
++                case CURLE_QUIC_CONNECT_ERROR:
++#endif
++                    type = "connectFailed";
++                    break;
++                case CURLE_OPERATION_TIMEDOUT:
++                    type = "connectTimeout";
++                    break;
++                case CURLE_WRITE_ERROR:
++                case CURLE_READ_ERROR: // error returned from our callbacks
++                case CURLE_ABORTED_BY_CALLBACK:
++                case CURLE_SEND_ERROR:
++                case CURLE_RECV_ERROR:
++                    type = "transferFailed";
++                    break;
++                default:
++                    if ( !isCancelled( ) )
++                        msg += ": " + m_url;
++                    break;
++            }
+     }
+ 
+     return libcmis::Exception( msg, type );
+--- libcmis/src/libcmis/http-session.hxx.orig	2024-06-21 12:36:22.785868998 +0200
++++ libcmis/src/libcmis/http-session.hxx	2024-06-21 12:36:44.272966309 +0200
+@@ -71,10 +71,10 @@
+         {
+         }
+ 
+-        CurlException( std::string message ) :
++        CurlException(std::string message, CURLcode const code) :
+             exception( ),
+             m_message( message ),
+-            m_code( CURLE_OK ),
++            m_code(code),
+             m_url( ),
+             m_httpStatus( 0 ),
+             m_cancelled( true ),
+--- libcmis/src/libcmis/sharepoint-session.cxx.orig	2024-06-21 12:23:07.164265783 +0200
++++ libcmis/src/libcmis/sharepoint-session.cxx	2024-06-21 12:37:45.528243723 +0200
+@@ -289,6 +291,7 @@
+         if ( CURLE_SSL_CACERT == errCode )
+         {
+             vector< string > certificates;
++            string err(errBuff);
+ 
+             // We somehow need to rerun the request to get the certificate
+             curl_easy_setopt(m_curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
+@@ -344,7 +344,7 @@
+                 }
+                 else
+                 {
+-                    throw CurlException( "Invalid SSL certificate" );
++                    throw CurlException(err, CURLE_SSL_CACERT);
+                 }
+             }
+         }
+--- libcmis/src/libcmis/session-factory.cxx.orig	2024-06-21 15:37:55.132824666 +0200
++++ libcmis/src/libcmis/session-factory.cxx	2024-06-21 15:36:17.558408868 +0200
+@@ -96,7 +96,7 @@
+                 }
+                 catch (const CurlException& e)
+                 {
+-                    if (strcmp(e.what(), "Invalid SSL certificate") == 0)
++                    if (e.getErrorCode() == CURLE_SSL_CACERT)
+                     {
+                         // no point in trying other protocols
+                         throw e.getCmisException();
+--- libcmis/qa/libcmis/test-atom.cxx.orig	2024-06-21 15:39:49.130310447 +0200
++++ libcmis/qa/libcmis/test-atom.cxx	2024-06-21 15:39:51.541320721 +0200
+@@ -323,8 +323,8 @@
+         }
+         catch ( const libcmis::Exception& e )
+         {
+-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong exception message",
+-                    string( "Invalid SSL certificate" ), string( e.what() ) );
++            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong exception type",
++                    string("connectFailed"), string(e.getType()) );
+         }
+     }
+ }
