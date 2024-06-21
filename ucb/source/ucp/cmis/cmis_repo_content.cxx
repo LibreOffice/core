@@ -33,7 +33,6 @@
 #include <ucbhelper/macros.hxx>
 
 #include "auth_provider.hxx"
-#include "certvalidation_handler.hxx"
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
@@ -127,11 +126,6 @@ namespace cmis
 
         if ( !m_aRepositories.empty() )
             return;
-
-        // Set the SSL Validation handler
-        libcmis::CertValidationHandlerPtr certHandler(
-                new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
-        libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
 
         // init libcurl callback
         libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);
