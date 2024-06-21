@@ -1083,6 +1083,10 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     if (pFont)
     {
         pDescriptor->TextFont = pFont->GetActualFont();
+
+        // Need to transport the color explicitly, so it's applied to both already filled in and
+        // future content.
+        pDescriptor->TextColor = pFont->GetColor();
     }
 
     // Description for accessibility purposes.

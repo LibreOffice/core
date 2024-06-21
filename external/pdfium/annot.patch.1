@@ -1,0 +1,65 @@
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index bc1f7f7eb..075baf1df 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -1366,6 +1366,42 @@ FPDFAnnot_GetFontSize(FPDF_FORMHANDLE hHandle,
+   return true;
+ }
+ 
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetFontColor(FPDF_FORMHANDLE hHandle,
++                      FPDF_ANNOTATION annot,
++                      unsigned int* R,
++                      unsigned int* G,
++                      unsigned int* B) {
++  if (!R || !G || !B)
++    return false;
++
++  CPDFSDK_InteractiveForm* pForm = FormHandleToInteractiveForm(hHandle);
++  if (!pForm)
++    return false;
++
++  const CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++  if (!pAnnotDict)
++    return false;
++
++  CPDF_InteractiveForm* pPDFForm = pForm->GetInteractiveForm();
++  CPDF_FormControl* pFormControl = pPDFForm->GetControlByDict(pAnnotDict);
++  if (!pFormControl)
++    return false;
++
++  CPDFSDK_Widget* pWidget = pForm->GetWidget(pFormControl);
++  if (!pWidget)
++    return false;
++
++  std::optional<FX_COLORREF> text_color = pWidget->GetTextColor();
++  if (!text_color)
++    return false;
++
++  *R = FXSYS_GetRValue(*text_color);
++  *G = FXSYS_GetGValue(*text_color);
++  *B = FXSYS_GetBValue(*text_color);
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_IsChecked(FPDF_FORMHANDLE hHandle,
+                                                         FPDF_ANNOTATION annot) {
+   const CPDFSDK_Widget* pWidget =
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index 337da58f1..27de4b1a8 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -845,6 +845,13 @@ FPDFAnnot_GetFontSize(FPDF_FORMHANDLE hHandle,
+                       FPDF_ANNOTATION annot,
+                       float* value);
+ 
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetFontColor(FPDF_FORMHANDLE hHandle,
++                      FPDF_ANNOTATION annot,
++                      unsigned int* R,
++                      unsigned int* G,
++                      unsigned int* B);
++
+ // Experimental API.
+ // Determine if |annot| is a form widget that is checked. Intended for use with
+ // checkbox and radio button widgets.
