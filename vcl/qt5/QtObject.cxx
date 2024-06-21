@@ -37,6 +37,12 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
         return;
 
     m_pQWidget = new QtObjectWidget(*this);
+
+    // set layout, used for video playback, see QtPlayer::createPlayerWindow
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    m_pQWidget->setLayout(layout);
+
     if (bShow)
         m_pQWidget->show();
 
@@ -112,11 +118,6 @@ QtObjectWidget::QtObjectWidget(QtObject& rParent)
     assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_OpaquePaintEvent);
-
-    // set layout, used for video playback, see QtPlayer::createPlayerWindow
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
-    setLayout(layout);
 }
 
 void QtObjectWidget::focusInEvent(QFocusEvent*)
