@@ -992,13 +992,16 @@ auto CurlProcessor::ProcessRequestImpl(
         switch (rc)
         {
             case CURLE_UNSUPPORTED_PROTOCOL:
-                throw DAVException(DAVException::DAV_UNSUPPORTED);
+                throw DAVException(DAVException::DAV_UNSUPPORTED, u""_ustr,
+                                   rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_COULDNT_RESOLVE_PROXY:
-                throw DAVException(DAVException::DAV_HTTP_LOOKUP, rSession.m_Proxy);
+                throw DAVException(DAVException::DAV_HTTP_LOOKUP, rSession.m_Proxy,
+                                   rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_COULDNT_RESOLVE_HOST:
                 throw DAVException(
                     DAVException::DAV_HTTP_LOOKUP,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()),
+                    rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_COULDNT_CONNECT:
             case CURLE_SSL_CONNECT_ERROR:
             case CURLE_SSL_CERTPROBLEM:
@@ -1020,7 +1023,8 @@ auto CurlProcessor::ProcessRequestImpl(
             case CURLE_AUTH_ERROR:
                 throw DAVException(
                     DAVException::DAV_HTTP_AUTH, // probably?
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()),
+                    rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_WRITE_ERROR:
             case CURLE_READ_ERROR: // error returned from our callbacks
             case CURLE_OUT_OF_MEMORY:
@@ -1033,13 +1037,16 @@ auto CurlProcessor::ProcessRequestImpl(
             case CURLE_RECURSIVE_API_CALL:
                 throw DAVException(
                     DAVException::DAV_HTTP_FAILED,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()),
+                    rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             case CURLE_OPERATION_TIMEDOUT:
                 throw DAVException(
                     DAVException::DAV_HTTP_TIMEOUT,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()),
+                    rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
             default: // lots of generic errors
-                throw DAVException(DAVException::DAV_HTTP_ERROR, u""_ustr, 0);
+                throw DAVException(DAVException::DAV_HTTP_ERROR, u""_ustr,
+                                   rtl::OStringToOUString(errorString, RTL_TEXTENCODING_UTF8));
         }
     }
     // error handling part 2: HTTP status codes
