@@ -18,6 +18,8 @@ pdfium_patches += constexpr-template.patch
 
 pdfium_patches += system-abseil.diff
 
+pdfium_patches += annot.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))

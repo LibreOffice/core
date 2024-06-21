@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#include <editeng/colritem.hxx>
+
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <sortedobjs.hxx>
@@ -223,6 +225,38 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     // i.e. the /AP -> /N key of the checkbox widget annotation object didn't have a sub-key that
     // would match /V, leading to not showing the checked state.
     CPPUNIT_ASSERT_EQUAL(u"Yes"_ustr, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a document with a custom orange font color and a content control:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xff6b00);
+    SvxColorItem aItem(nOrange, RES_CHRATR_COLOR);
+    aSet.Put(aItem);
+    pWrtShell->SetAttrSet(aSet);
+    pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+
+    // When exporting that document to PDF:
+    save(u"writer_pdf_Export"_ustr);
+
+    // Then make sure that the widget in the PDF result has that custom font color:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    pPage->onAfterLoadPage(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ff6b00ff]
+    // - Actual  : rgba[000000ff]
+    // i.e. the custom color was lost, the font color was black, not orange.
+    CPPUNIT_ASSERT_EQUAL(nOrange, pAnnotation->getFontColor(pPdfDocument.get()));
 }
 }
 
