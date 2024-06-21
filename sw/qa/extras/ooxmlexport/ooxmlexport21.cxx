@@ -38,6 +38,17 @@ public:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf161631, "tdf161631.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Some text
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, getParagraph(1)->getString());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
 {
     // test with 2 properties: font size, italic (toggle)
