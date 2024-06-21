@@ -2538,6 +2538,8 @@ public:
                                 const css::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
+    virtual void set_item_accessible_name(int nIndex, const OUString& rName) = 0;
+    virtual void set_item_accessible_name(const OUString& rIdent, const OUString& rName) = 0;
 
     virtual vcl::ImageType get_icon_size() const = 0;
     virtual void set_icon_size(vcl::ImageType eType) = 0;
