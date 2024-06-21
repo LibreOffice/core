@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,LanguageTool,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	fwk \
 	i18nlangtag \
 	svt \
 	lng \

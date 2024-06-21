@@ -47,8 +47,13 @@
 #include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
+#include <framework/interaction.hxx>
+#include <com/sun/star/task/InteractionClassification.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/lingucfg.hxx>
 #include <osl/mutex.hxx>
@@ -121,7 +126,7 @@ enum class HTTP_METHOD
 
 std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
                                  const OString& aPostData, curl_slist* pHttpHeader,
-                                 tools::Long& nStatusCode)
+                                 tools::Long& nStatusCode, CURLcode& eCURLCode)
 {
     struct curl_cleanup_t
     {
@@ -160,11 +165,12 @@ std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
         (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
     }
 
-    CURLcode cc = curl_easy_perform(curl.get());
-    if (cc != CURLE_OK)
+    eCURLCode = curl_easy_perform(curl.get());
+    if (eCURLCode != CURLE_OK)
     {
         SAL_WARN("languagetool",
-                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+                 "CURL request returned with error: " << static_cast<sal_Int32>(eCURLCode) << " "
+                                                      << curl_easy_strerror(eCURLCode));
     }
 
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
@@ -172,7 +178,7 @@ std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
 }
 
 std::string makeDudenHttpRequest(std::u16string_view aURL, const OString& aPostData,
-                                 tools::Long& nStatusCode)
+                                 tools::Long& nStatusCode, CURLcode& eCURLCode)
 {
     struct curl_slist* pList = nullptr;
     OString sAccessToken
@@ -186,11 +192,12 @@ std::string makeDudenHttpRequest(std::u16string_view aURL, const OString& aPostD
         pList = curl_slist_append(pList, sAccessToken.getStr());
     }
 
-    return makeHttpRequest_impl(aURL, HTTP_METHOD::HTTP_POST, aPostData, pList, nStatusCode);
+    return makeHttpRequest_impl(aURL, HTTP_METHOD::HTTP_POST, aPostData, pList, nStatusCode,
+                                eCURLCode);
 }
 
 std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const OString& aPostData,
-                            tools::Long& nStatusCode)
+                            tools::Long& nStatusCode, CURLcode& eCURLCode)
 {
     OString realPostData(aPostData);
     if (method == HTTP_METHOD::HTTP_POST)
@@ -202,7 +209,7 @@ std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const 
             realPostData += "&username=" + encodeTextForLT(username) + "&apiKey=" + apiKey;
     }
 
-    return makeHttpRequest_impl(aURL, method, realPostData, nullptr, nStatusCode);
+    return makeHttpRequest_impl(aURL, method, realPostData, nullptr, nStatusCode, eCURLCode);
 }
 
 template <typename Func>
@@ -301,10 +308,41 @@ OUString getCheckerURL()
             return *oURL + "/check";
     return {};
 }
+
+void lclShowCURLErrorInteraction(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                                 CURLcode eCURLCode, const OUString& rServer)
+{
+    if (!xContext.is())
+        return;
+
+    css::uno::Reference<task::XInteractionHandler2> xInteractionHandler
+        = task::InteractionHandler::createWithParent(xContext, nullptr);
+    if (!xInteractionHandler.is())
+        return;
+
+    css::uno::Any aInteraction;
+
+    rtl::Reference<comphelper::OInteractionApprove> pApprove
+        = new comphelper::OInteractionApprove();
+    css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> aContinuations{
+        pApprove
+    };
+
+    ucb::InteractiveNetworkConnectException aException(
+        { "(" + OUString::number(eCURLCode) + ") "
+          + OStringToOUString(curl_easy_strerror(eCURLCode), RTL_TEXTENCODING_UTF8) },
+        {}, task::InteractionClassification_ERROR, rServer);
+
+    aInteraction <<= aException;
+    xInteractionHandler->handle(
+        framework::InteractionRequest::CreateRequest(aInteraction, aContinuations));
+}
 }
 
-LanguageToolGrammarChecker::LanguageToolGrammarChecker()
+LanguageToolGrammarChecker::LanguageToolGrammarChecker(
+    const css::uno::Reference<css::uno::XComponentContext>& xContext)
     : mCachedResults(10)
+    , mxContext(xContext)
 {
 }
 
@@ -452,10 +490,22 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
 
     tools::Long http_code = 0;
     std::string response_body;
+    CURLcode eCURLCode = CURLE_OK;
     if (bDudenProtocol)
-        response_body = makeDudenHttpRequest(checkerURL, postData, http_code);
+        response_body = makeDudenHttpRequest(checkerURL, postData, http_code, eCURLCode);
     else
-        response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+        response_body
+            = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code, eCURLCode);
+
+    if (eCURLCode != CURLE_OK)
+    {
+        // show the cURL error only once for a given checkerURL
+        if (maLastErrorCheckerURL != checkerURL)
+        {
+            maLastErrorCheckerURL = checkerURL;
+            lclShowCURLErrorInteraction(mxContext, eCURLCode, checkerURL);
+        }
+    }
 
     if (http_code != 200)
     {
@@ -512,9 +562,9 @@ void SAL_CALL LanguageToolGrammarChecker::initialize(const uno::Sequence<uno::An
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
-    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* pContext, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new LanguageToolGrammarChecker());
+    return cppu::acquire(new LanguageToolGrammarChecker(pContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

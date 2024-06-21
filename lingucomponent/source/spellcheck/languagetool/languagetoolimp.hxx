@@ -25,6 +25,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <linguistic/misc.hxx>
 #include <string_view>
 #include <o3tl/lru_map.hxx>
@@ -37,11 +38,13 @@ class LanguageToolGrammarChecker
     css::uno::Sequence<css::lang::Locale> m_aSuppLocales;
     o3tl::lru_map<OString, css::uno::Sequence<css::linguistic2::SingleProofreadingError>>
         mCachedResults;
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    OUString maLastErrorCheckerURL;
     LanguageToolGrammarChecker(const LanguageToolGrammarChecker&) = delete;
     LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;
 
 public:
-    LanguageToolGrammarChecker();
+    LanguageToolGrammarChecker(const css::uno::Reference<css::uno::XComponentContext>& xContext);
     virtual ~LanguageToolGrammarChecker() override;
 
     // XSupportedLocales
