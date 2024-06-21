@@ -1092,12 +1092,12 @@ FIELD_INSERT:
         pDlg->StartExecuteAsync([pShell, &rSh, pDlg](int nResult) {
             if ( nResult == RET_OK )
             {
-                auto rDoc = rSh.GetDoc();
+                auto& rDoc = *rSh.GetDoc();
 
                 rSh.LockView(true);
                 rSh.StartAllAction();
                 rSh.SwCursorShell::Push();
-                rDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+                rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
 
                 const size_t nPageDescIndex = rSh.GetCurPageDesc();
                 const SwPageDesc& rDesc = rSh.GetPageDesc(nPageDescIndex);
@@ -1117,7 +1117,7 @@ FIELD_INSERT:
                 if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                 {
                     SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                    rDoc->getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+                    rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
                 }
 
                 SwPageDesc aNewDesc(rDesc);
@@ -1242,7 +1242,7 @@ FIELD_INSERT:
                 if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                 {
                     SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                    rDoc->getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+                    rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
                 }
 
                 SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
@@ -1250,7 +1250,7 @@ FIELD_INSERT:
                 // Insert new line if there is already text in header/footer
                 if (pTextNode && !pTextNode->GetText().isEmpty())
                 {
-                    rDoc->getIDocumentContentOperations().SplitNode(*rSh.GetCursor()->GetPoint(), false);
+                    rDoc.getIDocumentContentOperations().SplitNode(*rSh.GetCursor()->GetPoint(), false);
 
                     // Go back to start of header/footer
                     if (bHeader)
@@ -1292,7 +1292,7 @@ FIELD_INSERT:
                 aMgr.InsertField(aData);
                 if (pDlg->GetIncludePageTotal())
                 {
-                    rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
+                    rDoc.getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                     SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics, DS_PAGE,
                                                       OUString(), OUString(), SVX_NUM_PAGEDESC);
                     aMgr.InsertField(aPageTotalData);
@@ -1317,7 +1317,7 @@ FIELD_INSERT:
                     if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                     {
                         SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                        rDoc->getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+                        rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
                     }
 
                     pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
@@ -1325,7 +1325,7 @@ FIELD_INSERT:
                     // Insert new line if there is already text in header/footer
                     if (pTextNode && !pTextNode->GetText().isEmpty())
                     {
-                        rDoc->getIDocumentContentOperations().SplitNode(
+                        rDoc.getIDocumentContentOperations().SplitNode(
                             *rSh.GetCursor()->GetPoint(), false);
                         // Go back to start of header/footer
                         rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true);
@@ -1346,7 +1346,7 @@ FIELD_INSERT:
                     aEvenMgr.InsertField(aData);
                     if (pDlg->GetIncludePageTotal())
                     {
-                        rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
+                        rDoc.getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
                         SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
                                                           DS_PAGE, OUString(), OUString(),
                                                           SVX_NUM_PAGEDESC);
@@ -1366,7 +1366,7 @@ FIELD_INSERT:
                 rSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
                 rSh.EndAllAction();
                 rSh.LockView(false);
-                rDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+                rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
             }
             pDlg->disposeOnce();
         });
