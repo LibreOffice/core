@@ -20,11 +20,6 @@
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#ifndef SYSTEM_CURL
-#include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/DigestID.hpp>
-#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
-#endif
 
 #include <config_oauth2.h>
 #include <rtl/uri.hxx>
@@ -122,18 +117,6 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-#ifndef SYSTEM_CURL
-        // Initialize NSS library to make sure libcmis (and curl) can access CACERTs using NSS
-        // when using internal libcurl.
-        uno::Reference< css::xml::crypto::XNSSInitializer >
-            xNSSInitializer = css::xml::crypto::NSSInitializer::create( m_xContext );
-
-        uno::Reference< css::xml::crypto::XDigestContext > xDigestContext(
-                xNSSInitializer->getDigestContext( css::xml::crypto::DigestID::SHA256,
-                                                          uno::Sequence< beans::NamedValue >() ),
-                                                          uno::UNO_SET_THROW );
-#endif
-
         // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
         ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
