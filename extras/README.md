@@ -35,8 +35,8 @@ Contains templates, clipart galleries, palettes, symbol font, autocorrections, a
 	+ choose a template category `<Category>`
 	+ unzip `Foo.ot?` (? = p, t, s or g) in `extras/source/templates/<Category>/Foo` (no space allowed in any file names)
 	+ add `<Category>/Foo.ot? /` in `Package_templates.mk` (or `Package_tplpresnt.mk` if it's a presentation)
-	+ in `CustomTarget_templates.mk` (or `CustomTarget_tplpresnt.mk` if it's a presentation):
-		+ add `<Category>/Foo/meta.xml /` and all files which are not automatically added in `extras_TEMPLATES_XMLFILES` (or `extras_PRESENTATIONS_XMLFILES` for presentation)
+	+ in `template_files.mk`:
+		+ add e.g. `<Category>/Foo/settings.xml` (and all other files which are not automatically added) to `extra_files_COMMON` (or `extra_files_PRESENTATIONS` in case of a presentation template)
 	+ for translation of template name
 		+ define a new STR_TEMPLATE_NAMExx in include/sfx2/strings.hrc
 		+ define a new STR_TEMPLATE_NAMExx_DEF in sfx2/inc/strings.hxx

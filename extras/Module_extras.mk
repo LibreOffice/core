@@ -15,9 +15,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_glade \
 	CustomTarget_gallsystem \
 	CustomTarget_templates \
-	CustomTarget_tplpresnt \
-	CustomTarget_tplwizard \
-	CustomTarget_tplwizdesktop \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
