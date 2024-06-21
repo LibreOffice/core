@@ -913,6 +913,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             m_bTriedConversion = true;
             if ( TryToConvertToOOo( m_xObjectStream ) )
             {
+                aGuard.clear();
                 changeState( embed::EmbedStates::ACTIVE );
                 return;
             }
@@ -944,6 +945,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
             if ( TryToConvertToOOo( xStream ) )
             {
+                aGuard.clear();
                 changeState( embed::EmbedStates::ACTIVE );
                 return;
             }
