@@ -1833,11 +1833,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         // retrieve the name of the column
                         OUString sName = xMetaData->getColumnName(i + 1);
                         // check for duplicate entries
-                        if(aColumnMap.find(sName) != aColumnMap.end())
+                        if(aColumnMap.contains(sName))
                         {
                             OUString sAlias(sName);
                             sal_Int32 searchIndex=1;
-                            while(aColumnMap.find(sAlias) != aColumnMap.end())
+                            while(aColumnMap.contains(sAlias))
                             {
                                 sAlias = sName + OUString::number(searchIndex++);
                             }
