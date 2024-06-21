@@ -1091,6 +1091,10 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
         Wallpaper aWallpaper(aTileImage);
         aWallpaper.SetColor(COL_TRANSPARENT);
+        Point aPaperPt(aMaskRect.getX() % aTileImage.GetSizePixel().Width(),
+                       aMaskRect.getY() % aTileImage.GetSizePixel().Height());
+        tools::Rectangle aPaperRect(aPaperPt, aTileImage.GetSizePixel());
+        aWallpaper.SetRect(aPaperRect);
         mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
         mpOutputDevice->Pop();
         return;
@@ -1117,6 +1121,10 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     {
         Wallpaper aWallpaper(aTileImage);
         aWallpaper.SetColor(COL_TRANSPARENT);
+        Point aPaperPt(aMaskRect.getX() % aTileImage.GetSizePixel().Width(),
+                       aMaskRect.getY() % aTileImage.GetSizePixel().Height());
+        tools::Rectangle aPaperRect(aPaperPt, aTileImage.GetSizePixel());
+        aWallpaper.SetRect(aPaperRect);
         mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
     }
 
