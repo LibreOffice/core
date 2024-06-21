@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name expander -->
+      <!-- column-name icon -->
       <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -43,16 +43,21 @@
               <object class="GtkTreeSelection"/>
             </child>
             <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+              <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                <property name="visible">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                  <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf"/>
                   <attributes>
                     <attribute name="pixbuf">0</attribute>
                   </attributes>
                 </child>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext2">
+                  <object class="GtkCellRendererText" id="cellrenderertext">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
