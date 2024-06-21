@@ -45,25 +45,6 @@ sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='invalid'] orph
 sc/uiconfig/scalc/ui/definename.ui://GtkLabel[@id='label'] orphan-label
 sc/uiconfig/scalc/ui/doubledialog.ui://GtkEntry[@id='value'] no-labelled-by
 sc/uiconfig/scalc/ui/externaldata.ui://GtkLabel[@id='secondsft'] orphan-label
-
-// Tooltip values now controlled in svx/strings.hrc instead of sc/uiconfig/scalc/ui/floatingborderstyle.ui
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='none'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='all'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='outside'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='thickbox'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='thickbottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='doublebottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='topthickbottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='topdoublebottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='left'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='right'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='top'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='bottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='diagup'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='diagdown'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='topbottom'] button-no-label
-sc/uiconfig/scalc/ui/floatingborderstyle.ui://GtkToolButton[@id='leftright'] button-no-label
-
 sc/uiconfig/scalc/ui/fourieranalysisdialog.ui://GtkLabel[@id='error-message'] orphan-label
 sc/uiconfig/scalc/ui/groupbynumber.ui://GtkEntry[@id='edit_by'] no-labelled-by
 sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkLabel[@id='labelFT_H_CUSTOM'] orphan-label
