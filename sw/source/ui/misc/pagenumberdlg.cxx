@@ -33,6 +33,8 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     , m_xPageNumberAlignment(m_xBuilder->weld_combo_box("alignmentCombo"))
     , m_xMirrorOnEvenPages(m_xBuilder->weld_check_button("mirrorCheckbox"))
     , m_xIncludePageTotal(m_xBuilder->weld_check_button("pagetotalCheckbox"))
+    , m_xFitIntoExistingMargins(
+          m_xBuilder->weld_check_button(u"fitintoexistingmarginsCheckbox"_ustr))
     , m_xPageNumberTypeLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("numfmtlb")))
     , m_xPreviewImage(m_xBuilder->weld_image("previewImage"))
     , m_aPageNumberPosition(1) // bottom
@@ -47,6 +49,7 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     m_xMirrorOnEvenPages->set_sensitive(false);
     m_xMirrorOnEvenPages->set_state(TRISTATE_TRUE);
     m_xIncludePageTotal->set_state(TRISTATE_FALSE);
+    m_xFitIntoExistingMargins->set_state(TRISTATE_FALSE);
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xPageNumberTypeLB->get_widget(),
                                                  ::std::numeric_limits<sal_uInt16>::max());
     m_xPageNumberTypeLB->connect_changed(LINK(this, SwPageNumberDlg, NumberTypeSelectHdl));
@@ -83,15 +86,20 @@ IMPL_LINK_NOARG(SwPageNumberDlg, IncludePageTotalChangeHdl, weld::Toggleable&, v
     updateImage();
 }
 
-bool SwPageNumberDlg::GetMirrorOnEvenPages()
+bool SwPageNumberDlg::GetMirrorOnEvenPages() const
 {
     return m_xMirrorOnEvenPages->get_sensitive()
            && m_xMirrorOnEvenPages->get_state() == TRISTATE_TRUE;
 }
 
-bool SwPageNumberDlg::GetIncludePageTotal()
+bool SwPageNumberDlg::GetIncludePageTotal() const
 {
     return m_xIncludePageTotal->get_state() == TRISTATE_TRUE;
+}
+
+bool SwPageNumberDlg::GetFitIntoExistingMargins() const
+{
+    return m_xFitIntoExistingMargins->get_state() == TRISTATE_TRUE;
 }
 
 void SwPageNumberDlg::SetPageNumberType(SvxNumType nSet)

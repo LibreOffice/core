@@ -37,10 +37,15 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <osl/diagnose.h>
+#include <charatr.hxx>
+#include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtinfmt.hxx>
 #include <fldwrap.hxx>
+#include <frmatr.hxx>
+#include <hfspacingitem.hxx>
 #include <redline.hxx>
+#include <swfont.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -59,9 +64,9 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 
-#include <editeng/ulspitem.hxx>
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <svl/zforlist.hxx>
@@ -1140,6 +1145,72 @@ FIELD_INSERT:
                               : const_cast<SwFrameFormat&>(*rMaster.GetFooter().GetFooterFormat());
                     rFormat.SetFormatAttr(aUL);
                     rFormat.SetFormatAttr(aFill);
+
+                    if (pDlg->GetFitIntoExistingMargins())
+                    {
+                        SvxULSpaceItem aPageUL(aNewDesc.GetMaster().GetULSpace());
+                        tools::Long nPageMargin = bHeader ? aPageUL.GetUpper() : aPageUL.GetLower();
+
+                        // most printers can't print to paper edge - use arbitrary ~14pt as minimum
+                        if (nPageMargin > constTwips_5mm)
+                        {
+                            // reduce existing margin by the "Spacing"
+                            nPageMargin -= constTwips_5mm;
+
+                            // also reduce by the "Height" (as calculated from the font)
+                            tools::Long nFontHeight = constTwips_5mm; // appropriate for 12pt font
+                            const OutputDevice* pOutDev = Application::GetDefaultDevice();
+                            const SwViewShell* pViewSh
+                                = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+                            OUString sParaStyle(bHeader ? "Header" : "Footer");
+                            SwTextFormatColl* pStyle = rDoc.FindTextFormatCollByName(sParaStyle);
+                            if (pStyle && pOutDev)
+                            {
+                                SwFont aFont(
+                                    &pStyle->GetAttrSet(), /*IDocumentSettingAccess=*/nullptr);
+
+                                // sledgehammer approach: since the in-use-font (Latin/CTL/CKJ)
+                                // is not known, use the tallest of the three just to ensure fit.
+                                sal_uInt16 nHeight = aFont.GetHeight(pViewSh, *pOutDev); // Latin
+
+                                aFont.SetActual(SwFontScript::CTL);
+                                nHeight = std::max(nHeight, aFont.GetHeight(pViewSh, *pOutDev));
+
+                                aFont.SetActual(SwFontScript::CJK);
+                                nFontHeight = std::max(nHeight, aFont.GetHeight(pViewSh, *pOutDev));
+
+                                // Spacing: above and below paragraph
+                                const SvxULSpaceItem& rParaStyleUL = pStyle->GetULSpace();
+                                nFontHeight += rParaStyleUL.GetUpper() + rParaStyleUL.GetLower();
+
+                                // Border padding: top and bottom
+                                const SvxBoxItem rBorders = pStyle->GetBox();
+                                nFontHeight += rBorders.CalcLineSpace(SvxBoxItemLine::TOP, true);
+                                nFontHeight += rBorders.CalcLineSpace(SvxBoxItemLine::BOTTOM, true);
+                            }
+                            nPageMargin -= nFontHeight;
+
+                            nPageMargin = std::max(nPageMargin, constTwips_5mm);
+                            if (bHeader)
+                                aPageUL.SetUpper(nPageMargin);
+                            else
+                                aPageUL.SetLower(nPageMargin);
+                            aNewDesc.GetMaster().SetFormatAttr(aPageUL);
+
+                            // force aggressively calculated font height as minimum to ensure
+                            // effective margin stays the same (instead of getting smaller)
+                            SwFormatFrameSize aSize(rFormat.GetFrameSize());
+                            aSize.SetHeightSizeType(SwFrameSize::Minimum);
+                            // frame size property includes both Spacing + Height
+                            aSize.SetHeight(constTwips_5mm + nFontHeight);
+                            rFormat.SetFormatAttr(aSize);
+
+                            // in case the calculated font height isn't actually large enough,
+                            // eat into spacing first before pushing into the content area.
+                            rFormat.SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
+                                RES_HEADER_FOOTER_EAT_SPACING, true));
+                        }
+                    }
 
                     // Might as well turn on margin mirroring too - if appropriate
                     if (pDlg->GetMirrorOnEvenPages() && !bHeaderAlreadyOn && !bFooterAlreadyOn
