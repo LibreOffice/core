@@ -1217,6 +1217,16 @@ void SalInstanceToolbar::set_item_tooltip_text(const OUString& rIdent, const OUS
     m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(rIdent), rTip);
 }
 
+void SalInstanceToolbar::set_item_accessible_name(int nIndex, const OUString& rName)
+{
+    m_xToolBox->SetAccessibleName(m_xToolBox->GetItemId(nIndex), rName);
+}
+
+void SalInstanceToolbar::set_item_accessible_name(const OUString& rIdent, const OUString& rName)
+{
+    m_xToolBox->SetAccessibleName(m_xToolBox->GetItemId(rIdent), rName);
+}
+
 OUString SalInstanceToolbar::get_item_tooltip_text(const OUString& rIdent) const
 {
     return m_xToolBox->GetQuickHelpText(m_xToolBox->GetItemId(rIdent));

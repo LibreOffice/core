@@ -12447,6 +12447,32 @@ public:
         gtk_widget_set_tooltip_text(pItem, OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    virtual void set_item_accessible_name(int nIndex, const OUString& rName) override
+    {
+        GtkWidget* pItem = toolbar_get_nth_item(nIndex);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        AtkObject* pAccessible = gtk_widget_get_accessible(pItem);
+        assert(pAccessible);
+        atk_object_set_name(pAccessible, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+#else
+        gtk_accessible_update_property(GTK_ACCESSIBLE(pItem), GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+    }
+
+    virtual void set_item_accessible_name(const OUString& rIdent, const OUString& rName) override
+    {
+        GtkWidget* pItem = GTK_WIDGET(m_aMap[rIdent]);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        AtkObject* pAccessible = gtk_widget_get_accessible(pItem);
+        assert(pAccessible);
+        atk_object_set_name(pAccessible, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+#else
+        gtk_accessible_update_property(GTK_ACCESSIBLE(pItem), GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+    }
+
     virtual OUString get_item_tooltip_text(const OUString& rIdent) const override
     {
         GtkWidget* pItem = GTK_WIDGET(m_aMap.find(rIdent)->second);

@@ -1426,6 +1426,10 @@ public:
 
     virtual void set_item_tooltip_text(const OUString& rIdent, const OUString& rTip) override;
 
+    virtual void set_item_accessible_name(int nIndex, const OUString& rName) override;
+
+    virtual void set_item_accessible_name(const OUString& rIdent, const OUString& rName) override;
+
     virtual OUString get_item_tooltip_text(const OUString& rIdent) const override;
 
     virtual vcl::ImageType get_icon_size() const override;
