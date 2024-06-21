@@ -48,6 +48,11 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
         // which is not a problem with the QtMultimedia approach that the qt6 VCL plugin uses;
         // stay with the QtObjectWidget introduced in commit 4366e0605214260e55a937173b0c2e02225dc843
         m_pQWidget = new QtObjectWidget(*this);
+
+        // invoke QWidget::winId() to ensure a native window for OpenGL rendering is available on X11,
+        // don't do it on Wayland, as that breaks rendering otherwise, s.a. QtFrame::ResolveWindowHandle
+        if (QGuiApplication::platformName() == "xcb")
+            m_pQWidget->winId();
         m_pQWindow = m_pQWidget->windowHandle();
     }
 
