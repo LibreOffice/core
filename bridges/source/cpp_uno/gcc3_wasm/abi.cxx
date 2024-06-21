@@ -10,12 +10,11 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
 #include <typeinfo>
 
+#include <bridges/emscriptencxxabi/cxxabi.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppu/unotype.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
@@ -23,49 +22,12 @@
 
 #include "abi.hxx"
 
-namespace
-{
-OUString toUnoName(char const* name)
-{
-    assert(name != nullptr);
-    OUStringBuffer b;
-    bool scoped = *name == 'N';
-    if (scoped)
-    {
-        ++name;
-    }
-    for (;;)
-    {
-        assert(*name >= '0' && *name <= '9');
-        std::size_t n = *name++ - '0';
-        while (*name >= '0' && *name <= '9')
-        {
-            n = 10 * n + (*name++ - '0');
-        }
-        b.appendAscii(name, n);
-        name += n;
-        if (!scoped)
-        {
-            assert(*name == 0);
-            break;
-        }
-        if (*name == 'E')
-        {
-            assert(name[1] == 0);
-            break;
-        }
-        b.append('.');
-    }
-    return b.makeStringAndClear();
-}
-}
-
 void abi_wasm::mapException(__cxxabiv1::__cxa_exception* exception, std::type_info const* type,
                             uno_Any* any, uno_Mapping* mapping)
 {
     assert(exception != nullptr);
     assert(type != nullptr);
-    OUString unoName(toUnoName(type->name()));
+    OUString unoName(emscriptencxxabi::toUnoName(type->name()));
     typelib_TypeDescription* td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
     if (td == nullptr)

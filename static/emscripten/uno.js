@@ -15,6 +15,18 @@ Module.initUno = function() {
     }
 };
 
+Module.catchUnoException = function(exception) {
+    // Rethrow non-C++ exceptions (non-UNO C++ exceptions are mapped to css.uno.RuntimeException in
+    // Module.getUnoExceptionFromCxaException):
+    if (!(exception instanceof WebAssembly.Exception && exception.is(getCppExceptionTag()))) {
+        throw exception;
+    }
+    const any = Module.getUnoExceptionFromCxaException(
+        getCppExceptionThrownObjectFromWebAssemblyException(exception));
+    decrementExceptionRefcount(exception);
+    return any;
+}
+
 Module.unoObject = function(interfaces, obj) {
     Module.initUno();
     interfaces = ['com.sun.star.lang.XTypeProvider'].concat(interfaces);
