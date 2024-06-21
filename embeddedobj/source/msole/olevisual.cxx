@@ -355,9 +355,6 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     {
         try
         {
-            if ( m_nObjectState == embed::EmbedStates::LOADED )
-                changeState( embed::EmbedStates::RUNNING );
-
             datatransfer::DataFlavor aDataFlavor(
                     "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
                     "Windows Metafile",
@@ -366,6 +363,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
             embed::VisualRepresentation aVisualRepr;
             {
                 osl::ResettableMutexGuardScopedReleaser clearedMutex(aGuard);
+                if ( m_nObjectState == embed::EmbedStates::LOADED )
+                    changeState( embed::EmbedStates::RUNNING );
                 aVisualRepr.Data = m_pOleComponent->getTransferData(aDataFlavor);
             }
             aVisualRepr.Flavor = aDataFlavor;
