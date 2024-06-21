@@ -1136,7 +1136,10 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     {
                         auto & rEntry = aTabCols.GetEntry(nIndex);
                         tools::Long nNewPosition = rEntry.nPos + nOffset;
-                        nNewPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        tools::Long nMax = rEntry.nMax - constDistanceOffset;
+                        if (nMax < rEntry.nMin)
+                            nMax = rEntry.nMin;
+                        nNewPosition = std::clamp(nNewPosition, rEntry.nMin, nMax);
                         rEntry.nPos = nNewPosition;
                     }
 
