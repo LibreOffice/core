@@ -646,6 +646,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
     xGlobalSheetSettings->setDoAutoComplete(bOldValue);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteWithReturnKey)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+
+    insertStringToCell(u"A1"_ustr, u"Test");
+
+    goToCell(u"A1"_ustr);
+
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+        dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
+
+        // Paste using Return
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, pDoc->GetString(ScAddress(0, i, 0)));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
 {
     createScDoc();
