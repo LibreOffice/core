@@ -2238,8 +2238,7 @@ void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool b
 void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 {
     SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(rFieldMgr.GetCurField());
-    bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);
-    if (bNew || GetView().GetPostItMgr()->IsAnswer())
+
     {
         const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
         OUString sAuthor;
