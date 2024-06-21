@@ -2258,6 +2258,19 @@ uno::Any Content::open(
                         && aDAVOptions.getHttpResponseStatusCode() != SC_INTERNAL_SERVER_ERROR)
                     {
                         // throws exception as if there was a server error, a DAV exception
+                        switch (aDAVOptions.getHttpResponseStatusCode())
+                        {
+                            case USC_CONNECT_FAILED:
+                            {
+                                CurlUri aUri(aTargetURL);
+                                throw DAVException(
+                                    DAVException::DAV_HTTP_CONNECT,
+                                    ConnectionEndPointString(aUri.GetHost(), aUri.GetPort()),
+                                    aDAVOptions.getHttpResponseStatusText());
+                            }
+                            default:
+                                break;
+                        }
                         throw DAVException( DAVException::DAV_HTTP_ERROR,
                                             aDAVOptions.getHttpResponseStatusText(),
                                             aDAVOptions.getHttpResponseStatusCode() );

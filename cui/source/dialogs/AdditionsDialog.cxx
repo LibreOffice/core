@@ -71,11 +71,12 @@ using namespace ::com::sun::star::beans;
 namespace
 {
 // Gets the content of the given URL and returns as a standard string
-std::string ucbGet(const OUString& rURL)
+std::string ucbGet(const OUString& rURL, const css::uno::Reference<css::awt::XWindow>& xParentWin)
 {
     try
     {
-        auto const s = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::STD_READ);
+        auto const s
+            = utl::UcbStreamHelper::CreateStream(rURL, StreamMode::STD_READ, xParentWin, false);
         if (!s)
         {
             SAL_WARN("cui.dialogs", "CreateStream <" << rURL << "> failed");
@@ -404,7 +405,10 @@ void SearchAndParseThread::execute()
 
     if (m_bIsFirstLoading)
     {
-        std::string sResponse = !m_bUITest ? ucbGet(m_pAdditionsDialog->m_sURL) : "";
+        const auto pDialog = m_pAdditionsDialog->getDialog();
+        std::string sResponse = !m_bUITest ? ucbGet(m_pAdditionsDialog->m_sURL,
+                                                    pDialog ? pDialog->GetXWindow() : nullptr)
+                                           : "";
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
         std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
                   m_pAdditionsDialog->m_aAllExtensionsVector.end(),
