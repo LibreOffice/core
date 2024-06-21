@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -16,29 +16,29 @@
   </object>
   <object class="GtkBox" id="FilterNavigator">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="shadow_type">in</property>
+        <property name="shadow-type">in</property>
         <child>
           <object class="GtkTreeView" id="treeview">
-            <property name="width_request">-1</property>
+            <property name="width-request">-1</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="has_tooltip">True</property>
+            <property name="can-focus">True</property>
+            <property name="has-tooltip">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="model">liststore1</property>
-            <property name="headers_visible">False</property>
+            <property name="headers-visible">False</property>
             <property name="reorderable">True</property>
-            <property name="search_column">1</property>
-            <property name="enable_tree_lines">True</property>
+            <property name="search-column">1</property>
+            <property name="enable-tree-lines">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
