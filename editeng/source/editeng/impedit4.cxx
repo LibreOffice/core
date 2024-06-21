@@ -296,8 +296,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
 {
     assert( IsUpdateLayout() && "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();
-    if ( !IsFormatted() )
-        FormatDoc();
 
     sal_Int32 nStartNode, nEndNode;
     aSel.Adjust( maEditDoc );

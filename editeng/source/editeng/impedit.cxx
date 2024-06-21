@@ -1175,8 +1175,6 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         return;
 
     getEditEngine().CheckIdleFormatter();
-    if (!getEditEngine().IsFormatted())
-        getImpEditEngine().FormatDoc();
 
     // For some reasons I end up here during the formatting, if the Outliner
     // is initialized in Paint, because no SetPool();
