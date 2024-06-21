@@ -196,7 +196,6 @@ private:
     SAL_DLLPRIVATE bool HasText() const;
     SAL_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
     SAL_DLLPRIVATE void SetInSelectionMode(bool b);
-    SAL_DLLPRIVATE void ensureDocumentFormatted() const;
 
 public:
     EditEngine(SfxItemPool* pItemPool);

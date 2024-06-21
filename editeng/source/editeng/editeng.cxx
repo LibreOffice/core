@@ -420,12 +420,6 @@ sal_Int32 EditEngine::GetParagraphCount() const
     return getImpl().maEditDoc.Count();
 }
 
-void EditEngine::ensureDocumentFormatted() const
-{
-    if (!getImpl().IsFormatted())
-        getImpl().FormatDoc();
-}
-
 sal_Int32 EditEngine::GetLineCount( sal_Int32 nParagraph ) const
 {
     return getImpl().GetLineCount(nParagraph);
@@ -459,7 +453,7 @@ tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
 
 sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const
 {
-    ensureDocumentFormatted();
+    getImpl().EnsureDocumentFormatted();
     sal_uInt32 nHeight = getImpl().GetParaHeight(nParagraph);
     return nHeight;
 }
@@ -801,14 +795,14 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
 sal_uInt32 EditEngine::GetTextHeight() const
 {
-    ensureDocumentFormatted();
+    getImpl().EnsureDocumentFormatted();
     sal_uInt32 nHeight = !IsEffectivelyVertical() ? getImpl().GetTextHeight() : getImpl().CalcTextWidth( true );
     return nHeight;
 }
 
 sal_uInt32 EditEngine::CalcTextWidth()
 {
-    ensureDocumentFormatted();
+    getImpl().EnsureDocumentFormatted();
     sal_uInt32 nWidth = !IsEffectivelyVertical() ? getImpl().CalcTextWidth(true) : getImpl().GetTextHeight();
     return nWidth;
 }
@@ -1147,7 +1141,7 @@ tools::Long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
     if ( pPPortion )
     {
         DBG_ASSERT(getImpl().IsFormatted() || !getImpl().IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!");
-        ensureDocumentFormatted();
+        getImpl().EnsureDocumentFormatted();
         const EditLine& rFirstLine = pPPortion->GetLines()[0];
         nX = rFirstLine.GetStartPosX();
     }
@@ -1192,7 +1186,7 @@ bool EditEngine::IsRightToLeft( sal_Int32 nPara ) const
 
 bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 {
-    ensureDocumentFormatted();
+    getImpl().EnsureDocumentFormatted();
 
     // take unrotated positions for calculation here
     Point aDocPos = GetDocPos( rPaperPos );
@@ -1580,7 +1574,7 @@ tools::Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 {
     // This only works if not already in the format ...
-    ensureDocumentFormatted();
+    getImpl().EnsureDocumentFormatted();
 
     ParagraphInfos aInfos;
     aInfos.bValid = getImpl().IsFormatted();

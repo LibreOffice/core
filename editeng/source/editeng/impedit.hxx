@@ -988,6 +988,7 @@ public:
     void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
     void FormatDoc();
     void FormatFullDoc();
+    void EnsureDocumentFormatted();
 
     void                    Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
     void                    Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );

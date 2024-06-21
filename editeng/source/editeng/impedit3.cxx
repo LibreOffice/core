@@ -500,6 +500,12 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
     }
 }
 
+void ImpEditEngine::EnsureDocumentFormatted()
+{
+    if (!IsFormatted())
+        FormatDoc();
+}
+
 void ImpEditEngine::FormatDoc()
 {
     if (!IsUpdateLayout() || IsFormatting())
