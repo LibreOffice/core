@@ -27,6 +27,9 @@
 #include <com/sun/star/ucb/InsertCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
@@ -427,7 +430,37 @@ namespace cmis
                     }
                     catch( const libcmis::Exception & e )
                     {
-                        if ( e.getType() != "permissionDenied" )
+                        if (e.getType() == "dnsFailed")
+                        {
+                            uno::Any ex;
+                            ex <<= ucb::InteractiveNetworkResolveNameException(
+                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                    getXWeak(),
+                                    task::InteractionClassification_ERROR,
+                                    m_aURL.getBindingUrl());
+                            ucbhelper::cancelCommandExecution(ex, xEnv);
+                        }
+                        else if (e.getType() == "connectFailed" || e.getType() == "connectTimeout")
+                        {
+                            uno::Any ex;
+                            ex <<= ucb::InteractiveNetworkConnectException(
+                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                    getXWeak(),
+                                    task::InteractionClassification_ERROR,
+                                    m_aURL.getBindingUrl());
+                            ucbhelper::cancelCommandExecution(ex, xEnv);
+                        }
+                        else if (e.getType() == "transferFailed")
+                        {
+                            uno::Any ex;
+                            ex <<= ucb::InteractiveNetworkReadException(
+                                    OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8),
+                                    getXWeak(),
+                                    task::InteractionClassification_ERROR,
+                                    m_aURL.getBindingUrl());
+                            ucbhelper::cancelCommandExecution(ex, xEnv);
+                        }
+                        else if (e.getType() != "permissionDenied")
                         {
                             SAL_INFO("ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what());
                             throw;
