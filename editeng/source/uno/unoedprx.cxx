@@ -180,7 +180,6 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwar
     mnEEIndex = nEEIndex;
 
     // calculate unknowns
-    sal_Int32 nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     mnIndex = nEEIndex;
 
@@ -194,20 +193,19 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwar
         mnIndex += aBulletInfo.aText.getLength();
     }
 
-    for( nCurrField=0; nCurrField < nFieldCount; ++nCurrField )
+    std::vector<EFieldInfo> aFieldInfos = rTF.GetFieldInfo( GetParagraph() );
+    for( const EFieldInfo& rFieldInfo : aFieldInfos )
     {
-        EFieldInfo aFieldInfo( rTF.GetFieldInfo( GetParagraph(), nCurrField ) );
-
-        if( aFieldInfo.aPosition.nIndex > nEEIndex )
+        if( rFieldInfo.aPosition.nIndex > nEEIndex )
             break;
 
-        if( aFieldInfo.aPosition.nIndex == nEEIndex )
+        if( rFieldInfo.aPosition.nIndex == nEEIndex )
         {
             AreInField();
             break;
         }
 
-        mnIndex += std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
+        mnIndex += std::max(rFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
     }
 }
 
@@ -225,7 +223,6 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     mnIndex = nIndex;
 
     // calculate unknowns
-    sal_Int32 nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     DBG_ASSERT(nIndex >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
@@ -252,23 +249,22 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
         mnEEIndex = mnEEIndex - nBulletLen;
     }
 
-    for( nCurrField=0; nCurrField < nFieldCount; ++nCurrField )
+    std::vector<EFieldInfo> aFieldInfos = rTF.GetFieldInfo( GetParagraph() );
+    for( const EFieldInfo& rFieldInfo : aFieldInfos )
     {
-        EFieldInfo aFieldInfo( rTF.GetFieldInfo( GetParagraph(), nCurrField ) );
-
         // we're before a field
-        if( aFieldInfo.aPosition.nIndex > mnEEIndex )
+        if( rFieldInfo.aPosition.nIndex > mnEEIndex )
             break;
 
-        mnEEIndex -= std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
+        mnEEIndex -= std::max(rFieldInfo.aCurrentText.getLength()-1, sal_Int32(0));
 
         // we're within a field
-        if( aFieldInfo.aPosition.nIndex >= mnEEIndex )
+        if( rFieldInfo.aPosition.nIndex >= mnEEIndex )
         {
             AreInField();
-            SetFieldOffset( std::max(aFieldInfo.aCurrentText.getLength()-1, sal_Int32(0)) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
-                            aFieldInfo.aCurrentText.getLength() );
-            mnEEIndex = aFieldInfo.aPosition.nIndex ;
+            SetFieldOffset( std::max(rFieldInfo.aCurrentText.getLength()-1, sal_Int32(0)) - (rFieldInfo.aPosition.nIndex - mnEEIndex),
+                            rFieldInfo.aCurrentText.getLength() );
+            mnEEIndex = rFieldInfo.aPosition.nIndex ;
             break;
         }
     }
@@ -671,18 +667,11 @@ LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_Int32 nPara, sal_Int32 n
     return mpTextForwarder->GetLanguage( nPara, aIndex.GetEEIndex() );
 }
 
-sal_Int32 SvxAccessibleTextAdapter::GetFieldCount( sal_Int32 nPara ) const
+std::vector<EFieldInfo> SvxAccessibleTextAdapter::GetFieldInfo( sal_Int32 nPara ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
-    return mpTextForwarder->GetFieldCount( nPara );
-}
-
-EFieldInfo SvxAccessibleTextAdapter::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
-{
-    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
-
-    return mpTextForwarder->GetFieldInfo( nPara, nField );
+    return mpTextForwarder->GetFieldInfo( nPara );
 }
 
 EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_Int32 nPara ) const

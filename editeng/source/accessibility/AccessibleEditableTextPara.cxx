@@ -886,10 +886,9 @@ namespace accessibility
         //For field object info
         sal_Int32 nParaIndex = GetParagraphIndex();
         sal_Int32 nAllFieldLen = 0;
-        sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex);
-        for (sal_Int32 j = 0; j < nField; ++j)
+        std::vector<EFieldInfo> aFieldInfos = rCacheTF.GetFieldInfo(nParaIndex);
+        for (const EFieldInfo& ree : aFieldInfos)
         {
-            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
             sal_Int32 reeBegin = ree.aPosition.nIndex + nAllFieldLen;
             sal_Int32 reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
@@ -1529,11 +1528,12 @@ namespace accessibility
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
         sal_Int32 nAllFieldLen = 0;
-        sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex), nFoundFieldIndex = -1;
+        sal_Int32 nFoundFieldIndex = -1;
+        std::vector<EFieldInfo> aFieldInfos = rCacheTF.GetFieldInfo(nParaIndex);
         sal_Int32  reeBegin=0, reeEnd=0;
-        for (sal_Int32 j = 0; j < nField; ++j)
+        sal_Int32 j = 0;
+        for (const EFieldInfo& ree : aFieldInfos)
         {
-            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
             reeBegin = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
@@ -1549,6 +1549,7 @@ namespace accessibility
                     break;
                 }
             }
+            j++;
         }
         if( nFoundFieldIndex >= 0  )
         {
@@ -1563,12 +1564,13 @@ namespace accessibility
     {
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+        std::vector<EFieldInfo> aFieldInfos = rCacheTF.GetFieldInfo(nParaIndex);
         sal_Int32 nAllFieldLen = 0;
-        sal_Int32 nField = rCacheTF.GetFieldCount(nParaIndex), nFoundFieldIndex = -1;
+        sal_Int32 nField = aFieldInfos.size(), nFoundFieldIndex = -1;
         sal_Int32  reeBegin=0, reeEnd=0;
         for (sal_Int32 j = 0; j < nField; ++j)
         {
-            EFieldInfo ree = rCacheTF.GetFieldInfo(nParaIndex, j);
+            const EFieldInfo& ree = aFieldInfos[j];
             reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
             reeEnd = reeBegin + ree.aCurrentText.getLength();
             nAllFieldLen += (ree.aCurrentText.getLength() - 1);
@@ -2493,12 +2495,12 @@ namespace accessibility
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
         const sal_Int32 nPara = GetParagraphIndex();
 
+        std::vector<EFieldInfo> aFieldInfos = rT.GetFieldInfo( nPara );
         sal_Int32 nHyperLinks = 0;
-        sal_Int32 nFields = rT.GetFieldCount( nPara );
+        sal_Int32 nFields = aFieldInfos.size();
         for (sal_Int32 n = 0; n < nFields; ++n)
         {
-            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( dynamic_cast<const SvxURLField* >(aField.pFieldItem->GetField() ) != nullptr)
+            if ( dynamic_cast<const SvxURLField* >(aFieldInfos[n].pFieldItem->GetField() ) != nullptr)
                 nHyperLinks++;
         }
         return nHyperLinks;
@@ -2512,20 +2514,18 @@ namespace accessibility
         const sal_Int32 nPara = GetParagraphIndex();
 
         sal_Int32 nHyperLink = 0;
-        sal_Int32 nFields = rT.GetFieldCount( nPara );
-        for (sal_Int32 n = 0; n < nFields; ++n)
+        for (const EFieldInfo& rField : rT.GetFieldInfo( nPara ))
         {
-            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( dynamic_cast<const SvxURLField* >(aField.pFieldItem->GetField()) != nullptr )
+            if ( dynamic_cast<const SvxURLField* >(rField.pFieldItem->GetField()) != nullptr )
             {
                 if ( nHyperLink == nLinkIndex )
                 {
-                    sal_Int32 nEEStart = aField.aPosition.nIndex;
+                    sal_Int32 nEEStart = rField.aPosition.nIndex;
 
                     // Translate EE Index to accessible index
                     sal_Int32 nStart = rT.CalcEditEngineIndex( nPara, nEEStart );
-                    sal_Int32 nEnd = nStart + aField.aCurrentText.getLength();
-                    xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *aField.pFieldItem ), nStart, nEnd, aField.aCurrentText );
+                    sal_Int32 nEnd = nStart + rField.aCurrentText.getLength();
+                    xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *rField.pFieldItem ), nStart, nEnd, rField.aCurrentText );
                     break;
                 }
                 nHyperLink++;
@@ -2543,13 +2543,11 @@ namespace accessibility
         const sal_Int32 nEEIndex = rT.CalcEditEngineIndex( nPara, nCharIndex );
         sal_Int32 nHLIndex = -1; //i123620
         sal_Int32 nHyperLink = 0;
-        sal_Int32 nFields = rT.GetFieldCount( nPara );
-        for (sal_Int32 n = 0; n < nFields; ++n)
+        for (const EFieldInfo & rField : rT.GetFieldInfo( nPara ))
         {
-            EFieldInfo aField = rT.GetFieldInfo( nPara, n );
-            if ( dynamic_cast<const SvxURLField* >( aField.pFieldItem->GetField() ) != nullptr)
+            if ( dynamic_cast<const SvxURLField* >( rField.pFieldItem->GetField() ) != nullptr)
             {
-                if ( aField.aPosition.nIndex == nEEIndex )
+                if ( rField.aPosition.nIndex == nEEIndex )
                 {
                     nHLIndex = nHyperLink;
                     break;

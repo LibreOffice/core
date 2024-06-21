@@ -5839,11 +5839,9 @@ static std::vector<std::unique_ptr<SvxFieldItem>> lcl_GetEditEngineFields(std::s
     sal_Int32 nPara = pEditEngine->GetParagraphCount();
     for (sal_Int32 nCurrPara = 0; nCurrPara < nPara; ++nCurrPara)
     {
-        sal_Int16 nField = pEditEngine->GetFieldCount(nCurrPara);
-        for (sal_Int16 nCurrField = 0; nCurrField < nField; ++nCurrField)
+        for (EFieldInfo& rFieldInfo : pEditEngine->GetFieldInfo(nCurrPara))
         {
-            EFieldInfo aFieldInfo = pEditEngine->GetFieldInfo(nCurrPara, nCurrField);
-            vFieldVect.push_back(std::move(aFieldInfo.pFieldItem));
+            vFieldVect.push_back(std::move(rFieldInfo.pFieldItem));
         }
     }
     return vFieldVect;

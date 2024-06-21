@@ -1450,18 +1450,16 @@ sal_Int32 EditView::countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPos, bool b
 
     for (int nCurrentPara = 0; nCurrentPara <= nPara; nCurrentPara++)
     {
-        int nFields = getEditEngine().GetFieldCount( nCurrentPara );
-        for (int nField = 0; nField < nFields; nField++)
+        std::vector<EFieldInfo> aFieldInfos = getEditEngine().GetFieldInfo( nCurrentPara );
+        for (const EFieldInfo& rFieldInfo : aFieldInfos)
         {
-            EFieldInfo aFieldInfo = getEditEngine().GetFieldInfo( nCurrentPara, nField );
-
             bool bLastPara = nCurrentPara == nPara;
-            sal_Int32 nFieldPos = aFieldInfo.aPosition.nIndex;
+            sal_Int32 nFieldPos = rFieldInfo.aPosition.nIndex;
 
             if (bLastPara && nFieldPos >= nPos)
                 break;
 
-            sal_Int32 nFieldLen = aFieldInfo.aCurrentText.getLength();
+            sal_Int32 nFieldLen = rFieldInfo.aCurrentText.getLength();
 
             // position in the middle of a field
             if (!bCanOverflow && bLastPara && nFieldPos + nFieldLen > nPos)

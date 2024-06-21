@@ -392,8 +392,7 @@ public:
     virtual bool IsValid() const override;
 
     virtual LanguageType GetLanguage(sal_Int32, sal_Int32) const override;
-    virtual sal_Int32 GetFieldCount(sal_Int32 nPara) const override;
-    virtual EFieldInfo GetFieldInfo(sal_Int32 nPara, sal_uInt16 nField) const override;
+    virtual std::vector<EFieldInfo> GetFieldInfo(sal_Int32 nPara) const override;
     virtual EBulletInfo GetBulletInfo(sal_Int32 nPara) const override;
     virtual tools::Rectangle GetCharBounds(sal_Int32 nPara, sal_Int32 nIndex) const override;
     virtual tools::Rectangle GetParaBounds(sal_Int32 nPara) const override;
@@ -1213,16 +1212,12 @@ LanguageType WeldTextForwarder::GetLanguage(sal_Int32 nPara, sal_Int32 nIndex) c
     return pEditEngine ? pEditEngine->GetLanguage(nPara, nIndex).nLang : LANGUAGE_NONE;
 }
 
-sal_Int32 WeldTextForwarder::GetFieldCount(sal_Int32 nPara) const
+std::vector<EFieldInfo> WeldTextForwarder::GetFieldInfo(sal_Int32 nPara) const
 {
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetFieldCount(nPara) : 0;
-}
-
-EFieldInfo WeldTextForwarder::GetFieldInfo(sal_Int32 nPara, sal_uInt16 nField) const
-{
-    EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetFieldInfo(nPara, nField) : EFieldInfo();
+    if (!pEditEngine)
+        return {};
+    return pEditEngine->GetFieldInfo(nPara);
 }
 
 EBulletInfo WeldTextForwarder::GetBulletInfo(sal_Int32 /*nPara*/) const { return EBulletInfo(); }

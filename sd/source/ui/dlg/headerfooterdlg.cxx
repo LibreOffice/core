@@ -576,18 +576,16 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     sal_Int32 nParaCount = pEdit->GetParagraphCount();
     for (sal_Int32 nPara = 0; (nPara < nParaCount) && !bHasDateFieldItem; ++nPara)
     {
-        sal_uInt16 nFieldCount = pEdit->GetFieldCount(nPara);
-        for (sal_uInt16 nField = 0; (nField < nFieldCount); ++nField)
+        for (const EFieldInfo& rFieldInfo : pEdit->GetFieldInfo(nPara))
         {
-            EFieldInfo aFieldInfo = pEdit->GetFieldInfo(nPara, nField);
-            if (aFieldInfo.pFieldItem)
+            if (rFieldInfo.pFieldItem)
             {
-                const SvxFieldData* pFieldData = aFieldInfo.pFieldItem->GetField();
+                const SvxFieldData* pFieldData = rFieldInfo.pFieldItem->GetField();
                 if (dynamic_cast<const SvxDateTimeField*>(pFieldData) != nullptr ||
                     dynamic_cast<const SvxDateField*>(pFieldData) != nullptr)
                 {
                     bHasDateFieldItem = true;
-                    aDateFieldPosition = aFieldInfo.aPosition;
+                    aDateFieldPosition = rFieldInfo.aPosition;
                     break;
                 }
             }

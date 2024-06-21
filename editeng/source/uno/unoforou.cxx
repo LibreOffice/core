@@ -270,14 +270,9 @@ LanguageType SvxOutlinerForwarder::GetLanguage( sal_Int32 nPara, sal_Int32 nInde
     return rOutliner.GetLanguage(nPara, nIndex);
 }
 
-sal_Int32 SvxOutlinerForwarder::GetFieldCount( sal_Int32 nPara ) const
+std::vector<EFieldInfo> SvxOutlinerForwarder::GetFieldInfo( sal_Int32 nPara ) const
 {
-    return rOutliner.GetEditEngine().GetFieldCount(nPara);
-}
-
-EFieldInfo SvxOutlinerForwarder::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
-{
-    return rOutliner.GetEditEngine().GetFieldInfo( nPara, nField );
+    return rOutliner.GetEditEngine().GetFieldInfo( nPara );
 }
 
 EBulletInfo SvxOutlinerForwarder::GetBulletInfo( sal_Int32 nPara ) const

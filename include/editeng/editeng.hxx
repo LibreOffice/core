@@ -476,8 +476,7 @@ public:
     SAL_DLLPRIVATE bool            UpdateFieldsOnly();
     void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );
 
-    sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
-    EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;
+    std::vector<EFieldInfo> GetFieldInfo( sal_Int32 nPara ) const;
 
     bool            IsRightToLeft( sal_Int32 nPara ) const;
 

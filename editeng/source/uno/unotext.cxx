@@ -2446,14 +2446,9 @@ LanguageType SvxDummyTextSource::GetLanguage( sal_Int32, sal_Int32 ) const
     return LANGUAGE_DONTKNOW;
 }
 
-sal_Int32 SvxDummyTextSource::GetFieldCount( sal_Int32 ) const
+std::vector<EFieldInfo> SvxDummyTextSource::GetFieldInfo( sal_Int32 ) const
 {
-    return 0;
-}
-
-EFieldInfo SvxDummyTextSource::GetFieldInfo( sal_Int32, sal_uInt16 ) const
-{
-    return EFieldInfo();
+    return {};
 }
 
 EBulletInfo SvxDummyTextSource::GetBulletInfo( sal_Int32 ) const

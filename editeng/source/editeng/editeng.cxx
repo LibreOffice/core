@@ -1429,46 +1429,25 @@ bool EditEngine::ShouldCreateBigTextObject() const
     return nTextPortions >= getImpl().GetBigTextObjectStart();
 }
 
-sal_uInt16 EditEngine::GetFieldCount( sal_Int32 nPara ) const
+std::vector<EFieldInfo> EditEngine::GetFieldInfo( sal_Int32 nPara ) const
 {
-    sal_uInt16 nFields = 0;
+    std::vector<EFieldInfo> aFieldInfos;
     ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
     if ( pNode )
     {
-        for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
-        {
-            if (attrib->Which() == EE_FEATURE_FIELD)
-                ++nFields;
-        }
-    }
-
-    return nFields;
-}
-
-EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
-{
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
-    if ( pNode )
-    {
-        sal_uInt16 nCurrentField = 0;
         for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
         {
             const EditCharAttrib& rAttr = *attrib;
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                if ( nCurrentField == nField )
-                {
-                    const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
-                    EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
-                    aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
-                    return aInfo;
-                }
-
-                ++nCurrentField;
+                const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
+                EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
+                aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
+                aFieldInfos.push_back(aInfo);
             }
         }
     }
-    return EFieldInfo();
+    return aFieldInfos;
 }
 
 

@@ -133,8 +133,7 @@ namespace accessibility
         bool            IsValid() const override { return true; }
 
         LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const override { return LANGUAGE_DONTKNOW; }
-        sal_Int32       GetFieldCount( sal_Int32 ) const override { return 0; }
-        EFieldInfo      GetFieldInfo( sal_Int32, sal_uInt16 ) const override { return EFieldInfo(); }
+        std::vector<EFieldInfo> GetFieldInfo( sal_Int32 ) const override { return {}; }
         EBulletInfo     GetBulletInfo( sal_Int32 ) const override { return EBulletInfo(); }
         tools::Rectangle       GetCharBounds( sal_Int32, sal_Int32 ) const override { return tools::Rectangle(); }
         tools::Rectangle       GetParaBounds( sal_Int32 ) const override { return tools::Rectangle(); }

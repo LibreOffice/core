@@ -486,13 +486,11 @@ void ClassificationDialog::toggleWidgetsDependingOnCategory()
 
     for (sal_Int32 nParagraph = 0; nParagraph < rEditEngine.GetParagraphCount(); ++nParagraph)
     {
-        sal_uInt16 nFieldCount = rEditEngine.GetFieldCount(nParagraph);
-        for (sal_uInt16 nField = 0; nField < nFieldCount; ++nField)
+        for (const EFieldInfo& rFieldInfo : rEditEngine.GetFieldInfo(nParagraph))
         {
-            EFieldInfo aFieldInfo = rEditEngine.GetFieldInfo(nParagraph, nField);
-            if (aFieldInfo.pFieldItem)
+            if (rFieldInfo.pFieldItem)
             {
-                const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(aFieldInfo.pFieldItem->GetField());
+                const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(rFieldInfo.pFieldItem->GetField());
                 if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
                 {
                     m_xOkButton->set_sensitive(true);

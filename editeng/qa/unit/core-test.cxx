@@ -638,14 +638,14 @@ void Test::testHyperlinkCopyPaste()
     aEditEngine.InsertField(aSel1, aField1);
 
     // Assert Field Count
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aEditEngine.GetFieldCount(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
 
     // Insert URL 2
     EditSelection aSel2(EditPaM(pNode, 20 + 1), EditPaM(pNode, 20 + 1));
     aEditEngine.InsertField(aSel2, aField2);
 
     // Assert Field Count
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aEditEngine.GetFieldCount(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aEditEngine.GetFieldInfo(0).size());
 
     // Assert URL Fields and text before copy
     // Check text
@@ -653,7 +653,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( u"sampletextforuser@example.comtestingexample@domain.comfeaturefields"_ustr, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check Field 1
-    EFieldInfo aURLFieldInfo1 = aEditEngine.GetFieldInfo(sal_Int32(0), sal_uInt16(0));
+    EFieldInfo aURLFieldInfo1 = aEditEngine.GetFieldInfo(sal_Int32(0))[0];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aURLFieldInfo1.aPosition.nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo1.pFieldItem->Which());
     SvxURLField* pURLField1 = dynamic_cast<SvxURLField*>(
@@ -663,7 +663,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aRepres1, pURLField1->GetRepresentation());
 
     // Check Field 2
-    EFieldInfo aURLFieldInfo2 = aEditEngine.GetFieldInfo(sal_Int32(0), sal_uInt16(1));
+    EFieldInfo aURLFieldInfo2 = aEditEngine.GetFieldInfo(sal_Int32(0))[1];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21), aURLFieldInfo2.aPosition.nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo2.pFieldItem->Which());
     SvxURLField* pURLField2 = dynamic_cast<SvxURLField*>(
@@ -682,7 +682,7 @@ void Test::testHyperlinkCopyPaste()
     // Assert Changes ACP, ACP: after Copy/Paste
 
     // Check the fields count
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aEditEngine.GetFieldCount(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aEditEngine.GetFieldInfo(0).size());
 
     // Check the updated text length
     CPPUNIT_ASSERT_EQUAL(aTextLen + 10 + aRepres1.getLength() * 2 + aRepres2.getLength(),
@@ -694,7 +694,7 @@ void Test::testHyperlinkCopyPaste()
     // Check the Fields and their values
 
     // Field 1
-    EFieldInfo aACPURLFieldInfo1 = aEditEngine.GetFieldInfo(sal_Int32(0), sal_uInt16(0));
+    EFieldInfo aACPURLFieldInfo1 = aEditEngine.GetFieldInfo(sal_Int32(0))[0];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aACPURLFieldInfo1.aPosition.nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo1.pFieldItem->Which());
     SvxURLField* pACPURLField1 = dynamic_cast<SvxURLField*>(
@@ -704,7 +704,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aRepres1, pACPURLField1->GetRepresentation());
 
     // Field 2
-    EFieldInfo aACPURLFieldInfo2 = aEditEngine.GetFieldInfo(sal_Int32(0), sal_uInt16(1));
+    EFieldInfo aACPURLFieldInfo2 = aEditEngine.GetFieldInfo(sal_Int32(0))[1];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21), aACPURLFieldInfo2.aPosition.nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo2.pFieldItem->Which());
     SvxURLField* pACPURLField2 = dynamic_cast<SvxURLField*>(
@@ -714,7 +714,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aRepres2, pACPURLField2->GetRepresentation());
 
     // Field 3
-    EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo(sal_Int32(0), sal_uInt16(2));
+    EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo(sal_Int32(0))[2];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which());
     SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*>(
@@ -2388,7 +2388,7 @@ void Test::testTdf154248MultilineFieldWrapping()
     aEditEngine.InsertField(aSel, aField);
 
     // Assert Field Count
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aEditEngine.GetFieldCount(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
 
     aEditEngine.QuickFormatDoc(false);
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());

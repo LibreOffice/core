@@ -208,8 +208,7 @@ public:
     virtual bool            IsValid() const override;
 
     virtual LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const override;
-    virtual sal_Int32       GetFieldCount( sal_Int32 nPara ) const override;
-    virtual EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const override;
+    virtual std::vector<EFieldInfo> GetFieldInfo( sal_Int32 nPara ) const override;
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const override;
     virtual tools::Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const override;
     virtual tools::Rectangle       GetParaBounds( sal_Int32 nPara ) const override;
