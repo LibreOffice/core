@@ -20,7 +20,10 @@ $(eval $(call gb_Module_add_targets,bridges,\
 		$(if $(filter ANDROID LINUX,$(OS)),\
 			CustomTarget_gcc3_linux_arm) \
 	) \
-	$(if $(filter EMSCRIPTEN,$(OS)),CustomTarget_gcc3_wasm) \
+	$(if $(filter EMSCRIPTEN,$(OS)), \
+	    CustomTarget_gcc3_wasm \
+	    StaticLibrary_emscriptencxxabi \
+	) \
 ))
 
 ifeq (,$(filter build,$(gb_Module_SKIPTARGETS)))

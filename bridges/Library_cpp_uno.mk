@@ -90,6 +90,9 @@ $(eval $(call gb_Library_add_generated_asmobjects,$(CPPU_ENV)_uno, \
 $(eval $(call gb_Library_add_generated_exception_objects,$(CPPU_ENV)_uno, \
     CustomTarget/bridges/gcc3_wasm/callvirtualfunction-wrapper \
 ))
+$(eval $(call gb_Library_use_static_libraries,$(CPPU_ENV)_uno, \
+    emscriptencxxabi \
+))
 endif
 
 else ifeq ($(CPUNAME),M68K)

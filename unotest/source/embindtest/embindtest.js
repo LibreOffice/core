@@ -640,11 +640,11 @@ Module.addOnPostRun(function() {
         test.throwRuntimeException();
         console.assert(false);
     } catch (e) {
-        const [type, message] = getExceptionMessage(e);
-        console.assert(type === 'com::sun::star::uno::RuntimeException');
-        console.assert(message === undefined); //TODO
-        //TODO: verify css.uno.RuntimeException's Message startsWith('test')
-        decrementExceptionRefcount(e);
+        const any = Module.catchUnoException(e);
+        console.assert(any.getType() == 'com.sun.star.uno.RuntimeException');
+        const exc = any.get();
+        console.assert(exc.Message.startsWith('test'));
+        any.delete();
     }
     const obj = Module.unoObject(
         ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor'],
@@ -1086,11 +1086,14 @@ Module.addOnPostRun(function() {
             console.assert(false);
             ret.delete();
         } catch (e) {
-            const [type, message] = getExceptionMessage(e);
-            console.assert(type === 'com::sun::star::reflection::InvocationTargetException');
-            console.assert(message === undefined); //TODO
-            //TODO: inspect wrapped css.uno.RuntimeException
-            decrementExceptionRefcount(e);
+            const any = Module.catchUnoException(e);
+            console.assert(any.getType() == 'com.sun.star.reflection.InvocationTargetException');
+            const target = any.get().TargetException;
+            console.assert(target.getType() == 'com.sun.star.uno.RuntimeException');
+            const exc = target.get();
+            console.assert(exc.Message.startsWith('test'));
+            any.delete();
+            target.delete();
         }
         params.delete();
         outparamindex.delete();

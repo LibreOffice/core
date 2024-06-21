@@ -12,6 +12,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
+#include <bridges/emscriptencxxabi/cxxabi.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -414,6 +415,28 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                  css::uno::Reference<css::uno::XInterface> const& ref2) { return ref1 == ref2; });
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
+    function("getUnoExceptionFromCxaException", +[](std::uintptr_t ptr) {
+        // Cf. __get_exception_message in <https://github.com/emscripten-core/emscripten/>,
+        // system/lib/libcxxabi/src/cxa_exception_js_utils.cpp:
+        auto const header = reinterpret_cast<__cxxabiv1::__cxa_exception const*>(ptr) - 1;
+        css::uno::Any exc;
+        OUString unoName(emscriptencxxabi::toUnoName(header->exceptionType->name()));
+        typelib_TypeDescription* td = nullptr;
+        typelib_typedescription_getByName(&td, unoName.pData);
+        if (td == nullptr)
+        {
+            css::uno::RuntimeException e("exception type not found: " + unoName);
+            uno_type_any_construct(
+                &exc, &e, cppu::UnoType<css::uno::RuntimeException>::get().getTypeLibType(),
+                cpp_acquire);
+        }
+        else
+        {
+            uno_any_construct(&exc, reinterpret_cast<void*>(ptr), td, cpp_acquire);
+            typelib_typedescription_release(td);
+        }
+        return exc;
+    });
 
     jsRegisterChar(&typeid(char16_t));
     jsRegisterString(&typeid(OUString));
