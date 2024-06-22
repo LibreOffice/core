@@ -443,6 +443,20 @@ IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
         break;
     case KEY_ESCAPE:
         {
+            // Escape in an empty search field should move focus to the document,
+            // adhering to Sidebar guidelines
+            if (m_xSearchString->get_text().isEmpty())
+            {
+                if (SfxViewShell* pCurSh = SfxViewShell::Current())
+                {
+                    vcl::Window* pShellWnd = pCurSh->GetWindow();
+
+                    if (pShellWnd)
+                        pShellWnd->GrabFocusToDocument();
+                }
+                bHandled = true;
+                break;
+            }
             m_xSearchString->set_text(u""_ustr);
             UpdateFunctionList(u""_ustr);
             bHandled = true;
