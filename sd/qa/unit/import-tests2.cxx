@@ -77,6 +77,31 @@ protected:
     bool checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpected);
 };
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157529)
+{
+    createSdImpressDoc("pptx/tdf157529.pptx");
+
+    uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT(xShape1.is());
+    sal_Int16 nTransparence1;
+    xShape1->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence1;
+
+    // Without the fix in place, this test would have failed with
+    // Expected: transparence value: 100%
+    // Actual  : transparence value: 0%
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), nTransparence1);
+
+    uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT(xShape2.is());
+    sal_Int16 nTransparence2;
+    xShape2->getPropertyValue(u"FillTransparence"_ustr) >>= nTransparence2;
+
+    // Without the fix in place, this test would have failed with
+    // Expected: transparence value: 100%
+    // Actual  : transparence value: 0%
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), nTransparence2);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf160490)
 {
     createSdImpressDoc("pptx/tdf160490.pptx");

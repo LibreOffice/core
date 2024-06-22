@@ -646,9 +646,13 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
     {
         std::shared_ptr<TextParagraph> pParagraph = *aParaIt;
         const TextRunVector& rRuns = pParagraph->getRuns();
-        auto aRunIt = std::find_if_not(
-            rRuns.cbegin(), rRuns.cend(),
-            [](const std::shared_ptr<TextRun> pRun) { return pRun->getText().isEmpty(); });
+        auto aRunIt = std::find_if_not(rRuns.cbegin(), rRuns.cend(),
+                                       [](const std::shared_ptr<TextRun> pRun)
+                                       {
+                                           return pRun->getText().isEmpty()
+                                                  || pRun->getText() == " "
+                                                  || pRun->getText().toChar() == 0xA0; // NBSP
+                                       });
         if (aRunIt != rRuns.cend())
         {
             std::shared_ptr<TextRun> pRun = *aRunIt;
