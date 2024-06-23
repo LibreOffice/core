@@ -5308,6 +5308,15 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
         *ppBottom = pBottomLine;
 }
 
+bool ScDocument::IsNotesBlockEmpty(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                   SCTAB nTab) const
+{
+    if (HasTable(nTab))
+        return maTabs[nTab]->IsNotesBlockEmpty(nStartCol, nStartRow, nEndCol, nEndRow);
+    OSL_FAIL("wrong table number");
+    return false;
+}
+
 bool ScDocument::IsBlockEmpty(SCCOL nStartCol, SCROW nStartRow,
                               SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
 {

@@ -852,13 +852,18 @@ bool checkDestRangeForOverwrite(InsertDeleteFlags nFlags, const ScRangeList& rDe
 {
     bool bIsEmpty = true;
     size_t nRangeSize = rDestRanges.size();
+
     for (const auto& rTab : rMark)
     {
         for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
         {
             const ScRange& rRange = rDestRanges[i];
-            if (nFlags & InsertDeleteFlags::ADDNOTES)
-                bIsEmpty = !rDoc.HasNote(rRange.aStart) && !rDoc.HasNote(rRange.aEnd);
+            // tdf#158110 - check if just the ADDNOTES flag is present without any other content
+            if ((nFlags & InsertDeleteFlags::ADDNOTES) == InsertDeleteFlags::ADDNOTES
+                && (nFlags & (InsertDeleteFlags::CONTENTS & ~InsertDeleteFlags::NOTE))
+                       == InsertDeleteFlags::NONE)
+                bIsEmpty = rDoc.IsNotesBlockEmpty(rRange.aStart.Col(), rRange.aStart.Row(),
+                                                  rRange.aEnd.Col(), rRange.aEnd.Row(), rTab);
             else
                 bIsEmpty = rDoc.IsBlockEmpty(rRange.aStart.Col(), rRange.aStart.Row(),
                                              rRange.aEnd.Col(), rRange.aEnd.Row(), rTab);
