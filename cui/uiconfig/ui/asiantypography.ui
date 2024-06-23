@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkFrame" id="AsianTypography">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
-    <property name="label_xalign">0</property>
-    <property name="shadow_type">none</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
+    <property name="label-xalign">0</property>
+    <property name="shadow-type">none</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">12</property>
         <property name="margin-top">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="checkForbidList">
             <property name="label" translatable="yes" context="asiantypography|checkForbidList">Apply list of forbidden characters to the beginning and end of lines</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
             <property name="inconsistent">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -36,11 +36,11 @@
           <object class="GtkCheckButton" id="checkHangPunct">
             <property name="label" translatable="yes" context="asiantypography|checkHangPunct">Allow hanging punctuation</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
             <property name="inconsistent">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -52,11 +52,11 @@
           <object class="GtkCheckButton" id="checkApplySpacing">
             <property name="label" translatable="yes" context="asiantypography|checkApplySpacing">Apply spacing between Asian and non-Asian text</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
             <property name="inconsistent">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -69,7 +69,7 @@
     <child type="label">
       <object class="GtkLabel" id="labelLineChange">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="asiantypography|labelLineChange">Line Change</property>
         <attributes>
           <attribute name="weight" value="bold"/>
