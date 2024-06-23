@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sal/types.h>
 #include <svl/listener.hxx>
@@ -38,6 +39,7 @@
 #include "unotext.hxx"
 
 #include <memory>
+#include <mutex>
 
 class SdrObject;
 class SwDoc;
@@ -58,8 +60,8 @@ class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXFrame : public cp
     public SvtListener
 {
 private:
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SwFrameFormat* m_pFrameFormat;
 
     const SfxItemPropertySet*       m_pPropSet;

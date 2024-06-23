@@ -99,7 +99,6 @@
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
-#include <mutex>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
@@ -112,7 +111,6 @@
 #include <fmtfollowtextflow.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -1183,14 +1181,6 @@ bool SwOLEProperties_Impl::AnyToItemSet(
     return true;
 }
 
-class SwXFrame::Impl
-{
-public:
-    uno::WeakReference<uno::XInterface> m_wThis;
-    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
-    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
-};
-
 OUString SwXFrame::getImplementationName()
 {
     return u"SwXFrame"_ustr;
@@ -1207,8 +1197,7 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
 }
 
 SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDoc)
-    : m_pImpl(new Impl)
-    , m_pFrameFormat(nullptr)
+    : m_pFrameFormat(nullptr)
     , m_pPropSet(pSet)
     , m_pDoc(pDoc)
     , m_eType(eSet)
@@ -1262,8 +1251,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
 }
 
 SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItemPropertySet* pSet)
-    : m_pImpl(new Impl)
-    , m_pFrameFormat(&rFrameFormat)
+    : m_pFrameFormat(&rFrameFormat)
     , m_pPropSet(pSet)
     , m_pDoc(nullptr)
     , m_eType(eSet)
@@ -1301,9 +1289,6 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
         }
         else
             xFrame = new NameLookupIsHard(&rDoc);
-
-        // need a permanent Reference to initialize m_wThis
-        xFrame->SwXFrame::m_pImpl->m_wThis = uno::Reference<XWeak>(xFrame.get());
     }
     return xFrame;
 }
@@ -2641,15 +2626,15 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
 void SAL_CALL SwXFrame::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.addInterface(aGuard, xListener);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SwXFrame::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 {
-    std::unique_lock aGuard(m_pImpl->m_Mutex);
-    m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
+    std::unique_lock aGuard(m_Mutex);
+    m_EventListeners.removeInterface(aGuard, xListener);
 }
 
 void SwXFrame::DisposeInternal()
@@ -2657,15 +2642,14 @@ void SwXFrame::DisposeInternal()
     mxStyleData.clear();
     mxStyleFamily.clear();
     m_pDoc = nullptr;
-    uno::Reference<uno::XInterface> const xThis(m_pImpl->m_wThis);
-    if (!xThis.is())
+    if (m_refCount == 0)
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;
     }
     {
-        lang::EventObject const ev(xThis);
-        std::unique_lock aGuard(m_pImpl->m_Mutex);
-        m_pImpl->m_EventListeners.disposeAndClear(aGuard, ev);
+        lang::EventObject const ev(static_cast<cppu::OWeakObject*>(this));
+        std::unique_lock aGuard(m_Mutex);
+        m_EventListeners.disposeAndClear(aGuard, ev);
     }
     m_pFrameFormat = nullptr;
     EndListeningAll();
