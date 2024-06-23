@@ -403,7 +403,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
                 pOutliner->SetText(*pOutlinerParaObject);
             }
 
-            ESelection aSelAll( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL );
+            auto aSelAll = ESelection::All();
             for( const auto& rWhichId : rCharWhichIds )
             {
                 pOutliner->RemoveAttribs( aSelAll, false, rWhichId );

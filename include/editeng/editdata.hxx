@@ -47,12 +47,12 @@ enum class EEAnchorMode {
 
 enum class EERemoveParaAttribsMode { RemoveAll, RemoveCharItems, RemoveNone };
 
-#define EE_PARA_APPEND          SAL_MAX_INT32
-#define EE_PARA_ALL             SAL_MAX_INT32
-#define EE_PARA_MAX_COUNT       SAL_MAX_INT32
+#define EE_PARA_APPEND          ESelection::MAX_PARAGRAPH_POSITION
+#define EE_PARA_ALL             ESelection::MAX_PARAGRAPH_POSITION
+#define EE_PARA_MAX_COUNT       ESelection::MAX_PARAGRAPH_POSITION
 
-#define EE_TEXTPOS_ALL          SAL_MAX_INT32
-#define EE_TEXTPOS_MAX_COUNT    SAL_MAX_INT32
+#define EE_TEXTPOS_ALL          ESelection::MAX_TEXT_POSITION
+#define EE_TEXTPOS_MAX_COUNT    ESelection::MAX_TEXT_POSITION
 
 EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 

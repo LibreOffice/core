@@ -50,8 +50,8 @@ protected:
     {
         aNilChainingEvent = false;
         aCursorEvent = CursorChainingEvent::NULL_EVENT;
-        aPreChainingSel = ESelection(0, 0, 0, 0);
-        aPostChainingSel = ESelection(0, 0, 0, 0);
+        aPreChainingSel = ESelection();
+        aPostChainingSel = ESelection();
         aIsPartOfLastParaInNextLink = false; // XXX: Should come from file
         aSwitchingToNextBox = false;
     }

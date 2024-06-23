@@ -196,7 +196,7 @@ namespace sdr::properties
 
                         if(nParaCount)
                         {
-                            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
+                            auto aSelection = ESelection::All();
                             rOutliner.RemoveAttribs(aSelection, true, 0);
 
                             std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);

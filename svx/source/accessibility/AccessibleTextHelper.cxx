@@ -1157,8 +1157,7 @@ namespace accessibility
                                 // change children state
                                 maParaManager.SetActive( false );
 
-                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND,
-                                                              EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+                                maLastSelection = ESelection::NotFound();
                                 break;
                             }
                             default:

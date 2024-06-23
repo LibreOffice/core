@@ -21,6 +21,20 @@
 
 struct ESelection
 {
+    static constexpr sal_Int32 MAX_PARAGRAPH_POSITION = SAL_MAX_INT32;
+    static constexpr sal_Int32 MAX_TEXT_POSITION = SAL_MAX_INT32;
+
+    // Select all text
+    static ESelection All() { return ESelection(0, 0, MAX_PARAGRAPH_POSITION, MAX_TEXT_POSITION); }
+
+    // Set to "not found" state
+    static ESelection NotFound() { return ESelection(MAX_PARAGRAPH_POSITION, MAX_TEXT_POSITION); }
+    // Set to no selection
+    static ESelection NoSelection()
+    {
+        return ESelection(MAX_PARAGRAPH_POSITION, MAX_TEXT_POSITION);
+    }
+
     sal_Int32 nStartPara = 0;
     sal_Int32 nStartPos = 0;
     sal_Int32 nEndPara = 0;

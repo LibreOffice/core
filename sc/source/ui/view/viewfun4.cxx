@@ -379,7 +379,7 @@ void ScViewFunc::DoThesaurus()
     if (pEditSel)
         pEditView->SetSelection(*pEditSel);
     else
-        pEditView->SetSelection(ESelection(0,0,0,0));
+        pEditView->SetSelection(ESelection());
 
     pThesaurusEngine->ClearModifyFlag();
 

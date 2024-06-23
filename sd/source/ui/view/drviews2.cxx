@@ -409,7 +409,7 @@ private:
         for (svx::ClassificationResult const & rResult : rResults)
         {
 
-            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT, nParagraph, EE_TEXTPOS_MAX_COUNT);
+            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT);
 
             switch (rResult.meType)
             {

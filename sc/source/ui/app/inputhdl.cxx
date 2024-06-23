@@ -3964,7 +3964,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         {
                             pTableView->getEditEngine().SetText( aStrLoP );
                             if ( !aStrLoP.isEmpty() )
-                                pTableView->SetSelection( ESelection(0,0, 0,0) );   // before the '%'
+                                pTableView->SetSelection(ESelection());   // before the '%'
 
                             // Don't call SetSelection if the string is empty anyway,
                             // to avoid breaking the bInitial handling in ScViewData::EditGrowY
@@ -3973,7 +3973,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         {
                             pTopView->getEditEngine().SetText( aStrLoP );
                             if ( !aStrLoP.isEmpty() )
-                                pTopView->SetSelection( ESelection(0,0, 0,0) );     // before the '%'
+                                pTopView->SetSelection(ESelection());     // before the '%'
                         }
                     }
                 SyncViews();
@@ -4187,12 +4187,12 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
                         if (pTableView)
                         {
                             pTableView->getEditEngine().SetText( u""_ustr );
-                            pTableView->SetSelection( ESelection(0,0, 0,0) );
+                            pTableView->SetSelection(ESelection());
                         }
                         if (pTopView)
                         {
                             pTopView->getEditEngine().SetText( u""_ustr );
-                            pTopView->SetSelection( ESelection(0,0, 0,0) );
+                            pTopView->SetSelection(ESelection());
                         }
                     }
                 SyncViews();

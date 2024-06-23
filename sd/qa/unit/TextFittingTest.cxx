@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rEditEngine.GetParagraphCount());
 
     // Add paragraph 4
-    rEditView.SetSelection(ESelection(3, 0, 3, 0));
+    rEditView.SetSelection(ESelection(3, 0));
     rEditView.InsertText(u"\nD4"_ustr);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // Add paragraph 5
-    rEditView.SetSelection(ESelection(4, 0, 4, 0));
+    rEditView.SetSelection(ESelection(4, 0));
     rEditView.InsertText(u"\nD5"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rEditEngine.GetParagraphCount());
 
@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // Add paragraph 6
-    rEditView.SetSelection(ESelection(5, 0, 5, 0));
+    rEditView.SetSelection(ESelection(5, 0));
     rEditView.InsertText(u"\nD6"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rEditEngine.GetParagraphCount());
 

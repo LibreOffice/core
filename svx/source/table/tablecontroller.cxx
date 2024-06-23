@@ -2099,7 +2099,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
                              ((nAction == TblAction::GotoRightCell) && (eMode == WritingMode_RL_TB));
 
         if( bLast )
-            aNewSelection = ESelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+            aNewSelection = ESelection::NotFound();
     }
     pOLV->SetSelection(aNewSelection);
 }

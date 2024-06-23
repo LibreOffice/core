@@ -1361,7 +1361,7 @@ SdrViewContext SdrView::GetContext() const
 void SdrView::MarkAll()
 {
     if (IsTextEdit()) {
-        GetTextEditOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
+        GetTextEditOutlinerView()->SetSelection(ESelection::All());
     } else if (IsGluePointEditMode()) MarkAllGluePoints();
     else if (HasMarkablePoints()) MarkAllPoints();
     else {

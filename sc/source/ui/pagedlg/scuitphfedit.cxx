@@ -444,7 +444,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
         if(aPosList.size() == 2)
         {
             OUString aPageEntry(m_xFtPage->get_label() + " ");
-            ESelection aSel(0,0,0,0);
+            ESelection aSel;
             aSel.nEndPos = aPageEntry.getLength();
             if(aPageEntry == pEngine->GetText(aSel))
             {
@@ -531,7 +531,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case ePagesEntry:
         {
             ClearTextAreas();
-            ESelection aSel(0,0,0,0);
+            ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " ");
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
@@ -574,7 +574,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case eFileNamePageEntry:
         {
             ClearTextAreas();
-            ESelection aSel(0,0,0,0);
+            ESelection aSel;
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ), aSel );
             ++aSel.nEndPos;
             OUString aPageEntry(", " + m_xFtPage->get_label() + " ");
@@ -600,7 +600,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case ePageSheetEntry:
         {
             ClearTextAreas();
-            ESelection aSel(0,0,0,0);
+            ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " " );
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
@@ -621,7 +621,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case ePageFileNameEntry:
         {
             ClearTextAreas();
-            ESelection aSel(0,0,0,0);
+            ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " " );
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
             aSel.nEndPos = aPageEntry.getLength();
