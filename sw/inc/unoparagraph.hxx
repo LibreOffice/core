@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_UNOPARAGRAPH_HXX
 
 #include <memory>
+#include <optional>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -32,12 +33,16 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
+#include <svl/listener.hxx>
 
 #include "unobaseclass.hxx"
 
+class SfxItemPropertySet;
+struct SfxItemPropertyMapEntry;
 class SwPaM;
 class SwUnoCursor;
 class SwStartNode;
@@ -65,9 +70,6 @@ class SwXParagraph final
 
 private:
 
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
     virtual ~SwXParagraph() override;
 
     SwXParagraph(css::uno::Reference< SwXText > const & xParent,
@@ -77,6 +79,31 @@ private:
     /// descriptor
     SwXParagraph();
 
+    /// @throws beans::UnknownPropertyException
+    /// @throws beans::PropertyVetoException
+    /// @throws lang::IllegalArgumentException
+    /// @throws lang::WrappedTargetException
+    /// @throws uno::RuntimeException
+    void SetPropertyValues_Impl(
+        const css::uno::Sequence< OUString >& rPropertyNames,
+        const css::uno::Sequence< css::uno::Any >& rValues );
+    /// @throws beans::UnknownPropertyException
+    /// @throws lang::WrappedTargetException
+    /// @throws uno::RuntimeException
+    css::uno::Sequence< css::uno::Any > GetPropertyValues_Impl(
+            const css::uno::Sequence< OUString >& rPropertyNames);
+    SwTextNode& GetTextNodeOrThrow();
+    /// @throws uno::RuntimeException
+    static void GetSinglePropertyValue_Impl(
+        const SfxItemPropertyMapEntry& rEntry,
+        const SfxItemSet& rSet,
+        css::uno::Any& rAny );
+    /// @throws uno::RuntimeException
+    css::uno::Sequence< css::beans::GetDirectPropertyTolerantResult >
+        GetPropertyValuesTolerant_Impl(
+            const css::uno::Sequence< OUString >& rPropertyNames,
+            bool bDirectValuesOnly);
+
 public:
 
     static rtl::Reference<SwXParagraph>
@@ -84,8 +111,8 @@ public:
             css::uno::Reference<SwXText> const& xParentText,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
-    const SwTextNode * GetTextNode() const;
-    bool            IsDescriptor() const;
+    const SwTextNode * GetTextNode() const { return m_pTextNode; }
+    bool            IsDescriptor() const { return m_bIsDescriptor; }
     /// make rPaM select the paragraph
     bool SelectPaM(SwPaM & rPaM);
     /// for SwXText
@@ -200,6 +227,24 @@ public:
 
     /// tries to return less data, but may return more than just text fields
     rtl::Reference<SwXTextPortionEnumeration> createTextFieldsEnumeration();
+
+private:
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
+    SfxItemPropertySet const& m_rPropSet;
+    bool m_bIsDescriptor;
+    sal_Int32 m_nSelectionStartPos;
+    sal_Int32 m_nSelectionEndPos;
+    OUString m_sText;
+    css::uno::Reference<SwXText> m_xParentText;
+    SwTextNode* m_pTextNode;
+    struct MySvtListener : public SvtListener
+    {
+        SwXParagraph& m_rThis;
+        MySvtListener(SwXParagraph& rThis) : m_rThis(rThis) {}
+        virtual void Notify(const SfxHint& rHint) override;
+    };
+    std::optional<MySvtListener> moSvtListener;
 };
 
 
