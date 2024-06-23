@@ -12,7 +12,8 @@ $(call gb_DotnetLibrary_get_target,net_oootypes) : \
     $(call gb_CustomTarget_get_target,net_oootypes)
 
 $(eval $(call gb_DotnetLibrary_add_generated_sources,net_oootypes,\
-    $(gb_CustomTarget_workdir)/net_ure/net_oootypes/**/*.cs \
+    $(gb_CustomTarget_workdir)/net_ure/net_oootypes, \
+        **/*.cs \
 ))
 
 $(eval $(call gb_DotnetLibrary_link_cs_library,net_oootypes,net_uretypes))

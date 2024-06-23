@@ -12,7 +12,8 @@ $(call gb_DotnetLibrary_get_target,net_uretypes) : \
     $(call gb_CustomTarget_get_target,net_uretypes)
 
 $(eval $(call gb_DotnetLibrary_add_generated_sources,net_uretypes,\
-    $(gb_CustomTarget_workdir)/net_ure/net_uretypes/**/*.cs \
+    $(gb_CustomTarget_workdir)/net_ure/net_uretypes, \
+        **/*.cs \
 ))
 
 $(eval $(call gb_DotnetLibrary_link_cs_library,net_uretypes,net_basetypes))

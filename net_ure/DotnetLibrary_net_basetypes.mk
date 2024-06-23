@@ -9,12 +9,13 @@
 $(eval $(call gb_DotnetLibrary_CsLibrary,net_basetypes))
 
 $(eval $(call gb_DotnetLibrary_add_sources,net_basetypes,\
-    net_ure/source/basetypes/Any.cs \
-    net_ure/source/basetypes/BoundAttribute.cs \
-    net_ure/source/basetypes/Exception.cs \
-    net_ure/source/basetypes/IQueryInterface.cs \
-    net_ure/source/basetypes/RaisesAttribute.cs \
-    net_ure/source/basetypes/UnoGeneratedAttribute.cs \
+    $(SRCDIR)/net_ure/source/basetypes, \
+        Any.cs \
+        BoundAttribute.cs \
+        Exception.cs \
+        IQueryInterface.cs \
+        RaisesAttribute.cs \
+        UnoGeneratedAttribute.cs \
 ))
 
 $(eval $(call gb_DotnetLibrary_add_properties,net_basetypes,\

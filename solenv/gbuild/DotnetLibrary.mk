@@ -33,11 +33,6 @@ $(strip $(subst ",\",$(1)))
 
 endef
 
-define gb_DotnetLibrary__ensure_absolute
-$(if $(filter $(SRCDIR)%,$(1)),$(1),$(SRCDIR)/$(1))
-
-endef
-
 ####### Build and Clean Targets #########
 
 .PHONY : $(call gb_DotnetLibrary_get_clean_target,%)
@@ -136,19 +131,19 @@ endef
 # Add one source file to the project file
 # This adds it to the project, and makes it a build dependency
 # so the library is rebuilt if the source changes
-# call gb_DotnetLibrary_add_source,target,source
+# call gb_DotnetLibrary_add_source,target,basedir,source
 define gb_DotnetLibrary_add_source
-$(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))
-$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))"/>)
+$(call gb_DotnetLibrary_get_target,$(1)) : $(strip $(2))/$(strip $(3))
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(strip $(2))/$(strip $(3))"/>)
 
 endef
 
 # Add source files to the project file
 # This adds them to the project, and makes it them build dependency
 # so the library is rebuilt if the sources change
-# call gb_DotnetLibrary_add_sources,target,sources
+# call gb_DotnetLibrary_add_sources,target,basedir,sources
 define gb_DotnetLibrary_add_sources
-$(foreach source,$(2),$(call gb_DotnetLibrary_add_source,$(1),$(source)))
+$(foreach source,$(3),$(call gb_DotnetLibrary_add_source,$(1),$(2),$(source)))
 
 endef
 
@@ -156,9 +151,9 @@ endef
 # This is not marked as makefile build dependency,
 # so the library is NOT rebuilt if this source changes
 # Useful for things like source globs supported by .net projects
-# call gb_DotnetLibrary_add_generated_source,target,source
+# call gb_DotnetLibrary_add_generated_source,target,basedir,source
 define gb_DotnetLibrary_add_generated_source
-$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(call gb_DotnetLibrary__ensure_absolute,$(strip $(2)))"/>)
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(strip $(2))/$(strip $(3))"/>)
 
 endef
 
@@ -166,9 +161,9 @@ endef
 # These are not marked as makefile build dependencies,
 # so the library is NOT rebuilt if these sources change
 # Useful for things like source globs supported by .net projects
-# call gb_DotnetLibrary_add_generated_sources,target,sources
+# call gb_DotnetLibrary_add_generated_sources,target,basedir,sources
 define gb_DotnetLibrary_add_generated_sources
-$(foreach source,$(2),$(call gb_DotnetLibrary_add_generated_source,$(1),$(source)))
+$(foreach source,$(3),$(call gb_DotnetLibrary_add_generated_source,$(1),$(2),$(source)))
 
 endef
 
