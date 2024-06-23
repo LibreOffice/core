@@ -1359,6 +1359,8 @@ public:
     // This also includes e.g. notes. Use IsEmptyData() for cell data only.
     bool              IsBlockEmpty( SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
+    bool              IsNotesBlockEmpty( SCCOL nStartCol, SCROW nStartRow,
+                                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
     bool              IsPrintEmpty( SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                     bool bLeftIsEmpty = false,

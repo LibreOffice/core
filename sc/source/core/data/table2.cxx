@@ -2396,6 +2396,20 @@ void ScTable::SetMergedCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         ApplyFlags(nCol1+1, nRow1+1, nCol2, nRow2, ScMF::Hor | ScMF::Ver);
 }
 
+bool ScTable::IsNotesBlockEmpty(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+{
+    if (!(ValidCol(nCol1) && ValidCol(nCol2)))
+    {
+        OSL_FAIL("ScTable::IsBlockEmptyNotes: invalid column number");
+        return false;
+    }
+    nCol2 = ClampToAllocatedColumns(nCol2);
+    bool bEmpty = true;
+    for (SCCOL i = nCol1; i <= nCol2 && bEmpty; i++)
+        bEmpty = aCol[i].IsNotesEmptyBlock(nRow1, nRow2);
+    return bEmpty;
+}
+
 bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))

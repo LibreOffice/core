@@ -426,6 +426,7 @@ public:
 
     // This also includes e.g. notes. Use IsEmptyData() for cell data only.
     bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    bool        IsNotesBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                            const ScSetStringParam * pParam = nullptr );
