@@ -38,10 +38,13 @@ namespace com::sun::star {
     }
 }
 
+class SfxItemPropertySet;
 class SwDoc;
 class SwStartNode;
+class SwNodeRange;
 class SwPaM;
 class SwXTextCursor;
+class SwXParagraph;
 
 class SAL_DLLPUBLIC_RTTI SwXText
     : public css::lang::XTypeProvider
@@ -55,9 +58,6 @@ class SAL_DLLPUBLIC_RTTI SwXText
 
 private:
 
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
-
     virtual void PrepareForAttach(
             css::uno::Reference< css::text::XTextRange > & xRange,
             SwPaM const & rPam);
@@ -65,11 +65,22 @@ private:
     /// @throws css::uno::RuntimeException
     virtual bool CheckForOwnMemberMeta(
             const SwPaM & rPam, const bool bAbsorb);
+    bool CheckForOwnMember(const SwPaM & rPaM);
+    sal_Int16 ComparePositions(
+            const css::uno::Reference<css::text::XTextRange>& xPos1,
+            const css::uno::Reference<css::text::XTextRange>& xPos2);
+    rtl::Reference<SwXParagraph> finishOrAppendParagraph(
+            const css::uno::Sequence< css::beans::PropertyValue > & rProperties,
+            const css::uno::Reference< css::text::XTextRange >& xInsertPosition);
+    void ConvertCell(
+            const css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > & rCell,
+            std::vector<SwNodeRange> & rRowNodes,
+            SwNodeRange *const pLastCell);
 
 protected:
 
-    bool            IsValid() const;
-    void            Invalidate();
+    bool            IsValid() const { return m_bIsValid; }
+    void            Invalidate() { m_bIsValid = false; }
     void            SetDoc(SwDoc *const pDoc);
 
     virtual ~SwXText();
@@ -81,8 +92,8 @@ public:
 
     SwXText(SwDoc *const pDoc, const CursorType eType);
 
-    const SwDoc*    GetDoc() const;
-          SwDoc*    GetDoc();
+    const SwDoc*    GetDoc() const { return m_pDoc; }
+          SwDoc*    GetDoc() { return m_pDoc; }
 
     // declare these here to resolve ambiguity when we declared rtl::Reference<subtype-of-SwXText>
     virtual void SAL_CALL acquire() override = 0;
@@ -233,6 +244,12 @@ public:
             const css::uno::Reference< css::text::XTextContent>& xSuccessor) override;
     virtual void SAL_CALL removeTextContentAfter(
             const css::uno::Reference< css::text::XTextContent>& xPredecessor) override;
+
+private:
+    SfxItemPropertySet const&   m_rPropSet;
+    const CursorType            m_eType;
+    SwDoc *                     m_pDoc;
+    bool                        m_bIsValid;
 };
 
 #endif // INCLUDED_SW_INC_UNOTEXT_HXX

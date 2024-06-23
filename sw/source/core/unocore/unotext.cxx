@@ -77,53 +77,56 @@ using namespace ::com::sun::star;
 
 constexpr OUString cInvalidObject = u"this object is invalid"_ustr;
 
-class SwXText::Impl
-{
-
-public:
-    SwXText &                   m_rThis;
-    SfxItemPropertySet const&   m_rPropSet;
-    const CursorType            m_eType;
-    SwDoc *                     m_pDoc;
-    bool                        m_bIsValid;
-
-    Impl(   SwXText & rThis,
-            SwDoc *const pDoc, const CursorType eType)
-        : m_rThis(rThis)
-        , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
-        , m_eType(eType)
-        , m_pDoc(pDoc)
-        , m_bIsValid(nullptr != pDoc)
-    {
-    }
-
-    /// @throws lang::IllegalArgumentException
-    /// @throws uno::RuntimeException
-    rtl::Reference<SwXParagraph>
-        finishOrAppendParagraph(
-            const uno::Sequence< beans::PropertyValue >&
-                rCharacterAndParagraphProperties,
-            const uno::Reference< text::XTextRange >& xInsertPosition);
-
-    /// @throws lang::IllegalArgumentException
-    /// @throws uno::RuntimeException
-    sal_Int16 ComparePositions(
-            const uno::Reference<text::XTextRange>& xPos1,
-            const uno::Reference<text::XTextRange>& xPos2);
-
-    /// @throws lang::IllegalArgumentException
-    /// @throws uno::RuntimeException
-    bool CheckForOwnMember(const SwPaM & rPaM);
-
-    void ConvertCell(
-            const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
-            std::vector<SwNodeRange> & rRowNodes,
-            SwNodeRange *const pLastCell);
-
-};
+//class SwXText::Impl
+//{
+//
+//public:
+//    SwXText &                   m_rThis;
+//    SfxItemPropertySet const&   m_rPropSet;
+//    const CursorType            m_eType;
+//    SwDoc *                     m_pDoc;
+//    bool                        m_bIsValid;
+//
+//    Impl(   SwXText & rThis,
+//            SwDoc *const pDoc, const CursorType eType)
+//        : m_rThis(rThis)
+//        , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
+//        , m_eType(eType)
+//        , m_pDoc(pDoc)
+//        , m_bIsValid(nullptr != pDoc)
+//    {
+//    }
+//
+//    /// @throws lang::IllegalArgumentException
+//    /// @throws uno::RuntimeException
+//    rtl::Reference<SwXParagraph>
+//        finishOrAppendParagraph(
+//            const uno::Sequence< beans::PropertyValue >&
+//                rCharacterAndParagraphProperties,
+//            const uno::Reference< text::XTextRange >& xInsertPosition);
+//
+//    /// @throws lang::IllegalArgumentException
+//    /// @throws uno::RuntimeException
+//    sal_Int16 ComparePositions(
+//            const uno::Reference<text::XTextRange>& xPos1,
+//            const uno::Reference<text::XTextRange>& xPos2);
+//
+//    /// @throws lang::IllegalArgumentException
+//    /// @throws uno::RuntimeException
+//    bool CheckForOwnMember(const SwPaM & rPaM);
+//
+//    void ConvertCell(
+//            const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
+//            std::vector<SwNodeRange> & rRowNodes,
+//            SwNodeRange *const pLastCell);
+//
+//};
 
 SwXText::SwXText(SwDoc *const pDoc, const CursorType eType)
-    : m_pImpl( new SwXText::Impl(*this, pDoc, eType) )
+    : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
+    , m_eType(eType)
+    , m_pDoc(pDoc)
+    , m_bIsValid(nullptr != pDoc)
 {
 }
 
@@ -131,32 +134,11 @@ SwXText::~SwXText()
 {
 }
 
-const SwDoc * SwXText::GetDoc() const
-{
-    return m_pImpl->m_pDoc;
-}
-
-SwDoc * SwXText::GetDoc()
-{
-    return m_pImpl->m_pDoc;
-}
-
-bool SwXText::IsValid() const
-{
-    return m_pImpl->m_bIsValid;
-}
-
-void SwXText::Invalidate()
-{
-    m_pImpl->m_bIsValid = false;
-}
-
 void SwXText::SetDoc(SwDoc *const pDoc)
 {
-    OSL_ENSURE(!m_pImpl->m_pDoc || !pDoc,
-        "SwXText::SetDoc: already have a doc?");
-    m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_bIsValid = (nullptr != pDoc);
+    OSL_ENSURE(!m_pDoc || !pDoc, "SwXText::SetDoc: already have a doc?");
+    m_pDoc = pDoc;
+    m_bIsValid = (nullptr != pDoc);
 }
 
 void
@@ -166,7 +148,7 @@ SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
 
 bool SwXText::CheckForOwnMemberMeta(const SwPaM &, const bool)
 {
-    OSL_ENSURE(CursorType::Meta != m_pImpl->m_eType, "should not be called!");
+    OSL_ENSURE(CursorType::Meta != m_eType, "should not be called!");
     return false;
 }
 
@@ -192,7 +174,7 @@ SwXText::createXTextCursor()
     {
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
         SwPosition aPos(rNode);
-        xRet = new SwXTextCursor(*GetDoc(), this, m_pImpl->m_eType, aPos);
+        xRet = new SwXTextCursor(*GetDoc(), this, m_eType, aPos);
         xRet->gotoStart(false);
     }
     return xRet;
@@ -347,7 +329,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     }
 
     bool bForceExpandHints( false );
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         try
         {
@@ -428,7 +410,7 @@ SwXText::insertControlCharacter(
 
     if (bAbsorb && aPam.HasMark())
     {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+        m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
         aPam.DeleteMark();
     }
 
@@ -437,13 +419,13 @@ SwXText::insertControlCharacter(
     {
         case text::ControlCharacter::PARAGRAPH_BREAK :
             // a table cell now becomes an ordinary text cell!
-            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
-            m_pImpl->m_pDoc->getIDocumentContentOperations().SplitNode(*aPam.GetPoint(), false);
+            m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
+            m_pDoc->getIDocumentContentOperations().SplitNode(*aPam.GetPoint(), false);
             break;
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
-            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
-            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
+            m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
+            m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
 
             SwXTextRange *const pRange =
                 dynamic_cast<SwXTextRange*>(xTextRange.get());
@@ -468,7 +450,7 @@ SwXText::insertControlCharacter(
     }
     if (cIns)
     {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().InsertString(
+        m_pDoc->getIDocumentContentOperations().InsertString(
                 aPam, OUString(cIns), nInsertFlags);
     }
 
@@ -528,7 +510,7 @@ SwXText::insertTextContent(
     // xContent->attach
     const SwStartNode* pOwnStartNode = GetStartNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
-    switch (m_pImpl->m_eType)
+    switch (m_eType)
     {
         case CursorType::Frame:      eSearchNodeType = SwFlyStartNode;       break;
         case CursorType::TableText:    eSearchNodeType = SwTableBoxStartNode;  break;
@@ -869,7 +851,7 @@ SwXText::setString(const OUString& rString)
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
-    if (CursorType::Meta != m_pImpl->m_eType)
+    if (CursorType::Meta != m_eType)
     {
         SwPosition aStartPos(*pStartNode);
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
@@ -914,10 +896,9 @@ SwXText::setString(const OUString& rString)
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
 //  Description: Checks if pRange/pCursor are member of the same text interface.
 //              Only one of the pointers has to be set!
-bool SwXText::Impl::CheckForOwnMember(
-    const SwPaM & rPaM)
+bool SwXText::CheckForOwnMember(const SwPaM & rPaM)
 {
-    const rtl::Reference< SwXTextCursor > xOwnCursor(m_rThis.createXTextCursor());
+    const rtl::Reference< SwXTextCursor > xOwnCursor(createXTextCursor());
     const SwStartNode* pOwnStartNode =
         xOwnCursor->GetPaM()->GetPointNode().StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -957,8 +938,7 @@ bool SwXText::Impl::CheckForOwnMember(
     return (pOwnStartNode == pTmp);
 }
 
-sal_Int16
-SwXText::Impl::ComparePositions(
+sal_Int16 SwXText::ComparePositions(
     const uno::Reference<text::XTextRange>& xPos1,
     const uno::Reference<text::XTextRange>& xPos2)
 {
@@ -1016,7 +996,7 @@ SwXText::compareRegionStarts(
     const uno::Reference<text::XTextRange> xStart1 = xRange1->getStart();
     const uno::Reference<text::XTextRange> xStart2 = xRange2->getStart();
 
-    return m_pImpl->ComparePositions(xStart1, xStart2);
+    return ComparePositions(xStart1, xStart2);
 }
 
 sal_Int16 SAL_CALL
@@ -1033,7 +1013,7 @@ SwXText::compareRegionEnds(
     uno::Reference<text::XTextRange> xEnd1 = xRange1->getEnd();
     uno::Reference<text::XTextRange> xEnd2 = xRange2->getEnd();
 
-    return m_pImpl->ComparePositions(xEnd1, xEnd2);
+    return ComparePositions(xEnd1, xEnd2);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
@@ -1041,8 +1021,7 @@ SwXText::getPropertySetInfo()
 {
     SolarMutexGuard g;
 
-    static uno::Reference< beans::XPropertySetInfo > xInfo =
-        m_pImpl->m_rPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo > xInfo = m_rPropSet.getPropertySetInfo();
     return xInfo;
 }
 
@@ -1065,7 +1044,7 @@ SwXText::getPropertyValue(
     }
 
     SfxItemPropertyMapEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
+        m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName);
 
@@ -1144,7 +1123,7 @@ SwXText::finishParagraph(
 {
     SolarMutexGuard g;
 
-    return m_pImpl->finishOrAppendParagraph(rProperties, uno::Reference< text::XTextRange >());
+    return finishOrAppendParagraph(rProperties, uno::Reference< text::XTextRange >());
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1154,11 +1133,11 @@ SwXText::finishParagraphInsert(
 {
     SolarMutexGuard g;
 
-    return m_pImpl->finishOrAppendParagraph(rProperties, xInsertPosition);
+    return finishOrAppendParagraph(rProperties, xInsertPosition);
 }
 
 rtl::Reference<SwXParagraph>
-SwXText::Impl::finishOrAppendParagraph(
+SwXText::finishOrAppendParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
 {
@@ -1167,7 +1146,7 @@ SwXText::Impl::finishOrAppendParagraph(
         throw  uno::RuntimeException();
     }
 
-    const SwStartNode* pStartNode = m_rThis.GetStartNode();
+    const SwStartNode* pStartNode = GetStartNode();
     if(!pStartNode)
     {
         throw  uno::RuntimeException();
@@ -1186,7 +1165,7 @@ SwXText::Impl::finishOrAppendParagraph(
     // the document.
     if (xInsertPosition.is())
     {
-        SwUnoInternalPaM aStartPam(*m_rThis.GetDoc());
+        SwUnoInternalPaM aStartPam(*GetDoc());
         ::sw::XTextRangeToSwPaM(aStartPam, xInsertPosition);
         aPam = aStartPam;
         aPam.SetMark();
@@ -1258,7 +1237,7 @@ SwXText::Impl::finishOrAppendParagraph(
     OSL_ENSURE(pTextNode, "no SwTextNode?");
     if (pTextNode)
     {
-        xRet = SwXParagraph::CreateXParagraph(*m_pDoc, pTextNode, &m_rThis);
+        xRet = SwXParagraph::CreateXParagraph(*m_pDoc, pTextNode, this);
     }
 
     return xRet;
@@ -1283,17 +1262,17 @@ SwXText::insertTextPortion(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
     auto& rCursor(xTextCursor->GetCursor());
-    m_pImpl->m_pDoc->DontExpandFormat( *rCursor.Start() );
+    m_pDoc->DontExpandFormat( *rCursor.Start() );
 
     if (!rText.isEmpty())
     {
         SwNodeIndex const nodeIndex(rCursor.GetPoint()->GetNode(), -1);
         const sal_Int32 nContentPos = rCursor.GetPoint()->GetContentIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(
-            *m_pImpl->m_pDoc, rCursor, rText, false);
+            *m_pDoc, rCursor, rText, false);
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.GetPoint()->Assign(nodeIndex.GetNode(), SwNodeOffset(+1), nContentPos);
     }
@@ -1316,10 +1295,10 @@ SwXText::insertTextPortion(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     if (bIllegalException || bRuntimeException)
     {
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
+        m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             throw lang::IllegalArgumentException(sMessage, nullptr, 0);
@@ -1372,7 +1351,7 @@ SwXText::insertTextContentWithProperties(
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SwResId(STR_UNDO_INSERT_TEXTBOX));
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, &aRewriter);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, &aRewriter);
 
     // Any direct formatting ending at the insert position (xRange) should not
     // be expanded to cover the inserted content (xContent)
@@ -1399,12 +1378,12 @@ SwXText::insertTextContentWithProperties(
         catch (const uno::Exception& e)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
+            m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
             throw lang::WrappedTargetRuntimeException( e.Message,
                             uno::Reference< uno::XInterface >(), anyEx );
         }
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
     return xInsertPosition;
 }
 
@@ -1522,7 +1501,7 @@ SwXText::convertToTextFrame(
         pEndRange->Invalidate();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+    m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
@@ -1632,9 +1611,9 @@ SwXText::convertToTextFrame(
     // tdf#115094: do nothing if we have a graphic node
     o3tl::sorted_vector<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<OUString> aAnchoredObjectsByName;
-    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
+    for (size_t i = 0; i < m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
-        const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+        const SwFrameFormat* pFrameFormat = (*m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         // note: Word can do at-char anchors in text frames - sometimes!
         // see testFlyInFly for why this checks only the edges of the selection,
@@ -1662,7 +1641,7 @@ SwXText::convertToTextFrame(
     oAnchorCheckPam.reset(); // clear SwContentIndex before deleting nodes
 
     const rtl::Reference<SwXTextFrame> xNewFrame =
-            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr);
+            SwXTextFrame::CreateXTextFrame(*m_pDoc, nullptr);
     try
     {
         for (const beans::PropertyValue& rValue : rFrameProperties)
@@ -1691,20 +1670,20 @@ SwXText::convertToTextFrame(
                     // move the anchor to the next paragraph
                     SwFormatAnchor aNewAnchor(xNewFrame->GetFrameFormat()->GetAnchor());
                     aNewAnchor.SetAnchor( aMovePam.Start() );
-                    m_pImpl->m_pDoc->SetAttr(
+                    m_pDoc->SetAttr(
                         aNewAnchor, *xNewFrame->GetFrameFormat() );
 
                     // also move frames anchored to us
-                    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
+                    for (size_t i = 0; i < m_pDoc->GetSpzFrameFormats()->size(); ++i)
                     {
-                        SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+                        SwFrameFormat* pFrameFormat = (*m_pDoc->GetSpzFrameFormats())[i];
                         if ((!pFrameFormat->GetName().isEmpty() && aAnchoredObjectsByName.find(pFrameFormat->GetName()) != aAnchoredObjectsByName.end() ) ||
                             ( pFrameFormat->GetName().isEmpty() && aAnchoredObjectsByPtr.find(pFrameFormat->FindSdrObject()) != aAnchoredObjectsByPtr.end()) )
                         {
                             // copy the anchor to the next paragraph
                             SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
                             aAnchor.SetAnchor(aMovePam.Start());
-                            m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrameFormat);
+                            m_pDoc->SetAttr(aAnchor, *pFrameFormat);
                         }
                         else
                         {
@@ -1724,7 +1703,7 @@ SwXText::convertToTextFrame(
                                     {
                                         SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
                                         aAnchor.SetAnchor(aMovePam.Start());
-                                        m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrameFormat);
+                                        m_pDoc->SetAttr(aAnchor, *pFrameFormat);
                                     }
                                 }
                             }
@@ -1732,7 +1711,7 @@ SwXText::convertToTextFrame(
                     }
                 }
             }
-            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pStartPam);
+            m_pDoc->getIDocumentContentOperations().DelFullPara(*pStartPam);
         }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
@@ -1753,28 +1732,28 @@ SwXText::convertToTextFrame(
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame
-            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*xFrameTextCursor->GetPaM());
+            m_pDoc->getIDocumentContentOperations().DelFullPara(*xFrameTextCursor->GetPaM());
         }
         if (bParaAfterInserted)
         {
             xFrameTextCursor->gotoEnd(false);
             if (!bParaBeforeInserted)
-                m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*xFrameTextCursor->GetPaM());
+                m_pDoc->getIDocumentContentOperations().DelFullPara(*xFrameTextCursor->GetPaM());
             else
             {
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
                 SwPaM aPaM(*xFrameTextCursor->GetPaM()->GetPointNode().FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
                 // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
                 aPaM.GetPoint()->Adjust(SwNodeOffset(-1));
-                m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
+                m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
         }
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     if (bIllegalException || bRuntimeException)
     {
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
+        m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             throw lang::IllegalArgumentException(sMessage, nullptr, 0);
@@ -1814,7 +1793,7 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
-void SwXText::Impl::ConvertCell(
+void SwXText::ConvertCell(
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     std::vector<SwNodeRange> & rRowNodes,
     SwNodeRange *const pLastCell)
@@ -1823,7 +1802,7 @@ void SwXText::Impl::ConvertCell(
     {
         throw lang::IllegalArgumentException(
                 u"rCell needs to contain 2 elements"_ustr,
-                uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
+                uno::Reference< text::XTextCopy >( this ), sal_Int16( 2 ) );
     }
     const uno::Reference<text::XTextRange> xStartRange = rCell[0];
     const uno::Reference<text::XTextRange> xEndRange = rCell[1];
@@ -1838,7 +1817,7 @@ void SwXText::Impl::ConvertCell(
     {
         throw lang::IllegalArgumentException(
                 u"Start or End range cannot be resolved to a SwPaM"_ustr,
-                uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
+                uno::Reference< text::XTextCopy >( this ), sal_Int16( 2 ) );
     }
 
     SwNodeRange aTmpRange(aStartCellPam.Start()->GetNode(),
@@ -2186,7 +2165,7 @@ SwXText::convertToTable(
         throw  uno::RuntimeException();
     }
 
-    IDocumentRedlineAccess & rIDRA(m_pImpl->m_pDoc->getIDocumentRedlineAccess());
+    IDocumentRedlineAccess & rIDRA(m_pDoc->getIDocumentRedlineAccess());
     if (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags()))
     {
         throw uno::RuntimeException(
@@ -2217,7 +2196,7 @@ SwXText::convertToTable(
                         ? nullptr
                         : &*aTableNodes.rbegin()->rbegin())
                     : &*aRowNodes.rbegin());
-            m_pImpl->ConvertCell(pRow[nCell], aRowNodes, pLastCell);
+            ConvertCell(pRow[nCell], aRowNodes, pLastCell);
         }
         assert(!aRowNodes.empty());
         aTableNodes.push_back(aRowNodes);
@@ -2227,7 +2206,7 @@ SwXText::convertToTable(
         aRowSeparators(rRowProperties.getLength());
     std::vector<VerticallyMergedCell> aMergedCells;
 
-    SwTable const*const pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
+    SwTable const*const pTable = m_pDoc->TextToTable( aTableNodes );
 
     if (!pTable)
         return uno::Reference< text::XTextTable >();
@@ -2362,7 +2341,7 @@ SwXText::copyText(
         // Explicitly request copy text mode, so
         // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to
         // us, even if we have only a single paragraph.
-        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, SwCopyFlags::CheckPosInFly);
+        m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, SwCopyFlags::CheckPosInFly);
     }
 }
 
