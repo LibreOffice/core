@@ -3339,8 +3339,8 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
     LanguageTag aFallbackTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();
 
     // If we want de-CH, and the de localisation is available, we don't want to use de-DE as then
-    // the magic in Translate::get() won't turn ess-zet into double s. Possibly other similar cases?
-    if (comphelper::LibreOfficeKit::isActive() && aTag.getLanguage() == aFallbackTag.getLanguage())
+    // the magic in Translate::get() won't turn ess-zet into double s.
+    if (rBcp47LanguageTag == "de-CH")
         maLOKLanguageTag = aTag;
     else
         maLOKLanguageTag = aFallbackTag;
