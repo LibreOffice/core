@@ -194,14 +194,14 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      bool               bWasTransformed
                                      )
 {
-    static constexpr OUStringLiteral sDrawZIndex = u"draw:z-index";
-    static constexpr OUStringLiteral sDrawStyleName = u"draw:style-name";
-    static constexpr OUStringLiteral sDrawTextStyleName = u"draw:text-style-name";
-    static constexpr OUStringLiteral sSvgX = u"svg:x";
-    static constexpr OUStringLiteral sSvgY = u"svg:y";
-    static constexpr OUStringLiteral sSvgWidth = u"svg:width";
-    static constexpr OUStringLiteral sSvgHeight = u"svg:height";
-    static constexpr OUStringLiteral sDrawTransform = u"draw:transform";
+    static constexpr OUString sDrawZIndex = u"draw:z-index"_ustr;
+    static constexpr OUString sDrawStyleName = u"draw:style-name"_ustr;
+    static constexpr OUString sDrawTextStyleName = u"draw:text-style-name"_ustr;
+    static constexpr OUString sSvgX = u"svg:x"_ustr;
+    static constexpr OUString sSvgY = u"svg:y"_ustr;
+    static constexpr OUString sSvgWidth = u"svg:width"_ustr;
+    static constexpr OUString sSvgHeight = u"svg:height"_ustr;
+    static constexpr OUString sDrawTransform = u"draw:transform"_ustr;
 
     rProps[ sDrawZIndex ] = OUString::number( rElem.ZOrder );
     rProps[ sDrawStyleName ] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
