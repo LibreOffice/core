@@ -879,6 +879,58 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_HatchAngle)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161483_ShadowSlant)
+{
+    // Load document with four 3D-scenes, that differ in the draw:shadow-slant value
+    loadFromFile(u"tdf161483_ShadowSlant.fodg");
+
+    // The shadow-slant angle is given in file as
+    // [0] 36 unitless
+    // [1] 36deg,
+    // [2] 40grad,
+    // [3] 1.628318530717959rad
+    // The resulting angle should be 36 in all cases.
+    // Cases [1], [2] and [3] had angle 0 without fix.
+
+    constexpr sal_Int16 nExpectedAngle = 36; // D3DSceneShadowSlant has data type 'short'
+    for (size_t i = 0; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        sal_Int16 nActualAngle;
+        xShapeProps->getPropertyValue(u"D3DSceneShadowSlant"_ustr) >>= nActualAngle;
+        CPPUNIT_ASSERT_EQUAL(nExpectedAngle, nActualAngle);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161483_CircleStartEndAngle)
+{
+    // Load document with four 'Arc' shapes, which differ in the type of start and end angles
+    loadFromFile(u"tdf161483_CircleStartEndAngle.fodg");
+
+    // The start and end angles are given in file as
+    // [0] unitless: start 337.5   end 306
+    // [1] deg: start 337.5deg   end 306deg
+    // [2] grad: start 375grad   end 340grad
+    // [3] rad: start 5.89048622548086rad   end 5.34070751110265rad
+    // The resulting angle should be 33750 and 30600 in all cases.
+
+    // CircleStartAngle and CircleEndAngle have data type 'long', meaning Degree100
+    constexpr sal_Int32 nExpectedStartAngle = 33750;
+    constexpr sal_Int32 nExpectedEndAngle = 30600;
+    for (size_t i = 0; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        sal_Int32 nActualStartAngle;
+        xShapeProps->getPropertyValue(u"CircleStartAngle"_ustr) >>= nActualStartAngle;
+        CPPUNIT_ASSERT_EQUAL(nExpectedStartAngle, nActualStartAngle);
+        sal_Int32 nActualEndAngle;
+        xShapeProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= nActualEndAngle;
+        CPPUNIT_ASSERT_EQUAL(nExpectedEndAngle, nActualEndAngle);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

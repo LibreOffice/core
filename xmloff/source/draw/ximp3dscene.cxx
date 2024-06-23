@@ -284,7 +284,11 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::
         }
         case XML_SHADOW_SLANT:
         {
-            ::sax::Converter::convertNumber(mnShadowSlant, aIter.toView());
+            double fAngle = 0.0;
+            if (::sax::Converter::convertAngle(fAngle, aIter.toView()))
+                mnShadowSlant = static_cast<sal_Int32>(basegfx::fround(fAngle));
+            else
+                mnShadowSlant = 0;
             return;
         }
         case XML_SHADE_MODE:

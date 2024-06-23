@@ -210,6 +210,14 @@ public:
     static bool convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
                                     bool isWrongOOo10thDegAngle);
 
+    /** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
+    static bool convertAngle(double& rAngle, std::u16string_view rString,
+                             const sal_uInt16& nFactor = 1);
+
+    /** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
+    static bool convertAngle(double& rAngle, std::string_view rString,
+                             const sal_uInt16& nFactor = 1);
+
     /** convert double to XMLSchema-2 "duration" string; negative durations allowed */
     static void convertDuration(OUStringBuffer& rBuffer,
                                 const double fTime);

@@ -26,6 +26,7 @@ $(eval $(call gb_Library_use_externals,sax,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sax,\
+    basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \

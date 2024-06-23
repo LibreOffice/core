@@ -802,6 +802,56 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
     return bRet;
 }
 
+/** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
+bool Converter::convertAngle(double& rAngle, std::u16string_view rString, const sal_uInt16& nFactor)
+{
+    // ODF uses in several places angles in data type 'angle' (18.3.1, ODF 1.3). That is a double
+    // followed by unit identifier deg, grad or rad or a unitless value in degrees. LO uses angles
+    // in degrees, 1/10 of degrees and 1/100 of degrees in various data types.
+    // This method converts ODF 'angle' to double considering nFactor and normalizes it to range
+    // [0..nFactor*360[. Further type converting and range restriction are done by the caller.
+    bool bRet = ::sax::Converter::convertDouble(rAngle, rString);
+    if (bRet)
+    {
+        //degrees
+        if (std::u16string_view::npos != rString.find(u"grad"))
+            rAngle *= 0.9; // 360deg = 400grad
+        else if (std::u16string_view::npos != rString.find(u"rad"))
+            rAngle = basegfx::rad2deg(rAngle);
+        // 1/nFactor of degrees in range [0..nFactor*360]
+        if (nFactor > 0)
+            rAngle = basegfx::snapToZeroRange(rAngle * nFactor, nFactor * 360.0);
+        else
+            return false;
+    }
+    return bRet;
+}
+
+/** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
+bool Converter::convertAngle(double& rAngle, std::string_view rString, const sal_uInt16& nFactor)
+{
+    // ODF uses in several places angles in data type 'angle' (18.3.1, ODF 1.3). That is a double
+    // followed by unit identifier deg, grad or rad or a unitless value in degrees. LO uses angles
+    // in degrees, 1/10 of degrees and 1/100 of degrees in various data types.
+    // This method converts ODF 'angle' to double considering nFactor and normalizes it to range
+    // [0..nFactor*360[. Further type converting and range restriction are done by the caller.
+    bool bRet = ::sax::Converter::convertDouble(rAngle, rString);
+    if (bRet)
+    {
+        // degrees
+        if (std::u16string_view::npos != rString.find("grad"))
+            rAngle *= 0.9; // 360deg = 400grad
+        else if (std::u16string_view::npos != rString.find("rad"))
+            rAngle = basegfx::rad2deg(rAngle);
+        // 1/nFactor of degrees in range [0..nFactor*360]
+        if (nFactor > 0)
+            rAngle = basegfx::snapToZeroRange(rAngle * nFactor, nFactor * 360.0);
+        else
+            return false;
+    }
+    return bRet;
+}
+
 /** convert double to ISO "duration" string; negative durations allowed */
 void Converter::convertDuration(OUStringBuffer& rBuffer,
                                 const double fTime)
