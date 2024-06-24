@@ -77,51 +77,6 @@ using namespace ::com::sun::star;
 
 constexpr OUString cInvalidObject = u"this object is invalid"_ustr;
 
-//class SwXText::Impl
-//{
-//
-//public:
-//    SwXText &                   m_rThis;
-//    SfxItemPropertySet const&   m_rPropSet;
-//    const CursorType            m_eType;
-//    SwDoc *                     m_pDoc;
-//    bool                        m_bIsValid;
-//
-//    Impl(   SwXText & rThis,
-//            SwDoc *const pDoc, const CursorType eType)
-//        : m_rThis(rThis)
-//        , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
-//        , m_eType(eType)
-//        , m_pDoc(pDoc)
-//        , m_bIsValid(nullptr != pDoc)
-//    {
-//    }
-//
-//    /// @throws lang::IllegalArgumentException
-//    /// @throws uno::RuntimeException
-//    rtl::Reference<SwXParagraph>
-//        finishOrAppendParagraph(
-//            const uno::Sequence< beans::PropertyValue >&
-//                rCharacterAndParagraphProperties,
-//            const uno::Reference< text::XTextRange >& xInsertPosition);
-//
-//    /// @throws lang::IllegalArgumentException
-//    /// @throws uno::RuntimeException
-//    sal_Int16 ComparePositions(
-//            const uno::Reference<text::XTextRange>& xPos1,
-//            const uno::Reference<text::XTextRange>& xPos2);
-//
-//    /// @throws lang::IllegalArgumentException
-//    /// @throws uno::RuntimeException
-//    bool CheckForOwnMember(const SwPaM & rPaM);
-//
-//    void ConvertCell(
-//            const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
-//            std::vector<SwNodeRange> & rRowNodes,
-//            SwNodeRange *const pLastCell);
-//
-//};
-
 SwXText::SwXText(SwDoc *const pDoc, const CursorType eType)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
     , m_eType(eType)
