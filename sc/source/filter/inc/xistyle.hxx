@@ -22,6 +22,7 @@
 #include <tools/solar.h>
 #include <vector>
 #include <memory>
+#include <optional>
 #include <rangelst.hxx>
 #include "xlstyle.hxx"
 #include "xiroot.hxx"
@@ -565,10 +566,6 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 class XclImpXFRangeColumn
 {
 public:
-    /** make noncopyable */
-    XclImpXFRangeColumn(const XclImpXFRangeColumn&) = delete;
-    const XclImpXFRangeColumn& operator=(const XclImpXFRangeColumn&) = delete;
-
     typedef std::vector< XclImpXFRange > IndexList;
 
     explicit     XclImpXFRangeColumn() {}
@@ -660,7 +657,7 @@ private:
 
 private:
 
-    std::vector< std::shared_ptr< XclImpXFRangeColumn > >
+    std::vector< std::optional<XclImpXFRangeColumn> >
                         maColumns;        /// Array of column XF index buffers.
     std::vector< std::pair< XclRange, OUString > >
                         maHyperlinks;     /// Maps URLs to hyperlink cells.
