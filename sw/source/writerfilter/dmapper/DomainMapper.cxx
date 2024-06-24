@@ -149,6 +149,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(u"NoNumberingShowFollowBy"_ustr, uno::Any(true));
         //paint background frames after header/footer when anchored in body
         m_pImpl->SetDocumentSettingsProperty(u"PaintHellOverHeaderFooter"_ustr,uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(u"EmptyDbFieldHidesPara"_ustr,uno::Any(false));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.
