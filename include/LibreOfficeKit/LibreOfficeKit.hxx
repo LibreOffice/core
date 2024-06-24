@@ -1267,6 +1267,11 @@ public:
     {
         return mpThis->pClass->setForkedChild(mpThis, bIsChild);
     }
+
+    char* extractDocumentStructureRequest(const char* pFilePath)
+    {
+        return mpThis->pClass->extractDocumentStructureRequest(mpThis, pFilePath);
+    }
 };
 
 /// Factory method to create a lok::Office instance.
