@@ -1,12 +1,11 @@
 --- libcmis/src/libcmis/http-session.cxx.orig	2024-06-21 12:22:36.083125022 +0200
 +++ libcmis/src/libcmis/http-session.cxx	2024-06-21 13:08:37.403016695 +0200
-@@ -653,7 +653,8 @@
+@@ -653,7 +653,7 @@
          m_authProvided = authProvider->authenticationQuery( m_username, m_password );
          if ( !m_authProvided )
          {
 -            throw CurlException( "User cancelled authentication request" );
-+            // report this as 401 so it becomes permissionDenied
-+            throw CurlException("User cancelled authentication request", CURLE_OK, "", 401);
++            throw CurlException("User cancelled authentication request", CURLE_OK);
          }
      }
  }
@@ -62,7 +61,7 @@
  
  void HttpSession::initProtocols( )
  {
-@@ -981,11 +972,43 @@
+@@ -981,11 +972,45 @@
              break;
          default:
              msg = what();
@@ -106,6 +105,8 @@
 +                default:
 +                    if ( !isCancelled( ) )
 +                        msg += ": " + m_url;
++                    else if (msg == "User cancelled authentication request")
++                        type = "permissionDenied";
 +                    break;
 +            }
      }
