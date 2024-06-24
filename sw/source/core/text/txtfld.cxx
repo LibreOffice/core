@@ -55,6 +55,7 @@
 #include <svl/grabbagitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
+#include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -395,6 +396,13 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             {
                 pCleanedSet->ClearItem(pItem->Which());
             }
+        }
+        else if (pItem->Which() == RES_CHRATR_CASEMAP)
+        {
+            SvxCaseMap eCaseMap = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
+            // MS only knows about "all caps" and "small caps". Small caps is not set on numbering
+            if (eCaseMap == SvxCaseMap::SmallCaps)
+                pCleanedSet->ClearItem(pItem->Which());
         }
         pItem = aIter.NextItem();
     };

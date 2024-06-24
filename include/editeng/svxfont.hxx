@@ -113,6 +113,9 @@ public:
 
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );
+
+    // returns true if the SvxFont's own properties are equal (the SvxFont portion of an operator==)
+    bool SvxFontSubsetEquals(const SvxFont& rFont) const;
 };
 
 #endif // INCLUDED_EDITENG_SVXFONT_HXX

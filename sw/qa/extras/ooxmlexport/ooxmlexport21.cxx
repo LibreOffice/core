@@ -327,6 +327,72 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumbering.odt")
+{
+    // given a document with 2 numbered Lists [each entry restarts numbering for visual comparison]
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    // using the relative width difference between "A)" and "a)" as the test comparison
+    // since ListLabelString etc. does not output the actual string that is displayed on the screen
+
+    // When the entire paragraph has a certain character attribute, that property is also applied
+    // to the list numbering itself (with some differing exceptions) for both ODT and DOCX.
+
+    // ESTABLISH A BASELINE: these baseline paragraphs have no special character attributes.
+    // Paragraph 1/list 1(uppercase): no formatting applied to list numbering. Width is 253 for me
+    const sal_Int32 nUpperCaseWidth
+        = getXPath(pDump, "//body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    // Paragraph 4/list 2(lowercase): no formatting applied to list numbering. Width is 186 for me.
+    const sal_Int32 nLowerCaseWidth
+        = getXPath(pDump, "//body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                   "width"_ostr)
+              .toInt32();
+
+    // UPPERCASE LIST
+    // Paragraph 2: ODF should honour "lowercase". MSO doesn't know about lowercase
+    sal_Int32 nWidth
+        = getXPath(pDump, "//body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                   "width"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL(isExported() ? nUpperCaseWidth : nLowerCaseWidth, nWidth);
+
+    // Paragraph 3: ODF should honour "superscript" (for consistency). MSO ignores superscript
+    nWidth = getXPath(pDump, "//body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                      "width"_ostr)
+                 .toInt32();
+    if (!isExported())
+        CPPUNIT_ASSERT_LESS(nLowerCaseWidth, nWidth);
+    else
+        CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
+
+    // LOWERCASE LIST
+    //Paragraph 6: ODF should honour "titlecase". MSO doesn't know about titlecase
+    nWidth = getXPath(pDump, "//body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                      "width"_ostr)
+                 .toInt32();
+    CPPUNIT_ASSERT_EQUAL(isExported() ? nLowerCaseWidth : nUpperCaseWidth, nWidth);
+
+    // Paragraph 7: ODF should honour "smallcaps". MSO apparently has an exception for small caps
+    nWidth = getXPath(pDump, "//body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                      "width"_ostr)
+                 .toInt32();
+    if (!isExported())
+    {
+        CPPUNIT_ASSERT_GREATER(nLowerCaseWidth, nWidth);
+        CPPUNIT_ASSERT_LESS(nUpperCaseWidth, nWidth);
+    }
+    else
+        CPPUNIT_ASSERT_EQUAL(nLowerCaseWidth, nWidth);
+
+    // Paragraph 8: ODF should honour "uppercase". MSO also honours uppercase
+    nWidth = getXPath(pDump, "//body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
+                      "width"_ostr)
+                 .toInt32();
+    CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.odt")
 {
     // given a numbered list with a non-escaping percent symbol in the prefix and suffix

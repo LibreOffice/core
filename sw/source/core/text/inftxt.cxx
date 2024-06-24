@@ -2155,7 +2155,8 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
         ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
         ( pNew->GetBackColor() && ! pFnt->GetBackColor() ) ||
         ( pNew->GetBackColor() && pFnt->GetBackColor() &&
-          ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) ) )
+          ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) )
+        || !pNew->GetActualFont().SvxFontSubsetEquals(pFnt->GetActualFont()))
     {
         pNew->SetTransparent( true );
         pNew->SetAlign( ALIGN_BASELINE );

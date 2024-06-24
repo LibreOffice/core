@@ -670,6 +670,12 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
     return *this;
 }
 
+bool SvxFont::SvxFontSubsetEquals(const SvxFont& rFont) const
+{
+    return nEsc == rFont.GetEscapement() && nPropr == rFont.GetPropr()
+        && eCaseMap == rFont.GetCaseMap();
+}
+
 namespace {
 
 class SvxDoGetCapitalSize : public SvxDoCapitals
