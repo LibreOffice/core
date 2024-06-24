@@ -406,6 +406,10 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 pTitledDockingWindow->SetTitle(SdResId(aId));
     };
 
+    if (comphelper::LibreOfficeKit::isActive())
+        GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                   ".uno:DocumentStatus"_ostr); // pseudo-command
+
     if (meEditMode == EditMode::Page)
     {
         /******************************************************************
@@ -452,9 +456,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_DRAW, STR_LEFT_PANE_DRAW_TITLE_MASTER);
         setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_IMPRESS, STR_LEFT_PANE_IMPRESS_TITLE_MASTER);
 
-        if (comphelper::LibreOfficeKit::isActive())
-            GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       ".uno:SlideMasterPage=true"_ostr);
         if (!mpActualPage)
         {
             // as long as there is no mpActualPage, take first

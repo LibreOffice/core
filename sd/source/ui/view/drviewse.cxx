@@ -1033,10 +1033,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_MASTERPAGE:          // BASIC
         {
-            if (comphelper::LibreOfficeKit::isActive())
-                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           ".uno:SlideMasterPage=true"_ostr);
-
             // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
 
@@ -1071,11 +1067,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_CLOSE_MASTER_VIEW:
         {
-            // Notify of disabling master view, which is enabled in DrawViewShell::ChangeEditMode.
-            if (comphelper::LibreOfficeKit::isActive())
-                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                           ".uno:SlideMasterPage=false"_ostr);
-
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
