@@ -282,6 +282,8 @@ struct StyleSheetTable_Impl
     std::vector< ListCharStylePropertyMap_t > m_aListCharStylePropertyVector;
     bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
+    std::set<OUString> m_aInsertedParagraphStyles;
+    std::set<OUString> m_aUsedParagraphStyles;
 
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc);
 
@@ -1420,6 +1422,13 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             aMissingParent.emplace_back( sParentStyle, xStyle );
 
                         xStyles->insertByName( sConvertedStyleName, uno::Any( xStyle) );
+
+                        if (!m_pImpl->m_bIsNewDoc && bParaStyle)
+                        {
+                            // Remember the inserted style, which may or may not be referred during
+                            // pasting content.
+                            m_pImpl->m_aInsertedParagraphStyles.insert(sConvertedStyleName);
+                        }
                     }
 
                     beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
@@ -2166,6 +2175,31 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     }
 
     return sListLabel;
+}
+
+void StyleSheetTable::MarkParagraphStyleAsUsed(const OUString& rName)
+{
+    m_pImpl->m_aUsedParagraphStyles.insert(rName);
+}
+
+void StyleSheetTable::RemoveUnusedParagraphStyles()
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(m_pImpl->m_xTextDocument,
+                                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xDocFactory(m_pImpl->m_xTextDocument,
+                                                           uno::UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameContainer> xParaStyles;
+    xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xParaStyles;
+    for (const auto& rName : m_pImpl->m_aInsertedParagraphStyles)
+    {
+        if (m_pImpl->m_aUsedParagraphStyles.contains(rName))
+        {
+            continue;
+        }
+
+        xParaStyles->removeByName(rName);
+    }
 }
 
 }//namespace writerfilter

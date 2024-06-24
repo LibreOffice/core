@@ -2702,7 +2702,39 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         const OUString sConvertedStyleName = pStyleTable->ConvertStyleNameExt(sStringValue);
         m_pImpl->SetCurrentParaStyleName( sConvertedStyleName );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
+        {
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sConvertedStyleName ));
+
+            if (!m_pImpl->IsNewDoc())
+            {
+                // Mark the paragraph style & its parent / follow as used.
+                pStyleTable->MarkParagraphStyleAsUsed(sConvertedStyleName);
+
+                auto pStyle = pStyleTable->FindStyleSheetByConvertedStyleName(sConvertedStyleName);
+                if (pStyle)
+                {
+                    if (!pStyle->m_sBaseStyleIdentifier.isEmpty())
+                    {
+                        StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
+                        if (pParent)
+                        {
+                            OUString sParent = StyleSheetTable::ConvertStyleName(pParent->m_sStyleName).first;
+                            pStyleTable->MarkParagraphStyleAsUsed(sParent);
+                        }
+                    }
+
+                    if (!pStyle->m_sNextStyleIdentifier.isEmpty())
+                    {
+                        StyleSheetEntryPtr pFollow = pStyleTable->FindStyleSheetByISTD(pStyle->m_sNextStyleIdentifier);
+                        if (pFollow)
+                        {
+                            OUString sFollow = StyleSheetTable::ConvertStyleName(pFollow->m_sStyleName).first;
+                            pStyleTable->MarkParagraphStyleAsUsed(sFollow);
+                        }
+                    }
+                }
+            }
+        }
     }
     break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:

@@ -112,6 +112,10 @@ public:
 
     const StyleSheetEntryPtr & GetCurrentEntry() const;
 
+    void MarkParagraphStyleAsUsed(const OUString& rName);
+    /// In case of pasting, removes unused paragraph styles, inserted during the paste.
+    void RemoveUnusedParagraphStyles();
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;

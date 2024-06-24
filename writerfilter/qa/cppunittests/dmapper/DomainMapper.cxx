@@ -14,8 +14,13 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 
 #include <tools/UnitConversion.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
 
@@ -184,6 +189,41 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorder)
     // - Actual  : 0
     // i.e. the 0 para border distance was applied on the cell instead.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(203), nLeftBorderDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRTFStylePaste)
+{
+    // Given an empty Writer document:
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+
+    // When pasting RTF that has unreferenced paragraph styles:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
+    uno::Reference<text::XTextRange> xBodyEnd = xText->getEnd();
+    uno::Reference<document::XFilter> xFilter(
+        m_xSFactory->createInstance(u"com.sun.star.comp.Writer.RtfFilter"_ustr), uno::UNO_QUERY);
+    uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
+    xImporter->setTargetDocument(mxComponent);
+    std::unique_ptr<SvStream> pStream(
+        new SvFileStream(createFileURL(u"clipboard.rtf"), StreamMode::READ));
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                             xBodyEnd) };
+    CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
+
+    // Then make sure those paragraph styles don't show up in the past result:
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed, 'Default Drawing Style'
+    // was imported, even if no pasted content referenced it.
+    CPPUNIT_ASSERT(!xStyleFamily->hasByName(u"Default Drawing Style"_ustr));
 }
 }
 

@@ -442,6 +442,10 @@ DomainMapper_Impl::~DomainMapper_Impl()
         RemoveLastParagraph();
         suppress_fun_call_w_exception(GetStyleSheetTable()->ApplyClonedTOCStyles());
     }
+    else if (m_pStyleSheetTable)
+    {
+        m_pStyleSheetTable->RemoveUnusedParagraphStyles();
+    }
     if (hasTableManager())
     {
         getTableManager().endLevel();
