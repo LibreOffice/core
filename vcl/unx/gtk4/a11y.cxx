@@ -50,6 +50,10 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
     {
         css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
             rAccessible->getAccessibleContext());
+
+        if (!xContext.is())
+            return GTK_ACCESSIBLE_ROLE_NONE;
+
         // https://w3c.github.io/core-aam/#mapping_role
         // https://hg.mozilla.org/mozilla-central/file/tip/accessible/base/RoleMap.h
         // https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/a11y/gtkatspiutils.c
