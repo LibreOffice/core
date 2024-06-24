@@ -19,9 +19,7 @@
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
-#include <memory>
 #include <string_view>
-#include <vector>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -70,43 +68,15 @@ using namespace ::xmloff::token;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
-class XMLHints_Impl
+void XMLHints_Impl::push_back(std::unique_ptr<XMLIndexMarkHint_Impl> pHint)
 {
-private:
-
-    std::vector<std::unique_ptr<XMLHint_Impl>> m_Hints;
-    std::unordered_map<OUString, XMLIndexMarkHint_Impl*> m_IndexHintsById;
-    uno::Reference<uno::XInterface> m_xCrossRefHeadingBookmark;
-
-public:
-    void push_back(std::unique_ptr<XMLHint_Impl> pHint)
-    {
-        m_Hints.push_back(std::move(pHint));
-    }
-
-    void push_back(std::unique_ptr<XMLIndexMarkHint_Impl> pHint)
-    {
-        m_IndexHintsById.emplace(pHint->GetID(), pHint.get());
-        m_Hints.push_back(std::move(pHint));
-    }
-
-    std::vector<std::unique_ptr<XMLHint_Impl>> const& GetHints() const
-    {
-        return m_Hints;
-    }
-
-    XMLIndexMarkHint_Impl* GetIndexHintById(const OUString& sID)
-    {
-        auto it = m_IndexHintsById.find(sID);
-        return it == m_IndexHintsById.end() ? nullptr : it->second;
-    }
-
-    uno::Reference<uno::XInterface> & GetCrossRefHeadingBookmark()
-    {
-        return m_xCrossRefHeadingBookmark;
-    }
-};
-
+    m_IndexHintsById.emplace(pHint->GetID(), pHint.get());
+    m_Hints.push_back(std::move(pHint));
+}
+void XMLHints_Impl::push_back(std::unique_ptr<XMLHint_Impl> pHint)
+{
+    m_Hints.push_back(std::move(pHint));
+}
 
 XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
@@ -1849,14 +1819,14 @@ void XMLParaContext::endFastElement(sal_Int32 )
         }
     }
 
-    if (m_xHints)
+    if (m_oHints)
     {
         bool bEmptyHints = false;
         if (auto xCompare = xTxtImport->GetText().query<text::XTextRangeCompare>())
         {
             try
             {
-                for (const auto& pHint : m_xHints->GetHints())
+                for (const auto& pHint : m_oHints->GetHints())
                 {
                     if (xCompare->compareRegionStarts(pHint->GetStart(), pHint->GetEnd()) == 0)
                     {
@@ -1882,7 +1852,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
         {
             xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(true));
         }
-        for (const auto & i : m_xHints->GetHints())
+        for (const auto & i : m_oHints->GetHints())
         {
             XMLHint_Impl *const pHint = i.get();
             xAttrCursor->gotoRange( pHint->GetStart(), false );
@@ -2026,18 +1996,18 @@ void XMLParaContext::endFastElement(sal_Int32 )
             xCursorProps->setPropertyValue(u"NoFormatAttr"_ustr, uno::Any(false));
         }
     }
-    m_xHints.reset();
+    m_oHints.reset();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLParaContext::createFastChildContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (!m_xHints)
-        m_xHints.reset(new XMLHints_Impl);
+    if (!m_oHints)
+        m_oHints.emplace();
     return XMLImpSpanContext_Impl::CreateSpanContext(
                                 GetImport(), nElement, xAttrList,
-                                *m_xHints, bIgnoreLeadingSpace,
+                                *m_oHints, bIgnoreLeadingSpace,
                                 nStarFontsConvFlags);
 }
 

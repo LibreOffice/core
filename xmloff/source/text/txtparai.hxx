@@ -22,8 +22,8 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlictxt.hxx>
+#include "txthints.hxx"
 
-class XMLHints_Impl;
 namespace com::sun::star {
     namespace text {  class XTextRange; }
     namespace xml::sax { class XAttributeList; }
@@ -45,7 +45,7 @@ class XMLParaContext : public SvXMLImportContext
     css::uno::Any        m_aMarkerStyleName;
     bool                 m_bHaveAbout;
     sal_Int8             nOutlineLevel;
-    std::unique_ptr<XMLHints_Impl> m_xHints;
+    std::optional<XMLHints_Impl> m_oHints;
     // Lost outline numbering in master document (#i73509#)
     bool                 mbOutlineLevelAttrFound;
     bool                 mbOutlineContentVisible;
