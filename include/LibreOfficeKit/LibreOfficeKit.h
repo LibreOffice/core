@@ -146,6 +146,10 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::setForkedChild
     void (*setForkedChild)(LibreOfficeKit* pThis, bool bIsChild);
+
+    /** @see lok::Office::extractDocumentStructureRequest.
+     */
+    char* (*extractDocumentStructureRequest) (LibreOfficeKit* pThis, const char* pFilePath);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

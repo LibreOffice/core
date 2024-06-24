@@ -39,6 +39,11 @@
 #include <txtrfmrk.hxx>
 #include <ndtxt.hxx>
 
+#include <unoport.hxx>
+#include <unoprnms.hxx>
+#include <unocontentcontrol.hxx>
+#include <com/sun/star/text/XTextContent.hpp>
+
 using namespace ::com::sun::star;
 
 namespace
@@ -378,6 +383,72 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     rJsonWriter.put("name", rRefmark.GetRefName());
 }
 
+/// Implements getCommandValues(".uno:ExtractDocumentStructures").
+///
+/// Parameters:
+///
+/// todo later (filtering options)
+void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
+                     const std::map<OUString, OUString>& /*rArguments*/,
+                     uno::Reference<container::XIndexAccess>& xContentControls)
+{
+    int iCCcount = xContentControls->getCount();
+
+    auto commentsNode = rJsonWriter.startNode("DocStructure");
+    for (int i = 0; i < iCCcount; ++i)
+    {
+        OString aNodeName("ContentControls.ByIndex."_ostr + OString::number(i));
+        auto ContentControlNode = rJsonWriter.startNode(aNodeName);
+
+        uno::Reference<text::XTextContent> xContentControl;
+
+        xContentControls->getByIndex(i) >>= xContentControl;
+
+        uno::Reference<text::XText> xContentControlText(xContentControl, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+
+        sal_Int32 iID = -1;
+        xContentControlProps->getPropertyValue(UNO_NAME_ID) >>= iID;
+        rJsonWriter.put("id", iID);
+
+        OUString aTag;
+        xContentControlProps->getPropertyValue(UNO_NAME_TAG) >>= aTag;
+        rJsonWriter.put("tag", aTag);
+
+        OUString aAlias;
+        xContentControlProps->getPropertyValue(UNO_NAME_ALIAS) >>= aAlias;
+        rJsonWriter.put("alias", aAlias);
+
+        bool bShowingPlaceHolder = false;
+        xContentControlProps->getPropertyValue(UNO_NAME_SHOWING_PLACE_HOLDER)
+            >>= bShowingPlaceHolder;
+        OUString aContent;
+        if (!bShowingPlaceHolder)
+        {
+            aContent = xContentControlText->getString();
+        }
+        rJsonWriter.put("content", aContent);
+
+        bool bPlainText = false;
+        xContentControlProps->getPropertyValue(UNO_NAME_PLAIN_TEXT) >>= bPlainText;
+        bool bChBox = false;
+        xContentControlProps->getPropertyValue(UNO_NAME_CHECKBOX) >>= bChBox;
+        // "type" value derives from the UNO bool property name.
+        if (bPlainText)
+        {
+            rJsonWriter.put("type", "plain-text");
+        }
+        else if (bChBox)
+        {
+            rJsonWriter.put("type", "checkbox");
+            bool bchecked = false;
+            xContentControlProps->getPropertyValue(UNO_NAME_CHECKED) >>= bchecked;
+            rJsonWriter.put(UNO_NAME_CHECKED, OUString::boolean(bchecked));
+        }
+        // TODO more types: picture, date, combobox, dropdown...
+    }
+}
+
 /// Implements getCommandValues(".uno:Sections").
 ///
 /// Parameters:
@@ -432,6 +503,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     static constexpr OStringLiteral aSections(".uno:Sections");
     static constexpr OStringLiteral aBookmark(".uno:Bookmark");
     static constexpr OStringLiteral aField(".uno:Field");
+    static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
 
     INetURLObject aParser(OUString::fromUtf8(rCommand));
     OUString aArguments = aParser.GetParam();
@@ -484,6 +556,11 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     else if (o3tl::starts_with(rCommand, aField))
     {
         GetField(rJsonWriter, m_pDocShell, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aExtractDocStructure))
+    {
+        uno::Reference<container::XIndexAccess> xContentControls = getContentControls();
+        GetDocStructure(rJsonWriter, m_pDocShell, aMap, xContentControls);
     }
 }
 

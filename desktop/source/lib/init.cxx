@@ -2588,6 +2588,8 @@ static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char*
 
 static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pState);
 
+static char* lo_extractDocumentStructureRequest(LibreOfficeKit* pThis, const char* pFilePath);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2621,6 +2623,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->stopURP = lo_stopURP;
         m_pOfficeClass->joinThreads = lo_joinThreads;
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
+        m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3137,6 +3140,65 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
                     }
                     return convertOString(aJson.finishAndGetAsOString());
                 }
+                xComp->dispose();
+            }
+        }
+    }
+    return strdup("{ }");
+}
+
+static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
+{
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference< css::lang::XComponent > xComp;
+    OUString aURL(getAbsoluteURL(pFilePath));
+    if (!aURL.isEmpty())
+    {
+        if (xComponentLoader.is())
+        {
+            try
+            {
+                uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
+                {
+                    {u"Hidden"_ustr, css::uno::Any(true)},
+                    {u"ReadOnly"_ustr, css::uno::Any(true)}
+                }));
+                xComp = xComponentLoader->loadComponentFromURL( aURL, u"_blank"_ustr, 0, aFilterOptions );
+            }
+            catch ( const lang::IllegalArgumentException& ex )
+            {
+                SAL_WARN("lok", "lo_extractDocumentStructureRequest: IllegalArgumentException: " << ex.Message);
+            }
+            catch (...)
+            {
+                SAL_WARN("lok", "lo_extractDocumentStructureRequest: Exception on loadComponentFromURL, url= " << aURL);
+            }
+
+            if (xComp.is())
+            {
+                ITiledRenderable* pDoc = dynamic_cast<ITiledRenderable*>(xComp.get());
+
+                auto pBaseModel = dynamic_cast<SfxBaseModel*>(xComp.get());
+                if (!pBaseModel)
+                    return nullptr;
+
+                SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+                if (!pObjectShell)
+                    return nullptr;
+
+                //if it is a writer document..
+                uno::Reference<lang::XServiceInfo> xDocument(xComp, uno::UNO_QUERY_THROW);
+                if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
+                {
+                    tools::JsonWriter aJson;
+                    {
+                        pDoc->getCommandValues(aJson, ".uno:ExtractDocumentStructure");
+                        //auto aNode = aJson.startNode("Controls");
+                        //extractLinks(xLTS->getLinks(), false, aJson);
+                    }
+                    return convertOString(aJson.finishAndGetAsOString());
+                }
+
                 xComp->dispose();
             }
         }
