@@ -62,7 +62,7 @@ class Configuration(object):
     @classmethod
     def getInt(self, name, parent):
         o = self.getNode(name, parent)
-        # com will be undefined as it seems to strem from a java module?
+        # com will be undefined as it seems to stream from a java module?
         # so no need to add an import statement for this.
         # pyflakes will give an undefined name error but it seems
         # this can therefore be ignored.
