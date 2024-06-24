@@ -188,10 +188,10 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
 {
-    Size aDistance; // Distance by which we move
+    Size m_aDistance; // Distance by which we move
 
 public:
-    SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
+    SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),m_aDistance(rDist) {}
     virtual ~SdrUndoMoveObj() override;
 
     virtual void Undo() override;

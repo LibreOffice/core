@@ -521,12 +521,12 @@ void SdrUndoMoveObj::Undo()
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    mxObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
+    mxObj->Move(Size(-m_aDistance.Width(),-m_aDistance.Height()));
 }
 
 void SdrUndoMoveObj::Redo()
 {
-    mxObj->Move(Size(aDistance.Width(),aDistance.Height()));
+    mxObj->Move(Size(m_aDistance.Width(),m_aDistance.Height()));
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -539,7 +539,7 @@ OUString SdrUndoMoveObj::GetComment() const
 
 void SdrUndoMoveObj::SdrRepeat(SdrView& rView)
 {
-    rView.MoveMarkedObj(aDistance);
+    rView.MoveMarkedObj(m_aDistance);
 }
 
 bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
