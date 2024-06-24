@@ -145,6 +145,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
         // Enable only for new documents, since pasting from clipboard can influence existing doc
         m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty("EmptyDbFieldHidesPara",uno::Any(false));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.
