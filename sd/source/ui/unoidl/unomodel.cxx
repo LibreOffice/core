@@ -80,6 +80,7 @@
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
 #include <xmloff/autolayout.hxx>
+#include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/helpers.hxx>
 
@@ -3088,6 +3089,65 @@ OString SdXImpressDocument::getPresentationInfo() const
         TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved" );
     }
     return aJsonWriter.finishAndGetAsOString();
+}
+
+bool SdXImpressDocument::createSlideRenderer(
+    sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
+    bool bRenderBackground, bool bRenderMasterPage)
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return false;
+
+    uno::Reference<presentation::XSlideShow> xSlideShow = pViewSh->getXSlideShowInstance();
+    if (!xSlideShow.is())
+        return false;
+
+    bool bSuccess = false;
+    try
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPages(mpDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber), uno::UNO_QUERY_THROW);
+        uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xSlide, uno::UNO_QUERY_THROW);
+        uno::Reference<animations::XAnimationNode> xAnimNode = xAnimNodeSupplier->getAnimationNode();
+
+        bSuccess = xSlideShow->createLOKSlideRenderer(nViewWidth, nViewHeight,
+                                                 bRenderMasterPage, bRenderBackground,
+                                                 xSlide, xDrawPages, xAnimNode);
+    }
+    catch (uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createLOKSlideRenderer: failed" );
+    }
+    return bSuccess;
+}
+
+void SdXImpressDocument::postSlideshowCleanup()
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return;
+
+    pViewSh->destroyXSlideShowInstance();
+}
+
+bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg)
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return true;
+
+    uno::Reference<presentation::XSlideShow> xSlideShow = pViewSh->getXSlideShowInstance();
+    if (!xSlideShow.is())
+        return true;
+
+    auto nBufferPointer = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pBuffer));
+    sal_Bool bBitmapLayer = false;
+    bool bDone = xSlideShow->renderNextLOKSlideLayer(nBufferPointer, bBitmapLayer, rJsonMsg);
+    bIsBitmapLayer = bBitmapLayer;
+
+    return bDone;
 }
 
 SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const

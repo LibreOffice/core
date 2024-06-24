@@ -33,6 +33,7 @@
 namespace svx::sidebar { class SelectionChangeHandler; }
 namespace com::sun::star::lang { class XEventListener; }
 namespace com::sun::star::scanner { class XScannerManager2; }
+namespace com::sun::star::presentation { class XSlideShow; }
 
 class Outliner;
 class SdPage;
@@ -383,6 +384,10 @@ public:
     const SdViewOptions& GetViewOptions() const { return maViewOptions; }
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
+
+    css::uno::Reference<css::presentation::XSlideShow> getXSlideShowInstance();
+    void destroyXSlideShowInstance();
+
 protected:
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
@@ -502,6 +507,8 @@ private:
     std::unique_ptr<ViewOverlayManager> mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
     SdViewOptions maViewOptions;
+
+    css::uno::Reference<com::sun::star::presentation::XSlideShow> mxSlideShow;
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr

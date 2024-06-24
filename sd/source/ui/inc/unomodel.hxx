@@ -283,12 +283,19 @@ public:
     }
     /// @see vcl::ITiledRenderable::setPaintTextEdit().
     virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
-
     /// @see vcl::ITiledRenderable::getViewRenderState().
     SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::getPresentationInfo().
     OString getPresentationInfo() const override;
+    /// @see vcl::ITiledRenderable::createSlideRenderer().
+    bool createSlideRenderer(
+        sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
+        bool bRenderBackground, bool bRenderMasterPage) override;
+    /// @see vcl::ITiledRenderable::postSlideshowCleanup().
+    void postSlideshowCleanup() override;
+    /// @see vcl::ITiledRenderable::renderNextSlideLayer().
+    bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
 
     // XComponent
 

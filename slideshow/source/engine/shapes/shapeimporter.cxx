@@ -201,6 +201,15 @@ ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<beans::XPropertySet> const& xPropSet,
     std::u16string_view shapeType ) const
 {
+    css::uno::Reference<css::drawing::XDrawPage> xPage = mxPage;
+    if (mbConvertingMasterPage && mbMasterPageObjectsOnly)
+    {
+        const XShapesEntry& rTop = maShapesStack.top();
+        css::uno::Reference<css::drawing::XDrawPage> xMasterPage(rTop.mxShapes, uno::UNO_QUERY_THROW);
+        if (xMasterPage.is())
+            xPage = xMasterPage;
+    }
+
     if( shapeType == u"com.sun.star.drawing.MediaShape" || shapeType == u"com.sun.star.presentation.MediaShape" )
     {
         // Media shape (video etc.). This is a special object
@@ -233,7 +242,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
         return DrawShape::create( xCurrShape,
-                                  mxPage,
+                                  xPage,
                                   mnAscendingPrio,
                                   true,
                                   mrContext );
@@ -258,7 +267,7 @@ ShapeSharedPtr ShapeImporter::createShape(
             // anyway, or it's a metafile, which currently the
             // metafile renderer might not display correctly.
             return DrawShape::create( xCurrShape,
-                                      mxPage,
+                                      xPage,
                                       mnAscendingPrio,
                                       true,
                                       mrContext );
@@ -318,7 +327,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                 aGraphAttrs ) );
 
         return DrawShape::create( xCurrShape,
-                                  mxPage,
+                                  xPage,
                                   mnAscendingPrio,
                                   std::move(pGraphic),
                                   mrContext );
@@ -326,7 +335,7 @@ ShapeSharedPtr ShapeImporter::createShape(
     else
     {
         return DrawShape::create( xCurrShape,
-                                  mxPage,
+                                  xPage,
                                   mnAscendingPrio,
                                   false,
                                   mrContext );
@@ -391,6 +400,15 @@ bool ShapeImporter::isSkip(
         if( shapeType == u"com.sun.star.presentation.TitleTextShape" || shapeType == u"com.sun.star.presentation.OutlinerShape" )
         {
             return true;
+        }
+        if( mbTextFieldsOnly )
+        {
+            if( !( shapeType == u"com.sun.star.presentation.SlideNumberShape" ||
+                   shapeType == u"com.sun.star.presentation.FooterShape" ||
+                   shapeType == u"com.sun.star.presentation.DateTimeShape" ) )
+            {
+                return true;
+            }
         }
     }
     return false;
@@ -543,7 +561,9 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
-    mbConvertingMasterPage( bConvertingMasterPage )
+    mbConvertingMasterPage( bConvertingMasterPage ),
+    mbMasterPageObjectsOnly( false ),
+    mbTextFieldsOnly( false )
 {
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );

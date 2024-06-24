@@ -95,6 +95,17 @@ public:
     const PolyPolygonVector& getPolygons() const;
 
     double getImportedShapesCount() const{ return mnAscendingPrio; }
+
+    void setMasterPageObjectsOnly(bool bMasterPageObjectsOnly)
+    {
+        mbMasterPageObjectsOnly = bMasterPageObjectsOnly;
+    }
+
+    void setTextFieldsOnly(bool bTextFieldsOnly)
+    {
+        mbTextFieldsOnly = bTextFieldsOnly;
+    }
+
 private:
     bool isSkip( css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
                  std::u16string_view shapeType,
@@ -132,6 +143,8 @@ private:
     ::std::stack<XShapesEntry>                maShapesStack;
     double                                    mnAscendingPrio;
     bool                                      mbConvertingMasterPage;
+    bool mbMasterPageObjectsOnly;
+    bool mbTextFieldsOnly;
 };
 
 } // namespace presentation::internal
