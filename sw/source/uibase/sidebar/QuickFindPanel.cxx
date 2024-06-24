@@ -217,7 +217,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::g
     }
 
     // To not have top and bottom clipping when the sidebar width is made smaller by the user
-    // calculate the text rectangle using the mimimum width the rectangle can become.
+    // calculate the text rectangle using the minimum width the rectangle can become.
     int x, y, width, height;
     m_xSearchFindsList->get_extents_relative_to(*m_xContainer, x, y, width, height);
 
