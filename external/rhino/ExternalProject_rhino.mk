@@ -17,6 +17,7 @@ $(call gb_ExternalProject_get_state_target,rhino,build) :
 	$(call gb_Trace_StartRange,rhino,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		mkdir $(gb_UnpackedTarball_workdir)/rhino/build \
+		&& mkdir $(gb_UnpackedTarball_workdir)/rhino/build/content \
 		&& cd $(gb_UnpackedTarball_workdir)/rhino \
 		&& $(call gb_JavaClassSet_JAVACCOMMAND,$(JAVA_TARGET_VER)) $(gb_JavaClassSet_JAVACDEBUG) \
 			-d $(gb_UnpackedTarball_workdir)/rhino/build/content \
