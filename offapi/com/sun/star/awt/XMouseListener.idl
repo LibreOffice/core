@@ -30,6 +30,11 @@
  *   <li>com::sun::star::awt::XMouseClickHandler</li>
  *   <li>com::sun::star::awt::XMouseMotionHandler</li>
  * </ul>
+ * These interfaces are better suited for many purposes. In opposite to this listener they don't
+ * need to be added on exactly the correct widget. Optionally they can also consume events.
+ *
+ * @see com::sun::star::awt::XVclContainer The function getWindows might be helpful to find the
+ * correct widget to add this listener to.
  */
 published interface XMouseListener: com::sun::star::lang::XEventListener
 {

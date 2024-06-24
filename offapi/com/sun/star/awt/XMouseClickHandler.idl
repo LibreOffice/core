@@ -24,6 +24,15 @@ module com {  module sun {  module star {  module awt {
 
 /** makes it possible to receive events from the mouse in a certain window.
 
+    This handler is usually added via
+    com::sun::star::awt::XUserInputInterception to the controller from
+    com::sun::star::frame::XModel. While
+    com::sun::star::awt::XMouseListener needs to be added to exactly the
+    correct widget.
+
+    Also this handler is more flexible, because it optionally allows the
+    consumption of key events.
+
     @since OOo 1.1.2
  */
 published interface XMouseClickHandler: ::com::sun::star::lang::XEventListener

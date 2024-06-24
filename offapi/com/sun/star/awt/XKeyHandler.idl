@@ -20,15 +20,27 @@
 
 module com {  module sun {  module star {  module awt {
 
-/** This key handler is similar to
-    ::com::sun::star::awt::XKeyListener but allows the
-    consumption of key events.  If a key event is consumed by one
-    handler both the following handlers, with respect to the list of key
-    handlers of the broadcaster, and a following handling by the
-    broadcaster will not take place.
-
-    @since OOo 1.1.2
-*/
+/** makes it possible to receive keyboard events.
+ *
+ *  This key handler is similar to com::sun::star::awt::XKeyListener.
+ *  But this handler is easier to use and more flexible for many
+ *  purposes.
+ *
+ *  This handler is usually added via
+ *  com::sun::star::awt::XUserInputInterception to the controller from
+ *  com::sun::star::frame::XModel. While
+ *  com::sun::star::awt::XKeyListener needs to be added to exactly the
+ *  correct widget.
+ *
+ *  Also this handler is more flexible then
+ *  com::sun::star::awt::XKeyListener, because it optionally allows the
+ *  consumption of key events. If a key event is consumed by one handler
+ *  both the following handlers, with respect to the list of
+ *  key handlers of the broadcaster, and a following handling by the
+ *  broadcaster will not take place.
+ *
+ *  @since OOo 1.1.2
+ */
 published interface XKeyHandler : ::com::sun::star::lang::XEventListener
 {
     /** This function is called by the broadcaster, an

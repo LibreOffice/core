@@ -23,6 +23,9 @@
 
 
 /** makes it possible to receive mouse motion events on a window.
+ *
+ * @see ::com::sun::star::awt::XMouseMotionListener This handler is more
+ * flexible, because it optionally allows the consumption of key events.
  */
 published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
 {

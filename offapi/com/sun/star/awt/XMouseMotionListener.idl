@@ -23,6 +23,12 @@
 
 
 /** makes it possible to receive mouse motion events on a window.
+ *
+ * @see com::sun::star::awt::XMouseListener
+ * @see com::sun::star::awt::XMouseMotionHandler This can optionally consume events.
+ *
+ * @see com::sun::star::awt::XVclContainer The function getWindows might be helpful to find the
+ * correct widget to add this listener to.
  */
 published interface XMouseMotionListener: com::sun::star::lang::XEventListener
 {

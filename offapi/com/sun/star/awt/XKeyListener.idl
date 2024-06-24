@@ -24,8 +24,12 @@
 
 /** makes it possible to receive keyboard events.
  *
- * @see com::sun::star::awt::XKeyHandler This interface allows you receive (and consume) key events,
- * even on windows which are not at the top.
+ * @see com::sun::star::awt::XKeyHandler That interface is better suited for many purposes. In
+ * opposite to this listener, the com::sun::star::awt::XKeyHandler doesn't need to be added on
+ * exactly the correct widget. Optionally com::sun::star::awt::XKeyHandler can also consume events.
+ *
+ * @see com::sun::star::awt::XVclContainer The function getWindows might be helpful to find the
+ * correct widget to add the this listener to.
  */
 published interface XKeyListener: com::sun::star::lang::XEventListener
 {
