@@ -42,8 +42,7 @@ enum GIFAction
 enum ReadState
 {
     GIFREAD_OK,
-    GIFREAD_ERROR,
-    GIFREAD_NEED_MORE
+    GIFREAD_ERROR
 };
 
 }
@@ -115,7 +114,6 @@ public:
     ReadState           ReadGIF( Graphic& rGraphic );
     bool                ReadIsAnimated();
     void GetLogicSize(Size& rLogicSize);
-    Graphic             GetIntermediateGraphic();
 
     explicit            GIFReader( SvStream& rStm );
 };
@@ -261,13 +259,13 @@ bool GIFReader::ReadGlobalHeader()
     bool    bRet = false;
 
     auto nRead = rIStm.ReadBytes(pBuf, 6);
-    if (nRead == 6 && (rIStm.GetError() != ERRCODE_IO_PENDING))
+    if (nRead == 6 && rIStm.good())
     {
         pBuf[ 6 ] = 0;
         if( !strcmp( pBuf, "GIF87a" ) || !strcmp( pBuf, "GIF89a" ) )
         {
             nRead = rIStm.ReadBytes(pBuf, 7);
-            if (nRead == 7 && (rIStm.GetError() != ERRCODE_IO_PENDING))
+            if (nRead == 7 && rIStm.good())
             {
                 sal_uInt8   nAspect;
                 sal_uInt8   nRF;
@@ -287,7 +285,7 @@ bool GIFReader::ReadGlobalHeader()
                 else
                     nBackgroundColor = 0;
 
-                if (rIStm.GetError() != ERRCODE_IO_PENDING)
+                if (rIStm.good())
                     bRet = true;
             }
         }
@@ -307,7 +305,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nLen ]);
     std::size_t nRead = rIStm.ReadBytes(pBuf.get(), nLen);
     nCount = nRead/3UL;
-    if (rIStm.GetError() == ERRCODE_IO_PENDING)
+    if (!rIStm.good())
         return;
 
     sal_uInt8* pTmp = pBuf.get();
@@ -340,7 +338,7 @@ bool GIFReader::ReadExtension()
     // Extension-Label
     sal_uInt8 cFunction(0);
     rIStm.ReadUChar( cFunction );
-    if (rIStm.GetError() != ERRCODE_IO_PENDING)
+    if (rIStm.good())
     {
         bool    bOverreadDataBlocks = false;
         sal_uInt8 cSize(0);
@@ -358,7 +356,7 @@ bool GIFReader::ReadExtension()
                 sal_uInt8 cByte(0);
                 rIStm.ReadUChar(cByte);
 
-                if (rIStm.GetError() != ERRCODE_IO_PENDING)
+                if (rIStm.good())
                 {
                     nGCDisposalMethod = ( cFlags >> 2) & 7;
                     bGCTransparent = ( cFlags & 1 );
@@ -371,7 +369,7 @@ bool GIFReader::ReadExtension()
             // Application extension
             case 0xff :
             {
-                if (rIStm.GetError() != ERRCODE_IO_PENDING)
+                if (rIStm.good())
                 {
                     // by default overread this extension
                     bOverreadDataBlocks = true;
@@ -399,7 +397,7 @@ bool GIFReader::ReadExtension()
                                 rIStm.ReadUChar( cByte );
 
                                 bStatus = ( cByte == 0 );
-                                bRet = rIStm.GetError() != ERRCODE_IO_PENDING;
+                                bRet = rIStm.good();
                                 bOverreadDataBlocks = false;
 
                                 // Netscape interprets the loop count
@@ -422,7 +420,7 @@ bool GIFReader::ReadExtension()
                                 rIStm.ReadUInt32( nLogWidth100 ).ReadUInt32( nLogHeight100 );
                                 rIStm.ReadUChar( cByte );
                                 bStatus = ( cByte == 0 );
-                                bRet = rIStm.GetError() != ERRCODE_IO_PENDING;
+                                bRet = rIStm.good();
                                 bOverreadDataBlocks = false;
                             }
                             else
@@ -456,7 +454,7 @@ bool GIFReader::ReadExtension()
 
                 bRet = false;
                 std::size_t nRead = rIStm.ReadBytes(&cSize, 1);
-                if (rIStm.GetError() != ERRCODE_IO_PENDING && nRead == 1)
+                if (rIStm.good() && nRead == 1)
                 {
                     bRet = true;
                 }
@@ -475,7 +473,7 @@ bool GIFReader::ReadLocalHeader()
     bool    bRet = false;
 
     std::size_t nRead = rIStm.ReadBytes(pBuf, 9);
-    if (rIStm.GetError() != ERRCODE_IO_PENDING && nRead == 9)
+    if (rIStm.good() && nRead == 9)
     {
         SvMemoryStream  aMemStm;
         BitmapPalette*  pPal;
@@ -504,7 +502,7 @@ bool GIFReader::ReadLocalHeader()
         // if we could read everything, we will create the local image;
         // if the global colour table is valid for the image, we will
         // consider the BackGroundColorIndex.
-        if (rIStm.GetError() != ERRCODE_IO_PENDING)
+        if (rIStm.good())
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
             bRet = true;
@@ -523,7 +521,7 @@ sal_uLong GIFReader::ReadNextBlock()
 
     if ( rIStm.eof() )
         nRet = 4;
-    else if (rIStm.GetError() != ERRCODE_IO_PENDING)
+    else if (rIStm.good())
     {
         if ( cBlockSize == 0 )
             nRet = 2;
@@ -531,7 +529,7 @@ sal_uLong GIFReader::ReadNextBlock()
         {
             rIStm.ReadBytes( aSrcBuf.data(), cBlockSize );
 
-            if (rIStm.GetError() != ERRCODE_IO_PENDING)
+            if (rIStm.good())
             {
                 if( bOverreadBlock )
                     nRet = 3;
@@ -721,34 +719,6 @@ void GIFReader::CreateNewBitmaps()
     }
 }
 
-Graphic GIFReader::GetIntermediateGraphic()
-{
-    Graphic aImGraphic;
-
-    // only create intermediate graphic, if data is available
-    // but graphic still not completely read
-    if ( bImGraphicReady && !aAnimation.Count() )
-    {
-        pAcc8.reset();
-
-        if ( bGCTransparent )
-        {
-            pAcc1.reset();
-            aImGraphic = BitmapEx( aBmp8, aBmp1 );
-
-            pAcc1 = aBmp1;
-            bStatus = bStatus && pAcc1;
-        }
-        else
-            aImGraphic = BitmapEx(aBmp8);
-
-        pAcc8 = aBmp8;
-        bStatus = bStatus && pAcc8;
-    }
-
-    return aImGraphic;
-}
-
 bool GIFReader::ProcessGIF()
 {
     bool bRead = false;
@@ -771,7 +741,7 @@ bool GIFReader::ProcessGIF()
 
             if( rIStm.eof() )
                 eActAction = END_READING;
-            else if (rIStm.GetError() != ERRCODE_IO_PENDING)
+            else if (rIStm.good())
             {
                 bRead = true;
 
@@ -831,7 +801,7 @@ bool GIFReader::ProcessGIF()
                 eActAction = ABORT_READING;
             else if( cDataSize > 12 )
                 bStatus = false;
-            else if (rIStm.GetError() != ERRCODE_IO_PENDING)
+            else if (rIStm.good())
             {
                 bRead = true;
                 pDecomp = std::make_unique<GIFLZWDecompressor>( cDataSize );
@@ -915,23 +885,16 @@ bool GIFReader::ProcessGIF()
 
 bool GIFReader::ReadIsAnimated()
 {
-    ReadState eReadState;
-
     bStatus = true;
+    while (ProcessGIF() && eActAction != END_READING)
+    {}
 
-    while( ProcessGIF() && ( eActAction != END_READING ) ) {}
+    ReadState eReadState = GIFREAD_ERROR;
 
-    if( !bStatus )
+    if (!bStatus)
         eReadState = GIFREAD_ERROR;
-    else if( eActAction == END_READING )
+    else if (eActAction == END_READING)
         eReadState = GIFREAD_OK;
-    else
-    {
-        if ( rIStm.GetError() == ERRCODE_IO_PENDING )
-            rIStm.ResetError();
-
-        eReadState = GIFREAD_NEED_MORE;
-    }
 
     if (eReadState == GIFREAD_OK)
         return aAnimation.Count() > 1;
@@ -944,27 +907,21 @@ void GIFReader::GetLogicSize(Size& rLogicSize)
     rLogicSize.setHeight(nLogHeight100);
 }
 
-ReadState GIFReader::ReadGIF( Graphic& rGraphic )
+ReadState GIFReader::ReadGIF(Graphic& rGraphic)
 {
-    ReadState eReadState;
-
     bStatus = true;
 
-    while( ProcessGIF() && ( eActAction != END_READING ) ) {}
+    while (ProcessGIF() && eActAction != END_READING)
+    {}
 
-    if( !bStatus )
+    ReadState eReadState = GIFREAD_ERROR;
+
+    if (!bStatus)
         eReadState = GIFREAD_ERROR;
-    else if( eActAction == END_READING )
+    else if (eActAction == END_READING)
         eReadState = GIFREAD_OK;
-    else
-    {
-        if ( rIStm.GetError() == ERRCODE_IO_PENDING )
-            rIStm.ResetError();
 
-        eReadState = GIFREAD_NEED_MORE;
-    }
-
-    if( aAnimation.Count() == 1 )
+    if (aAnimation.Count() == 1)
     {
         rGraphic = aAnimation.Get(0).maBitmapEx;
 
@@ -980,50 +937,35 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
     return eReadState;
 }
 
-bool IsGIFAnimated(SvStream & rStm, Size& rLogicSize)
+bool IsGIFAnimated(SvStream& rStream, Size& rLogicSize)
 {
-    GIFReader aReader(rStm);
+    GIFReader aReader(rStream);
 
-    SvStreamEndian nOldFormat = rStm.GetEndian();
-    rStm.SetEndian(SvStreamEndian::LITTLE);
+    SvStreamEndian nOldFormat = rStream.GetEndian();
+    rStream.SetEndian(SvStreamEndian::LITTLE);
     bool bResult = aReader.ReadIsAnimated();
     aReader.GetLogicSize(rLogicSize);
-    rStm.SetEndian(nOldFormat);
+    rStream.SetEndian(nOldFormat);
 
     return bResult;
 }
 
-VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
+VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, Graphic& rGraphic)
 {
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
-    rGraphic.SetReaderContext(nullptr);
-    GIFReader* pGIFReader = dynamic_cast<GIFReader*>( pContext.get() );
-    if (!pGIFReader)
-    {
-        pContext = std::make_shared<GIFReader>( rStm );
-        pGIFReader = static_cast<GIFReader*>( pContext.get() );
-    }
+    bool bReturn = false;
+    GIFReader aGIFReader(rStream);
 
-    SvStreamEndian nOldFormat = rStm.GetEndian();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
+    SvStreamEndian nOldFormat = rStream.GetEndian();
+    rStream.SetEndian(SvStreamEndian::LITTLE);
 
-    bool bRet = true;
+    ReadState eReadState = aGIFReader.ReadGIF(rGraphic);
 
-    ReadState eReadState = pGIFReader->ReadGIF(rGraphic);
+    if (eReadState == GIFREAD_OK)
+        bReturn = true;
 
-    if (eReadState == GIFREAD_ERROR)
-    {
-        bRet = false;
-    }
-    else if (eReadState == GIFREAD_NEED_MORE)
-    {
-        rGraphic = pGIFReader->GetIntermediateGraphic();
-        rGraphic.SetReaderContext(pContext);
-    }
+    rStream.SetEndian(nOldFormat);
 
-    rStm.SetEndian(nOldFormat);
-
-    return bRet;
+    return bReturn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
