@@ -22,6 +22,7 @@
 #include <memory>
 #include <stack>
 #include <tools/datetime.hxx>
+#include <unotools/securityoptions.hxx>
 #include <chgtrack.hxx>
 #include <document.hxx>
 #include "xelink.hxx"
@@ -262,6 +263,10 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
     void AppendAction( std::unique_ptr<XclExpChTrAction> pAction );
+
+private:
+    /// map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
 };
 
 // XclExpChTrInfo - header of action group of a user

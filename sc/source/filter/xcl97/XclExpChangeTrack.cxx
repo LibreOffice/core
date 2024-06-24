@@ -37,6 +37,9 @@
 #include <oox/token/tokens.hxx>
 #include <rtl/uuid.h>
 #include <svl/sharedstring.hxx>
+#include <unotools/securityoptions.hxx>
+
+#include <com/sun/star/util/DateTime.hpp>
 
 using namespace oox;
 
@@ -395,7 +398,7 @@ XclExpXmlChTrHeader::XclExpXmlChTrHeader(
     OUString aUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
     sal_Int32 nLogNumber, const XclExpChTrTabIdBuffer& rBuf ) :
     maUserName(std::move(aUserName)), maDateTime(rDateTime), mnLogNumber(nLogNumber),
-    mnMinAction(0), mnMaxAction(0)
+    mnMinAction(0), mnMaxAction(0), mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     memcpy(maGUID, pGUID, 16);
     if (rBuf.GetBufferCount())
@@ -421,6 +424,14 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
             &aRelId);
 
     tools::Guid aGuid(maGUID);
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
+    if (bRemovePersonalInfo)
+    {
+        maDateTime = css::util::DateTime(0, 0, 0, 12, 1, 1, 1970, true);
+        maUserName = "Author" + OUString::number(mpAuthorIDs->GetInfoID(maUserName));
+    }
     rStrm.WriteAttributes(
         XML_guid, aGuid.getString(),
         XML_dateTime, lcl_DateTimeToOString(maDateTime),

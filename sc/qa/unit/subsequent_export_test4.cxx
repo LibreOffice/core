@@ -1889,6 +1889,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testChangesAuthorDate)
         pXmlDoc,
         "/office:document-content/office:body/office:spreadsheet/table:tracked-changes/table:cell-content-change[1]/office:change-info/dc:date"_ostr,
         u"1970-01-01T12:00:00"_ustr);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testChangesAuthorDateXLSX)
+{
+    createScDoc("xlsx/change-tracking.xlsx");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // Remove all personal info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/revisions/revisionHeaders.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/x:headers/x:header[1]"_ostr, "userName"_ostr, u"Author1"_ustr);
+    assertXPath(pXmlDoc, "/x:headers/x:header[1]"_ostr, "dateTime"_ostr,
+                u"1970-01-01T12:00:00.000000000Z"_ustr);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
