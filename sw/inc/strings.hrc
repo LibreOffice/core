@@ -134,7 +134,7 @@
 #define STR_POOLCOLL_BULLET_LEVEL5              NC_("STR_POOLCOLL_BULLET_LEVEL5", "List 5")
 #define STR_POOLCOLL_BULLET_LEVEL5E             NC_("STR_POOLCOLL_BULLET_LEVEL5E", "List 5 End")
 #define STR_POOLCOLL_BULLET_NONUM5              NC_("STR_POOLCOLL_BULLET_NONUM5", "List 5 Cont.")
-#define STR_POOLCOLL_HEADERFOOTER               NC_("STR_POOLCOLL_HEADER", "Header and Footer")
+#define STR_POOLCOLL_HEADERFOOTER               NC_("STR_POOLCOLL_HEADERFOOTER", "Header and Footer")
 #define STR_POOLCOLL_HEADER                     NC_("STR_POOLCOLL_HEADER", "Header")
 #define STR_POOLCOLL_HEADERL                    NC_("STR_POOLCOLL_HEADERL", "Header Left")
 #define STR_POOLCOLL_HEADERR                    NC_("STR_POOLCOLL_HEADERR", "Header Right")
