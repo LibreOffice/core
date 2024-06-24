@@ -110,7 +110,6 @@ void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
 
     // current undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
-    bool bRet = false;
 
     StartAllAction();
     {
@@ -138,7 +137,7 @@ void SwEditShell::Undo(sal_uInt16 const nCount, sal_uInt16 nOffset)
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
-                bRet = GetDoc()->GetIDocumentUndoRedo().UndoWithOffset(nOffset) || bRet;
+                GetDoc()->GetIDocumentUndoRedo().UndoWithOffset(nOffset);
             }
         } catch (const css::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Undo()");
@@ -165,8 +164,6 @@ void SwEditShell::Redo(sal_uInt16 const nCount)
 
     CurrShell aCurr( this );
 
-    bool bRet = false;
-
     // undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
 
@@ -192,8 +189,7 @@ void SwEditShell::Redo(sal_uInt16 const nCount)
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
-                bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
-                    || bRet;
+                GetDoc()->GetIDocumentUndoRedo().Redo();
             }
         } catch (const css::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("sw.core", "SwEditShell::Redo()");
