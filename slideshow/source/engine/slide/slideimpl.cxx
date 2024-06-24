@@ -19,10 +19,13 @@
 
 
 #include <osl/diagnose.hxx>
+#include <canvas/canvastools.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/vclfactory.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -47,9 +50,12 @@
 #include "userpaintoverlay.hxx"
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
+#include <tools/helpers.hxx>
+#include <tools/json_writer.hxx>
 #include <box2dtools.hxx>
 #include <utility>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/virdev.hxx>
 #include <svx/svdograf.hxx>
 
 using namespace ::com::sun::star;
@@ -57,8 +63,671 @@ using namespace ::com::sun::star;
 
 namespace slideshow::internal
 {
+
 namespace
 {
+basegfx::B2IVector getSlideSizePixel(const basegfx::B2DVector& rSlideSize,
+                                     const basegfx::B2DHomMatrix& rTransformation)
+{
+    const basegfx::B2DRange aRect(0, 0, rSlideSize.getX(), rSlideSize.getY());
+
+    basegfx::B2DRange aTmpRect;
+    canvas::tools::calcTransformedRectBounds(aTmpRect, aRect, rTransformation);
+
+    // #i42440# Returned slide size is one pixel too small, as
+    // rendering happens one pixel to the right and below the
+    // actual bound rect.
+    return basegfx::B2IVector(basegfx::fround(aTmpRect.getRange().getX()) + 1,
+                              basegfx::fround(aTmpRect.getRange().getY()) + 1);
+}
+
+basegfx::B2DHomMatrix createTransformation(Size& rDeviceSize, const Size& rSlideSize )
+{
+    basegfx::B2DHomMatrix aViewTransform(1, 0, 0, 0, 1, 0);
+
+    const Size aWindowSize( rDeviceSize );
+    Size aOutputSize( aWindowSize );
+    Size aPageSize( rSlideSize );
+
+    const double page_ratio = static_cast<double>(aPageSize.Width()) / static_cast<double>(aPageSize.Height());
+    const double output_ratio = static_cast<double>(aOutputSize.Width()) / static_cast<double>(aOutputSize.Height());
+
+    if( page_ratio > output_ratio )
+    {
+        aOutputSize.setHeight( ( aOutputSize.Width() * aPageSize.Height() ) / aPageSize.Width() );
+    }
+    else if( page_ratio < output_ratio )
+    {
+        aOutputSize.setWidth( ( aOutputSize.Height() * aPageSize.Width() ) / aPageSize.Height() );
+    }
+
+    // Reduce available width by one, as the slides might actually
+    // render one pixel wider and higher as aPageSize below specifies
+    // (when shapes of page size have visible border lines)
+    aOutputSize.AdjustWidth( -1 );
+    aOutputSize.AdjustHeight( -1 );
+
+    rDeviceSize = aOutputSize;
+
+    // scale presentation into available window rect (minus 10%); center in the window
+    aViewTransform = basegfx::utils::createScaleB2DHomMatrix(aOutputSize.Width(), aOutputSize.Height());
+
+    if (basegfx::fTools::equalZero(aViewTransform.get(0,0)) ||
+        basegfx::fTools::equalZero(aViewTransform.get(1,1)))
+    {
+        OSL_FAIL( "SlideView::SlideView(): Singular matrix!" );
+
+        aViewTransform = basegfx::B2DHomMatrix::abcdef(1, 0, 0, 0, 1, 0);
+    }
+
+    basegfx::B2DHomMatrix aScaleMatrix;
+    aScaleMatrix.scale( 1.0 / rSlideSize.getWidth(), 1.0 / rSlideSize.getHeight() );
+    aViewTransform = aViewTransform * aScaleMatrix;
+
+    return aViewTransform;
+}
+
+OUString getPlaceholderType(std::u16string_view sShapeType)
+{
+    OUString aType;
+    if (sShapeType == u"com.sun.star.presentation.SlideNumberShape")
+        aType = u"SlideNumber"_ustr;
+    if (sShapeType == u"com.sun.star.presentation.FooterShape")
+        aType = u"Footer"_ustr;
+    if (sShapeType == u"com.sun.star.presentation.DateTimeShape")
+        aType = u"DateTime"_ustr;
+
+    return aType;
+}
+
+class LOKSlideRenderer
+{
+public:
+    enum LayerGroupType
+    {
+        BACKGROUND,
+        MASTER_PAGE,
+        DRAW_PAGE,
+        TEXT_FIELDS
+    };
+public:
+    LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize,
+                     bool bRenderBackground, bool bRenderMasterPageObjects,
+                     const uno::Reference<drawing::XDrawPage>& rxDrawPage,
+                     const uno::Reference<drawing::XDrawPagesSupplier>& rxDrawPagesSupplier,
+                     const uno::Reference<animations::XAnimationNode>& rxRootNode,
+                     const SlideShowContext& rContext,
+                     const std::shared_ptr<LayerManager>& pLayerManager);
+
+    void renderBackground(unsigned char* pBuffer);
+    void renderTextFields(unsigned char* pBuffer);
+    void renderMasterPage(unsigned char* pBuffer);
+    void renderDrawPage(unsigned char* pBuffer);
+    void renderNextLayer(unsigned char* pBuffer);
+
+    const Size& getDeviceSize() const { return maDeviceSize; }
+    bool isBackgroundRenderingDone() const { return mbBackgroundRenderingDone; }
+    bool isTextFieldsRenderingDone() const { return mbTextFieldsRenderingDone; }
+    bool isMasterPageRenderingDone() const { return mbMasterPageRenderingDone; }
+    bool isDrawPageRenderingDone() const { return mbDrawPageRenderingDone; }
+    bool isSlideRenderingDone() const { return mbSlideRenderingDone; }
+    bool isBitmapLayer() const { return mbIsBitmapLayer; }
+
+    const OString& getJsonMessage() const { return msLastJsonMessage; }
+
+private:
+    void collectAnimatedShapes();
+
+    void renderImpl(LayerGroupType eLayersSet, unsigned char* pBuffer);
+    void renderBackgroundImpl(VirtualDevice& rDevice);
+    void renderTextFieldsImpl(VirtualDevice& rDevice);
+    void renderMasterPageImpl(VirtualDevice& rDevice);
+    void renderDrawPageImpl(VirtualDevice& rDevice);
+
+    void renderLayerImpl(VirtualDevice& rDevice, tools::JsonWriter& rJsonWriter);
+    void renderAnimatedShapeImpl(VirtualDevice& rDevice, const std::shared_ptr<Shape>& pShape,
+                                 tools::JsonWriter& rJsonWriter);
+
+    SlideBitmapSharedPtr createLayerBitmap(const ::cppcanvas::CanvasSharedPtr& pCanvas,
+                                           const ::basegfx::B2ISize& rBmpSize ) const;
+    void renderLayerBitmapImpl(VirtualDevice& rDevice);
+
+private:
+    Size maDeviceSize;
+    Size maSlideSize;
+    bool mbRenderBackground;
+    bool mbRenderMasterPageObjects;
+    basegfx::B2DHomMatrix maTransformation;
+    uno::Reference<drawing::XDrawPage> mxDrawPage;
+    uno::Reference<drawing::XDrawPagesSupplier> mxDrawPagesSupplier;
+    uno::Reference<animations::XAnimationNode> mxRootNode;
+    const SlideShowContext& mrContext;
+    std::shared_ptr<LayerManager> mpLayerManager;
+    uno::Reference<drawing::XDrawPage> mxMasterPage;
+    std::shared_ptr<ShapeImporter> mpTFShapesFunctor;
+    std::shared_ptr<ShapeImporter> mpMPShapesFunctor;
+    std::shared_ptr<ShapeImporter> mpShapesFunctor;
+    std::unordered_map< BitmapChecksum, BitmapEx > maBitmapMap;
+    std::vector<OString> maJsonMsgList;
+    std::unordered_map<std::string, bool> maAnimatedShapeVisibilityMap;
+
+    sal_uInt32 mnMPLayerIndex;
+    sal_uInt32 mnDPLayerIndex;
+    bool mbBackgroundRenderingDone;
+    bool mbTextFieldsRenderingDone;
+    bool mbMasterPageRenderingDone;
+    bool mbDrawPageRenderingDone;
+    bool mbSlideRenderingDone;
+    ShapeSharedPtr mpDPLastAnimatedShape;
+    OUString msLastPlaceholder;
+
+    bool mbIsBitmapLayer;
+    OString msLastJsonMessage;
+};
+
+LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize,
+                                   bool bRenderBackground, bool bRenderMasterPageObjects,
+                                   const uno::Reference<drawing::XDrawPage>& rxDrawPage,
+                                   const uno::Reference<drawing::XDrawPagesSupplier>& rxDrawPagesSupplier,
+                                   const uno::Reference<animations::XAnimationNode>& rxRootNode,
+                                   const SlideShowContext& rContext,
+                                   const std::shared_ptr<LayerManager>& pLayerManager) :
+    maDeviceSize(rViewSize),
+    maSlideSize(rSlideSize),
+    mbRenderBackground(bRenderBackground),
+    mbRenderMasterPageObjects(bRenderMasterPageObjects),
+    maTransformation(createTransformation(maDeviceSize, maSlideSize)),
+    mxDrawPage(rxDrawPage),
+    mxDrawPagesSupplier(rxDrawPagesSupplier),
+    mxRootNode(rxRootNode),
+    mrContext(rContext),
+    mpLayerManager(pLayerManager),
+    mnMPLayerIndex(0),
+    mnDPLayerIndex(0),
+    mbBackgroundRenderingDone(false),
+    mbTextFieldsRenderingDone(false),
+    mbMasterPageRenderingDone(false),
+    mbDrawPageRenderingDone(false),
+    mbSlideRenderingDone(false),
+    mbIsBitmapLayer(false)
+{
+    uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mxDrawPage, uno::UNO_QUERY );
+    if( xMasterPageTarget.is() )
+    {
+        mxMasterPage = xMasterPageTarget->getMasterPage();
+        uno::Reference< drawing::XShapes > xMasterPageShapes = mxMasterPage;
+        OSL_ASSERT(mxDrawPage.is() && mxMasterPage.is() && xMasterPageShapes.is());
+
+        uno::Reference<beans::XPropertySet> xPropSet(mxDrawPage, uno::UNO_QUERY);
+        OSL_ASSERT(xPropSet.is());
+
+        bool bBackgroundVisibility = true; // default visible
+        xPropSet->getPropertyValue("IsBackgroundVisible")  >>= bBackgroundVisibility;
+        mbBackgroundRenderingDone = !bBackgroundVisibility;
+
+        bool bBackgroundObjectsVisibility = true; // default visible
+        xPropSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
+        mbTextFieldsRenderingDone = mbMasterPageRenderingDone = !bBackgroundObjectsVisibility;
+
+        if (!mbTextFieldsRenderingDone)
+        {
+            mpTFShapesFunctor
+                = std::make_shared<ShapeImporter>(mxMasterPage, mxDrawPage, mxDrawPagesSupplier,
+                                                  mrContext, 0, /* shape num starts at 0 */
+                                                  true);
+            mpTFShapesFunctor->setTextFieldsOnly(true);
+        }
+        if (!(mbBackgroundRenderingDone && mbMasterPageRenderingDone))
+        {
+            mpMPShapesFunctor
+                = std::make_shared<ShapeImporter>(mxMasterPage, mxDrawPage, mxDrawPagesSupplier,
+                                                  mrContext, 0, /* shape num starts at 0 */
+                                                  true);
+            mpMPShapesFunctor->setMasterPageObjectsOnly(true);
+        }
+
+        mpShapesFunctor = std::make_shared<ShapeImporter>(mxDrawPage, mxDrawPage, mxDrawPagesSupplier,
+                                                          mrContext, 0, /* shape num starts at 0 */
+                                                          false);
+    }
+    collectAnimatedShapes();
+}
+
+void LOKSlideRenderer::renderBackground(unsigned char* pBuffer)
+{
+    renderImpl(LayerGroupType::BACKGROUND, pBuffer);
+}
+
+void LOKSlideRenderer::renderMasterPage(unsigned char* pBuffer)
+{
+    renderImpl(LayerGroupType::MASTER_PAGE, pBuffer);
+}
+
+void LOKSlideRenderer::renderDrawPage(unsigned char* pBuffer)
+{
+    renderImpl(LayerGroupType::DRAW_PAGE, pBuffer);
+}
+
+void LOKSlideRenderer::renderTextFields(unsigned char* pBuffer)
+{
+    renderImpl(LayerGroupType::TEXT_FIELDS, pBuffer);
+}
+
+void LOKSlideRenderer::renderNextLayer(unsigned char* pBuffer)
+{
+    OSL_ASSERT(pBuffer);
+
+    if (mbRenderBackground && !isBackgroundRenderingDone())
+        renderBackground(pBuffer);
+
+    if (!isTextFieldsRenderingDone())
+    {
+        renderTextFields(pBuffer);
+        return;
+    }
+
+    if (mbRenderMasterPageObjects && !isMasterPageRenderingDone())
+    {
+        renderMasterPage(pBuffer);
+        return;
+    }
+
+    if (!isDrawPageRenderingDone())
+    {
+        renderDrawPage(pBuffer);
+        return;
+    }
+
+    mbSlideRenderingDone = true;
+}
+
+void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
+{
+    if (mbBackgroundRenderingDone)
+        return;
+
+    tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("group", "Background");
+    std::string sLayerId = GetInterfaceHash(mxDrawPage) + ".0";
+    aJsonWriter.put("id", sLayerId);
+
+    ShapeSharedPtr const& rBGShape(mpMPShapesFunctor->importBackgroundShape());
+    mpLayerManager->addShape(rBGShape);
+
+    // render and collect bitmap
+    renderLayerBitmapImpl(rDevice);
+    BitmapEx aBitmapEx(
+        rDevice.GetBitmapEx(Point(0, 0), rDevice.GetOutputSizePixel()));
+    BitmapChecksum nChecksum = aBitmapEx.GetChecksum();
+    maBitmapMap[nChecksum] = aBitmapEx;
+
+    // json
+    mbIsBitmapLayer = true;
+    aJsonWriter.put("type", "bitmap");
+    aJsonWriter.put("checksum", std::to_string(nChecksum));
+
+    msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+    maJsonMsgList.push_back(msLastJsonMessage);
+
+    // clean up
+    rDevice.Erase();
+    mpLayerManager->removeShape(rBGShape);
+
+    mbBackgroundRenderingDone = true;
+}
+
+void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
+{
+    if (mpMPShapesFunctor->isImportDone())
+        mbMasterPageRenderingDone = true;
+
+    if (mbMasterPageRenderingDone)
+        return;
+
+    tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("group", "MasterPage");
+    std::string sLayerId = GetInterfaceHash(mxMasterPage) + "." + std::to_string(mnMPLayerIndex);
+    aJsonWriter.put("id", sLayerId);
+
+    if (!msLastPlaceholder.isEmpty())
+    {
+        aJsonWriter.put("type", "placeholder");
+        aJsonWriter.put("placeholderId", msLastPlaceholder);
+        msLastPlaceholder = "";
+        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+        maJsonMsgList.push_back(msLastJsonMessage);
+        ++mnMPLayerIndex;
+        return;
+    }
+
+    bool bDoRendering = false;
+    while (!mpMPShapesFunctor->isImportDone())
+    {
+        ShapeSharedPtr const& rShape(mpMPShapesFunctor->importShape());
+        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        if (xShape.is())
+        {
+            OUString sShapeType = xShape->getShapeType();
+            OUString sPlaceholderType = getPlaceholderType(sShapeType);
+            if (sPlaceholderType.isEmpty())
+            {
+                mpLayerManager->addShape(rShape);
+                bDoRendering = true;
+            }
+            else
+            {
+                if (bDoRendering)
+                {
+                    msLastPlaceholder = sPlaceholderType;
+                    renderLayerImpl(rDevice, aJsonWriter);
+                }
+                else
+                {
+                    aJsonWriter.put("type", "placeholder");
+                    aJsonWriter.put("placeholderId", sPlaceholderType);
+                }
+                bDoRendering = false;
+                msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+                maJsonMsgList.push_back(msLastJsonMessage);
+                ++mnMPLayerIndex;
+                return;
+            }
+        }
+    }
+    if (bDoRendering)
+    {
+        renderLayerImpl(rDevice, aJsonWriter);
+    }
+    msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+    maJsonMsgList.push_back(msLastJsonMessage);
+
+    mbMasterPageRenderingDone = true;
+}
+
+void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
+{
+    while( !mpTFShapesFunctor->isImportDone() )
+    {
+        ShapeSharedPtr const& rShape(mpTFShapesFunctor->importShape());
+        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        if (xShape.is())
+        {
+            OUString sShapeType = xShape->getShapeType();
+            OUString sPlaceholderType = getPlaceholderType(sShapeType);
+            if (!sPlaceholderType.isEmpty())
+            {
+                mpLayerManager->addShape(rShape);
+
+                // render and collect bitmap
+                renderLayerBitmapImpl(rDevice);
+                BitmapEx aBitmapEx(rDevice.GetBitmapEx(Point(0, 0), rDevice.GetOutputSizePixel()));
+                BitmapChecksum nChecksum = aBitmapEx.GetChecksum();
+                maBitmapMap[nChecksum] = aBitmapEx;
+
+                // json
+                OUString sLayerId = OUString::fromUtf8(GetInterfaceHash(mxMasterPage)) + "." + sPlaceholderType;
+                tools::JsonWriter aJsonWriter;
+                aJsonWriter.put("group", "TextFields");
+                aJsonWriter.put("id", sLayerId);
+                mbIsBitmapLayer = true;
+                aJsonWriter.put("type", "bitmap");
+                aJsonWriter.put("checksum", std::to_string(nChecksum));
+
+                msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+                maJsonMsgList.push_back(msLastJsonMessage);
+
+                // clean up
+                rDevice.Erase();
+                mpLayerManager->removeShape(rShape);
+                return;
+            }
+        }
+    }
+    mbTextFieldsRenderingDone = true;
+}
+
+void LOKSlideRenderer::renderLayerImpl(VirtualDevice& rDevice, tools::JsonWriter& rJsonWriter)
+{
+    // render and collect bitmap
+    renderLayerBitmapImpl(rDevice);
+    BitmapEx aBitmapEx(rDevice.GetBitmapEx(Point(0, 0), rDevice.GetOutputSizePixel()));
+    BitmapChecksum nChecksum = aBitmapEx.GetChecksum();
+    maBitmapMap[nChecksum] = aBitmapEx;
+
+    // json
+    mbIsBitmapLayer = true;
+    rJsonWriter.put("type", "bitmap");
+    rJsonWriter.put("checksum", std::to_string(nChecksum));
+
+    // clean up
+    rDevice.Erase();
+    mpLayerManager->removeAllShapes();
+}
+
+void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
+{
+    if (mpShapesFunctor->isImportDone())
+        mbDrawPageRenderingDone = true;
+
+    if (mbDrawPageRenderingDone)
+        return;
+
+    tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("group", "DrawPage");
+    std::string sLayerId = GetInterfaceHash(mxDrawPage) + "." + std::to_string(mnDPLayerIndex);
+    aJsonWriter.put("id", sLayerId);
+
+    if (mpDPLastAnimatedShape)
+    {
+        renderAnimatedShapeImpl(rDevice, mpDPLastAnimatedShape, aJsonWriter);
+        mpDPLastAnimatedShape.reset();
+        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+        maJsonMsgList.push_back(msLastJsonMessage);
+        ++mnDPLayerIndex;
+        return;
+    }
+
+    bool bDoRendering = false;
+    while (!mpShapesFunctor->isImportDone())
+    {
+        ShapeSharedPtr const& rShape(mpShapesFunctor->importShape());
+        if (rShape)
+        {
+            std::string sShapeId = GetInterfaceHash(rShape->getXShape());
+            const auto& rIter = maAnimatedShapeVisibilityMap.find(sShapeId);
+            bool bIsAnimated = rIter != maAnimatedShapeVisibilityMap.end();
+            if (!bIsAnimated)
+            {
+                mpLayerManager->addShape(rShape);
+                bDoRendering = true;
+            }
+            else
+            {
+                if (bDoRendering)
+                {
+                    mpDPLastAnimatedShape = rShape;
+                    renderLayerImpl(rDevice, aJsonWriter);
+                }
+                else
+                {
+                    renderAnimatedShapeImpl(rDevice, rShape, aJsonWriter);
+                }
+                msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+                maJsonMsgList.push_back(msLastJsonMessage);
+                ++mnDPLayerIndex;
+                return;
+            }
+        }
+    }
+    if (bDoRendering)
+    {
+        renderLayerImpl(rDevice, aJsonWriter);
+    }
+    msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+    maJsonMsgList.push_back(msLastJsonMessage);
+
+    mbDrawPageRenderingDone = true;
+}
+
+void LOKSlideRenderer::renderAnimatedShapeImpl(VirtualDevice& rDevice,
+                                               const std::shared_ptr<Shape>& pShape,
+                                               tools::JsonWriter& rJsonWriter)
+{
+    rJsonWriter.put("type", "animated");
+
+    std::string sShapeId = GetInterfaceHash(pShape->getXShape());
+    rJsonWriter.put("shapeHash", sShapeId);
+
+    bool bIsInitVisible = maAnimatedShapeVisibilityMap.at(sShapeId);
+    rJsonWriter.put("initVisible", bIsInitVisible);
+    tools::ScopedJsonWriterNode aData = rJsonWriter.startNode("data");
+    if (bIsInitVisible)
+    {
+        mpLayerManager->addShape(pShape);
+        renderLayerImpl(rDevice, rJsonWriter);
+    }
+}
+
+void LOKSlideRenderer::renderImpl(LayerGroupType eLayersSet, unsigned char* pBuffer)
+{
+    VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
+        maDeviceSize, Fraction(1.0),
+        Point(), pBuffer);
+
+    pDevice->Erase();
+    OSL_ASSERT(pDevice->GetCanvas().is());
+    mbIsBitmapLayer = false;
+    msLastJsonMessage = ""_ostr;
+    try
+    {
+        switch (eLayersSet)
+        {
+            case LayerGroupType::BACKGROUND: return renderBackgroundImpl(*pDevice);
+            case LayerGroupType::MASTER_PAGE: return renderMasterPageImpl(*pDevice);
+            case LayerGroupType::DRAW_PAGE: return renderDrawPageImpl(*pDevice);
+            case LayerGroupType::TEXT_FIELDS: return renderTextFieldsImpl(*pDevice);
+        }
+    }
+    catch (uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (ShapeLoadFailedException&)
+    {
+        // TODO(E2): Error handling. For now, bail out
+        TOOLS_WARN_EXCEPTION( "slideshow", "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+        return;
+    }
+    catch (uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "slideshow", "Geenral Exception");
+        return;
+    }
+}
+
+SlideBitmapSharedPtr LOKSlideRenderer::createLayerBitmap(const ::cppcanvas::CanvasSharedPtr& pCanvas,
+                                                         const ::basegfx::B2ISize& rBmpSize ) const
+{
+    ::cppcanvas::BitmapSharedPtr pBitmap(
+        ::cppcanvas::BaseGfxFactory::createBitmap(
+            pCanvas,
+            rBmpSize ) );
+
+    ENSURE_OR_THROW(pBitmap,
+                    "LOKSlideRenderer::createCurrentSlideBitmap(): Cannot create page bitmap");
+
+    ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(pBitmap->getBitmapCanvas());
+
+    ENSURE_OR_THROW( pBitmapCanvas,
+                    "LOKSlideRenderer::createCurrentSlideBitmap(): Cannot create page bitmap canvas" );
+
+    // apply linear part of destination canvas transformation (linear means in this context:
+    // transformation without any translational components)
+    ::basegfx::B2DHomMatrix aLinearTransform(maTransformation);
+    aLinearTransform.set( 0, 2, 0.0 );
+    aLinearTransform.set( 1, 2, 0.0 );
+    pBitmapCanvas->setTransformation( aLinearTransform );
+
+    initSlideBackground( pBitmapCanvas, rBmpSize );
+    mpLayerManager->renderTo( pBitmapCanvas );
+
+    return std::make_shared<SlideBitmap>( pBitmap );
+}
+
+void LOKSlideRenderer::renderLayerBitmapImpl(VirtualDevice& rDevice)
+{
+    auto aSize = getSlideSizePixel(basegfx::B2DVector(maSlideSize.getWidth(), maSlideSize.getHeight()),
+                                   maTransformation);
+    const basegfx::B2ISize rSlideSize(aSize.getX(), aSize.getY());
+
+    ::cppcanvas::CanvasSharedPtr pCanvas = cppcanvas::VCLFactory::createCanvas(rDevice.GetCanvas());
+
+    SlideBitmapSharedPtr pBitmap = createLayerBitmap(pCanvas, rSlideSize);
+
+    // setup a canvas with device coordinate space, the slide
+    // bitmap already has the correct dimension.
+    //    const ::basegfx::B2DPoint aOutPosPixel( rTransformation * ::basegfx::B2DPoint() );
+    ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+
+    // render at given output position
+    //    pBitmap->move( aOutPosPixel );
+
+    // clear clip (might have been changed, e.g. from comb
+    // transition)
+    pBitmap->clip( ::basegfx::B2DPolyPolygon() );
+    pBitmap->draw( pDevicePixelCanvas );
+}
+
+void LOKSlideRenderer::collectAnimatedShapes()
+{
+    if (!mxRootNode.is())
+        return;
+
+    const uno::Sequence< animations::TargetProperties > aProps(
+        TargetPropertiesCreator::createTargetProperties( mxRootNode, true /* Initial */ ) );
+
+    for (const auto& rProp : aProps)
+    {
+        uno::Reference<drawing::XShape> xShape(rProp.Target, uno::UNO_QUERY);
+
+        if (!xShape.is())
+        {
+            // not a shape target. Maybe a ParagraphTarget?
+            presentation::ParagraphTarget aParaTarget;
+
+            if (rProp.Target >>= aParaTarget)
+            {
+                // yep, ParagraphTarget found - extract shape
+                // and index
+                xShape = aParaTarget.Shape;
+            }
+        }
+
+        if( xShape.is() )
+        {
+            const uno::Sequence< beans::NamedValue >& rShapeProps( rProp.Properties );
+            for (const auto& rShapeProp : rShapeProps)
+            {
+                bool bVisible = false;
+                if (rShapeProp.Name.equalsIgnoreAsciiCase("visibility") &&
+                    extractValue( bVisible,
+                                 rShapeProp.Value,
+                                 nullptr,
+                                 basegfx::B2DVector() ))
+                {
+                    maAnimatedShapeVisibilityMap[GetInterfaceHash(xShape)] = bVisible;
+                }
+                else
+                {
+                    OSL_FAIL( "LOKSlideRenderer::collectAnimatedShapes:(): Unexpected "
+                             "(and unimplemented) property encountered" );
+                }
+            }
+        }
+    }
+}
 
 class SlideImpl : public Slide,
                   public CursorManager,
@@ -85,7 +754,7 @@ public:
                double                                            dUserPaintStrokeWidth,
                bool                                              bUserPaintEnabled,
                bool                                              bIntrinsicAnimationsAllowed,
-               bool                                              bDisableAnimationZOrder );
+               bool                                              bDisableAnimationZOrder);
 
     virtual ~SlideImpl() override;
 
@@ -111,6 +780,13 @@ public:
     // but on canvas-independent basegfx bitmaps
     virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const override;
 
+    virtual Size createLOKSlideRenderer(int nViewWidth, int nViewHeight,
+                                        bool bRenderBackground,
+                                        bool bRenderMasterPageObjects) override;
+
+    virtual bool renderNextLOKSlideLayer(unsigned char* buffer,
+                                         bool& bIsBitmapLayer,
+                                         OString& rJsonMsg) override;
 
 private:
     // ViewEventHandler
@@ -209,6 +885,8 @@ private:
     SlideAnimations                                     maAnimations;
     PolyPolygonVector                                   maPolygons;
 
+    std::shared_ptr<LOKSlideRenderer> mpLOKRenderer;
+
     RGBColor                                            maUserPaintColor;
     double                                              mdUserPaintStrokeWidth;
     UserPaintOverlaySharedPtr                           mpPaintOverlay;
@@ -306,7 +984,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       double                                                dUserPaintStrokeWidth,
                       bool                                                  bUserPaintEnabled,
                       bool                                                  bIntrinsicAnimationsAllowed,
-                      bool                                                  bDisableAnimationZOrder ) :
+                      bool                                                  bDisableAnimationZOrder) :
     mxDrawPage( xDrawPage ),
     mxDrawPagesSupplier(std::move( xDrawPages )),
     mxRootNode(std::move( xRootNode )),
@@ -642,6 +1320,42 @@ bool SlideImpl::isAnimated()
         return false;
 
     return mbHaveAnimations && maAnimations.isAnimated();
+}
+
+Size SlideImpl::createLOKSlideRenderer(int nViewWidth, int nViewHeight,
+                                       bool bRenderBackground, bool bRenderMasterPageObjects)
+{
+    if (!mpLOKRenderer)
+    {
+        Size aViewSize(nViewWidth, nViewHeight);
+        Size aSlideSize(getSlideSize().getWidth(), getSlideSize().getHeight());
+        mpLOKRenderer = std::make_shared<LOKSlideRenderer>(aViewSize, aSlideSize,
+                                                           bRenderBackground,
+                                                           bRenderMasterPageObjects,
+                                                           mxDrawPage, mxDrawPagesSupplier,
+                                                           mxRootNode, maContext, mpLayerManager);
+        if (mpLOKRenderer)
+        {
+            return mpLOKRenderer->getDeviceSize();
+        }
+    }
+    return {};
+}
+
+bool SlideImpl::renderNextLOKSlideLayer(unsigned char* buffer, bool& bIsBitmapLayer, OString& rJsonMsg)
+{
+    if (mpLOKRenderer)
+    {
+        if (!mpLOKRenderer->isSlideRenderingDone())
+        {
+            mpLOKRenderer->renderNextLayer(buffer);
+            bIsBitmapLayer = mpLOKRenderer->isBitmapLayer();
+            rJsonMsg = mpLOKRenderer->getJsonMessage();
+        }
+
+        return mpLOKRenderer->isSlideRenderingDone();
+    }
+    return true;
 }
 
 SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,

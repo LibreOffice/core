@@ -11,11 +11,17 @@
 #include <ViewShellBase.hxx>
 #include <sdmod.hxx>
 
+#include <com/sun/star/presentation/SlideShow.hpp>
+
 #include <comphelper/lok.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unomodel.hxx>
+
+using namespace css;
 
 namespace sd {
 
@@ -55,6 +61,42 @@ void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorCon
     if (meEditMode == EditMode::MasterPage)
         aFillColor.DecreaseLuminance( 64 );
     maViewOptions.mnAppBackgroundColor = aFillColor;
+}
+
+void DrawViewShell::destroyXSlideShowInstance()
+{
+    if (!mxSlideShow.is())
+        return;
+
+    try
+    {
+        uno::Reference<lang::XComponent> xComponent(mxSlideShow, uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    catch (uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "DrawViewShell::destroyXSlideShowInstance dispose");
+    }
+
+    mxSlideShow.clear();
+}
+
+uno::Reference<presentation::XSlideShow> DrawViewShell::getXSlideShowInstance()
+{
+    if (!mxSlideShow.is())
+    {
+        try
+        {
+            auto xContext = ::comphelper::getProcessComponentContext();
+            mxSlideShow.set(presentation::SlideShow::create(xContext), uno::UNO_SET_THROW);
+        }
+        catch (uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sd", "DrawViewShell::createXSlideShowInstance()");
+        }
+    }
+    return mxSlideShow;
 }
 
 }
