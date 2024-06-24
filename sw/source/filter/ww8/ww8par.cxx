@@ -1868,6 +1868,8 @@ void SwWW8ImplReader::ImportDop()
         DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA, true);
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, true);
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, false);
 
     // Import Default Tabs
     tools::Long nDefTabSiz = m_xWDop->dxaTab;
