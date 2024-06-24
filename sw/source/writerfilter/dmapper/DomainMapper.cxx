@@ -148,7 +148,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         // Enable only for new documents, since pasting from clipboard can influence existing doc
         m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
         //paint background frames after header/footer when anchored in body
-        m_pImpl->SetDocumentSettingsProperty("PaintHellOverHeaderFooter",uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(u"PaintHellOverHeaderFooter"_ustr,uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(u"EmptyDbFieldHidesPara"_ustr,uno::Any(false));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.
