@@ -225,6 +225,54 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkEntry" id="formula">
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="visibility">False</property>
+                        <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formula-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|formula">Here you can add formula for conditional formatting.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="datetype">
+                        <property name="can-focus">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="visible">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="condformatmanager|datetype" id="26">Today</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="27">Yesterday</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="28">Tomorrow</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="29">Last 7 days</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="30">This week</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="31">Last week</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="32">Next week</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="33">This month</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="34">Last month</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="35">Next month</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="36">This year</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="37">Last year</item>
+                          <item translatable="yes" context="condformatmanager|datetype" id="38">Next year</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkButton" id="add">
                         <property name="label" translatable="yes" context="condformatmanager|add">Add</property>
                         <property name="visible">True</property>
@@ -239,7 +287,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position"></property>
                       </packing>
                     </child>
                     <child>
@@ -257,7 +305,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -275,7 +323,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                   </object>

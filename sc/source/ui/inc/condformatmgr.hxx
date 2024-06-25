@@ -52,6 +52,8 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xConditionalType;
     std::unique_ptr<weld::ComboBox> m_xConditionalCellValue;
+    std::unique_ptr<weld::Entry> m_xConditionalFormula;
+    std::unique_ptr<weld::ComboBox> m_xConditionalDate;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnRemove;
     std::unique_ptr<weld::Button> m_xBtnEdit;
@@ -64,6 +66,8 @@ private:
     DECL_LINK(EditBtnClickHdl, weld::Button&, void);
     DECL_LINK(AddBtnHdl, weld::Button&, void);
     DECL_LINK(EditBtnHdl, weld::TreeView&, bool);
+    DECL_LINK(ComboHdl, weld::ComboBox&, void);
+    DECL_LINK(EntryFocus, weld::TreeView&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

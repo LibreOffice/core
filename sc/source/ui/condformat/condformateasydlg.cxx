@@ -31,6 +31,41 @@ void UpdateStyleList(const ScDocument* pDocument, weld::ComboBox& rCombo)
     FillStyleListBox(pDocument, rCombo);
     rCombo.set_active_text(sSelectedStyle);
 }
+
+condformat::ScCondFormatDateType GetScCondFormatDateType(ScConditionMode mode)
+{
+    switch (mode)
+    {
+        case ScConditionMode::Today:
+            return condformat::ScCondFormatDateType::TODAY;
+        case ScConditionMode::Yesterday:
+            return condformat::ScCondFormatDateType::YESTERDAY;
+        case ScConditionMode::Tomorrow:
+            return condformat::ScCondFormatDateType::TOMORROW;
+        case ScConditionMode::Last7days:
+            return condformat::ScCondFormatDateType::LAST7DAYS;
+        case ScConditionMode::ThisWeek:
+            return condformat::ScCondFormatDateType::THISWEEK;
+        case ScConditionMode::LastWeek:
+            return condformat::ScCondFormatDateType::LASTWEEK;
+        case ScConditionMode::NextWeek:
+            return condformat::ScCondFormatDateType::NEXTWEEK;
+        case ScConditionMode::ThisMonth:
+            return condformat::ScCondFormatDateType::THISMONTH;
+        case ScConditionMode::LastMonth:
+            return condformat::ScCondFormatDateType::LASTMONTH;
+        case ScConditionMode::NextMonth:
+            return condformat::ScCondFormatDateType::NEXTMONTH;
+        case ScConditionMode::ThisYear:
+            return condformat::ScCondFormatDateType::THISYEAR;
+        case ScConditionMode::LastYear:
+            return condformat::ScCondFormatDateType::LASTYEAR;
+        case ScConditionMode::NextYear:
+            return condformat::ScCondFormatDateType::NEXTYEAR;
+        default:
+            return condformat::ScCondFormatDateType::TODAY;
+    }
+}
 }
 
 namespace sc
@@ -160,6 +195,62 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
         case ScConditionMode::NotContainsText:
             SetDescription(ScResId(STR_CONDITION_NOT_CONTAINS_TEXT));
             break;
+        case ScConditionMode::Formula:
+            SetDescription(ScResId(STR_CONDITION_FORMULA));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::Today:
+            SetDescription(ScResId(STR_CONDITION_TODAY));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::Yesterday:
+            SetDescription(ScResId(STR_CONDITION_YESTERDAY));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::Tomorrow:
+            SetDescription(ScResId(STR_CONDITION_TOMORROW));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::Last7days:
+            SetDescription(ScResId(STR_CONDITION_LAST7DAYS));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::ThisWeek:
+            SetDescription(ScResId(STR_CONDITION_THISWEEK));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::LastWeek:
+            SetDescription(ScResId(STR_CONDITION_LASTWEEK));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::NextWeek:
+            SetDescription(ScResId(STR_CONDITION_NEXTWEEK));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::ThisMonth:
+            SetDescription(ScResId(STR_CONDITION_THISMONTH));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::LastMonth:
+            SetDescription(ScResId(STR_CONDITION_LASTMONTH));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::NextMonth:
+            SetDescription(ScResId(STR_CONDITION_NEXTMONTH));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::ThisYear:
+            SetDescription(ScResId(STR_CONDITION_THISYEAR));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::LastYear:
+            SetDescription(ScResId(STR_CONDITION_LASTYEAR));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::NextYear:
+            SetDescription(ScResId(STR_CONDITION_NEXTYEAR));
+            mxAllInputs->hide();
+            break;
         default:
             SAL_WARN("sc",
                      "ConditionalFormatEasyDialog::ConditionalFormatEasyDialog: invalid format");
@@ -256,9 +347,24 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
                 break;
         }
 
-        ScFormatEntry* pEntry
-            = new ScCondFormatEntry(meMode, sExpression1, sExpression2, *mpDocument, maPosition,
-                                    mxStyles->get_active_text());
+        ScFormatEntry* pEntry;
+        if (meMode < ScConditionMode::Formula)
+        {
+            pEntry = new ScCondFormatEntry(meMode, sExpression1, sExpression2, *mpDocument,
+                                           maPosition, mxStyles->get_active_text());
+        }
+        else if (meMode >= ScConditionMode::Today && meMode < ScConditionMode::NONE)
+        {
+            ScCondDateFormatEntry entry(mpDocument);
+            entry.SetDateType(GetScCondFormatDateType(meMode));
+            entry.SetStyleName(mxStyles->get_active_text());
+            pEntry = new ScCondDateFormatEntry(mpDocument, entry);
+        }
+        else if (meMode == ScConditionMode::Formula)
+        {
+            pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "", OUString(), *mpDocument,
+                                           maPosition, mxStyles->get_active_text());
+        }
 
         ScRangeList aRange;
         ScRefFlags nFlags

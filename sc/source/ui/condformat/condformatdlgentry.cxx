@@ -122,32 +122,45 @@ void FillStyleListBox( const ScDocument* pDoc, weld::ComboBox& rLbStyle )
 
 }
 
-const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::NUM_COND_ENTRIES] = {
-    ScConditionMode::Equal,
-    ScConditionMode::Less,
-    ScConditionMode::Greater,
-    ScConditionMode::EqLess,
-    ScConditionMode::EqGreater,
-    ScConditionMode::NotEqual,
-    ScConditionMode::Between,
-    ScConditionMode::NotBetween,
-    ScConditionMode::Duplicate,
-    ScConditionMode::NotDuplicate,
-    ScConditionMode::Top10,
-    ScConditionMode::Bottom10,
-    ScConditionMode::TopPercent,
-    ScConditionMode::BottomPercent,
-    ScConditionMode::AboveAverage,
-    ScConditionMode::BelowAverage,
-    ScConditionMode::AboveEqualAverage,
-    ScConditionMode::BelowEqualAverage,
-    ScConditionMode::Error,
-    ScConditionMode::NoError,
-    ScConditionMode::BeginsWith,
-    ScConditionMode::EndsWith,
-    ScConditionMode::ContainsText,
-    ScConditionMode::NotContainsText
-};
+const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::NUM_COND_ENTRIES]
+    = { ScConditionMode::Equal,
+        ScConditionMode::Less,
+        ScConditionMode::Greater,
+        ScConditionMode::EqLess,
+        ScConditionMode::EqGreater,
+        ScConditionMode::NotEqual,
+        ScConditionMode::Between,
+        ScConditionMode::NotBetween,
+        ScConditionMode::Duplicate,
+        ScConditionMode::NotDuplicate,
+        ScConditionMode::Top10,
+        ScConditionMode::Bottom10,
+        ScConditionMode::TopPercent,
+        ScConditionMode::BottomPercent,
+        ScConditionMode::AboveAverage,
+        ScConditionMode::BelowAverage,
+        ScConditionMode::AboveEqualAverage,
+        ScConditionMode::BelowEqualAverage,
+        ScConditionMode::Error,
+        ScConditionMode::NoError,
+        ScConditionMode::BeginsWith,
+        ScConditionMode::EndsWith,
+        ScConditionMode::ContainsText,
+        ScConditionMode::NotContainsText,
+        ScConditionMode::Formula,
+        ScConditionMode::Today,
+        ScConditionMode::Yesterday,
+        ScConditionMode::Tomorrow,
+        ScConditionMode::Last7days,
+        ScConditionMode::ThisWeek,
+        ScConditionMode::LastWeek,
+        ScConditionMode::NextWeek,
+        ScConditionMode::ThisMonth,
+        ScConditionMode::LastMonth,
+        ScConditionMode::NextMonth,
+        ScConditionMode::ThisYear,
+        ScConditionMode::LastYear,
+        ScConditionMode::NextYear };
 
 ScConditionFrmtEntry::ScConditionFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry)
@@ -351,6 +364,20 @@ sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode )
         case ScConditionMode::BelowEqualAverage:
         case ScConditionMode::Duplicate:
         case ScConditionMode::NotDuplicate:
+        case ScConditionMode::Formula:
+        case ScConditionMode::Today:
+        case ScConditionMode::Yesterday:
+        case ScConditionMode::Tomorrow:
+        case ScConditionMode::Last7days:
+        case ScConditionMode::ThisWeek:
+        case ScConditionMode::LastWeek:
+        case ScConditionMode::NextWeek:
+        case ScConditionMode::ThisMonth:
+        case ScConditionMode::LastMonth:
+        case ScConditionMode::NextMonth:
+        case ScConditionMode::ThisYear:
+        case ScConditionMode::LastYear:
+        case ScConditionMode::NextYear:
             return 0;
         case ScConditionMode::Between:
         case ScConditionMode::NotBetween:

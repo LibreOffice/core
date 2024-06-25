@@ -103,7 +103,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     std::unique_ptr<weld::CustomWeld> mxWdPreview;
     bool mbIsInStyleCreate;
 
-    static const sal_Int32 NUM_COND_ENTRIES = 24;
+    static const sal_Int32 NUM_COND_ENTRIES = 38;
     // Lookup table from positions in maLbCondType to the condition mode enum
     static const ScConditionMode mpEntryToCond[NUM_COND_ENTRIES];
 
