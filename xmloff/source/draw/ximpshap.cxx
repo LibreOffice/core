@@ -226,7 +226,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
             }
         }
 
-        // if we have a text cursor, lets  try to import some text
+        // if we have a text cursor, let's try to import some text
         if( mxCursor.is() )
         {
             xContext = GetImport().GetTextImport()->CreateTextChildContext(
