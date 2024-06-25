@@ -175,7 +175,12 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 // since up till now these were just treated as automatic tabstops.
                 eAdj = SvxTabAdjust::Right;
                 bAbsoluteNextPos = true;
-                nNextPos = rInf.Width();
+                // TODO: unclear if old Word has an upper limit for center/right
+                // tabs, UI allows setting 55.87cm max which is still one line
+                if (!bTabOverMargin || o3tl::toTwips(558, o3tl::Length::mm) < nNextPos)
+                {
+                    nNextPos = rInf.Width();
+                }
             }
             bAutoTabStop = false;
         }
