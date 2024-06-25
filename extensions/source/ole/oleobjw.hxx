@@ -210,7 +210,7 @@ protected:
     // the IDispatch* are wrapped by objects of this class. Assuming that the functions
     // implemented by the IDispatch object returns another UNO interface then
     // it has to be wrapped to this type. But this is only possible if an object of this
-    // wrapper class knows what type it is represting. The member m_TypeDescription holds this
+    // wrapper class knows what type it is representing. The member m_TypeDescription holds this
     // information.
     // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
     // a UNO interface. The value is set during a call to XInitialization::initialize.
