@@ -32,6 +32,7 @@
 #include <txtftn.hxx>
 #include <flyfrm.hxx>
 #include <fmtftn.hxx>
+#include <fmtsrnd.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <rowfrm.hxx>
@@ -246,6 +247,12 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
             const SwSortedObjs &rObjs = *pStartFrame->GetDrawObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
+                if (pAnchoredObj->GetFrameFormat()->GetSurround().GetSurround()
+                        == text::WrapTextMode_THROUGH)
+                {
+                    continue; // tdf#161718 no effect on text flow, skip
+                }
+
                 SwRect aRect( pAnchoredObj->GetObjRect() );
 
                 auto pFlyFrame = pAnchoredObj->DynCastFlyFrame();
