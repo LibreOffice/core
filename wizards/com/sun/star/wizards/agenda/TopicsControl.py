@@ -721,7 +721,7 @@ class TopicsControl(ControlScroller):
             traceback.print_exc()
 
 '''
-A class represting a single GUI row.
+A class representing a single GUI row.
 Note that the instance methods of this class
 are being called and handle controls of
 a single row.
