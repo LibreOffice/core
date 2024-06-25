@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkImage" id="image_portrait7">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">cmd/lc_attributepagesize.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/lc_attributepagesize.png</property>
   </object>
   <object class="GtkPopover" id="PageSizeControl">
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="border_width">4</property>
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="border-width">4</property>
     <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
@@ -28,27 +28,27 @@
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow" id="valuesetwin">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkDrawingArea" id="pagesizevalueset">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
@@ -65,8 +65,8 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="metric">
-                <property name="can_focus">True</property>
-                <property name="no_show_all">True</property>
+                <property name="can-focus">True</property>
+                <property name="no-show-all">True</property>
                 <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
@@ -87,13 +87,13 @@
           <object class="GtkButton" id="moreoptions">
             <property name="label" translatable="yes" context="pagesizecontrol|moreoptions">_More Options</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes" context="pagesizecontrol|moreoptions|tooltip_text">More Options</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes" context="pagesizecontrol|moreoptions|tooltip_text">More Options</property>
             <property name="image">image_portrait7</property>
             <property name="relief">none</property>
-            <property name="use_underline">True</property>
-            <property name="always_show_image">True</property>
+            <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="expand">False</property>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore4">
@@ -15,20 +15,20 @@
     </columns>
   </object>
   <object class="GtkBox" id="ComboBox">
-    <property name="width_request">150</property>
+    <property name="width-request">150</property>
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkComboBox" id="combobox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="model">liststore4</property>
-        <property name="entry_text_column">0</property>
-        <property name="id_column">1</property>
+        <property name="entry-text-column">0</property>
+        <property name="id-column">1</property>
         <child>
           <object class="GtkCellRendererText" id="cellrenderertext3"/>
           <attributes>
