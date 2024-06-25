@@ -406,6 +406,32 @@ private:
                 pIssue->setStart(nStart);
                 pIssue->setEnd(nStart + sText.getLength());
             }
+
+            if (aHyperlink.GetProtocol() != INetProtocol::NotValid)
+            {
+                // Check if the Hyperlink have Name settled.
+                if (!xProperties->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                    return;
+
+                OUString sHyperlinkName;
+                xProperties->getPropertyValue(u"HyperLinkName"_ustr) >>= sHyperlinkName;
+                if (sHyperlinkName.isEmpty())
+                {
+                    std::shared_ptr<sw::AccessibilityIssue> pNameIssue
+                        = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_NO_NAME),
+                                      sfx::AccessibilityIssueID::HYPERLINK_NO_NAME);
+
+                    if (pNameIssue)
+                    {
+                        pNameIssue->setIssueObject(IssueObject::HYPERLINKTEXT);
+                        pNameIssue->setNode(pTextNode);
+                        SwDoc& rDocument = pTextNode->GetDoc();
+                        pNameIssue->setDoc(rDocument);
+                        pNameIssue->setStart(nStart);
+                        pNameIssue->setEnd(nStart + sText.getLength());
+                    }
+                }
+            }
         }
     }
 

@@ -19,6 +19,7 @@
 #define STR_FAKE_NUMBERING              NC_("STR_FAKE_NUMBERING", "Simulated numbering “%NUMBERING%”.")
 #define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address “%LINK%”.")
 #define STR_HYPERLINK_TEXT_IS_SHORT     NC_("STR_HYPERLINK_TEXT_IS_SHORT", "Hyperlink text is too short.")
+#define STR_HYPERLINK_NO_NAME           NC_("STR_HYPERLINK_NO_NAME", "Missing 'Name' property of hyperlink.")
 #define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
 #define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
 #define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")
@@ -45,6 +46,7 @@
 #define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set.")
 #define STR_DOCUMENT_TITLE_DLG_TITLE    NC_("STR_DOCUMENT_TITLE_DLG_TITLE", "Document title")
 #define STR_DOCUMENT_TITLE_DLG_DESC     NC_("STR_DOCUMENT_TITLE_DLG_DESC", "Enter document title:")
+#define STR_HYPERLINK_NO_NAME_DLG       NC_("STR_HYPERLINK_NO_NAME_DLG", "Enter a name of the hyperlink:")
 
 #define STR_ENTER_ALT                   NC_("STR_ENTER_ALT", "Enter alternative text:")
 

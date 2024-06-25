@@ -29,6 +29,7 @@
 
 #include <svx/svdview.hxx>
 #include <flyfrm.hxx>
+#include <unotextrange.hxx>
 #include <txatbase.hxx>
 #include <txtfrm.hxx>
 
@@ -185,6 +186,7 @@ void AccessibilityIssue::gotoIssue() const
         }
         break;
         case IssueObject::TEXT:
+        case IssueObject::HYPERLINKTEXT:
         {
             SwContentNode* pContentNode = TempIssueObject.m_pNode->GetContentNode();
             SwPosition aStart(*pContentNode, TempIssueObject.m_nStart);
@@ -241,7 +243,8 @@ bool AccessibilityIssue::canQuickFixIssue() const
            || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM
            || m_eIssueObject == IssueObject::DOCUMENT_TITLE
            || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND
-           || m_eIssueObject == IssueObject::LANGUAGE_NOT_SET;
+           || m_eIssueObject == IssueObject::LANGUAGE_NOT_SET
+           || m_eIssueObject == IssueObject::HYPERLINKTEXT;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -320,6 +323,33 @@ void AccessibilityIssue::quickFixIssue() const
                     if (m_pNode)
                         m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
                 });
+            }
+        }
+        break;
+        case IssueObject::HYPERLINKTEXT:
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
+                pWrtShell->GetView().GetFrameWeld(), OUString(), SwResId(STR_HYPERLINK_NO_NAME_DLG),
+                SwResId(STR_HYPERLINK_NO_NAME_DLG)));
+            if (aNameDialog->Execute() == RET_OK)
+            {
+                SwContentNode* pContentNode = m_pNode->GetContentNode();
+                SwPosition aStart(*pContentNode, m_nStart);
+                SwPosition aEnd(*pContentNode, m_nEnd);
+                uno::Reference<text::XTextRange> xRun
+                    = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
+                if (xRun.is())
+                {
+                    uno::Reference<beans::XPropertySet> xProperties(xRun, uno::UNO_QUERY);
+                    if (xProperties->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                    {
+                        xProperties->setPropertyValue(u"HyperLinkName"_ustr,
+                                                      uno::Any(aNameDialog->GetName()));
+                    }
+                }
+                pWrtShell->SetModified();
             }
         }
         break;

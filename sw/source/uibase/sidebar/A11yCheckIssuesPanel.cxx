@@ -295,6 +295,7 @@ void A11yCheckIssuesPanel::populateIssues()
             break;
             case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
             case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
+            case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
             {
                 addEntryForGroup(AccessibilityCheckGroups::Hyperlink, nIndices, pIssue);
             }
