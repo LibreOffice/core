@@ -2492,7 +2492,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     OString aCursor = pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY);
                     double fPPTX = pViewShell->GetViewData().GetPPTX();
                     int mouseX = aPos.X() / fPPTX;
-                    OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", " + OString::number(mouseX));
+                    int mouseY = aPos.Y() / fPPTX;
+                    OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", "
+                                 + OString::number(mouseX) + ", " + OString::number(mouseY));
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
@@ -2621,9 +2623,10 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if (pViewShell && nPosX == m_nDownPosX && nPosY == m_nDownPosY
             && GetEditUrl(aPos, &aName, &aUrl, &aTarget))
         {
-            OString aMsg(aUrl.toUtf8() + " coordinates: " +
-                         pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", " +
-                         OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()));
+            OString aMsg(aUrl.toUtf8() + " coordinates: "
+                         + pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", "
+                         + OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()) + ", "
+                         + OString::number(aPos.Y() / pViewShell->GetViewData().GetPPTY()));
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
         }
     }

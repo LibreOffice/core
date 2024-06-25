@@ -12411,6 +12411,7 @@ SfxVoidItem RemoveHyperlink SID_REMOVE_HYPERLINK
 ]
 
 SfxVoidItem CopyHyperlinkLocation SID_COPY_HYPERLINK_LOCATION
+(SfxInt32Item PositionX FN_PARAM_1, SfxInt32Item PositionY FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
