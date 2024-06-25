@@ -29,6 +29,7 @@
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
+#include <NotesPanelViewShell.hxx>
 #include <ViewShellBase.hxx>
 
 class SfxRequest;
@@ -77,6 +78,19 @@ void FuSearch::DoExecute( SfxRequest& )
     {
         m_bOwnOutliner = false;
         m_pSdOutliner = mpDoc->GetOutliner();
+    }
+    else if ( dynamic_cast< const NotesPanelViewShell *>( mpViewShell ) !=  nullptr )
+    {
+        if( mpViewShell->GetViewShellBase().GetMainViewShell()->GetShellType() == ViewShell::ST_OUTLINE )
+        {
+            m_bOwnOutliner = false;
+            m_pSdOutliner = mpDoc->GetOutliner();
+        }
+        if( mpViewShell->GetViewShellBase().GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
+        {
+            m_bOwnOutliner = true;
+            m_pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
+        }
     }
 
     if (m_pSdOutliner)
