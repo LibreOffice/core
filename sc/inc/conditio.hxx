@@ -85,6 +85,20 @@ enum class ScConditionMode
     EndsWith,
     ContainsText,
     NotContainsText,
+    Formula,
+    Today,
+    Yesterday,
+    Tomorrow,
+    Last7days,
+    ThisWeek,
+    LastWeek,
+    NextWeek,
+    ThisMonth,
+    LastMonth,
+    NextMonth,
+    ThisYear,
+    LastYear,
+    NextYear,
     NONE
 };
 
@@ -168,6 +182,48 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
         break;
     case ScConditionMode::NotContainsText:
         stream << "NOTCONTAINSTEXT";
+        break;
+    case ScConditionMode::Formula:
+        stream << "FORMULA";
+        break;
+    case ScConditionMode::Today:
+        stream << "TODAY";
+        break;
+    case ScConditionMode::Yesterday:
+        stream << "YESTERDAY";
+        break;
+    case ScConditionMode::Tomorrow:
+        stream << "TOMORROW";
+        break;
+    case ScConditionMode::Last7days:
+        stream << "LAST7DAYS";
+        break;
+    case ScConditionMode::ThisWeek:
+        stream << "THISWEEK";
+        break;
+    case ScConditionMode::LastWeek:
+        stream << "LASTWEEK";
+        break;
+    case ScConditionMode::NextWeek:
+        stream << "NEXTWEEK";
+        break;
+    case ScConditionMode::ThisMonth:
+        stream << "THISMONTH";
+        break;
+    case ScConditionMode::LastMonth:
+        stream << "LASTMONTH";
+        break;
+    case ScConditionMode::NextMonth:
+        stream << "NEXTMONTH";
+        break;
+    case ScConditionMode::ThisYear:
+        stream << "THISYEAR";
+        break;
+    case ScConditionMode::LastYear:
+        stream << "LASTYEAR";
+        break;
+    case ScConditionMode::NextYear:
+        stream << "NEXTYEAR";
         break;
     case ScConditionMode::NONE:
         stream << "NONE";

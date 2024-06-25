@@ -1139,6 +1139,22 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             if( eOp == ScConditionMode::NotContainsText )
                 bValid = !bValid;
             break;
+        case ScConditionMode::Formula:
+        case ScConditionMode::Today:
+        case ScConditionMode::Yesterday:
+        case ScConditionMode::Tomorrow:
+        case ScConditionMode::Last7days:
+        case ScConditionMode::ThisWeek:
+        case ScConditionMode::LastWeek:
+        case ScConditionMode::NextWeek:
+        case ScConditionMode::ThisMonth:
+        case ScConditionMode::LastMonth:
+        case ScConditionMode::NextMonth:
+        case ScConditionMode::ThisYear:
+        case ScConditionMode::LastYear:
+        case ScConditionMode::NextYear:
+            bValid = true;
+            break;
         default:
             SAL_WARN("sc", "unknown operation at ScConditionEntry");
             break;

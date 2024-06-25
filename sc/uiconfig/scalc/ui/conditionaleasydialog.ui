@@ -204,7 +204,7 @@
                   <object class="GtkLabel" id="description">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="conditionaleasydialog|label">Conditional formatting rule: %1</property>
+                    <property name="label" translatable="yes" context="conditionaleasydialog|label">Highlight cells if %1</property>
                     <accessibility>
                       <relation type="label-for" target="entryNumber"/>
                       <relation type="label-for" target="entryNumber2"/>

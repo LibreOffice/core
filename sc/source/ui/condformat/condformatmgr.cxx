@@ -21,6 +21,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/viewoptions.hxx>
+#include <iostream>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
     ScDocument& rDoc, ScConditionalFormatList* pFormatList)
@@ -98,6 +99,8 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
     , m_xFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
     , m_xConditionalType(m_xBuilder->weld_combo_box("type"))
     , m_xConditionalCellValue(m_xBuilder->weld_combo_box("typeis"))
+    , m_xConditionalFormula(m_xBuilder->weld_entry("formula"))
+    , m_xConditionalDate(m_xBuilder->weld_combo_box("datetype"))
     , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
     , m_xBtnEdit(m_xBuilder->weld_button(u"edit"_ustr))
@@ -108,6 +111,8 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
     m_xBtnEdit->connect_clicked(LINK(this, ScCondFormatManagerDlg, EditBtnClickHdl));
     m_xBtnAdd->connect_clicked(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     m_xTreeView->connect_row_activated(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    m_xTreeView->connect_changed(LINK(this, ScCondFormatManagerDlg, EntryFocus));
+    m_xConditionalType->connect_changed(LINK(this, ScCondFormatManagerDlg, ComboHdl));
 
     SvtViewOptions aDlgOpt(EViewType::Dialog, u"CondFormatDialog"_ustr);
     if (aDlgOpt.Exists())
@@ -148,13 +153,29 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
         return;
 
     auto id = m_xConditionalType->get_active();
+    SfxBoolItem IsManaged(FN_PARAM_2, true);
     switch (id)
     {
         case 0: // Cell value
         {
             SfxInt16Item FormatRule(FN_PARAM_1,
                                     m_xConditionalCellValue->get_active_id().toUInt32());
-            SfxBoolItem IsManaged(FN_PARAM_2, true);
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
+                { &FormatRule, &IsManaged });
+        }
+        break;
+        case 1: // Formula
+        {
+            SfxInt16Item FormatRule(FN_PARAM_1, static_cast<sal_Int16>(ScConditionMode::Formula));
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
+                { &FormatRule, &IsManaged });
+        }
+        break;
+        case 2: // Date
+        {
+            SfxInt16Item FormatRule(FN_PARAM_1, m_xConditionalDate->get_active_id().toUInt32());
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
                 { &FormatRule, &IsManaged });
@@ -194,6 +215,67 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl, weld::Button&, void)
 {
     m_bModified = true;
     m_xDialog->response( DLG_RET_ADD );
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, ComboHdl, weld::ComboBox&, void)
+{
+    auto id = m_xConditionalType->get_active();
+    switch (id)
+    {
+        case 0:
+        {
+            m_xConditionalCellValue->set_visible(true);
+            m_xConditionalFormula->set_visible(false);
+            m_xConditionalDate->set_visible(false);
+        }
+        break;
+        case 1:
+        {
+            m_xConditionalCellValue->set_visible(false);
+            m_xConditionalFormula->set_visible(true);
+            m_xConditionalDate->set_visible(false);
+        }
+        break;
+        case 2:
+        {
+            m_xConditionalCellValue->set_visible(false);
+            m_xConditionalFormula->set_visible(false);
+            m_xConditionalDate->set_visible(true);
+        }
+        break;
+        default:
+            break;
+    }
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, EntryFocus, weld::TreeView&, void)
+{
+    ScConditionalFormat* conditionFrmt = m_xCtrlManager->GetSelection();
+
+    if (!conditionFrmt)
+        return;
+
+    const ScFormatEntry* entry = conditionFrmt->GetEntry(0);
+    if (!entry)
+        return;
+    auto type = entry->GetType();
+
+    if (type == ScFormatEntry::Type::Condition)
+    {
+        const ScCondFormatEntry* conditionEntry = dynamic_cast<const ScCondFormatEntry*>(entry);
+        auto conditionType = conditionEntry->GetOperation();
+        m_xConditionalType->set_active(0);
+        this->ComboHdl(*m_xConditionalType);
+        m_xConditionalCellValue->set_active(static_cast<int>(conditionType));
+    }
+    else if (type == ScFormatEntry::Type::Date)
+    {
+        const ScCondDateFormatEntry* dateEntry = dynamic_cast<const ScCondDateFormatEntry*>(entry);
+        auto dateType = dateEntry->GetDateType();
+        m_xConditionalType->set_active(2);
+        this->ComboHdl(*m_xConditionalType);
+        m_xConditionalDate->set_active(dateType);
+    }
 }
 
 void ScCondFormatManagerDlg::SetModified()
