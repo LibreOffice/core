@@ -172,6 +172,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128966)
     xmlXPathFreeObject(pXmlObj);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161718)
+{
+    createSwDoc("tdf161718.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // everything on one page
+    assertXPath(pXmlDoc, "/root/page/header", 1);
+    assertXPath(pXmlDoc, "/root/page/header/txt/anchored", 1);
+    assertXPath(pXmlDoc, "/root/page/footer", 1);
+    assertXPath(pXmlDoc, "/root/page/ftncont/ftn", 1);
+    assertXPath(pXmlDoc, "/root/page/ftncont/ftn/txt", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt", 27);
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored", 1);
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
