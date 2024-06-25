@@ -535,12 +535,21 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
 
     bool bHasHeader = false;
     bool bHasFooter = false;
+    bool bHeaderIsShared = false;
+    bool bFooterIsShared = false;
+    bool bFirstIsShared = false;
 
     const OUString& sHeaderIsOn = getPropertyName(PROP_HEADER_IS_ON);
     const OUString& sFooterIsOn = getPropertyName(PROP_FOOTER_IS_ON);
+    const OUString& sHeaderIsShared = getPropertyName(PROP_HEADER_IS_SHARED);
+    const OUString& sFooterIsShared = getPropertyName(PROP_FOOTER_IS_SHARED);
+    const OUString& sFirstIsShared = getPropertyName(PROP_FIRST_IS_SHARED);
 
     m_aPageStyle->getPropertyValue(sHeaderIsOn) >>= bHasHeader;
     m_aPageStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
+    m_aPageStyle->getPropertyValue(sHeaderIsShared) >>= bHeaderIsShared;
+    m_aPageStyle->getPropertyValue(sFooterIsShared) >>= bFooterIsShared;
+    m_aPageStyle->getPropertyValue(sFirstIsShared) >>= bFirstIsShared;
 
     bool bEvenAndOdd = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
 
@@ -576,9 +585,12 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
             SectionPropertyMap::removeXTextContent(xText);
     }
 
-    m_aPageStyle->setPropertyValue(getPropertyName(PROP_HEADER_IS_SHARED), uno::Any(!bEvenAndOdd));
-    m_aPageStyle->setPropertyValue(getPropertyName(PROP_FOOTER_IS_SHARED), uno::Any(!bEvenAndOdd));
-    m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(!m_bTitlePage));
+    if ( bHeaderIsShared != !bEvenAndOdd )
+        m_aPageStyle->setPropertyValue(sHeaderIsShared, uno::Any(!bEvenAndOdd));
+    if ( bFooterIsShared != !bEvenAndOdd )
+        m_aPageStyle->setPropertyValue(sFooterIsShared, uno::Any(!bEvenAndOdd));
+    if ( bFirstIsShared != !m_bTitlePage )
+        m_aPageStyle->setPropertyValue(sFirstIsShared, uno::Any(!m_bTitlePage));
 
     bool bHadFirstHeader = m_bHadFirstHeader && m_bTitlePage;
     if (bHasHeader && !bHadFirstHeader && !m_bHadLeftHeader && !m_bHadRightHeader && rDM_Impl.IsNewDoc())

@@ -3830,13 +3830,25 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
 
     try
     {
+        // Note that the header property calls are very expensive, hence the need to check if the property needs
+        // setting before calling setPropertyValue.
+
         // Turn on the headers
-        xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
+        bool bPropIsOn = false;
+        xPageStyle->getPropertyValue(getPropertyName(ePropIsOn)) >>= bPropIsOn;
+        if (!bPropIsOn)
+            xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
 
         // Set both sharing left and first to off so we can import the content regardless of what value
         // the "titlePage" or "evenAndOdd" flags are set (which decide what the sharing is set to in the document).
-        xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
-        xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(false));
+        bool bPropShared = false;
+        xPageStyle->getPropertyValue(getPropertyName(ePropShared)) >>= bPropShared;
+        if (bPropShared)
+            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
+        bool bFirstShared = false;
+        xPageStyle->getPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED)) >>= bFirstShared;
+        if (bFirstShared)
+            xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(false));
 
         if (eType == PageType::LEFT)
         {
