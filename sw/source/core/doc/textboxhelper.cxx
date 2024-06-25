@@ -1536,26 +1536,14 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
                 auto pPage = pDrawModel->GetPage(0);
                 // Recalc all Z-orders
                 pPage->RecalcObjOrdNums();
-                // Here is a counter avoiding running to in infinity:
-                sal_uInt16 nIterator = 0;
                 // If the shape is behind the frame, is good, but if there are some objects
                 // between of them that is wrong so put the frame exactly one level higher
                 // than the shape.
-                if (pFrmObj->GetOrdNum() > pShpObj->GetOrdNum())
+                if (pFrmObj->GetOrdNum() != pShpObj->GetOrdNum() + 1)
+                {
                     pPage->SetObjectOrdNum(pFrmObj->GetOrdNum(), pShpObj->GetOrdNum() + 1);
-                else
-                    // Else, if the frame is behind the shape, bring to the front of it.
-                    while (pFrmObj->GetOrdNum() <= pShpObj->GetOrdNum())
-                    {
-                        pPage->SetObjectOrdNum(pFrmObj->GetOrdNum(), pFrmObj->GetOrdNum() + 1);
-                        // If there is any problem with the indexes, do not run over the infinity
-                        if (pPage->GetObjCount() == pFrmObj->GetOrdNum())
-                            break;
-                        ++nIterator;
-                        if (nIterator > 300)
-                            break; // Do not run to infinity
-                    }
-                pPage->RecalcObjOrdNums();
+                    pPage->RecalcObjOrdNums();
+                }
                 return true; // Success
             }
             SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
