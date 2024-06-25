@@ -1274,6 +1274,19 @@ static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bo
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
 
 static int doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis);
+
+static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis);
+
+static bool doc_createSlideRenderer(
+    LibreOfficeKitDocument* pThis,
+    int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
+    bool bRenderBackground, bool bRenderMasterPage);
+
+static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis);
+
+static bool doc_renderNextSlideLayer(
+    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMsg);
+
 } // extern "C"
 
 namespace {
@@ -1470,6 +1483,11 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setViewReadOnly = doc_setViewReadOnly;
 
         m_pDocumentClass->setAllowChangeComments = doc_setAllowChangeComments;
+
+        m_pDocumentClass->getPresentationInfo = doc_getPresentationInfo;
+        m_pDocumentClass->createSlideRenderer = doc_createSlideRenderer;
+        m_pDocumentClass->postSlideshowCleanup = doc_postSlideshowCleanup;
+        m_pDocumentClass->renderNextSlideLayer = doc_renderNextSlideLayer;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5497,6 +5515,85 @@ static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsign
     MouseEvent aCursorEvent(aCursorPos, 1, MouseEventModifiers::SIMPLECLICK, 0, nModifier);
     Application::PostMouseEvent(VclEventId::WindowMouseButtonDown, pWindow, &aCursorEvent);
     Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aCursorEvent);
+}
+
+static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return nullptr;
+    }
+
+    return convertOString(pDoc->getPresentationInfo());
+}
+
+static bool doc_createSlideRenderer(
+    LibreOfficeKitDocument* pThis,
+    int nSlideNumber, unsigned* pViewWidth, unsigned* pViewHeight,
+    bool bRenderBackground, bool bRenderMasterPage)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    sal_Int32 nViewWidth = 0;
+    sal_Int32 nViewHeight = 0;
+    bool bReturn = pDoc->createSlideRenderer(
+                    nSlideNumber, nViewWidth, nViewHeight,
+                    bRenderBackground, bRenderMasterPage);
+
+    *pViewWidth = nViewWidth;
+    *pViewHeight = nViewHeight;
+
+    return bReturn;
+}
+
+static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return;
+    }
+    pDoc->postSlideshowCleanup();
+}
+
+static bool doc_renderNextSlideLayer(
+    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, char** pJsonMessage)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return true;
+    }
+    OUString sJsonMesssage;
+    bool bIsBitmapLayer = false;
+    bool bDone = pDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, sJsonMesssage);
+
+    if (pJsonMessage)
+        *pJsonMessage = convertOUString(sJsonMesssage);
+    *pIsBitmapLayer = bIsBitmapLayer;
+
+    return bDone;
 }
 
 static bool getFromTransferable(

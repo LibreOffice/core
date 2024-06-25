@@ -523,6 +523,22 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setAllowChangeComments().
     void (*setAllowChangeComments) (LibreOfficeKitDocument* pThis, int nId, const bool allow);
 
+    /// @see lok::Document::getPresentationInfo
+    char* (*getPresentationInfo) (LibreOfficeKitDocument* pThis);
+
+    /// @see lok::Document::createSlideRenderer
+    bool (*createSlideRenderer) (
+        LibreOfficeKitDocument* pThis,
+        int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
+        bool bRenderBackground, bool bRenderMasterPage);
+
+    /// @see lok::Document::postSlideshowCleanup
+    void (*postSlideshowCleanup)(LibreOfficeKitDocument* pThis);
+
+    /// @see lok::Document::renderNextSlideLayer
+    bool (*renderNextSlideLayer)(
+        LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMessage);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
