@@ -294,6 +294,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:              // copy
+            case SID_COPY_HYPERLINK_LOCATION:
                 // not editable because of matrix only? Do not damage matrix
                 //! is not called, when protected AND matrix, we will have
                 //! to live with this... is caught in Copy-Routine, otherwise

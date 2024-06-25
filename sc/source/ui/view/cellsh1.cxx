@@ -35,6 +35,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/unohelp2.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
@@ -3208,6 +3209,29 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     SC_MOD()->SetReference( aRef, rData.GetDocument(), &rData.GetMarkData() );
 
                     pInputHdl->UpdateLokReferenceMarks();
+                }
+            }
+            break;
+
+        case SID_COPY_HYPERLINK_LOCATION:
+            {
+                ScViewData& rData = GetViewData();
+                ScGridWindow* pWindow = rData.GetActiveWin();
+                const SfxInt32Item* pPosX = rReq.GetArg<SfxInt32Item>(FN_PARAM_1);
+                const SfxInt32Item* pPosY = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+                if (pWindow && pPosX && pPosY)
+                {
+                    const Point aPoint(pPosX->GetValue() * rData.GetPPTX(),
+                                       pPosY->GetValue() * rData.GetPPTY());
+                    OUString aName, aUrl;
+                    if (pWindow->GetEditUrl(aPoint, &aName, &aUrl))
+                    {
+                        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                            = pWindow->GetClipboard();
+                        vcl::unohelper::TextDataObject::CopyStringTo(aUrl, xClipboard,
+                                                                     rData.GetViewShell());
+                        rReq.Done();
+                    }
                 }
             }
             break;
