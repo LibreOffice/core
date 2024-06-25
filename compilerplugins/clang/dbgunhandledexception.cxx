@@ -16,6 +16,7 @@
 #include <clang/Lex/Lexer.h>
 #include <fstream>
 #include <set>
+#include <stack>
 
 namespace loplugin
 {

@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <stack>
 
 #include "check.hxx"
 #include "compat.hxx"
