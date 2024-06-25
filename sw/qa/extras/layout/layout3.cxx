@@ -453,8 +453,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658b)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Word 2013 puts all tabs and the field following into one line
-    // but also puts the field off the page, while in Writer it's
-    // aligned to the right margin; should be good enough for now...
+    // and also puts the field off the page
     assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
     assertXPath(
         pXmlDoc,
@@ -464,6 +463,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158658b)
         pXmlDoc,
         "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
         1);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
+        "width"_ostr, u"4446"_ustr); // was very small: 24
     assertXPath(
         pXmlDoc,
         "/root/page[1]/footer/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr,
