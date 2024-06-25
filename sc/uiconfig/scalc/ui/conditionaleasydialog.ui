@@ -176,6 +176,9 @@
                           <object class="GtkComboBoxText" id="themeCombo">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <items>
+                              <item translatable="yes" context="conditionaleasydialog|style">New Style...</item>
+                            </items>
                             <accessibility>
                               <relation type="labelled-by" target="with"/>
                             </accessibility>
@@ -288,6 +291,33 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="previewwin">
+                <property name="can-focus">True</property>
+                <property name="no-show-all">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="conditionaleasydialog|preview|tooltip_text">Example</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

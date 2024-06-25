@@ -12,6 +12,7 @@
 #include "anyrefdg.hxx"
 #include <svl/lstner.hxx>
 #include <conditio.hxx>
+#include <svx/fntctrl.hxx>
 
 class ScViewData;
 class ScConditionalFormat;
@@ -32,10 +33,12 @@ public:
     virtual void Notify(SfxBroadcaster&, const SfxHint&) override;
 
     DECL_LINK(ButtonPressed, weld::Button&, void);
+    DECL_LINK(StyleSelectHdl, weld::ComboBox&, void);
 
 private:
     void SetDescription(std::u16string_view rCondition);
 
+    weld::Window* mpParent;
     ScViewData* mpViewData;
     ScDocument* mpDocument;
     ScConditionMode meMode;
@@ -43,12 +46,15 @@ private:
     OUString msFormula;
     ScAddress maPosition;
 
+    SvxFontPrevWindow maWdPreview;
     std::unique_ptr<weld::Entry> mxNumberEntry;
     std::unique_ptr<weld::Entry> mxNumberEntry2;
     std::unique_ptr<weld::Container> mxAllInputs;
     std::unique_ptr<formula::RefEdit> mxRangeEntry;
     std::unique_ptr<formula::RefButton> mxButtonRangeEdit;
     std::unique_ptr<weld::ComboBox> mxStyles;
+    std::unique_ptr<weld::Widget> mxWdPreviewWin;
+    std::unique_ptr<weld::CustomWeld> mxWdPreview;
     std::unique_ptr<weld::Label> mxDescription;
     std::unique_ptr<weld::Button> mxButtonOk;
     std::unique_ptr<weld::Button> mxButtonCancel;

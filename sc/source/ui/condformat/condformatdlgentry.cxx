@@ -108,26 +108,6 @@ void ScCondFrmtEntry::Deselect()
     mbActive = false;
 }
 
-//condition
-
-namespace {
-
-void FillStyleListBox( const ScDocument* pDoc, weld::ComboBox& rLbStyle )
-{
-    std::set<OUString> aStyleNames;
-    SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SfxStyleFamily::Para );
-    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-    {
-        aStyleNames.insert(pStyle->GetName());
-    }
-    for(const auto& rStyleName : aStyleNames)
-    {
-        rLbStyle.append_text(rStyleName);
-    }
-}
-
-}
-
 const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::NUM_COND_ENTRIES]
     = { ScConditionMode::Equal,
         ScConditionMode::Less,
@@ -241,7 +221,7 @@ void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
     mxEdVal1->SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
     mxEdVal2->SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
 
-    FillStyleListBox( mpDoc, *mxLbStyle );
+    ScCondFormatHelper::FillStyleListBox(mpDoc, *mxLbStyle);
     mxLbStyle->connect_changed( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
 
     mxLbCondType->connect_changed( LINK( this, ScConditionFrmtEntry, ConditionTypeSelectHdl ) );
@@ -437,104 +417,19 @@ void ScConditionFrmtEntry::SetInactive()
     Deselect();
 }
 
-namespace {
-
-void UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument* pDoc)
-{
-    OUString aSelectedStyle = rLbStyle.get_active_text();
-    for (sal_Int32 i = rLbStyle.get_count(); i > 1; --i)
-        rLbStyle.remove(i - 1);
-    FillStyleListBox(pDoc, rLbStyle);
-    rLbStyle.set_active_text(aSelectedStyle);
-}
-
-}
-
 void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
     {
         if(!mbIsInStyleCreate)
-            UpdateStyleList(*mxLbStyle, mpDoc);
+            ScCondFormatHelper::UpdateStyleList(*mxLbStyle, mpDoc);
     }
-}
-
-namespace {
-
-void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& rWdPreview)
-{
-    if (rLbStyle.get_active() == 0)
-    {
-        // call new style dialog
-        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para) );
-        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScResId(STR_STYLENAME_STANDARD) );
-        css::uno::Any aAny(pDialogParent->GetXWindow());
-        SfxUnoAnyItem aDialogParent( SID_DIALOG_PARENT, aAny );
-
-        // unlock the dispatcher so SID_STYLE_NEW can be executed
-        // (SetDispatcherLock would affect all Calc documents)
-        if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
-        {
-            if (SfxDispatcher* pDisp = pViewShell->GetDispatcher())
-            {
-                bool bLocked = pDisp->IsLocked();
-                if (bLocked)
-                    pDisp->Lock(false);
-
-                // Execute the "new style" slot, complete with undo and all necessary updates.
-                // The return value (SfxUInt16Item) is ignored, look for new styles instead.
-                pDisp->ExecuteList(SID_STYLE_NEW,
-                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                    { &aFamilyItem, &aRefItem }, { &aDialogParent });
-
-                if (bLocked)
-                    pDisp->Lock(true);
-
-                // Find the new style and add it into the style list boxes
-                SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SfxStyleFamily::Para );
-                bool bFound = false;
-                for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
-                {
-                    const OUString& aName = pStyle->GetName();
-                    if (rLbStyle.find_text(aName) == -1)    // all lists contain the same entries
-                    {
-                        for( sal_Int32 i = 1, n = rLbStyle.get_count(); i <= n && !bFound; ++i)
-                        {
-                            OUString aStyleName = ScGlobal::getCharClass().uppercase(rLbStyle.get_text(i));
-                            if( i == n )
-                            {
-                                rLbStyle.append_text(aName);
-                                rLbStyle.set_active_text(aName);
-                                bFound = true;
-                            }
-                            else if( aStyleName > ScGlobal::getCharClass().uppercase(aName) )
-                            {
-                                rLbStyle.insert_text(i, aName);
-                                rLbStyle.set_active_text(aName);
-                                bFound = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    OUString aStyleName = rLbStyle.get_active_text();
-    SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SfxStyleFamily::Para );
-    if(pStyleSheet)
-    {
-        const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        rWdPreview.SetFromItemSet(rSet, false);
-    }
-}
-
 }
 
 IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl, weld::ComboBox&, void)
 {
     mbIsInStyleCreate = true;
-    StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
+    ScCondFormatHelper::StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
     mbIsInStyleCreate = false;
 }
 
@@ -576,13 +471,13 @@ void ScFormulaFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
     mxEdFormula->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );
 
-    FillStyleListBox( mpDoc, *mxLbStyle );
+    ScCondFormatHelper::FillStyleListBox(mpDoc, *mxLbStyle);
     mxLbStyle->connect_changed( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
 }
 
 IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl, weld::ComboBox&, void)
 {
-    StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
+    ScCondFormatHelper::StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
 }
 
 ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
@@ -1292,7 +1187,7 @@ void ScDateFrmtEntry::Init()
     mxLbDateEntry->set_active(0);
     mxLbType->set_active(3);
 
-    FillStyleListBox( mpDoc, *mxLbStyle );
+    ScCondFormatHelper::FillStyleListBox(mpDoc, *mxLbStyle);
     mxLbStyle->connect_changed( LINK( this, ScDateFrmtEntry, StyleSelectHdl ) );
     mxLbStyle->set_active(1);
 }
@@ -1322,7 +1217,7 @@ void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if(rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
     {
         if(!mbIsInStyleCreate)
-            UpdateStyleList(*mxLbStyle, mpDoc);
+            ScCondFormatHelper::UpdateStyleList(*mxLbStyle, mpDoc);
     }
 }
 
@@ -1344,7 +1239,7 @@ OUString ScDateFrmtEntry::GetExpressionString()
 IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl, weld::ComboBox&, void )
 {
     mbIsInStyleCreate = true;
-    StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
+    ScCondFormatHelper::StyleSelect(mpParent->GetFrameWeld(), *mxLbStyle, mpDoc, maWdPreview);
     mbIsInStyleCreate = false;
 }
 
