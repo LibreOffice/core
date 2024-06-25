@@ -21,6 +21,7 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -79,6 +80,8 @@
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
 #include <xmloff/autolayout.hxx>
+#include <tools/json_writer.hxx>
+#include <tools/helpers.hxx>
 
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -190,7 +193,119 @@ private:
     SdrModel*   mpModel;
 };
 
+class SlideBackgroundInfo
+{
+public:
+    SlideBackgroundInfo(const uno::Reference<drawing::XDrawPage>& xDrawPage,
+                        const uno::Reference<drawing::XDrawPage>& xMasterPage);
+    bool slideHasOwnBackground() const { return mbIsCustom; }
+    bool hasBackground() const { return bHasBackground; }
+    bool isSolidColor() const { return mbIsSolidColor; }
+    ::Color getFillColor() const;
+    sal_Int32 getFillTransparency() const;
+    OString getFillColorAsRGBA() const;
+private:
+    bool getFillStyleImpl(const uno::Reference<drawing::XDrawPage>& xDrawPage);
+private:
+    uno::Reference<drawing::XDrawPage> mxDrawPage;
+    uno::Reference<drawing::XDrawPage> mxMasterPage;
+    uno::Reference<beans::XPropertySet> mxBackground;
+    bool mbIsCustom;
+    bool bHasBackground;
+    bool mbIsSolidColor;
+    drawing::FillStyle maFillStyle;
+};
+
+SlideBackgroundInfo::SlideBackgroundInfo(
+        const uno::Reference<drawing::XDrawPage>& xDrawPage,
+        const uno::Reference<drawing::XDrawPage>& xMasterPage)
+    : mxDrawPage(xDrawPage)
+    , mxMasterPage(xMasterPage)
+    , mbIsCustom(false)
+    , bHasBackground(false)
+    , mbIsSolidColor(false)
+    , maFillStyle(drawing::FillStyle_NONE)
+{
+    mbIsCustom = getFillStyleImpl(xDrawPage);
+    bHasBackground = mbIsCustom;
+    if (!bHasBackground)
+    {
+        bHasBackground = getFillStyleImpl(xMasterPage);
+    }
+    if (bHasBackground)
+    {
+        if (maFillStyle == drawing::FillStyle_SOLID)
+        {
+            OUString sGradientName;
+            mxBackground->getPropertyValue("FillTransparenceGradientName") >>= sGradientName;
+            if (sGradientName.isEmpty())
+            {
+                mbIsSolidColor = true;
+            }
+        }
+    }
 }
+
+sal_Int32 SlideBackgroundInfo::getFillTransparency() const
+{
+    if (!mxBackground.is())
+        return 0;
+    sal_Int32 nFillTransparency = 0;
+    mxBackground->getPropertyValue("FillTransparence") >>= nFillTransparency;
+    return nFillTransparency;
+}
+
+::Color SlideBackgroundInfo::getFillColor() const
+{
+    if (!mxBackground.is())
+        return {};
+    if (sal_Int32 nFillColor; mxBackground->getPropertyValue("FillColor") >>= nFillColor)
+    {
+        return ::Color(ColorTransparency, nFillColor & 0xffffff);
+    }
+    return {};
+}
+
+OString SlideBackgroundInfo::getFillColorAsRGBA() const
+{
+    ::Color aColor = getFillColor();
+    OString sColor = aColor.AsRGBHEXString().toUtf8();
+    sal_uInt32 nAlpha = std::round((100 - getFillTransparency()) * 255 / 100.0);
+    std::stringstream ss;
+    ss << std::hex << std::uppercase << std::setfill ('0') << std::setw(2) << nAlpha;
+    sColor += ss.str().c_str();
+    return sColor;
+}
+
+bool SlideBackgroundInfo::getFillStyleImpl(const uno::Reference<drawing::XDrawPage>& xDrawPage)
+{
+    if( xDrawPage.is() )
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( xDrawPage, uno::UNO_QUERY );
+        if( xPropSet.is() )
+        {
+            uno::Reference< beans::XPropertySet > xBackground;
+            if (xPropSet->getPropertySetInfo()->hasPropertyByName("Background"))
+                xPropSet->getPropertyValue( "Background" ) >>= xBackground;
+            if( xBackground.is() )
+            {
+                drawing::FillStyle aFillStyle;
+                if( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle )
+                {
+                    maFillStyle = aFillStyle;
+                    if (aFillStyle != drawing::FillStyle_NONE)
+                    {
+                        mxBackground = xBackground;
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+} // end anonymous namespace
 
 SdUnoForbiddenCharsTable::SdUnoForbiddenCharsTable( SdrModel* pModel )
 : SvxUnoForbiddenCharsTable( pModel->GetForbiddenCharsTable() ), mpModel( pModel )
@@ -2475,7 +2590,8 @@ OUString SdXImpressDocument::getPartHash(int nPart)
         return OUString();
     }
 
-    return OUString::number(pPage->GetHashCode());
+    uno::Reference<drawing::XDrawPage> xDrawPage(pPage->getUnoPage(), uno::UNO_QUERY);
+    return OUString::fromUtf8(GetInterfaceHash(xDrawPage));
 }
 
 bool SdXImpressDocument::isMasterViewMode()
@@ -2879,6 +2995,90 @@ void SdXImpressDocument::initializeDocument()
         break;
     }
     }
+}
+
+OString SdXImpressDocument::getPresentationInfo() const
+{
+    ::tools::JsonWriter aJsonWriter;
+
+    try
+    {
+        uno::Reference<container::XIndexAccess> xSlides(mxDrawPagesAccess.get(), uno::UNO_QUERY_THROW);
+        if (xSlides.is())
+        {
+            // size in twips
+            Size aDocSize = const_cast<SdXImpressDocument*>(this)->getDocumentSize();
+            aJsonWriter.put("docWidth", aDocSize.getWidth());
+            aJsonWriter.put("docHeight", aDocSize.getHeight());
+
+            ::tools::ScopedJsonWriterArray aSlideList = aJsonWriter.startArray("slides");
+            sal_Int32 nSlideCount = xSlides->getCount();
+            for (sal_Int32 i = 0; i < nSlideCount; ++i)
+            {
+                uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(i), uno::UNO_QUERY_THROW);
+                if (xSlide.is())
+                {
+                    uno::Reference<XPropertySet> xPropSet(xSlide, uno::UNO_QUERY);
+                    if (xPropSet.is())
+                    {
+                        bool bIsVisible = true; // default visible
+                        xPropSet->getPropertyValue("Visible") >>= bIsVisible;
+                        if (bIsVisible)
+                        {
+                            ::tools::ScopedJsonWriterStruct aSlideNode = aJsonWriter.startStruct();
+                            std::string sSlideHash = GetInterfaceHash(xSlide);
+                            aJsonWriter.put("hash", sSlideHash);
+                            aJsonWriter.put("index", i);
+
+                            uno::Reference<drawing::XShapes> xSlideShapes(xSlide, uno::UNO_QUERY_THROW);
+                            bool bIsDrawPageEmpty = true;
+                            if (xSlideShapes.is()) {
+                                bIsDrawPageEmpty = xSlideShapes->getCount() == 0;
+                            }
+                            aJsonWriter.put("empty", bIsDrawPageEmpty);
+
+                            uno::Reference<drawing::XDrawPage> xMasterPage;
+                            uno::Reference<drawing::XMasterPageTarget> xMasterPageTarget(xSlide, uno::UNO_QUERY);
+                            if (xMasterPageTarget.is())
+                            {
+                                xMasterPage = xMasterPageTarget->getMasterPage();
+                                if (xMasterPage.is())
+                                {
+                                    std::string sMPHash = GetInterfaceHash(xMasterPage);
+                                    aJsonWriter.put("masterPage", sMPHash);
+
+                                    bool bBackgroundObjectsVisibility = true; // default visible
+                                    xPropSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
+                                    aJsonWriter.put("masterPageObjectsVisible", bBackgroundObjectsVisibility);
+                                }
+                            }
+
+                            bool bBackgroundVisibility = true; // default visible
+                            xPropSet->getPropertyValue("IsBackgroundVisible")  >>= bBackgroundVisibility;
+                            if (bBackgroundVisibility)
+                            {
+                                SlideBackgroundInfo aSlideBackgroundInfo(xSlide, xMasterPage);
+                                if (aSlideBackgroundInfo.hasBackground())
+                                {
+                                    ::tools::ScopedJsonWriterNode aBackgroundNode = aJsonWriter.startNode("background");
+                                    aJsonWriter.put("isCustom", aSlideBackgroundInfo.slideHasOwnBackground());
+                                    if (aSlideBackgroundInfo.isSolidColor())
+                                    {
+                                        aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved" );
+    }
+    return aJsonWriter.finishAndGetAsOString();
 }
 
 SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const

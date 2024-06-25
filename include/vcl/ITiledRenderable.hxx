@@ -384,6 +384,12 @@ public:
      * @param pViewShell the view to get the options from, if nullptr the current view shell is used
      */
     virtual OString getViewRenderState(SfxViewShell* = nullptr) { return rtl::OString(); }
+
+    /** Return JSON structure filled with the information about the presentation (Impress only function) */
+    virtual OString getPresentationInfo() const
+    {
+        return {};
+    }
 };
 } // namespace vcl
 
