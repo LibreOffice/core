@@ -6625,7 +6625,8 @@ void ScGridWindow::UpdateCursorOverlay()
             mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
             // tdf#143733 Make cell outline wider than the cell
-            const double nAdjustBorder(2 + mrViewData.GetZoomX());
+            const double fZoom(mrViewData.GetZoomX());
+            const sal_uInt16 nAdjustBorder(2 + fZoom / 2);
             aScrPos.AdjustX(-nAdjustBorder);
             aScrPos.AdjustY(-nAdjustBorder);
 
@@ -6690,15 +6691,35 @@ void ScGridWindow::UpdateCursorOverlay()
                 // tdf#143733, tdf#145080 - improve border visibility
                 // constants picked for maximum consistency at 100% and adequate response on zoom
                 // line width = 1.5 at 100% (0.75 left +/- 0.75 right), 50% = 1, 200% = 1.25, 400% = 2.25
-                const double MinSize = 0.25 * GetDPIScaleFactor();
-                double fZoom(mrViewData.GetZoomX() * 0.5);
-                for(const tools::Rectangle & rRA : aPixelRects)
-                {
-                    basegfx::B2DRange aRB(rRA.Left() - MinSize - fZoom, rRA.Top() - MinSize - fZoom,
-                                          rRA.Right() + MinSize + fZoom, rRA.Bottom() + MinSize + fZoom);
-                    aRB.transform(aTransform);
-                    aRanges.push_back(aRB);
-                }
+                const double fCurZoom(mrViewData.GetZoomX());
+                const double fMinSize = 0.25 * GetDPIScaleFactor();
+                const double fAdjust(fMinSize + mrViewData.GetZoomX() * 0.5);
+                int nAdjustPixel(o3tl::convert(fAdjust, o3tl::Length::pt, o3tl::Length::px));
+                // If zoom level is 50% or greater the rectangles must be at least 1 pixel thick
+                if (fCurZoom >= 0.5)
+                    nAdjustPixel = std::max(1, nAdjustPixel);
+
+                // Below each rectangle is adjusted so that they have thickness of nAdjustPixel
+                // Left rectangle
+                basegfx::B2DRange aRBLeft(aPixelRects[0].Left() - nAdjustPixel, aPixelRects[0].Top() - nAdjustPixel,
+                                          aPixelRects[0].Right(), aPixelRects[0].Bottom() + nAdjustPixel);
+                aRBLeft.transform(aTransform);
+                aRanges.push_back(aRBLeft);
+                // Right rectangle
+                basegfx::B2DRange aRBRight(aPixelRects[1].Left(), aPixelRects[1].Top() - nAdjustPixel,
+                                           aPixelRects[1].Right() + nAdjustPixel, aPixelRects[1].Bottom() + nAdjustPixel);
+                aRBRight.transform(aTransform);
+                aRanges.push_back(aRBRight);
+                // Top rectangle
+                basegfx::B2DRange aRBTop(aPixelRects[2].Left() - nAdjustPixel, aPixelRects[2].Top() - nAdjustPixel,
+                                         aPixelRects[2].Right() + nAdjustPixel, aPixelRects[2].Bottom());
+                aRBTop.transform(aTransform);
+                aRanges.push_back(aRBTop);
+                // Bottom rectangle
+                basegfx::B2DRange aRBBottom(aPixelRects[3].Left() - nAdjustPixel, aPixelRects[3].Top(),
+                                            aPixelRects[3].Right() + nAdjustPixel, aPixelRects[3].Bottom() + nAdjustPixel);
+                aRBBottom.transform(aTransform);
+                aRanges.push_back(aRBBottom);
 
                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                     sdr::overlay::OverlayType::Solid,
@@ -6937,7 +6958,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         nY2 += pMerge->GetRowMerge() - 1;
     }
     if (nX == nX2 && nY == nY2)
-        nAdjustBorder = 2 + static_cast<double>(mrViewData.GetZoomX());
+        nAdjustBorder = std::round(2 + static_cast<double>(mrViewData.GetZoomX()) / 2);
 
     if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
         aFillPos.AdjustX( -(nSizeXPix + nAdjustBorder + (aFillHandleSize.Width() / 2)) );
