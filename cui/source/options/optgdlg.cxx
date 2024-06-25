@@ -632,7 +632,11 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     m_xIconStyleLB->set_active(0);
 
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
-    m_xRunGPTests->connect_clicked( LINK( this, OfaViewTabPage, OnRunGPTestClick));
+    m_xRunGPTests->connect_clicked(LINK(this, OfaViewTabPage, OnRunGPTestClick));
+
+    // Hide "Run Graphics Test" button if Experimental Mode is off
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+        m_xRunGPTests->hide();
 }
 
 void OfaViewTabPage::UpdateIconThemes()
