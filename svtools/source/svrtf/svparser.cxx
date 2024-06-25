@@ -34,7 +34,7 @@
 template<typename T>
 struct SvParser_Impl
 {
-    OUString        aToken;             // gescanntes Token
+    OUString        aToken;             // parsed token
     sal_uInt64      nFilePos;           // actual position in stream
     sal_uInt32      nlLineNr;           // actual line number
     sal_uInt32      nlLinePos;          // actual column number
