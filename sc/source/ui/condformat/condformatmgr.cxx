@@ -8,11 +8,18 @@
  */
 
 #include <condformatmgr.hxx>
+#include <condformateasydlg.hxx>
 #include <condformathelper.hxx>
 #include <condformatdlg.hxx>
 #include <document.hxx>
 #include <conditio.hxx>
+#include <sc.hrc>
 #include <o3tl/safeint.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewsh.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <unotools/viewoptions.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
@@ -85,10 +92,13 @@ void ScCondFormatManagerWindow::setColSizes()
     mrTreeView.set_column_fixed_widths(aWidths);
 }
 
-ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList)
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc,
+                                               const ScConditionalFormatList* pFormatList)
     : GenericDialogController(pParent, "modules/scalc/ui/condformatmanager.ui", "CondFormatManager")
     , m_bModified(false)
-    , m_xFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
+    , m_xFormatList(pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
+    , m_xConditionalType(m_xBuilder->weld_combo_box("type"))
+    , m_xConditionalCellValue(m_xBuilder->weld_combo_box("typeis"))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnRemove(m_xBuilder->weld_button("remove"))
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
@@ -131,6 +141,26 @@ void ScCondFormatManagerDlg::UpdateButtonSensitivity()
 ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
 {
     return m_xCtrlManager->GetSelection();
+}
+
+void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
+{
+    auto id = m_xConditionalType->get_active();
+    switch (id)
+    {
+        case 0: // Cell value
+        {
+            SfxInt16Item FormatRule(FN_PARAM_1,
+                                    m_xConditionalCellValue->get_active_id().toUInt32());
+            SfxBoolItem IsManaged(FN_PARAM_2, true);
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
+                { &FormatRule, &IsManaged });
+        }
+        break;
+        default:
+            break;
+    }
 }
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl, weld::Button&, void)

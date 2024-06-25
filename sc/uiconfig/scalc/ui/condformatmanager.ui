@@ -163,11 +163,67 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="buttonbox2">
+                  <object class="GtkBox" id="buttonbox2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
-                    <property name="layout_style">start</property>
+                    <child>
+                      <object class="GtkComboBoxText" id="type">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="condformatmanager|typex">Cell value</item>
+                          <item translatable="yes" context="condformatmanager|typex">Formula is</item>
+                          <item translatable="yes" context="condformatmanager|typex">Date is</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="typeis">
+                        <property name="can_focus">False</property>
+                        <property name="visible">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="condformatmanager|typeis" id="0">is equal to</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="1">is less than</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="2">is greater than</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="3">is less than or equal to</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="4">is greater than or equal to</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="5">is not equal to</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="6">is between</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="7">is not between</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="8">is duplicate</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="9">is not duplicate</item>
+                          <!-- <item translatable="yes" context="condformatmanager|typeis" id="10" >is direct</item> -->
+                          <item translatable="yes" context="condformatmanager|typeis" id="11">is in top N elements</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="12">is in bottom N elements</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="13">is in top N percent</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="14">is in bottom N percent</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="15">is above average</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="16">is below average</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="17">is above or equal average</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="18">is below or equal average</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="19">is error</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="20">is not error</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="21">begins with</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="22">ends with</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="23">contains</item>
+                          <item translatable="yes" context="condformatmanager|typeis" id="24">does not contain</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkButton" id="add">
                         <property name="label" translatable="yes" context="condformatmanager|add">Add</property>
@@ -183,7 +239,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -201,7 +257,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -219,7 +275,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>

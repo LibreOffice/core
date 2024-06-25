@@ -215,7 +215,8 @@ interface CellSelection
     SID_POPUP_EASY_CONDITIONAL_FORMAT   []
     SfxVoidItem ConditionalFormatEasy SID_EASY_CONDITIONAL_FORMAT_DIALOG
     (
-        SfxInt16Item FormatRule FN_PARAM_1
+        SfxInt16Item FormatRule FN_PARAM_1,
+        SfxBoolItem  Managed FN_PARAM_2
     )
     [
         ExecMethod = Execute;
