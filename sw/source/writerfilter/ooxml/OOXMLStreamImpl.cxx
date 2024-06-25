@@ -122,7 +122,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
 
     bool bFound = false;
     static uno::Reference<uri::XUriReferenceFactory> xFac = uri::UriReferenceFactory::create(mxContext);
-    // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+    // use '/' to represent the root of the zip package ( and provide a 'file' scheme to
     // keep the XUriReference implementation happy )
     // add mspath to represent the 'source' of this stream
     uno::Reference<uri::XUriReference> xBase = xFac->parse("file:///" + msPath);

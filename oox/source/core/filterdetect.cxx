@@ -161,7 +161,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );
     try
     {
-         // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+         // use '/' to represent the root of the zip package ( and provide a 'file' scheme to
          // keep the XUriReference implementation happy )
          Reference< XUriReference > xBase = xFactory->parse( u"file:///"_ustr );
 
