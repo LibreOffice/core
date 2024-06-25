@@ -14,6 +14,7 @@
 #include <svx/fntctrl.hxx>
 
 class ScConditionalFormat;
+class ScFormatEntry;
 
 enum ScCondFormatEntryType
 {
@@ -28,6 +29,7 @@ enum ScCondFormatEntryType
 class ScCondFormatHelper
 {
 public:
+    static SC_DLLPUBLIC OUString GetExpression(const ScFormatEntry* rEntry, const ScAddress& rPos);
     static SC_DLLPUBLIC OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
     static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,

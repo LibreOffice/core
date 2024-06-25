@@ -44,7 +44,7 @@ class tdf86253(UITestCase):
                 # check that we have exactly 1 conditional format and range is C1:C17
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '1')
+                self.assertEqual(list_state['Children'], '2') # We can now display both condition seprate on same range
 
                 xTreeEntry = xList.getChild('0')
                 self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1:A6,C1:C17\tCell value >= 0")
