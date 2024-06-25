@@ -2005,11 +2005,10 @@ SwTwips SwTextFormatInfo::GetLineWidth()
         if (pLastTab->GetWhichPor() == PortionType::TabLeft)
             nLineWidth = nTextFrameWidth - pLastTab->GetTabPos();
     }
-    else if (GetLast() == pLastTab)
+    else
     {   // tdf#158658 Put content after tab into margin like Word.
-        // FIXME using Width() is entirely arbitrary here, Word adds even more
-        // width but not infinitely much.
-        nLineWidth = std::max(Width(), nLineWidth);
+        // Try to limit the paragraph to 55.87cm, it's max tab pos in Word UI.
+        nLineWidth = o3tl::toTwips(558, o3tl::Length::mm) - X();
     }
     return nLineWidth;
 }
