@@ -659,6 +659,8 @@ private:
 
     std::vector< std::optional<XclImpXFRangeColumn> >
                         maColumns;        /// Array of column XF index buffers.
+    std::vector< std::optional<sal_uInt16> >
+                        maRows;        /// Array of row XF index.
     std::vector< std::pair< XclRange, OUString > >
                         maHyperlinks;     /// Maps URLs to hyperlink cells.
     ScRangeList         maMergeList;      /// List of merged cell ranges.

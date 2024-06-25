@@ -1890,6 +1890,7 @@ XclImpXFRangeBuffer::~XclImpXFRangeBuffer()
 void XclImpXFRangeBuffer::Initialize()
 {
     maColumns.clear();
+    maRows.clear();
     maHyperlinks.clear();
     maMergeList.RemoveAll();
 }
@@ -1942,8 +1943,10 @@ void XclImpXFRangeBuffer::SetBoolXF( const ScAddress& rScPos, sal_uInt16 nXFInde
 
 void XclImpXFRangeBuffer::SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex )
 {
-    for( SCCOL nScCol = 0; nScCol <= GetDoc().MaxCol(); ++nScCol )
-        SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
+    size_t nIndex = static_cast< size_t >( nScRow );
+    if( maRows.size() <= nIndex )
+        maRows.resize( nIndex + 1 );
+    maRows[ nIndex ].emplace(nXFIndex);
 }
 
 void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
@@ -1989,6 +1992,17 @@ void XclImpXFRangeBuffer::Finalize()
     ScDocumentImport& rDocImport = GetDocImport();
     ScDocument& rDoc = rDocImport.getDoc();
     SCTAB nScTab = GetCurrScTab();
+
+    // apply row styles
+    for( SCROW nScRow = 0; nScRow < static_cast<SCROW>(maRows.size()); ++nScRow )
+    {
+        if (!maRows[nScRow])
+            continue;
+        sal_uInt16 nXFIndex = *maRows[nScRow];
+        for( SCCOL nScCol = 0; nScCol < static_cast<SCCOL>(maColumns.size()); ++nScCol )
+            if (maColumns[nScCol])
+                SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
+    }
 
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
