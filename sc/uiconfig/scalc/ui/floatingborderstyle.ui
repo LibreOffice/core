@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkPopover" id="FloatingBorderStyle">
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="border_width">4</property>
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="border-width">4</property>
     <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=1 n-rows=4 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
-            <property name="row_spacing">6</property>
+            <property name="row-spacing">6</property>
             <child>
               <object class="GtkToolbar" id="border1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="can-focus">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="none">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Empty_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Empty_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -41,7 +42,8 @@
                 <child>
                   <object class="GtkToolButton" id="all">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_All_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_All_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -51,7 +53,8 @@
                 <child>
                   <object class="GtkToolButton" id="outside">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_FourBorders_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -61,7 +64,8 @@
                 <child>
                   <object class="GtkToolButton" id="thickbox">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_Thick_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_FourBorders_Thick_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -70,20 +74,21 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToolbar" id="border4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="can-focus">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="thickbottom">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Thick_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Bottom_Thick_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -93,7 +98,8 @@
                 <child>
                   <object class="GtkToolButton" id="doublebottom">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Double_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Bottom_Double_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -103,7 +109,8 @@
                 <child>
                   <object class="GtkToolButton" id="topthickbottom">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_TopThin_BottomThick_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_TopThin_BottomThick_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -113,7 +120,8 @@
                 <child>
                   <object class="GtkToolButton" id="topdoublebottom">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_TopSingle_BottomDouble_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_TopSingle_BottomDouble_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -122,20 +130,21 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkToolbar" id="border2">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="can-focus">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="left">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Left_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Left_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -145,7 +154,8 @@
                 <child>
                   <object class="GtkToolButton" id="right">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Right_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Right_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -155,7 +165,8 @@
                 <child>
                   <object class="GtkToolButton" id="top">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Top_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Top_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -165,7 +176,8 @@
                 <child>
                   <object class="GtkToolButton" id="bottom">
                     <property name="visible">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_Bottom_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -174,21 +186,22 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkToolbar" id="border3">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="can-focus">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="diagup">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -198,8 +211,9 @@
                 <child>
                   <object class="GtkToolButton" id="diagdown">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -209,8 +223,9 @@
                 <child>
                   <object class="GtkToolButton" id="topbottom">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_TopAndBottom_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_TopAndBottom_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -220,8 +235,9 @@
                 <child>
                   <object class="GtkToolButton" id="leftright">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">sc/res/sidebar/CellBorder_LeftAndRight_18x18.png</property>
+                    <property name="can-focus">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_LeftAndRight_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -230,8 +246,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>
