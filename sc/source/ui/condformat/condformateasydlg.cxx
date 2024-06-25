@@ -6,32 +6,10 @@
 #include <scresid.hxx>
 #include <svl/style.hxx>
 #include <strings.hrc>
+#include <condformathelper.hxx>
 
 namespace
 {
-void FillStyleListBox(const ScDocument* pDocument, weld::ComboBox& rCombo)
-{
-    std::set<OUString> aStyleNames;
-    SfxStyleSheetIterator aStyleIter(pDocument->GetStyleSheetPool(), SfxStyleFamily::Para);
-    for (SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next())
-    {
-        aStyleNames.insert(pStyle->GetName());
-    }
-    for (const auto& rStyleName : aStyleNames)
-    {
-        rCombo.append_text(rStyleName);
-    }
-}
-
-void UpdateStyleList(const ScDocument* pDocument, weld::ComboBox& rCombo)
-{
-    OUString sSelectedStyle = rCombo.get_active_text();
-    for (sal_Int32 i = rCombo.get_count(); i > 1; --i)
-        rCombo.remove(i - 1);
-    FillStyleListBox(pDocument, rCombo);
-    rCombo.set_active_text(sSelectedStyle);
-}
-
 condformat::ScCondFormatDateType GetScCondFormatDateType(ScConditionMode mode)
 {
     switch (mode)
@@ -81,6 +59,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                                                          ScViewData* pViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pParent,
                             "modules/scalc/ui/conditionaleasydialog.ui", "CondFormatEasyDlg")
+    , mpParent(pParent)
     , mpViewData(pViewData)
     , mpDocument(&mpViewData->GetDocument())
     , mxNumberEntry(m_xBuilder->weld_entry("entryNumber"))
@@ -89,6 +68,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
+    , mxWdPreviewWin(m_xBuilder->weld_widget("previewwin"))
+    , mxWdPreview(new weld::CustomWeld(*m_xBuilder, "preview", maWdPreview))
     , mxDescription(m_xBuilder->weld_label("description"))
     , mxButtonOk(m_xBuilder->weld_button("ok"))
     , mxButtonCancel(m_xBuilder->weld_button("cancel"))
@@ -260,6 +241,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
 
     mxButtonOk->connect_clicked(LINK(this, ConditionalFormatEasyDialog, ButtonPressed));
     mxButtonCancel->connect_clicked(LINK(this, ConditionalFormatEasyDialog, ButtonPressed));
+    mxStyles->connect_changed(LINK(this, ConditionalFormatEasyDialog, StyleSelectHdl));
 
     ScRangeList aRange;
     mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
@@ -275,9 +257,10 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mxRangeEntry->SetText(sRangeString);
 
     StartListening(*mpDocument->GetStyleSheetPool(), DuplicateHandling::Prevent);
-    FillStyleListBox(mpDocument, *mxStyles);
+    ScCondFormatHelper::FillStyleListBox(mpDocument, *mxStyles);
 
     mxStyles->set_active(1);
+    mxWdPreviewWin->show();
 }
 
 ConditionalFormatEasyDialog::~ConditionalFormatEasyDialog()
@@ -292,7 +275,7 @@ ConditionalFormatEasyDialog::~ConditionalFormatEasyDialog()
 void ConditionalFormatEasyDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::StyleSheetModified)
-        UpdateStyleList(mpDocument, *mxStyles);
+        ScCondFormatHelper::UpdateStyleList(*mxStyles, mpDocument);
 }
 
 void ConditionalFormatEasyDialog::SetReference(const ScRange& rRange, ScDocument&)
@@ -383,6 +366,11 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
     }
     else if (&rButton == mxButtonCancel.get())
         m_xDialog->response(RET_CANCEL);
+}
+
+IMPL_LINK_NOARG(ConditionalFormatEasyDialog, StyleSelectHdl, weld::ComboBox&, void)
+{
+    ScCondFormatHelper::StyleSelect(mpParent, *mxStyles, &(mpViewData->GetDocument()), maWdPreview);
 }
 
 } // namespace sc
