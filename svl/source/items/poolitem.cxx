@@ -503,16 +503,25 @@ void listAllocatedSfxPoolItems()
 
 const SfxPoolItem* DefaultItemInstanceManager::find(const SfxPoolItem& rItem) const
 {
-    for (const auto& rCandidate : maRegistered)
-        if (rCandidate->Which() == rItem.Which() && *rCandidate == rItem)
+    auto it = maRegistered.find(rItem.Which());
+    if (it == maRegistered.end())
+        return nullptr;
+    for (const auto& rCandidate : it->second)
+        if (*rCandidate == rItem)
             return rCandidate;
 
     return nullptr;
 }
 
-void DefaultItemInstanceManager::add(const SfxPoolItem& rItem) { maRegistered.insert(&rItem); }
+void DefaultItemInstanceManager::add(const SfxPoolItem& rItem)
+{
+    maRegistered[rItem.Which()].insert(&rItem);
+}
 
-void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem) { maRegistered.erase(&rItem); }
+void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem)
+{
+    maRegistered[rItem.Which()].erase(&rItem);
+}
 
 ItemInstanceManager* SfxPoolItem::getItemInstanceManager() const { return nullptr; }
 

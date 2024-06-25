@@ -33,6 +33,7 @@
 #include <tools/long.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <unordered_set>
+#include <unordered_map>
 
 class IntlWrapper;
 
@@ -638,7 +639,7 @@ private:
 // that specific Item (see other derivations)
 class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
 {
-    std::unordered_set<const SfxPoolItem*>  maRegistered;
+    std::unordered_map<sal_uInt16, std::unordered_set<const SfxPoolItem*>>  maRegistered;
 
 public:
     DefaultItemInstanceManager(const std::size_t aClassHash)
