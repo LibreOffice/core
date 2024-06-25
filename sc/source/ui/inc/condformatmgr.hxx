@@ -15,6 +15,7 @@
 class ScDocument;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+class ScFormatEntry;
 
 class ScCondFormatManagerWindow
 {
@@ -31,6 +32,7 @@ public:
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
+    const ScFormatEntry* GetSelectedEntry();
 };
 
 class ScCondFormatManagerDlg : public weld::GenericDialogController

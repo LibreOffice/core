@@ -27,7 +27,7 @@ class tdf105544(UITestCase):
                 # check that we have exactly four conditional formats in the beginning
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '4')
+                self.assertEqual(list_state['Children'], '5')
 
                 #select B3:B37 range and click edit, then click yes
                 xList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))  #2nd position in the list
@@ -41,7 +41,7 @@ class tdf105544(UITestCase):
                 # check again that we still have 4 entry in the list
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '4')
+                self.assertEqual(list_state['Children'], '5')
 
                 # close the conditional format manager
                 xOKBtn = xCondFormatMgr.getChild("ok")

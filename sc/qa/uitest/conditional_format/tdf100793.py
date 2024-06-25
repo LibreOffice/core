@@ -32,7 +32,7 @@ class tdf100793(UITestCase):
                 # check that we have exactly one conditional formats in the beginning
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '1')
+                self.assertEqual(list_state['Children'], '3')
 
                 #3) Click Edit & try to change to intended one, F18:K33
                 xEditBtn = xCondFormatMgr.getChild("edit")
@@ -65,7 +65,7 @@ class tdf100793(UITestCase):
                 # and still only 1 conditional format in the document
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '1')
+                self.assertEqual(list_state['Children'], '3')
 
                 self.assertEqual(conditional_format_list.getLength(), 1)
 

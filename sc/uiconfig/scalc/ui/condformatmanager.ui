@@ -139,7 +139,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_FIRST_CONDITION">First Condition</property>
+                            <property name="title" translatable="yes" context="condformatmanager|STR_HEADER_FIRST_CONDITION">Condition</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer2"/>
                               <attributes>
