@@ -8,7 +8,7 @@
 
 $(eval $(call gb_Module_Module,net_ure))
 
-ifeq ($(ENABLE_DOTNET),TRUE)
+ifeq ($(ENABLE_DOTNET)_$(filter ODK,$(BUILD_TYPE)),TRUE_ODK)
 $(eval $(call gb_Module_add_targets,net_ure,\
 	CustomTarget_net_uretypes \
 	CustomTarget_net_oootypes \
