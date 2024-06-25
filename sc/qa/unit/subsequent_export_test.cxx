@@ -1140,10 +1140,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport)
         // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
         { u"xlsx/miscrowheights.xlsx", u"MS Excel 97"_ustr, SAL_N_ELEMENTS(DfltRowData),
           DfltRowData },
-        // Checks that repreated rows ( of various heights ) remain set after export ( to xlsx )
+        // Checks that repeated rows ( of various heights ) remain set after export ( to xlsx )
         { u"ods/miscemptyrepeatedrowheights.ods", u"Calc Office Open XML"_ustr,
           SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
-        // Checks that repreated rows ( of various heights ) remain set after export ( to xls )
+        // Checks that repeated rows ( of various heights ) remain set after export ( to xls )
         { u"ods/miscemptyrepeatedrowheights.ods", u"MS Excel 97"_ustr,
           SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
