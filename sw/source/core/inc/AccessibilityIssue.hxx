@@ -26,6 +26,7 @@ enum class IssueObject
     FORM,
     TABLE,
     TEXT,
+    HYPERLINKTEXT,
     DOCUMENT_TITLE,
     DOCUMENT_BACKGROUND,
     LANGUAGE_NOT_SET,
