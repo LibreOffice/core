@@ -287,6 +287,9 @@ public:
     /// @see vcl::ITiledRenderable::getViewRenderState().
     SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
+    /// @see vcl::ITiledRenderable::getPresentationInfo().
+    OString getPresentationInfo() const override;
+
     // XComponent
 
     /** This dispose implementation releases the resources held by the

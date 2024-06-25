@@ -53,7 +53,7 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_empty_stdlib_save \
 	CppunitTest_dbaccess_nolib_save \
 	CppunitTest_dbaccess_hsqlschema_import \
-	CppunitTest_dbaccess_CRMDatabase_test \
+	$(if $(ENABLE_FIREBIRD_SDBC),CppunitTest_dbaccess_CRMDatabase_test) \
 ))
 endif
 

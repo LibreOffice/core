@@ -7,11 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-
+#include <com/sun/star/uno/Reference.h>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <tools/long.hxx>
 #include <limits>
+#include <string>
 #include <type_traits>
 
 inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
@@ -43,6 +44,19 @@ template <typename T> [[nodiscard]] inline T NormAngle360(T angle)
     while (angle >= 360)
         angle -= 360;
     return angle;
+}
+
+// get hash from interface
+// TODO: UNIT TEST
+[[nodiscard]] inline
+std::string GetInterfaceHash(const ::css::uno::Reference<::css::uno::XInterface>& xIf)
+{
+    if (xIf.is())
+    {
+        auto ptr = reinterpret_cast<sal_uIntPtr>(xIf.get());
+        return std::to_string(ptr);
+    }
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
