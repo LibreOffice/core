@@ -49,6 +49,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                             u"CondFormatEasyDlg"_ustr)
     , mpViewData(pViewData)
     , mpDocument(&mpViewData->GetDocument())
+    , mbIsManaged(false)
     , mxNumberEntry(m_xBuilder->weld_entry(u"entryNumber"_ustr))
     , mxNumberEntry2(m_xBuilder->weld_entry(u"entryNumber2"_ustr))
     , mxAllInputs(m_xBuilder->weld_container(u"allInputs"_ustr))
@@ -60,9 +61,9 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {
     mxButtonRangeEdit->SetReferences(this, mxRangeEntry.get());
-    const ScConditionMode* pCurrentMode
+    const ScConditionEasyDialogData CurrentData
         = pViewData->GetDocument().GetEasyConditionalFormatDialogData();
-    if (!pCurrentMode)
+    if (!CurrentData.Mode)
     {
         SAL_WARN(
             "sc",
@@ -71,7 +72,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     }
     else
     {
-        meMode = *pCurrentMode;
+        meMode = *CurrentData.Mode;
+        mbIsManaged = CurrentData.IsManaged;
     }
     mxNumberEntry2->hide();
     switch (meMode)
@@ -188,7 +190,14 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mxStyles->set_active(1);
 }
 
-ConditionalFormatEasyDialog::~ConditionalFormatEasyDialog() {}
+ConditionalFormatEasyDialog::~ConditionalFormatEasyDialog()
+{
+    if (mbIsManaged)
+    {
+        GetBindings().GetDispatcher()->Execute(SID_OPENDLG_CONDFRMT_MANAGER,
+                                               SfxCallMode::ASYNCHRON);
+    }
+}
 
 void ConditionalFormatEasyDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {

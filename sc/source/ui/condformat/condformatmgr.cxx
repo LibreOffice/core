@@ -8,11 +8,18 @@
  */
 
 #include <condformatmgr.hxx>
+#include <condformateasydlg.hxx>
 #include <condformathelper.hxx>
 #include <condformatdlg.hxx>
 #include <document.hxx>
 #include <conditio.hxx>
+#include <sc.hrc>
 #include <o3tl/safeint.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewsh.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <unotools/viewoptions.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
@@ -89,6 +96,8 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
     : GenericDialogController(pParent, u"modules/scalc/ui/condformatmanager.ui"_ustr, u"CondFormatManager"_ustr)
     , m_bModified(false)
     , m_xFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
+    , m_xConditionalType(m_xBuilder->weld_combo_box("type"))
+    , m_xConditionalCellValue(m_xBuilder->weld_combo_box("typeis"))
     , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
     , m_xBtnEdit(m_xBuilder->weld_button(u"edit"_ustr))
@@ -131,6 +140,29 @@ void ScCondFormatManagerDlg::UpdateButtonSensitivity()
 ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
 {
     return m_xCtrlManager->GetSelection();
+}
+
+void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
+{
+    if (!SfxViewShell::Current())
+        return;
+
+    auto id = m_xConditionalType->get_active();
+    switch (id)
+    {
+        case 0: // Cell value
+        {
+            SfxInt16Item FormatRule(FN_PARAM_1,
+                                    m_xConditionalCellValue->get_active_id().toUInt32());
+            SfxBoolItem IsManaged(FN_PARAM_2, true);
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
+                { &FormatRule, &IsManaged });
+        }
+        break;
+        default:
+            break;
+    }
 }
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl, weld::Button&, void)

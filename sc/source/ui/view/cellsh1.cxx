@@ -2940,12 +2940,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else if(nRet == DLG_RET_ADD)
                     {
-                        // Put the xml string parameter to initialize the
-                        // Conditional Format Dialog. ( add new )
-                        pTabViewShell->setScCondFormatDlgItem(std::make_shared<ScCondFormatDlgData>(
-                            std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
-                        // Queue message to open Conditional Format Dialog
-                        GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
+                        pDlg->ShowEasyConditionalDialog();
                     }
                     else if (nRet == DLG_RET_EDIT)
                     {
