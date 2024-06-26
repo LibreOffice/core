@@ -769,6 +769,7 @@ namespace {
         bool m_bGraphicViewSelection;
         bool m_bGraphicSelection;
         bool m_bViewLock;
+        OString m_aDocColor;
         /// Set if any callback was invoked.
         bool m_bCalled;
         /// Redline table size changed payload
@@ -940,6 +941,11 @@ namespace {
                         m_aComment = m_aComment.get_child("comment");
                     }
                     break;
+                case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+                    {
+                        m_aDocColor = aPayload;
+                        break;
+                    }
             }
         }
     };
@@ -1852,6 +1858,39 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     }
     // Now in light scheme
     assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+}
+
+// Test that changing the theme sends the document background color as LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
+{
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc();
+    ViewCallback aView;
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL("1c1c1c"_ostr, aView.m_aDocColor);
+
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Light")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL("ffffff"_ostr, aView.m_aDocColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
