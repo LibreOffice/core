@@ -1153,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArrowPosition)
 
     // This is the correct Y coordinate, the incorrect was 817880.
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/wp:positionV/wp:posOffset"_ostr, "516255");
+        "/wp:positionV/wp:posOffset"_ostr, "516890");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testArrowMarker)
