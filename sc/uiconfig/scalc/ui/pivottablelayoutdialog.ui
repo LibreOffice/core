@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -43,32 +43,29 @@
     </columns>
   </object>
   <object class="GtkDialog" id="PivotTableLayout">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="pivottablelayoutdialog|PivotTableLayout">Pivot Table Layout</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ok-atkobject">
@@ -86,8 +83,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel-atkobject">
@@ -105,8 +102,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -120,14 +117,14 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
@@ -135,23 +132,23 @@
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="spacing">6</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=2 -->
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="orientation">vertical</property>
@@ -159,10 +156,10 @@
                         <child>
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label3">Column Fields:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">listbox-column</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">listbox-column</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <attributes>
@@ -177,25 +174,25 @@
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="width_request">200</property>
-                            <property name="height_request">100</property>
+                            <property name="width-request">200</property>
+                            <property name="height-request">100</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="shadow_type">in</property>
+                            <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="listbox-column">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore3</property>
-                                <property name="headers_visible">False</property>
-                                <property name="headers_clickable">False</property>
+                                <property name="headers-visible">False</property>
+                                <property name="headers-clickable">False</property>
                                 <property name="reorderable">True</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
+                                <property name="search-column">0</property>
+                                <property name="show-expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Pivot Table List-selection"/>
                                 </child>
@@ -225,14 +222,14 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="orientation">vertical</property>
@@ -240,10 +237,10 @@
                         <child>
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label5">Data Fields:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">listbox-data</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">listbox-data</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <attributes>
@@ -258,25 +255,25 @@
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="width_request">240</property>
-                            <property name="height_request">120</property>
+                            <property name="width-request">240</property>
+                            <property name="height-request">120</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="shadow_type">in</property>
+                            <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="listbox-data">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore4</property>
-                                <property name="headers_visible">False</property>
-                                <property name="headers_clickable">False</property>
+                                <property name="headers-visible">False</property>
+                                <property name="headers-clickable">False</property>
                                 <property name="reorderable">True</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
+                                <property name="search-column">0</property>
+                                <property name="show-expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Pivot Table Data List-selection"/>
                                 </child>
@@ -306,14 +303,14 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box6">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="orientation">vertical</property>
@@ -321,10 +318,10 @@
                         <child>
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label4">Row Fields:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">listbox-row</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">listbox-row</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <attributes>
@@ -339,23 +336,23 @@
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="width_request">180</property>
-                            <property name="height_request">100</property>
+                            <property name="width-request">180</property>
+                            <property name="height-request">100</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="vexpand">True</property>
-                            <property name="shadow_type">in</property>
+                            <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="listbox-row">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore5</property>
-                                <property name="headers_visible">False</property>
-                                <property name="headers_clickable">False</property>
+                                <property name="headers-visible">False</property>
+                                <property name="headers-clickable">False</property>
                                 <property name="reorderable">True</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
+                                <property name="search-column">0</property>
+                                <property name="show-expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Pivot Table List-selection4"/>
                                 </child>
@@ -385,14 +382,14 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box7">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="orientation">vertical</property>
@@ -400,10 +397,10 @@
                         <child>
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label2">Filters:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">listbox-page</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">listbox-page</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <attributes>
@@ -418,25 +415,25 @@
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="width_request">200</property>
-                            <property name="height_request">100</property>
+                            <property name="width-request">200</property>
+                            <property name="height-request">100</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="shadow_type">in</property>
+                            <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="listbox-page">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore1</property>
-                                <property name="headers_visible">False</property>
-                                <property name="headers_clickable">False</property>
+                                <property name="headers-visible">False</property>
+                                <property name="headers-clickable">False</property>
                                 <property name="reorderable">True</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
+                                <property name="search-column">0</property>
+                                <property name="show-expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Pivot Table List-selection5"/>
                                 </child>
@@ -466,8 +463,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -480,14 +477,14 @@
                 <child>
                   <object class="GtkBox" id="boxline">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkSeparator" id="separator1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                       </object>
                       <packing>
@@ -506,17 +503,17 @@
                 <child>
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|label1">Available Fields:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">listbox-fields</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">listbox-fields</property>
                         <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
@@ -530,25 +527,25 @@
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="width_request">180</property>
-                        <property name="height_request">150</property>
+                        <property name="width-request">180</property>
+                        <property name="height-request">150</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="listbox-fields">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
+                            <property name="headers-visible">False</property>
+                            <property name="headers-clickable">False</property>
                             <property name="reorderable">True</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
+                            <property name="search-column">0</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Pivot Table Label List-selection"/>
                             </child>
@@ -593,7 +590,7 @@
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes" context="pivottablelayoutdialog|label6">Drag the Items into the Desired Position</property>
                 <attributes>
@@ -609,26 +606,26 @@
             <child>
               <object class="GtkExpander" id="options">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="resize_toplevel">True</property>
+                <property name="can-focus">True</property>
+                <property name="resize-toplevel">True</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=4 -->
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
-                    <property name="margin_top">6</property>
-                    <property name="row_spacing">3</property>
-                    <property name="column_spacing">12</property>
-                    <property name="column_homogeneous">True</property>
+                    <property name="margin-top">6</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">12</property>
+                    <property name="column-homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="check-ignore-empty-rows">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-ignore-empty-rows">Ignore empty rows</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-ignore-empty-rows-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-ignore-empty-rows">Ignores empty fields in the data source.</property>
@@ -636,18 +633,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-identify-categories">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-identify-categories">Identify categories</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-identify-categories-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-identify-categories">Automatically assigns rows without labels to the category of the row above.</property>
@@ -655,18 +652,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-rows">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-rows">Total rows</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-total-rows-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-total-rows">Calculates and displays the grand total of the row calculation.</property>
@@ -674,18 +671,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-columns">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-columns">Total columns</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-total-columns-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-total-columns">Calculates and displays the grand total of the column calculation.</property>
@@ -693,18 +690,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-add-filter">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-add-filter">Add filter</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-add-filter-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-add-filter">Adds a Filter button to pivot tables that are based on spreadsheet data.</property>
@@ -712,18 +709,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-drill-to-details">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-drill-to-details">Enable drill to details</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-drill-to-details-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-drill-to-details">Select this check box and double-click an item label in the table to show or hide details for the item. Clear this check box and double-click a cell in the table to edit the contents of the cell.</property>
@@ -731,18 +728,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-show-expand-collapse">
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|check-show-expand-collapse">Show expand/collapse buttons</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-show-expand-collapse-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-show-expand-collapse">Select this check box to show expand/collapse buttons for field members</property>
@@ -750,18 +747,21 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
                 <child type="label">
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="pivottablelayoutdialog|label11">Options</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -777,48 +777,48 @@
             <child>
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="resize_toplevel">True</property>
+                <property name="can-focus">True</property>
+                <property name="resize-toplevel">True</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=1 n-rows=2 -->
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
-                    <property name="margin_top">6</property>
+                    <property name="margin-top">6</property>
                     <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
+                        <property name="label-xalign">0</property>
+                        <property name="shadow-type">none</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
+                          <!-- n-columns=3 n-rows=3 -->
                           <object class="GtkGrid" id="grid3">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="row_spacing">3</property>
-                            <property name="column_spacing">6</property>
+                            <property name="can-focus">False</property>
                             <property name="margin-start">12</property>
                             <property name="margin-top">6</property>
+                            <property name="hexpand">True</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="destination-radio-new-sheet">
                                 <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-new-sheet">New sheet</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
                                 <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                                 <property name="width">3</property>
                               </packing>
                             </child>
@@ -826,21 +826,21 @@
                               <object class="GtkRadioButton" id="destination-radio-selection">
                                 <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-selection">Selection</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">destination-radio-new-sheet</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="destination-edit">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
@@ -850,15 +850,15 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkButton" id="destination-button">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="destination-button-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|destination-button">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
@@ -866,14 +866,14 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">2</property>
-                                <property name="top_attach">2</property>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkComboBoxText" id="destination-list">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="destination-list-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|destination-list">Select the area where you want to display the results of the pivot table.</property>
@@ -881,8 +881,8 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
@@ -890,15 +890,15 @@
                               <object class="GtkRadioButton" id="destination-radio-named-range">
                                 <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-named-range">Named range</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">destination-radio-new-sheet</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                           </object>
@@ -906,7 +906,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label8">Destination</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -915,48 +915,48 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkFrame" id="frame2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
+                        <property name="label-xalign">0</property>
+                        <property name="shadow-type">none</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
+                          <!-- n-columns=3 n-rows=2 -->
                           <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="row_spacing">3</property>
-                            <property name="column_spacing">6</property>
+                            <property name="can-focus">False</property>
                             <property name="margin-start">12</property>
                             <property name="margin-top">6</property>
+                            <property name="hexpand">True</property>
+                            <property name="row-spacing">3</property>
+                            <property name="column-spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="source-radio-selection">
                                 <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-selection">Selection</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
                                 <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="source-edit">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="activates_default">True</property>
+                                <property name="activates-default">True</property>
                                 <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="source-edit-atkobject">
@@ -965,15 +965,15 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkButton" id="source-button">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="source-button-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|source-button">Select the area that contains the data for the current pivot table.</property>
@@ -981,33 +981,33 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">2</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="source-radio-named-range">
                                 <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-named-range">Named range</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
                                 <property name="group">source-radio-selection</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkComboBoxText" id="source-list">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
@@ -1016,7 +1016,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label9">Source</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -1025,8 +1025,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -1034,9 +1034,9 @@
                 <child type="label">
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="pivottablelayoutdialog|label7">Source and Destination</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
