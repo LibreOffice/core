@@ -102,15 +102,30 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
     return mpFormatList->GetFormat(nKey);
 }
 
-const ScFormatEntry* ScCondFormatManagerWindow::GetSelectedEntry()
+const ScFormatEntry* ScCondFormatManagerWindow::GetSelectedEntry() const
+{
+    sal_Int32 nKey = GetSelectedFormatKey();
+    sal_Int32 nEntryIndex = GetSelectedEntryIndex();
+
+    if (nKey == -1 || nEntryIndex == -1)
+        return nullptr;
+    return mpFormatList->GetFormat(nKey)->GetEntry(nEntryIndex);
+}
+
+sal_Int32 ScCondFormatManagerWindow::GetSelectedFormatKey() const
 {
     OUString id = mrTreeView.get_selected_id();
     if (id.isEmpty())
-        return nullptr;
+        return -1;
+    return getKeyFromId(id);
+}
 
-    sal_Int32 nKey = getKeyFromId(id);
-    sal_Int32 nEntryIndex = getEntryIndexFromId(id);
-    return mpFormatList->GetFormat(nKey)->GetEntry(nEntryIndex);
+sal_Int32 ScCondFormatManagerWindow::GetSelectedEntryIndex() const
+{
+    OUString id = mrTreeView.get_selected_id();
+    if (id.isEmpty())
+        return -1;
+    return getEntryIndexFromId(id);
 }
 
 void ScCondFormatManagerWindow::setColSizes()
@@ -148,6 +163,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     UpdateButtonSensitivity();
+    this->EntryFocus(*m_xTreeView);
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
@@ -176,13 +192,15 @@ ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
     return m_xCtrlManager->GetSelection();
 }
 
-void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
+void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
 {
     if (!SfxViewShell::Current())
         return;
 
     auto id = m_xConditionalType->get_active();
     SfxBoolItem IsManaged(FN_PARAM_2, true);
+    SfxInt32Item FormatKey(FN_PARAM_3, isEdit ? m_xCtrlManager->GetSelectedFormatKey() : -1);
+    SfxInt32Item EntryIndex(FN_PARAM_4, isEdit ? m_xCtrlManager->GetSelectedEntryIndex() : -1);
     switch (id)
     {
         case 0: // Cell value
@@ -191,16 +209,16 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
                                     m_xConditionalCellValue->get_active_id().toUInt32());
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged });
+                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
         }
         break;
         case 1: // Formula
         {
             SfxInt16Item FormatRule(FN_PARAM_1, static_cast<sal_Int16>(ScConditionMode::Formula));
-            SfxStringItem Formula(FN_PARAM_3, m_xConditionalFormula->GetText());
+            SfxStringItem Formula(FN_PARAM_5, m_xConditionalFormula->GetText());
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged, &Formula });
+                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex, &Formula });
         }
         break;
         case 2: // Date
@@ -208,7 +226,7 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
             SfxInt16Item FormatRule(FN_PARAM_1, m_xConditionalDate->get_active_id().toUInt32());
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged });
+                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
         }
         break;
         default:

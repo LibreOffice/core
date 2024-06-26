@@ -5,7 +5,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-#
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
@@ -39,7 +38,7 @@ class tdf100793(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible") as xCondFormatDlg:
 
                     #modify textbox
-                    xedassign = xCondFormatDlg.getChild("edassign")
+                    xedassign = xCondFormatDlg.getChild("entryRange")
                     #go at the beginning
                     xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "END"}))
                     xedassign.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
@@ -67,7 +66,7 @@ class tdf100793(UITestCase):
                 list_state = get_state_as_dict(xList)
                 self.assertEqual(list_state['Children'], '3')
 
-                self.assertEqual(conditional_format_list.getLength(), 1)
+                self.assertEqual(conditional_format_list.getLength(), 2)
 
                 # close the conditional format manager
                 xOKBtn = xCondFormatMgr.getChild("ok")
@@ -75,9 +74,11 @@ class tdf100793(UITestCase):
 
             #verify - reopen, check range
             with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
+                xCondFormatMgr.getChild("CONTAINER").executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+                xCondFormatMgr.getChild("CONTAINER").executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
                 xEditBtn = xCondFormatMgr.getChild("edit")
                 with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible") as xCondFormatDlg:
-                    xedassign = xCondFormatDlg.getChild("edassign")
+                    xedassign = xCondFormatDlg.getChild("entryRange")
                     self.assertEqual(get_state_as_dict(xedassign)["Text"], "G18:K29,F18:K33,F20:F29")
 
                 xCondFormatMgr = self.xUITest.getTopFocusWindow()

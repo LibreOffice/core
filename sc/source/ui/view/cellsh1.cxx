@@ -2932,33 +2932,29 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (rDlgItem)
                     pDlg->SetModified();
 
-                pDlg->StartExecuteAsync([this, pDlg, &rData, pTabViewShell, rDlgItem, aPos](sal_Int32 nRet){
-                    std::unique_ptr<ScConditionalFormatList> pCondFormatList = pDlg->GetConditionalFormatList();
-                    if(nRet == RET_OK && pDlg->CondFormatsChanged())
+                pDlg->StartExecuteAsync(
+                    [pDlg, &rData, aPos](sal_Int32 nRet)
                     {
-                        rData.GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList.release(), aPos.Tab());
-                    }
-                    else if(nRet == DLG_RET_ADD)
-                    {
-                        pDlg->ShowEasyConditionalDialog();
-                    }
-                    else if (nRet == DLG_RET_EDIT)
-                    {
-                        ScConditionalFormat* pFormat = pDlg->GetCondFormatSelected();
-                        sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
-                        // Put the xml string parameter to initialize the
-                        // Conditional Format Dialog. ( edit selected conditional format )
-                        pTabViewShell->setScCondFormatDlgItem(std::make_shared<ScCondFormatDlgData>(
-                                    std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), nIndex, true));
+                        std::unique_ptr<ScConditionalFormatList> pCondFormatList
+                            = pDlg->GetConditionalFormatList();
+                        if (nRet == RET_OK && pDlg->CondFormatsChanged())
+                        {
+                            rData.GetDocShell()->GetDocFunc().SetConditionalFormatList(
+                                pCondFormatList.release(), aPos.Tab());
+                        }
+                        else if (nRet == DLG_RET_ADD)
+                        {
+                            pDlg->ShowEasyConditionalDialog();
+                        }
+                        else if (nRet == DLG_RET_EDIT)
+                        {
+                            pDlg->ShowEasyConditionalDialog(true);
+                        }
+                        else
+                            pCondFormatList.reset();
 
-                        // Queue message to open Conditional Format Dialog
-                        GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
-                    }
-                    else
-                        pCondFormatList.reset();
-
-                    pDlg->disposeOnce();
-                });
+                        pDlg->disposeOnce();
+                    });
             }
             break;
 

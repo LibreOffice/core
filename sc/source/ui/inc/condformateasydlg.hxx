@@ -45,6 +45,8 @@ private:
     bool mbIsManaged;
     OUString msFormula;
     ScAddress maPosition;
+    sal_Int32 mnFormatKey;
+    sal_Int32 mnEntryIndex;
 
     SvxFontPrevWindow maWdPreview;
     std::unique_ptr<weld::Entry> mxNumberEntry;

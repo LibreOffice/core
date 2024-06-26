@@ -116,7 +116,7 @@ public:
     virtual bool CondFormatsChanged() const override;
     virtual void SetModified() override;
     virtual ScConditionalFormat* GetCondFormatSelected() override;
-    virtual void ShowEasyConditionalDialog() override;
+    virtual void ShowEasyConditionalDialog(bool isEdit = false) override;
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg
