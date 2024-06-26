@@ -2189,7 +2189,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     bool bIsSpecialSymbol = false;
     bool bIsArabic = false;
 
-    if (nullptr != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1))))
+    if ((!GetToken().aText.isEmpty())
+        && (nullptr
+            != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1)))))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );
