@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/weld.hxx>
+#include <formula/funcutl.hxx>
 
 class ScDocument;
 class ScConditionalFormat;
@@ -52,7 +53,7 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xConditionalType;
     std::unique_ptr<weld::ComboBox> m_xConditionalCellValue;
-    std::unique_ptr<weld::Entry> m_xConditionalFormula;
+    std::unique_ptr<formula::RefEdit> m_xConditionalFormula;
     std::unique_ptr<weld::ComboBox> m_xConditionalDate;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnRemove;

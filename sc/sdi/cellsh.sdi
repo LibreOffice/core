@@ -220,7 +220,8 @@ interface CellSelection
     SfxVoidItem ConditionalFormatEasy SID_EASY_CONDITIONAL_FORMAT_DIALOG
     (
         SfxInt16Item FormatRule FN_PARAM_1,
-        SfxBoolItem  Managed FN_PARAM_2
+        SfxBoolItem  Managed FN_PARAM_2,
+        SfxStringItem Formula FN_PARAM_3
     )
     [
         ExecMethod = Execute;
