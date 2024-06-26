@@ -678,7 +678,7 @@ void SdrObject::RemoveListener(SfxListener& rListener)
     }
 }
 
-const SfxBroadcaster* SdrObject::GetBroadcaster() const
+SfxBroadcaster* SdrObject::GetBroadcaster() const
 {
     return m_pPlusData!=nullptr ? m_pPlusData->pBroadcast.get() : nullptr;
 }

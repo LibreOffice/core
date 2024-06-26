@@ -1708,13 +1708,13 @@ void SdrEdgeObj::Reformat()
     if( nullptr != m_aCon1.m_pSdrObj )
     {
         SfxHint aHint( SfxHintId::DataChanged );
-        Notify( *const_cast<SfxBroadcaster*>(m_aCon1.m_pSdrObj->GetBroadcaster()), aHint );
+        Notify( *m_aCon1.m_pSdrObj->GetBroadcaster(), aHint );
     }
 
     if( nullptr != m_aCon2.m_pSdrObj )
     {
         SfxHint aHint( SfxHintId::DataChanged );
-        Notify( *const_cast<SfxBroadcaster*>(m_aCon2.m_pSdrObj->GetBroadcaster()), aHint );
+        Notify( *m_aCon2.m_pSdrObj->GetBroadcaster(), aHint );
     }
 }
 

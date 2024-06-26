@@ -1496,6 +1496,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             SdrHint aHint(SdrHintKind::BeginEdit, *pTextObj);
             GetModel().Broadcast(aHint);
+            if (auto pBroadcaster = pTextObj->GetBroadcaster())
+                pBroadcaster->Broadcast(aHint);
 
             mpTextEditOutliner->setVisualizedPage(nullptr);
 
@@ -1631,6 +1633,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     {
         SdrHint aHint(SdrHintKind::EndEdit, *pTextEditObj);
         GetModel().Broadcast(aHint);
+        if (auto pBroadcaster = pTextEditObj->GetBroadcaster())
+            pBroadcaster->Broadcast(aHint);
     }
 
     // if new mechanism was used, clean it up. At cleanup no need to check
@@ -1808,7 +1812,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     if (pTEObj && !pTEObj->getSdrModelFromSdrObject().isLocked() && pTEObj->GetBroadcaster())
     {
         SdrHint aHint(SdrHintKind::EndEdit, *pTEObj);
-        const_cast<SfxBroadcaster*>(pTEObj->GetBroadcaster())->Broadcast(aHint);
+        pTEObj->GetBroadcaster()->Broadcast(aHint);
     }
 
     if (pUndoEditUndoManager)

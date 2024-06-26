@@ -175,11 +175,11 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
             mpText = pTextObj->getText( 0 );
     }
 
-    if( mpModel )
-        StartListening( *mpModel );
-
     if( mpObject )
+    {
+        mpObject->AddListener( *this );
         mpObject->AddObjectUser( *this );
+    }
 }
 
 
@@ -206,7 +206,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
             mpText = pTextObj->getText( 0 );
     }
 
-    StartListening( *mpModel );
+    rObject.AddListener( *this );
     StartListening( *mpView );
     mpObject->AddObjectUser( *this );
 
@@ -366,9 +366,6 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case SdrHintKind::ModelCleared:
-                dispose();
-                break;
             default:
                 break;
         }
@@ -426,6 +423,7 @@ void SvxTextEditSourceImpl::dispose()
 
     if( mpObject )
     {
+        mpObject->RemoveListener( *this );
         mpObject->RemoveObjectUser( *this );
         mpObject = nullptr;
     }
