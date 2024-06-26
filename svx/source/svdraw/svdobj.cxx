@@ -321,8 +321,6 @@ void SdrObject::SetBoundRectDirty()
     resetOutRectangle();
 }
 
-#ifdef DBG_UTIL
-// SdrObjectLifetimeWatchDog:
 void impAddIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel)
 {
     rSdrModel.maAllIncarnatedObjects.insert(&rSdrObject);
@@ -334,7 +332,6 @@ void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSd
         assert(false && "SdrObject::~SdrObject: Destructed incarnation of SdrObject not member of this SdrModel (!)");
     }
 }
-#endif
 
 SdrObject::SdrObject(SdrModel& rSdrModel)
     : mpFillGeometryDefiningShape(nullptr)
@@ -369,10 +366,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     m_bIs3DObj=false;
     m_bMarkProt=false;
     m_bIsUnoObj=false;
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
     impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
-#endif
 }
 
 SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
@@ -440,10 +434,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)
         m_pGrabBagItem.reset(rSource.m_pGrabBagItem->Clone());
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
     impAddIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
-#endif
 }
 
 SdrObject::~SdrObject()
@@ -470,10 +461,7 @@ SdrObject::~SdrObject()
     m_pGrabBagItem.reset();
     mpProperties.reset();
     mpViewContact.reset();
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
     impRemoveIncarnatedSdrObjectToSdrModel(*this, getSdrModelFromSdrObject());
-#endif
 }
 
 void SdrObject::acquire() noexcept

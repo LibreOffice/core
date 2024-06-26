@@ -42,11 +42,7 @@
 
 #include <rtl/ref.hxx>
 #include <deque>
-
-#ifdef DBG_UTIL
-// SdrObjectLifetimeWatchDog
 #include <unordered_set>
-#endif
 
 class OutputDevice;
 class SdrOutliner;
@@ -153,8 +149,9 @@ struct SdrModelImpl;
 
 class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
 {
-#ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
+    // We need to keep track of all the SdrObjects linked to this SdrModel so that we can
+    // shut them down cleanly, otherwise we end up with use-after-free issues.
+    //
     // Use maAllIncarnatedObjects to keep track of all SdrObjects incarnated using this SdrModel
     // (what is now possible after the paradigm change that a SdrObject stays at a single SdrModel
     // for it's whole lifetime).
@@ -174,7 +171,6 @@ class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
     friend void impAddIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
     friend void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
     std::unordered_set< SdrObject* >  maAllIncarnatedObjects;
-#endif
 protected:
     std::vector<rtl::Reference<SdrPage>> maMasterPages;
     std::vector<rtl::Reference<SdrPage>> maPages;

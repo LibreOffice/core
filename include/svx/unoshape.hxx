@@ -226,7 +226,7 @@ public:
     void setMaster( SvxShapeMaster* pMaster );
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override final;
 
     // XAggregation
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
