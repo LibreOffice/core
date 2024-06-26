@@ -104,9 +104,11 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckNewlineSpace)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
@@ -117,8 +119,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testHyperlinks)
@@ -144,8 +148,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testNumberingCheck)
@@ -172,9 +178,13 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeFootnote)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_FOOTNOTE, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_FOOTNOTE, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::FAKE_FOOTNOTE, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[4]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[5]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckFakeCaption)
@@ -209,11 +219,15 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(4), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[4]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[5]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[7]->m_eIssueID);
 }
 
 //tdf#156550 - Accessibility sidebar complains about TOC hyperlinks
