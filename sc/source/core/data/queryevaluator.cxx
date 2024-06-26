@@ -98,7 +98,7 @@ void ScQueryEvaluator::setupCollatorIfNeeded()
 
 ScQueryEvaluator::ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab,
                                    const ScQueryParam& rParam, ScInterpreterContext* pContext,
-                                   bool* pTestEqualCondition)
+                                   bool* pTestEqualCondition, bool bNewSearchFunction)
     : mrDoc(rDoc)
     , mrStrPool(rDoc.GetSharedStringPool())
     , mrTab(rTab)
@@ -106,7 +106,7 @@ ScQueryEvaluator::ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab,
     , mpTestEqualCondition(pTestEqualCondition)
     , mpTransliteration(nullptr)
     , mpCollator(nullptr)
-    , mbMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell())
+    , mbMatchWholeCell(!bNewSearchFunction ? rDoc.GetDocOptions().IsMatchWholeCell() : true)
     , mbCaseSensitive(rParam.bCaseSens)
     , mpContext(pContext)
     , mnEntryCount(mrParam.GetEntryCount())
