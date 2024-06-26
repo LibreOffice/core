@@ -159,61 +159,24 @@ bool SvxFontListItem::GetPresentation
 
 // class SvxFontItem -----------------------------------------------------
 
-typedef std::unordered_map<size_t, const SfxPoolItem*> SvxFontItemMap;
-
 namespace
 {
-    class SvxFontItemInstanceManager : public ItemInstanceManager
+    class SvxFontItemInstanceManager : public TypeSpecificItemInstanceManager<SvxFontItem>
     {
-        SvxFontItemMap  maRegistered;
-
-    public:
-        SvxFontItemInstanceManager()
-        : ItemInstanceManager(typeid(SvxFontItem).hash_code())
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
+            const SvxFontItem& rFontItem(static_cast<const SvxFontItem&>(rItem));
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rItem.Which());
+            o3tl::hash_combine(seed, rFontItem.GetFamilyName().hashCode());
+            o3tl::hash_combine(seed, rFontItem.GetStyleName().hashCode());
+            o3tl::hash_combine(seed, rFontItem.GetFamily());
+            o3tl::hash_combine(seed, rFontItem.GetPitch());
+            o3tl::hash_combine(seed, rFontItem.GetCharSet());
+            return seed;
         }
-
-    private:
-        static size_t hashCode(const SfxPoolItem&);
-
-        // standard interface, accessed exclusively
-        // by implCreateItemEntry/implCleanupItemEntry
-        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
-        virtual void add(const SfxPoolItem&) override;
-        virtual void remove(const SfxPoolItem&) override;
     };
-
-    size_t SvxFontItemInstanceManager::hashCode(const SfxPoolItem& rItem)
-    {
-        const SvxFontItem& rFontItem(static_cast<const SvxFontItem&>(rItem));
-        std::size_t seed(0);
-        o3tl::hash_combine(seed, rItem.Which());
-        o3tl::hash_combine(seed, rFontItem.GetFamilyName().hashCode());
-        o3tl::hash_combine(seed, rFontItem.GetStyleName().hashCode());
-        o3tl::hash_combine(seed, rFontItem.GetFamily());
-        o3tl::hash_combine(seed, rFontItem.GetPitch());
-        o3tl::hash_combine(seed, rFontItem.GetCharSet());
-        return seed;
-    }
-
-    const SfxPoolItem* SvxFontItemInstanceManager::find(const SfxPoolItem& rItem) const
-    {
-        SvxFontItemMap::const_iterator aHit(maRegistered.find(hashCode(rItem)));
-        if (aHit != maRegistered.end())
-            return aHit->second;
-        return nullptr;
-    }
-
-    void SvxFontItemInstanceManager::add(const SfxPoolItem& rItem)
-    {
-        maRegistered.insert({hashCode(rItem), &rItem});
-    }
-
-    void SvxFontItemInstanceManager::remove(const SfxPoolItem& rItem)
-    {
-        maRegistered.erase(hashCode(rItem));
-    }
-
 }
 
 ItemInstanceManager* SvxFontItem::getItemInstanceManager() const
@@ -446,56 +409,20 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxPostureItem --------------------------------------------------
 
-typedef std::unordered_map<size_t, const SfxPoolItem*> SvxPostureItemMap;
-
 namespace
 {
-    class SvxPostureItemInstanceManager : public ItemInstanceManager
+    class SvxPostureItemInstanceManager : public TypeSpecificItemInstanceManager<SvxPostureItem>
     {
-        SvxPostureItemMap  maRegistered;
-
-    public:
-        SvxPostureItemInstanceManager()
-        : ItemInstanceManager(typeid(SvxPostureItem).hash_code())
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
+            auto const & rPostureItem = static_cast<const SvxPostureItem&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rPostureItem.Which());
+            o3tl::hash_combine(seed, rPostureItem. GetEnumValue());
+            return seed;
         }
-
-    private:
-        static size_t hashCode(const SfxPoolItem&);
-
-        // standard interface, accessed exclusively
-        // by implCreateItemEntry/implCleanupItemEntry
-        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
-        virtual void add(const SfxPoolItem&) override;
-        virtual void remove(const SfxPoolItem&) override;
     };
-
-    size_t SvxPostureItemInstanceManager::hashCode(const SfxPoolItem& rItem)
-    {
-        auto const & rPostureItem = static_cast<const SvxPostureItem&>(rItem);
-        std::size_t seed(0);
-        o3tl::hash_combine(seed, rPostureItem.Which());
-        o3tl::hash_combine(seed, rPostureItem. GetEnumValue());
-        return seed;
-    }
-
-    const SfxPoolItem* SvxPostureItemInstanceManager::find(const SfxPoolItem& rItem) const
-    {
-        auto aHit(maRegistered.find(hashCode(rItem)));
-        if (aHit != maRegistered.end())
-            return aHit->second;
-        return nullptr;
-    }
-
-    void SvxPostureItemInstanceManager::add(const SfxPoolItem& rItem)
-    {
-        maRegistered.insert({hashCode(rItem), &rItem});
-    }
-
-    void SvxPostureItemInstanceManager::remove(const SfxPoolItem& rItem)
-    {
-        maRegistered.erase(hashCode(rItem));
-    }
 }
 
 ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
@@ -750,58 +677,22 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxFontHeightItem -----------------------------------------------
 
-typedef std::unordered_map<size_t, const SfxPoolItem*> SvxFontHeightItemMap;
-
 namespace
 {
-    class SvxFontHeightItemInstanceManager : public ItemInstanceManager
+    class SvxFontHeightItemInstanceManager : public TypeSpecificItemInstanceManager<SvxFontHeightItem>
     {
-        SvxFontHeightItemMap  maRegistered;
-
-    public:
-        SvxFontHeightItemInstanceManager()
-        : ItemInstanceManager(typeid(SvxFontHeightItem).hash_code())
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
+            auto const & rFontHeightItem = static_cast<const SvxFontHeightItem&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rFontHeightItem.Which());
+            o3tl::hash_combine(seed, rFontHeightItem.GetHeight());
+            o3tl::hash_combine(seed, rFontHeightItem.GetProp());
+            o3tl::hash_combine(seed, rFontHeightItem.GetPropUnit());
+            return seed;
         }
-
-    private:
-        static size_t hashCode(const SfxPoolItem&);
-
-        // standard interface, accessed exclusively
-        // by implCreateItemEntry/implCleanupItemEntry
-        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
-        virtual void add(const SfxPoolItem&) override;
-        virtual void remove(const SfxPoolItem&) override;
     };
-
-    size_t SvxFontHeightItemInstanceManager::hashCode(const SfxPoolItem& rItem)
-    {
-        auto const & rFontHeightItem = static_cast<const SvxFontHeightItem&>(rItem);
-        std::size_t seed(0);
-        o3tl::hash_combine(seed, rFontHeightItem.Which());
-        o3tl::hash_combine(seed, rFontHeightItem.GetHeight());
-        o3tl::hash_combine(seed, rFontHeightItem.GetProp());
-        o3tl::hash_combine(seed, rFontHeightItem.GetPropUnit());
-        return seed;
-    }
-
-    const SfxPoolItem* SvxFontHeightItemInstanceManager::find(const SfxPoolItem& rItem) const
-    {
-        auto aHit(maRegistered.find(hashCode(rItem)));
-        if (aHit != maRegistered.end())
-            return aHit->second;
-        return nullptr;
-    }
-
-    void SvxFontHeightItemInstanceManager::add(const SfxPoolItem& rItem)
-    {
-        maRegistered.insert({hashCode(rItem), &rItem});
-    }
-
-    void SvxFontHeightItemInstanceManager::remove(const SfxPoolItem& rItem)
-    {
-        maRegistered.erase(hashCode(rItem));
-    }
 }
 
 ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
@@ -3078,56 +2969,20 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
 // class SvxRsidItem -----------------------------------------------------
 
-typedef std::unordered_map<size_t, const SfxPoolItem*> SvxRsidItemMap;
-
 namespace
 {
-    class SvxRsidItemInstanceManager : public ItemInstanceManager
+    class SvxRsidItemInstanceManager : public TypeSpecificItemInstanceManager<SvxRsidItem>
     {
-        SvxRsidItemMap  maRegistered;
-
-    public:
-        SvxRsidItemInstanceManager()
-        : ItemInstanceManager(typeid(SvxRsidItem).hash_code())
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
+            auto const & rRsidItem = static_cast<const SvxRsidItem&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rRsidItem.Which());
+            o3tl::hash_combine(seed, rRsidItem.GetValue());
+            return seed;
         }
-
-    private:
-        static size_t hashCode(const SfxPoolItem&);
-
-        // standard interface, accessed exclusively
-        // by implCreateItemEntry/implCleanupItemEntry
-        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
-        virtual void add(const SfxPoolItem&) override;
-        virtual void remove(const SfxPoolItem&) override;
     };
-
-    size_t SvxRsidItemInstanceManager::hashCode(const SfxPoolItem& rItem)
-    {
-        auto const & rRsidItem = static_cast<const SvxRsidItem&>(rItem);
-        std::size_t seed(0);
-        o3tl::hash_combine(seed, rRsidItem.Which());
-        o3tl::hash_combine(seed, rRsidItem.GetValue());
-        return seed;
-    }
-
-    const SfxPoolItem* SvxRsidItemInstanceManager::find(const SfxPoolItem& rItem) const
-    {
-        auto aHit(maRegistered.find(hashCode(rItem)));
-        if (aHit != maRegistered.end())
-            return aHit->second;
-        return nullptr;
-    }
-
-    void SvxRsidItemInstanceManager::add(const SfxPoolItem& rItem)
-    {
-        maRegistered.insert({hashCode(rItem), &rItem});
-    }
-
-    void SvxRsidItemInstanceManager::remove(const SfxPoolItem& rItem)
-    {
-        maRegistered.erase(hashCode(rItem));
-    }
 }
 
 ItemInstanceManager* SvxRsidItem::getItemInstanceManager() const

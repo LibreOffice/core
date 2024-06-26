@@ -653,6 +653,45 @@ private:
     virtual void remove(const SfxPoolItem&) override;
 };
 
+/**
+  Utility template to reduce boilerplate code when creating item instance managers
+  for specific PoolItem subclasses.
+*/
+template<class T>
+class TypeSpecificItemInstanceManager : public ItemInstanceManager
+{
+public:
+    TypeSpecificItemInstanceManager()
+    : ItemInstanceManager(typeid(T).hash_code())
+    {
+    }
+
+    // standard interface, accessed exclusively
+    // by implCreateItemEntry/implCleanupItemEntry
+    virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override final
+    {
+        auto aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+    virtual void add(const SfxPoolItem& rItem) override final
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+    virtual void remove(const SfxPoolItem& rItem) override final
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
+
+protected:
+    virtual size_t hashCode(const SfxPoolItem&) const = 0;
+
+private:
+    std::unordered_map<size_t, const SfxPoolItem*> maRegistered;
+};
+
+
 inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {
     return pItem && pItem->isStaticDefault();
