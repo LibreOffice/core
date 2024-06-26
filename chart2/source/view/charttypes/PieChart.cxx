@@ -313,14 +313,14 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
                 aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
                 aNewOrigin = m_aPosHelper.transformUnitCircleToScene(180, 0.75, rParam.mfLogicZ);
                 aOffset = aNewOrigin - aOrigin;
-                fExplodedOuterRadius *= 2.0/3;
+                fExplodedOuterRadius *= m_fLeftScale;
                 break;
             case SubPieType::RIGHT:
                 // Draw the sub-pie for pie-of-pie much smaller and to the right
                 aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
                 aNewOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0.75, rParam.mfLogicZ);
                 aOffset = aNewOrigin - aOrigin;
-                fExplodedOuterRadius *= 1.0/3;
+                fExplodedOuterRadius *= m_fRightScale;
                 break;
             case SubPieType::NONE:
             default:
@@ -357,31 +357,13 @@ rtl::Reference<SvxShape> PieChart::createBarDataPoint(
         const ShapeParam& rParam,
         double fBarSegBottom, double fBarSegTop)
 {
-    drawing::Position3D aP0, aP1;
-
     // Draw the bar for bar-of-pie small and to the right. Width and
     // position are hard-coded for now.
 
-#if 0
-    aP0 = cartesianPosHelper.transformLogicToScene(0.75, fBarSegBottom,
-            rParam.mfLogicZ, false);
-    aP1 = cartesianPosHelper.transformLogicToScene(1.25, fBarSegTop,
-            rParam.mfLogicZ, false);
-#else
-    double x0 = m_aPosHelper.transformUnitCircleToScene(0, 0.75, 0).PositionX;
-    double x1 = m_aPosHelper.transformUnitCircleToScene(0, 1.25, 0).PositionX;
-    double y0 = m_aPosHelper.transformUnitCircleToScene(
-            90, fBarSegBottom, 0).PositionY;
-    double y1 = m_aPosHelper.transformUnitCircleToScene(
-            90, fBarSegTop, 0).PositionY;
+    css::awt::Point aPos;
+    css::awt::Size aSz;
 
-    aP0 = drawing::Position3D(x0, y0, rParam.mfLogicZ);
-    aP1 = drawing::Position3D(x1, y1, rParam.mfLogicZ);
-#endif
-
-    const css::awt::Point aPos(aP0.PositionX, aP1.PositionY);
-    const css::awt::Size aSz(fabs(aP0.PositionX - aP1.PositionX),
-            fabs(aP0.PositionY - aP1.PositionY));
+    getBarRect(&aPos, &aSz, fBarSegBottom, fBarSegTop, rParam);
 
     const tNameSequence emptyNameSeq;
     const tAnySequence emptyValSeq;
@@ -395,9 +377,28 @@ rtl::Reference<SvxShape> PieChart::createBarDataPoint(
     return xShape;
 }
 
+void PieChart::getBarRect(css::awt::Point *pPos, css::awt::Size *pSz,
+        double fBarBottom, double fBarTop, const ShapeParam& rParam) const
+{
+    double x0 = m_aPosHelper.transformUnitCircleToScene(0, m_fBarLeft, 0).PositionX;
+    double x1 = m_aPosHelper.transformUnitCircleToScene(0, m_fBarRight, 0).PositionX;
+    double y0 = m_aPosHelper.transformUnitCircleToScene(
+            90, fBarBottom, 0).PositionY;
+    double y1 = m_aPosHelper.transformUnitCircleToScene(
+            90, fBarTop, 0).PositionY;
+
+    drawing::Position3D aP0(x0, y0, rParam.mfLogicZ);
+    drawing::Position3D aP1(x1, y1, rParam.mfLogicZ);
+
+    *pPos = css::awt::Point(aP0.PositionX, aP1.PositionY);
+    *pSz = css::awt::Size(fabs(aP0.PositionX - aP1.PositionX),
+            fabs(aP0.PositionY - aP1.PositionY));
+}
+
 void PieChart::createTextLabelShape(
     const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
-    VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam )
+    VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam ,
+    enum SubPieType eType)
 {
     if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
         // There is no text label for this data point.  Nothing to do.
@@ -449,6 +450,24 @@ void PieChart::createTextLabelShape(
     else if( nLabelPlacement == css::chart::DataLabelPlacement::INSIDE )
         nScreenValueOffsetInRadiusDirection = (m_nDimension!=3) ? -150 : 0;//todo maybe calculate this font height dependent
 
+    double fRadiusScale;
+    double fXShift;
+    switch (eType) {
+    case SubPieType::LEFT:
+        fRadiusScale = m_fLeftScale;
+        fXShift = m_fLeftShift;
+        break;
+    case SubPieType::RIGHT:
+        fRadiusScale = m_fRightScale;
+        fXShift = m_fRightShift;
+        break;
+    default:
+        fRadiusScale = 1.0;
+        fXShift = 0;
+    }
+
+    ::basegfx::B3DVector aShift(fXShift, 0, 0);
+
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
     ///and immediately transformed into the screen position.
@@ -456,12 +475,15 @@ void PieChart::createTextLabelShape(
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
         , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-        , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ+0.5, 0 ));
+        , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius * fRadiusScale
+        , rParam.mfLogicZ+0.5, 0, aShift));
 
     ///the screen position of the pie/donut center is calculated.
     PieLabelInfo aPieLabelInfo;
     aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_aPosHelper.transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
+    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition(
+                m_aPosHelper.transformUnitCircleToScene( 0.0, 0.0,
+                    rParam.mfLogicZ+1.0, aShift ) ) );
     aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
 
     ///add a scaling independent Offset if requested
@@ -477,8 +499,9 @@ void PieChart::createTextLabelShape(
     awt::Point aOuterCirclePoint = PlottingPositionHelper::transformSceneToScreenPosition(
             m_aPosHelper.transformUnitCircleToScene(
                     0,
-                    rParam.mfUnitCircleOuterRadius,
-                    0 ),
+                    rParam.mfUnitCircleOuterRadius * fRadiusScale,
+                    0 ,
+                    aShift),
             m_xLogicTarget, m_nDimension );
     basegfx::B2IVector aRadiusVector(
             aOuterCirclePoint.X - aPieLabelInfo.aOrigin.getX(),
@@ -493,7 +516,8 @@ void PieChart::createTextLabelShape(
     // aOuterPosition: slice midpoint on the circumference,
     // which is where an outside/custom label would be connected
     awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
-        m_aPosHelper.transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
+        m_aPosHelper.transformUnitCircleToScene(fAngleDegree,
+            rParam.mfUnitCircleOuterRadius * fRadiusScale, 0, aShift),
         m_xLogicTarget, m_nDimension);
     aPieLabelInfo.aOuterPosition = basegfx::B2IVector(aOuterPosition.X, aOuterPosition.Y);
 
@@ -579,7 +603,8 @@ void PieChart::createTextLabelShape(
          *       is crucial (and currently lacking)!
          * TODO: * change bestFit to treat the width as a max width, and reduce if beneficial
          */
-        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
+        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo,
+                    fRadiusScale, aShift))
         {
             if (m_aAvailableOuterRect.getWidth())
             {
@@ -620,7 +645,8 @@ void PieChart::createTextLabelShape(
                     eAlignment, css::chart::DataLabelPlacement::OUTSIDE,
                     rParam.mfUnitCircleStartAngleDegree,
                     rParam.mfUnitCircleWidthAngleDegree, rParam.mfUnitCircleInnerRadius,
-                    rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ + 0.5, 0);
+                    rParam.mfUnitCircleOuterRadius * fRadiusScale,
+                    rParam.mfLogicZ + 0.5, 0, aShift);
             aPieLabelInfo.aFirstPosition
                 = basegfx::B2IVector(aScreenPosition2D.X, aScreenPosition2D.Y);
 
@@ -722,6 +748,58 @@ void PieChart::createTextLabelShape(
     aPieLabelInfo.bMoved = false;
     aPieLabelInfo.xTextTarget = xTextTarget;
     aPieLabelInfo.bShowLeaderLine = bShowLeaderLine && !rSeries.isLabelCustomPos(nPointIndex);
+
+    m_aLabelInfoList.push_back(aPieLabelInfo);
+}
+
+// Put labels in one bar of a bar-of-pie chart. This is quite basic and doesn't
+// deal with the possibility of the bar being too small for the label text.
+void PieChart::createBarLabelShape(
+    const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
+    VDataSeries& rSeries, sal_Int32 nPointIndex, double fBarBottom,
+    double fBarTop, ShapeParam& rParam)
+{
+    if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
+        // There is no text label for this data point.  Nothing to do.
+        return;
+
+    // Ignore the label placement specification, and just center all labels
+    const LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+
+    css::awt::Point aPos;
+    css::awt::Size aSz;
+
+    getBarRect(&aPos, &aSz, fBarBottom, fBarTop, rParam);
+
+    // The screen position of the label anchor point is the center of the bar
+    awt::Point aScreenPosition2D(
+            aPos.X + aSz.Width/2.0,
+            aPos.Y + aSz.Height/2.0);
+
+    const double fTextMaximumFrameWidth = 0.8 * (m_fBarRight - m_fBarLeft);
+    const sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+
+    ///the text shape for the label is created
+    PieLabelInfo aPieLabelInfo;
+    const double nVal = rSeries.getYValue(nPointIndex);
+    aPieLabelInfo.xTextShape = createDataLabel(
+        xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
+        aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
+
+    ///a new `PieLabelInfo` instance is initialized with all the info related to
+    ///the current label in order to simplify later label position rearrangement;
+    rtl::Reference< SvxShape > xChild = aPieLabelInfo.xTextShape;
+
+    ///text shape could be empty; in that case there is no need to add label info
+    if( !xChild.is() )
+        return;
+
+    aPieLabelInfo.xLabelGroupShape = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
+    aPieLabelInfo.fValue = nVal;
+    aPieLabelInfo.bMovementAllowed = false;
+    aPieLabelInfo.bMoved = false;
+    aPieLabelInfo.xTextTarget = xTextTarget;
+    aPieLabelInfo.bShowLeaderLine = false;
 
     m_aLabelInfoList.push_back(aPieLabelInfo);
 }
@@ -1269,8 +1347,11 @@ void PieChart::createOneRing(
                 }
             }
 
-            ///create label
-            createTextLabelShape(xTextTarget, *pSeries, nPropIdx, aParam);
+            ///create label, *except* for composite wedge
+            if (!(eType == SubPieType::LEFT && nPointIndex == pDataSrc->getNPoints(pSeries,
+                    SubPieType::LEFT) - 1)) {
+                createTextLabelShape(xTextTarget, *pSeries, nPropIdx, aParam, eType);
+            }
 
             if(!bDoExplode)
             {
@@ -1383,7 +1464,8 @@ void PieChart::createOneBar(
         }
 
         ///create label
-        createTextLabelShape(xTextTarget, *pSeries, nPropIdx, aParam);
+        createBarLabelShape(xTextTarget, *pSeries, nPropIdx, fBarBottom,
+                fBarTop, aParam);
 
         ShapeFactory::setShapeName( xPointShape,
                 ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(),
@@ -1879,7 +1961,9 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
  *   4. the top edge when 225 < alpha < 315.
  *
  **/
-bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo)
+bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam,
+        PieLabelInfo const & rPieLabelInfo, double fRadiusScale,
+        const ::basegfx::B3DVector& aShift)
 {
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "** PieChart::performLabelBestFitInnerPlacement invoked **" );
@@ -1892,12 +1976,13 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // get the middle point of the arc representing the pie slice border
     double fLogicZ = rShapeParam.mfLogicZ + 1.0;
-    awt::Point aMiddleArcPoint = PlottingPositionHelper::transformSceneToScreenPosition(
-            m_aPosHelper.transformUnitCircleToScene(
+    drawing::Position3D aUnitCirclePt = m_aPosHelper.transformUnitCircleToScene(
                     fBisectingRayAngleDeg,
-                    rShapeParam.mfUnitCircleOuterRadius,
-                    fLogicZ ),
-            m_xLogicTarget, m_nDimension );
+                    rShapeParam.mfUnitCircleOuterRadius * fRadiusScale,
+                    fLogicZ,
+                    aShift);
+    awt::Point aMiddleArcPoint = PlottingPositionHelper::transformSceneToScreenPosition(
+            aUnitCirclePt, m_xLogicTarget, m_nDimension );
 
     // compute the pie radius
     basegfx::B2IVector aPieCenter = rPieLabelInfo.aOrigin;
@@ -1910,7 +1995,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // the bb is moved as much as possible near to the border of the pie,
     // anyway a small offset from the border is present (0.025 * pie radius)
     const double fPieBorderOffset = 0.025;
-    fPieRadius = fPieRadius - fPieRadius * fPieBorderOffset;
+    fPieRadius *= (1 - fPieBorderOffset);
 
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "    pie sector:" );

@@ -622,8 +622,10 @@ drawing::Position3D PolarPlottingPositionHelper::transformScaledLogicToScene( do
     double fLogicValueOnRadiusAxis = m_bSwapXAndY ? fX : fY;
     return transformAngleRadiusToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ, false );
 }
-drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius
-                                                                            , double fLogicZ ) const
+drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene(
+        double fUnitAngleDegree, double fUnitRadius,
+        double fLogicZ ,
+        const ::basegfx::B3DVector& aOffset) const
 {
     double fAnglePi = basegfx::deg2rad(fUnitAngleDegree);
 
@@ -633,6 +635,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
 
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
+    aPoint += aOffset;
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
     return B3DPointToPosition3D(aRet);
 }

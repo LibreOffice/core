@@ -59,7 +59,8 @@ public:
                         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                         , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                         , double fLogicZ
-                        , sal_Int32 nScreenValueOffsetInRadiusDirection ) const;
+                        , sal_Int32 nScreenValueOffsetInRadiusDirection
+                        , const ::basegfx::B3DVector& aOffset = ::basegfx::B3DVector()) const;
 
 private:
     PolarPlottingPositionHelper*    m_pPosHelper;

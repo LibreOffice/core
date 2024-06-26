@@ -186,7 +186,15 @@ private: //methods
      */
     void createTextLabelShape(
         const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
-        VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam );
+        VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam ,
+        enum SubPieType eType );
+
+    /** Same as createTextLabelShape(), but for bar-of-pie bar charts.
+     */
+    void createBarLabelShape(
+        const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
+        VDataSeries& rSeries, sal_Int32 nPointIndex,
+        double fBarBottom, double fBarTop, ShapeParam& rParam);
 
     /** This method sets `m_fMaxOffset` to the maximum `Offset` property and
      *  returns it. There is a `Offset` property for each entry in a data
@@ -209,7 +217,9 @@ struct PieLabelInfo;
                                 , const css::awt::Size& rPageSize );
 
     bool                performLabelBestFitInnerPlacement( ShapeParam& rShapeParam
-                                , PieLabelInfo const & rPieLabelInfo );
+                                , PieLabelInfo const & rPieLabelInfo
+                                , double fRadiusScale
+                                , const ::basegfx::B3DVector& aShift);
 
     // A standalone pie, one pie in a pie-of-pie, or one ring of a donut
     void                createOneRing([[maybe_unused]]enum SubPieType eType
@@ -230,6 +240,9 @@ struct PieLabelInfo;
             VDataSeries* pSeries,
             const PieDataSrcBase *pDataSrc,
             sal_Int32 n3DRelativeHeight);
+
+    void getBarRect(css::awt::Point *pPos, css::awt::Size *pSz,
+            double fBarBottom, double fBarTop, const ShapeParam& rParam) const;
 
     // Determine left endpoints of connecting lines. These will terminate either
     // at the corners of the composite wedge (if the wedge is small enough), or
@@ -262,6 +275,7 @@ private: //member
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
     ::css::chart2::PieChartSubType m_eSubType;
+    // Number of entries in an of-pie composite wedge
     sal_Int32             m_nCompositeSize;
 
     struct PieLabelInfo

@@ -225,12 +225,17 @@ public:
     css::drawing::Position3D
             transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling=true ) const;
 
-    /** It returns the scene coordinates of the passed point: this point is
-     *  described through a normalized cylindrical coordinate system.
-     *  (For a pie chart the origin of the coordinate system is the pie center).
+    /** Return the scene coordinates of the passed point: this point is
+     *  described through a normalized cylindrical coordinate system, with an
+     *  optional offset.
+     *  (For a standard pie chart the origin of the coordinate system is the
+     *  pie center; for an of-pie chart the components of the aOffset
+     *  parameter are not all zero).
      */
     css::drawing::Position3D
-            transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ ) const;
+            transformUnitCircleToScene( double fUnitAngleDegree
+                    , double fUnitRadius, double fLogicZ
+                    , const ::basegfx::B3DVector& aOffset = ::basegfx::B3DVector()) const;
 
     using PlottingPositionHelper::transformScaledLogicToScene;
 

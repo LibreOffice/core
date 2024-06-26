@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <BaseGFXHelper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -62,7 +63,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
         , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
         , double fLogicZ
-        , sal_Int32 nScreenValueOffsetInRadiusDirection ) const
+        , sal_Int32 nScreenValueOffsetInRadiusDirection
+        , const ::basegfx::B3DVector& aOffset) const
 {
     bool bCenter = (nLabelPlacement != css::chart::DataLabelPlacement::OUTSIDE)
                 && (nLabelPlacement != css::chart::DataLabelPlacement::INSIDE);
@@ -75,7 +77,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         fRadius = fUnitCircleInnerRadius + (fUnitCircleOuterRadius-fUnitCircleInnerRadius)/2.0 ;
 
     awt::Point aRet( transformSceneToScreenPosition(
-        m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ+0.5 ) ) );
+        m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius,
+            fLogicZ+0.5, aOffset ) ) );
 
     if(m_nDimensionCount==3 && nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
     {
@@ -83,10 +86,11 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         //take the farthest point to put the label to
 
         awt::Point aP0( transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ ) ) );
+            m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ, aOffset ) ) );
         awt::Point aP1(aRet);
         awt::Point aP2( transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ-0.5 ) ) );
+            m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius,
+                fLogicZ-0.5, aOffset ) ) );
 
         ::basegfx::B2DVector aV0( aP0.X, aP0.Y );
         ::basegfx::B2DVector aV1( aP1.X, aP1.Y );
@@ -142,7 +146,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     if( nScreenValueOffsetInRadiusDirection != 0)
     {
         awt::Point aOrigin( transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+0.5 ) ) );
+            m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, fLogicZ+0.5,
+                aOffset ) ) );
         basegfx::B2IVector aDirection( aRet.X- aOrigin.X, aRet.Y- aOrigin.Y );
         aDirection.setLength(nScreenValueOffsetInRadiusDirection);
         aRet.X += aDirection.getX();
