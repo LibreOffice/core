@@ -347,6 +347,12 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
 
 void TabBar::UpdateMenus()
 {
+    if (Application::GetToolkitName() == u"gtk4"_ustr)
+    {
+        SAL_WARN("sfx", "Skipping update of sidebar menus to avoid crash due to gtk4 menu brokenness.");
+        return;
+    }
+
     for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
     {
         OUString sIdent = mxMainMenu->get_id(i);
