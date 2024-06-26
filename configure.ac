@@ -2740,9 +2740,9 @@ AC_ARG_WITH(perl-home,
 libo_FUZZ_ARG_WITH(doxygen,
     AS_HELP_STRING(
         [--with-doxygen=<absolute path to doxygen executable>],
-        [Specifies the doxygen executable to use when generating ODK C/C++
-         documentation. --without-doxygen disables generation of ODK C/C++
-         documentation. Not relevant in the --disable-odk case.]),
+        [Only relevant when --enable-odk is set. Specifies the doxygen
+         executable to use when generating ODK C/C++ documentation.
+         --without-doxygen disables generation of ODK C/C++ documentation.]),
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
