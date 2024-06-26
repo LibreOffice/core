@@ -29,6 +29,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/util/XTheme.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -696,6 +698,55 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
     xShapeProps->getPropertyValue(u"CharLocaleComplex"_ustr) >>= aLocal;
     CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocal.Country);
     CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocal.Language);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
+{
+    // Given a toplevel line shape from DOCX:
+    loadFromFile(u"toplevel-line-hori-offset.docx");
+
+    // When checking the transform and the points of the shape:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::HomogenMatrix3 aTransformation;
+    xShape->getPropertyValue(u"Transformation"_ustr) >>= aTransformation;
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.set(0, 0, aTransformation.Line1.Column1);
+    aMatrix.set(0, 1, aTransformation.Line1.Column2);
+    aMatrix.set(0, 2, aTransformation.Line1.Column3);
+    aMatrix.set(1, 0, aTransformation.Line2.Column1);
+    aMatrix.set(1, 1, aTransformation.Line2.Column2);
+    aMatrix.set(1, 2, aTransformation.Line2.Column3);
+    drawing::PointSequenceSequence aPolyPoly;
+    xShape->getPropertyValue(u"Geometry"_ustr) >>= aPolyPoly;
+
+    // Then make sure we get a vertical line, not a horizontal one:
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate = 0;
+    double fShearX = 0;
+    aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 4094.76362560479
+    // i.e. this was a horizontal line, not a vertical one.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aScale.getX(), 0.01);
+    // 1473682 EMUs in mm100 is 4093.56.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4094, aScale.getY(), 0.01);
+    // 343535 EMUs in mm100 is 954.27.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(954, aTranslate.getX(), 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, aTranslate.getY(), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, fRotate, 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, fShearX, 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aPolyPoly.getLength());
+    drawing::PointSequence aPoly = aPolyPoly[0];
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aPoly.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPoly[0].X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPoly[0].Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aPoly[1].X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4094), aPoly[1].Y);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

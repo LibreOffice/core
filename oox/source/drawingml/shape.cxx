@@ -1035,11 +1035,19 @@ Reference< XShape > const & Shape::createAndInsert(
         aTransformation.translate(0.5, 0.5);
     }
 
+    bool bLineShape = aServiceName == "com.sun.star.drawing.LineShape";
+    bool bTopWriterLine = !pParentGroupShape && mbWps && bLineShape;
     // Build object matrix from shape size and position; corresponds to MSO ext and off
     // Only LineShape and ConnectorShape may have zero width or height.
     if (aServiceName == "com.sun.star.drawing.LineShape"
         || aServiceName == "com.sun.star.drawing.ConnectorShape")
-        aTransformation.scale(maSize.Width, maSize.Height);
+    {
+        // For toplevel Writer lines, size is included in the point coordinates.
+        if (!bTopWriterLine)
+        {
+            aTransformation.scale(maSize.Width, maSize.Height);
+        }
+    }
     else
     {
         aTransformation.scale(maSize.Width ? maSize.Width : 1.0,
@@ -1147,7 +1155,10 @@ Reference< XShape > const & Shape::createAndInsert(
     aParentTransformation = aTransformation;
 
     constexpr double fEmuToMm100 = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
-    aTransformation.scale(fEmuToMm100, fEmuToMm100);
+    if (!bTopWriterLine)
+    {
+        aTransformation.scale(fEmuToMm100, fEmuToMm100);
+    }
 
     // OOXML flips shapes before rotating them, so the rotation needs to be inverted
     if( bIsCustomShape && mbFlipH != mbFlipV )
@@ -1171,8 +1182,19 @@ Reference< XShape > const & Shape::createAndInsert(
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
-        aPoly.insert( 1, ::basegfx::B2DPoint( maSize.Width ? 1 : 0, maSize.Height ? 1 : 0 ) );
-        aPoly.transform( aTransformation );
+        if (bTopWriterLine)
+        {
+            // No transform of individual points, everything apart from size is part of the
+            // transform matrix.
+            sal_Int32 nMM100Width = o3tl::convert(maSize.Width, o3tl::Length::emu, o3tl::Length::mm100);
+            sal_Int32 nMM100Height = o3tl::convert(maSize.Height, o3tl::Length::emu, o3tl::Length::mm100);
+            aPoly.insert(1, ::basegfx::B2DPoint(nMM100Width, nMM100Height));
+        }
+        else
+        {
+            aPoly.insert( 1, ::basegfx::B2DPoint( maSize.Width ? 1 : 0, maSize.Height ? 1 : 0 ) );
+            aPoly.transform( aTransformation );
+        }
 
         // now creating the corresponding PolyPolygon
         sal_Int32 i, nNumPoints = aPoly.count();
@@ -1199,7 +1221,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
         maShapeProperties.setProperty(PROP_PolyPolygon, aPolyPolySequence);
     }
-    else if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
+    if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -1214,7 +1236,7 @@ Reference< XShape > const & Shape::createAndInsert(
         maShapeProperties.setProperty(PROP_StartPosition, aAWTStartPosition);
         maShapeProperties.setProperty(PROP_EndPosition, aAWTEndPosition);
     }
-    else
+    else if (!bLineShape || bTopWriterLine)
     {
         // now set transformation for this object
         HomogenMatrix3 aMatrix;
