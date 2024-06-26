@@ -2290,6 +2290,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf138124)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf161348)
+{
+    createSwDoc("fdo48718-1.docx");
+
+    xmlDocUniquePtr pXml = parseLayoutDump();
+
+    // the floating table is on page 1
+    // apparently both parts of the split table are on this text frame
+    assertXPath(pXml, "/root/page[1]/body/txt[2]/anchored/fly"_ostr, 2);
+    assertXPath(pXml, "/root/page[1]/body/txt[2]/anchored/fly/tab"_ostr, 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf154113)
 {
     createSwDoc("three_sections.fodt");
