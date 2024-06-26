@@ -195,7 +195,7 @@ SvxShape::~SvxShape() noexcept
 
     if ( mxSdrObject )
     {
-        EndListening(mxSdrObject->getSdrModelFromSdrObject());
+        mxSdrObject->RemoveListener(*this);
         mxSdrObject->setUnoShape(nullptr);
         mxSdrObject.clear();
     }
@@ -208,7 +208,7 @@ void SvxShape::InvalidateSdrObject()
 {
     if(mxSdrObject)
     {
-        EndListening(mxSdrObject->getSdrModelFromSdrObject());
+        mxSdrObject->RemoveListener(*this);
         mxSdrObject.clear();
     }
 };
@@ -288,7 +288,7 @@ void SvxShape::impl_construct()
 {
     if ( HasSdrObject() )
     {
-        StartListening(GetSdrObject()->getSdrModelFromSdrObject());
+        GetSdrObject()->AddListener(*this);
         impl_initFromSdrObject();
     }
 }
@@ -358,14 +358,14 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
 
     if( HasSdrObject() )
     {
-        EndListening( GetSdrObject()->getSdrModelFromSdrObject() );
+        GetSdrObject()->RemoveListener( *this );
     }
 
     mxSdrObject = pNewObj;
 
     if( HasSdrObject() )
     {
-        StartListening( GetSdrObject()->getSdrModelFromSdrObject() );
+        GetSdrObject()->AddListener( *this );
     }
 
     OSL_ENSURE( !mbIsMultiPropertyCall, "SvxShape::Create: hmm?" );
@@ -933,8 +933,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
         return;
     const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
-    if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mxSdrObject.get() ))
+    if (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mxSdrObject.get())
         return;
 
     // prevent object being deleted from under us
@@ -942,24 +941,12 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     uno::Reference< uno::XInterface > xSelf( mxSdrObject->getWeakUnoShape() );
     if( !xSelf.is() )
     {
-        EndListening(mxSdrObject->getSdrModelFromSdrObject());
+        mxSdrObject->RemoveListener(*this);
         mxSdrObject.clear();
         return;
     }
 
-    if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
-    {
-        updateShapeKind();
-    }
-    else // (pSdrHint->GetKind() == SdrHintKind::ModelCleared)
-    {
-        EndListening(mxSdrObject->getSdrModelFromSdrObject());
-        mxSdrObject->setUnoShape(nullptr);
-        mxSdrObject.clear();
-
-        if(!mpImpl->mbDisposing)
-            dispose();
-    }
+    updateShapeKind();
 }
 
 // XShape
@@ -1194,7 +1181,7 @@ void SAL_CALL SvxShape::dispose()
     if (!pObject)
         return;
 
-    EndListening( pObject->getSdrModelFromSdrObject() );
+    pObject->RemoveListener( *this );
 
     if ( pObject->IsInserted() && pObject->getSdrPageFromSdrObject() )
     {

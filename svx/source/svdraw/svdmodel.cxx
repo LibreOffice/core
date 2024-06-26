@@ -45,6 +45,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/unoshape.hxx>
 #include <textchain.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
@@ -223,7 +224,6 @@ SdrModel::~SdrModel()
     implDtorClearModel();
 
 #ifdef DBG_UTIL
-    // SdrObjectLifetimeWatchDog:
     if(!maAllIncarnatedObjects.empty())
     {
         SAL_WARN("svx",
@@ -581,6 +581,25 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
         mbInDestruction = true;
     }
 
+    // Disconnect all SvxShape's from their SdrObjects to prevent the SdrObjects
+    // from hanging around and causing use-after-free.
+    // Make a copy because it might modified during InvalidateSdrObject calls.
+    std::vector<rtl::Reference<SdrObject>> allObjs(maAllIncarnatedObjects.begin(), maAllIncarnatedObjects.end());
+    for (const auto & pSdrObj : allObjs)
+    {
+        uno::Reference<uno::XInterface> xShape = pSdrObj->getWeakUnoShape().get();
+        rtl::Reference<SvxShape> pSvxShape = dynamic_cast<SvxShape*>(xShape.get());
+        // calling getWeakUnoShape so we don't accidentally create new UNO shapes
+        if (pSvxShape)
+            pSvxShape->InvalidateSdrObject();
+        else
+        {
+            // because some things like SwXShape don't subclass SvxShape
+            uno::Reference<lang::XComponent> xComp(xShape, uno::UNO_QUERY);
+            if (xComp)
+                xComp->dispose();
+        }
+    }
     sal_Int32 i;
     // delete all drawing pages
     sal_Int32 nCount=GetPageCount();
