@@ -28,6 +28,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <calbck.hxx>
 #include <charatr.hxx>
 #include <svx/xfillit0.hxx>
@@ -795,6 +796,25 @@ public:
                 || aSwAttrSet.GetItem(RES_CHRATR_RELIEF, false)
                 || aSwAttrSet.GetItem(RES_CHRATR_NOHYPHEN, false)
                 || aSwAttrSet.GetItem(RES_CHRATR_CONTOUR, false))
+            {
+                auto pIssue
+                    = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+                pIssue->setEnd(nParagraphLength);
+            }
+        }
+
+        // paragraph direct formats (TODO: add more paragraph direct format)
+        sal_Int32 nParagraphLength = pTextNode->GetText().getLength();
+        if (nParagraphLength != 0 && pTextNode->HasSwAttrSet())
+        {
+            const SvxULSpaceItem& rULSpace = pTextNode->SwContentNode::GetAttr(RES_UL_SPACE, false);
+            bool bULSpace = rULSpace.GetLower() > 0 || rULSpace.GetUpper() > 0;
+            if (bULSpace)
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
