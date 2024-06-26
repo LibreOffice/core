@@ -67,7 +67,7 @@ struct PngDestructor
     png_infop pInfo;
 };
 
-#if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclobbered"
 #endif
@@ -475,7 +475,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
             return {};
     }
 }
-#if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
 

@@ -717,6 +717,10 @@ public:
     }
 };
 
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 template<SfxStyleFamily eFamily>
 css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
 {
@@ -746,6 +750,9 @@ css::uno::Reference<css::style::XStyle> StyleFamilyEntry::CreateStyle<SfxStyleFa
 {
     return SwXTextCellStyle::CreateXTextCellStyle(pDocShell, sStyleName);
 }
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 class XStyleFamily : public cppu::WeakImplHelper
 <
