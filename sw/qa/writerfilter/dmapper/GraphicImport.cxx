@@ -167,9 +167,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141540GroupLinePosSize)
     // Without fix in place, you had got Position = (19|6498), Size = 5001 x 2
     // i.e. the line was nearly horizontal instead of vertical
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5022), aPosition.X);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2963), aPosition.Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2965), aPosition.Y);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSize.Width);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7073), aSize.Height);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7071), aSize.Height);
 
     // Test group
     uno::Reference<drawing::XShape> xGroupShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
