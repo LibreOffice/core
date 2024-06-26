@@ -807,7 +807,8 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
         bRet = false;
 
     // apparently checking nFootnoteHeight here does *not* guarantee that it fits into the body
-    if (bRet && nDistanceToFootnoteBodyPrtBottom + nFollowFootnotes < 0)
+    if (bRet && rTab.IsInDocBody()
+        && nDistanceToFootnoteBodyPrtBottom + nFollowFootnotes < 0)
     {
         assert(rTab.GetUpper() != rTab.FindFootnoteBossFrame()->FindBodyCont());
         SAL_INFO("sw.layout", "SwTabFrame Split failed because of footnote growth");
