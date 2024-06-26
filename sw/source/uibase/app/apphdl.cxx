@@ -1000,7 +1000,7 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
-                            aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
+                            aViewColors.m_aDocColor.AsRGBHexString().toUtf8());
                     }
 
                     // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
