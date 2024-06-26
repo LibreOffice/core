@@ -32,7 +32,9 @@ public:
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
-    const ScFormatEntry* GetSelectedEntry();
+    const ScFormatEntry* GetSelectedEntry() const;
+    sal_Int32 GetSelectedFormatKey() const;
+    sal_Int32 GetSelectedEntryIndex() const;
 };
 
 class ScCondFormatManagerDlg : public weld::GenericDialogController
@@ -47,7 +49,7 @@ public:
     void SetModified();
 
     ScConditionalFormat* GetCondFormatSelected();
-    void ShowEasyConditionalDialog();
+    void ShowEasyConditionalDialog(bool isEdit = false);
 
 private:
     bool m_bModified;

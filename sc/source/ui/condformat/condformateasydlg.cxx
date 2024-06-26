@@ -89,6 +89,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
         meMode = *CurrentData.Mode;
         mbIsManaged = CurrentData.IsManaged;
         msFormula = CurrentData.Formula;
+        mnFormatKey = CurrentData.FormatKey;
+        mnEntryIndex = CurrentData.EntryIndex;
     }
     mxNumberEntry2->hide();
     switch (meMode)
@@ -245,12 +247,21 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
 
     ScRangeList aRange;
     mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
-    if (aRange.empty())
+    if (aRange.empty() && mnFormatKey != -1 && mnEntryIndex != -1)
+    {
+        aRange = mpDocument->GetCondFormList(mpViewData->GetTabNo())
+                     ->GetFormat(mnFormatKey)
+                     ->GetRangeList();
+    }
+    else if (aRange.empty())
     {
         ScAddress aPosition(mpViewData->GetCurX(), mpViewData->GetCurY(), mpViewData->GetTabNo());
         aRange.push_back(ScRange(aPosition));
     }
     maPosition = aRange.GetTopLeftCorner();
+    // FIX me: Tab is always 0 in some cases
+    // Refer to test tdf100793
+    maPosition.SetTab(mpViewData->GetTabNo());
 
     OUString sRangeString;
     aRange.Format(sRangeString, ScRefFlags::VALID, *mpDocument, mpDocument->GetAddressConvention());
@@ -307,6 +318,11 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
 {
     if (&rButton == mxButtonOk.get())
     {
+        if (mnEntryIndex != -1 && mnFormatKey != -1) // isEdit
+            mpDocument->GetCondFormList(maPosition.Tab())
+                ->GetFormat(mnFormatKey)
+                ->RemoveEntry(mnEntryIndex);
+
         std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mpDocument));
 
         OUString sExpression1

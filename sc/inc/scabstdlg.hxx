@@ -93,7 +93,7 @@ public:
     virtual std::unique_ptr<ScConditionalFormatList> GetConditionalFormatList() = 0;
 
     virtual bool CondFormatsChanged() const = 0;
-    virtual void ShowEasyConditionalDialog() = 0;
+    virtual void ShowEasyConditionalDialog(bool isEdit = false) = 0;
 
     virtual void SetModified() = 0;
 
