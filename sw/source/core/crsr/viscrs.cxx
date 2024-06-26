@@ -1001,7 +1001,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
         }
 
         pSfxViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
-        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        SfxLokHelper::notifyOtherViews(pSfxViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }
 
