@@ -109,7 +109,7 @@ class ScQueryEvaluator
 public:
     ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
                      const ScInterpreterContext* pContext = nullptr,
-                     bool* pTestEqualCondition = nullptr);
+                     bool* pTestEqualCondition = nullptr, bool bNewSearchFunction = false);
 
     bool ValidQuery(SCROW nRow, const ScRefCellValue* pCell = nullptr,
                     sc::TableColumnBlockPositionSet* pBlockPos = nullptr);

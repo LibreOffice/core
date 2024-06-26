@@ -51,7 +51,8 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
 
 ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                                        const ScQueryParam& param, ScInterpreterContext* context,
-                                       bool invalid, sal_uInt8 nSortedBinarySearch)
+                                       bool invalid, bool bNewSearchFunction,
+                                       sal_uInt8 nSortedBinarySearch)
     : maRange(rRange)
     , mpDoc(pDoc)
     , mValid(false)
@@ -111,8 +112,8 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                     // the whole column which includes a textual header). But if it can possibly
                     // match, then bail out and leave it to the unoptimized case.
                     // TODO Maybe it would actually work to use the numeric value obtained here?
-                    if (!ScQueryEvaluator::isMatchWholeCell(*pDoc, mQueryOp))
-                        return; // substring matching cannot be sorted
+                    if (!bNewSearchFunction && !ScQueryEvaluator::isMatchWholeCell(*pDoc, mQueryOp))
+                        return; // substring matching cannot be sorted, but new search functions are sorted
                     sal_uInt32 format = 0;
                     double value;
                     if (context->GetFormatTable()->IsNumberFormat(cell.getString(pDoc), format,
@@ -170,7 +171,8 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
         // Try to reuse as much ScQueryEvaluator code as possible, this should
         // basically do the same comparisons.
         assert(pDoc->FetchTable(nTab) != nullptr);
-        ScQueryEvaluator evaluator(*pDoc, *pDoc->FetchTable(nTab), param, context);
+        ScQueryEvaluator evaluator(*pDoc, *pDoc->FetchTable(nTab), param, context, nullptr,
+                                   bNewSearchFunction);
         for (SCCOL nCol = startCol; nCol <= endCol; ++nCol)
         {
             for (SCROW nRow = startRow; nRow <= endRow; ++nRow)

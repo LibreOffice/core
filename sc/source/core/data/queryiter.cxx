@@ -106,8 +106,9 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
         ((maParam.bByRow && nRow == maParam.nRow1) ||
          (!maParam.bByRow && nCol == maParam.nCol1));
     bool bTestEqualCondition = false;
+    const bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
     ScQueryEvaluator queryEvaluator(rDoc, *rDoc.maTabs[nTab], maParam, &mrContext,
-        (nTestEqualCondition ? &bTestEqualCondition : nullptr));
+        (nTestEqualCondition ? &bTestEqualCondition : nullptr), bNewSearchFunction);
     if( queryType == ScQueryCellIteratorType::CountIf )
     {
         // These are not used for COUNTIF, so should not be set, make the compiler
@@ -208,7 +209,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                     return;
 
                 // XLookUp/XMatch: Forward/asc/backward/desc search for best fit value, except if we have an exact match
-                if ((nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH) &&
+                if (bNewSearchFunction &&
                     (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL) &&
                     (nBestFitCol != nCol || nBestFitRow != nRow))
                 {
@@ -236,7 +237,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                             else if (bStringSearch)
                                 rItemTmp.maString = svl::SharedString(aBFCell.getString(&rDoc));
 
-                            ScQueryEvaluator queryEvaluatorTmp(rDoc, *rDoc.maTabs[nTab], aParamTmp, &mrContext, nullptr);
+                            ScQueryEvaluator queryEvaluatorTmp(rDoc, *rDoc.maTabs[nTab], aParamTmp, &mrContext, nullptr, bNewSearchFunction);
                             if (queryEvaluatorTmp.ValidQuery(nRow, (nCol == static_cast<SCCOL>(nFirstQueryField) ? &aCell : nullptr)))
                                 HandleBestFitItemFound(nCol, nRow);
                             else
@@ -303,7 +304,8 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
     {
         // This should be all in AccessBase::InitPos(), but that one can't call
         // BinarySearch(), so do it this way instead.
-        AccessBase::InitPosStart(nSortedBinarySearch);
+        bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+        AccessBase::InitPosStart(bNewSearchFunction, nSortedBinarySearch);
         ScQueryOp& op = maParam.GetEntry(0).eOp;
         SCCOLROW beforeColRow = -1;
         SCCOLROW lastColRow = -1;
@@ -1378,11 +1380,11 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
 // over indexes of the sorted cache (which is a stable sort of the cell contents) in the range
 // that fits the query condition and then that is mapped to rows. This will result in iterating
 // over only matching rows in their sorted order (and for equal rows in their row order).
-void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosStart(sal_uInt8 nSortedBinarySearch)
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosStart(bool bNewSearchFunction, sal_uInt8 nSortedBinarySearch)
 {
     ScRange aSortedRangeRange( maParam.nCol1, maParam.nRow1, nTab, maParam.nCol2, maParam.nRow2, nTab );
     // We want all matching values first in the sort order,
-    SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext, nSortedBinarySearch ));
+    SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext, bNewSearchFunction, nSortedBinarySearch ));
     // InitPosFinish() needs to be called after this, ScQueryCellIteratorBase::InitPos()
     // will handle that
 }
@@ -1626,7 +1628,8 @@ static bool CanBeUsedForSorterCache(ScDocument& /*rDoc*/, const ScQueryParam& /*
         return false;
     if(rParam.mbRangeLookup)
         return false;
-    if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
+    const bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+    if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString && !bNewSearchFunction
         && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0).eOp))
         return false; // substring matching cannot be sorted
     if(rParam.GetEntry(0).eOp != SC_LESS && rParam.GetEntry(0).eOp != SC_LESS_EQUAL
@@ -1784,7 +1787,8 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
         nRow = maParam.nRow1;
         ScRange aSortedRangeRange( col, maParam.nRow1, nTab, col, maParam.nRow2, nTab);
         ScQueryOp& op = maParam.GetEntry(0).eOp;
-        SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext ));
+        bool bNewSearchFunction = nSearchOpCode == SC_OPCODE_X_LOOKUP || nSearchOpCode == SC_OPCODE_X_MATCH;
+        SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, maParam, &mrContext, bNewSearchFunction, nSearchOpCode ));
         if( op == SC_EQUAL )
         {
             // BinarySearch() searches for the last item that matches. Therefore first
