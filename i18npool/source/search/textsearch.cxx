@@ -93,6 +93,30 @@ bool isSimpleRegexTrans( TransliterationFlags n )
 {
     return bool(maskSimpleRegexTrans(n));
 }
+
+bool isReplacePunctuation( OUString &rStr )
+{
+    return rStr.indexOf(u'\u2018') > -1 ||
+           rStr.indexOf(u'\u2019') > -1 ||
+           rStr.indexOf(u'\u201A') > -1 ||
+           rStr.indexOf(u'\u201B') > -1 ||
+           rStr.indexOf(u'\u201C') > -1 ||
+           rStr.indexOf(u'\u201D') > -1 ||
+           rStr.indexOf(u'\u201E') > -1 ||
+           rStr.indexOf(u'\u201F') > -1;
+}
+
+OUString replacePunctuation( OUString &rStr )
+{
+    return rStr.replace(u'\u2018', '\'')
+               .replace(u'\u2019', '\'')
+               .replace(u'\u201A', '\'')
+               .replace(u'\u201B', '\'')
+               .replace(u'\u201C', '"')
+               .replace(u'\u201D', '"')
+               .replace(u'\u201E', '"')
+               .replace(u'\u201F', '"');
+}
 };
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
@@ -139,10 +163,10 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
         // match is not case-altered, leave case-(in)sensitive to regex engine.
         transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
     }
-    else if ( aSrchPara.searchString.indexOf('\'') > - 1 )
+    else if ( aSrchPara.searchString.indexOf('\'') > - 1 || aSrchPara.searchString.indexOf('"') > - 1 )
     {
         bSearchApostrophe = true;
-        bReplaceApostrophe = aSrchPara.searchString.indexOf(u'\u2019') > -1;
+        bReplaceApostrophe = isReplacePunctuation(aSrchPara.searchString);
     }
 
     // Create Transliteration class
@@ -215,7 +239,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
     }
 
     if ( bReplaceApostrophe )
-        sSrchStr = sSrchStr.replace(u'\u2019', '\'');
+        sSrchStr = replacePunctuation(sSrchStr);
 
     // Take the new SearchOptions2::AlgorithmType2 field and ignore
     // SearchOptions::algorithmType
@@ -308,7 +332,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
     // in non-regex mode, allow searching typographical apostrophe with the ASCII one
     // to avoid regression after using automatic conversion to U+2019 during typing in Writer
-    bool bReplaceApostrophe = bSearchApostrophe && in_str.indexOf(u'\u2019') > -1;
+    bool bReplaceApostrophe = bSearchApostrophe && isReplacePunctuation(in_str);
 
     bUsePrimarySrchStr = true;
 
@@ -340,7 +364,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         in_str = xTranslit->transliterate(searchStr, nInStartPos, nInEndPos - nInStartPos, offset);
 
         if ( bReplaceApostrophe )
-            in_str = in_str.replace(u'\u2019', '\'');
+            in_str = replacePunctuation(in_str);
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 newStartPos =
@@ -447,7 +471,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
     // in non-regex mode, allow searching typographical apostrophe with the ASCII one
     // to avoid regression after using automatic conversion to U+2019 during typing in Writer
-    bool bReplaceApostrophe = bSearchApostrophe && in_str.indexOf(u'\u2019') > -1;
+    bool bReplaceApostrophe = bSearchApostrophe && isReplacePunctuation(in_str);
 
     bUsePrimarySrchStr = true;
 
@@ -458,7 +482,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
 
         if ( bReplaceApostrophe )
-            in_str = in_str.replace(u'\u2019', '\'');
+            in_str = replacePunctuation(in_str);
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 const newStartPos = (startPos < searchStr.getLength())
@@ -508,7 +532,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     else
     {
         if ( bReplaceApostrophe )
-            in_str = in_str.replace(u'\u2019', '\'');
+            in_str = replacePunctuation(in_str);
 
         sres = (this->*fnBackward)( in_str, startPos, endPos );
     }

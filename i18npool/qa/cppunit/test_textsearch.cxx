@@ -38,6 +38,7 @@ public:
     void testSearches();
     void testWildcardSearch();
     void testApostropheSearch();
+    void testQuotationMarkSearch();
     void testTdf138410();
 
     CPPUNIT_TEST_SUITE(TestTextSearch);
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testSearches);
     CPPUNIT_TEST(testWildcardSearch);
     CPPUNIT_TEST(testApostropheSearch);
+    CPPUNIT_TEST(testQuotationMarkSearch);
     CPPUNIT_TEST(testTdf138410);
     CPPUNIT_TEST_SUITE_END();
 private:
@@ -402,6 +404,92 @@ void TestTextSearch::testApostropheSearch()
     // search backwards
     aRes = m_xSearch->searchBackward( str, str.getLength(), startPos );
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+}
+
+void TestTextSearch::testQuotationMarkSearch()
+{
+    // A) find typographic quotation marks also by using ASCII ones
+    OUString str( u"“x”, „y‟, ‘z’, ‚a‛"_ustr );
+    sal_Int32 startPos = 0, endPos = str.getLength();
+
+    // set options
+    util::SearchOptions aOptions;
+    aOptions.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+    aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
+    aOptions.searchString = "\"x\"";
+    aOptions.transliterateFlags = static_cast<int>(TransliterationFlags::IGNORE_CASE
+                                | TransliterationFlags::IGNORE_WIDTH);
+    m_xSearch->setOptions( aOptions );
+
+    util::SearchResult aRes;
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(3), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), aRes.endOffset[0] );
+
+    // B)
+    aOptions.searchString = "\"y\"";
+    m_xSearch->setOptions( aOptions );
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(5), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(8), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(8), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(5), aRes.endOffset[0] );
+
+    // C)
+    aOptions.searchString = "'z'";
+    m_xSearch->setOptions( aOptions );
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(10), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(13), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(13), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(10), aRes.endOffset[0] );
+
+    // D)
+    aOptions.searchString = "'a'";
+    m_xSearch->setOptions( aOptions );
+
+    // search forward
+    aRes = m_xSearch->searchForward( str, startPos, endPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(15), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(18), aRes.endOffset[0] );
+
+    // search backwards
+    aRes = m_xSearch->searchBackward( str, endPos, startPos );
+    // This was 0.
+    CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(18), aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(15), aRes.endOffset[0] );
 }
 
 void TestTextSearch::testTdf138410()
