@@ -409,7 +409,7 @@ public:
 
     void BroadcastObjectChange() const;
 
-    const SfxBroadcaster* GetBroadcaster() const;
+    SfxBroadcaster* GetBroadcaster() const;
 
     // set modified-flag in the model
     virtual void SetChanged();
