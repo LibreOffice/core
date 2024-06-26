@@ -229,7 +229,6 @@
                         <property name="can-focus">True</property>
                         <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="visibility">False</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="formula-atkobject">
