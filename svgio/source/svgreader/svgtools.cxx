@@ -153,6 +153,7 @@ namespace svgio::svgreader
             { u"plum", Color(221, 160, 221) },
             { u"powderblue", Color(176, 224, 230) },
             { u"purple", Color(128, 0, 128) },
+            { u"rebeccapurple", Color(102, 51, 153) },
             { u"red", Color(255, 0, 0) },
             { u"rosybrown", Color(188, 143, 143) },
             { u"royalblue", Color( 65, 105, 225) },
