@@ -1370,8 +1370,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
                 lcl_collectUsedNums(aUsedNums, nNmLen, *pObj, aName);
         }
 
-        OUString sName = pFlyFormat->GetName();
-        lcl_collectUsedNums(aUsedNums, nNmLen, sName, aName);
+        lcl_collectUsedNums(aUsedNums, nNmLen, pFlyFormat->GetName(), aName);
     }
 
     // All numbers are flagged accordingly, so determine the right one
