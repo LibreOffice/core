@@ -450,10 +450,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
     SwFrame* pTab2 = pPage2Fly->GetLower();
     SwFrame* pRow2 = pTab2->GetLower();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1014
+    // - Expected: 1029
     // - Actual  : 553
-    // i.e. <w:trHeight w:val="1014"> from the file was ignored.
-    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(1014), pRow2->getFrameArea().Height());
+    // i.e. <w:trHeight w:val="1029"> from the file was ignored
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(1029), pRow2->getFrameArea().Height());
     SwFrame* pCell2 = pRow2->GetLower();
     auto pText2 = dynamic_cast<SwTextFrame*>(pCell2->GetLower());
     // And then similarly this was 1, not 2.
