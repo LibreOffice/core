@@ -26,6 +26,7 @@
 #include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
 
 using namespace css;
 
@@ -241,6 +242,105 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationUpdate)
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(2540), pObject->GetLogicRect().Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(25400), pObject->GetLogicRect().Top());
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePage)
+{
+    // Check the annotation object is properly cloned when duplicating the page.
+
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    auto* pDrawViewShell = dynamic_cast<sd::DrawViewShell*>(pViewShell);
+    CPPUNIT_ASSERT(pDrawViewShell);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    // 1 Page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // No objects yet
+    SdrPage* pPage1 = pDrawViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage1->GetObjCount());
+
+    // Inserted new annotation
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    aArgs = comphelper::InitPropertySequence({
+        { "Text", uno::Any(u"Comment"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
+
+    // Check state
+    {
+        // 1 Annotation in the page
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage1->getAnnotations().size());
+
+        // 1 Object in the page
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage1->GetObjCount());
+
+        // And the object is an annotation
+        SdrObject* pObject = pPage1->GetObj(0);
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::Annotation, pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT(pObject->isAnnotationObject());
+        auto& rAnnotationData = pObject->getAnnotationData();
+
+        // Get the annotation from the page 1
+        auto xAnnotation = pPage1->getAnnotations().at(0);
+
+        // Annotation in the object is the same as the one in the page
+        CPPUNIT_ASSERT_EQUAL(xAnnotation.get(), rAnnotationData->mxAnnotation.get());
+
+        // Check text of the annotation
+        CPPUNIT_ASSERT_EQUAL(u"Comment"_ustr, xAnnotation->GetText());
+    }
+
+    // Let's duplicate the page
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+
+    // 2 Pages
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // Let's switch to the 2nd page
+    CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
+
+    // Check state
+    {
+        // Get the current page
+        SdrPage* pPage2 = pDrawViewShell->GetActualPage();
+
+        // Should not be the same page as previous page
+        CPPUNIT_ASSERT(pPage2 != pPage1);
+
+        // 1 Annotation in the page
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage2->getAnnotations().size());
+
+        // 1 Object in the page
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage2->GetObjCount());
+
+        // And the object is an annotation
+        SdrObject* pObject = pPage2->GetObj(0);
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::Annotation, pObject->GetObjIdentifier());
+        CPPUNIT_ASSERT(pObject->isAnnotationObject());
+        auto& rAnnotationData = pObject->getAnnotationData();
+
+        // Get the annotation from the page 2
+        auto xAnnotation = pPage2->getAnnotations().at(0);
+
+        // Annotation in the object is the same as the one in the page
+        CPPUNIT_ASSERT_EQUAL(xAnnotation.get(), rAnnotationData->mxAnnotation.get());
+
+        // Check text of the annotation
+        CPPUNIT_ASSERT_EQUAL(u"Comment"_ustr, xAnnotation->GetText());
+
+        // Annotation in page 1 is not the same instance as annotation in page 2
+        // We verify the annotation was copied
+        CPPUNIT_ASSERT(pPage1->getAnnotations().at(0).get()
+                       != pPage2->getAnnotations().at(0).get());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
