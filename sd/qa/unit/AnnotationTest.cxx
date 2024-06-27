@@ -232,12 +232,12 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
     // Move the object
     pObject->Move({ 200, 200 });
 
-    // Object at a new postion
+    // Object at a new position
     CPPUNIT_ASSERT_EQUAL(tools::Long(200),
                          pObject->GetLogicRect().Left()); // in 100th of an mm (hmm)
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), pObject->GetLogicRect().Top());
 
-    // Position of the annotation whould be the same as the object (2.0 mm equals 200 hmm)
+    // Position of the annotation would be the same as the object (2.0 mm equals 200 hmm)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().X, 1E-4); // mm
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);
 
