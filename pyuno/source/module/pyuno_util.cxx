@@ -36,10 +36,10 @@ PyRef ustring2PyUnicode( const OUString & str )
     PyRef ret;
 #if Py_UNICODE_SIZE == 2
 #ifdef MACOSX
-    ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<const unsigned short *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromWideChar( reinterpret_cast<const unsigned short *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #else
     static_assert(sizeof (wchar_t) == Py_UNICODE_SIZE, "bad assumption");
-    ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<wchar_t const *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromWideChar( reinterpret_cast<wchar_t const *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #endif
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
@@ -59,11 +59,11 @@ OUString pyString2ustring( PyObject *pystr )
     OUString ret;
     if( PyUnicode_Check( pystr ) )
     {
+        Py_ssize_t size(0);
 #if Py_UNICODE_SIZE == 2
         ret = OUString(
-            reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
+            reinterpret_cast<sal_Unicode const *>(PyUnicode_AsWideCharString( pystr, &size )) );
 #else
-        Py_ssize_t size(0);
         char const *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
         ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
 #endif
