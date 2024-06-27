@@ -701,8 +701,31 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
 
     // check if offset is used
     const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
+    const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
 
-    if (nOffsetX)
+    if (nOffsetX == 0 && nOffsetY == 0)
+    {
+        if (!bPreScaled)
+            aBitmapEx.Scale(aNeededBitmapSizePixel);
+
+        // if the tile is a single pixel big, just flood fill with that pixel color
+        if (aNeededBitmapSizePixel.getWidth() == 1 && aNeededBitmapSizePixel.getHeight() == 1)
+        {
+            Color col = aBitmapEx.GetPixelColor(0, 0);
+            mpOutputDevice->SetLineColor(col);
+            mpOutputDevice->SetFillColor(col);
+            mpOutputDevice->DrawRect(aVisiblePixel);
+        }
+        else
+        {
+            // TODO vcl does not have an optimised path here, it should be passing some kind of fill/tile
+            // operation down to the cairo/skia layers
+            Wallpaper aWallpaper(aBitmapEx);
+            aWallpaper.SetColor(COL_TRANSPARENT);
+            mpOutputDevice->DrawWallpaper(aVisiblePixel, aWallpaper);
+        }
+    }
+    else if (nOffsetX)
     {
         // offset in X, so iterate over Y first and draw lines
         for (sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight; nYPos += nBHeight, nPosY++)
@@ -727,11 +750,8 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
             }
         }
     }
-    else
+    else // nOffsetY is used
     {
-        // check if offset is used
-        const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
-
         // possible offset in Y, so iterate over X first and draw columns
         for (sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth; nXPos += nBWidth, nPosX++)
         {
