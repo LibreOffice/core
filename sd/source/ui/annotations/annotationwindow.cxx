@@ -351,7 +351,7 @@ void AnnotationWindow::FillMenuButton()
 
 void AnnotationWindow::StartEdit()
 {
-    GetOutlinerView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
+    GetOutlinerView()->SetSelection(ESelection::NoSelection());
     GetOutlinerView()->ShowCursor();
 }
 
