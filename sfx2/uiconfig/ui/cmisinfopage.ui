@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="CmisInfoPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
-    <property name="row_spacing">6</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">6</property>
     <child>
       <object class="GtkScrolledWindow" id="CmisScroll">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="hscrollbar_policy">never</property>
-        <property name="vscrollbar_policy">always</property>
-        <property name="shadow_type">in</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
         <child>
           <object class="GtkViewport" id="viewport1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkBox" id="CmisWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
@@ -39,8 +39,8 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
   </object>

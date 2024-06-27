@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -15,25 +15,25 @@
     </columns>
   </object>
   <object class="GtkDialog" id="VersionsOfDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cmis">
                 <property name="label" translatable="yes" context="versionsofdialog|cmis">CMIS</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -45,9 +45,9 @@
               <object class="GtkButton" id="delete">
                 <property name="label" translatable="yes" context="stock">_Delete</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="delete-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|delete">Deletes the selected version.</property>
@@ -64,9 +64,9 @@
               <object class="GtkButton" id="compare">
                 <property name="label" translatable="yes" context="versionsofdialog|compare">_Compare</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="compare-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|compare">Compare the changes that were made in each version.</property>
@@ -83,9 +83,9 @@
               <object class="GtkButton" id="show">
                 <property name="label" translatable="yes" context="versionsofdialog|show">_Show...</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="show-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|show">Displays the entire comment for the selected version.</property>
@@ -102,10 +102,10 @@
               <object class="GtkButton" id="close">
                 <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -118,9 +118,9 @@
               <object class="GtkButton" id="open">
                 <property name="label" translatable="yes" context="versionsofdialog|open">_Open</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="open-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|open">Opens the selected version in a read-only window.</property>
@@ -137,8 +137,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -152,40 +152,40 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=1 n-rows=2 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row_spacing">12</property>
+            <property name="row-spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=1 -->
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkButton" id="save">
                         <property name="label" translatable="yes" context="versionsofdialog|save">Save _New Version</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="save-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|save">Saves the current state of the document as a new version. If you want, you can also enter comments in the Insert Version Comment dialog before you save the new version.</property>
@@ -193,18 +193,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="always">
                         <property name="label" translatable="yes" context="versionsofdialog|always">_Always save a new version on closing</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="always-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|always">If you have made changes to your document then a new version is automatically saved when you close the document.</property>
@@ -212,8 +212,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -221,7 +221,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="versionsofdialog|label1">New Versions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -230,44 +230,44 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkFrame" id="frame2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="versions">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore3</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
+                            <property name="search-column">0</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="versions-selection2"/>
                             </child>
@@ -319,8 +319,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -328,7 +328,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="versionsofdialog|label2">Existing Versions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -337,8 +337,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
@@ -359,9 +359,6 @@
       <action-widget response="-5">open</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="VersionsOfDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|VersionsOfDialog">Saves and organizes multiple versions of the current document in the same file. You can also open, delete and compare previous versions.</property>

@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="new">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="stylecontextmenu|new">New...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="edit">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="stylecontextmenu|edit">Edit Style...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="hide">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="stylecontextmenu|hide">Hide</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="show">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="stylecontextmenu|show">Show</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="stylecontextmenu|delete">Delete...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
   </object>
