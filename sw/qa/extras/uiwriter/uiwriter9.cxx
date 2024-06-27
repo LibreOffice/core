@@ -109,7 +109,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
 }
 
-} // end of anonymouse namespace
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)
+{
+    // Given a document with a 1-cell table in another 1-cell table:
+    createSwDoc("table-in-table.fodt");
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // Move to the normally hidden paragraph inside the outer table cell, following the inner table
+    pWrtShell->Down(false, 2);
+    // Without the fix, this would crash:
+    pWrtShell->SelAll();
+}
+
+} // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

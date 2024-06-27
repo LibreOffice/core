@@ -58,6 +58,7 @@ private:
 
     // unit tests
 public:
+    void testMediaShapeScreen_Tdf159094();
     void testExportRange_Tdf120161();
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
@@ -69,6 +70,7 @@ public:
     void testForcepoint97();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
+    CPPUNIT_TEST(testMediaShapeScreen_Tdf159094);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
@@ -197,6 +199,18 @@ void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int3
                       EE_CHAR_FONTINFO);
     aItemSet.Put(aItem);
     rEE.QuickSetAttribs(aItemSet, aSel);
+}
+
+void ScPDFExportTest::testMediaShapeScreen_Tdf159094()
+{
+    loadFromFile(u"tdf159094.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:B8
+    ScRange aRange(0, 0, 0, 1, 7, 0);
+
+    // Without the fix, this test would crash on export media file to pdf
+    exportToPDF(xModel, aRange);
 }
 
 // Selection was not taken into account during export into PDF

@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[7.6.6.4],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[7.6.7.2],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -11019,20 +11019,6 @@ dnl ===================================================================
 dnl Check for disabling cve_tests
 dnl ===================================================================
 AC_MSG_CHECKING([whether to execute CVE tests])
-# If not explicitly enabled or disabled, default
-if test -z "$enable_cve_tests"; then
-    case "$OS" in
-    WNT)
-        # Default cves off for Windows with its wild and wonderful
-        # variety of AV software kicking in and panicking
-        enable_cve_tests=no
-        ;;
-    *)
-        # otherwise yes
-        enable_cve_tests=yes
-        ;;
-    esac
-fi
 if test "$enable_cve_tests" = "no"; then
     AC_MSG_RESULT([no])
     DISABLE_CVE_TESTS=TRUE
@@ -11065,6 +11051,9 @@ if test "$enable_openssl" = "yes"; then
         OPENSSL_LIBS="-lssl -lcrypto"
     else
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
+        if test -n "${SYSTEM_OPENSSL}"; then
+            AC_DEFINE([SYSTEM_OPENSSL])
+        fi
     fi
     if test "$with_system_openssl" = "yes"; then
         AC_MSG_CHECKING([whether openssl supports SHA512])

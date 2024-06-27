@@ -751,13 +751,19 @@ void SwXTextCursor::DeleteAndInsert(std::u16string_view aText,
         }
         if(nTextLen)
         {
+            // Store node and content indexes prior to insertion: to select the inserted text,
+            // we need to account for possible surrogate pairs, combining characters, etc.; it
+            // is easier to just restore the correct position from the indexes.
+            const auto start = pCurrent->Start();
+            const auto nodeIndex = start->GetNodeIndex();
+            const auto contentIndex = start->GetContentIndex();
             const bool bSuccess(
                 SwUnoCursorHelper::DocInsertStringSplitCR(
-                    rDoc, *pCurrent, aText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)));
+                    rDoc, SwPaM(*start, pCurrent), aText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)));
             OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
 
-            SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
-            pCurrent->Left(aText.size());
+            pCurrent->SetMark();
+            pCurrent->GetPoint()->Assign(nodeIndex, contentIndex);
         }
         pCurrent = pCurrent->GetNext();
     } while (pCurrent != pUnoCursor);

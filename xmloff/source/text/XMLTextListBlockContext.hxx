@@ -66,7 +66,6 @@ public:
     void ResetRestartNumbering() { mbRestartNumbering = false; }
 
     /// does this list have (possibly inherited from parent) list-style-name?
-    bool HasListStyleName() { return !msListStyleName.isEmpty(); }
     const css::uno::Reference < css::container::XIndexReplace >& GetNumRules() const
         { return mxNumRules; }
 

@@ -23,7 +23,7 @@
     <string name="readonly_file">Այս նիշքը միայն-կարդալու է։</string>
     <string name="about_moreinfo">Ավելի տեղեկատվություն</string>
     <string name="select_file_to_open">Բացելու համար ընտրեք նիշքը</string>
-    <string name="browser_app_name">LibreOffice Զննարկիչ</string>
+    <string name="browser_app_name">LibreOffice զննարկիչ</string>
     <string name="search_not_found">Բանալի բառը չի գտնվել</string>
     <string name="pref_experimental_editing">Փորձարարական ռեժիմ</string>
     <string name="pdf_export_finished">PDF արտահանումն ավարտված է</string>

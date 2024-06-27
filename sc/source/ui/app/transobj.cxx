@@ -405,11 +405,38 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                                                  aReducedBlock.aEnd.Col(), aReducedBlock.aEnd.Row(),
                                                  aReducedBlock.aStart.Tab() );
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
-            pVirtDev->SetOutputSizePixel(pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM)));
+
+            // tdf#160855 fix crash due to Skia's internal maximum pixel limit
+            // Somewhere in the tens of thousands of selected fill cells,
+            // the size of the VirtualDevice exceeds 1 GB of pixels. But
+            // Skia, at least on macOS, will fail to create a surface.
+            // Even if there is ample free memory, Skia/Raster will fail.
+            // The second problem is that even if you disable Skia, the
+            // crash is just delayed when a BitmapEx is created from the
+            // VirtualDevice and malloc() fails.
+            // Since this data flavor really triggers one or more system
+            // memory limits, lower the resolution of the bitmap by keeping
+            // the VirtualDevice pixel size within an arbitrary number of
+            // pixels.
+            // Note: the artibrary "maximum number of pixels" limit that
+            // that Skia can handle may need to be raised or lowered for
+            // platforms other than macOS.
+            static constexpr tools::Long nCopyToImageMaxPixels = 8192 * 8192;
+            Fraction aScale(1.0);
+            Size aPixelSize = pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM));
+            tools::Long nPixels(aPixelSize.Width() * aPixelSize.Height());
+            if (nPixels < 0 || nPixels > nCopyToImageMaxPixels)
+            {
+                aScale = Fraction(nCopyToImageMaxPixels, nPixels);
+                aPixelSize = pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM, Point(), aScale, aScale));
+                nPixels = aPixelSize.Width() * aPixelSize.Height();
+            }
+
+            pVirtDev->SetOutputSizePixel(aPixelSize);
 
             PaintToDev( pVirtDev, *m_pDoc, 1.0, aReducedBlock );
 
-            pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
+            pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel, Point(), aScale, aScale ) );
             BitmapEx aBmp = pVirtDev->GetBitmapEx( Point(), pVirtDev->GetOutputSize() );
             bOK = SetBitmapEx( aBmp, rFlavor );
         }

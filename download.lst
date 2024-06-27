@@ -106,8 +106,8 @@ ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EXPAT_SHA256SUM := cb5f5a8ea211e1cabd59be0a933a52e3c02cc326e86a4d387d8d218e7ee47a3e
-EXPAT_TARBALL := expat-2.6.0.tar.xz
+EXPAT_SHA256SUM := ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364
+EXPAT_TARBALL := expat-2.6.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -465,8 +465,8 @@ POPPLER_DATA_TARBALL := poppler-data-0.4.12.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POSTGRESQL_SHA256SUM := 4992ff647203566b670d4e54dc5317499a26856c93576d0ea951bdf6bee50bfb
-POSTGRESQL_TARBALL := postgresql-13.11.tar.bz2
+POSTGRESQL_SHA256SUM := b8df078551898960bd500dc5d38a177e9905376df81fe7f2b660a1407fa6a5ed
+POSTGRESQL_TARBALL := postgresql-13.14.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

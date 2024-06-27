@@ -738,9 +738,15 @@ bool SwCursorShell::MoveStartText()
     SwTableNode const*const pTable(pStartNode->FindTableNode());
     m_pCurrentCursor->GetPoint()->Assign(*pStartNode);
     GetDoc()->GetNodes().GoNext(m_pCurrentCursor->GetPoint());
-    while (m_pCurrentCursor->GetPoint()->GetNode().FindTableNode() != pTable
-        && (!pTable || pTable->GetIndex() < m_pCurrentCursor->GetPoint()->GetNode().FindTableNode()->GetIndex())
-        && MoveOutOfTable());
+    while (auto* pFoundTable = m_pCurrentCursor->GetPoint()->GetNode().FindTableNode())
+    {
+        if (pFoundTable == pTable)
+            break;
+        if (pTable && pTable->GetIndex() >= pFoundTable->GetIndex())
+            break;
+        if (!MoveOutOfTable())
+            break;
+    }
     UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return old != *m_pCurrentCursor->GetPoint();
 }

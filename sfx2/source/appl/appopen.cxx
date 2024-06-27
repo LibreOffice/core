@@ -1040,9 +1040,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if( aFileName.startsWith("#") ) // Mark without URL
     {
         SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : nullptr;
-        if ( !pView )
+        if (!pView)
             pView = SfxViewFrame::Current();
-        pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
+        if (pView)
+            pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
         rReq.SetReturnValue( SfxViewFrameItem( pView ) );
         return;
     }

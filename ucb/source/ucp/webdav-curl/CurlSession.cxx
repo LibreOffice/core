@@ -165,15 +165,6 @@ struct CurlOption
     }
 };
 
-// NOBODY will prevent logging the response body in ProcessRequest() exception
-// handler, so only use it if logging is disabled
-const CurlOption g_NoBody{ CURLOPT_NOBODY,
-                           sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, "ucb.ucp.webdav.curl")
-                                   == SAL_DETAIL_LOG_ACTION_IGNORE
-                               ? 1L
-                               : 0L,
-                           nullptr };
-
 /// combined guard class to ensure things are released in correct order,
 /// particularly in ProcessRequest() error handling
 class Guard
@@ -1543,9 +1534,8 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
     DAVResource result;
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "OPTIONS", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "OPTIONS",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "OPTIONS", options, &rEnv, nullptr, nullptr, nullptr,
                                   &headers);
@@ -1853,7 +1843,13 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ g_NoBody };
+    ::std::vector<CurlOption> const options{
+        // NOBODY will prevent logging the response body in ProcessRequest()
+        // exception, but omitting it here results in a long timeout until the
+        // server closes the connection, which is worse
+        { CURLOPT_NOBODY, 1L, nullptr },
+        { CURLOPT_CUSTOMREQUEST, "HEAD", "CURLOPT_CUSTOMREQUEST" }
+    };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
@@ -2088,9 +2084,8 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "MKCOL",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "MKCOL", options, &rEnv, nullptr, nullptr, nullptr,
                                   nullptr);
@@ -2118,9 +2113,8 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, std::u16string_view rSourc
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(rSession, uriSource, OUString::createFromAscii(pMethod), options,
                                   &rEnv, ::std::move(pList), nullptr, nullptr, nullptr);
@@ -2150,9 +2144,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "DELETE", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "DELETE",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "DESTROY", options, &rEnv, nullptr, nullptr, nullptr,
                                   nullptr);

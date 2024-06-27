@@ -77,6 +77,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pWrtShell->GetCurrentShellCursor().GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, selectTextRange)
+{
+    createSwDoc();
+    uno::Reference<text::XTextDocument> const xTD(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> const xText(xTD->getText());
+    uno::Reference<text::XTextCursor> const xCursor(xText->createTextCursor());
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(false);
+    xCursor->gotoEnd(true);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xCursor->getString());
+    uno::Reference<lang::XMultiServiceFactory> const xMSF(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextSection> const xSection(
+        xMSF->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW);
+    xText->insertTextContent(xCursor, xSection, true);
+    uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
+    uno::Reference<view::XSelectionSupplier> const xView(xTD->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xAnchor->getString());
+    CPPUNIT_ASSERT(xView->select(uno::Any(xAnchor)));
+    uno::Reference<container::XIndexAccess> xSel;
+    CPPUNIT_ASSERT(xView->getSelection() >>= xSel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSel->getCount());
+    uno::Reference<text::XTextRange> xSelRange;
+    CPPUNIT_ASSERT(xSel->getByIndex(0) >>= xSelRange);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xSelRange->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
 {
     createSwDoc();

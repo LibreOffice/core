@@ -127,6 +127,7 @@ namespace
 enum
 {
     PROP_TITLE_STRING,
+    PROP_TITLE_VISIBLE,
     PROP_TITLE_TEXT_ROTATION,
     PROP_TITLE_TEXT_STACKED
 };
@@ -136,6 +137,12 @@ void lcl_AddPropertiesToVector(
 {
     rOutProperties.emplace_back( "String",
                   PROP_TITLE_STRING,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "Visible",
+                  PROP_TITLE_VISIBLE,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );

@@ -1985,6 +1985,26 @@ CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
     CPPUNIT_ASSERT_EQUAL(OUString("dd.mm.yyyy"), pFormat->GetMappedFormatstring(keywords, ldw));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160306)
+{
+    // Check some cases, where the output of ROUND and of number formatter differed
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    sal_uInt32 format = aFormatter.GetEntryKey(u"0.00", LANGUAGE_ENGLISH_US);
+    CPPUNIT_ASSERT(format != NUMBERFORMAT_ENTRY_NOT_FOUND);
+    OUString output;
+    const Color* color;
+    aFormatter.GetOutputString(2697.0649999999996, format, output, &color);
+    // Without the fix in place, this would fail with
+    // - Expected: 2697.07
+    // - Actual  : 2697.06
+    CPPUNIT_ASSERT_EQUAL(OUString("2697.07"), output);
+    aFormatter.GetOutputString(57.374999999999993, format, output, &color);
+    // Without the fix in place, this would fail with
+    // - Expected: 57.38
+    // - Actual  : 57.37
+    CPPUNIT_ASSERT_EQUAL(OUString("57.38"), output);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }

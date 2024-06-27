@@ -2645,33 +2645,36 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                     assert(pFieldmark);
 
-                    if (pFieldmark->GetFieldname() == ODF_FORMDATE)
+                    if (pFieldmark)
                     {
-                        if(GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
+                        if (pFieldmark->GetFieldname() == ODF_FORMDATE)
                         {
-                            OutputField( nullptr, ww::eFORMDATE, OUString(), FieldFlags::Close );
-                        }
-                    }
-                    else
-                    {
-                        ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                        if (pFieldmark->GetFieldname() == ODF_UNHANDLED)
-                        {
-                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
-                            if ( it != pFieldmark->GetParameters()->end() )
+                            if(GetExportFormat() == MSWordExportBase::ExportFormat::DOCX) // supported by DOCX only
                             {
-                                OUString sFieldId;
-                                it->second >>= sFieldId;
-                                eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
+                                OutputField( nullptr, ww::eFORMDATE, OUString(), FieldFlags::Close );
                             }
                         }
-
-                        OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
-
-                        if (pFieldmark->GetFieldname() == ODF_FORMTEXT
-                             && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                        else
                         {
-                            AppendBookmark( pFieldmark->GetName() );
+                            ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                            if (pFieldmark->GetFieldname() == ODF_UNHANDLED)
+                            {
+                                IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                                if ( it != pFieldmark->GetParameters()->end() )
+                                {
+                                    OUString sFieldId;
+                                    it->second >>= sFieldId;
+                                    eFieldId = static_cast<ww::eField>(sFieldId.toInt32());
+                                }
+                            }
+
+                            OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
+
+                            if (pFieldmark->GetFieldname() == ODF_FORMTEXT
+                                    && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                            {
+                                AppendBookmark( pFieldmark->GetName() );
+                            }
                         }
                     }
                 }

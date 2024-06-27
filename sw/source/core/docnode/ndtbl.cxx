@@ -888,6 +888,34 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     return &rNdTable;
 }
 
+static void lcl_RemoveBreaksTable(SwTableNode & rNode, SwTableFormat *const pTableFormat)
+{
+    // delete old layout frames, new ones need to be created...
+    rNode.DelFrames(nullptr);
+
+    // remove PageBreaks/PageDesc/ColBreak
+    SwFrameFormat & rFormat(*rNode.GetTable().GetFrameFormat());
+
+    if (const SvxFormatBreakItem* pItem = rFormat.GetItemIfSet(RES_BREAK, false))
+    {
+        if (pTableFormat)
+        {
+            pTableFormat->SetFormatAttr(*pItem);
+        }
+        rFormat.ResetFormatAttr(RES_BREAK);
+    }
+
+    SwFormatPageDesc const*const pPageDescItem(rFormat.GetItemIfSet(RES_PAGEDESC, false));
+    if (pPageDescItem && pPageDescItem->GetPageDesc())
+    {
+        if (pTableFormat)
+        {
+            pTableFormat->SetFormatAttr(*pPageDescItem);
+        }
+        rFormat.ResetFormatAttr(RES_PAGEDESC);
+    }
+}
+
 static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableFormat)
 {
     // delete old layout frames, new ones need to be created...
@@ -1385,10 +1413,19 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     // delete frames of all contained content nodes
     for( nLines = 0; aNodeIndex <= rTableNodes.rbegin()->rbegin()->aEnd; ++aNodeIndex,++nLines )
     {
-        SwNode& rNode = aNodeIndex.GetNode();
-        if( rNode.IsContentNode() )
+        SwNode* pNode(&aNodeIndex.GetNode());
+        while (pNode->IsSectionNode()) // could be ToX field in table
         {
-            lcl_RemoveBreaks(static_cast<SwContentNode&>(rNode),
+            pNode = pNode->GetNodes()[pNode->GetIndex()+1];
+        }
+        if (pNode->IsTableNode())
+        {
+            lcl_RemoveBreaksTable(static_cast<SwTableNode&>(*pNode),
+                    (0 == nLines) ? pTableFormat : nullptr);
+        }
+        else if (pNode->IsContentNode())
+        {
+            lcl_RemoveBreaks(static_cast<SwContentNode&>(*pNode),
                     (0 == nLines) ? pTableFormat : nullptr);
         }
     }

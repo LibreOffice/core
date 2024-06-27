@@ -656,7 +656,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             }
 #endif
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    SfxItemIter aIter2(rItemSet);
+    for (const SfxPoolItem* pItem = aIter2.GetCurItem(); pItem; pItem = aIter2.NextItem())
     {
         HTMLAttr **ppAttr = nullptr;
 

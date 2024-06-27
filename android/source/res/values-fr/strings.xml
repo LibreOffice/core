@@ -114,7 +114,7 @@
     <string name="tabhost_character">Caractère</string>
     <string name="calc_alert_double_click_optimal_length">Astuce : appuyez deux fois sur un en-tête pour définir la largeur/hauteur optimale.</string>
     <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
-    <string name="message_save_incomplete">Enregistrement incomplet. Y a-t-il eu des changements \?</string>
+    <string name="message_save_incomplete">Enregistrement incomplet. Y a-t-il eu des modifications ?</string>
     <string name="action_underline">Souligné</string>
     <string name="unable_to_go_further">Impossible d\'aller plus loin.</string>
     <string name="action_bold">Gras</string>
@@ -129,5 +129,5 @@
     <string name="directory_not_saved">Répertoire non enregistré.</string>
     <string name="action_italic">Italique</string>
     <string name="about_moreinfo">Plus d\'informations</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Votre appareil Android ne prend pas en charge le diaporama SVG intégré à l\'application. Nous avons copié le lien du diaporama dans le presse-papiers. Veuillez appuyer sur le bouton d\'accueil, ouvrir un navigateur Web moderne, coller dans la barre d\'adresse et c\'est parti.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Votre appareil Android ne prend pas en charge le diaporama SVG intégré à l\'application. Le lien du diaporama a été copié dans le presse-papiers. Veuillez appuyer sur le bouton d\'accueil, ouvrir un navigateur Web moderne, le coller dans la barre d\'adresse et c\'est parti.</string>
 </resources>

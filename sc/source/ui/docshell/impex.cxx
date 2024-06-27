@@ -1656,6 +1656,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     ScDocumentImport aDocImport(rDoc);
     do
     {
+        const SCCOL nLastCol = nEndCol; // tdf#129701 preserve value of nEndCol
         for( ;; )
         {
             aLine = ReadCsvLine(rStrm, !bFixed, aSeps, cStr, cDetectSep);
@@ -1739,11 +1740,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 SCCOL nSourceCol = 0;
                 sal_uInt16 nInfoStart = 0;
                 const sal_Unicode* p = aLine.getStr();
+                // tdf#129701 if there is only one column, and user wants to treat empty cells,
+                // we need to detect *p = null
+                bool bIsLastColEmpty = !(*p) && !bSkipEmptyCells && !bDetermineRange;
                 // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it is only an
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
                 // SC_COL_SKIP.
-                while (*p && nCol <= rDoc.MaxCol()+1)
+                while ( (*p || bIsLastColEmpty) && nCol <= rDoc.MaxCol()+1)
                 {
                     bool bIsQuoted = false;
                     p = ScImportExport::ScanNextFieldFromString( p, aCell,
@@ -1775,8 +1779,17 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
                         ++nCol;
-                    }
+                        if (bIsLastColEmpty)
+                        {
+                            bIsLastColEmpty = false; // toggle to stop
+                        }
+                        else
+                        {
+                            // tdf#129701 detect if there is a last empty column when we need it
+                            bIsLastColEmpty = (nCol == nLastCol) && !(*p) && !bSkipEmptyCells && !bDetermineRange;
+                        }
 
+                    }
                     ++nSourceCol;
                 }
             }
