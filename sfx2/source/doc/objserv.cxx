@@ -1294,7 +1294,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_CLOSEDOC:
         {
-            // cancel requests during SfxApplication is closing or quiting.
+            // cancel requests during SfxApplication is closing or quitting.
             SfxAppData_Impl* pAppData = SfxGetpApp()->Get_Impl();
             if (pAppData && (pAppData->bInQuit || pAppData->bClosingDocs))
             {
