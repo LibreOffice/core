@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="PdfLinksPage">
@@ -30,9 +30,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="pdflinkspage|export|tooltip_text">Enable the checkbox to export bookmarks in your document as named destinations in the PDF document.</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
-                <property name="tooltip_text" translatable="yes" context="pdflinkspage|export|tooltip_text">Enable the checkbox to export bookmarks in your document as named destinations in the PDF document.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="export-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|export">Enable the checkbox to export bookmarks in your document as named destinations in the PDF document. The destinations correspond to the location of your bookmarks. Use these destinations to create URL links that point to these locations in the PDF document.</property>
