@@ -113,7 +113,7 @@ protected:
     DECL_LINK(Selected, weld::IconView&, void);
     DECL_LINK(DoubleClick, weld::IconView&, bool);
     DECL_LINK(DoCommand, const CommandEvent&, bool);
-    DECL_LINK(DoJsonProperty, const weld::json_prop_query&, bool);
+    DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
 
 public:
     StylesPreviewWindow_Base(weld::Builder& xBuilder,

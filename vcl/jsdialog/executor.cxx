@@ -76,11 +76,31 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
 
     if (pWidget != nullptr)
     {
+        // shared actions
+
         if (sAction == "grab_focus")
         {
             pWidget->grab_focus();
             return true;
         }
+        else if (sAction == "render_entry")
+        {
+            auto pRenderer = dynamic_cast<OnDemandRenderingHandler*>(pWidget);
+            if (pRenderer)
+            {
+                // pos;dpix;dpiy
+                const OUString& sParams = rData["data"];
+                const OUString aPos = sParams.getToken(0, ';');
+                const OUString aDpiScaleX = sParams.getToken(1, ';');
+                const OUString aDpiScaleY = sParams.getToken(2, ';');
+
+                pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
+                                        o3tl::toInt32(aDpiScaleY));
+            }
+            return true;
+        }
+
+        // depends on type
 
         if (sControlType == "tabcontrol")
         {
@@ -127,22 +147,6 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     else
                         pCombobox->set_entry_text(rData["data"]);
                     LOKTrigger::trigger_changed(*pCombobox);
-                    return true;
-                }
-                else if (sAction == "render_entry")
-                {
-                    auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
-                    if (pJSCombobox)
-                    {
-                        // pos;dpix;dpiy
-                        const OUString& sParams = rData["data"];
-                        const OUString aPos = sParams.getToken(0, ';');
-                        const OUString aDpiScaleX = sParams.getToken(1, ';');
-                        const OUString aDpiScaleY = sParams.getToken(2, ';');
-
-                        pJSCombobox->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
-                                                  o3tl::toInt32(aDpiScaleY));
-                    }
                     return true;
                 }
             }
