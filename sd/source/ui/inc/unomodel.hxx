@@ -287,7 +287,7 @@ public:
     SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::getPresentationInfo().
-    OString getPresentationInfo() const override;
+    SD_DLLPUBLIC OString getPresentationInfo() const override;
     /// @see vcl::ITiledRenderable::createSlideRenderer().
     bool createSlideRenderer(
         sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
