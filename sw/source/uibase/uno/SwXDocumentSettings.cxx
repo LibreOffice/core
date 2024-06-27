@@ -161,7 +161,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
-    HANDLE_PAINT_HELL_OVER_HEADER_FOOTER
+    HANDLE_PAINT_HELL_OVER_HEADER_FOOTER,
+    HANDLE_MIN_ROW_HEIGHT_INCL_BORDER
 };
 
 }
@@ -270,6 +271,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("ApplyTextAttrToEmptyLineAtEndOfParagraph"), HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
         { OUString("DoNotMirrorRtlDrawObjs"), HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
         { OUString("PaintHellOverHeaderFooter"), HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
+        { OUString("MinRowHeightInclBorder"), HANDLE_MIN_ROW_HEIGHT_INCL_BORDER, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1162,6 +1164,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER, bTmp);
         }
         break;
+        case HANDLE_MIN_ROW_HEIGHT_INCL_BORDER:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1742,6 +1752,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+        }
+        break;
+        case HANDLE_MIN_ROW_HEIGHT_INCL_BORDER:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
         }
         break;
         default:

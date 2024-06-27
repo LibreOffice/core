@@ -108,7 +108,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbNoNumberingShowFollowBy(false),
     mbDropCapPunctuation(true),
     mbUseVariableWidthNBSP(false),
-    mbPaintHellOverHeaderFooter(false)
+    mbPaintHellOverHeaderFooter(false),
+    mbMinRowHeightInclBorder(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -265,6 +266,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
         case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER: return mbPaintHellOverHeaderFooter;
+        case DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER: return mbMinRowHeightInclBorder;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -484,6 +486,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER:
             mbPaintHellOverHeaderFooter = value;
+            break;
+
+        case DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER:
+            mbMinRowHeightInclBorder = value;
             break;
 
         // COMPATIBILITY FLAGS END
@@ -1064,6 +1070,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbPaintHellOverHeaderFooter"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbPaintHellOverHeaderFooter).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMinRowHeightInclBorder"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbMinRowHeightInclBorder).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbContinuousEndnotes"));

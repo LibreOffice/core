@@ -135,6 +135,8 @@ enum class DocumentSettingId
     USE_VARIABLE_WIDTH_NBSP,
     // overlap background shapes if anchored in body
     PAINT_HELL_OVER_HEADER_FOOTER,
+    // tdf#155229 calculate minimum row height including horizontal border width
+    MIN_ROW_HEIGHT_INCL_BORDER,
 };
 
 /** Provides access to settings of a document

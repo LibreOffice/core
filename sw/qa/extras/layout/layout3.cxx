@@ -2638,6 +2638,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestCrashHyphenation)
     createSwDoc("crashHyphen.fodt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf155229RowAtLeast)
+{
+    createSwDoc("tdf155229_row_height_at_least.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTableHeight
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[11]/infos/bounds"_ostr, "bottom"_ostr)
+              .toInt32();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15494), nTableHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
