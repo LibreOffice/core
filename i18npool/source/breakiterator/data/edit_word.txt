@@ -65,7 +65,7 @@ $Extended_Pict      = [\p{Extended_Pictographic}];
 $MidNumLet          = [\p{Word_Break = MidNumLet}-[:name= FULL STOP:]];
 
 # $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-$ExtendNumLet       = [\p{Word_Break = ExtendNumLet}-[:name= LOW LINE:]];
+$ExtendNumLet       = [\p{Word_Break = ExtendNumLet}-[:name= LOW LINE:]-[:name = NARROW NO-BREAK SPACE:]];
 
 ### END CUSTOMIZATION
 
@@ -164,16 +164,18 @@ $Numeric $ExFm* ($MidNum | $MidNumLet | $Single_Quote) $ExFm* $Numeric;
 $Katakana $ExFm*  $Katakana {400};
 
 # rule 13a/b
+# allow to select numbers with narrow no-break spaces as thousand separators
+$ExtendNumLetNNBSP = [\p{Word_Break = ExtendNumLet}];
 
 $ALetterPlus   $ExFm* $ExtendNumLet {200};    #  (13a)
 $Hebrew_Letter $ExFm* $ExtendNumLet {200};    #  (13a)
-$Numeric       $ExFm* $ExtendNumLet {100};    #  (13a)
+$Numeric       $ExFm* $ExtendNumLetNNBSP {100};    #  (13a)
 $Katakana      $ExFm* $ExtendNumLet {400};    #  (13a)
 $ExtendNumLet  $ExFm* $ExtendNumLet {200};    #  (13a)
 
 $ExtendNumLet  $ExFm* $ALetterPlus  {200};    #  (13b)
 $ExtendNumLet  $ExFm* $Hebrew_Letter {200};    #  (13b)
-$ExtendNumLet  $ExFm* $Numeric      {100};    #  (13b)
+$ExtendNumLetNNBSP  $ExFm* $Numeric      {100};    #  (13b)
 $ExtendNumLet  $ExFm* $Katakana     {400};    #  (13b)
 
 # rules 15 - 17

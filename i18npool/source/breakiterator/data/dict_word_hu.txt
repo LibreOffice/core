@@ -53,7 +53,7 @@ $Double_Quote       = [\p{Word_Break = Double_Quote}];
 $MidNumLet          = [\p{Word_Break = MidNumLet}];
 $MidNum             = [\p{Word_Break = MidNum}];
 $Numeric            = [\p{Word_Break = Numeric}];
-$ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
+$ExtendNumLet       = [\p{Word_Break = ExtendNumLet}-[:name = NARROW NO-BREAK SPACE:]];
 $WSegSpace          = [\p{Word_Break = WSegSpace}];
 $Extended_Pict      = [\p{Extended_Pictographic}];
 
