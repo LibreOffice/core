@@ -31,6 +31,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <rtl/character.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <doc.hxx>
 #include "wrtww8.hxx"
@@ -2193,27 +2194,41 @@ void WW8_WrPlcFootnoteEdn::Append( WW8_CP nCp, const SwFormatFootnote& rFootnote
 
 WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd)
     :
-        maDateTime( DateTime::EMPTY ),
         m_nRangeStart(nRangeStart),
-        m_nRangeEnd(nRangeEnd)
+        m_nRangeEnd(nRangeEnd),
+        mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     mpRichText = pPostIt->GetTextObject();
     if (!mpRichText)
         msSimpleText = pPostIt->GetText();
-    msOwner = pPostIt->GetPar1();
-    m_sInitials = pPostIt->GetInitials();
-    maDateTime = DateTime(pPostIt->GetDate(), pPostIt->GetTime());
+    initPersonalInfo(pPostIt->GetPar1(), pPostIt->GetInitials(),
+                     DateTime(pPostIt->GetDate(), pPostIt->GetTime()));
 }
 
 WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
     :
         mpRichText(nullptr),
         msSimpleText(pRedline->GetComment()),
-        msOwner(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor())),
-        maDateTime(pRedline->GetTimeStamp()),
         m_nRangeStart(0),
-        m_nRangeEnd(0)
+        m_nRangeEnd(0),
+        mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
+    initPersonalInfo(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()), u""_ustr,
+                     pRedline->GetTimeStamp());
+}
+
+void WW8_Annotation::initPersonalInfo(const OUString& sAuthor, const OUString& sInitials,
+                                      DateTime aDateTime)
+{
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+    msOwner = bRemovePersonalInfo ? "Author" + OUString::number(mpAuthorIDs->GetInfoID(sAuthor))
+                                  : sAuthor;
+    m_sInitials = bRemovePersonalInfo ? "A" + OUString::number(mpAuthorIDs->GetInfoID(sAuthor))
+                                      : sInitials;
+    maDateTime = bRemovePersonalInfo ? DateTime(DateTime::EMPTY) : aDateTime;
 }
 
 bool WW8_Annotation::HasRange() const
