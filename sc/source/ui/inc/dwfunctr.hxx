@@ -20,6 +20,7 @@
 
 #include <comphelper/configurationlistener.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <unordered_map>
 
 class ScFuncDesc;
 namespace formula { class IFunctionDescription; }
@@ -45,6 +46,7 @@ class ScFunctionWin : public PanelLayout
 private:
     std::unique_ptr<weld::ComboBox> xCatBox;
     std::unique_ptr<weld::TreeView> xFuncList;
+    std::unique_ptr<weld::TreeIter> xScratchIter;
     std::unique_ptr<weld::Button> xInsertButton;
     std::unique_ptr<weld::Button> xHelpButton;
     std::unique_ptr<weld::TextView> xFiFuncDesc;
@@ -58,10 +60,12 @@ private:
     OUString m_aSearchHelpId;
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
+    ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
 
     void            UpdateLRUList();
-    void            DoEnter();
+    void            DoEnter(bool bDouble_or_Enter = false);
     void            SetDescription();
+    weld::TreeIter* FillCategoriesMap(const OUString&, bool);
 
                     DECL_LINK( SetRowActivatedHdl, weld::TreeView&, bool );
                     DECL_LINK( SetSelectionClickHdl, weld::Button&, void );

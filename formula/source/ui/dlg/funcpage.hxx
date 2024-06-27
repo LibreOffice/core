@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <vector>
+#include <unordered_map>
 
 namespace formula
 {
@@ -39,6 +40,7 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xLbCategory;
     std::unique_ptr<weld::TreeView> m_xLbFunction;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<weld::Entry> m_xLbFunctionSearchString;
     std::unique_ptr<weld::Button> m_xHelpButton;
 
@@ -47,12 +49,14 @@ private:
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
+    ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
     OUString    m_aHelpId;
 
     // tdf#104487 - remember last used function category
     static sal_Int32 m_nRememberedFunctionCategory;
 
-    void impl_addFunctions(const IFunctionCategory* _pCategory);
+    void impl_addFunctions(const IFunctionCategory*, bool);
+    weld::TreeIter* FillCategoriesMap(const OUString&, bool);
 
     DECL_LINK(SelComboBoxHdl, weld::ComboBox&, void);
     DECL_LINK(SelTreeViewHdl, weld::TreeView&, void);
@@ -80,7 +84,7 @@ public:
     static sal_Int32 GetRememeberdFunctionCategory() { return m_nRememberedFunctionCategory; };
 
     sal_Int32       GetFuncPos(const IFunctionDescription* _pDesc);
-    const IFunctionDescription* GetFuncDesc( sal_Int32  nPos ) const;
+    const IFunctionDescription* GetFuncDesc() const;
     OUString        GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link<FuncPage&,void>& rLink ) { aDoubleClickLink = rLink; }

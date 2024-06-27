@@ -120,7 +120,7 @@
             <property name="model">liststore1</property>
             <property name="headers-visible">False</property>
             <property name="search-column">0</property>
-            <property name="show-expanders">False</property>
+            <property name="show-expanders">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>

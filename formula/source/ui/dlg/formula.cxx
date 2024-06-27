@@ -1034,7 +1034,7 @@ IMPL_LINK(FormulaDlg_Impl, BtnHdl, weld::Button&, rBtn, void)
         const IFunctionDescription* pDesc;
         sal_Int32 nSelFunc = m_xFuncPage->GetFunction();
         if (nSelFunc != -1)
-            pDesc = m_xFuncPage->GetFuncDesc( nSelFunc );
+            pDesc = m_xFuncPage->GetFuncDesc();
         else
         {
             // Do not overwrite the selected formula expression, just edit the
@@ -1064,10 +1064,8 @@ IMPL_LINK(FormulaDlg_Impl, BtnHdl, weld::Button&, rBtn, void)
 
 IMPL_LINK_NOARG( FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
 {
-    sal_Int32 nFunc = m_xFuncPage->GetFunction();
-
     //  ex-UpdateLRUList
-    const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc(nFunc);
+    const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc();
     m_pHelper->insertEntryToLRUList(pDesc);
 
     OUString aFuncName = m_xFuncPage->GetSelFunctionName() + "()";
@@ -1672,7 +1670,7 @@ IMPL_LINK_NOARG( FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
     if (   (m_xFuncPage->GetFunctionEntryCount() > 0)
         && (m_xFuncPage->GetFunction() != -1) )
     {
-        const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc( m_xFuncPage->GetFunction() );
+        const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc();
 
         if (pDesc != m_pFuncDesc)
             m_xBtnForward->set_sensitive(true); //new
