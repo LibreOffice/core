@@ -2232,11 +2232,36 @@
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
     </style:style>
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Filled_20_Blue">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#7f59ae"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Filled_20_Yellow">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#f8b622"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Filled_20_Red">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#e54b89"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#7f59ae" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#f8b622" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Outlined_20_Red">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#e54b89" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#e54b89" loext:opacity="100%"/>
+    </style:style>
     <style:style style:name="Mgr32" style:family="graphic" style:parent-style-name="Outlined_20_Cyan">
       <style:graphic-properties svg:stroke-width="0.15cm"/>
     </style:style>
     <style:style style:name="Mgr33" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
-      <style:graphic-properties svg:stroke-width="0.15cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#f8b622" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Candy-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
@@ -2519,11 +2544,11 @@
     </style:master-page>
     <style:master-page style:name="Table_20_of_20_Content" style:display-name="Table of Content" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:polygon draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="5.141cm" svg:height="5.407cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 5142 5408" draw:points="3781,0 0,2467 0,5408 5142,2053 3802,0"/>
-        <draw:polygon draw:style-name="Filled_20_Yellow" draw:layer="backgroundobjects" svg:width="5.59cm" svg:height="5.64cm" svg:x="0cm" svg:y="6.466cm" svg:viewBox="0 0 5591 5641" draw:points="4291,0 0,2799 0,5641 5591,1993"/>
-        <draw:polygon draw:style-name="Filled_20_Red" draw:layer="backgroundobjects" svg:width="8.87cm" svg:height="8.997cm" svg:x="0cm" svg:y="0.557cm" svg:viewBox="0 0 8871 8998" draw:points="6776,0 0,4422 0,8998 8871,3210"/>
+        <draw:polygon draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="5.141cm" svg:height="5.407cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 5142 5408" draw:points="3781,0 0,2467 0,5408 5142,2053 3802,0"/>
+        <draw:polygon draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="5.59cm" svg:height="5.64cm" svg:x="0cm" svg:y="6.466cm" svg:viewBox="0 0 5591 5641" draw:points="4291,0 0,2799 0,5641 5591,1993"/>
+        <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="8.87cm" svg:height="8.997cm" svg:x="0cm" svg:y="0.557cm" svg:viewBox="0 0 8871 8998" draw:points="6776,0 0,4422 0,8998 8871,3210"/>
         <draw:polygon draw:style-name="Filled_20_Orange" draw:layer="backgroundobjects" svg:width="9cm" svg:height="8.3cm" svg:x="0cm" svg:y="7.447cm" svg:viewBox="0 0 8987 8271" draw:points="7027,0 0,4585 0,8271 911,8271 8987,3002"/>
-        <draw:polygon draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="4.355cm" svg:height="1.992cm" svg:x="0.771cm" svg:y="13.825cm" svg:viewBox="0 0 4356 1993" draw:points="3055,0 0,1993 4356,1993"/>
+        <draw:polygon draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="4.355cm" svg:height="1.992cm" svg:x="0.771cm" svg:y="13.825cm" svg:viewBox="0 0 4356 1993" draw:points="3055,0 0,1993 4356,1993"/>
         <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="3.885cm" svg:height="2.535cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 3886 2536" draw:points="0,0 0,2536 3886,0"/>
       </draw:g>
       <draw:frame presentation:style-name="Table_20_of_20_Content-title" draw:layer="backgroundobjects" svg:width="12.1cm" svg:height="3.125cm" draw:transform="rotate (-1.56817833291691) translate (26.69cm 2.028cm)" presentation:class="title" presentation:placeholder="true">
@@ -2581,26 +2606,26 @@
         <draw:polygon draw:style-name="Filled_20_Orange" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="4.675cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
         <draw:polygon draw:style-name="Filled_20_Orange" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="5.77cm" svg:y="7.341cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
         <draw:polygon draw:style-name="Filled_20_Orange" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="9.762cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="5.77cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="5.77cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="5.77cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="5.77cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="3.307cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
       </draw:g>
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="7.485cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
       </draw:g>
       <draw:g>
         <draw:polygon draw:style-name="Filled_20_Blue_20_Cyan" draw:text-style-name="MP31" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.5cm" svg:x="0cm" svg:y="15.25cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
@@ -2659,36 +2684,36 @@
     </style:master-page>
     <style:master-page style:name="Content" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
       </draw:g>
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
       </draw:g>
       <draw:frame presentation:style-name="Content-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.629cm" svg:x="1.4cm" svg:y="0.628cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -2768,47 +2793,47 @@
     </style:master-page>
     <style:master-page style:name="Sample_20_Article" style:display-name="Sample Article" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
       </draw:g>
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
       </draw:g>
-      <draw:polygon draw:style-name="Filled_20_Blue" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="0cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
+      <draw:polygon draw:style-name="Mgr3" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="0cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
         <text:p/>
       </draw:polygon>
       <draw:polygon draw:style-name="Filled_20_Cyan" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="7cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
         <text:p/>
       </draw:polygon>
-      <draw:polygon draw:style-name="Filled_20_Red" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="14cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
+      <draw:polygon draw:style-name="Mgr5" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="14cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
         <text:p/>
       </draw:polygon>
-      <draw:polygon draw:style-name="Filled_20_Yellow" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="21cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
+      <draw:polygon draw:style-name="Mgr4" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="7cm" svg:height="10.2cm" svg:x="21cm" svg:y="3.3cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600">
         <text:p/>
       </draw:polygon>
       <draw:frame presentation:style-name="Sample_20_Article-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.629cm" svg:x="1.4cm" svg:y="0.628cm" presentation:class="title" presentation:placeholder="true">
@@ -2889,20 +2914,20 @@
     </style:master-page>
     <style:master-page style:name="Topic_20_Title_20_2" style:display-name="Topic Title 2" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="7.485cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
       </draw:g>
       <draw:g>
         <draw:polygon draw:style-name="Filled_20_Blue_20_Cyan" draw:text-style-name="MP31" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.5cm" svg:x="0cm" svg:y="15.25cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
@@ -2915,10 +2940,10 @@
         <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.675cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
         <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="7.341cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
         <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.762cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
       </draw:g>
       <draw:frame presentation:style-name="Topic_20_Title_20_2-title" draw:layer="backgroundobjects" svg:width="12cm" svg:height="3cm" svg:x="5cm" svg:y="4.75cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -2971,22 +2996,22 @@
     </style:master-page>
     <style:master-page style:name="Insert_20_Picture" style:display-name="Insert Picture" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
       </draw:g>
-      <draw:path draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="16.8cm" svg:height="15.75cm" svg:x="11.2cm" svg:y="0cm" svg:viewBox="0 0 16778 15648" svg:d="M16778 0c0 5216 0 10432 0 15648-5592 0-11185 0-16778 0 0-12381 11861-15648 16778-15648z"/>
+      <draw:path draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="16.8cm" svg:height="15.75cm" svg:x="11.2cm" svg:y="0cm" svg:viewBox="0 0 16778 15648" svg:d="M16778 0c0 5216 0 10432 0 15648-5592 0-11185 0-16778 0 0-12381 11861-15648 16778-15648z"/>
       <draw:frame presentation:style-name="Insert_20_Picture-title" draw:layer="backgroundobjects" svg:width="11.6cm" svg:height="2.629cm" svg:x="1.4cm" svg:y="1.3cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -3069,20 +3094,20 @@
     </style:master-page>
     <style:master-page style:name="Insert_20_Picture_20_1" style:display-name="Insert Picture 1" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
       </draw:g>
       <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="9cm" svg:height="9cm" svg:x="0cm" svg:y="3.375cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
       <draw:frame presentation:style-name="Insert_20_Picture_20_1-title" draw:layer="backgroundobjects" svg:width="12cm" svg:height="2.629cm" svg:x="14.5cm" svg:y="1.3cm" presentation:class="title" presentation:placeholder="true">
@@ -3167,20 +3192,20 @@
     </style:master-page>
     <style:master-page style:name="Topic_20_Title_20_3" style:display-name="Topic Title 3" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="0.578cm" svg:x2="27.287cm" svg:y2="7.065cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="6.953cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="7.485cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.03cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="27.175cm" svg:y="8.651cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="27.287cm" svg:y1="8.673cm" svg:x2="27.287cm" svg:y2="15.16cm"/>
       </draw:g>
       <draw:g>
         <draw:polygon draw:style-name="Filled_20_Blue_20_Cyan" draw:text-style-name="MP31" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.5cm" svg:x="0cm" svg:y="15.25cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
@@ -3189,14 +3214,14 @@
         <draw:polygon draw:style-name="Filled_20_Orange_20_Yellow" draw:text-style-name="MP34" draw:layer="backgroundobjects" svg:width="4cm" svg:height="0.5cm" svg:x="24cm" svg:y="15.25cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
       </draw:g>
       <draw:g>
-        <draw:polygon draw:style-name="Filled_20_Red" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="2.254cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Filled_20_Red" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.675cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Filled_20_Red" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="7.341cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Filled_20_Red" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.762cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
-        <draw:polygon draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
+        <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="2.254cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.675cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="7.341cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.762cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="1.845cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="4.266cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="19.75cm" svg:y="6.933cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4231"/>
+        <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="4.23cm" svg:height="4.23cm" svg:x="17.25cm" svg:y="9.353cm" svg:viewBox="0 0 4231 4231" draw:points="1057,3165 0,2098 2116,0 4231,2133 2114,4232"/>
       </draw:g>
       <draw:frame presentation:style-name="Topic_20_Title_20_3-title" draw:layer="backgroundobjects" svg:width="12cm" svg:height="3cm" svg:x="5cm" svg:y="4.75cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -3249,36 +3274,36 @@
     </style:master-page>
     <style:master-page style:name="List_20_Content" style:display-name="List Content" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="0.711cm" svg:x2="13.197cm" svg:y2="0.711cm"/>
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="0.711cm" svg:x2="21.291cm" svg:y2="0.711cm"/>
       </draw:g>
       <draw:g>
-        <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
+        <draw:line draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:x1="6.712cm" svg:y1="15.24cm" svg:x2="13.197cm" svg:y2="15.24cm"/>
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="15.128cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
+        <draw:line draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:x1="14.806cm" svg:y1="15.24cm" svg:x2="21.291cm" svg:y2="15.24cm"/>
       </draw:g>
       <draw:path draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="7.805cm" svg:height="15.747cm" svg:x="20.194cm" svg:y="0.003cm" svg:viewBox="0 0 7806 15748" svg:d="M7806 0c-4311 0-7806 3495-7806 7805s3495 7943 7806 7943c0-5249 0-10499 0-15748z"/>
       <draw:frame presentation:style-name="List_20_Content-title" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="2.629cm" svg:x="1.4cm" svg:y="0.628cm" presentation:class="title" presentation:placeholder="true">
@@ -3359,16 +3384,16 @@
     </style:master-page>
     <style:master-page style:name="Greetings" style:page-layout-name="PM1" draw:style-name="Mdp3">
       <draw:g>
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr3" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.086cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="13.617cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr5" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.162cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
+        <draw:custom-shape draw:style-name="Mgr4" draw:layer="layout" svg:width="0.223cm" svg:height="0.223cm" svg:x="14.694cm" svg:y="0.6cm">
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
         </draw:custom-shape>
       </draw:g>
