@@ -1920,10 +1920,12 @@ public:
 
 class SalInstanceIconView : public SalInstanceWidget, public virtual weld::IconView
 {
+protected:
+    VclPtr<::IconView> m_xIconView;
+
 private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
-    VclPtr<::IconView> m_xIconView;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
@@ -1931,7 +1933,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(EntryAccessibleDescriptionHdl, SvTreeListEntry*, OUString);
-    DECL_LINK(DumpElemToPropertyTreeHdl, const ::IconView::json_prop_query&, bool);
+    DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -1954,7 +1956,7 @@ public:
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
 
     virtual void
-    connect_get_property_tree_elem(const Link<const weld::json_prop_query&, bool>& rLink) override;
+    connect_get_image(const Link<const weld::encoded_image_query&, bool>& rLink) override;
 
     virtual OUString get_selected_id() const override;
 

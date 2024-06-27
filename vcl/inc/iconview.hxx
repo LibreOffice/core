@@ -47,20 +47,22 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+    typedef std::tuple<OUString&, SvTreeListEntry*> encoded_image_query;
 
-    typedef std::tuple<tools::JsonWriter&, SvTreeListEntry*, std::string_view> json_prop_query;
-
-    void SetDumpElemToPropertyTreeHdl(const Link<const json_prop_query&, bool>& rLink)
+    void SetDumpImageHdl(const Link<const encoded_image_query&, bool>& rLink)
     {
-        maDumpElemToPropertyTreeHdl = rLink;
+        maDumpImageHdl = rLink;
     }
+
+    /// returns string with encoded image for an entry
+    OUString renderEntry(int pos, int dpix, int dpiy) const;
 
 protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 
 private:
     Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
-    Link<const json_prop_query&, bool> maDumpElemToPropertyTreeHdl;
+    Link<const encoded_image_query&, bool> maDumpImageHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 };
 

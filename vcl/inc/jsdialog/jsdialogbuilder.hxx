@@ -355,6 +355,12 @@ public:
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) = 0;
 };
 
+class SAL_LOPLUGIN_ANNOTATE("crosscast") OnDemandRenderingHandler
+{
+public:
+    virtual void render_entry(int pos, int dpix, int dpiy) = 0;
+};
+
 template <class BaseInstanceClass, class VclClass>
 class JSWidget : public BaseInstanceClass, public BaseJSWidget
 {
@@ -619,7 +625,8 @@ public:
     virtual void set_active(int pos) override;
 };
 
-class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
+class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>,
+                         public OnDemandRenderingHandler
 {
 public:
     JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
@@ -633,7 +640,8 @@ public:
     virtual void set_active_id(const OUString& rText) override;
     virtual bool changed_by_direct_pick() const override;
 
-    void render_entry(int pos, int dpix, int dpiy);
+    // OnDemandRenderingHandler
+    virtual void render_entry(int pos, int dpix, int dpiy) override;
 };
 
 class JSNotebook final : public JSWidget<SalInstanceNotebook, ::TabControl>
@@ -807,7 +815,8 @@ public:
     virtual void set_expanded(bool bExpand) override;
 };
 
-class JSIconView final : public JSWidget<SalInstanceIconView, ::IconView>
+class JSIconView final : public JSWidget<SalInstanceIconView, ::IconView>,
+                         public OnDemandRenderingHandler
 {
 public:
     JSIconView(JSDialogSender* pSender, ::IconView* pIconView, SalInstanceBuilder* pBuilder,
@@ -824,6 +833,9 @@ public:
     virtual void clear() override;
     virtual void select(int pos) override;
     virtual void unselect(int pos) override;
+
+    // OnDemandRenderingHandler
+    virtual void render_entry(int pos, int dpix, int dpiy) override;
 };
 
 class JSRadioButton final : public JSWidget<SalInstanceRadioButton, ::RadioButton>

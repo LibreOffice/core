@@ -455,8 +455,7 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_selection_changed(LINK(this, StylesPreviewWindow_Base, Selected));
     m_xStylesView->connect_item_activated(LINK(this, StylesPreviewWindow_Base, DoubleClick));
     m_xStylesView->connect_command(LINK(this, StylesPreviewWindow_Base, DoCommand));
-    m_xStylesView->connect_get_property_tree_elem(
-        LINK(this, StylesPreviewWindow_Base, DoJsonProperty));
+    m_xStylesView->connect_get_image(LINK(this, StylesPreviewWindow_Base, GetPreviewImage));
 
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
@@ -567,12 +566,9 @@ static OString extractPngString(const BitmapEx& rBitmap)
     return ""_ostr;
 }
 
-// 0: json writer, 1: TreeIter, 2: property. returns true if supported
-IMPL_LINK(StylesPreviewWindow_Base, DoJsonProperty, const weld::json_prop_query&, rQuery, bool)
+// 0: OUString, 1: TreeIter, returns true if supported
+IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_query&, rQuery, bool)
 {
-    if (std::get<2>(rQuery) != "image")
-        return false;
-
     const weld::TreeIter& rIter = std::get<1>(rQuery);
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
@@ -580,8 +576,8 @@ IMPL_LINK(StylesPreviewWindow_Base, DoJsonProperty, const weld::json_prop_query&
     if (sBase64Png.isEmpty())
         return false;
 
-    tools::JsonWriter& rJsonWriter = std::get<0>(rQuery);
-    rJsonWriter.put("image", sBase64Png);
+    OUString& rResult = std::get<0>(rQuery);
+    rResult = OStringToOUString(sBase64Png, RTL_TEXTENCODING_ASCII_US);
 
     return true;
 }

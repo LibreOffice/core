@@ -5544,20 +5544,18 @@ void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&
     m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
 }
 
-IMPL_LINK(SalInstanceIconView, DumpElemToPropertyTreeHdl, const ::IconView::json_prop_query&,
-          rQuery, bool)
+IMPL_LINK(SalInstanceIconView, DumpImageHdl, const ::IconView::encoded_image_query&, rQuery, bool)
 {
     SvTreeListEntry* pEntry = std::get<1>(rQuery);
-    return m_aGetPropertyTreeElemHdl.Call(weld::json_prop_query(
-        std::get<0>(rQuery), SalInstanceTreeIter(pEntry), std::get<2>(rQuery)));
+    return m_aGetPropertyTreeElemHdl.Call(
+        weld::encoded_image_query(std::get<0>(rQuery), SalInstanceTreeIter(pEntry)));
 }
 
-void SalInstanceIconView::connect_get_property_tree_elem(
-    const Link<const weld::json_prop_query&, bool>& rLink)
+void SalInstanceIconView::connect_get_image(
+    const Link<const weld::encoded_image_query&, bool>& rLink)
 {
-    weld::IconView::connect_get_property_tree_elem(rLink);
-    m_xIconView->SetDumpElemToPropertyTreeHdl(
-        LINK(this, SalInstanceIconView, DumpElemToPropertyTreeHdl));
+    weld::IconView::connect_get_image(rLink);
+    m_xIconView->SetDumpImageHdl(LINK(this, SalInstanceIconView, DumpImageHdl));
 }
 
 OUString SalInstanceIconView::get_selected_id() const

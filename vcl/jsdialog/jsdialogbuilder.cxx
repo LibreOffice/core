@@ -10,6 +10,8 @@
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/lok.hxx>
+#include <iconview.hxx>
 #include <utility>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -1705,7 +1707,7 @@ void JSComboBox::render_entry(int pos, int dpix, int dpiy)
         ::comphelper::Base64::encode(aBuffer, aSeq);
 
         std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE ""_ostr] = "rendered_combobox_entry";
+        (*pMap)[ACTION_TYPE ""_ostr] = "rendered_entry";
         (*pMap)["pos"_ostr] = OUString::number(pos);
         (*pMap)["image"_ostr] = aBuffer;
         sendAction(std::move(pMap));
@@ -2246,6 +2248,19 @@ void JSIconView::unselect(int pos)
 {
     SalInstanceIconView::unselect(pos);
     sendUpdate();
+}
+
+void JSIconView::render_entry(int pos, int dpix, int dpiy)
+{
+    OUString sImage = m_xIconView->renderEntry(pos, dpix, dpiy);
+    if (sImage.isEmpty())
+        return;
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    (*pMap)[ACTION_TYPE ""_ostr] = "rendered_entry";
+    (*pMap)["pos"_ostr] = OUString::number(pos);
+    (*pMap)["image"_ostr] = sImage;
+    sendAction(std::move(pMap));
 }
 
 JSRadioButton::JSRadioButton(JSDialogSender* pSender, ::RadioButton* pRadioButton,

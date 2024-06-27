@@ -278,6 +278,30 @@ static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
     return ""_ostr;
 }
 
+OUString IconView::renderEntry(int pos, int /*dpix*/, int /*dpiy*/) const
+{
+    // TODO: support various DPI
+    SvTreeListEntry* pEntry = GetEntry(pos);
+    if (!pEntry)
+        return "";
+
+    OUString sResult;
+    const bool bHandled
+        = maDumpImageHdl.IsSet() && maDumpImageHdl.Call(encoded_image_query(sResult, pEntry));
+
+    if (!bHandled)
+    {
+        if (const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp))
+        {
+            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            if (pBmpItem)
+                return OStringToOUString(extractPngString(pBmpItem), RTL_TEXTENCODING_ASCII_US);
+        }
+    }
+
+    return sResult;
+}
+
 void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry)
 {
     while (pEntry)
@@ -289,18 +313,12 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (pIt)
             rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
 
-        const bool bHandled
-            = maDumpElemToPropertyTreeHdl.IsSet()
-              && maDumpElemToPropertyTreeHdl.Call(json_prop_query(rJsonWriter, pEntry, "image"));
-        if (!bHandled)
+        pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
+        if (pIt)
         {
-            pIt = pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
-            if (pIt)
-            {
-                const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
-                if (pBmpItem)
-                    rJsonWriter.put("image", extractPngString(pBmpItem));
-            }
+            const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            if (pBmpItem)
+                rJsonWriter.put("ondemand", true);
         }
 
         if (const OUString tooltip = GetEntryTooltip(pEntry); !tooltip.isEmpty())

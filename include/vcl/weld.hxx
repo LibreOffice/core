@@ -1386,7 +1386,7 @@ public:
     using Widget::get_sensitive;
 };
 
-typedef std::tuple<tools::JsonWriter&, const TreeIter&, std::string_view> json_prop_query;
+typedef std::tuple<OUString&, const TreeIter&> encoded_image_query;
 
 class VCL_DLLPUBLIC IconView : virtual public Widget
 {
@@ -1400,7 +1400,7 @@ protected:
     Link<IconView&, bool> m_aItemActivatedHdl;
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
-    Link<const json_prop_query&, bool> m_aGetPropertyTreeElemHdl;
+    Link<const encoded_image_query&, bool> m_aGetPropertyTreeElemHdl;
 
     void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
     bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
@@ -1455,8 +1455,8 @@ public:
         m_aQueryTooltipHdl = rLink;
     }
 
-    // 0: json writer, 1: TreeIter, 2: property. returns true if supported
-    virtual void connect_get_property_tree_elem(const Link<const json_prop_query&, bool>& rLink)
+    // 0: OUString, 1: TreeIter, returns true if supported
+    virtual void connect_get_image(const Link<const encoded_image_query&, bool>& rLink)
     {
         m_aGetPropertyTreeElemHdl = rLink;
     }

@@ -17177,7 +17177,7 @@ public:
         gtk_widget_set_has_tooltip(GTK_WIDGET(m_pIconView), true);
     }
 
-    virtual void connect_get_property_tree_elem(const Link<const weld::json_prop_query&, bool>& /*rLink*/) override
+    virtual void connect_get_image(const Link<const weld::encoded_image_query&, bool>& /*rLink*/) override
     {
         //not implemented for the gtk variant
     }
