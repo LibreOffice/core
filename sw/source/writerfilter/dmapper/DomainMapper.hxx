@@ -143,6 +143,7 @@ public:
 
     css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
     OUString GetUnusedCharacterStyleName();
+    bool IsNewDoc() const;
 
 private:
     // Stream

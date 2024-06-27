@@ -5110,6 +5110,11 @@ OUString DomainMapper::GetUnusedCharacterStyleName()
     return m_pImpl->GetUnusedCharacterStyleName();
 }
 
+bool DomainMapper::IsNewDoc() const
+{
+    return m_pImpl->IsNewDoc();
+}
+
 } //namespace writerfilter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
