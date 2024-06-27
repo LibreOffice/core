@@ -1024,6 +1024,8 @@ protected:
 
 private:
     rtl::Reference<SotStorage> m_xEscherStg; /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
+    /// map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
 
 public:
     /// Access to the attribute output class.

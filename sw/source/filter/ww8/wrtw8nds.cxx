@@ -50,6 +50,7 @@
 #include <svl/grabbagitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
+#include <unotools/securityoptions.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtanchr.hxx>
@@ -3668,6 +3669,11 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         NS_sprm::CFRMarkDel::val, NS_sprm::CIbstRMarkDel::val, NS_sprm::CDttmRMarkDel::val,
     };
 
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(
+                 SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
+
     const sal_uInt16* pSprmIds = nullptr;
     switch( pRedline->GetType() )
     {
@@ -3684,7 +3690,8 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         m_rWW8Export.m_pO->push_back( 7 );       // len
         m_rWW8Export.m_pO->push_back( 1 );
         m_rWW8Export.InsUInt16( m_rWW8Export.AddRedlineAuthor( pRedline->GetAuthor() ) );
-        m_rWW8Export.InsUInt32( sw::ms::DateTime2DTTM( pRedline->GetTimeStamp() ));
+        m_rWW8Export.InsUInt32(sw::ms::DateTime2DTTM(
+            bRemovePersonalInfo ? DateTime(DateTime::EMPTY) : pRedline->GetTimeStamp()));
         break;
     default:
         OSL_ENSURE(false, "Unhandled redline type for export");
@@ -3700,7 +3707,8 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         m_rWW8Export.InsUInt16( m_rWW8Export.AddRedlineAuthor( pRedline->GetAuthor() ) );
 
         m_rWW8Export.InsUInt16( pSprmIds[2] );
-        m_rWW8Export.InsUInt32( sw::ms::DateTime2DTTM( pRedline->GetTimeStamp() ));
+        m_rWW8Export.InsUInt32(sw::ms::DateTime2DTTM(
+            bRemovePersonalInfo ? DateTime(DateTime::EMPTY) : pRedline->GetTimeStamp()));
     }
 }
 
