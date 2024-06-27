@@ -359,6 +359,74 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePage)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationTextUpdate)
+{
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    // Check current page
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    // Should have no objects yet
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    // Should have no annotaitons yet
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->getAnnotations().size());
+
+    // New free text annotation
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
+    xAnnotation->setAuthor(u"B"_ustr);
+
+    uno::Reference<text::XText> xText(xAnnotation->getTextRange());
+    xText->setString(u"XXX"_ustr);
+
+    xAnnotation->setPosition(geometry::RealPoint2D(1000.0, 1000.0));
+    xAnnotation->setSize(geometry::RealSize2D(5000.0, 2000.0));
+
+    sdr::annotation::CreationInfo aInfo;
+    aInfo.meType = sdr::annotation::AnnotationType::FreeText;
+    xAnnotation->setCreationInfo(aInfo);
+
+    pPage->addAnnotation(xAnnotation, -1);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Text, pObject->GetObjIdentifier());
+
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
+
+    {
+        OUString sText = pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0);
+        CPPUNIT_ASSERT_EQUAL(u"XXX"_ustr, sText);
+
+        CPPUNIT_ASSERT_EQUAL(u"XXX"_ustr, xAnnotation->GetText());
+    }
+
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT_EQUAL(true, pView->IsTextEdit());
+
+    auto* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    auto& rEditView = pOutlinerView->GetEditView();
+    rEditView.SetSelection(ESelection::All());
+    rEditView.InsertText(u"ABC"_ustr);
+
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT_EQUAL(false, pView->IsTextEdit());
+
+    {
+        OUString sText = pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0);
+        CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, sText);
+
+        CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, pPage->getAnnotations().at(0)->GetText());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
