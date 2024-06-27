@@ -22,7 +22,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/cenumitm.hxx>
-
+#include <cassert>
 
 template<typename EnumT>
 class SAL_DLLPUBLIC_RTTI SfxEnumItem : public SfxEnumItemInterface
@@ -43,7 +43,7 @@ public:
 
     void SetValue(EnumT nTheValue)
     {
-        assert(GetRefCount() == 0 && "SfxEnumItem::SetValue(): Pooled item");
+        assert( !isPooled() && "SetValue() with pooled item" );
         m_nValue = nTheValue;
     }
 

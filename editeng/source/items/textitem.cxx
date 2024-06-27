@@ -997,7 +997,7 @@ bool SvxFontHeightItem::HasMetrics() const
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp,
                                    MapUnit eUnit )
 {
-    DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+    assert( !isPooled() && "SetHeight() with pooled item" );
 
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     if( MapUnit::MapRelative != eUnit )
@@ -1015,7 +1015,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
                                    MapUnit eMetric, MapUnit eCoreMetric )
 {
-    DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+    assert( !isPooled() && "SetValue() with pooled item" );
 
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     if( MapUnit::MapRelative != eMetric )

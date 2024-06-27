@@ -503,6 +503,8 @@ public:
     bool isDynamicDefault() const { return m_bDynamicDefault; }
     bool isSetItem() const { return m_bIsSetItem; }
     bool isShareable() const { return m_bShareable; }
+    bool isPooled() const { return GetRefCount() > 0; }
+
 
     // version that allows nullptrs
     static bool areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2);
@@ -705,11 +707,6 @@ inline bool IsDynamicDefaultItem(const SfxPoolItem *pItem )
 inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
     return pItem && (pItem->isStaticDefault() || pItem->isDynamicDefault());
-}
-
-inline bool IsPooledItem( const SfxPoolItem *pItem )
-{
-    return pItem && pItem->GetRefCount() > 0;
 }
 
 SVL_DLLPUBLIC extern SfxPoolItem const * const INVALID_POOL_ITEM;

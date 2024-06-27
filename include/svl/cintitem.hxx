@@ -56,7 +56,7 @@ public:
 
 inline void CntByteItem::SetValue(sal_uInt8 nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "CntByteItem::SetValue(): Pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_nValue = nTheValue;
 }
 
@@ -93,7 +93,7 @@ public:
 
 inline void CntUInt16Item::SetValue(sal_uInt16 nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "CntUInt16Item::SetValue(): Pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_nValue = nTheValue;
 }
 
@@ -130,7 +130,7 @@ public:
 
 inline void CntInt32Item::SetValue(sal_Int32 nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "CntInt32Item::SetValue(): Pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_nValue = nTheValue;
 }
 
@@ -167,7 +167,7 @@ public:
 
 inline void CntUInt32Item::SetValue(sal_uInt32 nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "CntUInt32Item::SetValue(): Pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_nValue = nTheValue;
 }
 

@@ -60,7 +60,7 @@ public:
 
 inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
 {
-    assert(GetRefCount() == 0 && "cannot modify name of pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_aValue = rTheValue;
 }
 

@@ -75,7 +75,7 @@ public:
 
 inline void SfxInt16Item::SetValue(sal_Int16 nTheValue)
 {
-    DBG_ASSERT(GetRefCount() == 0, "SfxInt16Item::SetValue(); Pooled item");
+    assert( !isPooled() && "SetValue() with pooled item" );
     m_nValue = nTheValue;
 }
 

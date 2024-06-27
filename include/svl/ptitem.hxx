@@ -47,7 +47,7 @@ public:
 
     const Point&             GetValue() const { return aVal; }
             void             SetValue( const Point& rNewVal ) {
-                                 DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+                                 assert( !isPooled() && "SetValue() with pooled item" );
                                  aVal = rNewVal;
                              }
 

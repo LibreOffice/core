@@ -46,7 +46,7 @@ public:
                                   const IntlWrapper& ) const override;
             sal_uInt16           GetValue() const { return nVal; }
             void             SetValue( sal_uInt16 nNewVal ) {
-                                 DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+                                 assert( !isPooled() && "SetValue() with pooled item" );
                                  nVal = nNewVal;
                              }
             bool             GetFlag( sal_uInt8 nFlag ) const { return (nVal & ( 1<<nFlag)); }
