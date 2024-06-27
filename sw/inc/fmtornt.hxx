@@ -56,13 +56,19 @@ public:
 
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
-    void   SetVertOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
-    void   SetRelationOrient( sal_Int16 eNew ) { m_eRelation = eNew; }
+    void   SetVertOrient( sal_Int16 eNew )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eOrient = eNew; }
+    void   SetRelationOrient( sal_Int16 eNew )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eRelation = eNew; }
 
     SwTwips GetPos() const { return m_nYPos; }
-    void    SetPos( SwTwips nNew ) { m_nYPos = nNew; }
+    void    SetPos( SwTwips nNew )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_nYPos = nNew; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 };
 
 /// Defines the horizontal position of a fly frame.
@@ -93,16 +99,19 @@ public:
 
     sal_Int16 GetHoriOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
-    void SetHoriOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
-    void SetRelationOrient( sal_Int16 eNew ) { m_eRelation = eNew; }
+    void SetHoriOrient( sal_Int16 eNew ) { assert( !isPooled() && "SetValue() with pooled item" ); m_eOrient = eNew; }
+    void SetRelationOrient( sal_Int16 eNew ) { assert( !isPooled() && "SetValue() with pooled item" ); m_eRelation = eNew; }
 
     SwTwips GetPos() const { return m_nXPos; }
-    void    SetPos( SwTwips nNew ) { m_nXPos = nNew; }
+    void    SetPos( SwTwips nNew ) { assert( !isPooled() && "SetValue() with pooled item" ); m_nXPos = nNew; }
 
     bool IsPosToggle() const { return m_bPosToggle; }
-    void SetPosToggle( bool bNew ) { m_bPosToggle = bNew; }
+    void SetPosToggle( bool bNew ) { assert( !isPooled() && "SetValue() with pooled item" ); m_bPosToggle = bNew; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 };
 
 inline const SwFormatVertOrient &SwAttrSet::GetVertOrient(bool bInP) const

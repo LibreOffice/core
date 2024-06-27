@@ -216,6 +216,34 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     delete pFormat;
 }
 
+namespace
+{
+    class SwFormatFrameSizeInstanceManager : public TypeSpecificItemInstanceManager<SwFormatFrameSize>
+    {
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
+        {
+            auto const & rFormatItem = static_cast<const SwFormatFrameSize&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rFormatItem.GetHeightSizeType());
+            o3tl::hash_combine(seed, rFormatItem.GetWidthSizeType());
+            o3tl::hash_combine(seed, rFormatItem.GetWidthPercent());
+            o3tl::hash_combine(seed, rFormatItem.GetWidthPercentRelation());
+            o3tl::hash_combine(seed, rFormatItem.GetHeightPercent());
+            o3tl::hash_combine(seed, rFormatItem.GetHeightPercentRelation());
+            o3tl::hash_combine(seed, rFormatItem.GetSize().Width());
+            o3tl::hash_combine(seed, rFormatItem.GetSize().Height());
+            return seed;
+        }
+    };
+}
+
+ItemInstanceManager* SwFormatFrameSize::getItemInstanceManager() const
+{
+    static SwFormatFrameSizeInstanceManager aInstanceManager;
+    return &aInstanceManager;
+}
+
 void SwFormatFrameSize::ScaleMetrics(tools::Long lMult, tools::Long lDiv) {
     // Don't inherit the SvxSizeItem override (might or might not be relevant; added "just in case"
     // when changing SwFormatFrameSize to derive from SvxSizeItem instead of directly from
@@ -1375,6 +1403,29 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+namespace
+{
+    class SwFormatVertOrientInstanceManager : public TypeSpecificItemInstanceManager<SwFormatVertOrient>
+    {
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
+        {
+            auto const & rFormatItem = static_cast<const SwFormatVertOrient&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rFormatItem.GetPos());
+            o3tl::hash_combine(seed, rFormatItem.GetVertOrient());
+            o3tl::hash_combine(seed, rFormatItem.GetRelationOrient());
+            return seed;
+        }
+    };
+}
+
+ItemInstanceManager* SwFormatVertOrient::getItemInstanceManager() const
+{
+    static SwFormatVertOrientInstanceManager aInstanceManager;
+    return &aInstanceManager;
+}
+
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
@@ -1465,6 +1516,30 @@ void SwFormatVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(m_eRelation).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+namespace
+{
+    class SwFormatHoriOrientInstanceManager : public TypeSpecificItemInstanceManager<SwFormatHoriOrient>
+    {
+    protected:
+        virtual size_t hashCode(const SfxPoolItem& rItem) const override
+        {
+            auto const & rFormatItem = static_cast<const SwFormatHoriOrient&>(rItem);
+            std::size_t seed(0);
+            o3tl::hash_combine(seed, rFormatItem.GetPos());
+            o3tl::hash_combine(seed, rFormatItem.GetHoriOrient());
+            o3tl::hash_combine(seed, rFormatItem.GetRelationOrient());
+            o3tl::hash_combine(seed, rFormatItem.IsPosToggle());
+            return seed;
+        }
+    };
+}
+
+ItemInstanceManager* SwFormatHoriOrient::getItemInstanceManager() const
+{
+    static SwFormatHoriOrientInstanceManager aInstanceManager;
+    return &aInstanceManager;
 }
 
 // Partially implemented inline in hxx

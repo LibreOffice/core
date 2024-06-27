@@ -56,12 +56,15 @@ public:
     virtual bool             HasMetrics() const override;
 
     const Size& GetSize() const { return m_aSize; }
-    void        SetSize(const Size& rSize) { m_aSize = rSize; }
+    void        SetSize(const Size& rSize)
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize = rSize; }
 
     tools::Long GetWidth() const { return m_aSize.getWidth();  }
     tools::Long GetHeight() const { return m_aSize.getHeight(); }
-    void SetWidth(tools::Long n) { m_aSize.setWidth(n); }
-    void SetHeight(tools::Long n) { m_aSize.setHeight(n); }
+    void SetWidth(tools::Long n)
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize.setWidth(n); }
+    void SetHeight(tools::Long n)
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize.setHeight(n); }
 };
 
 #endif

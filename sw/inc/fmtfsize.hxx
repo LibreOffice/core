@@ -87,10 +87,12 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SwFrameSize GetHeightSizeType() const { return m_eFrameHeightType; }
-    void SetHeightSizeType( SwFrameSize eSize ) { m_eFrameHeightType = eSize; }
+    void SetHeightSizeType( SwFrameSize eSize )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eFrameHeightType = eSize; }
 
     SwFrameSize GetWidthSizeType() const { return m_eFrameWidthType; }
-    void SetWidthSizeType( SwFrameSize eSize ) { m_eFrameWidthType = eSize; }
+    void SetWidthSizeType( SwFrameSize eSize )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eFrameWidthType = eSize; }
 
     enum PercentFlags { SYNCED = 0xff };
     //0xff is reserved to indicate height is synced to width
@@ -99,12 +101,19 @@ public:
     //0xff is reserved to indicate width is synced to height
     sal_uInt8   GetWidthPercent() const { return m_nWidthPercent;  }
     sal_Int16   GetWidthPercentRelation() const { return m_eWidthPercentRelation;  }
-    void    SetHeightPercent( sal_uInt8 n ) { m_nHeightPercent = n; }
-    void    SetHeightPercentRelation ( sal_Int16 n ) { m_eHeightPercentRelation  = n; }
-    void    SetWidthPercent ( sal_uInt8 n ) { m_nWidthPercent  = n; }
-    void    SetWidthPercentRelation ( sal_Int16 n ) { m_eWidthPercentRelation  = n; }
+    void    SetHeightPercent( sal_uInt8 n )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_nHeightPercent = n; }
+    void    SetHeightPercentRelation ( sal_Int16 n )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eHeightPercentRelation  = n; }
+    void    SetWidthPercent ( sal_uInt8 n )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_nWidthPercent  = n; }
+    void    SetWidthPercentRelation ( sal_Int16 n )
+    { assert( !isPooled() && "SetValue() with pooled item" ); m_eWidthPercentRelation  = n; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 };
 
 inline const SwFormatFrameSize &SwAttrSet::GetFrameSize(bool bInP) const
