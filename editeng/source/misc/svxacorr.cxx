@@ -2059,8 +2059,6 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
             rLang = aLanguageTag;
             return pRet;
         }
-        else
-            return nullptr;
     }
 
     // If it still could not be found here, then keep on searching
