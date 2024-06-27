@@ -298,10 +298,12 @@ bool FocusManager::HandleKeyEvent(
                 }
                 case PC_PanelContent:
                     // Return focus to tab bar sidebar settings button or panel title.
-                    if (!IsDeckTitleVisible() && maPanels.size() == 1)
+                    if ((!IsDeckTitleVisible() && maPanels.size() == 1) ||
+                        (!maPanels[aLocation.mnIndex]->GetTitleBar()->GetVisible()))
                         FocusButton(0);
                     else
                         FocusPanel(aLocation.mnIndex, true);
+
                     bConsumed = true;
                     break;
                 default:
