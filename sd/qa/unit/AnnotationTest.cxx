@@ -194,52 +194,68 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
 }
 
-CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationUpdate)
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
 {
     createSdDrawDoc();
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
 
+    // Check current page
     SdPage* pPage = pViewShell->GetActualPage();
+
+    // Should have no objects yet
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
+    // Insert new annotation
     uno::Sequence<beans::PropertyValue> aArgs;
-
     aArgs = comphelper::InitPropertySequence({
         { "Text", uno::Any(u"Comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
+    // 1 object in the page now
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    // .. and is an annotation object
     SdrObject* pObject = pPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::Annotation, pObject->GetObjIdentifier());
-
     auto& pAnnotationData = pObject->getAnnotationData();
     CPPUNIT_ASSERT(pAnnotationData);
+
+    // Remember the annotation ID
     sal_Int32 nID = pAnnotationData->mxAnnotation->GetId();
 
+    // Current annotation position
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), pObject->GetLogicRect().Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), pObject->GetLogicRect().Top());
 
+    // Move the object
     pObject->Move({ 200, 200 });
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(200), pObject->GetLogicRect().Left());
+    // Object at a new postion
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200),
+                         pObject->GetLogicRect().Left()); // in 100th of an mm (hmm)
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), pObject->GetLogicRect().Top());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().X, 1E-4);
+    // Position of the annotation whould be the same as the object (2.0 mm equals 200 hmm)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().X, 1E-4); // mm
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);
 
-    aArgs = comphelper::InitPropertySequence({ { "Id", uno::Any(OUString::number(nID)) },
-                                               { "PositionX", uno::Any(sal_Int32(1440)) },
-                                               { "PositionY", uno::Any(sal_Int32(14400)) } });
+    // Change the annotation position
+    aArgs = comphelper::InitPropertySequence(
+        { { "Id", uno::Any(OUString::number(nID)) },
+          { "PositionX", uno::Any(sal_Int32(1440)) }, // 1440 twips = 2540 hmm
+          { "PositionY", uno::Any(sal_Int32(14400)) } });
 
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, pAnnotationData->mxAnnotation->getPosition().X, 1E-4);
+    // Position of the annotation changed again
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.4, pAnnotationData->mxAnnotation->getPosition().X,
+                                 1E-4); // in mm
     CPPUNIT_ASSERT_DOUBLES_EQUAL(254.0, pAnnotationData->mxAnnotation->getPosition().Y, 1E-4);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(2540), pObject->GetLogicRect().Left());
+    // Position of the annotation object changed also to the same value
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2540), pObject->GetLogicRect().Left()); // in hmm
     CPPUNIT_ASSERT_EQUAL(tools::Long(25400), pObject->GetLogicRect().Top());
 }
 
