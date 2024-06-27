@@ -133,17 +133,18 @@ void AnnotationObject::ApplyAnnotationName()
         OUString sInitials(mpAnnotationData->mxAnnotation->getInitials());
         if (sInitials.isEmpty())
             sInitials = createInitials(mpAnnotationData->mxAnnotation->getAuthor());
-        SetText(sInitials + " " + OUString::number(maViewData.nIndex));
+        SetText(sInitials + u" "_ustr + OUString::number(maViewData.nIndex));
     }
     else
     {
-        SetText(u"Empty"_ustr);
+        SetText(u"🗅"_ustr);
     }
 
     Color aColor(getColorLight(maViewData.nAuthorIndex));
 
-    SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
-    SetMergedItem(XFillColorItem(OUString(), aColor));
+    SfxItemSet aItemSet = GetMergedItemSet();
+    aItemSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+    aItemSet.Put(XFillColorItem(OUString(), aColor));
 
     Color aBorderColor(aColor);
     if (aColor.IsDark())
@@ -151,20 +152,22 @@ void AnnotationObject::ApplyAnnotationName()
     else
         aBorderColor.DecreaseLuminance(32);
 
-    SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
-    SetMergedItem(XLineColorItem(OUString(), aBorderColor));
-    SetMergedItem(XLineWidthItem(o3tl::convert(0, o3tl::Length::pt, o3tl::Length::mm100)));
+    aItemSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
+    aItemSet.Put(XLineColorItem(OUString(), aBorderColor));
+    aItemSet.Put(XLineWidthItem(o3tl::convert(0, o3tl::Length::pt, o3tl::Length::mm100)));
 
-    SetMergedItem(SvxFontHeightItem(o3tl::convert(10, o3tl::Length::pt, o3tl::Length::mm100), 100,
-                                    EE_CHAR_FONTHEIGHT));
+    aItemSet.Put(SvxFontHeightItem(o3tl::convert(10, o3tl::Length::pt, o3tl::Length::mm100), 100,
+                                   EE_CHAR_FONTHEIGHT));
 
-    SetMergedItem(SvxColorItem(aColor.IsDark() ? COL_WHITE : COL_BLACK, EE_CHAR_COLOR));
+    aItemSet.Put(SvxColorItem(aColor.IsDark() ? COL_WHITE : COL_BLACK, EE_CHAR_COLOR));
 
-    SetMergedItem(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_NONE));
+    aItemSet.Put(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_NONE));
 
-    SetMergedItem(makeSdrTextWordWrapItem(false));
-    SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
-    SetMergedItem(makeSdrTextAutoGrowHeightItem(true));
+    aItemSet.Put(makeSdrTextWordWrapItem(false));
+    aItemSet.Put(makeSdrTextAutoGrowWidthItem(true));
+    aItemSet.Put(makeSdrTextAutoGrowHeightItem(true));
+
+    SetMergedItemSet(aItemSet);
 }
 
 AnnotationObject::~AnnotationObject() {}
@@ -195,13 +198,13 @@ SdrObjKind AnnotationObject::GetObjIdentifier() const { return SdrObjKind::Annot
 
 OUString AnnotationObject::TakeObjNameSingul() const
 {
-    OUString sName(u"Annotation"_ustr);
+    OUString sOutName(u"Annotation"_ustr);
     OUString aName(GetName());
 
     if (!aName.isEmpty())
-        sName += " '" + aName + "'";
+        sOutName += u" '"_ustr + aName + u"'"_ustr;
 
-    return sName;
+    return sOutName;
 }
 
 OUString AnnotationObject::TakeObjNamePlural() const { return u"Annotations"_ustr; }

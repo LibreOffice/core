@@ -1118,7 +1118,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
             applyAnnotationProperties(*pNewObject, rInfo);
         }
 
-        pNewObject->SetLogicRect(aRectangle);
+        pNewObject->SetRelativePos(aRectangle.TopLeft());
 
         pView->InsertObjectAtView(pNewObject.get(), *pView->GetSdrPageView());
 
