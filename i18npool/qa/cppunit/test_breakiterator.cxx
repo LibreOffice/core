@@ -992,6 +992,36 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aBounds.endPos);
     }
+
+    //  tdf#161737: narrow no-break space at the end of words resulted spelling mistakes
+    {
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+
+        OUString aTest(u"L’espace fine insécable\u202F!"_ustr);
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 14, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.startPos);
+        // This was 24 (word + NNBSP)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(23), aBounds.endPos);
+    }
+
+    //  tdf#161737: narrow no-break space between digits resulted spelling mistakes
+    //  as a quick fix, limit NBSP as word-part character only for editing, and not for spell checking
+    //  TODO: remove NBSP by the linguistic module or by the spell checking dictionaries to allow
+    //  to check numbers with thousand separators and with correct suffix
+    {
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+
+        OUString aTest(u"1\u202F000\u202F000"_ustr);
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 2, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        // This was 0 (word + NNBSP)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        // This was 8 (word + NNBSP)
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+    }
 }
 
 void TestBreakIterator::testSentenceBoundaries()
