@@ -10,6 +10,10 @@
   <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="&apos;s" block-list:name="’s"/>
+  <block-list:block block-list:abbreviated-name="&apos;t" block-list:name="’t"/>
+  <block-list:block block-list:abbreviated-name="‘s" block-list:name="’s"/>
+  <block-list:block block-list:abbreviated-name="‘t" block-list:name="’t"/>
   <block-list:block block-list:abbreviated-name="aanrijken" block-list:name="aanreiken"/>
   <block-list:block block-list:abbreviated-name="abbonnee" block-list:name="abonnee"/>
   <block-list:block block-list:abbreviated-name="abbonnement" block-list:name="abonnement"/>
