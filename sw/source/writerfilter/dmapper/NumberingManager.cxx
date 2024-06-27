@@ -421,7 +421,8 @@ ListDef::~ListDef( )
 }
 
 const OUString & ListDef::GetStyleName(sal_Int32 const nId,
-    uno::Reference<container::XNameContainer> const& xStyles)
+    uno::Reference<container::XNameContainer> const& xStyles,
+    DomainMapper& rDMapper)
 {
     if (xStyles.is())
     {
@@ -429,6 +430,12 @@ const OUString & ListDef::GetStyleName(sal_Int32 const nId,
 
         while (xStyles->hasByName(sStyleName)) // unique
         {
+            if (!rDMapper.IsNewDoc())
+            {
+                // When pasting, don't rename our style, just use the existing one.
+                break;
+            }
+
             sStyleName += "a";
         }
 
@@ -538,12 +545,24 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
     try
     {
         // Create the numbering style
+        bool bUpdate = true;
         if (GetId() == nOutline)
             m_StyleName = "Outline"; //SwNumRule.GetOutlineRuleName()
         else
-            xStyles->insertByName(
-                GetStyleName(GetId(), xStyles),
-                css::uno::Any(uno::Reference<css::style::XStyle>(xTextDoc->createNumberingStyle())));
+        {
+            OUString aStyleName = GetStyleName(GetId(), xStyles, rDMapper);
+            if (xStyles->hasByName(aStyleName) && !rDMapper.IsNewDoc())
+            {
+                // When pasting, don't update existing styles.
+                bUpdate = false;
+            }
+            else
+            {
+                xStyles->insertByName(
+                    aStyleName,
+                    css::uno::Any(uno::Reference<css::style::XStyle>(xTextDoc->createNumberingStyle())));
+            }
+        }
 
         uno::Any oStyle = xStyles->getByName(GetStyleName());
         uno::Reference< beans::XPropertySet > xStyle( oStyle, uno::UNO_QUERY_THROW );
@@ -551,6 +570,12 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         // Get the default OOo Numbering style rules
         uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );
         aRules >>= m_xNumRules;
+        if (!bUpdate)
+        {
+            // If it was requested that we don't update existing styles, we fetched the numbering
+            // rules, don't modify them.
+            return;
+        }
 
         uno::Sequence<uno::Sequence<beans::PropertyValue>> aProps = GetMergedPropertyValues();
 
