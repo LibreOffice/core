@@ -30,6 +30,8 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XTheme.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -140,6 +142,10 @@
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>
 #include <docmodel/theme/Theme.hxx>
+
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 #include <app.hrc>
 
@@ -3021,6 +3027,59 @@ void SdXImpressDocument::initializeDocument()
     }
 }
 
+namespace
+{
+
+constexpr auto constTransitionTypeToString = frozen::make_unordered_map<sal_Int16, std::string_view>({
+    { animations::TransitionType::BARWIPE, "BarWipe" }, // Wipe
+    { animations::TransitionType::PINWHEELWIPE, "PineWheelWipe" }, // Wheel
+    { animations::TransitionType::SLIDEWIPE, "SlideWipe" }, // Cover, Uncover
+    { animations::TransitionType::RANDOMBARWIPE, "RandomBarWipe" }, // Bars
+    { animations::TransitionType::CHECKERBOARDWIPE, "CheckerBoardWipe" }, // Checkers
+    { animations::TransitionType::FOURBOXWIPE, "FourBoxWipe" }, // Shape
+    { animations::TransitionType::IRISWIPE, "IrisWipe" }, // Box
+    { animations::TransitionType::FANWIPE, "FanWipe" }, // Wedge
+    { animations::TransitionType::BLINDSWIPE, "BlindWipe"}, // Venetian
+    { animations::TransitionType::FADE, "Fade"},
+    { animations::TransitionType::DISSOLVE, "Dissolve"},
+    { animations::TransitionType::PUSHWIPE, "PushWipe"}, // Comb
+    { animations::TransitionType::ELLIPSEWIPE, "EllipseWipe"}, // Shape
+    { animations::TransitionType::BARNDOORWIPE, "BarnDoorWipe"}, // Split
+    { animations::TransitionType::WATERFALLWIPE, "WaterfallWipe"}, // Diagonal
+});
+
+constexpr auto constTransitionSubTypeToString = frozen::make_unordered_map<sal_Int16, std::string_view>({
+    { animations::TransitionSubType::LEFTTORIGHT, "LeftToRight" },
+    { animations::TransitionSubType::TOPTOBOTTOM, "TopToBottom" },
+    { animations::TransitionSubType::EIGHTBLADE, "8Blade" },
+    { animations::TransitionSubType::FOURBLADE, "4Blade" },
+    { animations::TransitionSubType::THREEBLADE, "3Blade" },
+    { animations::TransitionSubType::TWOBLADEVERTICAL, "2BladeVertical" },
+    { animations::TransitionSubType::ONEBLADE, "1Blade" },
+    { animations::TransitionSubType::FROMTOPLEFT, "FromTopLeft" },
+    { animations::TransitionSubType::FROMTOPRIGHT, "FromTopRight"},
+    { animations::TransitionSubType::FROMBOTTOMLEFT, "FromBottomLeft"},
+    { animations::TransitionSubType::FROMBOTTOMRIGHT, "FromBottomRight"},
+    { animations::TransitionSubType::VERTICAL, "Vertical"},
+    { animations::TransitionSubType::HORIZONTAL, "Horizontal"},
+    { animations::TransitionSubType::DOWN, "Down"},
+    { animations::TransitionSubType::ACROSS, "Across"},
+    { animations::TransitionSubType::CORNERSOUT, "CornersOut"},
+    { animations::TransitionSubType::DIAMOND, "Diamond"},
+    { animations::TransitionSubType::CIRCLE, "Circle"},
+    { animations::TransitionSubType::RECTANGLE, "Rectangle"},
+    { animations::TransitionSubType::CENTERTOP, "CenterTop"},
+    { animations::TransitionSubType::CROSSFADE, "CrossFade"},
+    { animations::TransitionSubType::FADEOVERCOLOR, "FadeOverColor"},
+    { animations::TransitionSubType::FROMLEFT, "FromLeft"},
+    { animations::TransitionSubType::FROMRIGHT, "FromRight"},
+    { animations::TransitionSubType::FROMTOP, "FromTop"},
+    { animations::TransitionSubType::HORIZONTALLEFT, "HorizontalLeft"},
+    { animations::TransitionSubType::HORIZONTALRIGHT, "HorizontalRight"},
+});
+
+}
+
 OString SdXImpressDocument::getPresentationInfo() const
 {
     ::tools::JsonWriter aJsonWriter;
@@ -3091,6 +3150,36 @@ OString SdXImpressDocument::getPresentationInfo() const
                                     {
                                         aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
                                     }
+                                }
+                            }
+
+                            sal_Int32 nTransitionType = 0;
+                            xPropSet->getPropertyValue("TransitionType") >>= nTransitionType;
+
+                            if (nTransitionType != 0)
+                            {
+                                auto iterator = constTransitionTypeToString.find(nTransitionType);
+
+                                if (iterator != constTransitionTypeToString.end())
+                                {
+                                    aJsonWriter.put("transitionType", iterator->second);
+
+                                    sal_Int32 nTransitionSubtype = 0;
+                                    xPropSet->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
+
+                                    auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
+                                    if (iteratorSubType != constTransitionSubTypeToString.end())
+                                    {
+                                        aJsonWriter.put("transitionSubtype", iteratorSubType->second);
+                                    }
+                                    else
+                                    {
+                                        SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
+                                    }
+
+                                    bool nTransitionDirection = false;
+                                    xPropSet->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
+                                    aJsonWriter.put("transitionDirection", nTransitionDirection);
                                 }
                             }
                         }

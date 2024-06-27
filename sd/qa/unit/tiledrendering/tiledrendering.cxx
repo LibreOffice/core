@@ -3045,10 +3045,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
         CPPUNIT_ASSERT_EQUAL(0, rChild.get_child("index").get_value<int>());
         CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
-
+        // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+
+        // Transitions
+        CPPUNIT_ASSERT_EQUAL(std::string("BarWipe"), rChild.get_child("transitionType").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(std::string("TopToBottom"), rChild.get_child("transitionSubtype").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("transitionDirection").get_value<bool>());
     }
 
     // Slide Index 1
@@ -3056,10 +3061,16 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 1);
         CPPUNIT_ASSERT_EQUAL(1, rChild.get_child("index").get_value<int>());
         CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
-
+        // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+
+        // Transitions
+        CPPUNIT_ASSERT_EQUAL(std::string("FanWipe"), rChild.get_child("transitionType").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(std::string("CenterTop"), rChild.get_child("transitionSubtype").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(true, rChild.get_child("transitionDirection").get_value<bool>());
+
     }
 
     // Slide Index 2
@@ -3067,10 +3078,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 2);
         CPPUNIT_ASSERT_EQUAL(2, rChild.get_child("index").get_value<int>());
         CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
-
+        // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+
+        // Transitions
+        CPPUNIT_ASSERT_EQUAL(std::string("BlindWipe"), rChild.get_child("transitionType").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(std::string("Vertical"), rChild.get_child("transitionSubtype").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(true, rChild.get_child("transitionDirection").get_value<bool>());
     }
 
     // Slide Index 3 - Hidden
@@ -3080,10 +3096,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 3);
         CPPUNIT_ASSERT_EQUAL(4, rChild.get_child("index").get_value<int>());
         CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
-
+        // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+
+        // Transitions
+        CPPUNIT_ASSERT_EQUAL(std::string("Fade"), rChild.get_child("transitionType").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(std::string("FadeOverColor"), rChild.get_child("transitionSubtype").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(true, rChild.get_child("transitionDirection").get_value<bool>());
     }
 }
 
