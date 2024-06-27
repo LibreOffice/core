@@ -2232,12 +2232,6 @@
         CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
         IN THE SOFTWARE.</p>
     </div>
-    <div class="ZXING-CPP">
-        <h2>ZXing-C++</h2>
-        <p>The following software may be included in this product: ZXing-C++. Use of any of this software is governed
-        by the terms of the license below:</p>
-        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    </div>
     <div class="ZLIB">
         <h2>zlib</h2>
         <p>The following software may be included in this product: zlib. Use of any of this software is governed by the
@@ -2253,6 +2247,12 @@
         <p>2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the
         original software.</p>
         <p>3. This notice may not be removed or altered from any source distribution.</p>
+    </div>
+    <div class="ZXING">
+        <h2>ZXing-C++</h2>
+        <p>The following software may be included in this product: ZXing-C++. Use of any of this software is governed
+        by the terms of the license below:</p>
+        <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
     </div>
     <div class="SKIA">
         <h2>Skia</h2>
