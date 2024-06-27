@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <sfx2/viewsh.hxx>
 
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

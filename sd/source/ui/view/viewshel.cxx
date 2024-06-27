@@ -403,20 +403,21 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
 
 void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
 {
-    auto getFrameworkResourceIdForShell = [&]() -> uno::Reference<drawing::framework::XResourceId> const
+    auto getFrameworkResourceIdForShell
+        = [&]() -> uno::Reference<drawing::framework::XResourceId> const
     {
         Reference<::css::drawing::framework::XControllerManager> xControllerManager(
             GetViewShellBase().GetController(), UNO_QUERY);
         if (!xControllerManager.is())
             return {};
 
-        Reference<::css::drawing::framework::XConfigurationController> xConfigurationController(
-            xControllerManager->getConfigurationController(), UNO_QUERY);
+        Reference<::css::drawing::framework::XConfigurationController> xConfigurationController
+            = xControllerManager->getConfigurationController();
         if (!xConfigurationController.is())
             return {};
 
-        Reference<::css::drawing::framework::XConfiguration> xConfiguration(
-            xConfigurationController->getCurrentConfiguration(), UNO_QUERY);
+        Reference<::css::drawing::framework::XConfiguration> xConfiguration
+            = xConfigurationController->getCurrentConfiguration();
         if (!xConfiguration.is())
             return {};
 
@@ -452,7 +453,7 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
             EventMultiplexerEventId::FocusShifted, nullptr, getFrameworkResourceIdForShell());
     }
 
-    if(GetDispatcher())
+    if (GetDispatcher())
         SfxShell::BroadcastContextForActivation(bIsActivated);
 }
 

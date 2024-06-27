@@ -18,7 +18,7 @@
  */
 
 #include "ToolBarModule.hxx"
-#include "ViewShell.hxx"
+#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <DrawController.hxx>
@@ -148,9 +148,9 @@ void ToolBarModule::HandlePaneViewShellFocused(const css::uno::Reference<css::dr
     if(!mpBase)
         return;
 
-    std::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(*mpBase));
-    std::shared_ptr<ViewShell> pViewShell = pFrameworkHelper->GetViewShell(pFrameworkHelper->GetView(rxResourceId));
-
+    std::shared_ptr<FrameworkHelper> pFrameworkHelper(FrameworkHelper::Instance(*mpBase));
+    std::shared_ptr<ViewShell> pViewShell
+        = FrameworkHelper::GetViewShell(pFrameworkHelper->GetView(rxResourceId));
 
     if(mpBase->GetMainViewShell() == pViewShell)
     {

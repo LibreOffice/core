@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "NotesPanelViewShell.hxx"
 #include <ToolBarManager.hxx>
 
 #include <DrawViewShell.hxx>
+#include <NotesPanelViewShell.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
@@ -158,8 +158,6 @@ public:
     void UpdateShells (
         const std::shared_ptr<ViewShell>& rpMainViewShell,
         const std::shared_ptr<ViewShellManager>& rpManager);
-
-    void SetActiveViewShell(std::shared_ptr<ViewShell>& rpMainViewShell);
 
 private:
     class ShellDescriptor

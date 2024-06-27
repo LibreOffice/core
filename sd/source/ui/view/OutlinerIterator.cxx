@@ -512,110 +512,7 @@ bool SelectionIteratorImpl::IsEqualSelection(const IteratorImplBase& rIterator) 
         && mnObjectIndex == pSelectionIterator->mnObjectIndex;
 }
 
-//===== ViewIteratorImpl ================================================
-
-ViewIteratorImpl::ViewIteratorImpl (
-    sal_Int32 nPageIndex,
-    SdDrawDocument* pDocument,
-    const std::weak_ptr<ViewShell>& rpViewShellWeak,
-    bool bDirectionIsForward)
-    : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
-      mpPage(nullptr)
-{
-    SetPage (nPageIndex);
-}
-
-ViewIteratorImpl::ViewIteratorImpl (
-    sal_Int32 nPageIndex,
-    SdDrawDocument* pDocument,
-    const std::weak_ptr<ViewShell>& rpViewShellWeak,
-    bool bDirectionIsForward,
-    PageKind ePageKind,
-    EditMode eEditMode)
-    : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
-      mpPage(nullptr)
-{
-    SetPage (nPageIndex);
-}
-
-ViewIteratorImpl::~ViewIteratorImpl()
-{
-}
-
-IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
-{
-
-    ViewIteratorImpl* pIterator = static_cast<ViewIteratorImpl*>(pObject);
-    if (pIterator == nullptr)
-        pIterator = new ViewIteratorImpl (
-            maPosition.mnPageIndex, mpDocument, mpViewShellWeak, mbDirectionIsForward);
-
-    IteratorImplBase::Clone (pObject);
-
-    if (moObjectIterator)
-    {
-        pIterator->moObjectIterator.emplace(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
-
-        // No direct way to set the object iterator to the current object.
-        pIterator->maPosition.mxObject = nullptr;
-        while (pIterator->moObjectIterator->IsMore() && pIterator->maPosition.mxObject.get()!=maPosition.mxObject.get())
-            pIterator->maPosition.mxObject = pIterator->moObjectIterator->Next();
-    }
-    else
-        pIterator->moObjectIterator.reset();
-
-    return pIterator;
-}
-
-void ViewIteratorImpl::GotoNextText()
-{
-    SdrTextObj* pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
-    if( pTextObj )
-    {
-        if (mbDirectionIsForward)
-        {
-            ++maPosition.mnText;
-            if( maPosition.mnText < pTextObj->getTextCount() )
-                return;
-        }
-        else
-        {
-            --maPosition.mnText;
-            if( maPosition.mnText >= 0 )
-                return;
-        }
-    }
-
-    if (moObjectIterator && moObjectIterator->IsMore())
-        maPosition.mxObject = moObjectIterator->Next();
-    else
-        maPosition.mxObject = nullptr;
-
-    if (!maPosition.mxObject.get().is() )
-    {
-        if (mbDirectionIsForward)
-            SetPage (maPosition.mnPageIndex+1);
-        else
-            SetPage (maPosition.mnPageIndex-1);
-
-        if (mpPage != nullptr)
-            moObjectIterator.emplace( mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward );
-        if (moObjectIterator && moObjectIterator->IsMore())
-            maPosition.mxObject = moObjectIterator->Next();
-        else
-            maPosition.mxObject = nullptr;
-    }
-
-    maPosition.mnText = 0;
-    if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
-    {
-        pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
-        if( pTextObj )
-            maPosition.mnText = pTextObj->getTextCount() - 1;
-    }
-}
-
-void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
+void DocumentIteratorImpl::SetPage(sal_Int32 nPageIndex)
 {
     maPosition.mnPageIndex = nPageIndex;
 
@@ -667,7 +564,7 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 
 }
 
-void ViewIteratorImpl::Reverse()
+void DocumentIteratorImpl::Reverse()
 {
     IteratorImplBase::Reverse ();
 
@@ -696,13 +593,14 @@ DocumentIteratorImpl::DocumentIteratorImpl (
     SdDrawDocument* pDocument,
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward)
-    : ViewIteratorImpl (nPageIndex, pDocument, rpViewShellWeak, bDirectionIsForward,
-        ePageKind, eEditMode)
+    : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode)
+    , mpPage(nullptr)
 {
     if (eEditMode == EditMode::Page)
         mnPageCount = pDocument->GetSdPageCount (ePageKind);
     else
         mnPageCount = pDocument->GetMasterSdPageCount(ePageKind);
+    SetPage(nPageIndex);
 }
 
 DocumentIteratorImpl::~DocumentIteratorImpl()
@@ -716,15 +614,27 @@ IteratorImplBase* DocumentIteratorImpl::Clone (IteratorImplBase* pObject) const
             maPosition.mnPageIndex, maPosition.mePageKind, maPosition.meEditMode,
             mpDocument, mpViewShellWeak, mbDirectionIsForward);
     // Finish the cloning.
-    return ViewIteratorImpl::Clone (pIterator);
+    IteratorImplBase::Clone (pObject);
+
+    if (moObjectIterator)
+    {
+        pIterator->moObjectIterator.emplace(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward);
+
+        // No direct way to set the object iterator to the current object.
+        pIterator->maPosition.mxObject = nullptr;
+        while (pIterator->moObjectIterator->IsMore() && pIterator->maPosition.mxObject.get()!=maPosition.mxObject.get())
+            pIterator->maPosition.mxObject = pIterator->moObjectIterator->Next();
+    }
+    else
+        pIterator->moObjectIterator.reset();
+
+    return pIterator;
 }
 
 void DocumentIteratorImpl::GotoNextText()
 {
     bool bSetToOnePastLastPage = false;
     bool bViewChanged = false;
-
-    // ViewIteratorImpl::GotoNextText();
 
     SdrTextObj* pTextObj = DynCastSdrTextObj( maPosition.mxObject.get().get() );
     if( pTextObj )
@@ -750,26 +660,28 @@ void DocumentIteratorImpl::GotoNextText()
 
     if (!maPosition.mxObject.get().is() )
     {
-        if(maPosition.mePageKind == PageKind::Standard)
+        if (maPosition.meEditMode == EditMode::Page
+            && maPosition.mePageKind == PageKind::Standard)
         {
             maPosition.mePageKind = PageKind::Notes;
             if (mbDirectionIsForward)
-                SetPage (maPosition.mnPageIndex);
-            else
                 SetPage(maPosition.mnPageIndex);
+            else
+                SetPage(maPosition.mnPageIndex - 1);
         }
-        else if (maPosition.mePageKind == PageKind::Notes)
+        else if (maPosition.meEditMode == EditMode::Page
+                 && maPosition.mePageKind == PageKind::Notes)
         {
             maPosition.mePageKind = PageKind::Standard;
             if (mbDirectionIsForward)
-                SetPage (maPosition.mnPageIndex+1);
+                SetPage(maPosition.mnPageIndex + 1);
             else
-                SetPage(maPosition.mnPageIndex - 1);
+                SetPage(maPosition.mnPageIndex);
         }
         else
         {
             if (mbDirectionIsForward)
-                SetPage (maPosition.mnPageIndex+1);
+                SetPage(maPosition.mnPageIndex + 1);
             else
                 SetPage(maPosition.mnPageIndex - 1);
         }
@@ -801,67 +713,74 @@ void DocumentIteratorImpl::GotoNextText()
                 maPosition.meEditMode = EditMode::MasterPage;
                 SetPage (0);
             }
-
             // Switch to next view mode.
             else
             {
                 if (maPosition.mePageKind == PageKind::Handout)
-                    // Not really necessary but makes things more clear.
-                    bSetToOnePastLastPage = true;
-                else
                 {
-                    maPosition.meEditMode = EditMode::Page;
-                    if (maPosition.mePageKind == PageKind::Standard)
-                        maPosition.mePageKind = PageKind::Handout;
-                    else if (maPosition.mePageKind == PageKind::Notes)
-                        maPosition.mePageKind = PageKind::Handout;
-                    SetPage (0);
+                    // search wrapped
+                    bSetToOnePastLastPage = true;
+                }
+                else if (maPosition.mePageKind == PageKind::Standard)
+                {
+                    // switch to master notes
+                    maPosition.mePageKind = PageKind::Notes;
+                    SetPage(0);
+                }
+                else if (maPosition.mePageKind == PageKind::Notes)
+                {
+                    // switch to master handout
+                    maPosition.mePageKind = PageKind::Handout;
+                    SetPage(0);
                 }
             }
             bViewChanged = true;
         }
     }
     else
+    {
         if (maPosition.mnPageIndex < 0)
         {
-            // Switch from master pages to draw pages.
             if (maPosition.meEditMode == EditMode::MasterPage)
             {
-                maPosition.meEditMode = EditMode::Page;
-                bSetToOnePastLastPage = true;
-            }
-
-            // Switch to previous view mode.
-            else
-            {
                 if (maPosition.mePageKind == PageKind::Standard)
-                    SetPage (-1);
-                else
                 {
-                    maPosition.meEditMode = EditMode::MasterPage;
-                    if (maPosition.mePageKind == PageKind::Handout)
-                        maPosition.mePageKind = PageKind::Notes;
-                    else if (maPosition.mePageKind == PageKind::Notes)
-                        maPosition.mePageKind = PageKind::Standard;
+                    maPosition.meEditMode = EditMode::Page;
+                    maPosition.mePageKind = PageKind::Notes;
+                    bSetToOnePastLastPage = true;
+                }
+                else if (maPosition.mePageKind == PageKind::Handout)
+                {
+                    maPosition.mePageKind = PageKind::Notes;
+                    bSetToOnePastLastPage = true;
+                }
+                else if (maPosition.mePageKind == PageKind::Notes)
+                {
+                    maPosition.mePageKind = PageKind::Standard;
                     bSetToOnePastLastPage = true;
                 }
             }
-            bViewChanged = true;
+            else
+            {
+                // search wrapped
+                SetPage(-1);
+            }
         }
+        bViewChanged = true;
+    }
 
     if (!bViewChanged)
         return;
 
     // Get new page count;
-    sal_Int32 nPageCount;
     if (maPosition.meEditMode == EditMode::Page)
-        nPageCount = mpDocument->GetSdPageCount (maPosition.mePageKind);
+        mnPageCount = mpDocument->GetSdPageCount (maPosition.mePageKind);
     else
-        nPageCount = mpDocument->GetMasterSdPageCount(maPosition.mePageKind);
+        mnPageCount = mpDocument->GetMasterSdPageCount(maPosition.mePageKind);
 
     // Now that we know the number of pages we can set the current page index.
     if (bSetToOnePastLastPage)
-        SetPage (nPageCount);
+        SetPage (mnPageCount);
 }
 
 } // end of namespace ::sd::outliner

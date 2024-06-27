@@ -155,36 +155,35 @@ private:
     IteratorImplBase& operator= (const IteratorImplBase& rIterator);
 };
 
-/** Iterator for iteration over all objects in a single view.  On reaching
-    the last object on the last page (or the first object on the first page)
-    the view is *not* switched.  Further calls to the
-    <member>GotoNextObject()</member> method will be ignored.
+/** Iterator for iteration over all objects in all views. It switches views when
+    appropriate.
+
+    Iterates in the following pattern
+    1-) Alternating Normal View and Notes View for each page
+    2-) Master Pages
+    3-) Notes Masters
+    4-) The Handout Master
 
     <p>For documentation of the methods please refer to the base class
     <type>IteratorImplBase</type>.</p>
 */
-class ViewIteratorImpl : public IteratorImplBase
+class DocumentIteratorImpl final : public IteratorImplBase
 {
 public:
-    ViewIteratorImpl (
+    DocumentIteratorImpl (
         sal_Int32 nPageIndex,
+        PageKind ePageKind,
+        EditMode eEditMode,
         SdDrawDocument* pDocument,
         const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
-    ViewIteratorImpl (
-        sal_Int32 nPageIndex,
-        SdDrawDocument* pDocument,
-        const std::weak_ptr<ViewShell>& rpViewShellWeak,
-        bool bDirectionIsForward,
-        PageKind ePageKind,
-        EditMode eEditMode);
-    virtual ~ViewIteratorImpl() override;
+    virtual ~DocumentIteratorImpl() override;
 
     virtual void GotoNextText() override;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
     virtual void Reverse() override;
 
-protected:
+private:
     /** Set up page pointer and object list iterator for the specified
         page.
         @param nPageIndex
@@ -199,33 +198,6 @@ protected:
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
 
-private:
-    // Don't use this operator.
-    ViewIteratorImpl& operator= (const ViewIteratorImpl&) = delete;
-};
-
-/** Iterator for iteration over all objects in all views.  It automatically
-    switches views when reaching the end/beginning of a view.
-
-    <p>For documentation of the methods please refer to the base class
-    <type>IteratorImplBase</type>.</p>
-*/
-class DocumentIteratorImpl final : public ViewIteratorImpl
-{
-public:
-    DocumentIteratorImpl (
-        sal_Int32 nPageIndex,
-        PageKind ePageKind,
-        EditMode eEditMode,
-        SdDrawDocument* pDocument,
-        const std::weak_ptr<ViewShell>& rpViewShellWeak,
-        bool bDirectionIsForward);
-    virtual ~DocumentIteratorImpl() override;
-
-    virtual void GotoNextText() override;
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
-
-private:
     /// Number of pages in the view that is specified by <member>maPosition</member>.
     sal_Int32 mnPageCount;
 

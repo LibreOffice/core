@@ -571,6 +571,7 @@ void NotesPanelViewShell::GetState(SfxItemSet& rSet)
     {
         switch (nWhich)
         {
+            case FID_SEARCH_NOW:
             case SID_SEARCH_ITEM:
             case SID_SEARCH_OPTIONS:
                 // Call common (old) implementation in the document shell.

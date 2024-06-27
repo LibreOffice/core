@@ -201,7 +201,6 @@ private:
 
     /// Returns the current outline view
     OutlinerView* getOutlinerView();
-    OutlinerView* lclGetNotesPaneOutliner();
 
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.
