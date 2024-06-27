@@ -17,7 +17,8 @@
       <style:graphic-properties style:protect="size"/>
     </style:style>
     <style:style style:name="gr2" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
-      <style:graphic-properties draw:stroke="solid" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#7f59ae" draw:fill="none" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr4" style:family="graphic" style:parent-style-name="Outlined_20_Cyan">
       <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.1cm" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
@@ -26,13 +27,39 @@
       <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.1cm" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
     </style:style>
     <style:style style:name="gr8" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
-      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.1cm" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.1cm" svg:stroke-color="#f8b622" draw:fill="none" draw:marker-start="Circle" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.139cm" fo:padding-bottom="0.139cm" fo:padding-left="0.264cm" fo:padding-right="0.264cm"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr13" style:family="graphic" style:parent-style-name="Filled_20_Blue">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#7f59ae"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr14" style:family="graphic" style:parent-style-name="Filled_20_Yellow">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#f8b622"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr15" style:family="graphic" style:parent-style-name="Filled_20_Red">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#e54b89"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr16" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#7f59ae" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr17" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#f8b622" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="gr18" style:family="graphic" style:parent-style-name="Outlined_20_Red">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.08cm" svg:stroke-color="#e54b89" draw:fill="none" svg:stroke-linecap="round"/>
+      <style:text-properties fo:color="#e54b89" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr19" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#ffffff" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="gr25" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
-      <style:graphic-properties svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.198cm" fo:padding-bottom="0.198cm" fo:padding-left="0.323cm" fo:padding-right="0.323cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#f8b622" svg:stroke-linecap="round" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.198cm" fo:padding-bottom="0.198cm" fo:padding-left="0.323cm" fo:padding-right="0.323cm"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr30" style:family="graphic" style:parent-style-name="Outlined_20_Cyan">
       <style:graphic-properties svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.198cm" fo:padding-bottom="0.198cm" fo:padding-left="0.323cm" fo:padding-right="0.323cm"/>
@@ -53,28 +80,36 @@
       <style:graphic-properties svg:stroke-color="#cc417a" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
     </style:style>
     <style:style style:name="gr36" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
-      <style:graphic-properties svg:stroke-color="#e5a822" svg:stroke-width="0.15cm" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#e5a822" svg:stroke-width="0.15cm" draw:fill="none" draw:fill-color="#ffffff" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr37" style:family="graphic" style:parent-style-name="Outlined_20_Yellow">
-      <style:graphic-properties svg:stroke-color="#e5a822" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#e5a822" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:text-properties fo:color="#f8b622" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr41" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
-      <style:graphic-properties svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#7f59ae" draw:fill="solid" draw:fill-color="#ffffff" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr42" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
-      <style:graphic-properties svg:stroke-color="#6f4f99" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#6f4f99" svg:stroke-width="0.15cm" draw:fill="solid" draw:fill-color="#ffffff" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr43" style:family="graphic" style:parent-style-name="Outlined_20_Blue">
-      <style:graphic-properties svg:stroke-color="#6f4f99" svg:stroke-width="0.15cm" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#6f4f99" svg:stroke-width="0.15cm" draw:fill="none" draw:fill-color="#ffffff" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.2cm" fo:padding-bottom="0.2cm" fo:padding-left="0.2cm" fo:padding-right="0.2cm"/>
+      <style:text-properties fo:color="#7f59ae" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr47" style:family="graphic" style:parent-style-name="Filled_20_Blue">
-      <style:graphic-properties draw:opacity="50%"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#7f59ae" draw:opacity="50%"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr48" style:family="graphic" style:parent-style-name="Filled_20_Blue">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:opacity="50%"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="50%"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr49" style:family="graphic" style:parent-style-name="Filled_20_Yellow">
-      <style:graphic-properties draw:opacity="50%"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#f8b622" draw:opacity="50%"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="gr59" style:family="graphic" style:parent-style-name="Outlined_20_White">
       <style:graphic-properties svg:stroke-width="0.03cm" svg:stroke-color="#ffffff" draw:marker-end="Arrowheads_20_2" draw:marker-end-width="0.12cm"/>
@@ -236,7 +271,7 @@
       </draw:page>
       <draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Table_20_of_20_Content" presentation:presentation-page-layout-name="AL1T2">
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="1.721cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="1.721cm">
             <text:p>
               <text:span text:style-name="T5">1</text:span>
             </text:p>
@@ -254,7 +289,7 @@
           <draw:line draw:style-name="gr4" draw:layer="layout" svg:x1="10.144cm" svg:y1="5.9cm" svg:x2="18.536cm" svg:y2="5.9cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="7.329cm">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="7.329cm">
             <text:p>
               <text:span text:style-name="T5">3</text:span>
             </text:p>
@@ -263,7 +298,7 @@
           <draw:line draw:style-name="gr6" draw:layer="layout" svg:x1="21.386cm" svg:y1="8.63cm" svg:x2="13cm" svg:y2="8.63cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18cm" svg:y="10.201cm">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18cm" svg:y="10.201cm">
             <text:p>
               <text:span text:style-name="T5">4</text:span>
             </text:p>
@@ -272,7 +307,7 @@
           <draw:line draw:style-name="gr8" draw:layer="layout" svg:x1="10.144cm" svg:y1="11.5cm" svg:x2="18.536cm" svg:y2="11.5cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="12.659cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="12.659cm">
             <text:p>
               <text:span text:style-name="T5">5</text:span>
             </text:p>
@@ -306,7 +341,7 @@
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page3" draw:style-name="dp1" draw:master-page-name="Topic_20_Title_20_1" presentation:presentation-page-layout-name="AL1T2">
-        <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="9.8cm" svg:y="5cm">
+        <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="9.8cm" svg:y="5cm">
           <text:p>
             <text:span text:style-name="T35">1</text:span>
           </text:p>
@@ -323,20 +358,20 @@
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page4" draw:style-name="dp1" draw:master-page-name="Content" presentation:presentation-page-layout-name="AL1T18">
-        <draw:path draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="4.883cm" svg:height="2.44cm" svg:x="17.723cm" svg:y="5.434cm" svg:viewBox="0 0 4884 2441" svg:d="M0 0c0 814 0 1627 0 2441 243 0 487 0 730 0 0-571 0-1141 0-1712 1142 0 2283 0 3425 0 0 571 0 1141 0 1712 243 0 486 0 729 0 0-814 0-1627 0-2441-1628 0-3256 0-4884 0z"/>
+        <draw:path draw:style-name="gr14" draw:layer="layout" svg:width="4.883cm" svg:height="2.44cm" svg:x="17.723cm" svg:y="5.434cm" svg:viewBox="0 0 4884 2441" svg:d="M0 0c0 814 0 1627 0 2441 243 0 487 0 730 0 0-571 0-1141 0-1712 1142 0 2283 0 3425 0 0 571 0 1141 0 1712 243 0 486 0 729 0 0-814 0-1627 0-2441-1628 0-3256 0-4884 0z"/>
         <draw:g>
           <draw:line draw:style-name="gr25" draw:layer="layout" svg:x1="20.23cm" svg:y1="5.434cm" svg:x2="20.23cm" svg:y2="4.206cm"/>
-          <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="19.98cm" svg:y="3.955cm">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="19.98cm" svg:y="3.955cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="gr25" draw:layer="layout" svg:width="0.75cm" svg:height="0.75cm" svg:x="19.855cm" svg:y="5.434cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
         </draw:g>
-        <draw:path draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="4.883cm" svg:height="2.972cm" svg:x="13.57cm" svg:y="7.344cm" svg:viewBox="0 0 4884 2973" svg:d="M0 531c0 814 0 1628 0 2442 1628 0 3256 0 4884 0 0-814 0-1628 0-2442-121-177-242-354-363-531-122 177-245 354-367 531 0 571 0 1142 0 1713-1141 0-2283 0-3424 0 0-571 0-1142 0-1713-243 0-487 0-730 0z"/>
+        <draw:path draw:style-name="gr15" draw:layer="layout" svg:width="4.883cm" svg:height="2.972cm" svg:x="13.57cm" svg:y="7.344cm" svg:viewBox="0 0 4884 2973" svg:d="M0 531c0 814 0 1628 0 2442 1628 0 3256 0 4884 0 0-814 0-1628 0-2442-121-177-242-354-363-531-122 177-245 354-367 531 0 571 0 1142 0 1713-1141 0-2283 0-3424 0 0-571 0-1142 0-1713-243 0-487 0-730 0z"/>
         <draw:g>
           <draw:line draw:style-name="gr31" draw:layer="layout" svg:x1="16cm" svg:y1="10.31cm" svg:x2="16cm" svg:y2="11.54cm"/>
-          <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="15.75cm" svg:y="11.295cm">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="15.75cm" svg:y="11.295cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="gr31" draw:layer="layout" svg:width="0.75cm" svg:height="0.75cm" svg:x="15.625cm" svg:y="9.59cm">
@@ -353,10 +388,10 @@
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
         </draw:g>
-        <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="4.882cm" svg:height="2.888cm" svg:x="5.262cm" svg:y="7.428cm" svg:viewBox="0 0 4883 2889" svg:d="M0 447c0 814 0 1628 0 2442 1628 0 3255 0 4883 0 0-814 0-1628 0-2442-122-149-244-298-366-447-121 149-242 298-363 447 0 571 0 1142 0 1713-1142 0-2283 0-3425 0 0-571 0-1142 0-1713-243 0-486 0-729 0z"/>
+        <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="4.882cm" svg:height="2.888cm" svg:x="5.262cm" svg:y="7.428cm" svg:viewBox="0 0 4883 2889" svg:d="M0 447c0 814 0 1628 0 2442 1628 0 3255 0 4883 0 0-814 0-1628 0-2442-122-149-244-298-366-447-121 149-242 298-363 447 0 571 0 1142 0 1713-1142 0-2283 0-3425 0 0-571 0-1142 0-1713-243 0-486 0-729 0z"/>
         <draw:g>
           <draw:line draw:style-name="gr41" draw:layer="layout" svg:x1="7.7cm" svg:y1="10.31cm" svg:x2="7.7cm" svg:y2="11.54cm"/>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="7.45cm" svg:y="11.295cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="7.45cm" svg:y="11.295cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="gr41" draw:layer="layout" svg:width="0.75cm" svg:height="0.75cm" svg:x="7.325cm" svg:y="9.59cm">
@@ -450,7 +485,7 @@
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page6" draw:style-name="dp1" draw:master-page-name="Topic_20_Title_20_2" presentation:presentation-page-layout-name="AL1T2">
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="1.25cm" svg:y="5cm">
+        <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="1.25cm" svg:y="5cm">
           <text:p>
             <text:span text:style-name="T36">2</text:span>
           </text:p>
@@ -468,13 +503,13 @@
       </draw:page>
       <draw:page draw:name="page7" draw:style-name="dp1" draw:master-page-name="Content" presentation:presentation-page-layout-name="AL1T18">
         <draw:g>
-          <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="4.5cm" svg:y="7.5cm" svg:viewBox="0 0 4747 690" svg:d="M345 0c-191 0-345 153-345 345 0 191 154 345 345 345 115 0 230 0 345 0 69 0 138 0 207 0 1283 0 2567 0 3850 0 0-230 0-460 0-690-1283 0-2567 0-3850 0-69 0-138 0-207 0-115 0-230 0-345 0z"/>
+          <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="4.5cm" svg:y="7.5cm" svg:viewBox="0 0 4747 690" svg:d="M345 0c-191 0-345 153-345 345 0 191 154 345 345 345 115 0 230 0 345 0 69 0 138 0 207 0 1283 0 2567 0 3850 0 0-230 0-460 0-690-1283 0-2567 0-3850 0-69 0-138 0-207 0-115 0-230 0-345 0z"/>
           <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="9.25cm" svg:y="7.5cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
-          <draw:polygon draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="14cm" svg:y="7.5cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
-          <draw:polygon draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="18.75cm" svg:y="7.5cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
+          <draw:polygon draw:style-name="gr15" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="14cm" svg:y="7.5cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
+          <draw:polygon draw:style-name="gr14" draw:layer="layout" svg:width="4.75cm" svg:height="0.7cm" svg:x="18.75cm" svg:y="7.5cm" svg:viewBox="0 0 21600 21600" draw:points="0,0 21600,0 21600,21600 0,21600"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="8.2cm" svg:y="10.9cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="8.2cm" svg:y="10.9cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:line draw:style-name="gr43" draw:layer="backgroundobjects" svg:x1="9.25cm" svg:y1="8.1cm" svg:x2="9.25cm" svg:y2="10.9cm"/>
@@ -498,7 +533,7 @@
           </draw:custom-shape>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="17.7cm" svg:y="10.9cm">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="17.7cm" svg:y="10.9cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:line draw:style-name="gr34" draw:layer="backgroundobjects" svg:x1="18.75cm" svg:y1="8.1cm" svg:x2="18.75cm" svg:y2="10.9cm"/>
@@ -510,7 +545,7 @@
           </draw:custom-shape>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="22.45cm" svg:y="2.1cm">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="2.6cm" svg:height="2.6cm" svg:x="22.45cm" svg:y="2.1cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:line draw:style-name="gr36" draw:layer="backgroundobjects" svg:x1="23.5cm" svg:y1="7.5cm" svg:x2="23.5cm" svg:y2="4.7cm"/>
@@ -583,7 +618,7 @@
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page10" draw:style-name="dp1" draw:master-page-name="Topic_20_Title_20_3" presentation:presentation-page-layout-name="AL1T2">
-        <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="1.25cm" svg:y="5cm">
+        <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="3.111cm" svg:height="3.111cm" svg:x="1.25cm" svg:y="5cm">
           <text:p>
             <text:span text:style-name="T36">3</text:span>
           </text:p>
@@ -602,24 +637,24 @@
       <draw:page draw:name="page11" draw:style-name="dp1" draw:master-page-name="Content">
         <draw:g>
           <draw:path draw:style-name="Filled_20_Light_20_Blue" draw:layer="layout" svg:width="1.913cm" svg:height="2.886cm" svg:x="12.0873cm" svg:y="5.064cm" svg:viewBox="0 0 1914 2887" svg:d="M0 704c236-207 505-374 795-496 259-108 532-178 811-208 103 962 206 1925 308 2887-638-728-1276-1456-1914-2183z"/>
-          <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="2.896cm" svg:height="1.822cm" svg:x="11.104cm" svg:y="6.128cm" svg:viewBox="0 0 2897 1823" svg:d="M0 1633c21-313 92-621 212-912 106-260 250-503 426-721 753 608 1506 1215 2259 1823-965-63-1932-127-2897-190z"/>
+          <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="2.896cm" svg:height="1.822cm" svg:x="11.104cm" svg:y="6.128cm" svg:viewBox="0 0 2897 1823" svg:d="M0 1633c21-313 92-621 212-912 106-260 250-503 426-721 753 608 1506 1215 2259 1823-965-63-1932-127-2897-190z"/>
           <draw:path draw:style-name="Filled_20_Light_20_Cyan" draw:layer="layout" svg:width="2.886cm" svg:height="1.913cm" svg:x="11.114cm" svg:y="7.95cm" svg:viewBox="0 0 2887 1914" svg:d="M704 1914c-207-236-374-504-496-794-108-260-178-532-208-812 962-103 1925-206 2887-308-728 638-1456 1276-2183 1914z"/>
           <draw:path draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="1.823cm" svg:height="2.896cm" svg:x="12.177cm" svg:y="7.95cm" svg:viewBox="0 0 1824 2897" svg:d="M1634 2897c-314-21-621-92-913-212-259-106-502-250-721-426 608-753 1216-1506 1824-2259-63 965-127 1932-190 2897z"/>
           <draw:path draw:style-name="Filled_20_Light_20_Red" draw:layer="layout" svg:width="1.913cm" svg:height="2.885cm" svg:x="14cm" svg:y="7.95cm" svg:viewBox="0 0 1914 2886" svg:d="M1914 2182c-236 207-504 375-794 496-260 108-532 178-812 208-103-962-206-1924-308-2886 638 728 1276 1454 1914 2182z"/>
-          <draw:path draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="2.896cm" svg:height="1.822cm" svg:x="14cm" svg:y="7.95cm" svg:viewBox="0 0 2897 1823" svg:d="M2897 189c-21 314-92 622-212 913-106 260-250 503-426 721-753-608-1506-1215-2259-1823 965 63 1932 126 2897 189z"/>
+          <draw:path draw:style-name="gr15" draw:layer="layout" svg:width="2.896cm" svg:height="1.822cm" svg:x="14cm" svg:y="7.95cm" svg:viewBox="0 0 2897 1823" svg:d="M2897 189c-21 314-92 622-212 913-106 260-250 503-426 721-753-608-1506-1215-2259-1823 965 63 1932 126 2897 189z"/>
           <draw:path draw:style-name="Filled_20_Light_20_Yellow" draw:layer="layout" svg:width="2.885cm" svg:height="1.913cm" svg:x="14cm" svg:y="6.037cm" svg:viewBox="0 0 2886 1914" svg:d="M2182 0c207 236 374 505 496 795 107 259 178 532 208 811-962 103-1924 206-2886 308 728-638 1454-1276 2182-1914z"/>
-          <draw:path draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="1.822cm" svg:height="2.895cm" svg:x="14cm" svg:y="5.055cm" svg:viewBox="0 0 1823 2896" svg:d="M189 0c314 20 622 92 913 211 260 106 503 250 721 426-608 753-1215 1506-1823 2259 63-965 126-1931 189-2896z"/>
+          <draw:path draw:style-name="gr14" draw:layer="layout" svg:width="1.822cm" svg:height="2.895cm" svg:x="14cm" svg:y="5.055cm" svg:viewBox="0 0 1823 2896" svg:d="M189 0c314 20 622 92 913 211 260 106 503 250 721 426-608 753-1215 1506-1823 2259 63-965 126-1931 189-2896z"/>
           <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="5.2cm" svg:height="5.2cm" svg:x="11.4cm" svg:y="5.35cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:g>
-            <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="12.8cm" svg:y="9cm">
+            <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="12.8cm" svg:y="9cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
             <draw:custom-shape draw:style-name="Filled_20_Light_20_Yellow" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="13.1cm" svg:y="9cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
-            <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="13.4cm" svg:y="9cm">
+            <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="13.4cm" svg:y="9cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
             <draw:custom-shape draw:style-name="Filled_20_Light_20_Red" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="13.7cm" svg:y="9cm">
@@ -631,7 +666,7 @@
             <draw:custom-shape draw:style-name="Filled_20_Light_20_Cyan" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="14.3cm" svg:y="9cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
-            <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="14.6cm" svg:y="9cm">
+            <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="14.6cm" svg:y="9cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
             <draw:custom-shape draw:style-name="Filled_20_Light_20_Blue" draw:layer="layout" svg:width="0.3cm" svg:height="0.3cm" svg:x="14.9cm" svg:y="9cm">
@@ -648,7 +683,7 @@
         <draw:line draw:style-name="gr2" draw:layer="layout" svg:x1="16.9cm" svg:y1="6.7cm" svg:x2="20cm" svg:y2="6.5cm"/>
         <draw:polyline draw:style-name="gr2" draw:layer="layout" svg:width="0.678cm" svg:height="4.163cm" draw:transform="rotate (2.0003218557107) translate (15.3399364746349cm 5.29019458622671cm)" svg:viewBox="0 0 679 4164" draw:points="266,0 679,957 0,4164"/>
         <draw:g>
-          <draw:custom-shape draw:style-name="Outlined_20_Blue" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (10.7cm 2.1cm)">
+          <draw:custom-shape draw:style-name="gr16" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (10.7cm 2.1cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="Filled_20_Light_20_Blue" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (10.527cm 2.3cm)">
@@ -660,10 +695,10 @@
           </draw:g>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Outlined_20_Blue" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (9.45cm 5cm)">
+          <draw:custom-shape draw:style-name="gr16" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (9.45cm 5cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (9.277cm 5.2cm)">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (9.277cm 5.2cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:g>
@@ -673,9 +708,9 @@
             <draw:path draw:style-name="Outlined_20_White" draw:layer="layout" svg:width="1.03cm" svg:height="0.713cm" svg:x="7.793cm" svg:y="6.185cm" svg:viewBox="0 0 1031 714" svg:d="M268 0c-148 0-268 120-268 268 0 14 0 29 0 43 0 149 120 268 268 268 62 0 122 0 183 0 55 45 111 90 166 135 0-45 0-90 0-135 48 0 97 0 146 0 148 0 268-119 268-268 0-14 0-29 0-43 0-148-120-268-268-268-165 0-330 0-495 0z"/>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.782cm" svg:height="0.782cm" svg:x="7.493cm" svg:y="6.037cm" svg:viewBox="0 0 783 783" svg:d="M783 392c0 69-18 136-52 196-35 59-84 109-143 143-60 34-128 52-196 52-69 0-137-18-196-52-60-34-109-84-144-143-35-60-52-127-52-196s17-137 52-196c35-60 84-109 144-144 59-34 127-52 196-52 68 0 136 18 196 52 59 35 108 84 143 144 34 59 52 127 52 196z"/>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.231cm" svg:height="0.231cm" svg:x="7.681cm" svg:y="6.734cm" svg:viewBox="0 0 232 232" svg:d="M0 232c77-77 155-155 232-232-77 0-155 0-232 0 0 77 0 155 0 232z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.63cm" svg:y="6.384cm" svg:viewBox="0 0 128 128" svg:d="M128 64c0 11-4 22-9 31-5 10-14 19-24 24-9 5-20 9-31 9-12 0-22-4-33-9-10-5-16-14-22-24-6-9-9-20-9-31 0-12 3-23 9-33 5-9 12-17 22-22 10-6 21-9 33-9 11 0 22 3 31 9 10 6 19 13 24 22 5 10 9 21 9 33z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.806cm" svg:y="6.384cm" svg:viewBox="0 0 128 128" svg:d="M128 64c0 11-4 22-9 31-5 10-14 19-24 24-9 5-20 9-31 9-12 0-22-4-33-9-10-5-16-14-22-24-6-9-9-20-9-31 0-12 3-23 9-33 5-9 12-17 22-22 10-6 21-9 33-9 11 0 22 3 31 9 10 6 19 13 24 22 5 10 9 21 9 33z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.974cm" svg:y="6.384cm" svg:viewBox="0 0 127 128" svg:d="M127 64c0 11-3 22-8 31-6 10-14 19-24 24-9 5-22 9-32 9-11 0-22-4-32-9-9-5-17-14-23-24-6-9-8-20-8-31 0-12 3-23 8-33 6-9 14-16 23-22 10-6 21-9 32-9s23 3 32 9c10 6 18 13 24 22 5 10 8 21 8 33z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.63cm" svg:y="6.384cm" svg:viewBox="0 0 128 128" svg:d="M128 64c0 11-4 22-9 31-5 10-14 19-24 24-9 5-20 9-31 9-12 0-22-4-33-9-10-5-16-14-22-24-6-9-9-20-9-31 0-12 3-23 9-33 5-9 12-17 22-22 10-6 21-9 33-9 11 0 22 3 31 9 10 6 19 13 24 22 5 10 9 21 9 33z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.806cm" svg:y="6.384cm" svg:viewBox="0 0 128 128" svg:d="M128 64c0 11-4 22-9 31-5 10-14 19-24 24-9 5-20 9-31 9-12 0-22-4-33-9-10-5-16-14-22-24-6-9-9-20-9-31 0-12 3-23 9-33 5-9 12-17 22-22 10-6 21-9 33-9 11 0 22 3 31 9 10 6 19 13 24 22 5 10 9 21 9 33z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.126cm" svg:height="0.126cm" svg:x="7.974cm" svg:y="6.384cm" svg:viewBox="0 0 127 128" svg:d="M127 64c0 11-3 22-8 31-6 10-14 19-24 24-9 5-22 9-32 9-11 0-22-4-32-9-9-5-17-14-23-24-6-9-8-20-8-31 0-12 3-23 8-33 6-9 14-16 23-22 10-6 21-9 32-9s23 3 32 9c10 6 18 13 24 22 5 10 8 21 8 33z"/>
           </draw:g>
         </draw:g>
         <draw:g>
@@ -687,9 +722,9 @@
           </draw:custom-shape>
           <draw:g>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.736cm" svg:height="0.893cm" svg:x="8.933cm" svg:y="8.79cm" svg:viewBox="0 0 737 894" svg:d="M369 0c-204 0-369 165-369 369 0 73 22 146 64 206h-1c20 55 135 213 139 318 106 0 212 1 317 1 4-100 84-217 131-285 57-68 87-153 87-240 0-204-164-369-368-369z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.511cm" svg:height="0.081cm" svg:x="9.037cm" svg:y="9.681cm" svg:viewBox="0 0 512 82" svg:d="M255 82c72 0 144 0 215 0 23 0 42-18 42-41s-19-41-42-41c-143 0-285 0-429 0-23 0-41 18-41 41s18 41 41 41c72 0 143 0 214 0z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.327cm" svg:height="0.123cm" svg:x="9.126cm" svg:y="9.879cm" svg:viewBox="0 0 328 124" svg:d="M164 124c34 0 68 0 102 0s62-28 62-62c0-35-28-62-62-62-68 0-136 0-204 0-34 0-62 27-62 62 0 34 28 62 62 62s68 0 102 0z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.418cm" svg:height="0.081cm" svg:x="9.082cm" svg:y="9.782cm" svg:viewBox="0 0 419 82" svg:d="M210 82c56 0 112 0 168 0 22 0 41-18 41-41s-19-41-41-41c-112 0-225 0-337 0-23 0-41 18-41 41s18 41 41 41c56 0 113 0 169 0z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.511cm" svg:height="0.081cm" svg:x="9.037cm" svg:y="9.681cm" svg:viewBox="0 0 512 82" svg:d="M255 82c72 0 144 0 215 0 23 0 42-18 42-41s-19-41-42-41c-143 0-285 0-429 0-23 0-41 18-41 41s18 41 41 41c72 0 143 0 214 0z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.327cm" svg:height="0.123cm" svg:x="9.126cm" svg:y="9.879cm" svg:viewBox="0 0 328 124" svg:d="M164 124c34 0 68 0 102 0s62-28 62-62c0-35-28-62-62-62-68 0-136 0-204 0-34 0-62 27-62 62 0 34 28 62 62 62s68 0 102 0z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.418cm" svg:height="0.081cm" svg:x="9.082cm" svg:y="9.782cm" svg:viewBox="0 0 419 82" svg:d="M210 82c56 0 112 0 168 0 22 0 41-18 41-41s-19-41-41-41c-112 0-225 0-337 0-23 0-41 18-41 41s18 41 41 41c56 0 113 0 169 0z"/>
           </draw:g>
         </draw:g>
         <draw:g>
@@ -701,7 +736,7 @@
           </draw:custom-shape>
           <draw:g>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.836cm" svg:height="0.836cm" svg:x="8.2cm" svg:y="12.014cm" svg:viewBox="0 0 837 837" svg:d="M837 419c0 73-19 145-56 209s-89 116-153 153c-16 9-33 18-51 25-50 20-104 31-158 31-74 0-146-19-210-56-32-18-62-42-88-68s-48-55-65-85c-37-64-56-136-56-209 0-57 11-113 33-165 7-15 14-30 23-45 36-63 89-116 153-153 63-37 136-56 210-56 2 0 3 0 6 0-2 140-4 279-6 419 139 0 279 0 418 0z"/>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.421cm" svg:height="0.426cm" svg:x="8.682cm" svg:y="11.952cm" svg:viewBox="0 0 422 427" svg:d="M0 0c8 0 16 1 24 1 72 4 144 26 206 65 25 17 50 36 72 58 29 31 55 65 74 102 32 63 47 132 46 201-140-3-279-6-419-8 0-140-2-279-3-419z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.421cm" svg:height="0.426cm" svg:x="8.682cm" svg:y="11.952cm" svg:viewBox="0 0 422 427" svg:d="M0 0c8 0 16 1 24 1 72 4 144 26 206 65 25 17 50 36 72 58 29 31 55 65 74 102 32 63 47 132 46 201-140-3-279-6-419-8 0-140-2-279-3-419z"/>
           </draw:g>
         </draw:g>
         <draw:g>
@@ -712,7 +747,7 @@
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:g>
-            <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.767cm" svg:height="0.637cm" svg:x="19.315cm" svg:y="12.363cm" svg:viewBox="0 0 768 638" svg:d="M381 0c-211 0-381 179-381 402 0 62 0 125 0 187 0 17 1 33 3 49 254-1 508-1 762-1 2-16 3-32 3-48 0-62 0-125 0-187 0-223-170-402-381-402-2 0-4 0-6 0z"/>
+            <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="0.767cm" svg:height="0.637cm" svg:x="19.315cm" svg:y="12.363cm" svg:viewBox="0 0 768 638" svg:d="M381 0c-211 0-381 179-381 402 0 62 0 125 0 187 0 17 1 33 3 49 254-1 508-1 762-1 2-16 3-32 3-48 0-62 0-125 0-187 0-223-170-402-381-402-2 0-4 0-6 0z"/>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.482cm" svg:height="0.517cm" svg:x="19.458cm" svg:y="11.802cm" svg:viewBox="0 0 483 518" svg:d="M483 259c0 45-12 90-33 129-21 40-51 73-88 96-37 22-79 34-121 34s-84-12-120-34c-37-23-68-56-89-96-21-39-32-84-32-129 0-46 11-90 32-130 21-39 52-72 89-95 36-23 78-34 120-34s84 11 121 34 67 56 88 95c21 40 33 84 33 130z"/>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.156cm" svg:height="0.091cm" svg:x="19.617cm" svg:y="12.358cm" svg:viewBox="0 0 157 92" svg:d="M0 13c27 27 55 53 82 79 26-26 50-52 75-79-49-20-102-15-157 0z"/>
             <draw:path draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.132cm" svg:height="0.353cm" svg:x="19.636cm" svg:y="12.491cm" svg:viewBox="0 0 133 354" svg:d="M67 0c22 101 44 200 66 301-23 17-46 36-68 53-22-17-43-36-65-53 23-101 45-200 67-301z"/>
@@ -722,7 +757,7 @@
           <draw:custom-shape draw:style-name="Outlined_20_Red" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (20.2cm 7.9cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
-          <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (20.027cm 8.1cm)">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (20.027cm 8.1cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:g>
@@ -733,18 +768,18 @@
           </draw:g>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Outlined_20_Yellow" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (21.2cm 5cm)">
+          <draw:custom-shape draw:style-name="gr17" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (21.2cm 5cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="Filled_20_Light_20_Yellow" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (21.027cm 5.2cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:g>
-            <draw:path draw:style-name="Outlined_20_Blue" draw:layer="layout" svg:width="0.887cm" svg:height="0.681cm" svg:x="19.457cm" svg:y="6.159cm" svg:viewBox="0 0 888 682" svg:d="M0 0c0 227 0 455 0 682 296 0 592 0 888 0"/>
+            <draw:path draw:style-name="gr16" draw:layer="layout" svg:width="0.887cm" svg:height="0.681cm" svg:x="19.457cm" svg:y="6.159cm" svg:viewBox="0 0 888 682" svg:d="M0 0c0 227 0 455 0 682 296 0 592 0 888 0"/>
             <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.15cm" svg:height="0.462cm" svg:x="19.559cm" svg:y="6.301cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
-            <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.15cm" svg:height="0.321cm" svg:x="19.772cm" svg:y="6.443cm">
+            <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="0.15cm" svg:height="0.321cm" svg:x="19.772cm" svg:y="6.443cm">
               <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
             </draw:custom-shape>
             <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="0.15cm" svg:height="0.215cm" svg:x="19.989cm" svg:y="6.548cm">
@@ -753,14 +788,14 @@
           </draw:g>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Outlined_20_Yellow" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (20.3cm 2.1cm)">
+          <draw:custom-shape draw:style-name="gr17" draw:layer="layout" svg:width="3cm" svg:height="2.598cm" draw:transform="rotate (-1.5707963267949) translate (20.3cm 2.1cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
-          <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (20.127cm 2.3cm)">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="2.6cm" svg:height="2.252cm" draw:transform="rotate (-1.5707963267949) translate (20.127cm 2.3cm)">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:type="hexagon" draw:enhanced-path="M 5400 0 L 16200 0 21600 10800 16200 21600 5400 21600 0 10800 Z N"/>
           </draw:custom-shape>
           <draw:g>
-            <draw:line draw:style-name="Outlined_20_Blue" draw:layer="layout" svg:x1="19.14cm" svg:y1="3.72cm" svg:x2="19.44cm" svg:y2="4.12cm"/>
+            <draw:line draw:style-name="gr16" draw:layer="layout" svg:x1="19.14cm" svg:y1="3.72cm" svg:x2="19.44cm" svg:y2="4.12cm"/>
             <draw:path draw:style-name="Outlined_20_White" draw:layer="layout" svg:width="0.638cm" svg:height="0.638cm" svg:x="18.558cm" svg:y="3.083cm" svg:viewBox="0 0 639 639" svg:d="M639 319c0 56-15 111-43 160-28 48-69 89-117 117-49 28-104 43-160 43-57 0-111-15-159-43-49-28-89-69-117-117-28-49-43-104-43-160 0-57 15-111 43-159 28-49 68-89 117-117 48-28 102-43 159-43 56 0 111 15 160 43 48 28 89 68 117 117 28 48 43 102 43 159z"/>
             <draw:path draw:style-name="gr112" draw:layer="layout" svg:width="0.202cm" svg:height="0.116cm" svg:x="18.867cm" svg:y="3.167cm" svg:viewBox="0 0 203 117" svg:d="M0 0c102 4 162 45 203 117"/>
           </draw:g>
@@ -826,14 +861,14 @@
       <draw:page draw:name="page12" draw:style-name="dp1" draw:master-page-name="List_20_Content">
         <draw:g>
           <draw:path draw:style-name="gr201" draw:layer="layout" svg:width="7.55cm" svg:height="2.5cm" svg:x="2.55cm" svg:y="1.9cm" svg:viewBox="0 0 7550 2500" svg:d="M650 2500v-385c-69-20-137-48-200-85-137-79-250-192-329-329s-121-292-121-450c0-159 42-314 121-451s192-250 329-329c63-37 131-65 200-85v-386h6000v800l900 450-900 450v800z"/>
-          <draw:path draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="2.1cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
+          <draw:path draw:style-name="gr13" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="2.1cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
           <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="1.1cm" svg:height="1.1cm" svg:x="2.9cm" svg:y="2.6cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
         </draw:g>
         <draw:g>
           <draw:path draw:style-name="gr202" draw:layer="layout" svg:width="7.55cm" svg:height="2.5cm" svg:x="2.55cm" svg:y="5.1cm" svg:viewBox="0 0 7550 2500" svg:d="M650 2500v-385c-69-20-137-48-200-85-137-79-250-192-329-329s-121-292-121-450c0-159 42-314 121-451s192-250 329-329c63-37 131-65 200-85v-386h6000v800l900 450-900 450v800z"/>
-          <draw:path draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="5.3cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
+          <draw:path draw:style-name="gr14" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="5.3cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
           <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="1.1cm" svg:height="1.1cm" svg:x="2.9cm" svg:y="5.8cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
@@ -847,7 +882,7 @@
         </draw:g>
         <draw:g>
           <draw:path draw:style-name="gr204" draw:layer="layout" svg:width="7.55cm" svg:height="2.5cm" svg:x="2.55cm" svg:y="11.5cm" svg:viewBox="0 0 7550 2500" svg:d="M650 2500v-385c-69-20-137-48-200-85-137-79-250-192-329-329s-121-292-121-450c0-159 42-314 121-451s192-250 329-329c63-37 131-65 200-85v-386h6000v800l900 450-900 450v800z"/>
-          <draw:path draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="11.7cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
+          <draw:path draw:style-name="gr15" draw:layer="layout" svg:width="6.95cm" svg:height="2.1cm" svg:x="2.75cm" svg:y="11.7cm" svg:viewBox="0 0 6950 2100" svg:d="M700 2100v-349c-123 0-243-32-350-94-106-61-195-150-256-256-62-107-94-228-94-350 0-123 32-244 94-351 61-106 150-195 256-256 107-62 227-94 350-94v-350h5500v750l750 300-750 301v749z"/>
           <draw:custom-shape draw:style-name="Filled_20_White" draw:layer="layout" svg:width="1.1cm" svg:height="1.1cm" svg:x="2.9cm" svg:y="12.2cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
@@ -885,20 +920,20 @@
       </draw:page>
       <draw:page draw:name="page13" draw:style-name="dp1" draw:master-page-name="Greetings">
         <draw:g>
-          <draw:line draw:style-name="Outlined_20_Blue" draw:layer="backgroundobjects" svg:x1="5.25cm" svg:y1="10.38cm" svg:x2="11.75cm" svg:y2="10.38cm"/>
-          <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="12.56cm" svg:y="10.2cm">
+          <draw:line draw:style-name="gr16" draw:layer="backgroundobjects" svg:x1="5.25cm" svg:y1="10.38cm" svg:x2="11.75cm" svg:y2="10.38cm"/>
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="12.56cm" svg:y="10.2cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
           <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="13.4cm" svg:y="10.2cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:custom-shape draw:style-name="Filled_20_Red" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="14.24cm" svg:y="10.2cm">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="14.24cm" svg:y="10.2cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:custom-shape draw:style-name="Filled_20_Yellow" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="15.08cm" svg:y="10.2cm">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="0.36cm" svg:height="0.36cm" svg:x="15.08cm" svg:y="10.2cm">
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="Outlined_20_Yellow" draw:layer="backgroundobjects" svg:x1="16.25cm" svg:y1="10.38cm" svg:x2="22.75cm" svg:y2="10.38cm"/>
+          <draw:line draw:style-name="gr17" draw:layer="backgroundobjects" svg:x1="16.25cm" svg:y1="10.38cm" svg:x2="22.75cm" svg:y2="10.38cm"/>
         </draw:g>
         <draw:frame presentation:style-name="Greetings-title" draw:layer="layout" svg:width="25.2cm" svg:height="3cm" svg:x="1.4cm" svg:y="6.4cm" presentation:class="title" presentation:placeholder="true">
           <draw:text-box/>
