@@ -1293,30 +1293,21 @@ Reference< XShape > const & Shape::createAndInsert(
                 ppt::PowerPointImport* pPPT = dynamic_cast<ppt::PowerPointImport*>(&rFilterBase);
                 if (!pPPT->getActualSlidePersist()->isMasterPage())
                 {
-                    // There is no support for change the shape of the drawing in LO, but we check,
-                    // if the placeholder changes its shape, top and bottom margins won't be used.
-                    bool bIsChangePlaceholderShape
-                        = !mpCustomShapePropertiesPtr->getAdjustmentGuideList().empty();
-
                     sal_Int32 nUpper = 0;
                     sal_Int32 nLower = 0;
                     sal_Int32 nHeight = maSize.Height / 360;
-                    if (getTextBody()->getTextProperties().moInsets[1].value() != 0
-                        && getTextBody()->getTextProperties().moInsets[3].value() != 0)
+                    if (getTextBody()->getTextProperties().moInsets[1].has_value()
+                        && getTextBody()->getTextProperties().moInsets[3].has_value())
                     {
-                        if (!bIsChangePlaceholderShape)
-                        {
-                            nUpper = *getTextBody()->getTextProperties().moInsets[1];
-                            nLower = *getTextBody()->getTextProperties().moInsets[3];
-                            nHeight -= (nUpper + nLower);
-                        }
+                        nUpper = *getTextBody()->getTextProperties().moInsets[1];
+                        nLower = *getTextBody()->getTextProperties().moInsets[3];
                     }
                     else
                     {
                         maDefaultShapeProperties.getProperty(PROP_TextUpperDistance) >>= nUpper;
                         maDefaultShapeProperties.getProperty(PROP_TextLowerDistance) >>= nLower;
-                        nHeight += (nUpper + nLower);
                     }
+                    nHeight -= (nUpper + nLower);
                     mxShape->setSize(awt::Size(0, nHeight));
                 }
             }

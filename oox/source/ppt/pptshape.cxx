@@ -335,9 +335,14 @@ void PPTShape::addShape(
         // Since it is not possible to represent custom shaped placeholders in Impress
         // Need to use service name css.drawing.CustomShape if they have a non default shape.
         // This workaround has the drawback of them not really being processed as placeholders
-        // so it is only done for slide footers...
-        bool convertInSlideMode = meShapeLocation == Slide &&
-            (mnSubType == XML_sldNum || mnSubType == XML_dt || mnSubType == XML_ftr || mnSubType == XML_body);
+        // so it is done for slide footers and obj placeholder
+        bool convertInSlideMode
+            = meShapeLocation == Slide
+              && (mnSubType == XML_sldNum || mnSubType == XML_dt || mnSubType == XML_ftr
+                  || mnSubType == XML_body
+                  || (mnSubType == XML_obj
+                      && sServiceName != "com.sun.star.drawing.GraphicObjectShape"));
+
         bool convertInLayoutMode = meShapeLocation == Layout && (mnSubType == XML_body);
         if ((convertInSlideMode || convertInLayoutMode) && !mpCustomShapePropertiesPtr->representsDefaultShape())
         {
