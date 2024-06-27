@@ -55,7 +55,7 @@ $(call gb_DotnetLibrary_get_target,%) :
 		echo "$(DOTNET_ITEM_ELEMENTS)" >> $$P && \
 		echo "</ItemGroup>" >> $$P && \
 		echo "</Project>" >> $$P && \
-		dotnet build $$P $(DOTNET_BUILD_FLAGS) \
+		"$(DOTNET)" build $$P $(DOTNET_BUILD_FLAGS) \
 			-o $(call gb_DotnetLibrary_get_workdir,$*) \
 			> $@.log 2>&1 || \
 			(echo \
