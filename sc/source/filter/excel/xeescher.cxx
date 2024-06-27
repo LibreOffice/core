@@ -38,6 +38,7 @@
 #include <editeng/outlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <unonames.hxx>
@@ -1639,6 +1640,7 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
     , mbAutoFill(false)
     , mbColHidden(false)
     , mbRowHidden(false)
+    , mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     // get the main note text
     OUString aNoteText;
@@ -1681,8 +1683,18 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                 // stAuthor (variable): An XLUnicodeString that specifies the name of the comment
                 // author. String length MUST be greater than or equal to 1 and less than or equal
                 // to 54.
+                bool bRemovePersonalInfo
+                    = SvtSecurityOptions::IsOptionSet(
+                          SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+                      && !SvtSecurityOptions::IsOptionSet(
+                             SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
                 if( pScNote->GetAuthor().isEmpty() )
                     maAuthor = XclExpString( u" "_ustr );
+                else if (bRemovePersonalInfo)
+                    maAuthor = XclExpString(
+                        "Author"
+                            + OUString::number(mpAuthorIDs->GetInfoID(pScNote->GetAuthor())),
+                        XclStrFlags::NONE, 54);
                 else
                     maAuthor = XclExpString( pScNote->GetAuthor(), XclStrFlags::NONE, 54 );
 
