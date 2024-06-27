@@ -33,30 +33,22 @@
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <map>
+#include <tools/fract.hxx>
 
 namespace sdr::overlay
 {
 
         // combine ranges geometrically to a single, ORed polygon
-        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges, bool bOffset)
+        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges, bool bOffset, double fOffset)
         {
-            // Determines the offset in twips.
-            // The offset is only needed if the contrast outline is drawn
-            sal_Int32 nOffset(0);
-            if (bOffset)
-            {
-                Size aSize(1, 1);
-                aSize = o3tl::convert(aSize, o3tl::Length::px, o3tl::Length::twip);
-                nOffset = aSize.getWidth();
-            }
-
             const sal_uInt32 nCount(rRanges.size());
             basegfx::B2DPolyPolygon aRetval;
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
                 basegfx::B2DRange aRange(rRanges[a]);
-                aRange.grow(nOffset);
+                if (bOffset)
+                    aRange.grow(fOffset);
                 const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(aRange));
 
                 if(0 == a)
@@ -172,15 +164,7 @@ namespace sdr::overlay
 
                     if(mbBorder)
                     {
-                        // External outline using themed color
-                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges(), mbContrastOutline));
-                        const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
-                            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                                std::move(aPolyPolygon),
-                                aRGBColor));
-
-                        // add both to result
-                        aRetval = drawinglayer::primitive2d::Primitive2DContainer {aUnifiedTransparence, aSelectionOutline};
+                        aRetval = drawinglayer::primitive2d::Primitive2DContainer {aUnifiedTransparence};
 
                         // tdf#161204 Outline with white color to provide contrast
                         if (mbContrastOutline)
@@ -192,6 +176,21 @@ namespace sdr::overlay
                                     basegfx::BColor(1.0, 1.0, 1.0)));
                             aRetval.append(drawinglayer::primitive2d::Primitive2DContainer{aContrastSelectionOutline});
                         }
+
+                        // Offset to be applied to the external outline
+                        double fOffset(0);
+                        if (getOverlayManager())
+                            fOffset = getOverlayManager()->getOutputDevice().PixelToLogic(Size(1, 1)).getWidth();
+
+                        // External outline using themed color
+                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges(), mbContrastOutline, fOffset));
+                        const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
+                            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                                std::move(aPolyPolygon),
+                                aRGBColor));
+
+                        // Add to result
+                        aRetval.append(drawinglayer::primitive2d::Primitive2DContainer {aSelectionOutline});
                     }
                     else
                     {
