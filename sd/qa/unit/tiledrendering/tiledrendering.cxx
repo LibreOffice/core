@@ -3025,6 +3025,92 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
+namespace
+{
+
+boost::property_tree::ptree const& child_at(boost::property_tree::ptree const& rTree, std::string_view aName, size_t nIndex)
+{
+    return std::next(rTree.get_child(std::string(aName)).find(""), nIndex)->second;
+}
+
+bool has_child(boost::property_tree::ptree const& rTree, std::string_view aName)
+{
+    return rTree.count(std::string(aName)) > 0;
+}
+
+} // end anonymous ns
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    Scheduler::ProcessEventsToIdle();
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    OString aString = pXImpressDocument->getPresentationInfo();
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(aString)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(15875, aTree.get_child("docWidth").get_value<int>());
+    CPPUNIT_ASSERT_EQUAL(8930,  aTree.get_child("docHeight").get_value<int>());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(4),  aTree.get_child("slides").size());
+
+    // Slide Index 0
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
+        CPPUNIT_ASSERT_EQUAL(0, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(has_child(rChild, "hash"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+    }
+
+    // Slide Index 1
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 1);
+        CPPUNIT_ASSERT_EQUAL(1, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(has_child(rChild, "hash"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+    }
+
+    // Slide Index 2
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 2);
+        CPPUNIT_ASSERT_EQUAL(2, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(has_child(rChild, "hash"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+    }
+
+    // Slide Index 3 - Hidden
+
+    // Slide Index 4
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 3);
+        CPPUNIT_ASSERT_EQUAL(4, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(has_child(rChild, "hash"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3004,7 +3004,8 @@ OString SdXImpressDocument::getPresentationInfo() const
 
     try
     {
-        uno::Reference<container::XIndexAccess> xSlides(mxDrawPagesAccess.get(), uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPages> xDrawPages = const_cast<SdXImpressDocument*>(this)->getDrawPages();
+        uno::Reference<container::XIndexAccess> xSlides(xDrawPages, uno::UNO_QUERY_THROW);
         if (xSlides.is())
         {
             // size in twips
@@ -3077,7 +3078,7 @@ OString SdXImpressDocument::getPresentationInfo() const
     }
     catch (uno::Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved" );
+        TOOLS_WARN_EXCEPTION("sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved");
     }
     return aJsonWriter.finishAndGetAsOString();
 }
