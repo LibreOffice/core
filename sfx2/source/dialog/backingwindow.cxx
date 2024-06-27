@@ -56,6 +56,11 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
+#include <officecfg/Office/Common.hxx>
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <bitmaps.hlst>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -188,6 +193,13 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     //set an alternative help label that doesn't hotkey the H of the Help menu
     mxHelpButton->set_label(mxAltHelpLabel->get_label());
     mxHelpButton->connect_clicked(LINK(this, BackingWindow, ClickHelpHdl));
+
+    // tdf#161796 make the extension button show the donation page
+    if (officecfg::Office::Common::Misc::ShowDonation::get())
+    {
+        mxExtensionsButton->set_label(SfxResId(STR_DONATE_BUTTON));
+        mxExtensionsButton->set_from_icon_name(BMP_DONATE);
+    }
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
 
@@ -533,9 +545,15 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton,void)
 
     try
     {
-        OUString sURL(officecfg::Office::Common::Menus::ExtensionsURL::get() +
-            "?LOvers=" + utl::ConfigManager::getProductVersion() +
-            "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
+        OUString sURL;
+        if (officecfg::Office::Common::Misc::ShowDonation::get())
+            sURL = officecfg::Office::Common::Menus::DonationURL::get() +
+                "?BCP47=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() +
+                "&LOlang=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+        else
+            sURL = officecfg::Office::Common::Menus::ExtensionsURL::get() +
+                "?LOvers=" + utl::ConfigManager::getProductVersion() +
+                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
 
         Reference<css::system::XSystemShellExecute> const
             xSystemShellExecute(
