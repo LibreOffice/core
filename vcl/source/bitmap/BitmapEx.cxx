@@ -1304,7 +1304,11 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
             std::unique_ptr<Point[]> pPoints2;
             tools::Long                nX, nY;
             sal_uInt16              nPolyPos = 0;
-            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( COL_BLACK );
+            // tdf#161498 use COL_ALPHA_OPAQUE for finding opaque pixels
+            // Starting with commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+            // pixels now contain an alpha value instead of a transparency
+            // value.
+            const BitmapColor   aTransparencyOpaque = pAcc->GetBestMatchingColor( COL_ALPHA_OPAQUE );
 
             pPoints1.reset(new Point[ nHeight ]);
             pPoints2.reset(new Point[ nHeight ]);
@@ -1317,7 +1321,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                 // scan row from left to right
                 while( nX < nEndX1 )
                 {
-                    if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
+                    if( aTransparencyOpaque == pAcc->GetPixelFromData( pScanline, nX ) )
                     {
                         pPoints1[ nPolyPos ] = Point( nX, nY );
                         nX = nStartX2;
@@ -1325,7 +1329,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                         // this loop always breaks eventually as there is at least one pixel
                         while( true )
                         {
-                            if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
+                            if( aTransparencyOpaque == pAcc->GetPixelFromData( pScanline, nX ) )
                             {
                                 pPoints2[ nPolyPos ] = Point( nX, nY );
                                 break;
