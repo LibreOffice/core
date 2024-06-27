@@ -1917,6 +1917,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testChangesAuthorDateXLSX)
     pBatch->commit();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testNotesAuthor)
+{
+    createScDoc("xlsx/cell-note.xlsx");
+
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    // Remove all personal info
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
+    pBatch->commit();
+
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/comments1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc, "/x:comments/x:authors/x:author"_ostr, u"Author1"_ustr);
+
+    // Reset config change
+    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
+    pBatch->commit();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

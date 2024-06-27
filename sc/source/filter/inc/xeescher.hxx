@@ -26,6 +26,7 @@
 #include "xlformula.hxx"
 #include <svx/sdtaitm.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <memory>
 #include <optional>
@@ -382,6 +383,8 @@ private:
     bool                mbRowHidden;    /// Row containing the comment is hidden
     tools::Rectangle           maCommentFrom;  /// From and From Offset
     tools::Rectangle           maCommentTo;    /// To and To Offsets
+    /// map authors to remove personal info
+    std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs;
 };
 
 class XclExpComments : public XclExpRecord
