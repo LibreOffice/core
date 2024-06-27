@@ -2696,11 +2696,6 @@ SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDra
     return nullptr;
 }
 
-sal_Int64 SdPage::GetHashCode() const
-{
-    return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-}
-
 void SdPage::SetName (const OUString& rName)
 {
     OUString aOldName( GetName() );

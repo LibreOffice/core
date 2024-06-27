@@ -2597,8 +2597,7 @@ OUString SdXImpressDocument::getPartHash(int nPart)
         return OUString();
     }
 
-    uno::Reference<drawing::XDrawPage> xDrawPage(pPage->getUnoPage(), uno::UNO_QUERY);
-    return OUString::fromUtf8(GetInterfaceHash(xDrawPage));
+    return OUString::number(pPage->GetPageRandomHash());
 }
 
 bool SdXImpressDocument::isMasterViewMode()
@@ -2694,10 +2693,10 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
     auto commentsNode = rJsonWriter.startNode("comments");
     // Return annotations on master pages too ?
     const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-    SdPage* pPage;
+    SdrPage* pPage;
     for (sal_uInt16 nPage = 0; nPage < nMaxPages; ++nPage)
     {
-        pPage = static_cast<SdPage*>(mpDoc->GetPage(nPage));
+        pPage = mpDoc->GetPage(nPage);
 
         for (auto const& xAnnotation : pPage->getAnnotations())
         {
@@ -2709,7 +2708,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
-            rJsonWriter.put("parthash", pPage->GetHashCode());
+            rJsonWriter.put("parthash", pPage->GetPageRandomHash());
             geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
             geometry::RealSize2D const & rSize = xAnnotation->getSize();
             ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));

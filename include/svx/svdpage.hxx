@@ -433,6 +433,7 @@ private:
     sal_Int32 mnBorderUpper; // top page margin
     sal_Int32 mnBorderRight; // right page margin
     sal_Int32 mnBorderLower; // bottom page margin
+    sal_Int64 nRandomHash; // Unique value for the page.
     bool mbBackgroundFullSize = false; ///< Background object to represent the whole page.
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
@@ -504,6 +505,7 @@ public:
     sal_Int32 GetUpperBorder() const;
     sal_Int32 GetRightBorder() const;
     sal_Int32 GetLowerBorder() const;
+    sal_Int64 GetPageRandomHash() const { return this->nRandomHash; }
     void    SetBackgroundFullSize(bool bIn);
     bool    IsBackgroundFullSize() const;
 
