@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="vcl">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="about">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="orientation">vertical</property>
@@ -12,7 +12,7 @@
     <child>
       <object class="GtkImage" id="logo">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="icon-name">missing-image</property>
       </object>
       <packing>
@@ -24,15 +24,15 @@
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="logoreplacement">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
             <property name="justify">center</property>
           </object>
           <packing>
@@ -45,21 +45,21 @@
           <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <child>
               <object class="GtkTextView" id="version">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="editable">False</property>
-                <property name="wrap_mode">word</property>
+                <property name="wrap-mode">word</property>
                 <property name="justification">center</property>
-                <property name="cursor_visible">False</property>
+                <property name="cursor-visible">False</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
@@ -73,8 +73,8 @@
           <object class="GtkLinkButton" id="buildIdLink">
             <property name="label" translatable="yes" context="aboutdialog|buildIdLink">See Log: $GITHASH</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="relief">none</property>
           </object>
           <packing>
@@ -86,11 +86,11 @@
         <child>
           <object class="GtkLabel" id="description">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
-            <property name="max_width_chars">62</property>
+            <property name="max-width-chars">62</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -102,12 +102,12 @@
           <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <child>
               <object class="GtkLabel" id="copyright">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
                 <property name="hexpand">True</property>
@@ -115,8 +115,8 @@
                 <property name="wrap">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
