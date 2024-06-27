@@ -3196,6 +3196,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf146081)
     CPPUNIT_ASSERT_EQUAL(nTotalHeight, nHeight1 * 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf155229RowAtLeast)
+{
+    createSwDoc("tdf155229_row_height_at_least.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTableHeight
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[11]/infos/bounds"_ostr, "bottom"_ostr)
+              .toInt32();
+
+    // Without the fix, this was Actual  : 14174
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15494), nTableHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf157829LTR)
 {
     // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions

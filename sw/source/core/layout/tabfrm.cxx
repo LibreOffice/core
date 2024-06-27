@@ -196,6 +196,8 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
 // cell height.
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame *pRow,
                                      const bool _bConsiderObjs );
+static sal_uInt16 lcl_GetTopSpace( const SwRowFrame& rRow );
+
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrame&, const SwBorderAttrs& );
 
 static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow);
@@ -4806,6 +4808,9 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
                                      const bool _bConsiderObjs )
 {
+    //calc min height including width of horizontal border
+    const bool bMinRowHeightInclBorder =
+        _pRow->GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
     SwTwips nHeight = 0;
     if ( !_pRow->IsRowSpanLine() )
     {
@@ -4846,6 +4851,11 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
             else
             {
                 nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
+            }
+            if (bMinRowHeightInclBorder)
+            {
+                //get horizontal border(s)
+                nHeight += lcl_GetTopSpace(*_pRow);
             }
         }
     }

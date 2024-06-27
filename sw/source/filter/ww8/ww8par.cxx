@@ -1874,6 +1874,9 @@ void SwWW8ImplReader::ImportDop()
         DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, true);
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, false);
+    // tdf#155229 calculate minimum row height including horizontal border width
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, true);
 
     // Import Default Tabs
     tools::Long nDefTabSiz = m_xWDop->dxaTab;

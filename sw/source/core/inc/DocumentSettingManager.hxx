@@ -185,6 +185,7 @@ class DocumentSettingManager final :
     bool mbDropCapPunctuation; // tdf#150200, tdf#150438
     bool mbUseVariableWidthNBSP : 1; // tdf#41652
     bool mbPaintHellOverHeaderFooter : 1; // tdf#160198
+    bool mbMinRowHeightInclBorder : 1; // tdf#155229
 
 public:
 
