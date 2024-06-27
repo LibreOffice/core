@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="Calendar">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkCalendar" id="date">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="year">2019</property>
         <property name="month">1</property>
         <property name="day">14</property>
@@ -24,7 +24,7 @@
     <child>
       <object class="GtkSeparator">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -35,17 +35,17 @@
     <child>
       <object class="GtkButtonBox" id="buttonbox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="spacing">6</property>
-        <property name="layout_style">spread</property>
+        <property name="layout-style">spread</property>
         <child>
           <object class="GtkButton" id="today">
             <property name="label" translatable="yes" context="calendar|STR_SVT_CALENDAR_TODAY">Today</property>
-            <property name="can_focus">True</property>
-            <property name="can_default">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
-            <property name="use_underline">True</property>
+            <property name="can-focus">True</property>
+            <property name="can-default">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="use-underline">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -56,9 +56,9 @@
         <child>
           <object class="GtkButton" id="none">
             <property name="label" translatable="yes" context="calendar|STR_SVT_CALENDAR_NONE">None</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="no_show_all">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
