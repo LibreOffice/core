@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,odk_checkapi,\
 
 $(eval $(call gb_CppunitTest_add_cxxflags,odk_checkapi,\
 	$(gb_CXX03FLAGS) \
+	$(if $(ENABLE_GTK3),$(GTK3_CFLAGS)) \
 ))
 
 $(eval $(call gb_CppunitTest_set_external_code,odk_checkapi))
