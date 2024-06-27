@@ -273,10 +273,9 @@ void RtfExport::WriteRevTab()
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
 
-    bool bRemoveCommentAuthorDates
+    bool bRemoveChangesInfo
         = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
-          && !SvtSecurityOptions::IsOptionSet(
-                 SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     // Now write the table
     Strm()
@@ -290,9 +289,8 @@ void RtfExport::WriteRevTab()
         Strm().WriteChar('{');
         if (pAuthor)
         {
-            OUString sAuthor(bRemoveCommentAuthorDates
-                                 ? "Author" + OUString::number(GetInfoID(*pAuthor))
-                                 : *pAuthor);
+            OUString sAuthor(bRemoveChangesInfo ? "Author" + OUString::number(GetInfoID(*pAuthor))
+                                                : *pAuthor);
             Strm().WriteOString(msfilter::rtfutil::OutString(sAuthor, m_eDefaultEncoding));
         }
         Strm().WriteOString(";}");
