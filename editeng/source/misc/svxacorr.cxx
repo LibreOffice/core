@@ -2060,7 +2060,6 @@ SvxAutoCorrect::SearchWordsInList(
             rLang = aLanguageTag;
             return pRet;
         }
-        return std::nullopt;
     }
 
     // If it still could not be found here, then keep on searching
