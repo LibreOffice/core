@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/securityoptions.hxx>
 #include <algorithm>
 #include <map>
 #include <hintids.hxx>
@@ -1680,7 +1681,12 @@ sal_uInt16 WW8Export::AddRedlineAuthor( std::size_t nId )
         m_pRedlAuthors.reset(new WW8_WrtRedlineAuthor);
         m_pRedlAuthors->AddName(u"Unknown"_ustr);
     }
-    return m_pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
+    bool bRemovePersonalInfo
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
+    OUString sName(SW_MOD()->GetRedlineAuthor(nId));
+    return m_pRedlAuthors->AddName(
+        bRemovePersonalInfo ? "Author" + OUString::number(mpAuthorIDs->GetInfoID(sName)) : sName);
 }
 
 void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
@@ -4040,6 +4046,7 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
     , m_bDot(bDot)
     , m_pWriter(pWriter)
     , m_pAttrOutput(new WW8AttributeOutput(*this))
+    , mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
 }
 
