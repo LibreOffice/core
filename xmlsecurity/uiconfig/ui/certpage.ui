@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -12,66 +12,66 @@
   </object>
   <object class="GtkBox" id="CertPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=1 n-rows=3 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="row_spacing">6</property>
+        <property name="row-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="certpage|label1">Certificate Path</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">signatures</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">signatures</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="viewcert">
             <property name="label" translatable="yes" context="certpage|viewcert">View Certificate...</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="halign">end</property>
-            <property name="use_underline">True</property>
+            <property name="use-underline">True</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="signatures">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="model">liststore3</property>
-                <property name="headers_visible">False</property>
-                <property name="search_column">0</property>
-                <property name="enable_tree_lines">True</property>
+                <property name="headers-visible">False</property>
+                <property name="search-column">0</property>
+                <property name="enable-tree-lines">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                 </child>
@@ -96,8 +96,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>
@@ -108,39 +108,39 @@
       </packing>
     </child>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=1 n-rows=2 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="row_spacing">6</property>
+        <property name="row-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="certpage|label2">Certificate status</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">status</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">status</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTextView" id="status">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child internal-child="accessible">
@@ -152,8 +152,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
       </object>
@@ -165,8 +165,8 @@
     </child>
     <child>
       <object class="GtkLabel" id="certok">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="label" translatable="yes" context="certpage|certok">The certificate is OK.</property>
       </object>
       <packing>
@@ -177,8 +177,8 @@
     </child>
     <child>
       <object class="GtkLabel" id="certnotok">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
         <property name="label" translatable="yes" context="certpage|certnotok">The certificate could not be validated.</property>
       </object>
       <packing>
