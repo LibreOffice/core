@@ -178,7 +178,8 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         { "SearchItem.Command", css::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
         { "SearchItem.AlgorithmType", css::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
         { "SearchItem.AlgorithmType2", css::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
-        { "SearchItem.SearchFormatted", css::uno::Any( bSearchFormatted ) }
+        { "SearchItem.SearchFormatted", css::uno::Any( bSearchFormatted ) },
+        { "UseAttrItemList", css::uno::Any(false) }
     } ) );
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);

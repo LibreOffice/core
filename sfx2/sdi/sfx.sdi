@@ -1158,7 +1158,7 @@ SfxVoidItem ShowStyle SID_STYLE_SHOW
 
 
 SfxVoidItem ExecuteSearch FID_SEARCH_NOW
-(SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET )
+(SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET, SfxBoolItem UseAttrItemList SID_SEARCH_USE_ATTR_ITEM_LIST)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
