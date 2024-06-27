@@ -158,6 +158,7 @@ extern "C"
             size_sEnvPath = strlen(sEnvPath);
         buffer_size = size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4;
         sNewPath = (char *) malloc(buffer_size);
+        assert(sNewPath);
         sNewPath[0] = L'\0';
         strcat_s(sNewPath, buffer_size, pPath);     // program to PATH
         strcat_s(sNewPath, buffer_size, ";");
