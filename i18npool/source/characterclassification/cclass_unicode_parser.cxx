@@ -651,7 +651,7 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c, const cclass_Un
             return ((nTypes & KParseTokens::IGNORE_LEADING_WS) ?
                 ParserFlags::CHAR_DONTCARE : (bStart ? ParserFlags::CHAR_WORD : (ParserFlags::CHAR_DONTCARE | ParserFlags::WORD_SEP | ParserFlags::VALUE_SEP) ));
         case U_OTHER_PUNCTUATION:
-            // fdo#61754 Lets see (if we not at the start) if this is midletter
+            // fdo#61754 Let's see (if we not at the start) if this is midletter
             // punctuation and allow it in a word if it is similarly to
             // U_NON_SPACING_MARK, for example U+00B7 MIDDLE DOT.
             // tdf#123575 for U+30FB KATAKANA MIDDLE DOT property is not

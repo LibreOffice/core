@@ -3246,7 +3246,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
         // Fonts without leading cause problems
         if ( ( nIntLeading == 0 ) && (mpRefDev->GetOutDevType() == OUTDEV_PRINTER))
         {
-            // Lets see what Leading one gets on the screen
+            // Let's see what Leading one gets on the screen
             VclPtr<VirtualDevice> pVDev = GetVirtualDevice(mpRefDev->GetMapMode(), mpRefDev->GetDrawMode());
             rFont.SetPhysFont(*pVDev);
             aMetric = pVDev->GetFontMetric();

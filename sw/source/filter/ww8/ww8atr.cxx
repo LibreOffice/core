@@ -644,7 +644,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     /*
     #i9301#
-    No explicit page break, lets see if the style had one and we've moved to a
+    No explicit page break, let's see if the style had one and we've moved to a
     new page style because of it, if we have to then we take the opportunity to
     set the equivalent word section here. We *could* do it for every paragraph
     that moves onto a new page because of layout, but that would be insane.

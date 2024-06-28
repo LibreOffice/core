@@ -1013,7 +1013,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 
     if( rType == "text/plain;charset=utf-16" )
     {
-        // lets see if we have UTF16 else try to find something convertible
+        // let's see if we have UTF16 else try to find something convertible
         if( it->second->m_aTypes.getLength() && ! it->second->m_bHaveUTF16 )
         {
             Sequence< sal_Int8 > aData;

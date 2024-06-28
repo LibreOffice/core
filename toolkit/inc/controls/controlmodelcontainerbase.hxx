@@ -259,7 +259,7 @@ public:
     void SAL_CALL setDesignMode( sal_Bool bOn ) override;
     // XModifyListener
     // Using a dummy/no-op implementation here, not sure if every container control needs
-    // to implement this, certainly Dialog does, lets see about others
+    // to implement this, certainly Dialog does, let's see about others
     virtual void SAL_CALL modified( const css::lang::EventObject& ) override {}
 protected:
     virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;

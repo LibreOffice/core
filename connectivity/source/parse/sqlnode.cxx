@@ -387,7 +387,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         return;
     }
 
-    // Lets see how many nodes this subtree has
+    // Let's see how many nodes this subtree has
     sal_uInt32 nCount = count();
 
     bool bHandled = false;

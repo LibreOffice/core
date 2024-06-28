@@ -1159,7 +1159,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
 
-    // Lets see if this is a reference to something in an external file.  A
+    // Let's see if this is a reference to something in an external file.  A
     // document name is always quoted and has a trailing #.
     if (*p == '\'')
     {
