@@ -303,6 +303,7 @@ public:
     OUString getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
                                                PDFAnnotAActionType eEvent) override;
     OUString getFormFieldValue(PDFiumDocument* pDoc) override;
+    int getOptionCount(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1381,6 +1382,11 @@ OUString PDFiumAnnotationImpl::getFormFieldValue(PDFiumDocument* pDoc)
         }
     }
     return aString;
+}
+int PDFiumAnnotationImpl::getOptionCount(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    return FPDFAnnot_GetOptionCount(pDocImpl->getFormHandlePointer(), mpAnnotation);
 }
 
 OUString PDFiumAnnotationImpl::getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
