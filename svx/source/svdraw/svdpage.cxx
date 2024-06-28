@@ -1325,14 +1325,6 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     mbPageBorderOnlyLeftRight(false)
 {
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
-
-    sal_Int8 random1;
-    (void)rtl_random_getBytes(nullptr, &random1, 1);
-
-    sal_Int8 random2;
-    (void)rtl_random_getBytes(nullptr, &random2, 1);
-
-    this->nRandomHash = random1 * random2;
 }
 
 SdrPage::~SdrPage()

@@ -2597,7 +2597,7 @@ OUString SdXImpressDocument::getPartHash(int nPart)
         return OUString();
     }
 
-    return OUString::number(pPage->GetPageRandomHash());
+    return OUString::number(pPage->GetUniqueID());
 }
 
 bool SdXImpressDocument::isMasterViewMode()
@@ -2708,7 +2708,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
-            rJsonWriter.put("parthash", pPage->GetPageRandomHash());
+            rJsonWriter.put("parthash", pPage->GetUniqueID());
             geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
             geometry::RealSize2D const & rSize = xAnnotation->getSize();
             ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));

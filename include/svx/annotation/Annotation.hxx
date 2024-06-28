@@ -22,6 +22,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/TextAPI.hxx>
+#include <svx/UniqueID.hxx>
 #include <vcl/bitmapex.hxx>
 
 class SdrUndoAction;
@@ -104,13 +105,9 @@ class SVXCORE_DLLPUBLIC Annotation
       public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
       public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
-private:
-    static sal_uInt32 m_nLastId;
-    static sal_uInt32 nextID() { return m_nLastId++; }
-
 protected:
     SdrPage* mpPage;
-    sal_uInt32 m_nId;
+    UniqueID maUniqueID;
 
     css::geometry::RealPoint2D m_Position;
     css::geometry::RealSize2D m_Size;
@@ -174,7 +171,7 @@ public:
     SdrPage* getPage() { return mpPage; }
 
     // Unique ID of the annotation
-    sal_uInt32 GetId() const { return m_nId; }
+    sal_uInt64 GetId() const { return maUniqueID.getID(); }
 
     CreationInfo const& getCreationInfo() { return maCreationInfo; }
     void setCreationInfo(CreationInfo const& rCreationInfo) { maCreationInfo = rCreationInfo; }
