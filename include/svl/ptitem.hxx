@@ -46,10 +46,7 @@ public:
     virtual SfxPointItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const Point&             GetValue() const { return aVal; }
-            void             SetValue( const Point& rNewVal ) {
-                                 assert( !isPooled() && "SetValue() with pooled item" );
-                                 aVal = rNewVal;
-                             }
+            void             SetValue( const Point& rNewVal ) { ASSERT_CHANGE_REFCOUNTED_ITEM; aVal = rNewVal; }
 
     virtual bool             QueryValue( css::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const override;

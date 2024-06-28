@@ -70,14 +70,8 @@ public:
 
     sal_Int16 GetValue() const { return m_nValue; }
 
-    inline void SetValue(sal_Int16 nTheValue);
+    void SetValue(sal_Int16 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nValue = nTheValue; }
 };
-
-inline void SfxInt16Item::SetValue(sal_Int16 nTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_nValue = nTheValue;
-}
 
 
 class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item

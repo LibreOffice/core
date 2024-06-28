@@ -997,9 +997,8 @@ bool SvxFontHeightItem::HasMetrics() const
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp,
                                    MapUnit eUnit )
 {
-    assert( !isPooled() && "SetHeight() with pooled item" );
-
     ASSERT_CHANGE_REFCOUNTED_ITEM;
+
     if( MapUnit::MapRelative != eUnit )
         nHeight = nNewHeight + ::ItemToControl( short(nNewProp), eUnit,
                                                 FieldUnit::TWIP );
@@ -1015,9 +1014,8 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
                                    MapUnit eMetric, MapUnit eCoreMetric )
 {
-    assert( !isPooled() && "SetValue() with pooled item" );
-
     ASSERT_CHANGE_REFCOUNTED_ITEM;
+
     if( MapUnit::MapRelative != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl(static_cast<short>(nNewProp), eMetric,

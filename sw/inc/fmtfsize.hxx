@@ -88,11 +88,11 @@ public:
 
     SwFrameSize GetHeightSizeType() const { return m_eFrameHeightType; }
     void SetHeightSizeType( SwFrameSize eSize )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_eFrameHeightType = eSize; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eFrameHeightType = eSize; }
 
     SwFrameSize GetWidthSizeType() const { return m_eFrameWidthType; }
     void SetWidthSizeType( SwFrameSize eSize )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_eFrameWidthType = eSize; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eFrameWidthType = eSize; }
 
     enum PercentFlags { SYNCED = 0xff };
     //0xff is reserved to indicate height is synced to width
@@ -102,13 +102,13 @@ public:
     sal_uInt8   GetWidthPercent() const { return m_nWidthPercent;  }
     sal_Int16   GetWidthPercentRelation() const { return m_eWidthPercentRelation;  }
     void    SetHeightPercent( sal_uInt8 n )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_nHeightPercent = n; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nHeightPercent = n; }
     void    SetHeightPercentRelation ( sal_Int16 n )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_eHeightPercentRelation  = n; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eHeightPercentRelation  = n; }
     void    SetWidthPercent ( sal_uInt8 n )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_nWidthPercent  = n; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nWidthPercent  = n; }
     void    SetWidthPercentRelation ( sal_Int16 n )
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_eWidthPercentRelation  = n; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_eWidthPercentRelation  = n; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 

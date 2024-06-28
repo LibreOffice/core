@@ -44,12 +44,9 @@ public:
                                   MapUnit ePresMetric,
                                   OUString & rText,
                                   const IntlWrapper& ) const override;
-            sal_uInt16           GetValue() const { return nVal; }
-            void             SetValue( sal_uInt16 nNewVal ) {
-                                 assert( !isPooled() && "SetValue() with pooled item" );
-                                 nVal = nNewVal;
-                             }
-            bool             GetFlag( sal_uInt8 nFlag ) const { return (nVal & ( 1<<nFlag)); }
+    sal_uInt16 GetValue() const { return nVal; }
+    void SetValue( sal_uInt16 nNewVal ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nVal = nNewVal; }
+    bool GetFlag( sal_uInt8 nFlag ) const { return (nVal & ( 1<<nFlag)); }
 };
 
 #endif

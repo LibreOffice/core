@@ -55,14 +55,8 @@ public:
 
     const OUString & GetValue() const { return m_aValue; }
 
-    inline void SetValue(const OUString & rTheValue);
+    void SetValue(const OUString & rTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_aValue = rTheValue; }
 };
-
-inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_aValue = rTheValue;
-}
 
 #endif // INCLUDED_SVL_CUSTRITM_HXX
 

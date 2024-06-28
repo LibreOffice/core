@@ -43,7 +43,7 @@ public:
 
     void SetValue(EnumT nTheValue)
     {
-        assert( !isPooled() && "SetValue() with pooled item" );
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         m_nValue = nTheValue;
     }
 

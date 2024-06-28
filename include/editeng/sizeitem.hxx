@@ -57,14 +57,14 @@ public:
 
     const Size& GetSize() const { return m_aSize; }
     void        SetSize(const Size& rSize)
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize = rSize; }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_aSize = rSize; }
 
     tools::Long GetWidth() const { return m_aSize.getWidth();  }
     tools::Long GetHeight() const { return m_aSize.getHeight(); }
     void SetWidth(tools::Long n)
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize.setWidth(n); }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_aSize.setWidth(n); }
     void SetHeight(tools::Long n)
-    { assert( !isPooled() && "SetValue() with pooled item" ); m_aSize.setHeight(n); }
+    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_aSize.setHeight(n); }
 };
 
 #endif

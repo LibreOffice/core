@@ -51,14 +51,8 @@ public:
 
     sal_uInt8 GetValue() const { return m_nValue; }
 
-    inline void SetValue(sal_uInt8 nTheValue);
+    void SetValue(sal_uInt8 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nValue = nTheValue; }
 };
-
-inline void CntByteItem::SetValue(sal_uInt8 nTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_nValue = nTheValue;
-}
 
 class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
 {
@@ -88,14 +82,9 @@ public:
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
-    inline void SetValue(sal_uInt16 nTheValue);
+    void SetValue(sal_uInt16 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nValue = nTheValue; }
 };
 
-inline void CntUInt16Item::SetValue(sal_uInt16 nTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_nValue = nTheValue;
-}
 
 class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
 {
@@ -125,14 +114,9 @@ public:
 
     sal_Int32 GetValue() const { return m_nValue; }
 
-    inline void SetValue(sal_Int32 nTheValue);
+    void SetValue(sal_Int32 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nValue = nTheValue; }
 };
 
-inline void CntInt32Item::SetValue(sal_Int32 nTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_nValue = nTheValue;
-}
 
 class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
 {
@@ -162,14 +146,8 @@ public:
 
     sal_uInt32 GetValue() const { return m_nValue; }
 
-    inline void SetValue(sal_uInt32 nTheValue);
+    void SetValue(sal_uInt32 nTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nValue = nTheValue; }
 };
-
-inline void CntUInt32Item::SetValue(sal_uInt32 nTheValue)
-{
-    assert( !isPooled() && "SetValue() with pooled item" );
-    m_nValue = nTheValue;
-}
 
 #endif // INCLUDED_SVL_CINTITEM_HXX
 
