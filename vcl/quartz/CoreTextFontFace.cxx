@@ -46,43 +46,46 @@ sal_IntPtr CoreTextFontFace::GetFontId() const
 
 const std::vector<hb_variation_t>& CoreTextFontFace::GetVariations(const LogicalFontInstance&) const
 {
-    CTFontRef pFont = CTFontCreateWithFontDescriptor(mxFontDescriptor, 0.0, nullptr);
-
     if (!mxVariations)
     {
         mxVariations.emplace();
-        CFArrayRef pAxes = CTFontCopyVariationAxes(pFont);
-        if (pAxes)
+        CTFontRef pFont = CTFontCreateWithFontDescriptor(mxFontDescriptor, 0.0, nullptr);
+        if (pFont)
         {
-            CFDictionaryRef pVariations = CTFontCopyVariation(pFont);
-            if (pVariations)
+            CFArrayRef pAxes = CTFontCopyVariationAxes(pFont);
+            if (pAxes)
             {
-                CFIndex nAxes = CFArrayGetCount(pAxes);
-                for (CFIndex i = 0; i < nAxes; ++i)
+                CFDictionaryRef pVariations = CTFontCopyVariation(pFont);
+                if (pVariations)
                 {
-                    auto pAxis = static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(pAxes, i));
-                    if (pAxis)
+                    CFIndex nAxes = CFArrayGetCount(pAxes);
+                    for (CFIndex i = 0; i < nAxes; ++i)
                     {
-                        hb_tag_t nTag;
-                        auto pTag = static_cast<CFNumberRef>(
-                            CFDictionaryGetValue(pAxis, kCTFontVariationAxisIdentifierKey));
-                        if (!pTag)
-                            continue;
-                        CFNumberGetValue(pTag, kCFNumberIntType, &nTag);
+                        auto pAxis = static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(pAxes, i));
+                        if (pAxis)
+                        {
+                            hb_tag_t nTag;
+                            auto pTag = static_cast<CFNumberRef>(
+                                CFDictionaryGetValue(pAxis, kCTFontVariationAxisIdentifierKey));
+                            if (!pTag)
+                                continue;
+                            CFNumberGetValue(pTag, kCFNumberIntType, &nTag);
 
-                        float fValue;
-                        auto pValue
-                            = static_cast<CFNumberRef>(CFDictionaryGetValue(pVariations, pTag));
-                        if (!pValue)
-                            continue;
-                        CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
+                            float fValue;
+                            auto pValue
+                                = static_cast<CFNumberRef>(CFDictionaryGetValue(pVariations, pTag));
+                            if (!pValue)
+                                continue;
+                            CFNumberGetValue(pValue, kCFNumberFloatType, &fValue);
 
-                        mxVariations->push_back({ nTag, fValue });
+                            mxVariations->push_back({ nTag, fValue });
+                        }
                     }
+                    CFRelease(pVariations);
                 }
-                CFRelease(pVariations);
+                CFRelease(pAxes);
             }
-            CFRelease(pAxes);
+            CFRelease(pFont);
         }
     }
 
