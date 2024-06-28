@@ -696,7 +696,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         case RES_CHRATR_NOHYPHEN :
             if ( m_pShell && m_pShell->GetWin() &&
-                            m_pShell->GetViewOptions()->IsShowHiddenChar() )
+                            m_pShell->GetViewOptions()->IsViewMetaChars() )
             {
                 if ( rItem.StaticWhichCast(RES_CHRATR_NOHYPHEN).GetValue() )
                 {
