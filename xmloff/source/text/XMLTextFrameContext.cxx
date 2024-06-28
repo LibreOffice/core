@@ -271,17 +271,26 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
     basegfx::B2DPolyPolygon aPolyPolygon;
 
-    if( bPath )
+    // Related tdf#161833: ignore saved polygon for "recreate on edit" contours
+    // tdf#161833 would cause semi-transparent pixels to be treated as fully
+    // transparent pixels when calculating the wrap contour for an image. To
+    // force the correct contour when loading a document, force the contour
+    // to be recalculated by ignoring the saved polygon if the contour is set
+    // to "recreate on edit".
+    if( !bAuto )
     {
-        basegfx::utils::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
-    }
-    else
-    {
-        basegfx::B2DPolygon aPolygon;
-
-        if(basegfx::utils::importFromSvgPoints(aPolygon, sPoints))
+        if( bPath )
         {
-            aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
+            basegfx::utils::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
+        }
+        else
+        {
+            basegfx::B2DPolygon aPolygon;
+
+            if(basegfx::utils::importFromSvgPoints(aPolygon, sPoints))
+            {
+                aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
+            }
         }
     }
 
