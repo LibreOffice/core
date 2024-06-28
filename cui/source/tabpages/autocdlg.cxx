@@ -1145,7 +1145,9 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
                 else
                 {
                     aTestStr = pCharClass->lowercase( aTestStr );
-                    if( aTestStr.startsWith(aWordStr) && !bTmpSelEntry )
+                    if( !bTmpSelEntry && ( aTestStr.startsWith(aWordStr)
+                        // find also with ".*" and between :colons:
+                        || aTestStr.replaceAll(".*","").replaceAll(":", "").startsWith(aWordStr) ) )
                     {
                         m_xReplaceTLB->scroll_to_row(rIter);
                         bTmpSelEntry = true;
