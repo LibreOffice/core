@@ -11,6 +11,9 @@
 
 #include <memory>
 
+#include <com/sun/star/text/XTextDocument.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/colritem.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
@@ -257,6 +260,59 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     // - Actual  : rgba[000000ff]
     // i.e. the custom color was lost, the font color was black, not orange.
     CPPUNIT_ASSERT_EQUAL(nOrange, pAnnotation->getFontColor(pPdfDocument.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a document with a dropdown: custom default text and 3 items:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+            },
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"G"_ustr)),
+            },
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"blue"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"B"_ustr)),
+            },
+        };
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting that to PDF:
+    save(u"writer_pdf_Export"_ustr);
+
+    // Then make sure that the custom default is not lost:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    pPage->onAfterLoadPage(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 3
+    // i.e. only the 3 colors were exported, the default "test" text was not.
+    CPPUNIT_ASSERT_EQUAL(4, pAnnotation->getOptionCount(pPdfDocument.get()));
 }
 }
 

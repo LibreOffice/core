@@ -112,6 +112,7 @@ public:
                                                        PDFAnnotAActionType eEvent)
         = 0;
     virtual OUString getFormFieldValue(PDFiumDocument* pDoc) = 0;
+    virtual int getOptionCount(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;

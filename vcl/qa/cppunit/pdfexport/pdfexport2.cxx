@@ -4703,11 +4703,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Position array
-    constexpr double aPos[5][4] = { { 56.699, 707.701, 131.401, 721.499 },
-                                    { 198.499, 707.701, 273.201, 721.499 },
-                                    { 303.349, 680.101, 378.051, 693.899 },
-                                    { 480.599, 680.101, 555.301, 693.899 },
-                                    { 56.699, 652.501, 131.401, 666.299 } };
+    constexpr double aPos[5][4] = { { 55.699, 706.701, 132.401, 722.499 },
+                                    { 197.499, 706.701, 274.201, 722.499 },
+                                    { 302.349, 679.101, 379.051, 694.899 },
+                                    { 479.599, 679.101, 556.301, 694.899 },
+                                    { 55.699, 651.501, 132.401, 667.299 } };
 
     // Get page annotations.
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
