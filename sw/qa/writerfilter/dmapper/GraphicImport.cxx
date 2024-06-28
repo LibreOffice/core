@@ -283,11 +283,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
     // Then there is a 15 twips shift from the origo, so it's 2351.55 + 26.46 = 2378.01 in mm100.
     //
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2368
+    // - Expected: 2369
     // - Actual  : 3542
     // i.e. the wrap polygon covered a larger-than-correct area, which end the end means 3 lines
     // were wrapping around the image, not only 2 as Word does it.
-    CPPUNIT_ASSERT_EQUAL(2368., aPolygon.getB2DPoint(0).getY());
+    CPPUNIT_ASSERT_EQUAL(2369., aPolygon.getB2DPoint(0).getY());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)

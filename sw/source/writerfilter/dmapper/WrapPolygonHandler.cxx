@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cmath>
+
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/sequence.hxx>
@@ -75,7 +79,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint) const
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY) const
+WrapPolygon::Pointer_t WrapPolygon::scale(double scaleX, double scaleY) const
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
@@ -84,7 +88,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint((Fraction(tools::Long(aIt->X)) * rFractionX).operator long(), (Fraction(tools::Long(aIt->Y)) * rFractionY).operator long());
+        awt::Point aPoint(std::round(aIt->X * scaleX), std::round(aIt->Y * scaleY));
         pResult->addPoint(aPoint);
         ++aIt;
     }
@@ -96,20 +100,15 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 {
     WrapPolygon::Pointer_t pResult;
 
-    const tools::Long nWrap100Percent = 21600;
+    const double nWrap100Percent = 21600;
 
-    Fraction aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * Fraction(convertTwipToMm100(15), 1);
-    awt::Point aMovePoint(aMove.operator long(), 0);
+    double nMove(convertTwipToMm100(nWrap100Percent * 15) / rSrcSize.Width);
+    awt::Point aMovePoint(std::round(nMove), 0);
     pResult = move(aMovePoint);
 
-    Fraction aScaleX = nWrap100Percent / (nWrap100Percent + aMove);
-    Fraction aScaleY = nWrap100Percent / (nWrap100Percent - aMove);
-    pResult = pResult->scale(aScaleX, aScaleY);
-
-    Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
-    Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
-    pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
+    double nScaleX = rSrcSize.Width / (nWrap100Percent + nMove);
+    double nScaleY = rSrcSize.Height / (nWrap100Percent - nMove);
+    pResult = pResult->scale(nScaleX, nScaleY);
 
     return pResult;
 }
@@ -128,10 +127,10 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size 
     * polygon units to fit the size of the image. The 21600 value is a legacy
     * artifact from the drawing layer of early versions of Microsoft Office.
     */
-    const tools::Long nWrap100Percent = 21600;
+    const double nWrap100Percent = 21600;
 
-    Fraction aScaleX(rSrcSize.Width, nWrap100Percent);
-    Fraction aScaleY(rSrcSize.Height, nWrap100Percent);
+    double aScaleX(rSrcSize.Width / nWrap100Percent);
+    double aScaleY(rSrcSize.Height / nWrap100Percent);
     pResult = scale(aScaleX, aScaleY);
 
     return pResult;
@@ -142,10 +141,10 @@ WrapPolygon::Pointer_t WrapPolygon::correctCrop(const awt::Size& rGraphicSize,
 {
     WrapPolygon::Pointer_t pResult;
 
-    Fraction aScaleX(rGraphicSize.Width - rGraphicCrop.Left - rGraphicCrop.Right,
-                     rGraphicSize.Width);
-    Fraction aScaleY(rGraphicSize.Height - rGraphicCrop.Top - rGraphicCrop.Bottom,
-                     rGraphicSize.Height);
+    double aScaleX(double(rGraphicSize.Width - rGraphicCrop.Left - rGraphicCrop.Right)
+                   / rGraphicSize.Width);
+    double aScaleY(double(rGraphicSize.Height - rGraphicCrop.Top - rGraphicCrop.Bottom)
+                   / rGraphicSize.Height);
     pResult = scale(aScaleX, aScaleY);
 
     awt::Point aMove(rGraphicCrop.Left, rGraphicCrop.Top);

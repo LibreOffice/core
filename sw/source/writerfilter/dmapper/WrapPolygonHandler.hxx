@@ -21,7 +21,6 @@
 
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include "LoggedResources.hxx"
-#include <tools/fract.hxx>
 #include <vector>
 
 namespace com::sun::star::text
@@ -51,7 +50,7 @@ public:
     Points_t::const_iterator end() const;
 
     WrapPolygon::Pointer_t move(const css::awt::Point& rMove) const;
-    WrapPolygon::Pointer_t scale(const Fraction& rFractionX, const Fraction& rFractionY) const;
+    WrapPolygon::Pointer_t scale(double scaleX, double scaleY) const;
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size& rSrcSize) const;
     WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size& rSrcSize) const;
     WrapPolygon::Pointer_t correctCrop(const css::awt::Size& rGraphicSize,
