@@ -36,6 +36,8 @@ public:
 
     virtual sal_uInt8        GetFlagCount() const;
 
+    virtual bool isHashable() const override { return true; }
+    virtual size_t hashCode() const override final { return nVal; }
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     virtual SfxFlagItem*     Clone( SfxItemPool *pPool = nullptr ) const override;

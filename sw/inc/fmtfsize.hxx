@@ -112,8 +112,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
 };
 
 inline const SwFormatFrameSize &SwAttrSet::GetFrameSize(bool bInP) const

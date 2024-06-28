@@ -32,9 +32,6 @@
 
 class EDITENG_DLLPUBLIC SvxWeightItem final : public SfxEnumItem<FontWeight>
 {
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

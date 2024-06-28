@@ -44,9 +44,6 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem final : public SfxPoolItem
     friend void Create_legacy_direct_set(SvxFontHeightItem& rItem, sal_uInt32 nH, sal_uInt16 nP, MapUnit eP);
     void legacy_direct_set(sal_uInt32 nH, sal_uInt16 nP, MapUnit eP) { nHeight = nH; nProp = nP; ePropUnit = eP; }
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -54,6 +51,8 @@ public:
                        const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

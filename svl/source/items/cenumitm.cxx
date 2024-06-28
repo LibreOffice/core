@@ -83,83 +83,14 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(bool)
 {}
 
-typedef std::unordered_map<sal_uInt16, std::pair<const SfxPoolItem*, const SfxPoolItem*>> SfxBoolItemMap;
-
-namespace
+bool SfxBoolItem::isHashable() const
 {
-    class SfxBoolItemInstanceManager : public ItemInstanceManager
-    {
-        SfxBoolItemMap  maRegistered;
-
-    public:
-        SfxBoolItemInstanceManager()
-        : ItemInstanceManager(typeid(SfxBoolItem).hash_code())
-        {
-        }
-
-    private:
-        // standard interface, accessed exclusively
-        // by implCreateItemEntry/implCleanupItemEntry
-        virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
-        virtual void add(const SfxPoolItem&) override;
-        virtual void remove(const SfxPoolItem&) override;
-    };
-
-    const SfxPoolItem* SfxBoolItemInstanceManager::find(const SfxPoolItem& rItem) const
-    {
-        SfxBoolItemMap::const_iterator aHit(maRegistered.find(rItem.Which()));
-        if (aHit == maRegistered.end())
-            return nullptr;
-
-        const SfxBoolItem& rSfxBoolItem(static_cast<const SfxBoolItem&>(rItem));
-        if (rSfxBoolItem.GetValue())
-            return aHit->second.first;
-        return aHit->second.second;
-    }
-
-    void SfxBoolItemInstanceManager::add(const SfxPoolItem& rItem)
-    {
-        SfxBoolItemMap::iterator aHit(maRegistered.find(rItem.Which()));
-        const SfxBoolItem& rSfxBoolItem(static_cast<const SfxBoolItem&>(rItem));
-
-        if (aHit == maRegistered.end())
-        {
-            if (rSfxBoolItem.GetValue())
-                maRegistered.insert({rItem.Which(), std::make_pair(&rItem, nullptr)});
-            else
-                maRegistered.insert({rItem.Which(), std::make_pair(nullptr, &rItem)});
-        }
-        else
-        {
-            if (rSfxBoolItem.GetValue())
-                aHit->second.first = &rItem;
-            else
-                aHit->second.second = &rItem;
-        }
-    }
-
-    void SfxBoolItemInstanceManager::remove(const SfxPoolItem& rItem)
-    {
-        SfxBoolItemMap::iterator aHit(maRegistered.find(rItem.Which()));
-        const SfxBoolItem& rSfxBoolItem(static_cast<const SfxBoolItem&>(rItem));
-
-        if (aHit != maRegistered.end())
-        {
-            if (rSfxBoolItem.GetValue())
-                aHit->second.first = nullptr;
-            else
-                aHit->second.second = nullptr;
-
-            if (aHit->second.first == nullptr && aHit->second.second == nullptr)
-                maRegistered.erase(aHit);
-        }
-    }
+    return true;
 }
 
-ItemInstanceManager* SfxBoolItem::getItemInstanceManager() const
+size_t SfxBoolItem::hashCode() const
 {
-    static SfxBoolItemInstanceManager aInstanceManager;
-    return &aInstanceManager;
+    return size_t(GetValue());
 }
 
 void SfxBoolItem::SetValue(bool const bTheValue)

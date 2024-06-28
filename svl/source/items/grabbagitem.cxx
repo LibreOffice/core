@@ -13,6 +13,8 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/anytohash.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace com::sun::star;
 
@@ -28,6 +30,20 @@ SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
 
 SfxGrabBagItem::~SfxGrabBagItem() = default;
 
+bool SfxGrabBagItem::isHashable() const { return true; }
+
+size_t SfxGrabBagItem::hashCode() const
+{
+    std::size_t seed = 0;
+    for (const auto& pair : m_aMap)
+    {
+        o3tl::hash_combine(seed, pair.first);
+        if (auto oVal = comphelper::anyToHash(pair.second))
+            o3tl::hash_combine(seed, *oVal);
+    }
+    return seed;
+}
+
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
     return SfxPoolItem::operator==(rItem)
@@ -41,6 +57,7 @@ SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
 
 bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     uno::Sequence<beans::PropertyValue> aValue;
     if (rVal >>= aValue)
     {

@@ -43,6 +43,8 @@ public:
     SvxProtectItem(SvxProtectItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -56,9 +58,9 @@ public:
     bool IsContentProtected() const { return bCntnt; }
     bool IsSizeProtected()  const { return bSize;  }
     bool IsPosProtected()   const { return bPos;   }
-    void SetContentProtect( bool bNew ) { bCntnt = bNew; }
-    void SetSizeProtect ( bool bNew ) { bSize  = bNew; }
-    void SetPosProtect  ( bool bNew ) { bPos   = bNew; }
+    void SetContentProtect( bool bNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bCntnt = bNew; }
+    void SetSizeProtect ( bool bNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bSize  = bNew; }
+    void SetPosProtect  ( bool bNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bPos   = bNew; }
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

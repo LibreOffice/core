@@ -34,13 +34,15 @@ public:
     virtual                 ~SfxImageItem() override;
 
     virtual SfxImageItem*   Clone( SfxItemPool* pPool = nullptr ) const override;
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void                    SetRotation( Degree10 nValue ) { mnAngle = nValue; }
+    void                    SetRotation( Degree10 nValue ) { ASSERT_CHANGE_REFCOUNTED_ITEM; mnAngle = nValue; }
     Degree10                GetRotation() const { return mnAngle; }
-    void                    SetMirrored( bool bSet ) { mbMirrored = bSet; }
+    void                    SetMirrored( bool bSet ) { ASSERT_CHANGE_REFCOUNTED_ITEM; mbMirrored = bSet; }
     bool                    IsMirrored() const { return mbMirrored; }
 
 private:

@@ -50,6 +50,7 @@
 #include <editeng/memberids.h>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -338,12 +339,6 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 }
 
 // class SvxAdjustItem ---------------------------------------------------
-
-ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxAdjustItem).hash_code());
-    return &aInstanceManager;
-}
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId, SfxItemType::SvxAdjustItemType ),

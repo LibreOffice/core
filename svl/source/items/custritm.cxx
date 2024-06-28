@@ -53,6 +53,7 @@ bool CntUnencodedStringItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 bool CntUnencodedStringItem::PutValue(const css::uno::Any& rVal,
                                          sal_uInt8)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     OUString aTheValue;
     if (rVal >>= aTheValue)
     {

@@ -44,6 +44,8 @@ public:
 
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxIntegerListItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            PutValue  ( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

@@ -34,9 +34,6 @@ class EDITENG_DLLPUBLIC SvxFontItem final : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -48,6 +45,8 @@ public:
                 const sal_uInt16 nId);
 
     // "pure virtual Methods" from SfxPoolItem
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem& rItem) const override;
     virtual SvxFontItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;

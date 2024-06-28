@@ -34,6 +34,8 @@ private:
     sal_uInt16                  nTo;
 public:
                                 SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
+    virtual bool isHashable() const override { return true; }
+    virtual size_t hashCode() const override { return (static_cast<size_t>(nFrom) << 16) | nTo; }
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

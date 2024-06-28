@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svl/globalnameitem.hxx>
+#include <o3tl/hash_combine.hxx>
 
 SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
 
@@ -46,6 +47,20 @@ SfxGlobalNameItem::~SfxGlobalNameItem()
 {
 }
 
+bool SfxGlobalNameItem::isHashable() const
+{
+    return true;
+}
+
+size_t SfxGlobalNameItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_aName.GetCLSID().Data1);
+    o3tl::hash_combine(seed, m_aName.GetCLSID().Data2);
+    o3tl::hash_combine(seed, m_aName.GetCLSID().Data3);
+    return seed;
+}
+
 bool SfxGlobalNameItem::operator==( const SfxPoolItem& rItem ) const
 {
     return SfxPoolItem::operator==(rItem) &&
@@ -60,6 +75,7 @@ SfxGlobalNameItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 // virtual
 bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create( ::comphelper::getProcessComponentContext() ));
     css::uno::Sequence< sal_Int8 > aSeq;

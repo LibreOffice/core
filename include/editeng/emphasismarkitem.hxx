@@ -32,9 +32,6 @@
 
 class EDITENG_DLLPUBLIC SvxEmphasisMarkItem final : public SfxUInt16Item
 {
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

@@ -173,6 +173,7 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -227,6 +228,19 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId ) :
 {
 }
 
+
+bool SvxSizeItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxSizeItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_aSize.Width());
+    o3tl::hash_combine(seed, m_aSize.Height());
+    return seed;
+}
 
 bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -607,6 +621,7 @@ bool SvxLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
 
 bool SvxLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -641,6 +656,19 @@ bool SvxLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             return false;
     }
     return true;
+}
+
+bool SvxLeftMarginItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxLeftMarginItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nLeftMargin);
+    o3tl::hash_combine(seed, m_nPropLeftMargin);
+    return seed;
 }
 
 bool SvxLeftMarginItem::operator==(const SfxPoolItem& rAttr) const
@@ -784,6 +812,7 @@ bool SvxTextLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) cons
 
 bool SvxTextLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -818,6 +847,19 @@ bool SvxTextLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             return false;
     }
     return true;
+}
+
+bool SvxTextLeftMarginItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxTextLeftMarginItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nTextLeftMargin);
+    o3tl::hash_combine(seed, m_nPropLeftMargin);
+    return seed;
 }
 
 bool SvxTextLeftMarginItem::operator==(const SfxPoolItem& rAttr) const
@@ -955,6 +997,7 @@ bool SvxFirstLineIndentItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) con
 
 bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -993,6 +1036,20 @@ bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             return false;
     }
     return true;
+}
+
+bool SvxFirstLineIndentItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxFirstLineIndentItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nFirstLineOffset);
+    o3tl::hash_combine(seed, m_nPropFirstLineOffset);
+    o3tl::hash_combine(seed, m_bAutoFirst);
+    return seed;
 }
 
 bool SvxFirstLineIndentItem::operator==(const SfxPoolItem& rAttr) const
@@ -1139,6 +1196,7 @@ bool SvxRightMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
 
 bool SvxRightMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1173,6 +1231,19 @@ bool SvxRightMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             return false;
     }
     return true;
+}
+
+bool SvxRightMarginItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxRightMarginItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nRightMargin);
+    o3tl::hash_combine(seed, m_nPropRightMargin);
+    return seed;
 }
 
 bool SvxRightMarginItem::operator==(const SfxPoolItem& rAttr) const
@@ -1300,6 +1371,7 @@ bool SvxGutterLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) co
 
 bool SvxGutterLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1321,6 +1393,18 @@ bool SvxGutterLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId
             return false;
     }
     return true;
+}
+
+bool SvxGutterLeftMarginItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxGutterLeftMarginItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nGutterMargin);
+    return seed;
 }
 
 bool SvxGutterLeftMarginItem::operator==(const SfxPoolItem& rAttr) const
@@ -1410,6 +1494,7 @@ bool SvxGutterRightMarginItem::QueryValue(uno::Any& /*rVal*/, sal_uInt8 nMemberI
 
 bool SvxGutterRightMarginItem::PutValue(const uno::Any& /*rVal*/, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     //bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1428,6 +1513,18 @@ bool SvxGutterRightMarginItem::PutValue(const uno::Any& /*rVal*/, sal_uInt8 nMem
     return true;
 }
 
+
+bool SvxGutterRightMarginItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxGutterRightMarginItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, m_nRightGutterMargin);
+    return seed;
+}
 
 bool SvxGutterRightMarginItem::operator==(const SfxPoolItem& rAttr) const
 {
@@ -1488,6 +1585,28 @@ boost::property_tree::ptree SvxGutterRightMarginItem::dumpAsJSON() const
     return aTree;
 }
 
+
+bool SvxLRSpaceItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxLRSpaceItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, nFirstLineOffset);
+    o3tl::hash_combine(seed, m_nGutterMargin);
+    o3tl::hash_combine(seed, m_nRightGutterMargin);
+    o3tl::hash_combine(seed, nLeftMargin);
+    o3tl::hash_combine(seed, nRightMargin);
+    o3tl::hash_combine(seed, nPropFirstLineOffset);
+    o3tl::hash_combine(seed, nPropLeftMargin);
+    o3tl::hash_combine(seed, nPropRightMargin);
+    o3tl::hash_combine(seed, bAutoFirst);
+    o3tl::hash_combine(seed, bExplicitZeroMarginValRight);
+    o3tl::hash_combine(seed, bExplicitZeroMarginValLeft);
+    return seed;
+}
 
 bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -1713,6 +1832,7 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
@@ -1772,6 +1892,22 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
+
+bool SvxULSpaceItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxULSpaceItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, nUpper);
+    o3tl::hash_combine(seed, nLower);
+    o3tl::hash_combine(seed, bContext);
+    o3tl::hash_combine(seed, nPropUpper);
+    o3tl::hash_combine(seed, nPropLower);
+    return seed;
+}
 
 bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -1943,6 +2079,20 @@ bool SvxOpaqueItem::GetPresentation
 }
 
 
+bool SvxProtectItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxProtectItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, bCntnt);
+    o3tl::hash_combine(seed, bSize);
+    o3tl::hash_combine(seed, bPos);
+    return seed;
+}
+
 bool SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -1975,6 +2125,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxProtectItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
     bool bVal( Any2Bool(rVal) );
     switch(nMemberId)
@@ -2142,6 +2293,20 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+
+bool SvxShadowItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxShadowItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(aShadowColor));
+    o3tl::hash_combine(seed, nWidth);
+    o3tl::hash_combine(seed, eLocation);
+    return seed;
+}
 
 bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -2357,7 +2522,6 @@ static bool CompareBorderLine(const std::unique_ptr<SvxBorderLine> & pBrd1, cons
         return false;
     return *pBrd1 == *pBrd2;
 }
-
 
 bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -3263,12 +3427,6 @@ SvxBoxInfoItem::SvxBoxInfoItem(const sal_uInt16 nId)
     ResetFlags();
 }
 
-ItemInstanceManager* SvxBoxItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxBoxItem).hash_code());
-    return &aInstanceManager;
-}
-
 SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCopy )
     : SfxPoolItem(rCopy)
     , mpHorizontalLine(rCopy.mpHorizontalLine ? new SvxBorderLine(*rCopy.mpHorizontalLine) : nullptr)
@@ -3983,12 +4141,6 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
     pLine.reset( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 }
 
-ItemInstanceManager* SvxBrushItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxBrushItem).hash_code());
-    return &aInstanceManager;
-}
-
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
     , aColor(COL_TRANSPARENT)
@@ -4598,12 +4750,6 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("graphicPos"), BAD_CAST(OString::number(eGraphicPos).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("loadAgain"), BAD_CAST(OString::boolean(bLoadAgain).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
-}
-
-ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxFrameDirectionItem).hash_code());
-    return &aInstanceManager;
 }
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,

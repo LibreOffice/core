@@ -32,9 +32,6 @@
 
 class EDITENG_DLLPUBLIC SvxPostureItem final : public SfxEnumItem<FontItalic>
 {
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

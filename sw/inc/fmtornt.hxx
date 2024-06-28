@@ -67,8 +67,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
 };
 
 /// Defines the horizontal position of a fly frame.
@@ -110,8 +110,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
 };
 
 inline const SwFormatVertOrient &SwAttrSet::GetVertOrient(bool bInP) const

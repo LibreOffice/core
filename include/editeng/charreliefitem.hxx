@@ -33,9 +33,6 @@
 
 class EDITENG_DLLPUBLIC SvxCharReliefItem final : public SfxEnumItem<FontRelief>
 {
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

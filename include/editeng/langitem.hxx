@@ -40,9 +40,6 @@ protected:
 
 class EDITENG_DLLPUBLIC SvxLanguageItem final : public SvxLanguageItem_Base
 {
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

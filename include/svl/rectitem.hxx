@@ -40,6 +40,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
 
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxRectangleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

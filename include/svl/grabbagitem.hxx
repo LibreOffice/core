@@ -33,8 +33,14 @@ public:
 
     const std::map<OUString, css::uno::Any>& GetGrabBag() const { return m_aMap; }
 
-    std::map<OUString, css::uno::Any>& GetGrabBag() { return m_aMap; }
+    std::map<OUString, css::uno::Any>& GetGrabBag()
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        return m_aMap;
+    }
 
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     bool operator==(const SfxPoolItem& rItem) const override;
     SfxGrabBagItem* Clone(SfxItemPool* pPool = nullptr) const override;
 

@@ -19,12 +19,14 @@
 
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/setitem.hxx>
 #include <sal/log.hxx>
+#include <unordered_map>
+#include <unordered_set>
+#include <memory>
 
-static bool g_bDisableItemInstanceManager(getenv("SVL_DISABLE_ITEM_INSTANCE_MANAGER"));
-static bool g_bShareImmediately(getenv("SVL_SHARE_ITEMS_GLOBALLY_INSTANTLY"));
-#define NUMBER_OF_UNSHARED_INSTANCES (50)
+// Classes that implement global SfxPoolItem sharing.
 
 #ifdef DBG_UTIL
 
@@ -77,173 +79,116 @@ void listSfxPoolItemsWithHighestUsage(sal_uInt16 nNum)
 
 #endif
 
-void DefaultItemInstanceManager::add(const SfxPoolItem& rItem)
+namespace
 {
-    maRegistered[rItem.Which()].insert(&rItem);
-}
-
-void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem)
+// basic Interface definition
+struct ItemInstanceManager
 {
-    maRegistered[rItem.Which()].erase(&rItem);
-}
+    virtual ~ItemInstanceManager() {}
+    // standard interface, accessed exclusively
+    // by implCreateItemEntry/implCleanupItemEntry
+    virtual const SfxPoolItem* find(const SfxPoolItem&) const = 0;
+    virtual bool add(const SfxPoolItem&) = 0;
+    virtual void remove(const SfxPoolItem&) = 0;
+};
 
-// Class that implements global Item sharing. It uses rtti to
-// associate every Item-derivation with a possible incarnation
-// of a DefaultItemInstanceManager. This is the default, it will
-// give direct implementations at the Items that overload
-// getItemInstanceManager() preference. These are expected to
-// return static instances of a derived implementation of a
-// ItemInstanceManager.
-// All in all there are now the following possibilities to support
-// this for individual Item derivations:
-// (1) Do nothing:
-//     In that case, if the Item is shareable, the new mechanism
-//     will kick in: It will start sharing the Item globally,
-//     but not immediately: After a defined amount of allowed
-//     non-shared occurrences (look for NUMBER_OF_UNSHARED_INSTANCES)
-//     an instance of the default ItemInstanceManager, a
-//     DefaultItemInstanceManager, will be incarnated and used.
-//     NOTE: Mixing shared/unshared instances is not a problem (we
-//     might even implement a kind of 're-hash' when this kicks in,
-//     but is not really needed).
-// (2) Overload getItemInstanceManager for SfxPoolItem in a class
-//     derived from SfxPoolItem and...
-// (2a) Return a static incarnation of DefaultItemInstanceManager to
-//      immediately start global sharing of that Item derivation.
-// (2b) Implement and return your own implementation and static
-//      incarnation of ItemInstanceManager to do something better/
-//      faster that the default implementation can do. Example:
-//      SvxFontItem, uses hashing now.
-// There are two supported ENVVARs to use:
-// (a) SVL_DISABLE_ITEM_INSTANCE_MANAGER:
-//     This disables the mechanism of global Item sharing completely.
-//     This can be used to test/check speed/memory needs compared with
-//     using it, but also may come in handy to check if evtl. errors/
-//     regressions have to do with it.
-// (b) SVL_SHARE_ITEMS_GLOBALLY_INSTANTLY:
-//     This internally forces the NUMBER_OF_UNSHARED_INSTANCES to be
-//     ignored and start sharing ALL Item derivations instantly.
-class InstanceManagerHelper
+// offering a default implementation that can be use for
+// each SfxPoolItem (except when !isShareable()). It just
+// uses an unordered_set holding ptrs to SfxPoolItems added
+// and SfxPoolItem::operator== to linearly search for one.
+// Thus this is not the fastest, but as fast as old 'poooled'
+// stuff - better use an intelligent, pro-Item implementation
+// that does e.g. hashing or whatever might be feasible for
+// that specific Item (see other derivations)
+struct DefaultItemInstanceManager : public ItemInstanceManager
 {
-    typedef std::unordered_map<std::size_t, std::pair<sal_uInt16, DefaultItemInstanceManager*>>
-        managerTypeMap;
-    managerTypeMap maManagerPerType;
+    std::unordered_set<const SfxPoolItem*> maRegistered;
 
-public:
-    InstanceManagerHelper() {}
-    ~InstanceManagerHelper()
+    virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override
     {
-        for (auto& rCandidate : maManagerPerType)
-            if (nullptr != rCandidate.second.second)
-                delete rCandidate.second.second;
-    }
-
-    ItemInstanceManager* getOrCreateItemInstanceManager(const SfxPoolItem& rItem)
-    {
-        // deactivated?
-        if (g_bDisableItemInstanceManager)
-            return nullptr;
-
-        // Item cannot be shared?
-        if (!rItem.isShareable())
-            return nullptr;
-
-        // Prefer getting an ItemInstanceManager directly from
-        // the Item: These are the extra implemented (and thus
-        // hopefully fastest) incarnations
-        ItemInstanceManager* pManager(rItem.getItemInstanceManager());
-
-        // Check for correct hash, there may be derivations of that class.
-        // Note that Managers from the Items are *not* added to local list,
-        // they are expected to be static instances at the Items
-        const std::size_t aHash(typeid(rItem).hash_code());
-        if (nullptr != pManager && pManager->getClassHash() == aHash)
-            return pManager;
-
-        // check local memory for existing entry
-        managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
-
-        // no instance yet
-        if (aHit == maManagerPerType.end())
-        {
-            // create a default one to start usage-counting
-            if (g_bShareImmediately)
-            {
-                // create, insert locally and immediately start sharing
-                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
-                maManagerPerType.insert({ aHash, std::make_pair(0, pNew) });
-                return pNew;
-            }
-
-            // start countdown from NUMBER_OF_UNSHARED_INSTANCES until zero is reached
-            maManagerPerType.insert(
-                { aHash, std::make_pair(NUMBER_OF_UNSHARED_INSTANCES, nullptr) });
-            return nullptr;
-        }
-
-        // if there is already an ItemInstanceManager incarnated, return it
-        if (nullptr != aHit->second.second)
-            return aHit->second.second;
-
-        if (aHit->second.first > 0)
-        {
-            // still not the needed number of hits, countdown & return nullptr
-            aHit->second.first--;
-            return nullptr;
-        }
-
-        // here the countdown is zero and there is not yet a ItemInstanceManager
-        // incarnated. Do so, register and return it
-        assert(nullptr == aHit->second.second);
-        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
-        aHit->second.second = pNew;
-
-        return pNew;
-    }
-
-    ItemInstanceManager* getExistingItemInstanceManager(const SfxPoolItem& rItem)
-    {
-        // deactivated?
-        if (g_bDisableItemInstanceManager)
-            return nullptr;
-
-        // Item cannot be shared?
-        if (!rItem.isShareable())
-            return nullptr;
-
-        // Prefer getting an ItemInstanceManager directly from
-        // the Item: These are the extra implemented (and thus
-        // hopefully fastest) incarnations
-        ItemInstanceManager* pManager(rItem.getItemInstanceManager());
-
-        // Check for correct hash, there may be derivations of that class.
-        // Note that Managers from the Items are *not* added to local list,
-        // they are expected to be static instances at the Items
-        const std::size_t aHash(typeid(rItem).hash_code());
-        if (nullptr != pManager && pManager->getClassHash() == aHash)
-            return pManager;
-
-        // check local memory for existing entry
-        managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
-
-        if (aHit == maManagerPerType.end())
-            // no instance yet, return nullptr
-            return nullptr;
-
-        // if there is already a ItemInstanceManager incarnated, return it
-        if (nullptr != aHit->second.second)
-            return aHit->second.second;
-
-        // count-up needed number of hits again if item is released
-        if (aHit->second.first < NUMBER_OF_UNSHARED_INSTANCES)
-            aHit->second.first++;
-
+        for (const auto& rCandidate : maRegistered)
+            if (*rCandidate == rItem)
+                return rCandidate;
         return nullptr;
+    }
+    virtual bool add(const SfxPoolItem& rItem) override
+    {
+        return maRegistered.insert(&rItem).second;
+    }
+    virtual void remove(const SfxPoolItem& rItem) override
+    {
+        bool bSuccess = maRegistered.erase(&rItem);
+        assert(bSuccess && "removing item but it is already gone");
+        (void)bSuccess;
     }
 };
 
-// the single static instance that takes over that global Item sharing
-static InstanceManagerHelper aInstanceManagerHelper;
+struct HashableItemInstanceManager : public ItemInstanceManager
+{
+    struct ItemHash
+    {
+        size_t operator()(const SfxPoolItem* pItem) const { return pItem->hashCode(); }
+    };
+    struct ItemEqual
+    {
+        bool operator()(const SfxPoolItem* lhs, const SfxPoolItem* rhs) const
+        {
+            return *lhs == *rhs;
+        }
+    };
+    std::unordered_set<const SfxPoolItem*, ItemHash, ItemEqual> maRegistered;
+
+    virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override
+    {
+        auto it = maRegistered.find(&rItem);
+        if (it == maRegistered.end())
+            return nullptr;
+        return *it;
+    }
+    virtual bool add(const SfxPoolItem& rItem) override
+    {
+        return maRegistered.insert(&rItem).second;
+    }
+    virtual void remove(const SfxPoolItem& rItem) override
+    {
+        auto it = maRegistered.find(&rItem);
+        if (it != maRegistered.end())
+        {
+            if (&rItem != *it)
+            {
+                SAL_WARN("svl", "erasing wrong object, hash/operator== methods likely bad "
+                                    << typeid(rItem).name());
+                assert(false && "erasing wrong object, hash/operator== methods likely bad");
+            }
+            maRegistered.erase(it);
+        }
+        else
+        {
+            SAL_WARN("svl",
+                     "removing item but its already gone, hash/operator== methods likely bad "
+                         << typeid(rItem).name());
+            assert(false
+                   && "removing item but its already gone, hash/operator== methods likely bad");
+        }
+    }
+};
+
+struct PairHash
+{
+    size_t operator()(const std::pair<SfxItemType, sal_uInt16>& rKey) const
+    {
+        return (static_cast<int>(rKey.first) << 16) | rKey.second;
+    }
+};
+}
+// The single static instance that takes over that global Item sharing
+// Maps SfxItemPool sub-classes to a set of shared items.
+//
+// Noting that the WhichId is part of the key, to simply the implementation of the hashCode() overides
+// in SfxPoolItem sub-classes.
+static std::unordered_map<std::pair<SfxItemType, sal_uInt16>, std::unique_ptr<ItemInstanceManager>,
+                          PairHash>
+    gInstanceManagerMap;
 
 SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource,
                                        bool bPassingOwnership)
@@ -326,30 +271,33 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return pSource;
     }
 
-    // try to get an ItemInstanceManager for global Item instance sharing
-    ItemInstanceManager* pManager(aInstanceManagerHelper.getOrCreateItemInstanceManager(*pSource));
-
-    // check if we can globally share the Item using an ItemInstanceManager
-    while (nullptr != pManager)
+    // Item cannot be shared?
+    SfxItemType nSourceItemType(pSource->ItemType());
+    if (pSource->isShareable())
     {
-        const SfxPoolItem* pAlternative(pManager->find(*pSource));
-        if (nullptr == pAlternative)
-            // no already globally shared one found, done
-            break;
+        // check if we can globally share the Item using the ItemInstanceManager
+        auto itemsetIt = gInstanceManagerMap.find({ nSourceItemType, pSource->Which() });
+        if (itemsetIt != gInstanceManagerMap.end())
+        {
+            ItemInstanceManager& rItemManager = *(itemsetIt->second);
+            const SfxPoolItem* pAlternative = rItemManager.find(*pSource);
+            if (pAlternative)
+            {
+                // Here we do *not* need to check if it is an SfxSetItem
+                // and cannot be shared if they are in/use another pool:
+                // The SfxItemSet::operator== will check for SfxItemPools
+                // being equal, thus when found in global share the Pool
+                // cannot be equal
 
-        // Here we do *not* need to check if it is an SfxSetItem
-        // and cannot be shared if they are in/use another pool:
-        // The SfxItemSet::operator== will check for SfxItemPools
-        // being equal, thus when found in global share the Pool
-        // cannot be equal
+                // need to delete evtl. handed over ownership change Item
+                if (bPassingOwnership)
+                    delete pSource;
 
-        // need to delete evtl. handed over ownership change Item
-        if (bPassingOwnership)
-            delete pSource;
-
-        // If we get here we can share the Item
-        pAlternative->AddRef();
-        return pAlternative;
+                // If we get here we can share the Item
+                pAlternative->AddRef();
+                return pAlternative;
+            }
+        }
     }
 
     // check if the handed over and to be directly used item is a
@@ -387,8 +335,28 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
 
     // check if we should register this Item for the global
     // ItemInstanceManager mechanism (only for shareable Items)
-    if (nullptr != pManager)
-        pManager->add(*pSource);
+    if (pSource->isShareable())
+    {
+        ItemInstanceManager* pManager;
+        std::pair<SfxItemType, sal_uInt16> aManagerKey{ nSourceItemType, pSource->Which() };
+        auto it1 = gInstanceManagerMap.find(aManagerKey);
+        if (it1 != gInstanceManagerMap.end())
+            pManager = it1->second.get();
+        else
+        {
+            if (pSource->isHashable())
+                gInstanceManagerMap.insert(
+                    { aManagerKey, std::make_unique<HashableItemInstanceManager>() });
+            else
+                gInstanceManagerMap.insert(
+                    { aManagerKey, std::make_unique<DefaultItemInstanceManager>() });
+            pManager = gInstanceManagerMap.find(aManagerKey)->second.get();
+        }
+
+        bool bSuccess = pManager->add(*pSource);
+        assert(bSuccess && "failed to add item to pool");
+        (void)bSuccess;
+    }
 
     return pSource;
 }
@@ -434,13 +402,14 @@ void implCleanupItemEntry(const SfxPoolItem* pSource)
         return;
     }
 
-    // try to get an ItemInstanceManager for global Item instance sharing
-    ItemInstanceManager* pManager(aInstanceManagerHelper.getExistingItemInstanceManager(*pSource));
-
     // check if we should/can remove this Item from the global
     // ItemInstanceManager mechanism
-    if (nullptr != pManager)
-        pManager->remove(*pSource);
+    auto itemsetIt = gInstanceManagerMap.find({ pSource->ItemType(), pSource->Which() });
+    if (itemsetIt != gInstanceManagerMap.end())
+    {
+        auto& rInstanceManager = *(itemsetIt->second);
+        rInstanceManager.remove(*pSource);
+    }
 
     // decrease RefCnt before deleting (destructor asserts for it and that's
     // good to find other errors)

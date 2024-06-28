@@ -33,8 +33,6 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
 };
 
 #endif // INCLUDED_EDITENG_RSIDITEM_HXX

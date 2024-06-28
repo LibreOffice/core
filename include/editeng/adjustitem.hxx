@@ -44,9 +44,6 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
-protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
-
 public:
     static SfxPoolItem* CreateDefault();
 

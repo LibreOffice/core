@@ -39,6 +39,8 @@ public:
     SfxGlobalNameItem & operator =(SfxGlobalNameItem const &) = delete; // due to SfxPoolItem
     SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = delete; // due to SfxPoolItem
 
+    virtual bool isHashable() const override;
+    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxGlobalNameItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     const SvGlobalName&     GetValue() const { return m_aName; }
