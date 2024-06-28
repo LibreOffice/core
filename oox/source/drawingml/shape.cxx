@@ -1039,8 +1039,7 @@ Reference< XShape > const & Shape::createAndInsert(
     bool bTopWriterLine = !pParentGroupShape && mbWps && bLineShape;
     // Build object matrix from shape size and position; corresponds to MSO ext and off
     // Only LineShape and ConnectorShape may have zero width or height.
-    if (aServiceName == "com.sun.star.drawing.LineShape"
-        || aServiceName == "com.sun.star.drawing.ConnectorShape")
+    if (bLineShape || aServiceName == "com.sun.star.drawing.ConnectorShape")
     {
         // For toplevel Writer lines, size is included in the point coordinates.
         if (!bTopWriterLine)
@@ -1178,7 +1177,7 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     // special for lineshape
-    if ( aServiceName == "com.sun.star.drawing.LineShape" )
+    if (bLineShape)
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
