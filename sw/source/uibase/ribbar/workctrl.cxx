@@ -91,6 +91,8 @@ void SwTbxAutoTextCtrl::CreatePopupWindow()
         for(size_t i = 1; i <= nGroupCount; ++i)
         {
             OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
+            if (sTitle == "My AutoText")
+                sTitle = SwResId(STR_MY_AUTOTEXT);
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
             auto const [it, _] = titles.insert(sTitle);
             size_t const menuIndex(::std::distance(titles.begin(), it));
