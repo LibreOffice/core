@@ -1620,7 +1620,7 @@ static bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
     SprmResult aS = pPap->HasSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = static_cast<sal_Int16>(SVBT16ToUInt16(aS.pSprm));
+        *pVar = SVBT16ToInt16(aS.pSprm);
     return aS.pSprm != nullptr;
 }
 
@@ -1628,7 +1628,7 @@ static bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId
 {
     SprmResult aS = pStyle->HasParaSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
-        *pVar = static_cast<sal_Int16>(SVBT16ToUInt16(aS.pSprm));
+        *pVar = SVBT16ToInt16(aS.pSprm);
     return aS.pSprm != nullptr;
 }
 
@@ -3568,7 +3568,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     }
 
     // font position in HalfPoints
-    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToInt16( pData );
+    short nPos = eVersion <= ww::eWW2 ? static_cast<sal_Int8>(*pData) : SVBT16ToInt16(pData);
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF = GetFormatAttr(RES_CHRATR_FONTSIZE);
     OSL_ENSURE(pF, "Expected to have the fontheight available here");

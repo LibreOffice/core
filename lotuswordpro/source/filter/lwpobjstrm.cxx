@@ -222,7 +222,7 @@ sal_Int16 LwpObjectStream::QuickReadInt16()
     SVBT16 aValue = { 0 };
     QuickRead(aValue, sizeof(aValue));
 
-    return static_cast<sal_Int16>(SVBT16ToUInt16(aValue));
+    return SVBT16ToInt16(aValue);
 }
 /**
  * @descr  Quick read sal_uInt8

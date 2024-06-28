@@ -568,7 +568,7 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     rNum.SetNumAdjust( eAdjA[ rAV.aBits1 & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToUInt16( rAV.dxaSpace ) );
-    sal_Int16 nIndent = std::abs(static_cast<sal_Int16>(SVBT16ToUInt16( rAV.dxaIndent )));
+    sal_Int16 nIndent = std::abs(SVBT16ToInt16(rAV.dxaIndent));
     if( rAV.aBits1 & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
@@ -1122,7 +1122,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
 
     const sal_uInt8* pT = &pS[1];
     for (int i = 0; i <= nCols; i++, pT+=2)
-        nCenter[i] = static_cast<sal_Int16>(SVBT16ToUInt16( pT ));    // X-borders
+        nCenter[i] = SVBT16ToInt16(pT); // X-borders
 
     if( nCols != nOldCols ) // different column count
     {
@@ -1346,7 +1346,7 @@ void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
 
     sal_uInt8 nitcFirst= pParamsTDxaCol[0]; // first col to be changed
     sal_uInt8 nitcLim  = pParamsTDxaCol[1]; // (last col to be changed)+1
-    short nDxaCol = static_cast<sal_Int16>(SVBT16ToUInt16( pParamsTDxaCol + 2 ));
+    short nDxaCol = SVBT16ToInt16(pParamsTDxaCol + 2);
 
     for( int i = nitcFirst; (i < nitcLim) && (i < nWwCols); i++ )
     {
@@ -1897,10 +1897,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         m_bIsBiDi = SVBT16ToUInt16(pParams) != 0;
                         break;
                     case sprmTDxaGapHalf:
-                        pNewBand->nGapHalf = static_cast<sal_Int16>(SVBT16ToUInt16( pParams ));
+                        pNewBand->nGapHalf = SVBT16ToInt16(pParams);
                         break;
                     case sprmTDyaRowHeight:
-                        pNewBand->nLineHeight = static_cast<sal_Int16>(SVBT16ToUInt16( pParams ));
+                        pNewBand->nLineHeight = SVBT16ToInt16(pParams);
                         m_bClaimLineFormat = true;
                         break;
                     case sprmTDefTable:
@@ -1925,7 +1925,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         // parameter (meaning the left-most position) and then
                         // shift the whole table to that margin (see below)
                         {
-                            short nDxaNew = static_cast<sal_Int16>(SVBT16ToUInt16( pParams ));
+                            short nDxaNew = SVBT16ToInt16(pParams);
                             if( nDxaNew < nTabeDxaNew )
                                 nTabeDxaNew = nDxaNew;
                         }

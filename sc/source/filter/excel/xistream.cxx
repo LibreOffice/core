@@ -637,7 +637,7 @@ sal_Int16 XclImpStream::ReadInt16()
         {
             SVBT16 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 2 );
-            nValue = static_cast< sal_Int16 >( SVBT16ToUInt16( pnBuffer ) );
+            nValue = SVBT16ToInt16(pnBuffer);
         }
         else
             mrStrm.ReadInt16( nValue );

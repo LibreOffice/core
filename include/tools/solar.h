@@ -23,6 +23,8 @@
 #include <sal/types.h>
 #include <osl/endian.h>
 
+#include <algorithm>
+
 /** Intermediate type to solve type clash with Windows headers.
  Should be removed as soon as all code parts have been reviewed
  and the correct type is known. Most of the times ULONG is meant
@@ -42,8 +44,6 @@ typedef sal_uInt8   SVBT16[2];
 typedef sal_uInt8   SVBT32[4];
 typedef sal_uInt8   SVBT64[8];
 
-#ifdef __cplusplus
-
 inline sal_uInt16 SVBT16ToUInt16( const SVBT16 p ) { return static_cast<sal_uInt16>
                                                      (static_cast<sal_uInt16>(p[0])
                                                    + (static_cast<sal_uInt16>(p[1]) <<  8)); }
@@ -53,32 +53,16 @@ inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return static_cast<sal_uIn
                                                    + (static_cast<sal_uInt32>(p[1]) <<  8)
                                                    + (static_cast<sal_uInt32>(p[2]) << 16)
                                                    + (static_cast<sal_uInt32>(p[3]) << 24)); }
-#if defined OSL_LITENDIAN
 inline double   SVBT64ToDouble( const SVBT64 p )
 {
     double n;
-    reinterpret_cast<sal_uInt8*>(&n)[0] = p[0];
-    reinterpret_cast<sal_uInt8*>(&n)[1] = p[1];
-    reinterpret_cast<sal_uInt8*>(&n)[2] = p[2];
-    reinterpret_cast<sal_uInt8*>(&n)[3] = p[3];
-    reinterpret_cast<sal_uInt8*>(&n)[4] = p[4];
-    reinterpret_cast<sal_uInt8*>(&n)[5] = p[5];
-    reinterpret_cast<sal_uInt8*>(&n)[6] = p[6];
-    reinterpret_cast<sal_uInt8*>(&n)[7] = p[7];
+#if defined OSL_LITENDIAN
+    std::copy(p, p + 8, reinterpret_cast<sal_uInt8*>(&n));
+#else
+    std::reverse_copy(p, p + 8, reinterpret_cast<sal_uInt8*>(&n));
+#endif
     return n;
 }
-#else
-inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
-                                                    reinterpret_cast<sal_uInt8*>(&n)[0] = p[7];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[1] = p[6];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[2] = p[5];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[3] = p[4];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[4] = p[3];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[5] = p[2];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[6] = p[1];
-                                                    reinterpret_cast<sal_uInt8*>(&n)[7] = p[0];
-                                                    return n; }
-#endif
 
 inline void     ShortToSVBT16( sal_uInt16 n, SVBT16 p )
 {
@@ -93,26 +77,14 @@ inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p )
     p[3] = static_cast<sal_uInt8>(n >> 24);
 }
 inline void     Int32ToSVBT32 ( sal_Int32  n, SVBT32 p ) { UInt32ToSVBT32(sal_uInt32(n), p); }
+inline void     DoubleToSVBT64( double n, SVBT64 p )
+{
 #if defined OSL_LITENDIAN
-inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<sal_uInt8*>(&n)[0];
-                                                       p[1] = reinterpret_cast<sal_uInt8*>(&n)[1];
-                                                       p[2] = reinterpret_cast<sal_uInt8*>(&n)[2];
-                                                       p[3] = reinterpret_cast<sal_uInt8*>(&n)[3];
-                                                       p[4] = reinterpret_cast<sal_uInt8*>(&n)[4];
-                                                       p[5] = reinterpret_cast<sal_uInt8*>(&n)[5];
-                                                       p[6] = reinterpret_cast<sal_uInt8*>(&n)[6];
-                                                       p[7] = reinterpret_cast<sal_uInt8*>(&n)[7]; }
+    std::copy(reinterpret_cast<sal_uInt8*>(&n), reinterpret_cast<sal_uInt8*>(&n) + 8, p);
 #else
-inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<sal_uInt8*>(&n)[7];
-                                                       p[1] = reinterpret_cast<sal_uInt8*>(&n)[6];
-                                                       p[2] = reinterpret_cast<sal_uInt8*>(&n)[5];
-                                                       p[3] = reinterpret_cast<sal_uInt8*>(&n)[4];
-                                                       p[4] = reinterpret_cast<sal_uInt8*>(&n)[3];
-                                                       p[5] = reinterpret_cast<sal_uInt8*>(&n)[2];
-                                                       p[6] = reinterpret_cast<sal_uInt8*>(&n)[1];
-                                                       p[7] = reinterpret_cast<sal_uInt8*>(&n)[0]; }
+    std::reverse_copy(reinterpret_cast<sal_uInt8*>(&n), reinterpret_cast<sal_uInt8*>(&n) + 8, p);
 #endif
-#endif
+}
 
 #endif
 

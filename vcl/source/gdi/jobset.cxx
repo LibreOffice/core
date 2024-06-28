@@ -363,8 +363,8 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             ShortToSVBT16( static_cast<sal_uInt16>(rJobData.GetOrientation()), aOldJobData.nOrientation );
             ShortToSVBT16( rJobData.GetPaperBin(), aOldJobData.nPaperBin );
             ShortToSVBT16( static_cast<sal_uInt16>(rJobData.GetPaperFormat()), aOldJobData.nPaperFormat );
-            UInt32ToSVBT32( static_cast<sal_uLong>(rJobData.GetPaperWidth()), aOldJobData.nPaperWidth );
-            UInt32ToSVBT32( static_cast<sal_uLong>(rJobData.GetPaperHeight()), aOldJobData.nPaperHeight );
+            UInt32ToSVBT32( static_cast<sal_uInt32>(rJobData.GetPaperWidth()), aOldJobData.nPaperWidth );
+            UInt32ToSVBT32( static_cast<sal_uInt32>(rJobData.GetPaperHeight()), aOldJobData.nPaperHeight );
 
             ImplOldJobSetupData aOldData = {};
             OString aPrnByteName(OUStringToOString(rJobData.GetPrinterName(), RTL_TEXTENCODING_UTF8));
