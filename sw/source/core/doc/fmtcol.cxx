@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <svl/intitem.hxx>
+#include <svl/itemiter.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
 #include <fmtcol.hxx>
@@ -376,6 +377,26 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 else if( pNewChgSet )
                     bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
+        }
+    }
+
+    // If there are any attributes in addition to the special ones already handled, then notify...
+    if (!bContinue && pNewChgSet && pNewChgSet->GetChgSet())
+    {
+        SfxItemIter aIter(*pNewChgSet->GetChgSet());
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        {
+            const sal_uInt16 nWhich = pItem->Which();
+            if (nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CTL_FONTSIZE
+                || nWhich == RES_CHRATR_CJK_FONTSIZE ||  nWhich == RES_UL_SPACE
+                || nWhich == RES_MARGIN_TEXTLEFT || nWhich == RES_MARGIN_RIGHT
+                || nWhich == RES_MARGIN_FIRSTLINE)
+            {
+                continue; // already considered for bContinue
+            }
+
+            bContinue = true;
+            break; // only one new condition needed to notify that this style has changes
         }
     }
 
