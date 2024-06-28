@@ -5364,6 +5364,16 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
 
+    // tdf#161717 - Track changes: Clicking on change in document should highlight related change
+    // in "Manage Changes" window/sidebar
+    if (SwContentAtPos aRedlineContentAtPos(IsAttrAtPos::Redline);
+        rSh.GetContentAtPos(aDocPt, aRedlineContentAtPos))
+    {
+        SwDocShell* pDocSh = m_rView.GetDocShell();
+        if (pDocSh)
+            pDocSh->Broadcast(SfxHint(SfxHintId::SwRedlineContentAtPos));
+    }
+
     if (!(pSdrView && rMEvt.GetClicks() == 1 && comphelper::LibreOfficeKit::isActive()))
         return;
 

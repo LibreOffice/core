@@ -166,6 +166,7 @@ enum class SfxHintId {
     SwRedlineDelText,
     SwRedlineUnDelText,
     SwMoveText,
+    SwRedlineContentAtPos,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint

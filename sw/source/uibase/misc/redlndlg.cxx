@@ -207,6 +207,9 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     // avoid multiple selection of the same texts:
     m_aSelectTimer.SetTimeout(100);
     m_aSelectTimer.SetInvokeHandler(LINK(this, SwRedlineAcceptDlg, GotoHdl));
+
+    // we want to receive SfxHintId::SwRedlineContentAtPos
+    StartListening(*(SW_MOD()->GetView()->GetDocShell()));
 }
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
@@ -493,6 +496,42 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     InitAuthors();
+}
+
+void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::SwRedlineContentAtPos)
+    {
+        SwView* pView = GetActiveView();
+        if (!pView)
+            return;
+
+        SwWrtShell* pSh = pView->GetWrtShellPtr();
+        if (!pSh)
+            return;
+
+        const SwRangeRedline* pRangeRedline = pSh->GetCurrRedline();
+        if (!pRangeRedline)
+            return;
+
+        const SwRedlineData& rRedlineData = pRangeRedline->GetRedlineData();
+
+        weld::TreeView& rTreeView = m_pTable->GetWidget();
+        rTreeView.all_foreach([&rTreeView, &rRedlineData](weld::TreeIter& rIter) {
+            RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(rIter));
+            const SwRedlineData* pRedlineData;
+            if (rTreeView.iter_has_child(rIter))
+                pRedlineData = static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
+            else
+                pRedlineData = static_cast<SwRedlineDataChild*>(pRedlinData->pData)->pChild;
+            if (pRedlineData == &rRedlineData)
+            {
+                rTreeView.set_cursor(rIter);
+                return true;
+            }
+            return false;
+        });
+    }
 }
 
 SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type nStart, bool bChild)

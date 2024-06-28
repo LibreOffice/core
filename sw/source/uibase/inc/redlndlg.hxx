@@ -53,7 +53,7 @@ struct SwRedlineDataParent
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to > {};
 
-class SW_DLLPUBLIC SwRedlineAcceptDlg final
+class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
 {
     std::shared_ptr<weld::Window> m_xParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
@@ -124,6 +124,8 @@ public:
     void            FillInfo(OUString &rExtraData) const;
 
     void            Activate();
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 
 class SwModelessRedlineAcceptDlg final : public SfxModelessDialogController
