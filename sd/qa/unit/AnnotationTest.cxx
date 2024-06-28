@@ -125,12 +125,12 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
 
-    sal_uInt32 nID = pPage->getAnnotations().front()->GetId();
+    sal_uInt64 nID = pPage->getAnnotations().front()->GetId();
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->getAnnotations().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 2), pPage->getAnnotations().at(2)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 1), pPage->getAnnotations().at(1)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 2), pPage->getAnnotations().at(2)->GetId());
 
     auto xAnnotation = pPage->getAnnotations().at(1);
 
@@ -143,8 +143,8 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 2), pPage->getAnnotations().at(1)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 2), pPage->getAnnotations().at(1)->GetId());
 }
 
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
@@ -165,34 +165,34 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     SdrObject* pObject = pPage->GetObj(0);
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::Annotation, pObject->GetObjIdentifier());
 
-    sal_uInt32 nID = pPage->getAnnotations().front()->GetId();
+    sal_uInt64 nID = pPage->getAnnotations().front()->GetId();
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 1), pPage->getAnnotations().at(1)->GetId());
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 1), pPage->getAnnotations().at(1)->GetId());
 
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 0), pPage->getAnnotations().at(0)->GetId());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nID + 1), pPage->getAnnotations().at(1)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 1), pPage->getAnnotations().at(1)->GetId());
 }
 
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
     CPPUNIT_ASSERT(pAnnotationData);
 
     // Remember the annotation ID
-    sal_Int32 nID = pAnnotationData->mxAnnotation->GetId();
+    sal_uInt64 nID = pAnnotationData->mxAnnotation->GetId();
 
     // Current annotation position
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), pObject->GetLogicRect().Left());

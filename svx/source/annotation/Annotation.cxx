@@ -44,8 +44,7 @@ OString lcl_LOKGetCommentPayload(CommentNotificationType nType, Annotation& rAnn
             aJsonWriter.put("dateTime", utl::toISO8601(rAnnotation.GetDateTime()));
             aJsonWriter.put("text", rAnnotation.GetText());
             SdrPage const* pPage = rAnnotation.getPage();
-            sal_Int64 nHash = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pPage));
-            aJsonWriter.put("parthash", pPage ? OString::number(nHash) : OString());
+            aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetUniqueID()) : OString());
             geometry::RealPoint2D const& rPoint = rAnnotation.GetPosition();
             geometry::RealSize2D const& rSize = rAnnotation.GetSize();
             tools::Rectangle aRectangle(
@@ -144,11 +143,8 @@ Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& r
     : cppu::PropertySetMixin<office::XAnnotation>(rxContext, IMPLEMENTS_PROPERTY_SET,
                                                   uno::Sequence<OUString>())
     , mpPage(pPage)
-    , m_nId(nextID())
 {
 }
-
-sal_uInt32 Annotation::m_nLastId = 1;
 
 SdrModel* Annotation::GetModel() const
 {
