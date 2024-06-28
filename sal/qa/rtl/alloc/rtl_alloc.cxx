@@ -190,7 +190,7 @@ public:
 
     void test2()
     {
-        // should never happen but lets try it again.
+        // should never happen but let's try it again.
         test();
     }
 

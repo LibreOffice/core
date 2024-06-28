@@ -671,7 +671,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLCellImportContext::
 
     SvXMLImportContext * pContext = nullptr;
 
-    // if we have a text cursor, lets  try to import some text
+    // if we have a text cursor, let's try to import some text
     if( mxCursor.is() )
     {
         pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nElement, xAttrList );

@@ -147,7 +147,7 @@ void CheckUnusedParams::checkForFunctionDecl(Expr const * expr, bool bCheckOnly)
 
 static int noFieldsInRecord(RecordType const * recordType) {
     auto recordDecl = recordType->getDecl();
-    // if it's complicated, lets just assume it has fields
+    // if it's complicated, let's just assume it has fields
     if (isa<ClassTemplateSpecializationDecl>(recordDecl))
         return 1;
     return std::distance(recordDecl->field_begin(), recordDecl->field_end());

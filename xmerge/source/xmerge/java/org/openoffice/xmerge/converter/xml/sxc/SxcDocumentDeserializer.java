@@ -511,7 +511,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 col = newCol;
             }
 
-            // Lets start dealing with the cell data
+            // Let's start dealing with the cell data
             Debug.log(Debug.TRACE, "<td>");
 
             // Get the cell's contents

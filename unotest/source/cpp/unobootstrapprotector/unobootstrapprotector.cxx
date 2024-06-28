@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 //But we can't setup and tear down the root component context for
 //every test because all the uno singletons will be invalid after
-//the first dispose. So lets setup the default context once before
+//the first dispose. So let's setup the default context once before
 //all tests are run, and tear it down once after all have finished
 
 class Prot : public CppUnit::Protector

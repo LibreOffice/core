@@ -369,7 +369,7 @@ namespace DOM
 
         Reference< XDocument > xRet;
 
-        // if we failed to parse the URI as a simple file, lets try via a ucb stream.
+        // if we failed to parse the URI as a simple file, let's try via a ucb stream.
         // For Android file:///assets/ URLs which must go via the osl/ file API.
         if (pDoc == nullptr) {
             Reference < XSimpleFileAccess3 > xStreamAccess(

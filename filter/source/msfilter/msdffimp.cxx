@@ -3894,7 +3894,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItem
             if ( !bGrfRead )
             {
                 /*
-                Still no luck, lets look at the end of this record for a FBSE pool,
+                Still no luck, let's look at the end of this record for a FBSE pool,
                 this fallback is a specific case for how word does it sometimes
                 */
                 bool bOk = rObjData.rSpHd.SeekToEndOfRecord( rSt );

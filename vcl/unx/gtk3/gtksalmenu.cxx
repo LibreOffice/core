@@ -1054,7 +1054,7 @@ void GtkSalMenu::ApplyPersona()
     if (!mpMenuBarContainerWidget)
         return;
     assert(mbMenuBar);
-    // I'm dubious about the persona theming feature, but as it exists, lets try and support
+    // I'm dubious about the persona theming feature, but as it exists, let's try and support
     // it, apply the image to the mpMenuBarContainerWidget
     const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
 
