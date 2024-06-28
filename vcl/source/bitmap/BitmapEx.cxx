@@ -1304,11 +1304,12 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
             std::unique_ptr<Point[]> pPoints2;
             tools::Long                nX, nY;
             sal_uInt16              nPolyPos = 0;
-            // tdf#161498 use COL_ALPHA_OPAQUE for finding opaque pixels
-            // Starting with commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
-            // pixels now contain an alpha value instead of a transparency
-            // value.
-            const BitmapColor   aTransparencyOpaque = pAcc->GetBestMatchingColor( COL_ALPHA_OPAQUE );
+            // tdf#161833 treat semi-transparent pixels as opaque
+            // Limiting the contour wrapping polygon to only opaque pixels
+            // causes clipping of any shadows or other semi-transaprent
+            // areas in the image. So, instead of testing for fully opaque
+            // pixels, treat pixels that are not fully transparent as opaque.
+            const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( COL_ALPHA_TRANSPARENT );
 
             pPoints1.reset(new Point[ nHeight ]);
             pPoints2.reset(new Point[ nHeight ]);
@@ -1321,7 +1322,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                 // scan row from left to right
                 while( nX < nEndX1 )
                 {
-                    if( aTransparencyOpaque == pAcc->GetPixelFromData( pScanline, nX ) )
+                    if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
                     {
                         pPoints1[ nPolyPos ] = Point( nX, nY );
                         nX = nStartX2;
@@ -1329,7 +1330,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                         // this loop always breaks eventually as there is at least one pixel
                         while( true )
                         {
-                            if( aTransparencyOpaque == pAcc->GetPixelFromData( pScanline, nX ) )
+                            if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
                             {
                                 pPoints2[ nPolyPos ] = Point( nX, nY );
                                 break;
