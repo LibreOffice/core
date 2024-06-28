@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_accessible_relation_set \
     CppunitTest_sw_apiterminate \
     CppunitTest_sw_apitests \
+    CppunitTest_sw_autocorrect \
     CppunitTest_sw_unowriter \
     CppunitTest_sw_core_text \
     CppunitTest_sw_core_doc \
