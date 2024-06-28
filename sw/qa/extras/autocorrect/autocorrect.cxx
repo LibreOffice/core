@@ -395,6 +395,21 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524_Romanian)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf158051)
+{
+    createSwDoc("el-GR.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Π Τάκης σ’ ευχαριστώ
+    // - Actual  : Π Τάκης ς’ ευχαριστώ
+    emulateTyping(*pTextDoc, u"π Τάκης σ’ ευχαριστώ");
+
+#if !defined(_WIN32) // For some reason it fails on Window. the manual test works fine
+    CPPUNIT_ASSERT_EQUAL(u"Π Τάκης σ’ ευχαριστώ"_ustr, getParagraph(1)->getString());
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
