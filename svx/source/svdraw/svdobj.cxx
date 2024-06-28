@@ -119,6 +119,7 @@
 #include <rtl/character.hxx>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/lazydelete.hxx>
 
 using namespace ::com::sun::star;
 
@@ -505,45 +506,20 @@ void SdrObject::handlePageChange(SdrPage*, SdrPage* )
 }
 
 
-// global static ItemPool for not-yet-inserted items
-static rtl::Reference<SdrItemPool> mpGlobalItemPool;
-
-/** If we let the libc runtime clean us up, we trigger a crash */
-namespace
-{
-class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
-{
-    void SAL_CALL queryTermination( const lang::EventObject& ) override
-    {}
-    void SAL_CALL notifyTermination( const lang::EventObject& ) override
-    {
-        mpGlobalItemPool.clear();
-    }
-    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
-    {}
-};
-};
-
 // init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 {
-    if(!mpGlobalItemPool)
-    {
-        mpGlobalItemPool = new SdrItemPool();
+    static vcl::DeleteRtlReferenceOnDeinit<SdrItemPool> xGlobalItemPool( []() {
+        rtl::Reference<SdrItemPool> xNewPool(new SdrItemPool());
         rtl::Reference<SfxItemPool> pGlobalOutlPool = EditEngine::CreatePool();
-        mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
-        mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
+        xNewPool->SetSecondaryPool(pGlobalOutlPool.get());
+        xNewPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
         if (comphelper::IsFuzzing())
-            mpGlobalItemPool->acquire();
-        else
-        {
-            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
-            uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
-            xDesktop->addTerminateListener( xListener );
-        }
-    }
+            xNewPool->acquire();
+        return xNewPool;
+    }() );
 
-    return *mpGlobalItemPool;
+    return *xGlobalItemPool.get();
 }
 
 void SdrObject::SetRelativeWidth( double nValue )

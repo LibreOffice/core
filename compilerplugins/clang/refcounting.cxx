@@ -336,6 +336,8 @@ bool containsSalhelperReferenceObjectSubclass(const clang::Type* pType0) {
             auto const dc = loplugin::DeclCheck(pTemplate);
             if (dc.Class("Reference").Namespace("rtl").GlobalNamespace()
                 || (dc.Class("OStoreHandle").AnonymousNamespace().Namespace("store")
+                    .GlobalNamespace())
+                || (dc.Class("DeleteRtlReferenceOnDeinit").Namespace("vcl")
                     .GlobalNamespace()))
             {
                 return false;

@@ -22,6 +22,7 @@
 #include <vcl/dllapi.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <rtl/ref.hxx>
 
 #include <optional>
 
@@ -129,6 +130,33 @@ namespace vcl
             catch( css::uno::Exception& )
             {
             }
+        }
+    };
+
+    /** Similar to DeleteOnDeinit, the DeleteRtlReferenceOnDeinit
+        template class makes sure that a static rtl::Reference managed object is disposed
+        and released at the right time.
+
+        Use like
+            static DeleteUnoReferenceOnDeinit<Foo> xStaticFactory (new Foo);
+            rtl::Reference<Foo> xFactory (xStaticFactory.get());
+            if (xFactory.is())
+                \<do something with xFactory>
+    */
+    template <typename I>
+    class DeleteRtlReferenceOnDeinit final : public vcl::DeleteOnDeinitBase
+    {
+        rtl::Reference<I> m_xI;
+        virtual void doCleanup() override { set(nullptr); }
+    public:
+        DeleteRtlReferenceOnDeinit(rtl::Reference<I> _xI ) : m_xI(std::move( _xI )) {
+            addDeinitContainer( this ); }
+
+        rtl::Reference<I> get() { return m_xI; }
+
+        void set (const rtl::Reference<I>& r_xNew )
+        {
+            m_xI = r_xNew;
         }
     };
 }
