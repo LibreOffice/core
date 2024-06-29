@@ -39,14 +39,14 @@ public:
     virtual void SAL_CALL Delete(  ) override;
     virtual OUString SAL_CALL getName(  ) override;
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& aIndex ) override;
-    virtual double SAL_CALL getBottomPadding(  ) override;
-    virtual void SAL_CALL setBottomPadding( double fValue ) override;
-    virtual double SAL_CALL getLeftPadding(  ) override;
-    virtual void SAL_CALL setLeftPadding( double fValue ) override;
-    virtual double SAL_CALL getRightPadding(  ) override;
-    virtual void SAL_CALL setRightPadding( double fValue ) override;
-    virtual double SAL_CALL getTopPadding(  ) override;
-    virtual void SAL_CALL setTopPadding( double fValue ) override;
+    virtual float SAL_CALL getBottomPadding(  ) override;
+    virtual void SAL_CALL setBottomPadding( float fValue ) override;
+    virtual float SAL_CALL getLeftPadding(  ) override;
+    virtual void SAL_CALL setLeftPadding( float fValue ) override;
+    virtual float SAL_CALL getRightPadding(  ) override;
+    virtual void SAL_CALL setRightPadding( float fValue ) override;
+    virtual float SAL_CALL getTopPadding(  ) override;
+    virtual void SAL_CALL setTopPadding( float fValue ) override;
     virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) override;
 

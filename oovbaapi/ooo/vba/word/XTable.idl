@@ -55,10 +55,10 @@ interface XTable
     any Rows([in] any aIndex );
     any Columns([in] any aIndex );
 
-    [attribute] double BottomPadding;
-    [attribute] double LeftPadding;
-    [attribute] double RightPadding;
-    [attribute] double TopPadding;
+    [attribute] float BottomPadding;
+    [attribute] float LeftPadding;
+    [attribute] float RightPadding;
+    [attribute] float TopPadding;
 };
 
 }; }; };
