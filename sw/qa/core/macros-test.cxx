@@ -116,7 +116,7 @@ void SwMacrosTest::testVba()
 
             OUString("testFontColor.docm"),
             OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
-        }
+        },
         // TODO - make these pass in Writer
         {
             OUString("testSentences.docm"),
@@ -133,8 +133,7 @@ void SwMacrosTest::testVba()
         {
             u"testTables.docm"_ustr,
             u"vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document"_ustr
-        }
-
+        },
     };
     for (auto const & [ sFileBaseName, sMacroUrl ] : testInfo)
     {
