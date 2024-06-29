@@ -94,6 +94,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
 
+#include <cmath>
 #include <memory>
 
 using namespace css;
@@ -428,13 +429,13 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
         SdrObject* pObject = xAnnotation->findAnnotationObject();
         if (pObject && nPositionX >= 0 && nPositionY >= 0)
         {
-            double fX = convertTwipToMm100(nPositionX);
-            double fY = convertTwipToMm100(nPositionY);
+            double fX = convertTwipToMm100<double>(nPositionX);
+            double fY = convertTwipToMm100<double>(nPositionY);
 
-            double deltaX = fX - (pSdAnnotation->getPosition().X * 100.0);
-            double deltaY = fY - (pSdAnnotation->getPosition().Y * 100.0);
+            ::tools::Long deltaX = std::round(fX - (pSdAnnotation->getPosition().X * 100.0));
+            ::tools::Long deltaY = std::round(fY - (pSdAnnotation->getPosition().Y * 100.0));
 
-            pObject->Move({::tools::Long(deltaX), ::tools::Long(deltaY)});
+            pObject->Move({ deltaX, deltaY });
         }
 
         if (!sText.isEmpty())
