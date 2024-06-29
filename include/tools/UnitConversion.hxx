@@ -92,7 +92,8 @@ inline Fraction conversionFract(o3tl::Length from, o3tl::Length to)
 
 template <typename N> constexpr auto convertTwipToMm100(N n)
 {
-    return o3tl::convert(n, o3tl::Length::twip, o3tl::Length::mm100);
+    using namespace o3tl; // Allow ADL find overloads e.g. in <tools/gen.hxx>
+    return convert(n, o3tl::Length::twip, o3tl::Length::mm100);
 }
 
 constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
