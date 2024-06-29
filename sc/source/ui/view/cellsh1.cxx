@@ -1461,7 +1461,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_COPYDELETE:      // for graphs in DrawShell
             {
                 weld::WaitObject aWait( GetViewData().GetDialogParent() );
-                pTabViewShell->CopyToClip( nullptr, false, false, true );
+                pTabViewShell->CopyToClip( nullptr, true, false, true );
                 pTabViewShell->DeleteContents( InsertDeleteFlags::CONTENTS );
                 rReq.Done();
                 GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
