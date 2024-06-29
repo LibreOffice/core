@@ -138,7 +138,7 @@ public class StyleUtilities
         }
 
         // There is no automatic style either. Now this means that someone
-        // messed up the fileformat. Lets create a new empty style for this.
+        // messed up the fileformat. Let's create a new empty style for this.
         final OfficeStyle autostyle = new OfficeStyle();
         autostyle.setNamespace(OfficeNamespaces.STYLE_NS);
         autostyle.setType(STYLE);

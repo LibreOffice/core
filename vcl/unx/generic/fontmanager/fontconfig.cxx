@@ -889,7 +889,7 @@ namespace
     //returns true if the given code-point couldn't possibly be in rLangTag.
     bool isImpossibleCodePointForLang(const LanguageTag &rLangTag, sal_uInt32 currentChar)
     {
-        //a non-default script is set, lets believe it
+        //a non-default script is set, let's believe it
         if (rLangTag.hasScript())
             return false;
 

@@ -1697,8 +1697,9 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             OUString aInterfaceName = xClass->getName();
             if ( aInterfaceName == "com.sun.star.bridge.oleautomation.XAutomationObject" )
             {
-                // there is a hack in the extensions/source/ole/oleobj.cxx  to return the typename of the automation object, lets check if it
-                // matches
+                // there is a hack in the extensions/source/ole/oleobj.cxx
+                // to return the typename of the automation object, let's
+                // check if it matches
                 Reference< XInvocation > xInv( aToInspectObj, UNO_QUERY );
                 if ( xInv.is() )
                 {

@@ -431,7 +431,7 @@ public:
     css::uno::Reference< css::script::XStorageBasedLibraryContainer >
             getLibraryContainer( bool _bScript );
 
-    /** lets our library containers store themself into the given root storage
+    /** lets our library containers store themselves into the given root storage
     */
     void    storeLibraryContainersTo( const css::uno::Reference< css::embed::XStorage >& _rxToRootStorage );
 

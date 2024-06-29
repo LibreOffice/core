@@ -14,7 +14,7 @@
 #include <officecfg/Office/Security.hxx>
 
 // curl is built with --with-secure-transport on macOS and iOS so doesn't need these
-// certs. Windows doesn't need them either, but lets assume everything else does
+// certs. Windows doesn't need them either, but let's assume everything else does
 #if !defined(SYSTEM_OPENSSL) && !defined(_WIN32) && !defined(MACOSX) && !defined(IOS)
 #include <com/sun/star/uno/RuntimeException.hpp>
 

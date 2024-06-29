@@ -72,7 +72,7 @@ sal_Int32 TextRun::insertAt(
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
 
-        // If no text color specified lets anyway initialize it as default:
+        // If no text color specified let's anyway initialize it as default:
         // this will help to recover after hyperlink
         if (!aTextCharacterProps.maFillProperties.maFillColor.isUsed())
             aTextCharacterProps.maFillProperties.moFillType = XML_solidFill;

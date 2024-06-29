@@ -1641,7 +1641,7 @@ static bool checkUnoStructCopy( bool bVBA, SbxVariableRef const & refVal, SbxVar
     // There are some circumstances when calling GetObject
     // will trigger an error, we need to squash those here.
     // Alternatively it is possible that the same scenario
-    // could overwrite and existing error. Lets prevent that
+    // could overwrite and existing error. Let's prevent that
     SbxObjectRef xVarObj = static_cast<SbxObject*>(refVar->GetObject());
     if ( eOldErr != ERRCODE_NONE )
         SbxBase::SetError( eOldErr );
@@ -3698,7 +3698,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         }
         // consider index-access for UnoObjects
         // definitely we want this for VBA where properties are often
-        // collections ( which need index access ), but lets only do
+        // collections ( which need index access ), but let's only do
         // this if we actually have params following
         else if( bVBAEnabled && dynamic_cast<const SbUnoProperty*>( pElem) != nullptr && pElem->GetParameters() )
         {

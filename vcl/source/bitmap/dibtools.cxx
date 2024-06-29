@@ -944,7 +944,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
             // tdf#122958 invalid compression value used
             if (aHeader.nCompression & 0x000F)
             {
-                // lets assume that there was an error in the generating application
+                // let's assume that there was an error in the generating application
                 // and allow through as COMPRESS_NONE if the bottom byte is 0
                 SAL_WARN( "vcl", "bad bmp compression scheme: " << aHeader.nCompression << ", rejecting bmp");
                 return false;

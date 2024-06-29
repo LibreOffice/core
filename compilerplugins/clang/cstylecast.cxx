@@ -139,7 +139,7 @@ bool isLiteralLike(Expr const * expr) {
 }
 
 bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
-    // Must be <simple-type-specifier> or <typename-specifier>, lets approximate that here:
+    // Must be <simple-type-specifier> or <typename-specifier>, let's approximate that here:
     assert(info != nullptr);
     auto const type = info->getType();
     if (type.hasLocalQualifiers()) {

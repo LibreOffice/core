@@ -374,7 +374,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         {
             // a new row means our column counter gets reset
             columnCounter = 0;
-            // Lets make sure the color of the table is ok ..
+            // Let's make sure the color of the table is ok...
             if (tableBackgroundColor != null)
             {
                 final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);

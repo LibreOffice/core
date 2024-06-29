@@ -122,7 +122,7 @@ public:
         // actually meant to e.g. clamp from a large signed type to a small unsigned type.  The
         // assumption is that this will only be likely the case for BO_EQ (==) and BO_NE (!=)
         // comparisons, so filter these out here (not sure what case BO_Cmp (<=>) will turn out to
-        // be, so lets keep it here at least for now):
+        // be, so let's keep it here at least for now):
         switch (expr->getOpcode())
         {
             case BO_Cmp:

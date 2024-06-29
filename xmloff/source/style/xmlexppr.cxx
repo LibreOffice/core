@@ -904,7 +904,7 @@ void SvXMLExportPropertyMapper::_exportXML(
             rPropTypeFlags |= (1 << nEPType);
             if( nEPType == nPropType )
             {
-                // we have a valid map entry here, so lets use it...
+                // we have a valid map entry here, so let's use it...
                 if( ( nEFlags & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
                 {
                     // element items do not add any properties,

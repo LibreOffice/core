@@ -120,7 +120,7 @@ pointer for you.
 
 ### How does my familiar code change ?
 
-Lets tweak the exemplary code above to fit the new model:
+Let's tweak the exemplary code above to fit the new model:
 
 ```
 -	Dialog aDialog(... dialog params ... );

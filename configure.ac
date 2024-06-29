@@ -13312,7 +13312,7 @@ AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
 # This is only used in Qt5/Qt6/KF5/KF6 checks to determine if /usr/lib64
-# paths should be added to library search path. So lets put all 64-bit
+# paths should be added to library search path. So let's put all 64-bit
 # platforms there.
 supports_multilib=
 case "$host_cpu" in

@@ -253,7 +253,7 @@ SalI18N_InputMethod::~SalI18N_InputMethod()
 }
 
 // XXX
-// debug routine: lets have a look at the provided method styles
+// debug routine: let's have a look at the provided method styles
 
 #if OSL_DEBUG_LEVEL > 1
 

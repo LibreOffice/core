@@ -642,7 +642,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                         if (style == null)
                         {
                             style = deriveStyle(OfficeToken.PARAGRAPH, styleName);
-                            // Lets set the 'keep-together' flag...
+                            // Let's set the 'keep-together' flag...
 
                             Element paragraphProps = style.getParagraphProperties();
                             if (paragraphProps == null)

@@ -1744,7 +1744,7 @@ bool SbModule::HasExeCode()
 {
     // And empty Image always has the Global Chain set up
     static const unsigned char pEmptyImage[] = { 0x45, 0x0 , 0x0, 0x0, 0x0 };
-    // lets be stricter for the moment than VBA
+    // let's be stricter for the moment than VBA
 
     if (!IsCompiled())
     {
