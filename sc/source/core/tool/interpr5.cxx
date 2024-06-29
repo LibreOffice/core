@@ -317,7 +317,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         {
             // Clamp the size of the matrix area to rows which actually contain data.
             // For e.g. SUM(IF over an entire column, this can make a big difference,
-            // But lets not trim the empty space from the top or left as this matters
+            // But let's not trim the empty space from the top or left as this matters
             // at least in matrix formulas involving IF().
             // Refer ScCompiler::AnnotateTrimOnDoubleRefs() where double-refs are
             // flagged for trimming.

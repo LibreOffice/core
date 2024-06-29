@@ -454,7 +454,7 @@ void Desktop::Init()
 
     // We need to have service factory before going further, but see fdo#37195.
     // Doing this will mmap common.rdb, making it not overwritable on windows,
-    // so this can't happen before the synchronization above. Lets rework this
+    // so this can't happen before the synchronization above. Let's rework this
     // so that the above is called *from* CreateApplicationServiceManager or
     // something to enforce this gotcha
     try

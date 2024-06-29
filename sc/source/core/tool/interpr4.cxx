@@ -3874,7 +3874,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpre
     else
         bMatrixFormula = false;
 
-    // Lets not use the global stack while formula-group-threading.
+    // Let's not use the global stack while formula-group-threading.
     // as it complicates its life-cycle mgmt since for threading formula-groups,
     // ScInterpreter is preallocated (in main thread) for each worker thread.
     if (!bGlobalStackInUse && !bForGroupThreading)

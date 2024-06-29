@@ -4499,7 +4499,7 @@ struct ScDependantsCalculator
                 // The dependency evaluator evaluates all arguments of IF/IFS/SWITCH irrespective
                 // of the result of the condition expression.
                 // This is a perf problem if we *don't* intent on recalc'ing all dirty cells
-                // in the document. So lets disable threading and stop dependency evaluation if
+                // in the document. So let's disable threading and stop dependency evaluation if
                 // the call did not originate from ScDocShell::DoRecalc()/ScDocShell::DoHardRecalc()
                 // for formulae with IF/IFS/SWITCH
                 OpCode nOpCode = p->GetOpCode();
@@ -4636,7 +4636,7 @@ struct ScDependantsCalculator
         }
 
         // Compute dependencies irrespective of the presence of any self references.
-        // These dependencies would get computed via InterpretTail anyway when we disable group calc, so lets do it now.
+        // These dependencies would get computed via InterpretTail anyway when we disable group calc, so let's do it now.
         // The advantage is that the FG's get marked for cycles early if present, and can avoid lots of complications.
         for (size_t i = 0; i < aRangeList.size(); ++i)
         {
@@ -4770,7 +4770,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
     // to avoid writing during the calculation
     if (bCalcDependencyOnly)
     {
-        // Lets not use "ScFormulaGroupDependencyComputeGuard" here as there is no corresponding
+        // Let's not use "ScFormulaGroupDependencyComputeGuard" here as there is no corresponding
         // "ScFormulaGroupCycleCheckGuard" for this formula-group.
         // (We can only reach here from a multi-group dependency evaluation attempt).
         // (These two have to be in pairs always for any given formula-group)

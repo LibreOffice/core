@@ -595,7 +595,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
         if( !bOk )
         {
-            // we failed to add the type, so lets remove the filter
+            // we failed to add the type, so let's remove the filter
             try
             {
                 mxFilterContainer->removeByName( pFilterEntry->maFilterName );
@@ -622,7 +622,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
             if( !bOk )
             {
-                // we failed to add the filter, so lets remove the type
+                // we failed to add the filter, so let's remove the type
                 try
                 {
                     mxTypeDetection->removeByName( pFilterEntry->maType );

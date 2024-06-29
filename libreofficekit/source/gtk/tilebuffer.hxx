@@ -18,7 +18,7 @@
 
 #define LOK_TILEBUFFER_ERROR (LOKTileBufferErrorQuark())
 
-// Lets use a square of side 256 pixels for each tile.
+// Let's use a square of side 256 pixels for each tile.
 const int nTileSizePixels = 256;
 
 /**

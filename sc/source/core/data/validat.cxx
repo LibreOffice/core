@@ -906,7 +906,7 @@ bool ScValidationData::GetSelectionFromFormula(
     /* XL artificially limits things to a single col or row in the UI but does
      * not list the constraint in MOOXml. If a defined name or INDIRECT
      * resulting in 1D is entered in the UI and the definition later modified
-     * to 2D, it is evaluated fine and also stored and loaded.  Lets get ahead
+     * to 2D, it is evaluated fine and also stored and loaded. Let's get ahead
      * of the curve and support 2d. In XL, values are listed row-wise, do the
      * same. */
     for( nRow = 0; nRow < nRows ; nRow++ )
