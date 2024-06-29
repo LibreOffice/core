@@ -234,11 +234,14 @@ void SwView::ExecSearch(SfxRequest& rReq)
             }
 
             // tdf#115665 Format in the CTRL+H search affects the CTRL+F search
-            if (const SfxBoolItem* pUseAttrItemListItem
-                = pArgs->GetItemIfSet(SID_SEARCH_USE_ATTR_ITEM_LIST, false))
+            if (pArgs)
             {
-                if (!pUseAttrItemListItem->GetValue())
-                    s_xSearchList.reset();
+                if (const SfxBoolItem* pUseAttrItemListItem
+                    = pArgs->GetItemIfSet(SID_SEARCH_USE_ATTR_ITEM_LIST, false))
+                {
+                    if (!pUseAttrItemListItem->GetValue())
+                        s_xSearchList.reset();
+                }
             }
 
             SvxSearchCmd eCommand = s_pSrchItem->GetCommand();
