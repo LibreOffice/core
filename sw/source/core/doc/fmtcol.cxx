@@ -233,7 +233,21 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                                                         this, pNewNumRuleItem );
     }
 
-    bool bContinue = true;
+    // There are three situations that trigger this notify
+    // A.) a single format change: potentially dead code?
+    // B.) a new parent (bNewParent): unknown number of potential changes involved
+    // C.) a set of changes: a known number of changes.
+
+    // Do we need to notify anyone that we have changed?
+    // yes(1) - if we ourselves are the ones that caused the change
+    //    -that seems puzzling to me, but very true at least for pNewChgSet
+    //        -THIS IS the INITIAL SwClientNotify CALL IN THAT CASE
+    // yes(2) - if we ourselves did not have that value set (we inherited a change)
+    // yes(3) - if we had a relative value that changed because the parent changed
+    //     - the SetFormatAttr triggers its own notify, but only about that ONE PROPERTY
+    // no - if the parents value changed, but our value was absolute (or unchanged relative)
+    //     - (4) but only if ALL the properties were unchanged
+    bool bContinue = true; // #1, #2
 
     // Check against the own attributes
     const SvxFirstLineIndentItem *pOldFirstLineIndent(GetItemIfSet(RES_MARGIN_FIRSTLINE, false));
@@ -256,10 +270,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 SetFormatAttr( aNew );
                 bContinue = nullptr != pOldChgSet || bNewParent;
             }
-            // We set it to absolute -> do not propagate it further, unless
-            // we set it!
+            // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
-                bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                bContinue = false;
         }
     }
     const SvxTextLeftMarginItem *pOldTextLeftMargin(GetItemIfSet(RES_MARGIN_TEXTLEFT, false));
@@ -283,10 +296,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 SetFormatAttr( aNew );
                 bContinue = nullptr != pOldChgSet || bNewParent;
             }
-            // We set it to absolute -> do not propagate it further, unless
-            // we set it!
+            // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
-                bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                bContinue = false;
         }
     }
     const SvxRightMarginItem *pOldRightMargin(GetItemIfSet(RES_MARGIN_RIGHT, false));
@@ -308,10 +320,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 SetFormatAttr( aNew );
                 bContinue = nullptr != pOldChgSet || bNewParent;
             }
-            // We set it to absolute -> do not propagate it further, unless
-            // we set it!
+            // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
-                bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                bContinue = false;
         }
     }
 
@@ -339,10 +350,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             SetFormatAttr( aNew );
             bContinue = nullptr != pOldChgSet || bNewParent;
         }
-        // We set it to absolute -> do not propagate it further, unless
-        // we set it!
+        // We set it to absolute -> do not propagate it further
         else if( pNewChgSet )
-            bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+            bContinue = false;
     }
 
     for (size_t nC = 0; nC < SAL_N_ELEMENTS(aFontSizeArr); ++nC)
@@ -356,10 +366,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( 100 == pOldFSize->GetProp() &&
                 MapUnit::MapRelative == pOldFSize->GetPropUnit() )
             {
-                // We set it to absolute -> do not propagate it further, unless
-                // we set it!
+                // We set it to absolute -> do not propagate it further
                 if( pNewChgSet )
-                    bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                    bContinue = false;
             }
             else
             {
@@ -373,10 +382,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                     SetFormatAttr( aNew );
                     bContinue = nullptr != pOldChgSet || bNewParent;
                 }
-                // We set it to absolute -> do not propagate it further, unless
-                // we set it!
+                // We set it to absolute -> do not propagate it further
                 else if( pNewChgSet )
-                    bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                    bContinue = false;
             }
         }
     }
