@@ -1489,9 +1489,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
 
-                const sal_uLong handleNum = handleNumItem->GetValue();
-                const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
-                const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
+                const sal_uInt32 handleNum = handleNumItem->GetValue();
+                const ::tools::Long newPosX = convertTwipToMm100(newPosXTwips->GetValue());
+                const ::tools::Long newPosY = convertTwipToMm100(newPosYTwips->GetValue());
 
                 mpDrawView->MoveShapeHandle(handleNum, Point(newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
                 Cancel();
