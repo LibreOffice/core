@@ -2210,14 +2210,25 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="horizontal" style:protect="position size"/>
     </style:style>
     <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Filled_20_Blue">
-      <style:graphic-properties draw:opacity="45%" style:protect="position size"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#0d84a1" draw:opacity="45%" style:protect="position size"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="Filled_20_Blue">
-      <style:graphic-properties style:protect="position size"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#0d84a1" style:protect="position size"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
       <style:graphic-properties style:protect="position size"/>
     </style:style>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Filled_20_Blue">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#0d84a1"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%"/>
+    </style:style>
+
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Freshes-backgroundobjects">
       <style:graphic-properties draw:textarea-vertical-align="bottom"/>
     </style:style>
@@ -2709,7 +2720,7 @@
     </style:master-page>
     <style:master-page style:name="Blue_2f_White_20_Chart" style:display-name="Blue/White Chart" style:page-layout-name="PM1" draw:style-name="Mdp4">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Filled" draw:layer="backgroundobjects" svg:width="10cm" svg:height="1.6cm" svg:x="0cm" svg:y="1cm">
+      <draw:custom-shape draw:style-name="Mgr9" draw:layer="backgroundobjects" svg:width="10cm" svg:height="1.6cm" svg:x="0cm" svg:y="1cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Blue_2f_White_20_Chart-title" draw:layer="backgroundobjects" svg:width="9.8cm" svg:height="2cm" svg:x="0cm" svg:y="0.8cm" presentation:class="title" presentation:placeholder="true">
@@ -2791,7 +2802,7 @@
     </style:master-page>
     <style:master-page style:name="White_2f_Blue_20_Chart" style:display-name="White/Blue Chart" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="10cm" svg:height="1.6cm" svg:x="0cm" svg:y="1cm">
+      <draw:custom-shape draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="10cm" svg:height="1.6cm" svg:x="0cm" svg:y="1cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="White_2f_Blue_20_Chart-title" draw:layer="backgroundobjects" svg:width="9.8cm" svg:height="2cm" svg:x="0cm" svg:y="0.8cm" presentation:class="title" presentation:placeholder="true">
@@ -2954,8 +2965,8 @@
     </style:master-page>
     <style:master-page style:name="Table" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:polygon draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="28cm" svg:height="4.571cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 1000 1000" draw:points="0,1000 0,0 1000,0"/>
-      <draw:polygon draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="16.6cm" svg:height="2.3cm" svg:x="11.4cm" svg:y="13.45cm" svg:viewBox="0 0 1000 1000" draw:points="0,1000 1000,1000 1000,0"/>
+      <draw:polygon draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="28cm" svg:height="4.571cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 1000 1000" draw:points="0,1000 0,0 1000,0"/>
+      <draw:polygon draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="16.6cm" svg:height="2.3cm" svg:x="11.4cm" svg:y="13.45cm" svg:viewBox="0 0 1000 1000" draw:points="0,1000 1000,1000 1000,0"/>
       <draw:frame presentation:style-name="Table-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="3cm" svg:x="1.4cm" svg:y="0.6cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -3035,7 +3046,7 @@
     </style:master-page>
     <style:master-page style:name="Left_20_Bar" style:display-name="Left Bar" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+      <draw:custom-shape draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Left_20_Bar-title" draw:layer="backgroundobjects" svg:width="14cm" svg:height="3.5cm" draw:transform="rotate (1.5707963267949) translate (0.5cm 14.75cm)" presentation:class="title" presentation:placeholder="true">
@@ -3117,7 +3128,7 @@
     </style:master-page>
     <style:master-page style:name="Right_20_Bar" style:display-name="Right Bar" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Filled_20_Blue" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="15.75cm" svg:x="23.5cm" svg:y="0cm">
+      <draw:custom-shape draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="15.75cm" svg:x="23.5cm" svg:y="0cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Right_20_Bar-title" draw:layer="backgroundobjects" svg:width="14cm" svg:height="3.5cm" draw:transform="rotate (-1.5707963267949) translate (27.5cm 0.5cm)" presentation:class="title" presentation:placeholder="true">
