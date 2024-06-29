@@ -932,7 +932,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DISTANCE        :
         {
-            sal_uInt32 nPos = rInfo.GetPosFromLeft();
+            sal_uInt16 nPos = rInfo.GetPosFromLeft();
             if(USHRT_MAX == nPos)
                 nPos = 0;
             aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nPos));
