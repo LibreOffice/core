@@ -325,6 +325,41 @@ FONT_OPEN_SANS_SHA256SUM := 85d79a39d26acb207ba13fb1007189d55355a0faf2cf7ccfe6a2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_AGDASIMA_TARBALL := Agdasima-2.002.zip
+FONT_AGDASIMA_SHA256SUM := b4c17499f8bc183320ffdcf1f8491c778dd68a237adc056dc08e1fcb2da488f3
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_BACASIME_ANTIQUE_TARBALL := Bacasime_Antique-2.000.zip
+FONT_BACASIME_ANTIQUE_SHA256SUM := 81127cebc97d4ee0b950c2bc2d6be0ed29abfe0d5988435eb9a39e382557250a
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_BELANOSIMA_TARBALL := Belanosima-2.000.zip
+FONT_BELANOSIMA_SHA256SUM := 9c30e9e7cdb0797b651113a77f6b789659b8d8598a466b2ba92754e9dec30449
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_CAPRASIMO_TARBALL := Caprasimo-1.001.zip
+FONT_CAPRASIMO_SHA256SUM := f066d27cfc99b6601083be102d08b4039da8d2834e2795aabd890f16c6fd1b9b
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_LUGRASIMO_TARBALL := Lugrasimo-1.001.zip
+FONT_LUGRASIMO_SHA256SUM := db24dff31e8ddf6a113556c947a219f9534b072852e9ce2079a08c94854a7503
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_LUMANOSIMO_TARBALL := Lumanosimo-1.010.zip
+FONT_LUMANOSIMO_SHA256SUM := d4545ad6afded9a55d9a7728cfc7453cf5637861db87aafe0a730676a0cb960f
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+FONT_LUNASIMA_TARBALL := Lunasima-2.009.zip
+FONT_LUNASIMA_SHA256SUM := 4302809cf4b95b481bec53de87484d919b391c90a518d065f6c775fd435a5393
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FREEHAND_SHA256SUM := 0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac
 FREEHAND_TARBALL := libfreehand-0.1.2.tar.xz
 # three static lines
