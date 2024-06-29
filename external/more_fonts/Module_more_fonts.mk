@@ -37,6 +37,13 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_serif_lao \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
+	ExternalPackage_agdasima \
+	ExternalPackage_bacasime_antique \
+	ExternalPackage_belanosima \
+	ExternalPackage_caprasimo \
+	ExternalPackage_lugrasimo \
+	ExternalPackage_lumanosimo \
+	ExternalPackage_lunasima \
 	UnpackedTarball_alef \
 	UnpackedTarball_amiri \
 	UnpackedTarball_caladea \
@@ -64,6 +71,13 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_serif_lao \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
+	UnpackedTarball_agdasima \
+	UnpackedTarball_bacasime_antique \
+	UnpackedTarball_belanosima \
+	UnpackedTarball_caprasimo \
+	UnpackedTarball_lugrasimo \
+	UnpackedTarball_lumanosimo \
+	UnpackedTarball_lunasima \
 ))
 
 # vim: set noet sw=4 ts=4:

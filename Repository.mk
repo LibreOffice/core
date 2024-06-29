@@ -1080,6 +1080,13 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_noto_serif_lao \
 		fonts_reem \
 		fonts_scheherazade \
+		fonts_agdasima \
+		fonts_bacasime_antique \
+		fonts_belanosima \
+		fonts_caprasimo \
+		fonts_lugrasimo \
+		fonts_lumanosimo \
+		fonts_lunasima \
 	) \
 ))
 

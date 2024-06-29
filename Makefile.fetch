@@ -202,6 +202,13 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_AMIRI_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_REEM_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_SCHEHERAZADE_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_AGDASIMA_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_BACASIME_ANTIQUE_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_BELANOSIMA_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CAPRASIMO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LUGRASIMO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LUMANOSIMO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LUNASIMA_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYTHES,MYTHES_TARBALL) \

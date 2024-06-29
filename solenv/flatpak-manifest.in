@@ -614,6 +614,55 @@
                     "dest-filename": "@FONT_SCHEHERAZADE_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_AGDASIMA_TARBALL@",
+                    "sha256": "@FONT_AGDASIMA_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_AGDASIMA_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_BACASIME_ANTIQUE_TARBALL@",
+                    "sha256": "@FONT_BACASIME_ANTIQUE_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_BACASIME_ANTIQUE_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_BELANOSIMA_TARBALL@",
+                    "sha256": "@FONT_BELANOSIMA_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_BELANOSIMA_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_CAPRASIMO_TARBALL@",
+                    "sha256": "@FONT_CAPRASIMO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_CAPRASIMO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_LUGRASIMO_TARBALL@",
+                    "sha256": "@FONT_LUGRASIMO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_LUGRASIMO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_LUMANOSIMO_TARBALL@",
+                    "sha256": "@FONT_LUMANOSIMO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_LUMANOSIMO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@FONT_LUNASIMA_TARBALL@",
+                    "sha256": "@FONT_LUNASIMA_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@FONT_LUNASIMA_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/@BSH_TARBALL@",
                     "sha256": "@BSH_SHA256SUM@",
                     "type": "file",
