@@ -45,10 +45,9 @@ namespace writerfilter::dmapper::ConversionHelper{
     //convert the number format string form MS format to SO format
     OUString ConvertMSFormatStringToSO(const OUString& rFormat, css::lang::Locale& rLocale, bool bHijri);
     // export just for test
-    SAL_DLLPUBLIC_EXPORT sal_Int32 convertTwipToMM100(sal_Int32 _t);
-    sal_Int32 convertTwipToMM100WithoutLimit(sal_Int32 _t);
-    double convertTwipToMM100Double(sal_Int32 _t);
-    SAL_DLLPUBLIC_EXPORT sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t);
+    SAL_DLLPUBLIC_EXPORT sal_Int32 convertTwipToMm100_Limited(sal_Int32 _t);
+    sal_Int32 convertTwipToMm100_LimitedRoundUp(sal_Int32 _t);
+    SAL_DLLPUBLIC_EXPORT sal_uInt32 convertTwipToMm100_LimitedUnsigned(sal_Int32 _t);
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     css::text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault = css::style::NumberingType::ARABIC);

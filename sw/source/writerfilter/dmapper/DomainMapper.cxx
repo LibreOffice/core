@@ -410,7 +410,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->m_aCurrentTabStop.FillChar = getFillCharFromValue(nIntValue);
             break;
         case NS_ooxml::LN_CT_TabStop_pos:
-            m_pImpl->m_aCurrentTabStop.Position = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->m_aCurrentTabStop.Position = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
             break;
 
         case NS_ooxml::LN_CT_Fonts_ascii:
@@ -480,14 +480,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 // NS_ooxml::LN_CT_Spacing_before in parent styles before style
                 // sheet support can be enabled.
                 if (m_pImpl->GetTopContext() && !IsStyleSheetImport())
-                    m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::Any(ConversionHelper::convertTwipToMM100(nIntValue * nSingleLineSpacing / 100)), false);
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::Any(ConversionHelper::convertTwipToMm100_Limited(nIntValue * nSingleLineSpacing / 100)), false);
             break;
         case NS_ooxml::LN_CT_Spacing_after:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"after"_ustr, OUString::number(nIntValue));
             if (m_pImpl->GetTopContext())
             {
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_afterAutospacing.
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ), false);
 
                 uno::Any aContextualSpacingFromStyle = m_pImpl->GetPropertyFromParaStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                 if (aContextualSpacingFromStyle.hasValue())
@@ -502,7 +502,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             // NS_ooxml::LN_CT_Spacing_after in parent styles before style
             // sheet support can be enabled.
             if (m_pImpl->GetTopContext() && !IsStyleSheetImport())
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any(ConversionHelper::convertTwipToMM100(nIntValue * nSingleLineSpacing / 100)), false);
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any(ConversionHelper::convertTwipToMm100_Limited(nIntValue * nSingleLineSpacing / 100)), false);
             break;
         case NS_ooxml::LN_CT_Spacing_line: //91434
         case NS_ooxml::LN_CT_Spacing_lineRule: //91435
@@ -518,7 +518,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 //default to single line spacing
                 aSpacing.Mode = style::LineSpacingMode::FIX;
-                aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nSingleLineSpacing ));
+                aSpacing.Height = convertTwipToMm100(nSingleLineSpacing);
             }
             if( nName == NS_ooxml::LN_CT_Spacing_line )
             {
@@ -527,7 +527,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 if( aSpacing.Mode == style::LineSpacingMode::PROP )
                     aSpacing.Height = sal_Int16(nIntValue * 100 / nSingleLineSpacing );
                 else
-                    aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nIntValue ));
+                    aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMm100_Limited( nIntValue ));
             }
             else //NS_ooxml::LN_CT_Spacing_lineRule:
             {
@@ -539,7 +539,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         {
                             aSpacing.Mode = style::LineSpacingMode::PROP;
                             //reinterpret the already set value
-                            aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMM100( nSingleLineSpacing ));
+                            aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMm100_Limited( nSingleLineSpacing ));
                         }
                         else
                         {
@@ -573,7 +573,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 sal_Int32 nFirstLineIndent = m_pImpl->getCurrentNumberingProperty(u"FirstLineIndent"_ustr);
                 sal_Int32 nIndentAt = m_pImpl->getCurrentNumberingProperty(u"IndentAt"_ustr);
 
-                sal_Int32 nParaLeftMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+                sal_Int32 nParaLeftMargin = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
                 if (nParaLeftMargin != 0 && nIndentAt == nParaLeftMargin)
                     // Avoid direct left margin when it's the same as from the
                     // numbering.
@@ -601,14 +601,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN, uno::Any(nParaLeftMargin), /*bOverwrite=*/false);
 
                 m_pImpl->GetTopContext()->Insert(
-                    PROP_PARA_RIGHT_MARGIN, uno::Any( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+                    PROP_PARA_RIGHT_MARGIN, uno::Any( ConversionHelper::convertTwipToMm100_Limited(nIntValue ) ));
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"right"_ustr, OUString::number(nIntValue));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if (m_pImpl->GetTopContext())
             {
-                sal_Int32 nValue = ConversionHelper::convertTwipToMM100( nIntValue );
+                sal_Int32 nValue = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_FIRST_LINE_INDENT, uno::Any( - nValue ));
 
@@ -623,7 +623,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 sal_Int32 nFirstLineIndent
                     = m_pImpl->getCurrentNumberingProperty(u"FirstLineIndent"_ustr);
-                sal_Int32 nParaFirstLineIndent = ConversionHelper::convertTwipToMM100(nIntValue);
+                sal_Int32 nParaFirstLineIndent = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
                 if (nParaFirstLineIndent != 0 && nFirstLineIndent == nParaFirstLineIndent)
                     // Avoid direct first margin when it's the same as from the
                     // numbering.
@@ -667,7 +667,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_PageSz_h:
             {
-                sal_Int32 nHeight = ConversionHelper::convertTwipToMM100WithoutLimit(nIntValue);
+                sal_Int32 nHeight = convertTwipToMm100(nIntValue);
                 CT_PageSz.h = PaperInfo::sloppyFitPageDimension(nHeight);
             }
             break;
@@ -676,7 +676,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_PageSz_w:
             {
-                sal_Int32 nWidth = ConversionHelper::convertTwipToMM100WithoutLimit(nIntValue);
+                sal_Int32 nWidth = convertTwipToMm100(nIntValue);
                 CT_PageSz.w = PaperInfo::sloppyFitPageDimension(nWidth);
             }
             break;
@@ -759,43 +759,43 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         // See SwWW8ImplReader::GetParagraphAutoSpace() on why these are 100 and 280
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
         {
-            sal_Int32 default_spacing = -1;
+            sal_Int32 default_spacing = convertTwipToMm100(-1);
             if (nIntValue)
             {
                 m_pImpl->SetParaAutoBefore(true);
 
-                default_spacing = 100;
+                default_spacing = convertTwipToMm100(100);
                 if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
                 {
                     // 49 is just the old value that should be removed, once the
                     // root cause in SwTabFrm::MakeAll() is fixed.
                     if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
-                        default_spacing = 49;
+                        default_spacing = convertTwipToMm100(49);
                     else
-                        default_spacing = 280;
+                        default_spacing = convertTwipToMm100(280);
                 }
                 // required at export (here mainly for StyleSheets) to determine if the setting has changed from grab_bag
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::Any(ConversionHelper::convertTwipToMM100(default_spacing)));
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::Any(default_spacing));
             }
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::Any( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::Any( default_spacing ),true, PARA_GRAB_BAG );
         }
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
         {
-            sal_Int32 default_spacing = -1;
+            sal_Int32 default_spacing = convertTwipToMm100(-1);
             if  (nIntValue)
             {
-                default_spacing = 100;
+                default_spacing = convertTwipToMm100(100);
                 if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
                 {
                     if (m_pImpl->GetSettingsTable()->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
-                        default_spacing = 49;
+                        default_spacing = convertTwipToMm100(49);
                     else
-                        default_spacing = 280;
+                        default_spacing = convertTwipToMm100(280);
                 }
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any(ConversionHelper::convertTwipToMM100(default_spacing)));
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any(default_spacing));
             }
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::Any( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::Any( default_spacing ),true, PARA_GRAB_BAG );
         }
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
@@ -906,7 +906,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_x:
                         pParaProperties->props().Setx(
-                            ConversionHelper::convertTwipToMM100(nIntValue ));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                         pParaProperties->props().SetxAlign( text::HoriOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_xAlign:
@@ -923,7 +923,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_y:
                         pParaProperties->props().Sety(
-                            ConversionHelper::convertTwipToMM100(nIntValue ));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                         pParaProperties->props().SetyAlign( text::VertOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_yAlign:
@@ -996,19 +996,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_w:
                         pParaProperties->props().Setw(
-                            ConversionHelper::convertTwipToMM100(nIntValue));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                     break;
                     case NS_ooxml::LN_CT_FramePr_h:
                         pParaProperties->props().Seth(
-                            ConversionHelper::convertTwipToMM100(nIntValue));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                     break;
                     case NS_ooxml::LN_CT_FramePr_hSpace:
                         pParaProperties->props().SethSpace(
-                            ConversionHelper::convertTwipToMM100(nIntValue ));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                     break;
                     case NS_ooxml::LN_CT_FramePr_vSpace:
                         pParaProperties->props().SetvSpace(
-                            ConversionHelper::convertTwipToMM100(nIntValue ));
+                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
                     break;
                     default:;
                 }
@@ -1059,7 +1059,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         pSectionContext->SetLnnMin( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_distance:
-                    aSettings.nDistance = ConversionHelper::convertTwipToMM100( nIntValue );
+                    aSettings.nDistance = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
                     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
                     if( pSectionContext )
                         pSectionContext->SetdxaLnn( nIntValue );
@@ -1087,7 +1087,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
             if(pSectionContext)
             {
-                pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) );
             }
         }
         break;
@@ -2195,7 +2195,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             //Kerning half point values
             //TODO: there are two kerning values -
             // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
-            sal_Int16 nResult = static_cast<sal_Int16>(ConversionHelper::convertTwipToMM100(nIntValue));
+            sal_Int16 nResult = static_cast<sal_Int16>(ConversionHelper::convertTwipToMm100_Limited(nIntValue));
             if (m_pImpl->IsInComments())
             {
                 nResult = static_cast<sal_Int16>(nIntValue);
@@ -2280,7 +2280,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case 165:
     {
         //page height, rounded to default values, default: 0x3dc0 twip
-        sal_Int32 nHeight = ConversionHelper::convertTwipToMM100( nIntValue );
+        sal_Int32 nHeight = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
         rContext->Insert( PROP_HEIGHT, uno::Any( PaperInfo::sloppyFitPageDimension( nHeight ) ) );
     }
     break;

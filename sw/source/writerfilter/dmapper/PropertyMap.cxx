@@ -1825,7 +1825,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 double fHeight = 0;
                 if ( pPropHeight->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertTwipToMM100( static_cast<tools::Long>(fHeight * 20.0 + 0.5) );
+                    nCharWidth = ConversionHelper::convertTwipToMm100_Limited( static_cast<sal_Int32>(fHeight * 20.0 + 0.5) );
             }
         }
 
@@ -1836,11 +1836,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             //main lives in top 20 bits, and is signed.
             sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
             nMain /= 0x1000;
-            nCharWidth += ConversionHelper::convertTwipToMM100( nMain * 20 );
+            nCharWidth += ConversionHelper::convertTwipToMm100_Limited(nMain * 20);
 
             sal_Int32 nFraction = (nCharSpace & 0x00000FFF);
             nFraction = (nFraction * 20) / 0xFFF;
-            nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
+            nCharWidth += ConversionHelper::convertTwipToMm100_Limited(nFraction);
         }
 
         if ( m_nPageNumberType >= 0 )

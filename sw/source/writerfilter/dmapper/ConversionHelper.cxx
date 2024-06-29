@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <cmath>
+
 #include "ConversionHelper.hxx"
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -266,7 +271,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
     double const fConverted( (SvxBorderLineStyle::NONE == nLineStyle) ? 0.0 :
         ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness,
             nLineType));
-    rToFill.LineWidth = convertTwipToMM100(fConverted);
+    rToFill.LineWidth = convertTwipToMm100_Limited(fConverted);
     rToFill.Color = nLineColor;
 }
 
@@ -415,7 +420,7 @@ OUString ConvertMSFormatStringToSO(
 
 }
 
-sal_Int32 convertTwipToMM100(sal_Int32 _t)
+sal_Int32 convertTwipToMm100_Limited(sal_Int32 _t)
 {
     // It appears that MSO handles large twip values specially, probably legacy 16bit handling,
     // anything that's bigger than 32767 appears to be simply ignored.
@@ -424,25 +429,20 @@ sal_Int32 convertTwipToMM100(sal_Int32 _t)
     return ::convertTwipToMm100( _t );
 }
 
-sal_Int32 convertTwipToMM100WithoutLimit(sal_Int32 _t)
-{
-    return ::convertTwipToMm100(_t);
-}
-
-double convertTwipToMM100Double(sal_Int32 _t)
+sal_Int32 convertTwipToMm100_LimitedRoundUp(sal_Int32 _t)
 {
     // It appears that MSO handles large twip values specially, probably legacy 16bit handling,
     // anything that's bigger than 32767 appears to be simply ignored.
     if( _t >= 0x8000 )
-        return 0.0;
-    return o3tl::convert<double>(_t, o3tl::Length::twip, o3tl::Length::mm100);
+        return 0;
+    return std::ceil(::convertTwipToMm100<double>(_t));
 }
 
-sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
+sal_uInt32 convertTwipToMm100_LimitedUnsigned(sal_Int32 _t)
 {
     if( _t < 0 )
         return 0;
-    return convertTwipToMM100( _t );
+    return convertTwipToMm100_Limited(_t);
 }
 
 text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue )

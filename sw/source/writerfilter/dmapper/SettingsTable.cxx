@@ -468,7 +468,7 @@ void SettingsTable::lcl_entry(const writerfilter::Reference<Properties>::Pointer
 //returns default TabStop in 1/100th mm
 int SettingsTable::GetDefaultTabStop() const
 {
-    return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );
+    return ConversionHelper::convertTwipToMm100_Limited(m_pImpl->m_nDefaultTabStop);
 }
 
 bool SettingsTable::GetLinkStyles() const

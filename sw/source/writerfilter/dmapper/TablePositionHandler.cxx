@@ -80,12 +80,14 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     aFrameProperties[u"TopBorderDistance"_ustr] <<= sal_Int32(0);
     aFrameProperties[u"BottomBorderDistance"_ustr] <<= sal_Int32(0);
 
-    aFrameProperties[u"LeftMargin"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
+    aFrameProperties[u"LeftMargin"_ustr]
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nLeftFromText);
     aFrameProperties[u"RightMargin"_ustr]
-        <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
-    aFrameProperties[u"TopMargin"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nRightFromText);
+    aFrameProperties[u"TopMargin"_ustr]
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nTopFromText);
     aFrameProperties[u"BottomMargin"_ustr]
-        <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nBottomFromText);
 
     table::BorderLine2 aEmptyBorder;
     aFrameProperties[u"TopBorder"_ustr] <<= aEmptyBorder;
@@ -116,7 +118,8 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
 
     aFrameProperties[u"HoriOrient"_ustr] <<= nHoriOrient;
     aFrameProperties[u"HoriOrientRelation"_ustr] <<= nHoriOrientRelation;
-    aFrameProperties[u"HoriOrientPosition"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nX);
+    aFrameProperties[u"HoriOrientPosition"_ustr]
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nX);
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;
@@ -138,7 +141,8 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
 
     aFrameProperties[u"VertOrient"_ustr] <<= nVertOrient;
     aFrameProperties[u"VertOrientRelation"_ustr] <<= nVertOrientRelation;
-    aFrameProperties[u"VertOrientPosition"_ustr] <<= ConversionHelper::convertTwipToMM100(m_nY);
+    aFrameProperties[u"VertOrientPosition"_ustr]
+        <<= ConversionHelper::convertTwipToMm100_Limited(m_nY);
     aFrameProperties[u"FillTransparence"_ustr] <<= sal_Int32(100);
 
     if (m_nTableOverlap == NS_ooxml::LN_Value_ST_TblOverlap_never)

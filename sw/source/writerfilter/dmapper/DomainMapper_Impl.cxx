@@ -100,6 +100,7 @@
 #include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -2345,7 +2346,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         GetAnyProperty(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, pPropertyMap) >>= nBeforeAutospacing;
         // tdf#137655 only w:beforeAutospacing=0 was specified, but not PARA_TOP_MARGIN
         // (see default_spacing = -1 in processing of LN_CT_Spacing_beforeAutospacing)
-        if ( bNoTopmargin && nBeforeAutospacing == ConversionHelper::convertTwipToMM100(-1) )
+        if (bNoTopmargin && nBeforeAutospacing == convertTwipToMm100(-1))
         {
             sal_Int32 nStyleAuto = -1;
             GetPropertyFromParaStyleSheet(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING) >>= nStyleAuto;
@@ -2379,7 +2380,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     if (bIsAutoSet || bNoBottomMargin)
     {
         GetAnyProperty(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, pPropertyMap) >>= nAfterAutospacing;
-        if (bNoBottomMargin && nAfterAutospacing == ConversionHelper::convertTwipToMM100(-1))
+        if (bNoBottomMargin && nAfterAutospacing == convertTwipToMm100(-1))
         {
             sal_Int32 nStyleAuto = -1;
             GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING) >>= nStyleAuto;
@@ -9457,7 +9458,7 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
             xProperties->setPropertyValue( getPropertyName( PROP_COUNT_EMPTY_LINES      ), aTrue );
             xProperties->setPropertyValue( getPropertyName( PROP_COUNT_LINES_IN_FRAMES  ), uno::Any( false ) );
             xProperties->setPropertyValue( getPropertyName( PROP_INTERVAL               ), uno::Any( static_cast< sal_Int16 >( nLnnMod )));
-            xProperties->setPropertyValue( getPropertyName( PROP_DISTANCE               ), uno::Any( ConversionHelper::convertTwipToMM100(ndxaLnn) ));
+            xProperties->setPropertyValue( getPropertyName( PROP_DISTANCE               ), uno::Any( ConversionHelper::convertTwipToMm100_Limited(ndxaLnn) ));
             xProperties->setPropertyValue( getPropertyName( PROP_NUMBER_POSITION        ), uno::Any( style::LineNumberPosition::LEFT));
             xProperties->setPropertyValue( getPropertyName( PROP_NUMBERING_TYPE         ), uno::Any( style::NumberingType::ARABIC));
             xProperties->setPropertyValue( getPropertyName( PROP_RESTART_AT_EACH_PAGE   ), uno::Any( nLnc == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage ));
@@ -9476,7 +9477,7 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
 
 void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue )
 {
-    nValue = ConversionHelper::convertTwipToMM100(nValue);
+    nValue = ConversionHelper::convertTwipToMm100_Limited(nValue);
     switch(eElement)
     {
         case PAGE_MAR_TOP    : m_aPageMargins.top     = nValue; break;
@@ -9501,13 +9502,13 @@ void DomainMapper_Impl::SetPaperSource(PaperSourceElement eElement, sal_Int32 nV
 
 
 PageMar::PageMar()
-    : top(ConversionHelper::convertTwipToMM100( sal_Int32(1440)))
+    : top(convertTwipToMm100(1440))
     // This is strange, the RTF spec says it's 1800, but it's clearly 1440 in Word
     // OOXML seems not to specify a default value
-    , right(ConversionHelper::convertTwipToMM100( sal_Int32(1440)))
+    , right(convertTwipToMm100(1440))
     , bottom(top)
     , left(right)
-    , header(ConversionHelper::convertTwipToMM100(sal_Int32(720)))
+    , header(convertTwipToMm100(720))
     , footer(header)
     , gutter(0)
 {
@@ -9701,7 +9702,7 @@ void DomainMapper_Impl::ApplySettingsTable()
         if (m_pSettingsTable->GetLinkStyles())
         {
             // If linked styles are enabled, set paragraph defaults from Word's default template
-            xTextDefaults->setPropertyValue(getPropertyName(PROP_PARA_BOTTOM_MARGIN), uno::Any(ConversionHelper::convertTwipToMM100(200)));
+            xTextDefaults->setPropertyValue(getPropertyName(PROP_PARA_BOTTOM_MARGIN), uno::Any(sal_Int32(convertTwipToMm100(200))));
             style::LineSpacing aSpacing;
             aSpacing.Mode = style::LineSpacingMode::PROP;
             aSpacing.Height = sal_Int16(115);

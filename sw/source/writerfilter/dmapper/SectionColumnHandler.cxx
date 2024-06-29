@@ -46,7 +46,7 @@ void SectionColumnHandler::lcl_attribute(Id rName, Value& rVal)
             m_bEqualWidth = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_Columns_space:
-            m_nSpace = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_nSpace = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
             break;
         case NS_ooxml::LN_CT_Columns_num:
             m_nNum = nIntValue;
@@ -56,10 +56,10 @@ void SectionColumnHandler::lcl_attribute(Id rName, Value& rVal)
             break;
 
         case NS_ooxml::LN_CT_Column_w:
-            m_aTempColumn.nWidth = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_aTempColumn.nWidth = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
             break;
         case NS_ooxml::LN_CT_Column_space:
-            m_aTempColumn.nSpace = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_aTempColumn.nSpace = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
             break;
         default:
             OSL_FAIL("SectionColumnHandler: unknown attribute");

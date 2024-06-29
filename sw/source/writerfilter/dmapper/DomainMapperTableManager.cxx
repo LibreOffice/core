@@ -621,7 +621,7 @@ void DomainMapperTableManager::endOfRowAction()
         }
         if (m_nTableWidth)
             // convert sum of grid twip values to 1/100 mm with rounding up to avoid table width loss
-            m_nTableWidth = static_cast<sal_Int32>(ceil(ConversionHelper::convertTwipToMM100Double(m_nTableWidth)));
+            m_nTableWidth = ConversionHelper::convertTwipToMm100_LimitedRoundUp(m_nTableWidth);
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
         {
@@ -780,7 +780,7 @@ void DomainMapperTableManager::endOfRowAction()
              * If table width property set earlier is smaller than the current table row width,
              * then replace the TABLE_WIDTH property, set earlier.
              */
-            sal_Int32 nFullWidth = static_cast<sal_Int32>(ceil(ConversionHelper::convertTwipToMM100Double(nFullWidthRelative)));
+            sal_Int32 nFullWidth = ConversionHelper::convertTwipToMm100_LimitedRoundUp(nFullWidthRelative);
             sal_Int32 nTableWidth(0);
             sal_Int32 nTableWidthType(text::SizeType::VARIABLE);
             pTablePropMap->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);

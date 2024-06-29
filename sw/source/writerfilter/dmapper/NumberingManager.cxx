@@ -780,17 +780,17 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Ind_left:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_INDENT_AT, uno::Any( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_INDENT_AT, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::Any( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, uno::Any( - ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::Any( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
         case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
@@ -800,7 +800,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             //no paragraph attributes in ListTable char style sheets
             if ( pCurrentLvl )
                 pCurrentLvl->SetValue( nName,
-                    ConversionHelper::convertTwipToMM100( nIntValue ) );
+                    ConversionHelper::convertTwipToMm100_Limited( nIntValue ) );
         }
         break;
         case NS_ooxml::LN_CT_TabStop_val:
