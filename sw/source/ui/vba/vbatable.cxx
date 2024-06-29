@@ -95,7 +95,7 @@ SwVbaTable::Borders( const uno::Any& index )
     return uno::Any( xCol );
 }
 
-double SAL_CALL
+float SAL_CALL
 SwVbaTable::getBottomPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
@@ -105,7 +105,7 @@ SwVbaTable::getBottomPadding()
 }
 
 void SAL_CALL
-SwVbaTable::setBottomPadding( double fValue )
+SwVbaTable::setBottomPadding( float fValue )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
@@ -114,7 +114,7 @@ SwVbaTable::setBottomPadding( double fValue )
     xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
-double SAL_CALL
+float SAL_CALL
 SwVbaTable::getLeftPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
@@ -124,7 +124,7 @@ SwVbaTable::getLeftPadding()
 }
 
 void SAL_CALL
-SwVbaTable::setLeftPadding( double fValue )
+SwVbaTable::setLeftPadding( float fValue )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
@@ -133,7 +133,7 @@ SwVbaTable::setLeftPadding( double fValue )
     xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
-double SAL_CALL
+float SAL_CALL
 SwVbaTable::getRightPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
@@ -143,7 +143,7 @@ SwVbaTable::getRightPadding()
 }
 
 void SAL_CALL
-SwVbaTable::setRightPadding( double fValue )
+SwVbaTable::setRightPadding( float fValue )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
@@ -152,7 +152,7 @@ SwVbaTable::setRightPadding( double fValue )
     xPropertySet->setPropertyValue( u"TableBorderDistances"_ustr, uno::Any( aTableBorderDistances ) );
 }
 
-double SAL_CALL
+float SAL_CALL
 SwVbaTable::getTopPadding()
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
@@ -162,7 +162,7 @@ SwVbaTable::getTopPadding()
 }
 
 void SAL_CALL
-SwVbaTable::setTopPadding( double fValue )
+SwVbaTable::setTopPadding( float fValue )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
     table::TableBorderDistances aTableBorderDistances;
