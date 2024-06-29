@@ -244,12 +244,12 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             bool bChg = false;
             SvxFirstLineIndentItem aNew(*pOldFirstLineIndent);
             // We had a relative value -> recalculate
-            if( 100 != aNew.GetPropTextFirstLineOffset() )
+            if (100 != pOldFirstLineIndent->GetPropTextFirstLineOffset())
             {
-                short nTmp = aNew.GetTextFirstLineOffset();    // keep so that we can compare
+                const short nOld = pOldFirstLineIndent->GetTextFirstLineOffset();
                 aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffset(),
-                                            aNew.GetPropTextFirstLineOffset() );
-                bChg |= nTmp != aNew.GetTextFirstLineOffset();
+                                            pOldFirstLineIndent->GetPropTextFirstLineOffset());
+                bChg = nOld != aNew.GetTextFirstLineOffset();
             }
             if( bChg )
             {
@@ -270,12 +270,13 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             bool bChg = false;
             SvxTextLeftMarginItem aNew(*pOldTextLeftMargin);
             // We had a relative value -> recalculate
-            if( 100 != aNew.GetPropLeft() )
+            if (100 != pOldTextLeftMargin->GetPropLeft())
             {
                 // note: changing from Left to TextLeft - looked wrong with Left
-                tools::Long nTmp = aNew.GetTextLeft(); // keep so that we can compare
-                aNew.SetTextLeft(pNewTextLeftMargin->GetTextLeft(), aNew.GetPropLeft());
-                bChg |= nTmp != aNew.GetTextLeft();
+                const tools::Long nOld = pOldTextLeftMargin->GetTextLeft();
+                aNew.SetTextLeft(pNewTextLeftMargin->GetTextLeft(),
+                                 pOldTextLeftMargin->GetPropLeft());
+                bChg = nOld != aNew.GetTextLeft();
             }
             if( bChg )
             {
@@ -296,11 +297,11 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             bool bChg = false;
             SvxRightMarginItem aNew(*pOldRightMargin);
             // We had a relative value -> recalculate
-            if( 100 != aNew.GetPropRight() )
+            if (100 != pOldRightMargin->GetPropRight())
             {
-                tools::Long nTmp = aNew.GetRight();    // keep so that we can compare
-                aNew.SetRight(pNewRightMargin->GetRight(), aNew.GetPropRight());
-                bChg |= nTmp != aNew.GetRight();
+                const tools::Long nOld = pOldRightMargin->GetRight();
+                aNew.SetRight(pNewRightMargin->GetRight(), pOldRightMargin->GetPropRight());
+                bChg = nOld != aNew.GetRight();
             }
             if( bChg )
             {
@@ -320,18 +321,18 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         SvxULSpaceItem aNew( *pOldULSpace );
         bool bChg = false;
         // We had a relative value -> recalculate
-        if( 100 != aNew.GetPropUpper() )
+        if (100 != pOldULSpace->GetPropUpper())
         {
-            sal_uInt16 nTmp = aNew.GetUpper();      // keep so that we can compare
-            aNew.SetUpper( pNewULSpace->GetUpper(), aNew.GetPropUpper() );
-            bChg |= nTmp != aNew.GetUpper();
+            const sal_uInt16 nOld = pOldULSpace->GetUpper();
+            aNew.SetUpper(pNewULSpace->GetUpper(), pOldULSpace->GetPropUpper());
+            bChg = nOld != aNew.GetUpper();
         }
         // We had a relative value -> recalculate
-        if( 100 != aNew.GetPropLower() )
+        if (100 != pOldULSpace->GetPropLower())
         {
-            sal_uInt16 nTmp = aNew.GetLower();      // keep so that we can compare
-            aNew.SetLower( pNewULSpace->GetLower(), aNew.GetPropLower() );
-            bChg |= nTmp != aNew.GetLower();
+            const sal_uInt16 nOld = pOldULSpace->GetLower();
+            aNew.SetLower(pNewULSpace->GetLower(), pOldULSpace->GetPropLower());
+            bChg |= nOld != aNew.GetLower();
         }
         if( bChg )
         {
@@ -344,7 +345,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-    for( int nC = 0; nC < int(SAL_N_ELEMENTS(aFontSizeArr)); ++nC )
+    for (size_t nC = 0; nC < SAL_N_ELEMENTS(aFontSizeArr); ++nC)
     {
         const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && (SfxItemState::SET == GetItemState(
@@ -363,11 +364,11 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             else
             {
                 // We had a relative value -> recalculate
-                sal_uInt32 nTmp = pOldFSize->GetHeight();       // keep so that we can compare
+                const sal_uInt32 nOld = pOldFSize->GetHeight();
                 SvxFontHeightItem aNew(240 , 100, pFSize->Which());
                 aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
                                 pOldFSize->GetPropUnit() );
-                if( nTmp != aNew.GetHeight() )
+                if (nOld != aNew.GetHeight())
                 {
                     SetFormatAttr( aNew );
                     bContinue = nullptr != pOldChgSet || bNewParent;
