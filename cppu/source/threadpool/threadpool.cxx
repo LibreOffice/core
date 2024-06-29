@@ -106,7 +106,7 @@ namespace cppu_threadpool
     }
 
     /******************
-     * This methods lets the thread wait a certain amount of time. If within this timespan
+     * This method lets the thread wait a certain amount of time. If within this timespan
      * a new request comes in, this thread is reused. This is done only to improve performance,
      * it is not required for threadpool functionality.
      ******************/
