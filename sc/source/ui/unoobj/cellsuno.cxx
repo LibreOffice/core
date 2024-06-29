@@ -8386,8 +8386,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
         // for hidden column, return original height
         sal_uInt16 nWidth = rDoc.GetOriginalWidth( nCol, nTab );
         //  property is 1/100mm, column width is twips
-        nWidth = static_cast<sal_uInt16>(convertTwipToMm100(nWidth));
-        rAny <<= static_cast<sal_Int32>(nWidth);
+        rAny <<= static_cast<sal_Int32>(convertTwipToMm100(nWidth));
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
     {
@@ -8532,8 +8531,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, 
         // for hidden row, return original height
         sal_uInt16 nHeight = rDoc.GetOriginalHeight( nRow, nTab );
         //  property is 1/100mm, row height is twips
-        nHeight = static_cast<sal_uInt16>(convertTwipToMm100(nHeight));
-        rAny <<= static_cast<sal_Int32>(nHeight);
+        rAny <<= static_cast<sal_Int32>(convertTwipToMm100(nHeight));
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
     {

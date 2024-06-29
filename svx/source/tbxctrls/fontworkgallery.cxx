@@ -229,10 +229,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         SfxViewShell::Current() : nullptr;
     if (pKitViewShell)
     {
-        aPagePos = pKitViewShell->getLOKVisibleArea().Center();
-
-        aPagePos.setX(convertTwipToMm100(aPagePos.X()));
-        aPagePos.setY(convertTwipToMm100(aPagePos.Y()));
+        aPagePos = convertTwipToMm100(pKitViewShell->getLOKVisibleArea().Center());
 
         sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pKitViewShell->getLOKVisibleArea().getOpenWidth());
         if (aFontworkSize.getWidth() > nLOKViewWidth)

@@ -952,8 +952,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     MapMode aDrawMode = pGridWin->GetDrawMapMode();
     // find pos anchor position
     Point aOldPos( rDoc.GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), rDoc.GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
-    aOldPos.setX(convertTwipToMm100(aOldPos.X()));
-    aOldPos.setY(convertTwipToMm100(aOldPos.Y()));
+    aOldPos = convertTwipToMm100(aOldPos);
     // find position of same point on the screen ( e.g. grid )
     Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, true );
     Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
@@ -1029,8 +1028,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
 
     // find pos anchor position
     Point aOldPos(rDoc.GetColOffset(aOldStt.Col(), aOldStt.Tab()), rDoc.GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
-    aOldPos.setX(convertTwipToMm100(aOldPos.X()));
-    aOldPos.setY(convertTwipToMm100(aOldPos.Y()));
+    aOldPos = convertTwipToMm100(aOldPos);
 
     // find position of same point on the screen ( e.g. grid )
     ScSplitPos eWhich(pViewData->GetActivePart());
@@ -1080,8 +1078,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
 
     // find pos anchor position
     Point aOldPos(rDoc.GetColOffset(aOldStt.Col(), aOldStt.Tab()), rDoc.GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
-    aOldPos.setX(convertTwipToMm100(aOldPos.X()));
-    aOldPos.setY(convertTwipToMm100(aOldPos.Y()));
+    aOldPos = convertTwipToMm100(aOldPos);
 
     // find position of same point on the screen ( e.g. grid )
     ScSplitPos eWhich(pViewData->GetActivePart());
