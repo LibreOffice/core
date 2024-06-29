@@ -12,77 +12,7 @@
 
 #include <o3tl/unit_conversion.hxx>
 #include <sal/types.h>
-#include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
-#include <tools/mapunit.hxx>
-
-constexpr o3tl::Length FieldToO3tlLength(FieldUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)
-{
-    switch (eU)
-    {
-        case FieldUnit::MM:
-            return o3tl::Length::mm;
-        case FieldUnit::CM:
-            return o3tl::Length::cm;
-        case FieldUnit::M:
-            return o3tl::Length::m;
-        case FieldUnit::KM:
-            return o3tl::Length::km;
-        case FieldUnit::TWIP:
-            return o3tl::Length::twip;
-        case FieldUnit::POINT:
-            return o3tl::Length::pt;
-        case FieldUnit::PICA:
-            return o3tl::Length::pc;
-        case FieldUnit::INCH:
-            return o3tl::Length::in;
-        case FieldUnit::FOOT:
-            return o3tl::Length::ft;
-        case FieldUnit::MILE:
-            return o3tl::Length::mi;
-        case FieldUnit::CHAR:
-            return o3tl::Length::ch;
-        case FieldUnit::LINE:
-            return o3tl::Length::line;
-        case FieldUnit::MM_100TH:
-            return o3tl::Length::mm100;
-        case FieldUnit::PIXEL:
-            return ePixelValue;
-        default:
-            return o3tl::Length::invalid;
-    }
-}
-
-constexpr o3tl::Length MapToO3tlLength(MapUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)
-{
-    switch (eU)
-    {
-        case MapUnit::Map100thMM:
-            return o3tl::Length::mm100;
-        case MapUnit::Map10thMM:
-            return o3tl::Length::mm10;
-        case MapUnit::MapMM:
-            return o3tl::Length::mm;
-        case MapUnit::MapCM:
-            return o3tl::Length::cm;
-        case MapUnit::Map1000thInch:
-            return o3tl::Length::in1000;
-        case MapUnit::Map100thInch:
-            return o3tl::Length::in100;
-        case MapUnit::Map10thInch:
-            return o3tl::Length::in10;
-        case MapUnit::MapInch:
-            return o3tl::Length::in;
-        case MapUnit::MapPoint:
-            return o3tl::Length::pt;
-        case MapUnit::MapTwip:
-            return o3tl::Length::twip;
-        case MapUnit::MapPixel:
-            return ePixelValue;
-        default:
-            return o3tl::Length::invalid;
-    }
-}
 
 inline Fraction conversionFract(o3tl::Length from, o3tl::Length to)
 {

@@ -18,6 +18,9 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <sal/types.h>
 
 enum class MapUnit : sal_uInt8
@@ -31,5 +34,36 @@ enum class MapUnit : sal_uInt8
     LAST = MapRelative,
     LASTENUMDUMMY // used as an error return
 };
+
+constexpr o3tl::Length MapToO3tlLength(MapUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)
+{
+    switch (eU)
+    {
+        case MapUnit::Map100thMM:
+            return o3tl::Length::mm100;
+        case MapUnit::Map10thMM:
+            return o3tl::Length::mm10;
+        case MapUnit::MapMM:
+            return o3tl::Length::mm;
+        case MapUnit::MapCM:
+            return o3tl::Length::cm;
+        case MapUnit::Map1000thInch:
+            return o3tl::Length::in1000;
+        case MapUnit::Map100thInch:
+            return o3tl::Length::in100;
+        case MapUnit::Map10thInch:
+            return o3tl::Length::in10;
+        case MapUnit::MapInch:
+            return o3tl::Length::in;
+        case MapUnit::MapPoint:
+            return o3tl::Length::pt;
+        case MapUnit::MapTwip:
+            return o3tl::Length::twip;
+        case MapUnit::MapPixel:
+            return ePixelValue;
+        default:
+            return o3tl::Length::invalid;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
