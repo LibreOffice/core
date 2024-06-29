@@ -206,7 +206,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         pNewULSpace = &pNew->StaticWhichCast(RES_UL_SPACE);
         break;
     case RES_CHRATR_FONTSIZE:
-        aFontSizeArr[0] = &pNew->StaticWhichCast(RES_CHRATR_CJK_FONTSIZE);
+        aFontSizeArr[0] = &pNew->StaticWhichCast(RES_CHRATR_FONTSIZE);
         break;
     case RES_CHRATR_CJK_FONTSIZE:
         aFontSizeArr[1] = &pNew->StaticWhichCast(RES_CHRATR_CJK_FONTSIZE);
