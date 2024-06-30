@@ -866,6 +866,12 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.toolset = os.environ['VCTOOLSET']
+        if os.environ['CPUNAME'] == 'X86_64':
+            self.platform = 'x64'
+        elif os.environ['CPUNAME'] == 'AARCH64':
+            self.platform = 'ARM'
+        else: # 'INTEL'
+            self.platform = 'Win32'
         self.solution_directory = self.gbuildparser.builddir
         self.configurations = {
             'Build': {
@@ -995,7 +1001,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('EndProject\n')
             # end Folders to group tests/libraries/executables
             f.write('Global\n')
-            platform = 'Win32'
+            platform = self.platform
             f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
             for cfg in self.configurations:
                 f.write('\t\t%(cfg)s|%(platform)s = %(cfg)s|%(platform)s\n' % {'cfg': cfg, 'platform': platform})
@@ -1071,7 +1077,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         ET.register_namespace('', self.ns)
         proj_node = ET.Element('{%s}Project' % self.ns, DefaultTargets='Build', ToolsVersion='4.0')
         proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % self.ns, Label='ProjectConfigurations')
-        platform = 'Win32'
+        platform = self.platform
         for configuration in self.configurations:
             proj_conf_node = ET.SubElement(proj_confs_node,
                                            '{%s}ProjectConfiguration' % self.ns,
