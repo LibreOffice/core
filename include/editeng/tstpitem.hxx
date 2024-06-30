@@ -37,11 +37,10 @@ class EDITENG_DLLPUBLIC SvxTabStop
 private:
     sal_Int32       nTabPos;
     SvxTabAdjust    eAdjustment;
-    mutable sal_Unicode
-                    m_cDecimal;
+    sal_Unicode     m_cDecimal;
     sal_Unicode     cFill;
 
-    void fillDecimal() const;
+    void fillDecimal();
 
 public:
     SvxTabStop();
@@ -56,8 +55,8 @@ public:
     SvxTabAdjust& GetAdjustment() { return eAdjustment; }
     SvxTabAdjust  GetAdjustment() const { return eAdjustment; }
 
-    sal_Unicode&  GetDecimal() { fillDecimal(); return m_cDecimal; }
-    sal_Unicode   GetDecimal() const { fillDecimal(); return m_cDecimal; }
+    sal_Unicode&  GetDecimal() { return m_cDecimal; }
+    sal_Unicode   GetDecimal() const { return m_cDecimal; }
 
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }

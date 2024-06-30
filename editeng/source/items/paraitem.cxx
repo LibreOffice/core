@@ -802,6 +802,7 @@ SvxTabStop::SvxTabStop()
     eAdjustment = SvxTabAdjust::Left;
     m_cDecimal = cDfltDecimalChar;
     cFill = cDfltFillChar;
+    fillDecimal();
 }
 
 
@@ -812,9 +813,10 @@ SvxTabStop::SvxTabStop( const sal_Int32 nPos, const SvxTabAdjust eAdjst,
     eAdjustment = eAdjst;
     m_cDecimal = cDec;
     cFill = cFil;
+    fillDecimal();
 }
 
-void SvxTabStop::fillDecimal() const
+void SvxTabStop::fillDecimal()
 {
     if ( cDfltDecimalChar == m_cDecimal )
         m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep()[0];
