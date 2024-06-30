@@ -74,15 +74,6 @@ public:
 
     bool IsEmpty( ) const { return (0 == m_nRate1) && (0 == m_nRate2); }
     bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }
-    std::size_t getHash() const
-    {
-        std::size_t seed = 0;
-        o3tl::hash_combine(seed, m_nFlags);
-        o3tl::hash_combine(seed, m_nRate1);
-        o3tl::hash_combine(seed, m_nRate2);
-        o3tl::hash_combine(seed, m_nRateGap);
-        return seed;
-    }
 
 };
 
