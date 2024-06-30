@@ -1570,7 +1570,7 @@
 #define RID_SUBSETSTR_THAANA                                NC_("RID_SUBSETMAP", "Thaana")
 #define RID_SUBSETSTR_ETHIOPIC                              NC_("RID_SUBSETMAP", "Ethiopic")
 #define RID_SUBSETSTR_CHEROKEE                              NC_("RID_SUBSETMAP", "Cherokee")
-#define RID_SUBSETSTR_CANADIAN_ABORIGINAL                   NC_("RID_SUBSETMAP", "Unified Canadian Aboriginal Syllables")
+#define RID_SUBSETSTR_CANADIAN_ABORIGINAL                   NC_("RID_SUBSETMAP", "Unified Canadian Aboriginal Syllabics")
 #define RID_SUBSETSTR_MONGOLIAN                             NC_("RID_SUBSETMAP", "Mongolian")
 #define RID_SUBSETSTR_MISC_MATH_SYMS_A                      NC_("RID_SUBSETMAP", "Miscellaneous Mathematical Symbols-A")
 #define RID_SUBSETSTR_SUPPL_ARROWS_A                        NC_("RID_SUBSETMAP", "Supplemental Arrows-A")
