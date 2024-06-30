@@ -960,8 +960,11 @@ static const sal_Unicode* lcl_a1_get_row( const ScDocument& rDoc,
         return p;
     }
 
-    sal_Int64 n = sal_Unicode_strtol( p, &pEnd ) - 1;
-    if( nullptr == pEnd || p == pEnd || n < 0 || n > rDoc.MaxRow() )
+    sal_Int64 n = sal_Unicode_strtol(p, &pEnd);
+    if (nullptr == pEnd || p == pEnd || n < 1)
+        return nullptr;
+    n -= 1;
+    if (n > rDoc.MaxRow())
         return nullptr;
 
     *nFlags |= ScRefFlags::ROW_VALID;
