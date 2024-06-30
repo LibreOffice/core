@@ -96,20 +96,20 @@ class VCL_DLLPUBLIC SystemWindow
     class ImplData;
 
 private:
-    VclPtr<MenuBar> mpMenuBar;
-    Size            maMinOutSize;
-    bool            mbDockBtn;
-    bool            mbHideBtn;
-    bool            mbSysChild;
-    bool            mbIsCalculatingInitialLayoutSize;
-    bool            mbInitialLayoutSizeCalculated;
-    bool            mbPaintComplete;
-    bool            mbIsDeferredInit;
-    MenuBarMode     mnMenuBarMode;
-    sal_uInt16      mnIcon;
     std::unique_ptr<ImplData> mpImplData;
-    Idle            maLayoutIdle;
+    VclPtr<MenuBar> mpMenuBar;
     OUString        maNotebookBarUIFile;
+    Size            maMinOutSize;
+    MenuBarMode     mnMenuBarMode = MenuBarMode::Normal;
+    sal_uInt16      mnIcon = 0;
+    bool            mbDockBtn : 1 = false;
+    bool            mbHideBtn : 1 = false;
+    bool            mbSysChild : 1 = false;
+    bool            mbIsCalculatingInitialLayoutSize : 1 = false;
+    bool            mbInitialLayoutSizeCalculated : 1 = false;
+    bool            mbPaintComplete : 1 = false;
+    bool            mbIsDeferredInit : 1 = false;
+    Idle            maLayoutIdle;
 protected:
     VclPtr<vcl::Window> mpDialogParent;
 public:
