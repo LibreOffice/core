@@ -561,14 +561,10 @@ OUString AllSettings::GetUIRootDir()
     return sShareLayer;
 }
 
-//we can't change sizeable after the fact, so need to defer until we know and then
-//do the init. Find the real parent stashed in mpDialogParent.
-void Dialog::doDeferredInit(WinBits nBits)
+//we can't change sizeable after the fact, so need to defer until we know and then do the init.
+void Dialog::ImplDeferredInit(vcl::Window* pParent, WinBits nBits)
 {
-    VclPtr<vcl::Window> pParent = mpDialogParent;
-    mpDialogParent = nullptr;
     ImplInitDialog(pParent, nBits | WB_BORDER, mnInitFlag);
-    mbIsDeferredInit = false;
 }
 
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)

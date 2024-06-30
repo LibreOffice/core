@@ -79,13 +79,13 @@ private:
 
 protected:
     void    ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
+    virtual void ImplDeferredInit(vcl::Window* pParent, WinBits nBits) override;
 
     /// Find and set the LOK notifier according to the pParent.
     void ImplLOKNotifier(vcl::Window* pParent);
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
-    virtual        void    doDeferredInit(WinBits nBits) override;
     SAL_DLLPRIVATE void    disposeOwnedButtons();
 
     SAL_DLLPRIVATE static vcl::Window* GetDefDialogParent();

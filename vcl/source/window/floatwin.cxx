@@ -173,13 +173,9 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, const OUString& rID, const 
     loadUI(pParent, rID, rUIXMLDescription, rFrame);
 }
 
-//Find the real parent stashed in mpDialogParent.
-void FloatingWindow::doDeferredInit(WinBits nBits)
+void FloatingWindow::ImplDeferredInit(vcl::Window* pParent, WinBits nBits)
 {
-    vcl::Window *pParent = mpDialogParent;
-    mpDialogParent = nullptr;
     ImplInitFloating(pParent, nBits);
-    mbIsDeferredInit = false;
 }
 
 void FloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)

@@ -83,6 +83,7 @@ private:
 
 protected:
     SAL_DLLPRIVATE void    ImplInitFloating( vcl::Window* pParent, WinBits nStyle );
+                   virtual void ImplDeferredInit(vcl::Window* pParent, WinBits nBits) override;
     SAL_DLLPRIVATE void    ImplInitSettings();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
@@ -102,7 +103,6 @@ public:
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
     SAL_DLLPRIVATE AbsoluteScreenPixelRectangle ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
-                   virtual void     doDeferredInit(WinBits nBits) override;
                    void             PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
 public:
