@@ -227,7 +227,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         else
         {
             sal_Int32* pLong = static_cast<sal_Int32*>(pPtr);
-            nRetValue = static_cast<double>(abs( pLong[ nSwitch ] ));
+            nRetValue = fabs(static_cast<double>(pLong[nSwitch]));
             nRetValue *= 65536;
             nVal = static_cast<sal_uInt32>( pLong[ nSwitch ^ 1 ] );
             nVal >>= 16;
