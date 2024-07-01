@@ -182,8 +182,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvtIconChoiceCtrl final : public Cont
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
 
-    static OUString     GetEntryText( SvxIconChoiceCtrlEntry const * pEntry );
-
     virtual void        FillLayoutData() const override;
 
     void                CallImplEventListeners(VclEventId nEvent, void* pData);

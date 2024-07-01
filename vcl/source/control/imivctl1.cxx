@@ -1362,9 +1362,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
 {
     if (eItem == IcnViewFieldType::Text)
     {
-        OUString aText = SvtIconChoiceCtrl::GetEntryText(pEntry);
-
-        rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
+        rRenderContext.DrawText(rRect, pEntry->GetText(), nCurTextDrawFlags);
 
         if (pEntry->IsFocused())
             DrawFocusRect(rRenderContext, pEntry);
@@ -1582,7 +1580,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
     if( pEntryPos )
         aBound.SetPos( *pEntryPos );
 
-    const OUString aEntryText = SvtIconChoiceCtrl::GetEntryText(pEntry);
+    const OUString aEntryText = pEntry->GetText();
     tools::Rectangle aTextRect = pView->GetTextRect( aMaxTextRect, aEntryText, nCurTextDrawFlags );
 
     Size aTextSize( aTextRect.GetSize() );
@@ -2758,7 +2756,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 
     OUString sQuickHelpText = pEntry->GetQuickHelpText();
     tools::Rectangle aTextRect(CalcTextRect(pEntry, nullptr));
-    OUString aEntryText( SvtIconChoiceCtrl::GetEntryText( pEntry ) );
+    const OUString aEntryText = pEntry->GetText();
     if ( ( !aTextRect.Contains( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
         return false;
 

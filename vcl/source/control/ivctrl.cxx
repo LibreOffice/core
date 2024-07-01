@@ -125,11 +125,6 @@ void SvtIconChoiceCtrl::RemoveEntry(sal_Int32 nIndex)
     _pImpl->RemoveEntry(nIndex);
 }
 
-OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry const * pEntry )
-{
-    return pEntry->GetText();
-}
-
 void SvtIconChoiceCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     _pImpl->Paint(rRenderContext, rRect);
