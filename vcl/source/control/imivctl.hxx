@@ -358,7 +358,7 @@ public:
     const Size&         GetItemSize( IcnViewFieldType ) const;
 
     static bool         IsOver(
-                            std::vector<tools::Rectangle>* pSelectedRectList,
+                            const std::vector<tools::Rectangle>& rRects,
                             const tools::Rectangle& rEntryBoundRect
                         );
 

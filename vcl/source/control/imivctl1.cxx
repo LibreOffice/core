@@ -2264,7 +2264,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
 
         bool bOverlaps;
         if( bCalcOverlap )
-            bOverlaps = IsOver( pOtherRects, aBoundRect );
+            bOverlaps = IsOver(*pOtherRects, aBoundRect);
         else
             bOverlaps = false;
         bool bOver = aRect.Overlaps( aBoundRect );
@@ -2370,12 +2370,12 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
     }
 }
 
-bool SvxIconChoiceCtrl_Impl::IsOver( std::vector<tools::Rectangle>* pRectList, const tools::Rectangle& rBoundRect )
+bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects, const tools::Rectangle& rBoundRect)
 {
-    const sal_uInt16 nCount = pRectList->size();
+    const sal_uInt16 nCount = rRects.size();
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        tools::Rectangle& rRect = (*pRectList)[ nCur ];
+        const tools::Rectangle& rRect = rRects[ nCur ];
         if( rBoundRect.Overlaps( rRect ))
             return true;
     }
