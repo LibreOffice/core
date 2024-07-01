@@ -3684,30 +3684,34 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
 {
     if (!IsFormatted())
         FormatDoc();
-    sal_Int32 nLineNo = -1;
     const ContentNode* pNode = GetEditDoc().GetObject( nPara );
     OSL_ENSURE( pNode, "GetLineNumberAtIndex: invalid paragraph index" );
-    if (pNode)
+    if (!pNode)
+        return -1;
+    // we explicitly allow for the index to point at the character right behind the text
+    const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
+    OSL_ENSURE( bValidIndex, "GetLineNumberAtIndex: invalid index" );
+    const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nPara);
+    if (!pPPortion)
     {
-        // we explicitly allow for the index to point at the character right behind the text
-        const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
-        OSL_ENSURE( bValidIndex, "GetLineNumberAtIndex: invalid index" );
-        const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nPara);
-        const EditLineList& rLineList = pPPortion->GetLines();
-        const sal_Int32 nLineCount = rLineList.Count();
-        if (nIndex == pNode->Len())
-            nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
-        else if (bValidIndex)   // nIndex < pNode->Len()
+        SAL_WARN( "editeng", "ImpEditEngine::GetLineNumberAtIndex missing ParaPortion");
+        return -1;
+    }
+    const EditLineList& rLineList = pPPortion->GetLines();
+    const sal_Int32 nLineCount = rLineList.Count();
+    sal_Int32 nLineNo = -1;
+    if (nIndex == pNode->Len())
+        nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
+    else if (bValidIndex)   // nIndex < pNode->Len()
+    {
+        sal_Int32 nStart = -1, nEnd = -1;
+        for (sal_Int32 i = 0;  i < nLineCount && nLineNo == -1;  ++i)
         {
-            sal_Int32 nStart = -1, nEnd = -1;
-            for (sal_Int32 i = 0;  i < nLineCount && nLineNo == -1;  ++i)
-            {
-                const EditLine& rLine = rLineList[i];
-                nStart = rLine.GetStart();
-                nEnd   = rLine.GetEnd();
-                if (nStart >= 0 && nStart <= nIndex && nEnd >= 0 && nIndex < nEnd)
-                    nLineNo = i;
-            }
+            const EditLine& rLine = rLineList[i];
+            nStart = rLine.GetStart();
+            nEnd   = rLine.GetEnd();
+            if (nStart >= 0 && nStart <= nIndex && nEnd >= 0 && nIndex < nEnd)
+                nLineNo = i;
         }
     }
     return nLineNo;
