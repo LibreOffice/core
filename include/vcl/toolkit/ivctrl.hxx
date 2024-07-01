@@ -222,10 +222,6 @@ public:
 
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
-#ifdef DBG_UTIL
-    void                    SetEntryTextMode(SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry& rEntry);
-#endif
-
     tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     tools::Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
 

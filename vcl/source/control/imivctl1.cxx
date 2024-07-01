@@ -979,12 +979,12 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( rKEvt.GetKeyCode().IsShift() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode(SvxIconChoiceCtrlTextMode::Full, *pCursor);
+                    SetEntryTextMode(SvxIconChoiceCtrlTextMode::Full, *pCursor);
             }
             if( rKEvt.GetKeyCode().IsMod1() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode(SvxIconChoiceCtrlTextMode::Short, *pCursor);
+                    SetEntryTextMode(SvxIconChoiceCtrlTextMode::Short, *pCursor);
             }
             break;
 #endif
