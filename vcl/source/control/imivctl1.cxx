@@ -1793,12 +1793,6 @@ void SvxIconChoiceCtrl_Impl::ShowCursor( bool bShow )
     /*pView->*/ShowFocus( aRect );
 }
 
-
-void SvxIconChoiceCtrl_Impl::HideDDIcon()
-{
-    pView->PaintImmediately();
-}
-
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
     tools::Rectangle aDocRect( Point(), aVirtOutputSize );
@@ -1966,7 +1960,6 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     aOutputArea.SetPos( aOrigin );
     if( GetUpdateMode() )
     {
-        HideDDIcon();
         pView->PaintImmediately();
         ShowCursor( false );
     }

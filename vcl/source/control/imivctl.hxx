@@ -357,8 +357,6 @@ public:
     void                Scroll( tools::Long nDeltaX, tools::Long nDeltaY );
     const Size&         GetItemSize( IcnViewFieldType ) const;
 
-    void                HideDDIcon();
-
     static bool         IsOver(
                             std::vector<tools::Rectangle>* pSelectedRectList,
                             const tools::Rectangle& rEntryBoundRect
