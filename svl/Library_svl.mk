@@ -119,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/custritm \
     svl/source/items/flagitem \
     svl/source/items/globalnameitem \
+    svl/source/items/globalpool \
     svl/source/items/grabbagitem \
     svl/source/items/ilstitem \
     svl/source/items/imageitm \

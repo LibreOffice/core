@@ -513,16 +513,6 @@ const SfxPoolItem* DefaultItemInstanceManager::find(const SfxPoolItem& rItem) co
     return nullptr;
 }
 
-void DefaultItemInstanceManager::add(const SfxPoolItem& rItem)
-{
-    maRegistered[rItem.Which()].insert(&rItem);
-}
-
-void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem)
-{
-    maRegistered[rItem.Which()].erase(&rItem);
-}
-
 ItemInstanceManager* SfxPoolItem::getItemInstanceManager() const { return nullptr; }
 
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich, SfxItemType eType)
