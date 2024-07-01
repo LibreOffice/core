@@ -404,10 +404,7 @@ void SvxTextEditSourceImpl::dispose()
     }
 
     if( mpModel )
-    {
-        EndListening( *mpModel );
         mpModel = nullptr;
-    }
 
     if( mpView )
     {
