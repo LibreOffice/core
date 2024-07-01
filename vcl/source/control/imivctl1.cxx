@@ -107,7 +107,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     pImpCursor.reset();
     pGridMap.reset();
     ClearSelectedRectList();
-    m_pColumns.reset();
     aVerSBar.disposeAndClear();
     aHorSBar.disposeAndClear();
     aScrBarBox.disposeAndClear();
@@ -2060,14 +2059,6 @@ void SvxIconChoiceCtrl_Impl::SetGrid( const Size& rSize )
         aSize.setHeight( aMinSize.Height() );
 
     nGridDX = aSize.Width();
-    // HACK: Detail mode is not yet fully implemented, this workaround makes it
-    // fly with a single column
-    if( nWinBits & WB_DETAILS )
-    {
-        const SvxIconChoiceCtrlColumnInfo* pCol = GetColumn( 0 );
-        if( pCol )
-            const_cast<SvxIconChoiceCtrlColumnInfo*>(pCol)->SetWidth( nGridDX );
-    }
     nGridDY = aSize.Height();
     SetDefaultTextSize();
 }
@@ -2795,16 +2786,6 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     }
 
     return true;
-}
-
-const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
-{
-    if (!m_pColumns)
-        return nullptr;
-    auto const it = m_pColumns->find( nIndex );
-    if (it == m_pColumns->end())
-        return nullptr;
-    return it->second.get();
 }
 
 void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect)

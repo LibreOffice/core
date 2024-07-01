@@ -105,7 +105,6 @@ typedef sal_uLong GridId;
 // Implementation-class of IconChoiceCtrl
 
 
-typedef std::map<sal_uInt16, std::unique_ptr<SvxIconChoiceCtrlColumnInfo>> SvxIconChoiceCtrlColumnInfoMap;
 typedef std::vector<SvxIconChoiceCtrlEntry*> SvxIconChoiceCtrlEntryPtrVec;
 
 class SvxIconChoiceCtrl_Impl
@@ -133,7 +132,6 @@ class SvxIconChoiceCtrl_Impl
     tools::Long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     tools::Long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     std::vector< SvxIconChoiceCtrlEntry* > maZOrderList;
-    std::unique_ptr<SvxIconChoiceCtrlColumnInfoMap> m_pColumns;
     WinBits                 nWinBits;
     tools::Long                    nMaxBoundHeight;            // height of highest BoundRects
     IconChoiceFlags         nFlags;
@@ -397,8 +395,6 @@ public:
     SvxIconChoiceCtrlEntry* FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry, const Point& );
 
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
-
-    const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
 
     void                SetEntryHighlightFrame(
                             SvxIconChoiceCtrlEntry* pEntry,
