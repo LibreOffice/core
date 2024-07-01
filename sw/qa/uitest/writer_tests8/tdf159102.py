@@ -71,27 +71,26 @@ class tdf159102(UITestCase):
         if not supported_locale:
             self.skipTest("no hyphenation patterns for en_US available")
 
-# disabling this because it fails on some machines
-#        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-#        with self.ui_test.load_file(get_url_for_data_file("tdf159102.fodt")) as writer_doc:
-#            # we must not depend on the installed hyphenation patterns,
-#            # so extend user dictionary temporarily with the hyphenation cur=sus and ege=stas
-#            self.set_custom_hyphenation()
-#            xToolkit.processEventsToIdle()
-#            # delete the text of the first line
-#            self.xUITest.executeCommand(".uno:GoToEndOfLine")
-#            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
-#            self.xUITest.executeCommand('.uno:Delete')
-#            paragraphs = writer_doc.Text.createEnumeration()
-#            para1 = paragraphs.nextElement()
-#            # This was "stas.", i.e. too much shrinking
-#            self.assertEqual("sus egestas.", para1.String)
-#
-#            # check next paragraph (containing different text portions)
-#            self.xUITest.executeCommand(".uno:GoDown")
-#            self.xUITest.executeCommand(".uno:GoToEndOfLine")
-#            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
-#            self.xUITest.executeCommand('.uno:Delete')
-#            paragraphs = writer_doc.Text.createEnumeration()
-#            para1 = paragraphs.nextElement()
-#            self.assertEqual("sus egestas.", para1.String)
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        with self.ui_test.load_file(get_url_for_data_file("tdf159102.fodt")) as writer_doc:
+            # we must not depend on the installed hyphenation patterns,
+            # so extend user dictionary temporarily with the hyphenation cur=sus and ege=stas
+            self.set_custom_hyphenation()
+            xToolkit.processEventsToIdle()
+            # delete the text of the first line
+            self.xUITest.executeCommand(".uno:GoToEndOfLine")
+            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
+            self.xUITest.executeCommand('.uno:Delete')
+            paragraphs = writer_doc.Text.createEnumeration()
+            para1 = paragraphs.nextElement()
+            # This was "stas.", i.e. too much shrinking
+            self.assertEqual("sus egestas.", para1.String)
+
+            # check next paragraph (containing different text portions)
+            self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoToEndOfLine")
+            self.xUITest.executeCommand('.uno:StartOfDocumentSel')
+            self.xUITest.executeCommand('.uno:Delete')
+            paragraphs = writer_doc.Text.createEnumeration()
+            para1 = paragraphs.nextElement()
+            self.assertEqual("sus egestas.", para1.String)
