@@ -23,6 +23,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <com/sun/star/text/XContentControlsSupplier.hpp>
 
 #include <hintids.hxx>
 #include <cmdid.h>
@@ -124,6 +125,8 @@
 #include <fmtrfmrk.hxx>
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>
+#include <unoprnms.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2144,6 +2147,154 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.SetInsMode( bOldIns );
     }
     break;
+        case FN_TRANSFORM_DOCUMENT_STRUCTURE:
+        {
+            // get the parameter, what to transform
+            OUString aDataJson;
+            const SfxStringItem* pDataJson = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pDataJson)
+            {
+                aDataJson = pDataJson->GetValue();
+            }
+
+            // parse the JSON got prom parameter
+            boost::property_tree::ptree aTree;
+            std::stringstream aStream(
+                (std::string(OUStringToOString(aDataJson, RTL_TEXTENCODING_UTF8))));
+            boost::property_tree::read_json(aStream, aTree);
+
+            // get the loaded content controls
+            uno::Reference<text::XContentControlsSupplier> xCCSupplier(
+                GetView().GetDocShell()->GetModel(), uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xContentControls
+                = xCCSupplier->getContentControls();
+            int iCCcount = xContentControls->getCount();
+
+            enum class ContentDataType
+            {
+                ERROR = -1,
+                INDEX,
+                TAG,
+                ALIAS,
+                ID
+            };
+            std::vector<std::string> aIdTexts = { ".ByIndex.", ".ByTag.", ".ByAlias.", ".ById." };
+
+            // Iterate trough the JSON data loaded into a tree structure
+            for (const auto& aItem : aTree)
+            {
+                if (aItem.first == "Transforms")
+                {
+                    // Handle all transformations
+                    for (const auto& aItem2 : aItem.second)
+                    {
+                        if (aItem2.first.starts_with("ContentControls"))
+                        {
+                            std::string aTextEnd = aItem2.first.substr(15);
+                            std::string aValue = "";
+                            ContentDataType iKeyId = ContentDataType::ERROR;
+                            // Find how the content control is identified: ByIndex, ByAlias...
+                            for (size_t i = 0; i < aIdTexts.size(); i++)
+                            {
+                                if (aTextEnd.starts_with(aIdTexts[i]))
+                                {
+                                    iKeyId = static_cast<ContentDataType>(i);
+                                    aValue = aTextEnd.substr(aIdTexts[i].length());
+                                    break;
+                                }
+                            }
+                            if (iKeyId != ContentDataType::ERROR)
+                            {
+                                // Check all the content controls, if they match
+                                for (int i = 0; i < iCCcount; ++i)
+                                {
+                                    uno::Reference<text::XTextContent> xContentControl;
+                                    xContentControls->getByIndex(i) >>= xContentControl;
+
+                                    uno::Reference<beans::XPropertySet> xContentControlProps(
+                                        xContentControl, uno::UNO_QUERY);
+
+                                    // Compare the loaded and the actual idetifier
+                                    switch (iKeyId)
+                                    {
+                                        case ContentDataType::INDEX:
+                                        {
+                                            if (stoi(aValue) != i)
+                                                continue;
+                                        }
+                                        break;
+                                        case ContentDataType::ID:
+                                        {
+                                            sal_Int32 iID = -1;
+                                            xContentControlProps->getPropertyValue(UNO_NAME_ID)
+                                                >>= iID;
+                                            if (stoi(aValue) != iID)
+                                                continue;
+                                        }
+                                        break;
+                                        case ContentDataType::ALIAS:
+                                        {
+                                            OUString aAlias;
+                                            xContentControlProps->getPropertyValue(UNO_NAME_ALIAS)
+                                                >>= aAlias;
+                                            if (OStringToOUString(aValue, RTL_TEXTENCODING_UTF8)
+                                                != aAlias)
+                                                continue;
+                                        }
+                                        break;
+                                        case ContentDataType::TAG:
+                                        {
+                                            OUString aTag;
+                                            xContentControlProps->getPropertyValue(UNO_NAME_TAG)
+                                                >>= aTag;
+                                            if (OStringToOUString(aValue, RTL_TEXTENCODING_UTF8)
+                                                != aTag)
+                                                continue;
+                                        }
+                                        break;
+                                        default:
+                                            continue;
+                                    }
+
+                                    // We have a match, this content control need to be transformed
+                                    // Set all the values (of the content control) what nes needed
+                                    for (const auto& aItem3 : aItem2.second)
+                                    {
+                                        if (aItem3.first == "content")
+                                        {
+                                            uno::Reference<text::XText> xContentControlText(
+                                                xContentControl, uno::UNO_QUERY);
+                                            xContentControlText->setString(OStringToOUString(
+                                                aItem3.second.get_value<std::string>(),
+                                                RTL_TEXTENCODING_UTF8));
+                                        }
+                                        else if (aItem3.first == "checked")
+                                        {
+                                            bool bChecked
+                                                = (aItem3.second.get_value<std::string>() == "true")
+                                                      ? true
+                                                      : false;
+                                            xContentControlProps->setPropertyValue(
+                                                UNO_NAME_CHECKED,
+                                                uno::Any(bChecked));
+                                        }
+                                        else if (aItem3.first == "alias")
+                                        {
+                                            xContentControlProps->setPropertyValue(
+                                                UNO_NAME_ALIAS,
+                                                uno::Any(OStringToOUString(
+                                                    aItem3.second.get_value<std::string>(),
+                                                    RTL_TEXTENCODING_UTF8)));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
     default:
         OSL_ENSURE(false, "wrong dispatcher");
         return;

@@ -336,6 +336,10 @@ interface BaseText
         ExecMethod = ExecInsert ;
         StateMethod = GetState ;
     ]
+    FN_TRANSFORM_DOCUMENT_STRUCTURE
+    [
+        ExecMethod = Execute ;
+    ]
     FN_INSERT_COLUMN_BREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
