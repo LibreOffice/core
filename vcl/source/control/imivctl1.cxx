@@ -2372,10 +2372,8 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
 
 bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects, const tools::Rectangle& rBoundRect)
 {
-    const sal_uInt16 nCount = rRects.size();
-    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
+    for (const tools::Rectangle& rRect : rRects)
     {
-        const tools::Rectangle& rRect = rRects[ nCur ];
         if( rBoundRect.Overlaps( rRect ))
             return true;
     }
