@@ -56,7 +56,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include <officecfg/Office/Common.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <bitmaps.hlst>
