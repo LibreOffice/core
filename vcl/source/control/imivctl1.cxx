@@ -1368,11 +1368,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
         rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
 
         if (pEntry->IsFocused())
-        {
-            tools::Rectangle aRect (CalcFocusRect(pEntry));
-            ShowFocus(aRect);
-            DrawFocusRect(rRenderContext);
-        }
+            DrawFocusRect(rRenderContext, pEntry);
     }
     else
     {
@@ -2465,8 +2461,11 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( tools::Rectangle const & rRect )
     aFocus.aRect = rRect;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
+void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext,  SvxIconChoiceCtrlEntry* pEntry)
 {
+    tools::Rectangle aRect (CalcFocusRect(pEntry));
+    ShowFocus(aRect);
+
     rRenderContext.SetLineColor(aFocus.aPenColor);
     rRenderContext.SetFillColor();
     tools::Polygon aPolygon (aFocus.aRect);

@@ -237,7 +237,7 @@ class SvxIconChoiceCtrl_Impl
     void                SetOrigin( const Point& );
 
     void                ShowFocus ( tools::Rectangle const & rRect );
-    void                DrawFocusRect(vcl::RenderContext& rRenderContext);
+    void                DrawFocusRect(vcl::RenderContext& rRenderContext, SvxIconChoiceCtrlEntry* pEntry);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
 
