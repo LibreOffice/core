@@ -633,7 +633,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 aRect.Union( aTempRect );
             }
             aCurSelectionRect = aRect;
-            SelectRect( aRect, bool(nFlags & IconChoiceFlags::AddMode), &aSelectedRectList );
+            SelectRect(aRect, bool(nFlags & IconChoiceFlags::AddMode), aSelectedRectList);
         }
         else if( rMEvt.IsMod1() )
         {
@@ -828,7 +828,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
         if ( nWinBits & WB_ALIGN_LEFT )
             SelectRange( pAnchor, pNewCursor, bool(nFlags & IconChoiceFlags::AddMode) );
         else
-            SelectRect(pAnchor,pNewCursor, bool(nFlags & IconChoiceFlags::AddMode), &aSelectedRectList);
+            SelectRect(pAnchor,pNewCursor, bool(nFlags & IconChoiceFlags::AddMode), aSelectedRectList);
     }
     else
     {
@@ -2219,16 +2219,16 @@ static tools::Rectangle GetHotSpot( const tools::Rectangle& rRect )
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIconChoiceCtrlEntry* pEntry2,
-    bool bAdd, std::vector<tools::Rectangle>* pOtherRects )
+    bool bAdd, const std::vector<tools::Rectangle>& rOtherRects)
 {
     DBG_ASSERT(pEntry1 && pEntry2,"SelectEntry: Invalid Entry-Ptr");
     tools::Rectangle aRect( GetEntryBoundRect( pEntry1 ) );
     aRect.Union( GetEntryBoundRect( pEntry2 ) );
-    SelectRect( aRect, bAdd, pOtherRects );
+    SelectRect(aRect, bAdd, rOtherRects);
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAdd,
-    std::vector<tools::Rectangle>* pOtherRects )
+    const std::vector<tools::Rectangle>& rOtherRects)
 {
     aCurSelectionRect = rRect;
     if( maZOrderList.empty() )
@@ -2244,7 +2244,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
 
     tools::Rectangle aRect( rRect );
     aRect.Normalize();
-    bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty());
+    bool bCalcOverlap = (bAdd && !rOtherRects.empty());
 
     bool bResetClipRegion = false;
     if( !pView->GetOutDev()->IsClipRegion() )
@@ -2264,7 +2264,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
 
         bool bOverlaps;
         if( bCalcOverlap )
-            bOverlaps = IsOver(*pOtherRects, aBoundRect);
+            bOverlaps = IsOver(rOtherRects, aBoundRect);
         else
             bOverlaps = false;
         bool bOver = aRect.Overlaps( aBoundRect );

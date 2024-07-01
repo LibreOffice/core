@@ -194,7 +194,7 @@ class SvxIconChoiceCtrl_Impl
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
                             bool bAdd,
-                            std::vector<tools::Rectangle>* pOtherRects
+                            const std::vector<tools::Rectangle>& rOtherRects
                         );
 
     void                SelectRange(
@@ -365,7 +365,7 @@ public:
     void                SelectRect(
                             const tools::Rectangle&,
                             bool bAdd,
-                            std::vector<tools::Rectangle>* pOtherRects
+                            const std::vector<tools::Rectangle>& rOtherRects
                         );
 
     void               MakeVisible(
