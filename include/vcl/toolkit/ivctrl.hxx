@@ -226,7 +226,6 @@ public:
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
 
-    // sal_uLong is the position of the selected element in the list
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
