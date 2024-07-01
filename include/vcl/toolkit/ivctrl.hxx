@@ -125,19 +125,6 @@ public:
     bool                    IsPosLocked() const { return bool(nFlags & SvxIconViewFlags::POS_LOCKED); }
 };
 
-class SvxIconChoiceCtrlColumnInfo
-{
-    tools::Long                    nWidth;
-
-public:
-                            SvxIconChoiceCtrlColumnInfo() :
-                                nWidth( 100 ) {}
-                            SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
-
-    void                    SetWidth( tools::Long nWd ) { nWidth = nWd; }
-    tools::Long                    GetWidth() const { return nWidth; }
-};
-
 
 /*
     Window-Bits:

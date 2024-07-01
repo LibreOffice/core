@@ -73,12 +73,6 @@ OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
     return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
 
-
-SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
-{
-    nWidth = rInfo.nWidth;
-}
-
 /*****************************************************************************
 |
 | class : SvtIconChoiceCtrl
