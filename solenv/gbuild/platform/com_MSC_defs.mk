@@ -82,8 +82,7 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4201: nonstandard extension used : nameless struct/union
 
-# C4244: nonstandard extension used : formal parameter 'identifier'
-#   was previously defined as a type
+# C4244: 'argument' : conversion from 'type1' to 'type2', possible loss of data
 
 # C4250: 'class1' : inherits 'class2::member' via dominance
 
