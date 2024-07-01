@@ -595,6 +595,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                 ::oox::drawingml::convertEmuToHmm( nPosX ) * 15.87,
                                 ::oox::drawingml::convertEmuToHmm( nPosY ) * 15.87 ) );
                         xAnnotation->setAuthor( aComment.getAuthor(maAuthorList) );
+                        xAnnotation->setInitials( aComment.getInitials(maAuthorList) );
                         xAnnotation->setDateTime( aComment.getDateTime() );
                         uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
                         xText->setString( aComment.get_text());
