@@ -1054,7 +1054,10 @@ void PPTWriter::ImplExportComments( const uno::Reference< drawing::XDrawPage >& 
                             : xAnnotation->getAuthor() );
                 uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
                 OUString sText( xText->getString() );
-                OUString sInitials( GetInitials( sAuthor ) );
+                OUString sInitials(
+                    bRemoveCommentAuthorDates
+                        ? "A" + OUString::number(mpAuthorIDs->GetInfoID(xAnnotation->getAuthor()))
+                        : xAnnotation->getInitials());
                 util::DateTime aEmptyDateTime;
                 util::DateTime aDateTime(bRemoveCommentAuthorDates ? aEmptyDateTime
                                                                    : xAnnotation->getDateTime());
