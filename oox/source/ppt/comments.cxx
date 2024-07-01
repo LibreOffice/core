@@ -76,6 +76,17 @@ OUString Comment::getAuthor(const CommentAuthorList& list)
     return u"Anonymous"_ustr;
 }
 
+OUString Comment::getInitials(const CommentAuthorList& list)
+{
+    const sal_Int32 nId = authorId.toInt32();
+    for (auto const& author : list.cmAuthorLst)
+    {
+        if (author.id.toInt32() == nId)
+            return author.initials;
+    }
+    return u"A"_ustr;
+}
+
 const Comment& CommentList::getCommentAtIndex(int index)
 {
     if (index < 0 || o3tl::make_unsigned(index) >= cmLst.size())

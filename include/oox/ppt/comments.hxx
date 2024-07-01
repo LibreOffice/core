@@ -97,6 +97,7 @@ class Comment
             return y.toInt32();
         }
         OUString getAuthor ( const CommentAuthorList& list );
+        OUString getInitials ( const CommentAuthorList& list );
 };
 
 class CommentList
