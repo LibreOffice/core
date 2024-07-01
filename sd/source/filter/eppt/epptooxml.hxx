@@ -109,7 +109,7 @@ private:
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
-    sal_Int32 GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex );
+    sal_Int32 GetAuthorIdAndLastIndex( const OUString& sAuthor, const OUString& sInitials, sal_Int32& nLastIndex );
 
     // Write docProps/core.xml and docprops/custom.xml and docprops/app.xml
     void writeDocumentProperties();
@@ -165,6 +165,7 @@ private:
     struct AuthorComments {
         sal_Int32 nId;
         sal_Int32 nLastIndex;
+        OUString sInitials;
     };
     typedef std::unordered_map< OUString, struct AuthorComments > AuthorsMap;
     AuthorsMap maAuthors;
