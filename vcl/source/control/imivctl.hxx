@@ -146,7 +146,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
-    SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode           eSelectionMode;
     sal_Int32               nSelectionCount;
     SvxIconChoiceCtrlPositionMode ePositionMode;
@@ -373,7 +372,7 @@ public:
 #ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,
-                            SvxIconChoiceCtrlEntry* pEntry
+                            SvxIconChoiceCtrlEntry& rEntry
                         );
 #endif
     size_t              GetEntryCount() const { return maEntries.size(); }

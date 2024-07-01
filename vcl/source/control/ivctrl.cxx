@@ -239,9 +239,9 @@ void SvtIconChoiceCtrl::Command(const CommandEvent& rCEvt)
 }
 
 #ifdef DBG_UTIL
-void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
+void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry& rEntry )
 {
-    _pImpl->SetEntryTextMode( eMode, pEntry );
+    _pImpl->SetEntryTextMode(eMode, rEntry);
 }
 #endif
 

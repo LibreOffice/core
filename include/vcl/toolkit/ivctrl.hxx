@@ -223,7 +223,7 @@ public:
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
-    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry );
+    void                    SetEntryTextMode(SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry& rEntry);
 #endif
 
     tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;

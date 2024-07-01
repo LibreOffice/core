@@ -65,7 +65,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
     pHdlEntry(nullptr),
-    pAnchor(nullptr), eTextMode(SvxIconChoiceCtrlTextMode::Short),
+    pAnchor(nullptr),
     eSelectionMode(SelectionMode::Multiple), ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
     bUpdateMode(true)
 {
@@ -979,12 +979,12 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( rKEvt.GetKeyCode().IsShift() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode( SvxIconChoiceCtrlTextMode::Full, pCursor );
+                    pView->SetEntryTextMode(SvxIconChoiceCtrlTextMode::Full, *pCursor);
             }
             if( rKEvt.GetKeyCode().IsMod1() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode( SvxIconChoiceCtrlTextMode::Short, pCursor );
+                    pView->SetEntryTextMode(SvxIconChoiceCtrlTextMode::Short, *pCursor);
             }
             break;
 #endif
@@ -2401,25 +2401,14 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
 }
 
 #ifdef DBG_UTIL
-void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
+void SvxIconChoiceCtrl_Impl::SetEntryTextMode(SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry& rEntry)
 {
-    if( !pEntry )
+    if (rEntry.eTextMode != eMode)
     {
-        if( eTextMode != eMode )
-        {
-            eTextMode = eMode;
-            Arrange( true, 0, 0 );
-        }
-    }
-    else
-    {
-        if( pEntry->eTextMode != eMode )
-        {
-            pEntry->eTextMode = eMode;
-            InvalidateEntry( pEntry );
-            pView->Invalidate( GetEntryBoundRect( pEntry ) );
-            AdjustVirtSize( pEntry->aRect );
-        }
+        rEntry.eTextMode = eMode;
+        InvalidateEntry(&rEntry );
+        pView->Invalidate(GetEntryBoundRect(&rEntry));
+        AdjustVirtSize(rEntry.aRect);
     }
 }
 #endif
