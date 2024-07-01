@@ -23,6 +23,8 @@ class NetProducer
 public:
     NetProducer()
         : m_manager(new TypeManager())
+        , m_verbose(false)
+        , m_dryRun(false)
     {
     }
 
