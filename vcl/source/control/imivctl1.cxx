@@ -2797,23 +2797,6 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     return true;
 }
 
-void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& rInfo)
-{
-    if (!m_pColumns)
-        m_pColumns.reset(new SvxIconChoiceCtrlColumnInfoMap);
-
-    SvxIconChoiceCtrlColumnInfo* pInfo = new SvxIconChoiceCtrlColumnInfo( rInfo );
-    m_pColumns->insert(std::make_pair(nIndex, std::unique_ptr<SvxIconChoiceCtrlColumnInfo>(pInfo)));
-
-    // HACK: Detail mode is not yet fully implemented, this workaround makes it
-    // fly with a single column
-    if( !nIndex && (nWinBits & WB_DETAILS) )
-        nGridDX = pInfo->GetWidth();
-
-    if( GetUpdateMode() )
-        Arrange( IsAutoArrange(), 0, 0 );
-}
-
 const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
 {
     if (!m_pColumns)

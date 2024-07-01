@@ -398,7 +398,6 @@ public:
 
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
 
-    void                SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& );
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
 
     void                SetEntryHighlightFrame(
