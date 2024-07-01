@@ -80,8 +80,8 @@ class SvxIconChoiceCtrlEntry
         (-> Order of the anchors in the anchors-list!). In "AutoArrange" mode the visible order
         can differ. The entries will be linked because of this.
     */
-    SvxIconChoiceCtrlEntry*         pblink;     // backward (linker neighbour)
-    SvxIconChoiceCtrlEntry*         pflink;     // forward  (rechter neighbour)
+    SvxIconChoiceCtrlEntry*         pblink;     // backward (left neighbour)
+    SvxIconChoiceCtrlEntry*         pflink;     // forward (right neighbour)
 
     SvxIconChoiceCtrlTextMode       eTextMode;
     sal_uInt16                      nX,nY;      // for keyboard control
