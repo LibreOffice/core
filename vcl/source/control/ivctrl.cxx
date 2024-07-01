@@ -125,11 +125,6 @@ void SvtIconChoiceCtrl::RemoveEntry(sal_Int32 nIndex)
     _pImpl->RemoveEntry(nIndex);
 }
 
-void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry const * pEntry, const Point& rPos, OutputDevice& rDev )
-{
-    rDev.DrawImage( rPos, pEntry->GetImage() );
-}
-
 OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry const * pEntry )
 {
     return pEntry->GetText();

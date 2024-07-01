@@ -1376,7 +1376,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
             aPos.AdjustX((rRect.GetWidth() - aImageSize.Width()) / 2 );
         if (nPaintFlags & PAINTFLAG_VER_CENTERED)
             aPos.AdjustY((rRect.GetHeight() - aImageSize.Height()) / 2 );
-        SvtIconChoiceCtrl::DrawEntryImage(pEntry, aPos, rRenderContext);
+        rRenderContext.DrawImage(aPos, pEntry->GetImage());
     }
 }
 
