@@ -177,7 +177,7 @@ public:
      */
     bool IsFullyTransparent() const
     {
-        return T == 255;
+        return GetAlpha() == 0;
     }
 
     /** Sets the red value.
@@ -217,7 +217,7 @@ public:
       */
     Color GetRGBColor() const
     {
-        return {R, G, B};
+        return { GetRed(), GetGreen(), GetBlue() };
     }
 
     /* Comparison and operators */
@@ -279,7 +279,7 @@ public:
       */
     sal_uInt8 GetLuminance() const
     {
-        return sal_uInt8((B * 29UL + G * 151UL + R * 76UL) >> 8);
+        return sal_uInt8((GetBlue() * 29UL + GetGreen() * 151UL + GetRed() * 76UL) >> 8);
     }
 
     /** Increases the color luminance by cLumInc.
@@ -343,9 +343,9 @@ public:
       */
     void Invert()
     {
-        R = ~R;
-        G = ~G;
-        B = ~B;
+        SetRed(~GetRed());
+        SetGreen(~GetGreen());
+        SetBlue(~GetBlue());
     }
 
     /** Merges color with rMergeColor.
@@ -355,9 +355,9 @@ public:
       */
     void Merge(const Color& rMergeColor, sal_uInt8 cTransparency)
     {
-        R = color::ColorChannelMerge(R, rMergeColor.R, cTransparency);
-        G = color::ColorChannelMerge(G, rMergeColor.G, cTransparency);
-        B = color::ColorChannelMerge(B, rMergeColor.B, cTransparency);
+        SetRed(color::ColorChannelMerge(GetRed(), rMergeColor.GetRed(), cTransparency));
+        SetGreen(color::ColorChannelMerge(GetGreen(), rMergeColor.GetGreen(), cTransparency));
+        SetBlue(color::ColorChannelMerge(GetBlue(), rMergeColor.GetBlue(), cTransparency));
     }
 
     /* Change of format */
@@ -411,7 +411,7 @@ public:
      */
     basegfx::BColor getBColor() const
     {
-        basegfx::BColor aColor(R / 255.0, G / 255.0, B / 255.0);
+        basegfx::BColor aColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0);
         if (mValue == Color(ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF).mValue)
             aColor.setAutomatic(true);
         return aColor;
