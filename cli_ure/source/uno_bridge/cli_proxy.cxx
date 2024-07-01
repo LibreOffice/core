@@ -711,7 +711,7 @@ void CliProxy::makeMethodInfos()
         {
             sr::InterfaceMapping mapInherited = objType->GetInterfaceMap(
                 arInheritedIfaces[nArLength - 1]);
-            int numMethods = mapInherited.TargetMethods->Length;
+            numMethods = mapInherited.TargetMethods->Length;
             m_arInterfaceMethodCount[nArLength - 1] = numMethods;
             for (int i = 0; i < numMethods; i++, index++)
             {
@@ -1029,11 +1029,11 @@ void SAL_CALL cli_proxy_dispatch(
                         OSL_ENSURE(usOid.equals( proxy->m_usOid ),
                                     "### different oids!");
 #endif
-                        uno_Interface* pUnoI = bridge->map_cli2uno(
+                        uno_Interface* pUnoI2 = bridge->map_cli2uno(
                             proxy->m_cliI, demanded_td.get() );
                         uno_any_construct(
-                            (uno_Any *)uno_ret, &pUnoI, demanded_td.get(), 0 );
-                        (*pUnoI->release)( pUnoI );
+                            (uno_Any *)uno_ret, &pUnoI2, demanded_td.get(), 0 );
+                        (*pUnoI2->release)( pUnoI2 );
                     }
                     else // object does not support demanded interface
                     {

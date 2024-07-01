@@ -106,10 +106,10 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
                 // cleanup uno in args
                 for (sal_Int32 n = 0; n < nPos; ++n)
                 {
-                    typelib_MethodParameter const & param = pParams[n];
-                    if (param.bIn)
+                    typelib_MethodParameter const & param2 = pParams[n];
+                    if (param2.bIn)
                     {
-                        uno_type_destructData(uno_args[n], param.pTypeRef, 0);
+                        uno_type_destructData(uno_args[n], param2.pTypeRef, 0);
                     }
                 }
                 throw;
@@ -253,9 +253,9 @@ void Bridge::call_cli(
                 // cleanup uno pure out
                 for ( sal_Int32 n = 0; n < nPos; ++n )
                 {
-                    typelib_MethodParameter const & param = params[ n ];
-                    if (! param.bIn)
-                        uno_type_destructData( uno_args[ n ], param.pTypeRef, 0 );
+                    typelib_MethodParameter const & param2 = params[ n ];
+                    if (! param2.bIn)
+                        uno_type_destructData( uno_args[ n ], param2.pTypeRef, 0 );
                 }
                 throw;
             }

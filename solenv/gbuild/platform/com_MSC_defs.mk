@@ -271,7 +271,7 @@ gb_CXXCLRFLAGS := \
 	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-EHa \
 	-clr \
-	-Wv:18 \
+	$(if $(filter 16.0,$(VCVER)),-Wv:18) \
 	-Zc:twoPhase- \
 
 ifeq ($(COM_IS_CLANG),TRUE)
