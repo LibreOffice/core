@@ -317,8 +317,7 @@ public:
     tools::Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );
     tools::Rectangle           CalcTextRect(
                             SvxIconChoiceCtrlEntry*,
-                            const Point* pPos = nullptr,
-                            const OUString* pStr = nullptr
+                            const Point* pPos = nullptr
                         );
 
     tools::Long                CalcBoundingWidth() const;
