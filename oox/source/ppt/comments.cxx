@@ -20,14 +20,13 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 {
     for (auto const& author : list.cmAuthorLst)
     {
-        CommentAuthor temp;
-        // TODO JNA : why not doing push_back at the end instead of using back()?
-        cmAuthorLst.push_back(temp);
-        cmAuthorLst.back().clrIdx = author.clrIdx;
-        cmAuthorLst.back().id = author.id;
-        cmAuthorLst.back().initials = author.initials;
-        cmAuthorLst.back().lastIdx = author.lastIdx;
-        cmAuthorLst.back().name = author.name;
+        CommentAuthor commentAuthor;
+        commentAuthor.clrIdx = author.clrIdx;
+        commentAuthor.id = author.id;
+        commentAuthor.initials = author.initials;
+        commentAuthor.lastIdx = author.lastIdx;
+        commentAuthor.name = author.name;
+        cmAuthorLst.push_back(commentAuthor);
     }
 }
 
