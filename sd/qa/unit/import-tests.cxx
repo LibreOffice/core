@@ -385,40 +385,12 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf152434)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest, testStandardConnectors)
-{
-    createSdImpressDoc("pptx/standardConnectors.pptx");
-
-    sal_Int32 aEdgeValue[] = { -1352, -2457, 3977, -2900, -1261, 4611, -1431, -2643, 3830, 3438 };
-
-    sal_Int32 nCount = 0;
-    sal_Int32 nEdgeLine = 0;
-    for (size_t i = 0; i < 10; i++)
-    {
-        uno::Reference<beans::XPropertySet> xConnector(getShapeFromPage(i, 0));
-        bool bConnector = xConnector->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
-        if (bConnector)
-        {
-            nEdgeLine = xConnector->getPropertyValue(u"EdgeLine1Delta"_ustr).get<sal_Int32>();
-            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
-            nCount++;
-
-            nEdgeLine = xConnector->getPropertyValue(u"EdgeLine2Delta"_ustr).get<sal_Int32>();
-            if (nEdgeLine != 0)
-            {
-                CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
-                nCount++;
-            }
-        }
-    }
-}
-
 CPPUNIT_TEST_FIXTURE(SdImportTest, testConnectors)
 {
     createSdImpressDoc("pptx/connectors.pptx");
 
     sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476,  1356, -1357, 1604,  -1540,
-                               607,   1296,  -1638, -1060, -522, 1578,  -1291, 333 };
+                               607,   1296,  -1638, -1060, 2402, 3313,  -1834, 333 };
 
     sal_Int32 nCount = 0;
     for (size_t i = 0; i < 18; i++)

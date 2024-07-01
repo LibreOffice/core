@@ -39,6 +39,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <editeng/unoprnms.hxx>
 
 using namespace ::com::sun::star;
 
@@ -89,6 +90,86 @@ uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view
     }
 
     return xRet;
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
+{
+    loadFromFile(u"elbowConnectors.pptx");
+
+    sal_Int32 nEdgeLineDelta;
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xShape1(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
+    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2756), nEdgeLineDelta);
+
+    uno::Reference<drawing::XShape> xShape2(xDrawPage->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
+    xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-805), nEdgeLineDelta);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
+{
+    loadFromFile(u"curvedConnectors.pptx");
+
+    sal_Int32 nEdgeLineDelta;
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xShape1(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
+    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2364), nEdgeLineDelta);
+    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4250), nEdgeLineDelta);
+    xShapeProps1->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2051), nEdgeLineDelta);
+
+    uno::Reference<drawing::XShape> xShape2(xDrawPage->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps2(xShape2, uno::UNO_QUERY);
+    xShapeProps2->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3019), nEdgeLineDelta);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testStandardConnectors)
+{
+    loadFromFile(u"standardConnectors.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    sal_Int32 aEdgeValue[] = { -1352, -2457, 2402, // bentConnector5
+                               3977,  0,     0, // bentConnector3
+                               -2899, 0,     0, // bentConnector3
+                               -1260, 4612,  0, // bentConnector4
+                               -1431, -2642, 0, // bentConnector4
+                               3831,  3438,  -1578 }; // bentConnector5
+    sal_Int32 nCount = 0;
+    sal_Int32 nEdgeLineDelta;
+    for (size_t i = 0; i < 10; i++)
+    {
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        bool bConnector = xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr);
+        if (bConnector)
+        {
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+            xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
+            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLineDelta);
+            nCount++;
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
