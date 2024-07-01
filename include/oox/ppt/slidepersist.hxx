@@ -125,7 +125,7 @@ public:
     CommentList& getCommentsList() { return maCommentsList; }
     CommentAuthorList& getCommentAuthors() { return maCommentAuthors; }
 
-    void createConnectorShapeConnection();
+    void createConnectorShapeConnection(oox::drawingml::ShapePtr& pConnector);
 
 private:
     OUString                                                                maPath;
@@ -158,8 +158,6 @@ private:
     // slide comments
     CommentList                                                             maCommentsList;
     CommentAuthorList                                                       maCommentAuthors;
-
-    std::vector<OUString>                                                   maConnectorShapeId;
 };
 
 }
