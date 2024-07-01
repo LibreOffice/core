@@ -1036,7 +1036,7 @@ void PowerPointExport::WriteAuthors()
         pFS->singleElementNS(XML_p, XML_cmAuthor,
                              XML_id, OString::number(i.second.nId),
                              XML_name, i.first,
-                             XML_initials, GetInitials(i.first),
+                             XML_initials, i.second.sInitials,
                              XML_lastIdx, OString::number(i.second.nLastIndex),
                              XML_clrIdx, OString::number(i.second.nId));
     }
@@ -1046,7 +1046,9 @@ void PowerPointExport::WriteAuthors()
     pFS->endDocument();
 }
 
-sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor, sal_Int32& nLastIndex)
+sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
+                                                    const OUString& sInitials,
+                                                    sal_Int32& nLastIndex)
 {
     if (maAuthors.count(sAuthor) <= 0)
     {
@@ -1054,6 +1056,7 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor, sal
 
         aAuthorComments.nId = maAuthors.size();
         aAuthorComments.nLastIndex = 0;
+        aAuthorComments.sInitials = sInitials;
 
         maAuthors[ sAuthor ] = aAuthorComments;
     }
@@ -1172,7 +1175,10 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
                                      ? "Author"
                                            + OUString::number(GetInfoID(xAnnotation->getAuthor()))
                                      : xAnnotation->getAuthor());
-                sal_Int32 nId = GetAuthorIdAndLastIndex(sAuthor, nLastIndex);
+                OUString sInitials(bRemoveCommentAuthorDates
+                                       ? "A" + OUString::number(GetInfoID(xAnnotation->getAuthor()))
+                                       : xAnnotation->getInitials());
+                sal_Int32 nId = GetAuthorIdAndLastIndex(sAuthor, sInitials, nLastIndex);
                 char cDateTime[sizeof("-32768-65535-65535T65535:65535:65535.4294967295")];
                     // reserve enough space for hypothetical max length
 

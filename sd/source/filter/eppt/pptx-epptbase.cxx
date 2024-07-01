@@ -998,24 +998,4 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders()
     return bOtherThanPlaceHolders;
 }
 
-OUString PPTWriterBase::GetInitials(std::u16string_view sName)
-{
-    OUStringBuffer sRet;
-
-    if (!sName.empty())
-    {
-        sRet.append(sName[0]);
-        size_t nStart = 0, nOffset;
-
-        while ((nOffset = sName.find(' ', nStart)) != std::u16string_view::npos)
-        {
-            if (nOffset + 1 < sName.size())
-                sRet.append(sName[ nOffset + 1 ]);
-            nStart = nOffset + 1;
-        }
-    }
-
-    return sRet.makeStringAndClear();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
