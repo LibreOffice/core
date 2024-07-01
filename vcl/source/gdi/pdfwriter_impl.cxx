@@ -5675,8 +5675,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (m_aFile.write(aByteRangeNo.getStr(), aByteRangeNo.getLength(), nWritten) != osl::File::E_None)
     {
-        if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, nOffset))
-            return false;
+        (void)m_aFile.setPos(osl_Pos_Absolut, nOffset);
         return false;
     }
 
