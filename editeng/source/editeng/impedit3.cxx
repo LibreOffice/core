@@ -646,7 +646,7 @@ void ImpEditEngine::CheckPageOverflow()
     if (nParaCount == 1)
     {
         const ParaPortion* pPPortion = GetParaPortions().SafeGetObject(0);
-        bOnlyOneEmptyPara = pPPortion->GetLines().Count() == 1
+        bOnlyOneEmptyPara = pPPortion && pPPortion->GetLines().Count() == 1
                             && pPPortion->GetLines()[0].GetLen() == 0;
     }
 
