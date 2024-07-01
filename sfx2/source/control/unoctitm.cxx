@@ -1161,6 +1161,7 @@ constexpr auto handlers = frozen::make_unordered_map<std::u16string_view, Payloa
 
     { u"BackColor", ColorPayload },
     { u"BackgroundColor", ColorPayload },
+    { u"TableCellBackgroundColor", ColorPayload },
     { u"CharBackColor", ColorPayload },
     { u"Color", ColorPayload },
     { u"FontColor", ColorPayload },
