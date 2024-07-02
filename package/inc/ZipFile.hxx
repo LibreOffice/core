@@ -86,7 +86,8 @@ class ZipFile
     void recover();
     static void readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
                                 sal_uInt64& nSize, sal_uInt64& nCompressedSize,
-                                sal_uInt64* nOffset);
+                                sal_uInt64* nOffset,
+                                OUString const* pCENFilenameToCheck);
 
 public:
 
