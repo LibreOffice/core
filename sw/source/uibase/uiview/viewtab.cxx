@@ -653,14 +653,9 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_TABSTOP_ADD_OR_CHANGE:
         if (pReqArgs)
         {
-            const auto aIndexItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_INDEX));
-            const auto aPositionItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_POSITION));
-            const auto aRemoveItem = static_cast<const SfxBoolItem&>(pReqArgs->Get(SID_TABSTOP_ATTR_REMOVE));
-            const sal_Int32 nIndex = aIndexItem.GetValue();
-            const sal_Int32 nPosition = aPositionItem.GetValue();
-            const bool bRemove = aRemoveItem.GetValue();
-
-
+            const sal_Int32 nIndex = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_INDEX)).GetValue();
+            const sal_Int32 nPosition = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_POSITION)).GetValue();
+            const bool bRemove = static_cast<const SfxBoolItem&>(pReqArgs->Get(SID_TABSTOP_ATTR_REMOVE)).GetValue();
 
             SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP> aItemSet(GetPool());
             rSh.GetCurAttr(aItemSet);
