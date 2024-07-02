@@ -779,6 +779,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
                 aMapIter = moUsedMasters->find(xOurText);
             }
 
+            assert(aMapIter != moUsedMasters->end());
+
             // insert this text field master
             OUString sFieldMasterName = GetStringProperty(
                 gsPropertyInstanceName, xDepField->getTextFieldMaster());
