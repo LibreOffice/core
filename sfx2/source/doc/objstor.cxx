@@ -3392,17 +3392,17 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
             for(int i = 0 ; i< rArgs.getLength() ; ++i)
             {
-                auto aProp = rArgs[i];
-                if(aProp.Name == "EncryptFile")
+                const auto& rProp = rArgs[i];
+                if (rProp.Name == "EncryptFile")
                 {
-                    pSaveToFilterDataOptions[0].Name = aProp.Name;
-                    pSaveToFilterDataOptions[0].Value = aProp.Value;
+                    pSaveToFilterDataOptions[0].Name = rProp.Name;
+                    pSaveToFilterDataOptions[0].Value = rProp.Value;
                     bRet = true;
                 }
-                if(aProp.Name == "DocumentOpenPassword")
+                else if (rProp.Name == "DocumentOpenPassword")
                 {
-                    pSaveToFilterDataOptions[1].Name = aProp.Name;
-                    pSaveToFilterDataOptions[1].Value = aProp.Value;
+                    pSaveToFilterDataOptions[1].Name = rProp.Name;
+                    pSaveToFilterDataOptions[1].Value = rProp.Value;
                     bRet = true;
                 }
             }
