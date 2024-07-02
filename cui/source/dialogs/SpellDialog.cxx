@@ -1248,9 +1248,9 @@ namespace
     void ExtractErrorDescription(const EECharAttrib& rEECharAttrib, SpellErrorDescription& rSpellErrorDescription)
     {
         css::uno::Sequence<css::uno::Any> aSequence;
-        const auto pGrabBag = static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag();
-        const auto iter = pGrabBag.find(u"SpellErrorDescription"_ustr);
-        assert(iter != pGrabBag.end());
+        const auto& rGrabBag = static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag();
+        const auto iter = rGrabBag.find(u"SpellErrorDescription"_ustr);
+        assert(iter != rGrabBag.end());
         iter->second >>= aSequence;
         rSpellErrorDescription.fromSequence(aSequence);
     }
