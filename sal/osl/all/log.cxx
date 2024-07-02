@@ -276,6 +276,10 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         s << ts << '.' << milliSecs << ':';
     }
 
+// disable this fairly obscure feature when building with coverity
+// to avoid a bazillion 'Initialization or destruction ordering is unspecified'
+// warnings about the use of aStartTime
+#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
     if (outputRelativeTimer)
     {
         int seconds = now.Seconds - aStartTime.aTime.Seconds;
@@ -291,6 +295,7 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
         s << relativeTimestamp << ':';
     }
+#endif
 }
 
 #endif
