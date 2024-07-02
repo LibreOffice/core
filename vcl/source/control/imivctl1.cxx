@@ -152,8 +152,6 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     nCurTextDrawFlags = DRAWTEXT_FLAGS_ICON;
     if( nWinBits & (WB_SMALLICON | WB_DETAILS) )
         nCurTextDrawFlags = DRAWTEXT_FLAGS_SMALLICON;
-    if( nWinBits & WB_NOSELECTION )
-        eSelectionMode = SelectionMode::NONE;
     if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
         nWinBits |= WB_ALIGN_LEFT;
 }

@@ -151,7 +151,6 @@ public:
 #define WB_DETAILS              WB_VCENTER
 #define WB_NOHSCROLL            WB_SPIN
 #define WB_NOVSCROLL            WB_DRAG
-#define WB_NOSELECTION          WB_REPEAT
 #define WB_NODRAGSELECTION      WB_PATHELLIPSIS
 #define WB_SMART_ARRANGE        0x01000000 // used to be WB_PASSWORD
 #define WB_ALIGN_TOP            WB_TOP
