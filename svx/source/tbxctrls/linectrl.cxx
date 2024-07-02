@@ -543,9 +543,9 @@ void SvxLineBox::Fill( const XDashListRef &pList )
     mxLineStyleSet->InsertItem(1, Image(), pList->GetStringForUiNoLine());
 
     // entry for solid line
-    auto aBmp = pList->GetBitmapForUISolidLine();
-    Size aBmpSize = aBmp.GetSizePixel();
-    mxLineStyleSet->InsertItem(2, Image(aBmp), pList->GetStringForUiSolidLine());
+    const auto& rBmp = pList->GetBitmapForUISolidLine();
+    Size aBmpSize = rBmp.GetSizePixel();
+    mxLineStyleSet->InsertItem(2, Image(rBmp), pList->GetStringForUiSolidLine());
 
     // entries for dashed lines
     tools::Long nCount = pList->Count();
