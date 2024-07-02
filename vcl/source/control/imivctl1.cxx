@@ -2439,9 +2439,7 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler()
     // missing calls to Select if the object is selected from a mouse movement,
     // because when starting the timer, the mouse cursor might have already left
     // the object.
-    // In special cases (=>SfxFileDialog!), synchronous calls can be forced via
-    // WB_NOASYNCSELECTHDL.
-    if( nWinBits & (WB_NOASYNCSELECTHDL | WB_HIGHLIGHTFRAME) )
+    if( nWinBits & WB_HIGHLIGHTFRAME )
     {
         pHdlEntry = nullptr;
         pView->ClickIcon();

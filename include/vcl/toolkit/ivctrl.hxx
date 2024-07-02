@@ -143,7 +143,6 @@ public:
         WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
         WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
         WB_HIGHLIGHTFRAME   // The entry beneath the mouse will be highlighted
-        WB_NOASYNCSELECTHDL // Do not collect events -> Selection handlers will be called synchronously
 */
 
 #define WB_ICON                 WB_RECTSTYLE
@@ -157,7 +156,6 @@ public:
 #define WB_ALIGN_LEFT           WB_LEFT
 #define WB_NOCOLUMNHEADER       WB_CENTER
 #define WB_HIGHLIGHTFRAME       WB_IGNORETAB
-#define WB_NOASYNCSELECTHDL     WB_NOLABEL
 
 class MnemonicGenerator;
 
