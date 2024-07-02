@@ -268,7 +268,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = nullptr != pOldChgSet || bNewParent;
+                bContinue = pOldChgSet; // #3, #4
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -294,7 +294,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = nullptr != pOldChgSet || bNewParent;
+                bContinue = pOldChgSet;
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -318,7 +318,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = nullptr != pOldChgSet || bNewParent;
+                bContinue = pOldChgSet;
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -348,7 +348,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         if( bChg )
         {
             SetFormatAttr( aNew );
-            bContinue = nullptr != pOldChgSet || bNewParent;
+            bContinue = pOldChgSet;
         }
         // We set it to absolute -> do not propagate it further
         else if( pNewChgSet )
@@ -380,7 +380,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 if (nOld != aNew.GetHeight())
                 {
                     SetFormatAttr( aNew );
-                    bContinue = nullptr != pOldChgSet || bNewParent;
+                    bContinue = pOldChgSet;
                 }
                 // We set it to absolute -> do not propagate it further
                 else if( pNewChgSet )
@@ -388,6 +388,10 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             }
         }
     }
+
+    // if the parent changed, we can't know how many properties are involved: always notify a change
+    if (!bContinue && bNewParent) // #4
+        bContinue = true;
 
     // If there are any attributes in addition to the special ones already handled, then notify...
     if (!bContinue && pNewChgSet && pNewChgSet->GetChgSet())
