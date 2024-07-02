@@ -267,8 +267,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             }
             if( bChg )
             {
-                SetFormatAttr( aNew );
-                bContinue = pOldChgSet; // #3, #4
+                SetFormatAttr(aNew); // triggered separate notification about only this one property
+                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1; // #3, #4
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -294,7 +294,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = pOldChgSet;
+                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -318,7 +318,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = pOldChgSet;
+                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
             }
             // We set it to absolute -> do not propagate it further
             else if( pNewChgSet )
@@ -348,7 +348,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         if( bChg )
         {
             SetFormatAttr( aNew );
-            bContinue = pOldChgSet;
+            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
         }
         // We set it to absolute -> do not propagate it further
         else if( pNewChgSet )
@@ -380,7 +380,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 if (nOld != aNew.GetHeight())
                 {
                     SetFormatAttr( aNew );
-                    bContinue = pOldChgSet;
+                    bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
                 }
                 // We set it to absolute -> do not propagate it further
                 else if( pNewChgSet )
