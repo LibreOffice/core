@@ -976,7 +976,16 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException("Zip entry has an invalid name." );
 
             aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );
-            aEntries[aEntry.sPath] = aEntry;
+
+            if (auto it = aEntries.find(aEntry.sPath); it == aEntries.end())
+            {
+                aEntries[aEntry.sPath] = aEntry;
+            }
+            else
+            {
+                SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
+                throw ZipException("Duplicate CEN entry");
+            }
         }
 
         if (nCount != nTotal)
