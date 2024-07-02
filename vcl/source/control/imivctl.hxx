@@ -119,7 +119,6 @@ class SvxIconChoiceCtrl_Impl
     Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
     Idle                    aVisRectChangedIdle;
-    Idle                    aCallSelectHdlIdle;
     Size                    aVirtOutputSize;
     Size                    aImageSize;
     Size                    aDefaultTextSize;
@@ -139,7 +138,6 @@ class SvxIconChoiceCtrl_Impl
     bool                    bHighlightFramePressed;
     SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
-    SvxIconChoiceCtrlEntry* pHdlEntry;
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
@@ -161,7 +159,6 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK( AutoArrangeHdl, Timer*, void );
                         DECL_LINK( DocRectChangedHdl, Timer*, void );
                         DECL_LINK( VisRectChangedHdl, Timer*, void );
-                        DECL_LINK( CallSelectHdlHdl, Timer*, void );
 
     void                AdjustScrollBars();
     void                PositionScrollBars( tools::Long nRealWidth, tools::Long nRealHeight );
@@ -182,7 +179,6 @@ class SvxIconChoiceCtrl_Impl
     void                ToggleSelection( SvxIconChoiceCtrlEntry* );
     void                DeselectAllBut( SvxIconChoiceCtrlEntry const * );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
-    void                CallSelectHandler();
 
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 

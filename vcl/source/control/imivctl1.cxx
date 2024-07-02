@@ -59,12 +59,10 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aAutoArrangeIdle( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" ),
     aDocRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" ),
     aVisRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" ),
-    aCallSelectHdlIdle( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" ),
     aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
     pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
-    pHdlEntry(nullptr),
     ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
     bUpdateMode(true)
 {
@@ -80,9 +78,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aAutoArrangeIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
-
-    aCallSelectHdlIdle.SetPriority( TaskPriority::LOWEST );
-    aCallSelectHdlIdle.SetInvokeHandler( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
 
     aDocRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aDocRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
@@ -256,21 +251,20 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
     if( pEntry->IsSelected() == bSelect )
         return;
 
-    pHdlEntry = pEntry;
     SvxIconViewFlags nEntryFlags = pEntry->GetFlags();
     if( bSelect )
     {
         nEntryFlags |= SvxIconViewFlags::SELECTED;
         pEntry->AssignFlags( nEntryFlags );
         nSelectionCount++;
-        CallSelectHandler();
+        pView->ClickIcon();
     }
     else
     {
         nEntryFlags &= ~SvxIconViewFlags::SELECTED;
         pEntry->AssignFlags( nEntryFlags );
         nSelectionCount--;
-        CallSelectHandler();
+        pView->ClickIcon();
     }
     EntrySelected( pEntry, bSelect );
 }
@@ -606,7 +600,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     {
         DeselectAllBut( pEntry );
         SelectEntry( pEntry, true, false );
-        pHdlEntry = pEntry;
         pView->ClickIcon();
     }
     else
@@ -664,13 +657,10 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
         bHighlightFramePressed = false;
         SetEntryHighlightFrame( pEntry, true );
 
-        pHdlEntry = pCurHighlightFrame;
         pView->ClickIcon();
 
         // set focus on Icon
-        SetCursor_Impl(pHdlEntry);
-
-        pHdlEntry = nullptr;
+        SetCursor_Impl(pCurHighlightFrame);
     }
     return bHandled;
 }
@@ -2429,31 +2419,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEn
         aInvalidationRect.expand(5);
         pView->Invalidate(aInvalidationRect);
     }
-}
-
-void SvxIconChoiceCtrl_Impl::CallSelectHandler()
-{
-    // When single-click mode is active, the selection handler should be called
-    // synchronously, as the selection is automatically taken away once the
-    // mouse cursor doesn't touch the object any more. Else, we might run into
-    // missing calls to Select if the object is selected from a mouse movement,
-    // because when starting the timer, the mouse cursor might have already left
-    // the object.
-    if( nWinBits & WB_HIGHLIGHTFRAME )
-    {
-        pHdlEntry = nullptr;
-        pView->ClickIcon();
-        //pView->Select();
-    }
-    else
-        aCallSelectHdlIdle.Start();
-}
-
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Timer *, void)
-{
-    pHdlEntry = nullptr;
-    pView->ClickIcon();
-    //pView->Select();
 }
 
 void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos )
