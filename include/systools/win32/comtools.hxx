@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <source_location>
 #include <string>
 #include <string_view>
 #include <stdexcept>
@@ -35,22 +38,27 @@ namespace sal::systools
     class ComError : public std::runtime_error
     {
     public:
-        ComError(const std::string& message, HRESULT hr) :
-            std::runtime_error(message),
-            hr_(hr)
+        ComError(std::string_view message, HRESULT hr,
+                 const std::source_location& loc = std::source_location::current())
+            : std::runtime_error(std::string(message))
+            , hr_(hr)
+            , loc_(loc)
         {}
 
         HRESULT GetHresult() const { return hr_; }
+        const std::source_location& GetLocation() const { return loc_; }
 
     private:
         HRESULT hr_;
+        std::source_location loc_;
     };
 
     /* Convert failed HRESULT to thrown ComError */
-    inline void ThrowIfFailed(HRESULT hr, std::string_view msg)
+    inline void ThrowIfFailed(HRESULT hr, std::string_view msg,
+                              std::source_location loc = std::source_location::current())
     {
         if (FAILED(hr))
-            throw ComError(std::string(msg), hr);
+            throw ComError(msg, hr, loc);
     }
 
     /* A guard class to call CoInitializeEx/CoUninitialize in proper pairs

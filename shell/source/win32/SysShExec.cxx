@@ -297,7 +297,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, " + o3tl::runtimeToOUString(e.what())
-                         + " with " + OUString::number(e.GetHresult())),
+                         + " at " + o3tl::runtimeToOUString(e.GetLocation().file_name()) + ":"
+                         + OUString::number(e.GetLocation().line()) + " error "
+                         + OUString::number(e.GetHresult())),
                         {}, 0);
                 }
                 // Fail at some arbitrary nesting depth, to avoid an infinite loop:
