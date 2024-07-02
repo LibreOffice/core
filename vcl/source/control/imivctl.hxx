@@ -141,7 +141,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
-    sal_Int32               nSelectionCount;
     SvxIconChoiceCtrlPositionMode ePositionMode;
     bool                    bBoundRectsDirty;
     bool                    bUpdateMode;
@@ -309,7 +308,6 @@ public:
     void                Command( const CommandEvent& rCEvt );
     void                ToTop( SvxIconChoiceCtrlEntry* );
 
-    sal_Int32           GetSelectionCount() const;
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
     void                Scroll( tools::Long nDeltaX, tools::Long nDeltaY );

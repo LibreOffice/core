@@ -107,7 +107,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 
 void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
 {
-    nSelectionCount = 0;
     pCurHighlightFrame = nullptr;
     CancelUserEvents();
     ShowCursor( false );
@@ -256,14 +255,12 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
     {
         nEntryFlags |= SvxIconViewFlags::SELECTED;
         pEntry->AssignFlags( nEntryFlags );
-        nSelectionCount++;
         pView->ClickIcon();
     }
     else
     {
         nEntryFlags &= ~SvxIconViewFlags::SELECTED;
         pEntry->AssignFlags( nEntryFlags );
-        nSelectionCount--;
         pView->ClickIcon();
     }
     EntrySelected( pEntry, bSelect );
@@ -1805,13 +1802,6 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     VisRectChanged();
 }
 
-sal_Int32 SvxIconChoiceCtrl_Impl::GetSelectionCount() const
-{
-    if( (nWinBits & WB_HIGHLIGHTFRAME) && pCurHighlightFrame )
-        return 1;
-    return nSelectionCount;
-}
-
 void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
 {
     bool bSel;
@@ -2124,9 +2114,6 @@ void SvxIconChoiceCtrl_Impl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
 
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 {
-    if( !GetSelectionCount() )
-        return nullptr;
-
     size_t nCount = maEntries.size();
     if( !pHead )
     {
