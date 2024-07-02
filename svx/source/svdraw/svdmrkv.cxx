@@ -1260,7 +1260,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             if (pViewShell != pOtherShell)
                 SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
-        else
+        else if (pViewShell)
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
