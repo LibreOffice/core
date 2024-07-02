@@ -196,8 +196,9 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     // tdf#161796 make the extension button show the donation page
     if (officecfg::Office::Common::Misc::ShowDonation::get())
     {
-        mxExtensionsButton->set_label(SfxResId(STR_DONATE_BUTTON));
-        mxExtensionsButton->set_from_icon_name(BMP_DONATE);
+        OUString test = SfxResId(STR_DONATE_BUTTON);
+        mxExtensionsButton->set_from_icon_name(BMP_DONATE); // icon first needed on gtk3 to apply the label
+        mxExtensionsButton->set_label(test);
     }
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
