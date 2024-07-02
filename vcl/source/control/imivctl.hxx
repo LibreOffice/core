@@ -142,7 +142,6 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     SvxIconChoiceCtrlEntry* pHdlEntry;
-    SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
@@ -257,7 +256,6 @@ public:
     void                InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry>, size_t nPos );
     void                RemoveEntry( size_t nPos );
     void                FontModified();
-    void                SelectAll();
     void                SelectEntry(
                             SvxIconChoiceCtrlEntry*,
                             bool bSelect,

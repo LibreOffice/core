@@ -65,7 +65,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
     pHdlEntry(nullptr),
-    pAnchor(nullptr),
     ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
     bUpdateMode(true)
 {
@@ -1845,7 +1844,6 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThi
         if( pEntry != pThisEntryNot && pEntry->IsSelected() )
             SelectEntry( pEntry, false, true );
     }
-    pAnchor = nullptr;
     nFlags &= ~IconChoiceFlags::AddMode;
 }
 
@@ -2362,21 +2360,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
     }
     return nullptr;
 }
-
-void SvxIconChoiceCtrl_Impl::SelectAll()
-{
-    size_t nCount = maEntries.size();
-    for( size_t nCur = 0; nCur < nCount; nCur++ )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = maEntries[ nCur ].get();
-        SelectEntry( pEntry, true/*bSelect*/, true );
-    }
-    nFlags &= ~IconChoiceFlags::AddMode;
-    pAnchor = nullptr;
-}
-
-
-
 
 sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {
