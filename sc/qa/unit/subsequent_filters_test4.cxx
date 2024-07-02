@@ -2032,6 +2032,29 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowImportCellStyleIssue)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCellTextRotation)
+{
+    createScDoc("fods/tdf161483_CellTextRotation.fods");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pDoc->GetTableCount());
+
+    // Without the fix, angles with decimals were imported as 0 and angle units were ignored.
+    // A1=32.67, B1=32.67deg, C1=0.570119066626548rad, D1=36.3rad
+    // All four angles have to convert to 3267.
+    Degree100 nExpectedAngle = 3267_deg100; // RotateAngle has data type long, meaning Degree100
+
+    Degree100 nActualAngle = 0_deg100;
+    nActualAngle = pDoc->GetAttr(0, 0, 0, ATTR_ROTATE_VALUE)->GetValue(); // col, row, tab, whichId
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("without unit", nExpectedAngle.get(), nActualAngle.get());
+    nActualAngle = pDoc->GetAttr(1, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("degrees", nExpectedAngle.get(), nActualAngle.get());
+    nActualAngle = pDoc->GetAttr(2, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("radians", nExpectedAngle.get(), nActualAngle.get());
+    nActualAngle = pDoc->GetAttr(3, 0, 0, ATTR_ROTATE_VALUE)->GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("grad", nExpectedAngle.get(), nActualAngle.get());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1512,10 +1512,10 @@ bool XmlScPropHdl_RotateAngle::importXML(
 {
     bool bRetval(false);
 
-    sal_Int32 nValue;
-    if (::sax::Converter::convertNumber(nValue, rStrImpValue) && !o3tl::checked_multiply<sal_Int32>(nValue, 100, nValue))
+    double fValue;
+    if (::sax::Converter::convertAngle(fValue, rStrImpValue, 100))
     {
-        rValue <<= nValue;
+        rValue <<= static_cast<sal_Int32>(basegfx::fround(fValue)); // It is already 0<=fValue<36000.
         bRetval = true;
     }
 
