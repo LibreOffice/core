@@ -91,11 +91,6 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
     _pImpl->SetPositionMode( SvxIconChoiceCtrlPositionMode::AutoArrange );
 }
 
-void SvtIconChoiceCtrl::SetSelectionMode(SelectionMode eMode)
-{
-    _pImpl->SetSelectionMode(eMode);
-}
-
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 {
     disposeOnce();
@@ -422,7 +417,6 @@ VerticalTabControl::VerticalTabControl(vcl::Window* pParent, bool bWithIcons)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     SetType(WindowType::VERTICALTABCONTROL);
-    m_xChooser->SetSelectionMode(SelectionMode::Single);
     m_xChooser->SetClickHdl(LINK(this, VerticalTabControl, ChosePageHdl_Impl));
     m_xChooser->set_width_request(150);
     m_xChooser->set_height_request(400);

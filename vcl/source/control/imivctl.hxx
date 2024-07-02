@@ -146,7 +146,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
-    SelectionMode           eSelectionMode;
     sal_Int32               nSelectionCount;
     SvxIconChoiceCtrlPositionMode ePositionMode;
     bool                    bBoundRectsDirty;
@@ -251,11 +250,6 @@ public:
 
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
-
-    void SetSelectionMode(SelectionMode eMode)
-    {
-        eSelectionMode = eMode;
-    }
 
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
