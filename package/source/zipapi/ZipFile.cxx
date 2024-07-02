@@ -1143,7 +1143,15 @@ sal_Int32 ZipFile::readCEN()
                     continue; // This is a directory entry, not a stream - skip it
             }
 
-            aEntries[aEntry.sPath] = aEntry;
+            if (auto it = aEntries.find(aEntry.sPath); it == aEntries.end())
+            {
+                aEntries[aEntry.sPath] = aEntry;
+            }
+            else
+            {
+                SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
+                throw ZipException(u"Duplicate CEN entry"_ustr);
+            }
         }
 
         if (nCount != nTotal)
