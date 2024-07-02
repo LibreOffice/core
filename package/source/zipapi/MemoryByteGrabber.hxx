@@ -51,6 +51,14 @@ public:
         mnCurrent += nBytesToSkip;
     }
 
+    sal_Int8 ReadUInt8()
+    {
+        if (mnCurrent + 1 > mnEnd)
+            return 0;
+        sal_uInt8 nInt8 = mpBuffer[mnCurrent++];
+        return nInt8;
+    }
+
     // XSeekable chained...
     sal_Int16 ReadInt16()
     {
@@ -60,6 +68,16 @@ public:
         nInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
         return nInt16;
     }
+
+    sal_Int16 ReadUInt16()
+    {
+        if (mnCurrent + 2 > mnEnd )
+            return 0;
+        sal_uInt16 nInt16  =  mpBuffer[mnCurrent++] & 0xFF;
+        nInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
+        return nInt16;
+    }
+
     sal_Int32 ReadInt32()
     {
         if (mnCurrent + 4 > mnEnd )

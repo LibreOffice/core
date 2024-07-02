@@ -31,6 +31,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
+#include <rtl/crc.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -975,7 +976,14 @@ sal_Int32 ZipFile::readCEN()
             if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
                 throw ZipException("Zip entry has an invalid name." );
 
-            aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );
+            aMemGrabber.skipBytes(aEntry.nPathLen);
+
+            if (aEntry.nExtraLen>0)
+            {
+                readExtraFields(aMemGrabber, aEntry.nExtraLen, /*nSize, nCompressedSize, &nOffset,*/ &aEntry.sPath);
+            }
+
+            aMemGrabber.skipBytes(nCommentLen);
 
             if (auto it = aEntries.find(aEntry.sPath); it == aEntries.end())
             {
@@ -997,6 +1005,72 @@ sal_Int32 ZipFile::readCEN()
         nCenPos = -1; // make sure we return -1 to indicate an error
     }
     return nCenPos;
+}
+
+void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
+        /*sal_uInt64& nSize, sal_uInt64& nCompressedSize,
+        sal_uInt64* nOffset, */OUString const*const pCENFilenameToCheck)
+{
+    while (nExtraLen > 0) // Extensible data fields
+    {
+        sal_Int16 nheaderID = aMemGrabber.ReadInt16();
+        sal_uInt16 dataSize = aMemGrabber.ReadUInt16();
+#if 0
+        if (nheaderID == 1) // Load Zip64 Extended Information Extra Field
+        {
+            // Datasize should be 28byte but some files have less (maybe non standard?)
+            nSize = aMemGrabber.ReadUInt64();
+            sal_uInt16 nReadSize = 8;
+            if (dataSize >= 16)
+            {
+                nCompressedSize = aMemGrabber.ReadUInt64();
+                nReadSize = 16;
+                if (dataSize >= 24 && nOffset)
+                {
+                    *nOffset = aMemGrabber.ReadUInt64();
+                    nReadSize = 24;
+                    // 4 byte should be "Disk Start Number" but we not need it
+                }
+            }
+            if (dataSize > nReadSize)
+                aMemGrabber.skipBytes(dataSize - nReadSize);
+        }
+#endif
+        // Info-ZIP Unicode Path Extra Field - pointless as we expect UTF-8 in CEN already
+        if (nheaderID == 0x7075 && pCENFilenameToCheck) // ignore in recovery mode
+        {
+            if (aMemGrabber.remainingSize() < dataSize)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: invalid TSize");
+                throw ZipException("Invalid Info-ZIP Unicode Path Extra Field");
+            }
+            auto const nVersion = aMemGrabber.ReadUInt8();
+            if (nVersion != 1)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: unexpected Version");
+                throw ZipException("Invalid Info-ZIP Unicode Path Extra Field");
+            }
+            // this CRC32 is actually of the pCENFilenameToCheck
+            // so it's pointless to check it if we require the UnicodeName
+            // to be equal to the CEN name anyway (and pCENFilenameToCheck
+            // is already converted to UTF-16 here)
+            (void) aMemGrabber.ReadUInt32();
+            // this is required to be UTF-8
+            OUString const unicodePath(reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
+                    dataSize - 5, RTL_TEXTENCODING_UTF8);
+            aMemGrabber.skipBytes(dataSize - 5);
+            if (unicodePath != *pCENFilenameToCheck)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: unexpected UnicodeName");
+                throw ZipException("Invalid Info-ZIP Unicode Path Extra Field");
+            }
+        }
+        else
+        {
+            aMemGrabber.skipBytes(dataSize);
+        }
+        nExtraLen -= dataSize + 4;
+    }
 }
 
 void ZipFile::recover()

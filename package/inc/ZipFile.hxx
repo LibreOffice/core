@@ -34,6 +34,7 @@
 
 #include <memory>
 
+class MemoryByteGrabber;
 namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace ucb  { class XProgressHandler; }
@@ -86,6 +87,10 @@ class ZipFile
     sal_Int32 readCEN();
     sal_Int32 findEND();
     void recover();
+    static void readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
+                                /*sal_uInt64& nSize, sal_uInt64& nCompressedSize,
+                                sal_uInt64* nOffset,*/
+                                OUString const* pCENFilenameToCheck);
 
 public:
 
