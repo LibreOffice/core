@@ -1354,7 +1354,7 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( we
             break;
     }
 
-    return xDlg ? VclPtr<ScAbstractTabController_Impl>::Create(std::move(xDlg)) : nullptr;
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::move(xDlg));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg(weld::Window* pParent,
