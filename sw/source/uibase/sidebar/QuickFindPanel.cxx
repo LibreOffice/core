@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
     if (sId[0] == '-')
         return;
 
-    std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toInt64()];
+    std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toUInt64()];
 
     m_pWrtShell->StartAction();
     bool bFound = false;
