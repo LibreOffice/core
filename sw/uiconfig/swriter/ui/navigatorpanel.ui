@@ -580,7 +580,7 @@
                               <object class="GtkToolButton" id="promote">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|promote|tooltip_text">Promote Outline Level</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|promote|tooltip_text">Promote Outline Level</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="icon-name">sw/res/sc20172.png</property>
@@ -594,7 +594,7 @@
                               <object class="GtkToolButton" id="demote">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|demote|tooltip_text">Demote Outline Level</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|demote|tooltip_text">Demote Outline Level</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="icon-name">sw/res/sc20173.png</property>
@@ -608,7 +608,7 @@
                               <object class="GtkToolButton" id="chapterup">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|chaptermoveup|tooltip_text">Move Heading Up</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|chaptermoveup|tooltip_text">Move Heading Up</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="icon-name">sw/res/sc20174.png</property>
@@ -622,7 +622,7 @@
                               <object class="GtkToolButton" id="chapterdown">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|chaptermovedown|tooltip_text">Move Heading Down</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|HeadingsContentFunctionButtonsToolbar|chaptermovedown|tooltip_text">Move Heading Down</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="icon-name">sw/res/sc20171.png</property>
@@ -1299,7 +1299,7 @@
                               <object class="GtkToolButton" id="delete">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="tooltip-text" translatable="yes" context="contenttreefunctionbuttons|delete|tooltip_text">Delete</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|DeleteFunctionButtonToolbar|delete|tooltip_text">Delete</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="icon-name">cmd/sc_delete.png</property>
