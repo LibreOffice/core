@@ -46,24 +46,16 @@ class ImpChainLinkProperties
 protected:
     friend class TextChain;
 
-    ImpChainLinkProperties()
-    {
-        aNilChainingEvent = false;
-        aCursorEvent = CursorChainingEvent::NULL_EVENT;
-        aPreChainingSel = ESelection();
-        aPostChainingSel = ESelection();
-        aIsPartOfLastParaInNextLink = false; // XXX: Should come from file
-        aSwitchingToNextBox = false;
-    }
+    ImpChainLinkProperties() = default;
 
 private:
     // NOTE: Remember to set default value in constructor when adding field
     ESelection aPreChainingSel;
     ESelection aPostChainingSel;
-    CursorChainingEvent aCursorEvent;
-    bool aNilChainingEvent;
-    bool aIsPartOfLastParaInNextLink;
-    bool aSwitchingToNextBox;
+    CursorChainingEvent aCursorEvent = CursorChainingEvent::NULL_EVENT;
+    bool aNilChainingEvent = false;
+    bool aIsPartOfLastParaInNextLink = false;
+    bool aSwitchingToNextBox = false;
 };
 
 class TextChain
