@@ -117,7 +117,6 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
     tools::Rectangle               aCurSelectionRect;
-    std::vector<tools::Rectangle> aSelectedRectList;
     Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
     Idle                    aVisRectChangedIdle;
@@ -198,13 +197,6 @@ class SvxIconChoiceCtrl_Impl
                             bool bAdd
                         );
 
-    void                AddSelectedRect( const tools::Rectangle& );
-    void                AddSelectedRect(
-                            SvxIconChoiceCtrlEntry* pEntry1,
-                            SvxIconChoiceCtrlEntry* pEntry2
-                        );
-
-    void                ClearSelectedRectList();
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;

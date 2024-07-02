@@ -105,7 +105,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     CancelUserEvents();
     pImpCursor.reset();
     pGridMap.reset();
-    ClearSelectedRectList();
     aVerSBar.disposeAndClear();
     aHorSBar.disposeAndClear();
     aScrBarBox.disposeAndClear();
@@ -1833,8 +1832,6 @@ void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
 
 void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThisEntryNot )
 {
-    ClearSelectedRectList();
-
     // TODO: work through z-order list, if necessary!
 
     size_t nCount = maEntries.size();
@@ -2183,27 +2180,6 @@ bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects,
             return true;
     }
     return false;
-}
-
-void SvxIconChoiceCtrl_Impl::AddSelectedRect( SvxIconChoiceCtrlEntry* pEntry1,
-    SvxIconChoiceCtrlEntry* pEntry2 )
-{
-    DBG_ASSERT(pEntry1 && pEntry2,"SelectEntry: Invalid Entry-Ptr");
-    tools::Rectangle aRect( GetEntryBoundRect( pEntry1 ) );
-    aRect.Union( GetEntryBoundRect( pEntry2 ) );
-    AddSelectedRect( aRect );
-}
-
-void SvxIconChoiceCtrl_Impl::AddSelectedRect( const tools::Rectangle& rRect )
-{
-    tools::Rectangle newRect = rRect;
-    newRect.Normalize();
-    aSelectedRectList.push_back( newRect );
-}
-
-void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
-{
-    aSelectedRectList.clear();
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
