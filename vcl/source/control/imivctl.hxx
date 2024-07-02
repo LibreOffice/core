@@ -116,7 +116,6 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<ScrollBar>       aVerSBar;
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
-    tools::Rectangle               aCurSelectionRect;
     Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
     Idle                    aVisRectChangedIdle;
@@ -184,12 +183,6 @@ class SvxIconChoiceCtrl_Impl
     void                DeselectAllBut( SvxIconChoiceCtrlEntry const * );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
     void                CallSelectHandler();
-    void                SelectRect(
-                            SvxIconChoiceCtrlEntry* pEntry1,
-                            SvxIconChoiceCtrlEntry* pEntry2,
-                            bool bAdd,
-                            const std::vector<tools::Rectangle>& rOtherRects
-                        );
 
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
@@ -329,12 +322,6 @@ public:
     static bool         IsOver(
                             const std::vector<tools::Rectangle>& rRects,
                             const tools::Rectangle& rEntryBoundRect
-                        );
-
-    void                SelectRect(
-                            const tools::Rectangle&,
-                            bool bAdd,
-                            const std::vector<tools::Rectangle>& rOtherRects
                         );
 
     void               MakeVisible(

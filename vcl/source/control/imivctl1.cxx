@@ -701,7 +701,6 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl(SvxIconChoiceCtrlEntry* pNewCursor)
     SetCursor( pNewCursor );
 
     SelectEntry( pCursor, true, false );
-    aCurSelectionRect = GetEntryBoundRect( pCursor );
     CallEventListeners( VclEventId::ListboxSelect, pCursor );
 }
 
@@ -2003,127 +2002,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
     return tools::Rectangle(
         aBoundRect.Left(), aBoundRect.Top() - 1, aBoundRect.Right() - 1,
         aTextRect.Bottom());
-}
-
-// the hot spot is the inner 50% of the rectangle
-static tools::Rectangle GetHotSpot( const tools::Rectangle& rRect )
-{
-    tools::Rectangle aResult( rRect );
-    aResult.Normalize();
-    Size aSize( rRect.GetSize() );
-    tools::Long nDelta = aSize.Width() / 4;
-    aResult.AdjustLeft(nDelta );
-    aResult.AdjustRight( -nDelta );
-    nDelta = aSize.Height() / 4;
-    aResult.AdjustTop(nDelta );
-    aResult.AdjustBottom( -nDelta );
-    return aResult;
-}
-
-void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIconChoiceCtrlEntry* pEntry2,
-    bool bAdd, const std::vector<tools::Rectangle>& rOtherRects)
-{
-    DBG_ASSERT(pEntry1 && pEntry2,"SelectEntry: Invalid Entry-Ptr");
-    tools::Rectangle aRect( GetEntryBoundRect( pEntry1 ) );
-    aRect.Union( GetEntryBoundRect( pEntry2 ) );
-    SelectRect(aRect, bAdd, rOtherRects);
-}
-
-void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAdd,
-    const std::vector<tools::Rectangle>& rOtherRects)
-{
-    aCurSelectionRect = rRect;
-    if( maZOrderList.empty() )
-        return;
-
-    // set flag, so ToTop won't be called in Select
-    bool bAlreadySelectingRect(nFlags & IconChoiceFlags::SelectingRect);
-    nFlags |= IconChoiceFlags::SelectingRect;
-
-    CheckBoundingRects();
-    pView->PaintImmediately();
-    const size_t nCount = maZOrderList.size();
-
-    tools::Rectangle aRect( rRect );
-    aRect.Normalize();
-    bool bCalcOverlap = (bAdd && !rOtherRects.empty());
-
-    bool bResetClipRegion = false;
-    if( !pView->GetOutDev()->IsClipRegion() )
-    {
-        bResetClipRegion = true;
-        pView->GetOutDev()->SetClipRegion(vcl::Region(GetOutputRect()));
-    }
-
-    for( size_t nPos = 0; nPos < nCount; nPos++ )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nPos ];
-
-        if( !IsBoundingRectValid( pEntry->aRect ))
-            FindBoundingRect( pEntry );
-        tools::Rectangle aBoundRect( GetHotSpot( pEntry->aRect ) );
-        bool bSelected = pEntry->IsSelected();
-
-        bool bOverlaps;
-        if( bCalcOverlap )
-            bOverlaps = IsOver(rOtherRects, aBoundRect);
-        else
-            bOverlaps = false;
-        bool bOver = aRect.Overlaps( aBoundRect );
-
-        if( bOver && !bOverlaps )
-        {
-            // is inside the new selection rectangle and outside of any old one
-            // => select
-            if( !bSelected )
-                SelectEntry( pEntry, true, true );
-        }
-        else if( !bAdd )
-        {
-            // is outside of the selection rectangle
-            // => deselect
-            if( bSelected )
-                SelectEntry( pEntry, false, true );
-        }
-        else if (bOverlaps)
-        {
-            // The entry is inside an old (=>span multiple rectangles with Ctrl)
-            // selection rectangle.
-
-            // There is still a bug here! The selection status of an entry in a
-            // previous rectangle has to be restored, if it was touched by the
-            // current selection rectangle but is not inside it any more.
-            // For simplicity's sake, let's assume that all entries in the old
-            // rectangles were correctly selected. It is wrong to just deselect
-            // the intersection.
-            // Possible solution: remember a snapshot of the selection before
-            // spanning the rectangle.
-            if( aBoundRect.Overlaps( rRect))
-            {
-                // deselect intersection between old rectangles and current rectangle
-                if( bSelected )
-                    SelectEntry( pEntry, false, true );
-            }
-            else
-            {
-                // select entry of an old rectangle
-                if( !bSelected )
-                    SelectEntry( pEntry, true, true );
-            }
-        }
-        else if( !bOver && bSelected )
-        {
-            // this entry is completely outside the rectangle => deselect it
-            SelectEntry( pEntry, false, true );
-        }
-    }
-
-    if( !bAlreadySelectingRect )
-        nFlags &= ~IconChoiceFlags::SelectingRect;
-
-    pView->PaintImmediately();
-    if( bResetClipRegion )
-        pView->GetOutDev()->SetClipRegion();
 }
 
 bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects, const tools::Rectangle& rBoundRect)
