@@ -2126,52 +2126,6 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
         pView->GetOutDev()->SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::SelectRange(
-                        SvxIconChoiceCtrlEntry const * pStart,
-                        SvxIconChoiceCtrlEntry const * pEnd,
-                        bool bAdd )
-{
-    sal_uLong nFront = GetEntryListPos( pStart );
-    sal_uLong nBack  = GetEntryListPos( pEnd );
-    sal_uLong nFirst = std::min( nFront, nBack );
-    sal_uLong nLast  = std::max( nFront, nBack );
-    sal_uLong i;
-    SvxIconChoiceCtrlEntry* pEntry;
-
-    if ( ! bAdd )
-    {
-        // deselect everything before the first entry if not in
-        // adding mode
-        for ( i=0; i<nFirst; i++ )
-        {
-            pEntry = GetEntry( i );
-            if( pEntry->IsSelected() )
-                SelectEntry( pEntry, false, true );
-        }
-    }
-
-    // select everything between nFirst and nLast
-    for ( i=nFirst; i<=nLast; i++ )
-    {
-        pEntry = GetEntry( i );
-        if( ! pEntry->IsSelected() )
-            SelectEntry( pEntry, true, true );
-    }
-
-    if ( ! bAdd )
-    {
-        // deselect everything behind the last entry if not in
-        // adding mode
-        sal_uLong nEnd = GetEntryCount();
-        for ( ; i<nEnd; i++ )
-        {
-            pEntry = GetEntry( i );
-            if( pEntry->IsSelected() )
-                SelectEntry( pEntry, false, true );
-        }
-    }
-}
-
 bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects, const tools::Rectangle& rBoundRect)
 {
     for (const tools::Rectangle& rRect : rRects)

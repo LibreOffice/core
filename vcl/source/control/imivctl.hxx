@@ -191,12 +191,6 @@ class SvxIconChoiceCtrl_Impl
                             const std::vector<tools::Rectangle>& rOtherRects
                         );
 
-    void                SelectRange(
-                            SvxIconChoiceCtrlEntry const * pStart,
-                            SvxIconChoiceCtrlEntry const * pEnd,
-                            bool bAdd
-                        );
-
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
