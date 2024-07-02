@@ -268,12 +268,7 @@ public:
     bool                MouseButtonUp( const MouseEvent& );
     bool                MouseMove( const MouseEvent&);
     bool                RequestHelp( const HelpEvent& rHEvt );
-    void                SetCursor_Impl(
-                            SvxIconChoiceCtrlEntry* pOldCursor,
-                            SvxIconChoiceCtrlEntry* pNewCursor,
-                            bool bMod1,
-                            bool bShift
-                        );
+    void                SetCursor_Impl(SvxIconChoiceCtrlEntry* pNewCursor);
     bool                KeyInput( const KeyEvent& );
     void                Resize();
     void                GetFocus();

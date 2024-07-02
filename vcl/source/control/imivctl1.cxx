@@ -670,8 +670,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
         pView->ClickIcon();
 
         // set focus on Icon
-        SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
-        SetCursor_Impl( pOldCursor, pHdlEntry, false, false );
+        SetCursor_Impl(pHdlEntry);
 
         pHdlEntry = nullptr;
     }
@@ -694,8 +693,7 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
-    SvxIconChoiceCtrlEntry* pNewCursor, bool bMod1, bool bShift )
+void SvxIconChoiceCtrl_Impl::SetCursor_Impl(SvxIconChoiceCtrlEntry* pNewCursor)
 {
     if( !pNewCursor )
         return;
@@ -703,29 +701,10 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
     ShowCursor( false );
     MakeEntryVisible( pNewCursor );
     SetCursor( pNewCursor );
-    if( bMod1 && !bShift )
-    {
-        if( pAnchor )
-        {
-            AddSelectedRect( pAnchor, pOldCursor );
-            pAnchor = nullptr;
-        }
-    }
-    else if( bShift )
-    {
-        if( !pAnchor )
-            pAnchor = pOldCursor;
-        if ( nWinBits & WB_ALIGN_LEFT )
-            SelectRange( pAnchor, pNewCursor, bool(nFlags & IconChoiceFlags::AddMode) );
-        else
-            SelectRect(pAnchor,pNewCursor, bool(nFlags & IconChoiceFlags::AddMode), aSelectedRectList);
-    }
-    else
-    {
-        SelectEntry( pCursor, true, false );
-        aCurSelectionRect = GetEntryBoundRect( pCursor );
-        CallEventListeners( VclEventId::ListboxSelect, pCursor );
-    }
+
+    SelectEntry( pCursor, true, false );
+    aCurSelectionRect = GetEntryBoundRect( pCursor );
+    CallEventListeners( VclEventId::ListboxSelect, pCursor );
 }
 
 bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
@@ -739,7 +718,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
         SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
         if ( pNewCursor != pOldCursor )
-            SetCursor_Impl( pOldCursor, pNewCursor, false, false );
+            SetCursor_Impl(pNewCursor);
         return true;
     }
 
@@ -750,7 +729,6 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
     bool bKeyUsed = true;
 
     SvxIconChoiceCtrlEntry* pNewCursor;
-    SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
 
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
@@ -764,7 +742,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                     pNewCursor = pImpCursor->GoUpDown(pCursor,false);
                 else
                     pNewCursor = pImpCursor->GoPageUpDown(pCursor,false);
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
                 if( !pNewCursor )
                 {
                     tools::Rectangle aRect( GetEntryBoundRect( pCursor ) );
@@ -786,7 +764,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                     pNewCursor=pImpCursor->GoUpDown( pCursor,true );
                 else
                     pNewCursor=pImpCursor->GoPageUpDown( pCursor,true );
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
             }
             break;
 
@@ -794,7 +772,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( pCursor )
             {
                 pNewCursor=pImpCursor->GoLeftRight(pCursor,true );
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
             }
             break;
 
@@ -803,7 +781,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             {
                 MakeEntryVisible( pCursor );
                 pNewCursor = pImpCursor->GoLeftRight(pCursor,false );
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
                 if( !pNewCursor )
                 {
                     tools::Rectangle aRect( GetEntryBoundRect(pCursor));
@@ -869,7 +847,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( pCursor )
             {
                 pNewCursor = maEntries.back().get();
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
             }
             break;
 
@@ -877,7 +855,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( pCursor )
             {
                 pNewCursor = maEntries[ 0 ].get();
-                SetCursor_Impl(pOldCursor, pNewCursor, false, false);
+                SetCursor_Impl(pNewCursor);
             }
             break;
 
