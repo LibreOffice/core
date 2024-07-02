@@ -1130,8 +1130,7 @@ namespace cmis
             std::vector< std::string > aPaths = pPwc->getPaths( );
             if ( !aPaths.empty() )
             {
-                auto sPath = aPaths.front( );
-                aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+                aCmisUrl.setObjectPath(STD_TO_OUSTR(aPaths.front()));
             }
             else
             {
