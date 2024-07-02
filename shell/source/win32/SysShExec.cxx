@@ -281,47 +281,23 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 if ((info.dwAttributes & SFGAO_LINK) == 0) {
                     break;
                 }
-                sal::systools::COMReference<IShellLinkW> link;
                 try
                 {
-                    link.CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
+                    sal::systools::COMReference<IShellLinkW> link(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
+                    sal::systools::COMReference<IPersistFile> file(link, sal::systools::COM_QUERY_THROW);
+                    sal::systools::ThrowIfFailed(file->Load(path, STGM_READ),
+                                                 "IPersistFile.Load failed");
+                    sal::systools::ThrowIfFailed(link->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI),
+                                                 "IShellLink.Resolve failed");
+                    WIN32_FIND_DATAW wfd;
+                    sal::systools::ThrowIfFailed(link->GetPath(path, std::size(path), &wfd, SLGP_RAWPATH),
+                                                 "IShellLink.GetPath failed");
                 }
                 catch (sal::systools::ComError& e)
                 {
                     throw css::lang::IllegalArgumentException(
-                        ("XSystemShellExecute.execute, CoCreateInstance failed with "
-                         + OUString::number(e.GetHresult())),
-                        {}, 0);
-                }
-                sal::systools::COMReference<IPersistFile> file;
-                try {
-                    file = link.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW);
-                } catch(sal::systools::ComError & e3) {
-                    throw css::lang::IllegalArgumentException(
-                        ("XSystemShellExecute.execute, QueryInterface failed with: "
-                         + o3tl::runtimeToOUString(e3.what())),
-                        {}, 0);
-                }
-                HRESULT e2 = file->Load(path, STGM_READ);
-                if (FAILED(e2)) {
-                    throw css::lang::IllegalArgumentException(
-                        ("XSystemShellExecute.execute, IPersistFile.Load failed with "
-                         + OUString::number(e2)),
-                        {}, 0);
-                }
-                e2 = link->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI);
-                if (FAILED(e2)) {
-                    throw css::lang::IllegalArgumentException(
-                        ("XSystemShellExecute.execute, IShellLink.Resolve failed with "
-                         + OUString::number(e2)),
-                        {}, 0);
-                }
-                WIN32_FIND_DATAW wfd;
-                e2 = link->GetPath(path, SAL_N_ELEMENTS(path), &wfd, SLGP_RAWPATH);
-                if (FAILED(e2)) {
-                    throw css::lang::IllegalArgumentException(
-                        ("XSystemShellExecute.execute, IShellLink.GetPath failed with "
-                         + OUString::number(e2)),
+                        ("XSystemShellExecute.execute, " + o3tl::runtimeToOUString(e.what())
+                         + " with " + OUString::number(e.GetHresult())),
                         {}, 0);
                 }
                 // Fail at some arbitrary nesting depth, to avoid an infinite loop:
