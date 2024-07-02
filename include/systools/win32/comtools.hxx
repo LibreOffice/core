@@ -92,10 +92,7 @@ namespace sal::systools
     };
 
     struct COM_QUERY_TAG {} constexpr COM_QUERY;
-    struct COM_QUERY_THROW_TAG {} constexpr COM_QUERY_THROW;
-    template <typename TAG>
-    constexpr bool is_COM_query_tag
-        = std::is_same_v<TAG, COM_QUERY_TAG> || std::is_same_v<TAG, COM_QUERY_THROW_TAG>;
+    struct COM_QUERY_THROW_TAG : public COM_QUERY_TAG {} constexpr COM_QUERY_THROW;
 
     /* A simple COM smart pointer template */
     template <typename T>
@@ -157,7 +154,8 @@ namespace sal::systools
 
         ~COMReference() { release(com_ptr_); }
 
-        template <typename T2, typename TAG, std::enable_if_t<is_COM_query_tag<TAG>, int> = 0>
+        template <typename T2, typename TAG>
+            requires std::is_base_of_v<COM_QUERY_TAG, TAG>
         COMReference<T2> QueryInterface(TAG) const
         {
             T2* ip = nullptr;
