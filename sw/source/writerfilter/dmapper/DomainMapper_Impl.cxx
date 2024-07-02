@@ -8316,8 +8316,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                             sFont = sFont.copy(0,sFont.getLength()-1);
                     }
 
-
-
                     if (xTextAppend.is())
                     {
                         uno::Reference< text::XText > xText = xTextAppend->getText();
@@ -8336,6 +8334,21 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
 
                             }
+                            PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
+                            if (pCharTopContext.is())
+                            {
+                                uno::Sequence<beans::PropertyValue> aValues
+                                    = pCharTopContext->GetPropertyValues(
+                                        /*bCharGrabBag=*/!IsInComments());
+                                OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
+                                for (const beans::PropertyValue& rProperty : aValues)
+                                {
+                                    if (!bHasFont || !rProperty.Name.startsWith(sFontName))
+                                        xProp->setPropertyValue(rProperty.Name, rProperty.Value);
+                                }
+
+                            }
+
                         }
                     }
                 }

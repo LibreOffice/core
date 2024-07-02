@@ -582,6 +582,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158982)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf161864)
+{
+    auto verify = [this]() {
+        //check bullet size at position 0, 22, 45 with 4/11/16 pt
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextDocument->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+        uno::Reference<beans::XPropertySet> xPropSet(xCursor, uno::UNO_QUERY);
+        xCursor->goRight(1, true);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(float(4)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+        xCursor->goRight(21, false);
+        xCursor->goRight(1, true);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(float(11)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+        xCursor->goRight(22, false);
+        xCursor->goRight(1, true);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(float(16)), xPropSet->getPropertyValue(u"CharHeight"_ustr));
+    };
+    createSwDoc("tdf161864.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
