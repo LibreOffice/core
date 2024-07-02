@@ -1903,6 +1903,12 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
     SignatureState* pState = bScriptingContent ? &pImpl->nScriptingSignatureState : &pImpl->nDocumentSignatureState;
 
+    // repaired package cannot be trusted
+    if (GetMedium()->IsRepairPackage())
+    {
+        *pState = SignatureState::BROKEN;
+    }
+
     if ( *pState == SignatureState::UNKNOWN )
     {
         *pState = SignatureState::NOSIGNATURES;
