@@ -289,8 +289,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                                                  "IPersistFile.Load failed");
                     sal::systools::ThrowIfFailed(link->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI),
                                                  "IShellLink.Resolve failed");
-                    WIN32_FIND_DATAW wfd;
-                    sal::systools::ThrowIfFailed(link->GetPath(path, std::size(path), &wfd, SLGP_RAWPATH),
+                    sal::systools::ThrowIfFailed(link->GetPath(path, std::size(path), nullptr, SLGP_RAWPATH),
                                                  "IShellLink.GetPath failed");
                 }
                 catch (sal::systools::ComError& e)
