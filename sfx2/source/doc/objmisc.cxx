@@ -943,6 +943,12 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
+    if (GetErrorCode() == ERRCODE_IO_BROKENPACKAGE)
+    {   // safety first: don't run any macros from broken package.
+        pImpl->aMacroMode.disallowMacroExecution();
+        return; // do not get signature status - needs to be done after RepairPackage
+    }
+
     // make sure LO evaluates the macro signatures, so it can be preserved
     GetScriptingSignatureState();
 
