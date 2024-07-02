@@ -137,6 +137,7 @@
 #endif
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/processfactory.hxx>
@@ -939,7 +940,8 @@ VCLXToolkit::VCLXToolkit():
 #ifndef IOS
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
     nVCLToolkitInstanceCount++;
-    if( ( nVCLToolkitInstanceCount == 1 ) && ( !Application::IsInMain() ) )
+    if( nVCLToolkitInstanceCount == 1 && !Application::IsInMain() &&
+        !comphelper::LibreOfficeKit::isActive() )
     {
         // setup execute thread
         CreateMainLoopThread( ToolkitWorkerFunction, this );
