@@ -95,4 +95,6 @@ inline constexpr OUString BMP_MENU_RENAME = u"cmd/sc_editdoc.png"_ustr;
 inline constexpr OUString BMP_MENU_DELETE = u"cmd/sc_delete.png"_ustr;
 inline constexpr OUString BMP_MENU_EXPORT = u"cmd/sc_exportto.png"_ustr;
 
+inline constexpr OUString BMP_DONATE = u"res/donate.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

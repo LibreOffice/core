@@ -457,6 +457,9 @@
     <prop oor:name="PerformFileExtCheck">
       <value install:module="wnt">true</value>
     </prop>
+    <prop oor:name="ShowDonation">
+      <value>true</value>
+    </prop>
   </node>
   <node oor:name="Save">
     <node oor:name="ODF">
