@@ -77,8 +77,7 @@ void EPUBExportTest::createDoc(std::u16string_view rFile,
     else
         aMediaDescriptor[u"FilterOptions"_ustr] <<= maFilterOptions;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-    mxZipFile
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
+    mxZipFile = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 }
 
 std::map<OUString, std::vector<OUString>> EPUBExportTest::parseCss(const OUString& rName)
@@ -165,7 +164,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMimetype)
         mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@name='generator']"_ostr, "content"_ostr);
     CPPUNIT_ASSERT(aGenerator.startsWith(utl::DocInfoHelper::GetGeneratorString()));
 
-    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponentContext->getServiceManager(),
+    uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
                                                     uno::UNO_QUERY);
     constexpr OUString aServiceName(u"com.sun.star.comp.Writer.EPUBExportFilter"_ustr);
     uno::Reference<document::XFilter> xFilter(xMSF->createInstance(aServiceName), uno::UNO_QUERY);

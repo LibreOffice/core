@@ -96,7 +96,7 @@ void SigningTest::setUp()
     MacrosTest::setUpGpg(m_directories, u"xmlsecurity_signing"_ustr);
 
     // Initialize crypto after setting up the environment variables.
-    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
 #ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 
     save(u"writer8"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 
     save(u"writer8"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 
     save(u"MS Word 2007 XML"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -243,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 
     save(u"writer_pdf_Export"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(
         maTempFile.GetURL(), StreamMode::READ | StreamMode::WRITE));
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 
     save(u"MS Word 2007 XML"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
     // Copy the test document to a temporary file, as it'll be modified.
     createTempCopy(u"partial.docx");
     // Load the test document as a storage and read its single signature.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
 {
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     createTempCopy(u"multi.docx");
     uno::Reference<embed::XStorage> xStorage
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
     // Copy the test document to a temporary file, as it'll be modified.
     createTempCopy(u"partial.docx");
     // Load the test document as a storage and read its single signature.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -406,7 +406,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
         = xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo
-        = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);
+        = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, m_xContext);
     const uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
     CPPUNIT_ASSERT(
         std::none_of(rOverrides.begin(), rOverrides.end(), [](const beans::StringPair& rPair) {
@@ -841,7 +841,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     createTempCopy(u"notype-xades.odt");
 
     // Read existing signature.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -897,7 +897,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 
     save(u"writer8"_ustr);
 
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -950,7 +950,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
     save(u"writer8"_ustr);
     {
-        DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+        DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
         uno::Reference<embed::XStorage> xStorage
             = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 
     save(u"MS Word 2007 XML"_ustr);
     {
-        DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+        DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
         CPPUNIT_ASSERT(aManager.init());
         uno::Reference<embed::XStorage> xStorage
             = comphelper::OStorageHelper::GetStorageOfFormatFromURL(

@@ -26,8 +26,7 @@ class Test : public test::BootstrapFixture, public unotest::MacrosTest
 CPPUNIT_TEST_FIXTURE(Test, testBibliographyLoader)
 {
     // Given a bibliography provider:
-    uno::Reference<container::XNameAccess> xBibAccess
-        = frame::Bibliography::create(mxComponentContext);
+    uno::Reference<container::XNameAccess> xBibAccess = frame::Bibliography::create(m_xContext);
     uno::Reference<beans::XPropertySet> xPropSet(xBibAccess, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aSeq;
 

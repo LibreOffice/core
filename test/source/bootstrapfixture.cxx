@@ -113,8 +113,6 @@ void test::BootstrapFixture::setUp()
 #if OSL_DEBUG_LEVEL > 0
     Scheduler::ProcessEventsToIdle();
 #endif
-
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
 }
 
 test::BootstrapFixture::~BootstrapFixture()

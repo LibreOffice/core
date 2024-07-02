@@ -118,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testURLTransformer_parseSmart)
 
     css::util::URL aURL;
     aURL.Complete = "www.example.com:8080/foo/bar?q=baz#F";
-    css::uno::Reference xParser(css::util::URLTransformer::create(mxComponentContext));
+    css::uno::Reference xParser(css::util::URLTransformer::create(m_xContext));
     CPPUNIT_ASSERT(xParser->parseSmart(aURL, u"http:"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"http://www.example.com:8080/foo/bar?q=baz#F"_ustr, aURL.Complete);
     CPPUNIT_ASSERT_EQUAL(u"http://www.example.com:8080/foo/bar"_ustr, aURL.Main);

@@ -73,7 +73,7 @@ void PDFSigningTest::setUp()
     MacrosTest::setUpX509(m_directories, u"xmlsecurity_pdfsigning"_ustr);
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
@@ -88,7 +88,7 @@ void PDFSigningTest::setUp()
 std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     std::vector<SignatureInformation> aRet;
@@ -116,7 +116,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
 {
     // Make sure that input has nOriginalSignatureCount signatures.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     vcl::filter::PDFDocument aDocument;
@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
 
     // Make sure that good.pdf has 1 valid signature.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     vcl::filter::PDFDocument aDocument;
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
     // testPDFRemove(), here intentionally test DocumentSignatureManager and
     // PDFSignatureHelper code as well.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
 
@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
         osl::File::RC::E_None,
         osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "2good.pdf", aOutURL));
     // Load the test document as a storage and read its two signatures.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     std::unique_ptr<SvStream> pStream
         = utl::UcbStreamHelper::CreateStream(aOutURL, StreamMode::READ | StreamMode::WRITE);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
@@ -320,12 +320,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf107782)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
 
     // Load the test document as a storage and read its signatures.
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107782.pdf";
     std::unique_ptr<SvStream> pStream
         = utl::UcbStreamHelper::CreateStream(aURL, StreamMode::READ | StreamMode::WRITE);
@@ -590,13 +590,13 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
 
     // Tokenize the bugdoc.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
         m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf", StreamMode::STD_READ);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     aManager.setSignatureStream(xStream);
     aManager.read(/*bUseTempStream=*/false);
 
@@ -615,14 +615,14 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGoodCustomMagic)
 
     // Tokenize the bugdoc.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
         m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-custom-magic.pdf",
         StreamMode::STD_READ);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     aManager.setSignatureStream(xStream);
     aManager.read(/*bUseTempStream=*/false);
 

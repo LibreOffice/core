@@ -70,7 +70,7 @@ void XmlScriptTest::setUp()
     test::BootstrapFixture::setUp();
     maDataPath = "/xmlscript/qa/cppunit/data/";
 
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxDesktop.set(frame::Desktop::create(m_xContext));
 }
 
 Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_view sFileName)
@@ -87,12 +87,12 @@ Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_vi
     aFile.close();
 
     Reference<container::XNameContainer> xDialogModel(
-        mxComponentContext->getServiceManager()->createInstanceWithContext(
-            u"com.sun.star.awt.UnoControlDialogModel"_ustr, mxComponentContext),
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.awt.UnoControlDialogModel"_ustr, m_xContext),
         UNO_QUERY);
 
     ::xmlscript::importDialogModel(::xmlscript::createInputStream(std::move(bytes)), xDialogModel,
-                                   mxComponentContext, nullptr);
+                                   m_xContext, nullptr);
 
     Reference<lang::XComponent> xDialogModelComp(xDialogModel, UNO_QUERY);
     if (xDialogModelComp)
@@ -105,7 +105,7 @@ void XmlScriptTest::exportToFile(std::u16string_view sURL,
                                  Reference<container::XNameContainer> const& xDialogModel)
 {
     Reference<io::XInputStreamProvider> xProvider(
-        ::xmlscript::exportDialogModel(xDialogModel, mxComponentContext, nullptr));
+        ::xmlscript::exportDialogModel(xDialogModel, m_xContext, nullptr));
     Reference<io::XInputStream> xStream(xProvider->createInputStream());
 
     Sequence<sal_Int8> bytes;

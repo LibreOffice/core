@@ -46,7 +46,7 @@ public:
     virtual void setUp() override
     {
         UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxDesktop.set(frame::Desktop::create(m_xContext));
         mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
         CPPUNIT_ASSERT(mxComponent.is());
     }

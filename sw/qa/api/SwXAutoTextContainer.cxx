@@ -45,7 +45,7 @@ public:
     virtual void setUp() override
     {
         UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxDesktop.set(frame::Desktop::create(m_xContext));
     }
 
     Reference<XInterface> init() override

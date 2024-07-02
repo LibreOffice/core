@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFrame.is());
 
-    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(mxComponentContext));
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
     util::URL url;
     url.Complete = xModel->getURL() + "#dummy";
     xParser->parseStrict(url);

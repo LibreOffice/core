@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     uno::Reference<frame::XTitle> xTitle(xFrame, css::uno::UNO_QUERY);
     OUString defaultTitle = xTitle->getTitle();
 
-    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(mxComponentContext));
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
 
     // Open print preview window and get title.
     util::URL printPreviewURL;
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
 
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xModel->getCurrentController(),
                                                                uno::UNO_QUERY);
-    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(mxComponentContext));
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
 
     util::URL printPreviewURL;
     printPreviewURL.Complete = u".uno::PrintPreview"_ustr;

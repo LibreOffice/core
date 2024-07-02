@@ -43,7 +43,7 @@ void test::AccessibleTestBase::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop = frame::Desktop::create(mxComponentContext);
+    mxDesktop = frame::Desktop::create(m_xContext);
 }
 
 void test::AccessibleTestBase::close()

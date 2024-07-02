@@ -2432,7 +2432,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133477)
 
     // Save the shape to a BMP.
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
-        = drawing::GraphicExportFilter::create(mxComponentContext);
+        = drawing::GraphicExportFilter::create(m_xContext);
     uno::Reference<lang::XComponent> xSourceDoc(getShape(1), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xSourceDoc);
 

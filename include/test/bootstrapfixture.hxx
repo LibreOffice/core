@@ -46,8 +46,6 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
     bool m_bAssertOnDialog;
 
 protected:
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-
     // A convenience function to be used to conditionally exclude tests not behaving properly
     // on UI scaling other than 1:1. Using this should be considered a temporary workaround,
     // until a proper fix is implemented that either considers the DPI properly in the test, or

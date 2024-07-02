@@ -61,7 +61,7 @@ void SwXDocumentSettings::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxDesktop.set(frame::Desktop::create(m_xContext));
 }
 
 void SwXDocumentSettings::tearDown()

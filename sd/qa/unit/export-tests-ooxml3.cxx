@@ -319,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115005)
 
     // additional checks of the output file
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();
@@ -352,7 +352,7 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
 
     // additional checks of the output file
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
-        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
+        = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();

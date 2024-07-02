@@ -85,7 +85,7 @@ void SwXFootnote::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxDesktop.set(frame::Desktop::create(m_xContext));
     mxTextDocument = Reference<text::XTextDocument>(
         loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr),
         uno::UNO_QUERY_THROW);

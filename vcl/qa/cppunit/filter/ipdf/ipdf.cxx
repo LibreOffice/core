@@ -51,7 +51,7 @@ void VclFilterIpdfTest::setUp()
     UnoApiTest::setUp();
     MacrosTest::setUpX509(m_directories, u"vcl_filter_ipdf"_ustr);
 
-    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 }
 

@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
         return;
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
+        = xml::crypto::SEInitializer::create(m_xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment

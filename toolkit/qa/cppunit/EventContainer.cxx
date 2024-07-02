@@ -38,11 +38,10 @@ class EventContainerTest : public test::BootstrapFixture
 // Otherwise this would break macro signatures.
 CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
 {
-    Reference<XMultiComponentFactory> xFactory(mxComponentContext->getServiceManager(),
-                                               UNO_SET_THROW);
+    Reference<XMultiComponentFactory> xFactory(m_xContext->getServiceManager(), UNO_SET_THROW);
     Reference<XControlModel> xControlModel(
         xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr,
-                                            mxComponentContext),
+                                            m_xContext),
         UNO_QUERY_THROW);
 
     Reference<beans::XPropertySet> xPropSet(xControlModel, UNO_QUERY_THROW);

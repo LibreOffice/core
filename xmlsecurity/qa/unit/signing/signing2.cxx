@@ -60,7 +60,7 @@ void SigningTest2::setUp()
     MacrosTest::setUpGpg(m_directories, u"xmlsecurity_signing2"_ustr);
 
     // Initialize crypto after setting up the environment variables.
-    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
 #ifdef NSS_USE_ALG_IN_ANY_SIGNATURE

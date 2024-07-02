@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
 
     // Export it as JPEG.
     uno::Reference<drawing::XGraphicExportFilter> xExportFilter
-        = drawing::GraphicExportFilter::create(mxComponentContext);
+        = drawing::GraphicExportFilter::create(m_xContext);
     // This resulted in a css::lang::IllegalArgumentException for a Writer
     // picture.
     xExportFilter->setSourceDocument(xShape);
