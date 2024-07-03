@@ -428,12 +428,6 @@ void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, tools::Long nSetMa
 
 void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
 {
-    static const Point aEmptyPoint;
-
-    bool bOldUpdate = bUpdateMode;
-    tools::Rectangle aCurOutputArea( GetOutputRect() );
-    if( (nWinBits & WB_SMART_ARRANGE) && aCurOutputArea.TopLeft() != aEmptyPoint )
-        bUpdateMode = false;
     aAutoArrangeIdle.Stop();
     nFlags |= IconChoiceFlags::Arranging;
     ShowCursor( false );
@@ -448,11 +442,6 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
     //if( !(nWinBits & WB_DETAILS ))
     pView->Invalidate( InvalidateFlags::NoChildren );
     nFlags &= ~IconChoiceFlags::Arranging;
-    if( (nWinBits & WB_SMART_ARRANGE) && aCurOutputArea.TopLeft() != aEmptyPoint )
-    {
-        MakeVisible( aCurOutputArea );
-        SetUpdateMode( bOldUpdate );
-    }
     ShowCursor( true );
 }
 
