@@ -65,8 +65,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pCurHighlightFrame(nullptr),
     pHead(nullptr),
     pCursor(nullptr),
-    ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
-    bUpdateMode(true)
+    ePositionMode(SvxIconChoiceCtrlPositionMode::Free)
 {
     SetStyle( nWinStyle );
     pImpCursor.reset( new IcnCursor_Impl( this ) );
@@ -131,8 +130,7 @@ void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
             nMaxVirtHeight = DEFAULT_MAX_VIRT_HEIGHT;
         maZOrderList.clear();
         SetOrigin( Point() );
-        if( bUpdateMode )
-            pView->Invalidate(InvalidateFlags::NoChildren);
+        pView->Invalidate(InvalidateFlags::NoChildren);
     }
     AdjustScrollBars();
     maEntries.clear();
@@ -190,21 +188,16 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
     maZOrderList.push_back( pEntry );
     pImpCursor->Clear();
 
-    // If the UpdateMode is true, don't set all bounding rectangles to
+    // don't set all bounding rectangles to
     // 'to be checked', but only the bounding rectangle of the new entry.
     // Thus, don't call InvalidateBoundingRect!
     pEntry->aRect.SetRight( LONG_MAX );
-    if( bUpdateMode )
-    {
-        FindBoundingRect( pEntry );
-        tools::Rectangle aOutputArea( GetOutputRect() );
-        pGridMap->OccupyGrids( pEntry );
-        if( !aOutputArea.Overlaps( pEntry->aRect ) )
-            return; // is invisible
-        pView->Invalidate( pEntry->aRect );
-    }
-    else
-        InvalidateBoundingRect( pEntry->aRect );
+    FindBoundingRect(pEntry);
+    tools::Rectangle aOutputArea(GetOutputRect());
+    pGridMap->OccupyGrids(pEntry);
+    if (!aOutputArea.Overlaps(pEntry->aRect))
+        return; // is invisible
+    pView->Invalidate(pEntry->aRect);
 }
 
 void SvxIconChoiceCtrl_Impl::RemoveEntry(size_t nPos)
@@ -281,14 +274,12 @@ void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool 
     // correctly!
     if (!(nFlags & IconChoiceFlags::SelectingRect))
         ToTop(pEntry);
-    if (bUpdateMode)
-    {
-        if (pEntry == pCursor)
-            ShowCursor(false);
-        pView->Invalidate(CalcFocusRect(pEntry));
-        if (pEntry == pCursor)
-            ShowCursor(true);
-    }
+
+    if (pEntry == pCursor)
+        ShowCursor(false);
+    pView->Invalidate(CalcFocusRect(pEntry));
+    if (pEntry == pCursor)
+        ShowCursor(true);
 
     // #i101012# emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
     if (bSelect)
@@ -1073,21 +1064,6 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
     RepaintSelectedEntries();
 }
 
-void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
-{
-    if( bUpdate != bUpdateMode )
-    {
-        bUpdateMode = bUpdate;
-        if( bUpdate )
-        {
-            AdjustScrollBars();
-            pImpCursor->Clear();
-            pGridMap->Clear();
-            pView->Invalidate(InvalidateFlags::NoChildren);
-        }
-    }
-}
-
 // priorities of the emphasis:  bSelected
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
                                            vcl::RenderContext& rRenderContext)
@@ -1695,11 +1671,9 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     aOrigin.AdjustX(nDx );
     aOrigin.AdjustY(nDy );
     aOutputArea.SetPos( aOrigin );
-    if( GetUpdateMode() )
-    {
-        pView->PaintImmediately();
-        ShowCursor( false );
-    }
+
+    pView->PaintImmediately();
+    ShowCursor(false);
 
     // invert origin for SV (so we can scroll/paint using document coordinates)
     aOrigin *= -1;
@@ -1707,7 +1681,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
 
     bool bScrollable = pView->GetBackground().IsScrollable();
 
-    if( bScrollable && GetUpdateMode() )
+    if (bScrollable)
     {
         // scroll in reverse direction!
         pView->Control::Scroll( -nDx, -nDy, aOutputArea,
@@ -1729,12 +1703,11 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
         }
     }
 
-    if( GetUpdateMode() )
-        ShowCursor( true );
+    ShowCursor(true);
 
     // check if we still need scrollbars
     CheckScrollBars();
-    if( bScrollable && GetUpdateMode() )
+    if (bScrollable)
         pView->PaintImmediately();
 
     // If the requested area can not be made completely visible, the

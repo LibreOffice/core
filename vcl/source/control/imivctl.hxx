@@ -140,7 +140,6 @@ class SvxIconChoiceCtrl_Impl
 
     SvxIconChoiceCtrlPositionMode ePositionMode;
     bool                    bBoundRectsDirty;
-    bool                    bUpdateMode;
 
     void                ShowCursor( bool bShow );
 
@@ -241,8 +240,6 @@ public:
     void                Resize();
     void                GetFocus();
     void                LoseFocus();
-    void                SetUpdateMode( bool bUpdate );
-    bool                GetUpdateMode() const { return bUpdateMode; }
     void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext);
 
     void                SetEntryPos(
