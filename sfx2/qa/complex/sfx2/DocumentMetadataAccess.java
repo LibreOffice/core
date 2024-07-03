@@ -578,21 +578,6 @@ public class DocumentMetadataAccess
         }
     }
 
-    @Test
-    public void checkTdf123293() throws Exception
-    {
-        XComponent xComp = null;
-        try {
-            xComp = util.DesktopTools.loadDocUsingStream(xMSF, TestDocument.getPath("TESTRDFA.odt"));
-
-            // Metadata was discarded when loading from stream, make sure it's there now
-            XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
-            assertNotNull("No metadata loaded", xRepoSupplier);
-        } finally {
-            close(xComp);
-        }
-    }
-
 // utilities -------------------------------------------------------------
 
     static void close(XComponent i_comp)

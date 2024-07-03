@@ -15,10 +15,6 @@
 #endif
 #include <memory>
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -31,19 +27,19 @@
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 #include <com/sun/star/rdf/XRepository.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <comphelper/sequence.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 #include <test/unoapixml_test.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <osl/file.hxx>
 
-
 using namespace ::com::sun::star;
-
 
 namespace {
 
@@ -55,7 +51,6 @@ public:
         : UnoApiXmlTest(u"/sfx2/qa/cppunit/data/"_ustr)
     {
     }
-
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -450,6 +445,26 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testRDFa)
     verify(/*bIsExport*/ false);
     saveAndReload(u"writer8"_ustr);
     verify(/*bIsExport*/ true);
+}
+
+CPPUNIT_TEST_FIXTURE(MiscTest, testTdf123293)
+{
+    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                     css::uno::UNO_SET_THROW);
+    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+    const uno::Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(createFileURL(u"TESTRDFA.odt") ),
+                                                   uno::UNO_SET_THROW);
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+        "InputStream", xInputStream) };
+    mxComponent = mxDesktop->loadComponentFromURL(u"private:stream"_ustr, u"_blank"_ustr, 0, aLoadArgs);
+    CPPUNIT_ASSERT(mxComponent.is());
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
+    uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
+    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocRepo);
 }
 }
 
