@@ -3373,7 +3373,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             rSh.LockView( true );
                             bool bSelObj
                                 = rSh.SelectObj(aDocPos, aMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
-                            if ( bSelObj && bSelectFrameInsteadOfCroppedImage )
+                            if ( bSelObj && bSelectFrameInsteadOfCroppedImage && pSdrView )
                             {
                                 bool bWrapped(false);
                                 const SdrObject* pFly = rSh.GetBestObject(false, GotoObjFlags::FlyAny, true, nullptr, &bWrapped);
