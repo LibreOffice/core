@@ -184,7 +184,7 @@ struct PairHash
 // The single static instance that takes over that global Item sharing
 // Maps SfxItemPool sub-classes to a set of shared items.
 //
-// Noting that the WhichId is part of the key, to simply the implementation of the hashCode() overides
+// Noting that the WhichId is part of the key, to simply the implementation of the hashCode() overrides
 // in SfxPoolItem sub-classes.
 static std::unordered_map<std::pair<SfxItemType, sal_uInt16>, std::unique_ptr<ItemInstanceManager>,
                           PairHash>
