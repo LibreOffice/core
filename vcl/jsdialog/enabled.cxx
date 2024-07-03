@@ -246,6 +246,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"svx/ui/headfootformatpage.ui"
         || rUIFile == u"sfx/ui/linefragment.ui"
         || rUIFile == u"sfx/ui/managestylepage.ui"
+        || rUIFile == u"sfx/ui/newstyle.ui"
         || rUIFile == u"sfx/ui/password.ui"
         // svx
         || rUIFile == u"svx/ui/acceptrejectchangesdialog.ui"
