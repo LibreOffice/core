@@ -62,7 +62,7 @@ struct XclExpSBIndex
     void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
     { mnSupbook = nSupbook; mnSBTab = nSBTab; }
     XclExpSBIndex( sal_uInt16 nSupbook, sal_uInt16 nSBTab ) : mnSupbook(nSupbook), mnSBTab(nSBTab)  {}
-    XclExpSBIndex() {}
+    XclExpSBIndex() : mnSupbook(0), mnSBTab(0) {}
 };
 
 /** Stores the correct Excel sheet index for each Calc sheet.
