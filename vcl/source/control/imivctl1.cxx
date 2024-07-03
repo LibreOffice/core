@@ -473,14 +473,9 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
 
 void SvxIconChoiceCtrl_Impl::RepaintSelectedEntries()
 {
-    const size_t nCount = maZOrderList.size();
-    if (!nCount)
-        return;
-
     tools::Rectangle aOutRect(GetOutputRect());
-    for (size_t nCur = 0; nCur < nCount; nCur++)
+    for (SvxIconChoiceCtrlEntry* pEntry : maZOrderList)
     {
-        SvxIconChoiceCtrlEntry* pEntry = maZOrderList[nCur];
         if (pEntry->GetFlags() & SvxIconViewFlags::SELECTED)
         {
             const tools::Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
