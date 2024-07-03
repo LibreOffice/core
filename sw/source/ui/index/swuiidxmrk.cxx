@@ -526,7 +526,7 @@ void SwIndexMarkPane::InsertMark()
 
     SwTOXMarkDescription aDesc(eType);
 
-    const int nLevel = m_xLevelNF->denormalize(m_xLevelNF->get_value());
+    const auto nLevel = m_xLevelNF->denormalize(m_xLevelNF->get_value());
     switch( nPos)
     {
         case POS_CONTENT : break;
