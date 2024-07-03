@@ -369,6 +369,7 @@ constexpr sal_uInt16 g_nMinWidth(MINLAY);
 SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/columnpage.ui", "ColumnPage", &rSet)
     , m_nFirstVis(0)
+    , m_nCols(0)
     , m_pModifiedField(nullptr)
     , m_bFormat(false)
     , m_bFrame(false)
