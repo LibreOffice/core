@@ -73,14 +73,6 @@ class SvxIconChoiceCtrlEntry
     tools::Rectangle               aGridRect;          // Only valid in Grid-mode
     sal_Int32               nPos;
 
-    /*
-        The insert position in the Insertlist is equal to the (sort) order stated at the Insert
-        (-> Order of the anchors in the anchors-list!). In "AutoArrange" mode the visible order
-        can differ. The entries will be linked because of this.
-    */
-    SvxIconChoiceCtrlEntry*         pblink;     // backward (left neighbour)
-    SvxIconChoiceCtrlEntry*         pflink;     // forward (right neighbour)
-
     SvxIconChoiceCtrlTextMode       eTextMode;
     sal_uInt16                      nX,nY;      // for keyboard control
     SvxIconViewFlags                nFlags;
@@ -88,23 +80,6 @@ class SvxIconChoiceCtrlEntry
     void                    ClearFlags( SvxIconViewFlags nMask ) { nFlags &= ~nMask; }
     void                    SetFlags( SvxIconViewFlags nMask ) { nFlags |= nMask; }
     void                    AssignFlags( SvxIconViewFlags _nFlags ) { nFlags = _nFlags; }
-
-    // set left neighbour (A <-> B  ==>  A <-> this <-> B)
-    void                    SetBacklink( SvxIconChoiceCtrlEntry* pA )
-                            {
-                                pA->pflink->pblink = this;      // X <- B
-                                this->pflink = pA->pflink;      // X -> B
-                                this->pblink = pA;              // A <- X
-                                pA->pflink = this;              // A -> X
-                            }
-    // Unlink (A <-> this <-> B  ==>  A <-> B)
-    void                    Unlink()
-                            {
-                                this->pblink->pflink = this->pflink;
-                                this->pflink->pblink = this->pblink;
-                                this->pflink = nullptr;
-                                this->pblink = nullptr;
-                            }
 
 public:
                             SvxIconChoiceCtrlEntry( OUString aText, Image aImage );
