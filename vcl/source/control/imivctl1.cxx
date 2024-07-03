@@ -1988,31 +1988,6 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
     }
 }
 
-GridId SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
-{
-    Point aPos( rPos );
-    aPos.AdjustX( -(LROFFS_WINBORDER) );
-    aPos.AdjustY( -(TBOFFS_WINBORDER) );
-    tools::Long nMaxCol = aVirtOutputSize.Width() / nGridDX;
-    if( nMaxCol )
-        nMaxCol--;
-    tools::Long nGridX = aPos.X() / nGridDX;
-    if( nGridX > nMaxCol )
-        nGridX = nMaxCol;
-    tools::Long nGridY = aPos.Y() / nGridDY;
-    tools::Long nGridsX = aOutputSize.Width() / nGridDX;
-    GridId nGrid = (nGridY * nGridsX) + nGridX;
-    tools::Long nMiddle = (nGridX * nGridDX) + (nGridDX / 2);
-    if( rPos.X() < nMiddle )
-    {
-        if( !nGrid )
-            nGrid = GRID_NOT_FOUND;
-        else
-            nGrid--;
-    }
-    return nGrid;
-}
-
 bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( !(rHEvt.GetMode() & HelpEventMode::QUICK ) )

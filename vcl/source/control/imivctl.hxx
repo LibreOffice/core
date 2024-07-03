@@ -177,7 +177,6 @@ class SvxIconChoiceCtrl_Impl
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
-    GridId              GetPredecessorGrid( const Point& rDocPos) const;
 
     bool                CheckVerScrollBar();
     bool                CheckHorScrollBar();
