@@ -22,6 +22,9 @@
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -30,6 +33,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <sax/tools/converter.hxx>
@@ -49,6 +53,13 @@
 #include <xmlsignaturehelper.hxx>
 #include <documentsignaturemanager.hxx>
 #include <biginteger.hxx>
+#include <certificate.hxx>
+#include <xsecctl.hxx>
+#include <ucbhelper/interceptedinteraction.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/configuration.hxx>
 
 using namespace com::sun::star;
 
@@ -113,6 +124,7 @@ public:
     void testXAdES();
     /// Works with an existing good XAdES signature.
     void testXAdESGood();
+    void testInvalidZIP();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -144,6 +156,7 @@ public:
     CPPUNIT_TEST(testXAdESNotype);
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
+    CPPUNIT_TEST(testInvalidZIP);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -894,6 +907,39 @@ void SigningTest::testXAdESGood()
         (nActual == SignatureState::NOTVALIDATED
          || nActual == SignatureState::OK));
 }
+
+void SigningTest::testInvalidZIP()
+{
+// set RepairPackage via interaction handler, same as soffice does
+// - if it's passed to load the behavior is different, oddly enough.
+#if 0
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> interceptions{
+        { css::uno::Any(css::document::BrokenPackageRequest()),
+          cppu::UnoType<css::task::XInteractionApprove>::get(), 0 },
+    };
+    ::rtl::Reference<ucbhelper::InterceptedInteraction> pIH(new ucbhelper::InterceptedInteraction);
+    pIH->setInterceptions(std::move(interceptions));
+
+    uno::Sequence<beans::PropertyValue> args = { comphelper::makePropertyValue(
+        "InteractionHandler", uno::Reference<task::XInteractionHandler>(pIH)) };
+#endif
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                       + "signature-forgery-cdh-lfh.docx");
+    mxComponent = mxDesktop->loadComponentFromURL(url, "_default", 0, {} /*args*/);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(!pBaseModel); // old branch cannot repair DOCX
+#if 0
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // the problem was that the document Zip structure is interpreted
+    // misleadingly in RepairPackage case, but signature was still returned
+    // as partially valid.
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
+                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+#endif
+}
+
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("odfds"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"));
