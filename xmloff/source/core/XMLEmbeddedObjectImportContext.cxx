@@ -118,8 +118,8 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
         return;
 
     assert(dynamic_cast<SvXMLImport*>(xFilter.get()));
-    SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xFilter.get());
-    mxFastHandler = pFastHandler;
+    SvXMLImport& rFastHandler = dynamic_cast<SvXMLImport&>(*xFilter);
+    mxFastHandler = &rFastHandler;
 
     try
     {
@@ -138,7 +138,7 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
     // #i34042: copy namespace declarations
     // We created a new instance of XMLImport, so we need to propagate the namespace
     // declarations to it.
-    pFastHandler->GetNamespaceMap() = GetImport().GetNamespaceMap();
+    rFastHandler.GetNamespaceMap() = GetImport().GetNamespaceMap();
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
