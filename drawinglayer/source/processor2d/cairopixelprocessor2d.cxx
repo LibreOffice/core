@@ -147,7 +147,7 @@ void addB2DPolygonToPathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolyg
 
 // needed as helper, see below. It guarantees clean
 // construction/cleanup using destructor
-// NOTE: maybe mpSurface can be costructed even simpler,
+// NOTE: maybe mpSurface can be constructed even simpler,
 // not sure about that. It is only used to construct
 // and hold path data
 struct CairoContextHolder
@@ -182,7 +182,7 @@ CairoContextHolder globalStaticCairoContext;
 // transformed form - using the current transformation set at the
 // cairo context.
 // This is not what we want to have a re-usable path that is
-// buffered at the Poly(poly)gon: we explicitely want *exactly*
+// buffered at the Poly(poly)gon: we explicitly want *exactly*
 // the coordinates in the polygon preserved *at* the polygon to
 // be able to re-use that data independent from any set
 // transformation at any cairo context.
@@ -317,7 +317,7 @@ void checkAndDoPixelSnap(cairo_t* pRT,
                 // transform to discrete pixels
                 cairo_user_to_device(pRT, pX, pY);
 
-                // round them, also substract 0.5 which will be as transform in
+                // round them, also subtract 0.5 which will be as transform in
                 // the paint method to move to 'inside' pixels when AA used.
                 // remember: this is only done when AA is active (see bPixelSnap
                 // above)
@@ -914,7 +914,7 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
     // insert a ARGB image, zoom to the borders. Seems to be half
     // a pixel. Very good to demonstrate: 8x1 pixel, some
     // transparent.
-    // This effect is also visible in the left/right/boittom/top
+    // This effect is also visible in the left/right/bottom/top
     // page shadows, these DO use 8x1/1x8 images which led me to
     // that problem. I see two solutions:
     static bool bRenderMasked(true);
@@ -933,7 +933,7 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
     }
     else
     {
-        // Alternative: for RGBA, resize/scale SLIGHTLY so that that
+        // Alternative: for RGBA, resize/scale SLIGHTLY so that
         // half pixel overlap is forced to be inside the unit range.
         // That makes the error disappear, so no clip needed, but
         // SLIGHTLY smaller.
@@ -1023,7 +1023,7 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
     cairo_set_source_rgb(mpRT, aHairlineColor.getRed(), aHairlineColor.getGreen(),
                          aHairlineColor.getBlue());
 
-    // set LineWidth, use cairos special cairo_set_hairline
+    // set LineWidth, use cairo special cairo_set_hairline
     impl_cairo_set_hairline(mpRT, getViewInformation2D());
 
     // get PathGeometry & paint it
@@ -2241,9 +2241,9 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
 
     if (!bRadial) // css::awt::GradientStyle_ELLIPTICAL
     {
-        // set cairo matirx at cairo_pattern_t to get needed ratio scale done.
+        // set cairo matrix at cairo_pattern_t to get needed ratio scale done.
         // this is necessary since cairo_pattern_create_radial does *not*
-        // support ellipse resp. radial gradient with non-aequidistant
+        // support ellipse resp. radial gradient with non-equidistant
         // ratio directly
         // this uses the transformation 'from user space to pattern space' as
         // cairo docu states. That is the inverse of the intuitive thought
@@ -2354,15 +2354,15 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
-    // evtl. prefer fallback: cairo does *not* render hard color transistions
+    // evtl. prefer fallback: cairo does *not* render hard color transitions
     // in gradients anti-aliased which is most visible in 'step'ed gradients,
     // but may also happen in normal ones -> may need to be checked in
     // basegfx::BColorStops (as tooling, like isSymmetrical() or similar).
     // due to the nature of 'step'ing this also means a low number of
     // filled polygons to be drawn (no 'smooth' parts to be replicated),
-    // so this is no runtime burner by definition.
+    // so this is not runtime burner by definition.
     // Making this configurable using static bool, may be moved to settings
-    // somewhere later. Do not firget to deactivate when working on 'step'ping
+    // somewhere later. Do not forget to deactivate when working on 'step'ping
     // stuff in the other helpers (!)
     static bool bPreferAntiAliasedHardColorTransitions(true);
 
@@ -2389,10 +2389,10 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
             //  NOTE for css::awt::GradientStyle_ELLIPTICAL:
             // The first time ever I will accept slight deviations for the
             // elliptical case here due to it's old chaotic move-two-pixels inside
-            // rendering method that cannot be pached into a lineartransformation
+            // rendering method that cannot be patched into a lineartransformation
             // and is hard/difficult to support in more modern systems. Differences
             // are small and mostly would be visible *if* in steps-mode what is
-            // also rare. IF that should make problems reactivation of tha case
+            // also rare. IF that should make problems reactivation of that case
             // for the default case below is possible. main reason is that speed
             // for direct rendering in cairo is much better.
             processFillGradientPrimitive2D_radial_elliptical(rFillGradientPrimitive2D);
@@ -2407,7 +2407,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         }
         default:
         {
-            // NOTE: All acses are covered above, but keep this as fallback,
+            // NOTE: All cases are covered above, but keep this as fallback,
             // so it is possible anytime to exclude one of the cases above again
             // and go back to decomposed version - just in case...
             processFillGradientPrimitive2D_fallback_decompose(rFillGradientPrimitive2D);
