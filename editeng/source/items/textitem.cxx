@@ -1468,6 +1468,16 @@ SvxColorItem::~SvxColorItem()
 {
 }
 
+bool SvxColorItem::isHashable() const { return true; }
+
+size_t SvxColorItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(mColor));
+    o3tl::hash_combine(seed, maComplexColor);
+    return seed;
+}
+
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -1556,6 +1566,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
