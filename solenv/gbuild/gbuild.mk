@@ -70,8 +70,6 @@ include $(GBUILDDIR)/Helper.mk
 
 include $(GBUILDDIR)/Conditions.mk
 
-include $(SRCDIR)/solenv/inc/langlist.mk
-
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
@@ -176,6 +174,7 @@ endif
 
 include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/TargetLocations.mk
+include $(SRCDIR)/solenv/inc/langlist.mk
 
 define gb_var2file
 $(file >$(1),$(2))$(1)
