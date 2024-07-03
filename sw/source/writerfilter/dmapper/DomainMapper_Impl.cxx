@@ -320,6 +320,7 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
                 case FIELD_REF:
                 case FIELD_PAGE:
                 case FIELD_NUMPAGES:
+                case FIELD_SYMBOL:
                 {
                     // LO does not currently know how to evaluate these as conditions or results
                     return false;
@@ -8382,52 +8383,56 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_SYMBOL:
                 {
-                    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
                     OUString sSymbol( sal_Unicode( sFirstParam.startsWithIgnoreAsciiCase("0x") ?  o3tl::toUInt32(sFirstParam.subView(2),16) : sFirstParam.toUInt32() ) );
-                    OUString sFont;
-                    bool bHasFont = lcl_FindInCommand( pContext->GetCommand(), 'f', sFont);
-                    if ( bHasFont )
+                    if (!pOuter || IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
                     {
-                        sFont = sFont.trim();
-                        if (sFont.startsWith("\""))
-                            sFont = sFont.copy(1);
-                        if (sFont.endsWith("\""))
-                            sFont = sFont.copy(0,sFont.getLength()-1);
-                    }
-
-                    if (xTextAppend.is())
-                    {
-                        uno::Reference< text::XText > xText = xTextAppend->getText();
-                        uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
-                        if (xCrsr.is())
+                        uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                        OUString sFont;
+                        bool bHasFont = lcl_FindInCommand( pContext->GetCommand(), 'f', sFont);
+                        if ( bHasFont )
                         {
-                            xCrsr->gotoEnd(false);
-                            xText->insertString(xCrsr, sSymbol, true);
-                            uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
-                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_CHAR_SET), uno::Any(awt::CharSet::SYMBOL));
-                            if(bHasFont)
-                            {
-                                uno::Any    aVal( sFont );
-                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), aVal);
-                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_ASIAN), aVal);
-                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
+                            sFont = sFont.trim();
+                            if (sFont.startsWith("\""))
+                                sFont = sFont.copy(1);
+                            if (sFont.endsWith("\""))
+                                sFont = sFont.copy(0,sFont.getLength()-1);
+                        }
 
-                            }
-                            PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
-                            if (pCharTopContext.is())
+                        if (xTextAppend.is())
+                        {
+                            uno::Reference< text::XText > xText = xTextAppend->getText();
+                            uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
+                            if (xCrsr.is())
                             {
-                                uno::Sequence<beans::PropertyValue> aValues
-                                    = pCharTopContext->GetPropertyValues(
-                                        /*bCharGrabBag=*/!IsInComments());
-                                OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
-                                for (const beans::PropertyValue& rProperty : aValues)
+                                xCrsr->gotoEnd(false);
+                                xText->insertString(xCrsr, sSymbol, true);
+                                uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
+                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_CHAR_SET), uno::Any(awt::CharSet::SYMBOL));
+                                if(bHasFont)
                                 {
-                                    if (!bHasFont || !rProperty.Name.startsWith(sFontName))
-                                        xProp->setPropertyValue(rProperty.Name, rProperty.Value);
+                                    uno::Any    aVal( sFont );
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), aVal);
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_ASIAN), aVal);
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
+
+                                }
+                                PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
+                                if (pCharTopContext.is())
+                                {
+                                    uno::Sequence<beans::PropertyValue> aValues
+                                        = pCharTopContext->GetPropertyValues(
+                                            /*bCharGrabBag=*/!IsInComments());
+                                    OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
+                                    for (const beans::PropertyValue& rProperty : aValues)
+                                    {
+                                        if (!bHasFont || !rProperty.Name.startsWith(sFontName))
+                                            xProp->setPropertyValue(rProperty.Name, rProperty.Value);
+                                    }
+
                                 }
 
                             }
-
                         }
                     }
                 }
