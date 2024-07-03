@@ -1173,41 +1173,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         rRenderContext.SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos )
-{
-    ShowCursor( false );
-    tools::Rectangle aBoundRect( GetEntryBoundRect( pEntry ));
-    pView->Invalidate( aBoundRect );
-    ToTop( pEntry );
-    if( !IsAutoArrange() )
-    {
-        bool bAdjustVirtSize = false;
-        if( rPos != aBoundRect.TopLeft() )
-        {
-            Point aGridOffs(
-                pEntry->aGridRect.TopLeft() - pEntry->aRect.TopLeft() );
-            pImpCursor->Clear();
-            pGridMap->Clear();
-            aBoundRect.SetPos( rPos );
-            pEntry->aRect = aBoundRect;
-            pEntry->aGridRect.SetPos( rPos + aGridOffs );
-            bAdjustVirtSize = true;
-        }
-        if( bAdjustVirtSize )
-            AdjustVirtSize( pEntry->aRect );
-
-        pView->Invalidate( pEntry->aRect );
-        pGridMap->OccupyGrids( pEntry );
-    }
-    else
-    {
-        SvxIconChoiceCtrlEntry* pPrev = FindEntryPredecessor( pEntry, rPos );
-        SetEntryPredecessor( pEntry, pPrev );
-        aAutoArrangeIdle.Start();
-    }
-    ShowCursor( true );
-}
-
 void SvxIconChoiceCtrl_Impl::SetNoSelection()
 {
     // block recursive calls via SelectEntry

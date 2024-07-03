@@ -242,11 +242,6 @@ public:
     void                LoseFocus();
     void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext);
 
-    void                SetEntryPos(
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            const Point& rPos
-                        );
-
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
 
     void                SetNoSelection();
