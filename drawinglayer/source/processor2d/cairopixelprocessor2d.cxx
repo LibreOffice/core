@@ -727,10 +727,7 @@ std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const BitmapEx
         }
     }
 
-    if (pSystemDependentData_CairoSurface)
-        return pSystemDependentData_CairoSurface->getCairoSurfaceHelper();
-
-    return nullptr;
+    return pSystemDependentData_CairoSurface->getCairoSurfaceHelper();
 }
 
 // This bit-tweaking looping is unpleasant and unfortunate
