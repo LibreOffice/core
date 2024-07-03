@@ -57,7 +57,7 @@ public interface IReportBuilderLayouter
     void setTableName(int _nType, String TableName);
 
     /**
-     * Insert the field names, these are the field names out of a given datebase table
+     * Insert the field names, these are the field names out of a given database table
      */
     void insertFieldNames(final String[] FieldNames);
 
