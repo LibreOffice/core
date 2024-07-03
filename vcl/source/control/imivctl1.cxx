@@ -296,7 +296,6 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pCur = maEntries[ nCur ].get();
-        pCur->ClearFlags( SvxIconViewFlags::POS_MOVED );
         InvalidateBoundingRect(pCur->aRect);
     }
 
@@ -361,8 +360,6 @@ void SvxIconChoiceCtrl_Impl::InitPredecessors()
         SvxIconChoiceCtrlEntry* pPrev = maEntries[ 0 ].get();
         for( size_t nCur = 1; nCur <= nCount; nCur++ )
         {
-            pPrev->ClearFlags(SvxIconViewFlags::POS_MOVED);
-
             SvxIconChoiceCtrlEntry* pNext;
             if( nCur == nCount )
                 pNext = maEntries[ 0 ].get();
@@ -2096,7 +2093,6 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
 
     SvxIconChoiceCtrlPositionMode eOldMode = ePositionMode;
     ePositionMode = eMode;
-    size_t nCount = maEntries.size();
 
     if( eOldMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
     {
@@ -2110,13 +2106,6 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
 
     if( ePositionMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
     {
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = maEntries[ nCur ].get();
-            if (pEntry->GetFlags() & SvxIconViewFlags::POS_MOVED)
-                SetEntryPos(pEntry, GetEntryBoundRect( pEntry ).TopLeft());
-        }
-
         if( maEntries.size() )
             aAutoArrangeIdle.Start();
     }

@@ -39,7 +39,6 @@ enum class SvxIconViewFlags
     NONE           = 0x0000,
     SELECTED       = 0x0001,
     FOCUSED        = 0x0002,
-    POS_MOVED      = 0x0004, // Moved by Drag and Drop, but not logged
 };
 namespace o3tl
 {
