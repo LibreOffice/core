@@ -308,15 +308,15 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                         {}, 0);
                 }
             }
-            pathname = o3tl::toU(path);
+            std::u16string_view resulting_path(o3tl::toU(path));
             // ShellExecuteExW appears to ignore trailing dots, so remove them:
-            while (pathname.endsWith(".", &pathname)) {}
-            auto const n = pathname.lastIndexOf('.');
-            if (n > pathname.lastIndexOf('\\')) {
-                auto const ext = pathname.copy(n + 1);
-                if (!ext.isEmpty()) {
+            while (o3tl::ends_with(resulting_path, u".", &resulting_path)) {}
+            auto const n = resulting_path.find_last_of('.');
+            if (n != std::u16string_view::npos && n > resulting_path.find_last_of('\\')) {
+                auto const ext = resulting_path.substr(n + 1);
+                if (!ext.empty()) {
                     OUString env;
-                    if (osl_getEnvironment(OUString("PATHEXT").pData, &env.pData)
+                    if (osl_getEnvironment(u"PATHEXT"_ustr.pData, &env.pData)
                         != osl_Process_E_None)
                     {
                         SAL_INFO("shell", "osl_getEnvironment(PATHEXT) failed");
