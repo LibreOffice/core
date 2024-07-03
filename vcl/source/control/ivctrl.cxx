@@ -151,7 +151,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
             aFullSize.setWidth ( aFullSize.getWidth()+aEntryRect.GetWidth() );
         }
 
-        _pImpl->Arrange ( false, aFullSize.getWidth(), 0 );
+        _pImpl->Arrange(aFullSize.getWidth(), 0);
     }
     else if ( GetStyle() & WB_ALIGN_LEFT )
     {
@@ -166,13 +166,13 @@ void SvtIconChoiceCtrl::ArrangeIcons()
             aFullSize.setHeight ( aFullSize.getHeight()+aEntryRect.GetHeight() );
         }
 
-        _pImpl->Arrange ( false, 0, aFullSize.getHeight() );
+        _pImpl->Arrange(0, aFullSize.getHeight());
     }
     else
     {
-        _pImpl->Arrange(false, 0, 0);
+        _pImpl->Arrange(0, 0);
     }
-    _pImpl->Arrange( false, 0, 1000 );
+    _pImpl->Arrange(0, 1000 );
 }
 void SvtIconChoiceCtrl::Resize()
 {

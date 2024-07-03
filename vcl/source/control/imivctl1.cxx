@@ -63,7 +63,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr),
-    pHead(nullptr),
     pCursor(nullptr),
     ePositionMode(SvxIconChoiceCtrlPositionMode::Free)
 {
@@ -176,9 +175,6 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
     } else {
         maEntries.push_back( std::move(pEntry1) );
     }
-
-    if( pHead )
-        pEntry->SetBacklink( pHead->pblink );
 
     if( (nFlags & IconChoiceFlags::EntryListPosValid) && nPos >= maEntries.size() - 1 )
         pEntry->nPos = maEntries.size() - 1;
@@ -351,22 +347,7 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const tools::Rectangle& rRect )
     DocRectChanged();
 }
 
-void SvxIconChoiceCtrl_Impl::ClearPredecessors()
-{
-    if( pHead )
-    {
-        size_t nCount = maEntries.size();
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pCur = maEntries[ nCur ].get();
-            pCur->pflink = nullptr;
-            pCur->pblink = nullptr;
-        }
-        pHead = nullptr;
-    }
-}
-
-void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight )
+void SvxIconChoiceCtrl_Impl::Arrange(tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight )
 {
     if ( nSetMaxVirtWidth != 0 )
         nMaxVirtWidth = nSetMaxVirtWidth;
@@ -378,17 +359,15 @@ void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, tools::Long nSetMa
     else
         nMaxVirtHeight = aOutputSize.Height();
 
-    ImpArrange( bKeepPredecessors );
+    ImpArrange();
 }
 
-void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
+void SvxIconChoiceCtrl_Impl::ImpArrange()
 {
     aAutoArrangeIdle.Stop();
     nFlags |= IconChoiceFlags::Arranging;
     ShowCursor( false );
     ResetVirtSize();
-    if( !bKeepPredecessors )
-        ClearPredecessors();
     bBoundRectsDirty = false;
     SetOrigin( Point() );
     VisRectChanged();
@@ -1335,41 +1314,18 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
     SvxIconChoiceCtrlEntry* pEntry;
     const size_t nCount = maEntries.size();
 
-    if( !IsAutoArrange() || !pHead )
+    for( nCur = 0; nCur < nCount; nCur++ )
     {
-        for( nCur = 0; nCur < nCount; nCur++ )
+        pEntry = maEntries[ nCur ].get();
+        if( IsBoundingRectValid( pEntry->aRect ))
         {
-            pEntry = maEntries[ nCur ].get();
-            if( IsBoundingRectValid( pEntry->aRect ))
-            {
-                Size aBoundSize( pEntry->aRect.GetSize() );
-                if( aBoundSize.Height() > nMaxBoundHeight )
-                    nMaxBoundHeight = aBoundSize.Height();
-            }
-            else
-                FindBoundingRect( pEntry );
-            maZOrderList.push_back( pEntry );
+            Size aBoundSize( pEntry->aRect.GetSize() );
+            if( aBoundSize.Height() > nMaxBoundHeight )
+                nMaxBoundHeight = aBoundSize.Height();
         }
-    }
-    else
-    {
-        nCur = 0;
-        pEntry = pHead;
-        while( nCur != nCount )
-        {
-            DBG_ASSERT(pEntry->pflink&&pEntry->pblink,"SvxIconChoiceCtrl_Impl::RecalcAllBoundingRect > Bad link(s)");
-            if( IsBoundingRectValid( pEntry->aRect ))
-            {
-                Size aBoundSize( pEntry->aRect.GetSize() );
-                if( aBoundSize.Height() > nMaxBoundHeight )
-                    nMaxBoundHeight = aBoundSize.Height();
-            }
-            else
-                FindBoundingRect( pEntry );
-            maZOrderList.push_back( pEntry );
-            pEntry = pEntry->pflink;
-            nCur++;
-        }
+        else
+            FindBoundingRect( pEntry );
+        maZOrderList.push_back( pEntry );
     }
     AdjustScrollBars();
 }
@@ -1835,7 +1791,7 @@ bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects,
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
 {
     aAutoArrangeIdle.Stop();
-    Arrange( IsAutoArrange(), 0, 0 );
+    Arrange(0, 0);
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Timer *, void)
@@ -1953,32 +1909,12 @@ void SvxIconChoiceCtrl_Impl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 {
     size_t nCount = maEntries.size();
-    if( !pHead )
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
+        SvxIconChoiceCtrlEntry* pEntry = maEntries[ nCur ].get();
+        if( pEntry->IsSelected() )
         {
-            SvxIconChoiceCtrlEntry* pEntry = maEntries[ nCur ].get();
-            if( pEntry->IsSelected() )
-            {
-                return pEntry;
-            }
-        }
-    }
-    else
-    {
-        SvxIconChoiceCtrlEntry* pEntry = pHead;
-        while( nCount-- )
-        {
-            if( pEntry->IsSelected() )
-            {
-                return pEntry;
-            }
-            pEntry = pEntry->pflink;
-            if( nCount && pEntry == pHead )
-            {
-                OSL_FAIL("SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry > infinite loop!");
-                return nullptr;
-            }
+            return pEntry;
         }
     }
     return nullptr;

@@ -133,7 +133,6 @@ class SvxIconChoiceCtrl_Impl
     DrawTextFlags           nCurTextDrawFlags;
     ImplSVEvent *           nUserEventAdjustScrBars;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
-    SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
@@ -143,7 +142,7 @@ class SvxIconChoiceCtrl_Impl
 
     void                ShowCursor( bool bShow );
 
-    void                ImpArrange( bool bKeepPredecessors );
+    void                ImpArrange();
     void                AdjustVirtSize( const tools::Rectangle& );
     void                ResetVirtSize();
     void                CheckScrollBars();
@@ -179,8 +178,6 @@ class SvxIconChoiceCtrl_Impl
 
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
     GridId              GetPredecessorGrid( const Point& rDocPos) const;
-
-    void                ClearPredecessors();
 
     bool                CheckVerScrollBar();
     bool                CheckHorScrollBar();
@@ -252,11 +249,7 @@ public:
 
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 
-    void                Arrange(
-                            bool bKeepPredecessors,
-                            tools::Long nSetMaxVirtWidth,
-                            tools::Long nSetMaxVirtHeight
-                        );
+    void                Arrange(tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight);
 
     tools::Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
     tools::Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );
