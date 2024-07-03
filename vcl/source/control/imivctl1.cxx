@@ -1104,7 +1104,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     if (bSelected)
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, CalcFocusRect(pEntry),
-                                                  bActiveSelection ? 1 : 2, false, true, false);
+                                                  bActiveSelection ? 1 : 2, false, false, false);
 
 
     PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
