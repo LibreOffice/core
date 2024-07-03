@@ -351,30 +351,6 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const tools::Rectangle& rRect )
     DocRectChanged();
 }
 
-void SvxIconChoiceCtrl_Impl::InitPredecessors()
-{
-    DBG_ASSERT(!pHead,"SvxIconChoiceCtrl_Impl::InitPredecessors() >> Already initialized");
-    size_t nCount = maEntries.size();
-    if( nCount )
-    {
-        SvxIconChoiceCtrlEntry* pPrev = maEntries[ 0 ].get();
-        for( size_t nCur = 1; nCur <= nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pNext;
-            if( nCur == nCount )
-                pNext = maEntries[ 0 ].get();
-            else
-                pNext = maEntries[ nCur ].get();
-            pPrev->pflink = pNext;
-            pNext->pblink = pPrev;
-            pPrev = pNext;
-        }
-        pHead = maEntries[ 0 ].get();
-    }
-    else
-        pHead = nullptr;
-}
-
 void SvxIconChoiceCtrl_Impl::ClearPredecessors()
 {
     if( pHead )

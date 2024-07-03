@@ -180,7 +180,6 @@ class SvxIconChoiceCtrl_Impl
     void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
     GridId              GetPredecessorGrid( const Point& rDocPos) const;
 
-    void                InitPredecessors();
     void                ClearPredecessors();
 
     bool                CheckVerScrollBar();
