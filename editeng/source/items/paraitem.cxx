@@ -347,6 +347,17 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     SetAdjust( eAdjst );
 }
 
+bool SvxAdjustItem::isHashable() const { return true; }
+
+size_t SvxAdjustItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, GetAdjust());
+    o3tl::hash_combine(seed, bOneBlock);
+    o3tl::hash_combine(seed, bLastCenter);
+    o3tl::hash_combine(seed, bLastBlock);
+    return seed;
+}
 
 bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -378,6 +389,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
