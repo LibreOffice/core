@@ -56,7 +56,7 @@ public:
 
 private:
 
-    void cellProps( TablePropertyMapPtr pProps )
+    void cellProps(const TablePropertyMapPtr& pProps)
     {
         if ( m_pTableManager )
             m_pTableManager->cellProps( pProps );
@@ -64,7 +64,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps.get());
     };
 
-    void insertRowProps( TablePropertyMapPtr pProps )
+    void insertRowProps(const TablePropertyMapPtr& pProps)
     {
         if ( m_pTableManager )
             m_pTableManager->insertRowProps( pProps );
@@ -72,7 +72,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps.get());
     };
 
-    void tableExceptionProps( TablePropertyMapPtr pProps )
+    void tableExceptionProps(const TablePropertyMapPtr& pProps)
     {
         if ( m_pTableManager )
             m_pTableManager->tableExceptionProps( pProps );
@@ -80,7 +80,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps.get());
     };
 
-    void insertTableProps( TablePropertyMapPtr pProps )
+    void insertTableProps(const TablePropertyMapPtr& pProps)
     {
         if ( m_pTableManager )
             m_pTableManager->insertTableProps( pProps );
