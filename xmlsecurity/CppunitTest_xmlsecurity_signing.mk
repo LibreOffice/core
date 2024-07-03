@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	sfx \
 	test \
 	tl \
+	ucbhelper \
 	unotest \
 	utl \
 	xmlsecurity \

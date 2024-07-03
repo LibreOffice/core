@@ -24,6 +24,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -32,6 +33,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -54,6 +56,7 @@
 #include <biginteger.hxx>
 #include <certificate.hxx>
 #include <xsecctl.hxx>
+#include <ucbhelper/interceptedinteraction.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1099,6 +1102,38 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
                                  SignatureState::NOTVALIDATED, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SigningTest, testInvalidZIP)
+{
+// set RepairPackage via interaction handler, same as soffice does
+// - if it's passed to load the behavior is different, oddly enough.
+#if 0
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> interceptions{
+        { css::uno::Any(css::document::BrokenPackageRequest()),
+          cppu::UnoType<css::task::XInteractionApprove>::get(), 0 },
+    };
+    ::rtl::Reference<ucbhelper::InterceptedInteraction> pIH(new ucbhelper::InterceptedInteraction);
+    pIH->setInterceptions(std::move(interceptions));
+
+    uno::Sequence<beans::PropertyValue> args = { comphelper::makePropertyValue(
+        "InteractionHandler", uno::Reference<task::XInteractionHandler>(pIH)) };
+#endif
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                       + "signature-forgery-cdh-lfh.docx");
+    mxComponent = mxDesktop->loadComponentFromURL(url, "_default", 0, {} /*args*/);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(!pBaseModel); // old branch cannot repair DOCX
+#if 0
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // the problem was that the document Zip structure is interpreted
+    // misleadingly in RepairPackage case, but signature was still returned
+    // as partially valid.
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
+                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+#endif
 }
 
 /// Test a typical broken ODF signature where one stream is corrupted.
