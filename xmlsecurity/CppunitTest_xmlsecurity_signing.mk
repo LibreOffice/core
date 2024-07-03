@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	subsequenttest \
 	test \
 	tl \
+	ucbhelper \
 	unotest \
 	utl \
 	vcl \

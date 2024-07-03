@@ -20,6 +20,7 @@
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -47,6 +48,7 @@
 #include <biginteger.hxx>
 #include <certificate.hxx>
 #include <xsecctl.hxx>
+#include <ucbhelper/interceptedinteraction.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1175,6 +1177,31 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                                  SignatureState::NOTVALIDATED, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SigningTest, testInvalidZIP)
+{
+    // set RepairPackage via interaction handler, same as soffice does
+    // - if it's passed to load the behavior is different, oddly enough.
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> interceptions{
+        { css::uno::Any(css::document::BrokenPackageRequest()),
+          cppu::UnoType<css::task::XInteractionApprove>::get(), 0 },
+    };
+    ::rtl::Reference<ucbhelper::InterceptedInteraction> pIH(new ucbhelper::InterceptedInteraction);
+    pIH->setInterceptions(std::move(interceptions));
+
+    uno::Sequence<beans::PropertyValue> args = { comphelper::makePropertyValue(
+        u"InteractionHandler"_ustr, uno::Reference<task::XInteractionHandler>(pIH)) };
+    loadWithParams(createFileURL(u"signature-forgery-cdh-lfh.docx"), args);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // the problem was that the document Zip structure is interpreted
+    // misleadingly in RepairPackage case, but signature was still returned
+    // as partially valid.
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
+                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
 /// Test a typical broken ODF signature where one stream is corrupted.
