@@ -647,13 +647,11 @@ ScMyFormatRange::ScMyFormatRange()
 
 bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
 {
-    if (aRangeAddress.StartRow < rRange.aRangeAddress.StartRow)
+    if (aRangeAddress.Sheet < rRange.aRangeAddress.Sheet)
         return true;
-    else
-        if (aRangeAddress.StartRow == rRange.aRangeAddress.StartRow)
-            return (aRangeAddress.StartColumn < rRange.aRangeAddress.StartColumn);
-        else
-            return false;
+    if (aRangeAddress.Sheet > rRange.aRangeAddress.Sheet)
+        return false;
+    return aRangeAddress.StartRow < rRange.aRangeAddress.StartRow;
 }
 
 ScFormatRangeStyles::ScFormatRangeStyles()
@@ -663,16 +661,6 @@ ScFormatRangeStyles::ScFormatRangeStyles()
 
 ScFormatRangeStyles::~ScFormatRangeStyles()
 {
-}
-
-void ScFormatRangeStyles::AddNewTable(const sal_Int32 nTable)
-{
-    sal_Int32 nSize = aTables.size() - 1;
-    if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; ++i)
-        {
-            aTables.emplace_back();
-        }
 }
 
 bool ScFormatRangeStyles::AddStyleName(OUString const & rString, sal_Int32& rIndex, const bool bIsAutoStyle)
@@ -759,12 +747,17 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(std::u16string_view rString, 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, bool& bIsAutoStyle) const
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
+    ScMyFormatRange aNeedle;
+    aNeedle.aRangeAddress.Sheet = nTable;
+    aNeedle.aRangeAddress.StartRow = nRow;
     bIsAutoStyle = false;
-    if (o3tl::make_unsigned(nTable) >= aTables.size())
-        return -1;
-    for (const ScMyFormatRange & rFormatRange : aTables[nTable])
+    for (auto it = maFormatRanges.lower_bound(aNeedle); it != maFormatRanges.end(); ++it)
     {
+        const ScMyFormatRange& rFormatRange = *it;
+        if (rFormatRange.aRangeAddress.Sheet > nTable)
+            break;
+        if (rFormatRange.aRangeAddress.StartRow > nRow)
+            break;
         if ((rFormatRange.aRangeAddress.StartColumn <= nColumn) &&
             (rFormatRange.aRangeAddress.EndColumn >= nColumn) &&
             (rFormatRange.aRangeAddress.StartRow <= nRow) &&
@@ -780,18 +773,16 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
     bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    if (o3tl::make_unsigned(nTable) >= aTables.size())
-        return -1;
-    ScMyFormatRangeAddresses& rFormatRanges(aTables[nTable]);
-    ScMyFormatRangeAddresses::iterator aItr(rFormatRanges.begin());
-    ScMyFormatRangeAddresses::iterator aEndItr(rFormatRanges.end());
-    while (aItr != aEndItr)
+    ScMyFormatRange aNeedle;
+    aNeedle.aRangeAddress.Sheet = nTable;
+    for (auto aItr = maFormatRanges.lower_bound(aNeedle); aItr != maFormatRanges.end(); )
     {
-        if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
-            ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
-            ((*aItr).aRangeAddress.StartRow <= nRow) &&
-            ((*aItr).aRangeAddress.EndRow >= nRow))
+        if (aItr->aRangeAddress.Sheet > nTable)
+            break;
+        if ((aItr->aRangeAddress.StartColumn <= nColumn) &&
+            (aItr->aRangeAddress.EndColumn >= nColumn) &&
+            (aItr->aRangeAddress.StartRow <= nRow) &&
+            (aItr->aRangeAddress.EndRow >= nRow))
         {
             bIsAutoStyle = aItr->bIsAutoStyle;
             nValidationIndex = aItr->nValidationIndex;
@@ -808,7 +799,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
         else
         {
             if ((*aItr).aRangeAddress.EndRow < nRemoveBeforeRow)
-                aItr = rFormatRanges.erase(aItr);
+                aItr = maFormatRanges.erase(aItr);
             else
                 ++aItr;
         }
@@ -820,13 +811,15 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     const sal_Int32 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
     sal_Int32 nTotalColumns(nEndColumn - nStartColumn + 1);
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses& rFormatRanges(aTables[nTable]);
-    ScMyFormatRangeAddresses::iterator aItr(rFormatRanges.begin());
-    ScMyFormatRangeAddresses::iterator aEndItr(rFormatRanges.end());
     sal_Int32 nColumns = 0;
-    while (aItr != aEndItr && nColumns < nTotalColumns)
+    ScMyFormatRange aNeedle;
+    aNeedle.aRangeAddress.Sheet = nTable;
+    for (auto aItr = maFormatRanges.lower_bound(aNeedle); aItr != maFormatRanges.end(); )
     {
+        if (aItr->aRangeAddress.Sheet > nTable)
+            break;
+        if (nColumns >= nTotalColumns)
+            break;
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
         {
@@ -871,7 +864,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
         }
         else
             if(aItr->aRangeAddress.EndRow < nRow)
-                aItr = rFormatRanges.erase(aItr);
+                aItr = maFormatRanges.erase(aItr);
             else
                 ++aItr;
     }
@@ -888,9 +881,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress& rCell
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    OSL_ENSURE(o3tl::make_unsigned(rCellRangeAddress.Sheet) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses& rFormatRanges(aTables[rCellRangeAddress.Sheet]);
-    rFormatRanges.push_back(aFormatRange);
+    maFormatRanges.insert(aFormatRange);
 }
 
 OUString & ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle)
@@ -899,12 +890,6 @@ OUString & ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, cons
         return aAutoStyleNames[nIndex];
     else
         return aStyleNames[nIndex];
-}
-
-void ScFormatRangeStyles::Sort()
-{
-    for (auto & rTable : aTables)
-        rTable.sort();
 }
 
 ScColumnRowStylesBase::ScColumnRowStylesBase()

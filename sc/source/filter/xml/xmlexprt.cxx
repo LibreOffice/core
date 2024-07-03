@@ -498,8 +498,6 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
     if (!pSharedData)
         pSharedData.reset(new ScMySharedData(nTableCount));
 
-    pCellStyles->AddNewTable(nTableCount - 1);
-
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
@@ -1908,7 +1906,6 @@ void ScXMLExport::ExportContent_()
         ScMyDetectiveOpContainer aDetectiveOpContainer;
         GetDetectiveOpList( aDetectiveOpContainer );
 
-        pCellStyles->Sort();
         pMergedRangesContainer->Sort();
         pSharedData->GetDetectiveObjContainer()->Sort();
 
@@ -2515,7 +2512,6 @@ void ScXMLExport::collectAutoStyles()
             CollectSharedData(nTableCount, nShapesCount);
         }
         sal_Int32 nTableCount(xIndex->getCount());
-        pCellStyles->AddNewTable(nTableCount - 1);
         CollectShapesAutoStyles(nTableCount);
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(false))
         {
