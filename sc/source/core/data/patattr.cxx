@@ -302,12 +302,6 @@ CellAttributeHolder::CellAttributeHolder(const CellAttributeHolder& rHolder)
         suppress_fun_call_w_exception(mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false));
 }
 
-CellAttributeHolder::CellAttributeHolder(CellAttributeHolder&& rHolder) noexcept
-: mpScPatternAttr(rHolder.mpScPatternAttr)
-{
-    rHolder.mpScPatternAttr = nullptr;
-}
-
 CellAttributeHolder::~CellAttributeHolder()
 {
     if (nullptr != mpScPatternAttr)
@@ -324,20 +318,6 @@ CellAttributeHolder& CellAttributeHolder::operator=(const CellAttributeHolder& r
 
     if (rHolder.getScPatternAttr())
         mpScPatternAttr = rHolder.getScPatternAttr()->getCellAttributeHelper().registerAndCheck(*rHolder.getScPatternAttr(), false);
-
-    return *this;
-}
-
-CellAttributeHolder& CellAttributeHolder::operator=(CellAttributeHolder&& rHolder)
-{
-    if (nullptr != mpScPatternAttr)
-    {
-        mpScPatternAttr->getCellAttributeHelper().doUnregister(*mpScPatternAttr);
-        mpScPatternAttr = nullptr;
-    }
-
-    std::swap(mpScPatternAttr, rHolder.mpScPatternAttr);
-    assert(!rHolder.mpScPatternAttr);
 
     return *this;
 }

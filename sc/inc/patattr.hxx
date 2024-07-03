@@ -102,13 +102,16 @@ class SC_DLLPUBLIC CellAttributeHolder final
     const ScPatternAttr*    mpScPatternAttr;
 
 public:
-    CellAttributeHolder(const ScPatternAttr* pScPatternAttr = nullptr, bool bPassingOwnership = false);
+    CellAttributeHolder() : mpScPatternAttr(nullptr) {}
+    CellAttributeHolder(const ScPatternAttr* pScPatternAttr, bool bPassingOwnership = false);
     CellAttributeHolder(const CellAttributeHolder& rHolder);
-    CellAttributeHolder(CellAttributeHolder&& rHolder) noexcept;
+    CellAttributeHolder(CellAttributeHolder&& rHolder) noexcept
+        : mpScPatternAttr(rHolder.mpScPatternAttr)
+    { rHolder.mpScPatternAttr = nullptr; }
     ~CellAttributeHolder();
 
     CellAttributeHolder& operator=(const CellAttributeHolder& rHolder);
-    CellAttributeHolder& operator=(CellAttributeHolder&& rHolder);
+    CellAttributeHolder& operator=(CellAttributeHolder&& rHolder) { std::swap(mpScPatternAttr, rHolder.mpScPatternAttr); return *this; }
     bool operator==(const CellAttributeHolder& rHolder) const;
 
     const ScPatternAttr* getScPatternAttr() const { return mpScPatternAttr; }
