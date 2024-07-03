@@ -1113,9 +1113,11 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(!aFill.isDefault() || !aText.isDefault())
+            if (!aFill.isDefault() || !aText.isDefault())
             {
-                return attribute::SdrFillTextAttribute(aFill, aFillFloatTransGradient, aText);
+                return attribute::SdrFillTextAttribute(std::move(aFill),
+                                                       std::move(aFillFloatTransGradient),
+                                                       std::move(aText));
             }
 
             return attribute::SdrFillTextAttribute();
