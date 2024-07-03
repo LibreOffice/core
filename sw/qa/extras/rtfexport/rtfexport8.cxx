@@ -256,6 +256,24 @@ DECLARE_RTFEXPORT_TEST(testTdf158982, "tdf158982.rtf")
                          getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf161878)
+{
+    auto verify = [this]() {
+        //check that the IF field is a pos 2
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextDocument->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+        uno::Reference<beans::XPropertySet> xPropSet(xCursor, uno::UNO_QUERY);
+        xCursor->goRight(2, false);
+        uno::Any xField = xPropSet->getPropertyValue("TextField");
+        CPPUNIT_ASSERT(xField.hasValue());
+    };
+    createSwDoc("tdf161878.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
