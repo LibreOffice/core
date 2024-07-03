@@ -266,12 +266,12 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                             + ") failed",
                         {}, 0);
                 }
-                SHFILEINFOW info;
-                if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_EXETYPE) != 0)
+                if (SHGetFileInfoW(path, 0, nullptr, 0, SHGFI_EXETYPE) != 0)
                 {
                     throw css::security::AccessControlException(
                         "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, {});
                 }
+                SHFILEINFOW info;
                 if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_ATTRIBUTES) == 0)
                 {
                     throw css::lang::IllegalArgumentException(
