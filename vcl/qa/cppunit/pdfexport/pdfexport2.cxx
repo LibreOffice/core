@@ -5227,6 +5227,47 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf71956)
     fnEqualPos(aRect[5], aRect[6]);
 }
 
+// tdf#101686 - Verifies that drawinglayer clears RTL flags while drawing Writer text boxes
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf101686)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf101686.fodt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first pace
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(3, nPageObjectCount);
+
+    std::vector<OUString> aText;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(3, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"Frame"_ustr, aText[0].trim());
+
+    // Without the fix, one of these two will be "xobtxeT"
+    CPPUNIT_ASSERT_EQUAL(u"Textbox"_ustr, aText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u"Textbox"_ustr, aText[2].trim());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
