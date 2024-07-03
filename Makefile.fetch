@@ -183,6 +183,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_KUFI_ARABIC_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SERIF_TARBALL) \
