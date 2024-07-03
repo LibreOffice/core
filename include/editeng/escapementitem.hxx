@@ -51,6 +51,8 @@ public:
                    const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
+    virtual bool             isHashable() const override;
+    virtual size_t           hashCode() const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     MapUnit eCoreMetric,
@@ -64,6 +66,7 @@ public:
 
     void SetEscapement( const SvxEscapement eNew )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         if( SvxEscapement::Off == eNew )
         {
             nEsc = 0;
@@ -80,11 +83,11 @@ public:
     }
     SvxEscapement GetEscapement() const { return static_cast< SvxEscapement >( GetEnumValue() ); }
 
-    short &GetEsc() { return nEsc; }
     short GetEsc() const { return nEsc; }
+    void SetEsc(short nNewEsc) { ASSERT_CHANGE_REFCOUNTED_ITEM; nEsc = nNewEsc; }
 
-    sal_uInt8 &GetProportionalHeight() { return nProp; }
-    sal_uInt8  GetProportionalHeight() const { return nProp; }
+    sal_uInt8 GetProportionalHeight() const { return nProp; }
+    void SetProportionalHeight(sal_uInt8 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; nProp = n; }
 
     virtual sal_uInt16      GetValueCount() const override;
     static OUString         GetValueTextByPos( sal_uInt16 nPos );

@@ -1895,6 +1895,15 @@ SvxEscapementItem::SvxEscapementItem( const short _nEsc,
 {
 }
 
+bool SvxEscapementItem::isHashable() const { return true; }
+
+size_t SvxEscapementItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, nEsc);
+    o3tl::hash_combine(seed, nProp);
+    return seed;
+}
 
 bool SvxEscapementItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -1984,6 +1993,7 @@ bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {

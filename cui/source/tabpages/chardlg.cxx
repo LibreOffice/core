@@ -2488,13 +2488,13 @@ void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 
     if ( SvxEscapement::Superscript == nEsc )
     {
-        aEscItm.GetEsc() = m_nSuperEsc;
-        aEscItm.GetProportionalHeight() = m_nSuperProp;
+        aEscItm.SetEsc( m_nSuperEsc );
+        aEscItm.SetProportionalHeight(m_nSuperProp);
     }
     else if ( SvxEscapement::Subscript == nEsc )
     {
-        aEscItm.GetEsc() = m_nSubEsc;
-        aEscItm.GetProportionalHeight() = m_nSubProp;
+        aEscItm.SetEsc( m_nSubEsc );
+        aEscItm.SetProportionalHeight( m_nSubProp );
     }
 
     short nFac = aEscItm.GetEsc() < 0 ? -1 : 1;
