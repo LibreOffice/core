@@ -268,11 +268,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr(aNew); // triggered separate notification about only this one property
-                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1; // #3, #4
             }
-            // We set it to absolute -> do not propagate it further
-            else if( pNewChgSet )
-                bContinue = false;
+            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1; // #3, #4
         }
     }
     const SvxTextLeftMarginItem *pOldTextLeftMargin(GetItemIfSet(RES_MARGIN_TEXTLEFT, false));
@@ -294,11 +291,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
             }
-            // We set it to absolute -> do not propagate it further
-            else if( pNewChgSet )
-                bContinue = false;
+            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
         }
     }
     const SvxRightMarginItem *pOldRightMargin(GetItemIfSet(RES_MARGIN_RIGHT, false));
@@ -318,11 +312,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if( bChg )
             {
                 SetFormatAttr( aNew );
-                bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
             }
-            // We set it to absolute -> do not propagate it further
-            else if( pNewChgSet )
-                bContinue = false;
+            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
         }
     }
 
@@ -348,11 +339,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         if( bChg )
         {
             SetFormatAttr( aNew );
-            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
         }
-        // We set it to absolute -> do not propagate it further
-        else if( pNewChgSet )
-            bContinue = false;
+        bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
     }
 
     for (size_t nC = 0; nC < SAL_N_ELEMENTS(aFontSizeArr); ++nC)
@@ -363,14 +351,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             // Avoid recursion (SetAttr!)
             !SfxPoolItem::areSame(pFSize, pOldFSize) )
         {
-            if( 100 == pOldFSize->GetProp() &&
-                MapUnit::MapRelative == pOldFSize->GetPropUnit() )
-            {
-                // We set it to absolute -> do not propagate it further
-                if( pNewChgSet )
-                    bContinue = false;
-            }
-            else
+            if (100 != pOldFSize->GetProp() || MapUnit::MapRelative != pOldFSize->GetPropUnit())
             {
                 // We had a relative value -> recalculate
                 const sal_uInt32 nOld = pOldFSize->GetHeight();
@@ -380,38 +361,15 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
                 if (nOld != aNew.GetHeight())
                 {
                     SetFormatAttr( aNew );
-                    bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
                 }
-                // We set it to absolute -> do not propagate it further
-                else if( pNewChgSet )
-                    bContinue = false;
             }
+            bContinue = pOldChgSet && pOldChgSet->GetChgSet()->Count() > 1;
         }
     }
 
     // if the parent changed, we can't know how many properties are involved: always notify a change
     if (!bContinue && bNewParent) // #4
         bContinue = true;
-
-    // If there are any attributes in addition to the special ones already handled, then notify...
-    if (!bContinue && pNewChgSet && pNewChgSet->GetChgSet())
-    {
-        SfxItemIter aIter(*pNewChgSet->GetChgSet());
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-        {
-            const sal_uInt16 nWhich = pItem->Which();
-            if (nWhich == RES_CHRATR_FONTSIZE || nWhich == RES_CHRATR_CTL_FONTSIZE
-                || nWhich == RES_CHRATR_CJK_FONTSIZE ||  nWhich == RES_UL_SPACE
-                || nWhich == RES_MARGIN_TEXTLEFT || nWhich == RES_MARGIN_RIGHT
-                || nWhich == RES_MARGIN_FIRSTLINE)
-            {
-                continue; // already considered for bContinue
-            }
-
-            bContinue = true;
-            break; // only one new condition needed to notify that this style has changes
-        }
-    }
 
     if( bContinue )
         SwFormatColl::SwClientNotify(rModify, rHint);
