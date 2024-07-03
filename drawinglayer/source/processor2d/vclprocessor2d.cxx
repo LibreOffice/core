@@ -315,6 +315,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             // set parameters and paint text snippet
             const basegfx::BColor aRGBFontColor(
                 maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+
+            // Store previous complex text layout state, to be restored after drawing
             const vcl::text::ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
             if (rTextCandidate.getFontAttribute().getRTL())
@@ -324,6 +326,14 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl
                                   | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
                 mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
+            }
+            else
+            {
+                // tdf#101686: This is LTR text, but the output device may have RTL state.
+                vcl::text::ComplexTextLayoutFlags nLTRLayoutMode(nOldLayoutMode);
+                nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+                nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+                mpOutputDevice->SetLayoutMode(nLTRLayoutMode);
             }
 
             OUString aText(rTextCandidate.getText());
@@ -460,10 +470,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 }
             }
 
-            if (rTextCandidate.getFontAttribute().getRTL())
-            {
-                mpOutputDevice->SetLayoutMode(nOldLayoutMode);
-            }
+            // Restore previous layout mode
+            mpOutputDevice->SetLayoutMode(nOldLayoutMode);
 
             if (bChangeMapMode)
                 mpOutputDevice->Pop();
