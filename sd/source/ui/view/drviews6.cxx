@@ -261,9 +261,12 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 
         case SID_BMPMASK_EXEC :
         {
+            if (!mpDrawView)
+                return;
+
             SdrGrafObj* pObj = nullptr;
             const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-            if( mpDrawView && rMarkList.GetMarkCount() )
+            if( rMarkList.GetMarkCount() )
                 pObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark(0)->GetMarkedSdrObj() );
 
             if ( pObj && !mpDrawView->IsTextEdit() )
