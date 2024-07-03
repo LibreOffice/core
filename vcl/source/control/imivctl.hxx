@@ -331,10 +331,6 @@ public:
     void                InitSettings();
     tools::Rectangle           GetOutputRect() const;
 
-    void                SetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry* pPredecessor);
-    // only delivers valid results when in AutoArrange mode!
-    SvxIconChoiceCtrlEntry* FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry, const Point& );
-
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
 
     void                SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry);
