@@ -62,7 +62,9 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
     pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
-    pCurHighlightFrame(nullptr), bHighlightFramePressed(false), pHead(nullptr), pCursor(nullptr),
+    pCurHighlightFrame(nullptr),
+    pHead(nullptr),
+    pCursor(nullptr),
     ePositionMode(SvxIconChoiceCtrlPositionMode::Free),
     bUpdateMode(true)
 {
@@ -578,7 +580,6 @@ void SvxIconChoiceCtrl_Impl::InitScrollBarBox()
 bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
 {
     bool bHandled = true;
-    bHighlightFramePressed = false;
     if( !(nWinBits & WB_NOPOINTERFOCUS) )
         pView->GrabFocus();
 
@@ -646,19 +647,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
 
     nFlags &= ~IconChoiceFlags(IconChoiceFlags::DownCtrl | IconChoiceFlags::DownDeselect);
 
-    if((nWinBits & WB_HIGHLIGHTFRAME) && bHighlightFramePressed && pCurHighlightFrame)
-    {
-        bHandled = true;
-        SvxIconChoiceCtrlEntry* pEntry = pCurHighlightFrame;
-        pCurHighlightFrame = nullptr; // force repaint of frame
-        bHighlightFramePressed = false;
-        SetEntryHighlightFrame( pEntry, true );
-
-        pView->ClickIcon();
-
-        // set focus on Icon
-        SetCursor_Impl(pCurHighlightFrame);
-    }
     return bHandled;
 }
 
@@ -671,7 +659,7 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
     else if( nWinBits & WB_HIGHLIGHTFRAME )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos );
-        SetEntryHighlightFrame( pEntry, false );
+        SetEntryHighlightFrame(pEntry);
     }
     else
         return false;
@@ -2374,22 +2362,13 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderConte
     aBmpRect.AdjustTop( -nBorder );
 
     DecorationView aDecoView(&rRenderContext);
-    DrawHighlightFrameStyle nDecoFlags;
-    if (bHighlightFramePressed)
-        nDecoFlags = DrawHighlightFrameStyle::In;
-    else
-        nDecoFlags = DrawHighlightFrameStyle::Out;
-    aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
+    aDecoView.DrawHighlightFrame(aBmpRect, DrawHighlightFrameStyle::Out);
 }
 
-void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEntry,
-    bool bKeepHighlightFlags )
+void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry)
 {
     if( pEntry == pCurHighlightFrame )
         return;
-
-    if( !bKeepHighlightFlags )
-        bHighlightFramePressed = false;
 
     if (pCurHighlightFrame)
     {

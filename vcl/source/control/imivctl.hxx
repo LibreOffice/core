@@ -135,7 +135,6 @@ class SvxIconChoiceCtrl_Impl
     DrawTextFlags           nCurTextDrawFlags;
     ImplSVEvent *           nUserEventAdjustScrBars;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
-    bool                    bHighlightFramePressed;
     SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     LocalFocus              aFocus;                             // Data for focusrect
@@ -349,10 +348,7 @@ public:
 
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
 
-    void                SetEntryHighlightFrame(
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            bool bKeepHighlightFlags
-                        );
+    void                SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry);
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect);
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
