@@ -37,10 +37,9 @@ class SvxIconChoiceCtrl_Impl;
 enum class SvxIconViewFlags
 {
     NONE           = 0x0000,
-    POS_LOCKED     = 0x0001,
-    SELECTED       = 0x0002,
-    FOCUSED        = 0x0004,
-    POS_MOVED      = 0x0008, // Moved by Drag and Drop, but not logged
+    SELECTED       = 0x0001,
+    FOCUSED        = 0x0002,
+    POS_MOVED      = 0x0004, // Moved by Drag and Drop, but not logged
 };
 namespace o3tl
 {
@@ -122,7 +121,6 @@ public:
     SvxIconViewFlags        GetFlags() const { return nFlags; }
     bool                    IsSelected() const { return bool(nFlags & SvxIconViewFlags::SELECTED); }
     bool                    IsFocused() const { return bool(nFlags & SvxIconViewFlags::FOCUSED); }
-    bool                    IsPosLocked() const { return bool(nFlags & SvxIconViewFlags::POS_LOCKED); }
 };
 
 

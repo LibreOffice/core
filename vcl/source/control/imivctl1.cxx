@@ -297,16 +297,7 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     {
         SvxIconChoiceCtrlEntry* pCur = maEntries[ nCur ].get();
         pCur->ClearFlags( SvxIconViewFlags::POS_MOVED );
-        if( pCur->IsPosLocked() )
-        {
-            // adapt (among others) VirtSize
-            if( !IsBoundingRectValid( pCur->aRect ) )
-                FindBoundingRect( pCur );
-            else
-                AdjustVirtSize( pCur->aRect );
-        }
-        else
-            InvalidateBoundingRect( pCur->aRect );
+        InvalidateBoundingRect(pCur->aRect);
     }
 
     if( !(nWinBits & (WB_NOVSCROLL | WB_NOHSCROLL)) )
@@ -370,7 +361,7 @@ void SvxIconChoiceCtrl_Impl::InitPredecessors()
         SvxIconChoiceCtrlEntry* pPrev = maEntries[ 0 ].get();
         for( size_t nCur = 1; nCur <= nCount; nCur++ )
         {
-            pPrev->ClearFlags( SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED );
+            pPrev->ClearFlags(SvxIconViewFlags::POS_MOVED);
 
             SvxIconChoiceCtrlEntry* pNext;
             if( nCur == nCount )
@@ -1447,12 +1438,6 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
 
 void SvxIconChoiceCtrl_Impl::FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry )
 {
-    DBG_ASSERT(!pEntry->IsPosLocked(),"Locked entry pos in FindBoundingRect");
-    if( pEntry->IsPosLocked() && IsBoundingRectValid( pEntry->aRect) )
-    {
-        AdjustVirtSize( pEntry->aRect );
-        return;
-    }
     Size aSize( CalcBoundingSize() );
     Point aPos(pGridMap->GetGridRect(pGridMap->GetUnoccupiedGrid()).TopLeft());
     SetBoundingRect_Impl( pEntry, aPos, aSize );
@@ -2128,7 +2113,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = maEntries[ nCur ].get();
-            if( pEntry->GetFlags() & SvxIconViewFlags(SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED))
+            if (pEntry->GetFlags() & SvxIconViewFlags::POS_MOVED)
                 SetEntryPos(pEntry, GetEntryBoundRect( pEntry ).TopLeft());
         }
 
