@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testRDFa)
             CPPUNIT_ASSERT(xResult.Second);
         }
 
-        // Remaning rdfs should be empty
+        // Remaining rdfs should be empty
         do
         {
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
