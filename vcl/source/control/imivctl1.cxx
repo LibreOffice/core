@@ -266,10 +266,7 @@ void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool 
         SetCursor(pEntry);
     }
 
-    // Not when dragging though, else the loop in SelectRect doesn't work
-    // correctly!
-    if (!(nFlags & IconChoiceFlags::SelectingRect))
-        ToTop(pEntry);
+    ToTop(pEntry);
 
     if (pEntry == pCursor)
         ShowCursor(false);

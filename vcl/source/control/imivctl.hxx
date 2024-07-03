@@ -52,10 +52,9 @@ class IcnGridMap_Impl;
 enum class IconChoiceFlags {
     NONE                         = 0x0000,
     AddMode                      = 0x0001,
-    SelectingRect                = 0x0002,
-    EntryListPosValid            = 0x0004,
-    ClearingSelection            = 0x0008,
-    Arranging                    = 0x0010,
+    EntryListPosValid            = 0x0002,
+    ClearingSelection            = 0x0004,
+    Arranging                    = 0x0008,
 };
 namespace o3tl {
     template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x007f> {};
