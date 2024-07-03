@@ -254,7 +254,6 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 throw css::lang::IllegalArgumentException(
                     "XSystemShellExecute.execute, path <" + pathname + "> too long", {}, 0);
             }
-            preprocessed_command = pathname;
             wchar_t path[MAX_LONG_PATH];
             wcscpy_s(path, o3tl::toW(pathname.getStr()));
             for (int i = 0;; ++i) {
@@ -337,6 +336,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                     }
                 }
             }
+            preprocessed_command = resulting_path;
         }
     }
 
