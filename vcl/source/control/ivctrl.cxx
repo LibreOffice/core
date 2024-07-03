@@ -131,12 +131,6 @@ void SvtIconChoiceCtrl::MouseButtonDown( const MouseEvent& rMEvt )
         Control::MouseButtonDown( rMEvt );
 }
 
-void SvtIconChoiceCtrl::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    if( !_pImpl->MouseButtonUp( rMEvt ) )
-        Control::MouseButtonUp( rMEvt );
-}
-
 void SvtIconChoiceCtrl::MouseMove( const MouseEvent& rMEvt )
 {
     if( !_pImpl->MouseMove( rMEvt ) )

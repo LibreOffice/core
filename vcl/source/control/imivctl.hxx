@@ -53,11 +53,9 @@ enum class IconChoiceFlags {
     NONE                         = 0x0000,
     AddMode                      = 0x0001,
     SelectingRect                = 0x0002,
-    DownCtrl                     = 0x0004,
-    DownDeselect                 = 0x0008,
-    EntryListPosValid            = 0x0010,
-    ClearingSelection            = 0x0020,
-    Arranging                    = 0x0040
+    EntryListPosValid            = 0x0004,
+    ClearingSelection            = 0x0008,
+    Arranging                    = 0x0010,
 };
 namespace o3tl {
     template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x007f> {};
@@ -236,7 +234,6 @@ public:
                         );
     void                Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     bool                MouseButtonDown( const MouseEvent& );
-    bool                MouseButtonUp( const MouseEvent& );
     bool                MouseMove( const MouseEvent&);
     bool                RequestHelp( const HelpEvent& rHEvt );
     void                SetCursor_Impl(SvxIconChoiceCtrlEntry* pNewCursor);

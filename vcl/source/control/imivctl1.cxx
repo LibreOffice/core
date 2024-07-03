@@ -615,41 +615,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     return bHandled;
 }
 
-bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    bool bHandled = false;
-    if( rMEvt.IsRight() && (nFlags & (IconChoiceFlags::DownCtrl | IconChoiceFlags::DownDeselect) ))
-    {
-        nFlags &= ~IconChoiceFlags(IconChoiceFlags::DownCtrl | IconChoiceFlags::DownDeselect);
-        bHandled = true;
-    }
-
-    Point aDocPos( rMEvt.GetPosPixel() );
-    ToDocPos( aDocPos );
-    SvxIconChoiceCtrlEntry* pDocEntry = GetEntry( aDocPos );
-    if( pDocEntry )
-    {
-        if( nFlags & IconChoiceFlags::DownCtrl )
-        {
-            // Ctrl & MultiSelection
-            ToggleSelection( pDocEntry );
-            SetCursor( pDocEntry );
-            bHandled = true;
-        }
-        else if( nFlags & IconChoiceFlags::DownDeselect )
-        {
-            DeselectAllBut( pDocEntry );
-            SetCursor( pDocEntry );
-            SelectEntry( pDocEntry, true, false );
-            bHandled = true;
-        }
-    }
-
-    nFlags &= ~IconChoiceFlags(IconChoiceFlags::DownCtrl | IconChoiceFlags::DownDeselect);
-
-    return bHandled;
-}
-
 bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
 {
     const Point aDocPos( pView->PixelToLogic(rMEvt.GetPosPixel()) );
