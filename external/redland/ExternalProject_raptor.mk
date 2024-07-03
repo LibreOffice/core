@@ -29,8 +29,8 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
-			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
-			--with-www=xml \
+			--enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
+			--without-www \
 			--without-xslt-config \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
