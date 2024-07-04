@@ -744,7 +744,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
                     if ( nVersion != 0 )
                         pSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
-                    pMed = new SfxMedium( aFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
+                    pMed = new SfxMedium( aFileName, StreamMode::STD_READ, std::move(pFilter), std::move(pSet) );
                 }
                 else
                 {
