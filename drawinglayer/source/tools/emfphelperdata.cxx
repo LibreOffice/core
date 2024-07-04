@@ -1705,7 +1705,7 @@ namespace emfplushelper
                                             stringLength,
                                             std::move(emptyVector),   // EMF-PLUS has no DX-array
                                             {},
-                                            fontAttribute,
+                                            std::move(fontAttribute),
                                             locale,
                                             color.getBColor(), // Font Color
                                             COL_TRANSPARENT,   // Fill Color
@@ -1725,7 +1725,7 @@ namespace emfplushelper
                                             stringLength,
                                             std::move(emptyVector),   // EMF-PLUS has no DX-array
                                             {},
-                                            fontAttribute,
+                                            std::move(fontAttribute),
                                             locale,
                                             color.getBColor());
                             }
