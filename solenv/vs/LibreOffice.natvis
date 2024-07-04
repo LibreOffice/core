@@ -490,11 +490,20 @@
       <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
     </Expand>
   </Type>
+  <Type Name='SwFlowFrame'>
+    <DisplayString Condition="m_pPrecede">{{Follow {m_rThis,view(min)nd}}}</DisplayString>
+    <DisplayString>{{{m_rThis,view(min)nd}}}</DisplayString>
+  </Type>
   <Type Name="SwTabFrame">
-    <DisplayString Condition="m_pPrecede">{{Follow {(SwFrame&amp;)*this,view(min)}}}</DisplayString>
-    <DisplayString>{(SwFrame&amp;)*this}</DisplayString>
+    <DisplayString>{(SwFlowFrame&amp;)*this}</DisplayString>
     <Expand>
       <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="SwContentFrame">
+    <DisplayString>{(SwFlowFrame&amp;)*this}</DisplayString>
+    <Expand>
+      <ExpandedItem>(SwFrame&amp;)(*this)</ExpandedItem>
     </Expand>
   </Type>
   <Type Name="boost::optional&lt;*&gt;">
