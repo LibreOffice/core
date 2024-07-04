@@ -1224,14 +1224,13 @@ void UnoControlModel::setFastPropertyValueImpl( std::unique_lock<std::mutex>& rG
         getFastPropertyValue( rGuard, aOldSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
         css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-        FontDescriptor aOldFontDescriptor;
-        (*pProp) >>= aOldFontDescriptor;
+        FontDescriptor aFontDescriptor;
+        (*pProp) >>= aFontDescriptor;
 
-        FontDescriptor aNewFontDescriptor( aOldFontDescriptor );
-        lcl_ImplMergeFontProperty( aNewFontDescriptor, static_cast<sal_uInt16>(nPropId), rValue );
+        lcl_ImplMergeFontProperty(aFontDescriptor, static_cast<sal_uInt16>(nPropId), rValue);
 
         Any aNewValue;
-        aNewValue <<= aNewFontDescriptor;
+        aNewValue <<= aFontDescriptor;
         sal_Int32 nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
 
         // also, we need  fire a propertyChange event for the single property, since with
