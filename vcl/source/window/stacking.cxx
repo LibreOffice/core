@@ -200,7 +200,10 @@ void Window::ImplToBottomChild()
     if ( mpWindowImpl->mpPrev )
         mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
     else
+    {
+        // coverity[copy_paste_error : FALSE] - this is correct mpFirstChild, not mpNext
         mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild = mpWindowImpl->mpNext;
+    }
     mpWindowImpl->mpNext->mpWindowImpl->mpPrev = mpWindowImpl->mpPrev;
     mpWindowImpl->mpPrev = mpWindowImpl->mpParent->mpWindowImpl->mpLastChild;
     mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = this;
@@ -268,7 +271,10 @@ void Window::ImplToTop( ToTopFlags nFlags )
             if ( mpWindowImpl->mpNext )
                 mpWindowImpl->mpNext->mpWindowImpl->mpPrev = mpWindowImpl->mpPrev;
             else
+            {
+                // coverity[copy_paste_error : FALSE] - this is correct mpLastOverlap, not mpPrev
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = mpWindowImpl->mpPrev;
+            }
 
             // take AlwaysOnTop into account
             bool    bOnTop = IsAlwaysOnTopEnabled();
