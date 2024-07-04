@@ -46,11 +46,9 @@ endif
 
 endif # SYSTEM_PYTHON
 
-ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_check_targets,pyuno, \
     PythonTest_pyuno_pytests_testssl \
 ))
-endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_testcollections \
