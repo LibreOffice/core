@@ -568,10 +568,17 @@ bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlash
 bool OStorageHelper::IsValidZipEntryFileName(
     const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed )
 {
+    long nDots{0};
     for ( sal_Int32 i = 0; i < nLength; i++ )
     {
         switch ( pChar[i] )
         {
+            case '.':
+                if (nDots != -1)
+                {
+                    ++nDots;
+                }
+                break;
             case '\\':
             case '?':
             case '<':
@@ -581,15 +588,17 @@ bool OStorageHelper::IsValidZipEntryFileName(
             case ':':
                 return false;
             case '/':
-                if ( !bSlashAllowed )
+                if (!bSlashAllowed || nDots == 1 || nDots == 2 || i == 0)
                     return false;
+                nDots = 0;
                 break;
             default:
+                nDots = -1;
                 if ( pChar[i] < 32  || (pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF) )
                     return false;
         }
     }
-    return true;
+    return nDots != 1 && nDots != 2;
 }
 
 
