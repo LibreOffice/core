@@ -213,6 +213,7 @@ protected:
     bool                m_bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
     bool                mbVOCInvalidationIsReliable:1; // does the app reliably invalidate the VOC, or do we need to rebuild the primitives on every render?
+    bool m_bIsPDFDocument:1;
     sal_uInt16          m_nDefaultTabulator;
     sal_uInt32          m_nMaxUndoCount;
 
@@ -580,6 +581,12 @@ public:
     void disposeOutliner( std::unique_ptr<SdrOutliner> pOutliner );
 
     bool IsWriter() const { return m_bIsWriter; }
+
+    bool IsPDFDocument() const { return m_bIsPDFDocument; }
+    void setPDFDocument(bool bIsPDFDocument)
+    {
+        m_bIsPDFDocument = bIsPDFDocument;
+    }
 
     // Used as a fallback in *::ReadUserDataSequence() to process common properties
     void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);

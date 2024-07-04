@@ -37,6 +37,8 @@ public:
     AnnotationObject(SdrModel& rSdrModel, tools::Rectangle const& rRectangle,
                      sdr::annotation::AnnotationViewData const& aAnnotationViewData);
 
+    void setup();
+
     rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SdrObjKind GetObjIdentifier() const override;

@@ -59,6 +59,9 @@ bool SdPdfFilter::Import()
     mrDocument.setLock(true);
     const bool bSavedUndoEnabled = mrDocument.IsUndoEnabled();
     mrDocument.EnableUndo(false);
+    mrDocument.setPDFDocument(true);
+
+    SdrModel& rModel = mrDocument;
 
     // Add as many pages as we need up-front.
     mrDocument.CreateFirstPages();
@@ -82,8 +85,6 @@ bool SdPdfFilter::Import()
 
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
-
-        SdrModel& rModel = pPage->getSdrModelFromSdrPage();
 
         rtl::Reference<SdrGrafObj> pSdrGrafObj
             = new SdrGrafObj(rModel, rGraphic, tools::Rectangle(Point(), aSizeHMM));
