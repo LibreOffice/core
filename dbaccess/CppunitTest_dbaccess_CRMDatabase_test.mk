@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_CRMDatabase_test, \
     cppuhelper \
     dbaxml \
     dbtools \
-    firebird_sdbc \
     sal \
     subsequenttest \
     utl \
