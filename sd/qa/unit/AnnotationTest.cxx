@@ -372,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationTextUpdate)
     // Should have no objects yet
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
-    // Should have no annotaitons yet
+    // Should have no annotations yet
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->getAnnotations().size());
 
     // New free text annotation
