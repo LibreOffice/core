@@ -427,6 +427,10 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     basic/text/modifying_text_automatically/using_regular_expressions.odt \
     cpp/Convertor/Convertor.cxx \
     cpp/Convertor/Makefile \
+    cpp/Convertor/test.odt \
+    cpp/lokconvert/lokconvert.cxx \
+    cpp/lokconvert/Makefile \
+    cpp/lokconvert/test.odt \
     cpp/Draw/Draw.cxx \
     cpp/Draw/Makefile \
     cpp/DocumentLoader/DocumentLoader.cxx \
