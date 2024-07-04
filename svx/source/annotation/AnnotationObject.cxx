@@ -11,15 +11,13 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <comphelper/lok.hxx>
+
 #include <sal/log.hxx>
 #include <svx/svdmodel.hxx>
-
 #include <svx/annotation/AnnotationObject.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 #include <sdr/properties/rectangleproperties.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
@@ -29,6 +27,9 @@
 #include <svx/sdooitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdasitm.hxx>
+
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -92,13 +93,13 @@ Color getColorLight(sal_uInt16 aAuthorIndex)
 AnnotationObject::AnnotationObject(SdrModel& rSdrModel)
     : SdrRectObj(rSdrModel)
 {
-    setAsAnnotationObject(true);
+    setup();
 }
 
 AnnotationObject::AnnotationObject(SdrModel& rSdrModel, AnnotationObject const& rSource)
     : SdrRectObj(rSdrModel, rSource)
 {
-    setAsAnnotationObject(true);
+    setup();
 }
 
 AnnotationObject::AnnotationObject(SdrModel& rSdrModel, tools::Rectangle const& rRectangle,
@@ -114,7 +115,15 @@ AnnotationObject::AnnotationObject(SdrModel& rSdrModel, tools::Rectangle const& 
     rSdrModel.EnableUndo(bUndo);
 
     osl_atomic_decrement(&m_refCount);
+    setup();
+}
+
+void AnnotationObject::setup()
+{
     setAsAnnotationObject(true);
+    mbTextFrame = true; // need this so the frame can be adjusted to the text
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    SetVisible(getSdrModelFromSdrObject().IsPDFDocument() || !bLOK);
 }
 
 void AnnotationObject::ApplyAnnotationName()
