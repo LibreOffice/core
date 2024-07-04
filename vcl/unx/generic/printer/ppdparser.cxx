@@ -33,7 +33,10 @@
 
 #include <unx/helper.hxx>
 #include <unx/cupsmgr.hxx>
+
+#if ENABLE_CPDB
 #include <unx/cpdmgr.hxx>
+#endif
 
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>

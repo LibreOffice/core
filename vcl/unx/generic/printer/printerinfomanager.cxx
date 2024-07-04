@@ -19,7 +19,10 @@
 
 #include <config_cpdb.h>
 
+#if ENABLE_CPDB
 #include <unx/cpdmgr.hxx>
+#endif
+
 #include <unx/cupsmgr.hxx>
 #include <unx/gendata.hxx>
 #include <unx/helper.hxx>
