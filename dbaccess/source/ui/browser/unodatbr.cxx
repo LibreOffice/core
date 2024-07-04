@@ -2575,7 +2575,7 @@ bool SbaTableQueryBrowser::implSelect(const weld::TreeIter* pEntry)
             selectPath(m_xCurrentlyDisplayed.get());
 
             // get the name of the data source currently selected
-            ensureConnection(m_xCurrentlyDisplayed.get(), pConData->xConnection);
+            (void)ensureConnection(m_xCurrentlyDisplayed.get(), pConData->xConnection);
 
             if ( !pConData->xConnection.is() )
             {
