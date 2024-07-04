@@ -381,6 +381,8 @@ void SfxObjectShell::PrepareSecondTryLoad_Impl()
     // only for internal use
     pImpl->m_xDocStorage.clear();
     pImpl->mxObjectContainer.reset();
+    pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;
+    pImpl->nScriptingSignatureState = SignatureState::UNKNOWN;
     pImpl->m_bIsInit = false;
     ResetError();
 }
