@@ -1911,18 +1911,19 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
     SignatureState* pState = bScriptingContent ? &pImpl->nScriptingSignatureState : &pImpl->nDocumentSignatureState;
 
-    // repaired package cannot be trusted
-    if (GetMedium()->IsRepairPackage())
-    {
-        *pState = SignatureState::BROKEN;
-    }
-
     if ( *pState == SignatureState::UNKNOWN )
     {
         *pState = SignatureState::NOSIGNATURES;
 
         uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
         *pState = DocumentSignatures::getSignatureState(aInfos);
+
+        // repaired package cannot be trusted
+        if (*pState != SignatureState::NOSIGNATURES
+            && GetMedium()->IsRepairPackage())
+        {
+            *pState = SignatureState::BROKEN;
+        }
     }
 
     if ( *pState == SignatureState::OK || *pState == SignatureState::NOTVALIDATED
