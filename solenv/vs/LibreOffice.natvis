@@ -57,30 +57,50 @@
     typelib_TypeClass_CONSTANTS = 30,
     typelib_TypeClass_SINGLETON = 31,
     -->
-    <DisplayString Condition="pType->eTypeClass == 1" >{*((wchar_t*)pData),c} (CHAR)</DisplayString><!-- typelib_TypeClass_CHAR -->
-    <DisplayString Condition="pType->eTypeClass == 2" >{*((bool*)pData),d} (BOOLEAN)</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
-    <DisplayString Condition="pType->eTypeClass == 3" >{*((unsigned char*)pData),d} (BYTE)</DisplayString><!-- typelib_TypeClass_BYTE -->
-    <DisplayString Condition="pType->eTypeClass == 4" >{*((short*)pData),d} (SHORT)</DisplayString><!-- typelib_TypeClass_SHORT -->
-    <DisplayString Condition="pType->eTypeClass == 5" >{*((unsigned short*)pData),d} (UNSIGNED_SHORT)</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
-    <DisplayString Condition="pType->eTypeClass == 6" >{*((int*)pData),d} (LONG)</DisplayString><!-- typelib_TypeClass_LONG -->
-    <DisplayString Condition="pType->eTypeClass == 7" >{*((unsigned int*)pData),d} (UNSIGNED_LONG)</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
-    <DisplayString Condition="pType->eTypeClass == 8" >{*((__int64*)pData),d} (HYPER)</DisplayString><!-- typelib_TypeClass_HYPER -->
-    <DisplayString Condition="pType->eTypeClass == 9" >{*((unsigned __int64*)pData),d} (UNSIGNED_HYPER)</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
-    <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} (FLOAT)</DisplayString><!-- typelib_TypeClass_FLOAT -->
-    <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} (DOUBLE)</DisplayString><!-- typelib_TypeClass_DOUBLE -->
-    <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} (STRING)</DisplayString><!-- typelib_TypeClass_STRING -->
-    <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} (TYPE)</DisplayString><!-- typelib_TypeClass_TYPE -->
-    <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} (ANY)</DisplayString><!-- typelib_TypeClass_ANY -->
-    <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} (ENUM)</DisplayString><!-- typelib_TypeClass_ENUM -->
-    <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception *)pData)} (EXCEPTION)</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
-    <DisplayString Condition="pType->eTypeClass == 20">{*((uno_Sequence **)pData)} (SEQUENCE)</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
-    <DisplayString Condition="pType->eTypeClass == 22">{*((com::sun::star::uno::BaseReference *)pData)} (INTERFACE)</DisplayString><!-- typelib_TypeClass_INTERFACE -->
-    <DisplayString>{pType->eTypeClass,en}</DisplayString>
-    <Expand>
-      <ExpandedItem Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception *)pData</ExpandedItem>
-      <ExpandedItem Condition="pType->eTypeClass == 20">*(uno_Sequence **)pData</ExpandedItem>
-      <ExpandedItem Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference *)pData</ExpandedItem>
-      <Item Name="Data" Condition="pType->eTypeClass != 19 &amp;&amp; pType->eTypeClass != 20 &amp;&amp; pType->eTypeClass != 22">pData</Item>
+    <DisplayString Condition="pType->eTypeClass == 1" >{*((sal_Unicode*)pData),c} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_CHAR -->
+    <DisplayString Condition="pType->eTypeClass == 2" >{*((bool*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
+    <DisplayString Condition="pType->eTypeClass == 3" >{*((sal_Int8*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_BYTE -->
+    <DisplayString Condition="pType->eTypeClass == 4" >{*((sal_Int16*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 5" >{*((sal_uInt16*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 6" >{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 7" >{*((sal_uInt32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 8" >{*((sal_Int64*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 9" >{*((sal_uInt64*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_FLOAT -->
+    <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_DOUBLE -->
+    <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_STRING -->
+    <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_TYPE -->
+    <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ANY -->
+    <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ENUM -->
+    <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
+    <DisplayString Condition="pType->eTypeClass == 20">{**((uno_Sequence**)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; !((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*(com::sun::star::uno::BaseReference*)pData} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; ((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*((com::sun::star::uno::BaseReference*)pData)->_pInterface} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString>{pType->eTypeClass,en} ({*pType->pTypeName,sub})</DisplayString>
+    <Expand HideRawView="true">
+      <Item Name="pType">pType</Item>
+
+      <Item Name="pData" Condition="pType->eTypeClass == 1" >(sal_Unicode*)pData</Item><!-- typelib_TypeClass_CHAR -->
+      <Item Name="pData" Condition="pType->eTypeClass == 2" >(bool*)pData</Item><!-- typelib_TypeClass_BOOLEAN -->
+      <Item Name="pData" Condition="pType->eTypeClass == 3" >(sal_Int8*)pData</Item><!-- typelib_TypeClass_BYTE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 4" >(sal_Int16*)pData</Item><!-- typelib_TypeClass_SHORT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 5" >(sal_uInt16*)pData</Item><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 6" >(sal_Int32*)pData</Item><!-- typelib_TypeClass_LONG -->
+      <Item Name="pData" Condition="pType->eTypeClass == 7" >(sal_uInt32*)pData</Item><!-- typelib_TypeClass_UNSIGNED_LONG -->
+      <Item Name="pData" Condition="pType->eTypeClass == 8" >(sal_Int64*)pData</Item><!-- typelib_TypeClass_HYPER -->
+      <Item Name="pData" Condition="pType->eTypeClass == 9" >(sal_uInt64*)pData</Item><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+      <Item Name="pData" Condition="pType->eTypeClass == 10">(float*)pData</Item><!-- typelib_TypeClass_FLOAT -->
+      <Item Name="pData" Condition="pType->eTypeClass == 11">(double*)pData</Item><!-- typelib_TypeClass_DOUBLE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 12">(rtl::OUString*)pData</Item><!-- typelib_TypeClass_STRING -->
+      <Item Name="pData" Condition="pType->eTypeClass == 13">(com::sun::star::uno::Type*)pData</Item><!-- typelib_TypeClass_TYPE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 14">(_uno_Any*)pData</Item><!-- typelib_TypeClass_ANY -->
+      <Item Name="pData" Condition="pType->eTypeClass == 15">(sal_Int32*)pData</Item><!-- typelib_TypeClass_ENUM -->
+      <Item Name="pData" Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
+      <Item Name="pData" Condition="pType->eTypeClass == 20">(uno_Sequence**)pData</Item><!-- typelib_TypeClass_SEQUENCE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference*)pData</Item><!-- typelib_TypeClass_INTERFACE -->
+      <Item Name="pData" Condition="pType->eTypeClass &lt; 1 || (pType->eTypeClass &gt; 15 &amp;&amp; pType->eTypeClass &lt; 19) || pType->eTypeClass == 21 || pType->eTypeClass &gt; 22">pData</Item>
+
+      <Item Name="pReserved">pReserved</Item>
     </Expand>
   </Type>
   <Type Name="basegfx::internal::ImplMatLine &lt; 3 &gt;">
