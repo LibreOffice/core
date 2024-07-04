@@ -4958,13 +4958,13 @@ Color ImpEditEngine::GetAutoColor() const
     }
     else
     {
-        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
 
-        if ( GetBackgroundColor() != COL_AUTO )
+        if ( aColor == COL_AUTO )
         {
-            if ( GetBackgroundColor().IsDark() && aColor.IsDark() )
+            if ( GetBackgroundColor().IsDark()  )
                 aColor = COL_WHITE;
-            else if ( GetBackgroundColor().IsBright() && aColor.IsBright() )
+            else
                 aColor = COL_BLACK;
         }
     }
