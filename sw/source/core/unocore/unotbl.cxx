@@ -2189,7 +2189,7 @@ rtl::Reference<SwXCellRange> GetRangeByName(
     UnoActionRemoveContext aRemoveContext(rCursor);
     rCursor.MakeBoxSels();
     // pUnoCursor will be provided and will not be deleted
-    return SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, rDesc);
+    return SwXCellRange::CreateXCellRange(std::move(pUnoCursor), *pFormat, rDesc);
 }
 
 } // namespace
