@@ -497,7 +497,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 SfxObjectShell* pNxtObjSh = SfxObjectShell::GetNext(*pObjSh);
                 // can close immediately
-                if (!pObjSh->IsModified() || pObjSh->isSaveLocked())
+                if (!pObjSh->IsModified())
                 {
                     // don't close the last remaining frame for close dispatch
                     if (pNxtObjSh || !bClosedAll)
@@ -1352,10 +1352,8 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                         return;
                     }
-
                     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
                     Reference< XIndexAccess > xTasks = xDesktop->getFrames();
-
                     if ( !xTasks.is() || !xTasks->getCount() )
                         rSet.DisableItem(nWhich);
                     break;
