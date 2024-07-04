@@ -544,10 +544,17 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
 bool OStorageHelper::IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed )
 {
+    long nDots{0};
     for ( size_t i = 0; i < aName.size(); i++ )
     {
         switch ( aName[i] )
         {
+            case '.':
+                if (nDots != -1)
+                {
+                    ++nDots;
+                }
+                break;
             case '\\':
             case '?':
             case '<':
@@ -557,15 +564,17 @@ bool OStorageHelper::IsValidZipEntryFileName( std::u16string_view aName, bool bS
             case ':':
                 return false;
             case '/':
-                if ( !bSlashAllowed )
+                if (!bSlashAllowed || nDots == 1 || nDots == 2 || i == 0)
                     return false;
+                nDots = 0;
                 break;
             default:
+                nDots = -1;
                 if ( aName[i] < 32  || (aName[i] >= 0xD800 && aName[i] <= 0xDFFF) )
                     return false;
         }
     }
-    return true;
+    return nDots != 1 && nDots != 2;
 }
 
 
