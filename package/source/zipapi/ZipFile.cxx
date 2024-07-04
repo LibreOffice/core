@@ -913,6 +913,7 @@ sal_Int32 ZipFile::readCEN()
 
         ZipEntry aEntry;
         sal_Int16 nCommentLen;
+        sal_Int64 nMinOffset{nEndPos};
 
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
@@ -953,8 +954,11 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nSize = nSize;
             aEntry.nOffset = nOffset;
 
-            aEntry.nOffset += nLocPos;
-            aEntry.nOffset *= -1;
+            if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
+            nMinOffset = std::min(nMinOffset, aEntry.nOffset);
+            if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
+                throw ZipException("Integer-overflow");
 
             if ( aEntry.nPathLen < 0 )
                 throw ZipException("unexpected name length" );
@@ -998,6 +1002,10 @@ sal_Int32 ZipFile::readCEN()
 
         if (nCount != nTotal)
             throw ZipException("Count != Total" );
+        if (nMinOffset != 0)
+        {
+            throw ZipException("Extra bytes at beginning of zip file");
+        }
     }
     catch ( IllegalArgumentException & )
     {
