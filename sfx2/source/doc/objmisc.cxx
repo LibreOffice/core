@@ -923,6 +923,12 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
+    if (GetErrorCode() == ERRCODE_IO_BROKENPACKAGE)
+    {   // safety first: don't run any macros from broken package.
+        pImpl->aMacroMode.disallowMacroExecution();
+        return; // do not get signature status - needs to be done after RepairPackage
+    }
+
     uno::Reference< task::XInteractionHandler > xInteraction;
     if ( GetMedium() )
         xInteraction = GetMedium()->GetInteractionHandler();
