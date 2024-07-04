@@ -375,7 +375,7 @@ bool OCommonEmbeddedObject::getAllowLinkUpdate() const
             uno::Reference<container::XChild> xGrandParent(xParent->getParent(), uno::UNO_QUERY);
             if (!xGrandParent)
                 break;
-            xParent = xGrandParent;
+            xParent = std::move(xGrandParent);
         }
 
         uno::Reference<beans::XPropertySet> xPropSet(xParent, uno::UNO_QUERY);
