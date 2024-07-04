@@ -124,6 +124,8 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
 
     const SfxUInt16Item* pItem = rReq.GetArgs()->GetItem(SID_ATTR_BULLET_INDEX);
+    if (!pItem) // tdf#161653
+        pItem = rReq.GetArg<SfxUInt16Item>(nSId);
     if ( !pItem )
     {
         rReq.Done();
