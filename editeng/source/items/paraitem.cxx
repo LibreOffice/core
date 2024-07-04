@@ -566,7 +566,7 @@ bool SvxOrphansItem::GetPresentation
 // class SvxHyphenZoneItem -----------------------------------------------
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
-    SfxPoolItem( nId, SfxItemType::SvxHyphenZoneItem ),
+    SfxPoolItem( nId, SfxItemType::SvxHyphenZoneItemType ),
     bHyphen(bHyph),
     bKeep(false),
     bNoCapsHyphenation(false),

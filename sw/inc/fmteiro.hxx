@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwFormatEditInReadonly final : public SfxBoolItem
 {
 public:
     SwFormatEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
-                     bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
+                     bool bPrt = false ) : SfxBoolItem( nId, bPrt, SfxItemType::SwFormatEditInReadonly ) {}
 
     /// "pure virtual method" of SfxPoolItem
     virtual SwFormatEditInReadonly* Clone( SfxItemPool *pPool = nullptr ) const override;

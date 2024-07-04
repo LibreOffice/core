@@ -31,7 +31,7 @@
 // (SdrMeasureLineDistItem) over the reference edge
 class SVXCORE_DLLPUBLIC SdrMeasureBelowRefEdgeItem final : public SdrYesNoItem {
 public:
-    SdrMeasureBelowRefEdgeItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,bOn) {}
+    SdrMeasureBelowRefEdgeItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,bOn, SfxItemType::SdrMeasureBelowRefEdgeItemType) {}
     virtual ~SdrMeasureBelowRefEdgeItem() override;
     virtual SdrMeasureBelowRefEdgeItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

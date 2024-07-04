@@ -29,7 +29,7 @@
 // Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
 class SdrMeasureTextIsFixedAngleItem final : public SdrYesNoItem {
 public:
-    SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
+    SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn, SfxItemType::SdrMeasureTextIsFixedAngleItemType) {}
     virtual ~SdrMeasureTextIsFixedAngleItem() override;
     virtual SdrMeasureTextIsFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -42,7 +42,8 @@ public:
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
 class SdrMeasureTextFixedAngleItem final : public SdrAngleItem {
 public:
-    SdrMeasureTextFixedAngleItem(Degree100 nVal=0_deg100): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
+    SdrMeasureTextFixedAngleItem(Degree100 nVal=0_deg100)
+        : SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal, SfxItemType::SdrMeasureTextFixedAngleItemType)  {}
     virtual ~SdrMeasureTextFixedAngleItem() override;
     virtual SdrMeasureTextFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

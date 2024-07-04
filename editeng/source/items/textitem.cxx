@@ -2573,7 +2573,7 @@ void SvxCharRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
                                                TypedWhichId<SvxCharScaleWidthItem> nW )
-    : SfxUInt16Item( nW, nValue, SfxItemType::SvxCharScaleWidthItem )
+    : SfxUInt16Item( nW, nValue, SfxItemType::SvxCharScaleWidthItemType )
 {
 }
 

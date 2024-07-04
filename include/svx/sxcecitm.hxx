@@ -49,7 +49,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrCaptionEscIsRelItem final : public SdrYesNoItem {
 public:
-    SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
+    SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel, SfxItemType::SdrCaptionEscIsRelItemType) {}
     virtual ~SdrCaptionEscIsRelItem() override;
     virtual SdrCaptionEscIsRelItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

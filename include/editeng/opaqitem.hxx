@@ -45,7 +45,7 @@ public:
 };
 
 inline SvxOpaqueItem::SvxOpaqueItem( const sal_uInt16 nId, const bool bOpa )
-    : SfxBoolItem( nId, bOpa )
+    : SfxBoolItem( nId, bOpa, SfxItemType::SvxOpaqueItemType )
 {}
 
 #endif

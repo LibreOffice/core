@@ -24,7 +24,8 @@
 
 class SdrObjPrintableItem final : public SdrYesNoItem {
 public:
-    SdrObjPrintableItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJPRINTABLE,bOn) {}
+    SdrObjPrintableItem(bool bOn=false)
+        : SdrYesNoItem(SDRATTR_OBJPRINTABLE,bOn, SfxItemType::SdrObjPrintableItemType) {}
     virtual SdrObjPrintableItem* Clone(SfxItemPool*) const override
     {
         return new SdrObjPrintableItem(*this);
@@ -33,7 +34,7 @@ public:
 
 class SdrObjVisibleItem final : public SdrYesNoItem {
 public:
-    SdrObjVisibleItem(bool bOn=true): SdrYesNoItem(SDRATTR_OBJVISIBLE,bOn) {}
+    SdrObjVisibleItem(bool bOn=true): SdrYesNoItem(SDRATTR_OBJVISIBLE,bOn, SfxItemType::SdrObjVisibleItemType) {}
     virtual SdrObjVisibleItem* Clone(SfxItemPool*) const override
     {
         return new SdrObjVisibleItem(*this);

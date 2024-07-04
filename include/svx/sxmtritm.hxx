@@ -25,7 +25,7 @@
 // text across the dimension line (90deg counter-clockwise rotation)
 class SVXCORE_DLLPUBLIC SdrMeasureTextRota90Item final : public SdrYesNoItem {
 public:
-    SdrMeasureTextRota90Item(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,bOn) {}
+    SdrMeasureTextRota90Item(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,bOn, SfxItemType::SdrMeasureTextRota90ItemType) {}
     virtual ~SdrMeasureTextRota90Item() override;
     virtual SdrMeasureTextRota90Item* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -39,7 +39,7 @@ public:
 // Text is also switched to the other side of the dimension line, if not Rota90
 class SdrMeasureTextUpsideDownItem final : public SdrYesNoItem {
 public:
-    SdrMeasureTextUpsideDownItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,bOn) {}
+    SdrMeasureTextUpsideDownItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,bOn, SfxItemType::SdrMeasureTextUpsideDownItemType) {}
     virtual ~SdrMeasureTextUpsideDownItem() override;
     virtual SdrMeasureTextUpsideDownItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

@@ -772,7 +772,7 @@ bool ScRotateValueItem::GetPresentation(SfxItemPresentation ePresentation,
 }
 
 ScShrinkToFitCell::ScShrinkToFitCell(bool bShrink)
-    : SfxBoolItem(ATTR_SHRINKTOFIT, bShrink)
+    : SfxBoolItem(ATTR_SHRINKTOFIT, bShrink, SfxItemType::ScShrinkToFitCellType)
 {
 }
 
@@ -792,7 +792,7 @@ bool ScShrinkToFitCell::GetPresentation(SfxItemPresentation,
 }
 
 ScVerticalStackCell::ScVerticalStackCell(bool bStack)
-    : SfxBoolItem(ATTR_STACKED, bStack)
+    : SfxBoolItem(ATTR_STACKED, bStack, SfxItemType::ScVerticalStackCellType)
 {
 }
 
@@ -812,7 +812,7 @@ bool ScVerticalStackCell::GetPresentation(SfxItemPresentation,
 }
 
 ScLineBreakCell::ScLineBreakCell(bool bStack)
-    : SfxBoolItem(ATTR_LINEBREAK, bStack)
+    : SfxBoolItem(ATTR_LINEBREAK, bStack, SfxItemType::ScLineBreakCellType)
 {
 }
 
@@ -832,7 +832,7 @@ bool ScLineBreakCell::GetPresentation(SfxItemPresentation,
 }
 
 ScHyphenateCell::ScHyphenateCell(bool bHyphenate)
-    : SfxBoolItem(ATTR_HYPHENATE, bHyphenate)
+    : SfxBoolItem(ATTR_HYPHENATE, bHyphenate, SfxItemType::ScHyphenateCellType)
 {
 }
 

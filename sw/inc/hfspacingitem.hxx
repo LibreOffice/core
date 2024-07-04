@@ -29,7 +29,7 @@ class SW_DLLPUBLIC SwHeaderAndFooterEatSpacingItem final : public SfxBoolItem
 {
 public:
     SwHeaderAndFooterEatSpacingItem( sal_uInt16 nId = RES_HEADER_FOOTER_EAT_SPACING,
-                                     bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
+                                     bool bPrt = false ) : SfxBoolItem( nId, bPrt, SfxItemType::SwHeaderAndFooterEatSpacingItemType ) {}
 
     // "pure virtual methods" of SfxPoolItem
     virtual SwHeaderAndFooterEatSpacingItem* Clone( SfxItemPool *pPool = nullptr ) const override;

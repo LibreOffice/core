@@ -47,7 +47,7 @@ public:
 };
 
 inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const bool bPrt )
-    : SfxBoolItem( nId, bPrt )
+    : SfxBoolItem( nId, bPrt, SfxItemType::SvxPrintItemType )
 {}
 
 #endif

@@ -2987,7 +2987,7 @@ XFormTextStartItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
-    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror, SfxItemType::XFormTextMirrorItem)
+    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror, SfxItemType::XFormTextMirrorItemType)
 {
 }
 

@@ -283,6 +283,11 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
             const SfxPoolItem* pAlternative = rItemManager.find(*pSource);
             if (pAlternative)
             {
+                SAL_WARN_IF(typeid(*pAlternative) != typeid(*pSource), "svl",
+                            "wrong item from pool, expected " << typeid(*pSource).name()
+                                                              << " but got "
+                                                              << typeid(*pAlternative).name());
+                assert(typeid(*pAlternative) == typeid(*pSource) && "wrong item from pool");
                 // Here we do *not* need to check if it is an SfxSetItem
                 // and cannot be shared if they are in/use another pool:
                 // The SfxItemSet::operator== will check for SfxItemPools
@@ -324,10 +329,15 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // bPassingOwnership is given just use the item, else clone it
     if (!bPassingOwnership)
     {
+        auto pPreviousSource = pSource;
         pSource = pSource->Clone(pMasterPool);
 #ifdef DBG_UTIL
         assert(pSource->Which() == nWhich && "ITEM: Clone of Item did NOT copy/set WhichID (!)");
 #endif
+        SAL_WARN_IF(typeid(*pPreviousSource) != typeid(*pSource), "svl",
+                    "wrong item from Clone(), expected " << typeid(*pPreviousSource).name()
+                                                         << " but got " << typeid(*pSource).name());
+        assert(typeid(*pPreviousSource) == typeid(*pSource) && "wrong item from Clone()");
     }
 
     // increase RefCnt 0->1

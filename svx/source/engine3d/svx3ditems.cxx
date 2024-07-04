@@ -31,7 +31,8 @@ using namespace ::com::sun::star;
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
 Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal,
+                  SfxItemType::Svx3DReducedLineGeometryItemType)
 {
 }
 
@@ -76,7 +77,7 @@ Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 }
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal, SfxItemType::Svx3DSmoothNormalsItemType)
 {
 }
 
@@ -86,7 +87,7 @@ Svx3DSmoothNormalsItem* Svx3DSmoothNormalsItem::Clone(SfxItemPool*) const
 }
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal, SfxItemType::Svx3DSmoothLidsItemType)
 {
 }
 
@@ -96,7 +97,7 @@ Svx3DSmoothLidsItem* Svx3DSmoothLidsItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal, SfxItemType::Svx3DCharacterModeItemType)
 {
 }
 
@@ -106,7 +107,7 @@ Svx3DCharacterModeItem* Svx3DCharacterModeItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal, SfxItemType::Svx3DCloseFrontItemType)
 {
 }
 
@@ -116,7 +117,7 @@ Svx3DCloseFrontItem* Svx3DCloseFrontItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
+    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal, SfxItemType::Svx3DCloseBackItemType)
 {
 }
 

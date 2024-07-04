@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwFormatFollowTextFlow final : public SfxBoolItem
 public:
 
     SwFormatFollowTextFlow( bool bFlag = false )
-        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag, SfxItemType::SwFormatFollowTextFlowType )
         {}
 
     /// "pure virtual methods" of SfxPoolItem

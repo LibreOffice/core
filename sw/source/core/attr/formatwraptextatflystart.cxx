@@ -22,7 +22,7 @@
 #include <libxml/xmlwriter.h>
 
 SwFormatWrapTextAtFlyStart::SwFormatWrapTextAtFlyStart(bool bAtStart)
-    : SfxBoolItem(RES_WRAP_TEXT_AT_FLY_START, bAtStart)
+    : SfxBoolItem(RES_WRAP_TEXT_AT_FLY_START, bAtStart, SfxItemType::SwFormatWrapTextAtFlyStartType)
 {
     // Once this pool item is true, the text from the anchor text of the fly wraps an all pages, not
     // only on the last page of the fly chain.
