@@ -1288,7 +1288,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
             sal_uInt16              nPolyPos = 0;
             // tdf#161833 treat semi-transparent pixels as opaque
             // Limiting the contour wrapping polygon to only opaque pixels
-            // causes clipping of any shadows or other semi-transaprent
+            // causes clipping of any shadows or other semi-transparent
             // areas in the image. So, instead of testing for fully opaque
             // pixels, treat pixels that are not fully transparent as opaque.
             const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( COL_ALPHA_TRANSPARENT );
