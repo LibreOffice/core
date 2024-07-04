@@ -156,15 +156,17 @@ void CertificateViewerDetailsTP::InsertElement(const OUString& rField, const OUS
     m_xElementsLB->set_text(m_xElementsLB->n_children() -1, rValue, 1);
 }
 
+// X.509 + GPG
 CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent, CertificateViewer* pDlg)
     : CertificateViewerTP(pParent, u"xmlsec/ui/certdetails.ui"_ustr, u"CertDetails"_ustr, pDlg)
     , m_xElementsLB(mxBuilder->weld_tree_view(u"tablecontainer"_ustr))
     , m_xValueDetails(mxBuilder->weld_text_view(u"valuedetails"_ustr))
 {
-    const int nWidth = m_xElementsLB->get_approximate_digit_width() * 60;
-    const int nHeight = m_xElementsLB->get_height_rows(8);
+    const int nWidth = m_xElementsLB->get_approximate_digit_width() * 100;
+    const int nHeight = m_xElementsLB->get_height_rows(14);
     m_xElementsLB->set_size_request(nWidth, nHeight);
     m_xValueDetails->set_size_request(nWidth, nHeight);
+    m_xValueDetails->set_editable(false);
     m_xElementsLB->set_column_fixed_widths( { nWidth / 2 } );
 
     // fill list box
@@ -230,6 +232,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
     aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
+    m_xElementsLB->columns_autosize();
     m_xElementsLB->connect_changed(LINK(this, CertificateViewerDetailsTP, ElementSelectHdl));
 }
 
@@ -251,6 +254,7 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, weld::TreeView&, v
     m_xValueDetails->set_text(aElementText);
 }
 
+// X.509
 CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParent, CertificateViewer* pDlg)
     : CertificateViewerTP(pParent, u"xmlsec/ui/certpage.ui"_ustr, u"CertPage"_ustr, pDlg)
     , mpParent(pDlg)
@@ -262,11 +266,13 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParen
     , mxCertOK(mxBuilder->weld_label(u"certok"_ustr))
     , mxCertNotValidated(mxBuilder->weld_label(u"certnotok"_ustr))
 {
-    const int nWidth = mxCertPathLB->get_approximate_digit_width() * 60;
+    const int nWidth = mxCertPathLB->get_approximate_digit_width() * 100;
     const int nHeight = mxCertPathLB->get_height_rows(6);
     mxCertPathLB->set_size_request(nWidth, nHeight);
     mxCertStatusML->set_size_request(nWidth, nHeight);
+    mxCertStatusML->set_editable(false);
 
+    mxCertPathLB->columns_autosize();
     mxCertPathLB->connect_changed( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
     mxViewCertPB->connect_clicked( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
 }

@@ -6,7 +6,7 @@
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="viewcertdialog|ViewCertDialog">View Certificate</property>
-    <property name="resizable">False</property>
+    <property name="resizable">True</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
