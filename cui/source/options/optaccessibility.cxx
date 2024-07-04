@@ -18,9 +18,49 @@
  */
 
 #include "optaccessibility.hxx"
+#include <strings.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/resmgr.hxx>
+#include <dialmgr.hxx>
+
+namespace
+{
+    // <Option ID, <AccessibilityIssueID, TranslateId>>
+    constexpr std::pair<OUString, std::pair<sfx::AccessibilityIssueID, TranslateId>> options_list[] {
+        { u"DocumentTitle"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_TITLE, STR_DOCUMENT_TITLE } },
+        { u"DocumentLanguage"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE, STR_DOCUMENT_DEFAULT_LANGUAGE } },
+        { u"DocumentBackground"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE, STR_AVOID_BACKGROUND_IMAGES } },
+        { u"DocumentStyleLanguage"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND, STR_STYLE_NO_LANGUAGE } },
+        { u"LinkedGraphic"_ustr, { sfx::AccessibilityIssueID::LINKED_GRAPHIC, STR_LINKED_GRAPHIC } },
+        { u"NoAltOleObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_OLE, STR_NO_ALT_OLE } },
+        { u"NoAltGraphicObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_GRAPHIC, STR_NO_ALT_GRAPHIC } },
+        { u"NoAltShapeObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_SHAPE, STR_NO_ALT_SHAPE } },
+        { u"TextFormattings"_ustr, { sfx::AccessibilityIssueID::TEXT_FORMATTING, STR_AVOID_NEWLINES_SPACE } },
+        { u"DirectFormattings"_ustr, { sfx::AccessibilityIssueID::DIRECT_FORMATTING, STR_TEXT_FORMATTING_CONVEYS_MEAN } },
+        { u"TableFormattings"_ustr, { sfx::AccessibilityIssueID::TABLE_FORMATTING, STR_TABLE_FORMATTING } },
+        { u"TableMergeSplit"_ustr, { sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, STR_TABLE_MERGE_SPLIT } },
+        { u"HyperlinkText"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT, STR_HYPERLINK_TEXT_IS_LINK } },
+        { u"HyperlinkShort"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_SHORT, STR_HYPERLINK_TEXT_IS_SHORT } },
+        { u"HyperlinkNoName"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_NO_NAME, STR_HYPERLINK_NO_NAME } },
+        { u"FakeFootnotes"_ustr, { sfx::AccessibilityIssueID::FAKE_FOOTNOTE, STR_AVOID_FAKE_FOOTNOTES } },
+        { u"FakeCaptions"_ustr, { sfx::AccessibilityIssueID::FAKE_CAPTION, STR_AVOID_FAKE_CAPTIONS } },
+        { u"ManualNumbering"_ustr, { sfx::AccessibilityIssueID::MANUAL_NUMBERING, STR_FAKE_NUMBERING } },
+        { u"TextContrast"_ustr, { sfx::AccessibilityIssueID::TEXT_CONTRAST, STR_TEXT_CONTRAST } },
+        { u"TextBlinking"_ustr, { sfx::AccessibilityIssueID::TEXT_BLINKING, STR_TEXT_BLINKING } },
+        { u"HeadingNotInOrder"_ustr, { sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER, STR_HEADINGS_NOT_IN_ORDER } },
+        { u"NonInteractiveForms"_ustr, { sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS, STR_NON_INTERACTIVE_FORMS } },
+        { u"Floatingtext"_ustr, { sfx::AccessibilityIssueID::FLOATING_TEXT, STR_FLOATING_TEXT } },
+        { u"HeadingTable"_ustr, { sfx::AccessibilityIssueID::HEADING_IN_TABLE, STR_HEADING_IN_TABLE } },
+        { u"HeadingStart"_ustr, { sfx::AccessibilityIssueID::HEADING_START, STR_HEADING_START } },
+        { u"HeadingOrder"_ustr, { sfx::AccessibilityIssueID::HEADING_ORDER, STR_HEADING_ORDER } },
+        { u"ContentControl"_ustr, { sfx::AccessibilityIssueID::CONTENT_CONTROL, STR_CONTENT_CONTROL_IN_HEADER } },
+        { u"AvoidFootnotes"_ustr, { sfx::AccessibilityIssueID::AVOID_FOOTNOTES, STR_AVOID_FOOTNOTES } },
+        { u"AvoidEndnotes"_ustr, { sfx::AccessibilityIssueID::AVOID_ENDNOTES, STR_AVOID_ENDNOTES } },
+        { u"FontWorks"_ustr, { sfx::AccessibilityIssueID::FONTWORKS, STR_FONTWORKS } },
+    };
+}
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
@@ -39,11 +79,25 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xAutomaticFontColorImg(m_xBuilder->weld_widget(u"lockautofontcolor"_ustr))
     , m_xPagePreviews(m_xBuilder->weld_check_button(u"systempagepreviewcolor"_ustr))
     , m_xPagePreviewsImg(m_xBuilder->weld_widget(u"locksystempagepreviewcolor"_ustr))
+    , m_xOptionsLB(m_xBuilder->weld_tree_view(u"options"_ustr))
+    , m_xDefaultPB(m_xBuilder->weld_button(u"default"_ustr))
 {
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
     m_xAccessibilityTool->hide();
 #endif
+
+    m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+
+    auto pos = m_xOptionsLB->make_iterator();
+    for (const auto& [compatId, a11yId] : options_list)
+    {
+        m_xOptionsLB->append(pos.get());
+        m_xOptionsLB->set_id(*pos, compatId);
+        m_xOptionsLB->set_text(*pos, CuiResId(a11yId.second), 0);
+    }
+
+    m_xDefaultPB->connect_clicked(LINK(this, SvxAccessibilityOptionsTabPage, UseAsDefaultHdl));
 }
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
@@ -93,6 +147,146 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_xTextSelectionInReadonly->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::HighContrast::isReadOnly() )
         officecfg::Office::Common::Accessibility::HighContrast::set(m_xHighContrast->get_active(), batch);
+
+    const int nCount = m_xOptionsLB->n_children();
+    for (int i = 0; i < nCount; ++i)
+    {
+        OUString option = m_xOptionsLB->get_id(i);
+        const auto& aIssues = std::find_if(
+            std::begin(options_list), std::end(options_list),
+            [option](const auto& p) { return p.first == option; })->second;
+        TriState const current = m_xOptionsLB->get_toggle(i);
+        TriState saved = m_aSavedOptions[aIssues.first];
+        if (current != saved)
+        {
+            bool const bChecked(current != TRISTATE_FALSE);
+            switch (aIssues.first)
+            {
+                case sfx::AccessibilityIssueID::DOCUMENT_TITLE:
+                    officecfg::Office::Common::AccessibilityIssues::DocumentTitle::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE:
+                    officecfg::Office::Common::AccessibilityIssues::DocumentLanguage::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND:
+                    officecfg::Office::Common::AccessibilityIssues::DocumentBackground::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::STYLE_LANGUAGE:
+                    officecfg::Office::Common::AccessibilityIssues::DocumentStyleLanguage::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::LINKED_GRAPHIC:
+                    officecfg::Office::Common::AccessibilityIssues::LinkedGraphic::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::NO_ALT_OLE:
+                    officecfg::Office::Common::AccessibilityIssues::NoAltOleObj::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::NO_ALT_GRAPHIC:
+                    officecfg::Office::Common::AccessibilityIssues::NoAltGraphicObj::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::NO_ALT_SHAPE:
+                    officecfg::Office::Common::AccessibilityIssues::NoAltShapeObj::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_FORMATTING:
+                    officecfg::Office::Common::AccessibilityIssues::TextFormattings::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
+                    officecfg::Office::Common::AccessibilityIssues::DirectFormattings::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TABLE_FORMATTING:
+                    officecfg::Office::Common::AccessibilityIssues::TableFormattings::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT:
+                    officecfg::Office::Common::AccessibilityIssues::TableMergeSplit::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
+                    officecfg::Office::Common::AccessibilityIssues::HyperlinkText::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
+                    officecfg::Office::Common::AccessibilityIssues::HyperlinkShort::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
+                    officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:
+                    officecfg::Office::Common::AccessibilityIssues::FakeFootnotes::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::FAKE_CAPTION:
+                    officecfg::Office::Common::AccessibilityIssues::FakeCaptions::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::MANUAL_NUMBERING:
+                    officecfg::Office::Common::AccessibilityIssues::ManualNumbering::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_CONTRAST:
+                    officecfg::Office::Common::AccessibilityIssues::TextContrast::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_BLINKING:
+                    officecfg::Office::Common::AccessibilityIssues::TextBlinking::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER:
+                    officecfg::Office::Common::AccessibilityIssues::HeadingNotInOrder::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS:
+                    officecfg::Office::Common::AccessibilityIssues::NonInteractiveForms::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::FLOATING_TEXT:
+                    officecfg::Office::Common::AccessibilityIssues::Floatingtext::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HEADING_IN_TABLE:
+                    officecfg::Office::Common::AccessibilityIssues::HeadingTable::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HEADING_START:
+                    officecfg::Office::Common::AccessibilityIssues::HeadingStart::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::HEADING_ORDER:
+                    officecfg::Office::Common::AccessibilityIssues::HeadingOrder::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::CONTENT_CONTROL:
+                    officecfg::Office::Common::AccessibilityIssues::ContentControl::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::AVOID_FOOTNOTES:
+                    officecfg::Office::Common::AccessibilityIssues::AvoidFootnotes::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::AVOID_ENDNOTES:
+                    officecfg::Office::Common::AccessibilityIssues::AvoidEndnotes::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::FONTWORKS:
+                    officecfg::Office::Common::AccessibilityIssues::FontWorks::set(bChecked, batch);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
     batch->commit();
 
     AllSettings aAllSettings = Application::GetSettings();
@@ -152,9 +346,159 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
         m_xHighContrastImg->set_visible(true);
     }
 
+    m_aSavedOptions.clear();
+    const sal_Int32 nCount = m_xOptionsLB->n_children();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        OUString option = m_xOptionsLB->get_id(i);
+        const auto& aIssues = std::find_if(
+            std::begin(options_list), std::end(options_list),
+            [option](const auto& p) { return p.first == option; })->second;
+        bool bChecked = true;
+        switch (aIssues.first)
+        {
+            case sfx::AccessibilityIssueID::DOCUMENT_TITLE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::DocumentTitle::get();
+                break;
+
+            case sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::DocumentLanguage::get();
+                break;
+
+            case sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::DocumentBackground::get();
+                break;
+
+            case sfx::AccessibilityIssueID::STYLE_LANGUAGE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::DocumentStyleLanguage::get();
+                break;
+
+            case sfx::AccessibilityIssueID::LINKED_GRAPHIC:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::LinkedGraphic::get();
+                break;
+
+            case sfx::AccessibilityIssueID::NO_ALT_OLE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::NoAltOleObj::get();
+                break;
+
+            case sfx::AccessibilityIssueID::NO_ALT_GRAPHIC:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::NoAltGraphicObj::get();
+                break;
+
+            case sfx::AccessibilityIssueID::NO_ALT_SHAPE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::NoAltShapeObj::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_FORMATTING:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextFormattings::get();
+                break;
+
+            case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::DirectFormattings::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TableMergeSplit::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TABLE_FORMATTING:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TableFormattings::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HyperlinkText::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HyperlinkShort::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::get();
+                break;
+
+            case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::FakeFootnotes::get();
+                break;
+
+            case sfx::AccessibilityIssueID::FAKE_CAPTION:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::FakeCaptions::get();
+                break;
+
+            case sfx::AccessibilityIssueID::MANUAL_NUMBERING:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::ManualNumbering::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_CONTRAST:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextContrast::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_BLINKING:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextBlinking::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HeadingNotInOrder::get();
+                break;
+
+            case sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::NonInteractiveForms::get();
+                break;
+
+            case sfx::AccessibilityIssueID::FLOATING_TEXT:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::Floatingtext::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HEADING_IN_TABLE:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HeadingTable::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HEADING_START:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HeadingStart::get();
+                break;
+
+            case sfx::AccessibilityIssueID::HEADING_ORDER:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::HeadingOrder::get();
+                break;
+
+            case sfx::AccessibilityIssueID::CONTENT_CONTROL:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::ContentControl::get();
+                break;
+
+            case sfx::AccessibilityIssueID::AVOID_FOOTNOTES:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::AvoidFootnotes::get();
+                break;
+
+            case sfx::AccessibilityIssueID::AVOID_ENDNOTES:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::AvoidEndnotes::get();
+                break;
+
+            case sfx::AccessibilityIssueID::FONTWORKS:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::FontWorks::get();
+                break;
+
+            default:
+                break;
+        }
+
+        TriState value = bChecked ? TRISTATE_TRUE : TRISTATE_FALSE;
+        m_xOptionsLB->set_toggle(i, value);
+        m_aSavedOptions[aIssues.first] = value;
+    }
+
     AllSettings aAllSettings = Application::GetSettings();
     const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();
     m_xAccessibilityTool->set_active(aMiscSettings.GetEnableATToolSupport());
+}
+
+IMPL_LINK_NOARG(SvxAccessibilityOptionsTabPage, UseAsDefaultHdl, weld::Button&, void)
+{
+    const int nCount = m_xOptionsLB->n_children();
+    for (int i = 0; i < nCount; ++i)
+    {
+        m_xOptionsLB->set_toggle(i, TRISTATE_TRUE);
+    }
+    m_aSavedOptions.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6130,6 +6130,311 @@
          <value>false</value>
        </prop>
     </group>
+    <group oor:name="AccessibilityIssues">
+      <info>
+        <desc>Specifies settings for the accessibility options.</desc>
+      </info>
+      <prop oor:name="DocumentTitle" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Document Title, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Document Title accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="DocumentLanguage" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Document Language, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Document Language accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="DocumentBackground" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Document Background, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Document Background accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="DocumentStyleLanguage" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Document Style Language, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Document Style Language accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="LinkedGraphic" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Linked Graphic objects, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Linked Graphic objects accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="NoAltOleObj" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Alternative Text of OLE_Objects, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Alternative Text of OLE_Objects accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="NoAltGraphicObj" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Alternative Text of Graphic Objects, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Alternative Text of Graphic Objects accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="NoAltShapeObj" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Alternative Text of Shape Objects, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Alternative Text of Shape Objects accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="TableMergeSplit" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of merges or splits in Tables, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable merges or splits in Tables accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="TextFormattings" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Text formattings, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Text formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="DirectFormattings" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Direct formattings, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Direct formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="TableFormattings" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Table formattings, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Text formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HyperlinkText" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Hyperlink texts, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable hyperlink texts accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HyperlinkShort" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of short hyperlinks, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable short hyperlinks accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HyperlinkNoName" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of missing hyperlink name, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable missing hyperlink name accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="FakeFootnotes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of simulated footnotes, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable simulated footnotes accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="FakeCaptions" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of simulated captions, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable simulated captions accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="ManualNumbering" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of simulated numbering, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable simulated numbering accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="TextContrast" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check texts contrast is too low, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable texts contrast is too low accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="TextBlinking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of blinking texts, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable blinking texts accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HeadingNotInOrder" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of outline levels of headings not in sequential order,
+            inside the document structure while the user edits the document.
+          </desc>
+          <label>Enable/Disable outline levels of headings not in sequential order accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="NonInteractiveForms" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of non interactive input fields, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable accessibility check of non interactive input fields accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="Floatingtext" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of Frames/Text boxes anchored “As Character“, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable Frames, Text boxes anchored “As Character“ accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HeadingTable" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of tables contain headings, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable tables contain headings accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HeadingStart" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of heading order start with level 1, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable heading order start with level 1 accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="HeadingOrder" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of heading order is correct, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable heading order is correct accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="ContentControl" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of content controls in header or footer, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable document contains content controls in header or footer accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="AvoidFootnotes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of footnotes, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable document contains footnotes accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="AvoidEndnotes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of endnotes, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable document contains endnotes accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+       <prop oor:name="FontWorks" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of fontwork objects, inside the document structure
+            while the user edits the document.
+          </desc>
+          <label>Enable/Disable document contains fontwork objects accessibility issues.</label>
+         </info>
+         <value>true</value>
+       </prop>
+    </group>
     <group oor:name="ExternalMailer">
       <info>
         <desc>Specifies an external mail application to be used for Send as

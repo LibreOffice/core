@@ -19,6 +19,8 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/AccessibilityIssue.hxx>
+#include <map>
 
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
@@ -36,6 +38,13 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xAutomaticFontColorImg;
     std::unique_ptr<weld::CheckButton> m_xPagePreviews;
     std::unique_ptr<weld::Widget> m_xPagePreviewsImg;
+    std::unique_ptr<weld::TreeView> m_xOptionsLB;
+    std::unique_ptr<weld::Button> m_xDefaultPB;
+
+    // saved options after "Reset"; used in "FillItemSet" for comparison
+    std::map<sfx::AccessibilityIssueID, TriState> m_aSavedOptions;
+
+    DECL_LINK(UseAsDefaultHdl, weld::Button&, void);
 
 public:
     SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

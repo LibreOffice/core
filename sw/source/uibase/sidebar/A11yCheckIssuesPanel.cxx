@@ -19,8 +19,10 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
+#include <sfx2/pageids.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
@@ -107,6 +109,7 @@ std::unique_ptr<PanelLayout> A11yCheckIssuesPanel::Create(weld::Widget* pParent,
 A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"A11yCheckIssuesPanel"_ustr,
                   u"modules/swriter/ui/a11ycheckissuespanel.ui"_ustr)
+    , m_xOptionsButton(m_xBuilder->weld_button(u"bOptions"_ustr))
     , mxAccessibilityBox(m_xBuilder->weld_box(u"accessibilityCheckBox"_ustr))
     , mxUpdateBox(m_xBuilder->weld_box(u"updateBox"_ustr))
     , mxUpdateLinkButton(m_xBuilder->weld_link_button(u"updateLinkButton"_ustr))
@@ -162,6 +165,8 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
 
     mpDoc = pDocSh->GetDoc();
 
+    m_xOptionsButton->connect_clicked(LINK(this, A11yCheckIssuesPanel, OptionsButtonClicked));
+
     // If LOKit is enabled, then enable the update button and don't run the accessibility check.
     // In desktop don't show the update button and schedule to run the accessibility check async
     if (comphelper::LibreOfficeKit::isActive())
@@ -175,6 +180,13 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
         mxUpdateBox->hide();
         Application::PostUserEvent(LINK(this, A11yCheckIssuesPanel, PopulateIssuesHdl));
     }
+}
+
+IMPL_LINK_NOARG(A11yCheckIssuesPanel, OptionsButtonClicked, weld::Button&, void)
+{
+    SfxUInt16Item aPageID(SID_OPTIONS_PAGEID, sal_uInt16(RID_SVXPAGE_ACCESSIBILITYCONFIG));
+    auto pDispatcher = GetBindings()->GetDispatcher();
+    pDispatcher->ExecuteList(SID_OPTIONS_TREEDIALOG, SfxCallMode::SYNCHRON, { &aPageID });
 }
 
 IMPL_LINK_NOARG(A11yCheckIssuesPanel, UpdateLinkButtonClicked, weld::LinkButton&, bool)
@@ -256,73 +268,98 @@ void A11yCheckIssuesPanel::populateIssues()
             case sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE:
             case sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Document, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Document, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::STYLE_LANGUAGE:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Styles, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Styles, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::LINKED_GRAPHIC:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Linked, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Linked, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::NO_ALT_OLE:
             case sfx::AccessibilityIssueID::NO_ALT_GRAPHIC:
             case sfx::AccessibilityIssueID::NO_ALT_SHAPE:
             {
-                addEntryForGroup(AccessibilityCheckGroups::NoAlt, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::NoAlt, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Table, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Table, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::TEXT_FORMATTING:
             case sfx::AccessibilityIssueID::TABLE_FORMATTING:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Formatting, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Formatting, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
             {
-                addEntryForGroup(AccessibilityCheckGroups::DirectFormatting, nIndices, pIssue);
-                nDirectFormats++;
+                if (!pIssue->getHidden())
+                {
+                    addEntryForGroup(AccessibilityCheckGroups::DirectFormatting, nIndices, pIssue);
+                    nDirectFormats++;
+                }
             }
             break;
             case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
             case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
             case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Hyperlink, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Hyperlink, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:
             case sfx::AccessibilityIssueID::FAKE_CAPTION:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Fakes, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Fakes, nIndices, pIssue);
             }
             break;
             case sfx::AccessibilityIssueID::MANUAL_NUMBERING:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Numbering, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Numbering, nIndices, pIssue);
             }
             break;
-            case sfx::AccessibilityIssueID::UNSPECIFIED:
+
+            case sfx::AccessibilityIssueID::TEXT_CONTRAST:
+            case sfx::AccessibilityIssueID::TEXT_BLINKING:
+            case sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER:
+            case sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS:
+            case sfx::AccessibilityIssueID::FLOATING_TEXT:
+            case sfx::AccessibilityIssueID::HEADING_IN_TABLE:
+            case sfx::AccessibilityIssueID::HEADING_START:
+            case sfx::AccessibilityIssueID::HEADING_ORDER:
+            case sfx::AccessibilityIssueID::CONTENT_CONTROL:
+            case sfx::AccessibilityIssueID::AVOID_FOOTNOTES:
+            case sfx::AccessibilityIssueID::AVOID_ENDNOTES:
+            case sfx::AccessibilityIssueID::FONTWORKS:
             {
-                addEntryForGroup(AccessibilityCheckGroups::Other, nIndices, pIssue);
+                if (!pIssue->getHidden())
+                    addEntryForGroup(AccessibilityCheckGroups::Other, nIndices, pIssue);
             }
             break;
+
             default:
             {
                 SAL_WARN("sw.a11y", "Invalid issue ID.");
                 continue;
             }
-            break;
-        };
+        }
     }
 
     // add DirectFormats (if have) as last element to Formatting AccessibilityCheckGroup

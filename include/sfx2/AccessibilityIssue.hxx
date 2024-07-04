@@ -22,7 +22,6 @@ namespace sfx
 {
 enum class AccessibilityIssueID
 {
-    UNSPECIFIED, // TODO: remove - temporary
     DOCUMENT_TITLE,
     DOCUMENT_LANGUAGE,
     DOCUMENT_BACKGROUND,
@@ -40,13 +39,25 @@ enum class AccessibilityIssueID
     HYPERLINK_NO_NAME,
     FAKE_FOOTNOTE,
     FAKE_CAPTION,
-    MANUAL_NUMBERING
+    MANUAL_NUMBERING,
+    TEXT_CONTRAST,
+    TEXT_BLINKING,
+    HEADINGS_NOT_IN_ORDER,
+    NON_INTERACTIVE_FORMS,
+    FLOATING_TEXT,
+    HEADING_IN_TABLE,
+    HEADING_START,
+    HEADING_ORDER,
+    CONTENT_CONTROL,
+    AVOID_FOOTNOTES,
+    AVOID_ENDNOTES,
+    FONTWORKS,
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssue
 {
 public:
-    AccessibilityIssue(AccessibilityIssueID eIssueID = AccessibilityIssueID::UNSPECIFIED);
+    AccessibilityIssue(AccessibilityIssueID eIssueID);
     AccessibilityIssue(AccessibilityIssue const&) = default;
     virtual ~AccessibilityIssue();
 
@@ -58,10 +69,14 @@ public:
 
     void setParent(weld::Window* pParent) { m_pParent = pParent; }
 
+    void setHidden(bool bHidden) { m_bHidden = bHidden; }
+    bool getHidden() const { return m_bHidden; }
+
     AccessibilityIssue& operator=(const AccessibilityIssue&) = default;
 
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;
+    bool m_bHidden;
 
     weld::Window* m_pParent;
 };

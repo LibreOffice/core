@@ -337,7 +337,13 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
         if (pShell)
         {
             sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
-            const int nIssueCount(aCollection.getIssues().size());
+            auto& aIssues = aCollection.getIssues();
+            const int nIssueCount = std::count_if(aIssues.begin(), aIssues.end(),
+                [](const std::shared_ptr<sfx::AccessibilityIssue >& pIssues)
+                {
+                    return !pIssues->getHidden();
+                });
+
             if (nIssueCount)
             {
                 OUString aMessage(FilterResId(STR_WARN_PDFUA_ISSUES, nIssueCount));

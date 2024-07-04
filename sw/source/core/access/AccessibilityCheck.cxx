@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <unoparagraph.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <tools/urlobj.hxx>
@@ -73,12 +74,209 @@ SwTextNode* lclSearchNextTextNode(SwNode* pCurrent)
     return pTextNode;
 }
 
+void lcl_SetHiddenIssues(std::shared_ptr<sw::AccessibilityIssue>& pIssue)
+{
+    switch (pIssue->m_eIssueID)
+    {
+        case sfx::AccessibilityIssueID::DOCUMENT_TITLE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::DocumentTitle::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::DocumentLanguage::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::DocumentBackground::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::STYLE_LANGUAGE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::DocumentStyleLanguage::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::LINKED_GRAPHIC:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::LinkedGraphic::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::NO_ALT_OLE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::NoAltOleObj::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::NO_ALT_GRAPHIC:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::NoAltGraphicObj::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::NO_ALT_SHAPE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::NoAltShapeObj::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TableMergeSplit::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TEXT_FORMATTING:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextFormattings::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TABLE_FORMATTING:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TableFormattings::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::DirectFormattings::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HyperlinkText::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HYPERLINK_SHORT:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HyperlinkShort::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::FakeFootnotes::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::FAKE_CAPTION:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::FakeCaptions::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::MANUAL_NUMBERING:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::ManualNumbering::get())
+                pIssue->setHidden(true);
+        }
+        break;
+
+        case sfx::AccessibilityIssueID::TEXT_CONTRAST:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextContrast::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TEXT_BLINKING:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextBlinking::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HeadingNotInOrder::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::NonInteractiveForms::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::FLOATING_TEXT:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::Floatingtext::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HEADING_IN_TABLE:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HeadingTable::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HEADING_START:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HeadingStart::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::HEADING_ORDER:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::HeadingOrder::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::CONTENT_CONTROL:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::ContentControl::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::AVOID_FOOTNOTES:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::AvoidFootnotes::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::AVOID_ENDNOTES:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::AvoidEndnotes::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::FONTWORKS:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::FontWorks::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        default:
+        {
+            SAL_WARN("sw.a11y", "Invalid issue ID.");
+            break;
+        }
+    }
+}
+
 std::shared_ptr<sw::AccessibilityIssue>
 lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
-            sfx::AccessibilityIssueID eIssue = sfx::AccessibilityIssueID::UNSPECIFIED)
+            sfx::AccessibilityIssueID eIssue)
 {
     auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssue);
     pIssue->m_aIssueText = rText;
+
+    // check which a11y issue should be visible
+    lcl_SetHiddenIssues(pIssue);
+
     rIssueCollection.getIssues().push_back(pIssue);
     return pIssue;
 }
@@ -617,7 +815,8 @@ private:
         double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
         if (fContrastRatio < 4.5)
         {
-            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST),
+                                      sfx::AccessibilityIssueID::TEXT_CONTRAST);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setNode(pTextNode);
             pIssue->setDoc(pTextNode->GetDoc());
@@ -1156,7 +1355,8 @@ private:
 
             if (bBlinking)
             {
-                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING));
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING),
+                                          sfx::AccessibilityIssueID::TEXT_BLINKING);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 pIssue->setDoc(pTextNode->GetDoc());
@@ -1223,7 +1423,8 @@ public:
         assert(nLevel >= 0);
         if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
         {
-            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER),
+                                      sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setDoc(pCurrent->GetDoc());
             pIssue->setNode(pCurrent);
@@ -1268,7 +1469,8 @@ public:
         if (!bCheck)
         {
             sal_Int32 nStart = 0;
-            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS),
+                                      sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setNode(pTextNode);
             pIssue->setDoc(pTextNode->GetDoc());
@@ -1315,7 +1517,8 @@ public:
                 {
                     if (aIdx == aCurrentIdx)
                     {
-                        auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
+                        auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT),
+                                                  sfx::AccessibilityIssueID::FLOATING_TEXT);
                         pIssue->setIssueObject(IssueObject::TEXTFRAME);
                         pIssue->setObjectID(pFormat->GetName());
                         pIssue->setDoc(pCurrent->GetDoc());
@@ -1358,7 +1561,8 @@ public:
             if (parentTable)
             {
                 m_bPrevPassed = false;
-                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE),
+                                          sfx::AccessibilityIssueID::HEADING_IN_TABLE);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setDoc(pCurrent->GetDoc());
                 pIssue->setNode(pCurrent);
@@ -1392,19 +1596,22 @@ public:
         {
             // Preparing and posting a warning.
             OUString resultString;
+            sfx::AccessibilityIssueID eIssueID;
             if (!m_prevLevel)
             {
                 resultString = SwResId(STR_HEADING_START);
+                eIssueID = sfx::AccessibilityIssueID::HEADING_START;
             }
             else
             {
                 resultString = SwResId(STR_HEADING_ORDER);
                 resultString
                     = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
+                eIssueID = sfx::AccessibilityIssueID::HEADING_ORDER;
             }
             resultString
                 = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
-            auto pIssue = lclAddIssue(m_rIssueCollection, resultString);
+            auto pIssue = lclAddIssue(m_rIssueCollection, resultString, eIssueID);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setDoc(pCurrent->GetDoc());
             pIssue->setNode(pCurrent);
@@ -1448,7 +1655,8 @@ public:
                         {
                             auto pIssue
                                 = lclAddIssue(m_rIssueCollection,
-                                              SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER));
+                                              SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER),
+                                              sfx::AccessibilityIssueID::CONTENT_CONTROL);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setDoc(pCurrent->GetDoc());
                             pIssue->setNode(pCurrent);
@@ -1558,9 +1766,12 @@ public:
         for (SwTextFootnote* pTextFootnote : pDoc->GetFootnoteIdxs())
         {
             SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
-            auto pIssue = lclAddIssue(m_rIssueCollection, rFootnote.IsEndNote()
-                                                              ? SwResId(STR_AVOID_ENDNOTES)
-                                                              : SwResId(STR_AVOID_FOOTNOTES));
+            OUString sError = rFootnote.IsEndNote() ? SwResId(STR_AVOID_ENDNOTES)
+                                                    : SwResId(STR_AVOID_FOOTNOTES);
+            sfx::AccessibilityIssueID eIssueID = rFootnote.IsEndNote()
+                                                     ? sfx::AccessibilityIssueID::AVOID_FOOTNOTES
+                                                     : sfx::AccessibilityIssueID::AVOID_ENDNOTES;
+            auto pIssue = lclAddIssue(m_rIssueCollection, sError, eIssueID);
             pIssue->setDoc(*pDoc);
             pIssue->setIssueObject(IssueObject::FOOTENDNOTE);
             pIssue->setTextFootnote(pTextFootnote);
@@ -1628,7 +1839,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
 
         if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
             if (pAny->get<OUString>().startsWith("fontwork-"))
-                lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS));
+                lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS),
+                            sfx::AccessibilityIssueID::FONTWORKS);
     }
 
     // Checking if there is floating Writer text draw object and if so, throwing a warning.
@@ -1636,7 +1848,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
     if (pObject->HasText()
         && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
-        auto pIssue = lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
+        auto pIssue = lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT),
+                                  sfx::AccessibilityIssueID::FLOATING_TEXT);
         pIssue->setIssueObject(IssueObject::TEXTFRAME);
         pIssue->setObjectID(pObject->GetName());
         pIssue->setDoc(*m_pDoc);
