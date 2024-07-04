@@ -1164,7 +1164,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 pFilterContainer->GetFilter4FilterName( rMergeDescriptor.sSaveToFilter );
         if(pFilter)
         {
-            pStoreToFilter = pFilter;
+            pStoreToFilter = std::move(pFilter);
             if(!rMergeDescriptor.sSaveToFilterOptions.isEmpty())
                 pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
         }
