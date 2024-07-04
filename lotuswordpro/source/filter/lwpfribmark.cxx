@@ -150,7 +150,7 @@ void LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
         xMarkStart->SetDivision(sDivision);
         xMarkStart->SetName(name);
         pMarkMgr->AddXFBookmarkStart(name, xMarkStart.get()); //add to map
-        m_xStart = xMarkStart;
+        m_xStart = std::move(xMarkStart);
     }
     else if (type == MARKER_END)
     {
@@ -158,7 +158,7 @@ void LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
         xMarkEnd->SetDivision(sDivision);
         xMarkEnd->SetName(name);
         pMarkMgr->AddXFBookmarkEnd(name, xMarkEnd.get()); //add to map
-        m_xEnd = xMarkEnd;
+        m_xEnd = std::move(xMarkEnd);
     }
 }
 
