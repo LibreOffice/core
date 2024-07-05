@@ -501,7 +501,8 @@ void ChartController::executeDispatch_InsertTrendline()
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    SfxTabDialogController::runAsync(aDialog, [this, aDialog, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
+    SfxTabDialogController::runAsync(aDialog, [this, aDialog, aItemConverter = std::move(aItemConverter),
+                                               xUndoGuard=std::move(xUndoGuard)](int nResult) {
         if ( nResult == RET_OK || aDialog->DialogWasClosedWithOK() )
         {
             const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
