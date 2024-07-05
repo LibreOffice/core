@@ -26,7 +26,8 @@ class SAL_DLLPUBLIC_RTTI SdrEdgeLineDeltaCountItem final : public SfxUInt16Item
 {
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal = 0)
-        : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal)
+        : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal,
+                        SfxItemType::SdrEdgeLineDeltaCountItemType)
     {
     }
     virtual SdrEdgeLineDeltaCountItem* Clone(SfxItemPool*) const override

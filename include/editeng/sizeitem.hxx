@@ -39,7 +39,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxSizeItem( const sal_uInt16 nId );
-    SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
+    SvxSizeItem( const sal_uInt16 nId, const Size& rSize, SfxItemType eItemType = SfxItemType::SvxSizeItemType);
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool isHashable() const override;

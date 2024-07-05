@@ -50,7 +50,7 @@ public:
 };
 
 inline SvxPaperBinItem::SvxPaperBinItem( const sal_uInt16 nId, const sal_uInt8 nT )
-    : SfxByteItem( nId, nT )
+    : SfxByteItem( nId, nT, SfxItemType::SvxPaperBinItemType )
 {}
 
 #endif

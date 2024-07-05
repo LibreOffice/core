@@ -35,7 +35,8 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
 
 public:
     SvxTextLineItem( const FontLineStyle eSt,
-                     const sal_uInt16 nId );
+                     const sal_uInt16 nId,
+                     SfxItemType eItemType = SfxItemType::SvxTextLineItemType);
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,

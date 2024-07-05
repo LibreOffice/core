@@ -115,8 +115,8 @@ class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 public:
     static SfxPoolItem* CreateDefault();
 
-    explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
-        CntUInt32Item(which, nValue) {}
+    explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0, SfxItemType eItemType = SfxItemType::SfxUInt32ItemType):
+        CntUInt32Item(which, nValue, eItemType) {}
 
     virtual SfxUInt32Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }

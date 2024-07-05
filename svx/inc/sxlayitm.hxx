@@ -36,7 +36,8 @@ class SdrLayerNameItem final : public SfxStringItem {
 public:
     SdrLayerNameItem()
         : SfxStringItem(SDRATTR_LAYERNAME, SfxItemType::SdrLayerNameItemType) {}
-    SdrLayerNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_LAYERNAME,rStr) {}
+    SdrLayerNameItem(const OUString& rStr)
+        : SfxStringItem(SDRATTR_LAYERNAME, rStr, SfxItemType::SdrLayerNameItemType) {}
     virtual SdrLayerNameItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 

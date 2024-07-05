@@ -40,7 +40,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
     bool        bBookMode,
     TypedWhichId<SvxViewLayoutItem>  _nWhich
 )
-:   SfxUInt16Item( _nWhich, nColumns ),
+:   SfxUInt16Item( _nWhich, nColumns, SfxItemType::SvxViewLayoutItemType ),
     mbBookMode( bBookMode )
 {
 }

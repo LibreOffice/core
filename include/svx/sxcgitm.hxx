@@ -30,7 +30,7 @@ class SdrCaptionGapItem final : public SdrMetricItem
 {
 public:
     SdrCaptionGapItem(tools::Long nGap = 0)
-        : SdrMetricItem(SDRATTR_CAPTIONGAP, nGap)
+        : SdrMetricItem(SDRATTR_CAPTIONGAP, nGap, SfxItemType::SdrCaptionGapItemType)
     {
     }
     virtual SdrCaptionGapItem* Clone(SfxItemPool*) const override

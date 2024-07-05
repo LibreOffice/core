@@ -998,8 +998,8 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxTextLineItem ------------------------------------------------
 
-SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
-    : SfxEnumItem(nId, SfxItemType::SvxTextLineItemType,eSt)
+SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId, SfxItemType eItemType )
+    : SfxEnumItem(nId, eItemType, eSt)
     , maColor(COL_TRANSPARENT)
 {
 }
@@ -1151,7 +1151,7 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 // class SvxUnderlineItem ------------------------------------------------
 
 SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
-    : SvxTextLineItem( eSt, nId )
+    : SvxTextLineItem( eSt, nId, SfxItemType::SvxUnderlineItemType )
 {
 }
 
@@ -1192,7 +1192,7 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 // class SvxOverlineItem ------------------------------------------------
 
 SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
-    : SvxTextLineItem( eSt, nId )
+    : SvxTextLineItem( eSt, nId, SfxItemType::SvxOverlineItemType )
 {
 }
 
@@ -2404,8 +2404,8 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
 |*    class SvxTextRotateItem
 *************************************************************************/
 
-SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nW)
-    : SfxUInt16Item(nW, nValue.get(), SfxItemType::SvxTextRotateItemType)
+SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nW, SfxItemType eItemType)
+    : SfxUInt16Item(nW, nValue.get(), eItemType)
 {
 }
 
@@ -2484,7 +2484,8 @@ void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SvxCharRotateItem::SvxCharRotateItem( Degree10 nValue,
                                        bool bFitIntoLine,
                                        TypedWhichId<SvxCharRotateItem> nW )
-    : SvxTextRotateItem(nValue, nW), bFitToLine( bFitIntoLine )
+    : SvxTextRotateItem(nValue, nW, SfxItemType::SvxCharRotateItemType),
+      bFitToLine( bFitIntoLine )
 {
 }
 

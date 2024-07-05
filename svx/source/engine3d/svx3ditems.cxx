@@ -42,37 +42,40 @@ Svx3DReducedLineGeometryItem* Svx3DReducedLineGeometryItem::Clone(SfxItemPool*) 
 }
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
+    : SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal, SfxItemType::Svx3DNormalsKindItemType)
 {
 }
 
 Svx3DTextureProjectionXItem::Svx3DTextureProjectionXItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nVal)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nVal,
+                    SfxItemType::Svx3DTextureProjectionXItemType)
 {
 }
 
 Svx3DTextureProjectionYItem::Svx3DTextureProjectionYItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal,
+                    SfxItemType::Svx3DTextureProjectionYItemType)
 {
 }
 
 Svx3DTextureKindItem::Svx3DTextureKindItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nVal)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nVal, SfxItemType::Svx3DTextureKindItemType)
 {
 }
 
 Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal, SfxItemType::Svx3DTextureModeItemType)
 {
 }
 
 Svx3DPerspectiveItem::Svx3DPerspectiveItem(ProjectionType nVal)
-    : SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, static_cast<sal_uInt16>(nVal))
+    : SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, static_cast<sal_uInt16>(nVal),
+                    SfxItemType::Svx3DPerspectiveItemType)
 {
 }
 
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
+    : SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal, SfxItemType::Svx3DShadeModeItemType)
 {
 }
 

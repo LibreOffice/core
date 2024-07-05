@@ -28,7 +28,7 @@ class SdrMeasureOverhangItem final : public SdrMetricItem
 {
 public:
     SdrMeasureOverhangItem(tools::Long nVal)
-        : SdrMetricItem(SDRATTR_MEASUREOVERHANG, nVal)
+        : SdrMetricItem(SDRATTR_MEASUREOVERHANG, nVal, SfxItemType::SdrMeasureOverhangItemType)
     {
     }
     virtual SdrMeasureOverhangItem* Clone(SfxItemPool*) const override

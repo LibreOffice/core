@@ -751,7 +751,7 @@ void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 ScRotateValueItem::ScRotateValueItem(Degree100 nAngle)
-    : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle)
+    : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle, SfxItemType::ScRotateValueItemType)
 {
 }
 
@@ -852,7 +852,7 @@ bool ScHyphenateCell::GetPresentation(SfxItemPresentation,
 }
 
 ScIndentItem::ScIndentItem(sal_uInt16 nIndent)
-    : SfxUInt16Item(ATTR_INDENT, nIndent)
+    : SfxUInt16Item(ATTR_INDENT, nIndent, SfxItemType::ScIndentItemType)
 {
 }
 

@@ -138,9 +138,9 @@ bool SvxPaperBinItem::GetPresentation
 }
 
 
-SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
+SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize, SfxItemType eItemType ) :
 
-    SfxPoolItem( nId, SfxItemType::SvxSizeItemType ),
+    SfxPoolItem( nId, eItemType ),
 
     m_aSize( rSize )
 {

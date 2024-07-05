@@ -35,7 +35,7 @@
 class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 {
 public:
-    SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nId);
+    SvxTextRotateItem(Degree10 nValue, TypedWhichId<SvxTextRotateItem> nId, SfxItemType eItemType = SfxItemType::SvxTextRotateItemType);
 
     virtual SvxTextRotateItem* Clone(SfxItemPool *pPool = nullptr) const override;
 

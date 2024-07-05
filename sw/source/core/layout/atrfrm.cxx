@@ -251,7 +251,7 @@ bool SwFormatFrameSize::HasMetrics() const {
 
 // Partially implemented inline in hxx
 SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips nHeight )
-    : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight} ),
+    : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight}, SfxItemType::SwFormatFrameSizeType ),
     m_eFrameHeightType( eSize ),
     m_eFrameWidthType( SwFrameSize::Fixed )
 {

@@ -114,7 +114,7 @@ class SW_DLLPUBLIC SwLuminanceGrf final : public SfxInt16Item
 {
 public:
     SwLuminanceGrf( sal_Int16 nVal = 0 )
-        : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal )
+        : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal, SfxItemType::SwLuminanceGrfType )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -130,7 +130,7 @@ class SW_DLLPUBLIC SwContrastGrf final : public SfxInt16Item
 {
 public:
     SwContrastGrf( sal_Int16 nVal = 0 )
-        : SfxInt16Item( RES_GRFATR_CONTRAST, nVal )
+        : SfxInt16Item( RES_GRFATR_CONTRAST, nVal, SfxItemType::SwContrastGrfType )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -146,7 +146,7 @@ class SwChannelGrf : public SfxInt16Item
 {
 protected:
     SwChannelGrf( sal_Int16 nVal, sal_uInt16 nWhichL )
-        : SfxInt16Item( nWhichL, nVal )
+        : SfxInt16Item( nWhichL, nVal, SfxItemType::SwChannelGrfType )
     {}
 
 public:

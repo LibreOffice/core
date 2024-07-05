@@ -32,8 +32,7 @@ class SVXCORE_DLLPUBLIC SdrGrafGamma100Item final : public SfxUInt32Item
 {
 public:
 
-
-                            SdrGrafGamma100Item( sal_uInt32 nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100 ) {}
+    SdrGrafGamma100Item( sal_uInt32 nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100, SfxItemType::SdrGrafGamma100ItemType ) {}
 
     SAL_DLLPRIVATE virtual SdrGrafGamma100Item* Clone( SfxItemPool* pPool = nullptr ) const override;
 

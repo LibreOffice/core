@@ -38,7 +38,7 @@
 SwTableBoxNumFormat::SwTableBoxNumFormat( sal_uInt32 nFormat )
     : SfxUInt32Item( RES_BOXATR_FORMAT,
             (((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == getSwDefaultTextFormat()) ?
-             getSwDefaultTextFormat() : nFormat))
+             getSwDefaultTextFormat() : nFormat), SfxItemType::SwTableBoxNumFormatType)
 {
 }
 

@@ -156,10 +156,10 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SwNumRuleItem()
-        : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, OUString(), SfxItemType::SwNumRuleItemType ) {}
 
     SwNumRuleItem( const OUString& rRuleName )
-        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName, SfxItemType::SwNumRuleItemType ) {}
 
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
