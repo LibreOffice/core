@@ -180,7 +180,7 @@ struct PairHash
 {
     size_t operator()(const std::pair<SfxItemType, sal_uInt16>& rKey) const
     {
-        return (static_cast<int>(rKey.first) << 16) | rKey.second;
+        return (static_cast<unsigned int>(rKey.first) << 16) | rKey.second;
     }
 };
 }
