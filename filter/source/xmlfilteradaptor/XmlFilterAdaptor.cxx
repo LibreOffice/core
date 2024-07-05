@@ -98,9 +98,8 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     if (It != aMediaMap.end() && (It->second >>= aFilterName)
         && aFilterName == "OpenDocument Text Flat XML")
     {
-        PropertyValue EmptyDbFieldHidesPara(u"EmptyDbFieldHidesPara"_ustr, 0, Any(false),
-                                            PropertyState::PropertyState_DIRECT_VALUE);
-        Sequence<PropertyValue> aSettings{ EmptyDbFieldHidesPara };
+        Sequence<PropertyValue> aSettings{ PropertyValue(u"EmptyDbFieldHidesPara"_ustr, 0,
+                                                         Any(false), PropertyState::PropertyState_DIRECT_VALUE) };
         xInfoSet->setPropertyValue(u"DefaultDocumentSettings"_ustr, Any(aSettings));
     }
     Sequence< Any > aAnys{ Any(xInfoSet) };
