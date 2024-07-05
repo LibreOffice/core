@@ -32,6 +32,9 @@
 #include <layfrm.hxx>
 #include <SwPortionHandler.hxx>
 #include <EnhancedPDFExportHelper.hxx>
+#include <com/sun/star/i18n/BreakType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <breakit.hxx>
 #include "pormulti.hxx"
 #include "inftxt.hxx"
 #include "itrpaint.hxx"
@@ -1919,8 +1922,8 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
 // If a multi portion completely has to go to the
 // next line, this function is called to truncate
 // the rest of the remaining multi portion
-static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
-           TextFrameIndex const nStartIdx)
+static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
+                                     TextFrameIndex const nStartIdx, bool bIsBidiPortion)
 {
     rMulti.GetRoot().Truncate();
     rMulti.GetRoot().SetLen(TextFrameIndex(0));
@@ -1935,6 +1938,31 @@ static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTextFormatInfo& 
     rMulti.Width( 0 );
     rMulti.SetLen(TextFrameIndex(0));
     rInf.SetIdx( nStartIdx );
+
+    if (bIsBidiPortion)
+    {
+        // The truncated portion is a bidi portion. Bidi portions contain ordinary text, and may
+        // potentially underflow in the case that none of the text fits on the current line.
+        if (auto* pPrevTextPor = dynamic_cast<SwTextPortion*>(rInf.GetLast());
+            pPrevTextPor != nullptr)
+        {
+            // Check if the start of the bidi portion is a valid break. In that case, truncating
+            // the multi portion is sufficient.
+            css::i18n::LineBreakHyphenationOptions aHyphOptions;
+            css::i18n::LineBreakUserOptions aUserOptions;
+            css::lang::Locale aLocale;
+            auto aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
+                rInf.GetText(), sal_Int32(nStartIdx), aLocale, sal_Int32(rInf.GetLineStart()),
+                aHyphOptions, aUserOptions);
+
+            if (aResult.breakIndex != sal_Int32{ nStartIdx })
+            {
+                // The start of the bidi portion is not a valid break. Instead, a break should be
+                // inserted into a previous text portion on this line.
+                rInf.SetUnderflow(pPrevTextPor);
+            }
+        }
+    }
 }
 
 // Manages the formatting of a SwMultiPortion. External, for the calling
@@ -2345,7 +2373,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             else
             {
                 // we try to keep our ruby portion together
-                lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
+                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/false);
                 pTmp = nullptr;
                 // A follow field portion may still be waiting. If nobody wants
                 // it, we delete it.
@@ -2355,7 +2383,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         else if( rMulti.HasRotation() )
         {
             // we try to keep our rotated portion together
-            lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
+            lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/false);
             pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
                                          rMulti.GetDirection() );
         }
@@ -2363,8 +2391,10 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         // a new SwBidiPortion, this would cause a memory leak
         else if( rMulti.IsBidi() && ! m_pMulti )
         {
-            if ( ! rMulti.GetLen() )
-                lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
+            if (!rMulti.GetLen())
+            {
+                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/true);
+            }
 
             // If there is a HolePortion at the end of the bidi portion,
             // it has to be moved behind the bidi portion. Otherwise
