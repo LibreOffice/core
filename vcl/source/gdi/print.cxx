@@ -1335,7 +1335,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
         if ( IsDisplayPrinter() )
         {
             mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
+            maJobSetup = std::move(aJobSetup);
             return true;
         }
 
@@ -1347,7 +1347,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
+            maJobSetup = std::move(aJobSetup);
             ImplUpdatePageData();
             ImplUpdateFontList();
             return true;
