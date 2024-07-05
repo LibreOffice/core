@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/setitem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
@@ -102,7 +103,9 @@ struct ItemInstanceManager
 // that specific Item (see other derivations)
 struct DefaultItemInstanceManager : public ItemInstanceManager
 {
-    std::unordered_set<const SfxPoolItem*> maRegistered;
+    // This workload is very read-heavy, and we want to scan the candidates often, so
+    // a vector-based data structure is faster.
+    o3tl::sorted_vector<const SfxPoolItem*> maRegistered;
 
     virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override
     {
