@@ -241,7 +241,11 @@ OUString ScEditUtil::GetCellFieldValue(
                 INetURLHistory::GetOrCreate()->QueryUrl(aURL) ? svtools::LINKSVISITED : svtools::LINKS;
 
             if (ppTextColor)
+            {
                 *ppTextColor = SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor;
+                if (comphelper::LibreOfficeKit::isActive())
+                    ScModule::IsLOKViewInDarkMode() ? *ppTextColor = Color(0x1D99F3) : *ppTextColor = Color(0x000080);
+            }
 
             if (ppFldLineStyle)
                 *ppFldLineStyle = FontLineStyle::LINESTYLE_SINGLE;

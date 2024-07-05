@@ -186,6 +186,7 @@ public:
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();
     svtools::ColorConfig&   GetColorConfig();
+    static bool         IsLOKViewInDarkMode();
     SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
