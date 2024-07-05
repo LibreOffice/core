@@ -90,7 +90,12 @@ SvxRedlinTable::~SvxRedlinTable()
 
 IMPL_LINK(SvxRedlinTable, HeaderBarClick, int, nColumn, void)
 {
-    if (!bSorted)
+    if (nColumn == -1)
+    {
+        pTreeView->make_unsorted();
+        bSorted = false;
+    }
+    else if (!bSorted)
     {
         pTreeView->make_sorted();
         bSorted = true;
@@ -99,7 +104,7 @@ IMPL_LINK(SvxRedlinTable, HeaderBarClick, int, nColumn, void)
     bool bSortAtoZ = pTreeView->get_sort_order();
 
     //set new arrow positions in headerbar
-    if (nColumn == pTreeView->get_sort_column())
+    if (nColumn != -1 && nColumn == pTreeView->get_sort_column())
     {
         bSortAtoZ = !bSortAtoZ;
         pTreeView->set_sort_order(bSortAtoZ);
