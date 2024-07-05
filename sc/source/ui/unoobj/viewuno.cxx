@@ -2093,8 +2093,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
-    auto const listener(aRangeChgListeners);
-
+    const std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener>> listener(aRangeChgListeners);
     for (const auto& rListener : listener)
         rListener->descriptorChanged( aEvent );
 }
