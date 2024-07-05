@@ -31,7 +31,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/py_deprecated_warning.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \
 	external/python3/darwin.patch.0 \
-	external/python3/macos-11.patch.0 \
 	external/python3/tsan.patch.0 \
 	external/python3/init-sys-streams-cant-initialize-stdin.patch.0 \
 ))
