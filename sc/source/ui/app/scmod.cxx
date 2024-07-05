@@ -897,6 +897,18 @@ svtools::ColorConfig& ScModule::GetColorConfig()
     return *m_pColorConfig;
 }
 
+bool ScModule::IsLOKViewInDarkMode()
+{
+    SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+    if( pKitSh )
+    {
+        Color aDocColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
+        if( aDocColor.IsDark() )
+            return true;
+    }
+    return false;
+}
+
 SvtUserOptions&  ScModule::GetUserOptions()
 {
     if( !m_pUserOptions )
