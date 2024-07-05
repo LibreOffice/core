@@ -15,7 +15,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
@@ -48,9 +47,6 @@ void FirebirdTest::testEmptyDBConnection()
         getDocumentForUrl(maTempFile.GetURL());
 
     getConnectionForDocument(xDocument);
-
-    css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(false);
 }
 
 /**
@@ -90,9 +86,6 @@ void FirebirdTest::testIntegerDatabase()
         xRow->getString(xColumnLocate->findColumn(u"_VARCHAR"_ustr)));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
-
-    css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(false);
 }
 
 void FirebirdTest::testTdf132924()
@@ -118,9 +111,6 @@ void FirebirdTest::testTdf132924()
     // - Actual  : The column name 'TestId' is not valid
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xRow->getShort(xColumnLocate->findColumn(u"TestId"_ustr)));
     CPPUNIT_ASSERT_EQUAL(u"TestName"_ustr, xRow->getString(xColumnLocate->findColumn(u"TestName"_ustr)));
-
-    css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
-    xCloseable->close(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

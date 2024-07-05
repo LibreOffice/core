@@ -21,6 +21,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -45,6 +46,8 @@ public:
     void createQueries(Reference< XDataSource > xDataSource);
     void createQuery(OUString sQuery, bool bEscapeProcessing,
             OUString sQueryName, Reference<XDataSource> xDataSource);
+
+    virtual void tearDown() override;
 };
 
 uno::Reference<XOfficeDatabaseDocument> DBTestBase::getDocumentForUrl(OUString const & url) {
@@ -176,6 +179,18 @@ void DBTestBase::createQuery(OUString sQuery, bool bEscapeProcessing, OUString s
 
     Reference<container::XNameContainer> xNameContainer(xQueryAccess, UNO_QUERY_THROW);
     xNameContainer->insertByName(sQueryName, Any(xQueryProp));
+}
+
+void DBTestBase::tearDown()
+{
+    if (mxComponent)
+    {
+        // In order to close all windows
+        css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
+        xCloseable->close(false);
+    }
+
+    UnoApiTest::tearDown();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
