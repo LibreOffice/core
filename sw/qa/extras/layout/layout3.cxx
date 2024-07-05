@@ -3037,6 +3037,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf104209VertRTL)
                 "portion"_ostr, u"B"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408LTR)
+{
+    // Verify that line breaking a first bidi portion correctly underflows in LTR text
+    createSwDoc("tdf56408-ltr.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"English English English "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"((((עברית)))) English"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408RTL)
+{
+    // Verify that line breaking a first bidi portion correctly underflows in RTL text
+    createSwDoc("tdf56408-rtl.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"עברית עברית עברית "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"((((English)))) עברית"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408NoUnderflow)
+{
+    // The fix for tdf#56408 introduced a change to line breaking between text with
+    // direction changes. This test verifies behavior in the trivial case, when a
+    // break opportunity exists at the direction change boundary.
+    createSwDoc("tdf56408-no-underflow.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"English English English "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"עברית English"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
