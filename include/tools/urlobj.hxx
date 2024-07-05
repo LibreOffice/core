@@ -1210,7 +1210,7 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
                          FSysStyle::Detect))
         return false;
     if (pTheAbsURIRef)
-        *pTheAbsURIRef = aTheAbsURIRef;
+        *pTheAbsURIRef = std::move(aTheAbsURIRef);
     return true;
 }
 
