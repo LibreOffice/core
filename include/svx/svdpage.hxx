@@ -35,7 +35,7 @@
 #include <optional>
 #include <vector>
 #include <deque>
-#include <svx/UniqueID.hxx>
+#include <tools/UniqueID.hxx>
 
 // predefines
 namespace model { class Theme; }

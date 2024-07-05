@@ -10,31 +10,25 @@
 #pragma once
 
 #include <sal/types.h>
-#include <atomic>
+#include <tools/toolsdllapi.h>
 
 /** Unique ID for an object.
  *
  * Generates a unique ID and stores it in a member variable, so the ID returned
  * by getId() is the same as long as the object is alive.
  *
- * ID 0 means the ID is not yet created, so 0 is not a valid ID
+ * ID numbers start with 1.
  *
  */
-class UniqueID final
+class TOOLS_DLLPUBLIC UniqueID final
 {
 private:
-    sal_uInt64 mnID = 0;
+    sal_uInt64 mnID;
 
 public:
-    sal_uInt64 getID() const
-    {
-        if (!mnID)
-        {
-            static std::atomic<sal_uInt64> staticCounter(1);
-            const_cast<UniqueID*>(this)->mnID = staticCounter.fetch_add(1);
-        }
-        return mnID;
-    }
+    UniqueID();
+
+    sal_uInt64 getID() const { return mnID; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

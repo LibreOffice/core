@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets_for_build,tools,\
 $(eval $(call gb_Module_add_check_targets,tools,\
     CppunitTest_tools_test \
     CppunitTest_tools_config \
+    CppunitTest_tools_unique_id \
 ))
 
 # vim: set noet sw=4 ts=4:

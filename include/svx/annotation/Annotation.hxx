@@ -21,7 +21,7 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/TextAPI.hxx>
-#include <svx/UniqueID.hxx>
+#include <tools/UniqueID.hxx>
 #include <vcl/bitmapex.hxx>
 
 class SdrUndoAction;
