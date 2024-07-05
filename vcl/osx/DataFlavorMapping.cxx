@@ -577,6 +577,10 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
                 sysFlavor = flavorMap[i].SystemFlavor;
             else
                 sysFlavor = OUStringToNSString(oOOFlavor.MimeType);
+
+            // Flavor set, then break
+            if (sysFlavor != nullptr)
+                break;
         }
     }
 
