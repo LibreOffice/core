@@ -486,12 +486,14 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
     if (bAppEvents)
     {
         EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
+        assert(h_it != m_appEventsHash.end());
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
     else
     {
         EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
+        assert(h_it != m_docEventsHash.end());
         h_it->second.first = sEventType;
         h_it->second.second = sEventURL;
     }
