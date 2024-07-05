@@ -118,6 +118,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
         css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    m_seqAdjustmentValues;
         css::uno::Sequence< css::beans::PropertyValues >                          m_seqHandles;
         css::uno::Sequence< css::awt::Size >                                      m_seqSubViewSize;
+        css::uno::Sequence< double >                                              m_seqGluePointLeavingDirections;
 
         bool                    m_bFilled         : 1;
         bool                    m_bStroked        : 1;

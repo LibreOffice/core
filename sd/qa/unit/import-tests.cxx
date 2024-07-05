@@ -546,6 +546,34 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf89449)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testGluePointLeavingDirections)
+{
+    createSdImpressDoc("pptx/glue_point_leaving_directions.pptx");
+    uno::Reference<beans::XPropertySet> xEllipseShape(getShapeFromPage(0, 0));
+    uno::Sequence<beans::PropertyValue> aProps;
+    xEllipseShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
+
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : aProps)
+    {
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+    }
+
+    uno::Sequence<double> seqGluePointLeavingDirections;
+    for (beans::PropertyValue const& rProp : aPathProps)
+    {
+        if (rProp.Name == "GluePointLeavingDirections")
+        {
+            rProp.Value >>= seqGluePointLeavingDirections;
+        }
+    }
+
+    sal_Int32 nCountGluePointLeavingDirections = seqGluePointLeavingDirections.getLength();
+    // The ellipse has 8 glue point leaving directions
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), nCountGluePointLeavingDirections);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf147459)
 {
     createSdImpressDoc("pptx/tdf147459.pptx");
