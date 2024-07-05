@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,package2_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,package2_test, \
     package/qa/cppunit/test_package \
+    package/qa/cppunit/test_zippackage \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,package2_test, \
@@ -28,7 +29,9 @@ $(eval $(call gb_CppunitTest_use_sdk_api,package2_test))
 
 $(eval $(call gb_CppunitTest_use_components,package2_test,\
     configmgr/source/configmgr \
+    package/source/xstor/xstor \
     package/util/package2 \
+	sax/source/expatwrap/expwrap \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
 ))
