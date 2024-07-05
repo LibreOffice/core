@@ -1844,13 +1844,13 @@ SdrObject* SdOutliner::SetObject (
     if(rPosition.meEditMode == EditMode::Page && rPosition.mePageKind == PageKind::Notes)
     {
         std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
-        std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
-            std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-
-        if (pDrawViewShell->GetEditMode() != EditMode::Page
-            || pDrawViewShell->GetCurPagePos() != rPosition.mnPageIndex)
-            SetPage(EditMode::Page, static_cast<sal_uInt16>(rPosition.mnPageIndex));
-
+        if (std::shared_ptr<sd::DrawViewShell> pDrawViewShell =
+            std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell))
+        {
+            if (pDrawViewShell->GetEditMode() != EditMode::Page
+                || pDrawViewShell->GetCurPagePos() != rPosition.mnPageIndex)
+                SetPage(EditMode::Page, static_cast<sal_uInt16>(rPosition.mnPageIndex));
+        }
         mnText = rPosition.mnText;
         return rPosition.mxObject.get().get();
     }
