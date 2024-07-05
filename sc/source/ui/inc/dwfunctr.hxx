@@ -49,6 +49,7 @@ private:
     std::unique_ptr<weld::TreeIter> xScratchIter;
     std::unique_ptr<weld::Button> xInsertButton;
     std::unique_ptr<weld::Button> xHelpButton;
+    std::unique_ptr<weld::CheckButton> xSimilaritySearch;
     std::unique_ptr<weld::TextView> xFiFuncDesc;
     std::unique_ptr<weld::Entry> m_xSearchString;
 
@@ -59,6 +60,8 @@ private:
     OUString m_aListHelpId;
     OUString m_aSearchHelpId;
 
+    ::std::set<std::pair<std::pair<sal_Int32, sal_Int32>, std::pair<OUString, const ScFuncDesc*>>>
+                     sFuncScores;
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
     ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
 
@@ -70,6 +73,7 @@ private:
                     DECL_LINK( SetRowActivatedHdl, weld::TreeView&, bool );
                     DECL_LINK( SetSelectionClickHdl, weld::Button&, void );
                     DECL_LINK( SetHelpClickHdl, weld::Button&, void );
+                    DECL_LINK( SetSimilarityToggleHdl, weld::Toggleable&, void );
                     DECL_LINK( SelComboHdl, weld::ComboBox&, void );
                     DECL_LINK( SelTreeHdl, weld::TreeView&, void );
                     DECL_LINK( ModifyHdl, weld::Entry&, void );
@@ -82,6 +86,7 @@ public:
 
     void            InitLRUList();
     void            UpdateFunctionList(const OUString&);
+    void            SearchFunction(const OUString&, const OUString&, const ScFuncDesc*, const bool);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

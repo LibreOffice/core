@@ -353,6 +353,103 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_vi
     rReplaceStr = sBuff.makeStringAndClear();
 }
 
+bool TextSearch::SimilaritySearch(const OUString& rString, const OUString& rSearchString,
+                                  ::std::pair<sal_Int32, sal_Int32>& rSimilarityScore)
+{
+    sal_Int32 nScore = 0;
+    sal_Int32 nFirstScore = GetSubstringSimilarity(rString, rSearchString, nScore, true);
+    if (nFirstScore == -1)
+        nFirstScore = GetSubstringSimilarity(rString, rSearchString, nScore, false);
+    if (nFirstScore == -1)
+    {
+        if (rSearchString.getLength() == 1)
+        {
+            if (rString.startsWith(rSearchString))
+                nFirstScore = nScore;
+            else if (rString.endsWith(rSearchString))
+                nFirstScore = nScore + 1;
+            nScore += 2;
+        }
+        else if (rString.getLength() == 1 && rSearchString.getLength() < SMALL_STRING_THRESHOLD)
+        {
+            if (rSearchString.startsWith(rString))
+                nFirstScore = nScore;
+            else if (rSearchString.endsWith(rString))
+                nFirstScore = nScore + 1;
+            nScore += 2;
+        }
+    }
+    sal_Int32 nSecondScore = GetWeightedLevenshteinDistance(rString, rSearchString);
+
+    if (nFirstScore == -1 && nSecondScore >= WLD_THRESHOLD)
+        return false;
+
+    rSimilarityScore.first = (nFirstScore == -1) ? nScore : nFirstScore;
+    rSimilarityScore.second = nSecondScore;
+    return true;
+}
+
+sal_Int32 TextSearch::GetSubstringSimilarity(std::u16string_view rString,
+                                             std::u16string_view rSearchString,
+                                             sal_Int32& nInitialScore, const bool bFromStart)
+{
+    sal_Int32 nScore = -1;
+    for (sal_Int32 length = rSearchString.length(); length > 1; length--)
+    {
+        sal_Int32 nStartPos = bFromStart ? 0 : rSearchString.length() - length;
+        std::u16string_view rSearchSubString = rSearchString.substr(nStartPos, length);
+        if (rString.starts_with(rSearchSubString))
+        {
+            nScore = nInitialScore;
+            break;
+        }
+        else if (rString.ends_with(rSearchSubString))
+        {
+            nScore = nInitialScore + 1;
+            break;
+        }
+        else if (rString.find(rSearchSubString) != std::u16string_view::npos)
+        {
+            nScore = nInitialScore + 2;
+            break;
+        }
+        nInitialScore += 3;
+    }
+    return nScore;
+}
+
+sal_Int32 TextSearch::GetWeightedLevenshteinDistance(const OUString& rString,
+                                                     const OUString& rSearchString)
+{
+    sal_Int32 n = rString.getLength();
+    sal_Int32 m = rSearchString.getLength();
+    std::vector<std::vector<sal_Int32>> ScoreDP(n + 1, std::vector<sal_Int32>(m + 1));
+
+    for (sal_Int32 i = 0; i <= n; i++)
+    {
+        ScoreDP[i][0] = i;
+    }
+    for (sal_Int32 j = 0; j <= m; j++)
+    {
+        ScoreDP[0][j] = j;
+    }
+
+    for (sal_Int32 i = 1; i <= n; i++)
+    {
+        for (sal_Int32 j = 1; j <= m; j++)
+        {
+            sal_Int32& minE = ScoreDP[i][j];
+            minE = ScoreDP[i - 1][j] + 1;
+            minE = std::min(minE, ScoreDP[i][j - 1] + 1);
+            if (rString[i - 1] != rSearchString[j - 1])
+                minE = std::min(minE, ScoreDP[i - 1][j - 1] + 2);
+            else
+                minE = std::min(minE, ScoreDP[i - 1][j - 1]);
+        }
+    }
+    return ScoreDP[n][m];
+}
+
 }   // namespace utl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

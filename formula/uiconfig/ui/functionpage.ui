@@ -53,6 +53,26 @@
       </packing>
     </child>
     <child>
+      <object class="GtkCheckButton" id="similaritysearch">
+        <property name="label" translatable="yes" context="functionpage|similaritysearch">Similar</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="similaritysearch-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|similaritysearch">Search and Sort functions by similarity</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -64,7 +84,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
@@ -84,7 +104,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -99,7 +119,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <child>
@@ -147,7 +167,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child>
@@ -163,7 +183,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="position">7</property>
       </packing>
     </child>
     <child internal-child="accessible">

@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <vector>
+#include <set>
 #include <unordered_map>
 
 namespace formula
@@ -42,6 +43,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xLbFunction;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<weld::Entry> m_xLbFunctionSearchString;
+    std::unique_ptr<weld::CheckButton> m_xSimilaritySearch;
     std::unique_ptr<weld::Button> m_xHelpButton;
 
     Link<FuncPage&,void>     aDoubleClickLink;
@@ -50,6 +52,8 @@ private:
 
     ::std::vector< TFunctionDesc >  aLRUList;
     ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
+    ::std::set<std::pair<std::pair<sal_Int32, sal_Int32>, std::pair<OUString, TFunctionDesc>>>
+        sFuncScores;
     OUString    m_aHelpId;
 
     // tdf#104487 - remember last used function category
@@ -64,6 +68,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(SelHelpClickHdl, weld::Button&, void);
+    DECL_LINK(SimilarityToggleHdl, weld::Toggleable&, void);
 
     void            UpdateFunctionList(const OUString&);
 
@@ -92,6 +97,8 @@ public:
     void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
 
     bool            IsVisible() const { return m_xContainer->get_visible(); }
+
+    void            SearchFunction(const OUString&, const OUString&, TFunctionDesc, const bool);
 };
 
 } // formula

@@ -22,6 +22,7 @@
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
 #include <unotools/charclass.hxx>
+#include <unotools/textsearch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 
@@ -55,6 +56,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , xScratchIter(xFuncList->make_iterator())
     , xInsertButton(m_xBuilder->weld_button(u"insert"_ustr))
     , xHelpButton(m_xBuilder->weld_button(u"help"_ustr))
+    , xSimilaritySearch(m_xBuilder->weld_check_button(u"similaritysearch"_ustr))
     , xFiFuncDesc(m_xBuilder->weld_text_view(u"funcdesc"_ustr))
     , m_xSearchString(m_xBuilder->weld_entry(u"search"_ustr))
     , xConfigListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Calc/Formula/Syntax"_ustr))
@@ -79,6 +81,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     xFuncList->connect_row_activated(LINK( this, ScFunctionWin, SetRowActivatedHdl));
     xInsertButton->connect_clicked(LINK( this, ScFunctionWin, SetSelectionClickHdl));
     xHelpButton->connect_clicked(LINK( this, ScFunctionWin, SetHelpClickHdl));
+    xSimilaritySearch->connect_toggled(LINK(this, ScFunctionWin, SetSimilarityToggleHdl));
 
     xCatBox->set_active(0);
 
@@ -109,6 +112,7 @@ ScFunctionWin::~ScFunctionWin()
     xFuncList.reset();
     xInsertButton.reset();
     xHelpButton.reset();
+    xSimilaritySearch.reset();
     xFiFuncDesc.reset();
 }
 
@@ -189,6 +193,19 @@ void ScFunctionWin::UpdateLRUList()
     }
 }
 
+void ScFunctionWin::SearchFunction(const OUString& rFuncName, const OUString& rSearchString,
+                                   const ScFuncDesc* pDesc, const bool bSimilaritySearch)
+{
+    std::pair<sal_Int32, sal_Int32> score = std::make_pair(0, 0);
+    if (bSimilaritySearch && !utl::TextSearch::SimilaritySearch(rFuncName, rSearchString, score))
+        return;
+    if (!bSimilaritySearch && rFuncName.indexOf(rSearchString) < 0
+        && rSearchString.indexOf(rFuncName) < 0)
+        return;
+
+    sFuncScores.insert(std::make_pair(score, std::make_pair(rFuncName, pDesc)));
+}
+
 /*************************************************************************
 #*  Member:     SetDescription
 #*------------------------------------------------------------------------
@@ -252,6 +269,7 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
     xFuncList->clear();
     xFuncList->freeze();
     mCategories.clear();
+    sFuncScores.clear();
 
     bool bCollapse = nCategory == 0;
     bool bFilter = !rSearchString.isEmpty();
@@ -270,38 +288,31 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
         const ScFuncDesc* pDesc = pFuncMgr->First(nCategory);
         while (pDesc)
         {
-            OUString aCategory = pDesc->getCategory()->getName();
-            OUString aFunction = pDesc->getFunctionName();
-            OUString aFuncDescId = weld::toId(pDesc);
+            const OUString aCategory(pDesc->getCategory()->getName());
+            const OUString aFunction(pCharClass->uppercase(pDesc->getFunctionName()));
+            const OUString aFuncDescId(weld::toId(pDesc));
 
-            if (!bFilter || (pCharClass->uppercase(aFunction).startsWith(aSearchStr)))
+            if (bFilter)
+                SearchFunction(aFunction, aSearchStr, pDesc, xSimilaritySearch->get_active());
+            else
             {
                 weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
                 xFuncList->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
-                        false, xScratchIter.get());
+                            false, xScratchIter.get());
             }
             pDesc = pFuncMgr->Next();
         }
 
-        // Now add the functions that have the search string in the middle of the function name
-        // Note that this will only be necessary if the search string is not empty
-        if (bFilter)
+        for (const auto& func : sFuncScores)
         {
-            pDesc = pFuncMgr->First( nCategory );
-            while ( pDesc )
-            {
-                OUString aCategory = pDesc->getCategory()->getName();
-                OUString aFunction = pDesc->getFunctionName();
-                OUString aFuncDescId = weld::toId(pDesc);
+            pDesc = func.second.second;
+            const OUString aCategory(pDesc->getCategory()->getName());
+            const OUString aFunction(func.second.first);
+            const OUString aFuncDescId(weld::toId(pDesc));
+            weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
 
-                if (pCharClass->uppercase(aFunction).indexOf(aSearchStr) > 0)
-                {
-                    weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
-                    xFuncList->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
-                            false, xScratchIter.get());
-                }
-                pDesc = pFuncMgr->Next();
-            }
+            xFuncList->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr, false,
+                              xScratchIter.get());
         }
     }
     else // LRU list
@@ -477,6 +488,11 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
 
 IMPL_LINK_NOARG(ScFunctionWin, ModifyHdl, weld::Entry&, void)
 {
+    if (xCatBox->get_active() == 0)
+    {
+        xCatBox->set_active(1);
+        xHelpButton->set_sensitive(false);
+    }
     OUString searchStr = m_xSearchString->get_text();
     UpdateFunctionList(searchStr);
     SetDescription();
@@ -576,8 +592,9 @@ IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
 IMPL_LINK_NOARG(ScFunctionWin, SelComboHdl, weld::ComboBox&, void)
 {
+    if (xCatBox->get_active() == 0)
+        m_xSearchString->set_text(u""_ustr);
     xHelpButton->set_sensitive(xCatBox->get_active() != 1);
-    m_xSearchString->set_sensitive(xCatBox->get_active() > 0);
     OUString searchStr = m_xSearchString->get_text();
     UpdateFunctionList(searchStr);
     SetDescription();
@@ -636,6 +653,13 @@ IMPL_LINK_NOARG( ScFunctionWin, SetHelpClickHdl, weld::Button&, void )
             }
         }
     }
+}
+
+IMPL_LINK_NOARG(ScFunctionWin, SetSimilarityToggleHdl, weld::Toggleable&, void)
+{
+    OUString searchStr = m_xSearchString->get_text();
+    UpdateFunctionList(searchStr);
+    SetDescription();
 }
 
 IMPL_LINK_NOARG( ScFunctionWin, SetRowActivatedHdl, weld::TreeView&, bool )

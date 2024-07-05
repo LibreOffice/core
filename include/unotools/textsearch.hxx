@@ -27,6 +27,9 @@
 
 #include <ostream>
 
+#define WLD_THRESHOLD 3
+#define SMALL_STRING_THRESHOLD 4
+
 class CharClass;
 
 namespace com::sun::star::lang { struct Locale; }
@@ -209,6 +212,30 @@ public:
 
     /* replace back references in the replace string by the sub expressions from the search result */
     static void ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const css::util::SearchResult& rResult );
+
+    /**
+     * @brief Search for a string in a another one based on similarity
+     * @param rString The string we compare with
+     * @param rSearchString The search term
+     * @param rSimilarityScore The similarity score (sent by reference to be filled)
+     * @return True if the search term is found, false otherwise
+     */
+    static bool SimilaritySearch(const OUString& rString, const OUString& rSearchString,
+                                 ::std::pair<sal_Int32, sal_Int32>& rSimilarityScore);
+    /**
+     * @brief Get similarity score between two strings
+     *        according to the length of the common substring and its position
+     * @param rString The string we compare with
+     * @param rSearchString The search term
+     * @param nInitialScore The initial score
+     * @param bFromStart True if the search is from the start
+     * @return Score if the search term is found in the text, -1 otherwise
+     */
+    static sal_Int32 GetSubstringSimilarity(std::u16string_view rString,
+                                            std::u16string_view rSearchString,
+                                            sal_Int32& nInitialScore, const bool bFromStart);
+    static sal_Int32 GetWeightedLevenshteinDistance(const OUString& rString,
+                                                    const OUString& rSearchString);
 };
 
 }   // namespace utl

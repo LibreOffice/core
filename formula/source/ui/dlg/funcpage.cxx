@@ -25,6 +25,7 @@
 #include "funcpage.hxx"
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/textsearch.hxx>
 
 namespace formula
 {
@@ -48,10 +49,10 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     , m_xLbFunction(m_xBuilder->weld_tree_view(u"function"_ustr))
     , m_xScratchIter(m_xLbFunction->make_iterator())
     , m_xLbFunctionSearchString(m_xBuilder->weld_entry(u"search"_ustr))
+    , m_xSimilaritySearch(m_xBuilder->weld_check_button(u"similaritysearch"_ustr))
     , m_xHelpButton(m_xBuilder->weld_button(u"help"_ustr))
     , m_pFunctionManager(_pFunctionManager)
 {
-    m_xLbFunction->make_sorted();
     m_aHelpId = m_xLbFunction->get_help_id();
 
     m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
@@ -76,6 +77,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_xLbFunction->connect_row_activated(LINK(this, FuncPage, DblClkHdl));
     m_xLbFunction->connect_key_press(LINK(this, FuncPage, KeyInputHdl));
     m_xLbFunctionSearchString->connect_changed(LINK(this, FuncPage, ModifyHdl));
+    m_xSimilaritySearch->connect_toggled(LINK(this, FuncPage, SimilarityToggleHdl));
     m_xHelpButton->connect_clicked(LINK(this, FuncPage, SelHelpClickHdl));
 
     m_xHelpButton->set_sensitive(false);
@@ -117,12 +119,26 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory, bool bFill
     }
 }
 
+void FuncPage::SearchFunction(const OUString& rFuncName, const OUString& rSearchString,
+                              TFunctionDesc pDesc, const bool bSimilaritySearch)
+{
+    std::pair<sal_Int32, sal_Int32> score = std::make_pair(0, 0);
+    if (bSimilaritySearch && !utl::TextSearch::SimilaritySearch(rFuncName, rSearchString, score))
+        return;
+    if (!bSimilaritySearch && rFuncName.indexOf(rSearchString) < 0
+        && rSearchString.indexOf(rFuncName) < 0)
+        return;
+
+    sFuncScores.insert(std::make_pair(score, std::make_pair(rFuncName, pDesc)));
+}
+
 //aStr is non-empty when user types in the search box to search some function
 void FuncPage::UpdateFunctionList(const OUString& aStr)
 {
     m_xLbFunction->clear();
     m_xLbFunction->freeze();
     mCategories.clear();
+    sFuncScores.clear();
 
     const sal_Int32 nSelPos = m_xLbCategory->get_active();
     bool bCollapse = nSelPos == 1;
@@ -195,21 +211,23 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
             for (sal_uInt32 j = 0; j < nFunctionCount; ++j)
             {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
-                // tdf#146781 - search for the desired function also in the description
-                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0
-                    || rCharClass.uppercase(pDesc->getDescription()).indexOf(aSearchStr) >= 0)
-                {
-                    if (!pDesc->isHidden())
-                    {
-                        OUString aFunction(pDesc->getFunctionName());
-                        OUString sId(weld::toId(pDesc));
+                const OUString aFunction(rCharClass.uppercase(pDesc->getFunctionName()));
+                SearchFunction(aFunction, aSearchStr, pDesc, m_xSimilaritySearch->get_active());
+            }
+        }
 
-                        weld::TreeIter* pCategoryIter
-                            = FillCategoriesMap(pCategory->getName(), bCollapse);
-                        m_xLbFunction->insert(pCategoryIter, -1, &aFunction, &sId, nullptr, nullptr,
-                                              false, m_xScratchIter.get());
-                    }
-                }
+        for (const auto& func : sFuncScores)
+        {
+            TFunctionDesc pDesc(func.second.second);
+            if (!pDesc->isHidden())
+            {
+                const OUString aCategory(pDesc->getCategory()->getName());
+                const OUString aFunction(func.second.first);
+                const OUString aFuncDescId(weld::toId(pDesc));
+                weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
+
+                m_xLbFunction->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
+                                      false, m_xScratchIter.get());
             }
         }
     }
@@ -231,11 +249,12 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
 
 IMPL_LINK_NOARG(FuncPage, SelComboBoxHdl, weld::ComboBox&, void)
 {
-    m_xLbFunctionSearchString->set_sensitive(m_xLbCategory->get_active() > 0);
+    if (m_xLbCategory->get_active() == 0)
+        m_xLbFunctionSearchString->set_text(u""_ustr);
+    m_xHelpButton->set_sensitive(false);
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     m_xLbFunction->set_help_id(m_aHelpId);
     UpdateFunctionList(searchStr);
-    m_xHelpButton->set_sensitive(false);
 }
 
 IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
@@ -270,6 +289,17 @@ IMPL_LINK_NOARG(FuncPage, DblClkHdl, weld::TreeView&, bool)
 }
 
 IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::Entry&, void)
+{
+    if (m_xLbCategory->get_active() == 0)
+    {
+        m_xLbCategory->set_active(1);
+        m_xHelpButton->set_sensitive(false);
+    }
+    OUString searchStr = m_xLbFunctionSearchString->get_text();
+    UpdateFunctionList(searchStr);
+}
+
+IMPL_LINK_NOARG(FuncPage, SimilarityToggleHdl, weld::Toggleable&, void)
 {
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     UpdateFunctionList(searchStr);
