@@ -128,6 +128,7 @@
         </Coordinates>
        </PropertyValue>
        <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+       <PropertyValue name="GluePointLeavingDirections" handle="0" propertyState="DIRECT_VALUE"/>
        <PropertyValue name="Segments">
         <Segments>
          <EnhancedCustomShapeSegment command="1" count="1"/>
@@ -211,6 +212,7 @@
         </Coordinates>
        </PropertyValue>
        <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+       <PropertyValue name="GluePointLeavingDirections" handle="0" propertyState="DIRECT_VALUE"/>
        <PropertyValue name="Segments">
         <Segments>
          <EnhancedCustomShapeSegment command="1" count="1"/>

@@ -565,6 +565,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
     static constexpr OUString sPath( u"Path"_ustr );
     static constexpr OUStringLiteral sCoordinates( u"Coordinates" );
     static constexpr OUStringLiteral sGluePoints( u"GluePoints" );
+    static constexpr OUStringLiteral sGluePointLeavingDirections( u"GluePointLeavingDirections" );
     static constexpr OUStringLiteral sSegments( u"Segments" );
     static constexpr OUStringLiteral sSubViewSize( u"SubViewSize" );
     static constexpr OUStringLiteral sStretchX( u"StretchX" );
@@ -585,6 +586,10 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
     if ( pAny )
         *pAny >>= m_seqGluePoints;
 
+    // Path/GluePointLeavingDirections
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName(sPath, sGluePointLeavingDirections);
+    if (pAny)
+        *pAny >>= m_seqGluePointLeavingDirections;
 
     // Path/Segments
     pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sSegments );
@@ -3064,19 +3069,38 @@ rtl::Reference<SdrObject> EnhancedCustomShape2d::CreateObject( bool bLineGeometr
     return pRet;
 }
 
-void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
+static SdrEscapeDirection lcl_GetEscapeDirection(sal_Int32 nDirection)
+{
+    switch (nDirection)
+    {
+        case 1:  return SdrEscapeDirection::LEFT;
+        case 2:  return SdrEscapeDirection::RIGHT;
+        case 3:  return SdrEscapeDirection::TOP;
+        case 4:  return SdrEscapeDirection::BOTTOM;
+        default: return SdrEscapeDirection::SMART;
+    }
+}
+
+void EnhancedCustomShape2d::ApplyGluePoints(SdrObject* pObj)
 {
     if ( !pObj )
         return;
 
-    for (const auto& rGluePoint : m_seqGluePoints)
+    SdrEscapeDirection aDirection = SdrEscapeDirection::SMART;
+    for (size_t i = 0; i < m_seqGluePoints.size(); i++)
     {
-        SdrGluePoint aGluePoint;
+        EnhancedCustomShapeParameterPair aGluePointPair = m_seqGluePoints[i];
+        if (m_seqGluePointLeavingDirections.hasElements())
+        {
+            sal_Int32 aGluePointLeavingDirection = m_seqGluePointLeavingDirections[i];
+            aDirection = lcl_GetEscapeDirection(aGluePointLeavingDirection);
+        }
 
-        aGluePoint.SetPos( GetPoint( rGluePoint, !m_bOOXMLShape, true ) );
+        SdrGluePoint aGluePoint;
+        aGluePoint.SetPos( GetPoint( aGluePointPair, !m_bOOXMLShape, true ) );
         aGluePoint.SetPercent( false );
         aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
-        aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
+        aGluePoint.SetEscDir( aDirection );
         SdrGluePointList* pList = pObj->ForceGluePointList();
         if( pList )
             /* sal_uInt16 nId = */ pList->Insert( aGluePoint );

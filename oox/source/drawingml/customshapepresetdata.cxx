@@ -162,6 +162,18 @@ awt::Rectangle lcl_parseRectangle(std::string_view rValue)
     return aRectangle;
 }
 
+sal_Int32 lcl_parseDirection(std::string_view rValue)
+{
+    sal_Int32 aDirection;
+    // We expect the following here: Direction
+    static const char aExpectedWidthPrefix[] = "Dir = (long) ";
+    assert(o3tl::starts_with(rValue, aExpectedWidthPrefix));
+    sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
+    aDirection = o3tl::toInt32(rValue.substr(nIndex));
+
+    return aDirection;
+}
+
 awt::Size lcl_parseSize(std::string_view rValue)
 {
     awt::Size aSize;
@@ -582,6 +594,73 @@ void lcl_parsePathGluePoints(std::vector<beans::PropertyValue>& rPath, std::stri
     }
 }
 
+void lcl_parsePathGluePointLeavingDirectionsValues(std::vector<beans::PropertyValue>& rPath,
+                                                   std::string_view rValue)
+{
+    std::vector<double> aDirection;
+    sal_Int32 nLevel = 0;
+    sal_Int32 nStart = 0;
+    for (size_t i = 0; i < rValue.size(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                nStart = i;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                aDirection.push_back(lcl_parseDirection(
+                    rValue.substr(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+        }
+    }
+
+    beans::PropertyValue aPropertyValue;
+    aPropertyValue.Name = "GluePointLeavingDirections";
+    aPropertyValue.Value <<= comphelper::containerToSequence(aDirection);
+    rPath.push_back(aPropertyValue);
+}
+
+void lcl_parsePathGluePointLeavingDirections(std::vector<beans::PropertyValue>& rPath,
+                                             std::string_view rValue)
+{
+    sal_Int32 nLevel = 0;
+    bool bIgnore = false;
+    sal_Int32 nStart = 0;
+    for (size_t i = 0; i < rValue.size(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                bIgnore = true;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                bIgnore = false;
+        }
+        else if (rValue[i] == ',' && !bIgnore)
+        {
+            std::string_view aToken = rValue.substr(nStart, i - nStart);
+            static const char aExpectedPrefix[] = "Value = (any) { ([]long) { ";
+            if (o3tl::starts_with(aToken, aExpectedPrefix))
+            {
+                aToken = aToken.substr(strlen(aExpectedPrefix),
+                                       aToken.size() - strlen(aExpectedPrefix) - strlen(" } }"));
+                lcl_parsePathGluePointLeavingDirectionsValues(rPath, aToken);
+            }
+            else if (!o3tl::starts_with(aToken, "Name =") && !o3tl::starts_with(aToken, "Handle ="))
+                SAL_WARN("oox",
+                         "lcl_parsePathGluePointLeavingDirections: unexpected token: " << aToken);
+            nStart = i + strlen(", ");
+        }
+    }
+}
+
 void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, std::string_view rValue)
 {
     std::vector<drawing::EnhancedCustomShapeSegment> aSegments;
@@ -804,6 +883,8 @@ void lcl_parsePath(std::vector<beans::PropertyValue>& rPath, std::string_view rV
                     lcl_parsePathCoordinates(rPath, aToken);
                 else if (o3tl::starts_with(aToken, "Name = \"GluePoints\""))
                     lcl_parsePathGluePoints(rPath, aToken);
+                else if (o3tl::starts_with(aToken, "Name = \"GluePointLeavingDirections\""))
+                    lcl_parsePathGluePointLeavingDirections(rPath, aToken);
                 else if (o3tl::starts_with(aToken, "Name = \"Segments\""))
                     lcl_parsePathSegments(rPath, aToken);
                 else if (o3tl::starts_with(aToken, "Name = \"TextFrames\""))
