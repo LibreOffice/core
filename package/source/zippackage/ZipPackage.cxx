@@ -558,7 +558,11 @@ void ZipPackage::getZipFileContents()
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
                     ZipPackageFolder* pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
-                    pPkgFolder->setName( sTemp );
+                    try {
+                        pPkgFolder->setName( sTemp );
+                    } catch (uno::RuntimeException const& e) {
+                        throw css::packages::zip::ZipIOException(e.Message);
+                    }
                     pPkgFolder->doSetParent( pCurrent );
                     pCurrent = pPkgFolder;
                 }
