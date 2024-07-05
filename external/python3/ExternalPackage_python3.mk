@@ -96,7 +96,6 @@ python3_EXTENSION_MODULES= \
 	LO_lib/_multiprocessing.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_opcode.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/ossaudiodev.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/parser.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_pickle.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_posixshmem.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_posixsubprocess.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -186,7 +185,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/__future__.py \
 	Lib/__phello__.foo.py \
 	Lib/_aix_support.py \
-	Lib/_bootlocale.py \
 	Lib/_bootsubprocess.py \
 	Lib/_collections_abc.py \
 	Lib/_compat_pickle.py \
@@ -240,7 +238,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/filecmp.py \
 	Lib/fileinput.py \
 	Lib/fnmatch.py \
-	Lib/formatter.py \
 	Lib/fractions.py \
 	Lib/ftplib.py \
 	Lib/functools.py \
@@ -325,7 +322,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/struct.py \
 	Lib/subprocess.py \
 	Lib/sunau.py \
-	Lib/symbol.py \
 	Lib/symtable.py \
 	Lib/sysconfig.py \
 	Lib/tabnanny.py \
@@ -372,6 +368,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncio/futures.py \
 	Lib/asyncio/locks.py \
 	Lib/asyncio/log.py \
+	Lib/asyncio/mixins.py \
 	Lib/asyncio/proactor_events.py \
 	Lib/asyncio/protocols.py \
 	Lib/asyncio/queues.py \
@@ -462,7 +459,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/distutils/command/bdist_dumb.py \
 	Lib/distutils/command/bdist_msi.py \
 	Lib/distutils/command/bdist_rpm.py \
-	Lib/distutils/command/bdist_wininst.py \
 	Lib/distutils/command/build.py \
 	Lib/distutils/command/build_clib.py \
 	Lib/distutils/command/build_ext.py \
@@ -481,15 +477,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/distutils/command/register.py \
 	Lib/distutils/command/sdist.py \
 	Lib/distutils/command/upload.py \
-	Lib/distutils/command/wininst-10.0.exe \
-	Lib/distutils/command/wininst-10.0-amd64.exe \
-	Lib/distutils/command/wininst-14.0.exe \
-	Lib/distutils/command/wininst-14.0-amd64.exe \
-	Lib/distutils/command/wininst-6.0.exe \
-	Lib/distutils/command/wininst-7.1.exe \
-	Lib/distutils/command/wininst-8.0.exe \
-	Lib/distutils/command/wininst-9.0.exe \
-	Lib/distutils/command/wininst-9.0-amd64.exe \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/email,\
@@ -669,14 +656,25 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/importlib,\
 	Lib/importlib/__init__.py \
+	Lib/importlib/_abc.py \
+	Lib/importlib/_adapters.py \
 	Lib/importlib/_bootstrap.py \
 	Lib/importlib/_bootstrap_external.py \
 	Lib/importlib/_common.py \
 	Lib/importlib/abc.py \
 	Lib/importlib/machinery.py \
-	Lib/importlib/metadata.py \
 	Lib/importlib/resources.py \
 	Lib/importlib/util.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/importlib/metadata,\
+	Lib/importlib/metadata/__init__.py \
+	Lib/importlib/metadata/_adapters.py \
+	Lib/importlib/metadata/_collections.py \
+	Lib/importlib/metadata/_functools.py \
+	Lib/importlib/metadata/_itertools.py \
+	Lib/importlib/metadata/_meta.py \
+	Lib/importlib/metadata/_text.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/json,\
