@@ -658,7 +658,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
         {
             tools::Polygon aSimplePoly;
             aSimplePolyPoly[ i ].AdaptiveSubdivide( aSimplePoly );
-            aSimplePolyPoly[ i ] = aSimplePoly;
+            aSimplePolyPoly[ i ] = std::move(aSimplePoly);
         }
     }
     WriteRecordHeader(0,W_META_POLYPOLYGON);
