@@ -765,10 +765,18 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bPlacement )
         {
-            eVal = vcl::PDFWriter::TableHeader == eType ||
-                   vcl::PDFWriter::TableData   == eType ?
-                   vcl::PDFWriter::Inline :
-                   vcl::PDFWriter::Block;
+            bool bIsFigureInline = false;
+            if (vcl::PDFWriter::Figure == eType)
+            {
+                const SwFrame* pKeyFrame = static_cast<const SwFlyFrame&>(*pFrame).GetAnchorFrame();
+                if (pKeyFrame->GetUpper()->GetType() == SwFrameType::Body)
+                    bIsFigureInline = true;
+            }
+
+            eVal = vcl::PDFWriter::TableHeader == eType || vcl::PDFWriter::TableData == eType
+                           || bIsFigureInline
+                       ? vcl::PDFWriter::Inline
+                       : vcl::PDFWriter::Block;
 
             mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::Placement, eVal );
         }

@@ -70,6 +70,57 @@ void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rD
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testFigurePlacement)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    saveAsPDF(u"tdf159900_figurePlacement.odt");
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+            if (pS && pS->GetValue() == "Figure")
+            {
+                auto pAttrDict
+                    = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
+                CPPUNIT_ASSERT(pAttrDict);
+                auto pOwner = dynamic_cast<vcl::filter::PDFNameElement*>(
+                    pAttrDict->LookupElement("O"_ostr));
+                CPPUNIT_ASSERT(pOwner);
+                if (pOwner->GetValue() == "Layout")
+                {
+                    auto pPlacement = dynamic_cast<vcl::filter::PDFNameElement*>(
+                        pAttrDict->LookupElement("Placement"_ostr));
+                    CPPUNIT_ASSERT(pPlacement);
+
+                    // Without the fix in place, this test would have failed with
+                    // Expected: Inline
+                    // Actual:   Block
+                    CPPUNIT_ASSERT_EQUAL("Inline"_ostr, pPlacement->GetValue());
+                }
+            }
+        }
+    }
+}
+
 /// Tests that a pdf image is roundtripped back to PDF as a vector format.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
 {
