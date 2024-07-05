@@ -164,6 +164,7 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 
     Reference< XShapes > xShapes( getPage() );
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
+    oox::drawingml::ShapeIdMap aConnectorShapeMap;
 
     for (auto const& shape : rShapes)
     {
@@ -176,40 +177,39 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             {
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
 
-                oox::drawingml::ShapeIdMap aConnectorShapeMap;
                 const auto& pIter = maShapeMap.find(pPPTShape->getId());
                 if (pIter != maShapeMap.end())
                     lcl_createShapeMap(pIter->second, aConnectorShapeMap);
-
-                if(!aConnectorShapeMap.empty())
-                {
-                    for (auto& pIt : aConnectorShapeMap)
-                    {
-                        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(pIt.second->getXShape());
-                        SdrModel& rModel(pObj->getSdrModelFromSdrObject());
-                        rModel.setLock(false);
-
-                        ConnectorHelper::applyConnections(pIt.second, getShapeMap());
-
-                        if (pIt.second->getConnectorName() == u"bentConnector3"_ustr
-                            || pIt.second->getConnectorName() == u"bentConnector4"_ustr
-                            || pIt.second->getConnectorName() == u"bentConnector5"_ustr)
-                        {
-                            ConnectorHelper::applyBentHandleAdjustments(pIt.second);
-                        }
-                        else if (pIt.second->getConnectorName() == u"curvedConnector3"_ustr
-                                 || pIt.second->getConnectorName() == u"curvedConnector4"_ustr
-                                 || pIt.second->getConnectorName() == u"curvedConnector5"_ustr)
-                        {
-                            ConnectorHelper::applyCurvedHandleAdjustments(pIt.second);
-                        }
-                        else // bentConnector2
-                            createConnectorShapeConnection(pIt.second);
-                    }
-                }
             }
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
+        }
+    }
+
+    if (!aConnectorShapeMap.empty())
+    {
+        for (auto& pIt : aConnectorShapeMap)
+        {
+            ConnectorHelper::applyConnections(pIt.second, getShapeMap());
+
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(pIt.second->getXShape());
+            SdrModel& rModel(pObj->getSdrModelFromSdrObject());
+            rModel.setLock(false);
+
+            if (pIt.second->getConnectorName() == u"bentConnector3"_ustr
+                || pIt.second->getConnectorName() == u"bentConnector4"_ustr
+                || pIt.second->getConnectorName() == u"bentConnector5"_ustr)
+            {
+                ConnectorHelper::applyBentHandleAdjustments(pIt.second);
+            }
+            else if (pIt.second->getConnectorName() == u"curvedConnector3"_ustr
+                     || pIt.second->getConnectorName() == u"curvedConnector4"_ustr
+                     || pIt.second->getConnectorName() == u"curvedConnector5"_ustr)
+            {
+                ConnectorHelper::applyCurvedHandleAdjustments(pIt.second);
+            }
+            else // bentConnector2
+                createConnectorShapeConnection(pIt.second);
         }
     }
 

@@ -92,6 +92,34 @@ uno::Reference<drawing::XShape> OoxShapeTest::getShapeByName(std::u16string_view
     return xRet;
 }
 
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testConnectorConnection)
+{
+    loadFromFile(u"connectorConnection.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xConnector(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xConnectorProps(xConnector, uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : -1
+    // i.e. the connector shape is not attaching to the shape
+    sal_Int32 nStartGlueId;
+    xConnectorProps->getPropertyValue("StartGluePointIndex") >>= nStartGlueId;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nStartGlueId);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : -1
+    // i.e. the connector shape is not attaching to the shape
+    sal_Int32 nEndGlueId;
+    xConnectorProps->getPropertyValue("EndGluePointIndex") >>= nEndGlueId;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
+}
+
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
 {
     loadFromFile(u"elbowConnectors.pptx");
