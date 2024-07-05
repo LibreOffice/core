@@ -363,7 +363,9 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
             else
                 gInstanceManagerMap.insert(
                     { aManagerKey, std::make_unique<DefaultItemInstanceManager>() });
-            pManager = gInstanceManagerMap.find(aManagerKey)->second.get();
+            it1 = gInstanceManagerMap.find(aManagerKey);
+            assert(it1 != gInstanceManagerMap.end());
+            pManager = it1->second.get();
         }
 
         bool bSuccess = pManager->add(*pSource);
