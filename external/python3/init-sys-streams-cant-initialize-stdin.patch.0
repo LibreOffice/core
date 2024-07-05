@@ -21,7 +21,7 @@
      /* stdin is always opened in buffered mode, first because it shouldn't
         make a difference in common use cases, second because TextIOWrapper
         depends on the presence of a read1() method which only exists on
-@@ -1971,19 +1971,6 @@
+@@ -2335,19 +2335,6 @@
      PyStatus res = _PyStatus_OK();
      const PyConfig *config = _PyInterpreterState_GetConfig(tstate->interp);
  
@@ -38,6 +38,6 @@
 -    }
 -#endif
 -
-     /* Hack to avoid a nasty recursion issue when Python is invoked
-        in verbose mode: pre-import the Latin-1 and UTF-8 codecs */
-     if ((m = PyImport_ImportModule("encodings.utf_8")) == NULL) {
+     if (!(iomod = PyImport_ImportModule("io"))) {
+         goto error;
+     }
