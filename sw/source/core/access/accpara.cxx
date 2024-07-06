@@ -1525,8 +1525,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             {
                 PropertyValue rPropVal;
                 rPropVal.Name = UNO_NAME_PARA_STYLE_NAME;
-                uno::Any aVal( uno::Any( pTextNode->GetTextColl()->GetName() ) );
-                rPropVal.Value = aVal;
+                rPropVal.Value <<= pTextNode->GetTextColl()->GetName();
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
