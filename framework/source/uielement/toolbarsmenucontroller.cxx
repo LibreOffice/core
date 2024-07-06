@@ -279,11 +279,10 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
     const sal_uInt32 nCount = aToolBarArray.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        Sequence< css::beans::PropertyValue > aTbSeq{
+        pSeq[i] = Sequence<css::beans::PropertyValue>{
             comphelper::makePropertyValue(g_aPropUIName, aToolBarArray[i].aToolBarUIName),
             comphelper::makePropertyValue(g_aPropResourceURL, aToolBarArray[i].aToolBarResName)
         };
-        pSeq[i] = aTbSeq;
     }
 
     return aSeq;
