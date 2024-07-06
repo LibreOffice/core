@@ -1627,7 +1627,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
                 auto vCursors = CopyPaMRing(*pPaM); // tdf#134439 make a copy to use at later apply
-                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pDrawModel, pRequest=std::move(pRequest), nDefDist, vCursors](sal_Int32 nResult){
+                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pDrawModel, pRequest=std::move(pRequest), nDefDist, vCursors=std::move(vCursors)](sal_Int32 nResult){
                     if (nResult == RET_OK)
                     {
                         // Apply defaults if necessary.
