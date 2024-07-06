@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/text/footnote.hxx>
 #include <test/text/xsimpletext.hxx>
@@ -15,7 +15,6 @@
 #include <test/text/xtextcontent.hxx>
 #include <test/text/xtext.hxx>
 #include <test/text/xfootnote.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -35,8 +34,7 @@ namespace
 /**
  * Initial tests for SwXFootnote.
  */
-class SwXFootnote final : public test::BootstrapFixture,
-                          public unotest::MacrosTest,
+class SwXFootnote final : public UnoApiTest,
                           public apitest::XComponent,
                           public apitest::XSimpleText,
                           public apitest::XTextRange,
@@ -46,14 +44,12 @@ class SwXFootnote final : public test::BootstrapFixture,
                           public apitest::Footnote
 {
 public:
-    virtual void setUp() override;
-    void tearDown() override;
+    SwXFootnote();
 
     Reference<XInterface> init() override;
     Reference<text::XTextRange> getTextRange() override;
     Reference<text::XTextContent> getTextContent() override;
     bool isAttachSupported() override { return true; }
-    Reference<text::XTextDocument> getTextDocument() { return mxTextDocument; }
     void triggerDesktopTerminate() override {}
 
     CPPUNIT_TEST_SUITE(SwXFootnote);
@@ -76,38 +72,25 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    Reference<text::XTextDocument> mxTextDocument;
     Reference<text::XTextRange> mxTextRange;
     Reference<text::XTextContent> mxTextContent;
 };
 
-void SwXFootnote::setUp()
+SwXFootnote::SwXFootnote()
+    : UnoApiTest(u""_ustr)
 {
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(m_xContext));
-    mxTextDocument = Reference<text::XTextDocument>(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr),
-        uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
-}
-
-void SwXFootnote::tearDown()
-{
-    if (mxTextDocument.is())
-        mxTextDocument->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 Reference<XInterface> SwXFootnote::init()
 {
-    Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
-
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+    Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
     Reference<text::XFootnote> xFootnote(xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr),
                                          UNO_QUERY_THROW);
 
-    Reference<text::XText> xText = getTextDocument()->getText();
+    Reference<text::XText> xText = xTextDocument->getText();
     Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
     xText->insertTextContent(xCursor, xFootnote, false);

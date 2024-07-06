@@ -42,19 +42,11 @@ public:
     {
     }
 
-    virtual void setUp() override
-    {
-        UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
-        CPPUNIT_ASSERT(mxComponent.is());
-    }
-
     Reference<XInterface> init() override
     {
-        component_ = loadFromDesktop(u"private:factory/swriter"_ustr,
-                                     u"com.sun.star.text.TextDocument"_ustr);
-        Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
+                                      u"com.sun.star.text.TextDocument"_ustr);
+        Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
 
         Reference<text::XTextFieldsSupplier> xTFS;
 
@@ -75,9 +67,6 @@ public:
     CPPUNIT_TEST(testCreateEnumeration);
     CPPUNIT_TEST(testRefreshListener);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    Reference<lang::XComponent> component_;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXTextFieldTypes);

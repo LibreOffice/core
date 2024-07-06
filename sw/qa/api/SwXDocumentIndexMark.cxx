@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/text/xtextcontent.hxx>
 #include <test/text/baseindexmark.hxx>
 #include <test/text/documentindexmark.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -32,22 +31,19 @@ namespace
 /**
  * Initial tests for SwXDocumentIndexMark.
  */
-class SwXDocumentIndexMark final : public test::BootstrapFixture,
-                                   public unotest::MacrosTest,
+class SwXDocumentIndexMark final : public UnoApiTest,
                                    public apitest::XComponent,
                                    public apitest::XTextContent,
                                    public apitest::BaseIndexMark,
                                    public apitest::DocumentIndexMark
 {
 public:
-    virtual void setUp() override;
-    void tearDown() override;
+    SwXDocumentIndexMark();
 
     Reference<XInterface> init() override;
     uno::Reference<text::XTextRange> getTextRange() override;
     uno::Reference<text::XTextContent> getTextContent() override;
     bool isAttachSupported() override { return true; }
-    uno::Reference<text::XTextDocument> getTextDocument() { return mxTextDocument; }
     void triggerDesktopTerminate() override { mxDesktop->terminate(); }
 
     CPPUNIT_TEST_SUITE(SwXDocumentIndexMark);
@@ -61,35 +57,23 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<text::XTextDocument> mxTextDocument;
     uno::Reference<text::XTextRange> mxTextRange;
     uno::Reference<text::XTextContent> mxTextContent;
 };
 
-void SwXDocumentIndexMark::setUp()
+SwXDocumentIndexMark::SwXDocumentIndexMark()
+    : UnoApiTest(u""_ustr)
 {
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(m_xContext));
-    mxTextDocument = uno::Reference<text::XTextDocument>(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr),
-        uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
-}
-
-void SwXDocumentIndexMark::tearDown()
-{
-    if (mxTextDocument.is())
-        mxTextDocument->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 Reference<XInterface> SwXDocumentIndexMark::init()
 {
-    Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
+    mxComponent
+        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+    Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 
-    Reference<text::XText> xText = getTextDocument()->getText();
+    Reference<text::XText> xText = xTextDocument->getText();
     Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
     Reference<text::XDocumentIndexMark> xDIM(

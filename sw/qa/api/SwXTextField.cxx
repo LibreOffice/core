@@ -51,16 +51,10 @@ struct SwXTextField final : public UnoApiTest,
     {
     }
 
-    virtual void setUp() override
-    {
-        UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
-        CPPUNIT_ASSERT(mxComponent.is());
-    }
-
     Reference<XInterface> init() override
     {
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
+                                      u"com.sun.star.text.TextDocument"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
         Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 

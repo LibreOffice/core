@@ -7,13 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/text/xsimpletext.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/text/xtextrange.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/text/xtextrangecompare.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -32,8 +31,7 @@ namespace
 /**
  * Initial tests for SwXBodyText.
  */
-class SwXBodyText final : public test::BootstrapFixture,
-                          public unotest::MacrosTest,
+class SwXBodyText final : public UnoApiTest,
                           public apitest::XElementAccess,
                           public apitest::XTextRange,
                           public apitest::XSimpleText,
@@ -42,8 +40,6 @@ class SwXBodyText final : public test::BootstrapFixture,
 {
 public:
     SwXBodyText();
-    virtual void setUp() override;
-    void tearDown() override;
 
     Reference<XInterface> init() override;
 
@@ -62,37 +58,20 @@ public:
     CPPUNIT_TEST(testCompareRegionStarts);
     CPPUNIT_TEST(testCompareRegionEnds);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> component_;
 };
 
 SwXBodyText::SwXBodyText()
-    : XElementAccess(cppu::UnoType<text::XTextRange>::get())
+    : UnoApiTest(u""_ustr)
+    , XElementAccess(cppu::UnoType<text::XTextRange>::get())
 {
-}
-
-void SwXBodyText::setUp()
-{
-    test::BootstrapFixture::setUp();
-    mxDesktop.set(
-        frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-}
-
-void SwXBodyText::tearDown()
-{
-    if (component_.is())
-        component_->dispose();
-
-    test::BootstrapFixture::tearDown();
 }
 
 Reference<XInterface> SwXBodyText::init()
 {
-    component_
+    mxComponent
         = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
-    Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
-    Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
+    Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+    Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 
     Reference<text::XText> xText = xTextDocument->getText();
 

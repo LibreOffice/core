@@ -36,16 +36,10 @@ public:
     {
     }
 
-    virtual void setUp() override
-    {
-        UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(m_xContext));
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
-        CPPUNIT_ASSERT(mxComponent.is());
-    }
-
     uno::Reference<uno::XInterface> init() override
     {
+        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
+                                      u"com.sun.star.text.TextDocument"_ustr);
         uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextFrame> xTextFrame(

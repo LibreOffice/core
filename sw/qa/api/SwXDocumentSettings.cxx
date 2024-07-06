@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xserviceinfo.hxx>
 #include <test/text/textdocumentsettings.hxx>
 #include <test/text/textprintersettings.hxx>
 #include <test/text/textsettings.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -28,22 +27,16 @@ namespace
 /**
  * Test for Java API test of file com.sun.star.comp.Writer.DocumentSettings.csv
  */
-class SwXDocumentSettings final : public test::BootstrapFixture,
-                                  public unotest::MacrosTest,
+class SwXDocumentSettings final : public UnoApiTest,
                                   public apitest::TextDocumentSettings,
                                   public apitest::TextSettings,
                                   public apitest::TextPrinterSettings,
                                   public apitest::XServiceInfo
 {
-private:
-    uno::Reference<lang::XComponent> mxComponent;
-
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
     SwXDocumentSettings()
-        : apitest::XServiceInfo(u"SwXDocumentSettings"_ustr,
+        : UnoApiTest(u""_ustr)
+        , apitest::XServiceInfo(u"SwXDocumentSettings"_ustr,
                                 u"com.sun.star.text.DocumentSettings"_ustr){};
     uno::Reference<uno::XInterface> init() override;
 
@@ -56,21 +49,6 @@ public:
     CPPUNIT_TEST(testPrinterSettingsProperties);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void SwXDocumentSettings::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(m_xContext));
-}
-
-void SwXDocumentSettings::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
 
 uno::Reference<uno::XInterface> SwXDocumentSettings::init()
 {
