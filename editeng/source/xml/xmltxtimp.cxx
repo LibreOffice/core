@@ -164,7 +164,8 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
         {
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
-            uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
+            xml::sax::InputSource aParserInput;
+            aParserInput.aInputStream = new utl::OInputStreamWrapper(rStream);
 
 /* testcode
             static constexpr OUStringLiteral aURL( u"file:///e:/test.xml" );
@@ -201,8 +202,6 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
             rtl::Reference< SvxXMLXTextImportComponent > xImport( new SvxXMLXTextImportComponent( xContext, pUnoText ) );
 
-            xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream = xInputStream;
 //          aParserInput.sSystemId = aMedium.GetName();
             xImport->parseStream( aParserInput );
         }
