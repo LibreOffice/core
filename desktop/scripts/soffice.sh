@@ -122,7 +122,7 @@ for arg in "$@" $EXTRAOPT ; do
                 echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
                 case "$VALGRIND" in
-                helgrind|memcheck|massif|exp-dhat)
+                helgrind|memcheck|massif|dhat)
                     export G_SLICE=always-malloc
                     export GLIBCXX_FORCE_NEW=1
                     ;;
