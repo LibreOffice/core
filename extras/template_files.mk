@@ -49,7 +49,6 @@ extra_files_COMMON := \
 extra_files_PRESENTATIONS := \
     presnt/Beehive/Thumbnails/thumbnail.png \
     presnt/Blue_Curve/Thumbnails/thumbnail.png \
-    presnt/Blueprint_Plans/Pictures/10000000000000580000001F99D2A38C014B254B.png  \
     presnt/Blueprint_Plans/Pictures/100000000000033C0000026D847ACE982C6E20B6.png  \
     presnt/Blueprint_Plans/Pictures/10000000000004220000031A5C2E04AB7C51FB60.png  \
     presnt/Blueprint_Plans/Pictures/1000020100000500000002D03918081590A75FCF.png  \
