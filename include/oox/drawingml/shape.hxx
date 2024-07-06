@@ -209,7 +209,7 @@ public:
                             const basegfx::B2DHomMatrix& aTransformation,
                             const FillProperties& rShapeOrParentShapeFillProps,
                             ShapeIdMap* pShapeMap = nullptr,
-                            oox::drawingml::ShapePtr pParentGroupShape = nullptr);
+                            const oox::drawingml::ShapePtr& pParentGroupShape = nullptr);
 
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
@@ -296,7 +296,7 @@ protected:
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
                             const FillProperties& rShapeOrParentShapeFillProps,
-                            oox::drawingml::ShapePtr pParentGroupShape = nullptr
+                            const oox::drawingml::ShapePtr& pParentGroupShape = nullptr
                              );
 
     SAL_DLLPRIVATE void addChildren(

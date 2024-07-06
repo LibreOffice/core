@@ -383,7 +383,7 @@ void Shape::addShape(
         const basegfx::B2DHomMatrix& aTransformation,
         const FillProperties& rShapeOrParentShapeFillProps,
         ShapeIdMap* pShapeMap,
-        oox::drawingml::ShapePtr pParentGroupShape)
+        const oox::drawingml::ShapePtr& pParentGroupShape)
 {
     SAL_INFO("oox.drawingml", "Shape::addShape: id='" << msId << "'");
 
@@ -908,7 +908,7 @@ Reference< XShape > const & Shape::createAndInsert(
         bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation,
         const FillProperties& rShapeOrParentShapeFillProps,
-        oox::drawingml::ShapePtr pParentGroupShape)
+        const oox::drawingml::ShapePtr& pParentGroupShape)
 {
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", "Shape::createAndInsert: id='" << msId << "' service='" << rServiceName << "'");
