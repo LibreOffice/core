@@ -774,8 +774,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // insert a list for our XText (if necessary)
             if (aMapIter == moUsedMasters->end())
             {
-                std::set<OUString> aSet;
-                (*moUsedMasters)[xOurText] = aSet;
+                (*moUsedMasters)[xOurText] = std::set<OUString>();
                 aMapIter = moUsedMasters->find(xOurText);
             }
 
