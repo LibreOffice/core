@@ -403,11 +403,11 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
                 sysFlavor = flavorMap[i].SystemFlavor;
             else
                 sysFlavor = OUStringToNSString(oOOFlavor.MimeType);
-        }
 
-        // Flavor set, then break
-        if (sysFlavor != nullptr)
-            break;
+            // Flavor set, then break
+            if (sysFlavor != nullptr)
+                break;
+        }
     }
 
     if (!sysFlavor)
