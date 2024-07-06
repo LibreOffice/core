@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2">
   <office:font-face-decls>
-    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Noto Serif CJK" svg:font-family="'Noto Serif CJK JP:palt','Noto Serif CJK KR','Noto Serif CJK SC','Noto Serif CJK TC','Noto Serif CJK HK'" style:font-family-generic="roman" style:font-pitch="variable" />
     <style:font-face style:name="Noto Serif" svg:font-family="Noto Serif" style:font-family-generic="roman" style:font-pitch="variable" />
   </office:font-face-decls>
   <office:styles>
-    <draw:gradient draw:name="Ausgefüllt" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Ausgefüllt_20_blau" draw:display-name="Ausgefüllt blau" draw:style="linear" draw:start-color="#729fcf" draw:end-color="#355269" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Ausgefüllt_20_gelb" draw:display-name="Ausgefüllt gelb" draw:style="linear" draw:start-color="#ffde59" draw:end-color="#b47804" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Ausgefüllt_20_grün" draw:display-name="Ausgefüllt grün" draw:style="linear" draw:start-color="#77bc65" draw:end-color="#127622" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Ausgefüllt_20_rot" draw:display-name="Ausgefüllt rot" draw:style="linear" draw:start-color="#ff6d6d" draw:end-color="#c9211e" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Formen" draw:style="rectangular" draw:cx="50%" draw:cy="50%" draw:start-color="#cccccc" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
+    <draw:gradient draw:name="Filled" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Blue" draw:display-name="Filled Blue" draw:style="linear" draw:start-color="#729fcf" draw:end-color="#355269" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Yellow" draw:display-name="Filled Yellow" draw:style="linear" draw:start-color="#ffde59" draw:end-color="#b47804" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Green" draw:display-name="Filled Green" draw:style="linear" draw:start-color="#77bc65" draw:end-color="#127622" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Red" draw:display-name="Filled Red" draw:style="linear" draw:start-color="#ff6d6d" draw:end-color="#c9211e" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Shapes" draw:style="rectangular" draw:cx="50%" draw:cy="50%" draw:start-color="#cccccc" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
     <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
     <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_2" draw:display-name="Dashed (var) 2" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
     <style:default-style style:family="graphic">
       <style:graphic-properties svg:stroke-color="#808080" draw:fill-color="#cfe7f5" fo:wrap-option="no-wrap"/>
-      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
-        <style:tab-stops/>
-      </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="24pt" style:font-size-asian="24pt" style:font-name-asian="Noto Serif CJK" style:font-size-complex="24pt" style:font-name-complex="Noto Serif" />
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="24pt" style:font-size-asian="24pt" style:font-name-asian="Noto Serif CJK" style:font-size-complex="24pt" style:font-name-complex="Noto Serif"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.05cm" svg:stroke-color="#2a6099" draw:marker-start-width="0.28cm" draw:marker-start-center="false" draw:marker-end-width="0.28cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#dee6ef" draw:textarea-horizontal-align="justify" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.05cm" draw:shadow-offset-y="0.05cm" draw:shadow-color="#ff5429">
@@ -68,17 +65,17 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Noto Serif" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties svg:stroke-color="#ff4000" draw:fill="none"/>
     </style:style>
-    <style:style style:name="Objekt_20_ohne_20_Füllung_20_und_20_Linie" style:display-name="Objekt ohne Füllung und Linie" style:family="graphic" style:parent-style-name="standard">
+    <style:style style:name="Object_20_with_20_no_20_fill_20_and_20_no_20_line" style:display-name="Object with no fill and no line" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
     </style:style>
     <style:style style:name="Text" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#cccccc" draw:fill="solid" draw:fill-color="#eeeeee"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:text-properties style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable" style:font-name-asian="Noto Serif CJK" style:font-name-complex="Noto Serif"/>
     </style:style>
     <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
@@ -112,29 +109,29 @@
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt"/>
+      <style:text-properties style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" style:font-name-asian="Noto Serif CJK" style:font-name-complex="Noto Serif"/>
     </style:style>
     <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
-      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Formen"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="Filled" style:family="graphic" style:parent-style-name="Shapes">
-      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Ausgefüllt"/>
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled"/>
     </style:style>
     <style:style style:name="Filled_20_Blue" style:display-name="Filled Blue" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Ausgefüllt_20_blau"/>
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Blue"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Green" style:display-name="Filled Green" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Ausgefüllt_20_grün"/>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Green"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Red" style:display-name="Filled Red" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Ausgefüllt_20_rot"/>
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Red"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Yellow" style:display-name="Filled Yellow" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Ausgefüllt_20_gelb"/>
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Yellow"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Outlined" style:family="graphic" style:parent-style-name="Shapes">
@@ -178,16 +175,15 @@
     </style:style>
     <style:style style:name="DNA-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-style-name="Normal" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="DNA-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none"  fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="DNA-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#3399ff" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#3399ff" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="DNA-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -232,7 +228,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#050505" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#050505" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="DNA-outline2" style:family="presentation" style:parent-style-name="DNA-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-indent="0cm"/>
@@ -299,10 +295,10 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none"  fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="DNA-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="DNA-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties/>
@@ -347,7 +343,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:color="#050505" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#050505" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -377,11 +373,9 @@
     </style:style>
     <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#2a6099" svg:stroke-width="0.05cm" draw:textarea-vertical-align="middle" draw:start-line-spacing-horizontal="0.25cm" draw:start-line-spacing-vertical="0.25cm" draw:end-line-spacing-horizontal="0.25cm" draw:end-line-spacing-vertical="0.25cm"/>
@@ -394,25 +388,15 @@
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="DNA-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.338cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="DNA-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="DNA-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="MP1" style:family="paragraph">
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP3" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
@@ -425,99 +409,6 @@
       <style:paragraph-properties fo:text-align="center"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
-    <style:style style:name="MP6" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="center"/>
-    </style:style>
-    <style:style style:name="MT1" style:family="text">
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MT2" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <text:list-style style:name="ML1">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
-    <text:list-style style:name="ML2">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
   </office:automatic-styles>
   <office:master-styles>
     <draw:layer-set>
@@ -530,8 +421,8 @@
     <style:handout-master presentation:presentation-page-layout-name="AL0T26" style:page-layout-name="PM0" draw:style-name="Mdp2">
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
+          <text:p>
+            <text:span>
               <presentation:header/>
             </text:span>
           </text:p>
@@ -539,8 +430,8 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
+          <text:p>
+            <text:span>
               <presentation:date-time/>
             </text:span>
           </text:p>
@@ -548,8 +439,8 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
+          <text:p>
+            <text:span>
               <presentation:footer/>
             </text:span>
           </text:p>
@@ -557,8 +448,8 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
+          <text:p>
+            <text:span>
               <text:page-number>1</text:page-number>
             </text:span>
           </text:p>
@@ -579,330 +470,224 @@
       <draw:frame presentation:style-name="DNA-outline1" draw:layer="backgroundobjects" svg:width="22.5cm" svg:height="9.134cm" svg:x="4.5cm" svg:y="3.8cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.085cm" svg:x="4.4cm" svg:y="14.347cm" presentation:class="date-time">
+      <draw:frame presentation:style-name="DNA-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.085cm" svg:x="4.4cm" svg:y="14.347cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT2">
+          <text:p>
+            <text:span>
               <presentation:date-time/>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.085cm" svg:x="11.075cm" svg:y="14.347cm" presentation:class="footer">
+      <draw:frame presentation:style-name="DNA-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.085cm" svg:x="11.075cm" svg:y="14.347cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT2">
+          <text:p>
+            <text:span>
               <presentation:footer/>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.085cm" svg:x="20.075cm" svg:y="14.347cm" presentation:class="page-number">
+      <draw:frame presentation:style-name="DNA-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.085cm" svg:x="20.075cm" svg:y="14.347cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT2">
+          <text:p>
+            <text:span>
               <text:page-number>1</text:page-number>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.5cm" svg:y1="0.851cm" svg:x2="3.5cm" svg:y2="0.851cm" draw:start-shape="id1" draw:start-glue-point="10" draw:end-shape="id2" draw:end-glue-point="6" svg:d="M1500 851h276 1449 275" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="1.351cm" svg:x2="3cm" svg:y2="1.351cm" draw:start-shape="id3" draw:start-glue-point="10" draw:end-shape="id4" draw:end-glue-point="6" svg:d="M2000 1351h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="1.951cm" svg:x2="2.6cm" svg:y2="1.951cm" draw:start-shape="id5" draw:start-glue-point="10" draw:end-shape="id6" draw:end-glue-point="6" svg:d="M2400 1951h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="0.351cm" svg:x2="3cm" svg:y2="0.351cm" draw:start-shape="id7" draw:start-glue-point="10" draw:end-shape="id8" draw:end-glue-point="6" svg:d="M2000 351h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="2.651cm" svg:x2="2.6cm" svg:y2="2.651cm" draw:start-shape="id9" draw:start-glue-point="10" draw:end-shape="id10" draw:end-glue-point="6" svg:d="M2400 2651h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.5cm" svg:y1="3.751cm" svg:x2="1.5cm" svg:y2="3.751cm" draw:start-shape="id11" draw:start-glue-point="10" draw:end-shape="id12" draw:end-glue-point="6" svg:d="M3500 3751h-276-1449-275" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3cm" svg:y1="3.251cm" svg:x2="2cm" svg:y2="3.251cm" draw:start-shape="id13" draw:start-glue-point="10" draw:end-shape="id14" draw:end-glue-point="6" svg:d="M3000 3251h-276-449-275" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3cm" svg:y1="4.251cm" svg:x2="2cm" svg:y2="4.251cm" draw:start-shape="id15" draw:start-glue-point="10" draw:end-shape="id16" draw:end-glue-point="6" svg:d="M3000 4251h-276-449-275" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.6cm" svg:y1="4.851cm" svg:x2="2.4cm" svg:y2="4.851cm" draw:start-shape="id17" draw:start-glue-point="10" draw:end-shape="id18" draw:end-glue-point="6" svg:d="M2600 4851h-277 352-275" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.6cm" svg:y1="5.551cm" svg:x2="2.4cm" svg:y2="5.551cm" draw:start-shape="id19" draw:start-glue-point="10" draw:end-shape="id20" draw:end-glue-point="6" svg:d="M2600 5551h-277 352-275" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.5cm" svg:y1="6.651cm" svg:x2="3.5cm" svg:y2="6.651cm" draw:start-shape="id21" draw:start-glue-point="10" draw:end-shape="id22" draw:end-glue-point="6" svg:d="M1500 6651h276 1449 275" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="6.151cm" svg:x2="3cm" svg:y2="6.151cm" draw:start-shape="id23" draw:start-glue-point="10" draw:end-shape="id24" draw:end-glue-point="6" svg:d="M2000 6151h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="7.177cm" svg:x2="3cm" svg:y2="7.177cm" draw:start-shape="id25" draw:start-glue-point="10" draw:end-shape="id26" draw:end-glue-point="6" svg:d="M2000 7177h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="7.777cm" svg:x2="2.6cm" svg:y2="7.777cm" draw:start-shape="id27" draw:start-glue-point="10" draw:end-shape="id28" draw:end-glue-point="6" svg:d="M2400 7777h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="8.477cm" svg:x2="2.6cm" svg:y2="8.477cm" draw:start-shape="id29" draw:start-glue-point="10" draw:end-shape="id30" draw:end-glue-point="6" svg:d="M2400 8477h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.5cm" svg:y1="9.577cm" svg:x2="1.5cm" svg:y2="9.577cm" draw:start-shape="id31" draw:start-glue-point="10" draw:end-shape="id32" draw:end-glue-point="6" svg:d="M3500 9577h-276-1449-275" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.052cm" svg:y1="9.077cm" svg:x2="2.052cm" svg:y2="9.077cm" draw:start-shape="id33" draw:start-glue-point="10" draw:end-shape="id34" draw:end-glue-point="6" svg:d="M3052 9077h-276-449-275" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.026cm" svg:y1="10.102cm" svg:x2="2.026cm" svg:y2="10.102cm" draw:start-shape="id35" draw:start-glue-point="10" draw:end-shape="id36" draw:end-glue-point="6" svg:d="M3026 10102h-276-449-275" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.626cm" svg:y1="10.702cm" svg:x2="2.426cm" svg:y2="10.702cm" draw:start-shape="id37" draw:start-glue-point="10" draw:end-shape="id38" draw:end-glue-point="6" svg:d="M2626 10702h-277 352-275" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.626cm" svg:y1="11.402cm" svg:x2="2.426cm" svg:y2="11.402cm" draw:start-shape="id39" draw:start-glue-point="10" draw:end-shape="id40" draw:end-glue-point="6" svg:d="M2626 11402h-277 352-275" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.526cm" svg:y1="12.502cm" svg:x2="3.526cm" svg:y2="12.502cm" draw:start-shape="id41" draw:start-glue-point="10" draw:end-shape="id42" draw:end-glue-point="6" svg:d="M1526 12502h276 1448 276" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.026cm" svg:y1="12.002cm" svg:x2="3.026cm" svg:y2="12.002cm" draw:start-shape="id43" draw:start-glue-point="10" draw:end-shape="id44" draw:end-glue-point="6" svg:d="M2026 12002h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.026cm" svg:y1="13.002cm" svg:x2="3.026cm" svg:y2="13.002cm" draw:start-shape="id45" draw:start-glue-point="10" draw:end-shape="id46" draw:end-glue-point="6" svg:d="M2026 13002h276 448 276" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.426cm" svg:y1="13.602cm" svg:x2="2.626cm" svg:y2="13.602cm" draw:start-shape="id47" draw:start-glue-point="10" draw:end-shape="id48" draw:end-glue-point="6" svg:d="M2426 13602h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.426cm" svg:y1="14.302cm" svg:x2="2.626cm" svg:y2="14.302cm" draw:start-shape="id49" draw:start-glue-point="10" draw:end-shape="id50" draw:end-glue-point="6" svg:d="M2426 14302h276-352 276" svg:viewBox="0 0 353 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.526cm" svg:y1="15.402cm" svg:x2="1.526cm" svg:y2="15.402cm" draw:start-shape="id51" draw:start-glue-point="10" draw:end-shape="id52" draw:end-glue-point="6" svg:d="M3526 15402h-276-1449-275" svg:viewBox="0 0 2001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:connector draw:style-name="Mgr3" draw:text-style-name="MP6" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.026cm" svg:y1="14.902cm" svg:x2="2.026cm" svg:y2="14.902cm" draw:start-shape="id53" draw:start-glue-point="10" draw:end-shape="id54" draw:end-glue-point="6" svg:d="M3026 14902h-276-449-275" svg:viewBox="0 0 1001 1">
-        <text:p/>
-      </draw:connector>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id2" draw:id="id2" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="0.601cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id4" draw:id="id4" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="1.101cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id8" draw:id="id8" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="0.101cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id6" draw:id="id6" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="1.701cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id10" draw:id="id10" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="2.401cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="false" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id11" draw:id="id11" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="3.501cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id13" draw:id="id13" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="3.001cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id15" draw:id="id15" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="4.001cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id17" draw:id="id17" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="4.601cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id19" draw:id="id19" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="5.301cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id22" draw:id="id22" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="6.401cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id24" draw:id="id24" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="5.901cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id26" draw:id="id26" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="6.927cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id28" draw:id="id28" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="7.527cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id30" draw:id="id30" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="8.227cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id31" draw:id="id31" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="9.327cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id33" draw:id="id33" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.052cm" svg:y="8.827cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id35" draw:id="id35" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="9.852cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id37" draw:id="id37" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="10.452cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id39" draw:id="id39" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="11.152cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id42" draw:id="id42" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.526cm" svg:y="12.252cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id44" draw:id="id44" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="11.752cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id46" draw:id="id46" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="12.752cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id48" draw:id="id48" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="13.352cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id50" draw:id="id50" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="14.052cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id52" draw:id="id52" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.026cm" svg:y="15.152cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id54" draw:id="id54" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="14.652cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id1" draw:id="id1" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="0.601cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id3" draw:id="id3" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="1.101cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id7" draw:id="id7" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="0.101cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id5" draw:id="id5" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="1.701cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id9" draw:id="id9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="2.401cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="false" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id12" draw:id="id12" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="3.501cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id14" draw:id="id14" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="3.001cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id16" draw:id="id16" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="4.001cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id18" draw:id="id18" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="4.601cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id20" draw:id="id20" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="5.301cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id21" draw:id="id21" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="6.401cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id23" draw:id="id23" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="5.901cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id25" draw:id="id25" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="6.927cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id27" draw:id="id27" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="7.527cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id29" draw:id="id29" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="8.227cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id32" draw:id="id32" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="9.327cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id34" draw:id="id34" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.552cm" svg:y="8.827cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id36" draw:id="id36" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="9.852cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id38" draw:id="id38" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="10.452cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id40" draw:id="id40" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="11.152cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id41" draw:id="id41" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.026cm" svg:y="12.252cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id43" draw:id="id43" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="11.752cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id45" draw:id="id45" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="12.752cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id47" draw:id="id47" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="13.352cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" xml:id="id49" draw:id="id49" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="14.052cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id51" draw:id="id51" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.526cm" svg:y="15.152cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" xml:id="id53" draw:id="id53" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="14.652cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
-      </draw:custom-shape>
+      <draw:g>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.5cm" svg:y1="0.851cm" svg:x2="3.5cm" svg:y2="0.851cm" draw:start-shape="id1" draw:start-glue-point="10" draw:end-shape="id2" draw:end-glue-point="6" svg:d="M1500 851h276 1449 275" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="1.351cm" svg:x2="3cm" svg:y2="1.351cm" draw:start-shape="id3" draw:start-glue-point="10" draw:end-shape="id4" draw:end-glue-point="6" svg:d="M2000 1351h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="1.951cm" svg:x2="2.6cm" svg:y2="1.951cm" draw:start-shape="id5" draw:start-glue-point="10" draw:end-shape="id6" draw:end-glue-point="6" svg:d="M2400 1951h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="0.351cm" svg:x2="3cm" svg:y2="0.351cm" draw:start-shape="id7" draw:start-glue-point="10" draw:end-shape="id8" draw:end-glue-point="6" svg:d="M2000 351h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="2.651cm" svg:x2="2.6cm" svg:y2="2.651cm" draw:start-shape="id9" draw:start-glue-point="10" draw:end-shape="id10" draw:end-glue-point="6" svg:d="M2400 2651h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.5cm" svg:y1="3.751cm" svg:x2="1.5cm" svg:y2="3.751cm" draw:start-shape="id11" draw:start-glue-point="10" draw:end-shape="id12" draw:end-glue-point="6" svg:d="M3500 3751h-276-1449-275" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3cm" svg:y1="3.251cm" svg:x2="2cm" svg:y2="3.251cm" draw:start-shape="id13" draw:start-glue-point="10" draw:end-shape="id14" draw:end-glue-point="6" svg:d="M3000 3251h-276-449-275" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3cm" svg:y1="4.251cm" svg:x2="2cm" svg:y2="4.251cm" draw:start-shape="id15" draw:start-glue-point="10" draw:end-shape="id16" draw:end-glue-point="6" svg:d="M3000 4251h-276-449-275" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.6cm" svg:y1="4.851cm" svg:x2="2.4cm" svg:y2="4.851cm" draw:start-shape="id17" draw:start-glue-point="10" draw:end-shape="id18" draw:end-glue-point="6" svg:d="M2600 4851h-277 352-275" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.6cm" svg:y1="5.551cm" svg:x2="2.4cm" svg:y2="5.551cm" draw:start-shape="id19" draw:start-glue-point="10" draw:end-shape="id20" draw:end-glue-point="6" svg:d="M2600 5551h-277 352-275" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.5cm" svg:y1="6.651cm" svg:x2="3.5cm" svg:y2="6.651cm" draw:start-shape="id21" draw:start-glue-point="10" draw:end-shape="id22" draw:end-glue-point="6" svg:d="M1500 6651h276 1449 275" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="6.151cm" svg:x2="3cm" svg:y2="6.151cm" draw:start-shape="id23" draw:start-glue-point="10" draw:end-shape="id24" draw:end-glue-point="6" svg:d="M2000 6151h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2cm" svg:y1="7.177cm" svg:x2="3cm" svg:y2="7.177cm" draw:start-shape="id25" draw:start-glue-point="10" draw:end-shape="id26" draw:end-glue-point="6" svg:d="M2000 7177h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="7.777cm" svg:x2="2.6cm" svg:y2="7.777cm" draw:start-shape="id27" draw:start-glue-point="10" draw:end-shape="id28" draw:end-glue-point="6" svg:d="M2400 7777h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.4cm" svg:y1="8.477cm" svg:x2="2.6cm" svg:y2="8.477cm" draw:start-shape="id29" draw:start-glue-point="10" draw:end-shape="id30" draw:end-glue-point="6" svg:d="M2400 8477h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.5cm" svg:y1="9.577cm" svg:x2="1.5cm" svg:y2="9.577cm" draw:start-shape="id31" draw:start-glue-point="10" draw:end-shape="id32" draw:end-glue-point="6" svg:d="M3500 9577h-276-1449-275" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.052cm" svg:y1="9.077cm" svg:x2="2.052cm" svg:y2="9.077cm" draw:start-shape="id33" draw:start-glue-point="10" draw:end-shape="id34" draw:end-glue-point="6" svg:d="M3052 9077h-276-449-275" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.026cm" svg:y1="10.102cm" svg:x2="2.026cm" svg:y2="10.102cm" draw:start-shape="id35" draw:start-glue-point="10" draw:end-shape="id36" draw:end-glue-point="6" svg:d="M3026 10102h-276-449-275" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.626cm" svg:y1="10.702cm" svg:x2="2.426cm" svg:y2="10.702cm" draw:start-shape="id37" draw:start-glue-point="10" draw:end-shape="id38" draw:end-glue-point="6" svg:d="M2626 10702h-277 352-275" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.626cm" svg:y1="11.402cm" svg:x2="2.426cm" svg:y2="11.402cm" draw:start-shape="id39" draw:start-glue-point="10" draw:end-shape="id40" draw:end-glue-point="6" svg:d="M2626 11402h-277 352-275" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="1.526cm" svg:y1="12.502cm" svg:x2="3.526cm" svg:y2="12.502cm" draw:start-shape="id41" draw:start-glue-point="10" draw:end-shape="id42" draw:end-glue-point="6" svg:d="M1526 12502h276 1448 276" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.026cm" svg:y1="12.002cm" svg:x2="3.026cm" svg:y2="12.002cm" draw:start-shape="id43" draw:start-glue-point="10" draw:end-shape="id44" draw:end-glue-point="6" svg:d="M2026 12002h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.026cm" svg:y1="13.002cm" svg:x2="3.026cm" svg:y2="13.002cm" draw:start-shape="id45" draw:start-glue-point="10" draw:end-shape="id46" draw:end-glue-point="6" svg:d="M2026 13002h276 448 276" svg:viewBox="0 0 1001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.426cm" svg:y1="13.602cm" svg:x2="2.626cm" svg:y2="13.602cm" draw:start-shape="id47" draw:start-glue-point="10" draw:end-shape="id48" draw:end-glue-point="6" svg:d="M2426 13602h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="2.426cm" svg:y1="14.302cm" svg:x2="2.626cm" svg:y2="14.302cm" draw:start-shape="id49" draw:start-glue-point="10" draw:end-shape="id50" draw:end-glue-point="6" svg:d="M2426 14302h276-352 276" svg:viewBox="0 0 353 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.526cm" svg:y1="15.402cm" svg:x2="1.526cm" svg:y2="15.402cm" draw:start-shape="id51" draw:start-glue-point="10" draw:end-shape="id52" draw:end-glue-point="6" svg:d="M3526 15402h-276-1449-275" svg:viewBox="0 0 2001 1"/>
+        <draw:connector draw:style-name="Mgr3" draw:layer="backgroundobjects" draw:type="lines" svg:x1="3.026cm" svg:y1="14.902cm" svg:x2="2.026cm" svg:y2="14.902cm" draw:start-shape="id53" draw:start-glue-point="10" draw:end-shape="id54" draw:end-glue-point="6" svg:d="M3026 14902h-276-449-275" svg:viewBox="0 0 1001 1"/>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id2" draw:id="id2" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="0.601cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id4" draw:id="id4" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="1.1cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id8" draw:id="id8" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="0.1cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id6" draw:id="id6" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="1.7cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id10" draw:id="id10" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="2.4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id11" draw:id="id11" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="3.5cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id13" draw:id="id13" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="3cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id15" draw:id="id15" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id17" draw:id="id17" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="4.6cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id19" draw:id="id19" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="5.3cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id22" draw:id="id22" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="6.4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id24" draw:id="id24" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="5.9cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id26" draw:id="id26" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3cm" svg:y="6.927cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id28" draw:id="id28" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="7.527cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id30" draw:id="id30" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.6cm" svg:y="8.227cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id31" draw:id="id31" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.5cm" svg:y="9.327cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id33" draw:id="id33" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.052cm" svg:y="8.827cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id35" draw:id="id35" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="9.852cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id37" draw:id="id37" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="10.452cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id39" draw:id="id39" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="11.152cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id42" draw:id="id42" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.526cm" svg:y="12.252cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id44" draw:id="id44" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="11.752cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id46" draw:id="id46" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="12.752cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id48" draw:id="id48" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="13.352cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id50" draw:id="id50" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="2.626cm" svg:y="14.052cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id52" draw:id="id52" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.026cm" svg:y="15.152cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id54" draw:id="id54" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="14.652cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id1" draw:id="id1" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="0.6cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id3" draw:id="id3" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="1.1cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id7" draw:id="id7" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="0.1cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id5" draw:id="id5" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="1.7cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id9" draw:id="id9" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="2.4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id12" draw:id="id12" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="3.5cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id14" draw:id="id14" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="3cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id16" draw:id="id16" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id18" draw:id="id18" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="4.6cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id20" draw:id="id20" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="5.3cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id21" draw:id="id21" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="6.4cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id23" draw:id="id23" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="5.9cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id25" draw:id="id25" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.5cm" svg:y="6.927cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id27" draw:id="id27" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="7.527cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id29" draw:id="id29" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.9cm" svg:y="8.227cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id32" draw:id="id32" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1cm" svg:y="9.327cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id34" draw:id="id34" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.552cm" svg:y="8.827cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id36" draw:id="id36" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="9.852cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id38" draw:id="id38" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="10.452cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id40" draw:id="id40" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="11.152cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id41" draw:id="id41" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.026cm" svg:y="12.252cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id43" draw:id="id43" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="11.752cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id45" draw:id="id45" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.526cm" svg:y="12.752cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id47" draw:id="id47" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="13.352cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr4" xml:id="id49" draw:id="id49" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="1.926cm" svg:y="14.052cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id51" draw:id="id51" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.526cm" svg:y="15.152cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+        <draw:custom-shape draw:style-name="Mgr5" xml:id="id53" draw:id="id53" draw:layer="backgroundobjects" svg:width="0.5cm" svg:height="0.5cm" svg:x="3.026cm" svg:y="14.652cm">
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:mirror-horizontal="true" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+      </draw:g>
       <presentation:notes style:page-layout-name="PM0">
         <draw:page-thumbnail presentation:style-name="DNA-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
         <draw:frame presentation:style-name="DNA-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
@@ -910,8 +695,8 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
+            <text:p>
+              <text:span>
                 <presentation:header/>
               </text:span>
             </text:p>
@@ -919,8 +704,8 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
+            <text:p>
+              <text:span>
                 <presentation:date-time/>
               </text:span>
             </text:p>
@@ -928,8 +713,8 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
+            <text:p>
+              <text:span>
                 <presentation:footer/>
               </text:span>
             </text:p>
@@ -937,8 +722,8 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
+            <text:p>
+              <text:span>
                 <text:page-number/>
               </text:span>
             </text:p>
