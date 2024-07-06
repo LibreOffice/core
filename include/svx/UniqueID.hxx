@@ -14,7 +14,7 @@
 
 /** Unique ID for an object.
  *
- * Generates an unique ID and stores it in a member variable, so the ID returned
+ * Generates a unique ID and stores it in a member variable, so the ID returned
  * by getId() is the same as long as the object is alive.
  *
  * ID 0 means the ID is not yet created, so 0 is not a valid ID
