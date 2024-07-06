@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2">
   <office:font-face-decls>
-    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Noto Sans CJK" svg:font-family="'Noto Sans CJK JP:palt','Noto Sans CJK KR','Noto Sans CJK SC','Noto Sans CJK TC','Noto Sans CJK HK'" style:font-family-generic="swiss" style:font-pitch="variable" />
     <style:font-face style:name="Noto Sans" svg:font-family="Noto Sans" style:font-family-generic="swiss" style:font-pitch="variable" />
   </office:font-face-decls>
@@ -19,9 +19,7 @@
     <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_2" draw:display-name="Dashed (var) 2" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
     <style:default-style style:family="graphic">
       <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap"/>
-      <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
-        <style:tab-stops/>
-      </style:paragraph-properties>
+      <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false"/>
       <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-size="24pt" style:font-name-asian="Noto Sans CJK" style:font-size-asian="24pt" style:font-name-complex="Noto Sans" style:font-size-complex="24pt"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
@@ -70,17 +68,16 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties svg:stroke-color="#009bdd" draw:fill="none"/>
     </style:style>
-    <style:style style:name="Objekt_20_ohne_20_Füllung_20_und_20_Linie" style:display-name="Objekt ohne Füllung und Linie" style:family="graphic" style:parent-style-name="standard">
+    <style:style style:name="Object_20_with_20_no_20_fill_20_and_20_no_20_line" style:display-name="Object with no fill and no line" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
     </style:style>
     <style:style style:name="Text" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#cccccc" draw:fill="solid" draw:fill-color="#eeeeee"/>
-      <style:text-properties style:font-name="Noto Sans" fo:font-family="&apos;Noto Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
     </style:style>
     <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
@@ -114,7 +111,7 @@
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt"/>
+      <style:text-properties fo:font-size="18pt"/>
     </style:style>
     <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
       <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
@@ -129,7 +126,7 @@
     </style:style>
     <style:style style:name="Filled_20_Green" style:display-name="Filled Green" style:family="graphic" style:parent-style-name="Filled">
       <style:graphic-properties draw:fill-gradient-name="Filled_20_Green"/>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Red" style:display-name="Filled Red" style:family="graphic" style:parent-style-name="Filled">
       <style:graphic-properties draw:fill-gradient-name="Filled_20_Red"/>
@@ -167,9 +164,6 @@
     <style:style style:name="Arrow_20_Dashed" style:display-name="Arrow Dashed" style:family="graphic" style:parent-style-name="Lines">
       <style:graphic-properties draw:stroke="dash"/>
     </style:style>
-    <style:style style:name="Object_20_with_20_no_20_fill_20_and_20_no_20_line" style:display-name="Object with no fill and no line" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-    </style:style>
     <style:style style:name="Accent" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke-dash="Dashed_20__28_var_29__20_2" draw:fill-gradient-name="Gradient_20_3" draw:fill-hatch-name="Hatching_20_1" draw:fill-image-name="Bitmap_20_1"/>
     </style:style>
@@ -193,10 +187,10 @@
     <style:style style:name="Blue_5f_Curve-notes" style:display-name="Blue_Curve-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve-outline1" style:display-name="Blue_Curve-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true" draw:shadow-color="#000000">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" draw:shadow-color="#000000">
         <text:list-style style:name="Blue_5f_Curve-outline1" style:display-name="Blue_Curve-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -241,7 +235,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.374cm" fo:margin-bottom="0cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#009bdd" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#009bdd" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve-outline2" style:display-name="Blue_Curve-outline2" style:family="presentation" style:parent-style-name="Blue_5f_Curve-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.3cm" fo:margin-bottom="0cm" fo:text-indent="0cm"/>
@@ -308,10 +302,10 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve-title" style:display-name="Blue_Curve-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="true">
         <text:list-style style:name="Blue_5f_Curve-title" style:display-name="Blue_Curve-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -356,7 +350,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#dd4100" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#dd4100" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve1-background" style:display-name="Blue_Curve1-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -369,7 +363,7 @@
     <style:style style:name="Blue_5f_Curve1-notes" style:display-name="Blue_Curve1-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve1-outline1" style:display-name="Blue_Curve1-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="false">
@@ -417,7 +411,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.374cm" fo:margin-bottom="0cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#009bdd" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#009bdd" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve1-outline2" style:display-name="Blue_Curve1-outline2" style:family="presentation" style:parent-style-name="Blue_5f_Curve1-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.3cm" fo:margin-bottom="0cm" fo:text-indent="0cm"/>
@@ -484,10 +478,10 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="#ffffff" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blue_5f_Curve1-title" style:display-name="Blue_Curve1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="true">
         <text:list-style style:name="Blue_5f_Curve1-title" style:display-name="Blue_Curve1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -532,7 +526,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -565,11 +559,9 @@
     </style:style>
     <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" svg:stroke-color="#009bdd" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_7" draw:gradient-step-count="64" draw:shadow="visible" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0.03cm" draw:shadow-color="#009bdd" draw:opacity="100%" draw:textarea-vertical-align="middle" fo:min-height="2.612cm" fo:min-width="28.001cm"/>
@@ -588,152 +580,39 @@
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Blue_5f_Curve-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Blue_5f_Curve-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Blue_5f_Curve-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="Blue_5f_Curve1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="Blue_5f_Curve1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Blue_5f_Curve1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="MP1" style:family="paragraph">
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP3" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:paragraph-properties fo:text-align="end"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP5" style:family="paragraph">
-      <loext:graphic-properties draw:opacity="100%"/>
-      <style:paragraph-properties fo:text-align="center"/>
-    </style:style>
-    <style:style style:name="MP6" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MP7" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP8" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end"/>
-    </style:style>
-    <style:style style:name="MP9" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:paragraph-properties fo:text-align="center"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT1" style:family="text">
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:color="#000000"/>
     </style:style>
-    <text:list-style style:name="ML1">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
-    <text:list-style style:name="ML2">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
   </office:automatic-styles>
   <office:master-styles>
     <draw:layer-set>
@@ -746,7 +625,7 @@
     <style:handout-master presentation:presentation-page-layout-name="AL0T26" style:page-layout-name="PM0" draw:style-name="Mdp2">
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
-          <text:p text:style-name="MP1">
+          <text:p>
             <text:span text:style-name="MT1">
               <presentation:header/>
             </text:span>
@@ -755,7 +634,7 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP3">
+          <text:p>
             <text:span text:style-name="MT1">
               <presentation:date-time/>
             </text:span>
@@ -764,7 +643,7 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP1">
+          <text:p>
             <text:span text:style-name="MT1">
               <presentation:footer/>
             </text:span>
@@ -773,9 +652,9 @@
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
+          <text:p>
             <text:span text:style-name="MT1">
-              <text:page-number></text:page-number>
+              <text:page-number/>
             </text:span>
           </text:p>
         </draw:text-box>
@@ -789,8 +668,7 @@
     </style:handout-master>
     <style:master-page style:name="Blue_5f_Curve" style:display-name="Blue_Curve" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="28cm" svg:height="3.25cm" svg:x="0cm" svg:y="12.5cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="28cm" svg:height="3.25cm" svg:x="0cm" svg:y="12.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="true" draw:mirror-vertical="true" draw:glue-points="10800 0 0 10800 10800 20320 21600 10800" draw:text-areas="0 0 21600 17360" draw:type="flowchart-document" draw:enhanced-path="M 0 0 L 21600 0 21600 17360 C 13050 17220 13340 20770 5620 21600 2860 21100 1850 20700 0 20120 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Blue_5f_Curve-title" draw:layer="backgroundobjects" svg:width="25cm" svg:height="3cm" svg:x="0cm" svg:y="4.5cm" presentation:class="title" presentation:placeholder="true">
@@ -802,27 +680,21 @@
       <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span text:style-name="MT1">
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP6">
-            <text:span text:style-name="MT1">
-              <presentation:footer/>
-            </text:span>
+          <text:p>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP8">
-            <text:span text:style-name="MT1">
-              <text:page-number></text:page-number>
-            </text:span>
+          <text:p>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -833,7 +705,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:header/>
               </text:span>
@@ -842,7 +714,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:date-time/>
               </text:span>
@@ -851,7 +723,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:footer/>
               </text:span>
@@ -860,9 +732,9 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
+            <text:p>
               <text:span text:style-name="MT1">
-                <text:page-number></text:page-number>
+                <text:page-number/>
               </text:span>
             </text:p>
           </draw:text-box>
@@ -871,12 +743,10 @@
     </style:master-page>
     <style:master-page style:name="Blue_5f_Curve1" style:display-name="Blue_Curve1" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="27.991cm" svg:height="2cm" svg:x="0cm" svg:y="0cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="27.991cm" svg:height="2cm" svg:x="0cm" svg:y="0cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="27.991cm" svg:height="1.754cm" svg:x="0.009cm" svg:y="14cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="27.991cm" svg:height="1.754cm" svg:x="0.009cm" svg:y="14cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Blue_5f_Curve1-title" draw:layer="backgroundobjects" svg:width="26cm" svg:height="1.328cm" svg:x="1cm" svg:y="0.5cm" presentation:class="title" presentation:placeholder="true">
@@ -887,28 +757,22 @@
       </draw:frame>
       <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
-              <presentation:date-time/>
-            </text:span>
+          <text:p>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP9">
-            <text:span text:style-name="MT1">
-              <presentation:footer/>
-            </text:span>
+          <text:p>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
-              <text:page-number></text:page-number>
-            </text:span>
+          <text:p>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -920,7 +784,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:header/>
               </text:span>
@@ -929,7 +793,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:date-time/>
               </text:span>
@@ -938,7 +802,7 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
+            <text:p>
               <text:span text:style-name="MT1">
                 <presentation:footer/>
               </text:span>
@@ -947,9 +811,9 @@
         </draw:frame>
         <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
+            <text:p>
               <text:span text:style-name="MT1">
-                <text:page-number></text:page-number>
+                <text:page-number/>
               </text:span>
             </text:p>
           </draw:text-box>
