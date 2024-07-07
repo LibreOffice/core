@@ -1744,7 +1744,7 @@ void SwHTMLParser::InsertInput()
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
-        ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
+        (void)ParseStyleOptions(aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo);
         if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
@@ -2004,7 +2004,7 @@ void SwHTMLParser::NewTextArea()
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
-        ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
+        (void)ParseStyleOptions(aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo);
         if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
@@ -2271,7 +2271,7 @@ void SwHTMLParser::NewSelect()
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
-        ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
+        (void)ParseStyleOptions(aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo);
         if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
