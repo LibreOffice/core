@@ -181,7 +181,6 @@ private:
     const SfxItemPropertySet* m_pPropSet;
 
     SwDocShell*             m_pDocShell;
-    bool                    m_bObjectValid;
 
     rtl::Reference<SwFmDrawPage>                                m_xDrawPage;
 

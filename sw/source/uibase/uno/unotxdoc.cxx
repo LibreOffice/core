@@ -381,7 +381,6 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT)),
     m_pDocShell(pShell),
-    m_bObjectValid(pShell != nullptr),
     m_pHiddenViewFrame(nullptr),
     // #i117783#
     m_bApplyPagePrintSettingsFromXPagePrintable( false )
@@ -390,7 +389,7 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 
 void SwXTextDocument::ThrowIfInvalid() const
 {
-    if (!m_bObjectValid)
+    if (!m_pDocShell)
         throw DisposedException(u"SwXTextDocument not valid"_ustr,
                                 const_cast<SwXTextDocument*>(this)->getXWeak());
 }
@@ -442,7 +441,7 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 
 void SwXTextDocument::GetNumberFormatter()
 {
-    if (!m_bObjectValid)
+    if (!m_pDocShell)
         return;
 
     if(!m_xNumFormatAgg.is())
@@ -529,7 +528,7 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
     Reference< XInterface >  xRef;
-    if (m_bObjectValid)
+    if (m_pDocShell)
     {
         SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
         while(pView && pView->GetObjectShell() != m_pDocShell)
@@ -587,7 +586,7 @@ void SwXTextDocument::close( sal_Bool bDeliverOwnership )
         m_pDocShell->CallAutomationDocumentEventSinks( u"Close"_ustr, aArgs );
     }
     SolarMutexGuard aGuard;
-    if (m_bObjectValid && m_pHiddenViewFrame)
+    if (m_pDocShell && m_pHiddenViewFrame)
         lcl_DisposeView( m_pHiddenViewFrame, m_pDocShell);
     SfxBaseModel::close(bDeliverOwnership);
 }
@@ -1372,7 +1371,7 @@ uno::Reference<drawing::XDrawPages> SAL_CALL SwXTextDocument::getDrawPages()
 
 void SwXTextDocument::Invalidate()
 {
-    m_bObjectValid = false;
+    m_pDocShell = nullptr;
     if(m_xNumFormatAgg.is())
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
@@ -1387,7 +1386,6 @@ void SwXTextDocument::Invalidate()
         OSL_ENSURE(pNumFormat, "No number formatter available");
     }
     InitNewDoc();
-    m_pDocShell = nullptr;
     lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
     m_pImpl->m_RefreshListeners.disposeAndClear(aGuard, ev);
@@ -1398,7 +1396,6 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
     if(m_pDocShell && m_pDocShell != pNewDocShell)
         Invalidate();
     m_pDocShell = pNewDocShell;
-    m_bObjectValid = true;
 }
 
 void    SwXTextDocument::InitNewDoc()
@@ -3190,7 +3187,7 @@ void SwXTextDocument::addPasteEventListener(const uno::Reference<text::XPasteLis
 {
     SolarMutexGuard aGuard;
 
-    if (m_bObjectValid && xListener.is())
+    if (m_pDocShell && xListener.is())
         m_pDocShell->GetWrtShell()->GetPasteListeners().addInterface(xListener);
 }
 
@@ -3199,7 +3196,7 @@ void SwXTextDocument::removePasteEventListener(
 {
     SolarMutexGuard aGuard;
 
-    if (m_bObjectValid && xListener.is())
+    if (m_pDocShell && xListener.is())
         m_pDocShell->GetWrtShell()->GetPasteListeners().removeInterface(xListener);
 }
 
