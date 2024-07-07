@@ -3048,7 +3048,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
-        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisibility"));
 
         // Transitions
         CPPUNIT_ASSERT_EQUAL(std::string("BarWipe"), rChild.get_child("transitionType").get_value<std::string>());
@@ -3064,7 +3064,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
-        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisibility"));
 
         // Transitions
         CPPUNIT_ASSERT_EQUAL(std::string("FanWipe"), rChild.get_child("transitionType").get_value<std::string>());
@@ -3081,7 +3081,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
-        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisibility"));
 
         // Transitions
         CPPUNIT_ASSERT_EQUAL(std::string("BlindWipe"), rChild.get_child("transitionType").get_value<std::string>());
@@ -3099,7 +3099,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
         // Check only that these exist
         CPPUNIT_ASSERT(has_child(rChild, "hash"));
         CPPUNIT_ASSERT(has_child(rChild, "masterPage"));
-        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisible"));
+        CPPUNIT_ASSERT(has_child(rChild, "masterPageObjectsVisibility"));
 
         // Transitions
         CPPUNIT_ASSERT_EQUAL(std::string("Fade"), rChild.get_child("transitionType").get_value<std::string>());
