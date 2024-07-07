@@ -50,7 +50,7 @@ struct SwUndoGroupObjImpl
     SwNodeOffset nNodeIdx;
 };
 
-// Draw-Objecte
+// Draw-Object
 
 void SwDoc::AddDrawUndo( std::unique_ptr<SdrUndoAction> pUndo )
 {

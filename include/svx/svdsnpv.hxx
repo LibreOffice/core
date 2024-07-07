@@ -268,7 +268,7 @@ public:
     void SetSlantButShear(bool bOn) { bSlantButShear=bOn; }
     bool IsSlantButShear() const { return bSlantButShear; }
 
-    // Don't contort objecte while Crook. persistent. Default=FALSE. (ni)
+    // Don't contort object while Crook. persistent. Default=FALSE. (ni)
     void SetCrookNoContortion(bool bOn) { bCrookNoContortion=bOn; }
     bool IsCrookNoContortion() const { return bCrookNoContortion; }
 
