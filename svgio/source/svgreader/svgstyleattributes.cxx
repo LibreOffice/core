@@ -1551,7 +1551,7 @@ namespace svgio::svgreader
 
                     if(readSvgStringVector(aContent, aSvgStringVector, ','))
                     {
-                        maFontFamily = aSvgStringVector;
+                        maFontFamily = std::move(aSvgStringVector);
                     }
                     break;
                 }
