@@ -3270,7 +3270,7 @@ void SwXTextDocument::setClipboard(const uno::Reference<datatransfer::clipboard:
 {
     SolarMutexGuard aGuard;
 
-    if (!m_bObjectValid)
+    if (!m_pDocShell)
     {
         SAL_WARN("sw.uno", "no DocShell when attempting to setClipboard");
         return;
