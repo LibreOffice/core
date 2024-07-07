@@ -732,7 +732,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (!rReq.IsSynchronCall())
                 {
                     std::shared_ptr<SfxRequest> xReq = std::make_shared<SfxRequest>(rReq);
-                    SfxTabDialogController::runAsync(xDlg, [xReq=std::move(xReq), aFunc](sal_Int32 nResult)
+                    SfxTabDialogController::runAsync(xDlg, [xReq=std::move(xReq), aFunc=std::move(aFunc)](sal_Int32 nResult)
                     {
                         aFunc(nResult, *xReq);
                     });
