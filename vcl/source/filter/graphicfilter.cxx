@@ -879,10 +879,11 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         if (nStatus == ERRCODE_NONE)
         {
             bool bAnimated = false;
+            Size aLogicSize;
+
             if (eLinkType == GfxLinkType::NativeGif && !aBinaryDataContainer.isEmpty())
             {
                 std::shared_ptr<SvStream> pMemoryStream = aBinaryDataContainer.getAsStream();
-                Size aLogicSize;
                 bAnimated = IsGIFAnimated(*pMemoryStream, aLogicSize);
                 if (!pSizeHint && aLogicSize.getWidth() && aLogicSize.getHeight())
                 {
