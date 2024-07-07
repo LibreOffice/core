@@ -1051,15 +1051,7 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
                                                     sal_Int32& nLastIndex)
 {
     if (maAuthors.count(sAuthor) <= 0)
-    {
-        struct AuthorComments aAuthorComments;
-
-        aAuthorComments.nId = maAuthors.size();
-        aAuthorComments.nLastIndex = 0;
-        aAuthorComments.sInitials = sInitials;
-
-        maAuthors[ sAuthor ] = aAuthorComments;
-    }
+        maAuthors.emplace(sAuthor, AuthorComments(maAuthors.size(), 0, sInitials));
 
     nLastIndex = ++maAuthors[ sAuthor ].nLastIndex;
 

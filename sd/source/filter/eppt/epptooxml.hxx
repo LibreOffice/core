@@ -166,6 +166,16 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
         OUString sInitials;
+
+        AuthorComments()
+        {
+        }
+        AuthorComments(sal_Int32 nId_, sal_Int32 nLastIndex_, OUString sInitials_)
+            : nId(nId_)
+            , nLastIndex(nLastIndex_)
+            , sInitials(sInitials_)
+        {
+        }
     };
     typedef std::unordered_map< OUString, struct AuthorComments > AuthorsMap;
     AuthorsMap maAuthors;
