@@ -313,9 +313,9 @@ namespace sdbtools
         if ( aMeta.supportsSubqueriesInFrom() )
             pReturn = std::make_shared<CombinedNameCheck>( pTableCheck, pQueryCheck );
         else if ( _nCommandType == CommandType::TABLE )
-            pReturn = pTableCheck;
+            pReturn = std::move(pTableCheck);
         else
-            pReturn = pQueryCheck;
+            pReturn = std::move(pQueryCheck);
         return pReturn;
     }
 
