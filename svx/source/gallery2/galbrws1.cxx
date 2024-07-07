@@ -1328,9 +1328,9 @@ void GalleryBrowser1::DispatchAdd(
         SVXGALLERYITEM_ARGNAME, aSeq) };
 
     std::unique_ptr<DispatchInfo> pInfo(new DispatchInfo);
-    pInfo->TargetURL = aURL;
-    pInfo->Arguments = aArgs;
-    pInfo->Dispatch = xDispatch;
+    pInfo->TargetURL = std::move(aURL);
+    pInfo->Arguments = std::move(aArgs);
+    pInfo->Dispatch = std::move(xDispatch);
 
     if ( Application::PostUserEvent(
             LINK( nullptr, GalleryBrowser1, AsyncDispatch_Impl), pInfo.get() ) )
