@@ -184,7 +184,7 @@ namespace dbaui
         {
             if ( _pErrorInfo )
             {
-                *_pErrorInfo = aInfo;
+                *_pErrorInfo = std::move(aInfo);
             }
             else
             {
