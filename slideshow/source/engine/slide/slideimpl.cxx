@@ -141,6 +141,13 @@ OUString getPlaceholderType(std::u16string_view sShapeType)
     return aType;
 }
 
+void appendImageInfoPlaceholder(tools::JsonWriter& rJsonWriter)
+{
+    auto aContentNode = rJsonWriter.startNode("content");
+    rJsonWriter.put("type", "%IMAGETYPE%");
+    rJsonWriter.put("checksum", "%IMAGECHECKSUM%");
+}
+
 class LOKSlideRenderer
 {
 public:
@@ -219,6 +226,9 @@ private:
     bool mbMasterPageRenderingDone;
     bool mbDrawPageRenderingDone;
     bool mbSlideRenderingDone;
+    bool mbIsPageNumberVisible;
+    bool mbIsDateTimeVisible;
+    bool mbIsFooterVisible;
     ShapeSharedPtr mpDPLastAnimatedShape;
     OUString msLastPlaceholder;
 
@@ -250,6 +260,9 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
     mbMasterPageRenderingDone(false),
     mbDrawPageRenderingDone(false),
     mbSlideRenderingDone(false),
+    mbIsPageNumberVisible(true),
+    mbIsDateTimeVisible(true),
+    mbIsFooterVisible(true),
     mbIsBitmapLayer(false)
 {
     uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mxDrawPage, uno::UNO_QUERY );
@@ -270,6 +283,34 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
         xPropSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
         mbTextFieldsRenderingDone = mbMasterPageRenderingDone = !bBackgroundObjectsVisibility;
 
+        // try to skip empty layer
+        if (bBackgroundObjectsVisibility)
+        {
+            xPropSet->getPropertyValue("IsPageNumberVisible") >>= mbIsPageNumberVisible;
+            xPropSet->getPropertyValue("IsDateTimeVisible") >>= mbIsDateTimeVisible;
+            xPropSet->getPropertyValue("IsFooterVisible") >>= mbIsFooterVisible;
+            if (mbIsDateTimeVisible)
+            {
+                bool bDateTimeFixed = true; // default: fixed
+                xPropSet->getPropertyValue("IsDateTimeFixed") >>= bDateTimeFixed;
+                if (bDateTimeFixed)
+                {
+                    OUString sDateTimeText;
+                    xPropSet->getPropertyValue("DateTimeText") >>= sDateTimeText;
+                    mbIsDateTimeVisible = !sDateTimeText.isEmpty();
+                }
+            }
+            if (mbIsFooterVisible)
+            {
+                OUString sFooterText;
+                xPropSet->getPropertyValue("FooterText") >>= sFooterText;
+                mbIsFooterVisible = !sFooterText.isEmpty();
+            }
+
+            mbTextFieldsRenderingDone =
+                !mbIsPageNumberVisible && !mbIsDateTimeVisible && !mbIsFooterVisible;
+        }
+
         if (!mbTextFieldsRenderingDone)
         {
             mpTFShapesFunctor
@@ -287,11 +328,22 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
             mpMPShapesFunctor->setMasterPageObjectsOnly(true);
         }
 
-        mpShapesFunctor = std::make_shared<ShapeImporter>(mxDrawPage, mxDrawPage, mxDrawPagesSupplier,
-                                                          mrContext, 0, /* shape num starts at 0 */
-                                                          false);
+        uno::Reference<drawing::XShapes> const xShapes(mxDrawPage, uno::UNO_QUERY_THROW);
+        if (xShapes.is())
+        {
+            mbDrawPageRenderingDone = xShapes->getCount() == 0;
+        }
+
+        if (!mbDrawPageRenderingDone)
+        {
+            mpShapesFunctor
+                = std::make_shared<ShapeImporter>(mxDrawPage, mxDrawPage, mxDrawPagesSupplier,
+                                                  mrContext, 0, /* shape num starts at 0 */
+                                                  false);
+        }
     }
-    collectAnimatedShapes();
+    if (!mbDrawPageRenderingDone)
+        collectAnimatedShapes();
 }
 
 void LOKSlideRenderer::renderBackground(unsigned char* pBuffer)
@@ -349,8 +401,8 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
 
     tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", "Background");
-    std::string sLayerId = GetInterfaceHash(mxDrawPage) + ".0";
-    aJsonWriter.put("id", sLayerId);
+    std::string sSlideHash = GetInterfaceHash(mxDrawPage);
+    aJsonWriter.put("slideHash", sSlideHash);
 
     ShapeSharedPtr const& rBGShape(mpMPShapesFunctor->importBackgroundShape());
     mpLayerManager->addShape(rBGShape);
@@ -365,7 +417,7 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
     // json
     mbIsBitmapLayer = true;
     aJsonWriter.put("type", "bitmap");
-    aJsonWriter.put("checksum", std::to_string(nChecksum));
+    appendImageInfoPlaceholder(aJsonWriter);
 
     msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
     maJsonMsgList.push_back(msLastJsonMessage);
@@ -379,6 +431,26 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
 
 void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
 {
+    if (!msLastPlaceholder.isEmpty())
+    {
+        tools::JsonWriter aJsonWriter;
+        aJsonWriter.put("group", "MasterPage");
+        aJsonWriter.put("slideHash", GetInterfaceHash(mxDrawPage));
+        aJsonWriter.put("index", mnMPLayerIndex);
+
+        aJsonWriter.put("type", "placeholder");
+        {
+            auto aContentNode = aJsonWriter.startNode("content");
+            aJsonWriter.put("type", msLastPlaceholder);
+        }
+
+        msLastPlaceholder = "";
+        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+        maJsonMsgList.push_back(msLastJsonMessage);
+        ++mnMPLayerIndex;
+        return;
+    }
+
     if (mpMPShapesFunctor->isImportDone())
         mbMasterPageRenderingDone = true;
 
@@ -387,19 +459,8 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
 
     tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", "MasterPage");
-    std::string sLayerId = GetInterfaceHash(mxMasterPage) + "." + std::to_string(mnMPLayerIndex);
-    aJsonWriter.put("id", sLayerId);
-
-    if (!msLastPlaceholder.isEmpty())
-    {
-        aJsonWriter.put("type", "placeholder");
-        aJsonWriter.put("placeholderId", msLastPlaceholder);
-        msLastPlaceholder = "";
-        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-        maJsonMsgList.push_back(msLastJsonMessage);
-        ++mnMPLayerIndex;
-        return;
-    }
+    aJsonWriter.put("slideHash", GetInterfaceHash(mxDrawPage));
+    aJsonWriter.put("index", mnMPLayerIndex);
 
     bool bDoRendering = false;
     while (!mpMPShapesFunctor->isImportDone())
@@ -428,7 +489,10 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
                 else
                 {
                     aJsonWriter.put("type", "placeholder");
-                    aJsonWriter.put("placeholderId", sPlaceholderType);
+                    {
+                        auto aContentNode = aJsonWriter.startNode("content");
+                        aJsonWriter.put("type", sPlaceholderType);
+                    }
                 }
                 bDoRendering = false;
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
@@ -463,6 +527,11 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
             OUString sPlaceholderType = getPlaceholderType(sShapeType);
             if (!sPlaceholderType.isEmpty())
             {
+                if ((!mbIsPageNumberVisible && sPlaceholderType == "SlideNumber") ||
+                    (!mbIsDateTimeVisible && sPlaceholderType == "DateTime") ||
+                    (!mbIsFooterVisible && sPlaceholderType == "Footer"))
+                    continue;
+
                 mpLayerManager->addShape(rShape);
 
                 // render and collect bitmap
@@ -470,16 +539,17 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
                 BitmapEx aBitmapEx(rDevice.GetBitmapEx(Point(0, 0), rDevice.GetOutputSizePixel()));
                 BitmapChecksum nChecksum = aBitmapEx.GetChecksum();
                 maBitmapMap[nChecksum] = aBitmapEx;
+                mbIsBitmapLayer = true;
 
                 // json
-                OUString sLayerId = OUString::fromUtf8(GetInterfaceHash(mxMasterPage)) + "." + sPlaceholderType;
                 tools::JsonWriter aJsonWriter;
                 aJsonWriter.put("group", "TextFields");
-                aJsonWriter.put("id", sLayerId);
-                mbIsBitmapLayer = true;
-                aJsonWriter.put("type", "bitmap");
-                aJsonWriter.put("checksum", std::to_string(nChecksum));
-
+                aJsonWriter.put("slideHash", GetInterfaceHash(mxDrawPage));
+                {
+                    auto aContentNode = aJsonWriter.startNode("content");
+                    aJsonWriter.put("type", sPlaceholderType);
+                    appendImageInfoPlaceholder(aJsonWriter);
+                }
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
                 maJsonMsgList.push_back(msLastJsonMessage);
 
@@ -504,7 +574,7 @@ void LOKSlideRenderer::renderLayerImpl(VirtualDevice& rDevice, tools::JsonWriter
     // json
     mbIsBitmapLayer = true;
     rJsonWriter.put("type", "bitmap");
-    rJsonWriter.put("checksum", std::to_string(nChecksum));
+    appendImageInfoPlaceholder(rJsonWriter);
 
     // clean up
     rDevice.Erase();
@@ -513,6 +583,21 @@ void LOKSlideRenderer::renderLayerImpl(VirtualDevice& rDevice, tools::JsonWriter
 
 void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
 {
+    if (mpDPLastAnimatedShape)
+    {
+        tools::JsonWriter aJsonWriter;
+        aJsonWriter.put("group", "DrawPage");
+        aJsonWriter.put("slideHash", GetInterfaceHash(mxDrawPage));
+        aJsonWriter.put("index", mnDPLayerIndex);
+
+        renderAnimatedShapeImpl(rDevice, mpDPLastAnimatedShape, aJsonWriter);
+        mpDPLastAnimatedShape.reset();
+        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
+        maJsonMsgList.push_back(msLastJsonMessage);
+        ++mnDPLayerIndex;
+        return;
+    }
+
     if (mpShapesFunctor->isImportDone())
         mbDrawPageRenderingDone = true;
 
@@ -521,18 +606,8 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
 
     tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", "DrawPage");
-    std::string sLayerId = GetInterfaceHash(mxDrawPage) + "." + std::to_string(mnDPLayerIndex);
-    aJsonWriter.put("id", sLayerId);
-
-    if (mpDPLastAnimatedShape)
-    {
-        renderAnimatedShapeImpl(rDevice, mpDPLastAnimatedShape, aJsonWriter);
-        mpDPLastAnimatedShape.reset();
-        msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-        maJsonMsgList.push_back(msLastJsonMessage);
-        ++mnDPLayerIndex;
-        return;
-    }
+    aJsonWriter.put("slideHash", GetInterfaceHash(mxDrawPage));
+    aJsonWriter.put("index", mnDPLayerIndex);
 
     bool bDoRendering = false;
     while (!mpShapesFunctor->isImportDone())
@@ -582,17 +657,14 @@ void LOKSlideRenderer::renderAnimatedShapeImpl(VirtualDevice& rDevice,
 {
     rJsonWriter.put("type", "animated");
 
+    auto aContentNode = rJsonWriter.startNode("content");
     std::string sShapeId = GetInterfaceHash(pShape->getXShape());
-    rJsonWriter.put("shapeHash", sShapeId);
+    rJsonWriter.put("hash", sShapeId);
 
     bool bIsInitVisible = maAnimatedShapeVisibilityMap.at(sShapeId);
     rJsonWriter.put("initVisible", bIsInitVisible);
-    auto aData = rJsonWriter.startNode("data");
-    if (bIsInitVisible)
-    {
-        mpLayerManager->addShape(pShape);
-        renderLayerImpl(rDevice, rJsonWriter);
-    }
+    mpLayerManager->addShape(pShape);
+    renderLayerImpl(rDevice, rJsonWriter);
 }
 
 void LOKSlideRenderer::renderImpl(LayerGroupType eLayersSet, unsigned char* pBuffer)
