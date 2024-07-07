@@ -5700,8 +5700,8 @@ static bool doc_createSlideRenderer(
         return false;
     }
 
-    sal_Int32 nViewWidth = 0;
-    sal_Int32 nViewHeight = 0;
+    sal_Int32 nViewWidth = *pViewWidth;
+    sal_Int32 nViewHeight = *pViewHeight;
     bool bReturn = pDoc->createSlideRenderer(
                     nSlideNumber, nViewWidth, nViewHeight,
                     bRenderBackground, bRenderMasterPage);

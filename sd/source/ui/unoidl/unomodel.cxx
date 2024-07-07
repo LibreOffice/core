@@ -3112,7 +3112,7 @@ OString SdXImpressDocument::getPresentationInfo() const
 
                                     bool bBackgroundObjectsVisibility = true; // default visible
                                     xPropSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
-                                    aJsonWriter.put("masterPageObjectsVisible", bBackgroundObjectsVisibility);
+                                    aJsonWriter.put("masterPageObjectsVisibility", bBackgroundObjectsVisibility);
                                 }
                             }
 

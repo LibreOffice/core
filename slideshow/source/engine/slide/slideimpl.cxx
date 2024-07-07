@@ -369,25 +369,35 @@ void LOKSlideRenderer::renderNextLayer(unsigned char* pBuffer)
 {
     OSL_ASSERT(pBuffer);
 
+    msLastJsonMessage = ""_ostr;
+    mbIsBitmapLayer = false;
+
     if (mbRenderBackground && !isBackgroundRenderingDone())
+    {
         renderBackground(pBuffer);
+        if (!msLastJsonMessage.isEmpty())
+            return;
+    }
 
     if (!isTextFieldsRenderingDone())
     {
         renderTextFields(pBuffer);
-        return;
+        if (!msLastJsonMessage.isEmpty())
+            return;
     }
 
     if (mbRenderMasterPageObjects && !isMasterPageRenderingDone())
     {
         renderMasterPage(pBuffer);
-        return;
+        if (!msLastJsonMessage.isEmpty())
+            return;
     }
 
     if (!isDrawPageRenderingDone())
     {
         renderDrawPage(pBuffer);
-        return;
+        if (!msLastJsonMessage.isEmpty())
+            return;
     }
 
     mbSlideRenderingDone = true;
