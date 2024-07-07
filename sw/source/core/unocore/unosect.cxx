@@ -1108,11 +1108,10 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                 pRet[nProperty] <<= bRet;
             }
             break;
-            case  FN_UNO_ANCHOR_TYPES:
-            case  FN_UNO_TEXT_WRAP:
-            case  FN_UNO_ANCHOR_TYPE:
-                ::sw::GetDefaultTextContentValue(
-                        pRet[nProperty], u"", pEntry->nWID);
+            case FN_UNO_ANCHOR_TYPES:
+            case FN_UNO_TEXT_WRAP:
+            case FN_UNO_ANCHOR_TYPE:
+                (void)::sw::GetDefaultTextContentValue(pRet[nProperty], u"", pEntry->nWID);
             break;
             case FN_UNO_REDLINE_NODE_START:
             case FN_UNO_REDLINE_NODE_END:
