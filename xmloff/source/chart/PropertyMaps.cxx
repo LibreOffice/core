@@ -932,8 +932,8 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 {
                     // convert from degrees (double) to 100th degrees (integer)
                     double fVal;
-                    ::sax::Converter::convertDouble( fVal, rValue );
-                    nValue = static_cast<sal_Int32>( fVal * 100.0 );
+                    ::sax::Converter::convertAngle(fVal, rValue, 100);
+                    nValue = static_cast<sal_Int32>(basegfx::fround(fVal));
                     rProperty.maValue <<= nValue;
                 }
                 break;

@@ -888,6 +888,60 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testChartDataTableWithMultipleLegendEntr
     CPPUNIT_ASSERT(xDataTableShape.is());
 }
 
+namespace
+{
+void lcl_assertAngles(const Reference<chart2::XAxis>& rAxis, const double& rExpectedLabelAngle,
+                      const double& rExpectedTitleAngle)
+{
+    Reference<beans::XPropertySet> xPS(rAxis, uno::UNO_QUERY_THROW);
+    double fAxisLabelAngle = 0.0;
+    xPS->getPropertyValue(u"TextRotation"_ustr) >>= fAxisLabelAngle;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(rExpectedLabelAngle, fAxisLabelAngle, 1e-10);
+
+    Reference<chart2::XTitled> xAxisTitled(rAxis, uno::UNO_QUERY_THROW);
+    Reference<chart2::XTitle> xAxisTitle = xAxisTitled->getTitleObject();
+    CPPUNIT_ASSERT(xAxisTitle.is());
+    Reference<beans::XPropertySet> xPropSet(xAxisTitle, uno::UNO_QUERY_THROW);
+    double fAxisTitleAngle = 0.0;
+    xPropSet->getPropertyValue(u"TextRotation"_ustr) >>= fAxisTitleAngle;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(rExpectedTitleAngle, fAxisTitleAngle, 1e-10);
+}
+} // end namespace
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testAngleUnits)
+{
+    loadFromFile(u"fods/tdf161483_AngleUnits.fods");
+    double fExpXAxisLabelAngle = 344.61; // = 382.9grad = 6.01457913529766rad
+    double fExpXAxisTitleAngle = 342.63; // = 380.7grad = 5.98002161610817rad
+    double fExpYAxisLabelAngle = 15.12; // = 16.8grad = 0.263893782901543rad
+    double fExpYAxisTitleAngle = 14.94; // = 16.6grad = 0.260752190247953rad
+    double fExpZAxisLabelAngle = 344.16; // = 382.4grad = 6.00672515366369rad
+    double fExpZAxisTitleAngle = 60.39; // = 67.1grad = 1.05400433527938rad
+
+    // sheet 0: no unit; sheet 1: unit deg; sheet 2: unit rad; sheet 3: unit grad
+    // Whithout fix, the values with unit grad and rad were read as if they are in degrees.
+    for (size_t i = 0; i < 4; i++)
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(i, mxComponent);
+        CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+        // x-axis
+        Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+        CPPUNIT_ASSERT(xAxis.is());
+        lcl_assertAngles(xAxis, fExpXAxisLabelAngle, fExpXAxisTitleAngle);
+
+        // y-axis
+        xAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+        CPPUNIT_ASSERT(xAxis.is());
+        lcl_assertAngles(xAxis, fExpYAxisLabelAngle, fExpYAxisTitleAngle);
+
+        //z-axis
+        xAxis = getAxisFromDoc(xChartDoc, 0, 2, 0);
+        CPPUNIT_ASSERT(xAxis.is());
+        lcl_assertAngles(xAxis, fExpZAxisLabelAngle, fExpZAxisTitleAngle);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
