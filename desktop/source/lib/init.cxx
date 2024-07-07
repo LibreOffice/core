@@ -8018,8 +8018,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 #else
         // Fun conversion dance back and forth between URLs and system paths...
         OUString aAppURL;
-        ::osl::Module::getUrlFromAddress( reinterpret_cast< oslGenericFunction >(lo_initialize),
-                                          aAppURL);
+        (void)::osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(lo_initialize),
+                                               aAppURL);
         osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
 #endif
 
