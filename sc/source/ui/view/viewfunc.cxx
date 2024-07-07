@@ -449,7 +449,7 @@ namespace
 }
 namespace
 {
-    void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context);
+    void runAutoCorrectQueryAsync(const std::shared_ptr<FormulaProcessingContext>& context);
 
     void performAutoFormatAndUpdate(std::u16string_view rString, const ScMarkData& rMark, SCCOL nCol,
                                     SCROW nRow, SCTAB nTab, bool bNumFmtChanged, bool bRecord,
@@ -480,7 +480,7 @@ namespace
         lcl_PostRepaintSparkLine(rDoc.GetSparklineList(nTab), ScRange(nCol, nRow, nTab), pDocSh);
     }
 
-    void finalizeFormulaProcessing(std::shared_ptr<FormulaProcessingContext> context)
+    void finalizeFormulaProcessing(const std::shared_ptr<FormulaProcessingContext>& context)
     {
         // to be used in multiple tabs, the formula must be compiled anew
         // via ScFormulaCell copy-ctor because of RangeNames,
@@ -636,7 +636,7 @@ namespace
         finalizeFormulaProcessing(context);
     }
 
-    void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context)
+    void runAutoCorrectQueryAsync(const std::shared_ptr<FormulaProcessingContext>& context)
     {
         auto aQueryBox = std::make_shared<AutoCorrectQuery>(context->GetViewData().GetDialogParent(), context->aCorrectedFormula);
         weld::DialogController::runAsync(aQueryBox, [context] (int nResult)
