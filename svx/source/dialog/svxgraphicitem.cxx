@@ -27,6 +27,16 @@ SvxGraphicItem::SvxGraphicItem( Graphic _aGraphic )
 
 }
 
+bool SvxGraphicItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxGraphicItem::hashCode() const
+{
+    return aGraphic.GetChecksum();
+}
+
 bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
 {
     return SfxPoolItem::operator==(rItem) && static_cast<const SvxGraphicItem&>(rItem).aGraphic == aGraphic;
