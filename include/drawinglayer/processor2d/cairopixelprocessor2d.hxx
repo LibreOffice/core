@@ -24,6 +24,7 @@ class BitmapPrimitive2D;
 class UnifiedTransparencePrimitive2D;
 class BackgroundColorPrimitive2D;
 class TransparencePrimitive2D;
+class InvertPrimitive2D;
 class MaskPrimitive2D;
 class ModifiedColorPrimitive2D;
 class TransformPrimitive2D;
@@ -55,6 +56,7 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     void processBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
     void
     processTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate);
+    void processInvertPrimitive2D(const primitive2d::InvertPrimitive2D& rTransCandidate);
     void processUnifiedTransparencePrimitive2D(
         const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);
     void processMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);

@@ -35,12 +35,14 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <unordered_map>
 #include <dlfcn.h>
 
@@ -742,7 +744,7 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
     if (0 == nWidth || 0 == nHeight)
         return;
 
-    unsigned char* mask_surface_data = cairo_image_surface_get_data(pMask);
+    unsigned char* mask_surface_data(cairo_image_surface_get_data(pMask));
 
     // include/basegfx/color/bcolormodifier.hxx
     constexpr double nRedMul(0.2125 / 255.0);
@@ -1110,11 +1112,11 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
                                              * getViewInformation2D().getViewTransformation());
 
     // draw mask to temporary surface
-    cairo_surface_t* pTarget = cairo_get_target(mpRT);
+    cairo_surface_t* pTarget(cairo_get_target(mpRT));
     const double fContainedWidth(ceil(aVisibleRange.getWidth()));
     const double fContainedHeight(ceil(aVisibleRange.getHeight()));
-    cairo_surface_t* pMask = cairo_surface_create_similar_image(pTarget, CAIRO_FORMAT_ARGB32,
-                                                                fContainedWidth, fContainedHeight);
+    cairo_surface_t* pMask(cairo_surface_create_similar_image(pTarget, CAIRO_FORMAT_ARGB32,
+                                                              fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aMaskRenderer(aViewInformation2D, pMask);
     aMaskRenderer.process(rTransCandidate.getTransparence());
 
@@ -1122,8 +1124,8 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
     LuminanceToAlpha(pMask);
 
     // draw content to temporary surface
-    cairo_surface_t* pContent = cairo_surface_create_similar(
-        pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight);
+    cairo_surface_t* pContent(cairo_surface_create_similar(
+        pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
     aContent.process(rTransCandidate.getChildren());
 
@@ -1134,6 +1136,127 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
     // cleanup temporary surfaces
     cairo_surface_destroy(pContent);
     cairo_surface_destroy(pMask);
+
+    cairo_restore(mpRT);
+}
+
+void CairoPixelProcessor2D::processInvertPrimitive2D(
+    const primitive2d::InvertPrimitive2D& rInvertCandidate)
+{
+    if (rInvertCandidate.getChildren().empty())
+    {
+        // no content, done
+        return;
+    }
+
+    // calculate visible range, create only for that range
+    basegfx::B2DRange aDiscreteRange(
+        rInvertCandidate.getChildren().getB2DRange(getViewInformation2D()));
+    aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
+    basegfx::B2DRange aVisibleRange(aDiscreteRange);
+    double clip_x1, clip_x2, clip_y1, clip_y2;
+    cairo_clip_extents(mpRT, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
+    const basegfx::B2DRange aViewRange(basegfx::B2DPoint(clip_x1, clip_y1),
+                                       basegfx::B2DPoint(clip_x2, clip_y2));
+    aVisibleRange.intersect(aViewRange);
+
+    if (aVisibleRange.isEmpty())
+    {
+        // not visible, done
+        return;
+    }
+
+    cairo_save(mpRT);
+
+    // create embedding transformation for sub-surface
+    const basegfx::B2DHomMatrix aEmbedTransform(basegfx::utils::createTranslateB2DHomMatrix(
+        -aVisibleRange.getMinX(), -aVisibleRange.getMinY()));
+    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
+    aViewInformation2D.setViewTransformation(aEmbedTransform
+                                             * getViewInformation2D().getViewTransformation());
+
+    // draw sub-content to temporary surface
+    cairo_surface_t* pTarget(cairo_get_target(mpRT));
+    const double fContainedWidth(ceil(aVisibleRange.getWidth()));
+    const double fContainedHeight(ceil(aVisibleRange.getHeight()));
+    cairo_surface_t* pContent(cairo_surface_create_similar_image(
+        pTarget, CAIRO_FORMAT_ARGB32, fContainedWidth, fContainedHeight));
+    CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
+    aContent.process(rInvertCandidate.getChildren());
+    cairo_surface_flush(pContent);
+
+    // get read access to target - XOR unfortunately needs that
+    cairo_surface_t* pRenderTarget(pTarget);
+
+    if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pRenderTarget))
+    {
+        pRenderTarget = cairo_surface_map_to_image(pRenderTarget, nullptr);
+    }
+
+    // iterate over pre-rendered pContent, call Dst due to being changed
+    const sal_uInt32 nDstWidth(cairo_image_surface_get_width(pContent));
+    const sal_uInt32 nDstHeight(cairo_image_surface_get_height(pContent));
+    const sal_uInt32 nDstStride(cairo_image_surface_get_stride(pContent));
+    unsigned char* pDstDataRoot(cairo_image_surface_get_data(pContent));
+
+    // in parallel, iterate over Src data
+    const sal_uInt32 nSrcOffX(floor(aVisibleRange.getMinX()));
+    const sal_uInt32 nSrcOffY(floor(aVisibleRange.getMinY()));
+    const sal_uInt32 nSrcStride(cairo_image_surface_get_stride(pRenderTarget));
+    unsigned char* pSrcDataRoot(cairo_image_surface_get_data(pRenderTarget));
+
+    if (nullptr != pDstDataRoot && nullptr != pSrcDataRoot)
+    {
+        for (sal_uInt32 y(0); y < nDstHeight; ++y)
+        {
+            // get mem locations
+            unsigned char* pDstData(pDstDataRoot + (nDstStride * y));
+            unsigned char* pSrcData(pSrcDataRoot + (nSrcStride * (y + nSrcOffY) + (nSrcOffX * 4)));
+
+            for (sal_uInt32 x(0); x < nDstWidth; ++x)
+            {
+                // do not forget prfe-multiply -> need to get both alphas
+                sal_uInt8 nSrcAlpha(pSrcData[SVP_CAIRO_ALPHA]);
+                sal_uInt8 nDstAlpha(pDstData[SVP_CAIRO_ALPHA]);
+
+                // create XOR r,g,b
+                const sal_uInt8 b(
+                    vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_BLUE])
+                    ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_BLUE]));
+                const sal_uInt8 g(
+                    vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_GREEN])
+                    ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_GREEN]));
+                const sal_uInt8 r(vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_RED])
+                                  ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_RED]));
+
+                // write back
+                pDstData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nDstAlpha, b);
+                pDstData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nDstAlpha, g);
+                pDstData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nDstAlpha, r);
+
+                // advance memory
+                pSrcData += 4;
+                pDstData += 4;
+            }
+        }
+
+        cairo_surface_mark_dirty(pContent);
+    }
+
+    if (pRenderTarget != pTarget)
+    {
+        // cleanup mapping for read access to target
+        cairo_surface_unmap_image(pTarget, pRenderTarget);
+    }
+
+    // draw created XOR to target
+    cairo_set_source_surface(mpRT, pContent, aVisibleRange.getMinX(), aVisibleRange.getMinY());
+    cairo_rectangle(mpRT, aVisibleRange.getMinX(), aVisibleRange.getMinY(),
+                    aVisibleRange.getWidth(), aVisibleRange.getHeight());
+    cairo_fill(mpRT);
+
+    // cleanup temporary surface
+    cairo_surface_destroy(pContent);
 
     cairo_restore(mpRT);
 }
@@ -1276,11 +1399,11 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
                                              * getViewInformation2D().getViewTransformation());
 
     // draw content to temporary surface
-    cairo_surface_t* pTarget = cairo_get_target(mpRT);
+    cairo_surface_t* pTarget(cairo_get_target(mpRT));
     const double fContainedWidth(ceil(aVisibleRange.getWidth()));
     const double fContainedHeight(ceil(aVisibleRange.getHeight()));
-    cairo_surface_t* pContent = cairo_surface_create_similar(
-        pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight);
+    cairo_surface_t* pContent(cairo_surface_create_similar(
+        pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
     aContent.process(rTransCandidate.getChildren());
 
@@ -2451,9 +2574,8 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         }
         case PRIMITIVE2D_ID_INVERTPRIMITIVE2D:
         {
-            // TODO: fallback is at VclPixelProcessor2D::processInvertPrimitive2D, so
-            // not in reach. Ignore for now.
-            // processInvertPrimitive2D(rCandidate);
+            processInvertPrimitive2D(
+                static_cast<const primitive2d::InvertPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:

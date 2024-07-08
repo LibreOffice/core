@@ -35,7 +35,7 @@ lookup_table const & get_premultiply_table();
 VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
 #endif
 
-sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
+VCL_DLLPUBLIC sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 VCL_DLLPUBLIC sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);

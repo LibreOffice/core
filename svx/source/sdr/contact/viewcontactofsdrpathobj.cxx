@@ -23,6 +23,7 @@
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/diagnose.h>
@@ -159,6 +160,22 @@ namespace sdr::contact
                     std::move(aUnitPolyPolygon),
                     std::move(aUnitDefinitionPolyPolygon)));
 
+#ifdef DBG_UTIL
+            // helper to create something that uses InvertPrimitive2D to be able
+            // to check/debug implementations in SDPRs. There is not much left
+            // doing InvertPrimitive2D nowadays (luckily). To use, create a polygon
+            // using one of the polygon tools.
+            static bool bTestInvert(false);
+            if (bTestInvert)
+            {
+                drawinglayer::primitive2d::Primitive2DContainer aContainer;
+                aContainer.push_back(xReference);
+                const drawinglayer::primitive2d::Primitive2DReference xReference2(
+                    new drawinglayer::primitive2d::InvertPrimitive2D(std::move(aContainer)));
+                rVisitor.visit(xReference2);
+                return;
+            }
+#endif
             rVisitor.visit(xReference);
         }
 
