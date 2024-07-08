@@ -9657,7 +9657,7 @@ SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
 ]
 
 SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
-()
+(SfxInt32Item PositionX FN_PARAM_1, SfxInt32Item PositionY FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -12394,7 +12394,7 @@ SfxVoidItem SignSignatureLine SID_SIGN_SIGNATURELINE
 ]
 
 SfxVoidItem RemoveHyperlink SID_REMOVE_HYPERLINK
-()
+(SfxInt32Item PositionX FN_PARAM_1, SfxInt32Item PositionY FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
