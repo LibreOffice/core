@@ -436,6 +436,11 @@ OUString FindTextFieldControl::get_active_text() const
     return m_xWidget->get_active_text();
 }
 
+void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
+{
+    m_xWidget->set_entry_message_type(eType);
+}
+
 void FindTextFieldControl::append_text(const OUString& rText)
 {
     m_xWidget->append_text(rText);

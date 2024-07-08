@@ -47,6 +47,7 @@ public:
     OUString get_text(int nIndex) const;
     OUString get_active_text() const;
     void append_text(const OUString& rText);
+    void set_entry_message_type(weld::EntryMessageType eType);
 
 private:
     ImplSVEvent* m_nAsyncGetFocusId;
