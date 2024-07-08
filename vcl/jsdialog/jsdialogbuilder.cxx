@@ -13,6 +13,7 @@
 #include <comphelper/lok.hxx>
 #include <iconview.hxx>
 #include <utility>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -828,6 +829,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
 
     if (pDialog)
     {
+        if (!pDialog->GetLOKNotifier())
+            pDialog->SetLOKNotifier(GetpApp());
+
         m_nWindowId = pDialog->GetLOKWindowId();
         pDialog->SetLOKTunnelingState(false);
 
