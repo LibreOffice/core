@@ -408,7 +408,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                 else
                     bFormat = false;
 
-                EnableInsert(bFormat || bNumFormat);
+                EnableInsert(bFormat || bNumFormat, IsCurrentPage());
             }
             break;
 
@@ -953,7 +953,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, weld::Entry&, void)
 
     m_xNewPB->set_sensitive(bApply);
     m_xDelPB->set_sensitive(bDelete);
-    EnableInsert(bInsert);
+    EnableInsert(bInsert, IsCurrentPage());
 }
 
 IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
@@ -1123,7 +1123,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl, weld::Entry&, void)
 {
     bool bEnable = !m_xSeparatorED->get_text().isEmpty() ||
                     m_xChapterLevelLB->get_active() == 0;
-    EnableInsert(bEnable);
+    EnableInsert(bEnable, IsCurrentPage());
 }
 
 bool SwFieldVarPage::FillItemSet(SfxItemSet* )

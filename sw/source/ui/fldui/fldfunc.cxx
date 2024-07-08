@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, weld::TreeView&, void)
     m_xValueGroup->set_sensitive(bValue);
     m_xMacroBT->set_sensitive(bMacro);
 
-    EnableInsert( bInsert );
+    EnableInsert(bInsert, IsCurrentPage());
 }
 
 IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl, weld::TreeView&, void)
@@ -500,7 +500,7 @@ void SwFieldFuncPage::UpdateSubType()
             m_xNameED->set_text(GetFieldMgr().GetMacroName());
             m_xValueGroup->set_sensitive(true);
         }
-        EnableInsert(bHasMacro);
+        EnableInsert(bHasMacro, IsCurrentPage());
     }
 }
 
@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, ModifyHdl, weld::Entry&, void)
         (!nLen || nLen > MAX_COMBINED_CHARACTERS ))
         bEnable = false;
 
-    EnableInsert( bEnable );
+    EnableInsert(bEnable, IsCurrentPage());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,7 @@ public:
     virtual void        Close() override;
     virtual void        EndDialog(int nResponse) override;
     virtual void        Activate() override;
+    virtual void        ActivatePage(const OUString& rPage) override;
 };
 
 #endif

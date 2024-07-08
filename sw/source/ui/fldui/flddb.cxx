@@ -441,7 +441,7 @@ void SwFieldDBPage::CheckInsert()
         bInsert &= bHasValue;
     }
 
-    EnableInsert(bInsert);
+    EnableInsert(bInsert, IsCurrentPage());
 }
 
 IMPL_LINK(SwFieldDBPage, TreeSelectHdl, weld::TreeView&, rBox, void)
