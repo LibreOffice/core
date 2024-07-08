@@ -157,11 +157,8 @@ OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFact
 {
     osl_atomic_increment(&m_refCount);
     {
-        Reference<XWindow>  xComp;
-        if (query_aggregation(m_xAggregate, xComp))
-        {
+        if (auto xComp = query_aggregation<XWindow>(m_xAggregate))
             xComp->addKeyListener(this);
-        }
     }
     osl_atomic_decrement(&m_refCount);
 }

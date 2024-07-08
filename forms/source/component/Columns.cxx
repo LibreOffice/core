@@ -124,8 +124,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     }
     else
     {
-        Reference< XUnoTunnel > xAggTunnel;
-        if ( query_aggregation( m_xAggregate, xAggTunnel ) )
+        if (auto xAggTunnel = query_aggregation<XUnoTunnel>(m_xAggregate))
             return xAggTunnel->getSomething( _rIdentifier );
     }
     return nReturn;
@@ -150,8 +149,7 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes()
     // but re-add their base class(es)
     aTypes.addType( cppu::UnoType<XChild>::get() );
 
-    Reference< XTypeProvider > xProv;
-    if ( query_aggregation( m_xAggregate, xProv ))
+    if (auto xProv = query_aggregation<XTypeProvider>(m_xAggregate))
         aTypes.addTypes( xProv->getTypes() );
 
     aTypes.removeType( cppu::UnoType<XTextRange>::get() );
@@ -264,8 +262,7 @@ void SAL_CALL OGridColumn::disposing(const EventObject& _rSource)
 {
     OPropertySetAggregationHelper::disposing(_rSource);
 
-    Reference<XEventListener>  xEvtLstner;
-    if (query_aggregation(m_xAggregate, xEvtLstner))
+    if (auto xEvtLstner = query_aggregation<XEventListener>(m_xAggregate))
         xEvtLstner->disposing(_rSource);
 }
 
@@ -276,8 +273,7 @@ void OGridColumn::disposing()
     OGridColumn_BASE::disposing();
     OPropertySetAggregationHelper::disposing();
 
-    Reference<XComponent>  xComp;
-    if (query_aggregation(m_xAggregate, xComp))
+    if (auto xComp = query_aggregation<XComponent>(m_xAggregate))
         xComp->dispose();
 }
 
@@ -467,8 +463,7 @@ void OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
     sal_Int32 nLen = 0;
     _rxOutStream->writeLong(nLen);
 
-    Reference<XPersistObject>  xPersist;
-    if (query_aggregation(m_xAggregate, xPersist))
+    if (auto xPersist = query_aggregation<XPersistObject>(m_xAggregate))
         xPersist->write(_rxOutStream);
 
     // Calculate the length
@@ -514,8 +509,7 @@ void OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
     {
         Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
         sal_Int32 nMark = xMark->createMark();
-        Reference<XPersistObject>  xPersist;
-        if (query_aggregation(m_xAggregate, xPersist))
+        if (auto xPersist = query_aggregation<XPersistObject>(m_xAggregate))
             xPersist->read(_rxInStream);
 
         xMark->jumpToMark(nMark);

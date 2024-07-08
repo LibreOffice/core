@@ -997,9 +997,7 @@ void SAL_CALL OReportDefinition::removeVetoableChangeListener( const OUString& P
 uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getParent(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< container::XChild > xChild;
-    comphelper::query_aggregation(m_aProps->m_xProxy,xChild);
-    if ( xChild.is() )
+    if (auto xChild = comphelper::query_aggregation<container::XChild>(m_aProps->m_xProxy))
         return xChild->getParent();
     return m_pImpl->m_xParent;
 }
@@ -1009,9 +1007,7 @@ void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterfac
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps->m_xParent = uno::Reference< container::XChild >(Parent,uno::UNO_QUERY);
     m_pImpl->m_xParent = Parent;
-    uno::Reference< container::XChild > xChild;
-    comphelper::query_aggregation(m_aProps->m_xProxy,xChild);
-    if ( xChild.is() )
+    if (auto xChild = comphelper::query_aggregation<container::XChild>(m_aProps->m_xProxy))
         xChild->setParent(Parent);
 }
 
@@ -1947,9 +1943,7 @@ sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int
     }
     if ( !nRet )
     {
-        uno::Reference< lang::XUnoTunnel> xTunnel;
-        ::comphelper::query_aggregation(m_aProps->m_xProxy,xTunnel);
-        if ( xTunnel.is() )
+        if (auto xTunnel = comphelper::query_aggregation<lang::XUnoTunnel>(m_aProps->m_xProxy))
             nRet = xTunnel->getSomething(rId);
     }
 

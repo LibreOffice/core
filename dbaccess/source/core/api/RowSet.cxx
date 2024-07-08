@@ -461,11 +461,7 @@ void SAL_CALL ORowSet::disposing()
     // remove myself as dispose listener
     Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
     if (xComponent.is())
-    {
-        Reference<XEventListener> xEvt;
-        query_aggregation(this,xEvt);
-        xComponent->removeEventListener(xEvt);
-    }
+        xComponent->removeEventListener(query_aggregation<XEventListener>(this));
 
     m_aActiveConnection = Any(); // the any contains a reference too
     if(m_bOwnConnection)
@@ -546,11 +542,7 @@ void ORowSet::setActiveConnection( Reference< XConnection > const & _rxNewConn, 
     // remove the event listener for the old connection
     Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
     if (xComponent.is())
-    {
-        Reference<XEventListener> xListener;
-        query_aggregation(this, xListener);
-        xComponent->removeEventListener(xListener);
-    }
+        xComponent->removeEventListener(query_aggregation<XEventListener>(this));
 
     // if we owned the connection, remember it for later disposing
     if(m_bOwnConnection)
@@ -575,11 +567,7 @@ void ORowSet::setActiveConnection( Reference< XConnection > const & _rxNewConn, 
     // register as event listener for the new connection
     xComponent.set(m_xActiveConnection,UNO_QUERY);
     if (xComponent.is())
-    {
-        Reference<XEventListener> xListener;
-        query_aggregation(this, xListener);
-        xComponent->addEventListener(xListener);
-    }
+        xComponent->addEventListener(query_aggregation<XEventListener>(this));
 }
 
 // css::XEventListener

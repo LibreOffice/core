@@ -589,8 +589,7 @@ namespace frm
         if (comphelper::isUnoTunnelId<ORichTextModel>(_rId))
             return comphelper::getSomething_cast(m_pEngine.get()); // Note returning a different type
 
-        Reference< XUnoTunnel > xAggTunnel;
-        if ( query_aggregation( m_xAggregate, xAggTunnel ) )
+        if (auto xAggTunnel = query_aggregation<XUnoTunnel>(m_xAggregate))
             return xAggTunnel->getSomething( _rId );
 
         return 0;

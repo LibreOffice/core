@@ -83,8 +83,7 @@ OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
 
     osl_atomic_increment(&m_refCount);
     {
-        Reference<XWindow>  xComp;
-        if (query_aggregation(m_xAggregate, xComp))
+        if (auto xComp = query_aggregation<XWindow>(m_xAggregate))
         {
             xComp->addFocusListener(this);
             xComp->addKeyListener(this);

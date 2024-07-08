@@ -373,9 +373,7 @@ OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
     osl_atomic_increment(&m_refCount);
     {
         // Register as ActionListener
-        Reference<XButton>  xButton;
-        query_aggregation( m_xAggregate, xButton);
-        if (xButton.is())
+        if (auto xButton = query_aggregation<XButton>(m_xAggregate))
             xButton->addActionListener(this);
     }
     // For Listener: refcount at one
@@ -517,9 +515,7 @@ void OButtonControl::actionPerformed_Impl( bool _bNotifyListener, const css::awt
 
 void OButtonControl::setLabel(const OUString& Label)
 {
-    Reference<XButton>  xButton;
-    query_aggregation( m_xAggregate, xButton );
-    if (xButton.is())
+    if (auto xButton = query_aggregation<XButton>(m_xAggregate))
         xButton->setLabel(Label);
 }
 
@@ -531,9 +527,7 @@ void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand)
         m_aActionCommand = _rCommand;
     }
 
-    Reference<XButton>  xButton;
-    query_aggregation( m_xAggregate, xButton);
-    if (xButton.is())
+    if (auto xButton = query_aggregation<XButton>(m_xAggregate))
         xButton->setActionCommand(_rCommand);
 }
 

@@ -181,8 +181,7 @@ Sequence<Type> SAL_CALL OControl::getTypes()
 {
     TypeBag aTypes( _getTypes() );
 
-    Reference< XTypeProvider > xProv;
-    if ( query_aggregation( m_xAggregate, xProv ) )
+    if (auto xProv = query_aggregation<XTypeProvider>(m_xAggregate))
         aTypes.addTypes( xProv->getTypes() );
 
     return aTypes.getTypes();
@@ -200,8 +199,7 @@ void OControl::disposing()
 
     m_aWindowStateGuard.attach( nullptr, nullptr );
 
-    Reference< XComponent > xComp;
-    if (query_aggregation(m_xAggregate, xComp))
+    if (auto xComp = query_aggregation<XComponent>(m_xAggregate))
         xComp->dispose();
 }
 
@@ -214,8 +212,7 @@ sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName)
 Sequence< OUString > OControl::getAggregateServiceNames() const
 {
     Sequence< OUString > aAggServices;
-    Reference< XServiceInfo > xInfo;
-    if ( query_aggregation( m_xAggregate, xInfo ) )
+    if (auto xInfo = query_aggregation<XServiceInfo>(m_xAggregate))
         aAggServices = xInfo->getSupportedServiceNames();
 
     return aAggServices;
@@ -230,14 +227,12 @@ Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames()
 // XEventListener
 void SAL_CALL OControl::disposing(const css::lang::EventObject& _rEvent)
 {
-    Reference< XInterface > xAggAsIface;
-    query_aggregation(m_xAggregate, xAggAsIface);
+    auto xAggAsIface = query_aggregation<XInterface>(m_xAggregate);
 
     // does the disposing come from the aggregate?
     if (xAggAsIface != Reference< XInterface >(_rEvent.Source, UNO_QUERY))
     {   // no -> forward it
-        Reference<css::lang::XEventListener> xListener;
-        if (query_aggregation(m_xAggregate, xListener))
+        if (auto xListener = query_aggregation<css::lang::XEventListener>(m_xAggregate))
             xListener->disposing(_rEvent);
     }
 }
@@ -414,9 +409,7 @@ Sequence<Type> SAL_CALL OControlModel::getTypes()
 {
     TypeBag aTypes( _getTypes() );
 
-    Reference< XTypeProvider > xProv;
-
-    if ( query_aggregation( m_xAggregate, xProv ) )
+    if (auto xProv = query_aggregation<XTypeProvider>(m_xAggregate))
         aTypes.addTypes( xProv->getTypes() );
 
     return aTypes.getTypes();
@@ -669,8 +662,7 @@ sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName)
 Sequence< OUString > OControlModel::getAggregateServiceNames() const
 {
     Sequence< OUString > aAggServices;
-    Reference< XServiceInfo > xInfo;
-    if ( query_aggregation( m_xAggregate, xInfo ) )
+    if (auto xInfo = query_aggregation<XServiceInfo>(m_xAggregate))
         aAggServices = xInfo->getSupportedServiceNames();
     return aAggServices;
 }
@@ -699,8 +691,7 @@ void SAL_CALL OControlModel::disposing(const css::lang::EventObject& _rSource)
     }
     else
     {
-        Reference<css::lang::XEventListener> xEvtLst;
-        if (query_aggregation(m_xAggregate, xEvtLst))
+        if (auto xEvtLst = query_aggregation<css::lang::XEventListener>(m_xAggregate))
         {
             osl::MutexGuard aGuard(m_aMutex);
             xEvtLst->disposing(_rSource);
@@ -713,8 +704,7 @@ void OControlModel::disposing()
 {
     OPropertySetAggregationHelper::disposing();
 
-    Reference<css::lang::XComponent> xComp;
-    if (query_aggregation(m_xAggregate, xComp))
+    if (auto xComp = query_aggregation<css::lang::XComponent>(m_xAggregate))
         xComp->dispose();
 
     setParent(Reference<XFormComponent>());
@@ -724,15 +714,13 @@ void OControlModel::disposing()
 
 void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
 {
-    Reference< XPersistObject > xPersist;
-    if ( query_aggregation( m_xAggregate, xPersist ) )
+    if (auto xPersist = query_aggregation<XPersistObject>(m_xAggregate))
         xPersist->write( _rxOutStream );
 }
 
 void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
 {
-    Reference< XPersistObject > xPersist;
-    if ( query_aggregation( m_xAggregate, xPersist ) )
+    if (auto xPersist = query_aggregation<XPersistObject>(m_xAggregate))
         xPersist->read( _rxInStream );
 }
 

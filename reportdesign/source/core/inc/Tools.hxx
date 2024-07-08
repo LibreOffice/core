@@ -132,17 +132,13 @@ namespace reportdesign
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             _pShape->m_aProps.aComponent.m_xParent = css::uno::Reference< css::container::XChild >(Parent,css::uno::UNO_QUERY);
-            css::uno::Reference< css::container::XChild > xChild;
-            comphelper::query_aggregation(_pShape->m_aProps.aComponent.m_xProxy,xChild);
-            if ( xChild.is() )
+            if (auto xChild = comphelper::query_aggregation<css::container::XChild>(_pShape->m_aProps.aComponent.m_xProxy))
                 xChild->setParent(Parent);
         }
         template<typename T> static css::uno::Reference< css::uno::XInterface > getParent( T* _pShape )
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
-            css::uno::Reference< css::container::XChild > xChild;
-            comphelper::query_aggregation(_pShape->m_aProps.aComponent.m_xProxy,xChild);
-            if ( xChild.is() )
+            if (auto xChild = comphelper::query_aggregation<css::container::XChild>(_pShape->m_aProps.aComponent.m_xProxy))
                     return xChild->getParent();
             return _pShape->m_aProps.aComponent.m_xParent;
         }

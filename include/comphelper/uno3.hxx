@@ -161,6 +161,19 @@ namespace comphelper
         }
         return _rxOut.is();
     }
+
+    /** ask for an iface of an aggregated object
+        usage:<br/>
+            if (auto xFoo = query_aggregation<XFoo>(xAggregatedObject))<br/>
+                ...
+    */
+    template <class iface>
+    css::uno::Reference<iface> query_aggregation(const css::uno::Reference< css::uno::XAggregation >& _rxAggregate)
+    {
+        css::uno::Reference<iface> _rxOut;
+        query_aggregation(_rxAggregate, _rxOut);
+        return _rxOut;
+    }
 }   // namespace comphelper
 
 

@@ -37,10 +37,9 @@ namespace frm
 
     Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {
-        Reference< XCloneable > xAggregateCloneable;    // will be the aggregate's XCloneable
         Reference< XAggregation > xAggregateClone;      // will be the aggregate's clone
 
-        if ( query_aggregation( _pOriginal->m_xAggregate, xAggregateCloneable ) )
+        if (auto xAggregateCloneable = query_aggregation<XCloneable>(_pOriginal->m_xAggregate))
         {
             xAggregateClone.set(xAggregateCloneable->createClone(), css::uno::UNO_QUERY);
             DBG_ASSERT( xAggregateClone.is(), "OCloneableAggregation::createAggregateClone: invalid clone returned by the aggregate!" );

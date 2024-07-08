@@ -84,8 +84,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
     rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xContext,
                                                                              m_implementationName));
 
-    Reference< XCloneable > xCloneAccess;
-    query_aggregation( m_xAggregate, xCloneAccess );
+    auto xCloneAccess = query_aggregation<XCloneable>(m_xAggregate);
 
     // clone the aggregate
     if ( xCloneAccess.is() )
@@ -198,8 +197,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     // if we act as real edit field, we can simple forward this write request
     if (!m_xFormattedPart.is())
     {
-        Reference<XPersistObject>  xAggregatePersistence;
-        query_aggregation(m_xAggregate, xAggregatePersistence);
+        auto xAggregatePersistence = query_aggregation<XPersistObject>(m_xAggregate);
         DBG_ASSERT(xAggregatePersistence.is(), "OFormattedFieldWrapper::write : don't know how to handle this : can't write !");
             // oops ... We gave an XPersistObject interface to the caller but now we aren't an XPersistObject ...
         if (xAggregatePersistence.is())
@@ -257,8 +255,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
             xInMarkable->deleteMark(nBeforeEditPart);
         }
 
-        Reference<XPersistObject>  xAggregatePersistence;
-        query_aggregation(m_xAggregate, xAggregatePersistence);
+        auto xAggregatePersistence = query_aggregation<XPersistObject>(m_xAggregate);
         DBG_ASSERT(xAggregatePersistence.is(), "OFormattedFieldWrapper::read : don't know how to handle this : can't read !");
             // oops ... We gave an XPersistObject interface to the caller but now we aren't an XPersistObject ...
 

@@ -176,8 +176,7 @@ Sequence<Type> SAL_CALL ODatabaseForm::getTypes()
 {
     // ask the aggregate
     Sequence<Type> aAggregateTypes;
-    Reference<XTypeProvider> xAggregateTypes;
-    if (query_aggregation(m_xAggregate, xAggregateTypes))
+    if (auto xAggregateTypes = query_aggregation<XTypeProvider>(m_xAggregate))
         aAggregateTypes = xAggregateTypes->getTypes();
 
     Sequence< Type > aRet = concatSequences(
@@ -1181,8 +1180,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
                     // move on the insert row of set
                     // resetting must be done later, after the load events have been posted
                     // see: moveToInsertRow and load , reload
-                    Reference<XResultSetUpdate>  xUpdate;
-                    if (query_aggregation( m_xAggregate, xUpdate))
+                    if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
                         xUpdate->moveToInsertRow();
                 }
             }
@@ -1234,8 +1232,7 @@ void ODatabaseForm::disposing()
         m_xAggregateAsRowSet->removeRowSetListener(this);
 
     // dispose the active connection
-    Reference<XComponent>  xAggregationComponent;
-    if (query_aggregation(m_xAggregate, xAggregationComponent))
+    if (auto xAggregationComponent = query_aggregation<XComponent>(m_xAggregate))
         xAggregationComponent->dispose();
 
     m_aPropertyBagHelper.dispose();
@@ -2510,8 +2507,7 @@ void SAL_CALL ODatabaseForm::disposing(const EventObject& Source)
     // does the disposing come from the aggregate ?
     if (m_xAggregate.is())
     {   // no -> forward it
-        css::uno::Reference<css::lang::XEventListener> xListener;
-        if (query_aggregation(m_xAggregate, xListener))
+        if (auto xListener = query_aggregation<css::lang::XEventListener>(m_xAggregate))
             xListener->disposing(Source);
     }
 }
@@ -2879,9 +2875,7 @@ void SAL_CALL ODatabaseForm::unload()
         try
         {
             // close the aggregate
-            Reference<XCloseable>  xCloseable;
-            query_aggregation( m_xAggregate, xCloseable);
-            if (xCloseable.is())
+            if (auto xCloseable = query_aggregation<XCloseable>(m_xAggregate))
                 xCloseable->close();
         }
         catch(const SQLException&)
@@ -3175,8 +3169,7 @@ void SAL_CALL ODatabaseForm::addRowSetApproveListener(const Reference<XRowSetApp
     // do we have to multiplex ?
     if (m_aRowSetApproveListeners.getLength() == 1)
     {
-        Reference<XRowSetApproveBroadcaster>  xBroadcaster;
-        if (query_aggregation( m_xAggregate, xBroadcaster))
+        if (auto xBroadcaster = query_aggregation<XRowSetApproveBroadcaster>(m_xAggregate))
         {
             Reference<XRowSetApproveListener>  xListener(static_cast<XRowSetApproveListener*>(this));
             xBroadcaster->addRowSetApproveListener(xListener);
@@ -3192,8 +3185,7 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
     m_aRowSetApproveListeners.removeInterface(_rListener);
     if ( m_aRowSetApproveListeners.getLength() == 0 )
     {
-        Reference<XRowSetApproveBroadcaster>  xBroadcaster;
-        if (query_aggregation( m_xAggregate, xBroadcaster))
+        if (auto xBroadcaster = query_aggregation<XRowSetApproveBroadcaster>(m_xAggregate))
         {
             Reference<XRowSetApproveListener>  xListener(static_cast<XRowSetApproveListener*>(this));
             xBroadcaster->removeRowSetApproveListener(xListener);
@@ -3407,8 +3399,7 @@ void SAL_CALL ODatabaseForm::insertRow()
 {
     try
     {
-        Reference<XResultSetUpdate>  xUpdate;
-        if (query_aggregation( m_xAggregate, xUpdate))
+        if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
             xUpdate->insertRow();
     }
     catch(const RowSetVetoException&)
@@ -3427,8 +3418,7 @@ void SAL_CALL ODatabaseForm::updateRow()
 {
     try
     {
-        Reference<XResultSetUpdate>  xUpdate;
-        if (query_aggregation( m_xAggregate, xUpdate))
+        if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
             xUpdate->updateRow();
     }
     catch(const RowSetVetoException&)
@@ -3447,8 +3437,7 @@ void SAL_CALL ODatabaseForm::deleteRow()
 {
     try
     {
-        Reference<XResultSetUpdate>  xUpdate;
-        if (query_aggregation( m_xAggregate, xUpdate))
+        if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
             xUpdate->deleteRow();
     }
     catch(const RowSetVetoException&)
@@ -3467,8 +3456,7 @@ void SAL_CALL ODatabaseForm::cancelRowUpdates()
 {
     try
     {
-        Reference<XResultSetUpdate>  xUpdate;
-        if (query_aggregation( m_xAggregate, xUpdate))
+        if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
             xUpdate->cancelRowUpdates();
     }
     catch(const RowSetVetoException&)
@@ -3485,8 +3473,8 @@ void SAL_CALL ODatabaseForm::cancelRowUpdates()
 
 void SAL_CALL ODatabaseForm::moveToInsertRow()
 {
-    Reference<XResultSetUpdate>  xUpdate;
-    if (!query_aggregation( m_xAggregate, xUpdate))
+    auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate);
+    if (!xUpdate)
         return;
 
     // _always_ move to the insert row
@@ -3520,8 +3508,7 @@ void SAL_CALL ODatabaseForm::moveToInsertRow()
 
 void SAL_CALL ODatabaseForm::moveToCurrentRow()
 {
-    Reference<XResultSetUpdate>  xUpdate;
-    if (query_aggregation( m_xAggregate, xUpdate))
+    if (auto xUpdate = query_aggregation<XResultSetUpdate>(m_xAggregate))
         xUpdate->moveToCurrentRow();
 }
 
@@ -3531,8 +3518,7 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
 {
     try
     {
-        Reference<XDeleteRows>  xDelete;
-        if (query_aggregation( m_xAggregate, xDelete))
+        if (auto xDelete = query_aggregation<XDeleteRows>(m_xAggregate))
             return xDelete->deleteRows(rows);
     }
     catch(const RowSetVetoException&)
@@ -3716,8 +3702,7 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames()
 {
     // the services of our aggregate
     Sequence< OUString > aServices;
-    Reference< XServiceInfo > xInfo;
-    if (query_aggregation(m_xAggregate, xInfo))
+    if (auto xInfo = query_aggregation<XServiceInfo>(m_xAggregate))
         aServices = xInfo->getSupportedServiceNames();
 
     // concat without own services

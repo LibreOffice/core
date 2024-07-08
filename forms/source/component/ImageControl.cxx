@@ -683,9 +683,7 @@ OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _
     osl_atomic_increment(&m_refCount);
     {
         // Add as Focus- and MouseListener
-        Reference< XWindow > xComp;
-        query_aggregation( m_xAggregate, xComp );
-        if ( xComp.is() )
+        if (auto xComp = query_aggregation<XWindow>(m_xAggregate))
             xComp->addMouseListener( this );
     }
     osl_atomic_decrement(&m_refCount);

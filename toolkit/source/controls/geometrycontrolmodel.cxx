@@ -429,8 +429,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         OGCM_Base::disposing();
         OPropertySetAggregationHelper::disposing();
 
-        Reference<XComponent>  xComp;
-        if ( query_aggregation( m_xAggregate, xComp ) )
+        if (auto xComp = query_aggregation<XComponent>(m_xAggregate))
             xComp->dispose();
     }
 

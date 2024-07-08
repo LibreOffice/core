@@ -1818,8 +1818,7 @@ namespace frm
         osl_atomic_increment(&m_refCount);
         {
             // Register as FocusListener
-            Reference<XWindow> xComp;
-            if (query_aggregation(m_xAggregate, xComp))
+            if (auto xComp = query_aggregation<XWindow>(m_xAggregate))
                 xComp->addFocusListener(this);
 
             // Register as ItemListener

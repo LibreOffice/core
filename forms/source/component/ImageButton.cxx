@@ -176,9 +176,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
     osl_atomic_increment(&m_refCount);
     {
         // Register as MouseListener
-        Reference< awt::XWindow >  xComp;
-        query_aggregation( m_xAggregate, xComp);
-        if (xComp.is())
+        if (auto xComp = query_aggregation<awt::XWindow>(m_xAggregate))
             xComp->addMouseListener( static_cast< awt::XMouseListener* >( this ) );
     }
     osl_atomic_decrement(&m_refCount);
