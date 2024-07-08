@@ -509,7 +509,7 @@ public:
      */
     bool Hyphenate(SwInterHyphInfoTextFrame & rInf);
     /// Is a hyphenated word? At selection, Point can be at the end of the word
-    virtual bool IsInHyphenatedWord(SwPaM *, bool bSelection) const;
+    bool IsInHyphenatedWord(SwPaM *, bool bSelection) const;
 
     /// Test grow
     inline SwTwips GrowTst( const SwTwips nGrow );

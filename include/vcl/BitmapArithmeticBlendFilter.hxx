@@ -21,7 +21,7 @@ private:
 
 public:
     BitmapArithmeticBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
-    virtual ~BitmapArithmeticBlendFilter();
+    ~BitmapArithmeticBlendFilter();
 
     BitmapEx execute(double aK1, double aK2, double aK3, double aK4);
 };

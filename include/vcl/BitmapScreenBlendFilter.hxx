@@ -22,7 +22,7 @@ private:
 public:
     BitmapScreenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
 
-    virtual ~BitmapScreenBlendFilter();
+    ~BitmapScreenBlendFilter();
     BitmapEx execute();
 };
 #endif

@@ -16,10 +16,12 @@ ux-gnu/../../../include/c++/13/bits/locale_facets_nonio.h:2002
     void std::messages::do_close(int,)const
 ux-gnu/../../../include/c++/13/streambuf:583
     void std::basic_streambuf::imbue(const class std::locale &,)
-vcl/inc/font/LogicalFontInstance.hxx:123
+vcl/inc/font/LogicalFontInstance.hxx:127
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+vcl/inc/salframe.hxx:214
+    void SalFrame::FlashWindow()const
 vcl/inc/salinst.hxx:203
     void SalInstance::releaseMainThread()
 vcl/inc/salinst.hxx:212

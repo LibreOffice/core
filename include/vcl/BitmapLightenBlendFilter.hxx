@@ -22,7 +22,7 @@ private:
 public:
     BitmapLightenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
 
-    virtual ~BitmapLightenBlendFilter();
+    ~BitmapLightenBlendFilter();
     BitmapEx execute();
 };
 #endif
