@@ -13,95 +13,73 @@
 
 ####### Constant Strings #########
 
-gb_DotnetLibrary__CONFIG_RELEASE := -c Release
-gb_DotnetLibrary__CONFIG_DEBUG := -c Debug
-
-####### Helper Functions #########
-
-define gb_DotnetLibrary__get_build_config
-$(if $(or \
-		$(filter TRUE,$(strip $(debug))), \
-		$(filter TRUE,$(strip $(ENABLE_DBGUTIL))) \
-	), \
-	$(gb_DotnetLibrary__CONFIG_DEBUG), \
-	$(gb_DotnetLibrary__CONFIG_RELEASE))
-
-endef
-
-define gb_DotnetLibrary__escape_quotes
-$(strip $(subst ",\",$(1)))
-
-endef
+gb_DotnetLibrary_CS := cs
+gb_DotnetLibrary_FS := fs
+gb_DotnetLibrary_VB := vb
 
 ####### Build and Clean Targets #########
 
-.PHONY : $(call gb_DotnetLibrary_get_clean_target,%)
-$(call gb_DotnetLibrary_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),NET,4)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -rf $(call gb_DotnetLibrary_get_target,$*))
+# Template for a target to generate the project file for a DotnetLibrary
+define gb_DotnetLibrary__project_target
+$$(gb_DotnetLibrary_$(1)_project) :
+	$$(shell mkdir -p $$(dir $$@))
+	$$(file  >$$@,<Project Sdk="Microsoft.NET.Sdk">)
+	$$(file >>$$@,<PropertyGroup>)
+	$$(file >>$$@,$$(DOTNET_PROPERTY_ELEMENTS))
+	$$(file >>$$@,</PropertyGroup>)
+	$$(file >>$$@,<ItemGroup>)
+	$$(file >>$$@,$$(DOTNET_ITEM_ELEMENTS))
+	$$(file >>$$@,</ItemGroup>)
+	$$(file >>$$@,</Project>)
 
-$(call gb_DotnetLibrary_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),NET,4)
-	$(call gb_Trace_StartRange,$*,NET)
-	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(call gb_DotnetLibrary_get_workdir,$*) && \
-		P=$(DOTNET_PROJECT_FILE) && \
-		echo "<Project Sdk=\"Microsoft.NET.Sdk\">" > $$P && \
-		echo "<PropertyGroup>" >> $$P && \
-		echo "$(DOTNET_PROPERTY_ELEMENTS)" >> $$P && \
-		echo "</PropertyGroup>" >> $$P && \
-		echo "<ItemGroup>" >> $$P && \
-		echo "$(DOTNET_ITEM_ELEMENTS)" >> $$P && \
-		echo "</ItemGroup>" >> $$P && \
-		echo "</Project>" >> $$P && \
-		"$(DOTNET)" build $$P $(DOTNET_BUILD_FLAGS) \
-			-o $(call gb_DotnetLibrary_get_workdir,$*) \
-			> $@.log 2>&1 || \
-			(echo \
-				&& cat $@.log \
-				&& echo \
-				&& echo "A library failed to build. To retry the build, use:" \
-				&& echo "    make DotnetLibrary_$*" \
-				&& echo "cd into the module directory to run the build faster" \
-				&& echo \
-				&& false) && \
-		touch $@)
-	$(call gb_Trace_EndRange,$*,NET)
+endef
 
-####### Library Target Constructors #########
+# Template for a target to build a DotnetLibrary
+define gb_DotnetLibrary__build_target
+$$(call gb_DotnetLibrary_get_target,$(1)) : $$(gb_DotnetLibrary_$(1)_project)
+	$$(call gb_Output_announce,$(1),$(true),NET,4)
+	$$(call gb_Trace_StartRange,$(1),NET)
+	$$(call gb_Helper_abbreviate_dirs,\
+		$$(call gb_Helper_print_on_error,\
+			"$$(DOTNET)" build $$< $$(DOTNET_BUILD_FLAGS) -o $$(dir $$@),\
+			$$(gb_DotnetLibrary_workdir)/$(1)/log))
+	$$(call gb_Trace_EndRange,$(1),NET)
 
-define gb_DotnetLibrary__common_ctor
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_BUILD_FLAGS := $(strip $(call gb_DotnetLibrary__get_build_config))
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_PROPERTY_ELEMENTS := <TargetFramework>netstandard20</TargetFramework>
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_ITEM_ELEMENTS :=
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_PROJECT_FILE := $(call gb_DotnetLibrary_get_workdir,$(1))/$(1).$(2)
+endef
 
-$(eval $(call gb_Module_register_target, \
+# Template for a target to clean a DotnetLibrary
+define gb_DotnetLibrary__clean_target
+$$(call gb_DotnetLibrary_get_clean_target,$(1)) :
+	$$(call gb_Output_announce,$(1),$(false),NET,4)
+	$$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $$(gb_DotnetLibrary_$(1)_project) $$(call gb_DotnetLibrary_get_target,$(1)))
+
+endef
+
+####### Library Target Constructor #########
+
+# Generates one project file for the given language, instantiating 
+# the project file, build and clean targets from above templates
+# call gb_DotnetLibrary_DotnetLibrary,targetname,language
+define gb_DotnetLibrary_DotnetLibrary
+gb_DotnetLibrary_$(1)_language := $(2)
+gb_DotnetLibrary_$(1)_project := $(gb_DotnetLibrary_workdir)/$(1)/$(1).$(2)proj
+
+$$(gb_DotnetLibrary_$(1)_project) : DOTNET_PROPERTY_ELEMENTS := <TargetFramework>netstandard2.0</TargetFramework> 
+$$(gb_DotnetLibrary_$(1)_project) : DOTNET_PROPERTY_ELEMENTS += <AssemblyName>$(1)</AssemblyName>
+$$(gb_DotnetLibrary_$(1)_project) : DOTNET_ITEM_ELEMENTS :=
+$$(eval $$(call gb_DotnetLibrary__project_target,$(1)))
+
+$$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_BUILD_FLAGS := $(if $(ENABLE_DEBUG),-c Debug,-c Release)
+$$(eval $$(call gb_DotnetLibrary__build_target,$(1)))
+
+.PHONY : $$(call gb_DotnetLibrary_get_clean_target,$(1))
+$$(eval $$(call gb_DotnetLibrary__clean_target,$(1)))
+
+$$(eval $$(call gb_Module_register_target, \
 	$(call gb_DotnetLibrary_get_target,$(1)), \
 	$(call gb_DotnetLibrary_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),DotnetLibrary)
-
-endef
-
-# Generates one csproj file from given inputs and builds it
-# call gb_DotnetLibrary_CsLibrary,targetname
-define gb_DotnetLibrary_CsLibrary
-$(call gb_DotnetLibrary__common_ctor,$(1),csproj)
-
-endef
-
-# Generates one fsproj file from given inputs and builds it
-# call gb_DotnetLibrary_FsLibrary,targetname
-define gb_DotnetLibrary_FsLibrary
-$(call gb_DotnetLibrary__common_ctor,$(1),fsproj)
-
-endef
-
-# Generates one vbproj file from given inputs and builds it
-# call gb_DotnetLibrary_VbLibrary,targetname
-define gb_DotnetLibrary_VbLibrary
-$(call gb_DotnetLibrary__common_ctor,$(1),vbproj)
 
 endef
 
@@ -117,77 +95,51 @@ endef
 # Add <PropertyGroup> elements to the project file
 # call gb_DotnetLibrary_add_properties,target,properties
 define gb_DotnetLibrary_add_properties
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_PROPERTY_ELEMENTS += $(strip $(call gb_DotnetLibrary__escape_quotes,$(2)))
+$(gb_DotnetLibrary_$(1)_project) : DOTNET_PROPERTY_ELEMENTS += $(2)
 
 endef
 
 # Add <ItemGroup> elements to the project file
 # call gb_DotnetLibrary_add_items,target,items
 define gb_DotnetLibrary_add_items
-$(call gb_DotnetLibrary_get_target,$(1)) : DOTNET_ITEM_ELEMENTS += $(strip $(call gb_DotnetLibrary__escape_quotes,$(2)))
+$(gb_DotnetLibrary_$(1)_project) : DOTNET_ITEM_ELEMENTS += $(2)
 
 endef
 
 # Add one source file to the project file
 # This adds it to the project, and makes it a build dependency
 # so the library is rebuilt if the source changes
-# call gb_DotnetLibrary_add_source,target,basedir,source
+# call gb_DotnetLibrary_add_source,target,source
 define gb_DotnetLibrary_add_source
-$(call gb_DotnetLibrary_get_target,$(1)) : $(strip $(2))/$(strip $(3))
-$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(strip $(2))/$(strip $(3))"/>)
+$(gb_DotnetLibrary_$(1)_project) : $(SRCDIR)/$(2).$(gb_DotnetLibrary_$(1)_language)
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(SRCDIR)/$(2).$(gb_DotnetLibrary_$(1)_language)"/>)
 
 endef
 
 # Add source files to the project file
 # This adds them to the project, and makes it them build dependency
 # so the library is rebuilt if the sources change
-# call gb_DotnetLibrary_add_sources,target,basedir,sources
+# call gb_DotnetLibrary_add_sources,target,sources
 define gb_DotnetLibrary_add_sources
-$(foreach source,$(3),$(call gb_DotnetLibrary_add_source,$(1),$(2),$(source)))
+$(foreach source,$(2),$(call gb_DotnetLibrary_add_source,$(1),$(source)))
 
 endef
 
-# Add one generated source file to the project file,
-# This is not marked as makefile build dependency,
-# so the library is NOT rebuilt if this source changes
-# Useful for things like source globs supported by .net projects
-# call gb_DotnetLibrary_add_generated_source,target,basedir,source
-define gb_DotnetLibrary_add_generated_source
-$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(strip $(2))/$(strip $(3))"/>)
+# Add source files generated by the given CustomTarget.
+# This adds the CustomTarget as a build dependency
+# so if the CustomTarget is rebuilt, this library is too.
+# call gb_DotnetLibrary_use_customtarget,target,customtarget
+define gb_DotnetLibrary_use_customtarget
+$(gb_DotnetLibrary_$(1)_project) : $(call gb_CustomTarget_get_target,$(2))
+$(call gb_DotnetLibrary_add_items,$(1),<Compile Include="$(gb_CustomTarget_workdir)/$(2)/**/*.$(gb_DotnetLibrary_$(1)_language)"/>)
 
 endef
 
-# Add generated source files to the project file,
-# These are not marked as makefile build dependencies,
-# so the library is NOT rebuilt if these sources change
-# Useful for things like source globs supported by .net projects
-# call gb_DotnetLibrary_add_generated_sources,target,basedir,sources
-define gb_DotnetLibrary_add_generated_sources
-$(foreach source,$(3),$(call gb_DotnetLibrary_add_generated_source,$(1),$(2),$(source)))
-
-endef
-
-# Link to a DotnetLibrary_CsLibrary target
-# call gb_DotnetLibrary_link_cs_library,target,library
-define gb_DotnetLibrary_link_cs_library
-$(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
-$(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).csproj"/>)
-
-endef
-
-# Link to a DotnetLibrary_FsLibrary target
-# call gb_DotnetLibrary_link_fs_library,target,library
-define gb_DotnetLibrary_link_fs_library
-$(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
-$(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).fsproj"/>)
-
-endef
-
-# Link to a DotnetLibrary_VbLibrary target
-# call gb_DotnetLibrary_link_vb_library,target,library
-define gb_DotnetLibrary_link_vb_library
-$(call gb_DotnetLibrary_get_target,$(1)) : $(call gb_DotnetLibrary_get_target,$(strip $(2)))
-$(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(call gb_DotnetLibrary_get_workdir,$(strip $(2)))/$(strip $(2)).vbproj"/>)
+# Link to another DotnetLibrary target
+# call gb_DotnetLibrary_link_library,target,library
+define gb_DotnetLibrary_link_library
+$(gb_DotnetLibrary_$(1)_project) : $(call gb_DotnetLibrary_get_target,$(2))
+$(call gb_DotnetLibrary_add_items,$(1),<ProjectReference Include="$(gb_DotnetLibrary_$(2)_project)"/>)
 
 endef
 

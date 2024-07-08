@@ -6,23 +6,21 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_DotnetLibrary_CsLibrary,net_basetypes))
+$(eval $(call gb_DotnetLibrary_DotnetLibrary,net_basetypes,$(gb_DotnetLibrary_CS)))
 
 $(eval $(call gb_DotnetLibrary_add_sources,net_basetypes,\
-    $(SRCDIR)/net_ure/source/basetypes, \
-        Any.cs \
-        BoundAttribute.cs \
-        Exception.cs \
-        IQueryInterface.cs \
-        RaisesAttribute.cs \
-        UnoGeneratedAttribute.cs \
+	net_ure/source/basetypes/Any \
+	net_ure/source/basetypes/BoundAttribute \
+	net_ure/source/basetypes/Exception \
+	net_ure/source/basetypes/IQueryInterface \
+	net_ure/source/basetypes/RaisesAttribute \
+	net_ure/source/basetypes/UnoGeneratedAttribute \
 ))
 
 $(eval $(call gb_DotnetLibrary_add_properties,net_basetypes,\
-    <AssemblyName>net_basetypes</AssemblyName> \
-    <Version>0.1.0</Version> \
-    <Company>LibreOffice</Company> \
-    <Description>Base datatypes for the .NET language UNO binding.</Description> \
+	<Version>0.1.0</Version> \
+	<Company>LibreOffice</Company> \
+	<Description>Base datatypes for the .NET language UNO binding.</Description> \
 ))
 
 # vim: set noet sw=4 ts=4:
