@@ -72,6 +72,8 @@
 #include <cstdlib>
 #include <memory>
 
+#include <findtextfield.hxx>
+
 #include <svx/labelitemwindow.hxx>
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -572,6 +574,9 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
         m_xSearchBox->set_size_request(-1, aSize.Height());
         m_xSearchBox->set_background(COL_TRANSPARENT);
     }
+
+    if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
+        m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Error);
 }
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
@@ -2368,6 +2373,18 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFr
             assert(pSearchLabel);
             pSearchLabel->set_label(rStr, LabelItemWindowType::Info);
             pSearchLabel->SetOptimalSize();
+        }
+
+        if (pToolBox->IsFloatingMode() && pToolBox->GetItemCommand(id) == ".uno:FindText")
+        {
+            FindTextFieldControl* pFindText = dynamic_cast<FindTextFieldControl*>(pToolBox->GetItemWindow(id));
+            assert(pFindText);
+            if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
+                pFindText->set_entry_message_type(weld::EntryMessageType::Error);
+            else if (rStr == SvxResId(RID_SVXSTR_SEARCH_END) || rStr == SvxResId(RID_SVXSTR_SEARCH_START))
+                pFindText->set_entry_message_type(weld::EntryMessageType::Warning);
+            else
+                pFindText->set_entry_message_type(weld::EntryMessageType::Normal);
         }
     }
     xLayoutManager->doLayout();
