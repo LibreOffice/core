@@ -98,7 +98,7 @@ void SwFieldPage::Init()
 // newly initialise page
 void SwFieldPage::Activate()
 {
-    EnableInsert(m_bInsert);
+    EnableInsert(m_bInsert, true);
 }
 
 // complete reset; edit new field
@@ -318,18 +318,25 @@ void SwFieldPage::InsertHdl(weld::Widget* pBtn)
     }
 }
 
-// enable/disable "Insert"-Button
-void SwFieldPage::EnableInsert(bool bEnable)
+bool SwFieldPage::IsCurrentPage() const
 {
-    if (SwFieldDlg *pDlg = dynamic_cast<SwFieldDlg*>(GetDialogController()))
+    if (const SwFieldDlg *pDlg = dynamic_cast<const SwFieldDlg*>(GetDialogController()))
+        return pDlg->GetCurTabPage() == this;
+    return true;
+}
+
+// enable/disable "Insert"-Button
+void SwFieldPage::EnableInsert(bool bEnable, bool bIsCurrentPage)
+{
+    if (bIsCurrentPage)
     {
-        if (pDlg->GetCurTabPage() == this)
+        if (SwFieldDlg *pDlg = dynamic_cast<SwFieldDlg*>(GetDialogController()))
             pDlg->EnableInsert(bEnable);
-    }
-    else
-    {
-        SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg*>(GetDialogController());
-        pEditDlg->EnableInsert(bEnable);
+        else
+        {
+            SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg*>(GetDialogController());
+            pEditDlg->EnableInsert(bEnable);
+        }
     }
 
     m_bInsert = bEnable;

@@ -401,7 +401,7 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     // fill Format-Listbox
     SwFieldTypesEnum nTypeId = SwFieldTypesEnum::DocumentInfo;
 
-    EnableInsert(nSubType != USHRT_MAX);
+    EnableInsert(nSubType != USHRT_MAX, IsCurrentPage());
 
     if (nSubType == USHRT_MAX)  // Info-Text
         nSubType = DI_SUBTYPE_BEGIN;

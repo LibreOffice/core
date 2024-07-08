@@ -240,6 +240,13 @@ void SwFieldDlg::Activate()
     }
 }
 
+void SwFieldDlg::ActivatePage(const OUString& rPage)
+{
+    SfxTabDialogController::ActivatePage(rPage);
+    if (SfxTabPage* pPage = GetTabPage(rPage))
+        pPage->Activate();
+}
+
 void SwFieldDlg::EnableInsert(bool bEnable)
 {
     if( bEnable )

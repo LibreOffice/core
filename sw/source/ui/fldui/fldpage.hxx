@@ -58,7 +58,8 @@ protected:
     void                Init();
     void                SavePos( const weld::TreeView& rLst1);
     void                RestorePos( weld::TreeView& rLst1 );
-    void                EnableInsert(bool bEnable);
+    bool                IsCurrentPage() const;
+    void                EnableInsert(bool bEnable, bool bIsCurrentPage);
     bool                IsFieldEdit() const   { return m_bFieldEdit; }
 
     // insert field

@@ -1003,7 +1003,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, weld::Entry&, void)
                        nTypeId == REFFLDFLAG_BOOKMARK)))
         bEnable = false;
 
-    EnableInsert(bEnable);
+    EnableInsert(bEnable, IsCurrentPage());
 
     m_xSelectionLB->select_text(aName);
 }
