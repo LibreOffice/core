@@ -65,6 +65,12 @@ SvxPostItAuthorItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
     return new SvxPostItAuthorItem( *this );
 }
 
+// hashCode is defined in CntUnencodedStringItem
+bool SvxPostItAuthorItem::isHashable() const
+{
+    return true;
+}
+
 SvxPostItDateItem::SvxPostItDateItem( TypedWhichId<SvxPostItDateItem> _nWhich )
     : SfxStringItem(_nWhich, SfxItemType::SvxPostItDateItemType)
 {
@@ -104,6 +110,12 @@ SvxPostItDateItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
     return new SvxPostItDateItem( *this );
 }
 
+// hashCode is defined in CntUnencodedStringItem
+bool SvxPostItDateItem::isHashable() const
+{
+    return true;
+}
+
 SvxPostItTextItem::SvxPostItTextItem( TypedWhichId<SvxPostItTextItem> _nWhich )
 {
     SetWhich( _nWhich );
@@ -141,6 +153,12 @@ SvxPostItTextItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
     return new SvxPostItTextItem( *this );
 }
 
+// hashCode is defined in CntUnencodedStringItem
+bool SvxPostItTextItem::isHashable() const
+{
+    return true;
+}
+
 SvxPostItIdItem::SvxPostItIdItem( TypedWhichId<SvxPostItIdItem> _nWhich )
 {
     SetWhich( _nWhich );
@@ -149,6 +167,12 @@ SvxPostItIdItem::SvxPostItIdItem( TypedWhichId<SvxPostItIdItem> _nWhich )
 SvxPostItIdItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItIdItem( *this );
+}
+
+// hashCode is defined in CntUnencodedStringItem
+bool SvxPostItIdItem::isHashable() const
+{
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

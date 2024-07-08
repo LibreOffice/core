@@ -2171,4 +2171,10 @@ SdrLayerNameItem* SdrLayerNameItem::Clone(SfxItemPool* /*pPool*/) const
     return new SdrLayerNameItem(*this);
 }
 
+// hashCode is defined in CntUnencodedStringItem
+bool SdrLayerNameItem::isHashable() const
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

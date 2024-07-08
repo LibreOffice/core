@@ -23,6 +23,11 @@
 #include <unotools/intlwrapper.hxx>
 #include <svl/custritm.hxx>
 
+// not all of the subclasses are hashable, so we only define the shared hashcode function here
+size_t CntUnencodedStringItem::hashCode() const
+{
+    return m_aValue.hashCode();
+}
 
 // virtual
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const

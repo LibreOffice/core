@@ -185,6 +185,12 @@ SwNumRuleItem* SwNumRuleItem::Clone( SfxItemPool * ) const
     return new SwNumRuleItem( *this );
 }
 
+// hashCode is defined in CntUnencodedStringItem
+bool SwNumRuleItem::isHashable() const
+{
+    return true;
+}
+
 bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
