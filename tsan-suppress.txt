@@ -20,6 +20,7 @@ deadlock:_dbus_lock
 race:g_dbus_connection_signal_unsubscribe
 race:g_path_get_basename
 race:g_date_time_format_iso8601
+race:g_realloc
 
 # inside an assert so I don't care.
 race:cppu::OWeakConnectionPoint::acquire
@@ -96,3 +97,17 @@ deadlock:ItemHolder1::impl_addItem
 #      the read produces either the old, original value, or the newly written one.
 race:cppu::createEmptySequence
 race:uno_type_sequence_reference2One
+
+# ignore harmless data race on m_nTimeoutMS
+race:GtkSalTimer::Start
+
+# TODO data-race with fields on salhelper::Timer, but I see no way of fixing this because this class
+# is in URE
+race:salhelper::Timer
+
+# TODO LanguageTag is copying data around without any locking at all, but it seems to be touched
+# from multiple threads. I am nervous to randomly add locks because it is performance sensitive.
+race:LanguageTag::
+
+# harmless race on m_storedTypeRefs
+race:cppu::getTypeEntries
