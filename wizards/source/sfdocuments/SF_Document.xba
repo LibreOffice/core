@@ -572,7 +572,7 @@ Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(MenuHeader, &quot;MenuHeader&quot;, V_STRING) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Before, &quot;Before&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Before, &quot;Before&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
 	End If
 
