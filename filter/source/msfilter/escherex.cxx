@@ -4531,7 +4531,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     *pType >>= sShapeType;
                 MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-                uno::Any* pGluePointType = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( u"Path"_ustr, u"GluePointType"_ustr );
+                const uno::Any* pGluePointType = rGeometryItem.GetPropertyValueByName( u"Path"_ustr, u"GluePointType"_ustr );
 
                 sal_Int16 nGluePointType = sal_Int16();
                 if ( !( pGluePointType &&

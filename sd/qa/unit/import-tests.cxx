@@ -1165,8 +1165,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo72998)
         CPPUNIT_ASSERT(pObj);
         const SdrCustomShapeGeometryItem& rGeometryItem
             = pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-        const css::uno::Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem)
-                                            .GetPropertyValueByName(u"ViewBox"_ustr);
+        const css::uno::Any* pViewBox = rGeometryItem.GetPropertyValueByName(u"ViewBox"_ustr);
         CPPUNIT_ASSERT_MESSAGE("Missing ViewBox", pViewBox);
         css::awt::Rectangle aViewBox;
         CPPUNIT_ASSERT((*pViewBox >>= aViewBox));

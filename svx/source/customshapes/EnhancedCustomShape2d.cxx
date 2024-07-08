@@ -546,14 +546,14 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 {
     // AdjustmentValues
     static constexpr OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
-    const Any* pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sAdjustmentValues );
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= m_seqAdjustmentValues;
 
 
     // Coordsize
     static constexpr OUStringLiteral sViewBox( u"ViewBox" );
-    const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sViewBox );
+    const Any* pViewBox = rGeometryItem.GetPropertyValueByName( sViewBox );
     css::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
@@ -576,35 +576,35 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/Coordinates
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
     if ( pAny )
         *pAny >>= m_seqCoordinates;
 
 
     // Path/GluePoints
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sGluePoints );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
     if ( pAny )
         *pAny >>= m_seqGluePoints;
 
     // Path/GluePointLeavingDirections
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName(sPath, sGluePointLeavingDirections);
+    pAny = rGeometryItem.GetPropertyValueByName(sPath, sGluePointLeavingDirections);
     if (pAny)
         *pAny >>= m_seqGluePointLeavingDirections;
 
     // Path/Segments
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sSegments );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sSegments );
     if ( pAny )
         *pAny >>= m_seqSegments;
 
 
     // Path/SubViewSize
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sSubViewSize );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sSubViewSize );
     if ( pAny )
         *pAny >>= m_seqSubViewSize;
 
 
     // Path/StretchX
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sStretchX );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sStretchX );
     if ( pAny )
     {
         sal_Int32 nStretchX = 0;
@@ -614,7 +614,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/StretchY
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sStretchY );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sStretchY );
     if ( pAny )
     {
         sal_Int32 nStretchY = 0;
@@ -624,19 +624,19 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/TextFrames
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, sTextFrames );
+    pAny = rGeometryItem.GetPropertyValueByName( sPath, sTextFrames );
     if ( pAny )
         *pAny >>= m_seqTextFrames;
 
 
     // Equations
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sEquations );
+    pAny = rGeometryItem.GetPropertyValueByName( sEquations );
     if ( pAny )
         *pAny >>= m_seqEquations;
 
 
     // Handles
-    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sHandles );
+    pAny = rGeometryItem.GetPropertyValueByName( sHandles );
     if ( pAny )
         *pAny >>= m_seqHandles;
 }
@@ -2182,8 +2182,8 @@ void EnhancedCustomShape2d::CreateSubPath(
                 {
                     // Some shapes will need special handling, decide on property 'Type'.
                     OUString sShpType;
-                    SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(mrSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
-                    Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+                    const SdrCustomShapeGeometryItem& rGeometryItem = mrSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                    const Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
                     if (pAny)
                         *pAny >>= sShpType;
                     // User defined shapes in MS binary format, which contain command U or T after import
