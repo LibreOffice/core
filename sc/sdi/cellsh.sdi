@@ -184,6 +184,8 @@ interface CellSelection
     SID_CLIPBOARD_FORMAT_ITEMS  [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_EXTERNAL_SOURCE [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COPY_HYPERLINK_LOCATION [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_EDIT_HYPERLINK [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_REMOVE_HYPERLINK [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_MERGE_ON        [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_MERGE_OFF       [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_MERGE_TOGGLE    [ ExecMethod = Execute; StateMethod = GetState; ]

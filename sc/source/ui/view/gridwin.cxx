@@ -2593,7 +2593,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         //  Only execute on ButtonUp, if ButtonDown also was done on a URL
 
         OUString aName, aUrl, aTarget;
-        if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
+        SCCOL nUrlCellX;
+        if (GetEditUrl(rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget, &nUrlCellX))
         {
             nMouseStatus = SC_GM_NONE;              // Ignore double-click
             bool isTiledRendering = comphelper::LibreOfficeKit::isActive();
@@ -2613,7 +2614,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     aPos = rMEvt.GetPosPixel();
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-                    OString aCursor = pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY);
+                    OString aCursor
+                        = pViewShell->GetViewData().describeCellCursorAt(nUrlCellX, nPosY);
                     double fPPTX = pViewShell->GetViewData().GetPPTX();
                     int mouseX = aPos.X() / fPPTX;
                     int mouseY = aPos.Y() / fPPTX;
@@ -2741,7 +2743,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         OUString aName, aUrl, aTarget;
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         if (pViewShell && nPosX == m_nDownPosX && nPosY == m_nDownPosY
-            && GetEditUrl(aPos, &aName, &aUrl, &aTarget))
+            && GetEditUrl(aPos, &aName, &aUrl, &aTarget, &nPosX))
         {
             OString aMsg(aUrl.toUtf8() + " coordinates: "
                          + pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", "
@@ -5886,8 +5888,8 @@ std::vector<UrlData> ScGridWindow::GetEditUrls(const ScAddress& rSelectedCell)
     return vUrls;
 }
 
-bool ScGridWindow::GetEditUrl( const Point& rPos,
-                               OUString* pName, OUString* pUrl, OUString* pTarget )
+bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl, OUString* pTarget,
+                              SCCOL* pnCol)
 {
     ScTabViewShell* pViewSh = mrViewData.GetViewShell();
     ScInputHandler* pInputHdl = nullptr;
@@ -5910,6 +5912,8 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     bool bFound = lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL);
     if( !bFound )
         return false;
+    if (pnCol)
+        *pnCol = nPosX;
 
     const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
     // bForceToTop = sal_False, use the cell's real position

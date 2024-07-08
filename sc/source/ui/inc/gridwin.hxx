@@ -396,7 +396,8 @@ public:
     /// Get the cell selection, coordinates are in logic units.
     void GetCellSelection(std::vector<tools::Rectangle>& rLogicRects);
 
-    bool GetEditUrl( const Point& rPos, OUString* pName=nullptr, OUString* pUrl=nullptr, OUString* pTarget=nullptr );
+    bool GetEditUrl(const Point& rPos, OUString* pName = nullptr, OUString* pUrl = nullptr,
+                    OUString* pTarget = nullptr, SCCOL* pnCol= nullptr);
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
