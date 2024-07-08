@@ -919,7 +919,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testAngleUnits)
     double fExpZAxisTitleAngle = 60.39; // = 67.1grad = 1.05400433527938rad
 
     // sheet 0: no unit; sheet 1: unit deg; sheet 2: unit rad; sheet 3: unit grad
-    // Whithout fix, the values with unit grad and rad were read as if they are in degrees.
+    // Without fix, the values with unit grad and rad were read as if they are in degrees.
     for (size_t i = 0; i < 4; i++)
     {
         uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(i, mxComponent);
