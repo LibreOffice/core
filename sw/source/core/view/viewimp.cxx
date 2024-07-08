@@ -267,7 +267,7 @@ void SwViewShellImp::MakeDrawView()
 
             m_pDrawView.reset( new SwDrawView(
                 *this,
-                *rIDDMA.GetOrCreateDrawModel(),
+                rIDDMA.GetOrCreateDrawModel(),
                 pOutDevForDrawView) );
         }
 

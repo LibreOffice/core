@@ -502,7 +502,7 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
 
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
-    SwDrawModel* pDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+    SwDrawModel& rDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
@@ -515,37 +515,37 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
         {
             case XATTR_FILLBITMAP:
             {
-                pResult = pItem->StaticWhichCast(XATTR_FILLBITMAP).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLBITMAP).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_LINEDASH:
             {
-                pResult = pItem->StaticWhichCast(XATTR_LINEDASH).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINEDASH).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_LINESTART:
             {
-                pResult = pItem->StaticWhichCast(XATTR_LINESTART).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINESTART).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_LINEEND:
             {
-                pResult = pItem->StaticWhichCast(XATTR_LINEEND).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_LINEEND).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_FILLGRADIENT:
             {
-                pResult = pItem->StaticWhichCast(XATTR_FILLGRADIENT).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLGRADIENT).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_FILLFLOATTRANSPARENCE:
             {
-                pResult = pItem->StaticWhichCast(XATTR_FILLFLOATTRANSPARENCE).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLFLOATTRANSPARENCE).checkForUniqueItem(rDrawModel);
                 break;
             }
             case XATTR_FILLHATCH:
             {
-                pResult = pItem->StaticWhichCast(XATTR_FILLHATCH).checkForUniqueItem(*pDrawModel);
+                pResult = pItem->StaticWhichCast(XATTR_FILLHATCH).checkForUniqueItem(rDrawModel);
                 break;
             }
         }

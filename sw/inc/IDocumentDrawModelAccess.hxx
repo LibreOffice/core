@@ -33,8 +33,8 @@ public:
      */
     virtual const SwDrawModel* GetDrawModel() const = 0;
     virtual SwDrawModel* GetDrawModel() = 0;
-    virtual SwDrawModel* MakeDrawModel_() = 0;
-    virtual SwDrawModel* GetOrCreateDrawModel() = 0;
+    virtual SwDrawModel& MakeDrawModel_() = 0;
+    virtual SwDrawModel& GetOrCreateDrawModel() = 0;
     virtual SdrLayerID GetHeavenId() const = 0;
     virtual SdrLayerID GetHellId() const = 0;
     virtual SdrLayerID GetHeaderFooterHellId() const = 0;

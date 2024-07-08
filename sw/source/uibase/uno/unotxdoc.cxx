@@ -395,7 +395,6 @@ SwDoc& SwXTextDocument::GetDocOrThrow() const
 
 SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const
 {
-    assert(GetDocOrThrow().getIDocumentDrawModelAccess().GetOrCreateDrawModel());
     return *GetDocOrThrow().getIDocumentDrawModelAccess().GetDrawModel();
 }
 
@@ -1281,8 +1280,8 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
     {
         SwDoc& rDoc = GetDocOrThrow();
         // #i52858#
-        SwDrawModel* pModel = rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        SdrPage* pPage = pModel->GetPage( 0 );
+        SwDrawModel& rModel = rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        SdrPage* pPage = rModel.GetPage( 0 );
         m_xDrawPage = new SwFmDrawPage(&rDoc, pPage);
     }
     return m_xDrawPage;
@@ -1948,7 +1947,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             // we don't need to make an SdrModel and can do nothing
             // #i52858# - method name changed
             SwDrawModel* pDrawDoc
-                = bAuto ? rDrawModelAccess.GetOrCreateDrawModel() : rDrawModelAccess.GetDrawModel();
+                = bAuto ? &rDrawModelAccess.GetOrCreateDrawModel() : rDrawModelAccess.GetDrawModel();
 
             if ( nullptr != pDrawDoc )
                 pDrawDoc->SetAutoControlFocus( bAuto );
@@ -1966,7 +1965,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             // nothing
             // #i52858# - method name changed
             SwDrawModel* pDrawDoc
-                = bMode ? rDrawModelAccess.GetDrawModel() : rDrawModelAccess.GetOrCreateDrawModel();
+                = bMode ? rDrawModelAccess.GetDrawModel() : &rDrawModelAccess.GetOrCreateDrawModel();
 
             if ( nullptr != pDrawDoc )
                 pDrawDoc->SetOpenInDesignMode( bMode );
@@ -4732,32 +4731,32 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable 
             // assure that Draw model is created, if it doesn't exist.
             case SwCreateDrawTable::Dash         :
                 if(!m_xDashTable.is())
-                    m_xDashTable = SvxUnoDashTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xDashTable = SvxUnoDashTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xDashTable;
             break;
             case SwCreateDrawTable::Gradient     :
                 if(!m_xGradientTable.is())
-                    m_xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xGradientTable = SvxUnoGradientTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xGradientTable;
             break;
             case SwCreateDrawTable::Hatch        :
                 if(!m_xHatchTable.is())
-                    m_xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xHatchTable = SvxUnoHatchTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xHatchTable;
             break;
             case SwCreateDrawTable::Bitmap       :
                 if(!m_xBitmapTable.is())
-                    m_xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xBitmapTable = SvxUnoBitmapTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xBitmapTable;
             break;
             case SwCreateDrawTable::TransGradient:
                 if(!m_xTransGradientTable.is())
-                    m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xTransGradientTable;
             break;
             case SwCreateDrawTable::Marker       :
                 if(!m_xMarkerTable.is())
-                    m_xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    m_xMarkerTable = SvxUnoMarkerTable_createInstance( &m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = m_xMarkerTable;
             break;
             case  SwCreateDrawTable::Defaults:

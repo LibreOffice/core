@@ -42,8 +42,8 @@ public:
     //IDocumentDrawModelAccess
     virtual const SwDrawModel* GetDrawModel() const override;
     virtual SwDrawModel* GetDrawModel() override;
-    virtual SwDrawModel* MakeDrawModel_() override;
-    virtual SwDrawModel* GetOrCreateDrawModel() override;
+    virtual SwDrawModel& MakeDrawModel_() override;
+    virtual SwDrawModel& GetOrCreateDrawModel() override;
     virtual SdrLayerID GetHeavenId() const override;
     virtual SdrLayerID GetHellId() const override;
     virtual SdrLayerID GetHeaderFooterHellId() const override;

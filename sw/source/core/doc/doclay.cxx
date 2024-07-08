@@ -109,7 +109,7 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
                                 bool bInsInPage )
 {
     // #i52858# - method name changed
-    SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
+    SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel().GetPage( 0 );
     if( !pPg )
     {
         auto pNewPage = getIDocumentDrawModelAccess().GetDrawModel()->AllocPage( false );

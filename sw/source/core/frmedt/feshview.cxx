@@ -2069,7 +2069,7 @@ bool SwFEShell::ImpEndCreate()
         // via the available SS be generated.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // #i52858# - method name changed
-        SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
+        SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel().GetPage( 0 );
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess().GetDrawModel();

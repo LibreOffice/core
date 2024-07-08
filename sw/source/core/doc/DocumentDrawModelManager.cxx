@@ -173,7 +173,7 @@ SwDrawModel* DocumentDrawModelManager::GetDrawModel()
     return mpDrawModel.get();
 }
 
-SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
+SwDrawModel& DocumentDrawModelManager::MakeDrawModel_()
 {
     OSL_ENSURE( !mpDrawModel, "MakeDrawModel_: Why?" );
     InitDrawModel();
@@ -190,12 +190,12 @@ SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
             m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }
-    return mpDrawModel.get();
+    return *mpDrawModel;
 }
 
-SwDrawModel* DocumentDrawModelManager::GetOrCreateDrawModel()
+SwDrawModel& DocumentDrawModelManager::GetOrCreateDrawModel()
 {
-    return GetDrawModel() ? GetDrawModel() : MakeDrawModel_();
+    return GetDrawModel() ? *GetDrawModel() : MakeDrawModel_();
 }
 
 SdrLayerID DocumentDrawModelManager::GetHeavenId() const

@@ -1373,8 +1373,8 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
                                     ? pDoc->getIDocumentDrawModelAccess().GetHeaderFooterHellId()
                                     : pDoc->getIDocumentDrawModelAccess().GetHellId()
                                              : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
-        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        pDrawModel->GetPage(0)->InsertObject( pObject );
+        SwDrawModel& rDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        rDrawModel.GetPage(0)->InsertObject( pObject );
     }
 
     return pObject;

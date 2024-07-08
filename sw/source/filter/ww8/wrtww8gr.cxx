@@ -129,7 +129,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotSto
         ErrCode nErr = ERRCODE_NONE;
         sal_Int64 nAspect = rOLENd.GetAspect();
         rtl::Reference<SdrOle2Obj> pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            *m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
+            m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
             rStorageName,
             xObjStg,
             m_rDoc.GetDocStorage(),

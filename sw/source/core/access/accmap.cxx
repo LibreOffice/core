@@ -128,7 +128,7 @@ protected:
     virtual ~SwDrawModellListener_Impl() override;
 
 public:
-    explicit SwDrawModellListener_Impl( SdrModel *pDrawModel );
+    explicit SwDrawModellListener_Impl( SdrModel& rDrawModel );
 
     // css::document::XEventBroadcaster
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
@@ -143,8 +143,8 @@ public:
 
 }
 
-SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel *pDrawModel ) :
-    mpDrawModel( pDrawModel )
+SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel& rDrawModel ) :
+    mpDrawModel( &rDrawModel )
 {
     StartListening( *mpDrawModel );
 }
