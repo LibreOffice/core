@@ -77,6 +77,8 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
+    virtual bool            isHashable() const override;
+    virtual size_t          hashCode() const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SvxMarginItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
