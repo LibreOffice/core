@@ -28,7 +28,7 @@
 
 class SVXCORE_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
-    sal_Int32   nLeft, nRight, nTop, nBottom;
+    sal_Int32   m_nLeft, m_nRight, m_nTop, m_nBottom;
 public:
     SvxGrfCrop( TypedWhichId<SvxGrfCrop>, SfxItemType eType = SfxItemType::SvxGrfCropType );
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
@@ -54,15 +54,15 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
-    void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }
-    void SetRight( sal_Int32 nVal )     { nRight = nVal; }
-    void SetTop( sal_Int32 nVal )       { nTop = nVal; }
-    void SetBottom( sal_Int32 nVal )    { nBottom = nVal; }
+    void SetLeft( sal_Int32 nVal )      { m_nLeft = nVal; }
+    void SetRight( sal_Int32 nVal )     { m_nRight = nVal; }
+    void SetTop( sal_Int32 nVal )       { m_nTop = nVal; }
+    void SetBottom( sal_Int32 nVal )    { m_nBottom = nVal; }
 
-    sal_Int32 GetLeft() const           { return nLeft; }
-    sal_Int32 GetRight() const          { return nRight; }
-    sal_Int32 GetTop() const            { return nTop; }
-    sal_Int32 GetBottom() const         { return nBottom; }
+    sal_Int32 GetLeft() const           { return m_nLeft; }
+    sal_Int32 GetRight() const          { return m_nRight; }
+    sal_Int32 GetTop() const            { return m_nTop; }
+    sal_Int32 GetBottom() const         { return m_nBottom; }
 };
 
 #endif  // INCLUDED_SVX_GRFCROP_HXX
