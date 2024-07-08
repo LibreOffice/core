@@ -14,6 +14,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+
 #include <docsh.hxx>
 #include <formatcontentcontrol.hxx>
 #include <wrtsh.hxx>
@@ -597,6 +599,48 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
     // - XPath '/w:settings/w:endnotePr/w:pos' number of nodes is incorrect
     // i.e. the default position was used: document end.
     CPPUNIT_ASSERT_EQUAL(u"sectEnd"_ustr, aPos);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
+{
+    // Given a document with a dropdown content control, one item is empty, which can't be saved to
+    // a valid DOCX:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u"R"_ustr)),
+            },
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, uno::Any(u""_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, uno::Any(u""_ustr)),
+            },
+        };
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When saving to DOCX:
+    save(u"Office Open XML Text"_ustr);
+
+    // Then make sure we only emit 1 list item:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. we emitted an empty list item, so the result can't be opened in Word.
+    assertXPath(pXmlDoc, "//w:dropDownList/w:listItem"_ostr, 1);
 }
 }
 
