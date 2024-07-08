@@ -43,6 +43,8 @@ public:
     SvxGrfCrop & operator =(SvxGrfCrop &&) = delete; // due to SfxPoolItem
 
     // "pure virtual methods" from SfxPoolItem
+    virtual bool                isHashable() const override;
+    virtual size_t              hashCode() const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -54,10 +56,10 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal,
                            sal_uInt8 nMemberId ) override;
 
-    void SetLeft( sal_Int32 nVal )      { m_nLeft = nVal; }
-    void SetRight( sal_Int32 nVal )     { m_nRight = nVal; }
-    void SetTop( sal_Int32 nVal )       { m_nTop = nVal; }
-    void SetBottom( sal_Int32 nVal )    { m_nBottom = nVal; }
+    void SetLeft( sal_Int32 nVal )      { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nLeft = nVal; }
+    void SetRight( sal_Int32 nVal )     { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nRight = nVal; }
+    void SetTop( sal_Int32 nVal )       { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nTop = nVal; }
+    void SetBottom( sal_Int32 nVal )    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nBottom = nVal; }
 
     sal_Int32 GetLeft() const           { return m_nLeft; }
     sal_Int32 GetRight() const          { return m_nRight; }
