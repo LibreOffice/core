@@ -590,7 +590,6 @@ private:
     bool NxtWrdForDelete();
     bool PrvWrdForDelete();
     bool FwdSentence_();
-    bool EndSentence_();
     bool BwdSentence_();
     SW_DLLPUBLIC bool FwdPara_();
     bool BwdPara_();

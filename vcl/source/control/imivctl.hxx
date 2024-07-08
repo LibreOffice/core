@@ -169,7 +169,6 @@ class SvxIconChoiceCtrl_Impl
                             rPosPixel -= pView->GetMapMode().GetOrigin();
                         }
     void                InitScrollBarBox();
-    void                ToggleSelection( SvxIconChoiceCtrlEntry* );
     void                DeselectAllBut( SvxIconChoiceCtrlEntry const * );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
 
@@ -290,11 +289,6 @@ public:
     Size                GetMinGrid() const;
     void                Scroll( tools::Long nDeltaX, tools::Long nDeltaY );
     const Size&         GetItemSize( IcnViewFieldType ) const;
-
-    static bool         IsOver(
-                            const std::vector<tools::Rectangle>& rRects,
-                            const tools::Rectangle& rEntryBoundRect
-                        );
 
     void               MakeVisible(
                             const tools::Rectangle& rDocPos,

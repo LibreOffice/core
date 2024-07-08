@@ -1588,13 +1588,6 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     VisRectChanged();
 }
 
-void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
-{
-    bool bSel;
-    bSel = !pEntry->IsSelected();
-    SelectEntry( pEntry, bSel, true );
-}
-
 void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThisEntryNot )
 {
     // TODO: work through z-order list, if necessary!
@@ -1768,16 +1761,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
     return tools::Rectangle(
         aBoundRect.Left(), aBoundRect.Top() - 1, aBoundRect.Right() - 1,
         aTextRect.Bottom());
-}
-
-bool SvxIconChoiceCtrl_Impl::IsOver(const std::vector<tools::Rectangle>& rRects, const tools::Rectangle& rBoundRect)
-{
-    for (const tools::Rectangle& rRect : rRects)
-    {
-        if( rBoundRect.Overlaps( rRect ))
-            return true;
-    }
-    return false;
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
