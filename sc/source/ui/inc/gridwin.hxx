@@ -389,7 +389,7 @@ public:
     void GetCellSelection(std::vector<tools::Rectangle>& rLogicRects);
 
     bool GetEditUrl(const Point& rPos, OUString* pName = nullptr, OUString* pUrl = nullptr,
-                    OUString* pTarget = nullptr);
+                    OUString* pTarget = nullptr, SCCOL* pnRow = nullptr);
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
