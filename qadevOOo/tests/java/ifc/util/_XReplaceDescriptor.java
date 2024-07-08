@@ -35,7 +35,7 @@ import com.sun.star.util.XReplaceDescriptor;
 public class _XReplaceDescriptor extends MultiMethodTest {
 
     // oObj filled by MultiMethodTest
-    public XReplaceDescriptor oObj = null;
+    private XReplaceDescriptor oObj = null;
 
     /**
      * Test calls the method. <p>
