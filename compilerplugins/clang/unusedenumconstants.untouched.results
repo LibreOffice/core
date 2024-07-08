@@ -4,16 +4,96 @@ canvas/inc/rendering/icolorbuffer.hxx:40
     enum canvas::IColorBuffer::Format X8R8G8B8
 canvas/inc/rendering/irendermodule.hxx:55
     enum canvas::IRenderModule::PrimitiveType Unknown
+chart2/source/model/main/DataPointProperties.hxx:37
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_STYLE
+chart2/source/model/main/DataPointProperties.hxx:38
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_COLOR
+chart2/source/model/main/DataPointProperties.hxx:39
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_BACKGROUND
+chart2/source/model/main/DataPointProperties.hxx:40
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_FILL_HATCH_NAME
+chart2/source/model/main/DataPointProperties.hxx:43
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_COLOR
+chart2/source/model/main/DataPointProperties.hxx:44
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TRANSPARENCY
+chart2/source/model/main/DataPointProperties.hxx:47
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_STYLE
+chart2/source/model/main/DataPointProperties.hxx:48
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME
+chart2/source/model/main/DataPointProperties.hxx:49
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GRADIENT_NAME
+chart2/source/model/main/DataPointProperties.hxx:50
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GRADIENT_STEPCOUNT
+chart2/source/model/main/DataPointProperties.hxx:51
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_HATCH_NAME
+chart2/source/model/main/DataPointProperties.hxx:52
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_BITMAP_NAME
+chart2/source/model/main/DataPointProperties.hxx:53
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_BACKGROUND
+chart2/source/model/main/DataPointProperties.hxx:57
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_STYLE
+chart2/source/model/main/DataPointProperties.hxx:58
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_WIDTH
+chart2/source/model/main/DataPointProperties.hxx:59
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_DASH_NAME
+chart2/source/model/main/DataPointProperties.hxx:60
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_TRANSPARENCY
+chart2/source/model/main/DataPointProperties.hxx:63
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_SYMBOL_PROP
+chart2/source/model/main/DataPointProperties.hxx:64
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_OFFSET
+chart2/source/model/main/DataPointProperties.hxx:65
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_GEOMETRY3D
+chart2/source/model/main/DataPointProperties.hxx:66
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_NUMBER_FORMAT
+chart2/source/model/main/DataPointProperties.hxx:67
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE
+chart2/source/model/main/DataPointProperties.hxx:68
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT
+chart2/source/model/main/DataPointProperties.hxx:69
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_PLACEMENT
+chart2/source/model/main/DataPointProperties.hxx:70
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE
+chart2/source/model/main/DataPointProperties.hxx:71
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TEXT_ROTATION
+chart2/source/model/main/DataPointProperties.hxx:74
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_ERROR_BAR_X
+chart2/source/model/main/DataPointProperties.hxx:75
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_ERROR_BAR_Y
+chart2/source/model/main/DataPointProperties.hxx:76
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_SHOW_ERROR_BOX
+chart2/source/model/main/DataPointProperties.hxx:77
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_PERCENT_DIAGONAL
+chart2/source/model/main/DataPointProperties.hxx:80
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL
+chart2/source/model/main/DataPointProperties.hxx:81
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_SEPARATOR
+chart2/source/model/main/DataPointProperties.hxx:82
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_TEXT_WORD_WRAP
+chart2/source/model/main/DataPointProperties.hxx:83
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_STYLE
+chart2/source/model/main/DataPointProperties.hxx:84
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_COLOR
+chart2/source/model/main/DataPointProperties.hxx:85
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_WIDTH
+chart2/source/model/main/DataPointProperties.hxx:86
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_DASH
+chart2/source/model/main/DataPointProperties.hxx:87
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_DASH_NAME
+chart2/source/model/main/DataPointProperties.hxx:88
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_BORDER_TRANS
+chart2/source/model/main/DataPointProperties.hxx:89
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_CUSTOM_LABEL_FIELDS
+chart2/source/model/main/DataPointProperties.hxx:90
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_CUSTOM_POS
+chart2/source/model/main/DataPointProperties.hxx:91
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_LABEL_CUSTOM_SIZE
 chart2/source/model/main/Diagram.cxx:99
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEHBORDER
 chart2/source/model/main/Diagram.cxx:101
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEVBORDER
 chart2/source/model/main/Diagram.cxx:102
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Diagram.cxx:83:1) PROP_DIAGRAM_DATATABLEOUTLINE
-connectivity/source/inc/propertyids.hxx:87
-    enum PropertyId PROPERTY_ID_INVALID_INDEX
-connectivity/source/inc/propertyids.hxx:93
-    enum PropertyId PROPERTY_ID_IM001
 cui/source/options/optfltr.cxx:37
     enum MSFltrPg2_CheckBoxEntries InvalidCBEntry
 drawinglayer/source/tools/emfphelperdata.cxx:67
@@ -134,20 +214,6 @@ framework/inc/xml/imagesdocumenthandler.hxx:51
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
 framework/source/fwe/classes/actiontriggerseparatorpropertyset.cxx:44
     enum (anonymous namespace)::EPROPERTIES PROPERTYCOUNT
-include/basic/basmgr.hxx:46
-    enum BasicErrorReason OPENLIBSTORAGE
-include/basic/basmgr.hxx:47
-    enum BasicErrorReason OPENMGRSTREAM
-include/basic/basmgr.hxx:48
-    enum BasicErrorReason OPENLIBSTREAM
-include/basic/basmgr.hxx:49
-    enum BasicErrorReason LIBNOTFOUND
-include/basic/basmgr.hxx:50
-    enum BasicErrorReason STORAGENOTFOUND
-include/basic/basmgr.hxx:51
-    enum BasicErrorReason BASICLOADERROR
-include/basic/basmgr.hxx:52
-    enum BasicErrorReason STDLIB
 include/connectivity/dbtools.hxx:829
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:26
@@ -158,7 +224,7 @@ include/desktop/exithelper.h:28
     int EXITHELPER_FATAL_ERROR
 include/docmodel/color/Transformation.hxx:39
     enum model::TransformationType SatOff
-include/editeng/borderline.hxx:134
+include/editeng/borderline.hxx:135
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
 include/filter/msfilter/ww8fields.hxx:28
     enum ww::eField ePOSSIBLEBOOKMARK
@@ -184,7 +250,7 @@ include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
 include/LibreOfficeKit/LibreOfficeKitEnums.h:56
     LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
-include/LibreOfficeKit/LibreOfficeKitEnums.h:1072
+include/LibreOfficeKit/LibreOfficeKitEnums.h:1089
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
@@ -192,6 +258,14 @@ include/oox/ole/axfontdata.hxx:40
     enum AxFontFlags AutoColor
 include/svl/inettype.hxx:173
     enum INetContentType CONTENT_TYPE_IMAGE_WEBP
+include/svl/poolitem.hxx:109
+    enum SfxItemType SfxPoolItemType
+include/svl/poolitem.hxx:156
+    enum SfxItemType SdOptionsSnapItemType
+include/svl/poolitem.hxx:253
+    enum SfxItemType SfxEnumItemInterface
+include/svl/poolitem.hxx:259
+    enum SfxItemType SfxHyphenRegionItemType
 include/svtools/colorcfg.hxx:47
     enum svtools::ColorConfigEntry WRITERDIRECTCURSOR
 include/svx/diagram/datamodel.hxx:41
@@ -210,8 +284,6 @@ include/unotools/eventcfg.hxx:31
     enum GlobalEventId CLOSEAPP
 include/unotools/extendedsecurityoptions.hxx:28
     enum SvtExtendedSecurityOptions::OpenHyperlinkMode OPEN_WITHSECURITYCHECK
-include/unotools/itemholderbase.hxx:28
-    enum EItem AccessibilityOptions
 include/unotools/localedatawrapper.hxx:60
     enum LongDateOrder Invalid
 include/unotools/sharedunocomponent.hxx:150
@@ -228,44 +300,12 @@ include/unotools/sharedunocomponent.hxx:150
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:150
     enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface>::AssignmentMode NoTakeOwnership
-include/vcl/pdf/PDFAnnotationMarker.hxx:59
+include/vcl/pdf/PDFAnnotationMarker.hxx:71
     enum vcl::pdf::PDFTextMarkerType Underline
-include/vcl/pdf/PDFAnnotationMarker.hxx:60
+include/vcl/pdf/PDFAnnotationMarker.hxx:72
     enum vcl::pdf::PDFTextMarkerType Squiggly
-include/vcl/pdf/PDFAnnotationMarker.hxx:61
+include/vcl/pdf/PDFAnnotationMarker.hxx:73
     enum vcl::pdf::PDFTextMarkerType StrikeOut
-include/vcl/pdf/PDFAnnotationSubType.hxx:19
-    enum vcl::pdf::PDFAnnotationSubType Link
-include/vcl/pdf/PDFAnnotationSubType.hxx:25
-    enum vcl::pdf::PDFAnnotationSubType Polyline
-include/vcl/pdf/PDFAnnotationSubType.hxx:27
-    enum vcl::pdf::PDFAnnotationSubType Underline
-include/vcl/pdf/PDFAnnotationSubType.hxx:28
-    enum vcl::pdf::PDFAnnotationSubType Squiggly
-include/vcl/pdf/PDFAnnotationSubType.hxx:29
-    enum vcl::pdf::PDFAnnotationSubType Strikeout
-include/vcl/pdf/PDFAnnotationSubType.hxx:31
-    enum vcl::pdf::PDFAnnotationSubType Caret
-include/vcl/pdf/PDFAnnotationSubType.hxx:34
-    enum vcl::pdf::PDFAnnotationSubType FileAttachment
-include/vcl/pdf/PDFAnnotationSubType.hxx:35
-    enum vcl::pdf::PDFAnnotationSubType Sound
-include/vcl/pdf/PDFAnnotationSubType.hxx:36
-    enum vcl::pdf::PDFAnnotationSubType Movie
-include/vcl/pdf/PDFAnnotationSubType.hxx:38
-    enum vcl::pdf::PDFAnnotationSubType Screen
-include/vcl/pdf/PDFAnnotationSubType.hxx:39
-    enum vcl::pdf::PDFAnnotationSubType Printermark
-include/vcl/pdf/PDFAnnotationSubType.hxx:40
-    enum vcl::pdf::PDFAnnotationSubType Trapnet
-include/vcl/pdf/PDFAnnotationSubType.hxx:41
-    enum vcl::pdf::PDFAnnotationSubType Watermark
-include/vcl/pdf/PDFAnnotationSubType.hxx:42
-    enum vcl::pdf::PDFAnnotationSubType Threed
-include/vcl/pdf/PDFAnnotationSubType.hxx:43
-    enum vcl::pdf::PDFAnnotationSubType Richmedia
-include/vcl/pdf/PDFAnnotationSubType.hxx:44
-    enum vcl::pdf::PDFAnnotationSubType XFAWidget
 include/vcl/toolkit/svtabbx.hxx:38
     enum SvTabJustify AdjustRight
 include/vcl/toolkit/svtabbx.hxx:39
@@ -282,14 +322,14 @@ libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:71
     enum (unnamed at /home/noel/libo-plugin/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:310
     enum (unnamed at /home/noel/libo-plugin/libreofficekit/source/gtk/lokdocview.cxx:308:1) PROP_0
-lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:118
+lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:123
     enum (anonymous namespace)::HTTP_METHOD HTTP_GET
 reportdesign/source/filter/xml/xmlEnums.hxx:42
     enum rptxml::XMLReportToken XML_TOK_REPORT_ELEMENT
 sc/qa/unit/ucalc_copypaste.cxx:43
     enum TestCopyPaste::CalcMode NoCalc
-sc/source/filter/excel/xiescher.cxx:481
-    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:481:17) eCreateFromOffice
+sc/source/filter/excel/xiescher.cxx:480
+    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:480:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:23
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:142
@@ -354,21 +394,21 @@ sw/source/ui/fldui/fldref.cxx:58
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
 sw/source/ui/fldui/fldref.cxx:59
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
-sw/source/uibase/utlui/content.cxx:1062
-    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_LEVEL
-sw/source/uibase/utlui/content.cxx:1063
-    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DISPLAY
-sw/source/uibase/utlui/content.cxx:1068
-    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_EDIT_ENTRY
-sw/source/uibase/utlui/content.cxx:1069
-    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DELETE_ENTRY
 sw/source/uibase/utlui/content.cxx:1070
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_LEVEL
+sw/source/uibase/utlui/content.cxx:1071
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DISPLAY
+sw/source/uibase/utlui/content.cxx:1076
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_EDIT_ENTRY
+sw/source/uibase/utlui/content.cxx:1077
+    enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_DELETE_ENTRY
+sw/source/uibase/utlui/content.cxx:1078
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
-sw/source/uibase/utlui/content.cxx:1072
+sw/source/uibase/utlui/content.cxx:1080
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_DEFAULT
-sw/source/uibase/utlui/content.cxx:1073
+sw/source/uibase/utlui/content.cxx:1081
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_FOCUS
-sw/source/uibase/utlui/content.cxx:1074
+sw/source/uibase/utlui/content.cxx:1082
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING_OFF
 sw/source/uibase/utlui/glbltree.cxx:93
     enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE
@@ -394,6 +434,40 @@ sw/source/uibase/utlui/glbltree.cxx:104
     enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
 sw/source/uibase/utlui/glbltree.cxx:106
     enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_EDIT_LINK
+sw/source/writerfilter/dmapper/PropertyMap.hxx:230
+    enum writerfilter::dmapper::PageBreakType Both
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:30
+    enum writerfilter::ooxml::ResourceType NoResource
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:31
+    enum writerfilter::ooxml::ResourceType Table
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:32
+    enum writerfilter::ooxml::ResourceType Stream
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:35
+    enum writerfilter::ooxml::ResourceType Properties
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:39
+    enum writerfilter::ooxml::ResourceType Shape
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:41
+    enum writerfilter::ooxml::ResourceType Value
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:42
+    enum writerfilter::ooxml::ResourceType XNote
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:43
+    enum writerfilter::ooxml::ResourceType TextTableCell
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:44
+    enum writerfilter::ooxml::ResourceType TextTableRow
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:45
+    enum writerfilter::ooxml::ResourceType TextTable
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:46
+    enum writerfilter::ooxml::ResourceType PropertyTable
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:47
+    enum writerfilter::ooxml::ResourceType Math
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:48
+    enum writerfilter::ooxml::ResourceType Any
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:53
+    enum writerfilter::ooxml::ResourceType CommentEx
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:54
+    enum writerfilter::ooxml::ResourceType Theme
+sw/source/writerfilter/ooxml/OOXMLFastContextHandler.hxx:202
+    enum writerfilter::ooxml::OOXMLFastContextHandler::eMathParaJc INLINE
 ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:56
     enum (anonymous namespace)::WebDAVNamespace WebDAVNamespace_last
 ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:109
@@ -456,49 +530,15 @@ vcl/inc/salptype.hxx:44
     enum SalPrinterError General
 vcl/inc/unx/saldisp.hxx:60
     srv_vendor_t vendor_none
-vcl/source/app/svapp.cxx:1178
-    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1178:1) hwAll
+vcl/source/app/svapp.cxx:1168
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1168:1) hwAll
 vcl/source/filter/ipcd/ipcd.cxx:41
     enum (anonymous namespace)::PCDResolution PCDRES_4BASE
 vcl/source/filter/ipcd/ipcd.cxx:42
     enum (anonymous namespace)::PCDResolution PCDRES_16BASE
 vcl/source/fontsubset/ttcr.hxx:48
     enum vcl::TTCRErrCodes TTCR_UNKNOWN
-vcl/unx/gtk3/gtkinst.cxx:7890
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7888:1) PROP_0
-vcl/unx/gtk3/gtkinst.cxx:7895
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7888:1) PROP_SHADOW_TYPE
-writerfilter/source/dmapper/PropertyMap.hxx:227
-    enum writerfilter::dmapper::PageBreakType Both
-writerfilter/source/ooxml/OOXMLFactory.hxx:30
-    enum writerfilter::ooxml::ResourceType NoResource
-writerfilter/source/ooxml/OOXMLFactory.hxx:31
-    enum writerfilter::ooxml::ResourceType Table
-writerfilter/source/ooxml/OOXMLFactory.hxx:32
-    enum writerfilter::ooxml::ResourceType Stream
-writerfilter/source/ooxml/OOXMLFactory.hxx:35
-    enum writerfilter::ooxml::ResourceType Properties
-writerfilter/source/ooxml/OOXMLFactory.hxx:39
-    enum writerfilter::ooxml::ResourceType Shape
-writerfilter/source/ooxml/OOXMLFactory.hxx:41
-    enum writerfilter::ooxml::ResourceType Value
-writerfilter/source/ooxml/OOXMLFactory.hxx:42
-    enum writerfilter::ooxml::ResourceType XNote
-writerfilter/source/ooxml/OOXMLFactory.hxx:43
-    enum writerfilter::ooxml::ResourceType TextTableCell
-writerfilter/source/ooxml/OOXMLFactory.hxx:44
-    enum writerfilter::ooxml::ResourceType TextTableRow
-writerfilter/source/ooxml/OOXMLFactory.hxx:45
-    enum writerfilter::ooxml::ResourceType TextTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:46
-    enum writerfilter::ooxml::ResourceType PropertyTable
-writerfilter/source/ooxml/OOXMLFactory.hxx:47
-    enum writerfilter::ooxml::ResourceType Math
-writerfilter/source/ooxml/OOXMLFactory.hxx:48
-    enum writerfilter::ooxml::ResourceType Any
-writerfilter/source/ooxml/OOXMLFactory.hxx:53
-    enum writerfilter::ooxml::ResourceType CommentEx
-writerfilter/source/ooxml/OOXMLFactory.hxx:54
-    enum writerfilter::ooxml::ResourceType Theme
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:202
-    enum writerfilter::ooxml::OOXMLFastContextHandler::eMathParaJc INLINE
+vcl/unx/gtk3/gtkinst.cxx:7883
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7881:1) PROP_0
+vcl/unx/gtk3/gtkinst.cxx:7888
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/gtkinst.cxx:7881:1) PROP_SHADOW_TYPE

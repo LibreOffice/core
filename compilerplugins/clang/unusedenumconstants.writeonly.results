@@ -15,9 +15,9 @@ basctl/source/inc/dlged.hxx:99
 basctl/source/inc/layout.hxx:82
     enum basctl::Layout::SplittedSide::Side Bottom
 basctl/source/inc/sbxitem.hxx:30
-    enum basctl::ItemType TYPE_SHELL
+    enum basctl::SbxItemType SBX_TYPE_SHELL
 basctl/source/inc/sbxitem.hxx:31
-    enum basctl::ItemType TYPE_LIBRARY
+    enum basctl::SbxItemType SBX_TYPE_LIBRARY
 basctl/source/inc/scriptdocument.hxx:46
     enum basctl::LibraryLocation LIBRARY_LOCATION_UNKNOWN
 basegfx/source/range/b2drangeclipper.cxx:149
@@ -48,19 +48,19 @@ basic/source/inc/namecont.hxx:213
     enum basic::SfxLibraryContainer::InitMode LIBRARY_INIT_FILE
 basic/source/inc/namecont.hxx:215
     enum basic::SfxLibraryContainer::InitMode OLD_BASIC_STORAGE
-basic/source/runtime/methods.cxx:4250
+basic/source/runtime/methods.cxx:4238
     enum BasicResponse Ok
-basic/source/runtime/methods.cxx:4251
+basic/source/runtime/methods.cxx:4239
     enum BasicResponse Cancel
-basic/source/runtime/methods.cxx:4252
+basic/source/runtime/methods.cxx:4240
     enum BasicResponse Abort
-basic/source/runtime/methods.cxx:4253
+basic/source/runtime/methods.cxx:4241
     enum BasicResponse Retry
-basic/source/runtime/methods.cxx:4254
+basic/source/runtime/methods.cxx:4242
     enum BasicResponse Ignore
-basic/source/runtime/methods.cxx:4255
+basic/source/runtime/methods.cxx:4243
     enum BasicResponse Yes
-basic/source/runtime/methods.cxx:4256
+basic/source/runtime/methods.cxx:4244
     enum BasicResponse No
 binaryurp/source/cache.hxx:35
     enum binaryurp::cache::(unnamed at /home/noel/libo-plugin/binaryurp/qa/../source/cache.hxx:35:1) size
@@ -298,16 +298,16 @@ chart2/source/controller/chartapiwrapper/LegendWrapper.cxx:207
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/LegendWrapper.cxx:205:1) PROP_LEGEND_ALIGNMENT
 chart2/source/controller/chartapiwrapper/LegendWrapper.cxx:208
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/LegendWrapper.cxx:205:1) PROP_LEGEND_EXPANSION
-chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:186
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:184:1) PROP_TITLE_STRING
-chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:187
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:184:1) PROP_TITLE_FORMATTED_STRINGS
-chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:188
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:184:1) PROP_TITLE_VISIBLE
-chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:189
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:184:1) PROP_TITLE_TEXT_ROTATION
-chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:190
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:184:1) PROP_TITLE_TEXT_STACKED
+chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:174
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:172:1) PROP_TITLE_STRING
+chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:175
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:172:1) PROP_TITLE_FORMATTED_STRINGS
+chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:176
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:172:1) PROP_TITLE_VISIBLE
+chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:177
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:172:1) PROP_TITLE_TEXT_ROTATION
+chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:178
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/TitleWrapper.cxx:172:1) PROP_TITLE_TEXT_STACKED
 chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.cxx:102
     enum chart::wrapper::(anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.cxx:100:1) PROP_CHART_AUTOMATIC_POSITION
 chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.cxx:53
@@ -472,8 +472,8 @@ chart2/source/inc/CharacterProperties.hxx:115
     enum chart::CharacterProperties::(unnamed at /home/noel/libo-plugin/chart2/source/inc/CharacterProperties.hxx:41:5) PROP_PARA_IS_CHARACTER_DISTANCE
 chart2/source/inc/CharacterProperties.hxx:117
     enum chart::CharacterProperties::(unnamed at /home/noel/libo-plugin/chart2/source/inc/CharacterProperties.hxx:41:5) PROP_WRITING_MODE
-chart2/source/inc/ChartResourceGroups.hxx:38
-    enum chart::(unnamed at /home/noel/libo-plugin/chart2/source/inc/ChartResourceGroups.hxx:35:1) POS_3DSCHEME_REALISTIC
+chart2/source/inc/ChartResourceGroups.hxx:37
+    enum chart::(unnamed at /home/noel/libo-plugin/chart2/source/inc/ChartResourceGroups.hxx:34:1) POS_3DSCHEME_REALISTIC
 chart2/source/inc/ChartType.hxx:43
     enum chart::(unnamed at /home/noel/libo-plugin/chart2/source/inc/ChartType.hxx:41:1) PROP_PIECHARTTYPE_USE_RINGS
 chart2/source/inc/ChartType.hxx:44
@@ -724,6 +724,8 @@ chart2/source/model/main/DataPointProperties.hxx:53
     enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_FILL_BACKGROUND
 chart2/source/model/main/DataPointProperties.hxx:56
     enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_COLOR
+chart2/source/model/main/DataPointProperties.hxx:56
+    enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/view/charttypes/../../model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_COLOR
 chart2/source/model/main/DataPointProperties.hxx:57
     enum chart::DataPointProperties::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/DataPointProperties.hxx:35:5) PROP_DATAPOINT_BORDER_STYLE
 chart2/source/model/main/DataPointProperties.hxx:58
@@ -828,30 +830,30 @@ chart2/source/model/main/Legend.cxx:57
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Legend.cxx:50:1) PROP_LEGEND_REL_POS
 chart2/source/model/main/Legend.cxx:58
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Legend.cxx:50:1) PROP_LEGEND_REL_SIZE
-chart2/source/model/main/Title.cxx:50
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_ADJUST
 chart2/source/model/main/Title.cxx:51
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_LAST_LINE_ADJUST
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_ADJUST
 chart2/source/model/main/Title.cxx:52
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_LEFT_MARGIN
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_LAST_LINE_ADJUST
 chart2/source/model/main/Title.cxx:53
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_RIGHT_MARGIN
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_LEFT_MARGIN
 chart2/source/model/main/Title.cxx:54
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_TOP_MARGIN
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_RIGHT_MARGIN
 chart2/source/model/main/Title.cxx:55
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_BOTTOM_MARGIN
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_TOP_MARGIN
 chart2/source/model/main/Title.cxx:56
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_PARA_IS_HYPHENATION
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_BOTTOM_MARGIN
 chart2/source/model/main/Title.cxx:57
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_VISIBLE
-chart2/source/model/main/Title.cxx:59
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_TEXT_ROTATION
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_PARA_IS_HYPHENATION
+chart2/source/model/main/Title.cxx:58
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_VISIBLE
 chart2/source/model/main/Title.cxx:60
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_TEXT_STACKED
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_TEXT_ROTATION
 chart2/source/model/main/Title.cxx:61
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_REL_POS
-chart2/source/model/main/Title.cxx:63
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:48:1) PROP_TITLE_REF_PAGE_SIZE
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_TEXT_STACKED
+chart2/source/model/main/Title.cxx:62
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_REL_POS
+chart2/source/model/main/Title.cxx:64
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/main/Title.cxx:49:1) PROP_TITLE_REF_PAGE_SIZE
 chart2/source/model/template/AreaChartTypeTemplate.cxx:44
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/AreaChartTypeTemplate.cxx:42:1) PROP_AREA_TEMPLATE_DIMENSION
 chart2/source/model/template/BarChartTypeTemplate.cxx:45
@@ -868,8 +870,8 @@ chart2/source/model/template/ColumnChartType.cxx:37
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ColumnChartType.cxx:35:1) PROP_BARCHARTTYPE_OVERLAP_SEQUENCE
 chart2/source/model/template/ColumnChartType.cxx:38
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ColumnChartType.cxx:35:1) PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE
-chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:51
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:49:1) PROP_COL_LINE_NUMBER_OF_LINES
+chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:50
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:48:1) PROP_COL_LINE_NUMBER_OF_LINES
 chart2/source/model/template/LineChartType.cxx:41
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/LineChartType.cxx:39:1) PROP_LINECHARTTYPE_CURVE_STYLE
 chart2/source/model/template/LineChartType.cxx:42
@@ -904,18 +906,18 @@ chart2/source/model/template/ScatterChartTypeTemplate.cxx:52
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ScatterChartTypeTemplate.cxx:49:1) PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION
 chart2/source/model/template/ScatterChartTypeTemplate.cxx:53
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/ScatterChartTypeTemplate.cxx:49:1) PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER
+chart2/source/model/template/StockChartTypeTemplate.cxx:50
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:48:1) PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME
 chart2/source/model/template/StockChartTypeTemplate.cxx:51
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:49:1) PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:48:1) PROP_STOCKCHARTTYPE_TEMPLATE_OPEN
 chart2/source/model/template/StockChartTypeTemplate.cxx:52
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:49:1) PROP_STOCKCHARTTYPE_TEMPLATE_OPEN
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:48:1) PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH
 chart2/source/model/template/StockChartTypeTemplate.cxx:53
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:49:1) PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH
-chart2/source/model/template/StockChartTypeTemplate.cxx:54
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:49:1) PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/model/template/StockChartTypeTemplate.cxx:48:1) PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE
+chart2/source/tools/CachedDataSequence.cxx:45
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/CachedDataSequence.cxx:42:1) PROP_NUMBERFORMAT_KEY
 chart2/source/tools/CachedDataSequence.cxx:46
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/CachedDataSequence.cxx:43:1) PROP_NUMBERFORMAT_KEY
-chart2/source/tools/CachedDataSequence.cxx:47
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/CachedDataSequence.cxx:43:1) PROP_PROPOSED_ROLE
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/CachedDataSequence.cxx:42:1) PROP_PROPOSED_ROLE
 chart2/source/tools/RegressionCurveModel.cxx:41
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/RegressionCurveModel.cxx:39:1) PROPERTY_DEGREE
 chart2/source/tools/RegressionCurveModel.cxx:42
@@ -948,12 +950,12 @@ chart2/source/tools/RegressionEquation.cxx:58
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/RegressionEquation.cxx:50:1) PROP_EQUATION_REL_POS
 chart2/source/tools/RegressionEquation.cxx:59
     enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/RegressionEquation.cxx:50:1) PROP_EQUATION_NUMBER_FORMAT
+chart2/source/tools/UncachedDataSequence.cxx:46
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:44:1) PROP_NUMBERFORMAT_KEY
 chart2/source/tools/UncachedDataSequence.cxx:47
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:45:1) PROP_NUMBERFORMAT_KEY
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:44:1) PROP_PROPOSED_ROLE
 chart2/source/tools/UncachedDataSequence.cxx:48
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:45:1) PROP_PROPOSED_ROLE
-chart2/source/tools/UncachedDataSequence.cxx:49
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:45:1) PROP_XML_RANGE
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/chart2/source/tools/UncachedDataSequence.cxx:44:1) PROP_XML_RANGE
 chart2/source/view/axes/VAxisProperties.hxx:51
     enum chart::AxisLabelStaggering SideBySide
 chart2/source/view/inc/LegendEntryProvider.hxx:45
@@ -986,8 +988,8 @@ comphelper/source/misc/syntaxhighlight.cxx:42
     enum (anonymous namespace)::CharFlags Space
 comphelper/source/misc/syntaxhighlight.cxx:43
     enum (anonymous namespace)::CharFlags EOL
-configmgr/source/access.hxx:455
-    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:454:5) IS_ANY
+configmgr/source/access.hxx:456
+    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:455:5) IS_ANY
 configmgr/source/partial.hxx:33
     enum configmgr::Partial::Containment CONTAINS_SUBNODES
 connectivity/source/drivers/evoab2/EApi.h:74
@@ -1062,45 +1064,45 @@ connectivity/source/inc/propertyids.hxx:83
     enum PropertyId PROPERTY_ID_DBASEPRECISIONCHANGED
 connectivity/source/inc/propertyids.hxx:84
     enum PropertyId PROPERTY_ID_ISCURRENCY
-connectivity/source/inc/propertyids.hxx:88
+connectivity/source/inc/propertyids.hxx:87
     enum PropertyId PROPERTY_ID_HY010
-connectivity/source/inc/propertyids.hxx:89
+connectivity/source/inc/propertyids.hxx:88
     enum PropertyId PROPERTY_ID_LABEL
-connectivity/source/inc/propertyids.hxx:90
+connectivity/source/inc/propertyids.hxx:89
     enum PropertyId PROPERTY_ID_DELIMITER
-connectivity/source/inc/propertyids.hxx:91
+connectivity/source/inc/propertyids.hxx:90
     enum PropertyId PROPERTY_ID_FORMATKEY
-connectivity/source/inc/propertyids.hxx:92
+connectivity/source/inc/propertyids.hxx:91
     enum PropertyId PROPERTY_ID_LOCALE
-connectivity/source/inc/propertyids.hxx:95
+connectivity/source/inc/propertyids.hxx:93
     enum PropertyId PROPERTY_ID_AUTOINCREMENTCREATION
-connectivity/source/inc/propertyids.hxx:97
+connectivity/source/inc/propertyids.hxx:95
     enum PropertyId PROPERTY_ID_PRIVILEGES
-connectivity/source/inc/propertyids.hxx:98
+connectivity/source/inc/propertyids.hxx:96
     enum PropertyId PROPERTY_ID_HAVINGCLAUSE
-connectivity/source/inc/propertyids.hxx:100
+connectivity/source/inc/propertyids.hxx:98
     enum PropertyId PROPERTY_ID_ISSIGNED
-connectivity/source/inc/propertyids.hxx:101
+connectivity/source/inc/propertyids.hxx:99
     enum PropertyId PROPERTY_ID_AGGREGATEFUNCTION
-connectivity/source/inc/propertyids.hxx:102
+connectivity/source/inc/propertyids.hxx:100
     enum PropertyId PROPERTY_ID_ISSEARCHABLE
-connectivity/source/inc/propertyids.hxx:104
+connectivity/source/inc/propertyids.hxx:102
     enum PropertyId PROPERTY_ID_APPLYFILTER
-connectivity/source/inc/propertyids.hxx:105
+connectivity/source/inc/propertyids.hxx:103
     enum PropertyId PROPERTY_ID_FILTER
-connectivity/source/inc/propertyids.hxx:106
+connectivity/source/inc/propertyids.hxx:104
     enum PropertyId PROPERTY_ID_MASTERFIELDS
-connectivity/source/inc/propertyids.hxx:107
+connectivity/source/inc/propertyids.hxx:105
     enum PropertyId PROPERTY_ID_DETAILFIELDS
-connectivity/source/inc/propertyids.hxx:108
+connectivity/source/inc/propertyids.hxx:106
     enum PropertyId PROPERTY_ID_FIELDTYPE
-connectivity/source/inc/propertyids.hxx:109
+connectivity/source/inc/propertyids.hxx:107
     enum PropertyId PROPERTY_ID_VALUE
-connectivity/source/inc/propertyids.hxx:110
+connectivity/source/inc/propertyids.hxx:108
     enum PropertyId PROPERTY_ID_ACTIVE_CONNECTION
 connectivity/source/inc/TSortIndex.hxx:36
     enum connectivity::TAscendingOrder DESC
-cppuhelper/source/servicemanager.hxx:117
+cppuhelper/source/servicemanager.hxx:118
     enum cppuhelper::ServiceManager::Data::Implementation::Status STATUS_WRAPPER
 cui/inc/tipoftheday.hrc:50
     enum tipModule scalc
@@ -1170,51 +1172,51 @@ cui/source/options/optgenrl.cxx:60
     enum (anonymous namespace)::RowType Row_Phone
 cui/source/options/optgenrl.cxx:61
     enum (anonymous namespace)::RowType Row_FaxMail
-cui/source/tabpages/autocdlg.cxx:335
+cui/source/tabpages/autocdlg.cxx:334
     enum (anonymous namespace)::OfaAutoFmtOptions USE_REPLACE_TABLE
-cui/source/tabpages/autocdlg.cxx:336
+cui/source/tabpages/autocdlg.cxx:335
     enum (anonymous namespace)::OfaAutoFmtOptions CORR_UPPER
-cui/source/tabpages/autocdlg.cxx:337
+cui/source/tabpages/autocdlg.cxx:336
     enum (anonymous namespace)::OfaAutoFmtOptions BEGIN_UPPER
-cui/source/tabpages/autocdlg.cxx:338
+cui/source/tabpages/autocdlg.cxx:337
     enum (anonymous namespace)::OfaAutoFmtOptions BOLD_UNDERLINE
-cui/source/tabpages/autocdlg.cxx:339
+cui/source/tabpages/autocdlg.cxx:338
     enum (anonymous namespace)::OfaAutoFmtOptions DETECT_URL
-cui/source/tabpages/autocdlg.cxx:340
+cui/source/tabpages/autocdlg.cxx:339
     enum (anonymous namespace)::OfaAutoFmtOptions DETECT_DOI
-cui/source/tabpages/autocdlg.cxx:341
+cui/source/tabpages/autocdlg.cxx:340
     enum (anonymous namespace)::OfaAutoFmtOptions REPLACE_DASHES
-cui/source/tabpages/autocdlg.cxx:342
+cui/source/tabpages/autocdlg.cxx:341
     enum (anonymous namespace)::OfaAutoFmtOptions DEL_SPACES_AT_STT_END
-cui/source/tabpages/autocdlg.cxx:343
+cui/source/tabpages/autocdlg.cxx:342
     enum (anonymous namespace)::OfaAutoFmtOptions DEL_SPACES_BETWEEN_LINES
-cui/source/tabpages/autocdlg.cxx:344
+cui/source/tabpages/autocdlg.cxx:343
     enum (anonymous namespace)::OfaAutoFmtOptions IGNORE_DBLSPACE
-cui/source/tabpages/autocdlg.cxx:345
+cui/source/tabpages/autocdlg.cxx:344
     enum (anonymous namespace)::OfaAutoFmtOptions CORRECT_CAPS_LOCK
-cui/source/tabpages/autocdlg.cxx:347
+cui/source/tabpages/autocdlg.cxx:346
     enum (anonymous namespace)::OfaAutoFmtOptions APPLY_NUMBERING_AFTER_SPACE
-cui/source/tabpages/autocdlg.cxx:348
+cui/source/tabpages/autocdlg.cxx:347
     enum (anonymous namespace)::OfaAutoFmtOptions INSERT_BORDER
-cui/source/tabpages/autocdlg.cxx:349
+cui/source/tabpages/autocdlg.cxx:348
     enum (anonymous namespace)::OfaAutoFmtOptions CREATE_TABLE
-cui/source/tabpages/autocdlg.cxx:350
+cui/source/tabpages/autocdlg.cxx:349
     enum (anonymous namespace)::OfaAutoFmtOptions REPLACE_STYLES
-cui/source/tabpages/autocdlg.cxx:351
+cui/source/tabpages/autocdlg.cxx:350
     enum (anonymous namespace)::OfaAutoFmtOptions DEL_EMPTY_NODE
-cui/source/tabpages/autocdlg.cxx:352
+cui/source/tabpages/autocdlg.cxx:351
     enum (anonymous namespace)::OfaAutoFmtOptions REPLACE_USER_COLL
-cui/source/tabpages/autocdlg.cxx:1555
-    enum (anonymous namespace)::OfaQuoteOptions ADD_NONBRK_SPACE
 cui/source/tabpages/autocdlg.cxx:1556
-    enum (anonymous namespace)::OfaQuoteOptions REPLACE_1ST
+    enum (anonymous namespace)::OfaQuoteOptions ADD_NONBRK_SPACE
 cui/source/tabpages/autocdlg.cxx:1557
-    enum (anonymous namespace)::OfaQuoteOptions TRANSLITERATE_RTL
+    enum (anonymous namespace)::OfaQuoteOptions REPLACE_1ST
 cui/source/tabpages/autocdlg.cxx:1558
+    enum (anonymous namespace)::OfaQuoteOptions TRANSLITERATE_RTL
+cui/source/tabpages/autocdlg.cxx:1559
     enum (anonymous namespace)::OfaQuoteOptions REPLACE_ANGLE_QUOTES
-cui/source/tabpages/swpossizetabpage.cxx:104
-    enum (anonymous namespace)::LB RelPagePrintAreaBottom
 cui/source/tabpages/swpossizetabpage.cxx:105
+    enum (anonymous namespace)::LB RelPagePrintAreaBottom
+cui/source/tabpages/swpossizetabpage.cxx:106
     enum (anonymous namespace)::LB RelPagePrintAreaTop
 dbaccess/source/core/dataaccess/databasedocument.hxx:161
     enum dbaccess::ODatabaseDocument::InitState NotInitialized
@@ -1228,7 +1230,7 @@ dbaccess/source/core/dataaccess/databasedocument.hxx:658
     enum dbaccess::DocumentGuard::MethodWithoutInit_ MethodWithoutInit
 dbaccess/source/core/inc/definitioncontainer.hxx:104
     enum dbaccess::ODefinitionContainer::ListenerType ContainerListemers
-dbaccess/source/core/inc/ModelImpl.hxx:176
+dbaccess/source/core/inc/ModelImpl.hxx:167
     enum dbaccess::ODatabaseModelImpl::EmbeddedMacros DocumentWide
 dbaccess/source/core/inc/objectnameapproval.hxx:49
     enum dbaccess::ObjectNameApproval::ObjectType TypeTable
@@ -1264,9 +1266,9 @@ dbaccess/source/ui/tabledesign/TableFieldDescWin.hxx:37
     enum dbaui::OTableFieldDescWin::ChildFocusState HELP
 desktop/inc/app.hxx:66
     enum desktop::Desktop::BootstrapStatus BS_OK
-desktop/source/app/officeipcthread.cxx:770
+desktop/source/app/officeipcthread.cxx:769
     enum PipeMode PIPEMODE_CONNECTED
-desktop/source/app/officeipcthread.hxx:84
+desktop/source/app/officeipcthread.hxx:85
     enum desktop::RequestHandler::State Starting
 desktop/source/app/userinstall.hxx:32
     enum desktop::userinstall::Status ERROR_OTHER
@@ -1284,27 +1286,29 @@ desktop/source/deployment/registry/inc/dp_backend.h:216
     enum dp_registry::backend::PackageRegistryBackend::Context Tmp
 desktop/source/deployment/registry/inc/dp_backend.h:216
     enum dp_registry::backend::PackageRegistryBackend::Context Unknown
-desktop/source/lib/init.cxx:6194
+desktop/source/lib/init.cxx:6270
     enum (anonymous namespace)::UndoOrRedo REDO
-desktop/source/lib/init.cxx:7813
-    enum (unnamed at /home/noel/libo-plugin/desktop/source/lib/init.cxx:7810:5) FULL_INIT
+desktop/source/lib/init.cxx:7896
+    enum (unnamed at /home/noel/libo-plugin/desktop/source/lib/init.cxx:7893:5) FULL_INIT
 desktop/source/migration/services/oo3extensionmigration.hxx:62
     enum migration::OO3ExtensionMigration::ScanResult SCANRESULT_DONTMIGRATE_EXTENSION
 desktop/unx/source/start.c:178
     int ProgressExit
 desktop/unx/source/start.c:178
     int ProgressRestart
+drawinglayer/source/tools/emfphelperdata.hxx:250
+    enum emfplushelper::EmfPlusHelperData::Direction vertical
 editeng/inc/TextPortion.hxx:47
     enum AsianCompressionFlags Normal
-editeng/source/editeng/impedit.hxx:1322
+editeng/source/editeng/impedit.hxx:1336
     enum ImpEditEngine::CallbackResult Continue
-editeng/source/editeng/impedit.hxx:1340
+editeng/source/editeng/impedit.hxx:1354
     enum ImpEditEngine::IterFlag none
-editeng/source/editeng/impedit.hxx:1341
+editeng/source/editeng/impedit.hxx:1355
     enum ImpEditEngine::IterFlag inclILS
-editeng/source/items/paraitem.cxx:70
+editeng/source/items/paraitem.cxx:72
     enum (anonymous namespace)::SvxSpecialLineSpace User
-editeng/source/items/paraitem.cxx:74
+editeng/source/items/paraitem.cxx:76
     enum (anonymous namespace)::SvxSpecialLineSpace End
 editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:23
     enum SvXMLAutoCorrectToken NAMESPACE
@@ -1342,7 +1346,7 @@ extensions/source/propctrlr/eformshelper.hxx:180
     enum pcr::EFormsHelper::ModelElementType Binding
 extensions/source/propctrlr/formcomponenthandler.hxx:46
     enum pcr::ComponentClassification eUnknown
-extensions/source/propctrlr/formlinkdialog.cxx:77
+extensions/source/propctrlr/formlinkdialog.cxx:76
     enum pcr::FieldLinkRow::LinkParticipant eMasterField
 extensions/source/propctrlr/inspectormodelbase.cxx:35
     enum pcr::(anonymous namespace)::ModelPropertyId HAS_HELP_SECTION
@@ -1424,17 +1428,17 @@ framework/source/inc/loadenv/loadenvexception.hxx:71
     enum framework::LoadEnvException::EIDs ID_GENERAL_ERROR
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:55
     enum framework::ToolbarLayoutManager::PreviewFrameDetection PREVIEWFRAME_NO
-framework/source/services/autorecovery.cxx:210
-    enum (anonymous namespace)::DocState Unknown
 framework/source/services/autorecovery.cxx:218
+    enum (anonymous namespace)::DocState Unknown
+framework/source/services/autorecovery.cxx:226
     enum (anonymous namespace)::DocState TrySave
-framework/source/services/autorecovery.cxx:229
+framework/source/services/autorecovery.cxx:237
     enum (anonymous namespace)::DocState Succeeded
-framework/source/services/autorecovery.cxx:289
+framework/source/services/autorecovery.cxx:297
     enum (anonymous namespace)::AutoRecovery::EFailureSafeResult E_COPIED
-framework/source/services/autorecovery.cxx:290
+framework/source/services/autorecovery.cxx:298
     enum (anonymous namespace)::AutoRecovery::EFailureSafeResult E_ORIGINAL_FILE_MISSING
-framework/source/services/autorecovery.cxx:291
+framework/source/services/autorecovery.cxx:299
     enum (anonymous namespace)::AutoRecovery::EFailureSafeResult E_WRONG_TARGET_PATH
 framework/source/services/substitutepathvars.cxx:53
     enum (anonymous namespace)::PreDefVariable PREDEFVAR_INST
@@ -1732,13 +1736,13 @@ include/editeng/AccessibleContextBase.hxx:62
     enum accessibility::AccessibleContextBase::StringOrigin FromShape
 include/editeng/AccessibleContextBase.hxx:63
     enum accessibility::AccessibleContextBase::StringOrigin AutomaticallyCreated
-include/editeng/boxitem.hxx:186
-    enum SvxBoxInfoItemValidFlags VERT
 include/editeng/boxitem.hxx:187
-    enum SvxBoxInfoItemValidFlags DISTANCE
+    enum SvxBoxInfoItemValidFlags VERT
 include/editeng/boxitem.hxx:188
-    enum SvxBoxInfoItemValidFlags DISABLE
+    enum SvxBoxInfoItemValidFlags DISTANCE
 include/editeng/boxitem.hxx:189
+    enum SvxBoxInfoItemValidFlags DISABLE
+include/editeng/boxitem.hxx:190
     enum SvxBoxInfoItemValidFlags ALL
 include/editeng/editdata.hxx:39
     enum EESelectionMode Std
@@ -1994,7 +1998,7 @@ include/oox/drawingml/clrscheme.hxx:37
     enum oox::drawingml::PredefinedClrSchemeId dk1
 include/oox/drawingml/clrscheme.hxx:38
     enum oox::drawingml::PredefinedClrSchemeId lt1
-include/oox/drawingml/shape.hxx:283
+include/oox/drawingml/shape.hxx:286
     enum oox::drawingml::Shape::FrameType FRAMETYPE_TABLE
 include/oox/export/drawingml.hxx:267
     enum oox::drawingml::GraphicExport::TypeHint Detect
@@ -2182,7 +2186,7 @@ include/sfx2/objface.hxx:50
     enum StatusBarId CalcStatusBar
 include/sfx2/objface.hxx:51
     enum StatusBarId BasicIdeStatusBar
-include/sfx2/objsh.hxx:197
+include/sfx2/objsh.hxx:199
     enum SfxObjectShell::TriState no
 include/sfx2/passwd.hxx:35
     enum SfxShowExtras ALL
@@ -2490,19 +2494,823 @@ include/svl/inettype.hxx:230
     enum INetContentType CONTENT_TYPE_APP_VND_SUN_XML_WRITER_GLOBAL
 include/svl/inettype.hxx:231
     enum INetContentType CONTENT_TYPE_APP_VND_SUN_XML_IMPRESSPACKED
-include/svl/itemset.hxx:140
-    enum SfxItemSet::SfxAllItemSetFlag Flag
 include/svl/lstner.hxx:41
     enum DuplicateHandling Allow
 include/svl/nfsymbol.hxx:48
     enum svt::NfSymbolType NF_SYMBOLTYPE_CURRDEL
-include/svl/sigstruct.hxx:79
+include/svl/poolitem.hxx:110
+    enum SfxItemType AffineMatrixItemType
+include/svl/poolitem.hxx:111
+    enum SfxItemType CntByteItemType
+include/svl/poolitem.hxx:112
+    enum SfxItemType CntInt32ItemType
+include/svl/poolitem.hxx:113
+    enum SfxItemType CntUInt16ItemType
+include/svl/poolitem.hxx:114
+    enum SfxItemType CntUInt32ItemType
+include/svl/poolitem.hxx:115
+    enum SfxItemType CntUnencodedStringItemType
+include/svl/poolitem.hxx:116
+    enum SfxItemType DatabaseMapItemType
+include/svl/poolitem.hxx:117
+    enum SfxItemType DbuTypeCollectionItemType
+include/svl/poolitem.hxx:118
+    enum SfxItemType DriverPoolingSettingsItemType
+include/svl/poolitem.hxx:119
+    enum SfxItemType InvalidOrDisabledItemType
+include/svl/poolitem.hxx:120
+    enum SfxItemType MediaItemType
+include/svl/poolitem.hxx:121
+    enum SfxItemType NameOrIndexType
+include/svl/poolitem.hxx:122
+    enum SfxItemType OStringListItemType
+include/svl/poolitem.hxx:123
+    enum SfxItemType OfaPtrItemType
+include/svl/poolitem.hxx:124
+    enum SfxItemType OfaXColorListItemType
+include/svl/poolitem.hxx:125
+    enum SfxItemType OptionalBoolItemType
+include/svl/poolitem.hxx:126
+    enum SfxItemType RectangleAlignmentType
+include/svl/poolitem.hxx:127
+    enum SfxItemType SbxItemType
+include/svl/poolitem.hxx:128
+    enum SfxItemType ScCondFormatItemType
+include/svl/poolitem.hxx:129
+    enum SfxItemType ScConsolidateItemType
+include/svl/poolitem.hxx:130
+    enum SfxItemType ScHyphenateCellType
+include/svl/poolitem.hxx:131
+    enum SfxItemType ScIndentItemType
+include/svl/poolitem.hxx:132
+    enum SfxItemType ScInputStatusItemType
+include/svl/poolitem.hxx:133
+    enum SfxItemType ScLineBreakCellType
+include/svl/poolitem.hxx:134
+    enum SfxItemType ScMergeAttrType
+include/svl/poolitem.hxx:135
+    enum SfxItemType ScPageHFItemType
+include/svl/poolitem.hxx:136
+    enum SfxItemType ScPageScaleToItemType
+include/svl/poolitem.hxx:137
+    enum SfxItemType ScPivotItemType
+include/svl/poolitem.hxx:138
+    enum SfxItemType ScProtectionAttrType
+include/svl/poolitem.hxx:139
+    enum SfxItemType ScQueryItemType
+include/svl/poolitem.hxx:140
+    enum SfxItemType ScRotateValueItemType
+include/svl/poolitem.hxx:141
+    enum SfxItemType ScShrinkToFitCellType
+include/svl/poolitem.hxx:142
+    enum SfxItemType ScSolveItemType
+include/svl/poolitem.hxx:143
+    enum SfxItemType ScSortItemType
+include/svl/poolitem.hxx:144
+    enum SfxItemType ScSubTotalItemType
+include/svl/poolitem.hxx:145
+    enum SfxItemType ScTabOpItemType
+include/svl/poolitem.hxx:146
+    enum SfxItemType ScTpCalcItemType
+include/svl/poolitem.hxx:147
+    enum SfxItemType ScTpDefaultsItemType
+include/svl/poolitem.hxx:148
+    enum SfxItemType ScTpFormulaItemType
+include/svl/poolitem.hxx:149
+    enum SfxItemType ScTpPrintItemType
+include/svl/poolitem.hxx:150
+    enum SfxItemType ScTpViewItemType
+include/svl/poolitem.hxx:151
+    enum SfxItemType ScUserListItemType
+include/svl/poolitem.hxx:152
+    enum SfxItemType ScVerticalStackCellType
+include/svl/poolitem.hxx:153
+    enum SfxItemType ScViewObjectModeItemType
+include/svl/poolitem.hxx:154
+    enum SfxItemType SdOptionsMiscItemType
+include/svl/poolitem.hxx:155
+    enum SfxItemType SdOptionsPrintItemType
+include/svl/poolitem.hxx:157
+    enum SfxItemType SdrAllPositionXItemType
+include/svl/poolitem.hxx:158
+    enum SfxItemType SdrAllPositionYItemType
+include/svl/poolitem.hxx:159
+    enum SfxItemType SdrAllSizeHeightItemType
+include/svl/poolitem.hxx:160
+    enum SfxItemType SdrAllSizeWidthItemType
+include/svl/poolitem.hxx:161
+    enum SfxItemType SdrAngleItemType
+include/svl/poolitem.hxx:162
+    enum SfxItemType SdrCaptionAngleItemType
+include/svl/poolitem.hxx:163
+    enum SfxItemType SdrCaptionGapItemType
+include/svl/poolitem.hxx:164
+    enum SfxItemType SdrCaptionEscAbsItemType
+include/svl/poolitem.hxx:165
+    enum SfxItemType SdrCaptionEscDirItemType
+include/svl/poolitem.hxx:166
+    enum SfxItemType SdrCaptionEscRelItemType
+include/svl/poolitem.hxx:167
+    enum SfxItemType SdrCaptionEscIsRelItemType
+include/svl/poolitem.hxx:168
+    enum SfxItemType SdrCaptionFitLineLenItemType
+include/svl/poolitem.hxx:169
+    enum SfxItemType SdrCaptionLineLenItemType
+include/svl/poolitem.hxx:170
+    enum SfxItemType SdrCaptionTypeItemType
+include/svl/poolitem.hxx:171
+    enum SfxItemType SdrCircKindItemType
+include/svl/poolitem.hxx:172
+    enum SfxItemType SdrCustomShapeGeometryItemType
+include/svl/poolitem.hxx:173
+    enum SfxItemType SdrEdgeKindItemType
+include/svl/poolitem.hxx:174
+    enum SfxItemType SdrEdgeLineDeltaCountItemType
+include/svl/poolitem.hxx:175
+    enum SfxItemType SdrEdgeNode1GlueDistItemType
+include/svl/poolitem.hxx:176
+    enum SfxItemType SdrEdgeNode1HorzDistItemType
+include/svl/poolitem.hxx:177
+    enum SfxItemType SdrEdgeNode1VertDistItemType
+include/svl/poolitem.hxx:178
+    enum SfxItemType SdrEdgeNode2GlueDistItemType
+include/svl/poolitem.hxx:179
+    enum SfxItemType SdrEdgeNode2HorzDistItemType
+include/svl/poolitem.hxx:180
+    enum SfxItemType SdrEdgeNode2VertDistItemType
+include/svl/poolitem.hxx:181
+    enum SfxItemType SdrFractionItemType
+include/svl/poolitem.hxx:182
+    enum SfxItemType SdrGrafBlueItemType
+include/svl/poolitem.hxx:183
+    enum SfxItemType SdrGrafContrastItemType
+include/svl/poolitem.hxx:184
+    enum SfxItemType SdrGrafGamma100ItemType
+include/svl/poolitem.hxx:185
+    enum SfxItemType SdrGrafGreenItemType
+include/svl/poolitem.hxx:186
+    enum SfxItemType SdrGrafLuminanceItemType
+include/svl/poolitem.hxx:187
+    enum SfxItemType SdrGrafRedItemType
+include/svl/poolitem.hxx:188
+    enum SfxItemType SdrGrafInvertItemType
+include/svl/poolitem.hxx:189
+    enum SfxItemType SdrGrafModeItem_Base
+include/svl/poolitem.hxx:190
+    enum SfxItemType SdrGrafTransparenceItemType
+include/svl/poolitem.hxx:191
+    enum SfxItemType SdrLayerIdItemType
+include/svl/poolitem.hxx:192
+    enum SfxItemType SdrLayerNameItemType
+include/svl/poolitem.hxx:193
+    enum SfxItemType SdrLogicSizeHeightItemType
+include/svl/poolitem.hxx:194
+    enum SfxItemType SdrLogicSizeWidthItemType
+include/svl/poolitem.hxx:195
+    enum SfxItemType SdrMeasureBelowRefEdgeItemType
+include/svl/poolitem.hxx:196
+    enum SfxItemType SdrMeasureDecimalPlacesItemType
+include/svl/poolitem.hxx:197
+    enum SfxItemType SdrMeasureFormatStringItemType
+include/svl/poolitem.hxx:198
+    enum SfxItemType SdrMeasureKindItemType
+include/svl/poolitem.hxx:199
+    enum SfxItemType SdrMeasureOverhangItemType
+include/svl/poolitem.hxx:200
+    enum SfxItemType SdrMeasureScaleItemType
+include/svl/poolitem.hxx:201
+    enum SfxItemType SdrMeasureTextAutoAngleItemType
+include/svl/poolitem.hxx:202
+    enum SfxItemType SdrMeasureTextAutoAngleViewItemType
+include/svl/poolitem.hxx:203
+    enum SfxItemType SdrMeasureTextFixedAngleItemType
+include/svl/poolitem.hxx:204
+    enum SfxItemType SdrMeasureTextHPosItemType
+include/svl/poolitem.hxx:205
+    enum SfxItemType SdrMeasureTextIsFixedAngleItemType
+include/svl/poolitem.hxx:206
+    enum SfxItemType SdrMeasureTextRota90ItemType
+include/svl/poolitem.hxx:207
+    enum SfxItemType SdrMeasureTextUpsideDownItemType
+include/svl/poolitem.hxx:208
+    enum SfxItemType SdrMeasureTextVPosItemType
+include/svl/poolitem.hxx:209
+    enum SfxItemType SdrMeasureUnitItemType
+include/svl/poolitem.hxx:210
+    enum SfxItemType SdrMetricItemType
+include/svl/poolitem.hxx:211
+    enum SfxItemType SdrMoveXItemType
+include/svl/poolitem.hxx:212
+    enum SfxItemType SdrMoveYItemType
+include/svl/poolitem.hxx:213
+    enum SfxItemType SdrObjPrintableItemType
+include/svl/poolitem.hxx:214
+    enum SfxItemType SdrObjVisibleItemType
+include/svl/poolitem.hxx:215
+    enum SfxItemType SdrOnePositionXItemType
+include/svl/poolitem.hxx:216
+    enum SfxItemType SdrOnePositionYItemType
+include/svl/poolitem.hxx:217
+    enum SfxItemType SdrOneSizeHeightItemType
+include/svl/poolitem.hxx:218
+    enum SfxItemType SdrOneSizeWidthItemType
+include/svl/poolitem.hxx:219
+    enum SfxItemType SdrOnOffItemType
+include/svl/poolitem.hxx:220
+    enum SfxItemType SdrPercentItemType
+include/svl/poolitem.hxx:221
+    enum SfxItemType SdrResizeXAllItemType
+include/svl/poolitem.hxx:222
+    enum SfxItemType SdrResizeXOneItemType
+include/svl/poolitem.hxx:223
+    enum SfxItemType SdrResizeYAllItemType
+include/svl/poolitem.hxx:224
+    enum SfxItemType SdrResizeYOneItemType
+include/svl/poolitem.hxx:225
+    enum SfxItemType SdrRotateAllItemType
+include/svl/poolitem.hxx:226
+    enum SfxItemType SdrRotateOneItemType
+include/svl/poolitem.hxx:227
+    enum SfxItemType SdrScaleItemType
+include/svl/poolitem.hxx:228
+    enum SfxItemType SdrShearAngleItemType
+include/svl/poolitem.hxx:229
+    enum SfxItemType SdrSignedPercentItemType
+include/svl/poolitem.hxx:230
+    enum SfxItemType SdrTextAniAmountItemType
+include/svl/poolitem.hxx:231
+    enum SfxItemType SdrTextAniCountItemType
+include/svl/poolitem.hxx:232
+    enum SfxItemType SdrTextAniDelayItemType
+include/svl/poolitem.hxx:233
+    enum SfxItemType SdrTextAniDirectionItemType
+include/svl/poolitem.hxx:234
+    enum SfxItemType SdrTextAniStartInsideItemType
+include/svl/poolitem.hxx:235
+    enum SfxItemType SdrTextAniStopInsideItemType
+include/svl/poolitem.hxx:236
+    enum SfxItemType SdrTextAniKindItemType
+include/svl/poolitem.hxx:237
+    enum SfxItemType SdrTextFitToSizeTypeItemType
+include/svl/poolitem.hxx:238
+    enum SfxItemType SdrTextFixedCellHeightItemType
+include/svl/poolitem.hxx:239
+    enum SfxItemType SdrTextHorzAdjustType
+include/svl/poolitem.hxx:240
+    enum SfxItemType SdrTextVertAdjustType
+include/svl/poolitem.hxx:241
+    enum SfxItemType SdrTransformRef1XItemType
+include/svl/poolitem.hxx:242
+    enum SfxItemType SdrTransformRef1YItemType
+include/svl/poolitem.hxx:243
+    enum SfxItemType SdrTransformRef2XItemType
+include/svl/poolitem.hxx:244
+    enum SfxItemType SdrTransformRef2YItemType
+include/svl/poolitem.hxx:245
+    enum SfxItemType SdrHorzShearAllItemType
+include/svl/poolitem.hxx:246
+    enum SfxItemType SdrVertShearAllItemType
+include/svl/poolitem.hxx:247
+    enum SfxItemType SdrHorzShearOneItemType
+include/svl/poolitem.hxx:248
+    enum SfxItemType SdrVertShearOneItemType
+include/svl/poolitem.hxx:249
+    enum SfxItemType SdrYesNoItemType
+include/svl/poolitem.hxx:250
+    enum SfxItemType SfxBoolItemType
+include/svl/poolitem.hxx:251
+    enum SfxItemType SfxByteItemType
+include/svl/poolitem.hxx:252
+    enum SfxItemType SfxDocumentInfoItemType
+include/svl/poolitem.hxx:254
+    enum SfxItemType SfxEventNamesItemType
+include/svl/poolitem.hxx:255
+    enum SfxItemType SfxFlagItemType
+include/svl/poolitem.hxx:256
+    enum SfxItemType SfxFrameItemType
+include/svl/poolitem.hxx:257
+    enum SfxItemType SfxGlobalNameItemType
+include/svl/poolitem.hxx:258
+    enum SfxItemType SfxGrabBagItemType
+include/svl/poolitem.hxx:260
+    enum SfxItemType SfxImageItemType
+include/svl/poolitem.hxx:261
+    enum SfxItemType SfxInt16ItemType
+include/svl/poolitem.hxx:262
+    enum SfxItemType SfxInt32ItemType
+include/svl/poolitem.hxx:263
+    enum SfxItemType SfxInt64ItemType
+include/svl/poolitem.hxx:264
+    enum SfxItemType SfxIntegerListItemType
+include/svl/poolitem.hxx:265
+    enum SfxItemType SfxLinkItemType
+include/svl/poolitem.hxx:266
+    enum SfxItemType SfxLockBytesItemType
+include/svl/poolitem.hxx:267
+    enum SfxItemType SfxMacroInfoItemType
+include/svl/poolitem.hxx:268
+    enum SfxItemType SfxMetricItemType
+include/svl/poolitem.hxx:269
+    enum SfxItemType SfxObjectItemType
+include/svl/poolitem.hxx:270
+    enum SfxItemType SfxObjectShellItemType
+include/svl/poolitem.hxx:271
+    enum SfxItemType SfxPointItemType
+include/svl/poolitem.hxx:272
+    enum SfxItemType SfxRangeItemType
+include/svl/poolitem.hxx:273
+    enum SfxItemType SfxRectangleItemType
+include/svl/poolitem.hxx:274
+    enum SfxItemType SfxRegionItemType
+include/svl/poolitem.hxx:275
+    enum SfxItemType SfxSetItemType
+include/svl/poolitem.hxx:276
+    enum SfxItemType SfxStringItemType
+include/svl/poolitem.hxx:277
+    enum SfxItemType SfxStringListItemType
+include/svl/poolitem.hxx:278
+    enum SfxItemType SfxTabDialogItemType
+include/svl/poolitem.hxx:279
+    enum SfxItemType SfxTemplateItemType
+include/svl/poolitem.hxx:280
+    enum SfxItemType SfxUInt16ItemType
+include/svl/poolitem.hxx:281
+    enum SfxItemType SfxUInt32ItemType
+include/svl/poolitem.hxx:282
+    enum SfxItemType SfxUnoAnyItemType
+include/svl/poolitem.hxx:283
+    enum SfxItemType SfxUnoFrameItemType
+include/svl/poolitem.hxx:284
+    enum SfxItemType SfxViewFrameItemType
+include/svl/poolitem.hxx:285
+    enum SfxItemType SfxVisibilityItemType
+include/svl/poolitem.hxx:286
+    enum SfxItemType SfxVoidItemType
+include/svl/poolitem.hxx:287
+    enum SfxItemType SfxWatermarkItemType
+include/svl/poolitem.hxx:288
+    enum SfxItemType SfxZoomItemType
+include/svl/poolitem.hxx:289
+    enum SfxItemType Svx3DCharacterModeItemType
+include/svl/poolitem.hxx:290
+    enum SfxItemType Svx3DCloseBackItemType
+include/svl/poolitem.hxx:291
+    enum SfxItemType Svx3DCloseFrontItemType
+include/svl/poolitem.hxx:292
+    enum SfxItemType Svx3DNormalsKindItemType
+include/svl/poolitem.hxx:293
+    enum SfxItemType Svx3DPerspectiveItemType
+include/svl/poolitem.hxx:294
+    enum SfxItemType Svx3DReducedLineGeometryItemType
+include/svl/poolitem.hxx:295
+    enum SfxItemType Svx3DShadeModeItemType
+include/svl/poolitem.hxx:296
+    enum SfxItemType Svx3DSmoothLidsItemType
+include/svl/poolitem.hxx:297
+    enum SfxItemType Svx3DSmoothNormalsItemType
+include/svl/poolitem.hxx:298
+    enum SfxItemType Svx3DTextureKindItemType
+include/svl/poolitem.hxx:299
+    enum SfxItemType Svx3DTextureModeItemType
+include/svl/poolitem.hxx:300
+    enum SfxItemType Svx3DTextureProjectionXItemType
+include/svl/poolitem.hxx:301
+    enum SfxItemType Svx3DTextureProjectionYItemType
+include/svl/poolitem.hxx:302
+    enum SfxItemType SvXMLAttrContainerItemType
+include/svl/poolitem.hxx:303
+    enum SfxItemType SvxAdjustItemType
+include/svl/poolitem.hxx:304
+    enum SfxItemType SvxAutoKernItemType
+include/svl/poolitem.hxx:305
+    enum SfxItemType SvxB3DVectorItemType
+include/svl/poolitem.hxx:306
+    enum SfxItemType SvxBitmapListItemType
+include/svl/poolitem.hxx:307
+    enum SfxItemType SvxBlinkItemType
+include/svl/poolitem.hxx:308
+    enum SfxItemType SvxBoxInfoItemType
+include/svl/poolitem.hxx:309
+    enum SfxItemType SvxBoxItemType
+include/svl/poolitem.hxx:310
+    enum SfxItemType SvxBrushItemType
+include/svl/poolitem.hxx:311
+    enum SfxItemType SvxBulletItemType
+include/svl/poolitem.hxx:312
+    enum SfxItemType SvxCaseMapItemType
+include/svl/poolitem.hxx:313
+    enum SfxItemType SvxCharHiddenItemType
+include/svl/poolitem.hxx:314
+    enum SfxItemType SvxCharReliefItemType
+include/svl/poolitem.hxx:315
+    enum SfxItemType SvxCharRotateItemType
+include/svl/poolitem.hxx:316
+    enum SfxItemType SvxCharScaleWidthItemType
+include/svl/poolitem.hxx:317
+    enum SfxItemType SvxChartColorTableItemType
+include/svl/poolitem.hxx:318
+    enum SfxItemType SvxChartIndicateItemType
+include/svl/poolitem.hxx:319
+    enum SfxItemType SvxChartKindErrorItemType
+include/svl/poolitem.hxx:320
+    enum SfxItemType SvxChartRegressItemType
+include/svl/poolitem.hxx:321
+    enum SfxItemType SvxChartTextOrderItemType
+include/svl/poolitem.hxx:322
+    enum SfxItemType SvxClipboardFormatItemType
+include/svl/poolitem.hxx:323
+    enum SfxItemType SvxColorItemType
+include/svl/poolitem.hxx:324
+    enum SfxItemType SvxColorListItemType
+include/svl/poolitem.hxx:325
+    enum SfxItemType SvxColumnItemType
+include/svl/poolitem.hxx:326
+    enum SfxItemType SvxContourItemType
+include/svl/poolitem.hxx:327
+    enum SfxItemType SvxCrossedOutItemType
+include/svl/poolitem.hxx:328
+    enum SfxItemType SvxDashListItemType
+include/svl/poolitem.hxx:329
+    enum SfxItemType SvxDoubleItemType
+include/svl/poolitem.hxx:330
+    enum SfxItemType SvxEmphasisMarkItemType
+include/svl/poolitem.hxx:331
+    enum SfxItemType SvxEscapementItemType
+include/svl/poolitem.hxx:332
+    enum SfxItemType SvxFieldItemType
+include/svl/poolitem.hxx:333
+    enum SfxItemType SvxFirstLineIndentItemType
+include/svl/poolitem.hxx:334
+    enum SfxItemType SvxFontHeightItemType
+include/svl/poolitem.hxx:335
+    enum SfxItemType SvxFontItemType
+include/svl/poolitem.hxx:336
+    enum SfxItemType SvxFontListItemType
+include/svl/poolitem.hxx:337
+    enum SfxItemType SvxForbiddenRuleItemType
+include/svl/poolitem.hxx:338
+    enum SfxItemType SvxFormatBreakItemType
+include/svl/poolitem.hxx:339
+    enum SfxItemType SvxFrameDirectionItemType
+include/svl/poolitem.hxx:340
+    enum SfxItemType SvxGalleryItemType
+include/svl/poolitem.hxx:341
+    enum SfxItemType SvxGradientListItemType
+include/svl/poolitem.hxx:342
+    enum SfxItemType SvxGraphicItemType
+include/svl/poolitem.hxx:343
+    enum SfxItemType SvxGrfCropType
+include/svl/poolitem.hxx:344
+    enum SfxItemType SvxGridItemType
+include/svl/poolitem.hxx:345
+    enum SfxItemType SvxGutterLeftMarginItemType
+include/svl/poolitem.hxx:346
+    enum SfxItemType SvxGutterRightMarginItemType
+include/svl/poolitem.hxx:347
+    enum SfxItemType SvxHangingPunctuationItemType
+include/svl/poolitem.hxx:348
+    enum SfxItemType SvxHatchListItemType
+include/svl/poolitem.hxx:349
+    enum SfxItemType SvxHorJustifyItemType
+include/svl/poolitem.hxx:350
+    enum SfxItemType SvxHyperlinkItemType
+include/svl/poolitem.hxx:351
+    enum SfxItemType SvxHyphenZoneItemType
+include/svl/poolitem.hxx:352
+    enum SfxItemType SvxJustifyMethodItemType
+include/svl/poolitem.hxx:353
+    enum SfxItemType SvxKerningItemType
+include/svl/poolitem.hxx:354
+    enum SfxItemType SvxLRSpaceItemType
+include/svl/poolitem.hxx:355
+    enum SfxItemType SvxLanguageItemType
+include/svl/poolitem.hxx:356
+    enum SfxItemType SvxLeftMarginItemType
+include/svl/poolitem.hxx:357
+    enum SfxItemType SvxLineEndListItemType
+include/svl/poolitem.hxx:358
+    enum SfxItemType SvxLineItemType
+include/svl/poolitem.hxx:359
+    enum SfxItemType SvxLineSpacingItemType
+include/svl/poolitem.hxx:360
+    enum SfxItemType SvxLongLRSpaceItemType
+include/svl/poolitem.hxx:361
+    enum SfxItemType SvxLongULSpaceItemType
+include/svl/poolitem.hxx:362
+    enum SfxItemType SvxMacroItemType
+include/svl/poolitem.hxx:363
+    enum SfxItemType SvxMarginItemType
+include/svl/poolitem.hxx:364
+    enum SfxItemType SvxNoHyphenItemType
+include/svl/poolitem.hxx:365
+    enum SfxItemType SvxNumBulletItemType
+include/svl/poolitem.hxx:366
+    enum SfxItemType SvxNumberInfoItemType
+include/svl/poolitem.hxx:367
+    enum SfxItemType SvxObjectItemType
+include/svl/poolitem.hxx:368
+    enum SfxItemType SvxOpaqueItemType
+include/svl/poolitem.hxx:369
+    enum SfxItemType SvxOrientationItemType
+include/svl/poolitem.hxx:370
+    enum SfxItemType SvxOrphansItemType
+include/svl/poolitem.hxx:371
+    enum SfxItemType SvxOverlineItemType
+include/svl/poolitem.hxx:372
+    enum SfxItemType SvxPageItemType
+include/svl/poolitem.hxx:373
+    enum SfxItemType SvxPagePosSizeItemType
+include/svl/poolitem.hxx:374
+    enum SfxItemType SvxPaperBinItemType
+include/svl/poolitem.hxx:375
+    enum SfxItemType SvxParaGridItemType
+include/svl/poolitem.hxx:376
+    enum SfxItemType SvxParaVertAlignItemType
+include/svl/poolitem.hxx:377
+    enum SfxItemType SvxPatternListItemType
+include/svl/poolitem.hxx:378
+    enum SfxItemType SvxPostItDateItemType
+include/svl/poolitem.hxx:379
+    enum SfxItemType SvxPostureItemType
+include/svl/poolitem.hxx:380
+    enum SfxItemType SvxPrintItemType
+include/svl/poolitem.hxx:381
+    enum SfxItemType SvxProtectItemType
+include/svl/poolitem.hxx:382
+    enum SfxItemType SvxRightMarginItemType
+include/svl/poolitem.hxx:383
+    enum SfxItemType SvxRotateModeItemType
+include/svl/poolitem.hxx:384
+    enum SfxItemType SvxRsidItemType
+include/svl/poolitem.hxx:385
+    enum SfxItemType SvxScriptSetItemType
+include/svl/poolitem.hxx:386
+    enum SfxItemType SvxScriptSpaceItemType
+include/svl/poolitem.hxx:387
+    enum SfxItemType SvxSearchItemType
+include/svl/poolitem.hxx:388
+    enum SfxItemType SvxShadowItemType
+include/svl/poolitem.hxx:389
+    enum SfxItemType SvxShadowedItemType
+include/svl/poolitem.hxx:390
+    enum SfxItemType SvxSizeItemType
+include/svl/poolitem.hxx:391
+    enum SfxItemType SvxSmartTagItemType
+include/svl/poolitem.hxx:392
+    enum SfxItemType SvxStatusItemType
+include/svl/poolitem.hxx:393
+    enum SfxItemType SvxTabStopItemType
+include/svl/poolitem.hxx:394
+    enum SfxItemType SvxTextLeftMarginItemType
+include/svl/poolitem.hxx:395
+    enum SfxItemType SvxTextLineItemType
+include/svl/poolitem.hxx:396
+    enum SfxItemType SvxTextRotateItemType
+include/svl/poolitem.hxx:397
+    enum SfxItemType SvxTwoLinesItemType
+include/svl/poolitem.hxx:398
+    enum SfxItemType SvxUnderlineItemType
+include/svl/poolitem.hxx:399
+    enum SfxItemType SvxULSpaceItemType
+include/svl/poolitem.hxx:400
+    enum SfxItemType SvxVerJustifyItemType
+include/svl/poolitem.hxx:401
+    enum SfxItemType SvxViewLayoutItemType
+include/svl/poolitem.hxx:402
+    enum SfxItemType SvxWeightItemType
+include/svl/poolitem.hxx:403
+    enum SfxItemType SvxWidowsItemType
+include/svl/poolitem.hxx:404
+    enum SfxItemType SvxWordLineItemType
+include/svl/poolitem.hxx:405
+    enum SfxItemType SvxWritingModeItemType
+include/svl/poolitem.hxx:406
+    enum SfxItemType SvxZoomSliderItemType
+include/svl/poolitem.hxx:407
+    enum SfxItemType SwAddPrinterItemType
+include/svl/poolitem.hxx:408
+    enum SfxItemType SwChannelGrfType
+include/svl/poolitem.hxx:409
+    enum SfxItemType SwCondCollItemType
+include/svl/poolitem.hxx:410
+    enum SfxItemType SwContrastGrfType
+include/svl/poolitem.hxx:411
+    enum SfxItemType SwCropGrfType
+include/svl/poolitem.hxx:412
+    enum SfxItemType SwDocDisplayItemType
+include/svl/poolitem.hxx:413
+    enum SfxItemType SwDrawModeGrf_BaseType
+include/svl/poolitem.hxx:414
+    enum SfxItemType SwElemItemType
+include/svl/poolitem.hxx:415
+    enum SfxItemType SwEnvItemType
+include/svl/poolitem.hxx:416
+    enum SfxItemType SwFltAnchorType
+include/svl/poolitem.hxx:417
+    enum SfxItemType SwFltBookmarkType
+include/svl/poolitem.hxx:418
+    enum SfxItemType SwFltRDFMarkType
+include/svl/poolitem.hxx:419
+    enum SfxItemType SwFltRedlineType
+include/svl/poolitem.hxx:420
+    enum SfxItemType SwFltTOXType
+include/svl/poolitem.hxx:421
+    enum SfxItemType SwFmtAidsAutoComplItemType
+include/svl/poolitem.hxx:422
+    enum SfxItemType SwFormatAnchorType
+include/svl/poolitem.hxx:423
+    enum SfxItemType SwFormatAutoFormatType
+include/svl/poolitem.hxx:424
+    enum SfxItemType SwFormatChainType
+include/svl/poolitem.hxx:425
+    enum SfxItemType SwFormatCharFormatType
+include/svl/poolitem.hxx:426
+    enum SfxItemType SwFormatColType
+include/svl/poolitem.hxx:427
+    enum SfxItemType SwFormatContentControlType
+include/svl/poolitem.hxx:428
+    enum SfxItemType SwFormatContentType
+include/svl/poolitem.hxx:429
+    enum SfxItemType SwFormatDropType
+include/svl/poolitem.hxx:430
+    enum SfxItemType SwFormatEditInReadonly
+include/svl/poolitem.hxx:431
+    enum SfxItemType SwFormatFieldType
+include/svl/poolitem.hxx:432
+    enum SfxItemType SwFormatFrameSizeType
+include/svl/poolitem.hxx:433
+    enum SfxItemType SwFormatFillOrderType
+include/svl/poolitem.hxx:434
+    enum SfxItemType SwFormatFlyCntType
+include/svl/poolitem.hxx:435
+    enum SfxItemType SwFormatFlySplitType
+include/svl/poolitem.hxx:436
+    enum SfxItemType SwFormatFollowTextFlowType
+include/svl/poolitem.hxx:437
+    enum SfxItemType SwFormatFooterType
+include/svl/poolitem.hxx:438
+    enum SfxItemType SwFormatFootnoteEndAtTextEndType
+include/svl/poolitem.hxx:439
+    enum SfxItemType SwFormatFootnoteType
+include/svl/poolitem.hxx:440
+    enum SfxItemType SwFormatHeaderType
+include/svl/poolitem.hxx:441
+    enum SfxItemType SwFormatHoriOrientType
+include/svl/poolitem.hxx:442
+    enum SfxItemType SwFormatINetFormatType
+include/svl/poolitem.hxx:443
+    enum SfxItemType SwFormatLayoutSplitType
+include/svl/poolitem.hxx:444
+    enum SfxItemType SwFormatLineNumberType
+include/svl/poolitem.hxx:445
+    enum SfxItemType SwFormatLinebreakType
+include/svl/poolitem.hxx:446
+    enum SfxItemType SwFormatMetaType
+include/svl/poolitem.hxx:447
+    enum SfxItemType SwFormatNoBalancedColumnsType
+include/svl/poolitem.hxx:448
+    enum SfxItemType SwFormatPageDescType
+include/svl/poolitem.hxx:449
+    enum SfxItemType SwFormatRefMarkType
+include/svl/poolitem.hxx:450
+    enum SfxItemType SwFormatRowSplitType
+include/svl/poolitem.hxx:451
+    enum SfxItemType SwFormatRubyType
+include/svl/poolitem.hxx:452
+    enum SfxItemType SwFormatSurroundType
+include/svl/poolitem.hxx:453
+    enum SfxItemType SwFormatURLType
+include/svl/poolitem.hxx:454
+    enum SfxItemType SwFormatVertOrientType
+include/svl/poolitem.hxx:455
+    enum SfxItemType SwFormatWrapInfluenceOnOjPosType
+include/svl/poolitem.hxx:456
+    enum SfxItemType SwFormatWrapTextAtFlyStartType
+include/svl/poolitem.hxx:457
+    enum SfxItemType SwGammaGrfType
+include/svl/poolitem.hxx:458
+    enum SfxItemType SwHeaderAndFooterEatSpacingItemType
+include/svl/poolitem.hxx:459
+    enum SfxItemType SwInvertGrfType
+include/svl/poolitem.hxx:460
+    enum SfxItemType SwLabItemType
+include/svl/poolitem.hxx:461
+    enum SfxItemType SwLuminanceGrfType
+include/svl/poolitem.hxx:462
+    enum SfxItemType SwMirrorGrfType
+include/svl/poolitem.hxx:463
+    enum SfxItemType SwMsgPoolItemType
+include/svl/poolitem.hxx:464
+    enum SfxItemType SwNumRuleItemType
+include/svl/poolitem.hxx:465
+    enum SfxItemType SwPaMItemType
+include/svl/poolitem.hxx:466
+    enum SfxItemType SwPageFootnoteInfoItemType
+include/svl/poolitem.hxx:467
+    enum SfxItemType SwPtrItemType
+include/svl/poolitem.hxx:468
+    enum SfxItemType SwRotationGrfType
+include/svl/poolitem.hxx:469
+    enum SfxItemType SwShadowCursorItemType
+include/svl/poolitem.hxx:470
+    enum SfxItemType SwTOXMarkType
+include/svl/poolitem.hxx:471
+    enum SfxItemType SwTableBoxNumFormatType
+include/svl/poolitem.hxx:472
+    enum SfxItemType SwTableBoxValueType
+include/svl/poolitem.hxx:473
+    enum SfxItemType SwTableFormulaType
+include/svl/poolitem.hxx:474
+    enum SfxItemType SwTextGridItemType
+include/svl/poolitem.hxx:475
+    enum SfxItemType SwTransparencyGrfType
+include/svl/poolitem.hxx:476
+    enum SfxItemType SwUINumRuleItemType
+include/svl/poolitem.hxx:477
+    enum SfxItemType SwWrtShellItemType
+include/svl/poolitem.hxx:478
+    enum SfxItemType XFillAttrSetItemType
+include/svl/poolitem.hxx:479
+    enum SfxItemType XFillBackgroundItemType
+include/svl/poolitem.hxx:480
+    enum SfxItemType XFillBmpPosItemType
+include/svl/poolitem.hxx:481
+    enum SfxItemType XFillBmpPosOffsetXItemType
+include/svl/poolitem.hxx:482
+    enum SfxItemType XFillBmpPosOffsetYItemType
+include/svl/poolitem.hxx:483
+    enum SfxItemType XFillBmpSizeLogItemType
+include/svl/poolitem.hxx:484
+    enum SfxItemType XFillBmpSizeXItemType
+include/svl/poolitem.hxx:485
+    enum SfxItemType XFillBmpSizeYItemType
+include/svl/poolitem.hxx:486
+    enum SfxItemType XFillBmpStretchItemType
+include/svl/poolitem.hxx:487
+    enum SfxItemType XFillBmpTileItemType
+include/svl/poolitem.hxx:488
+    enum SfxItemType XFillBmpTileOffsetXItemType
+include/svl/poolitem.hxx:489
+    enum SfxItemType XFillBmpTileOffsetYItemType
+include/svl/poolitem.hxx:490
+    enum SfxItemType XFillStyleItemType
+include/svl/poolitem.hxx:491
+    enum SfxItemType XFillTransparenceItemType
+include/svl/poolitem.hxx:492
+    enum SfxItemType XFillUseSlideBackgroundItemType
+include/svl/poolitem.hxx:493
+    enum SfxItemType XFormTextAdjustItemType
+include/svl/poolitem.hxx:494
+    enum SfxItemType XFormTextDistanceItemType
+include/svl/poolitem.hxx:495
+    enum SfxItemType XFormTextHideFormItemType
+include/svl/poolitem.hxx:496
+    enum SfxItemType XFormTextMirrorItemType
+include/svl/poolitem.hxx:497
+    enum SfxItemType XFormTextOutlineItemType
+include/svl/poolitem.hxx:498
+    enum SfxItemType XFormTextShadowItemType
+include/svl/poolitem.hxx:499
+    enum SfxItemType XFormTextShadowTranspItemType
+include/svl/poolitem.hxx:500
+    enum SfxItemType XFormTextShadowXValItemType
+include/svl/poolitem.hxx:501
+    enum SfxItemType XFormTextShadowYValItemType
+include/svl/poolitem.hxx:502
+    enum SfxItemType XFormTextStartItemType
+include/svl/poolitem.hxx:503
+    enum SfxItemType XFormTextStyleItemType
+include/svl/poolitem.hxx:504
+    enum SfxItemType XGradientStepCountItemType
+include/svl/poolitem.hxx:505
+    enum SfxItemType XLineAttrSetItemType
+include/svl/poolitem.hxx:506
+    enum SfxItemType XLineCapItemType
+include/svl/poolitem.hxx:507
+    enum SfxItemType XLineEndCenterItemType
+include/svl/poolitem.hxx:508
+    enum SfxItemType XLineEndWidthItemType
+include/svl/poolitem.hxx:509
+    enum SfxItemType XLineJointItemType
+include/svl/poolitem.hxx:510
+    enum SfxItemType XLineStartCenterItem
+include/svl/poolitem.hxx:511
+    enum SfxItemType XLineStartWidthItemType
+include/svl/poolitem.hxx:512
+    enum SfxItemType XLineStyleItemType
+include/svl/poolitem.hxx:513
+    enum SfxItemType XLineTransparenceItemType
+include/svl/poolitem.hxx:514
+    enum SfxItemType XLineWidthItemType
+include/svl/poolitem.hxx:516
+    enum SfxItemType SwTestItemType
+include/svl/sigstruct.hxx:77
     enum svl::crypto::SignatureMethodAlgorithm RSA
 include/svl/srchdefs.hxx:41
     enum SearchOptionFlags ALL
 include/svl/style.hxx:56
     enum SfxStyleSearchBits ScStandard
-include/svtools/borderline.hxx:45
+include/svtools/borderline.hxx:46
     enum BorderWidthImplFlags FIXED
 include/svtools/colorcfg.hxx:33
     enum svtools::ColorConfigEntry DOCBOUNDARIES
@@ -2598,7 +3406,7 @@ include/svtools/colrdlg.hxx:35
     enum svtools::ColorPickerMode Modify
 include/svtools/colrdlg.hxx:35
     enum svtools::ColorPickerMode Select
-include/svtools/editbrowsebox.hxx:897
+include/svtools/editbrowsebox.hxx:899
     enum svt::EditBrowseBox::BrowseInfo COLCHANGE
 include/svtools/imagemgr.hxx:29
     enum SvImageId START
@@ -2670,7 +3478,7 @@ include/svx/gridctrl.hxx:58
     enum GridRowStatus Invalid
 include/svx/gridctrl.hxx:123
     enum InitWindowFacet All
-include/svx/numvset.hxx:46
+include/svx/numvset.hxx:47
     enum NumberingPageType BITMAP
 include/svx/optgenrl.hxx:26
     enum EditPosition COMPANY
@@ -2704,7 +3512,7 @@ include/svx/optgenrl.hxx:40
     enum EditPosition EMAIL
 include/svx/papersizelistbox.hxx:30
     enum PaperSizeApp Draw
-include/svx/ruler.hxx:53
+include/svx/ruler.hxx:54
     enum SvxRulerDragFlags OBJECT
 include/svx/sdasitm.hxx:53
     enum SdrCustomShapeGeometryItem::HashState Unusable
@@ -2742,11 +3550,11 @@ include/svx/svdoashp.hxx:58
     enum CustomShapeHandleModes ORTHO4
 include/svx/svdobj.hxx:101
     enum SdrInventor IMap
-include/svx/svdobjkind.hxx:63
+include/svx/svdobjkind.hxx:64
     enum SdrObjKind E3D_Object
-include/svx/svdobjkind.hxx:99
-    enum SdrObjKind BasicDialogControl
 include/svx/svdobjkind.hxx:100
+    enum SdrObjKind BasicDialogControl
+include/svx/svdobjkind.hxx:101
     enum SdrObjKind BasicDialogDialog
 include/svx/svdograf.hxx:43
     enum SdrGrafObjTransformsAttrs ALL
@@ -2952,9 +3760,9 @@ include/unotools/bootstrap.hxx:83
     enum utl::Bootstrap::Status INVALID_USER_INSTALL
 include/unotools/bootstrap.hxx:84
     enum utl::Bootstrap::Status INVALID_BASE_INSTALL
-include/unotools/confignode.hxx:164
+include/unotools/confignode.hxx:149
     enum utl::OConfigurationNode::NAMEORIGIN NO_CONFIGURATION
-include/unotools/confignode.hxx:194
+include/unotools/confignode.hxx:179
     enum utl::OConfigurationTreeRoot::CREATION_MODE CM_UPDATABLE
 include/unotools/eventcfg.hxx:32
     enum GlobalEventId DOCCREATED
@@ -3198,45 +4006,41 @@ include/vcl/keycodes.hxx:177
     enum ModKeyFlags RightMod3
 include/vcl/keycodes.hxx:192
     enum KeyIndicatorState NUMLOCK
-include/vcl/lazydelete.hxx:66
+include/vcl/lazydelete.hxx:67
     enum vcl::DeleteOnDeinitFlag Empty
-include/vcl/outdev.hxx:148
+include/vcl/outdev.hxx:150
     enum OutDevViewType DontKnow
-include/vcl/outdev.hxx:148
+include/vcl/outdev.hxx:150
     enum OutDevViewType SlideShow
-include/vcl/pdf/PDFAnnotationMarker.hxx:58
+include/vcl/pdf/PDFAnnotationMarker.hxx:70
     enum vcl::pdf::PDFTextMarkerType Highlight
-include/vcl/pdf/PDFAnnotationSubType.hxx:33
-    enum vcl::pdf::PDFAnnotationSubType Popup
-include/vcl/pdf/PDFAnnotationSubType.hxx:37
-    enum vcl::pdf::PDFAnnotationSubType Widget
-include/vcl/pdfwriter.hxx:124
+include/vcl/pdfwriter.hxx:115
     enum vcl::PDFWriter::StructElement Article
-include/vcl/pdfwriter.hxx:124
+include/vcl/pdfwriter.hxx:115
     enum vcl::PDFWriter::StructElement Section
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:116
     enum vcl::PDFWriter::StructElement Index
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:116
     enum vcl::PDFWriter::StructElement TOC
-include/vcl/pdfwriter.hxx:125
+include/vcl/pdfwriter.hxx:116
     enum vcl::PDFWriter::StructElement TOCI
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement RB
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement RP
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement Ruby
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement WP
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement WT
-include/vcl/pdfwriter.hxx:134
+include/vcl/pdfwriter.hxx:125
     enum vcl::PDFWriter::StructElement Warichu
-include/vcl/pdfwriter.hxx:170
+include/vcl/pdfwriter.hxx:161
     enum vcl::PDFWriter::StructAttributeValue Background
-include/vcl/pdfwriter.hxx:217
+include/vcl/pdfwriter.hxx:208
     enum vcl::PDFWriter::FormatType Text
-include/vcl/pdfwriter.hxx:582
+include/vcl/pdfwriter.hxx:573
     enum vcl::PDFWriter::ColorMode DrawColor
 include/vcl/printer/Options.hxx:41
     enum vcl::printer::GradientMode Color
@@ -3246,6 +4050,8 @@ include/vcl/rendercontext/AddFontSubstituteFlags.hxx:28
     enum AddFontSubstituteFlags ScreenOnly
 include/vcl/rendercontext/DrawModeFlags.hxx:27
     enum DrawModeFlags Default
+include/vcl/rendercontext/SalLayoutFlags.hxx:36
+    enum SalLayoutFlags UnclusteredGlyphs
 include/vcl/salgtype.hxx:30
     enum DeviceFormat WITH_ALPHA
 include/vcl/salnativewidgets.hxx:132
@@ -3288,9 +4094,9 @@ include/vcl/toolkit/dialog.hxx:46
     enum Dialog::InitFlag Default
 include/vcl/toolkit/floatwin.hxx:49
     enum FloatWinTitleType Unknown
-include/vcl/toolkit/ivctrl.hxx:53
+include/vcl/toolkit/ivctrl.hxx:51
     enum SvxIconChoiceCtrlTextMode Short
-include/vcl/toolkit/ivctrl.hxx:58
+include/vcl/toolkit/ivctrl.hxx:56
     enum SvxIconChoiceCtrlPositionMode Free
 include/vcl/toolkit/prgsbar.hxx:59
     enum ProgressBar::BarStyle Level
@@ -3328,6 +4134,8 @@ include/vcl/vclenum.hxx:314
     enum DrawFrameFlags BorderWindowBorder
 include/vcl/vclenum.hxx:368
     enum TrackingEventFlags Key
+include/vcl/vclevent.hxx:48
+    enum VclEventId ComboboxSetText
 include/vcl/vclevent.hxx:93
     enum VclEventId ScrollbarEndScroll
 include/vcl/vectorgraphicdata.hxx:100
@@ -3336,9 +4144,9 @@ include/vcl/VectorGraphicSearch.hxx:24
     enum SearchStartPosition Begin
 include/vcl/virdev.hxx:44
     enum VirtualDevice::RefDevMode Custom
-include/vcl/weld.hxx:896
+include/vcl/weld.hxx:900
     enum weld::ColumnToggleType Check
-include/vcl/weld.hxx:2400
+include/vcl/weld.hxx:2406
     enum weld::Placement End
 include/vcl/window.hxx:136
     enum PosSizeFlags PosSize
@@ -3362,23 +4170,23 @@ include/vcl/windowstate.hxx:42
     enum vcl::WindowState SystemMask
 include/vcl/windowstate.hxx:62
     enum vcl::WindowDataMask All
-include/vcl/wintypes.hxx:240
+include/vcl/wintypes.hxx:241
     enum SymbolAlign LEFT
-include/vcl/wintypes.hxx:253
-    enum StandardButtonType More
 include/vcl/wintypes.hxx:254
-    enum StandardButtonType Ignore
+    enum StandardButtonType More
 include/vcl/wintypes.hxx:255
-    enum StandardButtonType Abort
+    enum StandardButtonType Ignore
 include/vcl/wintypes.hxx:256
-    enum StandardButtonType Less
+    enum StandardButtonType Abort
 include/vcl/wintypes.hxx:257
-    enum StandardButtonType Back
+    enum StandardButtonType Less
 include/vcl/wintypes.hxx:258
-    enum StandardButtonType Next
+    enum StandardButtonType Back
 include/vcl/wintypes.hxx:259
-    enum StandardButtonType Finish
+    enum StandardButtonType Next
 include/vcl/wintypes.hxx:260
+    enum StandardButtonType Finish
+include/vcl/wintypes.hxx:261
     enum StandardButtonType Count
 include/xmloff/families.hxx:77
     enum XmlStyleFamily TABLE_TEMPLATE_ID
@@ -3406,7 +4214,7 @@ include/xmloff/txtimp.hxx:76
     enum XMLTextType Footnote
 include/xmloff/txtparae.hxx:75
     enum TextPNS ODF
-include/xmloff/txtparae.hxx:126
+include/xmloff/txtparae.hxx:128
     enum XMLTextParagraphExport::FieldmarkType CHECK
 include/xmloff/xmlerror.hxx:82
     enum SvXMLErrorFlags WARNING_OCCURRED
@@ -3642,39 +4450,39 @@ sc/inc/chartpos.hxx:96
     enum ScChartGlue Both
 sc/inc/chgtrack.hxx:589
     enum ScChangeActionContentCellType SC_CACCT_NORMAL
-sc/inc/colorscale.hxx:190
-    enum ScIconSetType IconSet_3Arrows
-sc/inc/colorscale.hxx:191
-    enum ScIconSetType IconSet_3ArrowsGray
-sc/inc/colorscale.hxx:192
-    enum ScIconSetType IconSet_3Flags
-sc/inc/colorscale.hxx:193
-    enum ScIconSetType IconSet_3TrafficLights1
 sc/inc/colorscale.hxx:194
-    enum ScIconSetType IconSet_3TrafficLights2
+    enum ScIconSetType IconSet_3Arrows
 sc/inc/colorscale.hxx:195
-    enum ScIconSetType IconSet_3Signs
+    enum ScIconSetType IconSet_3ArrowsGray
 sc/inc/colorscale.hxx:196
-    enum ScIconSetType IconSet_3Symbols
+    enum ScIconSetType IconSet_3Flags
 sc/inc/colorscale.hxx:197
+    enum ScIconSetType IconSet_3TrafficLights1
+sc/inc/colorscale.hxx:198
+    enum ScIconSetType IconSet_3TrafficLights2
+sc/inc/colorscale.hxx:199
+    enum ScIconSetType IconSet_3Signs
+sc/inc/colorscale.hxx:200
+    enum ScIconSetType IconSet_3Symbols
+sc/inc/colorscale.hxx:201
     enum ScIconSetType IconSet_3Symbols2
-sc/inc/colorscale.hxx:202
-    enum ScIconSetType IconSet_4Arrows
-sc/inc/colorscale.hxx:203
-    enum ScIconSetType IconSet_4ArrowsGray
-sc/inc/colorscale.hxx:204
-    enum ScIconSetType IconSet_4RedToBlack
-sc/inc/colorscale.hxx:205
-    enum ScIconSetType IconSet_4Rating
 sc/inc/colorscale.hxx:206
-    enum ScIconSetType IconSet_4TrafficLights
+    enum ScIconSetType IconSet_4Arrows
 sc/inc/colorscale.hxx:207
-    enum ScIconSetType IconSet_5Arrows
+    enum ScIconSetType IconSet_4ArrowsGray
 sc/inc/colorscale.hxx:208
-    enum ScIconSetType IconSet_5ArrowsGray
+    enum ScIconSetType IconSet_4RedToBlack
 sc/inc/colorscale.hxx:209
-    enum ScIconSetType IconSet_5Ratings
+    enum ScIconSetType IconSet_4Rating
 sc/inc/colorscale.hxx:210
+    enum ScIconSetType IconSet_4TrafficLights
+sc/inc/colorscale.hxx:211
+    enum ScIconSetType IconSet_5Arrows
+sc/inc/colorscale.hxx:212
+    enum ScIconSetType IconSet_5ArrowsGray
+sc/inc/colorscale.hxx:213
+    enum ScIconSetType IconSet_5Ratings
+sc/inc/colorscale.hxx:214
     enum ScIconSetType IconSet_5Quarters
 sc/inc/compiler.hxx:52
     enum ScCharFlags Illegal
@@ -3690,13 +4498,13 @@ sc/inc/datastreamgettime.hxx:30
     enum sc::DebugTime Render
 sc/inc/detfunc.hxx:45
     enum ScDetectiveObjType SC_DETOBJ_RECTANGLE
-sc/inc/document.hxx:265
+sc/inc/document.hxx:266
     enum CommentCaptionState ALLSHOWN
-sc/inc/document.hxx:273
+sc/inc/document.hxx:274
     enum RangeNameScope SHEET
-sc/inc/document.hxx:318
+sc/inc/document.hxx:319
     enum ScMutationGuardFlags CORE
-sc/inc/document.hxx:354
+sc/inc/document.hxx:364
     enum ScDocument::HardRecalcState TEMPORARY
 sc/inc/dpglobal.hxx:46
     enum ScDPValue::Type Value
@@ -3714,53 +4522,73 @@ sc/inc/patattr.hxx:50
     enum ScAutoFontColorMode Display
 sc/inc/PivotTableDataSequence.hxx:36
     enum sc::ValueType Empty
-sc/inc/queryiter.hxx:158
+sc/inc/queryiter.hxx:159
     enum ScQueryCellIteratorBase::StopOnMismatchBits nStopOnMismatchEnabled
-sc/inc/queryiter.hxx:158
+sc/inc/queryiter.hxx:159
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchEnabled
-sc/inc/queryiter.hxx:158
+sc/inc/queryiter.hxx:159
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchEnabled
-sc/inc/queryiter.hxx:158
+sc/inc/queryiter.hxx:159
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchEnabled
-sc/inc/queryiter.hxx:158
+sc/inc/queryiter.hxx:159
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchEnabled
-sc/inc/queryiter.hxx:159
+sc/inc/queryiter.hxx:160
     enum ScQueryCellIteratorBase::StopOnMismatchBits nStopOnMismatchOccurred
-sc/inc/queryiter.hxx:159
+sc/inc/queryiter.hxx:160
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchOccurred
-sc/inc/queryiter.hxx:159
+sc/inc/queryiter.hxx:160
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchOccurred
-sc/inc/queryiter.hxx:159
+sc/inc/queryiter.hxx:160
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchOccurred
-sc/inc/queryiter.hxx:159
+sc/inc/queryiter.hxx:160
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchOccurred
-sc/inc/queryiter.hxx:166
+sc/inc/queryiter.hxx:167
     enum ScQueryCellIteratorBase::TestEqualConditionBits nTestEqualConditionEnabled
-sc/inc/queryiter.hxx:166
+sc/inc/queryiter.hxx:167
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionEnabled
-sc/inc/queryiter.hxx:166
+sc/inc/queryiter.hxx:167
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionEnabled
-sc/inc/queryiter.hxx:166
+sc/inc/queryiter.hxx:167
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionEnabled
-sc/inc/queryiter.hxx:166
+sc/inc/queryiter.hxx:167
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionEnabled
-sc/inc/queryiter.hxx:167
+sc/inc/queryiter.hxx:168
     enum ScQueryCellIteratorBase::TestEqualConditionBits nTestEqualConditionMatched
-sc/inc/queryiter.hxx:167
+sc/inc/queryiter.hxx:168
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionMatched
-sc/inc/queryiter.hxx:167
+sc/inc/queryiter.hxx:168
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionMatched
-sc/inc/queryiter.hxx:167
+sc/inc/queryiter.hxx:168
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionMatched
-sc/inc/queryiter.hxx:167
+sc/inc/queryiter.hxx:168
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionMatched
-sc/inc/queryiter.hxx:173
+sc/inc/queryiter.hxx:174
     enum ScQueryCellIteratorBase::SortedBinarySearchBits nBinarySearchDisabled
-sc/inc/queryiter.hxx:173
+sc/inc/queryiter.hxx:174
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nBinarySearchDisabled
-sc/inc/queryiter.hxx:173
+sc/inc/queryiter.hxx:174
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nBinarySearchDisabled
-sc/inc/rangecache.hxx:63
+sc/inc/queryiter.hxx:175
+    enum ScQueryCellIteratorBase::SortedBinarySearchBits nSearchbAscd
+sc/inc/queryiter.hxx:175
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nSearchbAscd
+sc/inc/queryiter.hxx:175
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::SortedBinarySearchBits nSearchbAscd
+sc/inc/queryiter.hxx:175
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nSearchbAscd
+sc/inc/queryiter.hxx:175
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::SortedBinarySearchBits nSearchbAscd
+sc/inc/queryiter.hxx:176
+    enum ScQueryCellIteratorBase::SortedBinarySearchBits nSearchbDesc
+sc/inc/queryiter.hxx:176
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nSearchbDesc
+sc/inc/queryiter.hxx:176
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::SortedBinarySearchBits nSearchbDesc
+sc/inc/queryiter.hxx:176
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::SortedBinarySearchBits nSearchbDesc
+sc/inc/queryiter.hxx:176
+    enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::SortedBinarySearchBits nSearchbDesc
+sc/inc/rangecache.hxx:64
     enum ScSortedRangeCache::ValueType StringsCaseInsensitive
 sc/inc/rangenam.hxx:50
     enum ScRangeData::Type Name
@@ -3871,34 +4699,36 @@ sc/inc/viewopti.hxx:34
 sc/inc/viewopti.hxx:35
     enum ScViewOption VOPT_NOTES
 sc/inc/viewopti.hxx:36
-    enum ScViewOption VOPT_FORMULAS_MARKS
+    enum ScViewOption VOPT_NOTEAUTHOR
 sc/inc/viewopti.hxx:37
-    enum ScViewOption VOPT_VSCROLL
+    enum ScViewOption VOPT_FORMULAS_MARKS
 sc/inc/viewopti.hxx:38
-    enum ScViewOption VOPT_HSCROLL
+    enum ScViewOption VOPT_VSCROLL
 sc/inc/viewopti.hxx:39
-    enum ScViewOption VOPT_TABCONTROLS
+    enum ScViewOption VOPT_HSCROLL
 sc/inc/viewopti.hxx:40
-    enum ScViewOption VOPT_OUTLINER
+    enum ScViewOption VOPT_TABCONTROLS
 sc/inc/viewopti.hxx:41
-    enum ScViewOption VOPT_HEADER
+    enum ScViewOption VOPT_OUTLINER
 sc/inc/viewopti.hxx:42
-    enum ScViewOption VOPT_GRID
+    enum ScViewOption VOPT_HEADER
 sc/inc/viewopti.hxx:43
-    enum ScViewOption VOPT_GRID_ONTOP
+    enum ScViewOption VOPT_GRID
 sc/inc/viewopti.hxx:44
-    enum ScViewOption VOPT_HELPLINES
+    enum ScViewOption VOPT_GRID_ONTOP
 sc/inc/viewopti.hxx:45
-    enum ScViewOption VOPT_ANCHOR
+    enum ScViewOption VOPT_HELPLINES
 sc/inc/viewopti.hxx:46
-    enum ScViewOption VOPT_PAGEBREAKS
+    enum ScViewOption VOPT_ANCHOR
 sc/inc/viewopti.hxx:47
+    enum ScViewOption VOPT_PAGEBREAKS
+sc/inc/viewopti.hxx:48
     enum ScViewOption VOPT_SUMMARY
-sc/inc/viewopti.hxx:49
+sc/inc/viewopti.hxx:50
     enum ScViewOption VOPT_COPY_SHEET
-sc/inc/viewopti.hxx:55
-    enum ScVObjType VOBJ_TYPE_OLE
 sc/inc/viewopti.hxx:56
+    enum ScVObjType VOBJ_TYPE_OLE
+sc/inc/viewopti.hxx:57
     enum ScVObjType VOBJ_TYPE_CHART
 sc/inc/xmlwrap.hxx:49
     enum ImportFlags All
@@ -3920,40 +4750,40 @@ sc/source/core/tool/cellkeytranslator.cxx:40
     enum (anonymous namespace)::LocaleMatch LOCALE_MATCH_LANG_SCRIPT
 sc/source/core/tool/cellkeytranslator.cxx:41
     enum (anonymous namespace)::LocaleMatch LOCALE_MATCH_LANG_SCRIPT_COUNTRY
-sc/source/core/tool/token.cxx:2846
+sc/source/core/tool/token.cxx:2857
     enum (anonymous namespace)::ShrinkResult UNMODIFIED
 sc/source/filter/excel/xeformula.cxx:227
     enum (anonymous namespace)::XclExpFmlaClassType EXC_CLASSTYPE_ARRAY
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_DashDot
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_DashDotDot
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_Dashed
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_Dotted
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_DoubleThin
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_FineDashed
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_Last
-sc/source/filter/excel/xestyle.cxx:1620
+sc/source/filter/excel/xestyle.cxx:1623
     enum CalcLineIndex Idx_Solid
-sc/source/filter/excel/xestyle.cxx:1621
+sc/source/filter/excel/xestyle.cxx:1624
     enum ExcelWidthIndex Width_Hair
-sc/source/filter/excel/xestyle.cxx:1621
+sc/source/filter/excel/xestyle.cxx:1624
     enum ExcelWidthIndex Width_Last
-sc/source/filter/excel/xestyle.cxx:1621
+sc/source/filter/excel/xestyle.cxx:1624
     enum ExcelWidthIndex Width_Medium
-sc/source/filter/excel/xestyle.cxx:1621
+sc/source/filter/excel/xestyle.cxx:1624
     enum ExcelWidthIndex Width_Thick
-sc/source/filter/excel/xestyle.cxx:1621
+sc/source/filter/excel/xestyle.cxx:1624
     enum ExcelWidthIndex Width_Thin
-sc/source/filter/excel/xiescher.cxx:481
-    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:481:17) eCreateFromMSOCXControl
-sc/source/filter/excel/xiescher.cxx:481
-    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:481:17) eCreateFromMSTBXControl
+sc/source/filter/excel/xiescher.cxx:480
+    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:480:17) eCreateFromMSOCXControl
+sc/source/filter/excel/xiescher.cxx:480
+    enum (unnamed at /home/noel/libo-plugin/sc/source/filter/excel/xiescher.cxx:480:17) eCreateFromMSTBXControl
 sc/source/filter/inc/colrowst.hxx:30
     enum ExcColRowFlags Hidden
 sc/source/filter/inc/decl.h:23
@@ -3972,6 +4802,18 @@ sc/source/filter/inc/orcusinterface.hxx:245
     enum ScOrcusFormula::ResultType Empty
 sc/source/filter/inc/orcusinterface.hxx:245
     enum ScOrcusFormula::ResultType NotSet
+sc/source/filter/inc/PivotTableFormat.hxx:28
+    enum oox::xls::PivotAreaType Normal
+sc/source/filter/inc/PivotTableFormat.hxx:29
+    enum oox::xls::PivotAreaType Data
+sc/source/filter/inc/PivotTableFormat.hxx:30
+    enum oox::xls::PivotAreaType All
+sc/source/filter/inc/PivotTableFormat.hxx:31
+    enum oox::xls::PivotAreaType Origin
+sc/source/filter/inc/PivotTableFormat.hxx:32
+    enum oox::xls::PivotAreaType Button
+sc/source/filter/inc/PivotTableFormat.hxx:33
+    enum oox::xls::PivotAreaType TopRight
 sc/source/filter/inc/xeextlst.hxx:21
     enum XclExpExtType XclExpExtDataBarType
 sc/source/filter/inc/xeextlst.hxx:22
@@ -3994,7 +4836,7 @@ sc/source/filter/inc/xicontent.hxx:216
     enum XclImpWebQuery::XclImpWebQueryMode xlWQDocument
 sc/source/filter/inc/xihelper.hxx:191
     enum XclImpHFConverter::XclImpHFPortion EXC_HF_PORTION_COUNT
-sc/source/filter/inc/xistyle.hxx:644
+sc/source/filter/inc/xistyle.hxx:641
     enum XclImpXFRangeBuffer::XclImpXFInsertMode xlXFModeCell
 sc/source/filter/inc/xlchart.hxx:1114
     enum XclChObjectType EXC_CHOBJTYPE_BACKGROUND
@@ -4084,6 +4926,8 @@ sc/source/ui/inc/checklistmenu.hxx:30
     enum ScCheckListMember::DatePartType YEAR
 sc/source/ui/inc/checklistmenu.hxx:31
     enum ScCheckListMember::DatePartType MONTH
+sc/source/ui/inc/checklistmenu.hxx:102
+    enum ScCheckListMenuControl::RestoreFocus Menu
 sc/source/ui/inc/csvcontrol.hxx:92
     enum ScCsvDiff HeaderWidth
 sc/source/ui/inc/csvcontrol.hxx:93
@@ -4126,8 +4970,8 @@ sc/source/ui/inc/undobase.hxx:78
     enum ScBlockUndoMode SC_UNDO_MANUALHEIGHT
 sc/source/ui/inc/undobase.hxx:78
     enum ScBlockUndoMode SC_UNDO_SIMPLE
-sc/source/ui/inc/validate.hxx:223
-    enum ScValidationDlg::(unnamed at /home/noel/libo-plugin/sc/source/ui/inc/validate.hxx:223:5) SLOTID
+sc/source/ui/inc/validate.hxx:224
+    enum ScValidationDlg::(unnamed at /home/noel/libo-plugin/sc/source/ui/inc/validate.hxx:224:5) SLOTID
 sc/source/ui/inc/viewdata.hxx:66
     enum ScMarkType SC_MARK_FILTERED
 sc/source/ui/inc/viewdata.hxx:92
@@ -4140,7 +4984,7 @@ sc/source/ui/pagedlg/areasdlg.cxx:49
     enum (unnamed at /home/noel/libo-plugin/sc/source/ui/pagedlg/areasdlg.cxx:47:1) SC_AREASDLG_RR_USER
 sc/source/ui/pagedlg/areasdlg.cxx:50
     enum (unnamed at /home/noel/libo-plugin/sc/source/ui/pagedlg/areasdlg.cxx:47:1) SC_AREASDLG_RR_OFFSET
-sc/source/ui/unoobj/cellsuno.cxx:9018
+sc/source/ui/unoobj/cellsuno.cxx:9016
     enum (anonymous namespace)::ScUniqueFormatsEntry::EntryState STATE_COMPLEX
 sc/source/ui/unoobj/chart2uno.cxx:448
     enum (anonymous namespace)::Chart2Positioner::GlueType GLUETYPE_COLS
@@ -4158,8 +5002,8 @@ sc/source/ui/view/prevloc.cxx:38
     enum (anonymous namespace)::ScPreviewLocationType SC_PLOC_NOTEMARK
 sc/source/ui/view/prevloc.cxx:39
     enum (anonymous namespace)::ScPreviewLocationType SC_PLOC_NOTETEXT
-sc/source/ui/view/tabview3.cxx:1502
-    enum (unnamed at /home/noel/libo-plugin/sc/source/ui/view/tabview3.cxx:1502:5) MOD_BOTH
+sc/source/ui/view/tabview3.cxx:1503
+    enum (unnamed at /home/noel/libo-plugin/sc/source/ui/view/tabview3.cxx:1503:5) MOD_BOTH
 sc/source/ui/view/viewfun2.cxx:257
     enum (anonymous namespace)::ScAutoSum ScAutoSumAverage
 sc/source/ui/view/viewfun2.cxx:258
@@ -4208,8 +5052,6 @@ sd/inc/diadef.h:26
     enum PresChange SemiAuto
 sd/inc/sdenumdef.hxx:28
     enum SnapKind Point
-sd/inc/sdmod.hxx:56
-    enum SdOptionStreamMode Load
 sd/inc/sdxmlwrp.hxx:30
     enum SdXMLFilterMode Normal
 sd/source/console/PresenterBitmapContainer.hxx:66
@@ -4224,7 +5066,7 @@ sd/source/console/PresenterScrollBar.hxx:145
     enum sdext::presenter::PresenterScrollBar::Area Total
 sd/source/console/PresenterWindowManager.hxx:88
     enum sdext::presenter::PresenterWindowManager::LayoutMode LM_Generic
-sd/source/ui/dlg/present.cxx:43
+sd/source/ui/dlg/present.cxx:40
     enum (anonymous namespace)::PresenterConsoleMode Windowed
 sd/source/ui/inc/DrawController.hxx:94
     enum sd::DrawController::PropertyHandle PROPERTY_UPDATEACC
@@ -4374,67 +5216,67 @@ sdext/source/pdfimport/inc/genericelements.hxx:206
     enum pdfi::ParagraphElement::ParagraphType Normal
 sdext/source/pdfimport/tree/drawtreevisiting.hxx:96
     enum pdfi::DrawXmlEmitter::DocType IMPRESS_DOC
-sdext/source/pdfimport/wrapper/wrapper.cxx:89
-    enum pdfi::(anonymous namespace)::parseKey HYPERLINK
 sdext/source/pdfimport/wrapper/wrapper.cxx:90
-    enum pdfi::(anonymous namespace)::parseKey INTERSECTCLIP
+    enum pdfi::(anonymous namespace)::parseKey HYPERLINK
 sdext/source/pdfimport/wrapper/wrapper.cxx:91
-    enum pdfi::(anonymous namespace)::parseKey INTERSECTEOCLIP
+    enum pdfi::(anonymous namespace)::parseKey INTERSECTCLIP
 sdext/source/pdfimport/wrapper/wrapper.cxx:92
-    enum pdfi::(anonymous namespace)::parseKey POPSTATE
+    enum pdfi::(anonymous namespace)::parseKey INTERSECTEOCLIP
 sdext/source/pdfimport/wrapper/wrapper.cxx:93
+    enum pdfi::(anonymous namespace)::parseKey POPSTATE
+sdext/source/pdfimport/wrapper/wrapper.cxx:94
     enum pdfi::(anonymous namespace)::parseKey PUSHSTATE
-sdext/source/pdfimport/wrapper/wrapper.cxx:96
-    enum pdfi::(anonymous namespace)::parseKey SETBLENDMODE
 sdext/source/pdfimport/wrapper/wrapper.cxx:97
-    enum pdfi::(anonymous namespace)::parseKey SETFILLCOLOR
+    enum pdfi::(anonymous namespace)::parseKey SETBLENDMODE
 sdext/source/pdfimport/wrapper/wrapper.cxx:98
-    enum pdfi::(anonymous namespace)::parseKey SETFONT
+    enum pdfi::(anonymous namespace)::parseKey SETFILLCOLOR
 sdext/source/pdfimport/wrapper/wrapper.cxx:99
-    enum pdfi::(anonymous namespace)::parseKey SETLINECAP
+    enum pdfi::(anonymous namespace)::parseKey SETFONT
 sdext/source/pdfimport/wrapper/wrapper.cxx:100
-    enum pdfi::(anonymous namespace)::parseKey SETLINEDASH
+    enum pdfi::(anonymous namespace)::parseKey SETLINECAP
 sdext/source/pdfimport/wrapper/wrapper.cxx:101
-    enum pdfi::(anonymous namespace)::parseKey SETLINEJOIN
+    enum pdfi::(anonymous namespace)::parseKey SETLINEDASH
 sdext/source/pdfimport/wrapper/wrapper.cxx:102
-    enum pdfi::(anonymous namespace)::parseKey SETLINEWIDTH
+    enum pdfi::(anonymous namespace)::parseKey SETLINEJOIN
 sdext/source/pdfimport/wrapper/wrapper.cxx:103
+    enum pdfi::(anonymous namespace)::parseKey SETLINEWIDTH
+sdext/source/pdfimport/wrapper/wrapper.cxx:104
     enum pdfi::(anonymous namespace)::parseKey SETMITERLIMIT
-sdext/source/pdfimport/wrapper/wrapper.cxx:105
+sdext/source/pdfimport/wrapper/wrapper.cxx:106
     enum pdfi::(anonymous namespace)::parseKey SETSTROKECOLOR
-sdext/source/pdfimport/wrapper/wrapper.cxx:107
+sdext/source/pdfimport/wrapper/wrapper.cxx:108
     enum pdfi::(anonymous namespace)::parseKey SETTRANSFORMATION
-sdext/source/pdfimport/wrapper/wrapper.cxx:111
+sdext/source/pdfimport/wrapper/wrapper.cxx:112
     enum pdfi::(anonymous namespace)::parseKey UPDATEBLENDMODE
-sdext/source/pdfimport/wrapper/wrapper.cxx:114
+sdext/source/pdfimport/wrapper/wrapper.cxx:115
     enum pdfi::(anonymous namespace)::parseKey UPDATEFILLOPACITY
 sfx2/inc/dinfdlg.hrc:62
     enum CustomProperties Custom_Type_Unknown
-sfx2/source/control/unoctitm.cxx:88
-    enum (anonymous namespace)::URLTypeId URLType_BOOL
-sfx2/source/control/unoctitm.cxx:89
-    enum (anonymous namespace)::URLTypeId URLType_BYTE
-sfx2/source/control/unoctitm.cxx:90
-    enum (anonymous namespace)::URLTypeId URLType_SHORT
-sfx2/source/control/unoctitm.cxx:91
-    enum (anonymous namespace)::URLTypeId URLType_LONG
 sfx2/source/control/unoctitm.cxx:92
-    enum (anonymous namespace)::URLTypeId URLType_HYPER
+    enum (anonymous namespace)::URLTypeId URLType_BOOL
 sfx2/source/control/unoctitm.cxx:93
-    enum (anonymous namespace)::URLTypeId URLType_STRING
+    enum (anonymous namespace)::URLTypeId URLType_BYTE
 sfx2/source/control/unoctitm.cxx:94
-    enum (anonymous namespace)::URLTypeId URLType_FLOAT
+    enum (anonymous namespace)::URLTypeId URLType_SHORT
 sfx2/source/control/unoctitm.cxx:95
-    enum (anonymous namespace)::URLTypeId URLType_DOUBLE
+    enum (anonymous namespace)::URLTypeId URLType_LONG
 sfx2/source/control/unoctitm.cxx:96
+    enum (anonymous namespace)::URLTypeId URLType_HYPER
+sfx2/source/control/unoctitm.cxx:97
+    enum (anonymous namespace)::URLTypeId URLType_STRING
+sfx2/source/control/unoctitm.cxx:98
+    enum (anonymous namespace)::URLTypeId URLType_FLOAT
+sfx2/source/control/unoctitm.cxx:99
+    enum (anonymous namespace)::URLTypeId URLType_DOUBLE
+sfx2/source/control/unoctitm.cxx:100
     enum (anonymous namespace)::URLTypeId URLType_COUNT
-sfx2/source/dialog/filedlghelper.cxx:823
+sfx2/source/dialog/filedlghelper.cxx:820
     enum sfx2::(anonymous namespace)::open_or_save_t SAVE
-sfx2/source/dialog/filedlghelper.cxx:823
+sfx2/source/dialog/filedlghelper.cxx:820
     enum sfx2::(anonymous namespace)::open_or_save_t UNDEFINED
 sfx2/source/dialog/securitypage.cxx:46
     enum (anonymous namespace)::RedliningMode RL_CALC
-sfx2/source/doc/docmacromode.cxx:125
+sfx2/source/doc/docmacromode.cxx:128
     enum AutoConfirmation eAutoConfirmReject
 sfx2/source/inc/docundomanager.hxx:70
     enum SfxModelGuard::AllowedModelState E_FULLY_ALIVE
@@ -4442,24 +5284,24 @@ sfx2/source/inc/workwin.hxx:70
     enum SfxChildVisibility NOT_VISIBLE
 sfx2/source/inc/workwin.hxx:73
     enum SfxChildVisibility FITS_IN
-shell/source/backends/kf5be/kf5access.cxx:67
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:67:30) Size
-shell/source/backends/kf5be/kf5access.cxx:112
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:112:57) Size
-shell/source/backends/kf5be/kf5access.cxx:121
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:121:26) Size
-shell/source/backends/kf5be/kf5access.cxx:139
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:139:57) Size
-shell/source/backends/kf5be/kf5access.cxx:148
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:148:26) Size
-shell/source/backends/kf5be/kf5access.cxx:166
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:166:58) Size
-shell/source/backends/kf5be/kf5access.cxx:175
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:175:26) Size
-shell/source/backends/kf5be/kf5access.cxx:193
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:193:58) Size
-shell/source/backends/kf5be/kf5access.cxx:202
-    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kf5access.cxx:202:26) Size
+shell/source/backends/kf5be/kfaccess.cxx:66
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:66:30) Size
+shell/source/backends/kf5be/kfaccess.cxx:111
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:111:57) Size
+shell/source/backends/kf5be/kfaccess.cxx:120
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:120:26) Size
+shell/source/backends/kf5be/kfaccess.cxx:138
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:138:57) Size
+shell/source/backends/kf5be/kfaccess.cxx:147
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:147:26) Size
+shell/source/backends/kf5be/kfaccess.cxx:165
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:165:58) Size
+shell/source/backends/kf5be/kfaccess.cxx:174
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:174:26) Size
+shell/source/backends/kf5be/kfaccess.cxx:192
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:192:58) Size
+shell/source/backends/kf5be/kfaccess.cxx:201
+    enum (unnamed at /home/noel/libo-plugin/shell/source/backends/kf5be/kfaccess.cxx:201:26) Size
 slideshow/source/engine/shapes/viewshape.hxx:41
     enum UpdateFlags Transformation
 slideshow/source/engine/shapes/viewshape.hxx:44
@@ -4922,7 +5764,7 @@ svgio/inc/svgtoken.hxx:41
     enum svgio::svgreader::SVGToken Xmlns
 svgio/inc/svgtools.hxx:53
     enum svgio::svgreader::SvgAlign xMinYMin
-svgio/source/svgreader/svgtools.cxx:566
+svgio/source/svgreader/svgtools.cxx:567
     enum DegreeType rad
 svl/source/misc/adrparse.cxx:26
     enum (anonymous namespace)::ElementType ELEMENT_START
@@ -4942,18 +5784,18 @@ svtools/source/config/miscopt.cxx:96
     enum SvtMiscOptions_Impl::SetModifiedFlag DONT_SET
 svtools/source/control/ctrltool.cxx:100
     enum (anonymous namespace)::FontListFontNameType SCREEN
-svtools/source/control/valueset.cxx:63
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) ITEM_OFFSET
 svtools/source/control/valueset.cxx:64
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) ITEM_OFFSET_DOUBLE
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) ITEM_OFFSET
 svtools/source/control/valueset.cxx:65
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) NAME_LINE_OFF_X
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) ITEM_OFFSET_DOUBLE
 svtools/source/control/valueset.cxx:66
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) NAME_LINE_OFF_Y
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) NAME_LINE_OFF_X
 svtools/source/control/valueset.cxx:67
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) NAME_LINE_HEIGHT
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) NAME_LINE_OFF_Y
 svtools/source/control/valueset.cxx:68
-    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:61:1) NAME_OFFSET
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) NAME_LINE_HEIGHT
+svtools/source/control/valueset.cxx:69
+    enum (anonymous namespace)::(unnamed at /home/noel/libo-plugin/svtools/source/control/valueset.cxx:62:1) NAME_OFFSET
 svtools/source/svhtml/parhtml.cxx:1939
     enum (anonymous namespace)::HtmlMeta Generator
 svtools/source/svhtml/parhtml.cxx:1940
@@ -4964,11 +5806,11 @@ svx/inc/sdr/overlay/overlaytools.hxx:204
     enum drawinglayer::primitive2d::HelplineStyle HELPLINESTYLE_POINT
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_STD
-svx/source/dialog/srchdlg.cxx:97
+svx/source/dialog/srchdlg.cxx:103
     enum ModifyFlags Formulas
-svx/source/dialog/srchdlg.cxx:98
+svx/source/dialog/srchdlg.cxx:104
     enum ModifyFlags Values
-svx/source/dialog/srchdlg.cxx:99
+svx/source/dialog/srchdlg.cxx:105
     enum ModifyFlags CalcNotes
 svx/source/fmcomp/fmgridcl.cxx:813
     enum (anonymous namespace)::InspectorAction eOpenInspector
@@ -5014,7 +5856,7 @@ svx/source/table/tablehandles.hxx:28
     enum sdr::table::TableEdgeState Invisible
 svx/source/tbxctrls/tbcontrl.cxx:2520
     enum (anonymous namespace)::FrmValidFlags AllMask
-svx/source/tbxctrls/tbunosearchcontrollers.cxx:710
+svx/source/tbxctrls/tbunosearchcontrollers.cxx:711
     enum (anonymous namespace)::UpDownSearchToolboxController::Type DOWN
 svx/source/unodraw/recoveryui.cxx:50
     enum (anonymous namespace)::RecoveryUI::EJob E_JOB_UNKNOWN
@@ -5026,9 +5868,9 @@ sw/inc/chpfld.hxx:31
     enum SwChapterFormat CF_BEGIN
 sw/inc/contentindex.hxx:125
     enum SwContentIndexReg::UpdateMode Default
-sw/inc/crsrsh.hxx:337
+sw/inc/crsrsh.hxx:349
     enum SwCursorShell::StartsWith HiddenPara
-sw/inc/crsrsh.hxx:337
+sw/inc/crsrsh.hxx:349
     enum SwCursorShell::StartsWith HiddenSection
 sw/inc/crstate.hxx:57
     enum MultiPortionType TWOLINE
@@ -5040,7 +5882,9 @@ sw/inc/doc.hxx:334
     enum SwDoc::MissingDictionary False
 sw/inc/doc.hxx:406
     enum SwDoc::DocumentType DOCTYPE_NATIVE
-sw/inc/doc.hxx:1215
+sw/inc/doc.hxx:1056
+    enum SwDoc::SetNumRuleMode Default
+sw/inc/doc.hxx:1225
     enum SwDoc::RowColMode DeleteRow
 sw/inc/docary.hxx:72
     enum SwVectorModifyBase<class SwFrameFormat *>::DestructorPolicy KeepElements
@@ -5076,21 +5920,21 @@ sw/inc/flyenum.hxx:41
     enum SwChainRet SOURCE_CHAINED
 sw/inc/flyenum.hxx:42
     enum SwChainRet SELF
-sw/inc/fmtcol.hxx:198
+sw/inc/fmtcol.hxx:175
     enum Master_CollCondition PARA_IN_LIST
-sw/inc/fmtcol.hxx:199
+sw/inc/fmtcol.hxx:176
     enum Master_CollCondition PARA_IN_OUTLINE
-sw/inc/fmtcol.hxx:200
+sw/inc/fmtcol.hxx:177
     enum Master_CollCondition PARA_IN_FRAME
-sw/inc/fmtcol.hxx:203
+sw/inc/fmtcol.hxx:180
     enum Master_CollCondition PARA_IN_SECTION
-sw/inc/fmtcol.hxx:204
+sw/inc/fmtcol.hxx:181
     enum Master_CollCondition PARA_IN_FOOTNOTE
-sw/inc/fmtcol.hxx:207
+sw/inc/fmtcol.hxx:184
     enum Master_CollCondition PARA_IN_ENDNOTE
 sw/inc/fmtftntx.hxx:34
     enum SwFootnoteEndPosEnum FTNEND_ATTXTEND_END
-sw/inc/hints.hxx:338
+sw/inc/hints.hxx:343
     enum TableFormulaUpdateFlags TBL_CALC
 sw/inc/IDocumentContentOperations.hxx:47
     enum SwMoveFlags DEFAULT
@@ -5116,6 +5960,8 @@ sw/inc/itabenum.hxx:32
     enum SwInsertTableFlags All
 sw/inc/ndhints.hxx:33
     enum CopyOrNewType New
+sw/inc/ndtxt.hxx:87
+    enum sw::WrongState PENDING
 sw/inc/pagedesc.hxx:130
     enum UseOnPage NoHeaderShare
 sw/inc/pagedesc.hxx:131
@@ -5158,49 +6004,49 @@ sw/inc/unobaseclass.hxx:51
     enum CursorType All
 sw/inc/unobaseclass.hxx:63
     enum sw::DeleteAndInsertMode Default
-sw/inc/unocoll.hxx:128
-    enum SwServiceType FieldTypeDummy1
 sw/inc/unocoll.hxx:129
-    enum SwServiceType FieldTypeDummy2
+    enum SwServiceType FieldTypeDummy1
 sw/inc/unocoll.hxx:130
+    enum SwServiceType FieldTypeDummy2
+sw/inc/unocoll.hxx:131
     enum SwServiceType FieldTypeDummy3
-sw/inc/unocrsrhelper.hxx:57
+sw/inc/unocrsrhelper.hxx:58
     enum SwGetPropertyStatesCaller SW_PROPERTY_STATE_CALLER_DEFAULT
+sw/inc/unostyle.hxx:246
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) FIRST_ROW_STYLE
+sw/inc/unostyle.hxx:247
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) LAST_ROW_STYLE
 sw/inc/unostyle.hxx:248
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) FIRST_ROW_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) FIRST_COLUMN_STYLE
 sw/inc/unostyle.hxx:249
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) LAST_ROW_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) LAST_COLUMN_STYLE
 sw/inc/unostyle.hxx:250
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) FIRST_COLUMN_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) EVEN_ROWS_STYLE
 sw/inc/unostyle.hxx:251
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) LAST_COLUMN_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) ODD_ROWS_STYLE
 sw/inc/unostyle.hxx:252
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) EVEN_ROWS_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) EVEN_COLUMNS_STYLE
 sw/inc/unostyle.hxx:253
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) ODD_ROWS_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) ODD_COLUMNS_STYLE
 sw/inc/unostyle.hxx:254
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) EVEN_COLUMNS_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) BODY_STYLE
 sw/inc/unostyle.hxx:255
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) ODD_COLUMNS_STYLE
-sw/inc/unostyle.hxx:256
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) BODY_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) BACKGROUND_STYLE
 sw/inc/unostyle.hxx:257
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) BACKGROUND_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) FIRST_ROW_START_COLUMN_STYLE
+sw/inc/unostyle.hxx:258
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) FIRST_ROW_END_COLUMN_STYLE
 sw/inc/unostyle.hxx:259
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) FIRST_ROW_START_COLUMN_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) LAST_ROW_START_COLUMN_STYLE
 sw/inc/unostyle.hxx:260
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) FIRST_ROW_END_COLUMN_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) LAST_ROW_END_COLUMN_STYLE
 sw/inc/unostyle.hxx:261
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) LAST_ROW_START_COLUMN_STYLE
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) FIRST_ROW_EVEN_COLUMN_STYLE
 sw/inc/unostyle.hxx:262
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) LAST_ROW_END_COLUMN_STYLE
-sw/inc/unostyle.hxx:263
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) FIRST_ROW_EVEN_COLUMN_STYLE
-sw/inc/unostyle.hxx:264
-    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:247:5) LAST_ROW_EVEN_COLUMN_STYLE
-sw/inc/unotextrange.hxx:59
+    enum SwXTextTableStyle::(unnamed at /home/noel/libo-plugin/sw/inc/unostyle.hxx:245:5) LAST_ROW_EVEN_COLUMN_STYLE
+sw/inc/unotextrange.hxx:62
     enum sw::TextRangeMode RequireTextNode
-sw/inc/unotextrange.hxx:112
+sw/inc/unotextrange.hxx:115
     enum SwXTextRange::RangePosition RANGE_IN_TEXT
 sw/inc/view.hxx:101
     enum ShellMode Media
@@ -5210,42 +6056,42 @@ sw/inc/view.hxx:103
     enum ShellMode FontWork
 sw/inc/view.hxx:104
     enum ShellMode PostIt
-sw/inc/view.hxx:691
+sw/inc/view.hxx:690
     enum SwView::CachedStringID OldGrfCat
-sw/inc/view.hxx:692
+sw/inc/view.hxx:691
     enum SwView::CachedStringID OldTabCat
-sw/inc/view.hxx:693
+sw/inc/view.hxx:692
     enum SwView::CachedStringID OldFrameCat
-sw/inc/view.hxx:694
+sw/inc/view.hxx:693
     enum SwView::CachedStringID OldDrwCat
-sw/inc/view.hxx:695
+sw/inc/view.hxx:694
     enum SwView::CachedStringID CachedStrings
-sw/inc/viewopt.hxx:162
+sw/inc/viewopt.hxx:163
     enum ViewOptFlags2 Modified
-sw/inc/viewopt.hxx:184
-    enum ViewOptFlags DocBoundaries
 sw/inc/viewopt.hxx:185
-    enum ViewOptFlags ObjectBoundaries
+    enum ViewOptFlags DocBoundaries
 sw/inc/viewopt.hxx:186
-    enum ViewOptFlags TableBoundaries
+    enum ViewOptFlags ObjectBoundaries
 sw/inc/viewopt.hxx:187
-    enum ViewOptFlags IndexShadings
+    enum ViewOptFlags TableBoundaries
 sw/inc/viewopt.hxx:188
-    enum ViewOptFlags Links
+    enum ViewOptFlags IndexShadings
 sw/inc/viewopt.hxx:189
-    enum ViewOptFlags VisitedLinks
+    enum ViewOptFlags Links
 sw/inc/viewopt.hxx:190
-    enum ViewOptFlags FieldShadings
+    enum ViewOptFlags VisitedLinks
 sw/inc/viewopt.hxx:191
-    enum ViewOptFlags SectionBoundaries
+    enum ViewOptFlags FieldShadings
 sw/inc/viewopt.hxx:192
+    enum ViewOptFlags SectionBoundaries
+sw/inc/viewopt.hxx:193
     enum ViewOptFlags Shadow
-sw/qa/extras/globalfilter/globalfilter.cxx:1342
-    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1338:5) LblFoundText
-sw/qa/extras/globalfilter/globalfilter.cxx:1736
-    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1733:5) Artifact
-sw/qa/extras/globalfilter/globalfilter.cxx:1737
-    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1733:5) Tagged
+sw/qa/extras/globalfilter/globalfilter.cxx:1344
+    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1340:5) LblFoundText
+sw/qa/extras/globalfilter/globalfilter.cxx:1738
+    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1735:5) Artifact
+sw/qa/extras/globalfilter/globalfilter.cxx:1739
+    enum (unnamed at /home/noel/libo-plugin/sw/qa/extras/globalfilter/globalfilter.cxx:1735:5) Tagged
 sw/source/core/access/accfrmobjmap.hxx:36
     enum SwAccessibleChildMapKey::LayerId CONTROLS
 sw/source/core/access/accfrmobjmap.hxx:36
@@ -5266,11 +6112,11 @@ sw/source/core/inc/dbg_lay.hxx:56
     enum DbgAction NextSect
 sw/source/core/inc/dbg_lay.hxx:56
     enum DbgAction PrevSect
-sw/source/core/inc/frame.hxx:492
+sw/source/core/inc/frame.hxx:494
     enum SwFrame::InvalidationType INVALID_LINENUM
-sw/source/core/inc/frame.hxx:492
+sw/source/core/inc/frame.hxx:494
     enum SwFrame::InvalidationType INVALID_PRTAREA
-sw/source/core/inc/frame.hxx:492
+sw/source/core/inc/frame.hxx:494
     enum SwFrame::InvalidationType INVALID_SIZE
 sw/source/core/inc/layact.hxx:201
     enum IdleJobArea ALL
@@ -5304,7 +6150,7 @@ sw/source/core/inc/rootfrm.hxx:51
     enum sw::ParagraphBreakMode Shown
 sw/source/core/inc/rootfrm.hxx:73
     enum SwRemoveResult Prev
-sw/source/core/inc/rootfrm.hxx:346
+sw/source/core/inc/rootfrm.hxx:347
     enum SwRootFrame::RectsMode Default
 sw/source/core/inc/scriptinfo.hxx:47
     enum SwScriptInfo::CompType SPECIAL_RIGHT
@@ -5328,11 +6174,11 @@ sw/source/core/inc/UndoManager.hxx:132
     enum sw::UndoManager::UndoOrRedoType Redo
 sw/source/core/inc/wrong.hxx:60
     enum WrongListType WRONGLIST_CHANGETRACKING
-sw/source/core/layout/paintfrm.cxx:2258
+sw/source/core/layout/paintfrm.cxx:2257
     enum (anonymous namespace)::SwLineEntry::OverlapType NO_OVERLAP
-sw/source/core/text/inftxt.hxx:524
+sw/source/core/text/inftxt.hxx:542
     enum SwTextFormatInfo::TabSeen Left
-sw/source/core/text/porlay.hxx:325
+sw/source/core/text/porlay.hxx:330
     enum SwParaPortion::FootnoteOrNot OnlyNumbering
 sw/source/core/text/pormulti.hxx:40
     enum SwMultiCreatorId Double
@@ -5466,14 +6312,14 @@ sw/source/filter/ww8/sprmids.hxx:258
     enum NS_sprm::SPRA operand_2b_5
 sw/source/filter/ww8/sprmids.hxx:260
     enum NS_sprm::SPRA operand_3b_7
-sw/source/filter/ww8/wrtww8.hxx:831
+sw/source/filter/ww8/wrtww8.hxx:832
     enum MSWordExportBase::ExportFormat DOC
 sw/source/filter/ww8/ww8par2.cxx:1634
     enum (anonymous namespace)::wwTableSprm sprmNil
 sw/source/filter/ww8/ww8par2.hxx:300
     enum WW8LvlType WW8_Sequence
-sw/source/filter/ww8/ww8par.cxx:5795
-    enum (unnamed at /home/noel/libo-plugin/sw/source/filter/ww8/ww8par.cxx:5795:5) Other
+sw/source/filter/ww8/ww8par.cxx:5799
+    enum (unnamed at /home/noel/libo-plugin/sw/source/filter/ww8/ww8par.cxx:5799:5) Other
 sw/source/filter/ww8/ww8par.hxx:157
     enum WW8ListManager::ListLevel nMinLevel
 sw/source/filter/ww8/ww8scan.hxx:385
@@ -5502,19 +6348,19 @@ sw/source/filter/xml/xmlitemi.cxx:75
     enum (anonymous namespace)::SwXMLImportTableItemMapper_Impl::(unnamed at /home/noel/libo-plugin/sw/source/filter/xml/xmlitemi.cxx:75:5) RIGHT
 sw/source/filter/xml/xmlitemi.cxx:75
     enum (anonymous namespace)::SwXMLImportTableItemMapper_Impl::(unnamed at /home/noel/libo-plugin/sw/source/filter/xml/xmlitemi.cxx:75:5) TOP
-sw/source/filter/xml/xmlmeta.cxx:72
+sw/source/filter/xml/xmlmeta.cxx:69
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_TABLE
-sw/source/filter/xml/xmlmeta.cxx:73
+sw/source/filter/xml/xmlmeta.cxx:70
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_IMAGE
-sw/source/filter/xml/xmlmeta.cxx:74
+sw/source/filter/xml/xmlmeta.cxx:71
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_OLE
-sw/source/filter/xml/xmlmeta.cxx:77
+sw/source/filter/xml/xmlmeta.cxx:74
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_WORD
-sw/source/filter/xml/xmlmeta.cxx:78
+sw/source/filter/xml/xmlmeta.cxx:75
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_CHAR
-sw/source/filter/xml/xmlmeta.cxx:79
+sw/source/filter/xml/xmlmeta.cxx:76
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR
-sw/source/filter/xml/xmlmeta.cxx:80
+sw/source/filter/xml/xmlmeta.cxx:77
     enum (anonymous namespace)::SvXMLTokenMapAttrs XML_TOK_META_STAT_END
 sw/source/ui/fldui/fldref.cxx:55
     enum (anonymous namespace)::FMT_REF_IDX FMT_REF_TEXT_IDX
@@ -5564,58 +6410,58 @@ sw/source/ui/frmdlg/frmpage.cxx:125
     enum (anonymous namespace)::LB VertLine
 sw/source/uibase/dbui/dbmgr.cxx:168
     enum (anonymous namespace)::WorkingDocType COPY
-sw/source/uibase/docvw/edtwin.cxx:1673
+sw/source/uibase/docvw/edtwin.cxx:1672
     enum SwKeyState NumOrNoNum
-sw/source/uibase/docvw/edtwin.cxx:6416
+sw/source/uibase/docvw/edtwin.cxx:6436
     enum Capitalization CASE_OTHER
+sw/source/uibase/fldui/fldmgr.cxx:92
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_DOC_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:93
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_DOC_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:94
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_DOC_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_DOC_END
+sw/source/uibase/fldui/fldmgr.cxx:95
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_FKT_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:96
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_FKT_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:97
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_FKT_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_FKT_END
+sw/source/uibase/fldui/fldmgr.cxx:98
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_REF_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:99
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_REF_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:100
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_REF_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_REF_END
+sw/source/uibase/fldui/fldmgr.cxx:101
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_REG_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:102
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_REG_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:103
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_REG_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_REG_END
+sw/source/uibase/fldui/fldmgr.cxx:104
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_DB_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:105
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_DB_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:106
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_DB_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_DB_END
+sw/source/uibase/fldui/fldmgr.cxx:107
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_VAR_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:108
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_VAR_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:109
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:91:1) GRP_VAR_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:90:1) GRP_VAR_END
+sw/source/uibase/fldui/fldmgr.cxx:113
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_DOC_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:114
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_DOC_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:115
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_DOC_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_DOC_END
+sw/source/uibase/fldui/fldmgr.cxx:116
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_FKT_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:117
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_FKT_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:118
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_FKT_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_FKT_END
+sw/source/uibase/fldui/fldmgr.cxx:119
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_REF_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:120
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_REF_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:121
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_REF_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_REF_END
+sw/source/uibase/fldui/fldmgr.cxx:122
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_REG_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:123
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_REG_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:124
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_REG_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_REG_END
+sw/source/uibase/fldui/fldmgr.cxx:125
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_DB_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:126
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_DB_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:127
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_DB_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_DB_END
+sw/source/uibase/fldui/fldmgr.cxx:128
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_VAR_BEGIN
 sw/source/uibase/fldui/fldmgr.cxx:129
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_VAR_BEGIN
-sw/source/uibase/fldui/fldmgr.cxx:130
-    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:112:1) GRP_WEB_VAR_END
+    enum (unnamed at /home/noel/libo-plugin/sw/source/uibase/fldui/fldmgr.cxx:111:1) GRP_WEB_VAR_END
 sw/source/uibase/inc/chrdlgmodes.hxx:15
     enum SwCharDlgMode Env
 sw/source/uibase/inc/frmmgr.hxx:47
@@ -5634,21 +6480,43 @@ sw/source/uibase/inc/wrtsh.hxx:550
     enum SwWrtShell::PageMove MV_PAGE_UP
 sw/source/uibase/inc/wrtsh.hxx:551
     enum SwWrtShell::PageMove MV_PAGE_DOWN
-sw/source/uibase/ribbar/workctrl.cxx:799
+sw/source/uibase/ribbar/workctrl.cxx:801
     enum (anonymous namespace)::PrevNextScrollToolboxController::Type NEXT
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:48
+    enum sw::sidebar::AccessibilityCheckGroups Document
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:49
+    enum sw::sidebar::AccessibilityCheckGroups Styles
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:50
+    enum sw::sidebar::AccessibilityCheckGroups Linked
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:51
+    enum sw::sidebar::AccessibilityCheckGroups NoAlt
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:52
+    enum sw::sidebar::AccessibilityCheckGroups Table
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:53
+    enum sw::sidebar::AccessibilityCheckGroups Formatting
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:54
+    enum sw::sidebar::AccessibilityCheckGroups DirectFormatting
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:55
+    enum sw::sidebar::AccessibilityCheckGroups Hyperlink
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:56
+    enum sw::sidebar::AccessibilityCheckGroups Fakes
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:57
+    enum sw::sidebar::AccessibilityCheckGroups Numbering
+sw/source/uibase/sidebar/A11yCheckIssuesPanel.hxx:58
+    enum sw::sidebar::AccessibilityCheckGroups Other
 sw/source/uibase/uno/unomailmerge.cxx:92
     enum (anonymous namespace)::CloseResult eSuccess
 sw/source/uibase/uno/unomailmerge.cxx:94
     enum (anonymous namespace)::CloseResult eFailed
-sw/source/uibase/utlui/content.cxx:1064
+sw/source/uibase/utlui/content.cxx:1072
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_ACTIVE_VIEW
-sw/source/uibase/utlui/content.cxx:1065
+sw/source/uibase/utlui/content.cxx:1073
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_HIDDEN
-sw/source/uibase/utlui/content.cxx:1066
+sw/source/uibase/utlui/content.cxx:1074
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_ACTIVE
-sw/source/uibase/utlui/content.cxx:1067
+sw/source/uibase/utlui/content.cxx:1075
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_INACTIVE
-sw/source/uibase/utlui/content.cxx:1071
+sw/source/uibase/utlui/content.cxx:1079
     enum (anonymous namespace)::STR_CONTEXT_IDX IDX_STR_OUTLINE_TRACKING
 sw/source/uibase/utlui/glbltree.cxx:99
     enum (anonymous namespace)::GLOBAL_CONTEXT_IDX IDX_STR_INSERT_TEXT
@@ -5712,9 +6580,9 @@ ucb/source/ucp/tdoc/tdoc_content.hxx:94
     enum tdoc_ucp::Content::ContentState DEAD
 ucb/source/ucp/tdoc/tdoc_uri.hxx:34
     enum tdoc_ucp::Uri::State INVALID
-ucb/source/ucp/webdav-curl/DAVException.hxx:124
+ucb/source/ucp/webdav-curl/DAVException.hxx:125
     enum http_dav_ucp::DAVException::ExceptionCode DAV_HTTP_FAILED
-ucb/source/ucp/webdav-curl/DAVException.hxx:130
+ucb/source/ucp/webdav-curl/DAVException.hxx:131
     enum http_dav_ucp::DAVException::ExceptionCode DAV_SESSION_CREATE
 ucb/source/ucp/webdav-curl/webdavresponseparser.cxx:52
     enum (anonymous namespace)::WebDAVNamespace WebDAVNamespace_unknown
@@ -5796,11 +6664,13 @@ vcl/inc/headless/CairoCommon.hxx:109
     enum PaintMode Over
 vcl/inc/headless/svpinst.hxx:60
     enum SvpRequest MainThreadDispatchOneEvent
-vcl/inc/pdf/pdfwriter_impl.hxx:94
+vcl/inc/justificationdata.hxx:20
+    enum ClusterJustificationFlags KashidaPosition
+vcl/inc/pdf/pdfwriter_impl.hxx:95
     enum vcl::pdf::GraphicsStateUpdateFlags All
-vcl/inc/pdf/pdfwriter_impl.hxx:669
+vcl/inc/pdf/pdfwriter_impl.hxx:678
     enum vcl::pdf::Mode DEFAULT
-vcl/inc/pdf/pdfwriter_impl.hxx:1062
+vcl/inc/pdf/pdfwriter_impl.hxx:1071
     enum vcl::PDFWriterImpl::EndMode Default
 vcl/inc/ppdparser.hxx:44
     enum psp::PPDValueType eQuoted
@@ -5962,38 +6832,40 @@ vcl/inc/unx/wmadaptor.hxx:110
     enum vcl_sal::WMAdaptor::WMAtom XEMBED_INFO
 vcl/inc/unx/wmadaptor.hxx:111
     enum vcl_sal::WMAdaptor::WMAtom NetAtomMax
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1303
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1300:5) Artifact
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1306
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1300:5) Tagged
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1410
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1407:5) Artifact
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1411
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1407:5) Tagged
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1523
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1520:5) Artifact
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1524
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1520:5) Tagged
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3330
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3327:5) Artifact
-vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3331
-    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3327:5) Tagged
-vcl/qt5/QtFilePicker.cxx:360
-    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtFilePicker.cxx:360:27) Size
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1314
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1311:5) Artifact
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1317
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1311:5) Tagged
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1421
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1418:5) Artifact
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1422
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1418:5) Tagged
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1534
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1531:5) Artifact
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1535
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:1531:5) Tagged
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3341
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3338:5) Artifact
+vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3342
+    enum (unnamed at /home/noel/libo-plugin/vcl/qa/cppunit/pdfexport/pdfexport2.cxx:3338:5) Tagged
+vcl/qt5/QtFilePicker.cxx:361
+    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtFilePicker.cxx:361:27) Size
 vcl/qt5/QtInstance.cxx:313
     enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtInstance.cxx:313:45) Size
 vcl/qt5/QtTransferable.cxx:73
     enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:73:26) Size
-vcl/qt5/QtTransferable.cxx:134
-    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:134:56) Size
-vcl/qt5/QtTransferable.cxx:139
-    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:139:56) Size
-vcl/qt5/QtTransferable.cxx:274
-    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:274:22) Size
-vcl/qt5/QtTransferable.cxx:276
-    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:276:22) Size
-vcl/source/control/imivctl.hxx:87
+vcl/qt5/QtTransferable.cxx:141
+    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:141:52) Size
+vcl/qt5/QtTransferable.cxx:146
+    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:146:52) Size
+vcl/qt5/QtTransferable.cxx:281
+    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:281:22) Size
+vcl/qt5/QtTransferable.cxx:283
+    enum (unnamed at /home/noel/libo-plugin/vcl/qt5/QtTransferable.cxx:283:22) Size
+vcl/source/control/imivctl.hxx:84
     enum IcnViewFieldType Image
+vcl/source/filter/igif/gifread.cxx:44
+    enum (anonymous namespace)::ReadState GIFREAD_ERROR
 vcl/source/filter/ipict/ipict.cxx:73
     enum PictReaderInternal::(anonymous namespace)::Pattern::PenStyle PEN_DASH
 vcl/source/filter/ipict/ipict.cxx:73
@@ -6026,11 +6898,11 @@ vcl/source/filter/ipict/ipict.cxx:76
     enum PictReaderInternal::(anonymous namespace)::Pattern::BrushStyle BRUSH_75
 vcl/source/filter/ipict/ipict.cxx:147
     enum (anonymous namespace)::PictDrawingMethod UNDEFINED
-vcl/source/filter/ixbm/xbmread.cxx:37
+vcl/source/filter/ixbm/xbmread.cxx:36
     enum (anonymous namespace)::XBMFormat XBM11
-vcl/source/filter/ixbm/xbmread.cxx:42
+vcl/source/filter/ixbm/xbmread.cxx:41
     enum (anonymous namespace)::ReadState XBMREAD_OK
-vcl/source/filter/ixpm/xpmread.cxx:54
+vcl/source/filter/ixpm/xpmread.cxx:53
     enum (anonymous namespace)::ReadState XPMREAD_OK
 vcl/source/filter/jpeg/Exif.hxx:29
     enum exif::Orientation TOP_RIGHT
@@ -6040,7 +6912,7 @@ vcl/source/filter/jpeg/Exif.hxx:32
     enum exif::Orientation LEFT_TOP
 vcl/source/filter/jpeg/Exif.hxx:34
     enum exif::Orientation RIGHT_BOTTOM
-vcl/source/filter/jpeg/JpegReader.hxx:32
+vcl/source/filter/jpeg/JpegReader.hxx:31
     enum ReadState JPEGREAD_OK
 vcl/source/filter/wmf/emfwr.cxx:100
     enum EmfPlusRecordType Header
@@ -6162,758 +7034,24 @@ vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx:174
     enum SalGtkFilePicker::(unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx:172:9) CANCEL
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx:175
     enum SalGtkFilePicker::(unnamed at /home/noel/libo-plugin/vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx:172:9) PLAY
-vcl/unx/gtk3/gtkframe.cxx:1345
+vcl/unx/gtk3/gtkframe.cxx:1341
     enum (anonymous namespace)::ColorScheme DEFAULT
-vcl/unx/kf5/KFFilePicker.cxx:63
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:63:33) Size
-vcl/unx/kf5/KFFilePicker.cxx:63
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:63:57) Size
-vcl/unx/kf5/KFFilePicker.cxx:63
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:63:9) Size
-vcl/unx/kf5/KFFilePicker.cxx:64
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:64:35) Size
-vcl/unx/kf5/KFFilePicker.cxx:64
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:64:62) Size
-vcl/unx/kf5/KFFilePicker.cxx:64
-    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:64:9) Size
+vcl/unx/kf5/KFFilePicker.cxx:65
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:65:33) Size
+vcl/unx/kf5/KFFilePicker.cxx:65
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:65:57) Size
 vcl/unx/kf5/KFFilePicker.cxx:65
     enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:65:9) Size
+vcl/unx/kf5/KFFilePicker.cxx:66
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:66:35) Size
+vcl/unx/kf5/KFFilePicker.cxx:66
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:66:62) Size
+vcl/unx/kf5/KFFilePicker.cxx:66
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:66:9) Size
+vcl/unx/kf5/KFFilePicker.cxx:67
+    enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFFilePicker.cxx:67:9) Size
 vcl/unx/kf5/KFSalInstance.cxx:57
     enum (unnamed at /home/noel/libo-plugin/vcl/unx/kf5/KFSalInstance.cxx:57:60) Size
-writerfilter/source/dmapper/BorderHandler.hxx:39
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Top
-writerfilter/source/dmapper/BorderHandler.hxx:40
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Left
-writerfilter/source/dmapper/BorderHandler.hxx:41
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Bottom
-writerfilter/source/dmapper/BorderHandler.hxx:42
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Right
-writerfilter/source/dmapper/BorderHandler.hxx:43
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Horizontal
-writerfilter/source/dmapper/BorderHandler.hxx:44
-    enum writerfilter::dmapper::BorderHandler::BorderPosition Vertical
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:120
-    enum writerfilter::dmapper::PaperSourceElement PAPER_SOURCE_OTHER
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:130
-    enum writerfilter::dmapper::ContextType CONTEXT_LIST
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:152
-    enum writerfilter::dmapper::SkipFootnoteSeparator OFF
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:160
-    enum writerfilter::dmapper::StoredRedlines FRAME
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:161
-    enum writerfilter::dmapper::StoredRedlines FOOTNOTE
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:162
-    enum writerfilter::dmapper::StoredRedlines ENDNOTE
-writerfilter/source/dmapper/PropertyIds.hxx:28
-    enum writerfilter::dmapper::PropertyIds PROP_ID_START
-writerfilter/source/dmapper/PropertyIds.hxx:29
-    enum writerfilter::dmapper::PropertyIds META_PROP_CELL_MAR_BOTTOM
-writerfilter/source/dmapper/PropertyIds.hxx:30
-    enum writerfilter::dmapper::PropertyIds META_PROP_CELL_MAR_LEFT
-writerfilter/source/dmapper/PropertyIds.hxx:31
-    enum writerfilter::dmapper::PropertyIds META_PROP_CELL_MAR_RIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:32
-    enum writerfilter::dmapper::PropertyIds META_PROP_CELL_MAR_TOP
-writerfilter/source/dmapper/PropertyIds.hxx:34
-    enum writerfilter::dmapper::PropertyIds META_PROP_TABLE_STYLE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:36
-    enum writerfilter::dmapper::PropertyIds PROP_ADJUST
-writerfilter/source/dmapper/PropertyIds.hxx:37
-    enum writerfilter::dmapper::PropertyIds PROP_ADJUST_CONTRAST
-writerfilter/source/dmapper/PropertyIds.hxx:38
-    enum writerfilter::dmapper::PropertyIds PROP_ADJUST_LUMINANCE
-writerfilter/source/dmapper/PropertyIds.hxx:39
-    enum writerfilter::dmapper::PropertyIds PROP_ALLOW_OVERLAP
-writerfilter/source/dmapper/PropertyIds.hxx:40
-    enum writerfilter::dmapper::PropertyIds PROP_ALTERNATIVE_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:41
-    enum writerfilter::dmapper::PropertyIds PROP_ANCHOR_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:42
-    enum writerfilter::dmapper::PropertyIds PROP_AUTOMATIC_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:43
-    enum writerfilter::dmapper::PropertyIds PROP_BACK_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:44
-    enum writerfilter::dmapper::PropertyIds PROP_BACK_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:45
-    enum writerfilter::dmapper::PropertyIds PROP_BACK_COLOR_TRANSPARENCY
-writerfilter/source/dmapper/PropertyIds.hxx:46
-    enum writerfilter::dmapper::PropertyIds PROP_BITMAP
-writerfilter/source/dmapper/PropertyIds.hxx:47
-    enum writerfilter::dmapper::PropertyIds PROP_BORDER_LEFT_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:48
-    enum writerfilter::dmapper::PropertyIds PROP_BORDER_RIGHT_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:49
-    enum writerfilter::dmapper::PropertyIds PROP_BORDER_TOP_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:50
-    enum writerfilter::dmapper::PropertyIds PROP_BORDER_BOTTOM_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:52
-    enum writerfilter::dmapper::PropertyIds PROP_BOTTOM_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:53
-    enum writerfilter::dmapper::PropertyIds PROP_BOTTOM_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:54
-    enum writerfilter::dmapper::PropertyIds PROP_BREAK_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:55
-    enum writerfilter::dmapper::PropertyIds PROP_BULLET_CHAR
-writerfilter/source/dmapper/PropertyIds.hxx:56
-    enum writerfilter::dmapper::PropertyIds PROP_BULLET_FONT_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:57
-    enum writerfilter::dmapper::PropertyIds PROP_CHAPTER_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:59
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_AUTO_KERNING
-writerfilter/source/dmapper/PropertyIds.hxx:60
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BACK_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:61
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BACKGROUND_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:62
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_CASE_MAP
-writerfilter/source/dmapper/PropertyIds.hxx:63
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_CHAR_KERNING
-writerfilter/source/dmapper/PropertyIds.hxx:64
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:65
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:66
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_COMBINE_IS_ON
-writerfilter/source/dmapper/PropertyIds.hxx:67
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_COMBINE_PREFIX
-writerfilter/source/dmapper/PropertyIds.hxx:68
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_COMBINE_SUFFIX
-writerfilter/source/dmapper/PropertyIds.hxx:69
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_CONTOURED
-writerfilter/source/dmapper/PropertyIds.hxx:70
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LEFT_BORDER
-writerfilter/source/dmapper/PropertyIds.hxx:71
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_RIGHT_BORDER
-writerfilter/source/dmapper/PropertyIds.hxx:72
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_TOP_BORDER
-writerfilter/source/dmapper/PropertyIds.hxx:73
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BOTTOM_BORDER
-writerfilter/source/dmapper/PropertyIds.hxx:74
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LEFT_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:75
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_RIGHT_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:76
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_TOP_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:77
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BOTTOM_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:78
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BORDER_LEFT_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:79
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BORDER_RIGHT_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:80
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BORDER_TOP_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:81
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_BORDER_BOTTOM_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:82
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_EMPHASIS
-writerfilter/source/dmapper/PropertyIds.hxx:83
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_ESCAPEMENT
-writerfilter/source/dmapper/PropertyIds.hxx:84
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_ESCAPEMENT_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:85
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_FLASH
-writerfilter/source/dmapper/PropertyIds.hxx:86
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_FONT_CHAR_SET
-writerfilter/source/dmapper/PropertyIds.hxx:87
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_FONT_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:88
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_FONT_NAME_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:89
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_FONT_NAME_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:91
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_HEIGHT_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:92
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_HEIGHT_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:93
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_HIDDEN
-writerfilter/source/dmapper/PropertyIds.hxx:94
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_HIGHLIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:95
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LOCALE
-writerfilter/source/dmapper/PropertyIds.hxx:96
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LOCALE_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:97
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LOCALE_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:98
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_POSTURE
-writerfilter/source/dmapper/PropertyIds.hxx:99
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_POSTURE_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:100
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_POSTURE_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:101
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_PROP_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:102
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_PROP_HEIGHT_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:103
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_PROP_HEIGHT_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:104
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_RELIEF
-writerfilter/source/dmapper/PropertyIds.hxx:105
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_ROTATION
-writerfilter/source/dmapper/PropertyIds.hxx:106
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_ROTATION_IS_FIT_TO_LINE
-writerfilter/source/dmapper/PropertyIds.hxx:107
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SCALE_WIDTH
-writerfilter/source/dmapper/PropertyIds.hxx:108
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SHADOW_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:109
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SHADING_MARKER
-writerfilter/source/dmapper/PropertyIds.hxx:110
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SHADING_VALUE
-writerfilter/source/dmapper/PropertyIds.hxx:111
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SHADOWED
-writerfilter/source/dmapper/PropertyIds.hxx:112
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_STRIKEOUT
-writerfilter/source/dmapper/PropertyIds.hxx:114
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:115
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_TEXTFILL_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:116
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_NAME_ASCII
-writerfilter/source/dmapper/PropertyIds.hxx:117
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_NAME_CS
-writerfilter/source/dmapper/PropertyIds.hxx:118
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_NAME_H_ANSI
-writerfilter/source/dmapper/PropertyIds.hxx:119
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_NAME_EAST_ASIA
-writerfilter/source/dmapper/PropertyIds.hxx:120
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_FONT_NAME_ASCII
-writerfilter/source/dmapper/PropertyIds.hxx:121
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_FONT_NAME_CS
-writerfilter/source/dmapper/PropertyIds.hxx:122
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_FONT_NAME_EAST_ASIA
-writerfilter/source/dmapper/PropertyIds.hxx:123
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:124
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_ORIGINAL_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:125
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_COLOR_SHADE
-writerfilter/source/dmapper/PropertyIds.hxx:126
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_FILL
-writerfilter/source/dmapper/PropertyIds.hxx:127
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_THEME_COLOR_TINT
-writerfilter/source/dmapper/PropertyIds.hxx:128
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_UNDERLINE
-writerfilter/source/dmapper/PropertyIds.hxx:129
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_UNDERLINE_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:130
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_UNDERLINE_COMPLEX_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:131
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_UNDERLINE_HAS_COLOR
-writerfilter/source/dmapper/PropertyIds.hxx:132
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_WEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:133
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_WEIGHT_ASIAN
-writerfilter/source/dmapper/PropertyIds.hxx:134
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_WEIGHT_COMPLEX
-writerfilter/source/dmapper/PropertyIds.hxx:135
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_WORD_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:136
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_GLOW_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:137
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SHADOW_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:138
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_REFLECTION_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:139
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_SCENE3D_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:140
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_PROPS3D_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:141
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_LIGATURES_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:142
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_NUMFORM_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:143
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_NUMSPACING_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:144
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_STYLISTICSETS_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:145
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_CNTXTALTS_TEXT_EFFECT
-writerfilter/source/dmapper/PropertyIds.hxx:147
-    enum writerfilter::dmapper::PropertyIds PROP_CONTENT
-writerfilter/source/dmapper/PropertyIds.hxx:148
-    enum writerfilter::dmapper::PropertyIds PROP_CONTOUR_OUTSIDE
-writerfilter/source/dmapper/PropertyIds.hxx:149
-    enum writerfilter::dmapper::PropertyIds PROP_CONTOUR_POLY_POLYGON
-writerfilter/source/dmapper/PropertyIds.hxx:150
-    enum writerfilter::dmapper::PropertyIds PROP_COUNT_EMPTY_LINES
-writerfilter/source/dmapper/PropertyIds.hxx:151
-    enum writerfilter::dmapper::PropertyIds PROP_COUNT_LINES_IN_FRAMES
-writerfilter/source/dmapper/PropertyIds.hxx:152
-    enum writerfilter::dmapper::PropertyIds PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES
-writerfilter/source/dmapper/PropertyIds.hxx:153
-    enum writerfilter::dmapper::PropertyIds PROP_CREATE_FROM_MARKS
-writerfilter/source/dmapper/PropertyIds.hxx:154
-    enum writerfilter::dmapper::PropertyIds PROP_CREATE_FROM_OUTLINE
-writerfilter/source/dmapper/PropertyIds.hxx:155
-    enum writerfilter::dmapper::PropertyIds PROP_CURRENT_PRESENTATION
-writerfilter/source/dmapper/PropertyIds.hxx:156
-    enum writerfilter::dmapper::PropertyIds PROP_DECORATIVE
-writerfilter/source/dmapper/PropertyIds.hxx:157
-    enum writerfilter::dmapper::PropertyIds PROP_DELETE
-writerfilter/source/dmapper/PropertyIds.hxx:158
-    enum writerfilter::dmapper::PropertyIds PROP_DESCRIPTION
-writerfilter/source/dmapper/PropertyIds.hxx:159
-    enum writerfilter::dmapper::PropertyIds PROP_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:160
-    enum writerfilter::dmapper::PropertyIds PROP_DROP_CAP_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:161
-    enum writerfilter::dmapper::PropertyIds PROP_FILE_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:163
-    enum writerfilter::dmapper::PropertyIds PROP_FIRST_LINE_OFFSET
-writerfilter/source/dmapper/PropertyIds.hxx:164
-    enum writerfilter::dmapper::PropertyIds PROP_FIRST_PAGE
-writerfilter/source/dmapper/PropertyIds.hxx:165
-    enum writerfilter::dmapper::PropertyIds PROP_FIRST_IS_SHARED
-writerfilter/source/dmapper/PropertyIds.hxx:166
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_BODY_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:167
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_DYNAMIC_SPACING
-writerfilter/source/dmapper/PropertyIds.hxx:168
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:169
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_IS_DYNAMIC_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:170
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_IS_ON
-writerfilter/source/dmapper/PropertyIds.hxx:171
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_IS_SHARED
-writerfilter/source/dmapper/PropertyIds.hxx:172
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:173
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_TEXT_LEFT
-writerfilter/source/dmapper/PropertyIds.hxx:174
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTER_TEXT_FIRST
-writerfilter/source/dmapper/PropertyIds.hxx:175
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTNOTE_COUNTING
-writerfilter/source/dmapper/PropertyIds.hxx:176
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTNOTE_LINE_ADJUST
-writerfilter/source/dmapper/PropertyIds.hxx:177
-    enum writerfilter::dmapper::PropertyIds PROP_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:178
-    enum writerfilter::dmapper::PropertyIds PROP_FULL_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:179
-    enum writerfilter::dmapper::PropertyIds PROP_GRAPHIC
-writerfilter/source/dmapper/PropertyIds.hxx:180
-    enum writerfilter::dmapper::PropertyIds PROP_GRAPHIC_COLOR_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:181
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_BASE_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:182
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_BASE_WIDTH
-writerfilter/source/dmapper/PropertyIds.hxx:183
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_DISPLAY
-writerfilter/source/dmapper/PropertyIds.hxx:184
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_LINES
-writerfilter/source/dmapper/PropertyIds.hxx:185
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:186
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_PRINT
-writerfilter/source/dmapper/PropertyIds.hxx:187
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_RUBY_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:188
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_BODY_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:189
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_DYNAMIC_SPACING
-writerfilter/source/dmapper/PropertyIds.hxx:190
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:191
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_IS_DYNAMIC_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:192
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_IS_ON
-writerfilter/source/dmapper/PropertyIds.hxx:193
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_IS_SHARED
-writerfilter/source/dmapper/PropertyIds.hxx:194
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_ROW_COUNT
-writerfilter/source/dmapper/PropertyIds.hxx:195
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:196
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_TEXT_LEFT
-writerfilter/source/dmapper/PropertyIds.hxx:197
-    enum writerfilter::dmapper::PropertyIds PROP_HEADER_TEXT_FIRST
-writerfilter/source/dmapper/PropertyIds.hxx:198
-    enum writerfilter::dmapper::PropertyIds PROP_HEADING_STYLE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:199
-    enum writerfilter::dmapper::PropertyIds PROP_HEIGHT
-writerfilter/source/dmapper/PropertyIds.hxx:200
-    enum writerfilter::dmapper::PropertyIds PROP_HELP
-writerfilter/source/dmapper/PropertyIds.hxx:201
-    enum writerfilter::dmapper::PropertyIds PROP_HINT
-writerfilter/source/dmapper/PropertyIds.hxx:202
-    enum writerfilter::dmapper::PropertyIds PROP_HORI_ORIENT
-writerfilter/source/dmapper/PropertyIds.hxx:203
-    enum writerfilter::dmapper::PropertyIds PROP_HORI_ORIENT_POSITION
-writerfilter/source/dmapper/PropertyIds.hxx:204
-    enum writerfilter::dmapper::PropertyIds PROP_HORI_ORIENT_RELATION
-writerfilter/source/dmapper/PropertyIds.hxx:205
-    enum writerfilter::dmapper::PropertyIds PROP_HYPER_LINK_U_R_L
-writerfilter/source/dmapper/PropertyIds.hxx:206
-    enum writerfilter::dmapper::PropertyIds PROP_HYPERLINK
-writerfilter/source/dmapper/PropertyIds.hxx:208
-    enum writerfilter::dmapper::PropertyIds PROP_INPUT_STREAM
-writerfilter/source/dmapper/PropertyIds.hxx:209
-    enum writerfilter::dmapper::PropertyIds PROP_INSERT
-writerfilter/source/dmapper/PropertyIds.hxx:210
-    enum writerfilter::dmapper::PropertyIds PROP_INTERVAL
-writerfilter/source/dmapper/PropertyIds.hxx:211
-    enum writerfilter::dmapper::PropertyIds PROP_IS_DATE
-writerfilter/source/dmapper/PropertyIds.hxx:212
-    enum writerfilter::dmapper::PropertyIds PROP_IS_FIXED
-writerfilter/source/dmapper/PropertyIds.hxx:213
-    enum writerfilter::dmapper::PropertyIds PROP_IS_INPUT
-writerfilter/source/dmapper/PropertyIds.hxx:214
-    enum writerfilter::dmapper::PropertyIds PROP_IS_LANDSCAPE
-writerfilter/source/dmapper/PropertyIds.hxx:215
-    enum writerfilter::dmapper::PropertyIds PROP_IS_ON
-writerfilter/source/dmapper/PropertyIds.hxx:216
-    enum writerfilter::dmapper::PropertyIds PROP_IS_SPLIT_ALLOWED
-writerfilter/source/dmapper/PropertyIds.hxx:217
-    enum writerfilter::dmapper::PropertyIds PROP_IS_VISIBLE
-writerfilter/source/dmapper/PropertyIds.hxx:218
-    enum writerfilter::dmapper::PropertyIds PROP_LABEL_CATEGORY
-writerfilter/source/dmapper/PropertyIds.hxx:220
-    enum writerfilter::dmapper::PropertyIds PROP_LEFT_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:222
-    enum writerfilter::dmapper::PropertyIds PROP_LEVEL
-writerfilter/source/dmapper/PropertyIds.hxx:223
-    enum writerfilter::dmapper::PropertyIds PROP_LEVEL_FOLLOW
-writerfilter/source/dmapper/PropertyIds.hxx:224
-    enum writerfilter::dmapper::PropertyIds PROP_LEVEL_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:225
-    enum writerfilter::dmapper::PropertyIds PROP_LEVEL_PARAGRAPH_STYLES
-writerfilter/source/dmapper/PropertyIds.hxx:226
-    enum writerfilter::dmapper::PropertyIds PROP_LEVEL_IS_LEGAL
-writerfilter/source/dmapper/PropertyIds.hxx:227
-    enum writerfilter::dmapper::PropertyIds PROP_LISTTAB_STOP_POSITION
-writerfilter/source/dmapper/PropertyIds.hxx:228
-    enum writerfilter::dmapper::PropertyIds PROP_LIST_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:229
-    enum writerfilter::dmapper::PropertyIds PROP_MACRO_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:230
-    enum writerfilter::dmapper::PropertyIds PROP_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:231
-    enum writerfilter::dmapper::PropertyIds PROP_NUMBERING_LEVEL
-writerfilter/source/dmapper/PropertyIds.hxx:233
-    enum writerfilter::dmapper::PropertyIds PROP_NUMBERING_STYLE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:234
-    enum writerfilter::dmapper::PropertyIds PROP_NUMBERING_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:235
-    enum writerfilter::dmapper::PropertyIds PROP_NUMBER_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:236
-    enum writerfilter::dmapper::PropertyIds PROP_NUMBER_POSITION
-writerfilter/source/dmapper/PropertyIds.hxx:237
-    enum writerfilter::dmapper::PropertyIds PROP_OPAQUE
-writerfilter/source/dmapper/PropertyIds.hxx:238
-    enum writerfilter::dmapper::PropertyIds PROP_OUTLINE_LEVEL
-writerfilter/source/dmapper/PropertyIds.hxx:239
-    enum writerfilter::dmapper::PropertyIds PROP_PAGE_DESC_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:240
-    enum writerfilter::dmapper::PropertyIds PROP_PAGE_NUMBER_OFFSET
-writerfilter/source/dmapper/PropertyIds.hxx:241
-    enum writerfilter::dmapper::PropertyIds PROP_PAGE_TOGGLE
-writerfilter/source/dmapper/PropertyIds.hxx:242
-    enum writerfilter::dmapper::PropertyIds PROP_PARAGRAPH_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:243
-    enum writerfilter::dmapper::PropertyIds PROP_PARAGRAPH_STYLES
-writerfilter/source/dmapper/PropertyIds.hxx:245
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_BOTTOM_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:247
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_IS_HANGING_PUNCTUATION
-writerfilter/source/dmapper/PropertyIds.hxx:248
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_IS_HYPHENATION
-writerfilter/source/dmapper/PropertyIds.hxx:249
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_HYPHENATION_NO_CAPS
-writerfilter/source/dmapper/PropertyIds.hxx:250
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_HYPHENATION_ZONE
-writerfilter/source/dmapper/PropertyIds.hxx:251
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_KEEP_TOGETHER
-writerfilter/source/dmapper/PropertyIds.hxx:254
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_LINE_NUMBER_COUNT
-writerfilter/source/dmapper/PropertyIds.hxx:255
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_LINE_NUMBER_START_VALUE
-writerfilter/source/dmapper/PropertyIds.hxx:257
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_ORPHANS
-writerfilter/source/dmapper/PropertyIds.hxx:259
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_SPLIT
-writerfilter/source/dmapper/PropertyIds.hxx:262
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_TOP_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:263
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_VERT_ALIGNMENT
-writerfilter/source/dmapper/PropertyIds.hxx:265
-    enum writerfilter::dmapper::PropertyIds PROP_PAPER_TRAY
-writerfilter/source/dmapper/PropertyIds.hxx:266
-    enum writerfilter::dmapper::PropertyIds PROP_PARENT_NUMBERING
-writerfilter/source/dmapper/PropertyIds.hxx:267
-    enum writerfilter::dmapper::PropertyIds PROP_POSITION_AND_SPACE_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:268
-    enum writerfilter::dmapper::PropertyIds PROP_POSITION_PROTECTED
-writerfilter/source/dmapper/PropertyIds.hxx:269
-    enum writerfilter::dmapper::PropertyIds PROP_IS_PROTECTED
-writerfilter/source/dmapper/PropertyIds.hxx:270
-    enum writerfilter::dmapper::PropertyIds PROP_REDLINE_AUTHOR
-writerfilter/source/dmapper/PropertyIds.hxx:271
-    enum writerfilter::dmapper::PropertyIds PROP_REDLINE_DATE_TIME
-writerfilter/source/dmapper/PropertyIds.hxx:272
-    enum writerfilter::dmapper::PropertyIds PROP_REDLINE_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:273
-    enum writerfilter::dmapper::PropertyIds PROP_REDLINE_REVERT_PROPERTIES
-writerfilter/source/dmapper/PropertyIds.hxx:274
-    enum writerfilter::dmapper::PropertyIds PROP_REFERENCE_FIELD_FLAGS
-writerfilter/source/dmapper/PropertyIds.hxx:275
-    enum writerfilter::dmapper::PropertyIds PROP_REFERENCE_FIELD_PART
-writerfilter/source/dmapper/PropertyIds.hxx:276
-    enum writerfilter::dmapper::PropertyIds PROP_REFERENCE_FIELD_SOURCE
-writerfilter/source/dmapper/PropertyIds.hxx:277
-    enum writerfilter::dmapper::PropertyIds PROP_RESTART_AT_EACH_PAGE
-writerfilter/source/dmapper/PropertyIds.hxx:279
-    enum writerfilter::dmapper::PropertyIds PROP_RIGHT_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:280
-    enum writerfilter::dmapper::PropertyIds PROP_RIGHT_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:281
-    enum writerfilter::dmapper::PropertyIds PROP_SERVICE_CHAR_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:282
-    enum writerfilter::dmapper::PropertyIds PROP_SERVICE_PARA_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:283
-    enum writerfilter::dmapper::PropertyIds PROP_SIZE
-writerfilter/source/dmapper/PropertyIds.hxx:284
-    enum writerfilter::dmapper::PropertyIds PROP_SIZE100th_M_M
-writerfilter/source/dmapper/PropertyIds.hxx:285
-    enum writerfilter::dmapper::PropertyIds PROP_SIZE_PIXEL
-writerfilter/source/dmapper/PropertyIds.hxx:286
-    enum writerfilter::dmapper::PropertyIds PROP_SIZE_PROTECTED
-writerfilter/source/dmapper/PropertyIds.hxx:287
-    enum writerfilter::dmapper::PropertyIds PROP_SIZE_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:288
-    enum writerfilter::dmapper::PropertyIds PROP_SOURCE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:289
-    enum writerfilter::dmapper::PropertyIds PROP_SPLIT
-writerfilter/source/dmapper/PropertyIds.hxx:290
-    enum writerfilter::dmapper::PropertyIds PROP_STANDARD
-writerfilter/source/dmapper/PropertyIds.hxx:291
-    enum writerfilter::dmapper::PropertyIds PROP_START_AT
-writerfilter/source/dmapper/PropertyIds.hxx:292
-    enum writerfilter::dmapper::PropertyIds PROP_START_WITH
-writerfilter/source/dmapper/PropertyIds.hxx:293
-    enum writerfilter::dmapper::PropertyIds PROP_STREAM_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:294
-    enum writerfilter::dmapper::PropertyIds PROP_SUB_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:295
-    enum writerfilter::dmapper::PropertyIds PROP_SURROUND
-writerfilter/source/dmapper/PropertyIds.hxx:296
-    enum writerfilter::dmapper::PropertyIds PROP_SURROUND_CONTOUR
-writerfilter/source/dmapper/PropertyIds.hxx:297
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_BORDER
-writerfilter/source/dmapper/PropertyIds.hxx:298
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_BORDER_DISTANCES
-writerfilter/source/dmapper/PropertyIds.hxx:300
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_REDLINE_PARAMS
-writerfilter/source/dmapper/PropertyIds.hxx:301
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_ROW_DELETE
-writerfilter/source/dmapper/PropertyIds.hxx:302
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_ROW_INSERT
-writerfilter/source/dmapper/PropertyIds.hxx:303
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_CELL_DELETE
-writerfilter/source/dmapper/PropertyIds.hxx:304
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_CELL_INSERT
-writerfilter/source/dmapper/PropertyIds.hxx:305
-    enum writerfilter::dmapper::PropertyIds PROP_TABS_RELATIVE_TO_INDENT
-writerfilter/source/dmapper/PropertyIds.hxx:306
-    enum writerfilter::dmapper::PropertyIds PROP_TAB_STOP_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:307
-    enum writerfilter::dmapper::PropertyIds PROP_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:308
-    enum writerfilter::dmapper::PropertyIds PROP_TEXT_COLUMNS
-writerfilter/source/dmapper/PropertyIds.hxx:309
-    enum writerfilter::dmapper::PropertyIds PROP_TEXT_RANGE
-writerfilter/source/dmapper/PropertyIds.hxx:310
-    enum writerfilter::dmapper::PropertyIds PROP_TEXT_VERTICAL_ADJUST
-writerfilter/source/dmapper/PropertyIds.hxx:311
-    enum writerfilter::dmapper::PropertyIds PROP_TITLE
-writerfilter/source/dmapper/PropertyIds.hxx:312
-    enum writerfilter::dmapper::PropertyIds PROP_TOKEN_CHAPTER_INFO
-writerfilter/source/dmapper/PropertyIds.hxx:313
-    enum writerfilter::dmapper::PropertyIds PROP_TOKEN_HYPERLINK_END
-writerfilter/source/dmapper/PropertyIds.hxx:314
-    enum writerfilter::dmapper::PropertyIds PROP_TOKEN_HYPERLINK_START
-writerfilter/source/dmapper/PropertyIds.hxx:315
-    enum writerfilter::dmapper::PropertyIds PROP_TOKEN_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:316
-    enum writerfilter::dmapper::PropertyIds PROP_TOKEN_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:318
-    enum writerfilter::dmapper::PropertyIds PROP_TOP_BORDER_DISTANCE
-writerfilter/source/dmapper/PropertyIds.hxx:320
-    enum writerfilter::dmapper::PropertyIds PROP_VERTICAL_MERGE
-writerfilter/source/dmapper/PropertyIds.hxx:321
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_STANDARD_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:322
-    enum writerfilter::dmapper::PropertyIds PROP_VERT_ORIENT
-writerfilter/source/dmapper/PropertyIds.hxx:323
-    enum writerfilter::dmapper::PropertyIds PROP_VERT_ORIENT_POSITION
-writerfilter/source/dmapper/PropertyIds.hxx:324
-    enum writerfilter::dmapper::PropertyIds PROP_VERT_ORIENT_RELATION
-writerfilter/source/dmapper/PropertyIds.hxx:325
-    enum writerfilter::dmapper::PropertyIds PROP_WIDTH
-writerfilter/source/dmapper/PropertyIds.hxx:326
-    enum writerfilter::dmapper::PropertyIds PROP_WIDTH_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:327
-    enum writerfilter::dmapper::PropertyIds PROP_TBL_LOOK
-writerfilter/source/dmapper/PropertyIds.hxx:328
-    enum writerfilter::dmapper::PropertyIds PROP_WRITING_MODE
-writerfilter/source/dmapper/PropertyIds.hxx:329
-    enum writerfilter::dmapper::PropertyIds PROP_FRM_DIRECTION
-writerfilter/source/dmapper/PropertyIds.hxx:330
-    enum writerfilter::dmapper::PropertyIds PROP_EMBEDDED_OBJECT
-writerfilter/source/dmapper/PropertyIds.hxx:331
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_CONTEXT_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:332
-    enum writerfilter::dmapper::PropertyIds PROP_PAGE_STYLE_LAYOUT
-writerfilter/source/dmapper/PropertyIds.hxx:333
-    enum writerfilter::dmapper::PropertyIds PROP_Z_ORDER
-writerfilter/source/dmapper/PropertyIds.hxx:334
-    enum writerfilter::dmapper::PropertyIds PROP_EMBED_FONTS
-writerfilter/source/dmapper/PropertyIds.hxx:335
-    enum writerfilter::dmapper::PropertyIds PROP_EMBED_SYSTEM_FONTS
-writerfilter/source/dmapper/PropertyIds.hxx:336
-    enum writerfilter::dmapper::PropertyIds PROP_SHADOW_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:337
-    enum writerfilter::dmapper::PropertyIds PROP_RELATIVE_WIDTH
-writerfilter/source/dmapper/PropertyIds.hxx:338
-    enum writerfilter::dmapper::PropertyIds PROP_IS_WIDTH_RELATIVE
-writerfilter/source/dmapper/PropertyIds.hxx:339
-    enum writerfilter::dmapper::PropertyIds PROP_GRAPHIC_BITMAP
-writerfilter/source/dmapper/PropertyIds.hxx:340
-    enum writerfilter::dmapper::PropertyIds PROP_GRAPHIC_SIZE
-writerfilter/source/dmapper/PropertyIds.hxx:341
-    enum writerfilter::dmapper::PropertyIds PROP_MIRROR_INDENTS
-writerfilter/source/dmapper/PropertyIds.hxx:342
-    enum writerfilter::dmapper::PropertyIds PROP_SURROUND_TEXT_WRAP_SMALL
-writerfilter/source/dmapper/PropertyIds.hxx:343
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_SHADOW_FORMAT
-writerfilter/source/dmapper/PropertyIds.hxx:344
-    enum writerfilter::dmapper::PropertyIds PROP_FOOTNOTE_LINE_RELATIVE_WIDTH
-writerfilter/source/dmapper/PropertyIds.hxx:345
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING
-writerfilter/source/dmapper/PropertyIds.hxx:346
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING
-writerfilter/source/dmapper/PropertyIds.hxx:347
-    enum writerfilter::dmapper::PropertyIds PROP_TBL_HEADER
-writerfilter/source/dmapper/PropertyIds.hxx:348
-    enum writerfilter::dmapper::PropertyIds PROP_HORIZONTAL_MERGE
-writerfilter/source/dmapper/PropertyIds.hxx:349
-    enum writerfilter::dmapper::PropertyIds PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS
-writerfilter/source/dmapper/PropertyIds.hxx:350
-    enum writerfilter::dmapper::PropertyIds PROP_TAB_IN_TOC
-writerfilter/source/dmapper/PropertyIds.hxx:351
-    enum writerfilter::dmapper::PropertyIds PROP_TOC_BOOKMARK
-writerfilter/source/dmapper/PropertyIds.hxx:352
-    enum writerfilter::dmapper::PropertyIds PROP_TOC_NEW_LINE
-writerfilter/source/dmapper/PropertyIds.hxx:353
-    enum writerfilter::dmapper::PropertyIds PROP_TOC_PARAGRAPH_OUTLINE_LEVEL
-writerfilter/source/dmapper/PropertyIds.hxx:354
-    enum writerfilter::dmapper::PropertyIds PROP_SDTPR
-writerfilter/source/dmapper/PropertyIds.hxx:356
-    enum writerfilter::dmapper::PropertyIds PROP_TABLE_INTEROP_GRAB_BAG
-writerfilter/source/dmapper/PropertyIds.hxx:357
-    enum writerfilter::dmapper::PropertyIds PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
-writerfilter/source/dmapper/PropertyIds.hxx:358
-    enum writerfilter::dmapper::PropertyIds PROP_SDT_END_BEFORE
-writerfilter/source/dmapper/PropertyIds.hxx:359
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_SDT_END_BEFORE
-writerfilter/source/dmapper/PropertyIds.hxx:360
-    enum writerfilter::dmapper::PropertyIds META_PROP_TABLE_LOOK
-writerfilter/source/dmapper/PropertyIds.hxx:361
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_CNF_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:362
-    enum writerfilter::dmapper::PropertyIds PROP_CELL_CNF_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:363
-    enum writerfilter::dmapper::PropertyIds PROP_ROW_CNF_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:364
-    enum writerfilter::dmapper::PropertyIds PROP_CELL_HIDE_MARK
-writerfilter/source/dmapper/PropertyIds.hxx:365
-    enum writerfilter::dmapper::PropertyIds PROP_FOLLOW_TEXT_FLOW
-writerfilter/source/dmapper/PropertyIds.hxx:369
-    enum writerfilter::dmapper::PropertyIds PROP_SNAP_TO_GRID
-writerfilter/source/dmapper/PropertyIds.hxx:370
-    enum writerfilter::dmapper::PropertyIds PROP_GRID_SNAP_TO_CHARS
-writerfilter/source/dmapper/PropertyIds.hxx:371
-    enum writerfilter::dmapper::PropertyIds PROP_RUBY_STYLE
-writerfilter/source/dmapper/PropertyIds.hxx:372
-    enum writerfilter::dmapper::PropertyIds PROP_RUBY_TEXT
-writerfilter/source/dmapper/PropertyIds.hxx:373
-    enum writerfilter::dmapper::PropertyIds PROP_RUBY_ADJUST
-writerfilter/source/dmapper/PropertyIds.hxx:374
-    enum writerfilter::dmapper::PropertyIds PROP_RUBY_POSITION
-writerfilter/source/dmapper/PropertyIds.hxx:375
-    enum writerfilter::dmapper::PropertyIds PROP_DATABASE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:376
-    enum writerfilter::dmapper::PropertyIds PROP_COMMAND_TYPE
-writerfilter/source/dmapper/PropertyIds.hxx:377
-    enum writerfilter::dmapper::PropertyIds PROP_DATATABLE_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:378
-    enum writerfilter::dmapper::PropertyIds PROP_DATACOLUMN_NAME
-writerfilter/source/dmapper/PropertyIds.hxx:379
-    enum writerfilter::dmapper::PropertyIds PROP_CHAR_TRANSPARENCE
-writerfilter/source/dmapper/PropertyIds.hxx:380
-    enum writerfilter::dmapper::PropertyIds PROP_CELL_FORMULA
-writerfilter/source/dmapper/PropertyIds.hxx:381
-    enum writerfilter::dmapper::PropertyIds PROP_CELL_FORMULA_CONVERTED
-writerfilter/source/dmapper/PropertyIds.hxx:382
-    enum writerfilter::dmapper::PropertyIds PROP_GUTTER_MARGIN
-writerfilter/source/dmapper/PropertyIds.hxx:383
-    enum writerfilter::dmapper::PropertyIds PROP_RTL_GUTTER
-writerfilter/source/dmapper/PropertyIds.hxx:384
-    enum writerfilter::dmapper::PropertyIds PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF
-writerfilter/source/dmapper/PropertyIds.hxx:385
-    enum writerfilter::dmapper::PropertyIds PROP_PARA_CONNECT_BORDERS
-writerfilter/source/dmapper/PropertyMap.hxx:68
-    enum writerfilter::dmapper::BorderPosition BORDER_LEFT
-writerfilter/source/dmapper/PropertyMap.hxx:69
-    enum writerfilter::dmapper::BorderPosition BORDER_RIGHT
-writerfilter/source/dmapper/PropertyMap.hxx:70
-    enum writerfilter::dmapper::BorderPosition BORDER_TOP
-writerfilter/source/dmapper/PropertyMap.hxx:71
-    enum writerfilter::dmapper::BorderPosition BORDER_BOTTOM
-writerfilter/source/dmapper/PropertyMap.hxx:76
-    enum writerfilter::dmapper::GrabBagType NO_GRAB_BAG
-writerfilter/source/dmapper/PropertyMap.hxx:235
-    enum writerfilter::dmapper::SectionPropertyMap::BorderApply ToAllInSection
-writerfilter/source/dmapper/PropertyMap.hxx:236
-    enum writerfilter::dmapper::SectionPropertyMap::BorderApply ToFirstPageInSection
-writerfilter/source/dmapper/PropertyMap.hxx:237
-    enum writerfilter::dmapper::SectionPropertyMap::BorderApply ToAllButFirstInSection
-writerfilter/source/dmapper/PropertyMap.hxx:241
-    enum writerfilter::dmapper::SectionPropertyMap::BorderOffsetFrom Text
-writerfilter/source/dmapper/PropertyMap.hxx:600
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget TablePropertyMapTarget_START
-writerfilter/source/dmapper/PropertyMap.hxx:601
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget CELL_MAR_LEFT
-writerfilter/source/dmapper/PropertyMap.hxx:602
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget CELL_MAR_RIGHT
-writerfilter/source/dmapper/PropertyMap.hxx:603
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget CELL_MAR_TOP
-writerfilter/source/dmapper/PropertyMap.hxx:604
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget CELL_MAR_BOTTOM
-writerfilter/source/dmapper/PropertyMap.hxx:605
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget TABLE_WIDTH
-writerfilter/source/dmapper/PropertyMap.hxx:606
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget TABLE_WIDTH_TYPE
-writerfilter/source/dmapper/PropertyMap.hxx:607
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget LEFT_MARGIN
-writerfilter/source/dmapper/PropertyMap.hxx:608
-    enum writerfilter::dmapper::TablePropertyMap::TablePropertyMapTarget HORI_ORIENT
-writerfilter/source/dmapper/SdtHelper.hxx:50
-    enum writerfilter::dmapper::SdtControlType unsupported
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:40
-    enum writerfilter::ooxml::OOXMLFastContextHandler::ResourceEnum_t PROPERTIES
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:40
-    enum writerfilter::ooxml::OOXMLFastContextHandler::ResourceEnum_t SHAPE
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:40
-    enum writerfilter::ooxml::OOXMLFastContextHandler::ResourceEnum_t TABLE
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:97
-    enum writerfilter::rtftok::RTFFormFieldType TEXT
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:105
-    enum writerfilter::rtftok::RTFBmpStyle PNG
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:106
-    enum writerfilter::rtftok::RTFBmpStyle JPEG
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:114
-    enum writerfilter::rtftok::RTFFieldStatus RESULT
 writerperfect/source/writer/exp/xmlimp.hxx:60
     enum writerperfect::exp::PopupState Consumed
 xmlhelp/source/cxxhelp/inc/tvread.hxx:44
@@ -6940,9 +7078,9 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:246
     enum chelp::Databases::(unnamed at /home/noel/libo-plugin/xmlhelp/source/cxxhelp/provider/databases.hxx:240:9) NEWPRODUCTNAME
 xmlhelp/source/cxxhelp/provider/databases.hxx:247
     enum chelp::Databases::(unnamed at /home/noel/libo-plugin/xmlhelp/source/cxxhelp/provider/databases.hxx:240:9) NEWPRODUCTVERSION
-xmlhelp/source/treeview/tvread.cxx:82
-    enum treeview::TVDom::Kind tree_node
 xmlhelp/source/treeview/tvread.cxx:84
+    enum treeview::TVDom::Kind tree_node
+xmlhelp/source/treeview/tvread.cxx:86
     enum treeview::TVDom::Kind other
 xmloff/inc/EnhancedCustomShapeToken.hxx:90
     enum xmloff::EnhancedCustomShapeToken::EnhancedCustomShapeTokenEnum EAS_CustomShapeEngine
@@ -6960,25 +7098,25 @@ xmloff/inc/forms/property_ids.hxx:37
     enum xmloff::PropertyId PID_INVALID
 xmloff/source/chart/SchXMLPlotAreaContext.hxx:229
     enum SchXMLWallFloorContext::ContextType CONTEXT_TYPE_FLOOR
-xmloff/source/chart/SchXMLTools.hxx:55
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_LINE
 xmloff/source/chart/SchXMLTools.hxx:56
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_AREA
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_LINE
 xmloff/source/chart/SchXMLTools.hxx:57
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_CIRCLE
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_AREA
 xmloff/source/chart/SchXMLTools.hxx:58
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_RING
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_CIRCLE
 xmloff/source/chart/SchXMLTools.hxx:59
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_SCATTER
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_RING
 xmloff/source/chart/SchXMLTools.hxx:60
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_RADAR
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_SCATTER
 xmloff/source/chart/SchXMLTools.hxx:61
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_FILLED_RADAR
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_RADAR
 xmloff/source/chart/SchXMLTools.hxx:62
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_FILLED_RADAR
+xmloff/source/chart/SchXMLTools.hxx:63
     enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_BAR
-xmloff/source/chart/SchXMLTools.hxx:64
-    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_BUBBLE
 xmloff/source/chart/SchXMLTools.hxx:65
+    enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_BUBBLE
+xmloff/source/chart/SchXMLTools.hxx:66
     enum SchXMLTools::SchXMLChartTypeEnum XML_CHART_CLASS_ADDIN
 xmloff/source/chart/transporttypes.hxx:31
     enum SchXMLCellType SCH_CELL_TYPE_UNKNOWN
@@ -7048,7 +7186,7 @@ xmloff/source/draw/XMLNumberStyles.cxx:93
     enum DataStyleNumber Seconds
 xmloff/source/draw/XMLNumberStyles.cxx:94
     enum DataStyleNumber Seconds_02
-xmloff/source/forms/controlelement.hxx:52
+xmloff/source/forms/controlelement.hxx:53
     enum xmloff::OControlElement::ElementType GENERIC_CONTROL
 xmloff/source/forms/formattributes.hxx:100
     enum EAFlags ControlEvents
@@ -7070,23 +7208,23 @@ xmloff/source/text/txtparae.cxx:485
     enum (anonymous namespace)::eParagraphPropertyNamesEnumAuto PARA_CONDITIONAL_STYLE_NAME_AUTO
 xmloff/source/text/txtparae.cxx:486
     enum (anonymous namespace)::eParagraphPropertyNamesEnumAuto PARA_STYLE_NAME_AUTO
-xmloff/source/text/txtparae.cxx:507
+xmloff/source/text/txtparae.cxx:506
     enum (anonymous namespace)::eParagraphPropertyNamesEnum NUMBERING_IS_NUMBER
-xmloff/source/text/txtparae.cxx:508
+xmloff/source/text/txtparae.cxx:507
     enum (anonymous namespace)::eParagraphPropertyNamesEnum PARA_NUMBERING_STYLENAME
-xmloff/source/text/txtparae.cxx:509
+xmloff/source/text/txtparae.cxx:508
     enum (anonymous namespace)::eParagraphPropertyNamesEnum PARA_OUTLINE_LEVEL
-xmloff/source/text/txtparae.cxx:510
+xmloff/source/text/txtparae.cxx:509
     enum (anonymous namespace)::eParagraphPropertyNamesEnum PARA_CONDITIONAL_STYLE_NAME
-xmloff/source/text/txtparae.cxx:511
+xmloff/source/text/txtparae.cxx:510
     enum (anonymous namespace)::eParagraphPropertyNamesEnum PARA_STYLE_NAME
-xmloff/source/text/txtparae.cxx:512
+xmloff/source/text/txtparae.cxx:511
     enum (anonymous namespace)::eParagraphPropertyNamesEnum TEXT_SECTION
-xmloff/source/text/txtparae.cxx:513
+xmloff/source/text/txtparae.cxx:512
     enum (anonymous namespace)::eParagraphPropertyNamesEnum PARA_OUTLINE_CONTENT_VISIBLE
 xmloff/source/text/XMLIndexTOCContext.hxx:42
     enum IndexTypeEnum TEXT_INDEX_UNKNOWN
-xmloff/source/text/XMLSectionExport.cxx:1077
+xmloff/source/text/XMLSectionExport.cxx:1076
     enum (anonymous namespace)::TemplateTypeEnum TOK_TTYPE_INVALID
 xmloff/source/text/XMLSectionExport.hxx:57
     enum SectionTypeEnum TEXT_SECTION_TYPE_UNKNOWN

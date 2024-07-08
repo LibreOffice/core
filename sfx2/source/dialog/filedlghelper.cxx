@@ -2538,8 +2538,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"WriterExport"_ustr;
         case WriterImportAutotext:
             return u"WriterImportAutotext"_ustr;
-        case WriterInsertHyperlink:
-            return u"WriterInsertHyperlink"_ustr;
         case WriterInsertImage:
             return u"WriterInsertImage"_ustr;
         case WriterInsertScript:

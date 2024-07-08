@@ -36,10 +36,10 @@ chart2/source/view/inc/ShapeFactory.hxx:64
     enum chart::SymbolEnum Symbol_HorizontalBar
 chart2/source/view/inc/ShapeFactory.hxx:65
     enum chart::SymbolEnum Symbol_VerticalBar
-configmgr/source/access.hxx:456
-    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:454:5) IS_GROUP_MEMBER
-configmgr/source/access.hxx:456
-    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:454:5) IS_SET_MEMBER
+configmgr/source/access.hxx:457
+    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:455:5) IS_GROUP_MEMBER
+configmgr/source/access.hxx:457
+    enum configmgr::Access::(unnamed at /home/noel/libo-plugin/configmgr/source/access.hxx:455:5) IS_SET_MEMBER
 configmgr/source/components.hxx:149
     enum configmgr::Components::ModificationTarget Dconf
 configmgr/source/parsemanager.hxx:43
@@ -56,8 +56,6 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:71
     enum dbaccess::OSingleSelectQueryComposer::EColumnType SelectColumns
 dbaccess/source/ui/inc/sqlmessage.hxx:56
     enum dbaui::MessBoxStyle DefaultCancel
-drawinglayer/inc/primitive2d/texteffectprimitive2d.hxx:33
-    enum drawinglayer::primitive2d::TextEffectStyle2D ReliefEngraved
 drawinglayer/source/tools/emfphelperdata.cxx:63
     enum emfplushelper::(unnamed at /home/noel/libo-plugin/drawinglayer/source/tools/emfphelperdata.cxx:61:5) WrapModeTile
 drawinglayer/source/tools/emfphelperdata.cxx:64
@@ -556,6 +554,8 @@ filter/source/msfilter/msdffimp.cxx:186
     enum (anonymous namespace)::OfficeArtBlipRecInstance DIB
 filter/source/msfilter/msdffimp.cxx:187
     enum (anonymous namespace)::OfficeArtBlipRecInstance TIFF
+forms/source/misc/limitedformats.cxx:51
+    enum frm::(anonymous namespace)::LocaleType ltSystem
 framework/inc/xml/imagesdocumenthandler.hxx:39
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_IMAGECONTAINER
 framework/inc/xml/imagesdocumenthandler.hxx:40
@@ -708,6 +708,8 @@ include/o3tl/unit_conversion.hxx:46
     enum o3tl::Length count
 include/oox/core/filterbase.hxx:83
     enum oox::core::OoxmlVersion ISOIEC_29500_2008
+include/sfx2/filedlghelper.hxx:130
+    enum sfx2::FileDialogHelper::Context WriterInsertHyperlink
 include/sfx2/lnkbase.hxx:54
     enum sfx2::SvBaseLinkObjectType DdeExternal
 include/svl/ctloptions.hxx:64
@@ -726,8 +728,6 @@ include/svl/ctloptions.hxx:77
     enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGRESTRICTED
 include/svl/ctloptions.hxx:78
     enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGTYPEANDREPLACE
-include/svl/hint.hxx:107
-    enum SfxHintId StyleSheetModifiedExtended
 include/svl/lockfilecommon.hxx:36
     enum LockFileComponent EDITTIME
 include/svl/lockfilecommon.hxx:36
@@ -738,8 +738,6 @@ include/svl/lockfilecommon.hxx:36
     enum LockFileComponent SYSUSERNAME
 include/svl/srchdefs.hxx:40
     enum SearchOptionFlags WILDCARD
-include/svtools/restartdialog.hxx:64
-    enum svtools::RestartReason RESTART_REASON_MSCOMPATIBLE_FORMS_MENU
 include/svx/diagram/datamodel.hxx:43
     enum svx::diagram::TypeConstant XML_doc
 include/svx/EnhancedCustomShapeGeometry.hxx:47
@@ -766,15 +764,15 @@ include/svx/flagsdef.hxx:117
     enum TabulatorDisableFlags FillSolidLine
 include/svx/flagsdef.hxx:118
     enum TabulatorDisableFlags FillSpecial
-include/svx/ruler.hxx:60
+include/svx/ruler.hxx:61
     enum SvxRulerDragFlags OBJECT_LEFT_INDENT_ONLY
 include/svx/sdtakitm.hxx:31
     enum SdrTextAniKind Blink
 include/svx/svdhdl.hxx:108
     enum BitmapMarkerKind RectPlus_7x7
-include/svx/svdobjkind.hxx:70
-    enum SdrObjKind E3D_INVENTOR_FIRST
 include/svx/svdobjkind.hxx:71
+    enum SdrObjKind E3D_INVENTOR_FIRST
+include/svx/svdobjkind.hxx:72
     enum SdrObjKind E3D_INVENTOR_LAST
 include/svx/svdograf.hxx:42
     enum SdrGrafObjTransformsAttrs ROTATE
@@ -812,6 +810,8 @@ include/unotools/fontdefs.hxx:84
     enum DefaultFontType CTL_DISPLAY
 include/vcl/animate/AnimationFrame.hxx:33
     enum Blend Source
+include/vcl/decoview.hxx:48
+    enum DrawHighlightFrameStyle In
 include/vcl/gfxlink.hxx:54
     enum GfxLinkType NativeFirst
 include/vcl/gfxlink.hxx:55
@@ -848,10 +848,40 @@ include/vcl/pdf/PDFAnnotAActionType.hxx:20
     enum vcl::pdf::PDFAnnotAActionType Calculate
 include/vcl/pdf/PDFAnnotationSubType.hxx:17
     enum vcl::pdf::PDFAnnotationSubType Unknown
-include/vcl/pdf/PDFAnnotationSubType.hxx:26
-    enum vcl::pdf::PDFAnnotationSubType Highlight
+include/vcl/pdf/PDFAnnotationSubType.hxx:19
+    enum vcl::pdf::PDFAnnotationSubType Link
+include/vcl/pdf/PDFAnnotationSubType.hxx:25
+    enum vcl::pdf::PDFAnnotationSubType Polyline
+include/vcl/pdf/PDFAnnotationSubType.hxx:27
+    enum vcl::pdf::PDFAnnotationSubType Underline
+include/vcl/pdf/PDFAnnotationSubType.hxx:28
+    enum vcl::pdf::PDFAnnotationSubType Squiggly
+include/vcl/pdf/PDFAnnotationSubType.hxx:29
+    enum vcl::pdf::PDFAnnotationSubType Strikeout
 include/vcl/pdf/PDFAnnotationSubType.hxx:30
     enum vcl::pdf::PDFAnnotationSubType Stamp
+include/vcl/pdf/PDFAnnotationSubType.hxx:31
+    enum vcl::pdf::PDFAnnotationSubType Caret
+include/vcl/pdf/PDFAnnotationSubType.hxx:34
+    enum vcl::pdf::PDFAnnotationSubType FileAttachment
+include/vcl/pdf/PDFAnnotationSubType.hxx:35
+    enum vcl::pdf::PDFAnnotationSubType Sound
+include/vcl/pdf/PDFAnnotationSubType.hxx:36
+    enum vcl::pdf::PDFAnnotationSubType Movie
+include/vcl/pdf/PDFAnnotationSubType.hxx:38
+    enum vcl::pdf::PDFAnnotationSubType Screen
+include/vcl/pdf/PDFAnnotationSubType.hxx:39
+    enum vcl::pdf::PDFAnnotationSubType Printermark
+include/vcl/pdf/PDFAnnotationSubType.hxx:40
+    enum vcl::pdf::PDFAnnotationSubType Trapnet
+include/vcl/pdf/PDFAnnotationSubType.hxx:41
+    enum vcl::pdf::PDFAnnotationSubType Watermark
+include/vcl/pdf/PDFAnnotationSubType.hxx:42
+    enum vcl::pdf::PDFAnnotationSubType Threed
+include/vcl/pdf/PDFAnnotationSubType.hxx:43
+    enum vcl::pdf::PDFAnnotationSubType Richmedia
+include/vcl/pdf/PDFAnnotationSubType.hxx:44
+    enum vcl::pdf::PDFAnnotationSubType XFAWidget
 include/vcl/pdf/PDFAnnotationSubType.hxx:45
     enum vcl::pdf::PDFAnnotationSubType Redact
 include/vcl/pdf/PDFBitmapType.hxx:17
@@ -1064,25 +1094,25 @@ reportdesign/inc/conditionalexpression.hxx:85
     enum rptui::ComparisonOperation eLessOrEqual
 sal/qa/osl/file/osl_File.cxx:281
     enum (anonymous namespace)::oslCheckMode Exist
-sc/inc/queryiter.hxx:160
+sc/inc/queryiter.hxx:161
     enum ScQueryCellIteratorBase::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/queryiter.hxx:160
+sc/inc/queryiter.hxx:161
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/queryiter.hxx:160
+sc/inc/queryiter.hxx:161
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/queryiter.hxx:160
+sc/inc/queryiter.hxx:161
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/queryiter.hxx:160
+sc/inc/queryiter.hxx:161
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::StopOnMismatchBits nStopOnMismatchExecuted
-sc/inc/queryiter.hxx:168
+sc/inc/queryiter.hxx:169
     enum ScQueryCellIteratorBase::TestEqualConditionBits nTestEqualConditionFulfilled
-sc/inc/queryiter.hxx:168
+sc/inc/queryiter.hxx:169
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionFulfilled
-sc/inc/queryiter.hxx:168
+sc/inc/queryiter.hxx:169
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionFulfilled
-sc/inc/queryiter.hxx:168
+sc/inc/queryiter.hxx:169
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf>::TestEqualConditionBits nTestEqualConditionFulfilled
-sc/inc/queryiter.hxx:168
+sc/inc/queryiter.hxx:169
     enum ScQueryCellIteratorBase<ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic>::TestEqualConditionBits nTestEqualConditionFulfilled
 sc/inc/token.hxx:215
     enum ScTableRefToken::Item HEADERS_DATA
@@ -1094,6 +1124,8 @@ sc/inc/types.hxx:60
     enum ScFormulaVectorState FormulaVectorUnknown
 sc/qa/unit/ucalc_copypaste.cxx:45
     enum TestCopyPaste::CalcMode RecalcAtEnd
+sc/source/core/inc/interpre.hxx:59
+    enum MatchMode regex
 sc/source/core/inc/interpre.hxx:59
     enum MatchMode wildcard
 sc/source/core/inc/interpre.hxx:60
@@ -1241,8 +1273,6 @@ sw/inc/crstate.hxx:33
 sw/inc/crstate.hxx:34
     enum SwFillMode Indent
 sw/inc/dbmgr.hxx:488
-    enum sw::DBConnURIType MSJET
-sw/inc/dbmgr.hxx:489
     enum sw::DBConnURIType MSACE
 sw/inc/docary.hxx:73
     enum SwVectorModifyBase<class SwFrameFormat *>::DestructorPolicy FreeElements
@@ -1290,10 +1320,32 @@ sw/source/uibase/inc/envimg.hxx:33
     enum SwEnvAlign ENV_VER_LEFT
 sw/source/uibase/inc/envimg.hxx:34
     enum SwEnvAlign ENV_VER_CNTR
+sw/source/uibase/inc/macassgn.hxx:35
+    enum DlgEventType MACASSGN_INETFMT
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:33
+    enum writerfilter::ooxml::ResourceType List
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:34
+    enum writerfilter::ooxml::ResourceType Integer
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:36
+    enum writerfilter::ooxml::ResourceType Hex
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:37
+    enum writerfilter::ooxml::ResourceType HexColor
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:38
+    enum writerfilter::ooxml::ResourceType String
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:40
+    enum writerfilter::ooxml::ResourceType Boolean
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:49
+    enum writerfilter::ooxml::ResourceType TwipsMeasure_asSigned
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:50
+    enum writerfilter::ooxml::ResourceType TwipsMeasure_asZero
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:51
+    enum writerfilter::ooxml::ResourceType HpsMeasure
+sw/source/writerfilter/ooxml/OOXMLFactory.hxx:52
+    enum writerfilter::ooxml::ResourceType MeasurementOrPercent
 toolkit/inc/controls/table/tablemodel.hxx:49
     enum ColumnAttributeGroup ALL
-tools/source/generic/poly.cxx:1132
-    enum (unnamed at /home/noel/libo-plugin/tools/source/generic/poly.cxx:1132:5) maxRecursionDepth
+tools/source/generic/poly.cxx:1116
+    enum (unnamed at /home/noel/libo-plugin/tools/source/generic/poly.cxx:1116:5) maxRecursionDepth
 ucb/source/ucp/webdav-curl/DAVTypes.hxx:183
     enum http_dav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:126
@@ -1306,39 +1358,21 @@ vcl/inc/driverblocklist.hxx:73
     enum DriverBlocklist::OperatingSystem DRIVER_OS_OSX_LAST
 vcl/inc/fontsubset.hxx:41
     enum FontType ANY_TYPE1
-vcl/inc/pdf/pdfwriter_impl.hxx:87
+vcl/inc/pdf/pdfwriter_impl.hxx:88
     enum vcl::pdf::GraphicsStateUpdateFlags MapMode
-vcl/inc/pdf/pdfwriter_impl.hxx:92
+vcl/inc/pdf/pdfwriter_impl.hxx:93
     enum vcl::pdf::GraphicsStateUpdateFlags TransparentPercent
+vcl/inc/printerinfomanager.hxx:69
+    enum psp::PrinterInfoManager::Type CPD
 vcl/inc/salptype.hxx:45
     enum SalPrinterError Abort
-vcl/source/app/svapp.cxx:1178
-    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1178:1) hwEnv
-vcl/source/app/svapp.cxx:1178
-    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1178:1) hwUI
+vcl/source/app/svapp.cxx:1168
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1168:1) hwEnv
+vcl/source/app/svapp.cxx:1168
+    enum (unnamed at /home/noel/libo-plugin/vcl/source/app/svapp.cxx:1168:1) hwUI
 vcl/source/filter/jpeg/Exif.hxx:40
     enum Tag ORIENTATION
 vcl/source/window/printdlg.cxx:59
     enum (unnamed at /home/noel/libo-plugin/vcl/source/window/printdlg.cxx:56:1) ORIENTATION_PORTRAIT
-writerfilter/source/ooxml/OOXMLFactory.hxx:33
-    enum writerfilter::ooxml::ResourceType List
-writerfilter/source/ooxml/OOXMLFactory.hxx:34
-    enum writerfilter::ooxml::ResourceType Integer
-writerfilter/source/ooxml/OOXMLFactory.hxx:36
-    enum writerfilter::ooxml::ResourceType Hex
-writerfilter/source/ooxml/OOXMLFactory.hxx:37
-    enum writerfilter::ooxml::ResourceType HexColor
-writerfilter/source/ooxml/OOXMLFactory.hxx:38
-    enum writerfilter::ooxml::ResourceType String
-writerfilter/source/ooxml/OOXMLFactory.hxx:40
-    enum writerfilter::ooxml::ResourceType Boolean
-writerfilter/source/ooxml/OOXMLFactory.hxx:49
-    enum writerfilter::ooxml::ResourceType TwipsMeasure_asSigned
-writerfilter/source/ooxml/OOXMLFactory.hxx:50
-    enum writerfilter::ooxml::ResourceType TwipsMeasure_asZero
-writerfilter/source/ooxml/OOXMLFactory.hxx:51
-    enum writerfilter::ooxml::ResourceType HpsMeasure
-writerfilter/source/ooxml/OOXMLFactory.hxx:52
-    enum writerfilter::ooxml::ResourceType MeasurementOrPercent
 xmlsecurity/source/helper/ooxmlsecparser.cxx:964
     enum OOXMLSecParser::DsSignaturePropertyContext::SignatureProperty Info

@@ -106,7 +106,6 @@ enum class SfxItemState {
 };
 
 enum class SfxItemType : sal_uInt16 {
-    SfxPoolItemType,
     AffineMatrixItemType,
     CntByteItemType,
     CntInt32ItemType,
@@ -153,7 +152,6 @@ enum class SfxItemType : sal_uInt16 {
     ScViewObjectModeItemType,
     SdOptionsMiscItemType,
     SdOptionsPrintItemType,
-    SdOptionsSnapItemType,
     SdrAllPositionXItemType,
     SdrAllPositionYItemType,
     SdrAllSizeHeightItemType,
@@ -250,13 +248,11 @@ enum class SfxItemType : sal_uInt16 {
     SfxBoolItemType,
     SfxByteItemType,
     SfxDocumentInfoItemType,
-    SfxEnumItemInterface,
     SfxEventNamesItemType,
     SfxFlagItemType,
     SfxFrameItemType,
     SfxGlobalNameItemType,
     SfxGrabBagItemType,
-    SfxHyphenRegionItemType,
     SfxImageItemType,
     SfxInt16ItemType,
     SfxInt32ItemType,

@@ -83,10 +83,6 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             if( !bHtmlMode )
                 aItem.AddEvent( SwResId(STR_EVENT_OBJECT_SELECT), OUString(),
                                 SvMacroItemId::SwObjectSelect );
-        }
-        [[fallthrough]];
-    case MACASSGN_INETFMT:          // INetFormat-Attributes
-        {
             aItem.AddEvent( SwResId(STR_EVENT_MOUSEOVER_OBJECT), OUString(),
                                 SvMacroItemId::OnMouseOver );
             aItem.AddEvent( SwResId(STR_EVENT_MOUSECLICK_OBJECT), OUString(),

@@ -127,7 +127,6 @@ public:
         WriterInsertScript,
         WriterExport,
         WriterImportAutotext,
-        WriterInsertHyperlink,
         WriterLoadTemplate,
         WriterMailMerge,
         WriterMailMergeSaveAs,
