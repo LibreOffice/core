@@ -1157,15 +1157,15 @@ bool SdXMLEllipseShapeContext::processAttribute( const sax_fastparser::FastAttri
         case XML_ELEMENT(DRAW, XML_START_ANGLE):
         {
             double dStartAngle;
-            if (::sax::Converter::convertAngle( dStartAngle, aIter.toView(), 100))
-                mnStartAngle = static_cast<sal_Int32>(basegfx::fround(dStartAngle));
+            if (::sax::Converter::convertAngle( dStartAngle, aIter.toView()))
+                mnStartAngle = static_cast<sal_Int32>(basegfx::fround(dStartAngle * 100));
             break;
         }
         case XML_ELEMENT(DRAW, XML_END_ANGLE):
         {
             double dEndAngle;
-            if (::sax::Converter::convertAngle( dEndAngle, aIter.toView(), 100))
-                mnEndAngle = static_cast<sal_Int32>(basegfx::fround(dEndAngle));
+            if (::sax::Converter::convertAngle( dEndAngle, aIter.toView()))
+                mnEndAngle = static_cast<sal_Int32>(basegfx::fround(dEndAngle * 100));
             break;
         }
         default:

@@ -703,24 +703,30 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
-bool Converter::convertDouble(double& rValue, std::u16string_view rString)
+bool Converter::convertDouble(double& rValue, std::u16string_view rString, std::u16string_view* pRest)
 {
     rtl_math_ConversionStatus eStatus;
+    const sal_Unicode* pEnd;
     rValue = rtl_math_uStringToDouble(rString.data(),
                                      rString.data() + rString.size(),
                                      /*cDecSeparator*/'.', /*cGroupSeparator*/',',
-                                     &eStatus, nullptr);
+                                     &eStatus, &pEnd);
+    if (pRest)
+        *pRest = rString.substr(pEnd - rString.data());
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
 /** convert string to double number (using ::rtl::math) */
-bool Converter::convertDouble(double& rValue, std::string_view rString)
+bool Converter::convertDouble(double& rValue, std::string_view rString, std::string_view* pRest)
 {
     rtl_math_ConversionStatus eStatus;
+    const char* pEnd;
     rValue = rtl_math_stringToDouble(rString.data(),
                                      rString.data() + rString.size(),
                                      /*cDecSeparator*/'.', /*cGroupSeparator*/',',
-                                     &eStatus, nullptr);
+                                     &eStatus, &pEnd);
+    if (pRest)
+        *pRest = rString.substr(pEnd - rString.data());
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
@@ -751,17 +757,24 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::u16string_view rStri
     // new versions that can read "deg" suffix are widely deployed and we can
     // start to write the "deg" suffix.
     double fAngle(0.0);
-    bool bRet = ::sax::Converter::convertDouble(fAngle, rString);
+    std::u16string_view aRest;
+    bool bRet = ::sax::Converter::convertDouble(fAngle, rString, &aRest);
     if (bRet)
     {
-        if (std::u16string_view::npos != rString.find(u"deg"))
+        if (aRest == u"deg")
             fAngle *= 10.0;
-        else if (std::u16string_view::npos != rString.find(u"grad"))
+        else if (aRest == u"grad")
             fAngle *= 9.0; // 360deg = 400grad
-        else if (std::u16string_view::npos != rString.find(u"rad"))
+        else if (aRest == u"rad")
             fAngle = basegfx::rad2deg<10>(fAngle);
         else // no explicit unit
         { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
+            if (!aRest.empty())
+            {
+                // Wrong unit
+                fAngle = 0;
+                return false;
+            }
             if (!isWrongOOo10thDegAngle)
                 fAngle *= 10.0; // conform to ODF 1.2 and newer
         }
@@ -782,17 +795,24 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
     // new versions that can read "deg" suffix are widely deployed and we can
     // start to write the "deg" suffix.
     double fAngle(0.0);
-    bool bRet = ::sax::Converter::convertDouble(fAngle, rString);
+    std::string_view aRest;
+    bool bRet = ::sax::Converter::convertDouble(fAngle, rString, &aRest);
     if (bRet)
     {
-        if (std::string_view::npos != rString.find("deg"))
+        if (aRest == "deg")
             fAngle *= 10.0;
-        else if (std::string_view::npos != rString.find("grad"))
+        else if (aRest == "grad")
             fAngle *= 9.0; // 360deg = 400grad
-        else if (std::string_view::npos != rString.find("rad"))
+        else if (aRest == "rad")
             fAngle = basegfx::rad2deg<10>(fAngle);
         else // no explicit unit
         { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
+            if (!aRest.empty())
+            {
+                // Wrong unit
+                fAngle = 0;
+                return false;
+            }
             if (!isWrongOOo10thDegAngle)
                 fAngle *= 10.0; // conform to ODF 1.2 and newer
         }
@@ -802,52 +822,58 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
     return bRet;
 }
 
-/** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
-bool Converter::convertAngle(double& rAngle, std::u16string_view rString, const sal_uInt16& nFactor)
+/** convert SVG angle to number, in degrees, range [0..360] */
+bool Converter::convertAngle(double& rAngle, std::u16string_view rString)
 {
     // ODF uses in several places angles in data type 'angle' (18.3.1, ODF 1.3). That is a double
-    // followed by unit identifier deg, grad or rad or a unitless value in degrees. LO uses angles
-    // in degrees, 1/10 of degrees and 1/100 of degrees in various data types.
-    // This method converts ODF 'angle' to double considering nFactor and normalizes it to range
-    // [0..nFactor*360[. Further type converting and range restriction are done by the caller.
-    bool bRet = ::sax::Converter::convertDouble(rAngle, rString);
+    // followed by unit identifier deg, grad or rad or a unitless value in degrees.
+    // This method converts ODF 'angle' to double degrees and normalizes it to range
+    // [0..360]. Further type converting and range restriction are done by the caller.
+    std::u16string_view aRest;
+    bool bRet = ::sax::Converter::convertDouble(rAngle, rString, &aRest);
     if (bRet)
     {
         //degrees
-        if (std::u16string_view::npos != rString.find(u"grad"))
+        if (aRest == u"grad")
             rAngle *= 0.9; // 360deg = 400grad
-        else if (std::u16string_view::npos != rString.find(u"rad"))
+        else if (aRest == u"rad")
             rAngle = basegfx::rad2deg(rAngle);
-        // 1/nFactor of degrees in range [0..nFactor*360]
-        if (nFactor > 0)
-            rAngle = basegfx::snapToZeroRange(rAngle * nFactor, nFactor * 360.0);
-        else
+        else if (aRest != u"deg" && !aRest.empty())
+        {
+            // Wrong unit
+            rAngle = 0;
             return false;
+        }
+        // degrees in range [0..360]
+        rAngle = basegfx::snapToZeroRange(rAngle, 360.0);
     }
     return bRet;
 }
 
-/** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
-bool Converter::convertAngle(double& rAngle, std::string_view rString, const sal_uInt16& nFactor)
+/** convert SVG angle to number, in degrees, range [0..360] */
+bool Converter::convertAngle(double& rAngle, std::string_view rString)
 {
     // ODF uses in several places angles in data type 'angle' (18.3.1, ODF 1.3). That is a double
-    // followed by unit identifier deg, grad or rad or a unitless value in degrees. LO uses angles
-    // in degrees, 1/10 of degrees and 1/100 of degrees in various data types.
-    // This method converts ODF 'angle' to double considering nFactor and normalizes it to range
-    // [0..nFactor*360[. Further type converting and range restriction are done by the caller.
-    bool bRet = ::sax::Converter::convertDouble(rAngle, rString);
+    // followed by unit identifier deg, grad or rad or a unitless value in degrees.
+    // This method converts ODF 'angle' to double degrees and normalizes it to range
+    // [0..360]. Further type converting and range restriction are done by the caller.
+    std::string_view aRest;
+    bool bRet = ::sax::Converter::convertDouble(rAngle, rString, &aRest);
     if (bRet)
     {
         // degrees
-        if (std::u16string_view::npos != rString.find("grad"))
+        if (aRest == "grad")
             rAngle *= 0.9; // 360deg = 400grad
-        else if (std::u16string_view::npos != rString.find("rad"))
+        else if (aRest == "rad")
             rAngle = basegfx::rad2deg(rAngle);
-        // 1/nFactor of degrees in range [0..nFactor*360]
-        if (nFactor > 0)
-            rAngle = basegfx::snapToZeroRange(rAngle * nFactor, nFactor * 360.0);
-        else
+        else if (aRest != "deg" && !aRest.empty())
+        {
+            // Wrong unit
+            rAngle = 0;
             return false;
+        }
+        // degrees in range [0..360]
+        rAngle = basegfx::snapToZeroRange(rAngle, 360.0);
     }
     return bRet;
 }

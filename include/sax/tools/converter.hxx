@@ -193,10 +193,10 @@ public:
                                 sal_Int16 nTargetUnit );
 
     /** convert string to double number (using ::rtl::math) without unit conversion */
-    static bool convertDouble(double& rValue, std::u16string_view rString);
+    static bool convertDouble(double& rValue, std::u16string_view rString, std::u16string_view* pRest = nullptr);
 
     /** convert string to double number (using ::rtl::math) without unit conversion */
-    static bool convertDouble(double& rValue, std::string_view rString);
+    static bool convertDouble(double& rValue, std::string_view rString, std::string_view* pRest = nullptr);
 
     /** convert number, 10th of degrees with range [0..3600] to SVG angle */
     static void convert10thDegAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle,
@@ -210,13 +210,11 @@ public:
     static bool convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
                                     bool isWrongOOo10thDegAngle);
 
-    /** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
-    static bool convertAngle(double& rAngle, std::u16string_view rString,
-                             const sal_uInt16& nFactor = 1);
+    /** convert SVG angle to number, in degrees, range [0..360] */
+    static bool convertAngle(double& rAngle, std::u16string_view rString);
 
-    /** convert SVG angle to number, in 1/nFactor of degrees, range [0..nFactor*360[ */
-    static bool convertAngle(double& rAngle, std::string_view rString,
-                             const sal_uInt16& nFactor = 1);
+    /** convert SVG angle to number, in degrees, range [0..360] */
+    static bool convertAngle(double& rAngle, std::string_view rString);
 
     /** convert double to XMLSchema-2 "duration" string; negative durations allowed */
     static void convertDuration(OUStringBuffer& rBuffer,
