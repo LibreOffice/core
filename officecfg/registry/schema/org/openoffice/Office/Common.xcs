@@ -4991,7 +4991,7 @@
             <info>
               <desc>Specifies if the document is PDF/UA (Universal Accessibility) compliant</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <!-- END PDF/UA Compliance -->
           <!-- PDF Relative Link -->
