@@ -1598,7 +1598,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         if (bUndo)
                         {
                             pUndoMgr->AddUndoAction(std::make_unique<StyleSheetUndoAction>(this,
-                                                                 pMySheet, &pHisSheet->GetItemSet()));
+                                                                 *pMySheet, &pHisSheet->GetItemSet()));
                         }
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
                         pMySheet->Broadcast(SfxHint(SfxHintId::DataChanged));

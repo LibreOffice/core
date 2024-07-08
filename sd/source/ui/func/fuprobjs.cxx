@@ -142,10 +142,10 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
         // Undo-Action
         mpDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), pOutSet));
+            std::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet&>(rStyleSheet), pOutSet));
 
-        pStyleSheet->GetItemSet().Put( *pOutSet );
-        static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
+        rStyleSheet.GetItemSet().Put( *pOutSet );
+        static_cast<SfxStyleSheet&>( rStyleSheet ).Broadcast( SfxHint( SfxHintId::DataChanged ) );
     }
 }
 
