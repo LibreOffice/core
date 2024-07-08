@@ -642,6 +642,22 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
     // i.e. we emitted an empty list item, so the result can't be opened in Word.
     assertXPath(pXmlDoc, "//w:dropDownList/w:listItem"_ostr, 1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, tdf71749_with_footnote)
+{
+    // Without the fix in place,
+    // loading the document would hang.
+    loadFromFile(u"tdf71749_with_footnote.doc");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf71749_without_footnote)
+{
+    // Without the fix in place,
+    // loading the document would hang.
+    loadFromFile(u"tdf71749_without_footnote.doc");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
