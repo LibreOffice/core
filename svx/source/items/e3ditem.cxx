@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <libxml/xmlwriter.h>
-
+#include <o3tl/hash_combine.hxx>
 #include <svx/e3ditem.hxx>
 
 using namespace ::com::sun::star;
@@ -43,6 +43,19 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
 {
 }
 
+bool SvxB3DVectorItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxB3DVectorItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, aVal.getX());
+    o3tl::hash_combine(seed, aVal.getY());
+    o3tl::hash_combine(seed, aVal.getZ());
+    return seed;
+}
 
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
@@ -73,6 +86,7 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
 
 bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
         return false;
