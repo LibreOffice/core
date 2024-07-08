@@ -355,7 +355,6 @@ public:
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
                     SwTableAutoFormat const*& prTAFormat) override;
     virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const override;
-    virtual void Apply() override {}
 };
 
 class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPilot
