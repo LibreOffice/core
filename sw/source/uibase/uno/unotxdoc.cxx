@@ -22,6 +22,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/uno3.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
 #include <utility>
@@ -301,11 +302,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
         return nRet;
 
     GetNumberFormatter();
-    if (!m_xNumFormatAgg.is()) // may happen if not valid or no SwDoc
-        return 0;
-    Any aNumTunnel = m_xNumFormatAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
-    Reference<XUnoTunnel> xNumTunnel;
-    aNumTunnel >>= xNumTunnel;
+    auto xNumTunnel = comphelper::query_aggregation<XUnoTunnel>(m_xNumFormatAgg);
     return (xNumTunnel.is()) ? xNumTunnel->getSomething(rId) : 0;
 }
 
@@ -356,16 +353,8 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
 {
     Sequence< uno::Type > aNumTypes;
     GetNumberFormatter();
-    if(m_xNumFormatAgg.is())
-    {
-        const uno::Type& rProvType = cppu::UnoType<XTypeProvider>::get();
-        Any aNumProv = m_xNumFormatAgg->queryAggregation(rProvType);
-        Reference<XTypeProvider> xNumProv;
-        if(aNumProv >>= xNumProv)
-        {
-            aNumTypes = xNumProv->getTypes();
-        }
-    }
+    if (auto xNumProv = comphelper::query_aggregation<XTypeProvider>(m_xNumFormatAgg))
+        aNumTypes = xNumProv->getTypes();
     return comphelper::concatSequences(
             SfxBaseModel::getTypes(),
             SwXTextDocumentBaseClass::getTypes(),
@@ -415,9 +404,8 @@ SwXTextDocument::~SwXTextDocument()
     InitNewDoc();
     if(m_xNumFormatAgg.is())
     {
-        Reference< XInterface >  x0;
-        m_xNumFormatAgg->setDelegator(x0);
-        m_xNumFormatAgg = nullptr;
+        m_xNumFormatAgg->setDelegator({});
+        m_xNumFormatAgg.clear();
     }
     m_pPrintUIOptions.reset();
     if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
@@ -457,12 +445,8 @@ void SwXTextDocument::GetNumberFormatter()
     }
     else
     {
-        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-        Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        Reference< XUnoTunnel > xNumTunnel;
-        aNumTunnel >>= xNumTunnel;
-        SvNumberFormatsSupplierObj* pNumFormat
-            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
+        auto xNumTunnel = comphelper::query_aggregation<XUnoTunnel>(m_xNumFormatAgg);
+        auto pNumFormat = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat && !pNumFormat->GetNumberFormatter())
             pNumFormat->SetNumberFormatter(GetDocOrThrow().GetNumberFormatter());
@@ -1372,19 +1356,6 @@ uno::Reference<drawing::XDrawPages> SAL_CALL SwXTextDocument::getDrawPages()
 void SwXTextDocument::Invalidate()
 {
     m_pDocShell = nullptr;
-    if(m_xNumFormatAgg.is())
-    {
-        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-        Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        Reference< XUnoTunnel > xNumTunnel;
-        aNumTunnel >>= xNumTunnel;
-        SvNumberFormatsSupplierObj* pNumFormat
-            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
-        OSL_ENSURE(pNumFormat, "No number formatter available");
-        if (pNumFormat)
-            pNumFormat->SetNumberFormatter(nullptr);
-        OSL_ENSURE(pNumFormat, "No number formatter available");
-    }
     InitNewDoc();
     lang::EventObject const ev(getXWeak());
     std::unique_lock aGuard(m_pImpl->m_Mutex);
@@ -1400,6 +1371,14 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
 
 void    SwXTextDocument::InitNewDoc()
 {
+    if (auto xNumTunnel = comphelper::query_aggregation<XUnoTunnel>(m_xNumFormatAgg))
+    {
+        auto pNumFormat = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
+        OSL_ENSURE(pNumFormat, "No number formatter available");
+        if (pNumFormat)
+            pNumFormat->SetNumberFormatter(nullptr);
+    }
+
     // first invalidate all collections, then delete references and Set to zero
     if(mxXTextTables.is())
     {
@@ -1426,19 +1405,6 @@ void    SwXTextDocument::InitNewDoc()
     }
 
     m_xBodyText.clear();
-
-    if(m_xNumFormatAgg.is())
-    {
-        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-        Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        Reference< XUnoTunnel > xNumTunnel;
-        aNumTunnel >>= xNumTunnel;
-        SvNumberFormatsSupplierObj* pNumFormat
-            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
-        OSL_ENSURE(pNumFormat, "No number formatter available");
-        if (pNumFormat)
-            pNumFormat->SetNumberFormatter(nullptr);
-    }
 
     if(mxXTextFieldTypes.is())
     {
