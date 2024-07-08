@@ -55,7 +55,7 @@ public:
     bool isPattern() const;
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
-    std::unique_ptr<XFillBitmapItem> checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XFillBitmapItem> checkForUniqueItem( SdrModel& rModel ) const;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

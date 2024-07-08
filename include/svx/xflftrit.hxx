@@ -53,7 +53,7 @@ public:
     void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
-    std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel& rModel ) const;
 
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 };

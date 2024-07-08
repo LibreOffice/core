@@ -1666,7 +1666,7 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
                 {
                     if (auto pOldItem = rAttr.GetItemIfSet(nWhichId, false))
                     {
-                        if (auto pNewItem = pOldItem->checkForUniqueItem(&GetDrawView()->GetModel()))
+                        if (auto pNewItem = pOldItem->checkForUniqueItem(GetDrawView()->GetModel()))
                             rAttr.Put(std::move(pNewItem));
                     }
                 };

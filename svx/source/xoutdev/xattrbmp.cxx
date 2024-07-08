@@ -307,23 +307,20 @@ bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex
     return aGraphicObjectA == aGraphicObjectB;
 }
 
-std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel& rModel ) const
 {
-    if( pModel )
-    {
-        XPropertyListType aListType = XPropertyListType::Bitmap;
-        if(isPattern())
-            aListType = XPropertyListType::Pattern;
-        const OUString aUniqueName = NameOrIndex::CheckNamedItem(
-                this, XATTR_FILLBITMAP, &pModel->GetItemPool(),
-                XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
-                pModel->GetPropertyList( aListType ) );
+    XPropertyListType aListType = XPropertyListType::Bitmap;
+    if(isPattern())
+        aListType = XPropertyListType::Pattern;
+    const OUString aUniqueName = NameOrIndex::CheckNamedItem(
+            this, XATTR_FILLBITMAP, &rModel.GetItemPool(),
+            XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
+            rModel.GetPropertyList( aListType ) );
 
-        // if the given name is not valid, replace it!
-        if( aUniqueName != GetName() )
-        {
-            return std::make_unique<XFillBitmapItem>(aUniqueName, maGraphicObject);
-        }
+    // if the given name is not valid, replace it!
+    if( aUniqueName != GetName() )
+    {
+        return std::make_unique<XFillBitmapItem>(aUniqueName, maGraphicObject);
     }
 
     return nullptr;

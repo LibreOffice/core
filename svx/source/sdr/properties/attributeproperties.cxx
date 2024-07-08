@@ -291,39 +291,38 @@ namespace sdr::properties
                 {
                     case XATTR_FILLBITMAP:
                     {
-                        // TTTT checkForUniqueItem should use SdrModel&
-                        pResultItem = static_cast<const XFillBitmapItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XFillBitmapItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_LINEDASH:
                     {
-                        pResultItem = static_cast<const XLineDashItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XLineDashItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_LINESTART:
                     {
-                        pResultItem = static_cast<const XLineStartItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XLineStartItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_LINEEND:
                     {
-                        pResultItem = static_cast<const XLineEndItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XLineEndItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_FILLGRADIENT:
                     {
-                        pResultItem = static_cast<const XFillGradientItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XFillGradientItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         // #85953# allow all kinds of XFillFloatTransparenceItem to be set
-                        pResultItem = static_cast<const XFillFloatTransparenceItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XFillFloatTransparenceItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                     case XATTR_FILLHATCH:
                     {
-                        pResultItem = static_cast<const XFillHatchItem*>(pNewItem)->checkForUniqueItem( &rModel );
+                        pResultItem = static_cast<const XFillHatchItem*>(pNewItem)->checkForUniqueItem( rModel );
                         break;
                     }
                 }

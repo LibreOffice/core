@@ -53,7 +53,7 @@ public:
     const basegfx::B2DPolyPolygon& GetLineStartValue() const { return maPolyPolygon;}
     void SetLineStartValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
-    std::unique_ptr<XLineStartItem> checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XLineStartItem> checkForUniqueItem( SdrModel& rModel ) const;
 };
 
 #endif

@@ -373,7 +373,7 @@ void ScDrawLayer::CreateDefaultStyles()
     aTriangle.setClosed(true);
 
     auto pSet = &pSheet->GetItemSet();
-    pSet->Put(XLineStartItem(OUString(), ::basegfx::B2DPolyPolygon(aTriangle)).checkForUniqueItem(this));
+    pSet->Put(XLineStartItem(OUString(), ::basegfx::B2DPolyPolygon(aTriangle)).checkForUniqueItem(*this));
     pSet->Put(XLineStartWidthItem(200));
     pSet->Put(XLineStartCenterItem(false));
     pSet->Put(XLineStyleItem(drawing::LineStyle_SOLID));

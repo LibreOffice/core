@@ -295,7 +295,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
             // translate model name to UI-name for predefined entries, so
             // that the correct entry is chosen in the list of UI-names
-            std::unique_ptr<XLineDashItem> pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+            std::unique_ptr<XLineDashItem> pItemToPut = aItem.checkForUniqueItem( m_rDrawModel );
 
             if(pItemToPut)
                  rOutItemSet.Put( std::move(pItemToPut) );
@@ -321,7 +321,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                std::unique_ptr<XFillGradientItem> pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                std::unique_ptr<XFillGradientItem> pItemToPut = aItem.checkForUniqueItem( m_rDrawModel );
 
                 if(pItemToPut)
                     rOutItemSet.Put(std::move(pItemToPut) );
@@ -347,7 +347,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                std::unique_ptr<XFillHatchItem> pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                std::unique_ptr<XFillHatchItem> pItemToPut = aItem.checkForUniqueItem( m_rDrawModel );
 
                 if(pItemToPut)
                     rOutItemSet.Put( std::move(pItemToPut) );
@@ -368,7 +368,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                std::unique_ptr<XFillBitmapItem> pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                std::unique_ptr<XFillBitmapItem> pItemToPut = aItem.checkForUniqueItem( m_rDrawModel );
 
                 if(pItemToPut)
                     rOutItemSet.Put( std::move(pItemToPut) );

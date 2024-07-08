@@ -597,7 +597,7 @@ public:
 
     /** copies the items from the source set to the destination set. Both sets must have
         same ranges but can have different pools. */
-    static void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
+    static void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel& rNewModel );
 
     bool IsInDestruction() const { return mbInDestruction;}
 

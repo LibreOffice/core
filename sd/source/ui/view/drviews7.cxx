@@ -1823,7 +1823,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     // MigrateItemSet guarantees unique gradient names
                     SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
                     aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, &mpDrawView->GetModel());
+                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, mpDrawView->GetModel());
 
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                     rPageProperties.PutItemSet( aTempSet );
@@ -1835,7 +1835,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     // MigrateItemSet guarantees unique gradient names
                     SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
                     aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, &mpDrawView->GetModel());
+                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, mpDrawView->GetModel());
 
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                     rPageProperties.PutItemSet( aTempSet );

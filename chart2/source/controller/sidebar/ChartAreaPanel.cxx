@@ -473,7 +473,7 @@ void ChartAreaPanel::updateData()
             DrawModelWrapper* pModelWrapper = getDrawModelWrapper(mxModel);
             if (pModelWrapper)
             {
-                pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
+                pBitmapItem = aBitmapItem.checkForUniqueItem(pModelWrapper->getSdrModel());
             }
         }
         catch (...)

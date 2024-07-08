@@ -1666,7 +1666,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             // MigrateItemSet guarantees unique gradient names
                             SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(rWrtSh.GetView().GetPool());
                             aMigrateSet.Put(XFillGradientItem(u"gradient"_ustr, pTempGradItem->GetGradientValue()));
-                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
+                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, *pDrawModel);
                         }
 
                         bSet = pFS && pFS->GetValue() == drawing::FillStyle_HATCH;
@@ -1676,7 +1676,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         {
                             SfxItemSetFixed<XATTR_FILLHATCH, XATTR_FILLHATCH> aMigrateSet(rWrtSh.GetView().GetPool());
                             aMigrateSet.Put(XFillHatchItem(u"hatch"_ustr, pTempHatchItem->GetHatchValue()));
-                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
+                            SdrModel::MigrateItemSet(&aMigrateSet, pSet, *pDrawModel);
                         }
 
                         sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, vCursors->front().get());

@@ -55,7 +55,7 @@ public:
     const XHatch&           GetHatchValue() const { return m_aHatch;} // GetValue -> GetHatchValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
-    std::unique_ptr<XFillHatchItem> checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XFillHatchItem> checkForUniqueItem( SdrModel& rModel ) const;
 };
 
 #endif

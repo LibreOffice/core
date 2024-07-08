@@ -436,7 +436,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillBitmapItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillBitmapItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -445,7 +445,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_LINEDASH ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEDASH );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineDashItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineDashItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -454,7 +454,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_LINESTART ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINESTART );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineStartItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineStartItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -463,7 +463,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_LINEEND ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEEND );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineEndItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineEndItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -472,7 +472,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_FILLGRADIENT ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLGRADIENT );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillGradientItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillGradientItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -481,7 +481,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLFLOATTRANSPARENCE );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillFloatTransparenceItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillFloatTransparenceItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
@@ -490,7 +490,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( rAttr.GetItemState( XATTR_FILLHATCH ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLHATCH );
-                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillHatchItem*>(pOldItem)->checkForUniqueItem( mpDoc );
+                            std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillHatchItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
