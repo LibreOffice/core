@@ -21,7 +21,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-
+#include <o3tl/hash_combine.hxx>
 #include <svx/chrtitem.hxx>
 
 using namespace ::com::sun::star;
@@ -120,6 +120,18 @@ bool SvxDoubleItem::GetPresentation
     return true;
 }
 
+bool SvxDoubleItem::isHashable() const
+{
+    return true;
+}
+
+size_t SvxDoubleItem::hashCode() const
+{
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, fVal);
+    return seed;
+}
+
 bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -139,6 +151,7 @@ bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 
 bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     return rVal >>= fVal;
 }
 
