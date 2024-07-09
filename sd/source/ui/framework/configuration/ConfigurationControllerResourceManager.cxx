@@ -251,10 +251,7 @@ void ConfigurationControllerResourceManager::AddResource (
     }
 
     // Add the resource to the resource container.
-    ResourceDescriptor aDescriptor;
-    aDescriptor.mxResource = rxResource;
-    aDescriptor.mxResourceFactory = rxFactory;
-    maResourceMap[rxResource->getResourceId()] = aDescriptor;
+    maResourceMap[rxResource->getResourceId()] = ResourceDescriptor{rxResource, rxFactory};
 
 #if OSL_DEBUG_LEVEL >= 2
     SAL_INFO("sd.fwk", __func__ << ": ConfigurationControllerResourceManager::AddResource(): added " <<

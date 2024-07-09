@@ -46,9 +46,8 @@ public:
         creating factory are remembered, so that on deactivation, the
         resource can be deactivated by this factory.
     */
-    class ResourceDescriptor
+    struct ResourceDescriptor
     {
-    public:
         css::uno::Reference<css::drawing::framework::XResource> mxResource;
         css::uno::Reference<css::drawing::framework::XResourceFactory> mxResourceFactory;
     };
