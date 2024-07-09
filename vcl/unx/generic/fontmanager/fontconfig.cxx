@@ -272,7 +272,7 @@ namespace
 
     //See if this font is a duplicate with equal attributes which has already been
     //inserted, or if it an older version of an inserted fonts. Depends on FcFontSet
-    //on being sorted with SortFont
+    //being sorted with SortFont
     bool isPreviouslyDuplicateOrObsoleted(FcFontSet const *pFSet, int i)
     {
         const FcPattern *a = pFSet->fonts[i];
@@ -282,7 +282,9 @@ namespace
         FcPatternDel(pTestPatternA, FC_CHARSET);
         FcPatternDel(pTestPatternA, FC_CAPABILITY);
         FcPatternDel(pTestPatternA, FC_FONTVERSION);
+        FcPatternDel(pTestPatternA, FC_INDEX);
         FcPatternDel(pTestPatternA, FC_LANG);
+        FcPatternDel(pTestPatternA, FC_POSTSCRIPT_NAME);
 
         bool bIsDup(false);
 
@@ -299,7 +301,9 @@ namespace
             FcPatternDel(pTestPatternB, FC_CHARSET);
             FcPatternDel(pTestPatternB, FC_CAPABILITY);
             FcPatternDel(pTestPatternB, FC_FONTVERSION);
+            FcPatternDel(pTestPatternB, FC_INDEX);
             FcPatternDel(pTestPatternB, FC_LANG);
+            FcPatternDel(pTestPatternB, FC_POSTSCRIPT_NAME);
 
             bIsDup = FcPatternEqual(pTestPatternA, pTestPatternB);
 
