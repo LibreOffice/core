@@ -22,6 +22,8 @@
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
 #include <unotools/charclass.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/help.hxx>
 
 #include <global.hxx>
 #include <scmod.hxx>
@@ -50,6 +52,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , xCatBox(m_xBuilder->weld_combo_box(u"category"_ustr))
     , xFuncList(m_xBuilder->weld_tree_view(u"funclist"_ustr))
     , xInsertButton(m_xBuilder->weld_button(u"insert"_ustr))
+    , xHelpButton(m_xBuilder->weld_button(u"help"_ustr))
     , xFiFuncDesc(m_xBuilder->weld_text_view(u"funcdesc"_ustr))
     , m_xSearchString(m_xBuilder->weld_entry(u"search"_ustr))
     , xConfigListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Calc/Formula/Syntax"_ustr))
@@ -73,6 +76,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
 
     xFuncList->connect_row_activated(LINK( this, ScFunctionWin, SetRowActivatedHdl));
     xInsertButton->connect_clicked(LINK( this, ScFunctionWin, SetSelectionClickHdl));
+    xHelpButton->connect_clicked(LINK( this, ScFunctionWin, SetHelpClickHdl));
 
     xCatBox->set_active(0);
 
@@ -102,6 +106,7 @@ ScFunctionWin::~ScFunctionWin()
     xCatBox.reset();
     xFuncList.reset();
     xInsertButton.reset();
+    xHelpButton.reset();
     xFiFuncDesc.reset();
 }
 
@@ -525,6 +530,35 @@ IMPL_LINK_NOARG(ScFunctionWin, SelTreeHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, weld::Button&, void )
 {
     DoEnter();          // saves the input
+}
+
+/*************************************************************************
+#*  Handle:     SetHelpClickHdl
+#*------------------------------------------------------------------------
+#*
+#*  Class:      ScFunctionWin
+#*
+#*  Function:   Get selected function's offical help.
+#*
+#*  Input:      ---
+#*
+#*  Output:     ---
+#*
+#************************************************************************/
+
+IMPL_LINK_NOARG( ScFunctionWin, SetHelpClickHdl, weld::Button&, void )
+{
+    if (const auto pDesc = weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id()))
+    {
+        if (Help* pHelp = Application::GetHelp())
+        {
+            const OUString& sHelpId = pDesc->getHelpId();
+            if (!sHelpId.isEmpty())
+            {
+                pHelp->Start(sHelpId);
+            }
+        }
+    }
 }
 
 IMPL_LINK_NOARG( ScFunctionWin, SetRowActivatedHdl, weld::TreeView&, bool )

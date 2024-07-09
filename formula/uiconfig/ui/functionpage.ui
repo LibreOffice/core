@@ -150,6 +150,21 @@
         <property name="position">5</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkButton" id="help">
+        <property name="label">Help</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="can-default">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes" context="functionpage|help|tooltip_text">Go to Function's Help Page</property>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="FunctionPage-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|FunctionPage">Opens the Function Wizard, which helps you to interactively create formulas.</property>

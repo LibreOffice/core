@@ -19,6 +19,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/help.hxx>
 #include <formula/IFunctionDescription.hxx>
 
 #include "funcpage.hxx"
@@ -46,6 +47,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     , m_xLbCategory(m_xBuilder->weld_combo_box(u"category"_ustr))
     , m_xLbFunction(m_xBuilder->weld_tree_view(u"function"_ustr))
     , m_xLbFunctionSearchString(m_xBuilder->weld_entry(u"search"_ustr))
+    , m_xHelpButton(m_xBuilder->weld_button(u"help"_ustr))
     , m_pFunctionManager(_pFunctionManager)
 {
     m_xLbFunction->make_sorted();
@@ -73,7 +75,9 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_xLbFunction->connect_row_activated(LINK(this, FuncPage, DblClkHdl));
     m_xLbFunction->connect_key_press(LINK(this, FuncPage, KeyInputHdl));
     m_xLbFunctionSearchString->connect_changed(LINK(this, FuncPage, ModifyHdl));
+    m_xHelpButton->connect_clicked(LINK(this, FuncPage, SelHelpClickHdl));
 
+    m_xHelpButton->set_sensitive(false);
     m_xLbFunctionSearchString->grab_focus();
 }
 
@@ -193,6 +197,7 @@ IMPL_LINK_NOARG(FuncPage, SelComboBoxHdl, weld::ComboBox&, void)
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     m_xLbFunction->set_help_id(m_aHelpId);
     UpdateFunctionList(searchStr);
+    m_xHelpButton->set_sensitive(false);
 }
 
 IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
@@ -204,6 +209,8 @@ IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
         if (!sHelpId.isEmpty())
             m_xLbFunction->set_help_id(sHelpId);
     }
+    bool bSensitivity = weld::fromId<const IFunctionDescription*>(m_xLbFunction->get_selected_id());
+    m_xHelpButton->set_sensitive(bSensitivity);
     aSelectionLink.Call(*this);
 }
 
@@ -219,6 +226,22 @@ IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::Entry&, void)
     m_xLbCategory->set_active(1);
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     UpdateFunctionList(searchStr);
+}
+
+IMPL_LINK_NOARG(FuncPage, SelHelpClickHdl, weld::Button&, void)
+{
+    if (const auto pDesc
+        = weld::fromId<const IFunctionDescription*>(m_xLbFunction->get_selected_id()))
+    {
+        if (Help* pHelp = Application::GetHelp())
+        {
+            const OUString& sHelpId = pDesc->getHelpId();
+            if (!sHelpId.isEmpty())
+            {
+                pHelp->Start(sHelpId);
+            }
+        }
+    }
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)

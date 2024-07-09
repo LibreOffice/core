@@ -40,6 +40,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbCategory;
     std::unique_ptr<weld::TreeView> m_xLbFunction;
     std::unique_ptr<weld::Entry> m_xLbFunctionSearchString;
+    std::unique_ptr<weld::Button> m_xHelpButton;
 
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
@@ -58,6 +59,7 @@ private:
     DECL_LINK(DblClkHdl, weld::TreeView&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(SelHelpClickHdl, weld::Button&, void);
 
     void            UpdateFunctionList(const OUString&);
 

@@ -46,6 +46,7 @@ private:
     std::unique_ptr<weld::ComboBox> xCatBox;
     std::unique_ptr<weld::TreeView> xFuncList;
     std::unique_ptr<weld::Button> xInsertButton;
+    std::unique_ptr<weld::Button> xHelpButton;
     std::unique_ptr<weld::TextView> xFiFuncDesc;
     std::unique_ptr<weld::Entry> m_xSearchString;
 
@@ -64,6 +65,7 @@ private:
 
                     DECL_LINK( SetRowActivatedHdl, weld::TreeView&, bool );
                     DECL_LINK( SetSelectionClickHdl, weld::Button&, void );
+                    DECL_LINK( SetHelpClickHdl, weld::Button&, void );
                     DECL_LINK( SelComboHdl, weld::ComboBox&, void );
                     DECL_LINK( SelTreeHdl, weld::TreeView&, void );
                     DECL_LINK( ModifyHdl, weld::Entry&, void );
