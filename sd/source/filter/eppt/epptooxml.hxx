@@ -168,6 +168,8 @@ private:
         OUString sInitials;
 
         AuthorComments()
+            : nId(0)
+            , nLastIndex(0)
         {
         }
         AuthorComments(sal_Int32 nId_, sal_Int32 nLastIndex_, OUString sInitials_)
