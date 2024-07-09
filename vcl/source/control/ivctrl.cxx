@@ -136,25 +136,19 @@ void SvtIconChoiceCtrl::MouseMove( const MouseEvent& rMEvt )
 }
 void SvtIconChoiceCtrl::ArrangeIcons()
 {
-    if (GetStyle() & WB_ALIGN_LEFT)
+    Size aFullSize;
+    tools::Rectangle aEntryRect;
+
+    for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
     {
-        Size aFullSize;
-        tools::Rectangle aEntryRect;
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
+        aEntryRect = _pImpl->GetEntryBoundRect ( pEntry );
 
-        for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
-            aEntryRect = _pImpl->GetEntryBoundRect ( pEntry );
-
-            aFullSize.setHeight ( aFullSize.getHeight()+aEntryRect.GetHeight() );
-        }
-
-        _pImpl->Arrange(0, aFullSize.getHeight());
+        aFullSize.setHeight ( aFullSize.getHeight()+aEntryRect.GetHeight() );
     }
-    else
-    {
-        _pImpl->Arrange(0, 0);
-    }
+
+    _pImpl->Arrange(0, aFullSize.getHeight());
+
     _pImpl->Arrange(0, 1000 );
 }
 void SvtIconChoiceCtrl::Resize()
@@ -389,7 +383,7 @@ VerticalTabControl::VerticalTabControl(vcl::Window* pParent, bool bWithIcons)
     , m_xChooser(VclPtr<SvtIconChoiceCtrl>::Create(this, WB_3DLOOK | (bWithIcons ?  WB_ICON : WB_DETAILS) | WB_BORDER |
                                                          WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                                                          WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN |
-                                                         WB_ALIGN_LEFT | WB_NOHSCROLL))
+                                                         WB_NOHSCROLL))
     , m_xBox(VclPtr<VclVBox>::Create(this))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);

@@ -109,7 +109,6 @@ public:
         WB_NOVSCROLL
         WB_NOSELECTION
         WB_SMART_ARRANGE    // Keep Visible-Area at arrange
-        WB_ALIGN_LEFT       // Align columns from top to bottom
         WB_NODRAGSELECTION  // No selection with tracking rectangle
         WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
         WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
@@ -122,7 +121,6 @@ public:
 #define WB_NOHSCROLL            WB_SPIN
 #define WB_NOVSCROLL            WB_DRAG
 #define WB_NODRAGSELECTION      WB_PATHELLIPSIS
-#define WB_ALIGN_LEFT           WB_LEFT
 #define WB_NOCOLUMNHEADER       WB_CENTER
 #define WB_HIGHLIGHTFRAME       WB_IGNORETAB
 
