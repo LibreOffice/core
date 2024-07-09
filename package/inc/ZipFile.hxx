@@ -29,6 +29,8 @@
 #include "HashMaps.hxx"
 #include "EncryptionData.hxx"
 
+#include <unordered_set>
+
 class MemoryByteGrabber;
 namespace com::sun::star {
     namespace uno { class XComponentContext; }
@@ -51,6 +53,8 @@ class ZipEnumeration;
 class ZipFile
 {
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
+
+    std::unordered_set<OUString> m_EntriesInsensitive;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
