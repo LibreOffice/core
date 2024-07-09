@@ -337,9 +337,8 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
         if (pShell)
         {
             sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
-            auto aIssues = aCollection.getIssues();
-            int nIssueCount(aIssues.size());
-            if (!aIssues.empty())
+            const int nIssueCount(aCollection.getIssues().size());
+            if (nIssueCount)
             {
                 OUString aMessage(FilterResId(STR_WARN_PDFUA_ISSUES, nIssueCount));
                 aMessage = aMessage.replaceFirst("%1", OUString::number(nIssueCount));
