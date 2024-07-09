@@ -253,10 +253,47 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                        RTFOverwrite::NO_APPEND);
                 dispatchSymbol(RTFKeyword::CELL);
-
                 // Adjust total width, which is done in the \cellx handler for normal cells.
                 m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
 
+                int nCellCount = 0;
+                for (Buf_t& i : m_aTableBufferStack.back())
+                {
+                    if (BUFFER_CELLEND == std::get<0>(i))
+                        ++nCellCount;
+                }
+                if (m_nTopLevelCells < nCellCount)
+                {
+                    m_nTopLevelCells++;
+                    m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                    m_aTopLevelTableCellsAttributes.push_back(
+                        m_aStates.top().getTableCellAttributes());
+                }
+
+                if (m_aTopLevelTableCellsSprms.size() >= o3tl::make_unsigned(nCellCount))
+                {
+                    Id aBorderIds[]
+                        = { NS_ooxml::LN_CT_TcBorders_bottom, NS_ooxml::LN_CT_TcBorders_top,
+                            NS_ooxml::LN_CT_TcBorders_left, NS_ooxml::LN_CT_TcBorders_right };
+                    RTFSprms& rCurrentCellSprms = m_aTopLevelTableCellsSprms[nCellCount - 1];
+                    for (size_t i = 0; i < 4; i++)
+                    {
+                        RTFSprms aAttributes;
+                        RTFSprms aSprms;
+                        auto pBorderValue = new RTFValue(aAttributes, aSprms);
+                        auto pTypeValue = new RTFValue(NS_ooxml::LN_Value_ST_Border_none);
+                        auto pSizeValue = new RTFValue(0);
+                        putNestedSprm(rCurrentCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders,
+                                      aBorderIds[i], pBorderValue, RTFOverwrite::YES);
+                        RTFSprms* pAttributes = &getLastAttributes(
+                            rCurrentCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
+                        if (pAttributes)
+                        {
+                            pAttributes->set(NS_ooxml::LN_CT_Border_val, pTypeValue);
+                            pAttributes->set(NS_ooxml::LN_CT_Border_sz, pSizeValue);
+                        }
+                    }
+                }
                 m_aStates.top().setTableRowWidthAfter(0);
             }
 
