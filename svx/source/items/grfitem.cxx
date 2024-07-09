@@ -42,21 +42,6 @@ SvxGrfCrop::~SvxGrfCrop()
 {
 }
 
-bool SvxGrfCrop::isHashable() const
-{
-    return true;
-}
-
-size_t SvxGrfCrop::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, m_nLeft);
-    o3tl::hash_combine(seed, m_nRight);
-    o3tl::hash_combine(seed, m_nTop);
-    o3tl::hash_combine(seed, m_nBottom);
-    return seed;
-}
-
 bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));

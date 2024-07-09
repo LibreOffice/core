@@ -43,8 +43,6 @@ public:
     SvxGrfCrop & operator =(SvxGrfCrop &&) = delete; // due to SfxPoolItem
 
     // "pure virtual methods" from SfxPoolItem
-    virtual bool                isHashable() const override;
-    virtual size_t              hashCode() const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

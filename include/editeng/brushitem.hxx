@@ -54,6 +54,9 @@ class EDITENG_DLLPUBLIC SvxBrushItem final : public SfxPoolItem
 
     void        ApplyGraphicTransparency_Impl();
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 

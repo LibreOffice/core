@@ -30,6 +30,9 @@
 
 class EDITENG_DLLPUBLIC SvxFrameDirectionItem final : public SfxEnumItem<SvxFrameDirection>
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     SvxFrameDirectionItem( SvxFrameDirection nValue, sal_uInt16 nWhich  );
     virtual ~SvxFrameDirectionItem() override;

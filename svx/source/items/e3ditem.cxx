@@ -43,20 +43,6 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
 {
 }
 
-bool SvxB3DVectorItem::isHashable() const
-{
-    return true;
-}
-
-size_t SvxB3DVectorItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, aVal.getX());
-    o3tl::hash_combine(seed, aVal.getY());
-    o3tl::hash_combine(seed, aVal.getZ());
-    return seed;
-}
-
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

@@ -120,18 +120,6 @@ bool SvxDoubleItem::GetPresentation
     return true;
 }
 
-bool SvxDoubleItem::isHashable() const
-{
-    return true;
-}
-
-size_t SvxDoubleItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, fVal);
-    return seed;
-}
-
 bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));

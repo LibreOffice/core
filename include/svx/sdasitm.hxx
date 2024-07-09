@@ -69,8 +69,6 @@ private:
             SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = delete; // due to SfxPoolItem
             SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = delete; // due to SfxPoolItem
 
-            virtual bool                               isHashable() const override;
-            virtual size_t                             hashCode() const override;
             SAL_DLLPRIVATE virtual bool                operator==( const SfxPoolItem& ) const override;
 
             SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,

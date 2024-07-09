@@ -34,8 +34,6 @@ public:
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             virtual ~SvxB3DVectorItem() override;
 
-    virtual bool            isHashable() const override;
-    virtual size_t          hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxB3DVectorItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

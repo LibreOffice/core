@@ -39,7 +39,6 @@ public:
     SdrLayerNameItem(const OUString& rStr)
         : SfxStringItem(SDRATTR_LAYERNAME, rStr, SfxItemType::SdrLayerNameItemType) {}
     virtual SdrLayerNameItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
 };
 
 #endif

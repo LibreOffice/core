@@ -43,8 +43,6 @@ public:
     virtual ~SvxColorItem() override;
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem& rPoolItem) const override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

@@ -226,17 +226,6 @@ SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
 {
 }
 
-bool SdrCustomShapeGeometryItem::isHashable() const
-{
-    return true;
-}
-
-size_t SdrCustomShapeGeometryItem::hashCode() const
-{
-    UpdateHash();
-    return m_aHashState == HashState::Valid ? m_aHash : 0;
-}
-
 bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     if( !SfxPoolItem::operator==( rCmp ))

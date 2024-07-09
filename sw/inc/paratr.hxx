@@ -164,7 +164,6 @@ public:
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwNumRuleItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

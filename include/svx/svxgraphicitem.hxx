@@ -31,8 +31,6 @@ class SVX_DLLPUBLIC SvxGraphicItem final : public SfxPoolItem
 public:
                             SvxGraphicItem( Graphic aGraphic);
 
-    virtual bool            isHashable() const override;
-    virtual size_t          hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxGraphicItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 

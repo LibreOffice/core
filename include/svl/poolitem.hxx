@@ -523,6 +523,7 @@ SVL_DLLPUBLIC void listAllocatedSfxPoolItems();
 class SfxItemPool;
 class SfxItemSet;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
+class ItemInstanceManager;
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
@@ -578,6 +579,15 @@ protected:
     void setDynamicDefault() { m_bDynamicDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
     void setNonShareable() { m_bShareable = false; }
+
+    // access ItemInstanceManager for this Item, default
+    // is nullptr. If you overload this it is expected that
+    // you return a ptr to a static, Item-local managed
+    // instance that exists the whole office lifetime. This
+    // usually means to have a static instance directly in the
+    // implementation of the overloaded function (just grep
+    // for examples)
+    virtual ItemInstanceManager* getItemInstanceManager() const;
 
 public:
     inline void AddRef(sal_uInt32 n = 1) const
@@ -691,13 +701,99 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     virtual boost::property_tree::ptree dumpAsJSON() const;
 
-    // Only return true from isHashable() if hashCode is implemented.
-    virtual bool isHashable() const;
-    virtual size_t hashCode() const;
-
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
+
+// basic Interface definition
+class SVL_DLLPUBLIC ItemInstanceManager
+{
+    // allow *only* ItemSetTooling to access
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend void implCleanupItemEntry(SfxPoolItem const*);
+
+    // Define for which class to register (usually typeid().hash_code()).
+    std::size_t     m_aClassHash;
+
+public:
+    ItemInstanceManager(const std::size_t aClassHash)
+    : m_aClassHash(aClassHash)
+    {
+    }
+    virtual ~ItemInstanceManager() = default;
+
+    std::size_t getClassHash() const { return m_aClassHash; }
+
+private:
+    // standard interface, accessed exclusively
+    // by implCreateItemEntry/implCleanupItemEntry
+    virtual const SfxPoolItem* find(const SfxPoolItem&) const = 0;
+    virtual void add(const SfxPoolItem&) = 0;
+    virtual void remove(const SfxPoolItem&) = 0;
+};
+
+// offering a default implementation that can be use for
+// each SfxPoolItem (except when !isShareable()). It just
+// uses an unordered_set holding ptrs to SfxPoolItems added
+// and SfxPoolItem::operator== to linearly search for one.
+// Thus this is not the fastest, but as fast as old 'poooled'
+// stuff - better use an intelligent, pro-Item implementation
+// that does e.g. hashing or whatever might be feasible for
+// that specific Item (see other derivations)
+class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
+{
+    std::unordered_map<sal_uInt16, std::unordered_set<const SfxPoolItem*>>  maRegistered;
+
+public:
+    DefaultItemInstanceManager(const std::size_t aClassHash)
+    : ItemInstanceManager(aClassHash)
+    {
+    }
+
+private:
+    virtual const SfxPoolItem* find(const SfxPoolItem&) const override;
+    virtual void add(const SfxPoolItem&) override;
+    virtual void remove(const SfxPoolItem&) override;
+};
+
+/**
+  Utility template to reduce boilerplate code when creating item instance managers
+  for specific PoolItem subclasses.
+*/
+template<class T>
+class TypeSpecificItemInstanceManager : public ItemInstanceManager
+{
+public:
+    TypeSpecificItemInstanceManager()
+    : ItemInstanceManager(typeid(T).hash_code())
+    {
+    }
+
+    // standard interface, accessed exclusively
+    // by implCreateItemEntry/implCleanupItemEntry
+    virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override final
+    {
+        auto aHit(maRegistered.find(hashCode(rItem)));
+        if (aHit != maRegistered.end())
+            return aHit->second;
+        return nullptr;
+    }
+    virtual void add(const SfxPoolItem& rItem) override final
+    {
+        maRegistered.insert({hashCode(rItem), &rItem});
+    }
+    virtual void remove(const SfxPoolItem& rItem) override final
+    {
+        maRegistered.erase(hashCode(rItem));
+    }
+
+protected:
+    virtual size_t hashCode(const SfxPoolItem&) const = 0;
+
+private:
+    std::unordered_map<size_t, const SfxPoolItem*> maRegistered;
+};
+
 
 inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {

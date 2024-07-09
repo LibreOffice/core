@@ -27,8 +27,6 @@ public:
     SfxInt64Item & operator =(SfxInt64Item const &) = delete; // due to SfxPoolItem;
     SfxInt64Item & operator =(SfxInt64Item &&) = delete; // due to SfxPoolItem
 
-    virtual bool isHashable() const override { return true; }
-    virtual size_t hashCode() const override { return mnValue; }
     virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 
     virtual bool GetPresentation(

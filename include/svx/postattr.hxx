@@ -39,8 +39,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxPostItAuthorItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
 };
 
 
@@ -61,8 +59,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxPostItDateItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
 };
 
 /** The text of a note
@@ -83,8 +79,6 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxPostItTextItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
 };
 
 
@@ -99,8 +93,6 @@ public:
     SvxPostItIdItem( TypedWhichId<SvxPostItIdItem>  nWhich );
 
     virtual SvxPostItIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    virtual bool isHashable() const override; // hashCode is defined in CntUnencodedStringItem
 };
 
 #endif

@@ -62,22 +62,15 @@ public:
         return SfxEnumItemInterface::operator==(other) &&
                m_nValue == static_cast<const SfxEnumItem<EnumT> &>(other).m_nValue;
     }
-
-    virtual bool isHashable() const override final
-    {
-        return true;
-    }
-
-    virtual size_t hashCode() const override final
-    {
-        return GetEnumValue();
-    }
 };
 
 class SVL_DLLPUBLIC SfxBoolItem
     : public SfxPoolItem
 {
     bool m_bValue;
+
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -87,9 +80,6 @@ public:
         : SfxPoolItem(nWhich, eItemType)
         , m_bValue(bValue)
     { }
-
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
 
     bool GetValue() const { return m_bValue; }
     void SetValue(bool const bTheValue);

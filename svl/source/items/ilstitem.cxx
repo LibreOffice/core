@@ -23,7 +23,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <svl/ilstitem.hxx>
-#include <o3tl/hash_combine.hxx>
 
 
 SfxPoolItem* SfxIntegerListItem::CreateDefault() { return new SfxIntegerListItem; }
@@ -49,19 +48,6 @@ SfxIntegerListItem::~SfxIntegerListItem()
 {
 }
 
-bool SfxIntegerListItem::isHashable() const
-{
-    return true;
-}
-
-size_t SfxIntegerListItem::hashCode() const
-{
-    std::size_t seed = 0;
-    for (auto const & i : m_aList)
-        o3tl::hash_combine(seed, i);
-    return seed;
-}
-
 bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {
     if ( !SfxPoolItem::operator==(rPoolItem) )
@@ -78,7 +64,6 @@ SfxIntegerListItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 
 bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )
 {
-    ASSERT_CHANGE_REFCOUNTED_ITEM;
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
     css::uno::Any aNew;

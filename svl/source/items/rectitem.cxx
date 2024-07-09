@@ -25,7 +25,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>
-#include <o3tl/hash_combine.hxx>
 
 
 SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
@@ -60,21 +59,6 @@ bool SfxRectangleItem::GetPresentation
     return true;
 }
 
-
-bool SfxRectangleItem::isHashable() const
-{
-    return true;
-}
-
-size_t SfxRectangleItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, maVal.Top());
-    o3tl::hash_combine(seed, maVal.Left());
-    o3tl::hash_combine(seed, maVal.Bottom());
-    o3tl::hash_combine(seed, maVal.Right());
-    return seed;
-}
 
 bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -115,7 +99,6 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
 bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
                                  sal_uInt8 nMemberId )
 {
-    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     css::awt::Rectangle aValue;

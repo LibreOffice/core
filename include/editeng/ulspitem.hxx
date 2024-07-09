@@ -46,8 +46,6 @@ public:
                     const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -65,11 +63,11 @@ public:
     inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );
     inline void SetLower( const sal_uInt16 nL, const sal_uInt16 nProp = 100 );
 
-    void SetUpperValue( const sal_uInt16 nU ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nUpper = nU; }
-    void SetLowerValue( const sal_uInt16 nL ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nLower = nL; }
-    void SetContextValue( const bool bC )     { ASSERT_CHANGE_REFCOUNTED_ITEM; bContext = bC; }
-    void SetPropUpper( const sal_uInt16 nU )  { ASSERT_CHANGE_REFCOUNTED_ITEM; nPropUpper = nU; }
-    void SetPropLower( const sal_uInt16 nL )  { ASSERT_CHANGE_REFCOUNTED_ITEM; nPropLower = nL; }
+    void SetUpperValue( const sal_uInt16 nU ) { nUpper = nU; }
+    void SetLowerValue( const sal_uInt16 nL ) { nLower = nL; }
+    void SetContextValue( const bool bC )     { bContext = bC; }
+    void SetPropUpper( const sal_uInt16 nU )  { nPropUpper = nU; }
+    void SetPropLower( const sal_uInt16 nL )  { nPropLower = nL; }
 
     sal_uInt16 GetUpper() const { return nUpper; }
     sal_uInt16 GetLower() const { return nLower; }

@@ -501,13 +501,19 @@ void listAllocatedSfxPoolItems()
 }
 #endif
 
-bool SfxPoolItem::isHashable() const { return false; }
-
-size_t SfxPoolItem::hashCode() const
+const SfxPoolItem* DefaultItemInstanceManager::find(const SfxPoolItem& rItem) const
 {
-    assert(false && "not implemented");
-    return 0;
+    auto it = maRegistered.find(rItem.Which());
+    if (it == maRegistered.end())
+        return nullptr;
+    for (const auto& rCandidate : it->second)
+        if (*rCandidate == rItem)
+            return rCandidate;
+
+    return nullptr;
 }
+
+ItemInstanceManager* SfxPoolItem::getItemInstanceManager() const { return nullptr; }
 
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich, SfxItemType eType)
     : m_nRefCount(0)

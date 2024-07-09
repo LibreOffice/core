@@ -88,6 +88,9 @@ public:
 
 class EDITENG_DLLPUBLIC SvxUnderlineItem final : public SvxTextLineItem
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -104,6 +107,9 @@ public:
 
 class EDITENG_DLLPUBLIC SvxOverlineItem final : public SvxTextLineItem
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 

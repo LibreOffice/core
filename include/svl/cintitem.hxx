@@ -33,8 +33,6 @@ public:
     CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue, SfxItemType eItemType = SfxItemType::CntByteItemType):
         SfxPoolItem(which, eItemType), m_nValue(nTheValue) {}
 
-    virtual bool isHashable() const override final { return true; }
-    virtual size_t hashCode() const override final { return m_nValue; }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -66,8 +64,6 @@ public:
         SfxPoolItem(which, eItemType), m_nValue(nTheValue)
     {}
 
-    virtual bool isHashable() const override final { return true; }
-    virtual size_t hashCode() const override final { return m_nValue; }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -100,8 +96,6 @@ public:
         SfxPoolItem(which, eItemType), m_nValue(nTheValue)
     {}
 
-    virtual bool isHashable() const override final { return true; }
-    virtual size_t hashCode() const override final { return m_nValue; }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -134,8 +128,6 @@ public:
         SfxPoolItem(which, eItemType), m_nValue(nTheValue)
     {}
 
-    virtual bool isHashable() const override final { return true; }
-    virtual size_t hashCode() const override final { return m_nValue; }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,

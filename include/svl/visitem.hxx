@@ -36,8 +36,6 @@ public:
         m_nValue.bVisible = bVisible;
     }
 
-    virtual bool isHashable() const override { return true; }
-    virtual size_t hashCode() const override { return static_cast<size_t>(m_nValue.bVisible); }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation, MapUnit, MapUnit,

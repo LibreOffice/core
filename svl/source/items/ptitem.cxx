@@ -27,7 +27,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>
-#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -61,19 +60,6 @@ bool SfxPointItem::GetPresentation
     return true;
 }
 
-
-bool SfxPointItem::isHashable() const
-{
-    return true;
-}
-
-size_t SfxPointItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, aVal.X());
-    o3tl::hash_combine(seed, aVal.Y());
-    return seed;
-}
 
 bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -112,7 +98,6 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
 bool SfxPointItem::PutValue( const uno::Any& rVal,
                              sal_uInt8 nMemberId )
 {
-    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;

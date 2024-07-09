@@ -68,8 +68,6 @@ public:
     SvxLeftMarginItem(SvxLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -112,8 +110,6 @@ public:
     SvxTextLeftMarginItem(SvxTextLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -149,19 +145,17 @@ public:
     void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short GetTextFirstLineOffset() const { return m_nFirstLineOffset; }
     void SetPropTextFirstLineOffset(const sal_uInt16 nProp)
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nPropFirstLineOffset = nProp; }
+                    { m_nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return m_nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue(const short nValue)
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nFirstLineOffset = nValue; }
+                    { m_nFirstLineOffset = nValue; }
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
     SvxFirstLineIndentItem(const short nOffset, const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxFirstLineIndentItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -201,8 +195,6 @@ public:
     SvxRightMarginItem(SvxRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -229,15 +221,13 @@ private:
     tools::Long m_nGutterMargin = 0;
 
 public:
-    void SetGutterMargin(const tools::Long nGutterMargin) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nGutterMargin = nGutterMargin; }
+    void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     tools::Long GetGutterMargin() const { return m_nGutterMargin; }
 
     explicit SvxGutterLeftMarginItem(const sal_uInt16 nId);
     SvxGutterLeftMarginItem(SvxGutterLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -270,8 +260,6 @@ public:
     SvxGutterRightMarginItem(SvxGutterRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
@@ -317,8 +305,6 @@ public:
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool isHashable() const override;
-    virtual size_t hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -340,15 +326,15 @@ public:
     // Query/direct setting of the absolute values
     tools::Long GetLeft()  const { return nLeftMargin; }
     tools::Long GetRight() const { return nRightMargin;}
-    void SetLeftValue( const tools::Long nL ) { ASSERT_CHANGE_REFCOUNTED_ITEM; assert(nFirstLineOffset == 0); nLeftMargin = nL; }
-    void SetRightValue( const tools::Long nR ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nRightMargin = nR; }
+    void SetLeftValue( const tools::Long nL ) { assert(nFirstLineOffset == 0); nLeftMargin = nL; }
+    void SetRightValue( const tools::Long nR ) { nRightMargin = nR; }
     bool IsAutoFirst()  const { return bAutoFirst; }
-    void SetAutoFirst( const bool bNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bAutoFirst = bNew; }
+    void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
 
     bool IsExplicitZeroMarginValRight()  const { return bExplicitZeroMarginValRight; }
     bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
-    void SetExplicitZeroMarginValRight( const bool eR ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bExplicitZeroMarginValRight = eR; }
-    void SetExplicitZeroMarginValLeft( const bool eL ) { ASSERT_CHANGE_REFCOUNTED_ITEM; bExplicitZeroMarginValLeft = eL; }
+    void SetExplicitZeroMarginValRight( const bool eR ) { bExplicitZeroMarginValRight = eR; }
+    void SetExplicitZeroMarginValLeft( const bool eL ) { bExplicitZeroMarginValLeft = eL; }
     sal_uInt16 GetPropLeft()  const { return nPropLeftMargin; }
     sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
@@ -359,14 +345,14 @@ public:
     void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short  GetTextFirstLineOffset() const { return nFirstLineOffset; }
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; nPropFirstLineOffset = nProp; }
+                    { nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue( const short nValue )
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; nFirstLineOffset = nValue; }
-    void SetGutterMargin(const tools::Long nGutterMargin) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nGutterMargin = nGutterMargin; }
+                    { nFirstLineOffset = nValue; }
+    void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     tools::Long GetGutterMargin() const { return m_nGutterMargin; }
-    void SetRightGutterMargin(const tools::Long nRightGutterMargin) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nRightGutterMargin = nRightGutterMargin; }
+    void SetRightGutterMargin(const tools::Long nRightGutterMargin) { m_nRightGutterMargin = nRightGutterMargin; }
     tools::Long GetRightGutterMargin() const { return m_nRightGutterMargin; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

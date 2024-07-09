@@ -51,8 +51,6 @@ public:
                    const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool             isHashable() const override;
-    virtual size_t           hashCode() const override;
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     MapUnit eCoreMetric,

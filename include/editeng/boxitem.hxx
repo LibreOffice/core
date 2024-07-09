@@ -73,6 +73,9 @@ class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
 
     void tryMigrateComplexColor(SvxBoxItemLine eLine);
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 

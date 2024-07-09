@@ -20,7 +20,6 @@
 
 #include <svl/imageitm.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <o3tl/hash_combine.hxx>
 
 
 SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
@@ -45,20 +44,6 @@ SfxImageItem* SfxImageItem::Clone( SfxItemPool* ) const
     return new SfxImageItem( *this );
 }
 
-bool SfxImageItem::isHashable() const
-{
-    return true;
-}
-
-size_t SfxImageItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, GetValue());
-    o3tl::hash_combine(seed, mnAngle.get());
-    o3tl::hash_combine(seed, mbMirrored);
-    return seed;
-}
-
 bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
     if (!SfxInt16Item::operator==(rItem))
@@ -79,7 +64,6 @@ bool SfxImageItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 
 bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
-    ASSERT_CHANGE_REFCOUNTED_ITEM;
     css::uno::Sequence< css::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {

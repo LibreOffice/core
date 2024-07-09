@@ -50,7 +50,6 @@
 #include <editeng/memberids.h>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
-#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -340,23 +339,17 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxAdjustItem ---------------------------------------------------
 
+ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
+{
+    static DefaultItemInstanceManager aInstanceManager(typeid(SvxAdjustItem).hash_code());
+    return &aInstanceManager;
+}
+
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId, SfxItemType::SvxAdjustItemType ),
     bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
 {
     SetAdjust( eAdjst );
-}
-
-bool SvxAdjustItem::isHashable() const { return true; }
-
-size_t SvxAdjustItem::hashCode() const
-{
-    std::size_t seed(0);
-    o3tl::hash_combine(seed, GetAdjust());
-    o3tl::hash_combine(seed, bOneBlock);
-    o3tl::hash_combine(seed, bLastCenter);
-    o3tl::hash_combine(seed, bLastBlock);
-    return seed;
 }
 
 bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const

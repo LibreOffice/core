@@ -50,8 +50,6 @@ public:
         SfxPoolItem(which, eItemType), m_nValue(nTheValue)
     {}
 
-    virtual bool isHashable() const override { return true; }
-    virtual size_t hashCode() const override { return m_nValue; }
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,

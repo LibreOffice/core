@@ -31,6 +31,9 @@
 
 class EDITENG_DLLPUBLIC SvxCrossedOutItem final : public SfxEnumItem<FontStrikeout>
 {
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 

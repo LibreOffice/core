@@ -39,8 +39,6 @@ public:
         SfxPoolItem(which, eItemType), m_aValue(std::move(aTheValue))
     {}
 
-    // not all of the subclasses of this are hashable, so we only define the shared hashCode function here
-    virtual size_t hashCode() const override;
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,

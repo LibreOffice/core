@@ -31,10 +31,6 @@ public:
     {
         return new SdrMeasureFormatStringItem(*this);
     }
-    virtual bool isHashable() const override // hashCode is defined in CntUnencodedStringItem
-    {
-        return true;
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

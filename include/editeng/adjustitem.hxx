@@ -44,6 +44,9 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
+protected:
+    virtual ItemInstanceManager* getItemInstanceManager() const override;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -51,8 +54,6 @@ public:
                    const sal_uInt16 nId );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool            isHashable() const override;
-    virtual size_t          hashCode() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

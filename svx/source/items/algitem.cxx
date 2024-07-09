@@ -217,21 +217,6 @@ bool SvxMarginItem::GetPresentation
 }
 
 
-bool SvxMarginItem::isHashable() const
-{
-    return true;
-}
-
-size_t SvxMarginItem::hashCode() const
-{
-    std::size_t seed = 0;
-    o3tl::hash_combine(seed, nLeftMargin);
-    o3tl::hash_combine(seed, nTopMargin);
-    o3tl::hash_combine(seed, nRightMargin);
-    o3tl::hash_combine(seed, nBottomMargin);
-    return seed;
-}
-
 bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
