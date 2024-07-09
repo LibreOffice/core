@@ -1215,7 +1215,7 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
 
             for (sal_uInt32 x(0); x < nDstWidth; ++x)
             {
-                // do not forget prfe-multiply -> need to get both alphas
+                // do not forget pre-multiply -> need to get both alphas
                 sal_uInt8 nSrcAlpha(pSrcData[SVP_CAIRO_ALPHA]);
                 sal_uInt8 nDstAlpha(pDstData[SVP_CAIRO_ALPHA]);
 
