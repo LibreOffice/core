@@ -149,7 +149,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
-    ::basegfx::B2DPolyPolygon aNullPolyPolygon;
     Color    aNullCol(COL_DEFAULT_SHAPE_STROKE);
 
     XDash     aNullDash;
@@ -166,8 +165,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineColorItem(OUString(), COL_DEFAULT_SHAPE_STROKE));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(aNullDash));
-    rISet.Put(XLineStartItem(aNullPolyPolygon));
-    rISet.Put(XLineEndItem(aNullPolyPolygon));
+    rISet.Put(XLineStartItem(basegfx::B2DPolyPolygon()));
+    rISet.Put(XLineEndItem(basegfx::B2DPolyPolygon()));
     rISet.Put(XLineStartWidthItem(200));
     rISet.Put(XLineEndWidthItem(200));
     rISet.Put(XLineStartCenterItem());
