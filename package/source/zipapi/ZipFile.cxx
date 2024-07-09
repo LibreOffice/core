@@ -94,6 +94,7 @@ ZipFile::ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
     if (bInitialise && readCEN() == -1 )
     {
         aEntries.clear();
+        m_EntriesInsensitive.clear();
         throw ZipException( "stream data looks to be broken" );
     }
 }
@@ -118,6 +119,7 @@ ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
         else if ( readCEN() == -1 )
         {
             aEntries.clear();
+            m_EntriesInsensitive.clear();
             throw ZipException("stream data looks to be broken" );
         }
     }
@@ -1156,15 +1158,19 @@ sal_Int32 ZipFile::readCEN()
                     continue; // This is a directory entry, not a stream - skip it
             }
 
-            if (auto it = aEntries.find(aEntry.sPath); it == aEntries.end())
-            {
-                aEntries[aEntry.sPath] = aEntry;
-            }
-            else
+            if (aEntries.find(aEntry.sPath) != aEntries.end())
             {
                 SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
                 throw ZipException(u"Duplicate CEN entry"_ustr);
             }
+            // this is required for OOXML, but not for ODF
+            auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+            if (!m_EntriesInsensitive.insert(lowerPath).second)
+            {
+                SAL_INFO("package", "Duplicate CEN entry (case insensitive): \"" << aEntry.sPath << "\"");
+                throw ZipException(u"Duplicate CEN entry (case insensitive)"_ustr);
+            }
+            aEntries[aEntry.sPath] = aEntry;
         }
 
         if (nCount != nTotal)
@@ -1373,7 +1379,13 @@ void ZipFile::recover()
                                         nPos += 4;
                                         continue;
                                     }
-
+                                    auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+                                    if (m_EntriesInsensitive.find(lowerPath) != m_EntriesInsensitive.end())
+                                    {   // this is required for OOXML, but not for ODF
+                                        nPos += 4;
+                                        continue;
+                                    }
+                                    m_EntriesInsensitive.insert(lowerPath);
                                     aEntries.emplace( aEntry.sPath, aEntry );
 
                                     // Drop any "directory" entry corresponding to this one's path;
