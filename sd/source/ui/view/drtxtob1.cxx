@@ -230,7 +230,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                         }
                         pNewItem->SetLower( static_cast<sal_uInt16>(nLower) );
 
-                        SfxItemSet aNewAttrs( aAttr );
+                        SfxItemSet aNewAttrs(std::move(aAttr));
                         aNewAttrs.Put( std::move(pNewItem) );
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
