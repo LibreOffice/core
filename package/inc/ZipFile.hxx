@@ -33,6 +33,7 @@
 #include "EncryptionData.hxx"
 
 #include <memory>
+#include <unordered_set>
 
 class MemoryByteGrabber;
 namespace com { namespace sun { namespace star {
@@ -56,6 +57,8 @@ class ZipEnumeration;
 class ZipFile
 {
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
+
+    std::unordered_set<OUString> m_EntriesInsensitive;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
