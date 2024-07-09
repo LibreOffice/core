@@ -152,6 +152,14 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     rtl_uString* pArgs[], sal_uInt32 nArgs, oslProcess *pProcess,
     oslFileHandle *pIn, oslFileHandle *pOut, oslFileHandle *pErr)
 {
+    // run things that directly or indirectly might call gs in a tmpdir of their own
+    utl::TempFile aTMPDirectory(nullptr, true);
+    aTMPDirectory.EnableKillingFile(true);
+    OUString sTmpDirEnv = "TMPDIR=" + aTMPDirectory.GetFileName();
+
+    rtl_uString* ustrEnvironment[1];
+    ustrEnvironment[0] = sTmpDirEnv.pData;
+
     oslProcessError result = osl_Process_E_None;
     oslSecurity pSecurity = osl_getCurrentSecurity();
 #ifdef _WIN32
@@ -179,11 +187,11 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     else
         result = osl_executeProcess_WithRedirectedIO(url.pData,
             pArgs, nArgs, osl_Process_HIDDEN,
-            pSecurity, nullptr, nullptr, 0, pProcess, pIn, pOut, pErr);
+            pSecurity, nullptr, ustrEnvironment, 1, pProcess, pIn, pOut, pErr);
 #else
     result = osl_executeProcess_WithRedirectedIO(rProgName.pData,
         pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
-        pSecurity, nullptr, nullptr, 0, pProcess, pIn, pOut, pErr);
+        pSecurity, nullptr, ustrEnvironment, 1, pProcess, pIn, pOut, pErr);
 #endif
     osl_freeSecurityHandle( pSecurity );
     return result;
