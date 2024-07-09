@@ -20,8 +20,7 @@
 #ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
 #define INCLUDED_O3TL_COW_WRAPPER_HXX
 
-#include <osl/interlck.h>
-
+#include <atomic>
 #include <optional>
 #include <cstddef>
 
@@ -38,6 +37,7 @@ namespace o3tl
         typedef std::size_t ref_count_t;
         static void incrementCount( ref_count_t& rCount ) { ++rCount; }
         static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
+        static std::size_t getCount( ref_count_t& rCount) { return rCount; }
     };
 
     /** Thread-safe refcounting
@@ -47,12 +47,13 @@ namespace o3tl
      */
     struct ThreadSafeRefCountingPolicy
     {
-        typedef oslInterlockedCount ref_count_t;
-        static void incrementCount( ref_count_t& rCount ) { osl_atomic_increment(&rCount); }
+        typedef std::atomic<int> ref_count_t;
+        static void incrementCount( ref_count_t& rCount ) { rCount++; }
         static bool decrementCount( ref_count_t& rCount )
         {
-            return osl_atomic_decrement(&rCount) != 0;
+            return (--rCount) != 0;
         }
+        static std::size_t getCount( ref_count_t& rCount) { return rCount; }
     };
 
     /** Copy-on-write wrapper.
@@ -315,9 +316,9 @@ int cow_wrapper_client::queryUnmodified() const
         }
 
         /// return number of shared instances (1 for unique object)
-        typename MTPolicy::ref_count_t use_count() const // nothrow
+        size_t use_count() const // nothrow
         {
-            return m_pimpl ? m_pimpl->m_ref_count : 0;
+            return m_pimpl ? MTPolicy::getCount(m_pimpl->m_ref_count) : 0;
         }
 
         void swap(cow_wrapper& r) // never throws

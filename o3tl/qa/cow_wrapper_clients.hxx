@@ -20,6 +20,7 @@
 #ifndef INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 #define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
+#include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <assert.h>
 #include <iostream>
@@ -45,7 +46,7 @@ public:
 
     void makeUnique() { maImpl.make_unique(); }
     bool is_unique() const { return maImpl.is_unique(); }
-    oslInterlockedCount use_count() const { return maImpl.use_count(); }
+    int use_count() const { return maImpl.use_count(); }
     void swap( cow_wrapper_client1& r ) { o3tl::swap(maImpl, r.maImpl); }
 
     bool operator==( const cow_wrapper_client1& rRHS ) const { return maImpl == rRHS.maImpl; }
@@ -79,7 +80,7 @@ public:
 
     void makeUnique();
     bool is_unique() const;
-    oslInterlockedCount use_count() const;
+    int use_count() const;
     void swap( cow_wrapper_client2& r );
 
     bool operator==( const cow_wrapper_client2& rRHS ) const;
@@ -110,7 +111,7 @@ public:
 
     void makeUnique();
     bool is_unique() const;
-    oslInterlockedCount use_count() const;
+    int use_count() const;
     void swap( cow_wrapper_client3& r );
 
     bool operator==( const cow_wrapper_client3& rRHS ) const;
@@ -172,6 +173,7 @@ struct BogusRefCountPolicy
         }
         return rCount != 0;
     }
+    static std::size_t getCount( ref_count_t& rCount) { return rCount; }
 };
 
 class cow_wrapper_client5

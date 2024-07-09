@@ -93,7 +93,7 @@ bool cow_wrapper_client2::is_unique() const
 {
     return maImpl.is_unique();
 }
-oslInterlockedCount cow_wrapper_client2::use_count() const
+int cow_wrapper_client2::use_count() const
 {
     return maImpl.use_count();
 }
@@ -171,7 +171,7 @@ bool cow_wrapper_client3::is_unique() const
 {
     return maImpl.is_unique();
 }
-oslInterlockedCount cow_wrapper_client3::use_count() const
+int cow_wrapper_client3::use_count() const
 {
     return maImpl.use_count();
 }
