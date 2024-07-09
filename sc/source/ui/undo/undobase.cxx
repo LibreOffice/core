@@ -269,8 +269,12 @@ void ScBlockUndo::EndUndo()
     EnableDrawAdjust( &pDocShell->GetDocument(), true );
     DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );
 
-    ShowBlock();
+    // tdf#161712 invoke ScSimpleUndo::EndUndo() before ShowBlock()
+    // If this is an instance of ScUndoAutoFill, ShowBlock() will invoke
+    // ScTabViewShell::MoveCursorAbs() which will delete this instance
+    // so invoke ScSimpleUndo::EndUndo() first.
     ScSimpleUndo::EndUndo();
+    ShowBlock();
 }
 
 void ScBlockUndo::EndRedo()
