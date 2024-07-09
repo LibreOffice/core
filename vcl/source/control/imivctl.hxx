@@ -123,8 +123,7 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<SvtIconChoiceCtrl>  pView;
     std::unique_ptr<IcnCursor_Impl> pImpCursor;
     std::unique_ptr<IcnGridMap_Impl> pGridMap;
-    tools::Long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
-    tools::Long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
+    tools::Long                    nMaxVirtHeight; // max. height aVirtOutputSize
     std::vector< SvxIconChoiceCtrlEntry* > maZOrderList;
     WinBits                 nWinBits;
     tools::Long                    nMaxBoundHeight;            // height of highest BoundRects
@@ -246,7 +245,7 @@ public:
 
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 
-    void                Arrange(tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight);
+    void                Arrange(tools::Long nSetMaxVirtHeight);
 
     tools::Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
     tools::Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );

@@ -60,7 +60,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aDocRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" ),
     aVisRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" ),
     aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
-    pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
+    pView(pCurView), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr),
     pCursor(nullptr),
@@ -121,9 +121,6 @@ void SvxIconChoiceCtrl_Impl::Clear( bool bInCtor )
         aVirtOutputSize.setWidth( 0 );
         aVirtOutputSize.setHeight( 0 );
         Size aSize( pView->GetOutputSizePixel() );
-        nMaxVirtWidth = aSize.Width() - nVerSBarWidth;
-        if( nMaxVirtWidth <= 0 )
-            nMaxVirtWidth = DEFAULT_MAX_VIRT_WIDTH;
         nMaxVirtHeight = aSize.Height() - nHorSBarHeight;
         if( nMaxVirtHeight <= 0 )
             nMaxVirtHeight = DEFAULT_MAX_VIRT_HEIGHT;
@@ -337,13 +334,8 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const tools::Rectangle& rRect )
     DocRectChanged();
 }
 
-void SvxIconChoiceCtrl_Impl::Arrange(tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight )
+void SvxIconChoiceCtrl_Impl::Arrange(tools::Long nSetMaxVirtHeight)
 {
-    if ( nSetMaxVirtWidth != 0 )
-        nMaxVirtWidth = nSetMaxVirtWidth;
-    else
-        nMaxVirtWidth = aOutputSize.Width();
-
     if ( nSetMaxVirtHeight != 0 )
         nMaxVirtHeight = nSetMaxVirtHeight;
     else
@@ -1759,7 +1751,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
 {
     aAutoArrangeIdle.Stop();
-    Arrange(0, 0);
+    Arrange(0);
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Timer *, void)

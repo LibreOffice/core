@@ -147,9 +147,9 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         aFullSize.setHeight ( aFullSize.getHeight()+aEntryRect.GetHeight() );
     }
 
-    _pImpl->Arrange(0, aFullSize.getHeight());
+    _pImpl->Arrange(aFullSize.getHeight());
 
-    _pImpl->Arrange(0, 1000 );
+    _pImpl->Arrange(1000);
 }
 void SvtIconChoiceCtrl::Resize()
 {
