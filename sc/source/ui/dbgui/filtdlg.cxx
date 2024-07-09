@@ -670,11 +670,11 @@ void ScFilterDlg::UpdateColorList(size_t nList)
             maColorLbArr[nPos]->append(sId, OUString(), *pDev);
         }
 
-        auto aItem = rEntry.GetQueryItem();
-        if (aItem.maColor == rColor
-            && ((sSelectedCondition == aStrFontColor && aItem.meType == ScQueryEntry::ByTextColor)
+        const auto& rItem = rEntry.GetQueryItem();
+        if (rItem.maColor == rColor
+            && ((sSelectedCondition == aStrFontColor && rItem.meType == ScQueryEntry::ByTextColor)
                 || (sSelectedCondition == aStrBackgroundColor
-                    && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                    && rItem.meType == ScQueryEntry::ByBackgroundColor)))
         {
             maColorLbArr[nPos]->set_active_id(sId);
         }
