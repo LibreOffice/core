@@ -397,8 +397,7 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
 
     basegfx::B2DTuple aScale, aTranslation;
     double fRotate, fShearX;
-    auto rTfm = rGC.Transformation;
-    rTfm.decompose(aScale, aTranslation, fRotate, fShearX);
+    rGC.Transformation.decompose(aScale, aTranslation, fRotate, fShearX);
 
     // Build a poly covering the whole fill area
     double np0x = nX0 * nxStep;
