@@ -153,7 +153,6 @@ $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_Exter
 	$(COMMAND_ECHO)cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/ && \
 	for file in \
 		2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-		easy_install-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		pip$(PYTHON_VERSION_MAJOR) \
 		pip$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
