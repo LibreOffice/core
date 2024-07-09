@@ -97,8 +97,6 @@ struct LocalFocus
 
 typedef sal_uLong GridId;
 
-#define GRID_NOT_FOUND  (GridId(ULONG_MAX))
-
 // Implementation-class of IconChoiceCtrl
 
 
