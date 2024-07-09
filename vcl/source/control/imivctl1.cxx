@@ -743,7 +743,7 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars()
     tools::Long nVirtHeight = aVirtOutputSize.Height();
     tools::Long nVirtWidth = aVirtOutputSize.Width();
 
-    Size aOSize( pView->Control::GetOutputSizePixel() );
+    Size aOSize( pView->GetOutputSizePixel() );
     tools::Long nRealHeight = aOSize.Height();
     tools::Long nRealWidth = aOSize.Width();
 
@@ -872,7 +872,7 @@ void SvxIconChoiceCtrl_Impl::Resize()
     pImpCursor->Clear();
     pGridMap->OutputSizeChanged();
 
-    const Size& rSize = pView->Control::GetOutputSizePixel();
+    const Size& rSize = pView->GetOutputSizePixel();
     PositionScrollBars( rSize.Width(), rSize.Height() );
     // The scrollbars are shown/hidden asynchronously, so derived classes can
     // do an Arrange during Resize, without the scrollbars suddenly turning
@@ -1555,7 +1555,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     if (bScrollable)
     {
         // scroll in reverse direction!
-        pView->Control::Scroll( -nDx, -nDy, aOutputArea,
+        pView->Scroll( -nDx, -nDy, aOutputArea,
             ScrollFlags::NoChildren | ScrollFlags::UseClipRegion | ScrollFlags::Clip );
     }
     else
@@ -1933,7 +1933,7 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     aVerSBar->Hide();
     aVerSBar->SetSizePixel( aSize );
 
-    Size aOSize( pView->Control::GetOutputSizePixel() );
+    Size aOSize(pView->GetOutputSizePixel());
     PositionScrollBars( aOSize.Width(), aOSize.Height() );
     AdjustScrollBars();
 }
