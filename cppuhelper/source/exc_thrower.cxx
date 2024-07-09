@@ -167,7 +167,7 @@ ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
-#if defined(IOS) || defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(IOS) || defined(ANDROID)
 #define RETHROW_FAKE_EXCEPTIONS 1
 #else
 #define RETHROW_FAKE_EXCEPTIONS 0
@@ -255,7 +255,7 @@ void SAL_CALL throwException( Any const & exc )
 Any SAL_CALL getCaughtException()
 {
     // why does this differ from RETHROW_FAKE_EXCEPTIONS?
-#if defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(ANDROID)
     return Any();
 #else
     Mapping cpp2uno(Environment::getCurrent(), Environment(u"" UNO_LB_UNO ""_ustr));

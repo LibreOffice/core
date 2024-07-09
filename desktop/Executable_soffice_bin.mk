@@ -61,8 +61,11 @@ $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,soffice_bin)
 $(call gb_LinkTarget_get_headers_target,$(call gb_Executable_get_linktarget,soffice_bin)) : $(call gb_StaticLibrary_get_headers_target,unoembind)
 $(call gb_LinkTarget__static_lib_dummy_depend,unoembind)
 
+$(call gb_Executable_get_linktarget_target,soffice_bin): \
+    $(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports
+
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-	-s EXPORTED_FUNCTIONS=["_main"$(COMMA)"_libreofficekit_hook"$(COMMA)"_libreofficekit_hook_2"$(COMMA)"_lok_preinit"$(COMMA)"_lok_preinit_2"$(COMMA)"_malloc"$(COMMA)"_free"] -Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive \
+	-s EXPORTED_FUNCTIONS=@$(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports -Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive \
 ))
 ifeq ($(ENABLE_QT6),TRUE)
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \

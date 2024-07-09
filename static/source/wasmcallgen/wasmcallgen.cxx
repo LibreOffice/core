@@ -19,6 +19,7 @@
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 #include <codemaker/global.hxx>
 #include <codemaker/typemanager.hxx>
@@ -32,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textcvt.h>
+#include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/main.h>
@@ -44,11 +46,12 @@ namespace
 {
     std::cerr
         << "Usage:\n\n"
-           "  wasmcallgen <cpp-output> <asm-output> <registries>\n\n"
+           "  wasmcallgen <cpp-output> <asm-output> <exp-output> <registries>\n\n"
            "where each <registry> is '+' (primary) or ':' (secondary), followed by: either a\n"
            "new- or legacy-format .rdb file, a single .idl file, or a root directory of an\n"
            ".idl file tree.  For all primary registries, Wasm UNO bridge callvirtualfunction\n"
-           "code is written to <cpp-output>/<asm-output>.\n";
+           "code is written to <cpp-output>/<asm-output>, and to-be-exported exception RTTI\n"
+           "symbols are written to <exp-output>.\n";
     std::exit(EXIT_FAILURE);
 }
 
@@ -354,8 +357,34 @@ OString computeSignature(rtl::Reference<TypeManager> const& manager,
     return buf.makeStringAndClear();
 }
 
+void appendRttiSymbolSegment(OStringBuffer& buffer, OUString const& id)
+{
+    OString s(OUStringToOString(id, RTL_TEXTENCODING_ASCII_US));
+    buffer.append(OString::number(s.getLength()) + s);
+}
+
+OString computeRttiSymbol(std::vector<OUString> const& path, OUString const& id)
+{
+    OStringBuffer buf("__ZTI");
+    if (!path.empty())
+    {
+        buf.append('N');
+        for (auto const& i : path)
+        {
+            appendRttiSymbolSegment(buf, i);
+        }
+    }
+    appendRttiSymbolSegment(buf, id);
+    if (!path.empty())
+    {
+        buf.append('E');
+    }
+    return buf.makeStringAndClear();
+}
+
 void scan(rtl::Reference<TypeManager> const& manager,
-          rtl::Reference<unoidl::MapCursor> const& cursor, std::set<OString>& signatures)
+          rtl::Reference<unoidl::MapCursor> const& cursor, std::vector<OUString>& path,
+          std::set<OString>& signatures, std::set<OString>& rttis)
 {
     assert(cursor.is());
     for (;;)
@@ -369,8 +398,13 @@ void scan(rtl::Reference<TypeManager> const& manager,
         switch (ent->getSort())
         {
             case unoidl::Entity::SORT_MODULE:
-                scan(manager, static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     signatures);
+                path.push_back(id);
+                scan(manager, static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(), path,
+                     signatures, rttis);
+                path.pop_back();
+                break;
+            case unoidl::Entity::SORT_EXCEPTION_TYPE:
+                rttis.insert(computeRttiSymbol(path, id));
                 break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
                 for (auto const& meth :
@@ -391,14 +425,15 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         auto const args = rtl_getAppCommandArgCount();
-        if (args < 2)
+        if (args < 3)
         {
             badUsage();
         }
         auto const cppPathname = getPathnameArgument(0);
         auto const asmPathname = getPathnameArgument(1);
+        auto const expPathname = getPathnameArgument(2);
         rtl::Reference<TypeManager> mgr(new TypeManager);
-        for (sal_uInt32 i = 2; i != args; ++i)
+        for (sal_uInt32 i = 3; i != args; ++i)
         {
             auto const & [ uri, primary ] = parseRegistryArgument(i);
             try
@@ -411,10 +446,12 @@ SAL_IMPLEMENT_MAIN()
                 std::exit(EXIT_FAILURE);
             }
         }
+        std::vector<OUString> path;
         std::set<OString> signatures;
+        std::set<OString> rttis;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(mgr, prov->createRootCursor(), signatures);
+            scan(mgr, prov->createRootCursor(), path, signatures, rttis);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -586,6 +623,22 @@ SAL_IMPLEMENT_MAIN()
         if (!asmOut)
         {
             std::cerr << "Failed to write \"" << asmPathname << "\"\n";
+            std::exit(EXIT_FAILURE);
+        }
+        std::ofstream expOut(expPathname, std::ios_base::out | std::ios_base::trunc);
+        if (!expOut)
+        {
+            std::cerr << "Cannot open \"" << expPathname << "\" for writing\n";
+            std::exit(EXIT_FAILURE);
+        }
+        for (auto const& rtti : rttis)
+        {
+            expOut << rtti.getStr() << "\n";
+        }
+        expOut.close();
+        if (!expOut)
+        {
+            std::cerr << "Failed to write \"" << expPathname << "\"\n";
             std::exit(EXIT_FAILURE);
         }
         return EXIT_SUCCESS;
