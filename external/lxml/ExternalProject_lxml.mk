@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
 			$(if $(SYSTEM_LIBXSLT),,--with-xslt-config=$(gb_UnpackedTarball_workdir)/libxslt/xslt-config) && \
 		rm -fr install && \
 		mkdir install && \
-		$(lxml_PYTHON) setup.py install \
+		$(lxml_PYTHON) -Wi setup.py install \
 			--install-lib install \
 	)
 	$(call gb_Trace_EndRange,lxml,EXTERNAL)
