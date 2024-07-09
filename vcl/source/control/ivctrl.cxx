@@ -136,22 +136,7 @@ void SvtIconChoiceCtrl::MouseMove( const MouseEvent& rMEvt )
 }
 void SvtIconChoiceCtrl::ArrangeIcons()
 {
-    if ( GetStyle() & WB_ALIGN_TOP )
-    {
-        Size aFullSize;
-        tools::Rectangle aEntryRect;
-
-        for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
-            aEntryRect = _pImpl->GetEntryBoundRect ( pEntry );
-
-            aFullSize.setWidth ( aFullSize.getWidth()+aEntryRect.GetWidth() );
-        }
-
-        _pImpl->Arrange(aFullSize.getWidth(), 0);
-    }
-    else if ( GetStyle() & WB_ALIGN_LEFT )
+    if (GetStyle() & WB_ALIGN_LEFT)
     {
         Size aFullSize;
         tools::Rectangle aEntryRect;

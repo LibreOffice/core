@@ -143,8 +143,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     nCurTextDrawFlags = DRAWTEXT_FLAGS_ICON;
     if( nWinBits & (WB_SMALLICON | WB_DETAILS) )
         nCurTextDrawFlags = DRAWTEXT_FLAGS_SMALLICON;
-    if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
-        nWinBits |= WB_ALIGN_LEFT;
+    nWinBits |= WB_ALIGN_LEFT;
 }
 
 IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
@@ -301,12 +300,7 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
             sal_uLong nGridCount = IcnGridMap_Impl::GetGridCount(
                 aRealOutputSize, static_cast<sal_uInt16>(nGridDX), static_cast<sal_uInt16>(nGridDY) );
             if( nGridCount < nCount )
-            {
-                if( nWinBits & WB_ALIGN_TOP )
-                    nMaxVirtWidth = aRealOutputSize.Width() - nVerSBarWidth;
-                else // WB_ALIGN_LEFT
-                    nMaxVirtHeight = aRealOutputSize.Height() - nHorSBarHeight;
-            }
+                nMaxVirtHeight = aRealOutputSize.Height() - nHorSBarHeight;
         }
     }
 
