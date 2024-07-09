@@ -42,7 +42,6 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/BitmapTools.hxx>
 #include <unordered_map>
 #include <dlfcn.h>
 
