@@ -111,3 +111,9 @@ race:LanguageTag::
 
 # harmless race on m_storedTypeRefs
 race:cppu::getTypeEntries
+
+# double-checked locking in our 
+#    inline ::css::uno::Type const & cppu_detail_getUnoType(css:uno:Foo const *)
+# generated code
+race:typelib_typedescription_newEmpty
+race:typelib_typedescriptionreference_getByName
