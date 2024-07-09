@@ -251,7 +251,7 @@ namespace drawinglayer::primitive2d
                     // add last inner polygon with last color
                     aContainer.push_back(
                         new PolyPolygonColorPrimitive2D(
-                            aCombinedPolyPoly,
+                            std::move(aCombinedPolyPoly),
                             aLastColor));
                 }
             }
