@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
 			LDFLAGS="$$LDFLAGS -L$(gb_UnpackedTarball_workdir)/python3" && \
 			_PYTHON_PROJECT_BASE=$(gb_UnpackedTarball_workdir)/python3 && \
 			export CFLAGS LDFLAGS _PYTHON_PROJECT_BASE && ) \
-		$(lxml_PYTHON) setup.py build \
+		$(lxml_PYTHON) -Wi setup.py build \
 			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(gb_UnpackedTarball_workdir)/libxml2/xml2-config) \
 			$(if $(SYSTEM_LIBXSLT),,--with-xslt-config=$(gb_UnpackedTarball_workdir)/libxslt/xslt-config) && \
 		rm -fr install && \

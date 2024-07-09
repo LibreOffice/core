@@ -4,26 +4,9 @@ diff -ur lxml.org/setupinfo.py lxml/setupinfo.py
 @@ -4,7 +4,7 @@
  import os.path
  import subprocess
- 
+
 -from setuptools.command.build_ext import build_ext as _build_ext
 +from distutils.command.build_ext import build_ext as _build_ext
  from distutils.core import Extension
  from distutils.errors import CompileError, DistutilsOptionError
  from versioninfo import get_base_dir
-diff -ur lxml.org/setup.py lxml/setup.py
---- lxml.org/setup.py	2023-10-20 10:32:17.949501053 +0200
-+++ lxml/setup.py	2023-10-20 10:33:09.082631759 +0200
-@@ -217,9 +217,10 @@
-     # `Unknown distribution option: 'bugtrack_url'`
-     # which distract folks from real causes of problems when troubleshooting
-     # bugtrack_url="https://bugs.launchpad.net/lxml",
--    project_urls={
--        "Source": "https://github.com/lxml/lxml",
--    },
-+    # same as for bugtrack_urls also for project_urls when using distutils instead of setuptools
-+    #project_urls={
-+    #    "Source": "https://github.com/lxml/lxml",
-+    #},
-     description=(
-         "Powerful and Pythonic XML processing library"
-         " combining libxml2/libxslt with the ElementTree API."
