@@ -110,7 +110,6 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<ScrollBar>       aVerSBar;
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
-    Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
     Idle                    aVisRectChangedIdle;
     Size                    aVirtOutputSize;
@@ -309,8 +308,6 @@ public:
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry const * ) const;
     void                InitSettings();
     tools::Rectangle           GetOutputRect() const;
-
-    void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
 
     void                SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry);
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect);

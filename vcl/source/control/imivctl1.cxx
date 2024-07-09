@@ -56,7 +56,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
-    aAutoArrangeIdle( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" ),
     aDocRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" ),
     aVisRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" ),
     aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
@@ -64,7 +63,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr),
     pCursor(nullptr),
-    ePositionMode(SvxIconChoiceCtrlPositionMode::Free)
+    ePositionMode(SvxIconChoiceCtrlPositionMode::AutoArrange)
 {
     SetStyle( nWinStyle );
     pImpCursor.reset( new IcnCursor_Impl( this ) );
@@ -75,9 +74,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     nHorSBarHeight = aHorSBar->GetSizePixel().Height();
     nVerSBarWidth = aVerSBar->GetSizePixel().Width();
-
-    aAutoArrangeIdle.SetPriority( TaskPriority::HIGH_IDLE );
-    aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
 
     aDocRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aDocRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
@@ -326,7 +322,6 @@ void SvxIconChoiceCtrl_Impl::Arrange(tools::Long nSetMaxVirtHeight)
 
 void SvxIconChoiceCtrl_Impl::ImpArrange()
 {
-    aAutoArrangeIdle.Stop();
     nFlags |= IconChoiceFlags::Arranging;
     ShowCursor( false );
     ResetVirtSize();
@@ -1728,12 +1723,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
         aTextRect.Bottom());
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
-{
-    aAutoArrangeIdle.Stop();
-    Arrange(0);
-}
-
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Timer *, void)
 {
     aVisRectChangedIdle.Stop();
@@ -1904,31 +1893,6 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     Size aOSize(pView->GetOutputSizePixel());
     PositionScrollBars( aOSize.Width(), aOSize.Height() );
     AdjustScrollBars();
-}
-
-void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMode )
-{
-    if( eMode == ePositionMode )
-        return;
-
-    SvxIconChoiceCtrlPositionMode eOldMode = ePositionMode;
-    ePositionMode = eMode;
-
-    if( eOldMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
-    {
-        // when positioning moved entries "hard", there are problems with
-        // unwanted overlaps, as these entries aren't taken into account in
-        // Arrange.
-        if( maEntries.size() )
-            aAutoArrangeIdle.Start();
-        return;
-    }
-
-    if( ePositionMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
-    {
-        if( maEntries.size() )
-            aAutoArrangeIdle.Start();
-    }
 }
 
 bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
