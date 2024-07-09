@@ -128,8 +128,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                 if (!mbReverseSearch)
                 {
                     ++nCol;
-                    SCCOL nAlloCols = rDoc.maTabs[nTab]->GetAllocatedColumnsCount();
-                    if (nCol > maParam.nCol2 || nCol >= nAlloCols || (!maParam.bByRow && maParam.nCol2 >= nAlloCols))
+                    if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
                         return;
                 }
                 else
