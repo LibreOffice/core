@@ -71,7 +71,6 @@ class SvxIconChoiceCtrlEntry
 
     tools::Rectangle               aRect;              // Bounding-Rectangle of the entry
     tools::Rectangle               aGridRect;          // Only valid in Grid-mode
-    sal_Int32               nPos;
 
     SvxIconChoiceCtrlTextMode       eTextMode;
     sal_uInt16                      nX,nY;      // for keyboard control

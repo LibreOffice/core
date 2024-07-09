@@ -171,11 +171,6 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
         maEntries.push_back( std::move(pEntry1) );
     }
 
-    if( (nFlags & IconChoiceFlags::EntryListPosValid) && nPos >= maEntries.size() - 1 )
-        pEntry->nPos = maEntries.size() - 1;
-    else
-        nFlags &= ~IconChoiceFlags::EntryListPosValid;
-
     maZOrderList.push_back( pEntry );
     pImpCursor->Clear();
 
@@ -195,8 +190,6 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry(size_t nPos)
 {
     pImpCursor->Clear();
     maEntries.erase(maEntries.begin() + nPos);
-    // Recalculate list positions
-    nFlags &= ~IconChoiceFlags::EntryListPosValid;
     RecalcAllBoundingRectsSmart();
 }
 
@@ -205,19 +198,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::GetOutputRect() const
     Point aOrigin( pView->GetMapMode().GetOrigin() );
     aOrigin *= -1;
     return tools::Rectangle( aOrigin, aOutputSize );
-}
-
-void SvxIconChoiceCtrl_Impl::SetListPositions()
-{
-    if( nFlags & IconChoiceFlags::EntryListPosValid )
-        return;
-
-    size_t nCount = maEntries.size();
-    for( size_t nCur = 0; nCur < nCount; nCur++ )
-    {
-        maEntries[ nCur ]->nPos = nCur;
-    }
-    nFlags |= IconChoiceFlags::EntryListPosValid;
 }
 
 void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool bSelect,
@@ -1882,9 +1862,12 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 
 sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {
-    if( !(nFlags & IconChoiceFlags::EntryListPosValid ))
-        const_cast<SvxIconChoiceCtrl_Impl*>(this)->SetListPositions();
-    return pEntry->nPos;
+    auto it = std::find_if(maEntries.begin(), maEntries.end(),
+                           [pEntry](auto& rIt) { return rIt.get() == pEntry; });
+    if (it != maEntries.end())
+        return std::distance(maEntries.begin(), it);
+
+    return -1;
 }
 
 void SvxIconChoiceCtrl_Impl::InitSettings()

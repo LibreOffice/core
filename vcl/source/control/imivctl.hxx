@@ -52,9 +52,8 @@ class IcnGridMap_Impl;
 enum class IconChoiceFlags {
     NONE                         = 0x0000,
     AddMode                      = 0x0001,
-    EntryListPosValid            = 0x0002,
-    ClearingSelection            = 0x0004,
-    Arranging                    = 0x0008,
+    ClearingSelection            = 0x0002,
+    Arranging                    = 0x0004,
 };
 namespace o3tl {
     template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x007f> {};
@@ -181,7 +180,6 @@ class SvxIconChoiceCtrl_Impl
                             bool bSelect
                         );
     void                RepaintSelectedEntries();
-    void                SetListPositions();
     void                SetDefaultTextSize();
     bool                IsAutoArrange() const
                         {

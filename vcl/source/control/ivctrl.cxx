@@ -58,7 +58,6 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( OUString _aText,
                                                 Image _aImage )
     : aImage(std::move(_aImage))
     , aText(std::move(_aText))
-    , nPos(0)
     , eTextMode(SvxIconChoiceCtrlTextMode::Short)
     , nX(0)
     , nY(0)
