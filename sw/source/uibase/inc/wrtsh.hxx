@@ -640,6 +640,8 @@ private:
             bool bSelect, bool bDontMoveRegion = false);
     bool  GoEnd(bool KeepArea = false, const bool * = nullptr);
 
+    SAL_DLLPRIVATE void  ImplSetInsMode(bool bOn);
+
     enum BookMarkMove
     {
         BOOKMARK_INDEX,
