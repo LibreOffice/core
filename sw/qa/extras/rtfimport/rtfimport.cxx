@@ -24,6 +24,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -1889,6 +1890,32 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 
         CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test148544Tdf)
+{
+    createSwDoc("tdf148544.rtf");
+    uno::Reference<text::XTextTablesSupplier> tablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> tables = tablesSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable1(tables->getByName(u"Table2"_ustr), uno::UNO_QUERY);
+    const char* aCellNames[] = { "B2", "C5", "F6", "F7", "F8", "F9", "F10", "F11" };
+    for (tools::ULong nName = 0; nName < sizeof(aCellNames) / sizeof(const char*); ++nName)
+    {
+        uno::Reference<table::XCell> xCell
+            = xTable1->getCellByName(OUString::createFromAscii(aCellNames[nName]));
+        uno::Reference<beans::XPropertySet> xPropSet(xCell, uno::UNO_QUERY_THROW);
+
+        const char* aBorderNames[] = { "BottomBorder", "TopBorder", "RightBorder", "LeftBorder" };
+        for (tools::ULong nBorder = 0; nBorder < sizeof(aBorderNames) / sizeof(const char*);
+             ++nBorder)
+        {
+            table::BorderLine bottomBorder = getProperty<table::BorderLine>(
+                xCell, OUString::createFromAscii(aBorderNames[nBorder]));
+
+            CPPUNIT_ASSERT(!bottomBorder.InnerLineWidth);
+            CPPUNIT_ASSERT(!bottomBorder.OuterLineWidth);
+        }
     }
 }
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT

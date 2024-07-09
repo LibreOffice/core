@@ -1077,8 +1077,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTFKeyword::BRDRW:
         {
-            // dmapper expects it in 1/8 pt, we have it in twip - but avoid rounding 1 to 0
-            if (nParam > 1)
+            // dmapper expects it in 1/8 pt, we have it in twip - but avoid rounding 1 or 2 to 0
+            if (nParam == 2)
+                nParam = 1;
+            else if (nParam > 1)
                 nParam = nParam * 2 / 5;
             auto pValue = new RTFValue(nParam);
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_sz, pValue);
