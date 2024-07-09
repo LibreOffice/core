@@ -741,10 +741,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     }
     else
     {
-        auto aRectangle = getOutRectangle();
-        if (!aRectangle.IsEmpty()) {
-            aPt1 = aRectangle.TopLeft();
-            aPt2 = aRectangle.BottomRight();
+        const tools::Rectangle& rRectangle = getOutRectangle();
+        if (!rRectangle.IsEmpty()) {
+            aPt1 = rRectangle.TopLeft();
+            aPt2 = rRectangle.BottomRight();
         }
     }
 
