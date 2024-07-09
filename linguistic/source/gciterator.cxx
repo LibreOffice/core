@@ -795,80 +795,79 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
 {
     // for the context menu...
 
-    linguistic2::ProofreadingResult aRes;
-
     uno::Reference< lang::XComponent > xComponent( xDoc, uno::UNO_QUERY );
-    if (xFlatPara.is() && xComponent.is() &&
-        ( nErrorPosInPara < 0 || nErrorPosInPara < rText.getLength()))
+    const bool bDoCheck = (xFlatPara.is() && xComponent.is() &&
+        ( nErrorPosInPara < 0 || nErrorPosInPara < rText.getLength()));
+
+    if (!bDoCheck)
+        return linguistic2::ProofreadingResult();
+
+    // iterate through paragraph until we find the sentence we are interested in
+    linguistic2::ProofreadingResult aTmpRes;
+    sal_Int32 nStartPos = nStartOfSentencePos >= 0 ? nStartOfSentencePos : 0;
+
+    bool bFound = false;
+    do
     {
-        // iterate through paragraph until we find the sentence we are interested in
-        linguistic2::ProofreadingResult aTmpRes;
-        sal_Int32 nStartPos = nStartOfSentencePos >= 0 ? nStartOfSentencePos : 0;
+        lang::Locale aCurLocale = lcl_GetPrimaryLanguageOfSentence( xFlatPara, nStartPos );
+        sal_Int32 nOldStartOfSentencePos = nStartPos;
+        uno::Reference< linguistic2::XProofreader > xGC;
+        OUString aDocId;
 
-        bool bFound = false;
-        do
+        // ---- THREAD SAFE START ----
         {
-            lang::Locale aCurLocale = lcl_GetPrimaryLanguageOfSentence( xFlatPara, nStartPos );
-            sal_Int32 nOldStartOfSentencePos = nStartPos;
-            uno::Reference< linguistic2::XProofreader > xGC;
-            OUString aDocId;
+            ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+            aDocId = GetOrCreateDocId( xComponent );
+            nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
+            DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
 
-            // ---- THREAD SAFE START ----
-            {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
-                aDocId = GetOrCreateDocId( xComponent );
-                nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
-                DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
-
-                xGC = GetGrammarChecker( aCurLocale );
-            }
-            // ---- THREAD SAFE START ----
-            sal_Int32 nEndPos = -1;
-            if (xGC.is())
-            {
-                uno::Sequence<beans::PropertyValue> const aProps(
-                        lcl_makeProperties(xFlatPara, PROOFINFO_GET_PROOFRESULT));
-                aTmpRes = xGC->doProofreading( aDocId, rText,
-                    aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aProps );
-
-                //!! work-around to prevent looping if the grammar checker
-                //!! failed to properly identify the sentence end
-                if (aTmpRes.nBehindEndOfSentencePosition <= nStartPos)
-                {
-                    SAL_WARN( "linguistic", "!! Grammarchecker failed to provide end of sentence !!" );
-                    aTmpRes.nBehindEndOfSentencePosition = nSuggestedEndOfSentencePos;
-                }
-
-                aTmpRes.xFlatParagraph           = xFlatPara;
-                aTmpRes.nStartOfSentencePosition = nStartPos;
-                nEndPos = aTmpRes.nBehindEndOfSentencePosition;
-
-                if ((nErrorPosInPara< 0 || nStartPos <= nErrorPosInPara) && nErrorPosInPara < nEndPos)
-                    bFound = true;
-            }
-            if (nEndPos == -1) // no result from grammar checker
-                nEndPos = nSuggestedEndOfSentencePos;
-            nStartPos = lcl_SkipWhiteSpaces( rText, nEndPos );
-            aTmpRes.nBehindEndOfSentencePosition = nEndPos;
-            aTmpRes.nStartOfNextSentencePosition = nStartPos;
-            aTmpRes.nBehindEndOfSentencePosition = lcl_BacktraceWhiteSpaces( rText, aTmpRes.nStartOfNextSentencePosition );
-
-            // prevent endless loop by forcefully advancing if needs be...
-            if (nStartPos <= nOldStartOfSentencePos)
-            {
-                SAL_WARN( "linguistic", "end-of-sentence detection failed?" );
-                nStartPos = nOldStartOfSentencePos + 1;
-            }
+            xGC = GetGrammarChecker( aCurLocale );
         }
-        while (!bFound && nStartPos < rText.getLength());
+        // ---- THREAD SAFE START ----
+        sal_Int32 nEndPos = -1;
+        if (xGC.is())
+        {
+            uno::Sequence<beans::PropertyValue> const aProps(
+                    lcl_makeProperties(xFlatPara, PROOFINFO_GET_PROOFRESULT));
+            aTmpRes = xGC->doProofreading( aDocId, rText,
+                aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aProps );
 
-        if (bFound && !xFlatPara->isModified())
-            aRes = aTmpRes;
+            //!! work-around to prevent looping if the grammar checker
+            //!! failed to properly identify the sentence end
+            if (aTmpRes.nBehindEndOfSentencePosition <= nStartPos)
+            {
+                SAL_WARN( "linguistic", "!! Grammarchecker failed to provide end of sentence !!" );
+                aTmpRes.nBehindEndOfSentencePosition = nSuggestedEndOfSentencePos;
+            }
+
+            aTmpRes.xFlatParagraph           = xFlatPara;
+            aTmpRes.nStartOfSentencePosition = nStartPos;
+            nEndPos = aTmpRes.nBehindEndOfSentencePosition;
+
+            if ((nErrorPosInPara< 0 || nStartPos <= nErrorPosInPara) && nErrorPosInPara < nEndPos)
+                bFound = true;
+        }
+        if (nEndPos == -1) // no result from grammar checker
+            nEndPos = nSuggestedEndOfSentencePos;
+        nStartPos = lcl_SkipWhiteSpaces( rText, nEndPos );
+        aTmpRes.nBehindEndOfSentencePosition = nEndPos;
+        aTmpRes.nStartOfNextSentencePosition = nStartPos;
+        aTmpRes.nBehindEndOfSentencePosition = lcl_BacktraceWhiteSpaces( rText, aTmpRes.nStartOfNextSentencePosition );
+
+        // prevent endless loop by forcefully advancing if needs be...
+        if (nStartPos <= nOldStartOfSentencePos)
+        {
+            SAL_WARN( "linguistic", "end-of-sentence detection failed?" );
+            nStartPos = nOldStartOfSentencePos + 1;
+        }
     }
+    while (!bFound && nStartPos < rText.getLength());
 
-    return aRes;
+    if (bFound && !xFlatPara->isModified())
+        return aTmpRes;
+
+    return linguistic2::ProofreadingResult();
 }
-
 
 sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
     const OUString &rText,
