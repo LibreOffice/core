@@ -1210,7 +1210,7 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
         {
             // get mem locations
             unsigned char* pDstData(pDstDataRoot + (nDstStride * y));
-            unsigned char* pSrcData(pSrcDataRoot + (nSrcStride * (y + nSrcOffY) + (nSrcOffX * 4)));
+            unsigned char* pSrcData(pSrcDataRoot + (nSrcStride * (y + nSrcOffY)) + (nSrcOffX * 4));
 
             for (sal_uInt32 x(0); x < nDstWidth; ++x)
             {

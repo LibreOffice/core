@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include <primitive2d/graphicprimitivehelper2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>

@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <primitive2d/graphicprimitivehelper2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
 

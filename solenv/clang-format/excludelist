@@ -3224,7 +3224,6 @@ desktop/win32/source/loader.hxx
 desktop/win32/source/unoinfo.cxx
 drawinglayer/inc/emfplushelper.hxx
 drawinglayer/inc/primitive2d/cropprimitive2d.hxx
-drawinglayer/inc/primitive2d/graphicprimitivehelper2d.hxx
 drawinglayer/inc/primitive2d/textlineprimitive2d.hxx
 drawinglayer/inc/primitive2d/textstrikeoutprimitive2d.hxx
 drawinglayer/inc/primitive2d/wallpaperprimitive2d.hxx
@@ -5055,6 +5054,7 @@ include/drawinglayer/attribute/sdrobjectattribute3d.hxx
 include/drawinglayer/attribute/sdrsceneattribute3d.hxx
 include/drawinglayer/attribute/sdrshadowattribute.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
+include/drawinglayer/primitive2d/graphicprimitivehelper2d.hxx
 include/drawinglayer/primitive2d/discretebitmapprimitive2d.hxx
 include/drawinglayer/primitive2d/discreteshadowprimitive2d.hxx
 include/drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx
