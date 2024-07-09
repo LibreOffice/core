@@ -436,7 +436,8 @@ void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawViewOpt( *this, PortionType::SoftHyphen );
         SwExpandPortion::Paint( rInf );
 
-        if (rInf.GetOpt().IsViewMetaChars() && !rInf.GetOpt().IsPrinting())
+        if (rInf.GetOpt().IsViewMetaChars() && !rInf.GetOpt().IsPrinting()
+            && !rInf.GetOpt().IsPDFExport())
         {
             OUString aMarker = u"-"_ustr;
             SwTextPaintInfo aInf(rInf, &aMarker);
