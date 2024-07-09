@@ -62,7 +62,7 @@ bool create_ucb_content(
         if (ret_ucbContent != nullptr)
         {
             ucbContent.setCommandEnvironment( xCmdEnv );
-            *ret_ucbContent = ucbContent;
+            *ret_ucbContent = std::move(ucbContent);
         }
         return true;
     }
