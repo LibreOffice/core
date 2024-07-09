@@ -13,8 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,lxml,$(LXML_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,lxml,0))
 
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_add_patches,lxml, \
 	external/lxml/replace-setuptools-with-distutils.patch.1 \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
