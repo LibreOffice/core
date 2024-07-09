@@ -136,7 +136,6 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>
 #include <docmodel/theme/Theme.hxx>
