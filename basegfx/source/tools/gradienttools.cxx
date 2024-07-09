@@ -466,8 +466,8 @@ namespace basegfx
                     // copy on 'real' change, that means data was added.
                     // This should always be the cease and should have been
                     // detected as such above, see bNeedToSyncronize
-                    rColorStops = aNewColor;
-                    rAlphaStops = aNewAlpha; // MCGR: tdf#155537 used wrong result here
+                    rColorStops = std::move(aNewColor);
+                    rAlphaStops = std::move(aNewAlpha); // MCGR: tdf#155537 used wrong result here
                 }
             }
         }
