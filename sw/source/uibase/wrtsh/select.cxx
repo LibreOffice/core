@@ -713,27 +713,8 @@ void SwWrtShell::LeaveBlockMode()
 
 // Insert mode
 
-void SwWrtShell::SetInsMode( bool bOn )
+void SwWrtShell::ImplSetInsMode(bool bOn)
 {
-    const bool bDoAsk = officecfg::Office::Common::Misc::QuerySetInsMode::get();
-    if (!bOn && bDoAsk) {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), "cui/ui/querysetinsmodedialog.ui"));
-        std::unique_ptr<weld::Dialog> xQuery(xBuilder->weld_dialog("SetInsModeDialog"));
-        std::unique_ptr<weld::Image> xImage(xBuilder->weld_image("imSetInsMode"));
-        std::unique_ptr<weld::CheckButton> xCheckBox(xBuilder->weld_check_button("cbDontShowAgain"));
-
-        xImage->set_from_icon_name(RID_BMP_QUERYINSMODE);
-
-        const int nResult = xQuery->run();
-
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::QuerySetInsMode::set(!xCheckBox->get_active(), xChanges);
-        xChanges->commit();
-
-        if ( nResult == static_cast<int>(RET_NO) )
-            return;
-    }
     m_bIns = bOn;
     SwCursorShell::SetOverwriteCursor( !m_bIns );
     const SfxBoolItem aTmp( SID_ATTR_INSERT, m_bIns );
@@ -742,6 +723,51 @@ void SwWrtShell::SetInsMode( bool bOn )
     EndAction();
     Invalidate();
 }
+
+namespace
+{
+    class QuerySetInsModeDialog : public weld::GenericDialogController
+    {
+        std::unique_ptr<weld::Image> m_xImage;
+        std::unique_ptr<weld::CheckButton> m_xCheckBox;
+    public:
+        QuerySetInsModeDialog(weld::Window* pParent)
+            : GenericDialogController(pParent, "cui/ui/querysetinsmodedialog.ui", "SetInsModeDialog")
+            , m_xImage(m_xBuilder->weld_image("imSetInsMode"))
+            , m_xCheckBox(m_xBuilder->weld_check_button("cbDontShowAgain"))
+        {
+            m_xImage->set_from_icon_name(RID_BMP_QUERYINSMODE);
+        }
+        bool GetDoNotShowAgain() const
+        {
+            return m_xCheckBox->get_active();
+        }
+    };
+}
+
+void SwWrtShell::SetInsMode( bool bOn )
+{
+    const bool bDoAsk = officecfg::Office::Common::Misc::QuerySetInsMode::get();
+    if (!bOn && bDoAsk)
+    {
+        auto xDialog = std::make_shared<QuerySetInsModeDialog>(GetView().GetFrameWeld());
+        weld::DialogController::runAsync(xDialog, [this, bOn, xDialog](sal_Int32 nResult){
+
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Misc::QuerySetInsMode::set(!xDialog->GetDoNotShowAgain(), xChanges);
+            xChanges->commit();
+
+            if ( nResult == static_cast<int>(RET_NO) )
+                return;
+
+            ImplSetInsMode(bOn);
+        });
+        return;
+    }
+    ImplSetInsMode(bOn);
+}
+
 //Overwrite mode is incompatible with red-lining
 void SwWrtShell::SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode )
 {
