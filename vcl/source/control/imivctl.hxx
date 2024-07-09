@@ -40,7 +40,6 @@
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;
 class SvxIconChoiceCtrlEntry;
-class IcnViewEdit_Impl;
 class IcnGridMap_Impl;
 
 
