@@ -27,7 +27,7 @@ css::awt::ColorStopSequence createColorStopSequence(basegfx::BColorStops const& 
 
     for (const auto& rStop : rColorStops)
     {
-        auto rBColor = rStop.getStopColor();
+        const auto& rBColor = rStop.getStopColor();
         pSequence->StopOffset = rStop.getStopOffset();
         pSequence->StopColor
             = css::rendering::RGBColor(rBColor.getRed(), rBColor.getGreen(), rBColor.getBlue());
