@@ -1025,7 +1025,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     aMap[SQL_GUID]              = DataType::VARBINARY;
 
-    m_aValueRange[5] = aMap;
+    m_aValueRange[5] = std::move(aMap);
     checkColumnCount();
 }
 
