@@ -101,14 +101,12 @@ public:
 /*
     Window-Bits:
         WB_ICON             // Text beneath the icon
-        WB_SMALL_ICON       // Text right to the icon, position does not mind
+        WB_SMALLICON        // Text right to the icon, position does not mind
         WB_DETAILS          // Text right to the icon, limited positioning
         WB_BORDER
         WB_NOHIDESELECTION  // Draw selection inactively, if not focused.
         WB_NOHSCROLL
         WB_NOVSCROLL
-        WB_NOSELECTION
-        WB_SMART_ARRANGE    // Keep Visible-Area at arrange
         WB_NODRAGSELECTION  // No selection with tracking rectangle
         WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
         WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
