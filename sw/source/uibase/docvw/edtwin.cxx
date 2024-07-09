@@ -5366,8 +5366,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     // tdf#161717 - Track changes: Clicking on change in document should highlight related change
     // in "Manage Changes" window/sidebar
-    if (SwContentAtPos aRedlineContentAtPos(IsAttrAtPos::Redline);
-        rSh.GetContentAtPos(aDocPt, aRedlineContentAtPos))
+    if (m_rView.GetWrtShell().GetCurrRedline())
     {
         SwDocShell* pDocSh = m_rView.GetDocShell();
         if (pDocSh)
