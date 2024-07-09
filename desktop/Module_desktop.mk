@@ -105,6 +105,12 @@ endif
 
 endif # $(OS)
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Module_add_targets,desktop, \
+    CustomTarget_soffice_bin-emscripten-exports \
+))
+endif
+
 ifneq (,$(filter Extension_test-active,$(MAKECMDGOALS)))
 $(eval $(call gb_Module_add_targets,desktop, \
     Extension_test-active \

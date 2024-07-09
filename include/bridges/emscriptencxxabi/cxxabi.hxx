@@ -16,6 +16,7 @@
 #include <exception>
 #include <typeinfo>
 
+#define __USING_WASM_EXCEPTIONS__
 #include <cxxabi.h>
 
 #include <config_cxxabi.h>
@@ -67,7 +68,7 @@ struct __cxa_exception
 #endif
     //  Manage the exception object itself.
     std::type_info* exceptionType;
-#if 1 //MODIFIED: #ifdef __USING_WASM_EXCEPTIONS__
+#ifdef __USING_WASM_EXCEPTIONS__
     // In wasm, destructors return their argument
     void*(/*MODIFIED: _LIBCXXABI_DTOR_FUNC*/ *exceptionDestructor)(void*);
 #else
