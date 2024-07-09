@@ -86,6 +86,7 @@ ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolde
     if (bInitialise && readCEN() == -1 )
     {
         aEntries.clear();
+        m_EntriesInsensitive.clear();
         throw ZipException( "stream data looks to be broken" );
     }
 }
@@ -110,6 +111,7 @@ ZipFile::ZipFile( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHol
         else if ( readCEN() == -1 )
         {
             aEntries.clear();
+            m_EntriesInsensitive.clear();
             throw ZipException("stream data looks to be broken" );
         }
     }
@@ -989,15 +991,19 @@ sal_Int32 ZipFile::readCEN()
 
             aMemGrabber.skipBytes(nCommentLen);
 
-            if (auto it = aEntries.find(aEntry.sPath); it == aEntries.end())
-            {
-                aEntries[aEntry.sPath] = aEntry;
-            }
-            else
+            if (aEntries.find(aEntry.sPath) != aEntries.end())
             {
                 SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
                 throw ZipException("Duplicate CEN entry");
             }
+            // this is required for OOXML, but not for ODF
+            auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+            if (!m_EntriesInsensitive.insert(lowerPath).second)
+            {
+                SAL_INFO("package", "Duplicate CEN entry (case insensitive): \"" << aEntry.sPath << "\"");
+                throw ZipException("Duplicate CEN entry (case insensitive)");
+            }
+            aEntries[aEntry.sPath] = aEntry;
         }
 
         if (nCount != nTotal)
@@ -1171,6 +1177,13 @@ void ZipFile::recover()
                                     aEntry.nSize = 0;
                                 }
 
+                                auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+                                if (m_EntriesInsensitive.find(lowerPath) != m_EntriesInsensitive.end())
+                                {   // this is required for OOXML, but not for ODF
+                                    nPos += 4;
+                                    continue;
+                                }
+                                m_EntriesInsensitive.insert(lowerPath);
                                 aEntries.emplace( aEntry.sPath, aEntry );
                             }
                         }
