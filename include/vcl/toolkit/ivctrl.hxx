@@ -51,12 +51,6 @@ enum class SvxIconChoiceCtrlTextMode
     Short            // Shorten with "..."
 };
 
-enum class SvxIconChoiceCtrlPositionMode
-{
-    Free,                // Free pixel-perfect positioning
-    AutoArrange,         // Auto arrange
-};
-
 class SvxIconChoiceCtrlEntry
 {
     Image aImage;

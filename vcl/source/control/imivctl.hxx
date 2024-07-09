@@ -131,7 +131,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
-    SvxIconChoiceCtrlPositionMode ePositionMode;
     bool                    bBoundRectsDirty;
 
     void                ShowCursor( bool bShow );
@@ -180,10 +179,6 @@ class SvxIconChoiceCtrl_Impl
                         );
     void                RepaintSelectedEntries();
     void                SetDefaultTextSize();
-    bool                IsAutoArrange() const
-                        {
-                            return (ePositionMode == SvxIconChoiceCtrlPositionMode::AutoArrange);
-                        }
     void                DocRectChanged() { aDocRectChangedIdle.Start(); }
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point& );

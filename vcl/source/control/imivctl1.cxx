@@ -62,8 +62,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pView(pCurView), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
     pCurHighlightFrame(nullptr),
-    pCursor(nullptr),
-    ePositionMode(SvxIconChoiceCtrlPositionMode::AutoArrange)
+    pCursor(nullptr)
 {
     SetStyle( nWinStyle );
     pImpCursor.reset( new IcnCursor_Impl( this ) );
