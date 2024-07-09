@@ -56,7 +56,7 @@ BitmapInfoAccess::BitmapInfoAccess(const Bitmap& rBitmap, BitmapAccessMode nMode
         std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
         if (xNewImpBmp->Create(*xImpBmp, rBitmap.getPixelFormat()))
         {
-            xImpBmp = xNewImpBmp;
+            xImpBmp = std::move(xNewImpBmp);
             const_cast<Bitmap&>(rBitmap).ImplSetSalBitmap(xImpBmp);
             mpBuffer = xImpBmp->AcquireBuffer(mnAccessMode);
         }
