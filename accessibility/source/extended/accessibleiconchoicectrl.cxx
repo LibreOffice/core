@@ -309,7 +309,6 @@ namespace accessibility
         {
             rStateSet |= AccessibleStateType::FOCUSABLE;
             rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
-            rStateSet |= AccessibleStateType::SELECTABLE;
         }
     }
 
