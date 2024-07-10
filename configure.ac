@@ -1646,6 +1646,11 @@ AC_ARG_ENABLE(avahi,
         [Determines whether to use Avahi to advertise Impress to remote controls.])
 )
 
+AC_ARG_ENABLE(msvc-analyze,
+    AS_HELP_STRING([--enable-msvc-analyze],
+        [Determines whether to enable the Microsoft Visual Studio /analyze flag to provide additional warnings.])
+)
+
 libo_FUZZ_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
         [Turn warnings to errors. (Has no effect in modules where the treating
@@ -14167,6 +14172,24 @@ fi
 AC_SUBST(ENABLE_AVAHI)
 AC_SUBST(AVAHI_CFLAGS)
 AC_SUBST(AVAHI_LIBS)
+
+dnl ===================================================================
+dnl Test whether to use MSVC /analyze
+dnl ===================================================================
+ENABLE_MSVC_ANALYZE=
+AC_MSG_CHECKING([whether to use MSVC /analyze])
+if test -n "$enable_msvc_analyze" -a "$enable_msvc_analyze" != "no"; then
+if test "$_os" = "WINNT"; then
+    ENABLE_MSVC_ANALYZE=Yes
+    AC_MSG_RESULT([yes])
+else
+   AC_MSG_ERROR([--enable-msvc-analyze is only supported on Windows])
+fi
+else
+   AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_MSVC_ANALYZE)
 
 dnl ===================================================================
 dnl Test whether to use liblangtag
