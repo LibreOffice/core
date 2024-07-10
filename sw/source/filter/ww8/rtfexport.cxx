@@ -1494,26 +1494,29 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc)
     m_pFirstPageItemSet = nullptr;
     m_bOutPageDescs = false;
 
+    const bool bFakeFirst = m_pCurrentPageDesc != &rPgDsc;
+    if (bFakeFirst || !m_pCurrentPageDesc->IsFirstShared())
+        Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_TITLEPG);
+
     // normal header / footer (without a style)
     const SfxPoolItem* pItem;
     if (m_pCurrentPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
         == SfxItemState::SET)
-        WriteHeaderFooter(*pItem, true);
+        WriteHeaderFooter(*pItem, /*Header*/ true, /*AsTitlePg*/ false, /*WriteFirst*/ !bFakeFirst);
     if (m_pCurrentPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
         == SfxItemState::SET)
-        WriteHeaderFooter(*pItem, false);
+        WriteHeaderFooter(*pItem, false, /*AsTitlePg*/ false, /*WriteFirst*/ !bFakeFirst);
 
     // title page
-    if (m_pCurrentPageDesc != &rPgDsc)
+    if (bFakeFirst)
     {
-        Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         m_pCurrentPageDesc = &rPgDsc;
         if (m_pCurrentPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
             == SfxItemState::SET)
-            WriteHeaderFooter(*pItem, true);
+            WriteHeaderFooter(*pItem, /*Header*/ true, /*AsTitlePg*/ true, /*WriteFirst*/ false);
         if (m_pCurrentPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
             == SfxItemState::SET)
-            WriteHeaderFooter(*pItem, false);
+            WriteHeaderFooter(*pItem, /*Header*/ false, /*AsTitlePg*/ true, /*WriteFirst*/ false);
     }
 
     // numbering type
@@ -1524,8 +1527,18 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc)
     SAL_INFO("sw.rtf", __func__ << " end");
 }
 
-void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
+/** WriteHeaderFooter: used to write the initial header and footers
+ *  @param bHeader: true for a header, false for a footer.
+ *  @param bAsTitlePg: used to emulate a first-follow page style linking.
+ *      Set to true to only write this header as if it were a "first header".
+ *  @param bWriteFirst: used to determine whether to write a non-shared first header as the header.
+ *      Set to false if bAsTitlePg will be used to define the "first header".
+ */
+void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader, bool bAsTitlePg,
+                                  bool bWriteFirst)
 {
+    assert(!bAsTitlePg || !bWriteFirst);
+
     if (bHeader)
     {
         const auto& rHeader = static_cast<const SwFormatHeader&>(rItem);
@@ -1541,21 +1554,25 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     SAL_INFO("sw.rtf", __func__ << " start");
 
-    const char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
-    if ((m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
-        || !m_pCurrentPageDesc->IsFirstShared())
+    if (bAsTitlePg || (bWriteFirst && !m_pCurrentPageDesc->IsFirstShared()))
     {
-        Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_TITLEPG);
-        pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF);
+        auto pStr = bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF;
+        Strm().WriteChar('{').WriteOString(pStr);
+        WriteHeaderFooterText(m_pCurrentPageDesc->IsFirstShared()
+                                  ? m_pCurrentPageDesc->GetMaster()
+                                  : m_pCurrentPageDesc->GetFirstMaster(),
+                              bHeader);
+        Strm().WriteChar('}');
     }
 
-    Strm().WriteChar('{').WriteOString(pStr);
-    WriteHeaderFooterText(m_pCurrentPageDesc->IsFirstShared()
-                              ? m_pCurrentPageDesc->GetMaster()
-                              : m_pCurrentPageDesc->GetFirstMaster(),
-                          bHeader);
-    Strm().WriteChar('}');
+    if (!bAsTitlePg)
+    {
+        auto pStr = bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER;
+        Strm().WriteChar('{').WriteOString(pStr);
+        WriteHeaderFooterText(m_pCurrentPageDesc->GetMaster(), bHeader);
+        Strm().WriteChar('}');
+    }
 
     SAL_INFO("sw.rtf", __func__ << " end");
 }
