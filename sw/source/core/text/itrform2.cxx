@@ -2333,6 +2333,8 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
+                        bool bPropLineShrinks = (nTmp < 100);
+
                         // extend line height by (nPropLineSpace - 100) percent of the font height
                         nTmp -= 100;
                         nTmp *= m_pCurr->GetTextHeight();
@@ -2341,6 +2343,19 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         if (nTmp < 1)
                             nTmp = 1;
                         nLineHeight = nTmp;
+
+                        // tdf#146081: The height and ascent of the first line may have been
+                        // adjusted above. In order to have consistent line spacing when rendering,
+                        // the same adjustments must be made to the following lines.
+                        if (bPropLineShrinks
+                            && GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                                DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
+                        {
+                            SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
+                            m_pCurr->SetAscent(nAsc);
+                            m_pCurr->Height(nLineHeight, false);
+                            m_pInf->GetParaPortion()->SetFixLineHeight();
+                        }
                         break;
                     }
                     case SvxInterLineSpaceRule::Fix:
