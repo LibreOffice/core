@@ -415,7 +415,7 @@
                     <child>
                       <object class="GtkCheckButton" id="redlineinfo">
                         <property name="label" translatable="yes" context="securityoptionsdialog|redlineinfo">Keep track changes information</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">20</property>
@@ -431,7 +431,7 @@
                     <child>
                       <object class="GtkCheckButton" id="docproperties">
                         <property name="label" translatable="yes" context="securityoptionsdialog|docproperties">Keep document user informations</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">20</property>
@@ -447,7 +447,7 @@
                     <child>
                       <object class="GtkCheckButton" id="noteauthor">
                         <property name="label" translatable="yes" context="securityoptionsdialog|noteauthor">Keep author name and date of notes</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">20</property>
@@ -463,7 +463,7 @@
                     <child>
                       <object class="GtkCheckButton" id="documentversion">
                         <property name="label" translatable="yes" context="securityoptionsdialog|documentversion">Keep document version information</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">20</property>
