@@ -32,7 +32,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#define ACCESSIBLE_ACTION_COUNT     1
+constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT = 1;
 
 namespace
 {
@@ -40,7 +40,6 @@ namespace
     void checkActionIndex_Impl( sal_Int32 _nIndex )
     {
         if ( _nIndex < 0 || _nIndex >= ACCESSIBLE_ACTION_COUNT )
-            // only three actions
             throw css::lang::IndexOutOfBoundsException();
     }
 }
