@@ -3081,6 +3081,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408NoUnderflow)
                 u"עברית English"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf146081)
+{
+    // Verifies that proportional line spacing is consistent with the
+    // PropLineSpacingShrinksFirstLine compatibility flag set
+    createSwDoc("tdf146081-prop-spacing.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    SwTwips nTotalHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "height"_ostr).toInt32();
+
+    SwTwips nHeight1
+        = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr)
+              .toInt32();
+    SwTwips nHeight2
+        = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "height"_ostr)
+              .toInt32();
+    SwTwips nHeight3
+        = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]"_ostr, "height"_ostr)
+              .toInt32();
+    SwTwips nHeight4
+        = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[4]"_ostr, "height"_ostr)
+              .toInt32();
+
+    // All of the lines must have the same height
+    CPPUNIT_ASSERT_EQUAL(nHeight1, nHeight2);
+    CPPUNIT_ASSERT_EQUAL(nHeight1, nHeight3);
+    CPPUNIT_ASSERT_EQUAL(nHeight1, nHeight4);
+
+    // The total height of the paragraph must be equal to the sum of all lines
+    CPPUNIT_ASSERT_EQUAL(nTotalHeight, nHeight1 * 4);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
