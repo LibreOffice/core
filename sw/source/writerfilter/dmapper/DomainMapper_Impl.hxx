@@ -617,6 +617,8 @@ private:
 
     PropertyMapPtr                  m_pTopContext;
     tools::SvRef<SectionPropertyMap> m_pLastSectionContext;
+    rtl::Reference<SwXPageStyle> m_pLastFirstHeader; // last page style with different first header
+    rtl::Reference<SwXPageStyle> m_pLastFirstFooter; // last page style with different first footer
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
@@ -712,6 +714,16 @@ public:
     SectionPropertyMap* GetLastSectionContext( )
     {
         return m_pLastSectionContext.get( );
+    }
+
+    const rtl::Reference<SwXPageStyle>& GetLastFirstHeader() const
+    {
+        return m_pLastFirstHeader;
+    }
+
+    const rtl::Reference<SwXPageStyle>& GetLastFirstFooter() const
+    {
+        return m_pLastFirstFooter;
     }
 
     css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
