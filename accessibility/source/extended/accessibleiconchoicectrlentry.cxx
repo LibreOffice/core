@@ -641,7 +641,6 @@ namespace accessibility
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
         if ( pEntry && !pEntry->IsSelected() )
         {
-            m_pIconCtrl->SetNoSelection();
             m_pIconCtrl->SetCursor( pEntry );
             bRet = true;
         }
