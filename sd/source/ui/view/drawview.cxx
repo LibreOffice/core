@@ -295,7 +295,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
     {
         // Presentation object (except outline)
         SfxStyleSheet* pSheet = rPage.GetTextStyleSheetForObject(pObject);
-        DBG_ASSERT(pSheet, "StyleSheet not found");
+        assert(pSheet && "StyleSheet not found");
 
         SfxItemSet aTempSet( pSheet->GetItemSet() );
         aTempSet.Put( rSet );
@@ -316,7 +316,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
     {
         // Presentation object (except outline)
         SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
-        DBG_ASSERT(pSheet, "StyleSheet not found");
+        assert(pSheet && "StyleSheet not found");
 
         SfxItemSet aTempSet( pSheet->GetItemSet() );
         aTempSet.Put( rSet );
@@ -342,7 +342,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
                     OUString::number(nLevel);
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
                                     Find(aName, SfxStyleFamily::Page));
-                DBG_ASSERT(pSheet, "StyleSheet not found");
+                assert(pSheet && "StyleSheet not found");
 
                 SfxItemSet aTempSet( pSheet->GetItemSet() );
 
