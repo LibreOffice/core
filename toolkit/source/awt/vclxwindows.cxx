@@ -25,7 +25,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <helper/property.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -443,7 +442,7 @@ css::awt::Size VCLXButton::getMinimumSize(  )
     VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
         aSz = pButton->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXButton::getPreferredSize(  )
@@ -458,7 +457,7 @@ css::awt::Size VCLXButton::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
-    Size aSz = VCLSize(rNewSize);
+    Size aSz = VCLUnoHelper::ConvertToVCLSize(rNewSize);
     VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
     {
@@ -479,7 +478,7 @@ css::awt::Size VCLXButton::calcAdjustedSize( const css::awt::Size& rNewSize )
                 aSz = aMinSz;
         }
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
@@ -662,7 +661,7 @@ css::awt::Size VCLXImageControl::getMinimumSize(  )
     Size aSz = GetImage().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
 
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXImageControl::getPreferredSize(  )
@@ -899,7 +898,7 @@ css::awt::Size VCLXCheckBox::getMinimumSize()
     VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
     if ( pCheckBox )
         aSz = pCheckBox->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXCheckBox::getPreferredSize()
@@ -911,7 +910,7 @@ css::awt::Size VCLXCheckBox::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
-    Size aSz = VCLSize(rNewSize);
+    Size aSz = VCLUnoHelper::ConvertToVCLSize(rNewSize);
     VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
     if ( pCheckBox )
     {
@@ -921,7 +920,7 @@ css::awt::Size VCLXCheckBox::calcAdjustedSize( const css::awt::Size& rNewSize )
         else
             aSz = aMinSz;
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXCheckBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
@@ -1224,7 +1223,7 @@ css::awt::Size VCLXRadioButton::getMinimumSize(  )
     VclPtr< RadioButton > pRadioButton = GetAs< RadioButton >();
     if ( pRadioButton )
         aSz = pRadioButton->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXRadioButton::getPreferredSize(  )
@@ -1236,7 +1235,7 @@ css::awt::Size VCLXRadioButton::calcAdjustedSize( const css::awt::Size& rNewSize
 {
     SolarMutexGuard aGuard;
 
-    Size aSz = VCLSize(rNewSize);
+    Size aSz = VCLUnoHelper::ConvertToVCLSize(rNewSize);
     VclPtr< RadioButton > pRadioButton = GetAs< RadioButton >();
     if ( pRadioButton )
     {
@@ -1246,7 +1245,7 @@ css::awt::Size VCLXRadioButton::calcAdjustedSize( const css::awt::Size& rNewSize
         else
             aSz = aMinSz;
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -1958,7 +1957,7 @@ css::awt::Size VCLXListBox::getMinimumSize(  )
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
     if ( pListBox )
         aSz = pListBox->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXListBox::getPreferredSize(  )
@@ -1972,17 +1971,17 @@ css::awt::Size VCLXListBox::getPreferredSize(  )
         if ( pListBox->GetStyle() & WB_DROPDOWN )
             aSz.AdjustHeight(4 );
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXListBox::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
-    Size aSz = VCLSize(rNewSize);
+    Size aSz = VCLUnoHelper::ConvertToVCLSize(rNewSize);
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
     if ( pListBox )
         aSz = pListBox->CalcAdjustedSize( aSz );
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXListBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
@@ -1992,7 +1991,7 @@ css::awt::Size VCLXListBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
     if ( pListBox )
         aSz = pListBox->CalcBlockSize( nCols, nLines );
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXListBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
@@ -2875,7 +2874,7 @@ css::awt::Size VCLXFixedHyperlink::getMinimumSize(  )
     VclPtr< FixedText > pFixedText = GetAs< FixedText >();
     if ( pFixedText )
         aSz = pFixedText->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXFixedHyperlink::getPreferredSize(  )
@@ -3097,7 +3096,7 @@ css::awt::Size VCLXFixedText::getMinimumSize(  )
     VclPtr< FixedText > pFixedText = GetAs< FixedText >();
     if ( pFixedText )
         aSz = pFixedText->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXFixedText::getPreferredSize(  )
@@ -3855,7 +3854,7 @@ css::awt::Size VCLXEdit::getMinimumSize(  )
     VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit )
         aSz = pEdit->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXEdit::getPreferredSize(  )
@@ -3869,7 +3868,7 @@ css::awt::Size VCLXEdit::getPreferredSize(  )
         aSz = pEdit->CalcMinimumSize();
         aSz.AdjustHeight(4 );
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXEdit::calcAdjustedSize( const css::awt::Size& rNewSize )
@@ -3897,7 +3896,7 @@ css::awt::Size VCLXEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 )
         else
             aSz = pEdit->CalcMinimumSize();
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
@@ -4312,7 +4311,7 @@ css::awt::Size VCLXComboBox::getMinimumSize(  )
     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
     if ( pComboBox )
         aSz = pComboBox->CalcMinimumSize();
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXComboBox::getPreferredSize(  )
@@ -4327,18 +4326,18 @@ css::awt::Size VCLXComboBox::getPreferredSize(  )
         if ( pComboBox->GetStyle() & WB_DROPDOWN )
             aSz.AdjustHeight(4 );
     }
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXComboBox::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
-    Size aSz = VCLSize(rNewSize);
+    Size aSz = VCLUnoHelper::ConvertToVCLSize(rNewSize);
     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
     if ( pComboBox )
         aSz = pComboBox->CalcAdjustedSize( aSz );
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 css::awt::Size VCLXComboBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
@@ -4349,7 +4348,7 @@ css::awt::Size VCLXComboBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
     if ( pComboBox )
         aSz = pComboBox->CalcBlockSize( nCols, nLines );
-    return AWTSize(aSz);
+    return VCLUnoHelper::ConvertToAWTSize(aSz);
 }
 
 void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
@@ -6450,7 +6449,7 @@ css::awt::Size VCLXFileControl::getMinimumSize()
     {
         Size aTmpSize = pControl->GetEdit().CalcMinimumSize();
         aTmpSize.AdjustWidth(pControl->GetButton().CalcMinimumSize().Width() );
-        aSz = AWTSize(pControl->CalcWindowSize( aTmpSize ));
+        aSz = VCLUnoHelper::ConvertToAWTSize(pControl->CalcWindowSize(aTmpSize));
     }
     return aSz;
 }
@@ -6485,7 +6484,7 @@ css::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 )
     VclPtr< FileControl > pControl = GetAs< FileControl >();
     if ( pControl )
     {
-        aSz = AWTSize(pControl->GetEdit().CalcSize( nCols ));
+        aSz = VCLUnoHelper::ConvertToAWTSize(pControl->GetEdit().CalcSize(nCols));
         aSz.Width += pControl->GetButton().CalcMinimumSize().Width();
     }
     return aSz;
@@ -7677,7 +7676,7 @@ css::awt::Size VCLXMultiLineEdit::getMinimumSize()
     css::awt::Size aSz;
     VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcMinimumSize());
+        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcMinimumSize());
     return aSz;
 }
 
@@ -7693,7 +7692,8 @@ css::awt::Size VCLXMultiLineEdit::calcAdjustedSize( const css::awt::Size& rNewSi
     css::awt::Size aSz = rNewSize;
     VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcAdjustedSize( VCLSize(rNewSize )));
+        aSz = VCLUnoHelper::ConvertToAWTSize(
+                    pEdit->CalcAdjustedSize(VCLUnoHelper::ConvertToVCLSize(rNewSize)));
     return aSz;
 }
 
@@ -7704,7 +7704,7 @@ css::awt::Size VCLXMultiLineEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLi
     css::awt::Size aSz;
     VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcBlockSize( nCols, nLines ));
+        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcBlockSize(nCols, nLines));
     return aSz;
 }
 

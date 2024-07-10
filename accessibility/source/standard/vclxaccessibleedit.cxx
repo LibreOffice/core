@@ -20,7 +20,7 @@
 #include <standard/vclxaccessibleedit.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -388,7 +388,7 @@ awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex )
         }
         else
         {
-            aBounds = AWTRectangle( pControl->GetCharacterBounds( nIndex ) );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
         }
     }
 

@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlTable.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
@@ -95,7 +95,8 @@ AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
     Reference< XAccessible > xChild;
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
-    if( m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) )
+    if (m_aTable.ConvertPointToCellAddress(nRow, nColumnPos,
+                                           VCLUnoHelper::ConvertToVCLPoint(rPoint)))
         xChild = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumnPos);
     return xChild;
 }

@@ -19,7 +19,8 @@
 
 
 #include <extended/AccessibleBrowseBoxTableCell.hxx>
-#include <toolkit/helper/convert.hxx>
+
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -117,7 +118,8 @@ namespace accessibility
             if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
                 throw IndexOutOfBoundsException();
 
-            aRect = AWTRectangle( mpBrowseBox->GetFieldCharacterBounds( getRowPos(), getColumnPos(), nIndex ) );
+            aRect = VCLUnoHelper::ConvertToAWTRect(
+                mpBrowseBox->GetFieldCharacterBounds(getRowPos(), getColumnPos(), nIndex));
         }
 
         return aRect;
@@ -130,7 +132,8 @@ namespace accessibility
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
 
-        return mpBrowseBox->GetFieldIndexAtPoint( getRowPos(), getColumnPos(), VCLPoint( _aPoint ) );
+        return mpBrowseBox->GetFieldIndexAtPoint(getRowPos(), getColumnPos(),
+                                                 VCLUnoHelper::ConvertToVCLPoint(_aPoint));
     }
 
     /** @return

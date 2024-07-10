@@ -29,7 +29,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 
@@ -306,7 +306,7 @@ namespace accessibility
     {
         awt::Rectangle aBounds;
         if ( m_pTabBar )
-            aBounds = AWTRectangle( m_pTabBar->GetPageArea() );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(m_pTabBar->GetPageArea());
 
         return aBounds;
     }
@@ -491,8 +491,8 @@ namespace accessibility
                 Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
                 if ( xComp.is() )
                 {
-                    tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
-                    Point aPos = VCLPoint( rPoint );
+                    tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
+                    Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                     if ( aRect.Contains( aPos ) )
                     {
                         xChild = xAcc;

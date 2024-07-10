@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -409,7 +409,8 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds()
 {
     awt::Rectangle aBounds;
     if ( m_pDialogWindow )
-        aBounds = AWTRectangle( tools::Rectangle( m_pDialogWindow->GetPosPixel(), m_pDialogWindow->GetSizePixel() ) );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(
+            tools::Rectangle(m_pDialogWindow->GetPosPixel(), m_pDialogWindow->GetSizePixel()));
 
     return aBounds;
 }
@@ -685,8 +686,8 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
-                Point aPos = VCLPoint( rPoint );
+                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     xChild = xAcc;

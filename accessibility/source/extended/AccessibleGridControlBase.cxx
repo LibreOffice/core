@@ -18,7 +18,7 @@
  */
 
 #include <extended/AccessibleGridControlBase.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
@@ -183,27 +183,28 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
 {
-   return tools::Rectangle( Point(), getBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
+    return tools::Rectangle(Point(), getBoundingBox().GetSize())
+        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
 }
 
 awt::Rectangle SAL_CALL AccessibleGridControlBase::getBounds()
 {
-   return AWTRectangle( getBoundingBox() );
+    return VCLUnoHelper::ConvertToAWTRect(getBoundingBox());
 }
 
 awt::Point SAL_CALL AccessibleGridControlBase::getLocation()
 {
-    return AWTPoint( getBoundingBox().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL AccessibleGridControlBase::getLocationOnScreen()
 {
-    return AWTPoint( getBoundingBoxOnScreen().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL AccessibleGridControlBase::getSize()
 {
-    return AWTSize( getBoundingBox().GetSize() );
+    return VCLUnoHelper::ConvertToAWTSize(getBoundingBox().GetSize());
 }
 
 // css::accessibility::XAccessibleEventBroadcaster
@@ -273,7 +274,7 @@ bool AccessibleGridControlBase::implIsShowing()
             xParentComp( m_xParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().Overlaps(
-                VCLRectangle( xParentComp->getBounds() ) );
+                VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
     }
     return bShowing;
 }

@@ -47,7 +47,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 
 using namespace ::com::sun::star;
 
@@ -331,7 +330,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );
     if ( pOutDev )
     {
-        ::tools::Rectangle aRect = VCLRectangle( rOutputRectangle );
+        ::tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(rOutputRectangle);
         UserDrawEvent aUserDrawEvent(pOutDev, aRect, pBar->GetCurItemId());
         Paint( aUserDrawEvent );
     }

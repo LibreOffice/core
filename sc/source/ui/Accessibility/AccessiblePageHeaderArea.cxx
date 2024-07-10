@@ -34,7 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -233,8 +233,10 @@ AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(
         {
             // has the same size and position on screen like the parent
             aRect = AbsoluteScreenPixelRectangle(
-                        AbsoluteScreenPixelPoint(VCLPoint(xComp->getLocationOnScreen())),
-                        AbsoluteScreenPixelSize(VCLRectangle(xComp->getBounds()).GetSize()));
+                AbsoluteScreenPixelPoint(
+                    VCLUnoHelper::ConvertToVCLPoint(xComp->getLocationOnScreen())),
+                AbsoluteScreenPixelSize(
+                    VCLUnoHelper::ConvertToVCLRect(xComp->getBounds()).GetSize()));
         }
     }
     return aRect;
@@ -250,7 +252,8 @@ tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
         if (xComp.is())
         {
             // has the same size and position on screen like the parent and so the pos is (0, 0)
-            tools::Rectangle aNewRect(Point(0, 0), VCLRectangle(xComp->getBounds()).GetSize());
+            tools::Rectangle aNewRect(Point(0, 0),
+                                      VCLUnoHelper::ConvertToVCLRect(xComp->getBounds()).GetSize());
             aRect = aNewRect;
         }
     }

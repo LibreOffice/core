@@ -18,9 +18,9 @@
  */
 
 #include <extended/AccessibleGridControlTableCell.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -138,7 +138,8 @@ namespace accessibility
         if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return AWTRectangle( m_aTable.GetFieldCharacterBounds( getRowPos(), getColumnPos(), nIndex ) );
+        return VCLUnoHelper::ConvertToAWTRect(
+            m_aTable.GetFieldCharacterBounds(getRowPos(), getColumnPos(), nIndex));
     }
 
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint( const css::awt::Point& _aPoint )
@@ -147,7 +148,8 @@ namespace accessibility
 
         ensureIsAlive();
 
-        return m_aTable.GetFieldIndexAtPoint( getRowPos(), getColumnPos(), VCLPoint( _aPoint ) );
+        return m_aTable.GetFieldIndexAtPoint(getRowPos(), getColumnPos(),
+                                             VCLUnoHelper::ConvertToVCLPoint(_aPoint));
     }
 
     /** @return

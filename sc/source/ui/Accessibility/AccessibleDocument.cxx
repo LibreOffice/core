@@ -54,8 +54,8 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 
@@ -572,9 +572,10 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
 
                 if (pShape->pAccShape.is())
                 {
-                    Point aPoint(VCLPoint(rPoint));
-                    aPoint -= VCLRectangle(pShape->pAccShape->getBounds()).TopLeft();
-                    if (pShape->pAccShape->containsPoint(AWTPoint(aPoint)))
+                    Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
+                    aPoint
+                        -= VCLUnoHelper::ConvertToVCLRect(pShape->pAccShape->getBounds()).TopLeft();
+                    if (pShape->pAccShape->containsPoint(VCLUnoHelper::ConvertToAWTPoint(aPoint)))
                     {
                         xAccessible = pShape->pAccShape.get();
                         bFound = true;
@@ -1638,8 +1639,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
                 uno::Reference< XAccessibleComponent > xComp(xCont, uno::UNO_QUERY);
                 if (xComp.is())
                 {
-                    tools::Rectangle aBound(VCLRectangle(xComp->getBounds()));
-                    if (aBound.Contains(VCLPoint(rPoint)))
+                    tools::Rectangle aBound(VCLUnoHelper::ConvertToVCLRect(xComp->getBounds()));
+                    if (aBound.Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint)))
                         xAccessible = mxTempAcc;
                 }
             }

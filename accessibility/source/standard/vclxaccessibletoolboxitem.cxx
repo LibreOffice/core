@@ -18,7 +18,7 @@
  */
 
 #include <standard/vclxaccessibletoolboxitem.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -208,7 +208,7 @@ awt::Rectangle VCLXAccessibleToolBoxItem::implGetBounds(  )
 {
     awt::Rectangle aRect;
     if ( m_pToolBox )
-        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( m_nIndexInParent ) );
+        aRect = VCLUnoHelper::ConvertToAWTRect(m_pToolBox->GetItemPosRect(m_nIndexInParent));
 
     return aRect;
 }
@@ -477,7 +477,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::getCharacterBounds( sal_Int32
         tools::Rectangle aCharRect = m_pToolBox->GetCharacterBounds( m_nItemId, nIndex );
         tools::Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-        aBounds = AWTRectangle( aCharRect );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -492,7 +492,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getIndexAtPoint( const awt::Point&
     {
         ToolBoxItemId nItemId;
         tools::Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
-        Point aPnt( VCLPoint( aPoint ) );
+        Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
         aPnt += aItemRect.TopLeft();
         sal_Int32 nIdx = m_pToolBox->GetIndexForPoint( aPnt, nItemId );
         if ( nIdx != -1 && nItemId == m_nItemId )

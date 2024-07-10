@@ -20,7 +20,7 @@
 
 #include <standard/vclxaccessibletoolbox.hxx>
 #include <standard/vclxaccessibletoolboxitem.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -663,7 +663,8 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
     if ( pToolBox )
     {
-        ToolBox::ImplToolItems::size_type nItemPos = pToolBox->GetItemPos( VCLPoint( _rPoint ) );
+        ToolBox::ImplToolItems::size_type nItemPos
+            = pToolBox->GetItemPos(VCLUnoHelper::ConvertToVCLPoint(_rPoint));
         if ( nItemPos != ToolBox::ITEM_NOTFOUND )
             xAccessible = getAccessibleChild( nItemPos );
     }

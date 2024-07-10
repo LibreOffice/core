@@ -20,7 +20,7 @@
 #include <standard/accessiblemenucomponent.hxx>
 
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -98,7 +98,7 @@ awt::Rectangle OAccessibleMenuComponent::implGetBounds()
         {
             // get bounding rectangle of the window in screen coordinates
             AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-            aBounds = AWTRectangle( aRect );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(aRect);
 
             // get position of the accessible parent in screen coordinates
             Reference< XAccessible > xParent = getAccessibleParent();
@@ -235,7 +235,7 @@ awt::Point OAccessibleMenuComponent::getLocationOnScreen(  )
         if ( pWindow )
         {
             AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-            aPos = AWTPoint( aRect.TopLeft() );
+            aPos = VCLUnoHelper::ConvertToAWTPoint(aRect.TopLeft());
         }
     }
 

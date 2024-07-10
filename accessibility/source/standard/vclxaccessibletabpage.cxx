@@ -18,7 +18,7 @@
  */
 
 #include <standard/vclxaccessibletabpage.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -191,7 +191,7 @@ awt::Rectangle VCLXAccessibleTabPage::implGetBounds()
     awt::Rectangle aBounds( 0, 0, 0, 0 );
 
     if ( m_pTabControl )
-        aBounds = AWTRectangle( m_pTabControl->GetTabBounds( m_nPageId ) );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(m_pTabControl->GetTabBounds(m_nPageId));
 
     return aBounds;
 }
@@ -408,8 +408,8 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
-                Point aPos = VCLPoint( rPoint );
+                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     xChild = xAcc;
@@ -588,7 +588,7 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
         tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
         tools::Rectangle aCharRect; // m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
         aCharRect.Move( -aPageRect.Left(), -aPageRect.Top() );
-        aBounds = AWTRectangle( aCharRect );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -604,7 +604,7 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& /*aPoint*/ )
 //    {
 //        sal_uInt16 nPageId = 0;
 //        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
-//        Point aPnt( VCLPoint( aPoint ) );
+//        Point aPnt( VCLUnoHelper::ConvertToVCLPoint( aPoint ) );
 //        aPnt += aPageRect.TopLeft();
 //        sal_Int32 nI = m_pTabControl->GetIndexForPoint( aPnt, nPageId );
 //        if ( nI != -1 && m_nPageId == nPageId )

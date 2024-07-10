@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <utility>
 #include <vcl/accessibletableprovider.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
 
@@ -137,21 +136,21 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
     sal_Int32 nIndex = 0;
-    if( mpBrowseBox->ConvertPointToControlIndex( nIndex, VCLPoint( rPoint ) ) )
+    if (mpBrowseBox->ConvertPointToControlIndex(nIndex, VCLUnoHelper::ConvertToVCLPoint(rPoint)))
         xChild = mpBrowseBox->CreateAccessibleControl( nIndex );
     else
     {
         // try whether point is in one of the fixed children
         // (table, header bars, corner control)
-        Point aPoint( VCLPoint( rPoint ) );
+        Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
         for( nIndex = 0; (nIndex < vcl::BBINDEX_FIRSTCONTROL) && !xChild.is(); ++nIndex )
         {
             css::uno::Reference< css::accessibility::XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
             css::uno::Reference< css::accessibility::XAccessibleComponent >
                 xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
-            if( xCurrChildComp.is() &&
-                    VCLRectangle( xCurrChildComp->getBounds() ).Contains( aPoint ) )
+            if (xCurrChildComp.is()
+                && VCLUnoHelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
                 xChild = xCurrChild;
         }
     }

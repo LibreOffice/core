@@ -19,8 +19,6 @@
 
 #include <awt/vclxregion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
-
 
 
 VCLXRegion::VCLXRegion()
@@ -35,7 +33,7 @@ css::awt::Rectangle VCLXRegion::getBounds()
 {
     std::scoped_lock aGuard( maMutex );
 
-    return AWTRectangle( maRegion.GetBoundRect() );
+    return VCLUnoHelper::ConvertToAWTRect(maRegion.GetBoundRect());
 }
 
 void VCLXRegion::clear()
@@ -56,28 +54,28 @@ void VCLXRegion::unionRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Union( VCLRectangle( rRect ) );
+    maRegion.Union(VCLUnoHelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::intersectRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Intersect( VCLRectangle( rRect ) );
+    maRegion.Intersect(VCLUnoHelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::excludeRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Exclude( VCLRectangle( rRect ) );
+    maRegion.Exclude(VCLUnoHelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::xOrRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.XOr( VCLRectangle( rRect ) );
+    maRegion.XOr(VCLUnoHelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
@@ -125,14 +123,14 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
 
     for(const auto& rRect : aRectangles)
     {
-        aRects.getArray()[a++] = AWTRectangle(rRect);
+        aRects.getArray()[a++] = VCLUnoHelper::ConvertToAWTRect(rRect);
     }
 
     //Rectangle aRect;
     //sal_uInt32 nR = 0;
     //RegionHandle h = maRegion.BeginEnumRects();
     //while ( maRegion.GetEnumRects( h, aRect ) )
-    //  aRects.getArray()[nR++] = AWTRectangle( aRect );
+    //  aRects.getArray()[nR++] = VCLUnoHelper::ConvertToAWTRect( aRect );
     //maRegion.EndEnumRects( h );
 
     return aRects;

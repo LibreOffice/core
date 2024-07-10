@@ -48,7 +48,7 @@
 #include <svx/IAccessibleParent.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/ShapeTypeHandler.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -919,11 +919,14 @@ namespace {
 struct ScShapePointFound
 {
     Point maPoint;
-    explicit ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
+    explicit ScShapePointFound(const awt::Point& rPoint)
+        : maPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint))
+    {
+    }
     bool operator() (const ScShapeChild& rShape)
     {
         bool bResult(false);
-        if (VCLRectangle(rShape.mpAccShape->getBounds()).Contains(maPoint))
+        if (VCLUnoHelper::ConvertToVCLRect(rShape.mpAccShape->getBounds()).Contains(maPoint))
             bResult = true;
         return bResult;
     }
@@ -1023,7 +1026,8 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
         if (xShape.is())
         {
             tools::Rectangle aRect(pWin->LogicToPixel(
-                tools::Rectangle(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize())), aMapMode));
+                tools::Rectangle(VCLUnoHelper::ConvertToVCLPoint(xShape->getPosition()),
+                                 VCLUnoHelper::ConvertToVCLSize(xShape->getSize())), aMapMode));
             if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
             {
                 ScShapeChild aShape;
@@ -1291,7 +1295,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                     mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
                     mpTable->Init();
                 }
-                if (mpTable.is() && VCLRectangle(mpTable->getBounds()).Contains(VCLPoint(rPoint)))
+                if (mpTable.is()
+                    && VCLUnoHelper::ConvertToVCLRect(mpTable->getBounds())
+                           .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint)))
                     xAccessible = mpTable.get();
             }
             if (!xAccessible.is())
@@ -1313,11 +1319,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                     }
                 }
 
-                Point aPoint(VCLPoint(rPoint));
+                Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
 
-                if (VCLRectangle(mpHeader->getBounds()).Contains(aPoint))
+                if (VCLUnoHelper::ConvertToVCLRect(mpHeader->getBounds()).Contains(aPoint))
                     xAccessible = mpHeader.get();
-                else if (VCLRectangle(mpFooter->getBounds()).Contains(aPoint))
+                else if (VCLUnoHelper::ConvertToVCLRect(mpFooter->getBounds()).Contains(aPoint))
                     xAccessible = mpFooter.get();
             }
             if (!xAccessible.is())

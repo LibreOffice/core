@@ -348,7 +348,6 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/svtdllapi.h>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>

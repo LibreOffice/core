@@ -19,7 +19,7 @@
 
 #include <standard/vclxaccessiblestatusbar.hxx>
 #include <standard/vclxaccessiblestatusbaritem.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
@@ -307,7 +307,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const aw
     Reference< XAccessible > xChild;
     if ( m_pStatusBar )
     {
-        sal_uInt16 nItemId = m_pStatusBar->GetItemId( VCLPoint( rPoint ) );
+        sal_uInt16 nItemId = m_pStatusBar->GetItemId(VCLUnoHelper::ConvertToVCLPoint(rPoint));
         sal_Int32 nItemPos = m_pStatusBar->GetItemPos( nItemId );
         if ( nItemPos >= 0 && o3tl::make_unsigned(nItemPos) < m_aAccessibleChildren.size() )
             xChild = getAccessibleChild( nItemPos );

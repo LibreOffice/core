@@ -11,7 +11,7 @@
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/event.hxx>
 
 #include <extended/AccessibleIconView.hxx>
@@ -35,7 +35,8 @@ void AccessibleIconView::ProcessWindowEvent(const VclWindowEvent& rVclWindowEven
         case VclEventId::WindowMouseMove:
             if (MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rVclWindowEvent.GetData()))
             {
-                if (auto xChild = getAccessibleAtPoint(AWTPoint(pMouseEvt->GetPosPixel())))
+                if (auto xChild = getAccessibleAtPoint(
+                        VCLUnoHelper::ConvertToAWTPoint(pMouseEvt->GetPosPixel())))
                 {
                     // Allow announcing the element on mouse hover
                     css::uno::Any aNew(xChild);

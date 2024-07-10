@@ -18,7 +18,6 @@
  */
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <utility>
 #include <vcl/accessibletableprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -27,6 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -210,27 +210,28 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
 {
-    return tools::Rectangle( Point(), getBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
+    return tools::Rectangle(Point(), getBoundingBox().GetSize())
+        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
 }
 
 awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
 {
-    return AWTRectangle( getBoundingBox() );
+    return VCLUnoHelper::ConvertToAWTRect(getBoundingBox());
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocation()
 {
-    return AWTPoint( getBoundingBox().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocationOnScreen()
 {
-    return AWTPoint( getBoundingBoxOnScreen().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
 {
-    return AWTSize( getBoundingBox().GetSize() );
+    return VCLUnoHelper::ConvertToAWTSize(getBoundingBox().GetSize());
 }
 
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
@@ -350,7 +351,7 @@ bool AccessibleBrowseBoxBase::implIsShowing()
             xParentComp( mxParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().Overlaps(
-                VCLRectangle( xParentComp->getBounds() ) );
+                VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
     }
     return bShowing;
 }

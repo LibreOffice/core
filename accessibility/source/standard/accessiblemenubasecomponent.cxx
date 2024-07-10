@@ -21,7 +21,7 @@
 #include <standard/vclxaccessiblemenu.hxx>
 #include <standard/vclxaccessiblemenuitem.hxx>
 #include <standard/vclxaccessiblemenuseparator.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -347,8 +347,8 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Po
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
-                Point aPos = VCLPoint( rPoint );
+                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     xChild = xAcc;

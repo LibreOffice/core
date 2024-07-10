@@ -30,7 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -147,7 +146,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds() const
             // clip the shape's bounding box with the bounding box of its parent
             tools::Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
             aRect = aRect.GetIntersection( aParentRect );
-            aBounds = AWTRectangle( aRect );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(aRect);
         }
     }
 

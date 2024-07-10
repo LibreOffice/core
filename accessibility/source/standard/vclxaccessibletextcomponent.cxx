@@ -18,7 +18,7 @@
  */
 
 #include <standard/vclxaccessibletextcomponent.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -250,7 +250,7 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
     awt::Rectangle aRect;
     VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
-        aRect = AWTRectangle( pControl->GetCharacterBounds( nIndex ) );
+        aRect = VCLUnoHelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
 
     return aRect;
 }
@@ -271,7 +271,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
     sal_Int32 nIndex = -1;
     VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
-        nIndex = pControl->GetIndexForPoint( VCLPoint( aPoint ) );
+        nIndex = pControl->GetIndexForPoint(VCLUnoHelper::ConvertToVCLPoint(aPoint));
 
     return nIndex;
 }

@@ -43,7 +43,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <RptDef.hxx>
 #include <SectionWindow.hxx>
@@ -255,7 +255,8 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         // Clone to target SdrModel
                         rtl::Reference<SdrObject> pNewObj(pObject->CloneSdrObject(*m_pModel));
                         m_pPage->InsertObject(pNewObj.get(), SAL_MAX_SIZE);
-                        tools::Rectangle aRet(VCLPoint(rCopy->getPosition()),VCLSize(rCopy->getSize()));
+                        tools::Rectangle aRet(VCLUnoHelper::ConvertToVCLPoint(rCopy->getPosition()),
+                                              VCLUnoHelper::ConvertToVCLSize(rCopy->getSize()));
                         aRet.setHeight(aRet.getOpenHeight() + 1);
                         aRet.setWidth(aRet.getOpenWidth() + 1);
                         bool bOverlapping = true;
@@ -536,7 +537,9 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                 {
                     xReportComponent->setPosition(aPos);
                     correctOverlapping(pObject,*this,false);
-                    tools::Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+                    tools::Rectangle aRet(
+                        VCLUnoHelper::ConvertToVCLPoint(xReportComponent->getPosition()),
+                        VCLUnoHelper::ConvertToVCLSize(xReportComponent->getSize()));
                     aRet.setHeight(aRet.getOpenHeight() + 1);
                     aRet.setWidth(aRet.getOpenWidth() + 1);
                     if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getOpenHeight() + aRet.Top()) > m_xSection->getHeight()) )
@@ -768,7 +771,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                 aCurrent.realloc(nLength + 3);
                 auto pCurrent = aCurrent.getArray();
                 pCurrent[nLength].Name = PROPERTY_POSITION;
-                pCurrent[nLength++].Value <<= AWTPoint(aDropPos);
+                pCurrent[nLength++].Value <<= VCLUnoHelper::ConvertToAWTPoint(aDropPos);
                 // give also the DND Action (Shift|Ctrl) Key to really say what we want
                 pCurrent[nLength].Name = "DNDAction";
                 pCurrent[nLength++].Value <<= _rEvt.mnAction;

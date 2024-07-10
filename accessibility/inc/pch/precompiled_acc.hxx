@@ -316,7 +316,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/dllapi.h>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/degree.hxx>

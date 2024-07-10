@@ -18,7 +18,7 @@
  */
 
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
@@ -76,9 +76,11 @@ AccessibleBrowseBoxHeaderBar::getAccessibleAtPoint( const awt::Point& rPoint )
 
     sal_Int32 nRow = 0;
     sal_uInt16 nColumnPos = 0;
-    bool bConverted = isRowBar() ?
-        mpBrowseBox->ConvertPointToRowHeader( nRow, VCLPoint( rPoint ) ) :
-        mpBrowseBox->ConvertPointToColumnHeader( nColumnPos, VCLPoint( rPoint ) );
+    bool bConverted
+        = isRowBar()
+              ? mpBrowseBox->ConvertPointToRowHeader(nRow, VCLUnoHelper::ConvertToVCLPoint(rPoint))
+              : mpBrowseBox->ConvertPointToColumnHeader(nColumnPos,
+                                                        VCLUnoHelper::ConvertToVCLPoint(rPoint));
 
     return bConverted ? implGetChild( nRow, nColumnPos ) : Reference< XAccessible >();
 }

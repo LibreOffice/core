@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
@@ -148,21 +148,21 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
     sal_Int32 nIndex = 0;
-    if( m_aTable.ConvertPointToControlIndex( nIndex, VCLPoint( rPoint ) ) )
+    if (m_aTable.ConvertPointToControlIndex(nIndex, VCLUnoHelper::ConvertToVCLPoint(rPoint)))
         xChild = m_aTable.CreateAccessibleControl( nIndex );
     else
     {
         // try whether point is in one of the fixed children
         // (table, header bars, corner control)
-        Point aPoint( VCLPoint( rPoint ) );
+        Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
         for( nIndex = 0; (nIndex < 3) && !xChild.is(); ++nIndex )
         {
             css::uno::Reference< css::accessibility::XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
             css::uno::Reference< css::accessibility::XAccessibleComponent >
             xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
-            if( xCurrChildComp.is() &&
-                VCLRectangle( xCurrChildComp->getBounds() ).Contains( aPoint ) )
+            if (xCurrChildComp.is()
+                && VCLUnoHelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
                 xChild = xCurrChild;
         }
     }

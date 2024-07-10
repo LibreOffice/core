@@ -87,7 +87,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <helper/property.hxx>
 
-#include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
 #include <controls/table/tablecontrol.hxx>
@@ -1875,7 +1874,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else if ( !VCLUnoHelper::IsZero( rDescriptor.Bounds ) )
         {
-            tools::Rectangle aRect = VCLRectangle( rDescriptor.Bounds );
+            tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(rDescriptor.Bounds);
             pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         }
 

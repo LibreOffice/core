@@ -38,7 +38,6 @@
 #include <o3tl/string_view.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <utility>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/dockingarea.hxx>
@@ -1498,7 +1497,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
 
         xWindow->setPosSize( aPixelPos.X(), aPixelPos.Y(), 0, 0, awt::PosSize::POS );
         if( bSetSize )
-            xWindow->setOutputSize( AWTSize( aSize) );
+            xWindow->setOutputSize(VCLUnoHelper::ConvertToAWTSize(aSize));
 
         if ( pWindow )
         {
@@ -1726,7 +1725,8 @@ awt::Point ToolbarLayoutManager::implts_findNextCascadeFloatingPos()
         SolarMutexGuard aGuard;
         VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         if ( pContainerWindow )
-            aStartPos = AWTPoint(pContainerWindow->OutputToScreenPixel(VCLPoint(aStartPos)));
+            aStartPos = VCLUnoHelper::ConvertToAWTPoint(
+                pContainerWindow->OutputToScreenPixel(VCLUnoHelper::ConvertToVCLPoint(aStartPos)));
     }
 
     // Determine size of top and left docking area
@@ -3393,13 +3393,15 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
                 awt::Size aFloatSize = aUIDockingElement.m_aFloatingData.m_aSize;
                 if ( aFloatSize.Width > 0 && aFloatSize.Height > 0 )
                 {
-                    aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pContainerWindow->ScreenToOutputPixel(VCLPoint(e.MousePos)));
+                    aUIDockingElement.m_aFloatingData.m_aPos
+                        = VCLUnoHelper::ConvertToAWTPoint(pContainerWindow->ScreenToOutputPixel(
+                            VCLUnoHelper::ConvertToVCLPoint(e.MousePos)));
                     aDockingData.TrackingRectangle.Height = aFloatSize.Height;
                     aDockingData.TrackingRectangle.Width  = aFloatSize.Width;
                 }
                 else
                 {
-                    aFloatSize = AWTSize(pToolBox->CalcWindowSizePixel());
+                    aFloatSize = VCLUnoHelper::ConvertToAWTSize(pToolBox->CalcWindowSizePixel());
                     if ( !bIsHorizontal )
                     {
                         // Floating toolbars are always horizontal aligned! We have to swap
@@ -3414,7 +3416,9 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
 
                     // For the first time we don't have any data about the floating size of a toolbar.
                     // We calculate it and store it for later use.
-                    aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pContainerWindow->ScreenToOutputPixel(VCLPoint(e.MousePos)));
+                    aUIDockingElement.m_aFloatingData.m_aPos
+                        = VCLUnoHelper::ConvertToAWTPoint(pContainerWindow->ScreenToOutputPixel(
+                            VCLUnoHelper::ConvertToVCLPoint(e.MousePos)));
                     aUIDockingElement.m_aFloatingData.m_aSize = aFloatSize;
                     aUIDockingElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
                     aUIDockingElement.m_aFloatingData.m_bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
@@ -3569,8 +3573,9 @@ sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::E
         if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
         {
             ToolBox* pToolBox = static_cast< ToolBox *>( pWindow.get() );
-            aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pToolBox->GetPosPixel());
-            aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pToolBox->GetOutputSizePixel());
+            aUIDockingElement.m_aFloatingData.m_aPos
+                = VCLUnoHelper::ConvertToAWTPoint(pToolBox->GetPosPixel());
+            aUIDockingElement.m_aFloatingData.m_aSize = VCLUnoHelper::ConvertToAWTSize(pToolBox->GetOutputSizePixel());
             aUIDockingElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
             aUIDockingElement.m_aFloatingData.m_bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
         }
@@ -3638,9 +3643,9 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
                 if ( !bSetSize )
                 {
                     if ( pToolBox )
-                        aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pToolBox->CalcFloatingWindowSizePixel());
+                        aUIDockingElement.m_aFloatingData.m_aSize = VCLUnoHelper::ConvertToAWTSize(pToolBox->CalcFloatingWindowSizePixel());
                     else if ( pWindow )
-                        aUIDockingElement.m_aFloatingData.m_aSize = AWTSize(pWindow->GetOutputSizePixel());
+                        aUIDockingElement.m_aFloatingData.m_aSize = VCLUnoHelper::ConvertToAWTSize(pWindow->GetOutputSizePixel());
                 }
 
                 xWindow->setPosSize( aUIDockingElement.m_aFloatingData.m_aPos.X,
@@ -3677,7 +3682,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
                     ::Size aSize = pToolBox->CalcWindowSizePixel( 1 );
                     awt::Rectangle aRect = xWindow->getPosSize();
                     xWindow->setPosSize( aRect.X, aRect.Y, 0, 0, awt::PosSize::POS );
-                    xWindow->setOutputSize( AWTSize( aSize ) );
+                    xWindow->setOutputSize(VCLUnoHelper::ConvertToAWTSize(aSize));
                 }
             }
 

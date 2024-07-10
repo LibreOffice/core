@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/stringtransfer.hxx>
@@ -133,7 +133,8 @@ namespace accessibility
         {
             Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
-                bShowing = GetBoundingBox_Impl().Overlaps( VCLRectangle( xParentComp->getBounds() ) );
+                bShowing = GetBoundingBox_Impl().Overlaps(
+                    VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
         }
 
         return bShowing;
@@ -333,7 +334,8 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::containsPoint( const awt::Point& rPoint )
     {
-        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
+        return tools::Rectangle(Point(), GetBoundingBox().GetSize())
+            .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
     }
 
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleAtPoint( const awt::Point& )
@@ -343,22 +345,22 @@ namespace accessibility
 
     awt::Rectangle SAL_CALL AccessibleIconChoiceCtrlEntry::getBounds(  )
     {
-        return AWTRectangle( GetBoundingBox() );
+        return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
     }
 
     awt::Point SAL_CALL AccessibleIconChoiceCtrlEntry::getLocation(  )
     {
-        return AWTPoint( GetBoundingBox().TopLeft() );
+        return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
     }
 
     awt::Point SAL_CALL AccessibleIconChoiceCtrlEntry::getLocationOnScreen(  )
     {
-        return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
+        return VCLUnoHelper::ConvertToAWTPoint( GetBoundingBoxOnScreen().TopLeft() );
     }
 
     awt::Size SAL_CALL AccessibleIconChoiceCtrlEntry::getSize(  )
     {
-        return AWTSize( GetBoundingBox().GetSize() );
+        return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
     }
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::grabFocus(  )
@@ -417,7 +419,7 @@ namespace accessibility
             tools::Rectangle aItemRect = GetBoundingBox_Impl();
             tools::Rectangle aCharRect = m_pIconCtrl->GetEntryCharacterBounds( m_nIndex, _nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-            aBounds = AWTRectangle( aCharRect );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
         }
 
         return aBounds;
@@ -434,7 +436,7 @@ namespace accessibility
             vcl::ControlLayoutData aLayoutData;
             tools::Rectangle aItemRect = GetBoundingBox_Impl();
             m_pIconCtrl->RecordLayoutData( &aLayoutData, aItemRect );
-            Point aPnt( VCLPoint( aPoint ) );
+            Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
             aPnt += aItemRect.TopLeft();
             nIndex = aLayoutData.GetIndexForPoint( aPnt );
 

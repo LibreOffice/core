@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -601,7 +601,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
 awt::Rectangle SvxRectCtlChildAccessibleContext::implGetBounds(  )
 {
     // no guard necessary, because no one changes maBoundingBox after creating it
-    return AWTRectangle(maBoundingBox);
+    return VCLUnoHelper::ConvertToAWTRect(maBoundingBox);
 }
 
 void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )

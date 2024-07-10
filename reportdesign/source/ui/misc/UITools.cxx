@@ -19,7 +19,6 @@
 
 
 #include <memory>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <SectionView.hxx>
 #include <UITools.hxx>
@@ -935,7 +934,8 @@ tools::Rectangle getRectangleFromControl(SdrObject* _pControl)
         uno::Reference< report::XReportComponent > xComponent( _pControl->getUnoShape(), uno::UNO_QUERY);
         if (xComponent.is())
         {
-            tools::Rectangle aRect(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
+            tools::Rectangle aRect(VCLUnoHelper::ConvertToVCLPoint(xComponent->getPosition()),
+                                   VCLUnoHelper::ConvertToVCLSize(xComponent->getSize()));
             aRect.setHeight(aRect.getOpenHeight() + 1);
             aRect.setWidth(aRect.getOpenWidth() + 1);
             return aRect;

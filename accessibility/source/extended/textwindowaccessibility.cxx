@@ -38,7 +38,7 @@
 #include <vcl/txtattr.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <algorithm>
@@ -867,8 +867,8 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
     css::awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( nIndex == nLength )
     {
-        aBounds = AWTRectangle(
-            m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex)));
+        aBounds
+            = VCLUnoHelper::ConvertToAWTRect(m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex)));
     }
     else
     {

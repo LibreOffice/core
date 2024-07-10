@@ -19,9 +19,6 @@
 
 #include <standard/accessiblemenuitemcomponent.hxx>
 
-
-#include <toolkit/helper/convert.hxx>
-
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -29,6 +26,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
@@ -241,14 +239,14 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds()
     if ( m_pParent )
     {
         // get bounding rectangle of the item relative to the containing window
-        aBounds = AWTRectangle( m_pParent->GetBoundingRectangle( m_nItemPos ) );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(m_pParent->GetBoundingRectangle(m_nItemPos));
 
         // get position of containing window in screen coordinates
         vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
             AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-            awt::Point aWindowScreenLoc = AWTPoint( aRect.TopLeft() );
+            awt::Point aWindowScreenLoc = VCLUnoHelper::ConvertToAWTPoint(aRect.TopLeft());
 
             // get position of accessible parent in screen coordinates
             Reference< XAccessible > xParent = getAccessibleParent();

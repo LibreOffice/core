@@ -1188,7 +1188,7 @@ css::awt::Size TreeControlPeer::getMinimumSize()
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcMinimumSize());
+        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcMinimumSize());
 */
     return aSz;
 }
@@ -1206,7 +1206,7 @@ css::awt::Size TreeControlPeer::calcAdjustedSize( const css::awt::Size& rNewSize
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcAdjustedSize( VCLSize(rNewSize )));
+        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcAdjustedSize(VCLUnoHelper::ConvertToVCLSize(rNewSize)));
 */
     return aSz;
 }

@@ -18,7 +18,7 @@
  */
 
 #include <standard/vclxaccessiblelistitem.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/IComboListBoxHelper.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 
@@ -290,7 +290,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
     {
         tools::Rectangle aRect(pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
         aRect.Move(-aRect.Left(), -aRect.Top());
-        bInside = aRect.Contains( VCLPoint( _aPoint ) );
+        bInside = aRect.Contains(VCLUnoHelper::ConvertToVCLPoint(_aPoint));
     }
     return bInside;
 }
@@ -308,7 +308,8 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
     awt::Rectangle aRect;
     ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
-        aRect = AWTRectangle(pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
+        aRect = VCLUnoHelper::ConvertToAWTRect(
+            pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
 
     return aRect;
 }
@@ -325,7 +326,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
         tools::Rectangle aRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
         aPoint = aRect.TopLeft();
     }
-    return AWTPoint( aPoint );
+    return VCLUnoHelper::ConvertToAWTPoint(aPoint);
 }
 
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
@@ -341,7 +342,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
         aPoint = aRect.TopLeft();
         aPoint += Point(pListBoxHelper->GetWindowExtentsAbsolute().TopLeft());
     }
-    return AWTPoint( aPoint );
+    return VCLUnoHelper::ConvertToAWTPoint(aPoint);
 }
 
 awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
@@ -354,7 +355,7 @@ awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
     if (pListBoxHelper)
         aSize = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) ).GetSize();
 
-    return AWTSize( aSize );
+    return VCLUnoHelper::ConvertToAWTSize(aSize);
 }
 
 void SAL_CALL VCLXAccessibleListItem::grabFocus(  )
@@ -414,7 +415,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
         tools::Rectangle aCharRect = pListBoxHelper->GetEntryCharacterBounds( m_nIndexInParent, nIndex );
         tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-        aBounds = AWTRectangle( aCharRect );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -438,7 +439,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     {
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
         tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
-        Point aPnt( VCLPoint( aPoint ) );
+        Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
         aPnt += aItemRect.TopLeft();
         sal_Int32 nI = pListBoxHelper->GetIndexForPoint( aPnt, nPos );
         if ( nI != -1 && m_nIndexInParent == nPos )

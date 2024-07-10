@@ -21,7 +21,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -70,8 +70,9 @@ uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleC
 sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 {
     // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
-    return tools::Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
+//  return GetBoundingBox().IsInside( VCLUnoHelper::ConvertToVCLPoint( rPoint ) );
+    return tools::Rectangle(Point(0, 0), GetBoundingBox().GetSize())
+        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
@@ -85,25 +86,25 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint(
 awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds()
 {
     // no guard -> done in GetBoundingBox()
-    return AWTRectangle( GetBoundingBox() );
+    return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocation()
 {
     // no guard -> done in GetBoundingBox()
-    return AWTPoint( GetBoundingBox().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocationOnScreen()
 {
     // no guard -> done in GetBoundingBoxOnScreen()
-    return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
+    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL SvtRulerAccessible::getSize()
 {
     // no guard -> done in GetBoundingBox()
-    return AWTSize( GetBoundingBox().GetSize() );
+    return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 //=====  XAccessibleContext  ==================================================

@@ -18,7 +18,7 @@
  */
 
 #include <standard/vclxaccessiblestatusbaritem.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -148,7 +148,7 @@ awt::Rectangle VCLXAccessibleStatusBarItem::implGetBounds()
     awt::Rectangle aBounds( 0, 0, 0, 0 );
 
     if ( m_pStatusBar )
-        aBounds = AWTRectangle( m_pStatusBar->GetItemRect( m_nItemId ) );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(m_pStatusBar->GetItemRect(m_nItemId));
 
     return aBounds;
 }
@@ -500,7 +500,7 @@ awt::Rectangle VCLXAccessibleStatusBarItem::getCharacterBounds( sal_Int32 nIndex
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
         tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-        aBounds = AWTRectangle( aCharRect );
+        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -517,7 +517,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint
         vcl::ControlLayoutData aLayoutData;
         tools::Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
-        Point aPnt( VCLPoint( aPoint ) );
+        Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
         aPnt += aItemRect.TopLeft();
         nIndex = aLayoutData.GetIndexForPoint( aPnt );
     }

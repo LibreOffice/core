@@ -18,7 +18,6 @@
  */
 
 #include <toolkit/awt/vclxmenu.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -507,9 +506,8 @@ sal_Int16 VCLXMenu::execute(
     pPopupMenu->SetMenuFlags(nMenuFlags);
     // cannot call this with mutex locked because it will call back into us
     return pPopupMenu->Execute(
-                VCLUnoHelper::GetWindow( rxWindowPeer ),
-                VCLRectangle( rPos ),
-                static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
+        VCLUnoHelper::GetWindow(rxWindowPeer), VCLUnoHelper::ConvertToVCLRect(rPos),
+        static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose);
 }
 
 

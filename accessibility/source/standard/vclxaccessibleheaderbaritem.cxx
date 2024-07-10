@@ -29,7 +29,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
@@ -75,7 +75,8 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds()
     OExternalLockGuard aGuard( this );
 
     if ( m_pHeadBar )
-        aBounds = AWTRectangle( m_pHeadBar->GetItemRect( sal_uInt16( m_nIndexInParent ) ) );
+        aBounds
+            = VCLUnoHelper::ConvertToAWTRect(m_pHeadBar->GetItemRect(sal_uInt16(m_nIndexInParent)));
 
     return aBounds;
 }

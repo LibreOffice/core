@@ -41,7 +41,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/multisel.hxx>
 
@@ -406,7 +406,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
                 aVisPos.AdjustX( -(aVisSize.Width()) );
             }
             tools::Rectangle aVisRect( aVisPos, aVisSize );
-            aVisArea = AWTRectangle(aVisRect);
+            aVisArea = VCLUnoHelper::ConvertToAWTRect(aVisRect);
         }
     }
     return aVisArea;
@@ -1937,7 +1937,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
             if ( pActiveWin )
             {
                 AbsoluteScreenPixelRectangle aRect = pActiveWin->GetWindowExtentsAbsolute();
-                aRet <<= AWTRectangle( aRect );
+                aRet <<= VCLUnoHelper::ConvertToAWTRect(aRect);
             }
         }
     }

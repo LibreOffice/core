@@ -23,7 +23,7 @@
 #include "hatchwindow.hxx"
 #include "ipwin.hxx"
 
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
@@ -72,11 +72,11 @@ void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
     if ( !m_xController.is() )
         return;
 
-    awt::Rectangle aUnoRequestRect = AWTRectangle( aRect );
+    awt::Rectangle aUnoRequestRect = VCLUnoHelper::ConvertToAWTRect(aRect);
 
     try {
         awt::Rectangle aUnoResultRect = m_xController->calcAdjustedRectangle( aUnoRequestRect );
-        aRect = VCLRectangle( aUnoResultRect );
+        aRect = VCLUnoHelper::ConvertToVCLRect(aUnoResultRect);
     }
     catch( uno::Exception& )
     {
@@ -88,7 +88,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const tools::Rectangle & aRect )
 {
     if ( m_xController.is() )
     {
-        awt::Rectangle aUnoRequestRect = AWTRectangle( aRect );
+        awt::Rectangle aUnoRequestRect = VCLUnoHelper::ConvertToAWTRect(aRect);
 
         try {
             m_xController->requestPositioning( aUnoRequestRect );

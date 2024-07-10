@@ -36,7 +36,6 @@
 #include <awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <helper/property.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -449,7 +448,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 css::awt::PaintEvent aEvent;
                 aEvent.Source = getXWeak();
-                aEvent.UpdateRect = AWTRectangle( *static_cast<tools::Rectangle*>(rVclWindowEvent.GetData()) );
+                aEvent.UpdateRect = VCLUnoHelper::ConvertToAWTRect(
+                    *static_cast<tools::Rectangle*>(rVclWindowEvent.GetData()));
                 aEvent.Count = 0;
                 mpImpl->getPaintListeners().windowPaint( aEvent );
             }
@@ -757,7 +757,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     css::awt::DockingEvent aEvent;
                     aEvent.Source = getXWeak();
-                    aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
+                    aEvent.TrackingRectangle = VCLUnoHelper::ConvertToAWTRect(pData->maTrackRect);
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
                     aEvent.bLiveMode = false;
@@ -778,7 +778,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     css::awt::DockingEvent aEvent;
                     aEvent.Source = getXWeak();
-                    aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
+                    aEvent.TrackingRectangle = VCLUnoHelper::ConvertToAWTRect(pData->maTrackRect);
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
                     aEvent.bLiveMode = false;
@@ -793,7 +793,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                     css::awt::DockingData aDockingData =
                         xFirstListener->docking( aEvent );
-                    pData->maTrackRect = VCLRectangle( aDockingData.TrackingRectangle );
+                    pData->maTrackRect
+                        = VCLUnoHelper::ConvertToVCLRect(aDockingData.TrackingRectangle);
                     pData->mbFloating = aDockingData.bFloating;
                 }
             }
@@ -809,7 +810,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 {
                     css::awt::EndDockingEvent aEvent;
                     aEvent.Source = getXWeak();
-                    aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
+                    aEvent.WindowRectangle = VCLUnoHelper::ConvertToAWTRect(pData->maWindowRect);
                     aEvent.bFloating = pData->mbFloating;
                     aEvent.bCancelled = pData->mbCancelled;
                     mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::endDocking, aEvent );
@@ -982,9 +983,11 @@ css::awt::Rectangle VCLXWindow::getPosSize(  )
     if ( GetWindow() )
     {
         if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
-            aBounds = AWTRectangle( vcl::Window::GetDockingManager()->GetPosSizePixel( GetWindow() ) );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(
+                vcl::Window::GetDockingManager()->GetPosSizePixel(GetWindow()));
         else
-            aBounds = AWTRectangle( tools::Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(
+                tools::Rectangle(GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel()));
     }
 
     return aBounds;
@@ -1183,7 +1186,8 @@ void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nIn
     SolarMutexGuard aGuard;
 
     if ( GetWindow() )
-        GetWindow()->Invalidate( VCLRectangle(rRect), static_cast<InvalidateFlags>(nInvalidateFlags) );
+        GetWindow()->Invalidate(VCLUnoHelper::ConvertToVCLRect(rRect),
+                                static_cast<InvalidateFlags>(nInvalidateFlags));
 }
 
 
@@ -2517,14 +2521,14 @@ void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 {
     SolarMutexGuard aGuard;
     if( VclPtr<vcl::Window> pWindow = GetWindow() )
-        pWindow->SetOutputSizePixel( VCLSize( aSize ) );
+        pWindow->SetOutputSizePixel(VCLUnoHelper::ConvertToVCLSize(aSize));
 }
 
 css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
     if( VclPtr<vcl::Window> pWindow = GetWindow() )
-        return AWTSize( pWindow->GetOutputSizePixel() );
+        return VCLUnoHelper::ConvertToAWTSize(pWindow->GetOutputSizePixel());
     else
         return css::awt::Size();
 }

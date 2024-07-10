@@ -55,7 +55,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/fract.hxx>
@@ -458,7 +457,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
         aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
-    return AWTRectangle( aRealObjArea );
+    return VCLUnoHelper::ConvertToAWTRect(aRealObjArea);
 }
 
 
@@ -488,7 +487,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
         aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
-    return AWTRectangle( aRealObjArea );
+    return VCLUnoHelper::ConvertToAWTRect(aRealObjArea);
 }
 
 
@@ -516,8 +515,8 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
-    tools::Rectangle aNewPixelRect = VCLRectangle( aPosRect );
-    tools::Rectangle aOldPixelRect = VCLRectangle( aOldRect );
+    tools::Rectangle aNewPixelRect = VCLUnoHelper::ConvertToVCLRect(aPosRect);
+    tools::Rectangle aOldPixelRect = VCLUnoHelper::ConvertToVCLRect(aOldRect);
     if ( aOldPixelRect == aNewPixelRect )
         // nothing has changed
         return;

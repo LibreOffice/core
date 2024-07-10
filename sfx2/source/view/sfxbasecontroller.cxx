@@ -62,7 +62,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -830,9 +830,9 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        tools::Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
+        tools::Rectangle aTmpRect = VCLUnoHelper::ConvertToVCLRect(aPreliminaryRectangle);
         m_pData->m_pViewShell->QueryObjAreaPixel( aTmpRect );
-        return AWTRectangle( aTmpRect );
+        return VCLUnoHelper::ConvertToAWTRect(aTmpRect);
     }
 
     return aPreliminaryRectangle;

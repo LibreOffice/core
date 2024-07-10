@@ -127,7 +127,6 @@
 #include <PropertyForward.hxx>
 #include <SectionWindow.hxx>
 
-#include <toolkit/helper/convert.hxx>
 #include <GroupsSorting.hxx>
 #include <PageNumber.hxx>
 #include <UndoEnv.hxx>
@@ -2415,7 +2414,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             aDescriptor.Put(SvxBrushItem(::Color(ColorTransparency, _xSection->getBackColor()),RPTUI_ID_BRUSH));
         else
         {
-            aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
+            aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,
+                                        VCLUnoHelper::ConvertToVCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
             aDescriptor.Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,RPTUI_ID_LRSPACE));
             aDescriptor.Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))

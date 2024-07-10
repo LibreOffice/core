@@ -39,7 +39,7 @@
 #include <vcl/settings.hxx>
 #include <core_resource.hxx>
 #include <svx/svdundo.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <algorithm>
 #include <cstdlib>
 #include <numeric>
@@ -1238,7 +1238,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                     for (; pColIter != pColEnd; ++pColIter)
                     {
                         uno::Reference< report::XReportComponent> xRC(*pColIter);
-                        aPrevious = VCLPoint(xRC->getPosition());
+                        aPrevious = VCLUnoHelper::ConvertToVCLPoint(xRC->getPosition());
                         awt::Size aSize = xRC->getSize();
 
                         if ( aNewPos.X() < nLeftMargin )
@@ -1259,12 +1259,13 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                             aNewPos.setX( 0 );
                             xRC->setSize(aSize);
                         }
-                        xRC->setPosition(AWTPoint(aNewPos));
+                        xRC->setPosition(VCLUnoHelper::ConvertToAWTPoint(aNewPos));
                         if ( (pColIter+1) != pColEnd )
                         {
                             // bring aNewPos to the position of the next object
                             uno::Reference< report::XReportComponent> xRCNext = *(pColIter + 1);
-                            Point aNextPosition = VCLPoint(xRCNext->getPosition());
+                            Point aNextPosition
+                                = VCLUnoHelper::ConvertToVCLPoint(xRCNext->getPosition());
                             aNewPos += aNextPosition - aPrevious;
                         }
                     }

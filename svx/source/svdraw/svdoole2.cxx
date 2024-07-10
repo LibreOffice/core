@@ -41,7 +41,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/convert.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svtools/embedhlp.hxx>
@@ -454,7 +453,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
 
     aLogicRect = Application::GetDefaultDevice()->LogicToPixel(aLogicRect, MapMode(aContainerMapUnit));
-    return AWTRectangle( aLogicRect );
+    return VCLUnoHelper::ConvertToAWTRect(aLogicRect);
 }
 
 awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
@@ -480,8 +479,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
-    tools::Rectangle aNewPixelRect = VCLRectangle( aPosRect );
-    tools::Rectangle aOldPixelRect = VCLRectangle( aOldRect );
+    tools::Rectangle aNewPixelRect = VCLUnoHelper::ConvertToVCLRect(aPosRect);
+    tools::Rectangle aOldPixelRect = VCLUnoHelper::ConvertToVCLRect(aOldRect);
     if ( aOldPixelRect == aNewPixelRect )
         // nothing has changed
         return;

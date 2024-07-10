@@ -35,7 +35,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifdef indices
 #undef indices
@@ -325,7 +325,8 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
             uno::Reference<XAccessibleComponent> xAccParentComp (xAccParentContext, uno::UNO_QUERY);
             if (xAccParentComp.is())
             {
-                tools::Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
+                tools::Rectangle aParentRect(
+                    VCLUnoHelper::ConvertToVCLRect(xAccParentComp->getBounds()));
                 aCellRect.Move(-aParentRect.Left(), -aParentRect.Top());
             }
         }

@@ -31,7 +31,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -176,7 +176,8 @@ namespace accessibility
         {
             Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
-                bShowing = GetBoundingBox_Impl().Overlaps( VCLRectangle( xParentComp->getBounds() ) );
+                bShowing = GetBoundingBox_Impl().Overlaps(
+                    VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
         }
 
         return bShowing;
@@ -520,7 +521,8 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::containsPoint( const awt::Point& rPoint )
     {
-        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
+        return tools::Rectangle(Point(), GetBoundingBox().GetSize())
+            .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
@@ -529,7 +531,8 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
+        SvTreeListEntry* pEntry
+            = m_pTreeListBox->GetEntry(VCLUnoHelper::ConvertToVCLPoint(_aPoint));
         if ( !pEntry )
             throw RuntimeException(u"AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!"_ustr);
 
@@ -538,29 +541,29 @@ namespace accessibility
         assert(xListBox.is());
         auto pAccEntry = xListBox->implGetAccessible(*pEntry);
         tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
-        if ( aRect.Contains( VCLPoint( _aPoint ) ) )
+        if (aRect.Contains(VCLUnoHelper::ConvertToVCLPoint(_aPoint)))
             xAcc = pAccEntry.get();
         return xAcc;
     }
 
     awt::Rectangle SAL_CALL AccessibleListBoxEntry::getBounds(  )
     {
-        return AWTRectangle( GetBoundingBox() );
+        return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
     }
 
     awt::Point SAL_CALL AccessibleListBoxEntry::getLocation(  )
     {
-        return AWTPoint( GetBoundingBox().TopLeft() );
+        return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
     }
 
     awt::Point SAL_CALL AccessibleListBoxEntry::getLocationOnScreen(  )
     {
-        return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
+        return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
     }
 
     awt::Size SAL_CALL AccessibleListBoxEntry::getSize(  )
     {
-        return AWTSize( GetBoundingBox().GetSize() );
+        return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
     }
 
     void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
@@ -624,7 +627,7 @@ namespace accessibility
             m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
             tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-            aBounds = AWTRectangle( aCharRect );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
         }
 
         return aBounds;
@@ -644,7 +647,7 @@ namespace accessibility
             vcl::ControlLayoutData aLayoutData;
             tools::Rectangle aItemRect = GetBoundingBox();
             m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
-            Point aPnt( VCLPoint( aPoint ) );
+            Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
             aPnt += aItemRect.TopLeft();
             nIndex = aLayoutData.GetIndexForPoint( aPnt );
         }

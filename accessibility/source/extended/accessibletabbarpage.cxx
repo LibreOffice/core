@@ -28,7 +28,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 
@@ -164,7 +164,7 @@ namespace accessibility
         if ( m_pTabBar )
         {
             // get bounding rectangle relative to the AccessibleTabBar
-            aBounds = AWTRectangle( m_pTabBar->GetPageRect( m_nPageId ) );
+            aBounds = VCLUnoHelper::ConvertToAWTRect(m_pTabBar->GetPageRect(m_nPageId));
 
             // get position of the AccessibleTabBarPageList relative to the AccessibleTabBar
             Reference< XAccessible > xParent = getAccessibleParent();

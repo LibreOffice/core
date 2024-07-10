@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svl/hint.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -158,7 +158,8 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return tools::Rectangle (Point(), GetBoundingBox().GetSize()).Contains(VCLPoint(rPoint));
+    return tools::Rectangle(Point(), GetBoundingBox().GetSize())
+        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
@@ -172,28 +173,28 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return AWTRectangle(GetBoundingBox());
+    return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return AWTPoint(GetBoundingBox().TopLeft());
+    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return AWTPoint(GetBoundingBoxOnScreen().TopLeft());
+    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return AWTSize(GetBoundingBox().GetSize());
+    return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 bool ScAccessibleContextBase::isShowing(  )
@@ -206,8 +207,9 @@ bool ScAccessibleContextBase::isShowing(  )
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
         if (xParentComponent.is())
         {
-            tools::Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
-            tools::Rectangle aBounds(VCLRectangle(getBounds()));
+            tools::Rectangle aParentBounds(
+                VCLUnoHelper::ConvertToVCLRect(xParentComponent->getBounds()));
+            tools::Rectangle aBounds(VCLUnoHelper::ConvertToVCLRect(getBounds()));
             bShowing = aBounds.Overlaps(aParentBounds);
         }
     }

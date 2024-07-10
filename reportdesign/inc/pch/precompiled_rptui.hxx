@@ -444,7 +444,6 @@
 #include <svx/xit.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
