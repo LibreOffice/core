@@ -164,6 +164,12 @@ void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
     m_xDlg->set_title(rStr);
 }
 
+bool AbstractSvxCharacterMapDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    m_xDlg->prepForRun();
+    return SvxCharacterMap::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 void CuiAbstractTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );

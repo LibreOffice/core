@@ -394,7 +394,7 @@ DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractPasswordToOpenModifyDialog,AbstractPassw
 };
 
 // AbstractSvxCharacterMapDialog_Impl
-DECL_ABSTDLG_CLASS_UNIQUE(AbstractSvxCharacterMapDialog,SfxAbstractDialog,SvxCharacterMap)
+DECL_ABSTDLG_CLASS_SHARED_ASYNC(AbstractSvxCharacterMapDialog,SfxAbstractDialog,SvxCharacterMap)
     virtual const SfxItemSet* GetOutputItemSet() const override;
     virtual void  SetText(const OUString& rStr) override;
 };
