@@ -6239,11 +6239,11 @@ void ScGridWindow::CursorChanged()
 
 void ScGridWindow::ImpCreateOverlayObjects()
 {
+    UpdateHighlightOverlay();
+    UpdateSelectionOverlay();
+    UpdateAutoFillOverlay();
     UpdateCursorOverlay();
     UpdateCopySourceOverlay();
-    UpdateSelectionOverlay();
-    UpdateHighlightOverlay();
-    UpdateAutoFillOverlay();
     UpdateDragRectOverlay();
     UpdateHeaderOverlay();
     UpdateShrinkOverlay();
