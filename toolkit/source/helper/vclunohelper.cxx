@@ -48,8 +48,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Point.hpp>
 
 using namespace ::com::sun::star;
 
@@ -476,41 +474,6 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
         throw css::lang::IllegalArgumentException(u"Unsupported measure unit."_ustr, nullptr, 1 );
     }
     return eMode;
-}
-
-::Size VCLUnoHelper::ConvertToVCLSize(css::awt::Size const& _aSize)
-{
-    ::Size aVCLSize(_aSize.Width, _aSize.Height);
-    return aVCLSize;
-}
-
-css::awt::Size VCLUnoHelper::ConvertToAWTSize(::Size /* VCLSize */ const& _aSize)
-{
-    css::awt::Size aAWTSize(_aSize.Width(), _aSize.Height());
-    return aAWTSize;
-}
-
-
-::Point VCLUnoHelper::ConvertToVCLPoint(css::awt::Point const& _aPoint)
-{
-    ::Point aVCLPoint(_aPoint.X, _aPoint.Y);
-    return aVCLPoint;
-}
-
-css::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint)
-{
-    css::awt::Point aAWTPoint(_aPoint.X(), _aPoint.Y());
-    return aAWTPoint;
-}
-
-::tools::Rectangle VCLUnoHelper::ConvertToVCLRect( css::awt::Rectangle const & _rRect )
-{
-    return ::tools::Rectangle( _rRect.X, _rRect.Y, _rRect.X + _rRect.Width - 1, _rRect.Y + _rRect.Height - 1 );
-}
-
-css::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::tools::Rectangle const & _rRect )
-{
-    return css::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
 }
 
 awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
