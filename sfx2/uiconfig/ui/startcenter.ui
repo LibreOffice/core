@@ -436,6 +436,7 @@
                         <property name="receives-default">True</property>
                         <property name="relief">none</property>
                         <property name="use-underline">True</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
