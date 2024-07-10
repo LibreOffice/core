@@ -116,7 +116,8 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionType::WATERFALLWIPE,
             TransitionType::SPIRALWIPE,
             TransitionType::MISCDIAGONALWIPE,
-            TransitionType::BOXSNAKESWIPE
+            TransitionType::BOXSNAKESWIPE,
+            TransitionType::BLINDSWIPE
     };
 
     const std::set<sal_Int16> LOKSupportedTransitionSubTypes = {
