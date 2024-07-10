@@ -160,12 +160,6 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
-        SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry(i);
-        if ( !pEntry )
-            throw RuntimeException("getAccessibleChild: Entry "
-                                   + OUString::number(i) + " not found",
-                getXWeak());
-
         return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
     }
 
