@@ -1128,30 +1128,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         // switch on undo for the next operations
                         mpDrawView->BegUndo(SdResId(STR_UNDO_CONVERT_TO_BITMAP));
-                        bool bDone(false);
-
-                        // I have to get the image here directly since GetMarkedObjBitmapEx works
-                        // based on Bitmaps, but not on BitmapEx, thus throwing away the alpha
-                        // channel. Argh! GetMarkedObjBitmapEx itself is too widely used to safely
-                        // change that, e.g. in the exchange formats. For now I can only add this
-                        // exception to get good results for Svgs. This is how the code gets more
-                        // and more crowded, at last I made a remark for myself to change this
-                        // as one of the next tasks.
-                        if(1 == rMarkList.GetMarkCount())
-                        {
-                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(rMarkList.GetMark(0)->GetMarkedSdrObj());
-
-                            if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
-                            {
-                                aGraphic = Graphic(pSdrGrafObj->GetGraphic().getVectorGraphicData()->getReplacement());
-                                bDone = true;
-                            }
-                        }
-
-                        if(!bDone)
-                        {
-                            aGraphic = Graphic(mpDrawView->GetMarkedObjBitmapEx());
-                        }
+                        aGraphic = Graphic(mpDrawView->GetMarkedObjBitmapEx());
                         // Restore online spelling
                         GetDoc()->SetOnlineSpell(bOnlineSpell);
                     }
