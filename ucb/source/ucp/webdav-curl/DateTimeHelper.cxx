@@ -166,36 +166,36 @@ bool DateTimeHelper::RFC2068_To_DateTime (std::u16string_view s,
     char string_month[3 + 1];
     char string_day[3 + 1];
 
-    size_t found = s.find(',');
-    if (found != std::u16string_view::npos)
+    bool res = false;
+    if (s.find(',') != std::u16string_view::npos)
     {
         OString aDT = OUStringToOString(s, RTL_TEXTENCODING_ASCII_US);
 
         // RFC 1123
-        found = sscanf (aDT.getStr(), "%3s, %2d %3s %4d %2d:%2d:%2d GMT",
-                        string_day, &day, string_month, &year, &hours, &minutes, &seconds);
+        int found = sscanf(aDT.getStr(), "%3s, %2d %3s %4d %2d:%2d:%2d GMT",
+                           string_day, &day, string_month, &year, &hours, &minutes, &seconds);
         if (found != 7)
         {
             // RFC 1036
             found = sscanf (aDT.getStr(), "%3s, %2d-%3s-%2d %2d:%2d:%2d GMT",
                             string_day, &day, string_month, &year, &hours, &minutes, &seconds);
         }
-        found = (found == 7) ? 1 : 0;
+        res = found == 7;
     }
     else
     {
         OString aDT = OUStringToOString(s, RTL_TEXTENCODING_ASCII_US);
 
         // ANSI C's asctime () format
-        found = sscanf (aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
-                        string_day, string_month,
-                        &day, &hours, &minutes, &seconds, &year);
-        found = (found == 7) ? 1 : 0;
+        int found = sscanf(aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
+                           string_day, string_month,
+                           &day, &hours, &minutes, &seconds, &year);
+        res = found == 7;
     }
 
-    if (found)
+    if (res)
     {
-        found = 0;
+        res = false;
 
         int month = DateTimeHelper::convertMonthToInt (
                             OUString::createFromAscii (string_month));
@@ -235,14 +235,14 @@ bool DateTimeHelper::RFC2068_To_DateTime (std::u16string_view s,
                         dateTime.Minutes = aDateTime.Minutes;
                         dateTime.Seconds = aDateTime.Seconds;
 
-                        found = 1;
+                        res = true;
                     }
                 }
             }
         }
     }
 
-    return found;
+    return res;
 }
 
 bool DateTimeHelper::convert (std::u16string_view s, DateTime& dateTime)
