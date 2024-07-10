@@ -622,7 +622,7 @@ void LOKSlideRenderer::renderImpl(LayerGroupType eLayersSet, unsigned char* pBuf
     }
     catch (uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "slideshow", "Geenral Exception");
+        TOOLS_WARN_EXCEPTION( "slideshow", "General Exception");
         return;
     }
 }
