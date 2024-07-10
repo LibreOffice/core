@@ -3141,6 +3141,54 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_160867)
                        .endsWith("foo/bar"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
+{
+    // Given a document with two embedded metafiles:
+    createSwDoc("tdf161979_metafile.fodt");
+    ExportToHTML();
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    // First image: it has no EMF+ actions, and didn't use canvas rendering before the fix;
+    // yet, it didn't export correctly.
+    OUString imgName = getXPath(pDoc, "/html/body/p[2]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(imgName.endsWith(".gif"));
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setName(imgName);
+    Graphic graphic;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter().ImportGraphic(graphic, aUrl));
+
+    // Check that only ~4% of pixels are not transparent (before the fix, it was completely black)
+    BitmapEx bitmap = graphic.GetBitmapEx();
+    Size size = bitmap.GetSizePixel();
+    int numNonTransparent = 0;
+    for (tools::Long y = 0; y < size.Height(); ++y)
+        for (tools::Long x = 0; x < size.Width(); ++x)
+            if (bitmap.GetPixelColor(x, y) != COL_TRANSPARENT)
+                ++numNonTransparent;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.04, numNonTransparent / double(size.Height() * size.Width()),
+                                 0.01);
+
+    // Second image: it consists of EMF+ records (no EMF fallback). It used canvas rendering
+    // before the fix; it also didn't export correctly.
+    imgName = getXPath(pDoc, "/html/body/p[4]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(imgName.endsWith(".gif"));
+    aUrl.SetURL(maTempFile.GetURL());
+    aUrl.setName(imgName);
+    graphic.Clear();
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter().ImportGraphic(graphic, aUrl));
+
+    // Check that some pixels are transparent (before the fix, it was completely black)
+    bitmap = graphic.GetBitmapEx();
+    size = bitmap.GetSizePixel();
+    numNonTransparent = 0;
+    for (tools::Long y = 0; y < size.Height(); ++y)
+        for (tools::Long x = 0; x < size.Width(); ++x)
+            if (bitmap.GetPixelColor(x, y) != COL_TRANSPARENT)
+                ++numNonTransparent;
+    CPPUNIT_ASSERT(numNonTransparent > 0);
+    CPPUNIT_ASSERT(numNonTransparent < size.Height() * size.Width());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

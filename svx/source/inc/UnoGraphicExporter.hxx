@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_UNODRAW_UNOGRAPHICEXPORTER_HXX
-#define INCLUDED_SVX_SOURCE_UNODRAW_UNOGRAPHICEXPORTER_HXX
+#pragma once
 
 #include <sal/config.h>
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/graph.hxx>
 
+class Size;
+class GDIMetaFile;
 class SdrObject;
 
+BitmapEx GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize);
 Graphic SvxGetGraphicForShape(SdrObject& rShape);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

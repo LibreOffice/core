@@ -66,7 +66,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
-#include "UnoGraphicExporter.hxx"
+#include <UnoGraphicExporter.hxx>
 #include <memory>
 // #i102251#
 #include <editeng/editstat.hxx>
@@ -170,37 +170,6 @@ namespace {
         SdrPage*            mpCurrentPage;
         SdrModel*           mpDoc;
     };
-
-    /** creates a bitmap that is optionally transparent from a metafile
-    */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, const Size* pSize )
-    {
-        // use new primitive conversion tooling
-        basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
-        sal_uInt32 nMaximumQuadraticPixels(500000);
-
-        if(pSize)
-        {
-            // use 100th mm for primitive bitmap converter tool, input is pixel
-            // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
-            const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MapUnit::Map100thMM)));
-
-            aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
-
-            // when explicitly pixels are requested from the GraphicExporter, use a *very* high limit
-            // of 16gb (4096x4096 pixels), else use the default for the converters
-            nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(pSize->Width() * pSize->Height()));
-        }
-        else
-        {
-            // use 100th mm for primitive bitmap converter tool
-            const Size aSize100th(OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
-
-            aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
-        }
-
-        return convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
-    }
 
     Size* CalcSize( sal_Int32 nWidth, sal_Int32 nHeight, const Size& aBoundSize, Size& aOutSize )
     {
@@ -1287,6 +1256,42 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  )
     return aSeq;
 }
 
+}
+
+/** creates a bitmap that is optionally transparent from a metafile
+    */
+BitmapEx GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize)
+{
+    // use new primitive conversion tooling
+    basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
+    sal_uInt32 nMaximumQuadraticPixels;
+
+    if (pSize)
+    {
+        // use 100th mm for primitive bitmap converter tool, input is pixel
+        // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
+        const Size aSize100th(
+            Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MapUnit::Map100thMM)));
+
+        aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
+
+        // when explicitly pixels are requested from the GraphicExporter, use a *very* high limit
+        // of 16gb (4096x4096 pixels)
+        nMaximumQuadraticPixels = 4096 * 4096;
+    }
+    else
+    {
+        // use 100th mm for primitive bitmap converter tool
+        const Size aSize100th(OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(),
+                                                         MapMode(MapUnit::Map100thMM)));
+
+        aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
+
+        // limit to 2048x2048 pixels, as in ImpGraphic::getBitmap (vcl/source/gdi/impgraph.cxx):
+        nMaximumQuadraticPixels = 2048 * 2048;
+    }
+
+    return convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
 }
 
 Graphic SvxGetGraphicForShape( SdrObject& rShape )

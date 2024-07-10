@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "UnoGraphicExporter.hxx"
+#include <UnoGraphicExporter.hxx>
 #include "shapeimpl.hxx"
 #include <svx/unodraw/SvxTableShape.hxx>
 #include <svx/unoshprp.hxx>
