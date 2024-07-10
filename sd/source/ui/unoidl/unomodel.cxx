@@ -82,7 +82,6 @@
 #include <xmloff/autolayout.hxx>
 #include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
-#include <tools/helpers.hxx>
 
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
