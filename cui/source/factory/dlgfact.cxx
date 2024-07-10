@@ -115,7 +115,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(AbstractLinksDialog, SvBaseLinksDlg)
 IMPL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSignatureLineDialog, SignatureLineDialog)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSignSignatureLineDialog, SignSignatureLineDialog)
-IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxCharacterMapDialog, SvxCharacterMap)
+IMPL_ABSTDLG_CLASS(AbstractSvxCharacterMapDialog)
 IMPL_ABSTDLG_CLASS(AbstractSecurityOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxHpLinkDlg)
 IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
@@ -162,6 +162,12 @@ const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
 void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
+}
+
+bool AbstractSvxCharacterMapDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    m_xDlg->prepForRun();
+    return SvxCharacterMap::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 void CuiAbstractTabController_Impl::SetCurPageId( const OUString &rName )

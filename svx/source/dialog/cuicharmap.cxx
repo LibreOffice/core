@@ -116,7 +116,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     m_xSearchSet->Hide();
 }
 
-short SvxCharacterMap::run()
+void SvxCharacterMap::prepForRun()
 {
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
@@ -133,7 +133,11 @@ short SvxCharacterMap::run()
         setFavButtonState(aOUStr, m_aShowChar.GetFont().GetFamilyName());
         m_xOKBtn->set_sensitive(true);
     }
+}
 
+short SvxCharacterMap::run()
+{
+    prepForRun();
     return SfxDialogController::run();
 }
 
