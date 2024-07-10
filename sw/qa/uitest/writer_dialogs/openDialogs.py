@@ -99,7 +99,8 @@ dialogs = [
         # tested in sw/qa/uitest/writer_tests/wordCount.py
     # {"command": ".uno:AutoCorrectDlg", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests5/autocorrectOptions.py
-    {"command": ".uno:EditGlossary", "closeButton": "close"},
+    # {"command": ".uno:EditGlossary", "closeButton": "close"},
+        # tested in sw/qa/uitest/writer_tests3/tdf124088.py
     # {"command": ".uno:ChapterNumberingDialog", "closeButton": "cancel"},
         # tested in sw/qa/uitest/chapterNumbering/chapterNumbering.py
     # {"command": ".uno:LineNumberingDialog", "closeButton": "cancel"},

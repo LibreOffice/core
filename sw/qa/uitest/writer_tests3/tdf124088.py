@@ -24,6 +24,10 @@ class tdf124088(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:EditGlossary") as xEditGlossaryDlg:
                 xName = xEditGlossaryDlg.getChild("name")
                 self.assertEqual(get_state_as_dict(xName)["Text"], "This is a sample")
+
+                xShortName = xEditGlossaryDlg.getChild("shortname")
+                self.assertEqual("Tias", get_state_as_dict(xShortName)["Text"])
+
                 # Click on a group entry, proposed auto text should remain
                 xCategory = xEditGlossaryDlg.getChild("category")
                 xMyAutoText = xCategory.getChild("2")
