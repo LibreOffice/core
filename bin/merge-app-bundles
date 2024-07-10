@@ -110,7 +110,7 @@ OUT=$(cd "$3" && /bin/pwd)
         else
             # We ignore some files that can't be built for macOS on arm64 for now
             case "$fname" in
-                ./Contents/Frameworks/LibreOfficePython.framework/Versions/3.7/lib/python*/lib-dynload/_ctypes.cpython-*m.so)
+                ./Contents/Frameworks/LibreOfficePython.framework/Versions/3.*/lib/python*/lib-dynload/_ctypes.cpython-*m.so)
                     ;;
                 *)
                     echo "$fname does not exist in $TWO" >&2
