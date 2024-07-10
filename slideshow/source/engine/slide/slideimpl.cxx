@@ -404,6 +404,9 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
     while (!mpMPShapesFunctor->isImportDone())
     {
         ShapeSharedPtr const& rShape(mpMPShapesFunctor->importShape());
+        if (!rShape)
+            continue;
+
         uno::Reference<drawing::XShape> xShape = rShape->getXShape();
         if (xShape.is())
         {
@@ -449,6 +452,9 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
     while( !mpTFShapesFunctor->isImportDone() )
     {
         ShapeSharedPtr const& rShape(mpTFShapesFunctor->importShape());
+        if (!rShape)
+            continue;
+
         uno::Reference<drawing::XShape> xShape = rShape->getXShape();
         if (xShape.is())
         {
