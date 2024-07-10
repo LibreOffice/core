@@ -386,7 +386,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                         }
                         nR = 0;
                     }
-                    xNew = new ScJumpMatrixToken( pJumpMat );
+                    xNew = new ScJumpMatrixToken(std::move(pJumpMat));
                     GetTokenMatrixMap().emplace( pCur, xNew );
                 }
                 nGlobalError = nOldGlobalError;

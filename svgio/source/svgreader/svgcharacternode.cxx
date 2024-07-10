@@ -396,7 +396,7 @@ namespace svgio::svgreader
                         std::move(aTextArray),
                         {},
                         aFontAttribute,
-                        aLocale,
+                        std::move(aLocale),
                         aFill,
                         COL_TRANSPARENT,
 
@@ -425,7 +425,7 @@ namespace svgio::svgreader
                         std::move(aTextArray),
                         {},
                         aFontAttribute,
-                        aLocale,
+                        std::move(aLocale),
                         aFill);
                 }
 

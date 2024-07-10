@@ -1485,7 +1485,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         if (pEntry == pNewEntry) //fdo#49587
             break;
 
-        pEntry = pNewEntry;
+        pEntry = std::move(pNewEntry);
     }
     // not found in style, try the document's DocDefault properties
     if ( bDocDefaults && bPara )

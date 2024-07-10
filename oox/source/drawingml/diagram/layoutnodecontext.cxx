@@ -244,7 +244,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         ShapeAtomPtr pAtom = std::make_shared<ShapeAtom>(mpNode->getLayoutNode(), pShape);
         LayoutAtom::connect(mpNode, pAtom);
-        return new ShapeContext( *this, ShapePtr(), pShape );
+        return new ShapeContext( *this, ShapePtr(), std::move(pShape) );
     }
     case DGM_TOKEN( extLst ):
         return nullptr;

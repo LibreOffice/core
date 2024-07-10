@@ -1102,7 +1102,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
             for (auto const& rPolygon : rInfo.maPolygons)
                 aPolyPolygon.append(rPolygon);
 
-            pNewObject = new SdrPathObj(rModel, ekind, aPolyPolygon);
+            pNewObject = new SdrPathObj(rModel, ekind, std::move(aPolyPolygon));
 
             applyAnnotationCommon(*pNewObject, xAnnotation);
             applyAnnotationProperties(*pNewObject, rInfo);
