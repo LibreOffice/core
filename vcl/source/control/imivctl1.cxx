@@ -81,7 +81,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 100, (nWinStyle & WB_DETAILS) ?  20 : 70);
+    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 140, (nWinStyle & WB_DETAILS) ?  20 : 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
