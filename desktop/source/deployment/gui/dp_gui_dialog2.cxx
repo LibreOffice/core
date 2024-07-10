@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, weld::Button&, void)
 
 IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     bool bLockInterface = static_cast<bool>(_bLockInterface);
 
     if ( m_bStartProgress && !m_bHasProgress )
@@ -1105,7 +1105,7 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 
 void UpdateRequiredDialog::showProgress( bool _bStart )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     bool bStart = _bStart;
 
@@ -1129,9 +1129,9 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
 
 void UpdateRequiredDialog::updateProgress( const tools::Long nProgress )
 {
+    SolarMutexGuard aGuard;
     if ( m_nProgress != nProgress )
     {
-        std::unique_lock aGuard( m_aMutex );
         m_nProgress = nProgress;
         m_aIdle.Start();
     }
@@ -1141,7 +1141,7 @@ void UpdateRequiredDialog::updateProgress( const tools::Long nProgress )
 void UpdateRequiredDialog::updateProgress( const OUString &rText,
                                            const uno::Reference< task::XAbortChannel > &xAbortChannel)
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     m_xAbortChannel = xAbortChannel;
     m_sProgressText = rText;
@@ -1171,18 +1171,18 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
 
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, weld::Button&, void)
 {
-    std::unique_lock aGuard( m_aMutex );
-
     std::vector< uno::Reference< deployment::XPackage > > vUpdateEntries;
-    sal_Int32 nCount = m_xExtensionBox->GetEntryCount();
-
-    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( i );
-        vUpdateEntries.push_back( pEntry->m_xPackage );
-    }
+        SolarMutexGuard aGuard;
 
-    aGuard.unlock();
+        sal_Int32 nCount = m_xExtensionBox->GetEntryCount();
+
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( i );
+            vUpdateEntries.push_back( pEntry->m_xPackage );
+        }
+    }
 
     m_pManager->getCmdQueue()->checkForUpdates( std::move(vUpdateEntries) );
 }
@@ -1190,7 +1190,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, weld::Button&, void)
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     if ( !isBusy() )
     {
@@ -1301,8 +1301,6 @@ bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::
 
 bool UpdateRequiredDialog::hasActiveEntries()
 {
-    std::unique_lock aGuard( m_aMutex );
-
     bool bRet = false;
     tools::Long nCount = m_xExtensionBox->GetEntryCount();
     for ( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
@@ -1322,7 +1320,7 @@ bool UpdateRequiredDialog::hasActiveEntries()
 
 void UpdateRequiredDialog::disableAllEntries()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     incBusy();
 

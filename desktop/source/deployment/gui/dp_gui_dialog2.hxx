@@ -184,7 +184,6 @@ class UpdateRequiredDialog : public weld::GenericDialogController
 {
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
-    std::mutex           m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
     bool                 m_bStartProgress;
