@@ -342,11 +342,6 @@ tools::Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nE
     return aRect;
 }
 
-void SvtIconChoiceCtrl::SetNoSelection()
-{
-    _pImpl->SetNoSelection();
-}
-
 void SvtIconChoiceCtrl::CallImplEventListeners(VclEventId nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);

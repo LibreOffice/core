@@ -1091,17 +1091,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         rRenderContext.SetClipRegion();
 }
 
-void SvxIconChoiceCtrl_Impl::SetNoSelection()
-{
-    // block recursive calls via SelectEntry
-    if( !(nFlags & IconChoiceFlags::ClearingSelection ))
-    {
-        nFlags |= IconChoiceFlags::ClearingSelection;
-        DeselectAllBut( nullptr );
-        nFlags &= ~IconChoiceFlags::ClearingSelection;
-    }
-}
-
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos )
 {
     CheckBoundingRects();

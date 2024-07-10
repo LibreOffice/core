@@ -231,8 +231,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleIconChoiceCtrl::clearAccessibleSelection(  )
     {
-        ::comphelper::OExternalLockGuard aGuard( this );
-        getCtrl()->SetNoSelection();
+        // one entry should always be selected, so don't unselect
     }
 
     void SAL_CALL AccessibleIconChoiceCtrl::selectAllAccessibleChildren(  )
@@ -300,24 +299,7 @@ namespace accessibility
         if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount() )
             throw IndexOutOfBoundsException();
 
-        sal_Int32 nSelCount = 0;
-        VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
-        sal_Int32 nCount = pCtrl->GetEntryCount();
-        bool bFound = false;
-        for ( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
-            if ( pEntry->IsSelected() )
-            {
-                ++nSelCount;
-                if ( i == nSelectedChildIndex )
-                    bFound = true;
-            }
-        }
-
-        // if only one entry is selected and its index is chosen to deselect -> no selection anymore
-        if ( nSelCount == 1 && bFound )
-            pCtrl->SetNoSelection();
+        // one entry should always be selected, so don't unselect
     }
 
     void AccessibleIconChoiceCtrl::FillAccessibleStateSet( sal_Int64& rStateSet )

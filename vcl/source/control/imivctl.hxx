@@ -225,8 +225,6 @@ public:
 
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
 
-    void                SetNoSelection();
-
     SvxIconChoiceCtrlEntry* GetCurEntry() const { return pCursor; }
     void                SetCursor( SvxIconChoiceCtrlEntry* );
 
