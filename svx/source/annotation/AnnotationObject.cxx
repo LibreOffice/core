@@ -168,6 +168,12 @@ void AnnotationObject::ApplyAnnotationName()
     aItemSet.Put(makeSdrTextAutoGrowHeightItem(true));
 
     SetMergedItemSet(aItemSet);
+
+    // Update the annotation size after the auto-sizing the frame to content does its magic
+    auto& xAnnotationData = getAnnotationData();
+    css::geometry::RealSize2D aRealSize2D{ GetLogicRect().GetWidth() / 100.0,
+                                           GetLogicRect().GetHeight() / 100.0 };
+    xAnnotationData->mxAnnotation->SetSize(aRealSize2D);
 }
 
 AnnotationObject::~AnnotationObject() {}
