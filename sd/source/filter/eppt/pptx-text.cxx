@@ -356,9 +356,9 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     }
     if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName ) )
     {
-        css::lang::Locale eLocale;
-        if ( mAny >>= eLocale )
-            meCharLocale = eLocale;
+        css::lang::Locale aLocale;
+        if ( mAny >>= aLocale )
+            meCharLocale = std::move(aLocale);
     }
     if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName ) )
     {

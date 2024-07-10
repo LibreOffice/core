@@ -775,8 +775,8 @@ std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
     std::shared_ptr<SwHTMLTableLayoutCnts> xCntInfo;
     if (m_xContents)
         xCntInfo = m_xContents->CreateLayoutInfo();
-    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell(xCntInfo, m_nRowSpan, m_nColSpan, m_nWidth,
-                                      m_bRelWidth, m_bNoWrap));
+    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell(std::move(xCntInfo),
+                                      m_nRowSpan, m_nColSpan, m_nWidth, m_bRelWidth, m_bNoWrap));
 }
 
 HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)

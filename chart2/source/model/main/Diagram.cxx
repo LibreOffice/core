@@ -1230,7 +1230,7 @@ static std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDia
                             aRet.push_back(xAxis);
                         }
                         if( (nN == 0) && !xFallBack.is())
-                            xFallBack = xAxis;
+                            xFallBack = std::move(xAxis);
                     }
                 }
             }

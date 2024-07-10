@@ -527,10 +527,8 @@ namespace {
                 {
                     SvgStringVector aSvgStringVector;
 
-                    if(readSvgStringVector(aContent, aSvgStringVector, ','))
-                    {
-                        maSystemLanguage = aSvgStringVector;
-                    }
+                    if (readSvgStringVector(aContent, aSvgStringVector, ','))
+                        maSystemLanguage = std::move(aSvgStringVector);
                     break;
                 }
                 case SVGToken::XmlSpace:

@@ -185,9 +185,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
         rtl::Reference<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, u"\011DRMContent"_ustr);
         if (xDRMStrm.is())
         {
-            auto pDecryptedStorage = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
-            if (pDecryptedStorage)
-                xRootStrg = pDecryptedStorage;
+            if (auto xDecryptedStorage = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm))
+                xRootStrg = std::move(xDecryptedStorage);
             else
             {
                 bUnableToDecryptContent = true;

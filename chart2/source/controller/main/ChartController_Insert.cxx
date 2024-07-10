@@ -101,7 +101,8 @@ void ChartController::executeDispatch_InsertAxes()
 
         SolarMutexGuard aGuard;
         auto aDlg = std::make_shared<SchAxisDlg>(GetChartFrame(), *aDialogInput);
-        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, xUndoGuard=std::move(xUndoGuard)](int nResult) {
+        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput=std::move(aDialogInput),
+                                                xUndoGuard=std::move(xUndoGuard)](int nResult) {
             if ( nResult == RET_OK )
             {
                 // lock controllers till end of block

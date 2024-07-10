@@ -128,11 +128,11 @@ static PyObject* PyUNO_callable_call(
                 PyRef ref = runtime.any2PyObject( aOutParam[i] );
                 PyTuple_SetItem (return_list.get(), 1+i, ref.getAcquired());
             }
-            ret = return_list;
+            ret = std::move(return_list);
         }
         else
         {
-            ret = temp;
+            ret = std::move(temp);
         }
     }
     catch( const css::reflection::InvocationTargetException & e )

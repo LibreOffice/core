@@ -605,7 +605,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     if ( rInsert[columnIndex] != aTemp )
     {
         rInsert[columnIndex].setBound(true);
-        rInsert[columnIndex] = aTemp;
+        rInsert[columnIndex] = std::move(aTemp);
         rInsert[columnIndex].setModified(true);
         io_aRow[columnIndex] = rInsert[columnIndex];
 
