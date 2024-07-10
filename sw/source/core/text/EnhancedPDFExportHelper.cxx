@@ -2094,11 +2094,22 @@ tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* p
     {
         return rRectangle;
     }
+    return MapSwRectToPDFRect(pCurrPage, rRectangle);
+}
+
+double SwEnhancedPDFExportHelper::GetSwRectToPDFRectScale()
+{
+    return 0.75;
+}
+
+tools::Rectangle SwEnhancedPDFExportHelper::MapSwRectToPDFRect(const SwPageFrame* pCurrPage,
+                                                               const tools::Rectangle& rRectangle)
+{
     //the page has been scaled by 75% and vertically centered, so adjust these
     //rectangles equivalently
     tools::Rectangle aRect(rRectangle);
     Size aRectSize(aRect.GetSize());
-    double fScale = 0.75;
+    double fScale = GetSwRectToPDFRectScale();
     aRectSize.setWidth( aRectSize.Width() * fScale );
     aRectSize.setHeight( aRectSize.Height() * fScale );
     tools::Long nOrigHeight = pCurrPage->getFrameArea().Height();
