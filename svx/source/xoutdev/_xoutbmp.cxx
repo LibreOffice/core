@@ -25,9 +25,15 @@
 #include <tools/debug.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/docfile.hxx>
+#include <svx/svdpntv.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/svapp.hxx>
+
+#include <UnoGraphicExporter.hxx>
+
 #include <memory>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -271,63 +277,58 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         Graphic aGraphic;
         OUString aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
 
-        if( bWriteTransGrf )
+        if (bAnimated)
+            aGraphic = rGraphic;
+        else if (rGraphic.GetType() == GraphicType::GdiMetafile
+                 && rGraphic.GetGDIMetaFile().GetActionSize())
         {
-            if( bAnimated  )
-                aGraphic = rGraphic;
-            else
+            Size aSize;
+            const Size* pSize = nullptr;
+            if (pMtfSize_100TH_MM)
             {
-                if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
+                aSize = Application::GetDefaultDevice()->LogicToPixel(*pMtfSize_100TH_MM,
+                                                                      MapMode(MapUnit::Map100thMM));
+                pSize = &aSize;
+            }
+            aGraphic = GetBitmapFromMetaFile(rGraphic.GetGDIMetaFile(), pSize);
+        }
+        else if (pMtfSize_100TH_MM && (rGraphic.GetType() != GraphicType::Bitmap))
+        {
+            ScopedVclPtrInstance< VirtualDevice > pVDev;
+            const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+
+            if( pVDev->SetOutputSizePixel( aSize ) )
+            {
+                if (bWriteTransGrf)
                 {
-                    ScopedVclPtrInstance< VirtualDevice > pVDev;
-                    const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+                    const Wallpaper aWallpaper( pVDev->GetBackground() );
+                    const Point     aPt;
 
-                    if( pVDev->SetOutputSizePixel( aSize ) )
-                    {
-                        const Wallpaper aWallpaper( pVDev->GetBackground() );
-                        const Point     aPt;
+                    pVDev->SetBackground( Wallpaper( COL_BLACK ) );
+                    pVDev->Erase();
+                    rGraphic.Draw(*pVDev, aPt, aSize);
 
-                        pVDev->SetBackground( Wallpaper( COL_BLACK ) );
-                        pVDev->Erase();
-                        rGraphic.Draw(*pVDev, aPt, aSize);
+                    const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
 
-                        const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
+                    pVDev->SetBackground( aWallpaper );
+                    pVDev->Erase();
+                    rGraphic.Draw(*pVDev, aPt, aSize);
 
-                        pVDev->SetBackground( aWallpaper );
-                        pVDev->Erase();
-                        rGraphic.Draw(*pVDev, aPt, aSize);
-
-                        pVDev->SetRasterOp( RasterOp::Xor );
-                        pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                        aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
-                    }
-                    else
-                        aGraphic = rGraphic.GetBitmapEx();
+                    pVDev->SetRasterOp( RasterOp::Xor );
+                    pVDev->DrawBitmap( aPt, aSize, aBitmap );
+                    aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                 }
                 else
-                    aGraphic = rGraphic.GetBitmapEx();
-            }
-        }
-        else
-        {
-            if (bAnimated)
-                aGraphic = rGraphic;
-            else if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
-            {
-                ScopedVclPtrInstance< VirtualDevice > pVDev;
-                const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
-
-                if( pVDev->SetOutputSizePixel( aSize ) )
                 {
                     rGraphic.Draw(*pVDev, Point(), aSize);
                     aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
                 }
-                else
-                    aGraphic = rGraphic.GetBitmapEx();
             }
             else
                 aGraphic = rGraphic.GetBitmapEx();
         }
+        else
+            aGraphic = rGraphic.GetBitmapEx();
 
         // mirror?
         if( ( nFlags & XOutFlags::MirrorHorz ) || ( nFlags & XOutFlags::MirrorVert ) )
