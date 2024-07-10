@@ -1,0 +1,11 @@
+--- utils/Makefile.in
++++ utils/Makefile.in
+@@ -106,7 +106,7 @@
+ AM_V_at = $(am__v_at_@AM_V@)
+ am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
+ am__v_at_0 = @
+-CCLD = $(CC)
++CCLD = $(CXX)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
