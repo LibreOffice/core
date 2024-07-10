@@ -3263,12 +3263,6 @@ SvxBoxInfoItem::SvxBoxInfoItem(const sal_uInt16 nId)
     ResetFlags();
 }
 
-ItemInstanceManager* SvxBoxItem::getItemInstanceManager() const
-{
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxBoxItem).hash_code());
-    return &aInstanceManager;
-}
-
 SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCopy )
     : SfxPoolItem(rCopy)
     , mpHorizontalLine(rCopy.mpHorizontalLine ? new SvxBorderLine(*rCopy.mpHorizontalLine) : nullptr)
@@ -3985,7 +3979,7 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
 
 ItemInstanceManager* SvxBrushItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxBrushItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -4602,7 +4596,7 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxFrameDirectionItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 

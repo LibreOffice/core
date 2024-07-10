@@ -125,7 +125,7 @@ void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem)
 //     ignored and start sharing ALL Item derivations instantly.
 class InstanceManagerHelper
 {
-    typedef std::unordered_map<std::size_t, std::pair<sal_uInt16, DefaultItemInstanceManager*>>
+    typedef std::unordered_map<SfxItemType, std::pair<sal_uInt16, DefaultItemInstanceManager*>>
         managerTypeMap;
     managerTypeMap maManagerPerType;
 
@@ -153,15 +153,14 @@ public:
         // hopefully fastest) incarnations
         ItemInstanceManager* pManager(rItem.getItemInstanceManager());
 
-        // Check for correct hash, there may be derivations of that class.
+        // Check for correct SfxItemType, there may be derivations of that class.
         // Note that Managers from the Items are *not* added to local list,
-        // they are expected to be static instances at the Items
-        const std::size_t aHash(typeid(rItem).hash_code());
-        if (nullptr != pManager && pManager->getClassHash() == aHash)
+        // they are expected to be static instances at the Items for fastest access
+        if (nullptr != pManager && pManager->ItemType() == rItem.ItemType())
             return pManager;
 
         // check local memory for existing entry
-        managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
+        managerTypeMap::iterator aHit(maManagerPerType.find(rItem.ItemType()));
 
         // no instance yet
         if (aHit == maManagerPerType.end())
@@ -170,14 +169,14 @@ public:
             if (g_bShareImmediately)
             {
                 // create, insert locally and immediately start sharing
-                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
-                maManagerPerType.insert({ aHash, std::make_pair(0, pNew) });
+                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(rItem.ItemType()));
+                maManagerPerType.insert({ rItem.ItemType(), std::make_pair(0, pNew) });
                 return pNew;
             }
 
             // start countdown from NUMBER_OF_UNSHARED_INSTANCES until zero is reached
             maManagerPerType.insert(
-                { aHash, std::make_pair(NUMBER_OF_UNSHARED_INSTANCES, nullptr) });
+                { rItem.ItemType(), std::make_pair(NUMBER_OF_UNSHARED_INSTANCES, nullptr) });
             return nullptr;
         }
 
@@ -195,7 +194,7 @@ public:
         // here the countdown is zero and there is not yet a ItemInstanceManager
         // incarnated. Do so, register and return it
         assert(nullptr == aHit->second.second);
-        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(aHash));
+        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(rItem.ItemType()));
         aHit->second.second = pNew;
 
         return pNew;
@@ -216,15 +215,14 @@ public:
         // hopefully fastest) incarnations
         ItemInstanceManager* pManager(rItem.getItemInstanceManager());
 
-        // Check for correct hash, there may be derivations of that class.
+        // Check for correct SfxItemType, there may be derivations of that class.
         // Note that Managers from the Items are *not* added to local list,
         // they are expected to be static instances at the Items
-        const std::size_t aHash(typeid(rItem).hash_code());
-        if (nullptr != pManager && pManager->getClassHash() == aHash)
+        if (nullptr != pManager && pManager->ItemType() == rItem.ItemType())
             return pManager;
 
         // check local memory for existing entry
-        managerTypeMap::iterator aHit(maManagerPerType.find(aHash));
+        managerTypeMap::iterator aHit(maManagerPerType.find(rItem.ItemType()));
 
         if (aHit == maManagerPerType.end())
             // no instance yet, return nullptr

@@ -341,7 +341,7 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxAdjustItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 

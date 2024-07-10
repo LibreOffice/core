@@ -92,8 +92,9 @@ namespace
         SfxBoolItemMap  maRegistered;
 
     public:
-        SfxBoolItemInstanceManager()
-        : ItemInstanceManager(typeid(SfxBoolItem).hash_code())
+        SfxBoolItemInstanceManager(SfxItemType aSfxItemType)
+        : ItemInstanceManager(aSfxItemType)
+        , maRegistered()
         {
         }
 
@@ -158,7 +159,7 @@ namespace
 
 ItemInstanceManager* SfxBoolItem::getItemInstanceManager() const
 {
-    static SfxBoolItemInstanceManager aInstanceManager;
+    static SfxBoolItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 

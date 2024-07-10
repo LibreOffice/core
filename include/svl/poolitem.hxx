@@ -712,17 +712,17 @@ class SVL_DLLPUBLIC ItemInstanceManager
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
-    // Define for which class to register (usually typeid().hash_code()).
-    std::size_t     m_aClassHash;
+    // Define for which SfxItemType to register
+    SfxItemType     m_aSfxItemType;
 
 public:
-    ItemInstanceManager(const std::size_t aClassHash)
-    : m_aClassHash(aClassHash)
+    ItemInstanceManager(SfxItemType aSfxItemType)
+    : m_aSfxItemType(aSfxItemType)
     {
     }
     virtual ~ItemInstanceManager() = default;
 
-    std::size_t getClassHash() const { return m_aClassHash; }
+    SfxItemType ItemType() const { return m_aSfxItemType; }
 
 private:
     // standard interface, accessed exclusively
@@ -745,8 +745,9 @@ class SVL_DLLPUBLIC DefaultItemInstanceManager : public ItemInstanceManager
     std::unordered_map<sal_uInt16, std::unordered_set<const SfxPoolItem*>>  maRegistered;
 
 public:
-    DefaultItemInstanceManager(const std::size_t aClassHash)
-    : ItemInstanceManager(aClassHash)
+    DefaultItemInstanceManager(SfxItemType aSfxItemType)
+    : ItemInstanceManager(aSfxItemType)
+    , maRegistered()
     {
     }
 
@@ -760,12 +761,16 @@ private:
   Utility template to reduce boilerplate code when creating item instance managers
   for specific PoolItem subclasses.
 */
-template<class T>
-class TypeSpecificItemInstanceManager : public ItemInstanceManager
+class HashedItemInstanceManager : public ItemInstanceManager
 {
+    std::unordered_map<size_t, const SfxPoolItem*> maRegistered;
+
+protected:
+    virtual size_t hashCode(const SfxPoolItem&) const = 0;
+
 public:
-    TypeSpecificItemInstanceManager()
-    : ItemInstanceManager(typeid(T).hash_code())
+    HashedItemInstanceManager(SfxItemType aSfxItemType)
+    : ItemInstanceManager(aSfxItemType)
     {
     }
 
@@ -786,12 +791,6 @@ public:
     {
         maRegistered.erase(hashCode(rItem));
     }
-
-protected:
-    virtual size_t hashCode(const SfxPoolItem&) const = 0;
-
-private:
-    std::unordered_map<size_t, const SfxPoolItem*> maRegistered;
 };
 
 

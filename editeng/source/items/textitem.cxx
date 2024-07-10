@@ -161,7 +161,7 @@ bool SvxFontListItem::GetPresentation
 
 namespace
 {
-    class SvxFontItemInstanceManager : public TypeSpecificItemInstanceManager<SvxFontItem>
+    class SvxFontItemInstanceManager : public HashedItemInstanceManager
     {
     protected:
         virtual size_t hashCode(const SfxPoolItem& rItem) const override
@@ -176,12 +176,17 @@ namespace
             o3tl::hash_combine(seed, rFontItem.GetCharSet());
             return seed;
         }
+    public:
+        SvxFontItemInstanceManager(SfxItemType aSfxItemType)
+        : HashedItemInstanceManager(aSfxItemType)
+        {
+        }
     };
 }
 
 ItemInstanceManager* SvxFontItem::getItemInstanceManager() const
 {
-    static SvxFontItemInstanceManager aInstanceManager;
+    static SvxFontItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -411,23 +416,29 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 namespace
 {
-    class SvxPostureItemInstanceManager : public TypeSpecificItemInstanceManager<SvxPostureItem>
+    class SvxPostureItemInstanceManager : public HashedItemInstanceManager
     {
     protected:
         virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
             auto const & rPostureItem = static_cast<const SvxPostureItem&>(rItem);
             std::size_t seed(0);
+            o3tl::hash_combine(seed, rItem.Which());
             o3tl::hash_combine(seed, rPostureItem.Which());
             o3tl::hash_combine(seed, rPostureItem. GetEnumValue());
             return seed;
+        }
+    public:
+        SvxPostureItemInstanceManager(SfxItemType aSfxItemType)
+        : HashedItemInstanceManager(aSfxItemType)
+        {
         }
     };
 }
 
 ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
 {
-    static SvxPostureItemInstanceManager aInstanceManager;
+    static SvxPostureItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -549,7 +560,7 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ItemInstanceManager* SvxWeightItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxWeightItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -679,25 +690,31 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 namespace
 {
-    class SvxFontHeightItemInstanceManager : public TypeSpecificItemInstanceManager<SvxFontHeightItem>
+    class SvxFontHeightItemInstanceManager : public HashedItemInstanceManager
     {
     protected:
         virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
             auto const & rFontHeightItem = static_cast<const SvxFontHeightItem&>(rItem);
             std::size_t seed(0);
+            o3tl::hash_combine(seed, rItem.Which());
             o3tl::hash_combine(seed, rFontHeightItem.Which());
             o3tl::hash_combine(seed, rFontHeightItem.GetHeight());
             o3tl::hash_combine(seed, rFontHeightItem.GetProp());
             o3tl::hash_combine(seed, rFontHeightItem.GetPropUnit());
             return seed;
         }
+    public:
+        SvxFontHeightItemInstanceManager(SfxItemType aSfxItemType)
+        : HashedItemInstanceManager(aSfxItemType)
+        {
+        }
     };
 }
 
 ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
 {
-    static SvxFontHeightItemInstanceManager aInstanceManager;
+    static SvxFontHeightItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -1196,7 +1213,7 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 
 ItemInstanceManager* SvxUnderlineItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxUnderlineItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -1243,7 +1260,7 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 ItemInstanceManager* SvxOverlineItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxOverlineItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -1290,7 +1307,7 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 ItemInstanceManager* SvxCrossedOutItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxCrossedOutItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -2093,7 +2110,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 ItemInstanceManager* SvxLanguageItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxLanguageItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -2241,7 +2258,7 @@ bool SvxBlinkItem::GetPresentation
 
 ItemInstanceManager* SvxEmphasisMarkItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxEmphasisMarkItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -2682,7 +2699,7 @@ bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 
 ItemInstanceManager* SvxCharReliefItem::getItemInstanceManager() const
 {
-    static DefaultItemInstanceManager aInstanceManager(typeid(SvxCharReliefItem).hash_code());
+    static DefaultItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -2971,23 +2988,29 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
 namespace
 {
-    class SvxRsidItemInstanceManager : public TypeSpecificItemInstanceManager<SvxRsidItem>
+    class SvxRsidItemInstanceManager : public HashedItemInstanceManager
     {
     protected:
         virtual size_t hashCode(const SfxPoolItem& rItem) const override
         {
             auto const & rRsidItem = static_cast<const SvxRsidItem&>(rItem);
             std::size_t seed(0);
+            o3tl::hash_combine(seed, rItem.Which());
             o3tl::hash_combine(seed, rRsidItem.Which());
             o3tl::hash_combine(seed, rRsidItem.GetValue());
             return seed;
+        }
+    public:
+        SvxRsidItemInstanceManager(SfxItemType aSfxItemType)
+        : HashedItemInstanceManager(aSfxItemType)
+        {
         }
     };
 }
 
 ItemInstanceManager* SvxRsidItem::getItemInstanceManager() const
 {
-    static SvxRsidItemInstanceManager aInstanceManager;
+    static SvxRsidItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
