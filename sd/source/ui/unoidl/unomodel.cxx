@@ -3157,6 +3157,27 @@ OString SdXImpressDocument::getPresentationInfo() const
                                     xPropSet->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
                                     aJsonWriter.put("transitionDirection", nTransitionDirection);
                                 }
+
+                                double nTransitionDuration(0.0);
+                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionDuration" ) &&
+                                    (xPropSet->getPropertyValue( "TransitionDuration" ) >>= nTransitionDuration ) && nTransitionDuration != 0.0 )
+                                {
+                                    // convert transitionDuration time to ms
+                                    aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
+                                }
+
+                                sal_Int32 nChange(0);
+                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                                    (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                                {
+                                    double fSlideDuration(0);
+                                    if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                                        (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                                    {
+                                        // convert slide duration time to ms
+                                        aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
+                                    }
+                                }
                             }
                         }
                     }
