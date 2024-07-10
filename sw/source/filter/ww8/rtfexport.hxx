@@ -218,7 +218,8 @@ private:
     void WriteDocVars();
     /// This is necessary to have the numbering table ready before the main text is being processed.
     void BuildNumbering();
-    void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader);
+    void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader, bool bAsTitlePg,
+                           bool bWriteFirst);
     void WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const char* pStr,
                            bool bTitlepg = false);
 
