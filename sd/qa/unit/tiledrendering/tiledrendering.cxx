@@ -1782,6 +1782,24 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
+namespace
+{
+
+OUString extractRectangleX(std::string const& rString)
+{
+    auto rOUString = OUString::createFromAscii(rString);
+    auto aRectangleStrings = comphelper::string::convertCommaSeparated(rOUString);
+    return aRectangleStrings[0];
+}
+
+OUString extractRectangleY(std::string const& rString)
+{
+    auto aOUString = OUString::createFromAscii(rString);
+    auto aRectangleStrings = comphelper::string::convertCommaSeparated(aOUString);
+    return aRectangleStrings[1];
+}
+
+}
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 {
@@ -1811,7 +1829,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 282, 282"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    auto aRectStringBefore = aView1.m_aCommentCallbackResult.get<std::string>("rectangle");
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, extractRectangleX(aRectStringBefore));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, extractRectangleY(aRectStringBefore));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1824,7 +1845,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 282, 282"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    auto aRectStringAfter = aView1.m_aCommentCallbackResult.get<std::string>("rectangle");
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, extractRectangleX(aRectStringAfter));
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr, extractRectangleY(aRectStringAfter));
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
@@ -1857,7 +1881,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 282, 282"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    auto aRectStringBefore = aView1.m_aCommentCallbackResult.get<std::string>("rectangle");
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, extractRectangleX(aRectStringBefore));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, extractRectangleY(aRectStringBefore));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1870,7 +1897,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 282, 282"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+
+    auto aRectStringAfter = aView1.m_aCommentCallbackResult.get<std::string>("rectangle");
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, extractRectangleX(aRectStringAfter));
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr, extractRectangleY(aRectStringAfter));
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }

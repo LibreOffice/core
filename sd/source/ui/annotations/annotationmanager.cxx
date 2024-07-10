@@ -1032,6 +1032,9 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
 
         auto aRealSize2D = xAnnotation->getSize();
         Size aSize(::tools::Long(aRealSize2D.Width * 100.0), ::tools::Long(aRealSize2D.Height * 100.0));
+        // If the size is not set, set it to a default value so it is non-zero
+        if (aSize.getWidth() == 0 || aSize.getHeight() == 0)
+             aSize = Size(500, 500);
 
         ::tools::Rectangle aRectangle(aPosition, aSize);
 
