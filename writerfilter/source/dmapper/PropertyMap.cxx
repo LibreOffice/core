@@ -519,7 +519,8 @@ void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& r
  */
 void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
 {
-    if (!m_aPageStyle.is())
+    // do not alter header/footer during copy/paste
+    if (!m_aPageStyle.is() || !rDM_Impl.IsNewDoc())
         return;
 
     bool bHasHeader = false;
@@ -570,7 +571,7 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
     m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(!m_bTitlePage));
 
     bool bHadFirstHeader = m_bHadFirstHeader && m_bTitlePage;
-    if (bHasHeader && !bHadFirstHeader && !m_bHadLeftHeader && !m_bHadRightHeader && rDM_Impl.IsNewDoc())
+    if (bHasHeader && !bHadFirstHeader && !m_bHadLeftHeader && !m_bHadRightHeader)
     {
         m_aPageStyle->setPropertyValue(sHeaderIsOn, uno::Any(false));
     }
