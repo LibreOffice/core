@@ -349,6 +349,61 @@ DECLARE_RTFEXPORT_TEST(testTdf158982, "tdf158982.rtf")
                          getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
+{
+    // given a nasty ODT with first-even-odd page styles, emulate using RTF's abilities
+    auto verify = [this](bool bIsExported = false) {
+        // Sanity check - always good to test when dealing with page styles and breaks.
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+        CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
+                             parseDump("/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"First Left"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
+        if (!bIsExported)
+            CPPUNIT_ASSERT_EQUAL(u"First Right"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+    };
+    createSwDoc("tdf160976_headerFooter.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*IsExported*/ true);
+    // note: an unexpected header surfaces on page 3.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter2)
+{
+    // given a typical ODT with first-follow page styles, emulate using RTF's abilities
+    auto verify = [this]() {
+        // Sanity check - always good to test when dealing with page styles and breaks.
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+        CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
+                             parseDump("/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+    };
+    createSwDoc("tdf160976_headerFooter2.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
+{
+    // given a simple ODT with typical "different first" on the default page style
+    auto verify = [this]() {
+        // Sanity check - always good to test when dealing with page styles and breaks.
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr, parseDump("/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+    };
+    createSwDoc("tdf160976_headerFooter3.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
