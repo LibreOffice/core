@@ -77,7 +77,7 @@ ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 }
 
 OUString
-ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& /*rGuard*/, sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < m_aResults.size() )
     {
@@ -89,7 +89,7 @@ ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::m
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResultImpl(rGuard, nIndex) )
     {
         // Note: getResult fills m_pImpl->m_aResults[ nIndex ]->aURL.
         return m_aResults[ nIndex ].aURL;
