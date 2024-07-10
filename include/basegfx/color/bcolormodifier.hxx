@@ -32,6 +32,21 @@
 
 namespace basegfx
 {
+    enum class BColorModifierType : sal_uInt16 {
+        BCMType_gray,
+        BCMType_invert,
+        BCMType_luminance_to_alpha,
+        BCMType_replace,
+        BCMType_interpolate,
+        BCMType_saturate,
+        BCMType_matrix,
+        BCMType_hueRotate,
+        BCMType_black_and_white,
+        BCMType_gamma,
+        BCMType_RGBLuminanceContrast,
+        BCMType_randomize
+    };
+
     /** base class to define color modifications
 
         The basic idea is to have instances of color modifiers where each
@@ -61,12 +76,16 @@ namespace basegfx
     class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier
     {
     private:
+        BColorModifierType  maType;
         BColorModifier(const BColorModifier&) = delete;
         BColorModifier& operator=(const BColorModifier&) = delete;
     protected:
         // no one is allowed to incarnate the abstract base class
         // except derivations
-        BColorModifier() {}
+        BColorModifier(BColorModifierType aType)
+        : maType(aType)
+        {
+        }
 
     public:
         // no one should directly destroy it; all incarnations should be
@@ -74,9 +93,19 @@ namespace basegfx
         virtual ~BColorModifier();
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const = 0;
+        virtual bool operator==(const BColorModifier& rCompare) const
+        {
+            if (maType != rCompare.maType)
+                return false;
+
+            return true;
+        }
+
         bool operator!=(const BColorModifier& rCompare) const
         {
+            if (maType != rCompare.maType)
+                return true;
+
             return !(operator==(rCompare));
         }
 
@@ -84,6 +113,9 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const = 0;
 
         virtual OUString getModifierName() const = 0;
+
+        // return type
+        BColorModifierType getBColorModifierType() const { return maType; }
     };
 
     /** convert color to gray
@@ -92,13 +124,11 @@ namespace basegfx
     {
     public:
         BColorModifier_gray()
+        : BColorModifier(basegfx::BColorModifierType::BCMType_gray)
         {
         }
 
         virtual ~BColorModifier_gray() override;
-
-        // compare operator
-        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
         SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
@@ -113,13 +143,11 @@ namespace basegfx
     {
     public:
         BColorModifier_invert()
+        : BColorModifier(basegfx::BColorModifierType::BCMType_invert)
         {
         }
 
         virtual ~BColorModifier_invert() override;
-
-        // compare operator
-        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
         SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
@@ -138,13 +166,11 @@ namespace basegfx
     {
     public:
         BColorModifier_luminance_to_alpha()
+        : BColorModifier(basegfx::BColorModifierType::BCMType_luminance_to_alpha)
         {
         }
 
         virtual ~BColorModifier_luminance_to_alpha() override;
-
-        // compare operator
-        SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
         // compute modified color
         SAL_DLLPRIVATE virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
@@ -164,7 +190,8 @@ namespace basegfx
 
     public:
         BColorModifier_replace(const ::basegfx::BColor& rBColor)
-        :   maBColor(rBColor)
+        : BColorModifier(basegfx::BColorModifierType::BCMType_replace)
+        , maBColor(rBColor)
         {
         }
 
@@ -196,8 +223,9 @@ namespace basegfx
 
     public:
         BColorModifier_interpolate(const ::basegfx::BColor& rBColor, double fValue)
-        :   maBColor(rBColor),
-            mfValue(fValue)
+        : BColorModifier(basegfx::BColorModifierType::BCMType_interpolate)
+        , maBColor(rBColor)
+        , mfValue(fValue)
         {
         }
 
@@ -250,7 +278,8 @@ namespace basegfx
 
     public:
         BColorModifier_matrix(std::vector<double> aVector)
-            : maVector(std::move(aVector))
+        : BColorModifier(basegfx::BColorModifierType::BCMType_matrix)
+        , maVector(std::move(aVector))
         {
         }
 
@@ -300,7 +329,8 @@ namespace basegfx
 
     public:
         BColorModifier_black_and_white(double fValue)
-        :   mfValue(fValue)
+        : BColorModifier(basegfx::BColorModifierType::BCMType_black_and_white)
+        , mfValue(fValue)
         {
         }
 
@@ -441,6 +471,8 @@ namespace basegfx
         {
             maBColorModifiers.pop_back();
         }
+
+        bool operator==(const BColorModifierStack& rComp) const;
     };
 } // end of namespace basegfx
 

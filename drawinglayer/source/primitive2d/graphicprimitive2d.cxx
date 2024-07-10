@@ -75,28 +75,41 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
 
     const GraphicObject& rGraphicObject = getGraphicObject();
     Graphic aTransformedGraphic(rGraphicObject.GetGraphic());
-    const bool isBitmap(GraphicType::Bitmap == aTransformedGraphic.GetType()
-                        && !aTransformedGraphic.getVectorGraphicData());
     const bool isAdjusted(getGraphicAttr().IsAdjusted());
     const bool isDrawMode(GraphicDrawMode::Standard != getGraphicAttr().GetDrawMode());
 
-    if (isBitmap && (isAdjusted || isDrawMode))
-    {
-        // the pure primitive solution with the color modifiers works well, too, but when
-        // it is a bitmap graphic the old modification currently is faster; so use it here
-        // instead of creating all as in create2DColorModifierEmbeddingsAsNeeded (see below).
-        // Still, crop, rotation, mirroring and transparency is handled by primitives already
-        // (see above).
-        // This could even be done when vector graphic, but we explicitly want to have the
-        // pure primitive solution for this; this will allow vector graphics to stay vector
-        // graphics, independent from the color filtering stuff. This will enhance e.g.
-        // SVG and print quality while reducing data size at the same time.
-        // The other way around the old modifications when only used on already bitmap objects
-        // will not lose any quality.
-        aTransformedGraphic = rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr);
+    // I have now added buffering BColorModifierStack-adapted Bitmaps,
+    // see BitmapEx::ModifyBitmapEx, thus the primitive case is fast now.
+    // It buffers the adapted bitmap and at that the SDPRs can then buffer
+    // the system-dependent represetation.
+    // I keep the code below (adding a static switch). It modifies the
+    // Graphic and is a reliable fallback - just in case. Remember that
+    // it does *not* buffer and has to modify again at each re-use...
+    static bool bUseOldModification(false);
 
-        // reset GraphicAttr after use to not apply double
-        aSuppressGraphicAttr = GraphicAttr();
+    if (bUseOldModification)
+    {
+        const bool isBitmap(GraphicType::Bitmap == aTransformedGraphic.GetType()
+                            && !aTransformedGraphic.getVectorGraphicData());
+
+        if (isBitmap && (isAdjusted || isDrawMode))
+        {
+            // the pure primitive solution with the color modifiers works well, too, but when
+            // it is a bitmap graphic the old modification currently is faster; so use it here
+            // instead of creating all as in create2DColorModifierEmbeddingsAsNeeded (see below).
+            // Still, crop, rotation, mirroring and transparency is handled by primitives already
+            // (see above).
+            // This could even be done when vector graphic, but we explicitly want to have the
+            // pure primitive solution for this; this will allow vector graphics to stay vector
+            // graphics, independent from the color filtering stuff. This will enhance e.g.
+            // SVG and print quality while reducing data size at the same time.
+            // The other way around the old modifications when only used on already bitmap objects
+            // will not lose any quality.
+            aTransformedGraphic = rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr);
+
+            // reset GraphicAttr after use to not apply double
+            aSuppressGraphicAttr = GraphicAttr();
+        }
     }
 
     // create sub-content; helper takes care of correct handling of

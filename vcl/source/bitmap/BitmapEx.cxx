@@ -837,148 +837,210 @@ BitmapEx BitmapEx::getTransformed(
     return aRetval;
 }
 
+namespace
+{
+class BufferedData_ModifiedBitmapEx : public basegfx::SystemDependentData
+{
+    Bitmap maChangedBitmap;
+    basegfx::BColorModifierStack maBColorModifierStack;
+
+public:
+    BufferedData_ModifiedBitmapEx(
+        const Bitmap& rChangedBitmap,
+        const basegfx::BColorModifierStack& rBColorModifierStack)
+    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+    , maChangedBitmap(rChangedBitmap)
+    , maBColorModifierStack(rBColorModifierStack)
+    {
+    }
+
+    const Bitmap& getChangedBitmap() const { return maChangedBitmap; }
+    const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
+};
+
+sal_Int64 BufferedData_ModifiedBitmapEx::estimateUsageInBytes() const
+{
+    return maChangedBitmap.GetSizeBytes();
+}
+}
+
 BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
 {
-    Bitmap aChangedBitmap(GetBitmap());
-    bool bDone(false);
-
-    for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
+    if (0 == rBColorModifierStack.count())
     {
-        const basegfx::BColorModifierSharedPtr& rModifier = rBColorModifierStack.getBColorModifier(--a);
-        const basegfx::BColorModifier_replace* pReplace = dynamic_cast< const basegfx::BColorModifier_replace* >(rModifier.get());
+        // no modifiers, done
+        return *this;
+    }
 
-        if(pReplace)
+    // check for BColorModifier_replace at the top of the stack
+    const basegfx::BColorModifierSharedPtr& rLastModifier(rBColorModifierStack.getBColorModifier(rBColorModifierStack.count() - 1));
+    const basegfx::BColorModifier_replace* pLastModifierReplace(dynamic_cast<const basegfx::BColorModifier_replace*>(rLastModifier.get()));
+
+    if (nullptr != pLastModifierReplace && !IsAlpha())
+    {
+        // at the top of the stack we have a BColorModifier_replace -> no Bitmap needed,
+        // representation can be replaced by filled colored polygon. signal the caller
+        // about that by returning empty BitmapEx
+        return BitmapEx();
+    }
+
+    const basegfx::SystemDependentDataHolder* pHolder(GetBitmap().accessSystemDependentDataHolder());
+    std::shared_ptr<BufferedData_ModifiedBitmapEx> pBufferedData_ModifiedBitmapEx;
+
+    if (nullptr != pHolder)
+    {
+        // try to access SystemDependentDataHolder and buffered data
+        pBufferedData_ModifiedBitmapEx = std::static_pointer_cast<BufferedData_ModifiedBitmapEx>(
+            pHolder->getSystemDependentData(
+                typeid(BufferedData_ModifiedBitmapEx).hash_code()));
+
+        if (nullptr != pBufferedData_ModifiedBitmapEx
+            && !(pBufferedData_ModifiedBitmapEx->getBColorModifierStack() == rBColorModifierStack))
         {
-            // complete replace
-            if(IsAlpha())
-            {
-                // clear bitmap with dest color
-                if (vcl::isPalettePixelFormat(aChangedBitmap.getPixelFormat()))
-                {
-                    // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
-                    // determined and used -> this may be different from what is wanted here.
-                    // Better create a new bitmap with the needed color explicitly.
-                    BitmapScopedReadAccess xReadAccess(aChangedBitmap);
-                    OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
-
-                    if(xReadAccess)
-                    {
-                        BitmapPalette aNewPalette(xReadAccess->GetPalette());
-                        aNewPalette[0] = BitmapColor(Color(pReplace->getBColor()));
-                        aChangedBitmap = Bitmap(
-                            aChangedBitmap.GetSizePixel(),
-                            aChangedBitmap.getPixelFormat(),
-                            &aNewPalette);
-                    }
-                }
-                aChangedBitmap.Erase(Color(pReplace->getBColor()));
-            }
-            else
-            {
-                // erase bitmap, caller will know to paint direct
-                aChangedBitmap.SetEmpty();
-            }
-
-            bDone = true;
+            // BColorModifierStack is different -> data invalid
+            pBufferedData_ModifiedBitmapEx = nullptr;
         }
-        else
+
+        if (nullptr != pBufferedData_ModifiedBitmapEx)
         {
-            BitmapScopedWriteAccess xContent(aChangedBitmap);
-
-            if(xContent)
-            {
-                const double fConvertColor(1.0 / 255.0);
-
-                if(xContent->HasPalette())
-                {
-                    const sal_uInt16 nCount(xContent->GetPaletteEntryCount());
-
-                    for(sal_uInt16 b(0); b < nCount; b++)
-                    {
-                        const BitmapColor& rCol = xContent->GetPaletteColor(b);
-                        const basegfx::BColor aBSource(
-                            rCol.GetRed() * fConvertColor,
-                            rCol.GetGreen() * fConvertColor,
-                            rCol.GetBlue() * fConvertColor);
-                        const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
-                        xContent->SetPaletteColor(b, BitmapColor(Color(aBDest)));
-                    }
-                }
-                else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
-                {
-                    for(tools::Long y(0); y < xContent->Height(); y++)
-                    {
-                        Scanline pScan = xContent->GetScanline(y);
-
-                        for(tools::Long x(0); x < xContent->Width(); x++)
-                        {
-                            const basegfx::BColor aBSource(
-                                *(pScan + 2)* fConvertColor,
-                                *(pScan + 1) * fConvertColor,
-                                *pScan * fConvertColor);
-                            const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getBlue() * 255.0);
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getGreen() * 255.0);
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getRed() * 255.0);
-                        }
-                    }
-                }
-                else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
-                {
-                    for(tools::Long y(0); y < xContent->Height(); y++)
-                    {
-                        Scanline pScan = xContent->GetScanline(y);
-
-                        for(tools::Long x(0); x < xContent->Width(); x++)
-                        {
-                            const basegfx::BColor aBSource(
-                                *pScan * fConvertColor,
-                                *(pScan + 1) * fConvertColor,
-                                *(pScan + 2) * fConvertColor);
-                            const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getRed() * 255.0);
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getGreen() * 255.0);
-                            *pScan++ = static_cast< sal_uInt8 >(aBDest.getBlue() * 255.0);
-                        }
-                    }
-                }
-                else
-                {
-                    for(tools::Long y(0); y < xContent->Height(); y++)
-                    {
-                        Scanline pScanline = xContent->GetScanline( y );
-                        for(tools::Long x(0); x < xContent->Width(); x++)
-                        {
-                            const BitmapColor aBMCol(xContent->GetColor(y, x));
-                            const basegfx::BColor aBSource(
-                                static_cast<double>(aBMCol.GetRed()) * fConvertColor,
-                                static_cast<double>(aBMCol.GetGreen()) * fConvertColor,
-                                static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
-                            const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
-
-                            xContent->SetPixelOnData(pScanline, x, BitmapColor(Color(aBDest)));
-                        }
-                    }
-                }
-            }
+            // found existing instance of modified Bitmap, return reused/buffered result
+            if(IsAlpha())
+                return BitmapEx(pBufferedData_ModifiedBitmapEx->getChangedBitmap(), GetAlphaMask());
+            return BitmapEx(pBufferedData_ModifiedBitmapEx->getChangedBitmap());
         }
     }
 
-    if(aChangedBitmap.IsEmpty())
+    // have to create modified Bitmap
+    Bitmap aChangedBitmap(GetBitmap());
+
+    if (nullptr != pLastModifierReplace)
     {
-        return BitmapEx();
+        // special case -> we have BColorModifier_replace but Alpha channel
+        if (vcl::isPalettePixelFormat(aChangedBitmap.getPixelFormat()))
+        {
+            // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
+            // determined and used -> this may be different from what is wanted here.
+            // Better create a new bitmap with the needed color explicitly.
+            BitmapScopedReadAccess xReadAccess(aChangedBitmap);
+            OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
+
+            if(xReadAccess)
+            {
+                BitmapPalette aNewPalette(xReadAccess->GetPalette());
+                aNewPalette[0] = BitmapColor(Color(pLastModifierReplace->getBColor()));
+                aChangedBitmap = Bitmap(
+                    aChangedBitmap.GetSizePixel(),
+                    aChangedBitmap.getPixelFormat(),
+                    &aNewPalette);
+            }
+        }
+        else
+        {
+            // clear bitmap with dest color
+            aChangedBitmap.Erase(Color(pLastModifierReplace->getBColor()));
+        }
     }
     else
     {
-        if(IsAlpha())
+        BitmapScopedWriteAccess xContent(aChangedBitmap);
+
+        if(xContent)
         {
-            return BitmapEx(aChangedBitmap, GetAlphaMask());
-        }
-        else
-        {
-            return BitmapEx(aChangedBitmap);
+            const double fConvertColor(1.0 / 255.0);
+
+            if(xContent->HasPalette())
+            {
+                const sal_uInt16 nCount(xContent->GetPaletteEntryCount());
+
+                for(sal_uInt16 b(0); b < nCount; b++)
+                {
+                    const BitmapColor& rCol = xContent->GetPaletteColor(b);
+                    const basegfx::BColor aBSource(
+                        rCol.GetRed() * fConvertColor,
+                        rCol.GetGreen() * fConvertColor,
+                        rCol.GetBlue() * fConvertColor);
+                    const basegfx::BColor aBDest(rBColorModifierStack.getModifiedColor(aBSource));
+                    xContent->SetPaletteColor(b, BitmapColor(Color(aBDest)));
+                }
+            }
+            else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
+            {
+                for(tools::Long y(0); y < xContent->Height(); y++)
+                {
+                    Scanline pScan = xContent->GetScanline(y);
+
+                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    {
+                        const basegfx::BColor aBSource(
+                            *(pScan + 2)* fConvertColor,
+                            *(pScan + 1) * fConvertColor,
+                            *pScan * fConvertColor);
+                        const basegfx::BColor aBDest(rBColorModifierStack.getModifiedColor(aBSource));
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getBlue() * 255.0);
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getGreen() * 255.0);
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getRed() * 255.0);
+                    }
+                }
+            }
+            else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
+            {
+                for(tools::Long y(0); y < xContent->Height(); y++)
+                {
+                    Scanline pScan = xContent->GetScanline(y);
+
+                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    {
+                        const basegfx::BColor aBSource(
+                            *pScan * fConvertColor,
+                            *(pScan + 1) * fConvertColor,
+                            *(pScan + 2) * fConvertColor);
+                        const basegfx::BColor aBDest(rBColorModifierStack.getModifiedColor(aBSource));
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getRed() * 255.0);
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getGreen() * 255.0);
+                        *pScan++ = static_cast< sal_uInt8 >(aBDest.getBlue() * 255.0);
+                    }
+                }
+            }
+            else
+            {
+                for(tools::Long y(0); y < xContent->Height(); y++)
+                {
+                    Scanline pScanline = xContent->GetScanline( y );
+                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    {
+                        const BitmapColor aBMCol(xContent->GetColor(y, x));
+                        const basegfx::BColor aBSource(
+                            static_cast<double>(aBMCol.GetRed()) * fConvertColor,
+                            static_cast<double>(aBMCol.GetGreen()) * fConvertColor,
+                            static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
+                        const basegfx::BColor aBDest(rBColorModifierStack.getModifiedColor(aBSource));
+
+                        xContent->SetPixelOnData(pScanline, x, BitmapColor(Color(aBDest)));
+                    }
+                }
+            }
         }
     }
+
+    if (nullptr != pHolder)
+    {
+        // create new BufferedData_ModifiedBitmapEx (should be nullptr here)
+        if (nullptr == pBufferedData_ModifiedBitmapEx)
+        {
+            pBufferedData_ModifiedBitmapEx = std::make_shared<BufferedData_ModifiedBitmapEx>(aChangedBitmap, rBColorModifierStack);
+        }
+
+        // register it, evtl. it's a new one
+        basegfx::SystemDependentData_SharedPtr r2(pBufferedData_ModifiedBitmapEx);
+        const_cast<basegfx::SystemDependentDataHolder*>(pHolder)->addOrReplaceSystemDependentData(r2);
+    }
+
+    // return result
+    if(IsAlpha())
+        return BitmapEx(aChangedBitmap, GetAlphaMask());
+    return BitmapEx(aChangedBitmap);
 }
 
 BitmapEx createBlendFrame(
