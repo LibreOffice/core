@@ -747,6 +747,66 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
+{
+    createSwDoc("fly_hidden_paragraph.fodt");
+
+    // first, disable both so para gets hidden
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "448");
+    discardDumpedLayout();
+
+    // the problem was that now the fly was the same height as before hiding
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "828");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "1000");
+    discardDumpedLayout();
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "448");
+    discardDumpedLayout();
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "828");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "1000");
+    discardDumpedLayout();
+
+    // other test like testTdf143239 and testTdf159101 depend on this;
+    // seems getting the previous value is only possible with a listener
+    // so just hardcode it...
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 {
     createSwDoc("tdf134472.odt");
