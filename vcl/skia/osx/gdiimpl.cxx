@@ -46,11 +46,8 @@ struct SnapshotImageData
 };
 }
 
-static void SnapshotImageDataCallback(void* pInfo, const void* pData, size_t nSize)
+static void SnapshotImageDataCallback(void* pInfo, const void*, size_t)
 {
-    (void)pData;
-    (void)nSize;
-
     if (pInfo)
         delete static_cast<SnapshotImageData*>(pInfo);
 }
