@@ -693,41 +693,22 @@ class ImplB3DPolygon
     // and may be zero.
     std::unique_ptr<TextureCoordinate2D>            mpTextureCoordinates;
 
-    // The calculated plane normal. mbPlaneNormalValid says if it's valid.
-    ::basegfx::B3DVector                            maPlaneNormal;
-
     // flag which decides if this polygon is opened or closed
     bool                                            mbIsClosed : 1;
-
-    // flag which says if maPlaneNormal is up-to-date
-    bool                                            mbPlaneNormalValid : 1;
-
-protected:
-    void invalidatePlaneNormal()
-    {
-        if(mbPlaneNormalValid)
-        {
-            mbPlaneNormalValid = false;
-        }
-    }
 
 public:
     // This constructor is only used from the static identity polygon, thus
     // the RefCount is set to 1 to never 'delete' this static incarnation.
     ImplB3DPolygon()
     :   maPoints(0),
-        maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
-        mbIsClosed(false),
-        mbPlaneNormalValid(true)
+        mbIsClosed(false)
     {
         // complete initialization with defaults
     }
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
     :   maPoints(rToBeCopied.maPoints),
-        maPlaneNormal(rToBeCopied.maPlaneNormal),
-        mbIsClosed(rToBeCopied.mbIsClosed),
-        mbPlaneNormalValid(rToBeCopied.mbPlaneNormalValid)
+        mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using copy
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
@@ -748,9 +729,7 @@ public:
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
-        maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
-        mbIsClosed(rToBeCopied.mbIsClosed),
-        mbPlaneNormalValid(false)
+        mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using partly copy
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
@@ -916,7 +895,6 @@ public:
     void setPoint(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue)
     {
         maPoints.setCoordinate(nIndex, rValue);
-        invalidatePlaneNormal();
     }
 
     void insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
@@ -926,7 +904,6 @@ public:
 
         CoordinateData3D aCoordinate(rPoint);
         maPoints.insert(nIndex, aCoordinate, nCount);
-        invalidatePlaneNormal();
 
         if(mpBColors)
         {
@@ -987,15 +964,9 @@ public:
         mpBColors.reset();
     }
 
-    const ::basegfx::B3DVector& getNormal() const
+    ::basegfx::B3DVector getNormal() const
     {
-        if(!mbPlaneNormalValid)
-        {
-            const_cast< ImplB3DPolygon* >(this)->maPlaneNormal = maPoints.getNormal();
-            const_cast< ImplB3DPolygon* >(this)->mbPlaneNormalValid = true;
-        }
-
-        return maPlaneNormal;
+        return maPoints.getNormal();
     }
 
     const ::basegfx::B3DVector& getNormal(sal_uInt32 nIndex) const
@@ -1108,7 +1079,6 @@ public:
             return;
 
         maPoints.insert(nIndex, rSource.maPoints);
-        invalidatePlaneNormal();
 
         if(rSource.mpBColors && rSource.mpBColors->isUsed())
         {
@@ -1168,7 +1138,6 @@ public:
             return;
 
         maPoints.remove(nIndex, nCount);
-        invalidatePlaneNormal();
 
         if(mpBColors)
         {
@@ -1207,12 +1176,6 @@ public:
             return;
 
         maPoints.flip();
-
-        if(mbPlaneNormalValid)
-        {
-            // mirror plane normal
-            maPlaneNormal = -maPlaneNormal;
-        }
 
         if(mpBColors)
         {
@@ -1368,14 +1331,6 @@ public:
     void transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
         maPoints.transform(rMatrix);
-
-        // Here, it seems to be possible to transform a valid plane normal and to avoid
-        // invalidation, but it's not true. If the transformation contains shears or e.g.
-        // perspective projection, the orthogonality to the transformed plane will not
-        // be preserved. It may be possible to test that at the matrix to not invalidate in
-        // all cases or to extract a matrix which does not 'shear' the vector which is
-        // a normal in this case. As long as this is not sure, i will just invalidate.
-        invalidatePlaneNormal();
     }
 };
 
@@ -1459,7 +1414,7 @@ namespace basegfx
             mpPolygon->clearBColors();
     }
 
-    B3DVector const & B3DPolygon::getNormal() const
+    B3DVector B3DPolygon::getNormal() const
     {
         return mpPolygon->getNormal();
     }
