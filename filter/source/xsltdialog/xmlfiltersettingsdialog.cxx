@@ -1090,9 +1090,8 @@ void XMLFilterSettingsDialog::initFilterList()
                 }
 
                 // add entry to internal container and to ui filter list box
-                maFilterVector.push_back( std::unique_ptr<filter_info_impl>(pTempFilter.get()) );
-                addFilterEntry( pTempFilter.release() );
-
+                maFilterVector.push_back(std::move(pTempFilter));
+                addFilterEntry(maFilterVector.back().get());
 
                 pTempFilter.reset( new filter_info_impl );
             }
