@@ -181,6 +181,43 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
     // Then make sure the header stays on:
     CPPUNIT_ASSERT(xStyle->getPropertyValue(u"HeaderIsOn"_ustr).get<bool>());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderEmptied)
+{
+    // Given an empty document with a turned on footer with content:
+    loadFromFile(u"page-break-footer-table.docx");
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName(u"Standard"_ustr),
+                                               uno::UNO_QUERY);
+
+    // When pasting RTF content:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
+    uno::Reference<text::XTextRange> xBodyEnd = xText->getEnd();
+    uno::Reference<document::XFilter> xFilter(
+        m_xSFactory->createInstance(u"com.sun.star.comp.Writer.RtfFilter"_ustr), uno::UNO_QUERY);
+    uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
+    xImporter->setTargetDocument(mxComponent);
+    std::unique_ptr<SvStream> pStream(new SvMemoryStream);
+    pStream->WriteOString("{\\rtf1 paste}");
+    pStream->Seek(0);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                             xBodyEnd) };
+    CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
+
+    // Then make sure the header retains its contents:
+    uno::Reference<text::XTextRange> xFooterText(xStyle->getPropertyValue(u"FooterText"_ustr),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Odd page footer"_ustr, xFooterText->getString());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
