@@ -15,6 +15,8 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/colritem.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
@@ -25,6 +27,8 @@
 #include <wrtsh.hxx>
 #include <formatcontentcontrol.hxx>
 #include <textcontentcontrol.hxx>
+#include <view.hxx>
+#include <cmdid.h>
 
 namespace
 {
@@ -313,6 +317,47 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     // - Actual  : 3
     // i.e. only the 3 colors were exported, the default "test" text was not.
     CPPUNIT_ASSERT_EQUAL(4, pAnnotation->getOptionCount(pPdfDocument.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a document with both a content control and a comment:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    SwDocShell* pDocShell = getSwDocShell();
+    SwView* pView = pDocShell->GetView();
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+
+    // When exporting to PDF, exporting notes in master (and not as widgets):
+    uno::Sequence<beans::PropertyValue> aFilterData = {
+        comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
+        comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),
+    };
+    saveWithParams({
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+    });
+
+    // Then make sure the only widget for the content control has a correct position:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    pPage->onAfterLoadPage(pPdfDocument.get());
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    basegfx::B2DPoint aAnnotTopLeft = pAnnotation->getRectangle().getMinimum();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: (41.749, 639.401)
+    // - Actual  : (59.249,716.951)
+    // i.e. the content control rectangle was shifted towards the top right of the page, compared to
+    // where it's expected.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(41.749, aAnnotTopLeft.getX(), 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(639.401, aAnnotTopLeft.getY(), 0.001);
 }
 }
 

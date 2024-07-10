@@ -62,6 +62,7 @@
 #include <docsh.hxx>
 #include <unocrsrhelper.hxx>
 #include <textcontentcontrol.hxx>
+#include <EnhancedPDFExportHelper.hxx>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -1090,10 +1091,19 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         return false;
     }
 
+    bool bShrinkPageForPostIts = pPDFExtOutDevData->GetIsExportNotesInMargin()
+                                 && sw_GetPostIts(rDoc.getIDocumentFieldsAccess(), nullptr);
     const SwFont* pFont = rInf.GetFont();
     if (pFont)
     {
         pDescriptor->TextFont = pFont->GetActualFont();
+        if (bShrinkPageForPostIts)
+        {
+            // Page area is scaled down so we have space for comments. Scale down the font height
+            // for the content of the widgets, too.
+            double fScale = SwEnhancedPDFExportHelper::GetSwRectToPDFRectScale();
+            pDescriptor->TextFont.SetFontHeight(pDescriptor->TextFont.GetFontHeight() * fScale);
+        }
 
         // Need to transport the color explicitly, so it's applied to both already filled in and
         // future content.
@@ -1137,7 +1147,17 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     aLocation.AddLeft(-20);
     aLocation.AddRight(20);
 
-    pDescriptor->Location = aLocation.SVRect();
+    tools::Rectangle aRect = aLocation.SVRect();
+    if (bShrinkPageForPostIts)
+    {
+        // Map the rectangle of the form widget, similar to how it's done for e.g. hyperlinks.
+        const SwPageFrame* pPageFrame = pTextFrame->FindPageFrame();
+        if (pPageFrame)
+        {
+            aRect = SwEnhancedPDFExportHelper::MapSwRectToPDFRect(pPageFrame, aRect);
+        }
+    }
+    pDescriptor->Location = aRect;
 
     pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);
     pPDFExtOutDevData->CreateControl(*pDescriptor);

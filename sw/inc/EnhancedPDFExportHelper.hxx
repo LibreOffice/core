@@ -247,6 +247,10 @@ class SwEnhancedPDFExportHelper
     //scale and position rRectangle if we're scaling due to notes in margins.
     tools::Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,
         const tools::Rectangle& rRectangle) const;
+
+    static tools::Rectangle MapSwRectToPDFRect(const SwPageFrame* pCurrPage,
+                                               const tools::Rectangle& rRectangle);
+    static double GetSwRectToPDFRectScale();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
