@@ -238,31 +238,25 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
+        // don't do anything if there are no or multiple entries, as only
+        // a single one can be selected
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();
-        for ( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
-            if ( pCtrl->GetCursor() != pEntry )
-                pCtrl->SetCursor( pEntry );
-        }
+        if (nCount != 1)
+            return;
+
+        pCtrl->SetCursor(pCtrl->GetEntry(0));
     }
 
     sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        sal_Int64 nSelCount = 0;
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
-        sal_Int32 nCount = pCtrl->GetEntryCount();
-        for ( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
-            if ( pCtrl->GetCursor() == pEntry )
-                ++nSelCount;
-        }
+        if (pCtrl->GetCursor())
+            return 1;
 
-        return nSelCount;
+        return 0;
     }
 
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
