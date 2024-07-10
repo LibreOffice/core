@@ -296,6 +296,12 @@ public:
         mnSelectedPageNum = _nSelectedPageNum;
     }
 
+    /** get the maximal preview pages */
+    sal_uInt16 GetMaxPreviewPages() const
+    {
+        return mnPages;
+    }
+
     /** paint prepared preview
 
         @param _aOutRect

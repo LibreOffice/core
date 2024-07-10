@@ -1445,16 +1445,17 @@ void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
     {
         if ( Help::IsQuickHelpEnabled() )
             Help::ShowQuickHelp(m_pVScrollbar, tools::Rectangle(), OUString());
-        if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
+        SwPagePreviewLayout* pPagePreviewLay = GetViewShell()->PagePreviewLayout();
+        if (pPagePreviewLay->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
-            const sal_uInt16 nThmbPos = o3tl::narrowing<sal_uInt16>(rScrollbar.adjustment_get_value());
+            const sal_uInt16 nThmbPos = pPagePreviewLay->ConvertRelativeToAbsolutePageNum(
+                o3tl::narrowing<sal_uInt16>(rScrollbar.adjustment_get_value()) );
             // adjust to new preview functionality
             if( nThmbPos != m_pViewWin->SelectedPage() )
             {
                 // consider case that page <nThmbPos>
                 // is already visible
-                SwPagePreviewLayout* pPagePreviewLay = GetViewShell()->PagePreviewLayout();
                 if ( pPagePreviewLay->IsPageVisible( nThmbPos ) )
                 {
                     pPagePreviewLay->MarkNewSelectedPage( nThmbPos );
@@ -1464,29 +1465,11 @@ void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
                 else
                 {
                     // consider whether layout columns
-                    // fit or not.
-                    if ( !pPagePreviewLay->DoesPreviewLayoutColsFitIntoWindow() )
-                    {
-                        m_pViewWin->SetSttPage( nThmbPos );
-                        m_pViewWin->SetSelectedPage( nThmbPos );
-                        ChgPage( SwPagePreviewWin::MV_SCROLL, false );
-                        // update scrollbars
-                        ScrollViewSzChg();
-                    }
-                    else
-                    {
-                        // correct scroll amount
-                        const sal_Int16 nPageDiff = nThmbPos - m_pViewWin->SelectedPage();
-                        const sal_uInt16 nVisPages = m_pViewWin->GetRow() * m_pViewWin->GetCol();
-                        sal_Int16 nWinPagesToScroll = nPageDiff / nVisPages;
-                        if ( nPageDiff % nVisPages )
-                        {
-                            // decrease/increase number of preview pages to scroll
-                            nPageDiff < 0 ? --nWinPagesToScroll : ++nWinPagesToScroll;
-                        }
-                        m_pViewWin->SetSelectedPage( nThmbPos );
-                        m_pViewWin->Scroll( 0, pPagePreviewLay->GetWinPagesScrollAmount( nWinPagesToScroll ) );
-                    }
+                    m_pViewWin->SetSttPage( nThmbPos );
+                    m_pViewWin->SetSelectedPage( nThmbPos );
+                    ChgPage( SwPagePreviewWin::MV_SCROLL, false );
+                    // update scrollbars
+                    ScrollViewSzChg();
                 }
                 // update accessibility
                 GetViewShell()->ShowPreviewSelection( nThmbPos );
@@ -1570,23 +1553,25 @@ void SwPagePreview::ScrollViewSzChg()
             SwPagePreviewLayout* pPagePreviewLay = GetViewShell()->PagePreviewLayout();
             if ( pPagePreviewLay->IsPageVisible( m_pViewWin->SelectedPage() ) )
             {
-                m_pVScrollbar->SetThumbPos( m_pViewWin->SelectedPage() );
+                m_pVScrollbar->SetThumbPos(
+                    pPagePreviewLay->ConvertAbsoluteToRelativePageNum(m_pViewWin->SelectedPage()) );
             }
             else
             {
-                m_pVScrollbar->SetThumbPos( m_pViewWin->GetSttPage() );
+                m_pVScrollbar->SetThumbPos(
+                    pPagePreviewLay->ConvertAbsoluteToRelativePageNum(m_pViewWin->GetSttPage()) );
             }
             m_pVScrollbar->SetLineSize( m_pViewWin->GetCol() );
             m_pVScrollbar->SetPageSize( nVisPages );
             // calculate and set scrollbar range
-            Range aScrollbarRange( 1, mnPageCount );
+            Range aScrollbarRange( 1, pPagePreviewLay->GetMaxPreviewPages() );
             // increase range by one, because left-top-corner is left blank.
             ++aScrollbarRange.Max();
             // increase range in order to access all pages
             aScrollbarRange.Max() += ( nVisPages - 1 );
             m_pVScrollbar->SetRange( aScrollbarRange );
 
-            bShowVScrollbar = nVisPages < mnPageCount;
+            bShowVScrollbar = nVisPages < pPagePreviewLay->GetMaxPreviewPages();
         }
         else //vertical scrolling by pixel
         {
