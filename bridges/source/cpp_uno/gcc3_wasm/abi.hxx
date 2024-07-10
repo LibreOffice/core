@@ -18,6 +18,7 @@
 
 #include <bridges/emscriptencxxabi/cxxabi.hxx>
 #include <config_cxxabi.h>
+#include <typelib/typedescription.h>
 #include <uno/any2.h>
 #include <uno/mapping.h>
 
@@ -121,6 +122,18 @@ extern "C" __cxa_eh_globals* __cxa_get_globals();
 
 namespace abi_wasm
 {
+enum class StructKind
+{
+    Empty,
+    I32,
+    I64,
+    F32,
+    F64,
+    General
+};
+
+StructKind getKind(typelib_CompoundTypeDescription const* type);
+
 void mapException(__cxxabiv1::__cxa_exception* exception, std::type_info const* type, uno_Any* any,
                   uno_Mapping* mapping);
 }

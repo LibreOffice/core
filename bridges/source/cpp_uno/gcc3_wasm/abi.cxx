@@ -16,11 +16,54 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
+#include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 #include <uno/mapping.h>
 
 #include "abi.hxx"
+
+abi_wasm::StructKind abi_wasm::getKind(typelib_CompoundTypeDescription const* type)
+{
+    if (type->nMembers > 1)
+    {
+        return StructKind::General;
+    }
+    auto k = StructKind::Empty;
+    if (type->pBaseTypeDescription != nullptr)
+    {
+        k = getKind(type->pBaseTypeDescription);
+    }
+    if (type->nMembers == 0)
+    {
+        return k;
+    }
+    if (k != StructKind::Empty)
+    {
+        return StructKind::General;
+    }
+    switch (type->ppTypeRefs[0]->eTypeClass)
+    {
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_ENUM:
+            return StructKind::I32;
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            return StructKind::I64;
+        case typelib_TypeClass_FLOAT:
+            return StructKind::F32;
+        case typelib_TypeClass_DOUBLE:
+            return StructKind::F64;
+        default:
+            return StructKind::General;
+    }
+}
 
 void abi_wasm::mapException(__cxxabiv1::__cxa_exception* exception, std::type_info const* type,
                             uno_Any* any, uno_Mapping* mapping)

@@ -39,58 +39,6 @@
 
 namespace
 {
-enum class StructKind
-{
-    Empty,
-    I32,
-    I64,
-    F32,
-    F64,
-    General
-};
-
-StructKind getKind(typelib_CompoundTypeDescription const* type)
-{
-    if (type->nMembers > 1)
-    {
-        return StructKind::General;
-    }
-    auto k = StructKind::Empty;
-    if (type->pBaseTypeDescription != nullptr)
-    {
-        k = getKind(type->pBaseTypeDescription);
-    }
-    if (type->nMembers == 0)
-    {
-        return k;
-    }
-    if (k != StructKind::Empty)
-    {
-        return StructKind::General;
-    }
-    switch (type->ppTypeRefs[0]->eTypeClass)
-    {
-        case typelib_TypeClass_BOOLEAN:
-        case typelib_TypeClass_BYTE:
-        case typelib_TypeClass_SHORT:
-        case typelib_TypeClass_UNSIGNED_SHORT:
-        case typelib_TypeClass_LONG:
-        case typelib_TypeClass_UNSIGNED_LONG:
-        case typelib_TypeClass_CHAR:
-        case typelib_TypeClass_ENUM:
-            return StructKind::I32;
-        case typelib_TypeClass_HYPER:
-        case typelib_TypeClass_UNSIGNED_HYPER:
-            return StructKind::I64;
-        case typelib_TypeClass_FLOAT:
-            return StructKind::F32;
-        case typelib_TypeClass_DOUBLE:
-            return StructKind::F64;
-        default:
-            return StructKind::General;
-    }
-}
-
 void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
           bridges::cpp_uno::shared::VtableSlot slot, typelib_TypeDescriptionReference* returnType,
           sal_Int32 count, typelib_MethodParameter* parameters, void* returnValue, void** arguments,
@@ -136,23 +84,24 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             break;
         case typelib_TypeClass_STRUCT:
         {
-            switch (getKind(reinterpret_cast<typelib_CompoundTypeDescription const*>(rtd.get())))
+            switch (abi_wasm::getKind(
+                reinterpret_cast<typelib_CompoundTypeDescription const*>(rtd.get())))
             {
-                case StructKind::Empty:
+                case abi_wasm::StructKind::Empty:
                     break;
-                case StructKind::I32:
+                case abi_wasm::StructKind::I32:
                     sig.append('i');
                     break;
-                case StructKind::I64:
+                case abi_wasm::StructKind::I64:
                     sig.append('j');
                     break;
-                case StructKind::F32:
+                case abi_wasm::StructKind::F32:
                     sig.append('f');
                     break;
-                case StructKind::F64:
+                case abi_wasm::StructKind::F64:
                     sig.append('d');
                     break;
-                case StructKind::General:
+                case abi_wasm::StructKind::General:
                     sig.append("vi");
                     args.push_back(reinterpret_cast<sal_uInt32>(ret));
                     break;
