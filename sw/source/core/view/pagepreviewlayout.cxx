@@ -388,6 +388,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                 mnPaintPhyStartPageNum = mnPages;
                 mbNoPageVisible = true;
             }
+
+            mnPaintPhyStartPageNum = ConvertRelativeToAbsolutePageNum(
+                mnPaintPhyStartPageNum );
         }
         // set starting column and starting row
         mnPaintStartCol = nColOfProposed;
