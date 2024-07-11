@@ -75,7 +75,7 @@ class formatBulletsNumbering(UITestCase):
                     xindentatmf.executeAction("UP", tuple())
 
 
-                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
                     xalignedatmf = xDialog.getChild("alignedatmf")
@@ -100,7 +100,7 @@ class formatBulletsNumbering(UITestCase):
                 select_by_text(xnumfollowedbylb, "Space")
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "4")
                 xnumfollowedbylb = xDialog.getChild("numfollowedbylb")
@@ -130,7 +130,7 @@ class formatBulletsNumbering(UITestCase):
                 xallsame.executeAction("CLICK", tuple())
 
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "5")
                 xnumfmtlb = xDialog.getChild("numfmtlb")
@@ -151,7 +151,7 @@ class formatBulletsNumbering(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="user") as xDialog:
                 pass
 
-            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "5")
                 xnumfmtlb = xDialog.getChild("numfmtlb")
@@ -185,7 +185,7 @@ class formatBulletsNumbering(UITestCase):
 
 
                 xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"})) #TAB to move indent right
-                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
                     xindentatmf = xDialog.getChild("indentatmf")
@@ -193,7 +193,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue < indentValue2 , True)
 
                 xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
                     xindentatmf = xDialog.getChild("indentatmf")
@@ -214,7 +214,7 @@ class formatBulletsNumbering(UITestCase):
 
 
                 self.xUITest.executeCommand(".uno:DecrementSubLevels")
-                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
                     xindentatmf = xDialog.getChild("indentatmf")
@@ -222,7 +222,7 @@ class formatBulletsNumbering(UITestCase):
                     self.assertEqual(indentValue < indentValue2 , True)
 
                 self.xUITest.executeCommand(".uno:IncrementLevel")
-                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="cancel") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog", close_button="ok") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
                     xindentatmf = xDialog.getChild("indentatmf")

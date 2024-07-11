@@ -149,6 +149,7 @@ SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pControll
     : BuilderPage(pPage, pController, rUIXMLDescription, rID, isLOKMobilePhone())
     , mpSet(rAttrSet)
     , mbHasExchangeSupport(false)
+    , mbCancel(false)
     , mpImpl(new TabPageImpl)
 {
     mpImpl->mpSfxDialogController = dynamic_cast<SfxOkDialogController*>(m_pDialogController);
@@ -676,6 +677,19 @@ bool SfxTabDialogController::PrepareLeaveCurrentPage()
     }
 
     return bEnd;
+}
+
+void SfxTabDialogController::PrepareCancel()
+{
+    for (auto pDataObject : m_pImpl->aData)
+    {
+        if (!pDataObject->xTabPage)
+            continue;
+
+        SfxTabPage* pPage = pDataObject->xTabPage.get();
+        pPage->SetCancelMode(true);
+        pPage->DeactivatePage(nullptr);
+    }
 }
 
 const WhichRangesContainer & SfxTabDialogController::GetInputRanges(const SfxItemPool& rPool)

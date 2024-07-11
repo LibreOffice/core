@@ -107,6 +107,11 @@ protected:
     */
     bool PrepareLeaveCurrentPage();
 
+    /** Called before user cancels the dialog.
+        Calls DeactivatePage of all tab pages with IsCancelMode() set to true
+    */
+    void PrepareCancel();
+
     /** save the position of the TabDialog and which tab page is the currently active one
      */
     void SavePosAndId();
@@ -192,6 +197,7 @@ private:
     const SfxItemSet* mpSet;
     OUString maUserString;
     bool mbHasExchangeSupport;
+    bool mbCancel;
     std::unordered_map<OUString, css::uno::Any> maAdditionalProperties;
 
     std::unique_ptr<TabPageImpl> mpImpl;
@@ -258,6 +264,9 @@ public:
     }
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
+    // Whether the user has canceled the dialog. Allows to restore settings, etc.
+    virtual bool IsCancelMode() { return mbCancel; }
+    virtual void SetCancelMode(bool bCancel) { mbCancel = bCancel; }
     virtual void PageCreated (const SfxAllItemSet& aSet);
     virtual void ChangesApplied();
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
