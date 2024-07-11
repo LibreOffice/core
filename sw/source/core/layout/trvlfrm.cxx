@@ -1701,6 +1701,11 @@ void SwFrame::MakeValidZeroHeight()
         aRectFnSet.SetHeight(area, 0);
     }
     ShrinkFrame(aRectFnSet.GetHeight(getFrameArea()));
+    if (IsLayoutFrame()) // ShrinkFrame might do nothing!
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
+        aRectFnSet.SetHeight(area, 0);
+    }
     setFrameAreaSizeValid(true);
     setFramePrintAreaValid(true);
     setFrameAreaPositionValid(false);

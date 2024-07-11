@@ -37,6 +37,7 @@
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <fldmgr.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -532,6 +533,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds", "height", "828");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "height", "1000");
+    discardDumpedLayout();
+
+    // other test like testTdf143239 and testTdf159101 depend on this;
+    // seems getting the previous value is only possible with a listener
+    // so just hardcode it...
+    lcl_dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
+{
+    SwDoc* pDoc = createDoc("field_hide_section.fodt");
+    CPPUNIT_ASSERT(pDoc);
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row", 1);
+    assertXPath(pXmlDoc, "/root/page", 2);
+    discardDumpedLayout();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    ::std::unique_ptr<SwField> pField(pWrtShell->GetCurField()->CopyField());
+    SwFieldMgr manager(pWrtShell);
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000/*(?)*/, "Foo", "1", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[1]/infos/bounds", "height", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[2]/infos/bounds", "height", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/infos/bounds", "height", "0");
+    // the problem was that there were 3 pages now
+    assertXPath(pXmlDoc, "/root/page", 1);
+    discardDumpedLayout();
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000/*(?)*/, "Foo", "0", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row", 1);
+    assertXPath(pXmlDoc, "/root/page", 2);
     discardDumpedLayout();
 }
 
