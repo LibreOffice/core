@@ -6241,8 +6241,8 @@ void ScGridWindow::ImpCreateOverlayObjects()
 {
     UpdateHighlightOverlay();
     UpdateSelectionOverlay();
-    UpdateAutoFillOverlay();
     UpdateCursorOverlay();
+    UpdateAutoFillOverlay();
     UpdateCopySourceOverlay();
     UpdateDragRectOverlay();
     UpdateHeaderOverlay();
@@ -6726,9 +6726,24 @@ void ScGridWindow::UpdateCursorOverlay()
                     std::move(aRanges),
                     false, false));
 
+                // Internal white contrast rectangle
+                std::vector< basegfx::B2DRange > aRangesInternal;
+                basegfx::B2DRange aRBInternal(aPixelRects[0].Right(), aPixelRects[2].Bottom(),
+                                              aPixelRects[1].Left() - 1, aPixelRects[3].Top() - 1);
+                aRBInternal.transform(aTransform);
+                aRangesInternal.push_back(aRBInternal);
+
+                std::unique_ptr<sdr::overlay::OverlayObject> pOverlayInternal(new sdr::overlay::OverlaySelection(
+                    sdr::overlay::OverlayType::NoFill,
+                    COL_WHITE,
+                    std::move(aRangesInternal),
+                    true, false));
+
                 xOverlayManager->add(*pOverlay);
+                xOverlayManager->add(*pOverlayInternal);
                 mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
                 mpOOCursors->append(std::move(pOverlay));
+                mpOOCursors->append(std::move(pOverlayInternal));
             }
         }
     }
@@ -6931,13 +6946,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
     ScDocument& rDoc = mrViewData.GetDocument();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
-   // tdf#143733 tdf#145080 - improve border visibility
-   // constants picked for maximum consistency at 100%
-   // size = 6 at 100% (as before), 50% = 4.5, 200% = 9, 400% = 15
-    const float fScaleFactor = 3 * GetDPIScaleFactor();
-    const double fZoom(3 * mrViewData.GetZoomX());
-    // Size should be even
-    Size aFillHandleSize(fZoom + fScaleFactor, fZoom + fScaleFactor);
+    // tdf#162006 Ensures the AutoFill handle is visible at any zoom level
+    // At 100% = Total Size 8 (2px for the external white line; 6px for the handle itself)
+    const double fScaleFactor(2 + 2 * GetDPIScaleFactor());
+    const double fZoom(2 + 2 * mrViewData.GetZoomX());
+    Size aFillHandleSize(fScaleFactor + fZoom, fScaleFactor + fZoom);
 
     Point aFillPos = mrViewData.GetScrPos( nX, nY, eWhich, true );
     tools::Long nSizeXPix;
@@ -6981,26 +6994,47 @@ void ScGridWindow::UpdateAutoFillOverlay()
     }
     else if (xOverlayManager.is())
     {
+        const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+
+        // Outer rectangle (always white for contrast)
+        std::vector< basegfx::B2DRange > aRangesOuter;
+        basegfx::B2DRange aRBOuter = vcl::unotools::b2DRectangleFromRectangle(aFillRect);
+        aRBOuter.transform(aTransform);
+        aRangesOuter.push_back(aRBOuter);
+
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayOuter(new sdr::overlay::OverlaySelection(
+            sdr::overlay::OverlayType::Solid,
+            COL_WHITE,
+            std::move(aRangesOuter),
+            false, false));
+
+        // Inner rectangle
+        std::vector< basegfx::B2DRange > aRangesInner;
+        tools::Rectangle aRectInner(aFillRect);
+        aRectInner.AdjustTop(1);
+        aRectInner.AdjustBottom(-1);
+        aRectInner.AdjustLeft(1);
+        aRectInner.AdjustRight(-1);
+        basegfx::B2DRange aRBInner = vcl::unotools::b2DRectangleFromRectangle(aRectInner);
+        aRBInner.transform(aTransform);
+        aRangesInner.push_back(aRBInner);
+
         Color aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
         if (mrViewData.GetActivePart() != eWhich)
             // non-active pane uses a different color.
             aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
-        std::vector< basegfx::B2DRange > aRanges;
-        const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
-        basegfx::B2DRange aRB = vcl::unotools::b2DRectangleFromRectangle(aFillRect);
 
-        aRB.transform(aTransform);
-        aRanges.push_back(aRB);
-
-        std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayInner(new sdr::overlay::OverlaySelection(
             sdr::overlay::OverlayType::Solid,
             aHandleColor,
-            std::move(aRanges),
+            std::move(aRangesInner),
             false, false));
 
-        xOverlayManager->add(*pOverlay);
+        xOverlayManager->add(*pOverlayOuter);
+        xOverlayManager->add(*pOverlayInner);
         mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
-        mpOOAutoFill->append(std::move(pOverlay));
+        mpOOAutoFill->append(std::move(pOverlayOuter));
+        mpOOAutoFill->append(std::move(pOverlayInner));
     }
 }
 
