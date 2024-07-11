@@ -1164,7 +1164,24 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer&& rSource,
             const std::optional<basegfx::B2DHomMatrix>& pTransform) const
         {
-            const double fOpacity(getOpacity().solve(mrOwner));
+            // default is 1
+            double fOpacity(1.0);
+
+            if(maOpacity.isSet())
+            {
+                fOpacity = maOpacity.solve(mrOwner);
+            }
+            else
+            {
+                // if opacity is not set, check the css style
+                if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleParent())
+                {
+                    if (pSvgStyleAttributes->maOpacity.isSet())
+                    {
+                        fOpacity =  pSvgStyleAttributes->maOpacity.solve(mrOwner);
+                    }
+                }
+            }
 
             if(basegfx::fTools::equalZero(fOpacity))
             {
@@ -1292,7 +1309,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(32, 0),
+            maResolvingParent(35, 0),
             mbStrokeDasharraySet(false)
         {
         }
@@ -2315,16 +2332,14 @@ namespace svgio::svgreader
                 return maOpacity;
             }
 
-            // This is called from add_postProcess so only check the parent style
-            // if it has a local css style, because it's the first in the stack
-            if(mrOwner.hasLocalCssStyle())
-            {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-                if (pSvgStyleAttributes && pSvgStyleAttributes->maOpacity.isSet())
-                {
-                    return pSvgStyleAttributes->maOpacity;
-                }
+            if (pSvgStyleAttributes && maResolvingParent[34] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[34];
+                auto ret = pSvgStyleAttributes->getOpacity();
+                --maResolvingParent[34];
+                return ret;
             }
 
             // default is 1

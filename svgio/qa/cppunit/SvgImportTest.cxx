@@ -385,6 +385,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "serif");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf161985)
+{
+    Primitive2DSequence aSequenceTdf161985 = parseSvg(u"/svgio/qa/cppunit/data/tdf161985.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf161985.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf161985);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", 0);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion", 1);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion", "text", u"This is a test file.");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf145896.svg");
