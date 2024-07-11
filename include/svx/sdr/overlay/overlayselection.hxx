@@ -30,7 +30,8 @@ namespace sdr::overlay
         {
             Invert,
             Solid,
-            Transparent
+            Transparent,
+            NoFill
         };
 
         class SVXCORE_DLLPUBLIC OverlaySelection final : public OverlayObject
