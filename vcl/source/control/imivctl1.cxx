@@ -1065,9 +1065,23 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     if (pEntry->IsFocused())
         DrawFocusRect(rRenderContext, pEntry);
 
-    // draw highlight frame
+    // highlight mouse-hovered entry
     if (pEntry == pCurHighlightFrame)
-        DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry));
+    {
+        const tools::Rectangle aRect = CalcFocusRect(pEntry);
+        bool bNativeOK
+            = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
+        if (bNativeOK)
+        {
+            ControlState nState = ControlState::ENABLED | ControlState::ROLLOVER;
+            TabitemValue tiValue(aRect);
+            bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
+                                                         aRect, nState, tiValue, OUString());
+        }
+
+        if (!bNativeOK)
+            DrawHighlightFrame(rRenderContext, aRect);
+    }
 
     PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
