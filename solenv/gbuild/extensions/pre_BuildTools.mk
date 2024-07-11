@@ -16,7 +16,7 @@ gb_BUILD_TOOLS_executables = \
 		climaker \
 		cpp \
 		cppumaker \
-		$(if $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),embindmaker wasmcallgen) \
+		$(if $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),embindmaker wasmbridgegen) \
 		gencoll_rule \
 		genconv_dict \
 		gendict \

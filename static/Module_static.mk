@@ -34,7 +34,7 @@ endif
 ifneq ($(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),)
 $(eval $(call gb_Module_add_targets,static, \
     Executable_embindmaker \
-    Executable_wasmcallgen \
+    Executable_wasmbridgegen \
 ))
 endif
 

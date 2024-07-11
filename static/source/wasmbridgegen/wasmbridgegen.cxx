@@ -49,7 +49,7 @@ namespace
 {
     std::cerr
         << "Usage:\n\n"
-           "  wasmcallgen <cpp-output> <asm-output> <exp-output> <registries>\n\n"
+           "  wasmbridgegen <cpp-output> <asm-output> <exp-output> <registries>\n\n"
            "where each <registry> is '+' (primary) or ':' (secondary), followed by: either a\n"
            "new- or legacy-format .rdb file, a single .idl file, or a root directory of an\n"
            ".idl file tree.  For all primary registries, Wasm UNO bridge code is written to\n"

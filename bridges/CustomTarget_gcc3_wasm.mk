@@ -18,9 +18,10 @@ $(eval $(call gb_CustomTarget_register_targets,bridges/gcc3_wasm, \
 $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/generated-asm.s \
 $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/generated-cxx.cxx \
 $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/exports: \
-        $(call gb_Executable_get_target_for_build,wasmcallgen) $(call gb_UnoApi_get_target,udkapi) \
+        $(call gb_Executable_get_target_for_build,wasmbridgegen) \
+        $(call gb_UnoApi_get_target,udkapi) \
         $(call gb_UnoApi_get_target,offapi)
-	$(call gb_Executable_get_command,wasmcallgen) \
+	$(call gb_Executable_get_command,wasmbridgegen) \
         $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/generated-cxx.cxx \
         $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/generated-asm.s \
         $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/exports \
