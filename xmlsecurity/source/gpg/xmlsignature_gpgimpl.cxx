@@ -197,6 +197,8 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     int nRet = xmlSecBase64Decode_ex(pKey, reinterpret_cast<xmlSecByte*>(pKey), xmlStrlen(pKey), &nWritten);
     if(nRet < 0)
         throw RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
+
+    rCtx.clearSigningKeys(); // tdf#108828 Clear keys from previous unsuccessful sessions
     if( rCtx.addSigningKey(
             rCtx.key(
                 reinterpret_cast<char*>(pKey), err, true)) )
