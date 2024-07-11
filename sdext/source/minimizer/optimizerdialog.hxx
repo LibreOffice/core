@@ -47,10 +47,22 @@
 
 class OptimizerDialog;
 
-class IntroPage : public vcl::OWizardPage
+class OptimizedDialogPage : public vcl::OWizardPage
+{
+protected:
+    OptimizerDialog& mrOptimizerDialog;
+private:
+    int m_nPageNum;
+public:
+    OptimizedDialogPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog,
+                        const OUString& rUIXMLDescription, const OUString& rID,
+                        int nPageNum);
+    virtual void Activate() override;
+};
+
+class IntroPage : public OptimizedDialogPage
 {
 private:
-    OptimizerDialog& mrOptimizerDialog;
     std::unique_ptr<weld::ComboBox> mxComboBox;
     std::unique_ptr<weld::Button> mxButton;
 
@@ -66,10 +78,9 @@ public:
     }
 };
 
-class SlidesPage : public vcl::OWizardPage
+class SlidesPage : public OptimizedDialogPage
 {
 private:
-    OptimizerDialog& mrOptimizerDialog;
     std::unique_ptr<weld::CheckButton> mxMasterSlides;
     std::unique_ptr<weld::CheckButton> mxHiddenSlides;
     std::unique_ptr<weld::CheckButton> mxUnusedSlides;
@@ -93,10 +104,9 @@ public:
     }
 };
 
-class ImagesPage : public vcl::OWizardPage
+class ImagesPage : public OptimizedDialogPage
 {
 private:
-    OptimizerDialog& mrOptimizerDialog;
     std::unique_ptr<weld::RadioButton> m_xLossLessCompression;
     std::unique_ptr<weld::Label> m_xQualityLabel;
     std::unique_ptr<weld::SpinButton> m_xQuality;
@@ -118,10 +128,9 @@ public:
                              int nResolution, bool bEmbedLinkedGraphics);
 };
 
-class ObjectsPage : public vcl::OWizardPage
+class ObjectsPage : public OptimizedDialogPage
 {
 private:
-    OptimizerDialog& mrOptimizerDialog;
     std::unique_ptr<weld::CheckButton> m_xCreateStaticImage;
     std::unique_ptr<weld::RadioButton> m_xAllOLEObjects;
     std::unique_ptr<weld::RadioButton> m_xForeignOLEObjects;
@@ -138,10 +147,9 @@ public:
     void UpdateControlStates(bool bConvertOLEObjects, int nOLEOptimizationType);
 };
 
-class SummaryPage : public vcl::OWizardPage
+class SummaryPage : public OptimizedDialogPage
 {
 private:
-    OptimizerDialog& mrOptimizerDialog;
     std::unique_ptr<weld::Label> m_xLabel1;
     std::unique_ptr<weld::Label> m_xLabel2;
     std::unique_ptr<weld::Label> m_xLabel3;

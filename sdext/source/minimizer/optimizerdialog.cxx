@@ -52,9 +52,23 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-IntroPage::IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmintropage.ui"_ustr, u"PMIntroPage"_ustr)
+OptimizedDialogPage::OptimizedDialogPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog,
+                                         const OUString& rUIXMLDescription, const OUString& rID,
+                                         int nPageNum)
+    : vcl::OWizardPage(pPage, &rOptimizerDialog, rUIXMLDescription, rID)
     , mrOptimizerDialog(rOptimizerDialog)
+    , m_nPageNum(nPageNum)
+{
+}
+
+void OptimizedDialogPage::Activate()
+{
+    vcl::OWizardPage::Activate();
+    mrOptimizerDialog.UpdateControlStates(m_nPageNum);
+}
+
+IntroPage::IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
+    : OptimizedDialogPage(pPage, rOptimizerDialog, u"modules/simpress/ui/pmintropage.ui"_ustr, u"PMIntroPage"_ustr, 0)
     , mxComboBox(m_xBuilder->weld_combo_box(u"LB_SETTINGS"_ustr))
     , mxButton(m_xBuilder->weld_button(u"STR_REMOVE"_ustr))
 {
@@ -73,8 +87,7 @@ void IntroPage::UpdateControlStates(const std::vector<OUString>& rItemList, int 
 }
 
 SlidesPage::SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmslidespage.ui"_ustr, u"PMSlidesPage"_ustr)
-    , mrOptimizerDialog(rOptimizerDialog)
+    : OptimizedDialogPage(pPage, rOptimizerDialog, u"modules/simpress/ui/pmslidespage.ui"_ustr, u"PMSlidesPage"_ustr, 1)
     , mxMasterSlides(m_xBuilder->weld_check_button(u"STR_DELETE_MASTER_PAGES"_ustr))
     , mxHiddenSlides(m_xBuilder->weld_check_button(u"STR_DELETE_HIDDEN_SLIDES"_ustr))
     , mxUnusedSlides(m_xBuilder->weld_check_button(u"STR_CUSTOM_SHOW"_ustr))
@@ -105,8 +118,7 @@ void SlidesPage::UpdateControlStates(bool bDeleteUnusedMasterPages, bool bDelete
 }
 
 ImagesPage::ImagesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmimagespage.ui"_ustr, u"PMImagesPage"_ustr)
-    , mrOptimizerDialog(rOptimizerDialog)
+    : OptimizedDialogPage(pPage, rOptimizerDialog, u"modules/simpress/ui/pmimagespage.ui"_ustr, u"PMImagesPage"_ustr, 2)
     , m_xLossLessCompression(m_xBuilder->weld_radio_button(u"STR_LOSSLESS_COMPRESSION"_ustr))
     , m_xQualityLabel(m_xBuilder->weld_label(u"STR_QUALITY"_ustr))
     , m_xQuality(m_xBuilder->weld_spin_button(u"SB_QUALITY"_ustr))
@@ -139,8 +151,7 @@ void ImagesPage::UpdateControlStates(bool bJPEGCompression, int nJPEGQuality, bo
 }
 
 ObjectsPage::ObjectsPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmobjectspage.ui"_ustr, u"PMObjectsPage"_ustr)
-    , mrOptimizerDialog(rOptimizerDialog)
+    : OptimizedDialogPage(pPage, rOptimizerDialog, u"modules/simpress/ui/pmobjectspage.ui"_ustr, u"PMObjectsPage"_ustr, 3)
     , m_xCreateStaticImage(m_xBuilder->weld_check_button(u"STR_OLE_REPLACE"_ustr))
     , m_xAllOLEObjects(m_xBuilder->weld_radio_button(u"STR_ALL_OLE_OBJECTS"_ustr))
     , m_xForeignOLEObjects(m_xBuilder->weld_radio_button(u"STR_ALIEN_OLE_OBJECTS_ONLY"_ustr))
@@ -167,8 +178,7 @@ void ObjectsPage::UpdateControlStates(bool bConvertOLEObjects, int nOLEOptimizat
 }
 
 SummaryPage::SummaryPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
-    : vcl::OWizardPage(pPage, &rOptimizerDialog, u"modules/simpress/ui/pmsummarypage.ui"_ustr, u"PMSummaryPage"_ustr)
-    , mrOptimizerDialog(rOptimizerDialog)
+    : OptimizedDialogPage(pPage, rOptimizerDialog, u"modules/simpress/ui/pmsummarypage.ui"_ustr, u"PMSummaryPage"_ustr, 4)
     , m_xLabel1(m_xBuilder->weld_label(u"LABEL1"_ustr))
     , m_xLabel2(m_xBuilder->weld_label(u"LABEL2"_ustr))
     , m_xLabel3(m_xBuilder->weld_label(u"LABEL3"_ustr))
