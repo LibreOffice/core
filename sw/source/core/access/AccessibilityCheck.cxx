@@ -937,6 +937,7 @@ public:
         sal_Int32 nTabCount = 0;
         bool bNonSpaceFound = false;
         bool bPreviousWasChar = false;
+        bool bPreviousWasTab = false;
         for (sal_Int32 i = 0; i < nParagraphLength; i++)
         {
             switch (sParagraphText[i])
@@ -958,10 +959,15 @@ public:
                     if (pSection && pSection->GetTOXBase())
                         continue;
 
-                    if (bPreviousWasChar)
+                    // text between tabs or text align at least with two tabs
+                    if (bPreviousWasChar || bPreviousWasTab)
                     {
                         ++nTabCount;
-                        bPreviousWasChar = false;
+                        if (bPreviousWasChar)
+                        {
+                            bPreviousWasChar = false;
+                            bPreviousWasTab = true;
+                        }
                         if (nTabCount == 2)
                         {
                             auto pIssue = lclAddIssue(m_rIssueCollection,
@@ -993,6 +999,7 @@ public:
                     }
                     bNonSpaceFound = true;
                     bPreviousWasChar = true;
+                    bPreviousWasTab = false;
                     nSpaceCount = 0;
                     break;
                 }

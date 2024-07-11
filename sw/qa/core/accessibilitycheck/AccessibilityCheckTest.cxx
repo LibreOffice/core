@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     sw::AccessibilityCheck aCheck(pDoc);
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
-    CPPUNIT_ASSERT_EQUAL(size_t(8), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(10), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
@@ -228,6 +228,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[5]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[6]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[7]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[8]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[9]->m_eIssueID);
 }
 
 //tdf#156550 - Accessibility sidebar complains about TOC hyperlinks
