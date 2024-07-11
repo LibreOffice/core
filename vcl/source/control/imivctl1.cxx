@@ -991,9 +991,6 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
     if (eItem == IcnViewFieldType::Text)
     {
         rRenderContext.DrawText(rRect, pEntry->GetText(), nCurTextDrawFlags);
-
-        if (pEntry->IsFocused())
-            DrawFocusRect(rRenderContext, pEntry);
     }
     else
     {
@@ -1069,6 +1066,9 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
 
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
+
+    if (pEntry->IsFocused())
+        DrawFocusRect(rRenderContext, pEntry);
 
     // draw highlight frame
     if (pEntry == pCurHighlightFrame)
