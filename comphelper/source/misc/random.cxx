@@ -59,9 +59,9 @@ struct RandomNumberGenerator
             return;
         }
 
-        size_t seed = -1;
+        size_t seed = 0;
         if (rtl_random_getBytes(nullptr, &seed, sizeof(seed)) != rtl_Random_E_None)
-            seed = -1;
+            seed = 0;
 
         // initialises the state of the global random number generator
         // should only be called once.
