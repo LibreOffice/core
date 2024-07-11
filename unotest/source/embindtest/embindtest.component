@@ -13,6 +13,11 @@
         loader="com.sun.star.loader.SharedLibrary"
         xmlns="http://openoffice.org/2010/uno-components">
     <implementation
+            constructor="org_libreoffice_comp_embindtest_BridgeTest_get_implementation"
+            name="org.libreoffice.comp.embindtest.BridgeTest">
+        <singleton name="org.libreoffice.embindtest.BridgeTest"/>
+    </implementation>
+    <implementation
             constructor="org_libreoffice_comp_embindtest_Test_get_implementation"
             name="org.libreoffice.comp.embindtest.Test">
         <singleton name="org.libreoffice.embindtest.Test"/>

@@ -25,9 +25,12 @@
 #include <codemaker/typemanager.hxx>
 #include <codemaker/unotype.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
+#include <o3tl/unreachable.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <rtl/character.hxx>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -49,9 +52,9 @@ namespace
            "  wasmcallgen <cpp-output> <asm-output> <exp-output> <registries>\n\n"
            "where each <registry> is '+' (primary) or ':' (secondary), followed by: either a\n"
            "new- or legacy-format .rdb file, a single .idl file, or a root directory of an\n"
-           ".idl file tree.  For all primary registries, Wasm UNO bridge callvirtualfunction\n"
-           "code is written to <cpp-output>/<asm-output>, and to-be-exported exception RTTI\n"
-           "symbols are written to <exp-output>.\n";
+           ".idl file tree.  For all primary registries, Wasm UNO bridge code is written to\n"
+           "<cpp-output>/<asm-output>, and to-be-exported exception RTTI symbols are written\n"
+           "to <exp-output>.\n";
     std::exit(EXIT_FAILURE);
 }
 
@@ -245,14 +248,13 @@ StructKind getKind(rtl::Reference<TypeManager> const& manager, std::u16string_vi
     }
 }
 
-OString computeSignature(rtl::Reference<TypeManager> const& manager,
-                         unoidl::InterfaceTypeEntity::Method const& method)
+void appendCallSignatureReturnType(OStringBuffer& buffer,
+                                   rtl::Reference<TypeManager> const& manager, OUString const& type)
 {
-    OStringBuffer buf;
-    switch (manager->getSort(resolveAllTypedefs(manager, method.returnType)))
+    switch (manager->getSort(resolveAllTypedefs(manager, type)))
     {
         case codemaker::UnoType::Sort::Void:
-            buf.append('v');
+            buffer.append('v');
             break;
         case codemaker::UnoType::Sort::Boolean:
         case codemaker::UnoType::Sort::Byte:
@@ -262,99 +264,326 @@ OString computeSignature(rtl::Reference<TypeManager> const& manager,
         case codemaker::UnoType::Sort::UnsignedLong:
         case codemaker::UnoType::Sort::Char:
         case codemaker::UnoType::Sort::Enum:
-            buf.append('i');
+            buffer.append('i');
             break;
         case codemaker::UnoType::Sort::Hyper:
         case codemaker::UnoType::Sort::UnsignedHyper:
-            buf.append('j');
+            buffer.append('j');
             break;
         case codemaker::UnoType::Sort::Float:
-            buf.append('f');
+            buffer.append('f');
             break;
         case codemaker::UnoType::Sort::Double:
-            buf.append('d');
+            buffer.append('d');
             break;
         case codemaker::UnoType::Sort::String:
         case codemaker::UnoType::Sort::Type:
         case codemaker::UnoType::Sort::Any:
         case codemaker::UnoType::Sort::Sequence:
         case codemaker::UnoType::Sort::Interface:
-            buf.append("vi");
+            buffer.append("vi");
             break;
         case codemaker::UnoType::Sort::PlainStruct:
         case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         {
-            switch (getKind(manager, method.returnType))
+            switch (getKind(manager, type))
             {
                 case StructKind::Empty:
                     break;
                 case StructKind::I32:
-                    buf.append('i');
+                    buffer.append('i');
                     break;
                 case StructKind::I64:
-                    buf.append('j');
+                    buffer.append('j');
                     break;
                 case StructKind::F32:
-                    buf.append('f');
+                    buffer.append('f');
                     break;
                 case StructKind::F64:
-                    buf.append('d');
+                    buffer.append('d');
                     break;
                 case StructKind::General:
-                    buf.append("vi");
+                    buffer.append("vi");
                     break;
             }
             break;
         }
         default:
-            throw CannotDumpException("unexpected entity \"" + method.returnType
-                                      + "\" in call to computeSignature");
+            throw CannotDumpException("unexpected entity \"" + type
+                                      + "\" in call to appendCallSignatureReturnType");
     }
+}
+
+void appendCallSignatureParameter(
+    OStringBuffer& buffer, rtl::Reference<TypeManager> const& manager,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction, OUString const& type)
+{
+    if (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+    {
+        switch (manager->getSort(resolveAllTypedefs(manager, type)))
+        {
+            case codemaker::UnoType::Sort::Boolean:
+            case codemaker::UnoType::Sort::Byte:
+            case codemaker::UnoType::Sort::Short:
+            case codemaker::UnoType::Sort::UnsignedShort:
+            case codemaker::UnoType::Sort::Long:
+            case codemaker::UnoType::Sort::UnsignedLong:
+            case codemaker::UnoType::Sort::Char:
+            case codemaker::UnoType::Sort::Enum:
+            case codemaker::UnoType::Sort::String:
+            case codemaker::UnoType::Sort::Type:
+            case codemaker::UnoType::Sort::Any:
+            case codemaker::UnoType::Sort::Sequence:
+            case codemaker::UnoType::Sort::PlainStruct:
+            case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+            case codemaker::UnoType::Sort::Interface:
+                buffer.append('i');
+                break;
+            case codemaker::UnoType::Sort::Hyper:
+            case codemaker::UnoType::Sort::UnsignedHyper:
+                buffer.append('j');
+                break;
+            case codemaker::UnoType::Sort::Float:
+                buffer.append('f');
+                break;
+            case codemaker::UnoType::Sort::Double:
+                buffer.append('d');
+                break;
+            default:
+                throw CannotDumpException("unexpected entity \"" + type
+                                          + "\" in call to appendCallSignatureParameter");
+        }
+    }
+    else
+    {
+        buffer.append('i');
+    }
+}
+
+OString computeGetterCallSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Attribute const& attribute)
+{
+    OStringBuffer buf;
+    appendCallSignatureReturnType(buf, manager, attribute.type);
+    buf.append('i');
+    return buf.makeStringAndClear();
+}
+
+OString computeSetterCallSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Attribute const& attribute)
+{
+    OStringBuffer buf("vi");
+    appendCallSignatureParameter(
+        buf, manager, unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN, attribute.type);
+    return buf.makeStringAndClear();
+}
+
+OString computeMethodCallSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Method const& method)
+{
+    OStringBuffer buf;
+    appendCallSignatureReturnType(buf, manager, method.returnType);
     buf.append('i');
     for (auto const& param : method.parameters)
     {
-        if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
-        {
-            switch (manager->getSort(resolveAllTypedefs(manager, param.type)))
-            {
-                case codemaker::UnoType::Sort::Boolean:
-                case codemaker::UnoType::Sort::Byte:
-                case codemaker::UnoType::Sort::Short:
-                case codemaker::UnoType::Sort::UnsignedShort:
-                case codemaker::UnoType::Sort::Long:
-                case codemaker::UnoType::Sort::UnsignedLong:
-                case codemaker::UnoType::Sort::Char:
-                case codemaker::UnoType::Sort::Enum:
-                case codemaker::UnoType::Sort::String:
-                case codemaker::UnoType::Sort::Type:
-                case codemaker::UnoType::Sort::Any:
-                case codemaker::UnoType::Sort::Sequence:
-                case codemaker::UnoType::Sort::PlainStruct:
-                case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
-                case codemaker::UnoType::Sort::Interface:
-                    buf.append('i');
-                    break;
-                case codemaker::UnoType::Sort::Hyper:
-                case codemaker::UnoType::Sort::UnsignedHyper:
-                    buf.append('j');
-                    break;
-                case codemaker::UnoType::Sort::Float:
-                    buf.append('f');
-                    break;
-                case codemaker::UnoType::Sort::Double:
-                    buf.append('d');
-                    break;
-                default:
-                    throw CannotDumpException("unexpected entity \"" + param.type
-                                              + "\" in call to computeSignature");
-            }
-        }
-        else
-        {
-            buf.append('i');
-        }
+        appendCallSignatureParameter(buf, manager, param.direction, param.type);
     }
     return buf.makeStringAndClear();
+}
+
+void appendSlotSignatureOffsets(OStringBuffer& buffer, sal_Int32 functionOffset,
+                                sal_Int32 vtableOffset)
+{
+    buffer.append(OString::number(functionOffset) + "_" + OString::number(vtableOffset));
+}
+
+void appendSlotSignatureReturnType(OStringBuffer& buffer,
+                                   rtl::Reference<TypeManager> const& manager, OUString const& type)
+{
+    switch (manager->getSort(resolveAllTypedefs(manager, type)))
+    {
+        case codemaker::UnoType::Sort::Void:
+            buffer.append('v');
+            break;
+        case codemaker::UnoType::Sort::Boolean:
+        case codemaker::UnoType::Sort::Byte:
+        case codemaker::UnoType::Sort::Short:
+        case codemaker::UnoType::Sort::UnsignedShort:
+        case codemaker::UnoType::Sort::Long:
+        case codemaker::UnoType::Sort::UnsignedLong:
+        case codemaker::UnoType::Sort::Char:
+        case codemaker::UnoType::Sort::Enum:
+            buffer.append('i');
+            break;
+        case codemaker::UnoType::Sort::Hyper:
+        case codemaker::UnoType::Sort::UnsignedHyper:
+            buffer.append('j');
+            break;
+        case codemaker::UnoType::Sort::Float:
+            buffer.append('f');
+            break;
+        case codemaker::UnoType::Sort::Double:
+            buffer.append('d');
+            break;
+        case codemaker::UnoType::Sort::String:
+        case codemaker::UnoType::Sort::Type:
+        case codemaker::UnoType::Sort::Any:
+        case codemaker::UnoType::Sort::Sequence:
+        case codemaker::UnoType::Sort::Interface:
+            buffer.append('I');
+            break;
+        case codemaker::UnoType::Sort::PlainStruct:
+        case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+        {
+            switch (getKind(manager, type))
+            {
+                case StructKind::Empty:
+                    break;
+                case StructKind::I32:
+                    buffer.append('i');
+                    break;
+                case StructKind::I64:
+                    buffer.append('j');
+                    break;
+                case StructKind::F32:
+                    buffer.append('f');
+                    break;
+                case StructKind::F64:
+                    buffer.append('d');
+                    break;
+                case StructKind::General:
+                    buffer.append('I');
+                    break;
+            }
+            break;
+        }
+        default:
+            throw CannotDumpException("unexpected entity \"" + type
+                                      + "\" in call to appendSlotSignatureReturnType");
+    }
+}
+
+void appendSlotSignatureParameter(
+    OStringBuffer& buffer, rtl::Reference<TypeManager> const& manager,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction, OUString const& type)
+{
+    if (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+    {
+        switch (manager->getSort(resolveAllTypedefs(manager, type)))
+        {
+            case codemaker::UnoType::Sort::Boolean:
+            case codemaker::UnoType::Sort::Byte:
+            case codemaker::UnoType::Sort::Short:
+            case codemaker::UnoType::Sort::UnsignedShort:
+            case codemaker::UnoType::Sort::Long:
+            case codemaker::UnoType::Sort::UnsignedLong:
+            case codemaker::UnoType::Sort::Char:
+            case codemaker::UnoType::Sort::Enum:
+            case codemaker::UnoType::Sort::String:
+            case codemaker::UnoType::Sort::Type:
+            case codemaker::UnoType::Sort::Any:
+            case codemaker::UnoType::Sort::Sequence:
+            case codemaker::UnoType::Sort::PlainStruct:
+            case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+            case codemaker::UnoType::Sort::Interface:
+                buffer.append('i');
+                break;
+            case codemaker::UnoType::Sort::Hyper:
+            case codemaker::UnoType::Sort::UnsignedHyper:
+                buffer.append('j');
+                break;
+            case codemaker::UnoType::Sort::Float:
+                buffer.append('f');
+                break;
+            case codemaker::UnoType::Sort::Double:
+                buffer.append('d');
+                break;
+            default:
+                throw CannotDumpException("unexpected entity \"" + type
+                                          + "\" in call to appendSlotSignatureParameter");
+        }
+    }
+    else
+    {
+        buffer.append('i');
+    }
+}
+
+OString computeGetterSlotSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Attribute const& attribute,
+                                   sal_Int32 functionOffset, sal_Int32 vtableOffset)
+{
+    OStringBuffer buf;
+    appendSlotSignatureOffsets(buf, functionOffset, vtableOffset);
+    appendSlotSignatureReturnType(buf, manager, attribute.type);
+    return buf.makeStringAndClear();
+}
+
+OString computeSetterSlotSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Attribute const& attribute,
+                                   sal_Int32 functionOffset, sal_Int32 vtableOffset)
+{
+    OStringBuffer buf;
+    appendSlotSignatureOffsets(buf, functionOffset, vtableOffset);
+    buf.append('v');
+    appendSlotSignatureParameter(
+        buf, manager, unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN, attribute.type);
+    return buf.makeStringAndClear();
+}
+
+OString computeMethodSlotSignature(rtl::Reference<TypeManager> const& manager,
+                                   unoidl::InterfaceTypeEntity::Method const& method,
+                                   sal_Int32 functionOffset, sal_Int32 vtableOffset)
+{
+    OStringBuffer buf;
+    appendSlotSignatureOffsets(buf, functionOffset, vtableOffset);
+    appendSlotSignatureReturnType(buf, manager, method.returnType);
+    for (auto const& param : method.parameters)
+    {
+        appendSlotSignatureParameter(buf, manager, param.direction, param.type);
+    }
+    return buf.makeStringAndClear();
+}
+
+void computeSlotSignatures(rtl::Reference<TypeManager> const& manager,
+                           unoidl::InterfaceTypeEntity const& interface, sal_Int32& functionOffset,
+                           sal_Int32& vtableOffset, std::set<OString>& slotSignatures)
+{
+    auto const orgVtableOffset = vtableOffset;
+    auto firstBase = true;
+    for (auto const& base : interface.getDirectMandatoryBases())
+    {
+        auto const ent = manager->getManager()->findEntity(base.name);
+        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+        {
+            throw CannotDumpException("unexpected base type \"" + base.name
+                                      + "\" in call to computeSlotSignatures");
+        }
+        sal_Int32 freshFunctionOffset = 0;
+        computeSlotSignatures(manager, *static_cast<unoidl::InterfaceTypeEntity const*>(ent.get()),
+                              firstBase ? functionOffset : freshFunctionOffset, vtableOffset,
+                              slotSignatures);
+        vtableOffset += 4;
+        firstBase = false;
+    }
+    for (auto const& attr : interface.getDirectAttributes())
+    {
+        slotSignatures.insert(
+            computeGetterSlotSignature(manager, attr, functionOffset, orgVtableOffset));
+        ++functionOffset;
+        if (!attr.readOnly)
+        {
+            slotSignatures.insert(
+                computeSetterSlotSignature(manager, attr, functionOffset, orgVtableOffset));
+            ++functionOffset;
+        }
+    }
+    for (auto const& meth : interface.getDirectMethods())
+    {
+        slotSignatures.insert(
+            computeMethodSlotSignature(manager, meth, functionOffset, orgVtableOffset));
+        ++functionOffset;
+    }
 }
 
 void appendRttiSymbolSegment(OStringBuffer& buffer, OUString const& id)
@@ -384,7 +613,8 @@ OString computeRttiSymbol(std::vector<OUString> const& path, OUString const& id)
 
 void scan(rtl::Reference<TypeManager> const& manager,
           rtl::Reference<unoidl::MapCursor> const& cursor, std::vector<OUString>& path,
-          std::set<OString>& signatures, std::set<OString>& rttis)
+          std::set<OString>& callSignatures, std::set<OString>& slotSignatures,
+          std::set<OString>& rttis)
 {
     assert(cursor.is());
     for (;;)
@@ -400,19 +630,31 @@ void scan(rtl::Reference<TypeManager> const& manager,
             case unoidl::Entity::SORT_MODULE:
                 path.push_back(id);
                 scan(manager, static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(), path,
-                     signatures, rttis);
+                     callSignatures, slotSignatures, rttis);
                 path.pop_back();
                 break;
             case unoidl::Entity::SORT_EXCEPTION_TYPE:
                 rttis.insert(computeRttiSymbol(path, id));
                 break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
-                for (auto const& meth :
-                     static_cast<unoidl::InterfaceTypeEntity const*>(ent.get())->getDirectMethods())
+            {
+                auto const ite = static_cast<unoidl::InterfaceTypeEntity const*>(ent.get());
+                for (auto const& attr : ite->getDirectAttributes())
                 {
-                    signatures.insert(computeSignature(manager, meth));
+                    callSignatures.insert(computeGetterCallSignature(manager, attr));
+                    if (!attr.readOnly)
+                    {
+                        callSignatures.insert(computeSetterCallSignature(manager, attr));
+                    }
                 }
+                for (auto const& meth : ite->getDirectMethods())
+                {
+                    callSignatures.insert(computeMethodCallSignature(manager, meth));
+                }
+                computeSlotSignatures(manager, *ite, o3tl::temporary<sal_Int32>(0),
+                                      o3tl::temporary<sal_Int32>(0), slotSignatures);
                 break;
+            }
             default:
                 break;
         }
@@ -447,11 +689,12 @@ SAL_IMPLEMENT_MAIN()
             }
         }
         std::vector<OUString> path;
-        std::set<OString> signatures;
+        std::set<OString> callSignatures;
+        std::set<OString> slotSignatures;
         std::set<OString> rttis;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(mgr, prov->createRootCursor(), path, signatures, rttis);
+            scan(mgr, prov->createRootCursor(), path, callSignatures, slotSignatures, rttis);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -460,18 +703,20 @@ SAL_IMPLEMENT_MAIN()
             std::exit(EXIT_FAILURE);
         }
         cppOut << "#include <sal/config.h>\n"
+                  "#include <bit>\n"
                   "#include <string_view>\n"
                   "#include <com/sun/star/uno/RuntimeException.hpp>\n"
                   "#include <rtl/ustring.hxx>\n"
-                  "#include <wasm/callvirtualfunction.hxx>\n";
-        for (auto const& sig : signatures)
+                  "#include <sal/types.h>\n"
+                  "#include <wasm/generated.hxx>\n";
+        for (auto const& sig : callSignatures)
         {
             cppOut << "extern \"C\" void callVirtualFunction_" << sig
                    << "(sal_uInt32 target, sal_uInt64 const * arguments, void * returnValue);\n";
         }
         cppOut << "void callVirtualFunction(std::string_view signature, sal_uInt32 target, "
                   "sal_uInt64 const * arguments, void * returnValue) {\n";
-        for (auto const& sig : signatures)
+        for (auto const& sig : callSignatures)
         {
             cppOut << "    if (signature == \"" << sig << "\") {\n"
                    << "        callVirtualFunction_" << sig << "(target, arguments, returnValue);\n"
@@ -480,6 +725,145 @@ SAL_IMPLEMENT_MAIN()
         }
         cppOut << "    throw css::uno::RuntimeException(\"Wasm bridge cannot call virtual function "
                   "with signature \" + OUString::fromUtf8(signature));\n"
+                  "}\n";
+        if (!slotSignatures.empty())
+        {
+            cppOut << "namespace {\n";
+        }
+        for (auto const& sig : slotSignatures)
+        {
+            auto const i1 = sig.indexOf('_');
+            assert(i1 != -1);
+            sal_Int32 i2 = i1 + 1;
+            for (;; ++i2)
+            {
+                assert(i2 < sig.getLength());
+                if (!rtl::isAsciiDigit(static_cast<unsigned char>(sig[i2])))
+                {
+                    break;
+                }
+            }
+            assert(i2 != i1);
+            cppOut << "extern \"C\" ";
+            switch (sig[i2])
+            {
+                case 'd':
+                    cppOut << "double";
+                    break;
+                case 'f':
+                    cppOut << "float";
+                    break;
+                case 'i':
+                    cppOut << "unsigned";
+                    break;
+                case 'j':
+                    cppOut << "unsigned long long";
+                    break;
+                default:
+                    cppOut << "void";
+                    break;
+            }
+            cppOut << " vtableSlotFunction_" << sig << "(";
+            if (sig[i2] == 'I')
+            {
+                cppOut << "unsigned indirectRet, ";
+            }
+            cppOut << "unsigned thisPtr";
+            for (sal_Int32 i = i2 + 1; i != sig.getLength(); ++i)
+            {
+                cppOut << ", ";
+                switch (sig[i])
+                {
+                    case 'd':
+                        cppOut << "double";
+                        break;
+                    case 'f':
+                        cppOut << "float";
+                        break;
+                    case 'i':
+                        cppOut << "unsigned";
+                        break;
+                    case 'j':
+                        cppOut << "unsigned long long";
+                        break;
+                    default:
+                        O3TL_UNREACHABLE;
+                }
+                cppOut << " arg" << (i - i2);
+            }
+            cppOut << ") { ";
+            switch (sig[i2])
+            {
+                case 'd':
+                    cppOut << "return std::bit_cast<double>(static_cast<unsigned long long>(";
+                    break;
+                case 'f':
+                    cppOut << "return std::bit_cast<float>(static_cast<unsigned>(";
+                    break;
+                case 'i':
+                    cppOut << "return static_cast<unsigned>(";
+                    break;
+                case 'j':
+                    cppOut << "return static_cast<unsigned long long>(";
+                    break;
+            }
+            cppOut << "vtableCall(" << sig.subView(0, i1) << ", "
+                   << sig.subView(i1 + 1, i2 - (i1 + 1)) << ", thisPtr, {";
+            for (sal_Int32 i = i2 + 1; i != sig.getLength(); ++i)
+            {
+                if (i != i2 + 1)
+                {
+                    cppOut << ", ";
+                }
+                cppOut << "sal_uInt64(";
+                switch (sig[i])
+                {
+                    case 'd':
+                        cppOut << "std::bit_cast<unsigned long long>(";
+                        break;
+                    case 'f':
+                        cppOut << "std::bit_cast<unsigned>(";
+                        break;
+                }
+                cppOut << "arg" << (i - i2) << ")";
+                switch (sig[i])
+                {
+                    case 'd':
+                    case 'f':
+                        cppOut << ")";
+                        break;
+                }
+            }
+            cppOut << "}, "
+                   << (sig[i2] == 'I' ? "indirectRet" : "reinterpret_cast<unsigned>(nullptr)")
+                   << ")";
+            switch (sig[i2])
+            {
+                case 'd':
+                case 'f':
+                    cppOut << "))";
+                    break;
+                case 'i':
+                case 'j':
+                    cppOut << ")";
+                    break;
+            }
+            cppOut << "; }\n";
+        }
+        if (!slotSignatures.empty())
+        {
+            cppOut << "}\n";
+        }
+        cppOut << "void const * getVtableSlotFunction(std::string_view signature) {\n";
+        for (auto const& sig : slotSignatures)
+        {
+            cppOut << "    if (signature == \"" << sig << "\") {\n"
+                   << "        return reinterpret_cast<void const*>(vtableSlotFunction_" << sig
+                   << ");\n"
+                   << "    }\n";
+        }
+        cppOut << "    throw css::uno::RuntimeException(\"Wasm bridge cannot fill virtual function "
+                  "slot with signature \" + OUString::fromUtf8(signature));\n"
                   "}\n";
         cppOut.close();
         if (!cppOut)
@@ -495,11 +879,11 @@ SAL_IMPLEMENT_MAIN()
         }
         asmOut << "\t.text\n"
                   "\t.tabletype __indirect_function_table, funcref\n";
-        for (auto const& sig : signatures)
+        for (auto const& sig : callSignatures)
         {
             asmOut << "\t.functype callVirtualFunction_" << sig << " (i32, i32, i32) -> ()\n";
         }
-        for (auto const& sig : signatures)
+        for (auto const& sig : callSignatures)
         {
             asmOut << "\t.section .text.callVirtualFunction_" << sig
                    << ",\"\",@\n"

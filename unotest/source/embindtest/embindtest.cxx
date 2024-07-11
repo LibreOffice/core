@@ -9,6 +9,10 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -26,9 +30,14 @@
 #include <org/libreoffice/embindtest/Struct.hpp>
 #include <org/libreoffice/embindtest/StructLong.hpp>
 #include <org/libreoffice/embindtest/StructString.hpp>
+#include <org/libreoffice/embindtest/Test.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <uno/dispatcher.hxx>
+#include <uno/environment.h>
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
 
 namespace com::sun::star::uno
 {
@@ -601,6 +610,244 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     OUString stringAttribute_;
 };
+
+class BridgeTest : public cppu::WeakImplHelper<css::task::XJob>
+{
+public:
+    explicit BridgeTest(css::uno::Reference<css::uno::XComponentContext> const& context)
+        : context_(context)
+    {
+    }
+
+private:
+    css::uno::Any SAL_CALL
+    execute(css::uno::Sequence<css::beans::NamedValue> const& Arguments) override
+    {
+        if (Arguments.hasElements())
+        {
+            throw css::lang::IllegalArgumentException(u"BridgeTest execute args not empty"_ustr, {},
+                                                      0);
+        }
+        auto const envCppOrig = css::uno::Environment::getCurrent();
+        css::uno::Environment envUno;
+        uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envUno),
+                              u"" UNO_LB_UNO ""_ustr.pData, nullptr);
+        css::uno::Mapping cpp2uno(envCppOrig.get(), envUno.get());
+        css::uno::Environment envCpp;
+        if (!cpp2uno.is())
+        {
+            throw css::uno::RuntimeException(u"cannot get C++ to UNO mapping"_ustr);
+        }
+        uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envCpp),
+                              envCppOrig.getTypeName().pData, nullptr);
+        css::uno::Mapping uno2cpp(envUno.get(), envCpp.get());
+        if (!uno2cpp.is())
+        {
+            throw css::uno::RuntimeException(u"cannot get UNO to C++ mapping"_ustr);
+        }
+        css::uno::UnoInterfaceReference ifcUno;
+        cpp2uno.mapInterface(reinterpret_cast<void**>(&ifcUno.m_pUnoI),
+                             org::libreoffice::embindtest::Test::get(context_).get(),
+                             cppu::UnoType<org::libreoffice::embindtest::XTest>::get());
+        if (!ifcUno.is())
+        {
+            throw css::uno::RuntimeException(u"cannot map from C++ to UNO"_ustr);
+        }
+        css::uno::Reference<org::libreoffice::embindtest::XTest> ifcCpp;
+        uno2cpp.mapInterface(reinterpret_cast<void**>(&ifcCpp), ifcUno.get(),
+                             cppu::UnoType<org::libreoffice::embindtest::XTest>::get());
+        if (!ifcCpp.is())
+        {
+            throw css::uno::RuntimeException(u"cannot map from UNO to C++"_ustr);
+        }
+        {
+            auto const val = ifcCpp->getBoolean();
+            assert(val);
+            auto const ok = ifcCpp->isBoolean(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getByte();
+            assert(val == -12);
+            auto const ok = ifcCpp->isByte(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getShort();
+            assert(val == -1234);
+            auto const ok = ifcCpp->isShort(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getUnsignedShort();
+            assert(val == 54321);
+            auto const ok = ifcCpp->isUnsignedShort(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getLong();
+            assert(val == -123456);
+            auto const ok = ifcCpp->isLong(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getUnsignedLong();
+            assert(val == 3456789012);
+            auto const ok = ifcCpp->isUnsignedLong(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getHyper();
+            assert(val == -123456789);
+            auto const ok = ifcCpp->isHyper(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getUnsignedHyper();
+            assert(val == 9876543210);
+            auto const ok = ifcCpp->isUnsignedHyper(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getFloat();
+            assert(val == -10.25);
+            auto const ok = ifcCpp->isFloat(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getDouble();
+            assert(val == 100.5);
+            auto const ok = ifcCpp->isDouble(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getChar();
+            assert(val == u'Ö');
+            auto const ok = ifcCpp->isChar(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getString();
+            assert(val == u"hä"_ustr);
+            auto const ok = ifcCpp->isString(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getType();
+            assert(val == cppu::UnoType<sal_Int32>::get());
+            auto const ok = ifcCpp->isType(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getEnum();
+            assert(val == org::libreoffice::embindtest::Enum_E_2);
+            auto const ok = ifcCpp->isEnum(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getStruct();
+            assert((val == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr }));
+            auto const ok = ifcCpp->isStruct(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getStructLong();
+            assert(val == org::libreoffice::embindtest::StructLong{ -123456 });
+            auto const ok = ifcCpp->isStructLong(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getStructString();
+            assert(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
+            auto const ok = ifcCpp->isStructString(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getAnyVoid();
+            assert(val == css::uno::Any());
+            auto const ok = ifcCpp->isAnyVoid(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getSequenceBoolean();
+            assert((val == css::uno::Sequence<sal_Bool>{ true, true, false }));
+            auto const ok = ifcCpp->isSequenceBoolean(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            auto const val = ifcCpp->getNull();
+            assert(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
+            auto const ok = ifcCpp->isNull(val);
+            assert(ok == css::uno::Any(true));
+        }
+        {
+            sal_Bool value1;
+            sal_Int8 value2;
+            sal_Int16 value3;
+            sal_uInt16 value4;
+            sal_Int32 value5;
+            sal_uInt32 value6;
+            sal_Int64 value7;
+            sal_uInt64 value8;
+            float value9;
+            double value10;
+            sal_Unicode value11;
+            OUString value12;
+            css::uno::Type value13;
+            css::uno::Any value14;
+            css::uno::Sequence<OUString> value15;
+            org::libreoffice::embindtest::Enum value16;
+            org::libreoffice::embindtest::Struct value17;
+            css::uno::Reference<org::libreoffice::embindtest::XTest> value18;
+            ifcCpp->getOut(value1, value2, value3, value4, value5, value6, value7, value8, value9,
+                           value10, value11, value12, value13, value14, value15, value16, value17,
+                           value18);
+            assert(value1);
+            assert(value2 == -12);
+            assert(value3 == -1234);
+            assert(value4 == 54321);
+            assert(value5 == -123456);
+            assert(value6 == 3456789012);
+            assert(value7 == -123456789);
+            assert(value8 == 9876543210);
+            assert(value9 == -10.25);
+            assert(value10 == 100.5);
+            assert(value11 == u'Ö');
+            assert(value12 == u"hä"_ustr);
+            assert(value13 == cppu::UnoType<sal_Int32>::get());
+            assert(value14 == css::uno::Any(sal_Int32(-123456)));
+            assert((value15
+                    == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr }));
+            assert(value16 == org::libreoffice::embindtest::Enum_E_2);
+            assert((value17 == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr }));
+            assert(value18 == ifcCpp);
+        }
+        try
+        {
+            ifcCpp->throwRuntimeException();
+            assert(false);
+        }
+        catch (css::uno::RuntimeException& e)
+        {
+            assert(e.Message.startsWith("test"));
+        }
+        {
+            ifcCpp->setStringAttribute(u"hä"_ustr);
+            auto const val = ifcCpp->getStringAttribute();
+            assert(val == u"hä"_ustr);
+        }
+        return css::uno::Any(true);
+    }
+
+    css::uno::Reference<css::uno::XComponentContext> context_;
+};
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+org_libreoffice_comp_embindtest_BridgeTest_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new BridgeTest(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

@@ -33,7 +33,7 @@
 #include <types.hxx>
 #include <unointerfaceproxy.hxx>
 #include <vtables.hxx>
-#include <wasm/callvirtualfunction.hxx>
+#include <wasm/generated.hxx>
 
 #include "abi.hxx"
 

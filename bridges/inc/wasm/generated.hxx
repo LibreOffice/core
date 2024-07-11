@@ -12,10 +12,16 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <vector>
 
 #include <sal/types.h>
 
 void callVirtualFunction(std::string_view signature, sal_uInt32 target, sal_uInt64 const* arguments,
                          void* returnValue);
+
+sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPtr,
+                      std::vector<sal_uInt64> const& arguments, unsigned indirectRet);
+
+void const* getVtableSlotFunction(std::string_view signature);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

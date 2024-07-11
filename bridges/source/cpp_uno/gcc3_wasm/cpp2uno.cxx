@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <cstring>
 #include <typeinfo>
 
 #include <emscripten.h>
@@ -24,6 +25,7 @@
 #include <cppinterfaceproxy.hxx>
 #include <types.hxx>
 #include <vtablefactory.hxx>
+#include <wasm/generated.hxx>
 
 #include "abi.hxx"
 
@@ -176,19 +178,21 @@ void raiseException(uno_Any* any, uno_Mapping* mapping)
     __cxxabiv1::__cxa_throw(exc, rtti, deleteException);
 }
 
-void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
-          css::uno::TypeDescription const& description,
-          typelib_TypeDescriptionReference* returnType, sal_Int32 count,
-          typelib_MethodParameter* parameters, std::vector<sal_uInt64> arguments,
-          unsigned /*indirectRect*/)
+sal_uInt64 call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
+                css::uno::TypeDescription const& description,
+                typelib_TypeDescriptionReference* returnType, sal_Int32 count,
+                typelib_MethodParameter* parameters, std::vector<sal_uInt64> arguments,
+                unsigned indirectRet)
 {
     typelib_TypeDescription* rtd = nullptr;
     if (returnType != nullptr)
     {
         TYPELIB_DANGER_GET(&rtd, returnType);
     }
-    void* retin = nullptr;
-
+    auto const retConv = rtd != nullptr && bridges::cpp_uno::shared::relatesToInterfaceType(rtd);
+    void* retin = reinterpret_cast<void*>(indirectRet) != nullptr && !retConv
+                      ? reinterpret_cast<void*>(indirectRet)
+                      : rtd == nullptr ? nullptr : alloca(rtd->nSize);
     void** args = static_cast<void**>(alloca(count * sizeof(void*)));
     void** cppArgs = static_cast<void**>(alloca(count * sizeof(void*)));
     typelib_TypeDescription** argtds
@@ -198,7 +202,8 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
     {
         if (!parameters[i].bOut && bridges::cpp_uno::shared::isSimpleType(parameters[i].pTypeRef))
         {
-            assert(false);
+            args[i] = arguments.data() + i;
+            argtds[i] = nullptr;
         }
         else
         {
@@ -246,11 +251,54 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
         }
         raiseException(&exc, proxy->getBridge()->getUno2Cpp());
     }
-    assert(false);
+    for (sal_Int32 i = 0; i != count; ++i)
+    {
+        if (argtds[i] != nullptr)
+        {
+            if (parameters[i].bOut)
+            {
+                uno_destructData(cppArgs[i], argtds[i],
+                                 reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                uno_copyAndConvertData(cppArgs[i], args[i], argtds[i],
+                                       proxy->getBridge()->getUno2Cpp());
+            }
+            uno_destructData(args[i], argtds[i], nullptr);
+            TYPELIB_DANGER_RELEASE(argtds[i]);
+        }
+    }
+    sal_uInt64 retVal = {};
+    if (retConv)
+    {
+        uno_copyAndConvertData(reinterpret_cast<void*>(indirectRet), retin, rtd,
+                               proxy->getBridge()->getUno2Cpp());
+        uno_destructData(retin, rtd, nullptr);
+    }
+    else if (rtd != nullptr)
+    {
+        // Make sure to sign-extend the return value for small signed integer types:
+        switch (rtd->eTypeClass)
+        {
+            case typelib_TypeClass_BYTE:
+                retVal = static_cast<int>(*static_cast<sal_Int8 const*>(retin));
+                break;
+            case typelib_TypeClass_SHORT:
+                retVal = static_cast<int>(*static_cast<sal_Int16 const*>(retin));
+                break;
+            default:
+                std::memcpy(&retVal, retin, rtd->nSize);
+                break;
+        }
+    }
+    if (rtd != nullptr)
+    {
+        TYPELIB_DANGER_RELEASE(rtd);
+    }
+    return retVal;
+}
 }
 
-void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPtr,
-                std::vector<sal_uInt64> const& arguments, unsigned indirectRet)
+sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPtr,
+                      std::vector<sal_uInt64> const& arguments, unsigned indirectRet)
 {
     bridges::cpp_uno::shared::CppInterfaceProxy* proxy
         = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
@@ -265,10 +313,10 @@ void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPt
             if (type->pMapMemberIndexToFunctionIndex[pos] == functionIndex)
             {
                 // Getter:
-                call(proxy, desc,
-                     reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(desc.get())
-                         ->pAttributeTypeRef,
-                     0, nullptr, arguments, indirectRet);
+                return call(proxy, desc,
+                            reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(desc.get())
+                                ->pAttributeTypeRef,
+                            0, nullptr, arguments, indirectRet);
             }
             else
             {
@@ -278,7 +326,7 @@ void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPt
                         reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(desc.get())
                             ->pAttributeTypeRef,
                         true, false };
-                call(proxy, desc, nullptr, 1, &param, arguments, indirectRet);
+                return call(proxy, desc, nullptr, 1, &param, arguments, indirectRet);
             }
             break;
         case typelib_TypeClass_INTERFACE_METHOD:
@@ -286,10 +334,10 @@ void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPt
             {
                 case 1:
                     proxy->acquireProxy();
-                    break;
+                    return {};
                 case 2:
                     proxy->releaseProxy();
-                    break;
+                    return {};
                 case 0:
                 {
                     typelib_TypeDescription* td = nullptr;
@@ -309,78 +357,135 @@ void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned thisPt
                                 reinterpret_cast<uno_AcquireFunc>(css::uno::cpp_acquire));
                             ifc->release();
                             TYPELIB_DANGER_RELEASE(td);
-                            break;
+                            return {};
                         }
                         TYPELIB_DANGER_RELEASE(td);
                     }
                 }
                     [[fallthrough]];
                 default:
-                    call(proxy, desc,
-                         reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
-                             ->pReturnTypeRef,
-                         reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
-                             ->nParams,
-                         reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
-                             ->pParams,
-                         arguments, indirectRet);
-                    break;
+                    return call(
+                        proxy, desc,
+                        reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
+                            ->pReturnTypeRef,
+                        reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
+                            ->nParams,
+                        reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(desc.get())
+                            ->pParams,
+                        arguments, indirectRet);
             }
-            break;
         default:
             O3TL_UNREACHABLE;
     }
 }
 
-extern "C" void vtableSlotFunction_0_0Ii(unsigned indirectRet, unsigned thisPtr, unsigned arg1)
+namespace
 {
-    vtableCall(0, 0, thisPtr, { sal_uInt64(arg1) }, indirectRet);
+void appendSignatureOffsets(OStringBuffer& buffer, sal_Int32 functionOffset, sal_Int32 vtableOffset)
+{
+    buffer.append(OString::number(functionOffset) + "_" + OString::number(vtableOffset));
 }
 
-extern "C" void vtableSlotFunction_1_0v(unsigned thisPtr)
+void appendSignatureReturnType(OStringBuffer& buffer, typelib_TypeDescriptionReference* type)
 {
-    vtableCall(1, 0, thisPtr, {}, reinterpret_cast<unsigned>(nullptr));
+    switch (type->eTypeClass)
+    {
+        case typelib_TypeClass_VOID:
+            buffer.append('v');
+            break;
+        case typelib_TypeClass_BOOLEAN:
+        case typelib_TypeClass_BYTE:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_ENUM:
+            buffer.append('i');
+            break;
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            buffer.append('j');
+            break;
+        case typelib_TypeClass_FLOAT:
+            buffer.append('f');
+            break;
+        case typelib_TypeClass_DOUBLE:
+            buffer.append('d');
+            break;
+        case typelib_TypeClass_STRING:
+        case typelib_TypeClass_TYPE:
+        case typelib_TypeClass_ANY:
+        case typelib_TypeClass_SEQUENCE:
+        case typelib_TypeClass_INTERFACE:
+            buffer.append('I');
+            break;
+        case typelib_TypeClass_STRUCT:
+        {
+            css::uno::TypeDescription td(type);
+            switch (abi_wasm::getKind(
+                reinterpret_cast<typelib_CompoundTypeDescription const*>(td.get())))
+            {
+                case abi_wasm::StructKind::Empty:
+                    break;
+                case abi_wasm::StructKind::I32:
+                    buffer.append('i');
+                    break;
+                case abi_wasm::StructKind::I64:
+                    buffer.append('j');
+                    break;
+                case abi_wasm::StructKind::F32:
+                    buffer.append('f');
+                    break;
+                case abi_wasm::StructKind::F64:
+                    buffer.append('d');
+                    break;
+                case abi_wasm::StructKind::General:
+                    buffer.append('I');
+                    break;
+            }
+            break;
+        }
+        default:
+            O3TL_UNREACHABLE;
+    }
 }
 
-extern "C" void vtableSlotFunction_2_0v(unsigned thisPtr)
+void appendSignatureParameter(OStringBuffer& buffer, bool out,
+                              typelib_TypeDescriptionReference const* type)
 {
-    vtableCall(2, 0, thisPtr, {}, reinterpret_cast<unsigned>(nullptr));
-}
-
-extern "C" void vtableSlotFunction_3_0vi(unsigned thisPtr, unsigned arg1)
-{
-    vtableCall(3, 0, thisPtr, { arg1 }, reinterpret_cast<unsigned>(nullptr));
-}
-
-extern "C" void vtableSlotFunction_4_0v(unsigned thisPtr)
-{
-    vtableCall(4, 0, thisPtr, {}, reinterpret_cast<unsigned>(nullptr));
-}
-
-void const* getVtableSlotFunction(std::string_view signature)
-{
-    if (signature == "0_0Ii")
+    if (!out && bridges::cpp_uno::shared::isSimpleType(type))
     {
-        return reinterpret_cast<void const*>(vtableSlotFunction_0_0Ii);
+        switch (type->eTypeClass)
+        {
+            case typelib_TypeClass_BOOLEAN:
+            case typelib_TypeClass_BYTE:
+            case typelib_TypeClass_SHORT:
+            case typelib_TypeClass_UNSIGNED_SHORT:
+            case typelib_TypeClass_LONG:
+            case typelib_TypeClass_ENUM:
+            case typelib_TypeClass_UNSIGNED_LONG:
+            case typelib_TypeClass_CHAR:
+                buffer.append('i');
+                break;
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+                buffer.append('j');
+                break;
+            case typelib_TypeClass_FLOAT:
+                buffer.append('f');
+                break;
+            case typelib_TypeClass_DOUBLE:
+                buffer.append('d');
+                break;
+            default:
+                O3TL_UNREACHABLE;
+        }
     }
-    if (signature == "1_0v")
+    else
     {
-        return reinterpret_cast<void const*>(vtableSlotFunction_1_0v);
+        buffer.append('i');
     }
-    if (signature == "2_0v")
-    {
-        return reinterpret_cast<void const*>(vtableSlotFunction_2_0v);
-    }
-    if (signature == "3_0vi")
-    {
-        return reinterpret_cast<void const*>(vtableSlotFunction_3_0vi);
-    }
-    if (signature == "4_0v")
-    {
-        return reinterpret_cast<void const*>(vtableSlotFunction_4_0v);
-    }
-    throw css::uno::RuntimeException("Wasm bridge cannot fill virtual function slot with signature "
-                                     + OUString::fromUtf8(signature));
 }
 }
 
@@ -396,132 +501,37 @@ unsigned char* VtableFactory::addLocalFunctions(Slot** slots, unsigned char* cod
         switch (type->ppMembers[i]->eTypeClass)
         {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-                (s++)->fn = nullptr; //TODO
+            {
+                auto const atd = reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(
+                    css::uno::TypeDescription(type->ppMembers[i]).get());
+                OStringBuffer sigGetter;
+                appendSignatureOffsets(sigGetter, functionOffset, vtableOffset);
+                appendSignatureReturnType(sigGetter, atd->pAttributeTypeRef);
+                (s++)->fn = getVtableSlotFunction(sigGetter);
                 ++functionOffset;
                 if (!reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(
                          css::uno::TypeDescription(type->ppMembers[i]).get())
                          ->bReadOnly)
                 {
-                    (s++)->fn = nullptr; //TODO
+                    OStringBuffer sigSetter;
+                    appendSignatureOffsets(sigSetter, functionOffset, vtableOffset);
+                    sigSetter.append('v');
+                    appendSignatureParameter(sigSetter, false, atd->pAttributeTypeRef);
+                    (s++)->fn = getVtableSlotFunction(sigSetter);
                     ++functionOffset;
                 }
                 break;
+            }
             case typelib_TypeClass_INTERFACE_METHOD:
             {
-                OStringBuffer sig;
-                sig.append(OString::number(functionOffset) + "_" + OString::number(vtableOffset));
                 auto const mtd = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(
                     css::uno::TypeDescription(type->ppMembers[i]).get());
-                switch (mtd->pReturnTypeRef->eTypeClass)
-                {
-                    case typelib_TypeClass_VOID:
-                        sig.append('v');
-                        break;
-                    case typelib_TypeClass_BOOLEAN:
-                    case typelib_TypeClass_BYTE:
-                    case typelib_TypeClass_SHORT:
-                    case typelib_TypeClass_UNSIGNED_SHORT:
-                    case typelib_TypeClass_LONG:
-                    case typelib_TypeClass_UNSIGNED_LONG:
-                    case typelib_TypeClass_CHAR:
-                    case typelib_TypeClass_ENUM:
-                        sig.append('i');
-                        break;
-                    case typelib_TypeClass_HYPER:
-                    case typelib_TypeClass_UNSIGNED_HYPER:
-                        sig.append('j');
-                        break;
-                    case typelib_TypeClass_FLOAT:
-                        sig.append('f');
-                        break;
-                    case typelib_TypeClass_DOUBLE:
-                        sig.append('d');
-                        break;
-                    case typelib_TypeClass_STRING:
-                    case typelib_TypeClass_TYPE:
-                    case typelib_TypeClass_ANY:
-                    case typelib_TypeClass_SEQUENCE:
-                    case typelib_TypeClass_INTERFACE:
-                        sig.append('I');
-                        break;
-                    case typelib_TypeClass_STRUCT:
-                    {
-                        css::uno::TypeDescription rtd(mtd->pReturnTypeRef);
-                        switch (abi_wasm::getKind(
-                            reinterpret_cast<typelib_CompoundTypeDescription const*>(rtd.get())))
-                        {
-                            case abi_wasm::StructKind::Empty:
-                                break;
-                            case abi_wasm::StructKind::I32:
-                                sig.append('i');
-                                break;
-                            case abi_wasm::StructKind::I64:
-                                sig.append('j');
-                                break;
-                            case abi_wasm::StructKind::F32:
-                                sig.append('f');
-                                break;
-                            case abi_wasm::StructKind::F64:
-                                sig.append('d');
-                                break;
-                            case abi_wasm::StructKind::General:
-                                sig.append('I');
-                                break;
-                        }
-                        break;
-                    }
-                    default:
-                        O3TL_UNREACHABLE;
-                }
+                OStringBuffer sig;
+                appendSignatureOffsets(sig, functionOffset, vtableOffset);
+                appendSignatureReturnType(sig, mtd->pReturnTypeRef);
                 for (sal_Int32 j = 0; j != mtd->nParams; ++j)
                 {
-                    if (!mtd->pParams[j].bOut
-                        && bridges::cpp_uno::shared::isSimpleType(mtd->pParams[j].pTypeRef))
-                    {
-                        switch (mtd->pParams[j].pTypeRef->eTypeClass)
-                        {
-                            case typelib_TypeClass_BOOLEAN:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_BYTE:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_SHORT:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_UNSIGNED_SHORT:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_LONG:
-                            case typelib_TypeClass_ENUM:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_UNSIGNED_LONG:
-                                sig.append('i');
-                                break;
-                            case typelib_TypeClass_HYPER:
-                                sig.append('j');
-                                break;
-                            case typelib_TypeClass_UNSIGNED_HYPER:
-                                sig.append('j');
-                                break;
-                            case typelib_TypeClass_FLOAT:
-                                sig.append('f');
-                                break;
-                            case typelib_TypeClass_DOUBLE:
-                                sig.append('d');
-                                break;
-                            case typelib_TypeClass_CHAR:
-                                sig.append('i');
-                                break;
-                            default:
-                                O3TL_UNREACHABLE;
-                        }
-                    }
-                    else
-                    {
-                        sig.append('i');
-                    }
+                    appendSignatureParameter(sig, mtd->pParams[j].bOut, mtd->pParams[j].pTypeRef);
                 }
                 (s++)->fn = getVtableSlotFunction(sig);
                 ++functionOffset;
