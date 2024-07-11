@@ -397,6 +397,14 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
 
 DeactivateRC SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
+    if (IsCancelMode())
+    {
+        // Dialog cancelled, restore previous bullets
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::BulletsNumbering::DefaultBullets::set(m_aBulletSymbols, batch);
+        officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::set(m_aBulletSymbolsFonts, batch);
+        batch->commit();
+    }
     if(_pSet)
         FillItemSet(_pSet);
     return DeactivateRC::LeavePage;
@@ -519,15 +527,15 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
         _nMask <<= 1;
     }
 
-    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
-    css::uno::Sequence<OUString> aBulletSymbolsFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
-    css::uno::Sequence<OUString> aBulletSymbolsList(aBulletSymbols.size());
-    css::uno::Sequence<OUString> aBulletSymbolsFontsList(aBulletSymbolsFonts.size());
+    m_aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
+    m_aBulletSymbolsFonts = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
+    css::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
+    css::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
     auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
     auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
 
     sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
-    for (size_t i = 0; i < aBulletSymbols.size(); ++i)
+    for (size_t i = 0; i < m_aBulletSymbols.size(); ++i)
     {
         if (i == nIndex)
         {
@@ -536,8 +544,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
         }
         else
         {
-            aBulletSymbolsListRange[i] = aBulletSymbols[i];
-            aBulletSymbolsFontsListRange[i] = aBulletSymbolsFonts[i];
+            aBulletSymbolsListRange[i] = m_aBulletSymbols[i];
+            aBulletSymbolsFontsListRange[i] = m_aBulletSymbolsFonts[i];
         }
     }
 
