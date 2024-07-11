@@ -172,7 +172,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bookmarks-atkobject">
-                        <property name="AtkObject::accessible-description">Specifies whether bookmark positions are displayed on the screen.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bookmarks">Specifies whether bookmark positions are displayed on the screen.</property>
                       </object>
                     </child>
                   </object>
