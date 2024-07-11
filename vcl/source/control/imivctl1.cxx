@@ -1062,17 +1062,15 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, CalcFocusRect(pEntry),
                                                   bActiveSelection ? 1 : 2, false, false, false);
 
-
-    PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
-
-    PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
-
     if (pEntry->IsFocused())
         DrawFocusRect(rRenderContext, pEntry);
 
     // draw highlight frame
     if (pEntry == pCurHighlightFrame)
         DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry));
+
+    PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
+    PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
 
     rRenderContext.Pop();
     if (bResetClipRegion)
