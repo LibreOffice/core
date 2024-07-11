@@ -21,6 +21,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <unoframe.hxx>
+#include <fldmgr.hxx>
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
@@ -803,6 +804,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
     // so just hardcode it...
     dispatchCommand(mxComponent, ".uno:Fieldnames", args);
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
+{
+    createSwDoc("field_hide_section.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+    discardDumpedLayout();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    ::std::unique_ptr<SwField> pField(pWrtShell->GetCurField()->CopyField());
+    SwFieldMgr manager(pWrtShell);
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000 /*(?)*/, "Foo", "1", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[1]/infos/bounds"_ostr, "height"_ostr,
+                "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[2]/infos/bounds"_ostr, "height"_ostr,
+                "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+    // the problem was that there were 3 pages now
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    discardDumpedLayout();
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000 /*(?)*/, "Foo", "0", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+    discardDumpedLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
