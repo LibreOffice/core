@@ -177,6 +177,7 @@ public:
     sal_uInt32 m_nTabIndex;
     OUString m_aLock;
     OUString m_aMultiLine;
+    SwContentControlType m_iType;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          css::uno::Reference<SwXText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
@@ -196,6 +197,7 @@ public:
         , m_bDropDown(false)
         , m_nId(0)
         , m_nTabIndex(0)
+        , m_iType(SwContentControlType::RICH_TEXT)
     {
         if (m_pContentControl)
         {
@@ -1326,6 +1328,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetMultiLine();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CONTENT_CONTROL_TYPE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= static_cast<sal_Int32>(m_pImpl->m_iType);
+        }
+        else
+        {
+            aRet <<= static_cast<sal_Int32>(m_pImpl->m_pContentControl->GetType());
         }
     }
     else

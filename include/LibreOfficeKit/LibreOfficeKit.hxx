@@ -1268,9 +1268,9 @@ public:
         return mpThis->pClass->setForkedChild(mpThis, bIsChild);
     }
 
-    char* extractDocumentStructureRequest(const char* pFilePath)
+    char* extractDocumentStructureRequest(const char* pFilePath, const char* pFilter)
     {
-        return mpThis->pClass->extractDocumentStructureRequest(mpThis, pFilePath);
+        return mpThis->pClass->extractDocumentStructureRequest(mpThis, pFilePath, pFilter);
     }
 };
 

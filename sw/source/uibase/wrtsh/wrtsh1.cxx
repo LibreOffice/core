@@ -1064,6 +1064,28 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     }
 
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
+
+    // Search for a non used ID for the new ContentControl, to make it unique
+    SwContentControlManager& pManager = GetDoc()->GetContentControlManager();
+    size_t nCCCount = pManager.GetCount();
+    std::vector<bool> aIdMap(nCCCount);
+    aIdMap.resize(nCCCount, false);
+    size_t nIdToCheck;
+    for (nIdToCheck = 0; nIdToCheck < nCCCount; nIdToCheck++)
+    {
+        sal_Int32 nID
+            = pManager.UnsortedGet(nIdToCheck)->GetContentControl().GetContentControl()->GetId();
+        if (nID >= 0 && nID < static_cast<sal_Int32>(nCCCount))
+        {
+            aIdMap[nID] = true;
+        }
+    }
+    // Find the first ID that was not used
+    nIdToCheck = 0;
+    while (nIdToCheck < nCCCount && aIdMap[nIdToCheck])
+        nIdToCheck++;
+    pContentControl->SetId(nIdToCheck);
+
     OUString aPlaceholder;
     switch (eType)
     {

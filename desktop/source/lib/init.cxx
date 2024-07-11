@@ -2637,7 +2637,8 @@ static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char*
 
 static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pState);
 
-static char* lo_extractDocumentStructureRequest(LibreOfficeKit* pThis, const char* pFilePath);
+static char* lo_extractDocumentStructureRequest(LibreOfficeKit* pThis, const char* pFilePath,
+                                                const char* pFilter);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -3200,7 +3201,8 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
     return strdup("{ }");
 }
 
-static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
+static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath,
+                                                const char* pFilter)
 {
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
@@ -3245,9 +3247,14 @@ static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const
                 {
                     tools::JsonWriter aJson;
                     {
-                        pDoc->getCommandValues(aJson, ".uno:ExtractDocumentStructure");
-                        //auto aNode = aJson.startNode("Controls");
-                        //extractLinks(xLTS->getLinks(), false, aJson);
+                        OString aCommand = ".uno:ExtractDocumentStructure"_ostr;
+                        if (pFilter && pFilter[0])
+                        {
+                            aCommand
+                                = OString::Concat(aCommand) + "?filter="_ostr + pFilter;
+                        }
+
+                        pDoc->getCommandValues(aJson, aCommand);
                     }
                     return convertOString(aJson.finishAndGetAsOString());
                 }

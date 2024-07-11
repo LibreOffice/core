@@ -387,11 +387,20 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 ///
 /// Parameters:
 ///
-/// todo later (filtering options)
+/// - filter: To filter what document structure types to extract
+///   now, only contentcontrol is supported.
 void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
-                     const std::map<OUString, OUString>& /*rArguments*/,
+                     const std::map<OUString, OUString>& rArguments,
                      uno::Reference<container::XIndexAccess>& xContentControls)
 {
+    auto it = rArguments.find(u"filter"_ustr);
+    if (it != rArguments.end())
+    {
+        // If filter is present but we are filtering not to contentcontrols
+        if (!it->second.equals(u"contentcontrol"_ustr))
+            return;
+    }
+
     int iCCcount = xContentControls->getCount();
 
     auto commentsNode = rJsonWriter.startNode("DocStructure");
@@ -419,6 +428,10 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
         xContentControlProps->getPropertyValue(UNO_NAME_ALIAS) >>= aAlias;
         rJsonWriter.put("alias", aAlias);
 
+        sal_Int32 iType(0);
+        xContentControlProps->getPropertyValue(UNO_NAME_CONTENT_CONTROL_TYPE) >>= iType;
+        SwContentControlType aType = static_cast<SwContentControlType>(iType);
+
         bool bShowingPlaceHolder;
         xContentControlProps->getPropertyValue(UNO_NAME_SHOWING_PLACE_HOLDER)
             >>= bShowingPlaceHolder;
@@ -429,23 +442,58 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
         }
         rJsonWriter.put("content", aContent);
 
-        bool bPlainText;
-        xContentControlProps->getPropertyValue(UNO_NAME_PLAIN_TEXT) >>= bPlainText;
-        bool bChBox;
-        xContentControlProps->getPropertyValue(UNO_NAME_CHECKBOX) >>= bChBox;
-        // "type" value derives from the UNO bool property name.
-        if (bPlainText)
+        switch (aType)
         {
-            rJsonWriter.put("type", "plain-text");
+            case SwContentControlType::RICH_TEXT:
+            {
+                rJsonWriter.put("type", "rich-text");
+            }
+            break;
+            case SwContentControlType::CHECKBOX:
+            {
+                rJsonWriter.put("type", "checkbox");
+                bool bchecked = false;
+                xContentControlProps->getPropertyValue(UNO_NAME_CHECKED) >>= bchecked;
+                rJsonWriter.put(UNO_NAME_CHECKED, OUString::boolean(bchecked));
+            }
+            break;
+            case SwContentControlType::DROP_DOWN_LIST:
+            {
+                rJsonWriter.put("type", "drop-down-list");
+                // we could list its elements if we want
+            }
+            break;
+            case SwContentControlType::PICTURE:
+            {
+                rJsonWriter.put("type", "picture");
+            }
+            break;
+            case SwContentControlType::DATE:
+            {
+                rJsonWriter.put("type", "date");
+                OUString aDateFormat;
+                xContentControlProps->getPropertyValue(UNO_NAME_DATE_FORMAT) >>= aDateFormat;
+                rJsonWriter.put(UNO_NAME_DATE_FORMAT, aDateFormat);
+                OUString aDateLanguage;
+                xContentControlProps->getPropertyValue(UNO_NAME_DATE_LANGUAGE) >>= aDateLanguage;
+                rJsonWriter.put(UNO_NAME_DATE_LANGUAGE, aDateLanguage);
+            }
+            break;
+            case SwContentControlType::PLAIN_TEXT:
+            {
+                rJsonWriter.put("type", "plain-text");
+            }
+            break;
+            case SwContentControlType::COMBO_BOX:
+            {
+                rJsonWriter.put("type", "combo-box");
+                // we could list its elements if we want
+            }
+            break;
+            default:
+                //it should never happen
+                rJsonWriter.put("type", "no type?");
         }
-        else if (bChBox)
-        {
-            rJsonWriter.put("type", "checkbox");
-            bool bchecked = false;
-            xContentControlProps->getPropertyValue(UNO_NAME_CHECKED) >>= bchecked;
-            rJsonWriter.put(UNO_NAME_CHECKED, OUString::boolean(bchecked));
-        }
-        // TODO more types: picture, date, combobox, dropdown...
     }
 }
 

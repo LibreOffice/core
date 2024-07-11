@@ -934,6 +934,7 @@ inline constexpr OUString UNO_NAME_MULTILINE = u"MultiLine"_ustr;
 inline constexpr OUString UNO_NAME_DATE_STRING = u"DateString"_ustr;
 inline constexpr OUString UNO_NAME_PARA_ID = u"ParaId"_ustr;
 inline constexpr OUString UNO_NAME_PARA_ID_PARENT = u"ParaIdParent"_ustr;
+inline constexpr OUString UNO_NAME_CONTENT_CONTROL_TYPE = u"ContentControlType"_ustr;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
