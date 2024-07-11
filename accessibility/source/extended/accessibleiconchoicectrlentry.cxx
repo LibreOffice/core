@@ -60,12 +60,8 @@ namespace accessibility
     AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
                                                                   sal_Int32 _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
-
-        AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),
-
         m_pIconCtrl     ( &_rIconCtrl ),
         m_nIndex        ( _nPos ),
-        m_nClientId     ( 0 ),
         m_xParent       ( _xParent )
 
     {
@@ -163,6 +159,11 @@ namespace accessibility
             throw lang::DisposedException();
     }
 
+    css::awt::Rectangle AccessibleIconChoiceCtrlEntry::implGetBounds()
+    {
+        return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox_Impl());
+    }
+
     OUString AccessibleIconChoiceCtrlEntry::implGetText()
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
@@ -195,13 +196,7 @@ namespace accessibility
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // Send a disposing to all listeners.
-        if ( m_nClientId )
-        {
-            sal_uInt32 nId = m_nClientId;
-            m_nClientId =  0;
-            comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
-        }
+        comphelper::OAccessibleComponentHelper::disposing();
 
         Reference< XComponent > xComp( m_xParent, UNO_QUERY );
         if ( xComp.is() )
@@ -331,35 +326,14 @@ namespace accessibility
 
     // XAccessibleComponent
 
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::containsPoint( const awt::Point& rPoint )
-    {
-        return tools::Rectangle(Point(), GetBoundingBox().GetSize())
-            .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
-    }
-
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleAtPoint( const awt::Point& )
     {
         return Reference< XAccessible >();
     }
 
-    awt::Rectangle SAL_CALL AccessibleIconChoiceCtrlEntry::getBounds(  )
-    {
-        return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
-    }
-
-    awt::Point SAL_CALL AccessibleIconChoiceCtrlEntry::getLocation(  )
-    {
-        return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
-    }
-
     awt::Point SAL_CALL AccessibleIconChoiceCtrlEntry::getLocationOnScreen(  )
     {
         return VCLUnoHelper::ConvertToAWTPoint( GetBoundingBoxOnScreen().TopLeft() );
-    }
-
-    awt::Size SAL_CALL AccessibleIconChoiceCtrlEntry::getSize(  )
-    {
-        return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
     }
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::grabFocus(  )
@@ -476,37 +450,6 @@ namespace accessibility
     }
 
     // XAccessibleEventBroadcaster
-
-    void SAL_CALL AccessibleIconChoiceCtrlEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    {
-        if (xListener.is())
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
-            if (!m_nClientId)
-                m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-            comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
-        }
-    }
-
-    void SAL_CALL AccessibleIconChoiceCtrlEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    {
-        if (!xListener.is())
-            return;
-
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            sal_Int32 nId = m_nClientId;
-            m_nClientId = 0;
-            comphelper::AccessibleEventNotifier::revokeClient( nId );
-        }
-    }
 
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getCaretPosition(  )
     {

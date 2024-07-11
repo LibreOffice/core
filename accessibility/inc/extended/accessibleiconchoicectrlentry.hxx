@@ -27,8 +27,8 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
@@ -42,26 +42,20 @@ namespace accessibility
 {
 
 
-    typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible
-                                                , css::accessibility::XAccessibleContext
-                                                , css::accessibility::XAccessibleComponent
-                                                , css::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::ImplInheritanceHelper< comphelper::OAccessibleComponentHelper
+                                                , css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleText
                                                 , css::accessibility::XAccessibleAction
                                                 , css::lang::XServiceInfo
                                                 , css::lang::XEventListener > AccessibleIconChoiceCtrlEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleIconChoiceCtrlEntry final : public ::cppu::BaseMutex,
-                                                public AccessibleIconChoiceCtrlEntry_BASE,
+    class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry_BASE,
                                                 public ::comphelper::OCommonAccessibleText
     {
         /** The treelistbox control */
         VclPtr<SvtIconChoiceCtrl>           m_pIconCtrl;
         sal_Int32                           m_nIndex;
-
-        /// client id in the AccessibleEventNotifier queue
-        sal_uInt32                          m_nClientId;
 
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
@@ -83,6 +77,9 @@ namespace accessibility
         /** this function is called upon disposing the component
         */
         virtual void SAL_CALL                   disposing() override;
+
+        // OCommonAccessibleComponent
+        virtual css::awt::Rectangle implGetBounds() override;
 
         // OCommonAccessibleText
         virtual OUString                        implGetText() override;
@@ -129,12 +126,8 @@ namespace accessibility
         virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
         // XAccessibleComponent
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override;
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-        virtual css::awt::Size SAL_CALL getSize(  ) override;
         virtual void SAL_CALL grabFocus(  ) override;
         virtual sal_Int32 SAL_CALL getForeground(  ) override;
         virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -158,10 +151,6 @@ namespace accessibility
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
-
-        // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
         // XAccessibleAction
         virtual sal_Int32 SAL_CALL getAccessibleActionCount(  ) override;
