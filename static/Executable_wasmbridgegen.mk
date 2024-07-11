@@ -7,19 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,wasmcallgen))
+$(eval $(call gb_Executable_Executable,wasmbridgegen))
 
-$(eval $(call gb_Executable_add_exception_objects,wasmcallgen, \
-    static/source/wasmcallgen/wasmcallgen \
+$(eval $(call gb_Executable_add_exception_objects,wasmbridgegen, \
+    static/source/wasmbridgegen/wasmbridgegen \
 ))
 
-$(eval $(call gb_Executable_use_libraries,wasmcallgen, \
+$(eval $(call gb_Executable_use_libraries,wasmbridgegen, \
     sal \
     salhelper \
     unoidl \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,wasmcallgen, \
+$(eval $(call gb_Executable_use_static_libraries,wasmbridgegen, \
     codemaker \
 ))
 
