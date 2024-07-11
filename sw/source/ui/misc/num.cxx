@@ -870,6 +870,8 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     weld::Button* pButton = GetUserButton();
     pButton->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
     pButton->set_sensitive(m_rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
+    weld::Button& pCancelButton = GetCancelButton();
+    pCancelButton.connect_clicked(LINK(this, SwSvxNumBulletTabDialog, CancelHdl));
     AddTabPage(u"singlenum"_ustr, RID_SVXPAGE_PICK_SINGLE_NUM );
     AddTabPage(u"bullets"_ustr, RID_SVXPAGE_PICK_BULLET );
     AddTabPage(u"outlinenum"_ustr, RID_SVXPAGE_PICK_NUM );
@@ -944,6 +946,13 @@ short  SwSvxNumBulletTabDialog::Ok()
 IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl, weld::Button&, void)
 {
     m_xDialog->response(RET_USER);
+}
+
+IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, CancelHdl, weld::Button&, void)
+{
+    PrepareCancel();
+
+    m_xDialog->response(RET_CANCEL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,6 +99,8 @@ class SvxBulletPickTabPage final : public SfxTabPage
     std::unique_ptr<weld::Button> m_xBtChangeBullet;
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
+    css::uno::Sequence<OUString> m_aBulletSymbols;
+    css::uno::Sequence<OUString> m_aBulletSymbolsFonts;
 
     DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
     DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
