@@ -153,10 +153,16 @@ namespace sdr::overlay
                                 std::move(aRetval))
                     };
                 }
-                else if(OverlayType::Transparent == maLastOverlayType)
+                else if(maLastOverlayType == OverlayType::Transparent || maLastOverlayType == OverlayType::NoFill)
                 {
+                    // Determine transparency level
+                    double fTransparence;
+                    if (maLastOverlayType == OverlayType::NoFill)
+                        fTransparence = 1;
+                    else
+                        fTransparence = mnLastTransparence / 100.0;
+
                     // embed all rectangles in transparent paint
-                    const double fTransparence(mnLastTransparence / 100.0);
                     const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             std::move(aRetval),
