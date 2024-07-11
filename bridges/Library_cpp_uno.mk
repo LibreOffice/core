@@ -85,10 +85,10 @@ else ifeq ($(OS),EMSCRIPTEN)
 bridges_SELECTED_BRIDGE := gcc3_wasm
 bridge_exception_objects := abi cpp2uno uno2cpp
 $(eval $(call gb_Library_add_generated_asmobjects,$(CPPU_ENV)_uno, \
-    CustomTarget/bridges/gcc3_wasm/callvirtualfunction-impls \
+    CustomTarget/bridges/gcc3_wasm/generated-asm \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,$(CPPU_ENV)_uno, \
-    CustomTarget/bridges/gcc3_wasm/callvirtualfunction-wrapper \
+    CustomTarget/bridges/gcc3_wasm/generated-cxx \
 ))
 $(eval $(call gb_Library_use_static_libraries,$(CPPU_ENV)_uno, \
     emscriptencxxabi \

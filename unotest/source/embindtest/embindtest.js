@@ -1107,6 +1107,16 @@ Module.addOnPostRun(function() {
         console.assert(ret.get() === 'hä');
         ret.delete();
     }
+    {
+        const args = new Module.uno_Sequence_com$sun$star$beans$NamedValue(
+            0, Module.uno_Sequence.FromSize);
+        const ret =
+              Module.uno.org.libreoffice.embindtest.BridgeTest(Module.getUnoComponentContext()).
+              execute(args);
+        args.delete();
+        console.assert(ret.get() === true);
+        ret.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
