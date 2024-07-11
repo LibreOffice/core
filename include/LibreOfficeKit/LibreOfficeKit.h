@@ -149,7 +149,8 @@ struct _LibreOfficeKitClass
 
     /** @see lok::Office::extractDocumentStructureRequest.
      */
-    char* (*extractDocumentStructureRequest) (LibreOfficeKit* pThis, const char* pFilePath);
+    char* (*extractDocumentStructureRequest)(LibreOfficeKit* pThis, const char* pFilePath,
+                                             const char* pFilter);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

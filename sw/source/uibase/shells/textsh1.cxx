@@ -129,6 +129,7 @@
 #include <flyfrm.hxx>
 #include <unoprnms.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <formatcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2246,11 +2247,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // get the loaded content controls
             uno::Reference<text::XContentControlsSupplier> xCCSupplier(
                 GetView().GetDocShell()->GetModel(), uno::UNO_QUERY);
+            if (!xCCSupplier.is())
+                break;
+
             uno::Reference<container::XIndexAccess> xContentControls
                 = xCCSupplier->getContentControls();
             int iCCcount = xContentControls->getCount();
 
-            enum class ContentDataType
+            enum class ContentFilterType
             {
                 ERROR = -1,
                 INDEX,
@@ -2272,18 +2276,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         {
                             std::string aTextEnd = aItem2.first.substr(15);
                             std::string aValue = "";
-                            ContentDataType iKeyId = ContentDataType::ERROR;
+                            ContentFilterType iKeyId = ContentFilterType::ERROR;
                             // Find how the content control is identified: ByIndex, ByAlias...
                             for (size_t i = 0; i < aIdTexts.size(); i++)
                             {
                                 if (aTextEnd.starts_with(aIdTexts[i]))
                                 {
-                                    iKeyId = static_cast<ContentDataType>(i);
+                                    iKeyId = static_cast<ContentFilterType>(i);
                                     aValue = aTextEnd.substr(aIdTexts[i].length());
                                     break;
                                 }
                             }
-                            if (iKeyId != ContentDataType::ERROR)
+                            if (iKeyId != ContentFilterType::ERROR)
                             {
                                 // Check all the content controls, if they match
                                 for (int i = 0; i < iCCcount; ++i)
@@ -2293,17 +2297,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                                     uno::Reference<beans::XPropertySet> xContentControlProps(
                                         xContentControl, uno::UNO_QUERY);
+                                    if (!xContentControlProps.is())
+                                        continue;
 
                                     // Compare the loaded and the actual idetifier
                                     switch (iKeyId)
                                     {
-                                        case ContentDataType::INDEX:
+                                        case ContentFilterType::INDEX:
                                         {
                                             if (stoi(aValue) != i)
                                                 continue;
                                         }
                                         break;
-                                        case ContentDataType::ID:
+                                        case ContentFilterType::ID:
                                         {
                                             sal_Int32 iID = -1;
                                             xContentControlProps->getPropertyValue(UNO_NAME_ID)
@@ -2312,7 +2318,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 continue;
                                         }
                                         break;
-                                        case ContentDataType::ALIAS:
+                                        case ContentFilterType::ALIAS:
                                         {
                                             OUString aAlias;
                                             xContentControlProps->getPropertyValue(UNO_NAME_ALIAS)
@@ -2322,7 +2328,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 continue;
                                         }
                                         break;
-                                        case ContentDataType::TAG:
+                                        case ContentFilterType::TAG:
                                         {
                                             OUString aTag;
                                             xContentControlProps->getPropertyValue(UNO_NAME_TAG)
@@ -2337,16 +2343,91 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     }
 
                                     // We have a match, this content control need to be transformed
-                                    // Set all the values (of the content control) what nes needed
+                                    // Set all the values (of the content control) what is needed
                                     for (const auto& aItem3 : aItem2.second)
                                     {
                                         if (aItem3.first == "content")
                                         {
+                                            std::string aContent
+                                                = aItem3.second.get_value<std::string>();
+
                                             uno::Reference<text::XText> xContentControlText(
                                                 xContentControl, uno::UNO_QUERY);
-                                            xContentControlText->setString(OStringToOUString(
-                                                aItem3.second.get_value<std::string>(),
-                                                RTL_TEXTENCODING_UTF8));
+                                            if (!xContentControlText.is())
+                                                continue;
+
+                                            xContentControlText->setString(
+                                                OStringToOUString(aContent, RTL_TEXTENCODING_UTF8));
+
+                                            sal_Int32 iType = 0;
+                                            xContentControlProps->getPropertyValue(
+                                                UNO_NAME_CONTENT_CONTROL_TYPE)
+                                                >>= iType;
+                                            SwContentControlType aType
+                                                = static_cast<SwContentControlType>(iType);
+
+                                            // if we set the content of a checkbox, then we
+                                            // also set the checked state based on the content
+                                            if (aType == SwContentControlType::CHECKBOX)
+                                            {
+                                                OUString aCheckedContent;
+                                                xContentControlProps->getPropertyValue(
+                                                    UNO_NAME_CHECKED_STATE)
+                                                    >>= aCheckedContent;
+                                                bool bChecked = false;
+                                                if (aCheckedContent
+                                                    == OStringToOUString(
+                                                        aItem3.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8))
+                                                    bChecked = true;
+                                                xContentControlProps->setPropertyValue(
+                                                    UNO_NAME_CHECKED, uno::Any(bChecked));
+                                            }
+                                            else if (aType == SwContentControlType::PLAIN_TEXT
+                                                     || aType == SwContentControlType::RICH_TEXT
+                                                     || aType == SwContentControlType::DATE
+                                                     || aType == SwContentControlType::COMBO_BOX
+                                                     || aType
+                                                            == SwContentControlType::DROP_DOWN_LIST)
+                                            {
+                                                // Set the placeholder
+                                                bool bPlaceHolder = aContent == "" ? true : false;
+                                                xContentControlProps->setPropertyValue(
+                                                    UNO_NAME_SHOWING_PLACE_HOLDER,
+                                                    uno::Any(bPlaceHolder));
+                                                if (bPlaceHolder)
+                                                {
+                                                    OUString aPlaceHolderText;
+                                                    switch (aType)
+                                                    {
+                                                        case SwContentControlType::PLAIN_TEXT:
+                                                        case SwContentControlType::RICH_TEXT:
+                                                        {
+                                                            aPlaceHolderText = SwResId(
+                                                                STR_CONTENT_CONTROL_PLACEHOLDER);
+                                                        }
+                                                        break;
+                                                        case SwContentControlType::COMBO_BOX:
+                                                        case SwContentControlType::DROP_DOWN_LIST:
+                                                        {
+                                                            aPlaceHolderText = SwResId(
+                                                                STR_DROPDOWN_CONTENT_CONTROL_PLACEHOLDER);
+                                                        }
+                                                        break;
+                                                        case SwContentControlType::DATE:
+                                                        {
+                                                            aPlaceHolderText = SwResId(
+                                                                STR_DATE_CONTENT_CONTROL_PLACEHOLDER);
+                                                        }
+                                                        break;
+                                                        default: // do nothing for picture and checkbox
+                                                        break;
+                                                    }
+                                                    if (!aPlaceHolderText.isEmpty())
+                                                        xContentControlText->setString(
+                                                            aPlaceHolderText);
+                                                }
+                                            }
                                         }
                                         else if (aItem3.first == "checked")
                                         {
@@ -2357,6 +2438,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             xContentControlProps->setPropertyValue(
                                                 UNO_NAME_CHECKED,
                                                 uno::Any(bChecked));
+
+                                            OUString aCheckContent;
+                                            xContentControlProps->getPropertyValue(
+                                                bChecked ? UNO_NAME_CHECKED_STATE
+                                                         : UNO_NAME_UNCHECKED_STATE)
+                                                >>= aCheckContent;
+                                            uno::Reference<text::XText> xContentControlText(
+                                                xContentControl, uno::UNO_QUERY);
+                                            if (!xContentControlText.is())
+                                                continue;
+                                            xContentControlText->setString(aCheckContent);
                                         }
                                         else if (aItem3.first == "alias")
                                         {
