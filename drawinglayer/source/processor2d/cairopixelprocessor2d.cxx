@@ -250,7 +250,8 @@ class SystemDependentData_CairoPathGeometry : public basegfx::SystemDependentDat
 
 public:
     SystemDependentData_CairoPathGeometry(const std::shared_ptr<CairoPathHelper>& pCairoPathHelper)
-        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                       basegfx::SDD_Type::SDDType_CairoPathGeometry)
         , mpCairoPathHelper(pCairoPathHelper)
     {
     }
@@ -349,7 +350,8 @@ void getOrCreatePathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon,
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPathGeometry> pSystemDependentData_CairoPathGeometry(
-        rPolygon.getSystemDependentData<SystemDependentData_CairoPathGeometry>());
+        rPolygon.getSystemDependentData<SystemDependentData_CairoPathGeometry>(
+            basegfx::SDD_Type::SDDType_CairoPathGeometry));
 
     if (pSystemDependentData_CairoPathGeometry)
     {
@@ -375,7 +377,8 @@ void getOrCreateFillGeometry(cairo_t* pRT, const basegfx::B2DPolyPolygon& rPolyP
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPathGeometry> pSystemDependentData_CairoPathGeometry(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPathGeometry>());
+        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPathGeometry>(
+            basegfx::SDD_Type::SDDType_CairoPathGeometry));
 
     if (pSystemDependentData_CairoPathGeometry)
     {
@@ -645,7 +648,8 @@ class SystemDependentData_CairoSurface : public basegfx::SystemDependentData
 
 public:
     SystemDependentData_CairoSurface(const BitmapEx& rBitmapEx)
-        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                       basegfx::SDD_Type::SDDType_CairoSurface)
         , mpCairoSurfaceHelper(std::make_shared<CairoSurfaceHelper>(rBitmapEx))
         , maAssociatedAlpha()
     {
@@ -698,8 +702,7 @@ std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const BitmapEx
         // try to access SystemDependentDataHolder and buffered data
         pSystemDependentData_CairoSurface
             = std::static_pointer_cast<SystemDependentData_CairoSurface>(
-                pHolder->getSystemDependentData(
-                    typeid(SystemDependentData_CairoSurface).hash_code()));
+                pHolder->getSystemDependentData(basegfx::SDD_Type::SDDType_CairoSurface));
 
         // check data validity for associated Alpha
         if (pSystemDependentData_CairoSurface && rBitmapEx.IsAlpha()

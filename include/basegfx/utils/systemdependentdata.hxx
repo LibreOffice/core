@@ -12,7 +12,7 @@
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 #include <memory>
-#include <map>
+#include <unordered_map>
 
 namespace basegfx
 {
@@ -41,6 +41,20 @@ namespace basegfx
         virtual void flushAll() = 0;
     };
 
+    // (S)ystem(D)ependent(D)ata_Type
+    enum class BASEGFX_DLLPUBLIC SDD_Type : sal_uInt16 {
+        SDDType_CairoPathGeometry,
+        SDDType_CairoSurface,
+        SDDType_ID2D1PathGeometry,
+        SDDType_ID2D1Bitmap,
+        SDDType_BitmapHelper,
+        SDDType_MaskHelper,
+        SDDType_CairoPath,
+        SDDType_ModifiedBitmapEx,
+        SDDType_GraphicsPath,
+        SDDType_GdiPlusBitmap
+    };
+
     class BASEGFX_DLLPUBLIC SystemDependentData
     {
     private:
@@ -52,6 +66,9 @@ namespace basegfx
         // a single, globally used one, but not necessarily
         SystemDependentDataManager&     mrSystemDependentDataManager;
 
+        // Type identifier
+        SDD_Type                        maSystemDependentDataType;
+
         // Buffered CalculatedCycles, result of estimations using
         // getHoldCyclesInSeconds and estimateUsageInBytes, executed
         // using getHoldCyclesInSeconds. StartValue is 0 to detect
@@ -60,17 +77,16 @@ namespace basegfx
 
     public:
         SystemDependentData(
-            SystemDependentDataManager& rSystemDependentDataManager);
-
-        // CAUTION! It is VERY important to keep this base class
-        // virtual, else typeid(class).hash_code() from derived classes
-        // will NOT work what is ESSENTIAL for the SystemDependentData
-        // mechanism to work properly. So DO NOT REMOVE virtual here, please.
+            SystemDependentDataManager& rSystemDependentDataManager,
+            SDD_Type aSystemDependentDataType);
         virtual ~SystemDependentData();
 
         // allow access to call startUsage/endUsage/touchUsage
         // using getSystemDependentDataManager()
         SystemDependentDataManager& getSystemDependentDataManager() { return mrSystemDependentDataManager; }
+
+        // read access to SDD_Type
+        SDD_Type getSystemDependentDataType() const { return maSystemDependentDataType; }
 
         // Calculate HoldCyclesInSeconds based on using
         // getHoldCyclesInSeconds and estimateUsageInBytes, the
@@ -93,7 +109,7 @@ namespace basegfx
     {
     private:
         // Possibility to hold System-Dependent B2DPolygon-Representations
-        std::map< size_t, SystemDependentData_WeakPtr > maSystemDependentReferences;
+        std::unordered_map< SDD_Type, SystemDependentData_WeakPtr > maSystemDependentReferences;
 
         // noncopyable
         SystemDependentDataHolder(const SystemDependentDataHolder&) = delete;
@@ -104,7 +120,7 @@ namespace basegfx
         virtual ~SystemDependentDataHolder();
 
         void addOrReplaceSystemDependentData(SystemDependentData_SharedPtr& rData);
-        SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const;
+        SystemDependentData_SharedPtr getSystemDependentData(SDD_Type aType) const;
     };
 } // end of namespace basegfx
 

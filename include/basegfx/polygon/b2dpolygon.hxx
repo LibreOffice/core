@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 class ImplB2DPolygon;
@@ -37,9 +38,6 @@ namespace basegfx
     class B2DHomMatrix;
     class B2DCubicBezier;
     class B2DVector;
-    class SystemDependentData;
-    class SystemDependentDataManager;
-    typedef std::shared_ptr<SystemDependentData> SystemDependentData_SharedPtr;
 }
 
 namespace basegfx
@@ -230,9 +228,9 @@ namespace basegfx
 
         // exclusive management op's for SystemDependentData at B2DPolygon
         template<class T>
-        std::shared_ptr<T> getSystemDependentData() const
+        std::shared_ptr<T> getSystemDependentData(basegfx::SDD_Type aType) const
         {
-            return std::static_pointer_cast<T>(getSystemDependantDataInternal(typeid(T).hash_code()));
+            return std::static_pointer_cast<T>(getSystemDependantDataInternal(aType));
         }
 
         template<class T, class... Args>
@@ -252,7 +250,7 @@ namespace basegfx
 
     private:
         void addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const;
-        SystemDependentData_SharedPtr getSystemDependantDataInternal(size_t hash_code) const;
+        SystemDependentData_SharedPtr getSystemDependantDataInternal(basegfx::SDD_Type aType) const;
         const basegfx::B2DVector& getPrevControlVector(sal_uInt32 nIndex) const;
         const basegfx::B2DVector& getNextControlVector(sal_uInt32 nIndex) const;
     };

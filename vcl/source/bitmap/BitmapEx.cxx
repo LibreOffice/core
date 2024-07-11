@@ -848,7 +848,9 @@ public:
     BufferedData_ModifiedBitmapEx(
         const Bitmap& rChangedBitmap,
         const basegfx::BColorModifierStack& rBColorModifierStack)
-    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+    : basegfx::SystemDependentData(
+        Application::GetSystemDependentDataManager(),
+        basegfx::SDD_Type::SDDType_ModifiedBitmapEx)
     , maChangedBitmap(rChangedBitmap)
     , maBColorModifierStack(rBColorModifierStack)
     {
@@ -893,8 +895,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     {
         // try to access SystemDependentDataHolder and buffered data
         pBufferedData_ModifiedBitmapEx = std::static_pointer_cast<BufferedData_ModifiedBitmapEx>(
-            pHolder->getSystemDependentData(
-                typeid(BufferedData_ModifiedBitmapEx).hash_code()));
+            pHolder->getSystemDependentData(basegfx::SDD_Type::SDDType_ModifiedBitmapEx));
 
         if (nullptr != pBufferedData_ModifiedBitmapEx
             && !(pBufferedData_ModifiedBitmapEx->getBColorModifierStack() == rBColorModifierStack))

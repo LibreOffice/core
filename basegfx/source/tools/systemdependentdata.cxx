@@ -25,9 +25,11 @@ namespace basegfx
 namespace basegfx
 {
     SystemDependentData::SystemDependentData(
-        SystemDependentDataManager& rSystemDependentDataManager)
-    :   mrSystemDependentDataManager(rSystemDependentDataManager),
-        mnCalculatedCycles(0)
+        SystemDependentDataManager& rSystemDependentDataManager,
+        SDD_Type aSystemDependentDataType)
+    :   mrSystemDependentDataManager(rSystemDependentDataManager)
+    , maSystemDependentDataType(aSystemDependentDataType)
+    , mnCalculatedCycles(0)
     {
     }
 
@@ -120,8 +122,7 @@ namespace basegfx
 
     void SystemDependentDataHolder::addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData)
     {
-        const size_t hash_code(typeid(*rData).hash_code());
-        auto result(maSystemDependentReferences.find(hash_code));
+        auto result(maSystemDependentReferences.find(rData->getSystemDependentDataType()));
 
         if(result != maSystemDependentReferences.end())
         {
@@ -136,14 +137,14 @@ namespace basegfx
             result = maSystemDependentReferences.end();
         }
 
-        maSystemDependentReferences[hash_code] = rData;
+        maSystemDependentReferences[rData->getSystemDependentDataType()] = rData;
         rData->getSystemDependentDataManager().startUsage(rData);
     }
 
-    SystemDependentData_SharedPtr SystemDependentDataHolder::getSystemDependentData(size_t hash_code) const
+    SystemDependentData_SharedPtr SystemDependentDataHolder::getSystemDependentData(SDD_Type aType) const
     {
         basegfx::SystemDependentData_SharedPtr aRetval;
-        auto result(maSystemDependentReferences.find(hash_code));
+        auto result(maSystemDependentReferences.find(aType));
 
         if(result != maSystemDependentReferences.end())
         {

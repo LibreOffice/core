@@ -128,7 +128,8 @@ private:
 public:
     SystemDependentData_ID2D1PathGeometry(
         sal::systools::COMReference<ID2D1PathGeometry>& rID2D1PathGeometry)
-        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                       basegfx::SDD_Type::SDDType_ID2D1PathGeometry)
         , mpID2D1PathGeometry(rID2D1PathGeometry)
     {
     }
@@ -239,7 +240,8 @@ getOrCreatePathGeometry(const basegfx::B2DPolygon& rPolygon,
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
-        rPolygon.getSystemDependentData<SystemDependentData_ID2D1PathGeometry>());
+        rPolygon.getSystemDependentData<SystemDependentData_ID2D1PathGeometry>(
+            basegfx::SDD_Type::SDDType_ID2D1PathGeometry));
 
     if (pSystemDependentData_ID2D1PathGeometry)
     {
@@ -302,7 +304,8 @@ getOrCreateFillGeometry(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_ID2D1PathGeometry>());
+        rPolyPolygon.getSystemDependentData<SystemDependentData_ID2D1PathGeometry>(
+            basegfx::SDD_Type::SDDType_ID2D1PathGeometry));
 
     if (pSystemDependentData_ID2D1PathGeometry)
     {
@@ -361,7 +364,8 @@ private:
 public:
     SystemDependentData_ID2D1Bitmap(sal::systools::COMReference<ID2D1Bitmap>& rD2DBitmap,
                                     const std::shared_ptr<SalBitmap>& rAssociatedAlpha)
-        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+        : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                       basegfx::SDD_Type::SDDType_ID2D1Bitmap)
         , mpD2DBitmap(rD2DBitmap)
         , maAssociatedAlpha(rAssociatedAlpha)
     {
@@ -473,8 +477,7 @@ getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const 
         // try to access SystemDependentDataHolder and buffered data
         pSystemDependentData_ID2D1Bitmap
             = std::static_pointer_cast<SystemDependentData_ID2D1Bitmap>(
-                pHolder->getSystemDependentData(
-                    typeid(SystemDependentData_ID2D1Bitmap).hash_code()));
+                pHolder->getSystemDependentData(basegfx::SDD_Type::SDDType_ID2D1Bitmap));
 
         // check data validity for associated Alpha
         if (pSystemDependentData_ID2D1Bitmap

@@ -129,7 +129,8 @@ sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
 
 SystemDependentData_BitmapHelper::SystemDependentData_BitmapHelper(
     std::shared_ptr<BitmapHelper> xBitmapHelper)
-    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                   basegfx::SDD_Type::SDDType_BitmapHelper)
     , maBitmapHelper(std::move(xBitmapHelper))
 {
 }
@@ -141,7 +142,8 @@ sal_Int64 SystemDependentData_BitmapHelper::estimateUsageInBytes() const
 
 SystemDependentData_MaskHelper::SystemDependentData_MaskHelper(
     std::shared_ptr<MaskHelper> xMaskHelper)
-    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                   basegfx::SDD_Type::SDDType_MaskHelper)
     , maMaskHelper(std::move(xMaskHelper))
 {
 }
@@ -170,7 +172,8 @@ void tryToUseSourceBuffer(const SalBitmap& rSourceBitmap, std::shared_ptr<Bitmap
     if (bBufferSource)
     {
         pSystemDependentData_BitmapHelper
-            = rSourceBitmap.getSystemDependentData<SystemDependentData_BitmapHelper>();
+            = rSourceBitmap.getSystemDependentData<SystemDependentData_BitmapHelper>(
+                basegfx::SDD_Type::SDDType_BitmapHelper);
 
         if (pSystemDependentData_BitmapHelper)
         {
@@ -203,7 +206,8 @@ void tryToUseMaskBuffer(const SalBitmap& rMaskBitmap, std::shared_ptr<MaskHelper
     if (bBufferMask)
     {
         pSystemDependentData_MaskHelper
-            = rMaskBitmap.getSystemDependentData<SystemDependentData_MaskHelper>();
+            = rMaskBitmap.getSystemDependentData<SystemDependentData_MaskHelper>(
+                basegfx::SDD_Type::SDDType_MaskHelper);
 
         if (pSystemDependentData_MaskHelper)
         {

@@ -1999,7 +1999,9 @@ SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
     std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
     bool bNoLineJoin,
     const std::vector< double >* pStroke)
-:   basegfx::SystemDependentData(Application::GetSystemDependentDataManager()),
+:   basegfx::SystemDependentData(
+        Application::GetSystemDependentDataManager(),
+        basegfx::SDD_Type::SDDType_GraphicsPath),
     mpGraphicsPath(rpGraphicsPath),
     mbNoLineJoin(bNoLineJoin),
     maStroke()
@@ -2071,7 +2073,7 @@ void WinSalGraphicsImpl::drawPolyPolygon(
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
+        rPolyPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>(basegfx::SDD_Type::SDDType_GraphicsPath));
 
     if(pSystemDependentData_GraphicsPath)
     {
@@ -2305,7 +2307,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
-        rPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
+        rPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>(basegfx::SDD_Type::SDDType_GraphicsPath));
 
     // MM01 need to do line dashing as fallback stuff here now
     const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);

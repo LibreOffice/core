@@ -161,11 +161,11 @@ public:
 
     // exclusive management op's for SystemDependentData at SalBitmap
     template<class T>
-    std::shared_ptr<T> getSystemDependentData() const
+    std::shared_ptr<T> getSystemDependentData(basegfx::SDD_Type aType) const
     {
         const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
         if(pDataHolder)
-            return std::static_pointer_cast<T>(pDataHolder->getSystemDependentData(typeid(T).hash_code()));
+            return std::static_pointer_cast<T>(pDataHolder->getSystemDependentData(aType));
         return std::shared_ptr<T>();
     }
 

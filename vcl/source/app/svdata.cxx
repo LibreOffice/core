@@ -100,7 +100,7 @@ void ImplDeInitSVData()
 
 namespace
 {
-    typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
+    typedef ::std::unordered_map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
 
     class SystemDependentDataBuffer final : public basegfx::SystemDependentDataManager
     {

@@ -94,7 +94,9 @@ public:
 SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
     const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap,
     const WinSalBitmap* pAssociatedAlpha)
-:   basegfx::SystemDependentData(Application::GetSystemDependentDataManager()),
+:   basegfx::SystemDependentData(
+        Application::GetSystemDependentDataManager(),
+        basegfx::SDD_Type::SDDType_GdiPlusBitmap),
     mpGdiPlusBitmap(rGdiPlusBitmap),
     mpAssociatedAlpha(pAssociatedAlpha)
 {
@@ -159,7 +161,7 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GdiPlusBitmap> pSystemDependentData_GdiPlusBitmap(
-        getSystemDependentData<SystemDependentData_GdiPlusBitmap>());
+        getSystemDependentData<SystemDependentData_GdiPlusBitmap>(basegfx::SDD_Type::SDDType_GdiPlusBitmap));
 
     if(pSystemDependentData_GdiPlusBitmap)
     {

@@ -329,7 +329,8 @@ basegfx::B2DPoint PixelSnapper::snap(const basegfx::B2DPolygon& rPolygon,
 SystemDependentData_CairoPath::SystemDependentData_CairoPath(size_t nSizeMeasure, cairo_t* cr,
                                                              bool bNoJoin, bool bAntiAlias,
                                                              const std::vector<double>* pStroke)
-    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager())
+    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
+                                   basegfx::SDD_Type::SDDType_CairoPath)
     , mpCairoPath(nullptr)
     , mbNoJoin(bNoJoin)
     , mbAntiAlias(bAntiAlias)
@@ -382,7 +383,8 @@ void add_polygon_path(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPolygon,
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>());
+        rPolyPolygon.getSystemDependentData<SystemDependentData_CairoPath>(
+            basegfx::SDD_Type::SDDType_CairoPath));
 
     if (pSystemDependentData_CairoPath)
     {
@@ -1125,7 +1127,8 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
-        rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
+        rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>(
+            basegfx::SDD_Type::SDDType_CairoPath));
 
     // MM01 need to do line dashing as fallback stuff here now
     const double fDotDashLength(

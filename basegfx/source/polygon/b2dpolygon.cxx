@@ -1062,11 +1062,11 @@ public:
         mpBufferedData->addOrReplaceSystemDependentData(rData);
     }
 
-    basegfx::SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const
+    basegfx::SystemDependentData_SharedPtr getSystemDependentData(basegfx::SDD_Type aType) const
     {
         if(mpBufferedData)
         {
-            return mpBufferedData->getSystemDependentData(hash_code);
+            return mpBufferedData->getSystemDependentData(aType);
         }
 
         return basegfx::SystemDependentData_SharedPtr();
@@ -1445,9 +1445,9 @@ namespace basegfx
         mpPolygon->addOrReplaceSystemDependentData(rData);
     }
 
-    SystemDependentData_SharedPtr B2DPolygon::getSystemDependantDataInternal(size_t hash_code) const
+    SystemDependentData_SharedPtr B2DPolygon::getSystemDependantDataInternal(SDD_Type aType) const
     {
-        return mpPolygon->getSystemDependentData(hash_code);
+        return mpPolygon->getSystemDependentData(aType);
     }
 
 } // end of namespace basegfx

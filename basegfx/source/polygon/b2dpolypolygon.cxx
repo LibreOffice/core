@@ -73,14 +73,14 @@ public:
         mpSystemDependentDataHolder->addOrReplaceSystemDependentData(rData);
     }
 
-    basegfx::SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const
+    basegfx::SystemDependentData_SharedPtr getSystemDependentData(SDD_Type aType) const
     {
         if(!mpSystemDependentDataHolder)
         {
             return basegfx::SystemDependentData_SharedPtr();
         }
 
-        return mpSystemDependentDataHolder->getSystemDependentData(hash_code);
+        return mpSystemDependentDataHolder->getSystemDependentData(aType);
     }
 
     bool operator==(const ImplB2DPolyPolygon& rPolygonList) const
@@ -417,9 +417,9 @@ public:
         mpPolyPolygon->addOrReplaceSystemDependentData(rData);
     }
 
-    SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependantDataInternal(size_t hash_code) const
+    SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependantDataInternal(SDD_Type aType) const
     {
-        return mpPolyPolygon->getSystemDependentData(hash_code);
+        return mpPolyPolygon->getSystemDependentData(aType);
     }
 
 } // end of namespace basegfx
