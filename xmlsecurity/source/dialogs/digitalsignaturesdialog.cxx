@@ -466,7 +466,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
         std::unique_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), std::move(xSecContexts), CertificateChooserUserAction::Sign);
-        if (aChooser->run() == RET_OK)
+        while (aChooser->run() == RET_OK)
         {
             sal_Int32 nSecurityId;
             if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
@@ -491,6 +491,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
                 mbVerifySignatures = true;
                 ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
                 ImplFillSignaturesBox();
+                break;
             }
         }
     }
