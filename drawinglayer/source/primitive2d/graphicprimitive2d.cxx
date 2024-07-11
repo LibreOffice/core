@@ -81,7 +81,7 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
     // I have now added buffering BColorModifierStack-adapted Bitmaps,
     // see BitmapEx::ModifyBitmapEx, thus the primitive case is fast now.
     // It buffers the adapted bitmap and at that the SDPRs can then buffer
-    // the system-dependent represetation.
+    // the system-dependent representation.
     // I keep the code below (adding a static switch). It modifies the
     // Graphic and is a reliable fallback - just in case. Remember that
     // it does *not* buffer and has to modify again at each re-use...
