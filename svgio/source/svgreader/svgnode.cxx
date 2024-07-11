@@ -271,7 +271,7 @@ namespace {
             // - inherited attributes (up the hierarchy)
             // The first four will be collected in maCssStyleVector for the current element
             // (once, this will not change) and be linked in the needed order using the
-            // get/setCssStyleParent at the SvgStyleAttributes which will be used preferred in
+            // get/setCssStyle at the SvgStyleAttributes which will be used preferred in
             // member evaluation over the existing parent hierarchy
 
             // check for local CssStyle with highest priority
@@ -348,7 +348,7 @@ namespace {
                 {
                     SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
 
-                    pCurrent->setCssStyleParent(pNext);
+                    pCurrent->setCssStyle(pNext);
                     pCurrent = pNext;
                 }
 

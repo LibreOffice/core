@@ -94,7 +94,7 @@ namespace svgio::svgreader
             // these is in fillCssStyleVectorUsingHierarchyAndSelectors. There, the same string is
             // built up using the priorities of local CssStyle, Id, Class and other info combined
             // with the existing hierarchy. This creates a specificity and priority-sorted local
-            // list for each node which is then chained using get/setCssStyleParent.
+            // list for each node which is then chained using get/setCssStyle.
             // The current solution is capable of solving space-separated selectors which can be
             // mixed between Id, Class and type specifiers.
             // When CssStyles need more specific solving, the start point is here; remember the

@@ -190,7 +190,7 @@ namespace svgio::svgreader
         {
         private:
             SvgNode&                    mrOwner;
-            const SvgStyleAttributes*   mpCssStyleParent;
+            const SvgStyleAttributes*   mpCssStyle;
             SvgPaint                    maFill;
             SvgPaint                    maStroke;
             SvgPaint                    maStopColor;
@@ -312,13 +312,13 @@ namespace svgio::svgreader
                 drawinglayer::primitive2d::Primitive2DContainer&& rSource,
                 const std::optional<basegfx::B2DHomMatrix>& pTransform) const;
 
-            /// helper to set mpCssStyleParent temporarily for CSS style hierarchies
-            void setCssStyleParent(const SvgStyleAttributes* pNew) { mpCssStyleParent = pNew; }
-            const SvgStyleAttributes* getCssStyleParent() const { return mpCssStyleParent; }
+            /// helper to set mpCssStyle temporarily for CSS style hierarchies
+            void setCssStyle(const SvgStyleAttributes* pNew) { mpCssStyle = pNew; }
+            const SvgStyleAttributes* getCssStyle() const { return mpCssStyle; }
 
             /// scan helpers
             void readCssStyle(std::u16string_view rCandidate);
-            const SvgStyleAttributes* getParentStyle() const;
+            const SvgStyleAttributes* getCssStyleOrParentStyle() const;
 
             SvgStyleAttributes(SvgNode& rOwner);
             ~SvgStyleAttributes();

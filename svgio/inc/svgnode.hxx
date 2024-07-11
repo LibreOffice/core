@@ -188,9 +188,6 @@ namespace svgio::svgreader
 
             /// alternative parent
             void setAlternativeParent(const SvgNode* pAlternativeParent = nullptr) { mpAlternativeParent = pAlternativeParent; }
-
-            /// Check if there is a local css style
-            bool hasLocalCssStyle() { return static_cast<bool>(mpLocalCssStyle); }
         };
 
       class Visitor

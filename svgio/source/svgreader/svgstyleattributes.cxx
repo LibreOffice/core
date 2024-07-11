@@ -244,11 +244,11 @@ namespace svgio::svgreader
             }
         }
 
-        const SvgStyleAttributes* SvgStyleAttributes::getParentStyle() const
+        const SvgStyleAttributes* SvgStyleAttributes::getCssStyleOrParentStyle() const
         {
-            if(getCssStyleParent())
+            if(const SvgStyleAttributes* pCssStyleParent = getCssStyle())
             {
-                return getCssStyleParent();
+                return pCssStyleParent;
             }
 
             if(mrOwner.supportsParentStyle() && mrOwner.getParent())
@@ -1191,7 +1191,7 @@ namespace svgio::svgreader
             else
             {
                 // if opacity is not set, check the css style
-                if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleParent())
+                if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyle())
                 {
                     if (pSvgStyleAttributes->maOpacity.isSet())
                     {
@@ -1302,7 +1302,7 @@ namespace svgio::svgreader
 
         SvgStyleAttributes::SvgStyleAttributes(SvgNode& rOwner)
         :   mrOwner(rOwner),
-            mpCssStyleParent(nullptr),
+            mpCssStyle(nullptr),
             maStopColor(basegfx::BColor(0.0, 0.0, 0.0), true),
             maStrokeLinecap(StrokeLinecap::notset),
             maStrokeLinejoin(StrokeLinejoin::notset),
@@ -2054,7 +2054,7 @@ namespace svgio::svgreader
             if (SVGToken::Marker == mrOwner.getType())
                 return maContextFill;
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
             if (pSvgStyleAttributes && maResolvingParent[33] < nStyleDepthLimit)
             {
                 ++maResolvingParent[33];
@@ -2071,7 +2071,7 @@ namespace svgio::svgreader
             if (SVGToken::Marker == mrOwner.getType())
                 return maContextStroke;
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
             if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
             {
                 ++maResolvingParent[32];
@@ -2088,7 +2088,7 @@ namespace svgio::svgreader
             if (SVGToken::ClipPathNode == mrOwner.getType())
                 return true;
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
             if (pSvgStyleAttributes && maResolvingParent[31] < nStyleDepthLimit)
             {
                 ++maResolvingParent[31];
@@ -2139,7 +2139,7 @@ namespace svgio::svgreader
                 }
                 else if(isClipPathContent())
                 {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                     if (pSvgStyleAttributes && maResolvingParent[0] < nStyleDepthLimit)
                     {
@@ -2161,7 +2161,7 @@ namespace svgio::svgreader
             }
             else if (maNodeFillURL.isEmpty())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[0] < nStyleDepthLimit)
                 {
@@ -2214,7 +2214,7 @@ namespace svgio::svgreader
             }
             else if (maNodeStrokeURL.isEmpty())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[1] < nStyleDepthLimit)
                 {
@@ -2256,7 +2256,7 @@ namespace svgio::svgreader
                         }
                     }
                 }
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[2] < nStyleDepthLimit)
                 {
@@ -2287,7 +2287,7 @@ namespace svgio::svgreader
                     }
                 }
 
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[3] < nStyleDepthLimit)
                 {
@@ -2318,7 +2318,7 @@ namespace svgio::svgreader
                     }
                 }
 
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[4] < nStyleDepthLimit)
                 {
@@ -2349,7 +2349,7 @@ namespace svgio::svgreader
                     }
                 }
 
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[5] < nStyleDepthLimit)
                 {
@@ -2370,7 +2370,7 @@ namespace svgio::svgreader
                 return maStrokeWidth;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[6] < nStyleDepthLimit)
             {
@@ -2407,7 +2407,7 @@ namespace svgio::svgreader
                 return maFillOpacity;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[7] < nStyleDepthLimit)
             {
@@ -2428,7 +2428,7 @@ namespace svgio::svgreader
                 return maOpacity;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[34] < nStyleDepthLimit)
             {
@@ -2449,13 +2449,9 @@ namespace svgio::svgreader
                 return maOverflow;
             }
 
-            if(mrOwner.hasLocalCssStyle())
+            if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyle())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-                if (pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->getOverflow();
-                }
+                return pSvgStyleAttributes->getOverflow();
             }
 
             return Overflow::hidden;
@@ -2465,7 +2461,7 @@ namespace svgio::svgreader
         {
             if(Visibility::notset == maVisibility || Visibility::inherit == maVisibility)
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[9] < nStyleDepthLimit)
                 {
@@ -2518,7 +2514,7 @@ namespace svgio::svgreader
                 return maFillRule;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[10] < nStyleDepthLimit)
             {
@@ -2539,7 +2535,7 @@ namespace svgio::svgreader
                 return maClipRule;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
             {
@@ -2565,7 +2561,7 @@ namespace svgio::svgreader
                 return maStrokeDasharray;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[11] < nStyleDepthLimit)
             {
@@ -2586,7 +2582,7 @@ namespace svgio::svgreader
                 return maStrokeDashOffset;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[12] < nStyleDepthLimit)
             {
@@ -2607,7 +2603,7 @@ namespace svgio::svgreader
                 return maStrokeLinecap;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[13] < nStyleDepthLimit)
             {
@@ -2628,7 +2624,7 @@ namespace svgio::svgreader
                 return maStrokeLinejoin;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[14] < nStyleDepthLimit)
             {
@@ -2649,7 +2645,7 @@ namespace svgio::svgreader
                 return maStrokeMiterLimit;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[15] < nStyleDepthLimit)
             {
@@ -2670,7 +2666,7 @@ namespace svgio::svgreader
                 return maStrokeOpacity;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[16] < nStyleDepthLimit)
             {
@@ -2691,7 +2687,7 @@ namespace svgio::svgreader
                 return maFontFamily;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[17] < nStyleDepthLimit)
             {
@@ -2720,7 +2716,7 @@ namespace svgio::svgreader
                 // definition of the property')
                 if(SvgUnit::percent == maFontSizeNumber.getUnit())
                 {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                     if(pSvgStyleAttributes)
                     {
@@ -2738,7 +2734,7 @@ namespace svgio::svgreader
                 }
                 else if((SvgUnit::em == maFontSizeNumber.getUnit()) || (SvgUnit::ex == maFontSizeNumber.getUnit()))
                 {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                     if(pSvgStyleAttributes)
                     {
@@ -2773,7 +2769,7 @@ namespace svgio::svgreader
                 }
                 case FontSize::smaller:
                 {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
                     if(pSvgStyleAttributes)
                     {
                         const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
@@ -2792,7 +2788,7 @@ namespace svgio::svgreader
                 }
                 case FontSize::larger:
                 {
-                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                    const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
                     if(pSvgStyleAttributes)
                     {
                         const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
@@ -2810,7 +2806,7 @@ namespace svgio::svgreader
                 }
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if(pSvgStyleAttributes)
             {
@@ -2830,7 +2826,7 @@ namespace svgio::svgreader
                 }
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[18] < nStyleDepthLimit)
             {
@@ -2861,7 +2857,7 @@ namespace svgio::svgreader
                 return maFontStyle;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[19] < nStyleDepthLimit)
             {
@@ -2885,7 +2881,7 @@ namespace svgio::svgreader
                 }
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[20] < nStyleDepthLimit)
             {
@@ -2916,7 +2912,7 @@ namespace svgio::svgreader
                 return maTextAlign;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[21] < nStyleDepthLimit)
             {
@@ -2937,7 +2933,7 @@ namespace svgio::svgreader
                 return this;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[22] < nStyleDepthLimit)
             {
@@ -2973,7 +2969,7 @@ namespace svgio::svgreader
                 return maTextAnchor;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[23] < nStyleDepthLimit)
             {
@@ -3003,7 +2999,7 @@ namespace svgio::svgreader
             }
             else
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[24] < nStyleDepthLimit)
                 {
@@ -3024,16 +3020,10 @@ namespace svgio::svgreader
                 return maClipPathXLink;
             }
 
-            // This is called from add_postProcess so only check the parent style
-            // if it has a local css style, because it's the first in the stack
-            if(mrOwner.hasLocalCssStyle())
+            // This is called from add_postProcess so only check if it has a css style
+            if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyle())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if (pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->maClipPathXLink;
-                }
+                return pSvgStyleAttributes->maClipPathXLink;
             }
 
             return OUString();
@@ -3057,16 +3047,10 @@ namespace svgio::svgreader
                 return maFilterXLink;
             }
 
-            // This is called from add_postProcess so only check the parent style
-            // if it has a local css style, because it's the first in the stack
-            if(mrOwner.hasLocalCssStyle())
+            // This is called from add_postProcess so only check if it has a css style
+            if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyle())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if (pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->maFilterXLink;
-                }
+                return pSvgStyleAttributes->maFilterXLink;
             }
 
             return OUString();
@@ -3090,16 +3074,10 @@ namespace svgio::svgreader
                 return maMaskXLink;
             }
 
-            // This is called from add_postProcess so only check the parent style
-            // if it has a local css style, because it's the first in the stack
-            if(mrOwner.hasLocalCssStyle())
+            // This is called from add_postProcess so only check if it has a css style
+            if (const SvgStyleAttributes* pSvgStyleAttributes = getCssStyle())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
-
-                if (pSvgStyleAttributes)
-                {
-                    return pSvgStyleAttributes->maMaskXLink;
-                }
+                return pSvgStyleAttributes->maMaskXLink;
             }
 
             return OUString();
@@ -3123,7 +3101,7 @@ namespace svgio::svgreader
                 return maMarkerStartXLink;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[26] < nStyleDepthLimit)
             {
@@ -3154,7 +3132,7 @@ namespace svgio::svgreader
                 return maMarkerMidXLink;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[27] < nStyleDepthLimit)
             {
@@ -3185,7 +3163,7 @@ namespace svgio::svgreader
                 return maMarkerEndXLink;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[28] < nStyleDepthLimit)
             {
@@ -3214,7 +3192,7 @@ namespace svgio::svgreader
             // #122524# Handle SvgUnit::percent relative to parent BaselineShift
             if(SvgUnit::percent == maBaselineShiftNumber.getUnit())
             {
-                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
                 if (pSvgStyleAttributes && maResolvingParent[8] < nStyleDepthLimit)
                 {
@@ -3239,7 +3217,7 @@ namespace svgio::svgreader
                 return maBaselineShift;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[29] < nStyleDepthLimit)
             {
@@ -3259,7 +3237,7 @@ namespace svgio::svgreader
                 return maDominantBaseline;
             }
 
-            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
             if (pSvgStyleAttributes && maResolvingParent[30] < nStyleDepthLimit)
             {

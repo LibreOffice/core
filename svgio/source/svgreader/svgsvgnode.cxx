@@ -61,17 +61,17 @@ namespace svgio::svgreader
             {
                 const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
 
-                if(pStyles && pStyles->getParentStyle())
+                if(pStyles && pStyles->getCssStyleOrParentStyle())
                 {
                     // SVG has a parent style (probably CssStyle), check if fill is set there anywhere
                     // already. If yes, do not set the default fill (black)
                     bool bFillSet(false);
-                    const SvgStyleAttributes* pParentStyle = pStyles->getParentStyle();
+                    const SvgStyleAttributes* pParentStyle = pStyles->getCssStyleOrParentStyle();
 
                     while(pParentStyle && !bFillSet)
                     {
                         bFillSet = pParentStyle->isFillSet();
-                        pParentStyle = pParentStyle->getParentStyle();
+                        pParentStyle = pParentStyle->getCssStyleOrParentStyle();
                     }
 
                     if(bFillSet)
