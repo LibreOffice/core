@@ -20,6 +20,6 @@
     <implementation
             constructor="org_libreoffice_comp_embindtest_Test_get_implementation"
             name="org.libreoffice.comp.embindtest.Test">
-        <singleton name="org.libreoffice.embindtest.Test"/>
+        <service name="org.libreoffice.embindtest.Test"/>
     </implementation>
 </component>

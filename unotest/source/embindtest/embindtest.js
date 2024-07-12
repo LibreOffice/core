@@ -13,7 +13,7 @@ Module.addOnPostRun(function() {
     console.log('Running embindtest');
     Module.initUno();
     let css = Module.uno.com.sun.star;
-    let test = Module.uno.org.libreoffice.embindtest.Test(Module.getUnoComponentContext());
+    let test = Module.uno.org.libreoffice.embindtest.Test.create(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');
     {
         let v = test.getBoolean();
@@ -676,8 +676,9 @@ Module.addOnPostRun(function() {
     test.passJob(css.task.XJob.query(obj));
     test.passJobExecutor(css.task.XJobExecutor.query(obj));
     test.passInterface(obj);
-    test.StringAttribute = 'hä';
-    console.assert(test.StringAttribute === 'hä');
+    console.assert(test.getStringAttribute() === 'hä');
+    test.setStringAttribute('foo');
+    console.assert(test.getStringAttribute() === 'foo');
 
     const args = new Module.uno_Sequence_any(
         [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);
@@ -1100,12 +1101,15 @@ Module.addOnPostRun(function() {
         outparam.delete();
     }
     {
-        let a = new Module.uno_Any(Module.uno_Type.String(), 'hä');
+        const ret1 = invoke.getValue('StringAttribute');
+        console.assert(ret1.get() === 'foo');
+        ret1.delete();
+        let a = new Module.uno_Any(Module.uno_Type.String(), 'bar');
         invoke.setValue('StringAttribute', a);
         a.delete();
-        const ret = invoke.getValue('StringAttribute');
-        console.assert(ret.get() === 'hä');
-        ret.delete();
+        const ret2 = invoke.getValue('StringAttribute');
+        console.assert(ret2.get() === 'bar');
+        ret2.delete();
     }
     {
         const args = new Module.uno_Sequence_com$sun$star$beans$NamedValue(
