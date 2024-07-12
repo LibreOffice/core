@@ -1213,9 +1213,22 @@ SAL_IMPLEMENT_MAIN()
             std::cerr << "Cannot open \"" << jsPathname << "\" for writing\n";
             std::exit(EXIT_FAILURE);
         }
-        jsOut << "function init_unoembind_" << name
-              << "(instance) {\n"
-                 "    return {\n";
+        jsOut << "function init_unoembind_" << name << "(instance, tagSymbol) {\n";
+        for (auto const& enm : enums)
+        {
+            auto const ent = mgr->getManager()->findEntity(enm);
+            if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_ENUM_TYPE)
+            {
+                throw CannotDumpException("bad enum type \"" + enm + "\"");
+            }
+            for (auto const& mem :
+                 static_cast<unoidl::EnumTypeEntity const*>(ent.get())->getMembers())
+            {
+                jsOut << "    instance.uno_Type_" << enm.replace('.', '$') << "." << mem.name
+                      << "[tagSymbol] = {kind: 'enumerator', type: '" << enm << "'};\n";
+            }
+        }
+        jsOut << "    return {\n";
         writeJsMap(jsOut, *module, "        ");
         jsOut << "    };\n"
                  "};\n";
