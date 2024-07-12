@@ -72,6 +72,7 @@ svx/uiconfig/ui/redlinefilterpage.ui://GtkComboBoxText[@id='authorlist'] missing
 svx/uiconfig/ui/redlinefilterpage.ui://GtkEntry[@id='rangeedit'] missing-label-for
 svx/uiconfig/ui/redlinefilterpage.ui://GtkComboBoxText[@id='datecond'] missing-label-for
 svx/uiconfig/ui/redlinefilterpage.ui://GtkLabel[@id='and'] orphan-label
+svx/uiconfig/ui/redlineviewpage.ui://GtkLabel[@id='sortbylabel'] orphan-label
 svx/uiconfig/ui/safemodedialog.ui://GtkLabel[@id='label1'] orphan-label
 svx/uiconfig/ui/safemodedialog.ui://GtkLabel[@id='label3'] orphan-label
 svx/uiconfig/ui/safemodedialog.ui://GtkLabel[@id='label4'] orphan-label

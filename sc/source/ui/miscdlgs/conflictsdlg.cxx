@@ -334,7 +334,8 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     , m_xBtnKeepOther(m_xBuilder->weld_button(u"keepother"_ustr))
     , m_xBtnKeepAllMine(m_xBuilder->weld_button(u"keepallmine"_ustr))
     , m_xBtnKeepAllOthers(m_xBuilder->weld_button(u"keepallothers"_ustr))
-    , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view(u"container"_ustr), nullptr))
+    , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view(u"container"_ustr), nullptr,
+                                        nullptr))
 {
     OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
     mpOwnDoc = ( mpViewData ? &mpViewData->GetDocument() : nullptr );

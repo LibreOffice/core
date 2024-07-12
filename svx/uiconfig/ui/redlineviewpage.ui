@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -46,6 +46,53 @@
     <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
+    <child>
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="sortbylabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="redlineviewpage|sortbylabel">Sort by:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="sortbycombobox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="active">4</property>
+            <items>
+              <item id="action" translatable="yes" context="redlineviewpage|sortbycombobox">Action</item>
+              <item id="author" translatable="yes" context="redlineviewpage|sortbycombobox">Author</item>
+              <item id="date" translatable="yes" context="redlineviewpage|sortbycombobox">Date</item>
+              <item id="comment" translatable="yes" context="redlineviewpage|sortbycombox">Comment</item>
+              <item id="documentposition" translatable="yes" context="redlineviewpage|sortbycombobox">Document Position</item>
+            </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="sortbycombobox-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="redlineviewpage|extended_tip|SortByComboBox">How to sort the changes list.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
     <child>
       <object class="GtkScrolledWindow">
         <property name="can-focus">True</property>
@@ -128,18 +175,18 @@
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child internal-child="accessible">
-          <object class="AtkObject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="redlineviewpage|writerchanges-atkobject">Changes</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="writerchanges-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="redlineviewpage|writerchanges-atkobject">Changes</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
@@ -234,18 +281,18 @@
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child internal-child="accessible">
-          <object class="AtkObject">
-            <property name="AtkObject::accessible-name" translatable="yes" context="redlineviewpage|calcchanges-atkobject">Changes</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="calcchanges-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="redlineviewpage|calcchanges-atkobject">Changes</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child>
@@ -354,7 +401,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child internal-child="accessible">

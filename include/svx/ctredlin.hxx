@@ -83,6 +83,8 @@ private:
     std::unique_ptr<weld::TreeView> xCalcTreeView;
     weld::TreeView* pTreeView;
 
+    weld::ComboBox* m_pSortByComboBox;
+
     sal_uInt16      nDatePos;
     bool            bAuthor;
     bool            bDate;
@@ -100,7 +102,8 @@ private:
 
 public:
     SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
-                   std::unique_ptr<weld::TreeView> xCalcControl);
+                   std::unique_ptr<weld::TreeView> xCalcControl,
+                   weld::ComboBox* pSortByControl);
 
     weld::TreeView& GetWidget() { return *pTreeView; }
     bool IsSorted() const { return bSorted; }
@@ -256,12 +259,13 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPView final : public SvxTPage
 {
 private:
-
     Link<SvxTPView*,void>          AcceptClickLk;
     Link<SvxTPView*,void>          AcceptAllClickLk;
     Link<SvxTPView*,void>          RejectClickLk;
     Link<SvxTPView*,void>          RejectAllClickLk;
     Link<SvxTPView*,void>          UndoClickLk;
+
+    Link<SvxTPView*,void> SortByComboBoxChangedLk;
 
     bool bEnableAccept;
     bool bEnableAcceptAll;
@@ -277,15 +281,19 @@ private:
     std::unique_ptr<weld::Button> m_xAcceptAll;
     std::unique_ptr<weld::Button> m_xRejectAll;
     std::unique_ptr<weld::Button> m_xUndo;
+    std::unique_ptr<weld::ComboBox> m_xSortByComboBox;
     std::unique_ptr<SvxRedlinTable> m_xViewData;
 
     DECL_DLLPRIVATE_LINK( PbClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK(SortByComboBoxChangedHdl, weld::ComboBox&, void);
 
 public:
     SvxTPView(weld::Container* pParent);
     virtual ~SvxTPView() override;
 
     SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
+
+    weld::ComboBox* GetSortByComboBoxControl() { return m_xSortByComboBox.get(); }
 
     void            EnableAccept(bool bFlag);
     void            EnableAcceptAll(bool bFlag);
@@ -306,6 +314,11 @@ public:
     void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectAllClickLk = rLink; }
 
     void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
+
+    void SetSortByComboBoxChangedHdl(const Link<SvxTPView*, void>& rLink)
+    {
+        SortByComboBoxChangedLk = rLink;
+    }
 
     virtual void    ActivatePage() override;
     void            DeactivatePage();

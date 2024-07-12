@@ -47,12 +47,14 @@ RedlinData::~RedlinData()
 }
 
 SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
-                               std::unique_ptr<weld::TreeView> xCalcControl)
+                               std::unique_ptr<weld::TreeView> xCalcControl,
+                               weld::ComboBox* pSortByControl)
     : xSorter(new comphelper::string::NaturalStringSorter(::comphelper::getProcessComponentContext(),
         Application::GetSettings().GetUILanguageTag().getLocale()))
     , xWriterTreeView(std::move(xWriterControl))
     , xCalcTreeView(std::move(xCalcControl))
     , pTreeView(nullptr)
+    , m_pSortByComboBox(pSortByControl)
     , nDatePos(WRITER_DATE)
     , bAuthor(false)
     , bDate(false)
@@ -121,6 +123,8 @@ IMPL_LINK(SvxRedlinTable, HeaderBarClick, int, nColumn, void)
     {
         //sort lists
         pTreeView->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+        if (m_pSortByComboBox)
+            m_pSortByComboBox->set_active(nColumn);
     }
 }
 
@@ -311,9 +315,13 @@ SvxTPView::SvxTPView(weld::Container* pParent)
     , m_xAcceptAll(m_xBuilder->weld_button(u"acceptall"_ustr))
     , m_xRejectAll(m_xBuilder->weld_button(u"rejectall"_ustr))
     , m_xUndo(m_xBuilder->weld_button(u"undo"_ustr))
+    , m_xSortByComboBox(m_xBuilder->weld_combo_box(u"sortbycombobox"_ustr))
     , m_xViewData(new SvxRedlinTable(m_xBuilder->weld_tree_view(u"writerchanges"_ustr),
-                                     m_xBuilder->weld_tree_view(u"calcchanges"_ustr)))
+                                     m_xBuilder->weld_tree_view(u"calcchanges"_ustr),
+                                     m_xSortByComboBox.get()))
 {
+    m_xSortByComboBox->connect_changed(LINK(this, SvxTPView, SortByComboBoxChangedHdl));
+
     Link<weld::Button&,void> aLink=LINK( this, SvxTPView, PbClickHdl);
 
     m_xAccept->connect_clicked(aLink);
@@ -351,6 +359,8 @@ void SvxRedlinTable::SetWriterView()
     if (xCalcTreeView)
         xCalcTreeView->hide();
     xWriterTreeView->show();
+    if (m_pSortByComboBox)
+        m_pSortByComboBox->weld_parent()->show();
     pTreeView = xWriterTreeView.get();
 
     auto nDigitWidth = pTreeView->get_approximate_digit_width();
@@ -368,6 +378,8 @@ void SvxRedlinTable::SetCalcView()
     nDatePos = CALC_DATE;
     if (xWriterTreeView)
         xWriterTreeView->hide();
+    if (m_pSortByComboBox)
+        m_pSortByComboBox->weld_parent()->hide();
     xCalcTreeView->show();
     pTreeView = xCalcTreeView.get();
 
@@ -429,6 +441,12 @@ void SvxTPView::EnableUndo(bool bFlag)
 {
     bEnableUndo = bFlag;
     m_xUndo->set_sensitive(bFlag);
+}
+
+IMPL_LINK_NOARG(SvxTPView, SortByComboBoxChangedHdl, weld::ComboBox&, void)
+{
+    if (SortByComboBoxChangedLk.IsSet())
+        SortByComboBoxChangedLk.Call(this);
 }
 
 IMPL_LINK( SvxTPView, PbClickHdl, weld::Button&, rPushB, void)

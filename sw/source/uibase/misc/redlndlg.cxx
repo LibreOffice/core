@@ -167,6 +167,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     m_pTable = m_pTPView->GetTableControl();
     m_pTable->SetWriterView();
 
+    m_pTPView->GetSortByComboBoxControl()->set_active(4);
+
+    m_pTPView->SetSortByComboBoxChangedHdl(
+        LINK(this, SwRedlineAcceptDlg, SortByComboBoxChangedHdl));
+
     m_pTPView->SetAcceptClickHdl(LINK(this, SwRedlineAcceptDlg, AcceptHdl));
     m_pTPView->SetAcceptAllClickHdl(LINK(this, SwRedlineAcceptDlg, AcceptAllHdl));
     m_pTPView->SetRejectClickHdl(LINK(this, SwRedlineAcceptDlg, RejectHdl));
@@ -1174,6 +1179,20 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos(const weld::TreeIter
                                     rTreeView.get_id(rEntry))->pData)->pData );
 }
 
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, SortByComboBoxChangedHdl, SvxTPView*, void)
+{
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWait aWait(*pView->GetDocShell(), false);
+    auto nSortMode = m_pTPView->GetSortByComboBoxControl()->get_active();
+    if (nSortMode == 4)
+        nSortMode = -1;
+    m_pTable->HeaderBarClick(nSortMode);
+    if (nSortMode == -1)
+        Init();
+}
+
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
 {
     CallAcceptReject( true, true );
@@ -1455,6 +1474,9 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
         if (nSortMode == 4 && nColumn == 4)
             return true;  // we already have it
+
+        m_pTPView->GetSortByComboBoxControl()->set_active(nSortMode);
+
         if (nSortMode == 4)
             nSortMode = -1; // unsorted / sorted by position
 
