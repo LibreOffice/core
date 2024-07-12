@@ -1711,16 +1711,13 @@ const Size& SvxIconChoiceCtrl_Impl::GetItemSize( IcnViewFieldType eItem ) const
 
 tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry )
 {
-    tools::Rectangle aTextRect( CalcTextRect( pEntry ) );
     tools::Rectangle aBoundRect( GetEntryBoundRect( pEntry ) );
 
     // Remove left margin
     if (nWinBits & WB_DETAILS)
         aBoundRect.SetPos(Point(0, aBoundRect.GetPos().Y()));
 
-    return tools::Rectangle(
-        aBoundRect.Left(), aBoundRect.Top() - 1, aBoundRect.Right() - 1,
-        aTextRect.Bottom());
+    return aBoundRect;
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Timer *, void)
