@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OUString&, void)
 {
     // tdf#143146 copy the functor and arg before calling
     // GrabFocusToDocument which may destroy this object
-    auto aDeckActivationFunctor = maDeckActivationFunctor;
+    DeckActivationFunctor aDeckActivationFunctor = maDeckActivationFunctor;
     auto sDeckId = msDeckId;
 
     mrTabBar.GrabFocusToDocument();

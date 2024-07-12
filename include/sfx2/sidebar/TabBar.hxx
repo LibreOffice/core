@@ -101,13 +101,14 @@ private:
         DECL_LINK(HandleClick, const OUString&, void);
         std::unique_ptr<weld::Toolbar> mxButton;
         OUString msDeckId;
-        ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
+        typedef ::std::function<void (const OUString& rsDeckId)> DeckActivationFunctor;
+        DeckActivationFunctor maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
     };
     typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;
-    const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
+    const Item::DeckActivationFunctor maDeckActivationFunctor;
 
     void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
