@@ -1189,8 +1189,7 @@ namespace cmis
                     std::vector< std::string > aPaths = pVersion->getPaths( );
                     if ( !aPaths.empty() )
                     {
-                        auto sPath = aPaths.front( );
-                        aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+                        aCmisUrl.setObjectPath(STD_TO_OUSTR(aPaths.front()));
                     }
                     else
                     {
@@ -1319,11 +1318,10 @@ namespace cmis
                     getXWeak() ) ),
                 xEnv );
         }
-        auto newName = it->second->getStrings( ).front( );
         auto newPath = OUSTR_TO_STDSTR( m_sObjectPath );
         if ( !newPath.empty( ) && newPath[ newPath.size( ) - 1 ] != '/' )
             newPath += "/";
-        newPath += newName;
+        newPath += it->second->getStrings( ).front( );
         try
         {
             if ( !m_sObjectId.isEmpty( ) )

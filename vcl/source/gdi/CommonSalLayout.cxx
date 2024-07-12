@@ -240,24 +240,22 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
     if (nCharPos < 0 || nCharPos == nCharEnd || mbFuzzing)
         return;
 
-    using namespace ::com::sun::star;
-
     if (!mxBreak.is())
         mxBreak = vcl::unohelper::CreateBreakIterator();
 
-    lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
+    const css::lang::Locale& rLocale(rArgs.maLanguageTag.getLocale());
 
     //if position nCharPos is missing in the font, grab the entire grapheme and
     //mark all glyphs as missing so the whole thing is rendered with the same
     //font
     sal_Int32 nDone;
-    int nGraphemeEndPos = mxBreak->nextCharacters(rArgs.mrStr, nCharEnd - 1, aLocale,
-                                                  i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+    int nGraphemeEndPos = mxBreak->nextCharacters(rArgs.mrStr, nCharEnd - 1, rLocale,
+                                                  css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
     // Safely advance nCharPos in case it is a non-BMP character.
     rArgs.mrStr.iterateCodePoints(&nCharPos);
     int nGraphemeStartPos =
-        mxBreak->previousCharacters(rArgs.mrStr, nCharPos, aLocale,
-            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        mxBreak->previousCharacters(rArgs.mrStr, nCharPos, rLocale,
+            css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
     // tdf#107612
     // If the start of the fallback run is Mongolian character and the previous
@@ -764,7 +762,7 @@ void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUS
     rCharWidths.resize(nCharCount, 0);
 
     css::uno::Reference<css::i18n::XBreakIterator> xBreak;
-    auto aLocale(maLanguageTag.getLocale());
+    const css::lang::Locale& rLocale(maLanguageTag.getLocale());
 
     for (auto const& aGlyphItem : m_GlyphItems)
     {
@@ -784,7 +782,7 @@ void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUS
             sal_Int32 nPos = aGlyphItem.charPos();
             while (nPos < aGlyphItem.charPos() + aGlyphItem.charCount())
             {
-                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                nPos = xBreak->nextCharacters(rStr, nPos, rLocale,
                     css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 nGraphemeCount++;
             }
@@ -845,7 +843,7 @@ void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUS
             for (auto nWidth : aWidths)
             {
                 rCharWidths[nPos - mnMinCharPos] += nWidth;
-                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                nPos = xBreak->nextCharacters(rStr, nPos, rLocale,
                     css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
             }
         }

@@ -886,7 +886,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
 {
     if (CursorType::Meta == m_eType)
     {
-        auto pCursor( m_pUnoCursor );
+        sw::UnoCursorPointer pCursor( m_pUnoCursor );
         SwXMeta const*const pXMeta(
                 dynamic_cast<SwXMeta*>(m_xParentText.get()) );
         OSL_ENSURE(pXMeta, "no meta?");
@@ -916,7 +916,7 @@ bool SwXTextCursor::IsAtEndOfContentControl() const
 {
     if (CursorType::ContentControl == m_eType)
     {
-        auto pCursor( m_pUnoCursor );
+        sw::UnoCursorPointer pCursor( m_pUnoCursor );
         auto pXContentControl(
                 dynamic_cast<SwXContentControl*>(m_xParentText.get()) );
         if (!pXContentControl)
@@ -1010,7 +1010,7 @@ sal_Bool SAL_CALL SwXTextCursor::isCollapsed()
     SolarMutexGuard aGuard;
 
     bool bRet = true;
-    auto pUnoCursor(m_pUnoCursor);
+    sw::UnoCursorPointer pUnoCursor(m_pUnoCursor);
     if(pUnoCursor && pUnoCursor->GetMark())
     {
         bRet = (*pUnoCursor->GetPoint() == *pUnoCursor->GetMark());

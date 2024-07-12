@@ -220,7 +220,7 @@ private:
         RowData& rRowData = impl_getRowDataAccess_throw( aGuard, i_rowIndex, m_nColumnCount );
 
         ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
-                          [] ( const CellData& rCellData )
+                          [] ( const CellData& rCellData ) -> const Any&
                           { return rCellData.first; });
         return resultData;
     }

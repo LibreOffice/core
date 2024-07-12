@@ -342,9 +342,8 @@ weld::Window* SfxRequest::GetFrameWeld() const
     const SfxUnoAnyItem* pItem = nullptr;
     if (pIntArgs && (pItem = pIntArgs->GetItemIfSet(SID_DIALOG_PARENT, false)))
     {
-        auto aAny = pItem->GetValue();
         Reference<awt::XWindow> xWindow;
-        aAny >>= xWindow;
+        pItem->GetValue() >>= xWindow;
         return Application::GetFrameWeld(xWindow);
     }
 

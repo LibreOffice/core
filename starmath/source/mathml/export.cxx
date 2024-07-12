@@ -919,8 +919,7 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             case SmMlAttributeValueType::MlRspace:
             {
                 auto aSizeData = aAttribute.getMlRspace();
-                auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributeLength(XML_RSPACE, aLengthData);
+                exportMlAttributeLength(XML_RSPACE, aSizeData->m_aLengthValue);
                 break;
             }
             case SmMlAttributeValueType::MlSeparator:

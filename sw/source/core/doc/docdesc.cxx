@@ -437,19 +437,19 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         if (SwUndoId::HEADER_FOOTER == nBeingUndone)
         {
             // The last format change is currently being undone. Remove header/footer and corresponding nodes.
-            auto rDescMasterHeaderFormat = rDesc.GetMaster().GetFormatAttr(RES_HEADER);
-            auto rDescLeftHeaderFormat = rDesc.GetLeft().GetFormatAttr(RES_HEADER);
-            auto rDescFirstLeftHeaderFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_HEADER);
-            auto rDescMasterFooterFormat = rDesc.GetMaster().GetFormatAttr(RES_FOOTER);
-            auto rDescLeftFooterFormat = rDesc.GetLeft().GetFormatAttr(RES_FOOTER);
-            auto rDescFirstLeftFooterFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_FOOTER);
+            SwFormatHeader aDescMasterHeaderFormat = rDesc.GetMaster().GetFormatAttr(RES_HEADER);
+            SwFormatHeader aDescLeftHeaderFormat = rDesc.GetLeft().GetFormatAttr(RES_HEADER);
+            SwFormatHeader aDescFirstLeftHeaderFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_HEADER);
+            SwFormatFooter aDescMasterFooterFormat = rDesc.GetMaster().GetFormatAttr(RES_FOOTER);
+            SwFormatFooter aDescLeftFooterFormat = rDesc.GetLeft().GetFormatAttr(RES_FOOTER);
+            SwFormatFooter aDescFirstLeftFooterFormat = rDesc.GetFirstLeft().GetFormatAttr(RES_FOOTER);
 
-            auto rChgedMasterHeaderFormat = rChged.GetMaster().GetFormatAttr(RES_HEADER);
-            auto rChgedLeftHeaderFormat = rChged.GetLeft().GetFormatAttr(RES_HEADER);
-            auto rChgedFirstLeftHeaderFormat = rChged.GetFirstLeft().GetFormatAttr(RES_HEADER);
-            auto rChgedMasterFooterFormat = rChged.GetMaster().GetFormatAttr(RES_FOOTER);
-            auto rChgedLeftFooterFormat = rChged.GetLeft().GetFormatAttr(RES_FOOTER);
-            auto rChgedFirstLeftFooterFormat = rChged.GetFirstLeft().GetFormatAttr(RES_FOOTER);
+            SwFormatHeader aChgedMasterHeaderFormat = rChged.GetMaster().GetFormatAttr(RES_HEADER);
+            SwFormatHeader aChgedLeftHeaderFormat = rChged.GetLeft().GetFormatAttr(RES_HEADER);
+            SwFormatHeader aChgedFirstLeftHeaderFormat = rChged.GetFirstLeft().GetFormatAttr(RES_HEADER);
+            SwFormatFooter aChgedMasterFooterFormat = rChged.GetMaster().GetFormatAttr(RES_FOOTER);
+            SwFormatFooter aChgedLeftFooterFormat = rChged.GetLeft().GetFormatAttr(RES_FOOTER);
+            SwFormatFooter aChgedFirstLeftFooterFormat = rChged.GetFirstLeft().GetFormatAttr(RES_FOOTER);
 
             rDesc.GetMaster().ResetFormatAttr(RES_HEADER);
             rDesc.GetLeft().ResetFormatAttr(RES_HEADER);
@@ -496,19 +496,19 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                 delete pFormat;
             };
 
-            if (rDescMasterHeaderFormat.GetHeaderFormat() && rDescMasterHeaderFormat != rChgedMasterHeaderFormat)
-                lDelHFFormat(&rDescMasterHeaderFormat, rDescMasterHeaderFormat.GetHeaderFormat());
-            else if (rDescLeftHeaderFormat.GetHeaderFormat() && rDescLeftHeaderFormat != rChgedLeftHeaderFormat)
-                lDelHFFormat(&rDescLeftHeaderFormat, rDescLeftHeaderFormat.GetHeaderFormat());
-            else if (rDescFirstLeftHeaderFormat.GetHeaderFormat() && rDescFirstLeftHeaderFormat != rChgedFirstLeftHeaderFormat)
-                lDelHFFormat(&rDescFirstLeftHeaderFormat, rDescFirstLeftHeaderFormat.GetHeaderFormat());
+            if (aDescMasterHeaderFormat.GetHeaderFormat() && aDescMasterHeaderFormat != aChgedMasterHeaderFormat)
+                lDelHFFormat(&aDescMasterHeaderFormat, aDescMasterHeaderFormat.GetHeaderFormat());
+            else if (aDescLeftHeaderFormat.GetHeaderFormat() && aDescLeftHeaderFormat != aChgedLeftHeaderFormat)
+                lDelHFFormat(&aDescLeftHeaderFormat, aDescLeftHeaderFormat.GetHeaderFormat());
+            else if (aDescFirstLeftHeaderFormat.GetHeaderFormat() && aDescFirstLeftHeaderFormat != aChgedFirstLeftHeaderFormat)
+                lDelHFFormat(&aDescFirstLeftHeaderFormat, aDescFirstLeftHeaderFormat.GetHeaderFormat());
 
-            else if (rDescMasterFooterFormat.GetFooterFormat() && rDescMasterFooterFormat != rChgedMasterFooterFormat)
-                lDelHFFormat(&rDescMasterFooterFormat, rDescMasterFooterFormat.GetFooterFormat());
-            else if (rDescLeftFooterFormat.GetFooterFormat() && rDescLeftFooterFormat != rChgedLeftFooterFormat)
-                lDelHFFormat(&rDescLeftFooterFormat, rDescLeftFooterFormat.GetFooterFormat());
-            else if (rDescFirstLeftFooterFormat.GetFooterFormat() && rDescFirstLeftFooterFormat != rChgedFirstLeftFooterFormat)
-                lDelHFFormat(&rDescFirstLeftFooterFormat, rDescFirstLeftFooterFormat.GetFooterFormat());
+            else if (aDescMasterFooterFormat.GetFooterFormat() && aDescMasterFooterFormat != aChgedMasterFooterFormat)
+                lDelHFFormat(&aDescMasterFooterFormat, aDescMasterFooterFormat.GetFooterFormat());
+            else if (aDescLeftFooterFormat.GetFooterFormat() && aDescLeftFooterFormat != aChgedLeftFooterFormat)
+                lDelHFFormat(&aDescLeftFooterFormat, aDescLeftFooterFormat.GetFooterFormat());
+            else if (aDescFirstLeftFooterFormat.GetFooterFormat() && aDescFirstLeftFooterFormat != aChgedFirstLeftFooterFormat)
+                lDelHFFormat(&aDescFirstLeftFooterFormat, aDescFirstLeftFooterFormat.GetFooterFormat());
         }
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());

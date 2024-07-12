@@ -44,28 +44,27 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
     {
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::UpperLeft;
-        auto aRectangle = getRectangle();
+        const tools::Rectangle rRectangle = getRectangle();
         switch (nHdlNum) {
-            case 0: aPnt = aRectangle.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
-            case 1: aPnt = aRectangle.TopCenter();    eKind=SdrHdlKind::Upper; break;
-            case 2: aPnt = aRectangle.TopRight();     eKind=SdrHdlKind::UpperRight; break;
-            case 3: aPnt = aRectangle.LeftCenter();   eKind=SdrHdlKind::Left ; break;
-            case 4: aPnt = aRectangle.RightCenter();  eKind=SdrHdlKind::Right; break;
-            case 5: aPnt = aRectangle.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
-            case 6: aPnt = aRectangle.BottomCenter(); eKind=SdrHdlKind::Lower; break;
-            case 7: aPnt = aRectangle.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
+            case 0: aPnt = rRectangle.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
+            case 1: aPnt = rRectangle.TopCenter();    eKind=SdrHdlKind::Upper; break;
+            case 2: aPnt = rRectangle.TopRight();     eKind=SdrHdlKind::UpperRight; break;
+            case 3: aPnt = rRectangle.LeftCenter();   eKind=SdrHdlKind::Left ; break;
+            case 4: aPnt = rRectangle.RightCenter();  eKind=SdrHdlKind::Right; break;
+            case 5: aPnt = rRectangle.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
+            case 6: aPnt = rRectangle.BottomCenter(); eKind=SdrHdlKind::Lower; break;
+            case 7: aPnt = rRectangle.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
         }
         if (maGeo.m_nShearAngle)
-            ShearPoint(aPnt, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
+            ShearPoint(aPnt, rRectangle.TopLeft(), maGeo.mfTanShearAngle);
         if (maGeo.m_nRotationAngle)
-            RotatePoint(aPnt, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+            RotatePoint(aPnt, rRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(maGeo.m_nRotationAngle);
         rHdlList.AddHdl(std::move(pH));
     }
 }
-
 
 bool SdrTextObj::hasSpecialDrag() const
 {

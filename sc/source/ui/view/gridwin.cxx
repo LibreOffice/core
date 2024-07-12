@@ -622,12 +622,12 @@ public:
         rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
 
         bool bActive = false;
-        auto aItem = pEntry->GetQueryItem();
-        if (aItem.maColor == m_aColor
+        ScQueryEntry::Item& rItem = pEntry->GetQueryItem();
+        if (rItem.maColor == m_aColor
             && ((meMode == ScGridWindow::AutoFilterMode::TextColor
-                 && aItem.meType == ScQueryEntry::ByTextColor)
+                 && rItem.meType == ScQueryEntry::ByTextColor)
                 || (meMode == ScGridWindow::AutoFilterMode::BackgroundColor
-                    && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                    && rItem.meType == ScQueryEntry::ByBackgroundColor)))
         {
             bActive = true;
         }
@@ -788,12 +788,12 @@ public:
 
                 if (pEntry)
                 {
-                    auto aItem = pEntry->GetQueryItem();
-                    if (aItem.maColor == rColor
+                    ScQueryEntry::Item& rItem = pEntry->GetQueryItem();
+                    if (rItem.maColor == rColor
                         && ((eMode == ScGridWindow::AutoFilterMode::TextColor
-                             && aItem.meType == ScQueryEntry::ByTextColor)
+                             && rItem.meType == ScQueryEntry::ByTextColor)
                             || (eMode == ScGridWindow::AutoFilterMode::BackgroundColor
-                                && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                                && rItem.meType == ScQueryEntry::ByBackgroundColor)))
                     {
                         bActive = true;
                     }
