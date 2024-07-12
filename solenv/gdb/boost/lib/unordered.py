@@ -55,7 +55,7 @@ class Unordered(object):
         hash_buckets = hash_table.type.fields()[0]
         assert hash_buckets.is_base_class
         node_type = gdb.lookup_type("%s::node" % hash_buckets.type)
-        assert node_type != None
+        assert node_type is not None
         return node_type
 
     class _iterator(six.Iterator):
@@ -91,7 +91,7 @@ class Unordered(object):
 
         def _value(self):
             assert self.node != self.bucket # bucket node has no value
-            assert self.node != None
+            assert self.node is not None
             node = self.node.dereference().cast(self.node_type)
             return node['data_'].cast(self.value_type)
 

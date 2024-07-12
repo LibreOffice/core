@@ -782,7 +782,7 @@ def limit_rdb(services_rdb, full_factory_map, full_constructor_map):
         # direct
         uri = component.get('uri')
         component_name = None
-        if uri != None:
+        if uri is not None:
             component_name = re.sub(r'^vnd.sun.star.expand:\$LO_LIB_DIR/([^.]*).so$', r'\1.a', uri)
         if component_name in full_factory_map:
             continue

@@ -254,7 +254,7 @@ class ul_Compiler:
         self.variables.append(line)
 
     def handle_uno(self, UNOCommand):
-        if UNOCommand.parameters == None:
+        if UNOCommand.parameters is None:
             line = (
                 tab * 3
                 + 'self.xUITest.executeCommand("'

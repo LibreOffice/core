@@ -610,7 +610,7 @@ class LogoProgram(threading.Thread):
 
 # to check LibreLogo program termination (in that case, return value is False)
 def __is_alive__():
-    return __thread__ != None
+    return __thread__ is not None
 
 def __encodestring__(m):
     __strings__.append(re.sub("(\\[^\\]|\\\\(?=[‘’“”»」』]))", "", m.group(2)))
@@ -1453,7 +1453,7 @@ def text(shape, orig_st):
         c.CharFontName = _.fontfamily
 
         # has HTML-like formatting
-        if formatting != None:
+        if formatting is not None:
             _.fixSVG = True
             prev_format = 0
             prev_extra_data = extra_data[0]
@@ -1603,7 +1603,7 @@ def fillstyle(s):
 
 def __splitcolor__(c, shape = None, angle = None):
     if shape and (type(c) == tuple or type(_.t10y) == list):
-        angle = heading() if angle == None else -angle / 100 + 360
+        angle = heading() if angle is None else -angle / 100 + 360
         if type(c) == tuple:
             shape.FillStyle = __FillStyle_GRADIENT__
             # gradient color: [color1, color2, style, angle(must be positive for I/O), border, x_percent, y_percent, color1_intensity_percent, color2_intensity_percent]

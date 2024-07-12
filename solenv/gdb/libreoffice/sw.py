@@ -284,7 +284,7 @@ class BigPtrArrayPrinter(object):
             assert self.pos <= self.count
             assert self.block_pos <= self.block_count
             if self.pos == 0 and self.pos < self.count:
-                assert self.block != None
+                assert self.block is not None
 
 printer = None
 

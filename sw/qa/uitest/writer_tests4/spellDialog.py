@@ -22,11 +22,11 @@ class SpellingAndGrammarDialog(UITestCase):
         xSpellChecker = get_spellchecker(self.ui_test._xContext)
         locales = xSpellChecker.getLocales()
         for locale in locales:
-            if language != None:
+            if language is not None:
                 if locale.Language != language:
                     continue
 
-            if country != None:
+            if country is not None:
                 if locale.Country != country:
                     continue
 

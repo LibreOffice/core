@@ -159,7 +159,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
     def isConnected(self):
         if dbg:
             print("PyMailSMTPService isConnected", file=sys.stderr)
-        return self.server != None
+        return self.server is not None
     def getCurrentConnectionContext(self):
         if dbg:
             print("PyMailSMTPService getCurrentConnectionContext", file=sys.stderr)
@@ -353,7 +353,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
     def isConnected(self):
         if dbg:
             print("PyMailIMAPService isConnected", file=sys.stderr)
-        return self.server != None
+        return self.server is not None
     def getCurrentConnectionContext(self):
         if dbg:
             print("PyMailIMAPService getCurrentConnectionContext", file=sys.stderr)
@@ -430,7 +430,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
     def isConnected(self):
         if dbg:
             print("PyMailPOP3Service isConnected", file=sys.stderr)
-        return self.server != None
+        return self.server is not None
     def getCurrentConnectionContext(self):
         if dbg:
             print("PyMailPOP3Service getCurrentConnectionContext", file=sys.stderr)
@@ -472,7 +472,7 @@ class PyMailMessage(unohelper.Base, XMailMessage):
         self.ccrecipients = []
         self.bccrecipients = []
         self.aMailAttachments = []
-        if aMailAttachment != None:
+        if aMailAttachment is not None:
             self.aMailAttachments.append(aMailAttachment)
 
         self.SenderName, self.SenderAddress = parseaddr(sFrom)

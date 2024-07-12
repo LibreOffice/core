@@ -51,7 +51,7 @@ class Tdf133713(UITestCase):
             xEnumeration = shape.Text.createEnumeration()
 
             # Without the fix in place, this test would have failed with
-            # AssertionError: 0 != None
+            # AssertionError: 0 is not None
             for i in range(3):
                 self.assertEqual(0, xEnumeration.nextElement().NumberingLevel)
 

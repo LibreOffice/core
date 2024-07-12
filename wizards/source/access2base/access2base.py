@@ -574,12 +574,12 @@ class _A2B(object, metaclass = _Singleton):
             # Check the availability of the Access2Base library
             for lib in ('Access2BaseDev', 'Access2Base'):
                 try:
-                    if Script == None:
+                    if Script is None:
                         Script = SCRIPTPROVIDER.getScript(sScript(lib))
                         _LIBRARY = lib
                 except Exception:
                     pass
-            if Script == None:
+            if Script is None:
                 raise SystemExit('Access2Base basic library not found')
         else:
             Script = SCRIPTPROVIDER.getScript(sScript(_LIBRARY))
@@ -607,14 +607,14 @@ class _A2B(object, metaclass = _Singleton):
         :param args: list of arguments to be passed to the script
         :return: the value returned by the script execution
         """
-        if COMPONENTCONTEXT == None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         Script = cls.xScript(script, module)
         try:
             Returned = Script.invoke((args), (), ())[0]
         except Exception:
             raise TypeError("Access2Base error: method '" + script + "' in Basic module '" + module + "' call error. Check its arguments.")
         else:
-            if Returned == None:
+            if Returned is None:
                 if cls.VerifyNoError(): return None
             return Returned
 
@@ -632,7 +632,7 @@ class _A2B(object, metaclass = _Singleton):
         :param args: the arguments of the method, if any
         :return: the value returned by the execution of the Basic routine
         """
-        if COMPONENTCONTEXT == None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         # Intercept special call to Application.Events()
         if basic == Application.basicmodule and script == 'Events':
             Script = cls.xScript('PythonEventsWrapper', _WRAPPERMODULE)
@@ -666,7 +666,7 @@ class _A2B(object, metaclass = _Singleton):
                     return None
             else:                               # UNO object
                 return Returned[0]
-        elif Returned[0] == None:
+        elif Returned[0] is None:
             if cls.VerifyNoError(): return None
         else: # Should not happen
             return Returned[0]
@@ -756,8 +756,8 @@ class Application(object, metaclass = _Singleton):
     @classmethod
     def OpenConnection(cls, thisdatabasedocument = acConstants.Missing):
         global THISDATABASEDOCUMENT
-        if COMPONENTCONTEXT == None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
-        if DESKTOP != None:
+        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if DESKTOP is not None:
             THISDATABASEDOCUMENT = DESKTOP.getCurrentComponent()
             return _A2B.invokeMethod('OpenConnection', 'Application', THISDATABASEDOCUMENT)
     @classmethod

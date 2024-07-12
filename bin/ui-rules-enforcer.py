@@ -99,7 +99,7 @@ def replace_button_use_stock(current):
       if attributes.get("name") == "label":
         label = child
 
-  if isbutton and use_stock != None:
+  if isbutton and use_stock is not None:
     do_replace_button_use_stock(current, use_stock, use_underline, label, insertpos)
 
 def do_replace_image_stock(current, stock):
@@ -166,7 +166,7 @@ def replace_image_stock(current):
       if attributes.get("name") == "stock":
         stock = child
 
-  if isimage and stock != None:
+  if isimage and stock is not None:
     do_replace_image_stock(current, stock)
 
 def remove_check_button_align(current):
@@ -185,11 +185,11 @@ def remove_check_button_align(current):
         yalign = child
 
   if ischeckorradiobutton:
-    if xalign != None:
+    if xalign is not None:
       if xalign.text != "0":
         raise Exception(sys.argv[1] + ': non-default xalign', xalign.text)
       current.remove(xalign)
-    if yalign != None:
+    if yalign is not None:
       if yalign.text != "0.5":
         raise Exception(sys.argv[1] + ': non-default yalign', yalign.text)
       current.remove(yalign)
@@ -207,7 +207,7 @@ def remove_check_button_relief(current):
         relief = child
 
   if ischeckorradiobutton:
-    if relief != None:
+    if relief is not None:
       current.remove(relief)
 
 def remove_check_button_image_position(current):
@@ -223,7 +223,7 @@ def remove_check_button_image_position(current):
         image_position = child
 
   if ischeckorradiobutton:
-    if image_position != None:
+    if image_position is not None:
       current.remove(image_position)
 
 def remove_spin_button_input_purpose(current):
@@ -239,7 +239,7 @@ def remove_spin_button_input_purpose(current):
         input_purpose = child
 
   if isspinbutton:
-    if input_purpose != None:
+    if input_purpose is not None:
       current.remove(input_purpose)
 
 def remove_caps_lock_warning(current):
@@ -255,7 +255,7 @@ def remove_caps_lock_warning(current):
         caps_lock_warning = child
 
   if iscandidate:
-    if caps_lock_warning != None:
+    if caps_lock_warning is not None:
       current.remove(caps_lock_warning)
 
 def remove_spin_button_max_length(current):
@@ -271,7 +271,7 @@ def remove_spin_button_max_length(current):
         max_length = child
 
   if isspinbutton:
-    if max_length != None:
+    if max_length is not None:
       current.remove(max_length)
 
 def remove_entry_shadow_type(current):
@@ -287,7 +287,7 @@ def remove_entry_shadow_type(current):
         shadow_type = child
 
   if isentry:
-    if shadow_type!= None:
+    if shadow_typeis not None:
       current.remove(shadow_type)
 
 def remove_label_pad(current):
@@ -305,9 +305,9 @@ def remove_label_pad(current):
       elif attributes.get("name") == "ypad":
         ypad = child
 
-  if xpad != None:
+  if xpad is not None:
     current.remove(xpad)
-  if ypad != None:
+  if ypad is not None:
     current.remove(ypad)
 
 def remove_label_angle(current):
@@ -322,7 +322,7 @@ def remove_label_angle(current):
       if attributes.get("name") == "angle":
         angle = child
 
-  if angle != None:
+  if angle is not None:
     current.remove(angle)
 
 def remove_track_visited_links(current):
@@ -337,7 +337,7 @@ def remove_track_visited_links(current):
       if attributes.get("name") == "track_visited_links" or attributes.get("name") == "track-visited-links":
         track_visited_links = child
 
-  if track_visited_links != None:
+  if track_visited_links is not None:
     current.remove(track_visited_links)
 
 def remove_toolbutton_focus(current):
@@ -353,7 +353,7 @@ def remove_toolbutton_focus(current):
       if attributes.get("name") == "can_focus" or attributes.get("name") == "can-focus":
         can_focus = child
 
-  if can_focus != None:
+  if can_focus is not None:
     current.remove(can_focus)
 
 def remove_double_buffered(current):
@@ -365,7 +365,7 @@ def remove_double_buffered(current):
       if attributes.get("name") == "double_buffered" or attributes.get("name") == "double-buffered":
         double_buffered = child
 
-  if double_buffered != None:
+  if double_buffered is not None:
     current.remove(double_buffered)
 
 def remove_label_yalign(current):
@@ -377,7 +377,7 @@ def remove_label_yalign(current):
       if attributes.get("name") == "label_yalign" or attributes.get("name") == "label-yalign":
         label_yalign = child
 
-  if label_yalign != None:
+  if label_yalign is not None:
     current.remove(label_yalign)
 
 def remove_skip_pager_hint(current):
@@ -389,7 +389,7 @@ def remove_skip_pager_hint(current):
       if attributes.get("name") == "skip_pager_hint" or attributes.get("name") == "skip-pager-hint":
         skip_pager_hint = child
 
-  if skip_pager_hint != None:
+  if skip_pager_hint is not None:
     current.remove(skip_pager_hint)
 
 def remove_gravity(current):
@@ -401,7 +401,7 @@ def remove_gravity(current):
       if attributes.get("name") == "gravity":
         gravity = child
 
-  if gravity != None:
+  if gravity is not None:
     current.remove(gravity)
 
 def remove_expander_label_fill(current):
@@ -416,7 +416,7 @@ def remove_expander_label_fill(current):
       if attributes.get("name") == "label_fill" or attributes.get("name") == "label-fill":
         label_fill = child
 
-  if label_fill != None:
+  if label_fill is not None:
     current.remove(label_fill)
 
 def remove_expander_spacing(current):
@@ -431,7 +431,7 @@ def remove_expander_spacing(current):
       if attributes.get("name") == "spacing":
         spacing = child
 
-  if spacing != None:
+  if spacing is not None:
     current.remove(spacing)
 
 def enforce_menubutton_indicator_consistency(current):
@@ -452,8 +452,8 @@ def enforce_menubutton_indicator_consistency(current):
         image = child
 
   if ismenubutton:
-    if draw_indicator == None:
-      if image == None:
+    if draw_indicator is None:
+      if image is None:
         # if there is no draw indicator and no image there should be a draw indicator
         draw_indicator = etree.Element("property")
         attributes = draw_indicator.attrib
@@ -484,12 +484,12 @@ def enforce_active_in_group_consistency(current):
         active = child
 
   if isradiobutton:
-    if active != None and active.text != "True":
+    if active is not None and active.text != "True":
       raise Exception(sys.argv[1] + ': non-standard active value', active.text)
-    if group != None and active != None:
+    if group is not None and active is not None:
       # if there is a group then we are not the leader and should not be active
       current.remove(active)
-    elif group == None and active == None:
+    elif group is None and active is None:
       # if there is no group then we are the leader and should be active
       active = etree.Element("property")
       attributes = active.attrib
@@ -512,7 +512,7 @@ def enforce_toolbar_can_focus(current):
         can_focus = child
 
   if istoolbar:
-    if can_focus == None:
+    if can_focus is None:
       can_focus = etree.Element("property")
       attributes = can_focus.attrib
       attributes["name"] = "can-focus"
@@ -539,11 +539,11 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
         idcolumn = child
 
   if isgtkcombobox:
-    if entrytextcolumn != None and entrytextcolumn.text != "0":
+    if entrytextcolumn is not None and entrytextcolumn.text != "0":
       raise Exception(sys.argv[1] + ': non-standard entry_text_column value', entrytextcolumn.text)
-    if idcolumn != None and idcolumn.text != "1":
+    if idcolumn is not None and idcolumn.text != "1":
       raise Exception(sys.argv[1] + ': non-standard id_column value', idcolumn.text)
-    if entrytextcolumn == None:
+    if entrytextcolumn is None:
       # if there is no entry_text_column, create one
       entrytextcolumn = etree.Element("property")
       attributes = entrytextcolumn.attrib
@@ -551,7 +551,7 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
       entrytextcolumn.text = "0"
       current.insert(insertpos, entrytextcolumn)
       insertpos = insertpos + 1
-    if idcolumn == None:
+    if idcolumn is None:
       # if there is no id_column, create one
       idcolumn = etree.Element("property")
       attributes = idcolumn.attrib
@@ -577,7 +577,7 @@ def enforce_button_always_show_image(current):
         image = child
 
   if isbutton and image is not None:
-    if always_show_image == None:
+    if always_show_image is None:
       always_show_image = etree.Element("property")
       attributes = always_show_image.attrib
       attributes["name"] = "always-show-image"

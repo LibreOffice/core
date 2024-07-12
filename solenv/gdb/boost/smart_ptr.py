@@ -57,7 +57,7 @@ printer = None
 def build_pretty_printers():
     global printer
 
-    if printer != None:
+    if printer is not None:
         return
 
     printer = printing.Printer("boost.smart_ptr")

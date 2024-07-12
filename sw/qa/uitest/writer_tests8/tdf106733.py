@@ -20,11 +20,11 @@ class tdf106733(UITestCase):
         xHyphenator = xLinguServiceManager.getHyphenator()
         locales = xHyphenator.getLocales()
         for locale in locales:
-            if language != None:
+            if language is not None:
                 if locale.Language != language:
                     continue
 
-            if country != None:
+            if country is not None:
                 if locale.Country != country:
                     continue
 

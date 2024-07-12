@@ -106,7 +106,7 @@ class UnoDialog(object):
 
     def setVisible(self, parent):
         self.calculateDialogPosition(parent.xUnoDialog.getPosSize())
-        if self.xWindowPeer == None:
+        if self.xWindowPeer is None:
             self.createWindowPeer()
 
         self.xUnoDialog.setVisible(True)

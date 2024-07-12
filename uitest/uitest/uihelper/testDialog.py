@@ -26,7 +26,7 @@ def testAppDialog(UITestCase, app, dialog):
                 except:
                     xOKBtn = None
 
-        if (xOKBtn != None):
+        if (xOKBtn is not None):
             print("check also OK button")
             with UITestCase.ui_test.execute_dialog_through_command(dialog['command']):
                 pass
@@ -57,7 +57,7 @@ def testChartDialog(UITestCase, dialog):
                 except:
                     xOKBtn = None
 
-        if (xOKBtn != None):
+        if (xOKBtn is not None):
             print("check also OK button")
             with UITestCase.ui_test.execute_dialog_through_action(
                     xObj, "COMMAND",
