@@ -30,6 +30,11 @@ void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
                                       BAD_CAST(GetName().toUtf8().getStr()));
 
+    if (SwFormat* pDerivedFrom = DerivedFrom())
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("derived-from"),
+                                          BAD_CAST(pDerivedFrom->GetName().toUtf8().getStr()));
+    }
     if (mpLinkedParaFormat)
     {
         (void)xmlTextWriterWriteAttribute(
