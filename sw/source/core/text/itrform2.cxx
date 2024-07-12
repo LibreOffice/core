@@ -1418,8 +1418,11 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     if (!nCharWidthGuess)
         nCharWidthGuess = 1;
     auto nExpect = rInf.GetIdx() + TextFrameIndex(rInf.GetLineWidth() / nCharWidthGuess);
-    if (nExpect > rInf.GetIdx() && nNextChg > nExpect)
-        nNextChg = nExpect;
+    if (nExpect > rInf.GetIdx())
+    {
+        nNextChg = std::min(nNextChg, nExpect);
+        nNextContext = std::min(nNextContext, nExpect);
+    }
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
@@ -1444,7 +1447,8 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     // for the first text portion in a paragraph, or for any successive
     // portions that are outside of the bounds of the previous context.
     if (!rInf.GetLayoutContext().has_value()
-        || rInf.GetLayoutContext()->m_nEnd <= rInf.GetIdx().get())
+        || rInf.GetLayoutContext()->m_nBegin < rInf.GetLineStart().get()
+        || rInf.GetLayoutContext()->m_nEnd < nNextChg.get())
     {
         // The layout context must terminate at special characters
         sal_Int32 nEnd = rInf.GetIdx().get();

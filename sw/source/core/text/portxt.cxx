@@ -445,6 +445,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
             SetLen( pGuess->BreakPos() - rInf.GetIdx() );
 
+            // Clamp layout context to the end of the line
+            if(auto stClampedContext = GetLayoutContext(); stClampedContext.has_value()) {
+                stClampedContext->m_nEnd = pGuess->BreakPos().get();
+                SetLayoutContext(stClampedContext);
+            }
+
             OSL_ENSURE( pGuess->BreakStart() >= pGuess->FieldDiff(),
                     "Trouble with expanded field portions during line break" );
             TextFrameIndex const nRealStart = pGuess->BreakStart() - pGuess->FieldDiff();
