@@ -105,6 +105,7 @@ public:
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
     const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
+    BitmapEx getBitmap(const Size& pixelSize) const;
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 

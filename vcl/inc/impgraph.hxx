@@ -200,7 +200,8 @@ private:
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
     /// Gets the bitmap replacement for a vector graphic.
-    BitmapEx getVectorGraphicReplacement() const;
+    // Hide volatile state of maBitmapEx when using maVectorGraphicData into this method
+    void updateBitmapFromVectorGraphic(const Size& pixelSize = {}) const;
 
     bool ensureAvailable () const;
 
