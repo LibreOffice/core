@@ -175,6 +175,13 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
     return nRet;
 }
 
+static SwCalcExp& lcl_GetCalcExp(std::unordered_map<OUString, SwCalcExp>& rVarTable, const OUString& rType)
+{
+    auto it = rVarTable.find(rType);
+    assert(it != rVarTable.end());
+    return it->second;
+}
+
 SwCalc::SwCalc( SwDoc& rD )
     : m_aErrExpr( SwSbxValue(), nullptr )
     , m_nCommandPos(0)
@@ -254,24 +261,24 @@ SwCalc::SwCalc( SwDoc& rD )
     for( n = 0; n < 25; ++n )
         m_aVarTable.insert( { sNTypeTab[n], SwCalcExp( nVal, nullptr ) } );
 
-    m_aVarTable.find( sNTypeTab[ 0 ] )->second.nValue.PutBool( false );
-    m_aVarTable.find( sNTypeTab[ 1 ] )->second.nValue.PutBool( true );
-    m_aVarTable.find( sNTypeTab[ 2 ] )->second.nValue.PutDouble( M_PI );
-    m_aVarTable.find( sNTypeTab[ 3 ] )->second.nValue.PutDouble( M_E );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[0]).nValue.PutBool( false );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[1]).nValue.PutBool( true );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[2]).nValue.PutDouble( M_PI );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[3]).nValue.PutDouble( M_E );
 
     for( n = 0; n < 3; ++n )
-        m_aVarTable.find( sNTypeTab[ n + 4 ] )->second.nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
+        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 4]).nValue.PutLong( rDocStat.*aDocStat1[ n ] );
     for( n = 0; n < 4; ++n )
-        m_aVarTable.find( sNTypeTab[ n + 7 ] )->second.nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 7]).nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    m_aVarTable.find( sNTypeTab[ 11 ] )->second.nValue.PutString( rUserOptions.GetFirstName() );
-    m_aVarTable.find( sNTypeTab[ 12 ] )->second.nValue.PutString( rUserOptions.GetLastName() );
-    m_aVarTable.find( sNTypeTab[ 13 ] )->second.nValue.PutString( rUserOptions.GetID() );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[11]).nValue.PutString( rUserOptions.GetFirstName() );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[12]).nValue.PutString( rUserOptions.GetLastName() );
+    lcl_GetCalcExp(m_aVarTable, sNTypeTab[13]).nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
-        m_aVarTable.find( sNTypeTab[ n + 14 ] )->second.nValue.PutString(
+        lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 14] ).nValue.PutString(
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
