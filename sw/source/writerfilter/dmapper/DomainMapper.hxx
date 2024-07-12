@@ -24,6 +24,7 @@
 #include "SettingsTable.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
+#include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 
 #include <map>
@@ -70,7 +71,7 @@ typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
 class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {
-    std::unique_ptr<DomainMapper_Impl> m_pImpl;
+    std::unique_ptr<DomainMapper_Impl, o3tl::default_delete<DomainMapper_Impl>> m_pImpl;
 
 public:
     DomainMapper(const css::uno::Reference<css::uno::XComponentContext>& xContext,
