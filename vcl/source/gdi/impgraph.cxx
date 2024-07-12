@@ -492,10 +492,10 @@ void ImpGraphic::updateBitmapFromVectorGraphic(const Size& pixelSize) const
     assert (maVectorGraphicData);
 
     // use maBitmapEx as local buffer for rendered vector image
-    if (pixelSize.Width() && pixelSize.Height()
-        && (maBitmapEx.IsEmpty() || maBitmapEx.GetSizePixel() != pixelSize))
+    if (pixelSize.Width() && pixelSize.Height())
     {
-        const_cast<ImpGraphic*>(this)->maBitmapEx = maVectorGraphicData->getBitmap(pixelSize);
+        if (maBitmapEx.IsEmpty() || maBitmapEx.GetSizePixel() != pixelSize)
+            const_cast<ImpGraphic*>(this)->maBitmapEx = maVectorGraphicData->getBitmap(pixelSize);
     }
     else // maVectorGraphicData caches the replacement, so updating unconditionally is cheap
     {
