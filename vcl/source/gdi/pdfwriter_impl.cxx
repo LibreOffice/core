@@ -2740,10 +2740,11 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                     aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
                 }
 
-                auto aBitmapEmit = createBitmapEmit(aBitmapEx, Graphic(),
-                                                    aUsedBitmaps, aResourceDict, aOutputStreams);
+                const BitmapEmit& rBitmapEmit = createBitmapEmit(aBitmapEx, Graphic(),
+                                                                 aUsedBitmaps, aResourceDict,
+                                                                 aOutputStreams);
 
-                auto nObject = aBitmapEmit.m_aReferenceXObject.getObject();
+                auto nObject = rBitmapEmit.m_aReferenceXObject.getObject();
                 aContents.append("q ");
                 appendDouble(aRect.GetWidth() * fScale, aContents);
                 aContents.append(" 0 0 ");
