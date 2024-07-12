@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_writerfilter_dmapper, \
     sw/qa/writerfilter/dmapper/DomainMapperTableManager \
     sw/qa/writerfilter/dmapper/DomainMapper \
     sw/qa/writerfilter/dmapper/DomainMapper_Impl \
+    sw/qa/writerfilter/dmapper/FontTable \
     sw/qa/writerfilter/dmapper/GraphicImport \
     sw/qa/writerfilter/dmapper/NumberingManager \
     sw/qa/writerfilter/dmapper/TableManager \

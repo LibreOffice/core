@@ -16386,7 +16386,7 @@
           <data type="string"/>
         </attribute>
         <attribute name="subsetted">
-          <data type="string"/>
+          <ref name="ST_OnOff"/>
         </attribute>
       </define>
       <define name="CT_Font">

@@ -382,6 +382,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault(u"AltChunkStartingRange"_ustr, uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault(u"InsertMode"_ustr, false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault(u"AltChunkMode"_ustr, false)),
+        m_bReadOnly(rMediaDesc.getUnpackedValueOrDefault(u"ReadOnly"_ustr, false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault(u"ReadGlossaries"_ustr, false)),
         m_bHasFtnSep(false),
         m_bIsSplitPara(false),

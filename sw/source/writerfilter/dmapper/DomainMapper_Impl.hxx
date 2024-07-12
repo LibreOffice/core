@@ -697,6 +697,8 @@ public:
 private:
     bool m_bIsNewDoc;
     bool m_bIsAltChunk = false;
+    /// Document is loaded for viewing, not editing.
+    bool m_bReadOnly = false;
     bool m_bIsReadGlossaries;
 
 public:
@@ -861,7 +863,7 @@ public:
     FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
-            m_pFontTable = new FontTable();
+            m_pFontTable = new FontTable(m_bReadOnly);
         return m_pFontTable;
     }
     StyleSheetTablePtr const & GetStyleSheetTable()

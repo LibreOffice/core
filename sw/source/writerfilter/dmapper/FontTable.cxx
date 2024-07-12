@@ -37,14 +37,18 @@ struct FontTable_Impl
     std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> xEmbeddedFontHelper;
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
-    FontTable_Impl() {}
+    bool m_bReadOnly;
+    FontTable_Impl(bool bReadOnly)
+        : m_bReadOnly(bReadOnly)
+    {
+    }
 };
 
-FontTable::FontTable()
+FontTable::FontTable(bool bReadOnly)
 : LoggedProperties("FontTable")
 , LoggedTable("FontTable")
 , LoggedStream("FontTable")
-, m_pImpl( new FontTable_Impl )
+, m_pImpl( new FontTable_Impl(bReadOnly) )
 {
 }
 
@@ -225,6 +229,11 @@ sal_uInt32 FontTable::size()
     return m_pImpl->aFontEntries.size();
 }
 
+bool FontTable::IsReadOnly() const
+{
+    return m_pImpl->m_bReadOnly;
+}
+
 void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                                 const OUString& fontName, std::u16string_view extra,
                                 std::vector<unsigned char> const & key)
@@ -246,6 +255,12 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
 {
     if( !m_inputStream.is())
         return;
+
+    if (m_bSubsetted && !m_fontTable.IsReadOnly())
+    {
+        return;
+    }
+
     std::vector< unsigned char > key( 32 );
     if( !m_fontKey.isEmpty())
     {   // key for unobfuscating
@@ -279,8 +294,8 @@ void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
         case NS_ooxml::LN_CT_Rel_id:
             break;
         case NS_ooxml::LN_CT_FontRel_subsetted:
-            break; // TODO? Let's just ignore this for now and hope
-                   // it doesn't break anything.
+            m_bSubsetted = static_cast<bool>(val.getInt());
+            break;
         case NS_ooxml::LN_inputstream: // the actual font data as stream
             val.getAny() >>= m_inputStream;
             break;
