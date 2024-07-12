@@ -62,11 +62,11 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
             {
                 if (pObject->GetName() == rSearchIndexData.maObjectName)
                 {
-                    auto aRect = pObject->GetLogicRect();
+                    const tools::Rectangle& rRect = pObject->GetLogicRect();
                     rResult.mbFound = true;
-                    rResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
-                                                      aRect.Left() + aRect.GetWidth(),
-                                                      aRect.Top() + aRect.GetHeight());
+                    rResult.maRectangles.emplace_back(rRect.Left(), rRect.Top(),
+                                                      rRect.Left() + rRect.GetWidth(),
+                                                      rRect.Top() + rRect.GetHeight());
                 }
             }
         }
