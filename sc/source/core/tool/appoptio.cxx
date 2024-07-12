@@ -355,11 +355,12 @@ void ScAppCfg::ReadInputCfg()
         sal_Int32 nCount = aSeq.getLength();
         if (nCount < SAL_MAX_UINT16)
         {
-            std::vector<sal_uInt16> pUShorts(nCount);
-            for (sal_Int32 i = 0; i < nCount; i++)
+            sal_uInt16 nLRUCount = nCount;
+            std::vector<sal_uInt16> pUShorts(nLRUCount);
+            for (sal_uInt16 i = 0; i < nLRUCount; ++i)
                 pUShorts[i] = aSeq[i];
 
-            SetLRUFuncList(pUShorts.data(), nCount);
+            SetLRUFuncList(pUShorts.data(), nLRUCount);
         }
     }
     SetAutoComplete(ScUnoHelpFunctions::GetBoolFromAny(aValues[SCINPUTOPT_AUTOINPUT]));
