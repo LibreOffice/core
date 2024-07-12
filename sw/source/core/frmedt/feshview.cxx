@@ -68,7 +68,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sectfrm.hxx>
-#include <rowfrm.hxx>
+#include <cellfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
@@ -191,6 +191,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     ( pOldSelFly->GetFormat()->GetProtect().IsContentProtected()
                      && !IsReadOnlyAvailable() ))
                 {
+                    SdrObject *pOldObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
                     // If a fly is deselected, which contains graphic, OLE or
                     // otherwise, the cursor should be removed from it.
                     // Similar if a fly with protected content is deselected.
@@ -201,6 +202,43 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                     bool bUnLockView = !IsViewLocked();
                     LockView( true );
                     SetCursor( aPt, true );
+
+                    // in tables, fix lost position, when the selected image was
+                    // anchored as character at beginning of the table row:
+                    // in this case, the text cursor was positionated after the
+                    // floating table, and not before the image, as in other positions
+                    // in the table row (and if the table wasn't a floating one,
+                    // the text cursor lost completely)
+                    if ( SW_LEAVE_FRAME & nFlag )
+                    {
+                        const SwContact* pContact = GetUserCall(pOldObj);
+                        if ( pContact && pContact->ObjAnchoredAsChar() &&
+                                pOldSelFly->GetAnchorFrame() &&
+                                pOldSelFly->GetAnchorFrame()->GetUpper() )
+                        {
+                            const SwNode * pOldNd = pContact->GetAnchorNode().FindTableNode();
+                            // the original image was in a table, but the cursor is not in that
+                            if ( pOldNd && pOldNd != GetCursor()->GetPointNode().FindTableNode() )
+                            {
+                                const SwRect& rCellFrame =
+                                    pOldSelFly->GetAnchorFrame()->GetUpper()->getFrameArea();
+                                Point aPtCellTopRight( rCellFrame.Pos() );
+                                aPtCellTopRight.setX( aPtCellTopRight.X() + rCellFrame.Width() );
+                                if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                                    // put the text cursor in the same cell
+                                    pWrtShell->SelectTableRowCol( aPtCellTopRight );
+                            }
+                            // same table, but not in the same cell
+                            else if ( pContact->GetAnchorNode().GetTableBox() !=
+                                            GetCursor()->GetPointNode().GetTextNode()->GetTableBox() )
+                            {
+                                aPt.setX( aPt.getX() + 2 + pOldSelFly->getFrameArea().Width() );
+                                // put the text cursor after the object
+                                SetCursor( aPt, true );
+                            }
+                        }
+                    }
+
                     if( bUnLockView )
                         LockView( false );
                 }
@@ -1300,7 +1338,7 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
 }
 
 // Test if there is an object at that position and if it should be selected.
-bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
+bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInsteadOfCroppedImage)
 {
     CurrShell aCurr(this);
     SwDrawView *pDrawView = Imp()->GetDrawView();
@@ -1310,9 +1348,10 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
     {
         SdrPageView* pPV;
         const auto nOld(pDrawView->GetHitTolerancePixel());
+        sal_uInt16 nHitTol = pDrawView->getHitTolLog();
 
         pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
-        SdrObject* pObj = pDrawView->PickObj(rPt, pDrawView->getHitTolLog(), pPV, SdrSearchOptions::PICKMARKABLE);
+        SdrObject* pObj = pDrawView->PickObj(rPt, nHitTol, pPV, SdrSearchOptions::PICKMARKABLE);
         pDrawView->SetHitTolerancePixel(nOld);
 
         if (pObj)
@@ -1407,19 +1446,38 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             }
 
             // within table row, where image cropped by the fixed table row height,
-            // click position must be in the cell, where the image anchored as character
+            // click position must be in the cell frame, where the image anchored as character
             if ( bRet && pContact && pContact->ObjAnchoredAsChar() )
             {
                 if ( const SwTableBox *pBox = pContact->GetAnchorNode().GetTableBox() )
                 {
-                    SwIterator<SwRowFrame, SwFormat> aIter( *pBox->GetUpper()->GetFrameFormat() );
+                    SwIterator<SwCellFrame, SwFormat> aIter( *pBox->GetFrameFormat() );
                     bool bContainsClickPosition = false;
-                    for (SwRowFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    for (SwCellFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                     {
-                        if ( pFrame->getFrameArea().Contains( rPt ) )
+                        const SwRect& rRect = pFrame->getFrameArea();
+                        // click inside the cell frame which contains the cropped image
+                        if ( rRect.Contains( rPt ) )
                         {
+                            // click next to the right cell border
+                            if ( pSelectFrameInsteadOfCroppedImage &&
+                                    !rRect.Contains( Point(rPt.X() + 2 * nHitTol, rPt.Y()) ) )
+                            {
+                                *pSelectFrameInsteadOfCroppedImage = true;
+                            }
                             bContainsClickPosition = true;
                             break;
+                        }
+                        // or click on the right table border of the same table frame
+                        else if ( pSelectFrameInsteadOfCroppedImage &&
+                            ( pFrame->GetUpper() && pFrame->GetUpper()->GetUpper() &&
+                              pFrame->GetUpper()->GetUpper()->getFrameArea().Contains(
+                                  Point(rPt.X() - 2 * nHitTol, rPt.Y()) ) &&
+                              !pFrame->GetUpper()->GetUpper()->getFrameArea().Contains(
+                                  Point(rPt.X() + 2 * nHitTol, rPt.Y()) ) ) )
+                        {
+                            *pSelectFrameInsteadOfCroppedImage = true;
+                            bContainsClickPosition = true;
                         }
                     }
                     if ( !bContainsClickPosition )

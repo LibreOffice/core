@@ -105,12 +105,14 @@ public:
     virtual std::vector<basegfx::B2DPoint> getLineGeometry() = 0;
     virtual PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) = 0;
     virtual float getFontSize(PDFiumDocument* pDoc) = 0;
+    virtual Color getFontColor(PDFiumDocument* pDoc) = 0;
     virtual OUString getFormFieldAlternateName(PDFiumDocument* pDoc) = 0;
     virtual int getFormFieldFlags(PDFiumDocument* pDoc) = 0;
     virtual OUString getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
                                                        PDFAnnotAActionType eEvent)
         = 0;
     virtual OUString getFormFieldValue(PDFiumDocument* pDoc) = 0;
+    virtual int getOptionCount(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;

@@ -1490,6 +1490,14 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                 : sw::WrongState::DONE);
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
             pNode->ClearWrong();
+
+        if (bPending && getRootFrame())
+        {
+            if (SwViewShell* pViewSh = getRootFrame()->GetCurrShell())
+            {
+                pViewSh->OnSpellWrongStatePending();
+            }
+        }
     }
     else
         pNode->SetWrongDirty(sw::WrongState::DONE);

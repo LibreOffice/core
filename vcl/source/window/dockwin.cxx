@@ -758,11 +758,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
         pWin->SetMinOutputSizePixel( maMinOutSize );
 
         pWin->SetMaxOutputSizePixel( mpImplData->maMaxOutSize );
-
-        ToggleFloatingMode();
-
-        if ( bVisible )
-            Show();
     }
     else
     {
@@ -788,12 +783,14 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
         mpWindowImpl->mpRealParent = pRealParent;
         mpFloatWin.disposeAndClear();
         SetPosPixel( maDockPos );
-
-        ToggleFloatingMode();
-
-        if ( bVisible )
-            Show();
     }
+
+    ToggleFloatingMode();
+
+    if (bVisible)
+        Show();
+
+    CallEventListeners(VclEventId::WindowToggleFloating);
 }
 
 void DockingWindow::SetFloatStyle( WinBits nStyle )

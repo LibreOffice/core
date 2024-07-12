@@ -47,8 +47,8 @@ namespace sfx2::sidebar {
 TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
                std::function<void (const OUString&)> aDeckActivationFunctor,
-               PopupMenuProvider  aPopupMenuProvider,
-               SidebarController* rParentSidebarController
+               PopupMenuSignalConnectFunction aPopupMenuSignalConnectFunction,
+               SidebarController& rParentSidebarController
               )
     : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
     , mxFrame(rxFrame)
@@ -57,8 +57,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
-    , maPopupMenuProvider(std::move(aPopupMenuProvider))
-    , pParentSidebarController(rParentSidebarController)
+    , mrParentSidebarController(rParentSidebarController)
 {
     set_id("TabBar"); // for uitest
 
@@ -72,6 +71,9 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     mxMenuButton = mxAuxBuilder->weld_menu_button("menubutton");
     mxMainMenu = mxAuxBuilder->weld_menu("mainmenu");
     mxSubMenu = mxAuxBuilder->weld_menu("submenu");
+    aPopupMenuSignalConnectFunction(*mxMainMenu, *mxSubMenu);
+
+    UpdateMenus();
 
     gDefaultWidth = m_xContainer->get_preferred_size().Width();
 
@@ -79,8 +81,6 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     mxMeasureBox->hide();
 
     SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
-
-    mxMenuButton->connect_toggled(LINK(this, TabBar, OnToolboxClicked));
 
 #ifdef DEBUG
     SetText(OUString("TabBar"));
@@ -127,7 +127,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     maItems.clear();
     for (auto const& deck : rDecks)
     {
-        std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId);
+        std::shared_ptr<DeckDescriptor> xDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(deck.msId);
         if (xDescriptor == nullptr)
         {
             OSL_ASSERT(xDescriptor!=nullptr);
@@ -147,13 +147,14 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     }
 
     UpdateButtonIcons();
+    UpdateMenus();
 }
 
 void TabBar::UpdateButtonIcons()
 {
     for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
         if (!xDeckDescriptor)
             continue;
         item->mxButton->set_item_image("toggle", GetItemImage(*xDeckDescriptor));
@@ -164,18 +165,21 @@ void TabBar::HighlightDeck(std::u16string_view rsDeckId)
 {
     for (auto const& item : maItems)
         item->mxButton->set_item_active("toggle", item->msDeckId == rsDeckId);
+    UpdateMenus();
 }
 
 void TabBar::RemoveDeckHighlight()
 {
     for (auto const& item : maItems)
         item->mxButton->set_item_active("toggle", false);
+    UpdateMenus();
 }
 
 void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
     UpdateButtonIcons();
+    UpdateMenus();
 
     InterimItemWindow::DataChanged(rDataChangedEvent);
 }
@@ -297,19 +301,20 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 
     maItems[nIndex]->mbIsHidden = ! maItems[nIndex]->mbIsHidden;
 
-    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex]->msDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(maItems[nIndex]->msDeckId);
     if (xDeckDescriptor)
     {
         xDeckDescriptor->mbIsEnabled = ! maItems[nIndex]->mbIsHidden;
 
         Context aContext;
-        aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
+        aContext.msApplication = mrParentSidebarController.GetCurrentContext().msApplication;
         // leave aContext.msContext on default 'any' ... this func is used only for decks
         // and we don't have context-sensitive decks anyway
 
         xDeckDescriptor->maContextList.ToggleVisibilityForContext(
             aContext, xDeckDescriptor->mbIsEnabled );
     }
+    UpdateMenus();
 }
 
 void TabBar::RestoreHideFlags()
@@ -319,12 +324,13 @@ void TabBar::RestoreHideFlags()
         if (item->mbIsHidden != item->mbIsHiddenByDefault)
         {
             item->mbIsHidden = item->mbIsHiddenByDefault;
-            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
+            std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
             if (xDeckDescriptor)
                 xDeckDescriptor->mbIsEnabled = !item->mbIsHidden;
 
         }
     }
+    UpdateMenus();
 }
 
 void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
@@ -339,26 +345,12 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
     rFocusManager.SetButtons(aButtons);
 }
 
-IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
+void TabBar::UpdateMenus()
 {
-    if (!mxMenuButton->get_active())
-        return;
-
-    std::vector<DeckMenuData> aMenuData;
-
-    for (auto const& item : maItems)
+    if (Application::GetToolkitName() == u"gtk4"_ustr)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item->msDeckId);
-
-        if (!xDeckDescriptor)
-            continue;
-
-        DeckMenuData aData;
-        aData.msDisplayName = xDeckDescriptor->msTitle;
-        aData.mbIsCurrentDeck = item->mxButton->get_item_active("toggle");
-        aData.mbIsActive = !item->mbIsHidden;
-        aData.mbIsEnabled = item->mxButton->get_sensitive();
-        aMenuData.push_back(aData);
+        SAL_WARN("sfx", "Skipping update of sidebar menus to avoid crash due to gtk4 menu brokenness.");
+        return;
     }
 
     for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
@@ -374,7 +366,64 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
             mxSubMenu->remove(sIdent);
     }
 
-    maPopupMenuProvider(*mxMainMenu, *mxSubMenu, aMenuData);
+    // Add one entry for every tool panel element to individually make
+    // them visible or hide them.
+    sal_Int32 nIndex (0);
+    for (auto const& rItem : maItems)
+    {
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor
+            = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(rItem->msDeckId);
+
+        if (!xDeckDescriptor)
+            continue;
+
+        const OUString sDisplayName = xDeckDescriptor->msTitle;
+        OUString sIdent("select" + OUString::number(nIndex));
+        const bool bCurrentDeck = rItem->mxButton->get_item_active(u"toggle"_ustr);
+        const bool bActive = !rItem->mbIsHidden;
+        const bool bEnabled = rItem->mxButton->get_sensitive();
+        mxMainMenu->insert(nIndex, sIdent, sDisplayName, nullptr, nullptr, nullptr, TRISTATE_FALSE);
+        mxMainMenu->set_active(sIdent, bCurrentDeck);
+        mxMainMenu->set_sensitive(sIdent, bEnabled && bActive);
+
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            if (bCurrentDeck)
+            {
+                // Don't allow the currently visible deck to be disabled.
+                OUString sSubIdent("nocustomize" + OUString::number(nIndex));
+                mxSubMenu->insert(nIndex, sSubIdent, sDisplayName, nullptr, nullptr, nullptr,
+                                  TRISTATE_FALSE);
+                mxSubMenu->set_active(sSubIdent, true);
+            }
+            else
+            {
+                OUString sSubIdent("customize" + OUString::number(nIndex));
+                mxSubMenu->insert(nIndex, sSubIdent, sDisplayName, nullptr, nullptr, nullptr,
+                                  TRISTATE_TRUE);
+                mxSubMenu->set_active(sSubIdent, bEnabled && bActive);
+            }
+        }
+
+        ++nIndex;
+    }
+
+    bool bHideLock = true;
+    bool bHideUnLock = true;
+    // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // Add entry for docking or un-docking the tool panel.
+        if (!mrParentSidebarController.IsDocked())
+            bHideLock = false;
+        else
+            bHideUnLock = false;
+    }
+    mxMainMenu->set_visible("locktaskpanel", !bHideLock);
+    mxMainMenu->set_visible("unlocktaskpanel", !bHideUnLock);
+
+    // No Restore or Customize options for LoKit.
+    mxMainMenu->set_visible("customization", !comphelper::LibreOfficeKit::isActive());
 }
 
 void TabBar::EnableMenuButton(const bool bEnable)

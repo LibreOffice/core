@@ -264,11 +264,13 @@ public:
     std::vector<basegfx::B2DPoint> getLineGeometry() override;
     PDFFormFieldType getFormFieldType(PDFiumDocument* pDoc) override;
     float getFontSize(PDFiumDocument* pDoc) override;
+    Color getFontColor(PDFiumDocument* pDoc) override;
     OUString getFormFieldAlternateName(PDFiumDocument* pDoc) override;
     int getFormFieldFlags(PDFiumDocument* pDoc) override;
     OUString getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,
                                                PDFAnnotAActionType eEvent) override;
     OUString getFormFieldValue(PDFiumDocument* pDoc) override;
+    int getOptionCount(PDFiumDocument* pDoc) override;
 };
 
 class PDFiumPageObjectImpl final : public PDFiumPageObject
@@ -1216,6 +1218,18 @@ float PDFiumAnnotationImpl::getFontSize(PDFiumDocument* pDoc)
     return fRet;
 }
 
+Color PDFiumAnnotationImpl::getFontColor(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    unsigned int nR, nG, nB;
+    if (!FPDFAnnot_GetFontColor(pDocImpl->getFormHandlePointer(), mpAnnotation, &nR, &nG, &nB))
+    {
+        return Color();
+    }
+
+    return Color(nR, nG, nB);
+}
+
 OUString PDFiumAnnotationImpl::getFormFieldAlternateName(PDFiumDocument* pDoc)
 {
     auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
@@ -1274,6 +1288,11 @@ OUString PDFiumAnnotationImpl::getFormFieldValue(PDFiumDocument* pDoc)
         }
     }
     return aString;
+}
+int PDFiumAnnotationImpl::getOptionCount(PDFiumDocument* pDoc)
+{
+    auto pDocImpl = static_cast<PDFiumDocumentImpl*>(pDoc);
+    return FPDFAnnot_GetOptionCount(pDocImpl->getFormHandlePointer(), mpAnnotation);
 }
 
 OUString PDFiumAnnotationImpl::getFormAdditionalActionJavaScript(PDFiumDocument* pDoc,

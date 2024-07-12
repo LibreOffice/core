@@ -2047,6 +2047,29 @@ namespace {
 
         return bRet;
     }
+
+// Similar to SwObjPosOscillationControl in sw/source/core/layout/anchoreddrawobject.cxx
+class PosSizeOscillationControl
+{
+public:
+    bool OscillationDetected(const SwFrameAreaDefinition& rFrameArea);
+
+private:
+    std::vector<std::pair<SwRect, SwRect>> maFrameDatas;
+};
+
+bool PosSizeOscillationControl::OscillationDetected(const SwFrameAreaDefinition& rFrameArea)
+{
+    if (maFrameDatas.size() == 20) // stack is full -> oscillation
+        return true;
+
+    for (const auto& [area, printArea] : maFrameDatas)
+        if (rFrameArea.getFrameArea() == area && rFrameArea.getFramePrintArea() == printArea)
+            return true;
+
+    maFrameDatas.emplace_back(rFrameArea.getFrameArea(), rFrameArea.getFramePrintArea());
+    return false;
+}
 }
 
 // extern because static can't be friend
@@ -2239,8 +2262,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
+    if (IsHiddenNow())
+        MakeValidZeroHeight();
+
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
+    PosSizeOscillationControl posSizeOscillationControl; // And yet another one.
     SwRectFnSet aRectFnSet(this);
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
@@ -2931,7 +2958,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // split operation as good as possible. Therefore we
                     // do some more calculations. Note: Restricting this
                     // to nDeadLine may not be enough.
-                    if ( bSplitError && bTryToSplit ) // no restart if we did not try to split: i72847, i79426
+                    // tdf#161508 hack: treat oscillation likewise
+                    if ((bSplitError && bTryToSplit) // no restart if we did not try to split: i72847, i79426
+                        || posSizeOscillationControl.OscillationDetected(*this))
                     {
                         lcl_RecalcRow(*static_cast<SwRowFrame*>(Lower()), LONG_MAX);
                         setFrameAreaPositionValid(false);
@@ -3185,6 +3214,16 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                                tools::Long& rRightOffset,
                                SwTwips *const pSpaceBelowBottom) const
 {
+    if (IsHiddenNow())
+    {
+        rUpper = 0;
+        rLeftOffset = 0;
+        rRightOffset = 0;
+        if (pSpaceBelowBottom)
+            *pSpaceBelowBottom = 0;
+        return false;
+    }
+
     bool bInvalidatePrtArea = false;
     const SwPageFrame *pPage = FindPageFrame();
     const SwFlyFrame* pMyFly = FindFlyFrame();

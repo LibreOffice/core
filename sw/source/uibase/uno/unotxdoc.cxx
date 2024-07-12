@@ -3204,6 +3204,12 @@ void SwXTextDocument::setClipboard(const uno::Reference<datatransfer::clipboard:
 {
     SolarMutexGuard aGuard;
 
+    if (!m_bObjectValid)
+    {
+        SAL_WARN("sw.uno", "no DocShell when attempting to setClipboard");
+        return;
+    }
+
     SwView* pView = m_pDocShell->GetView();
     if (pView)
         pView->GetEditWin().SetClipboard(xClipboard);

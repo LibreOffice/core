@@ -256,7 +256,13 @@ bool SfxObjectShell::IsEnableSetModified() const
     // which the user didn't load or activate to modified.
     return pImpl->m_bEnableSetModified && !IsPreview()
         && eCreateMode != SfxObjectCreateMode::ORGANIZER
-        && eCreateMode != SfxObjectCreateMode::INTERNAL;
+        && eCreateMode != SfxObjectCreateMode::INTERNAL
+        // tdf#157931 form documents only in design mode
+        && ((pImpl->pBaseModel
+                && !pImpl->pBaseModel->impl_isDisposed()
+                && pImpl->pBaseModel->IsInitialized()
+                && pImpl->pBaseModel->getIdentifier() != "com.sun.star.sdb.FormDesign")
+            || !IsReadOnly());
 }
 
 
@@ -947,6 +953,12 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
+    if (GetErrorCode() == ERRCODE_IO_BROKENPACKAGE)
+    {   // safety first: don't run any macros from broken package.
+        pImpl->aMacroMode.disallowMacroExecution();
+        return; // do not get signature status - needs to be done after RepairPackage
+    }
+
     // make sure LO evaluates the macro signatures, so it can be preserved
     GetScriptingSignatureState();
 

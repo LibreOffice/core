@@ -37,6 +37,24 @@
 
 using namespace SkiaHelper;
 
+namespace
+{
+struct SnapshotImageData
+{
+    sk_sp<SkImage> image;
+    SkPixmap pixmap;
+};
+}
+
+static void SnapshotImageDataCallback(void* pInfo, const void* pData, size_t nSize)
+{
+    (void)pData;
+    (void)nSize;
+
+    if (pInfo)
+        delete static_cast<SnapshotImageData*>(pInfo);
+}
+
 AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
                                                  AquaSharedAttributes& rShared)
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
@@ -101,117 +119,129 @@ void AquaSkiaSalGraphicsImpl::WindowBackingPropertiesChanged() { windowBackingPr
 void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
 {
     if (!isGPU())
-        flushSurfaceToScreenCG();
+    {
+        // tdf159175 mark dirty area in NSWindow for redrawing
+        // This will cause -[SalFrameView drawRect:] to be called. That,
+        // in turn, will draw a CGImageRef of the surface fetched from
+        // AquaSkiaSalGraphicsImpl::createCGImageFromRasterSurface().
+        mrShared.refreshRect(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(),
+                             mDirtyRect.height());
+    }
     else
+    {
         SkiaSalGraphicsImpl::flushSurfaceToWindowContext();
+    }
 }
 
 // For Raster we use our own screen blitting (see above).
-void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
+CGImageRef AquaSkiaSalGraphicsImpl::createCGImageFromRasterSurface(const NSRect& rDirtyRect,
+                                                                   CGPoint& rImageOrigin,
+                                                                   bool& rImageFlipped)
 {
+    if (isGPU() || !mSurface)
+        return nullptr;
+
     // Based on AquaGraphicsBackend::drawBitmap().
     if (!mrShared.checkContext())
-        return;
+        return nullptr;
 
-    assert(mSurface.get());
+    NSRect aIntegralRect = NSIntegralRect(rDirtyRect);
+    if (NSIsEmptyRect(aIntegralRect))
+        return nullptr;
+
     // Do not use sub-rect, it creates copies of the data.
-    sk_sp<SkImage> image = makeCheckedImageSnapshot(mSurface);
-    SkPixmap pixmap;
-    if (!image->peekPixels(&pixmap))
+    SnapshotImageData* pInfo = new SnapshotImageData;
+    pInfo->image = makeCheckedImageSnapshot(mSurface);
+    if (!pInfo->image->peekPixels(&pInfo->pixmap))
         abort();
-    // If window scaling, then mDirtyRect is in VCL coordinates, mSurface has screen size (=points,HiDPI),
-    // maContextHolder has screen size but a scale matrix set so its inputs are in VCL coordinates (see
-    // its setup in AquaSharedAttributes::checkContext()).
-    // This creates the bitmap context from the cropped part, writable_addr32() will get
-    // the first pixel of mDirtyRect.topLeft(), and using pixmap.rowBytes() ensures the following
-    // pixel lines will be read from correct positions.
-    if (pixmap.bounds() != mDirtyRect && pixmap.bounds().bottom() == mDirtyRect.bottom())
+
+    SkIRect aDirtyRect = SkIRect::MakeXYWH(
+        aIntegralRect.origin.x * mScaling, aIntegralRect.origin.y * mScaling,
+        aIntegralRect.size.width * mScaling, aIntegralRect.size.height * mScaling);
+    if (mrShared.isFlipped())
+        aDirtyRect = SkIRect::MakeXYWH(
+            aDirtyRect.x(), pInfo->pixmap.bounds().height() - aDirtyRect.y() - aDirtyRect.height(),
+            aDirtyRect.width(), aDirtyRect.height());
+    if (!aDirtyRect.intersect(pInfo->pixmap.bounds()))
     {
-        // HACK for tdf#145843: If mDirtyRect includes the last line but not the first pixel of it,
+        delete pInfo;
+        return nullptr;
+    }
+
+    // If window scaling, then aDirtyRect is in scaled VCL coordinates and mSurface has
+    // screen size (=points,HiDPI).
+    // This creates the bitmap context from the cropped part, writable_addr32() will get
+    // the first pixel of aDirtyRect.topLeft(), and using pixmap.rowBytes() ensures the following
+    // pixel lines will be read from correct positions.
+    if (pInfo->pixmap.bounds() != aDirtyRect
+        && pInfo->pixmap.bounds().bottom() == aDirtyRect.bottom())
+    {
+        // HACK for tdf#145843: If aDirtyRect includes the last line but not the first pixel of it,
         // then the rowBytes() trick would lead to the CG* functions thinking that even pixels after
         // the pixmap data belong to the area (since the shifted x()+rowBytes() points there) and
         // at least on Intel Mac they would actually read those data, even though I see no good reason
         // to do that, as that's beyond the x()+width() for the last line. That could be handled
         // by creating a subset SkImage (which as is said above copies data), or set the x coordinate
         // to 0, which will then make rowBytes() match the actual data.
-        mDirtyRect.fLeft = 0;
+        aDirtyRect.fLeft = 0;
         // Related tdf#156630 pixmaps can be wider than the dirty rectangle
         // This seems to most commonly occur when SAL_FORCE_HIDPI_SCALING=1
         // and the native window scale is 2.
-        assert(mDirtyRect.width() <= pixmap.bounds().width());
+        assert(aDirtyRect.width() <= pInfo->pixmap.bounds().width());
     }
 
     // tdf#145843 Do not use CGBitmapContextCreate() to create a bitmap context
     // As described in the comment in the above code, CGBitmapContextCreate()
     // and CGBitmapContextCreateWithData() will try to access pixels up to
-    // mDirtyRect.x() + pixmap.bounds.width() for each row. When reading the
+    // aDirtyRect.x() + pixmap.bounds.width() for each row. When reading the
     // last line in the SkPixmap, the buffer allocated for the SkPixmap ends at
-    // mDirtyRect.x() + mDirtyRect.width() and mDirtyRect.width() is clamped to
-    // pixmap.bounds.width() - mDirtyRect.x().
+    // aDirtyRect.x() + aDirtyRect.width() and aDirtyRect.width() is clamped to
+    // pixmap.bounds.width() - aDirtyRect.x().
     // This behavior looks like an optimization within CGBitmapContextCreate()
     // to draw with a single memcpy() so fix this bug by chaining the
     // CGDataProvider(), CGImageCreate(), and CGImageCreateWithImageInRect()
     // functions to create the screen image.
-    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(
-        nullptr, pixmap.writable_addr32(0, 0), pixmap.computeByteSize(), nullptr);
+    CGDataProviderRef dataProvider
+        = CGDataProviderCreateWithData(pInfo, pInfo->pixmap.writable_addr32(0, 0),
+                                       pInfo->pixmap.computeByteSize(), SnapshotImageDataCallback);
     if (!dataProvider)
     {
+        delete pInfo;
         SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate data provider");
-        return;
+        return nullptr;
     }
 
-    CGImageRef fullImage = CGImageCreate(pixmap.bounds().width(), pixmap.bounds().height(), 8,
-                                         8 * image->imageInfo().bytesPerPixel(), pixmap.rowBytes(),
-                                         GetSalData()->mxRGBSpace,
-                                         SkiaToCGBitmapType(image->colorType(), image->alphaType()),
-                                         dataProvider, nullptr, false, kCGRenderingIntentDefault);
+    CGImageRef fullImage
+        = CGImageCreate(pInfo->pixmap.bounds().width(), pInfo->pixmap.bounds().height(), 8,
+                        8 * pInfo->image->imageInfo().bytesPerPixel(), pInfo->pixmap.rowBytes(),
+                        GetSalData()->mxRGBSpace,
+                        SkiaToCGBitmapType(pInfo->image->colorType(), pInfo->image->alphaType()),
+                        dataProvider, nullptr, false, kCGRenderingIntentDefault);
     if (!fullImage)
     {
         CGDataProviderRelease(dataProvider);
         SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate full image");
-        return;
+        return nullptr;
     }
 
     CGImageRef screenImage = CGImageCreateWithImageInRect(
-        fullImage, CGRectMake(mDirtyRect.x() * mScaling, mDirtyRect.y() * mScaling,
-                              mDirtyRect.width() * mScaling, mDirtyRect.height() * mScaling));
+        fullImage,
+        CGRectMake(aDirtyRect.x(), aDirtyRect.y(), aDirtyRect.width(), aDirtyRect.height()));
     if (!screenImage)
     {
         CGImageRelease(fullImage);
         CGDataProviderRelease(dataProvider);
-        SAL_WARN("vcl.skia", "flushSurfaceToScreenGC(): Failed to allocate screen image");
-        return;
+        SAL_WARN("vcl.skia", "createCGImageFromRasterSurface(): Failed to allocate screen image");
+        return nullptr;
     }
 
-    mrShared.maContextHolder.saveState();
-    // Drawing to the actual window has scaling active, so use unscaled coordinates, the scaling matrix will scale them
-    // to the proper screen coordinates. Unless the scaling is fake for debugging, in which case scale them to draw
-    // at the scaled size.
-    int windowScaling = 1;
-    static const char* env = getenv("SAL_FORCE_HIDPI_SCALING");
-    if (env != nullptr)
-        windowScaling = atoi(env);
-    CGRect drawRect
-        = CGRectMake(mDirtyRect.x() * windowScaling, mDirtyRect.y() * windowScaling,
-                     mDirtyRect.width() * windowScaling, mDirtyRect.height() * windowScaling);
-    if (mrShared.isFlipped())
-    {
-        // I don't understand why, but apparently it's needed to explicitly to flip the drawing, even though maContextHelper
-        // has this set up, so this unsets the flipping.
-        CGFloat invertedY = drawRect.origin.y + drawRect.size.height;
-        CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, invertedY);
-        CGContextScaleCTM(mrShared.maContextHolder.get(), 1, -1);
-        drawRect.origin.y = 0;
-    }
-    CGContextDrawImage(mrShared.maContextHolder.get(), drawRect, screenImage);
-    mrShared.maContextHolder.restoreState();
+    rImageOrigin = CGPointMake(aDirtyRect.x(), aDirtyRect.y());
+    rImageFlipped = mrShared.isFlipped();
 
-    CGImageRelease(screenImage);
     CGImageRelease(fullImage);
     CGDataProviderRelease(dataProvider);
 
-    // This is also in VCL coordinates.
-    mrShared.refreshRect(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
+    return screenImage;
 }
 
 bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,

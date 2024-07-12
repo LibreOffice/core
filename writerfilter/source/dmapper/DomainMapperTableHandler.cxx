@@ -1091,7 +1091,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
     std::vector<beans::PropertyValue> aProps;
     std::optional<OUString> oParagraphText;
 
-    for( auto const& eId : aAllTableParaProperties )
+    for( auto eId : aAllTableParaProperties )
     {
         // apply paragraph and character properties of the table style on table paragraphs
         // if there is no direct paragraph formatting
@@ -1105,7 +1105,51 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 continue;
             }
 
+            PropertyIds eMappedId = eId;
+            switch (eId)
+            {
+                case PROP_PARA_TOP_BORDER:
+                    eMappedId = PROP_TOP_BORDER;
+                    break;
+                case PROP_PARA_TOP_BORDER_DISTANCE:
+                    eMappedId = PROP_TOP_BORDER_DISTANCE;
+                    break;
+                case PROP_PARA_BORDER_TOP_COMPLEX_COLOR:
+                    eMappedId = PROP_BORDER_TOP_COMPLEX_COLOR;
+                    break;
+                case PROP_PARA_LEFT_BORDER:
+                    eMappedId = PROP_LEFT_BORDER;
+                    break;
+                case PROP_PARA_LEFT_BORDER_DISTANCE:
+                    eMappedId = PROP_LEFT_BORDER_DISTANCE;
+                    break;
+                case PROP_PARA_BORDER_LEFT_COMPLEX_COLOR:
+                    eMappedId = PROP_BORDER_LEFT_COMPLEX_COLOR;
+                    break;
+                case PROP_PARA_BOTTOM_BORDER:
+                    eMappedId = PROP_BOTTOM_BORDER;
+                    break;
+                case PROP_PARA_BOTTOM_BORDER_DISTANCE:
+                    eMappedId = PROP_BOTTOM_BORDER_DISTANCE;
+                    break;
+                case PROP_PARA_BORDER_BOTTOM_COMPLEX_COLOR:
+                    eMappedId = PROP_BORDER_BOTTOM_COMPLEX_COLOR;
+                    break;
+                case PROP_PARA_RIGHT_BORDER:
+                    eMappedId = PROP_RIGHT_BORDER;
+                    break;
+                case PROP_PARA_RIGHT_BORDER_DISTANCE:
+                    eMappedId = PROP_RIGHT_BORDER_DISTANCE;
+                    break;
+                case PROP_PARA_BORDER_RIGHT_COMPLEX_COLOR:
+                    eMappedId = PROP_BORDER_RIGHT_COMPLEX_COLOR;
+                    break;
+                default:
+                    break;
+            }
+
             OUString sPropertyName = getPropertyName(eId);
+            OUString sMappedPropertyName = getPropertyName(eMappedId);
 
             auto pCellProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                 [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
@@ -1168,7 +1212,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 if (!aParaStyle.hasValue() || bDocDefault || bCompatOverride) try
                 {
                     // apply style setting when the paragraph doesn't modify it
-                    aProps.push_back(comphelper::makePropertyValue(sPropertyName, pCellProp->Value));
+                    aProps.push_back(comphelper::makePropertyValue(sMappedPropertyName, pCellProp->Value));
                     if (eId == PROP_FILL_COLOR)
                     {
                         // we need this for complete import of table-style based paragraph background color

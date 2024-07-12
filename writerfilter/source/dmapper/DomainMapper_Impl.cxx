@@ -370,7 +370,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
-        m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsLastSectionGroup( false ),
         m_bUsingEnhancedFields( false ),
@@ -962,9 +961,8 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
-    m_bDummyParaAddedForTableInSection = bIsAdded;
+    m_StreamStateStack.top().bDummyParaAddedForTableInSection = bIsAdded;
 }
-
 
 void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
 {
@@ -3793,14 +3791,26 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 namespace
 {
 // Determines if the XText content is empty (no text, no shapes, no tables)
-bool isContentEmpty(uno::Reference<text::XText> const& xText)
+bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<text::XTextDocument> const& xTextDocument)
 {
     if (!xText.is())
         return true; // no XText means it's empty
 
-    uno::Reference<css::lang::XServiceInfo> xTextServiceInfo(xText, uno::UNO_QUERY);
-    if (xTextServiceInfo && xTextServiceInfo->getImplementationName() == "SwXHeadFootText")
-        return false;
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
+    auto xDrawPage = xDrawPageSupplier->getDrawPage();
+    if (xDrawPage && xDrawPage->hasElements())
+    {
+        for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+        {
+            uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+            if (xShape.is())
+            {
+                uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
+                if (xAnchor.is() && xAnchor->getText() == xText)
+                    return false;
+            }
+        }
+    }
 
     uno::Reference<container::XEnumerationAccess> xEnumAccess(xText->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
@@ -3947,7 +3957,7 @@ void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, P
     if (!xPageStyle.is())
         return;
 
-    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend);
+    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend, GetTextDocument());
 
     if (eType == PageType::FIRST && bEmpty)
     {
@@ -6929,7 +6939,12 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
         {   // practical case: Word wrote i18n name to TOC field, but it doesn't
             // exist in styles.xml; tdf#153083 clone it for best roundtrip
             assert(convertedStyleName == pStyle->m_sConvertedStyleName);
-            return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+            if (rTOCStyleName != pStyle->m_sStyleName)
+            {
+                // rTOCStyleName is localized, pStyle->m_sStyleName is not. They don't match, so
+                // make sense to clone the style.
+                return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
+            }
         }
     }
     // theoretical case: what OOXML says
@@ -7126,6 +7141,11 @@ void DomainMapper_Impl::handleToc
                 nLevel = o3tl::toInt32(o3tl::getToken(sTemplate, 0, tsep, nPosition ));
                 if( !nLevel )
                     nLevel = 1;
+
+                // The separator can be ',' or ', ': make sure the leading space doesn't end up in
+                // the style name.
+                sStyleName = sStyleName.trim();
+
                 if( !sStyleName.isEmpty() )
                     aMap.emplace(nLevel, sStyleName);
             }
@@ -8003,11 +8023,29 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                                 uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
 
-                            uno::Any aStyleDisplayName;
-                            aStyleDisplayName <<= ConvertTOCStyleName(sFirstParam);
+                            OUString styleName(sFirstParam);
+                            if (styleName.isEmpty())
+                            {
+                                for (auto const& rSwitch : vSwitches)
+                                {
+                                    // undocumented Word feature: \1 = "Heading 1" etc.
+                                    if (rSwitch.getLength() == 2 && rSwitch[0] == '\\'
+                                        && '1' <= rSwitch[1] && rSwitch[1] <= '9')
+                                    {
+                                        styleName = OUString(rSwitch[1]);
+                                        break;
+                                    }
+                                }
+                            }
 
-                            xFieldProperties->setPropertyValue(
-                                getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+                            if (!styleName.isEmpty())
+                            {
+                                uno::Any aStyleDisplayName;
+                                aStyleDisplayName <<= ConvertTOCStyleName(styleName);
+
+                                xFieldProperties->setPropertyValue(
+                                    getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+                            }
 
                             sal_uInt16 nFlags = 0;
                             OUString sValue;

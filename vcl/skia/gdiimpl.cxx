@@ -720,7 +720,21 @@ void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor
     SkPaint paint = makePixelPaint(nColor);
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+
+#ifdef MACOSX
+    // tdf#148569 set extra drawing constraints when scaling
+    // Previously, setting stroke width and cap was only done when running
+    // unit tests. But the same drawing contraints are necessary when running
+    // with a Retina display on macOS.
+    if (mScaling != 1)
+#else
+    // Related tdf#148569: do not apply macOS fix to non-macOS platforms
+    // Setting the stroke width and cap has a noticeable performance penalty
+    // when running on GTK3. Since tdf#148569 only appears to occur on macOS
+    // Retina displays, revert commit a4488013ee6c87a97501b620dbbf56622fb70246
+    // for non-macOS platforms.
     if (mScaling != 1 && isUnitTestRunning())
+#endif
     {
         // On HiDPI displays, draw a square on the entire non-hidpi "pixel" when running unittests,
         // since tests often require precise pixel drawing.

@@ -36,6 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/threadpool.hxx>
 #include <rtl/digest.h>
+#include <rtl/crc.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
@@ -93,6 +94,7 @@ ZipFile::ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
     if (bInitialise && readCEN() == -1 )
     {
         aEntries.clear();
+        m_EntriesInsensitive.clear();
         throw ZipException( "stream data looks to be broken" );
     }
 }
@@ -117,6 +119,7 @@ ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
         else if ( readCEN() == -1 )
         {
             aEntries.clear();
+            m_EntriesInsensitive.clear();
             throw ZipException("stream data looks to be broken" );
         }
     }
@@ -557,8 +560,6 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
     ZipEntry const& rEntry, ::rtl::Reference<EncryptionData> const& rData,
     rtl::Reference<comphelper::RefCountedMutex> const& rMutex)
 {
-    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
-
     if (rData.is() && rData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
     {
         try // the only way to find out: decrypt the whole stream, which will
@@ -579,6 +580,8 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
     }
     else if (rData.is() && rData->m_aKey.hasElements())
     {
+        ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
+
         css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
         sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
@@ -733,8 +736,18 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     static const sal_Int32 nThreadingThreshold = 10000;
 
     // "encrypted-package" is the only data stream, no point in threading it
-    if (rEntry.sPath != "encrypted-package" && nThreadingThreshold < xSrcStream->available())
+    if (nThreadingThreshold < xSrcStream->available()
+        && rEntry.sPath != "encrypted-package"
+        // tdf#160888 no threading for AEAD streams:
+        // 1. the whole stream must be read immediately to verify tag
+        // 2. XBufferedThreadedStream uses same m_aMutexHolder->GetMutex()
+        //    => caller cannot read without deadlock
+        && (nStreamMode != UNBUFF_STREAM_DATA
+            || !rData.is()
+            || rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C))
+    {
         xBufStream = new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
+    }
     else
 #endif
         xBufStream = new XBufferedStream(xSrcStream);
@@ -1066,6 +1079,7 @@ sal_Int32 ZipFile::readCEN()
 
         ZipEntry aEntry;
         sal_Int16 nCommentLen;
+        sal_Int64 nMinOffset{nEndPos};
 
         aEntries.reserve(nTotal);
         for (nCount = 0 ; nCount < nTotal; nCount++)
@@ -1122,7 +1136,7 @@ sal_Int32 ZipFile::readCEN()
 
             if (aEntry.nExtraLen>0)
             {
-                readExtraFields(aMemGrabber, aEntry.nExtraLen, nSize, nCompressedSize, &nOffset);
+                readExtraFields(aMemGrabber, aEntry.nExtraLen, nSize, nCompressedSize, &nOffset, &aEntry.sPath);
             }
             aEntry.nCompressedSize = nCompressedSize;
             aEntry.nSize = nSize;
@@ -1130,6 +1144,7 @@ sal_Int32 ZipFile::readCEN()
 
             if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
                 throw ZipException("Integer-overflow");
+            nMinOffset = std::min(nMinOffset, aEntry.nOffset);
             if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
                 throw ZipException("Integer-overflow");
 
@@ -1143,11 +1158,27 @@ sal_Int32 ZipFile::readCEN()
                     continue; // This is a directory entry, not a stream - skip it
             }
 
+            if (aEntries.find(aEntry.sPath) != aEntries.end())
+            {
+                SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
+                throw ZipException(u"Duplicate CEN entry"_ustr);
+            }
+            // this is required for OOXML, but not for ODF
+            auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+            if (!m_EntriesInsensitive.insert(lowerPath).second)
+            {
+                SAL_INFO("package", "Duplicate CEN entry (case insensitive): \"" << aEntry.sPath << "\"");
+                throw ZipException(u"Duplicate CEN entry (case insensitive)"_ustr);
+            }
             aEntries[aEntry.sPath] = aEntry;
         }
 
         if (nCount != nTotal)
             throw ZipException("Count != Total" );
+        if (nMinOffset != 0)
+        {
+            throw ZipException(u"Extra bytes at beginning of zip file"_ustr);
+        }
     }
     catch ( IllegalArgumentException & )
     {
@@ -1158,7 +1189,8 @@ sal_Int32 ZipFile::readCEN()
 }
 
 void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
-                              sal_uInt64& nSize, sal_uInt64& nCompressedSize, sal_uInt64* nOffset)
+        sal_uInt64& nSize, sal_uInt64& nCompressedSize,
+        sal_uInt64* nOffset, OUString const*const pCENFilenameToCheck)
 {
     while (nExtraLen > 0) // Extensible data fields
     {
@@ -1182,6 +1214,35 @@ void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
             }
             if (dataSize > nReadSize)
                 aMemGrabber.skipBytes(dataSize - nReadSize);
+        }
+        // Info-ZIP Unicode Path Extra Field - pointless as we expect UTF-8 in CEN already
+        else if (nheaderID == 0x7075 && pCENFilenameToCheck) // ignore in recovery mode
+        {
+            if (aMemGrabber.remainingSize() < dataSize)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: invalid TSize");
+                throw ZipException(u"Invalid Info-ZIP Unicode Path Extra Field"_ustr);
+            }
+            auto const nVersion = aMemGrabber.ReadUInt8();
+            if (nVersion != 1)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: unexpected Version");
+                throw ZipException(u"Invalid Info-ZIP Unicode Path Extra Field"_ustr);
+            }
+            // this CRC32 is actually of the pCENFilenameToCheck
+            // so it's pointless to check it if we require the UnicodeName
+            // to be equal to the CEN name anyway (and pCENFilenameToCheck
+            // is already converted to UTF-16 here)
+            (void) aMemGrabber.ReadUInt32();
+            // this is required to be UTF-8
+            OUString const unicodePath(reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
+                    dataSize - 5, RTL_TEXTENCODING_UTF8);
+            aMemGrabber.skipBytes(dataSize - 5);
+            if (unicodePath != *pCENFilenameToCheck)
+            {
+                SAL_INFO("package", "Invalid Info-ZIP Unicode Path Extra Field: unexpected UnicodeName");
+                throw ZipException(u"Invalid Info-ZIP Unicode Path Extra Field"_ustr);
+            }
         }
         else
         {
@@ -1285,7 +1346,7 @@ void ZipFile::recover()
                                     if (aEntry.nExtraLen > 0)
                                     {
                                         readExtraFields(aMemGrabberExtra, aEntry.nExtraLen, nSize,
-                                                        nCompressedSize, nullptr);
+                                                        nCompressedSize, nullptr, nullptr);
                                     }
                                 }
 
@@ -1318,7 +1379,13 @@ void ZipFile::recover()
                                         nPos += 4;
                                         continue;
                                     }
-
+                                    auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
+                                    if (m_EntriesInsensitive.find(lowerPath) != m_EntriesInsensitive.end())
+                                    {   // this is required for OOXML, but not for ODF
+                                        nPos += 4;
+                                        continue;
+                                    }
+                                    m_EntriesInsensitive.insert(lowerPath);
                                     aEntries.emplace( aEntry.sPath, aEntry );
 
                                     // Drop any "directory" entry corresponding to this one's path;

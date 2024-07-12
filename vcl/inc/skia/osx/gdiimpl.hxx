@@ -44,11 +44,13 @@ public:
     virtual void Flush(const tools::Rectangle&) override;
     virtual void WindowBackingPropertiesChanged() override;
 
+    CGImageRef createCGImageFromRasterSurface(const NSRect& rDirtyRect, CGPoint& rImageOrigin,
+                                              bool& rImageFlipped);
+
 private:
     virtual int getWindowScaling() const override;
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     virtual void flushSurfaceToWindowContext() override;
-    void flushSurfaceToScreenCG();
     static inline sk_sp<SkFontMgr> fontManager;
 };
 

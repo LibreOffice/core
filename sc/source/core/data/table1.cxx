@@ -2097,7 +2097,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
             {
                 if ( j >= aCol.size() )
                     break;
-                if (aCol[j].GetCellCount() == 0) // empty
+                if (aCol[j].IsCellCountZero()) // empty
                     nEmptyCount++;
             }
             if (nEmptyCount)

@@ -3282,6 +3282,19 @@ SCSIZE ScColumn::GetCellCount() const
     return aFunc.getCount();
 }
 
+bool ScColumn::IsCellCountZero() const
+{
+    auto it = maCells.begin();
+    auto itEnd = maCells.end();
+    for (; it != itEnd; ++it)
+    {
+        const sc::CellStoreType::value_type& node = *it;
+        if (node.size != 0)
+            return false;
+    }
+    return true;
+}
+
 FormulaError ScColumn::GetErrCode( SCROW nRow ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);

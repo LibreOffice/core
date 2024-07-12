@@ -51,8 +51,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.54/gvfs-1.54.0.tar.xz",
-                    "sha256": "f53d81df86c2e86cdd25182c2d8a669a22371e83623ded1b9d5416dcfc6de366",
+                    "url": "https://download.gnome.org/sources/gvfs/1.54/gvfs-1.54.2.tar.xz",
+                    "sha256": "54908f4e10b5f1c231e90330c8c15b7f21f2bb610f194c034b338e379c508e3c",
                     "x-checker-data": {
                         "type": "gnome",
                         "name": "gvfs",
@@ -77,8 +77,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://kerberos.org/dist/krb5/1.21/krb5-1.21.2.tar.gz",
-                    "sha256": "9560941a9d843c0243a71b17a7ac6fe31c7cebb5bce3983db79e52ae7e850491",
+                    "url": "https://kerberos.org/dist/krb5/1.21/krb5-1.21.3.tar.gz",
+                    "sha256": "b7a4cd5ead67fb08b980b21abd150ff7217e85ea320c9ed0c6dadd304840ad35",
                     "x-checker-data": {
                         "type": "html",
                         "url": "https://kerberos.org/dist/",

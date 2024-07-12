@@ -1430,6 +1430,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
     assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark"_ostr);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf160877, "tdf160877.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<text::XText> xHeaderTextPage1 = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Standard"), "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("Classification: General Business"), xHeaderTextPage1->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: (Sign GB)Test
+    // - Actual  : Test
+    CPPUNIT_ASSERT_EQUAL(OUString("(Sign GB)Test"), getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

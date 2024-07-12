@@ -1040,12 +1040,23 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             auto pListWidget = static_cast<vcl::PDFWriter::ListBoxWidget*>(pDescriptor.get());
             pListWidget->DropDown = true;
             sal_Int32 nIndex = 0;
+            bool bTextFound = false;
             for (const auto& rItem : pContentControl->GetListItems())
             {
                 pListWidget->Entries.push_back(rItem.m_aDisplayText);
                 if (rItem.m_aDisplayText == aText)
+                {
                     pListWidget->SelectedEntries.push_back(nIndex);
+                    bTextFound = true;
+                }
                 ++nIndex;
+            }
+            if (!aText.isEmpty() && !bTextFound)
+            {
+                // The selected entry has to be an index, if there is no index for it, insert one at
+                // the start.
+                pListWidget->Entries.insert(pListWidget->Entries.begin(), aText);
+                pListWidget->SelectedEntries.push_back(0);
             }
             break;
         }
@@ -1083,6 +1094,10 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     if (pFont)
     {
         pDescriptor->TextFont = pFont->GetActualFont();
+
+        // Need to transport the color explicitly, so it's applied to both already filled in and
+        // future content.
+        pDescriptor->TextColor = pFont->GetColor();
     }
 
     // Description for accessibility purposes.
@@ -1114,6 +1129,14 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
 
     aLocation = aStartRect;
     aLocation.Union(aEndRect);
+
+    // PDF spec 12.5.2 Annotation Dictionaries says the default border with is 1pt wide, increase
+    // the rectangle to compensate for that, otherwise the text will be cut off at the end.
+    aLocation.AddTop(-20);
+    aLocation.AddBottom(20);
+    aLocation.AddLeft(-20);
+    aLocation.AddRight(20);
+
     pDescriptor->Location = aLocation.SVRect();
 
     pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);

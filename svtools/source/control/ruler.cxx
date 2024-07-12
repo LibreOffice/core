@@ -1417,7 +1417,8 @@ void Ruler::ImplUpdate( bool bMustCalc )
 }
 
 bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
-                         bool bRequireStyle, RulerIndentStyle nRequiredStyle ) const
+                         bool bRequireStyle, RulerIndentStyle nRequiredStyle,
+                         tools::Long nTolerance ) const
 {
     sal_Int32   i;
     sal_uInt16  nStyle;
@@ -1558,7 +1559,7 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
     }
 
     // test the borders
-    int nBorderTolerance = 1;
+    int nBorderTolerance = nTolerance;
     if(pHitTest->bExpandTest)
     {
         nBorderTolerance++;
@@ -1574,7 +1575,6 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
         {
              n1 -= nBorderTolerance;
              n2 += nBorderTolerance;
-
         }
 
         if ( (nX >= n1) && (nX <= n2) )
@@ -1708,7 +1708,7 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
 }
 
 bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
-                                RulerSelection* pHitTest ) const
+                                RulerSelection* pHitTest, tools::Long nTolerance ) const
 {
     Point aPos = rPos;
     bool bRequiredStyle = false;
@@ -1732,7 +1732,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( RULER_OFF + 1 );
 
-        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
+        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle, nTolerance ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -1748,7 +1748,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( mnWidth - RULER_OFF - 1 );
 
-        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
+        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle, nTolerance ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -1763,7 +1763,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( RULER_OFF + (mnVirHeight / 2) );
 
-        if ( ImplDoHitTest( aPos, pHitTest ) )
+        if ( ImplDoHitTest( aPos, pHitTest, false, RulerIndentStyle::Top, nTolerance ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -2236,7 +2236,7 @@ void Ruler::Deactivate()
     mbActive = false;
 }
 
-bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
+bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType, tools::Long nTolerance )
 {
     if ( !mbDrag )
     {
@@ -2262,7 +2262,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
 
         if ( nMouseClicks == 1 )
         {
-            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
+            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest, nTolerance ) )
             {
                 PointerStyle aPtr = PointerStyle::Arrow;
 
@@ -2286,7 +2286,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         }
         else if ( nMouseClicks == 2 )
         {
-            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest ) )
+            if ( ImplDocHitTest( aMousePos, eDragType, &aHitTest, nTolerance ) )
             {
                 mnDragPos    = aHitTest.nPos;
                 mnDragAryPos = aHitTest.nAryPos;

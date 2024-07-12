@@ -178,7 +178,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
         aFollow = rName;
     aName = rName;
     if (bReIndexNow)
-        m_pPool->ReindexOnNameChange(aOldName, rName);
+        m_pPool->ReindexOnNameChange(*this, aOldName, rName);
 
     m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
     return true;
@@ -891,9 +891,9 @@ SfxStyleSheetBasePool::Reindex()
 }
 
 void
-SfxStyleSheetBasePool::ReindexOnNameChange(const OUString& rOldName, const OUString& rNewName)
+SfxStyleSheetBasePool::ReindexOnNameChange(const SfxStyleSheetBase& style, const OUString& rOldName, const OUString& rNewName)
 {
-    pImpl->mxIndexedStyleSheets->ReindexOnNameChange(rOldName, rNewName);
+    pImpl->mxIndexedStyleSheets->ReindexOnNameChange(style, rOldName, rNewName);
 }
 
 const svl::IndexedStyleSheets&

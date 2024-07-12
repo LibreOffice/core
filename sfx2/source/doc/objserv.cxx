@@ -332,14 +332,17 @@ void SfxObjectShell::CheckOut( )
         xCmisDoc->checkOut( );
 
         // Remove the info bar
-        SfxViewFrame* pViewFrame = GetFrame();
-        pViewFrame->RemoveInfoBar( u"checkout" );
+        if (SfxViewFrame* pViewFrame = GetFrame())
+            pViewFrame->RemoveInfoBar( u"checkout" );
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
-                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-        xBox->run();
+        if (SfxViewFrame* pFrame = GetFrame())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+            xBox->run();
+        }
     }
 }
 
@@ -356,9 +359,12 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
-                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-        xBox->run();
+        if (SfxViewFrame* pFrame = GetFrame())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+            xBox->run();
+        }
     }
 }
 
@@ -368,20 +374,26 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        SfxCheckinDialog checkinDlg(GetFrame()->GetFrameWeld());
-        if (checkinDlg.run() == RET_OK)
+        if (SfxViewFrame* pFrame = GetFrame())
         {
-            xCmisDoc->checkIn(checkinDlg.IsMajor(), checkinDlg.GetComment());
-            uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
-            if ( xModifiable.is( ) )
-                xModifiable->setModified( false );
+            SfxCheckinDialog checkinDlg(pFrame->GetFrameWeld());
+            if (checkinDlg.run() == RET_OK)
+            {
+                xCmisDoc->checkIn(checkinDlg.IsMajor(), checkinDlg.GetComment());
+                uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
+                if ( xModifiable.is( ) )
+                    xModifiable->setModified( false );
+            }
         }
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
-                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-        xBox->run();
+        if (SfxViewFrame* pFrame = GetFrame())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+            xBox->run();
+        }
     }
 }
 
@@ -394,9 +406,12 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
     }
     catch ( const uno::RuntimeException& e )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetFrameWeld(),
-                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-        xBox->run();
+        if (SfxViewFrame* pFrame = GetFrame())
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+            xBox->run();
+        }
     }
     return uno::Sequence< document::CmisVersion > ( );
 }
@@ -553,8 +568,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // Reload to show how the PDF actually looks like after signing. This also
                 // changes "finish signing" on the infobar back to "sign document" as a side
                 // effect.
-                SfxViewFrame* pFrame = GetFrame();
-                if (pFrame)
+                if (SfxViewFrame* pFrame = GetFrame())
                 {
                     // Store current page before reload.
                     SfxAllItemSet aSet(SfxGetpApp()->GetPool());
@@ -1243,8 +1257,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 const SfxBoolItem* saveTo = rReq.GetArg<SfxBoolItem>(SID_SAVETO);
                 if (saveTo == nullptr || !saveTo->GetValue())
                 {
-                    SfxViewFrame *pFrame = GetFrame();
-                    if (pFrame)
+                    if (SfxViewFrame* pFrame = GetFrame())
                         pFrame->RemoveInfoBar(u"readonly");
                     SetReadOnlyUI(false);
                 }
@@ -1355,8 +1368,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 CancelCheckOut( );
 
                 // Reload the document as we may still have local changes
-                SfxViewFrame *pFrame = GetFrame();
-                if ( pFrame )
+                if (SfxViewFrame* pFrame = GetFrame())
                     pFrame->GetDispatcher()->Execute(SID_RELOAD);
             }
             break;
@@ -1896,6 +1908,16 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 
         uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
         *pState = DocumentSignatures::getSignatureState(aInfos);
+
+        // repaired package cannot be trusted
+        if (*pState != SignatureState::NOSIGNATURES)
+        {
+            SfxBoolItem const*const pRepairItem{GetMedium()->GetItemSet().GetItem(SID_REPAIRPACKAGE, false)};
+            if (pRepairItem && pRepairItem->GetValue())
+            {
+                *pState = SignatureState::BROKEN;
+            }
+        }
     }
 
     if ( *pState == SignatureState::OK || *pState == SignatureState::NOTVALIDATED
@@ -2225,8 +2247,7 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
 
     // Reload the document to get the updated graphic
     // FIXME: Update just the signature line graphic instead of reloading the document
-    SfxViewFrame *pFrame = GetFrame();
-    if (pFrame)
+    if (SfxViewFrame* pFrame = GetFrame())
         pFrame->GetDispatcher()->Execute(SID_RELOAD);
 }
 
