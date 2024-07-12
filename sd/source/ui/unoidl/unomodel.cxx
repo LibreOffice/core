@@ -67,6 +67,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -3085,6 +3086,8 @@ OString SdXImpressDocument::getPresentationInfo() const
                         xPropSet->getPropertyValue("Visible") >>= bIsVisible;
                         if (bIsVisible)
                         {
+                            SdrPage* pPage = SdPage::getImplementation(xSlide);
+
                             ::tools::ScopedJsonWriterStruct aSlideNode = aJsonWriter.startStruct();
                             std::string sSlideHash = GetInterfaceHash(xSlide);
                             aJsonWriter.put("hash", sSlideHash);
@@ -3125,6 +3128,28 @@ OString SdXImpressDocument::getPresentationInfo() const
                                     if (aSlideBackgroundInfo.isSolidColor())
                                     {
                                         aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
+                                    }
+                                }
+                            }
+
+                            {
+                                ::tools::ScopedJsonWriterArray aVideoList = aJsonWriter.startArray("videos");
+                                SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
+                                while (aIterator.IsMore())
+                                {
+                                    auto* pObject = aIterator.Next();
+                                    if (pObject->GetObjIdentifier() == SdrObjKind::Media)
+                                    {
+                                        ::tools::ScopedJsonWriterStruct aVideosNode = aJsonWriter.startStruct();
+                                        auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
+                                        auto const& rRectangle = pMediaObject->GetLogicRect();
+                                        auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                                        aJsonWriter.put("id", reinterpret_cast<sal_uInt64>(pMediaObject));
+                                        aJsonWriter.put("url", pMediaObject->getTempURL());
+                                        aJsonWriter.put("x", aRectangle.Left());
+                                        aJsonWriter.put("y", aRectangle.Top());
+                                        aJsonWriter.put("width", aRectangle.GetWidth());
+                                        aJsonWriter.put("height", aRectangle.GetHeight());
                                     }
                                 }
                             }
