@@ -517,7 +517,8 @@ void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& r
  */
 void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
 {
-    if (!m_aPageStyle.is())
+    // do not alter header/footer during copy/paste
+    if (!m_aPageStyle.is() || !rDM_Impl.IsNewDoc())
         return;
 
     bool bHasHeader = false;
