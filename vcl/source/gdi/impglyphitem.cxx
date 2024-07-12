@@ -364,6 +364,13 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
             // part being underlined. Doing this for any two segments allows this optimization
             // even when the prefix of the string would use a different font.
             // TODO: Can those font differences be ignored?
+
+            // Shaping performance seems to scale poorly with respect to string length. Certain
+            // writing systems involve extremely long strings (for example, Tibetan: tdf#92064).
+            // In such cases, this optimization would be a net loss, and must be disabled.
+            constexpr sal_Int32 nOptLengthThreshold = 20000;
+            bool bEnableOptimization = (text.getLength() < nOptLengthThreshold);
+
             // Writer layouts tests enable SAL_NON_APPLICATION_FONT_USE=abort in order
             // to make PrintFontManager::Substitute() abort if font fallback happens. When
             // laying out the entire string the chance this happens increases (e.g. testAbi11870
@@ -374,7 +381,7 @@ const SalLayoutGlyphs* SalLayoutGlyphsCache::GetLayoutGlyphs(
                 const char* pEnv = getenv("SAL_NON_APPLICATION_FONT_USE");
                 return pEnv && strcmp(pEnv, "abort") == 0;
             }();
-            if (mLastSubstringKey.has_value() && !bAbortOnFontSubstitute)
+            if (bEnableOptimization && mLastSubstringKey.has_value() && !bAbortOnFontSubstitute)
             {
                 sal_Int32 pos = nIndex;
                 if (mLastSubstringKey->len < pos && pos > 0 && text[pos - 1] == nbSpace)
