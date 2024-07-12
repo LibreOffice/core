@@ -9,9 +9,11 @@
 
 'use strict';
 
+Module.unoTagSymbol = Symbol('unoTag');
+
 Module.initUno = function() {
     if (Module.uno === undefined) {
-        Module.uno = init_unoembind_uno(Module);
+        Module.uno = init_unoembind_uno(Module, Module.unoTagSymbol);
     }
 };
 
