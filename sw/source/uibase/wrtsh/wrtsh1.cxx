@@ -42,6 +42,7 @@
 #include <vcl/graph.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/random.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -1076,25 +1077,27 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
 
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
 
-    // Search for a non used ID for the new ContentControl, to make it unique
+    // Make Random ID.. cehcek if it is unique
+    // warning: possible infinite loop if there would be billions of content controls.
     SwContentControlManager& pManager = GetDoc()->GetContentControlManager();
     size_t nCCCount = pManager.GetCount();
-    std::vector<bool> aIdMap(nCCCount);
-    aIdMap.resize(nCCCount, false);
-    size_t nIdToCheck;
-    for (nIdToCheck = 0; nIdToCheck < nCCCount; nIdToCheck++)
+    sal_Int32 nIdToCheck;
+    nIdToCheck
+        = comphelper::rng::uniform_uint_distribution(1, std::numeric_limits<sal_Int32>::max());
+    size_t nIdx = 0;
+    while (nIdx < nCCCount)
     {
         sal_Int32 nID
-            = pManager.UnsortedGet(nIdToCheck)->GetContentControl().GetContentControl()->GetId();
-        if (nID >= 0 && nID < static_cast<sal_Int32>(nCCCount))
+            = pManager.UnsortedGet(nIdx)->GetContentControl().GetContentControl()->GetId();
+        if (nID == nIdToCheck)
         {
-            aIdMap[nID] = true;
+            nIdToCheck = comphelper::rng::uniform_uint_distribution(
+                1, std::numeric_limits<sal_Int32>::max());
+            nIdx = 0;
         }
+        else
+            nIdx++;
     }
-    // Find the first ID that was not used
-    nIdToCheck = 0;
-    while (nIdToCheck < nCCCount && aIdMap[nIdToCheck])
-        nIdToCheck++;
     pContentControl->SetId(nIdToCheck);
 
     OUString aPlaceholder;
