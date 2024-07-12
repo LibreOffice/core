@@ -383,6 +383,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsInTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
+        m_bReadOnly(rMediaDesc.getUnpackedValueOrDefault("ReadOnly", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
         m_nTableCellDepth(0),
         m_bHasFtn(false),

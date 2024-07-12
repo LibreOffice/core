@@ -45,7 +45,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     std::unique_ptr<FontTable_Impl> m_pImpl;
 
  public:
-    FontTable();
+    FontTable(bool bReadOnly);
     virtual ~FontTable() override;
 
     sal_uInt32          size();
@@ -54,6 +54,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     void addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                          const OUString& fontName, std::u16string_view extra,
                          std::vector<unsigned char> const & key);
+    bool IsReadOnly() const;
 
  private:
     // Properties
@@ -98,6 +99,7 @@ private:
     std::u16string_view m_style;
     OUString m_fontKey;
     css::uno::Reference<css::io::XInputStream> m_inputStream;
+    bool m_bSubsetted = false;
 };
 
 
