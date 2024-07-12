@@ -83,7 +83,8 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::MENU_BAR, NSAccessibilityMenuBarRole );
         MAP( AccessibleRole::MENU_ITEM, NSAccessibilityMenuItemRole );
         MAP( AccessibleRole::OPTION_PANE, NSAccessibilityUnknownRole ); // FIXME
-        MAP( AccessibleRole::PAGE_TAB, NSAccessibilityButtonRole );
+        // tdf#67943 tabs must have radio button role and tab button subrole
+        MAP( AccessibleRole::PAGE_TAB, NSAccessibilityRadioButtonRole );
         MAP( AccessibleRole::PAGE_TAB_LIST, NSAccessibilityTabGroupRole );
         MAP( AccessibleRole::PANEL, NSAccessibilityGroupRole );
         MAP( AccessibleRole::PARAGRAPH, NSAccessibilityTextAreaRole );
@@ -220,7 +221,8 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::MENU_BAR, @"" );
         MAP( AccessibleRole::MENU_ITEM, @"" );
         MAP( AccessibleRole::OPTION_PANE, @"" );
-        MAP( AccessibleRole::PAGE_TAB, @"" );
+        // tdf#67943 tabs must have radio button role and tab button subrole
+        MAP( AccessibleRole::PAGE_TAB, NSAccessibilityTabButtonSubrole );
         MAP( AccessibleRole::PAGE_TAB_LIST, @"" );
         MAP( AccessibleRole::PANEL, @"" );
         MAP( AccessibleRole::PARAGRAPH, @"" );
