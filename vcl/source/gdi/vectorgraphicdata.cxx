@@ -185,6 +185,9 @@ void VectorGraphicData::ensureReplacement()
 
 BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
 {
+    if (!maReplacement.IsEmpty() && maReplacement.GetSizePixel() == pixelSize)
+        return maReplacement;
+
     if (getType() == VectorGraphicDataType::Pdf)
     {
         // use PDFium directly
