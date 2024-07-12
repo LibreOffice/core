@@ -538,7 +538,7 @@ IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, weld::Button&, void )
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Get selected function's offical help.
+#*  Function:   Get selected function's official help.
 #*
 #*  Input:      ---
 #*
