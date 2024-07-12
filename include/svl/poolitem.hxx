@@ -759,11 +759,27 @@ private:
 
 /**
   Utility template to reduce boilerplate code when creating item instance managers
-  for specific PoolItem subclasses.
+  for specific PoolItem subclasses that can be hashed which is fatsre than using
+  the linear search with operator== that DefaultItemInstanceManager has to do
 */
 class HashedItemInstanceManager : public ItemInstanceManager
 {
-    std::unordered_map<size_t, const SfxPoolItem*> maRegistered;
+    struct ItemHash {
+        HashedItemInstanceManager& mrManager;
+        ItemHash(HashedItemInstanceManager& rManager) : mrManager(rManager) {}
+        size_t operator()(const SfxPoolItem* p) const
+        {
+            return mrManager.hashCode(*p);
+        }
+    };
+    struct ItemEqual {
+        bool operator()(const SfxPoolItem* lhs, const SfxPoolItem* rhs) const
+        {
+            return lhs->Which() == rhs->Which() && (*lhs) == (*rhs);
+        }
+    };
+
+    std::unordered_set<const SfxPoolItem*, ItemHash, ItemEqual> maRegistered;
 
 protected:
     virtual size_t hashCode(const SfxPoolItem&) const = 0;
@@ -771,6 +787,7 @@ protected:
 public:
     HashedItemInstanceManager(SfxItemType aSfxItemType)
     : ItemInstanceManager(aSfxItemType)
+    , maRegistered(0, ItemHash(*this), ItemEqual())
     {
     }
 
@@ -778,18 +795,18 @@ public:
     // by implCreateItemEntry/implCleanupItemEntry
     virtual const SfxPoolItem* find(const SfxPoolItem& rItem) const override final
     {
-        auto aHit(maRegistered.find(hashCode(rItem)));
+        auto aHit(maRegistered.find(&rItem));
         if (aHit != maRegistered.end())
-            return aHit->second;
+            return *aHit;
         return nullptr;
     }
     virtual void add(const SfxPoolItem& rItem) override final
     {
-        maRegistered.insert({hashCode(rItem), &rItem});
+        maRegistered.insert(&rItem);
     }
     virtual void remove(const SfxPoolItem& rItem) override final
     {
-        maRegistered.erase(hashCode(rItem));
+        maRegistered.erase(&rItem);
     }
 };
 
