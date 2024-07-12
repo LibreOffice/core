@@ -25,6 +25,8 @@
 #include <AnnotationWin.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>
+#include <txtfld.hxx>
+#include <ndtxt.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
@@ -46,6 +48,7 @@
 #include <cmdid.h>
 
 #include "CommentsPanel.hxx"
+#include <pam.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -84,29 +87,15 @@ void Comment::InitControls(const SwPostItField* pPostItField)
     maTime = tools::Time(pPostItField->GetDateTime().GetTime());
     mbResolved = pPostItField->GetResolved();
 
-    // Format date and time according to the system locale
-    const SvtSysLocale aSysLocale;
-    const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
-    OUString sMeta;
-    if (maDate.IsValidAndGregorian())
+    OUString sDate = sw::sidebar::CommentsPanel::FormatDate(maDate);
+    OUString sTime = sw::sidebar::CommentsPanel::FormatTime(maTime);
+    if (mxDate->get_label() != sDate)
     {
-        sMeta = rLocalData.getDate(maDate);
+        mxDate->set_label(sDate);
     }
-    else
+    if (mxTime->get_label() != sTime)
     {
-        sMeta = SwResId(STR_NODATE);
-    }
-    if (mxDate->get_label() != sMeta)
-    {
-        mxDate->set_label(sMeta);
-    }
-    if (pPostItField->GetTime().GetTime() != 0)
-    {
-        sMeta = " " + rLocalData.getTime(pPostItField->GetTime(), false);
-    }
-    if (mxTime->get_label() != sMeta)
-    {
-        mxTime->set_label(sMeta);
+        mxTime->set_label(sTime);
     }
 
     mxAuthor->set_label(msAuthor);
@@ -155,6 +144,9 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
     , mxSortbyTime(m_xBuilder->weld_radio_button("sortby_time"))
     , mxThreadsContainer(m_xBuilder->weld_box("comment_threads"))
 {
+    mxSortbyPosition->connect_toggled(LINK(this, CommentsPanel, SortHdl));
+    mxSortbyTime->connect_toggled(LINK(this, CommentsPanel, SortHdl));
+
     SwView* pView = GetActiveView();
     if (!pView)
         return;
@@ -164,6 +156,8 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
 
     StartListening(*mpPostItMgr);
 }
+
+IMPL_LINK_NOARG(CommentsPanel, SortHdl, weld::Toggleable&, void) { populateComments(); }
 
 void CommentsPanel::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -195,7 +189,8 @@ void CommentsPanel::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             {
                 sw::annotation::SwAnnotationWin* pAnnotationWin
                     = mpPostItMgr->GetRemovedAnnotationWin(pField);
-                deleteComment(pAnnotationWin);
+                sal_uInt32 nId = getPostItId(pAnnotationWin);
+                deleteComment(nId);
                 break;
             }
             case SwFormatFieldHintWhich::FOCUS:
@@ -214,6 +209,34 @@ void CommentsPanel::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             }
         }
     }
+}
+
+OUString CommentsPanel::FormatDate(Date& rDate)
+{
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
+    OUString sMeta;
+    if (rDate.IsValidAndGregorian())
+    {
+        sMeta = rLocalData.getDate(rDate);
+    }
+    else
+    {
+        sMeta = SwResId(STR_NODATE);
+    }
+    return sMeta;
+}
+
+OUString CommentsPanel::FormatTime(tools::Time& rTime)
+{
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
+    OUString sMeta;
+    if (rTime.GetTime() != 0)
+    {
+        sMeta = " " + rLocalData.getTime(rTime, false);
+    }
+    return sMeta;
 }
 
 sw::annotation::SwAnnotationWin* CommentsPanel::getRootCommentWin(const SwFormatField* pFormatField)
@@ -261,40 +284,125 @@ sw::annotation::SwAnnotationWin* CommentsPanel::getAnnotationWin(Comment* pComme
     return mpPostItMgr->GetAnnotationWin(pPostItField);
 }
 
+bool CommentsPanel::comp_dateTime(SwFormatField* a, SwFormatField* b)
+{
+    SwPostItField* pA = static_cast<SwPostItField*>(a->GetField());
+    SwPostItField* pB = static_cast<SwPostItField*>(b->GetField());
+
+    Date aDateA(pA->GetDateTime().GetDate());
+    tools::Time aTimeA(pA->GetDateTime().GetTime());
+    Date aDateB(pB->GetDateTime().GetDate());
+    tools::Time aTimeB(pB->GetDateTime().GetTime());
+
+    OUString sDateTimeA = FormatTime(aTimeA) + " " + FormatDate(aDateA);
+    OUString sDateTimeB = FormatTime(aTimeB) + " " + FormatDate(aDateB);
+
+    return sDateTimeA > sDateTimeB;
+}
+
+SwPosition CommentsPanel::getAnchorPosition(SwFormatField* pField)
+{
+    SwTextField* pTextField = pField->GetTextField();
+    SwTextNode* pTextNode = pTextField->GetpTextNode();
+
+    SwPosition aPos(*pTextNode, pTextField->GetStart());
+    return aPos;
+}
+
+bool CommentsPanel::comp_position(SwFormatField* a, SwFormatField* b)
+{
+    SwPosition aPosA = getAnchorPosition(a);
+    SwPosition aPosB = getAnchorPosition(b);
+
+    return aPosA < aPosB;
+}
+
 void CommentsPanel::populateComments()
 {
+    if (!mpCommentsMap.empty())
+    {
+        for (auto it = mpCommentsMap.begin(); it != mpCommentsMap.end();)
+        {
+            sal_uInt32 nId = it->first;
+            it++;
+            deleteComment(nId);
+        }
+    }
+
     if (!mpPostItMgr)
         return;
     std::vector<SwFormatField*> vFormatFields = mpPostItMgr->UpdatePostItsParentInfo();
+    if (mxSortbyTime->get_active())
+    {
+        std::sort(vFormatFields.begin(), vFormatFields.end(),
+                  [](SwFormatField* a, SwFormatField* b) {
+                      return sw::sidebar::CommentsPanel::comp_dateTime(a, b);
+                  });
+    }
+    else
+    {
+        std::stable_sort(vFormatFields.begin(), vFormatFields.end(),
+                         [](SwFormatField* a, SwFormatField* b) {
+                             return sw::sidebar::CommentsPanel::comp_position(a, b);
+                         });
+    }
 
     for (auto pFormatField : vFormatFields)
     {
         sw::annotation::SwAnnotationWin* pRootNote = getRootCommentWin(pFormatField);
         if (!pRootNote)
             continue;
-        sal_uInt32 nPostItId = getPostItId(pRootNote);
+        sal_uInt32 nRootId = getPostItId(pRootNote);
 
-        if (mpThreadsMap.find(nPostItId) != mpThreadsMap.end())
-            continue; // Skip if root comment is already present
+        if (mpThreadsMap.find(nRootId) != mpThreadsMap.end())
+        {
+            if (mxSortbyPosition->get_active())
+                continue;
+            else
+            {
+                auto pThread = mpThreadsMap[nRootId].get();
+                SwPostItField* pPostItField = static_cast<SwPostItField*>(pFormatField->GetField());
+                sal_uInt32 nId = pPostItField->GetPostItId();
+                auto pComment = std::make_unique<Comment>(pThread->getCommentBoxWidget(), *this);
+                pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
+                                                              pThread->mnComments++);
+                pComment->InitControls(pPostItField);
+                mpCommentsMap[nId] = std::move(pComment);
+                continue;
+            }
+        }
 
         auto pThread = std::make_unique<Thread>(mxThreadsContainer.get());
         mxThreadsContainer->reorder_child(pThread->get_widget(), mnThreads++);
 
-        for (sw::annotation::SwAnnotationWin* pCurrent = pRootNote;;)
+        if (mxSortbyPosition->get_active())
         {
-            sal_uInt32 nId = getPostItId(pCurrent);
+            for (sw::annotation::SwAnnotationWin* pCurrent = pRootNote;;)
+            {
+                sal_uInt32 nId = getPostItId(pCurrent);
+                auto pComment = std::make_unique<Comment>(pThread->getCommentBoxWidget(), *this);
+                pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
+                                                              pThread->mnComments++);
+                pComment->InitControls(pCurrent->GetPostItField());
+                mpCommentsMap[nId] = std::move(pComment);
+                sw::annotation::SwAnnotationWin* next
+                    = mpPostItMgr->GetNextPostIt(KEY_PAGEDOWN, pCurrent);
+                if (!next || next->GetTopReplyNote() != pRootNote)
+                    break;
+                pCurrent = next;
+            }
+        }
+        else
+        {
+            SwPostItField* pPostItField = static_cast<SwPostItField*>(pFormatField->GetField());
+            sal_uInt32 nId = pPostItField->GetPostItId();
             auto pComment = std::make_unique<Comment>(pThread->getCommentBoxWidget(), *this);
             pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                           pThread->mnComments++);
-            pComment->InitControls(pCurrent->GetPostItField());
+            pComment->InitControls(pPostItField);
             mpCommentsMap[nId] = std::move(pComment);
-            sw::annotation::SwAnnotationWin* next
-                = mpPostItMgr->GetNextPostIt(KEY_PAGEDOWN, pCurrent);
-            if (!next || next->GetTopReplyNote() != pRootNote)
-                break;
-            pCurrent = next;
         }
-        mpThreadsMap[nPostItId] = std::move(pThread);
+        mpThreadsMap[nRootId] = std::move(pThread);
     }
 }
 
@@ -337,35 +445,34 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         pComment->InitControls(pNote->GetPostItField());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
+    populateComments();
 }
 
-void CommentsPanel::deleteComment(sw::annotation::SwAnnotationWin* pAnnotationWin)
+void CommentsPanel::deleteComment(sal_uInt32 nId)
 {
-    if (!pAnnotationWin)
-        return;
-    sal_uInt32 nId = getPostItId(pAnnotationWin);
+    sw::annotation::SwAnnotationWin* pAnnotationWin = getAnnotationWin(mpCommentsMap[nId].get());
     SwFormatField* pFormatField = pAnnotationWin->GetFormatField();
-    sw::annotation::SwAnnotationWin* pRootNote = nullptr;
-    // If the root comment is deleted, the new root comment of the thread should be the next comment in the thread
-    // but due to a bug `getRootCommentWin` returns root comment of some other/random thread so we completely lose
-    // access to the current thread.
-    if (mpThreadsMap.find(nId) != mpThreadsMap.end())
-    {
-        pRootNote = pAnnotationWin;
-    }
-    else
-    {
-        pRootNote = getRootCommentWin(pFormatField);
-    }
+    sw::annotation::SwAnnotationWin* pRootNote = getRootCommentWin(pFormatField);
+    // // If the root comment is deleted, the new root comment of the thread should be the next comment in the thread
+    // // but due to a bug `getRootCommentWin` returns root comment of some other/random thread so we completely lose
+    // // access to the current thread.
+    // if (mpThreadsMap.find(nId) != mpThreadsMap.end())
+    // {
+    //     pRootNote = mpThreadsMap[nId];
+    // }
+    // else
+    // {
+    //     pRootNote = getRootCommentWin(pFormatField);
+    // }
 
     sal_uInt32 nRootId = getPostItId(pRootNote);
 
     if (mpThreadsMap.find(nRootId) == mpThreadsMap.end())
-        return;
+        throw std::runtime_error("Cannot delete comment: Thread does not exist");
     auto& pComment = mpCommentsMap[nId];
     auto& pThread = mpThreadsMap[nRootId];
     if (!pComment)
-        return;
+        throw std::runtime_error("Cannot delete comment: Comment does not exist");
 
     pThread->getCommentBoxWidget()->move(pComment->get_widget(), nullptr);
     mpCommentsMap.erase(nId);

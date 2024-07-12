@@ -126,6 +126,12 @@ public:
 
     void ReplyComment(Comment* pComment);
 
+    DECL_LINK(SortHdl, weld::Toggleable&, void);
+
+    // utility functions
+    static OUString FormatDate(Date& rDate);
+    static OUString FormatTime(tools::Time& rTime);
+
 private:
     SwPostItMgr* mpPostItMgr;
 
@@ -142,13 +148,18 @@ private:
 
     sal_uInt16 mnThreads = 0;
 
+    // utility functions
     sw::annotation::SwAnnotationWin* getRootCommentWin(const SwFormatField* pField);
     static sal_uInt32 getPostItId(sw::annotation::SwAnnotationWin* pAnnotationWin);
     sw::annotation::SwAnnotationWin* getAnnotationWin(Comment* pComment);
+    static bool comp_dateTime(SwFormatField* a, SwFormatField* b);
+    static SwPosition getAnchorPosition(SwFormatField* pField);
+    static bool comp_position(SwFormatField* a, SwFormatField* b);
 
+    // event handlers (To sync with AnnotationWin)
     void populateComments();
     void addComment(const SwFormatField* pField);
-    void deleteComment(sw::annotation::SwAnnotationWin* pAnnotationWin);
+    void deleteComment(sal_uInt32 nId);
     void setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotationWin);
     static void editComment(SwPostItField* pPostItField, Comment* pComment);
 };

@@ -59,6 +59,7 @@
                         <property name="halign">center</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
+                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                       </object>
                       <packing>
@@ -76,6 +77,7 @@
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="group">sortby_position</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
