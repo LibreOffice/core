@@ -36,7 +36,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 color_selector = xColorpage.getChild("colorset")
 
                 # For chart-palettes colors
-                select_by_text(xpaletteselector, "chart-palettes")
+                select_by_text(xpaletteselector, "Chart Palettes")
                 # Select Color with id 2
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "2"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "2")
@@ -54,7 +54,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["RGB"], "(126,0,33)")
 
                 # For libreoffice colors
-                select_by_text(xpaletteselector, "libreoffice")
+                select_by_text(xpaletteselector, "LibreOffice")
                 # Select Color with id 6
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "6"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "6")
@@ -72,7 +72,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["RGB"], "(255,215,76)")
 
                 # For html colors
-                select_by_text(xpaletteselector, "html")
+                select_by_text(xpaletteselector, "HTML")
                 # Select Color with id 1
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "1")
@@ -87,7 +87,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["ColorText"], "Navy")
 
                 # For freecolour-hlc colors
-                select_by_text(xpaletteselector, "freecolour-hlc")
+                select_by_text(xpaletteselector, "Freecolour HLC")
                 # Select Color with id 988
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "988"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "988")
@@ -102,7 +102,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["ColorText"], "HLC 190 50 20")
 
                 # For tonal colors
-                select_by_text(xpaletteselector, "tonal")
+                select_by_text(xpaletteselector, "Tonal")
                 # Select Color with id 17
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "17"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "17")
@@ -117,7 +117,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["ColorText"], "Magenta 82%")
 
                 # For material colors
-                select_by_text(xpaletteselector, "material")
+                select_by_text(xpaletteselector, "Material")
                 # Select Color with id 9
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "9"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "9")
@@ -127,7 +127,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 self.assertEqual(get_state_as_dict(color_selector)["ColorText"], "Gray 800")
 
                 # For standard colors
-                select_by_text(xpaletteselector, "standard")
+                select_by_text(xpaletteselector, "Standard")
                 # Select Color with id 3
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "3")
@@ -161,7 +161,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
                 color_selector = xColorpage.getChild("colorset")
 
                 # For chart-palettes colors
-                select_by_text(xpaletteselector, "chart-palettes")
+                select_by_text(xpaletteselector, "Chart Palettes")
                 # Select Color with id 2
                 color_selector.executeAction("CHOOSE", mkPropertyValues({"POS": "2"}))
                 self.assertEqual(get_state_as_dict(color_selector)["CurrColorId"], "2")

@@ -137,12 +137,31 @@ void PaletteManager::LoadPalettes()
                         if( aFName.endsWithIgnoreAsciiCase(".gpl") )
                             pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFNameWithoutExt));
                         else if( aFName.endsWithIgnoreAsciiCase(".soc") )
+                        {
+                            if (aFNameWithoutExt == "standard")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_STANDARD);
+                            else if (aFNameWithoutExt == "tonal")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_TONAL);
+                            else if (aFNameWithoutExt == "html")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_HTML);
+                            else if (aFNameWithoutExt == "chart-palettes")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_CHARTPALETTES);
+                            else if (aFNameWithoutExt == "compatibility")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_COMPATIBILITY);
+                            else if (aFNameWithoutExt == "material")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_MATERIAL);
+                            else if (aFNameWithoutExt == "libreoffice")
+                                aFNameWithoutExt = "LibreOffice";
+                            else if (aFNameWithoutExt == "freecolour-hlc")
+                                aFNameWithoutExt = SvxResId(RID_SVXSTR_COLOR_PALETTE_FREECOLOURHLC);
                             pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFNameWithoutExt));
+                        }
                         else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
                             pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFNameWithoutExt));
 
                         if( pPalette && pPalette->IsValid() )
                             m_Palettes.push_back( std::move(pPalette) );
+
                         aNames.insert(aFNameWithoutExt);
                     }
                 }

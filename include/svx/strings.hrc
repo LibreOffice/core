@@ -559,6 +559,14 @@
 #define RID_SVXSTR_GRAFMODE_MONO                            NC_("RID_SVXSTR_GRAFMODE_MONO", "Black/White")
 #define RID_SVXSTR_GRAFMODE_WATERMARK                       NC_("RID_SVXSTR_GRAFMODE_WATERMARK", "Watermark")
 #define RID_SVXSTR_COLORBAR                                 NC_("RID_SVXSTR_COLORBAR", "Left click to apply as background color, right click to set line color")
+// SOC color palettes
+#define RID_SVXSTR_COLOR_PALETTE_STANDARD                   NC_("RID_SVXSTR_COLOR_PALETTE_STANDARD", "Standard")
+#define RID_SVXSTR_COLOR_PALETTE_TONAL                      NC_("RID_SVXSTR_COLOR_PALETTE_TONAL", "Tonal")
+#define RID_SVXSTR_COLOR_PALETTE_HTML                       NC_("RID_SVXSTR_COLOR_PALETTE_HTML", "HTML")
+#define RID_SVXSTR_COLOR_PALETTE_CHARTPALETTES              NC_("RID_SVXSTR_COLOR_PALETTE_CHARTPALETTES", "Chart Palettes")
+#define RID_SVXSTR_COLOR_PALETTE_COMPATIBILITY              NC_("RID_SVXSTR_COLOR_PALETTE_COMPATIBILITY", "Compatibility")
+#define RID_SVXSTR_COLOR_PALETTE_MATERIAL                   NC_("RID_SVXSTR_COLOR_PALETTE_MATERIAL", "Material")
+#define RID_SVXSTR_COLOR_PALETTE_FREECOLOURHLC              NC_("RID_SVXSTR_COLOR_PALETTE_FREECOLOURHLC", "Freecolour HLC")
 // Default colors
 #define RID_SVXSTR_COLOR_DEFAULT_FONT                       NC_("RID_SVXSTR_COLOR_DEFAULT_FONTCOLOR", "Dark Red 2")
 #define RID_SVXSTR_COLOR_DEFAULT_FRAMELINE                  NC_("RID_SVXSTR_COLOR_DEFAULT_FRAMELINE", "Blue")
@@ -1116,7 +1124,7 @@
 // This is duplicated in GenericCommands.xcu in officecfg.
 #define RID_SVXSTR_CHARFONTNAME                             NC_("RID_SVXSTR_CHARFONTNAME", "Font Name")
 #define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE                NC_("RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE", "Font Name. The current font is not available and will be substituted.")
-#define RID_SVXSTR_CUSTOM_PAL                               NC_("RID_SVXSTR_CUSTOM_PAL", "custom")
+#define RID_SVXSTR_CUSTOM_PAL                               NC_("RID_SVXSTR_CUSTOM_PAL", "Custom")
 #define RID_SVXSTR_DOC_COLORS                               NC_("RID_SVXSTR_DOC_COLORS", "Document colors")
 #define RID_SVXSTR_THEME_COLORS                             NC_("RID_SVXSTR_THEME_COLORS", "Theme colors")
 #define RID_SVXSTR_DOC_COLOR_PREFIX                         NC_("RID_SVXSTR_DOC_COLOR_PREFIX", "Document Color")
