@@ -44,9 +44,10 @@ class TestTmpdlg(UITestCase):
                 type_text(xTag, "new tag ")
                 xAdd = xDialog.getChild("add")
 
-                xId = xDialog.getChild("idspinbutton")
-                self.assertEqual(get_state_as_dict(xId)['Text'], "0")
-                type_text(xId, "429496729") # added in front, making it 4294967290
+                # Id is a random number now, not 0.
+                # xId = xDialog.getChild("idspinbutton")
+                # self.assertEqual(get_state_as_dict(xId)['Text'], "0")
+                # type_text(xId, "429496729") # added in front, making it 4294967290
 
                 xTabIndex = xDialog.getChild("tabindexspinbutton")
                 self.assertEqual(get_state_as_dict(xTabIndex)['Text'], "1")
@@ -67,7 +68,7 @@ class TestTmpdlg(UITestCase):
             self.assertEqual(listItems[1][1].Value, "foo-bar")
             self.assertEqual(contentControl.Alias, "new alias my alias")
             self.assertEqual(contentControl.Tag, "new tag my tag")
-            self.assertEqual(contentControl.Id, -6) # stored as signed, displays as unsigned
+            # self.assertEqual(contentControl.Id, -6) # stored as signed, displays as unsigned
             self.assertEqual(contentControl.TabIndex, 4294967295) # stored as unsigned, displays as signed
 
 
