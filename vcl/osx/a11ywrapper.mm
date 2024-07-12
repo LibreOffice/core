@@ -560,7 +560,14 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(id)tabsAttribute {
-    return self; // TODO ???
+    // Related tdf#67943: return children if this is a tab bar
+    // This will cause VoiceOver to announce that the currently selected tab
+    // is "X of Y" tabs in the tab bar.
+    if ( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::PAGE_TAB_LIST ) {
+        return [ self childrenAttribute ];
+    } else {
+        return nil;
+    }
 }
 
 -(id)sharedTextUIElementsAttribute {
