@@ -491,16 +491,23 @@ bool ImpGraphic::makeAvailable()
     return ensureAvailable();
 }
 
-BitmapEx ImpGraphic::getVectorGraphicReplacement() const
+void ImpGraphic::updateBitmapFromVectorGraphic(const Size& pixelSize) const
 {
-    BitmapEx aRet = maVectorGraphicData->getReplacement();
+    assert (maVectorGraphicData);
 
-    if (maExPrefSize.getWidth() && maExPrefSize.getHeight())
+    // use maBitmapEx as local buffer for rendered vector image
+    if (pixelSize.Width() && pixelSize.Height()
+        && (maBitmapEx.IsEmpty() || maBitmapEx.GetSizePixel() != pixelSize))
     {
-        aRet.SetPrefSize(maExPrefSize);
+        const_cast<ImpGraphic*>(this)->maBitmapEx = maVectorGraphicData->getBitmap(pixelSize);
+    }
+    else // maVectorGraphicData caches the replacement, so updating unconditionally is cheap
+    {
+        const_cast<ImpGraphic*>(this)->maBitmapEx = maVectorGraphicData->getReplacement();
     }
 
-    return aRet;
+    if (maExPrefSize.getWidth() && maExPrefSize.getHeight())
+        const_cast<ImpGraphic*>(this)->maBitmapEx.SetPrefSize(maExPrefSize);
 }
 
 Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) const
@@ -511,11 +518,8 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData && maBitmapEx.IsEmpty())
-        {
-            // use maBitmapEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
-        }
+        if (!mpAnimation && maVectorGraphicData)
+            updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
         const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maBitmapEx );
 
@@ -613,11 +617,8 @@ BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters)
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData && maBitmapEx.IsEmpty())
-        {
-            // use maBitmapEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
-        }
+        if (!mpAnimation && maVectorGraphicData)
+            updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maBitmapEx );
 
@@ -696,6 +697,9 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
 
     if (GraphicType::Bitmap == meType && !maMetaFile.GetActionSize())
     {
+        if (maVectorGraphicData)
+            updateBitmapFromVectorGraphic();
+
         // #i119735#
         // Use the local maMetaFile as container for a metafile-representation
         // of the bitmap graphic. This will be done only once, thus be buffered.
@@ -703,12 +707,6 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         // GraphicType::Bitmap. In operator= it will get copied, thus buffering will
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
-
-        if(maVectorGraphicData && maBitmapEx.IsEmpty())
-        {
-            // use maBitmapEx as local buffer for rendered svg
-            pThat->maBitmapEx = getVectorGraphicReplacement();
-        }
 
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
         // the bitmap has, this will be an always correct metafile
@@ -816,7 +814,7 @@ void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
         {
             // used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
-            if (maVectorGraphicData && maBitmapEx.IsEmpty())
+            if (maVectorGraphicData)
             {
                 maExPrefSize = rPrefSize;
             }
@@ -828,10 +826,7 @@ void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
                 const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize(rPrefSize);
             }
 
-            if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
-            {
-                maBitmapEx.SetPrefSize(rPrefSize);
-            }
+            maBitmapEx.SetPrefSize(rPrefSize);
         }
         break;
 
@@ -907,7 +902,7 @@ void ImpGraphic::setValuesForPrefMapMod(const MapMode& rPrefMapMode)
             if (maVectorGraphicData)
             {
                 // ignore for Vector Graphic Data. If this is really used (except the grfcache)
-                // it can be extended by using maBitmapEx as buffer for getVectorGraphicReplacement()
+                // it can be extended by using maBitmapEx as buffer for updateBitmapFromVectorGraphic()
             }
             else
             {
@@ -1002,18 +997,14 @@ void ImpGraphic::draw(OutputDevice& rOutDev, const Point& rDestPt) const
     {
         case GraphicType::Bitmap:
         {
-            if (maVectorGraphicData && maBitmapEx.IsEmpty())
-            {
-                // use maBitmapEx as local buffer for rendered svg
-                const_cast<ImpGraphic*>(this)->maBitmapEx = getVectorGraphicReplacement();
-            }
-
             if (mpAnimation)
             {
                 mpAnimation->Draw(rOutDev, rDestPt);
             }
             else
             {
+                if (maVectorGraphicData)
+                    updateBitmapFromVectorGraphic();
                 maBitmapEx.Draw(&rOutDev, rDestPt);
             }
         }
@@ -1043,18 +1034,14 @@ void ImpGraphic::draw(OutputDevice& rOutDev,
     {
         case GraphicType::Bitmap:
         {
-            if (maVectorGraphicData && maBitmapEx.IsEmpty())
-            {
-                // use maBitmapEx as local buffer for rendered svg
-                const_cast<ImpGraphic*>(this)->maBitmapEx = getVectorGraphicReplacement();
-            }
-
             if (mpAnimation)
             {
                 mpAnimation->Draw(rOutDev, rDestPt, rDestSize);
             }
             else
             {
+                if (maVectorGraphicData)
+                    updateBitmapFromVectorGraphic(rOutDev.LogicToPixel(rDestSize));
                 maBitmapEx.Draw(&rOutDev, rDestPt, rDestSize);
             }
         }

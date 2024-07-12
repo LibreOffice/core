@@ -37,6 +37,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <pdf/PdfConfig.hxx>
 #include <rtl/crc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -180,6 +181,32 @@ void VectorGraphicData::ensureReplacement()
     {
         maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
     }
+}
+
+BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
+{
+    if (getType() == VectorGraphicDataType::Pdf)
+    {
+        // use PDFium directly
+        const sal_Int32 nUsePageIndex = mnPageIndex > 0 ? mnPageIndex : 0;
+        const double dpi = vcl::pdf::getDefaultPdfResolutionDpi();
+        basegfx::B2DTuple sizeMM100(
+            o3tl::convert(pixelSize.Width() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100),
+            o3tl::convert(pixelSize.Height() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100));
+        std::vector<BitmapEx> aBitmaps;
+        vcl::RenderPDFBitmaps(maDataContainer.getData(), maDataContainer.getSize(), aBitmaps,
+                              nUsePageIndex, 1, &sizeMM100);
+        if (!aBitmaps.empty())
+            return aBitmaps[0];
+    }
+
+    if (getPrimitive2DSequence().empty())
+        return {};
+
+    Size dpi(
+        std::round(pixelSize.Width() / o3tl::convert(maRange.getWidth(), o3tl::Length::mm100, o3tl::Length::in)),
+        std::round(pixelSize.Height() / o3tl::convert(maRange.getHeight(), o3tl::Length::mm100, o3tl::Length::in)));
+    return convertPrimitive2DSequenceToBitmapEx(maSequence, maRange, 4096 * 4096, o3tl::Length::mm100, dpi);
 }
 
 void VectorGraphicData::ensureSequenceAndRange()
