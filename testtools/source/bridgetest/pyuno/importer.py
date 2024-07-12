@@ -32,12 +32,12 @@ class ImporterTestCase(unittest.TestCase):
                            "com.sun.star.test.bridge.CppTestObject",self.ctx)
 
       def testStandard( self ):
-          self.failUnless( IllegalArgumentException != None, "none-test" )
-          self.failUnlessRaises( IllegalArgumentException, self.tobj.raiseException, 1,"foo",self.tobj)
+          self.assertTrue( IllegalArgumentException != None, "none-test" )
+          self.assertRaises( IllegalArgumentException, self.tobj.raiseException, 1,"foo",self.tobj)
                  
-          self.failUnless( TWO == uno.Enum( "test.testtools.bridgetest.TestEnum","TWO"), "enum" )
-          self.failUnless( UNSIGNED_LONG == uno.Enum( "com.sun.star.uno.TypeClass", "UNSIGNED_LONG" ) )
-          self.failUnless( typeOfIllegalArgumentException ==
+          self.assertTrue( TWO == uno.Enum( "test.testtools.bridgetest.TestEnum","TWO"), "enum" )
+          self.assertTrue( UNSIGNED_LONG == uno.Enum( "com.sun.star.uno.TypeClass", "UNSIGNED_LONG" ) )
+          self.assertTrue( typeOfIllegalArgumentException ==
                            uno.Type( "com.sun.star.lang.IllegalArgumentException", EXCEPTION) )
 
           # should not throw an exception
@@ -48,17 +48,17 @@ class ImporterTestCase(unittest.TestCase):
 
       def testDynamicComponentRegistration( self ):
           ctx = uno.getComponentContext()
-          self.failUnless(
+          self.assertTrue(
               not ("com.sun.star.connection.Acceptor" in ctx.ServiceManager.getAvailableServiceNames()),
               "precondition for dynamic component registration test is not fulfilled" )
-          self.failUnless(
+          self.assertTrue(
               not ("com.sun.star.connection.Connector" in ctx.ServiceManager.getAvailableServiceNames()),
               "precondition for dynamic component registration test is not fulfilled" )
           unohelper.addComponentsToContext(
               ctx , ctx, ("acceptor.uno","connector.uno"), "com.sun.star.loader.SharedLibrary" )
-          self.failUnless(
+          self.assertTrue(
                 ("com.sun.star.connection.Acceptor" in ctx.ServiceManager.getAvailableServiceNames()) )
-          self.failUnless(
+          self.assertTrue(
                 ("com.sun.star.connection.Connector" in ctx.ServiceManager.getAvailableServiceNames()))
 
 def suite( ctx ):

@@ -105,9 +105,9 @@ class TestCase(unittest.TestCase):
           
           dataInput.setInputStream( SequenceInputStream2( streamOut.getSequence() ) )
 
-          self.failUnless( 42 == dataInput.readShort() )
-          self.failUnless( 43 == dataInput.readLong() )
-          self.failUnless( self.tobj.transportAny( streamOut ) == streamOut )
+          self.assertTrue( 42 == dataInput.readShort() )
+          self.assertTrue( 43 == dataInput.readLong() )
+          self.assertTrue( self.tobj.transportAny( streamOut ) == streamOut )
 
 
 class NullDevice:
@@ -130,14 +130,14 @@ class TestHelperCase( unittest.TestCase ):
       def testUrlHelper( self ):
             systemPath = os.getcwd()
             if systemPath.startswith( "/" ):
-                  self.failUnless( "/tmp" == unohelper.fileUrlToSystemPath( "file:///tmp" ) )
-                  self.failUnless( "file:///tmp" == unohelper.systemPathToFileUrl( "/tmp" ))
+                  self.assertTrue( "/tmp" == unohelper.fileUrlToSystemPath( "file:///tmp" ) )
+                  self.assertTrue( "file:///tmp" == unohelper.systemPathToFileUrl( "/tmp" ))
             else:
-                  self.failUnless( "c:\\temp" == unohelper.fileUrlToSystemPath( "file:///c:/temp" ) )
-                  self.failUnless( "file:///c:/temp" == unohelper.systemPathToFileUrl( "c:\\temp" ) )
+                  self.assertTrue( "c:\\temp" == unohelper.fileUrlToSystemPath( "file:///c:/temp" ) )
+                  self.assertTrue( "file:///c:/temp" == unohelper.systemPathToFileUrl( "c:\\temp" ) )
 
             systemPath = unohelper.systemPathToFileUrl( systemPath )
-            self.failUnless( systemPath + "/a" == unohelper.absolutize( systemPath, "a" ) )
+            self.assertTrue( systemPath + "/a" == unohelper.absolutize( systemPath, "a" ) )
       def testInspect( self ):
             dev = NullDevice()
 #            dev = sys.stdout
@@ -153,7 +153,7 @@ class TestHelperCase( unittest.TestCase ):
             listener = EventListener()
             smgr.addEventListener( listener )
             smgr.dispose()
-            self.failUnless( listener.disposingCalled )
+            self.assertTrue( listener.disposingCalled )
 
             # check, whether listeners can be removed
             smgr = uno.getComponentContext().ServiceManager.createInstance(
@@ -162,15 +162,15 @@ class TestHelperCase( unittest.TestCase ):
             smgr.addEventListener( listener )
             smgr.removeEventListener( listener )
             smgr.dispose()
-            self.failUnless( not listener.disposingCalled )
+            self.assertTrue( not listener.disposingCalled )
             
       def testCurrentContext( self ):
             oldContext = uno.getCurrentContext()
             try:
                   uno.setCurrentContext(
                         unohelper.CurrentContext( oldContext,{"My42":42}) )
-                  self.failUnless( 42 == uno.getCurrentContext().getValueByName( "My42" ) )
-                  self.failUnless( None == uno.getCurrentContext().getValueByName( "My43" ) )
+                  self.assertTrue( 42 == uno.getCurrentContext().getValueByName( "My42" ) )
+                  self.assertTrue( None == uno.getCurrentContext().getValueByName( "My43" ) )
             finally:
                   uno.setCurrentContext( oldContext )
           
