@@ -608,7 +608,7 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     void SAL_CALL setStringAttribute(OUString const& value) override { stringAttribute_ = value; }
 
-    OUString stringAttribute_;
+    OUString stringAttribute_ = u"hä"_ustr;
 };
 
 class BridgeTest : public cppu::WeakImplHelper<css::task::XJob>
@@ -647,7 +647,7 @@ private:
         }
         css::uno::UnoInterfaceReference ifcUno;
         cpp2uno.mapInterface(reinterpret_cast<void**>(&ifcUno.m_pUnoI),
-                             org::libreoffice::embindtest::Test::get(context_).get(),
+                             org::libreoffice::embindtest::Test::create(context_).get(),
                              cppu::UnoType<org::libreoffice::embindtest::XTest>::get());
         if (!ifcUno.is())
         {
@@ -832,9 +832,11 @@ private:
             assert(e.Message.startsWith("test"));
         }
         {
-            ifcCpp->setStringAttribute(u"hä"_ustr);
-            auto const val = ifcCpp->getStringAttribute();
-            assert(val == u"hä"_ustr);
+            auto const val1 = ifcCpp->getStringAttribute();
+            assert(val1 == u"hä"_ustr);
+            ifcCpp->setStringAttribute(u"foo"_ustr);
+            auto const val2 = ifcCpp->getStringAttribute();
+            assert(val2 == u"foo"_ustr);
         }
         return css::uno::Any(true);
     }

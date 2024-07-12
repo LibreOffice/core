@@ -9,7 +9,7 @@
 
 module org { module libreoffice { module embindtest {
 
-singleton Test: XTest;
+service Test: XTest;
 
 }; }; };
 
