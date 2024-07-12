@@ -1102,7 +1102,6 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                             ( !bInReadOnly && pFrame->IsProtected() ) ||
                             pFrame->IsHiddenNow())
                         {
-                            pNd = nullptr;
                             continue;
                         }
                         *rPam.GetPoint() = aPos;
