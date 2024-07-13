@@ -2416,9 +2416,9 @@ OUString getNameFromStreamURL(std::u16string_view rURL)
     if (o3tl::starts_with(rURL, sPackageURL))
     {
         std::u16string_view sRequestedName = rURL.substr(sPackageURL.size());
-        size_t nLastIndex = sRequestedName.rfind('/') + 1;
-        if ((nLastIndex > 0) && (nLastIndex < sRequestedName.size()))
-            sRequestedName = sRequestedName.substr(nLastIndex);
+        size_t nLastIndex = sRequestedName.rfind('/');
+        if (nLastIndex != std::u16string_view::npos && nLastIndex + 1 < sRequestedName.size())
+            sRequestedName = sRequestedName.substr(nLastIndex + 1);
         nLastIndex = sRequestedName.rfind('.');
         if (nLastIndex != std::u16string_view::npos)
             sRequestedName = sRequestedName.substr(0, nLastIndex);
