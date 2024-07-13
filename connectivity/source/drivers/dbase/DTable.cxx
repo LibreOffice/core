@@ -2683,7 +2683,14 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
             (*m_pMemoStream).ReadUInt32( nLength );
 
             if (m_aMemoHeader.db_typ == MemodBaseIV)
+            {
+                if (nLength < 8)
+                {
+                    SAL_WARN("connectivity.drivers", "Size too small");
+                    return false;
+                }
                 nLength -= 8;
+            }
 
             if ( nLength )
             {
