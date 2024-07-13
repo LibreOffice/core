@@ -51,6 +51,7 @@
 #include <DrawViewShell.hxx>
 #include <ToolBarManager.hxx>
 #include <Client.hxx>
+#include <annotationmanager.hxx>
 
 #include <svx/svdundo.hxx>
 
@@ -861,7 +862,14 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         {
             auto& pAnnotationData = pSingleObj->getAnnotationData();
             if (pAnnotationData)
+            {
+                auto* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
+                if (pDrawViewShell && pDrawViewShell->getAnnotationManagerPtr())
+                {
+                    pDrawViewShell->getAnnotationManagerPtr()->SelectAnnotation(pAnnotationData->mxAnnotation);
+                }
                 pAnnotationData->openPopup();
+            }
             return true;
         }
 
