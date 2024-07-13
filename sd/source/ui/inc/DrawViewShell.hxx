@@ -235,6 +235,8 @@ public:
     void            ExecuteAnnotation (SfxRequest const & rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
 
+    AnnotationManager* getAnnotationManagerPtr() { return mpAnnotationManager.get(); }
+
     void            StartRulerDrag (const Ruler& rRuler, const MouseEvent& rMEvt);
 
     virtual bool    PrepareClose( bool bUI = true ) override;

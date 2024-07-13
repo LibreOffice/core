@@ -1288,6 +1288,11 @@ void AnnotationManager::GetAnnotationState(SfxItemSet& rItemSet)
     mxImpl->GetAnnotationState(rItemSet);
 }
 
+void AnnotationManager::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
+{
+    mxImpl->SelectAnnotation(xAnnotation);
 }
+
+} // end sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
