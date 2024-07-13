@@ -632,19 +632,27 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getToolTipText(  )
 
 sal_Int32 VCLXAccessibleToolBoxItem::getAccessibleActionCount( )
 {
-    // only one action -> "Click"
-    return 1;
+    // "Click" and maybe "Toggle Popup"
+    return ( m_pToolBox && m_pToolBox->ItemHasDropdown( m_nItemId ) ? 2 : 1 );
 }
 
 sal_Bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex != 0 )
-        throw IndexOutOfBoundsException();
-
-    if ( m_pToolBox )
-        m_pToolBox->TriggerItem( m_nItemId );
+    switch ( nIndex )
+    {
+        case 0:
+            if ( m_pToolBox )
+                m_pToolBox->TriggerItem( m_nItemId );
+            break;
+        case 1:
+            if ( m_pToolBox && m_pToolBox->ItemHasDropdown( m_nItemId ) )
+                m_pToolBox->TriggerItemDropdown( m_nItemId );
+            break;
+        default:
+            throw IndexOutOfBoundsException();
+    }
 
     return true;
 }
@@ -653,17 +661,22 @@ OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 n
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex != 0 )
-        throw IndexOutOfBoundsException();
-
-    return RID_STR_ACC_ACTION_CLICK;
+    switch ( nIndex )
+    {
+        case 0:
+            return RID_STR_ACC_ACTION_CLICK;
+        case 1:
+            return RID_STR_ACC_ACTION_TOGGLEPOPUP;
+        default:
+            throw IndexOutOfBoundsException();
+    }
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleToolBoxItem::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {
     OContextEntryGuard aGuard( this );
 
-    if ( nIndex != 0 )
+    if (nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw IndexOutOfBoundsException();
 
     return Reference< XAccessibleKeyBinding >();
