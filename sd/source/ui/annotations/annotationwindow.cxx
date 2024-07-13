@@ -148,7 +148,10 @@ bool AnnotationTextWindow::KeyInput(const KeyEvent& rKeyEvt)
         }
     }
 
-    return bDone;
+    if (bDone)
+        return true;
+
+    return WeldEditView::KeyInput(rKeyEvt);
 }
 
 AnnotationTextWindow::AnnotationTextWindow(AnnotationWindow& rContents)
