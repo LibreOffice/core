@@ -458,11 +458,11 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-void SvxNumValueSet::SetCustomBullets(std::vector<std::pair<OUString, OUString>> aCustomBullets)
+void SvxNumValueSet::SetCustomBullets(const std::vector<std::pair<OUString, OUString>>& rCustomBullets)
 {
     Clear();
-    maCustomBullets = aCustomBullets;
-    for (size_t i = 0; i < aCustomBullets.size(); i++)
+    maCustomBullets = rCustomBullets;
+    for (size_t i = 0; i < rCustomBullets.size(); i++)
     {
         InsertItem(i + 1, i);
     }

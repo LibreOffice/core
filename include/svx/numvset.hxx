@@ -87,7 +87,7 @@ public:
             const css::lang::Locale& rLocale);
 
     std::vector<std::pair<OUString, OUString>> GetCustomBullets() { return maCustomBullets; }
-    void SetCustomBullets(std::vector<std::pair<OUString, OUString>> aCustomBullets);
+    void SetCustomBullets(const std::vector<std::pair<OUString, OUString>>& rCustomBullets);
 
     virtual FactoryFunction GetUITestFactory() const override;
 
