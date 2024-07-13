@@ -177,7 +177,6 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
     return m_aUsersData;
 }
 
-
 void ShareControlFile::SetUsersDataAndStore( std::unique_lock<std::mutex>& /*rGuard*/, std::vector< LockFileEntry >&& aUsersData )
 {
     if ( !IsValid() )
@@ -205,9 +204,8 @@ void ShareControlFile::SetUsersDataAndStore( std::unique_lock<std::mutex>& /*rGu
     OString aStringData( OUStringToOString( aBuffer, RTL_TEXTENCODING_UTF8 ) );
     uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     m_xOutputStream->writeBytes( aData );
-    m_aUsersData = aUsersData;
+    m_aUsersData = std::move(aUsersData);
 }
-
 
 LockFileEntry ShareControlFile::InsertOwnEntry()
 {
