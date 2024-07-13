@@ -376,6 +376,10 @@ public:
     /// SdrObjects in the SdrObjList.
     sal_uInt32 GetOrdNum() const;
 
+    /// Ensure this object is sorted immediatedly after rFirst
+    /// ie. rFirst.GetOrdNum() + 1 == this->GetOrdNum()
+    void ensureSortedImmediatelyAfter(const SdrObject& rFirst);
+
     // setting the order number should only happen from the model or from the page
     void SetOrdNum(sal_uInt32 nNum);
 

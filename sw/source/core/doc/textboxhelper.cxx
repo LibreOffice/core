@@ -1533,17 +1533,10 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
             if (pDrawModel)
             {
                 // Not really sure this will work on all pages, but it seems it will.
-                auto pPage = pDrawModel->GetPage(0);
-                // Recalc all Z-orders
-                pPage->RecalcObjOrdNums();
                 // If the shape is behind the frame, is good, but if there are some objects
                 // between of them that is wrong so put the frame exactly one level higher
                 // than the shape.
-                if (pFrmObj->GetOrdNum() != pShpObj->GetOrdNum() + 1)
-                {
-                    pPage->SetObjectOrdNum(pFrmObj->GetOrdNum(), pShpObj->GetOrdNum() + 1);
-                    pPage->RecalcObjOrdNums();
-                }
+                pFrmObj->ensureSortedImmediatelyAfter(*pShpObj);
                 return true; // Success
             }
             SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
