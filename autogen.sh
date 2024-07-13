@@ -201,6 +201,8 @@ die "Failed to generate the configure script" if (! -f "configure");
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
         print STDOUT "autogen.sh - libreoffice configuration helper\n";
+        print STDOUT "When called without arguments, arguments from autogen.input are used.\n";
+        print STDOUT "\nArguments processed in the helper:\n";
         print STDOUT "   --with-distro  use a config from distro-configs/\n";
         print STDOUT "                  the name needs to be passed without extension\n";
         print STDOUT "   --best-effort  don't fail on un-known configure with/enable options\n";
