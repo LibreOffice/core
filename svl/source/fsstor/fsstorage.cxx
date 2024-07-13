@@ -546,7 +546,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
 {
     std::unique_lock aGuard( m_aMutex );
 
-    uno::Reference< embed::XStorage > xSourceStor( openStorageElement( aStorName, embed::ElementModes::READ ),
+    uno::Reference< embed::XStorage > xSourceStor( openStorageElementImpl(aGuard, aStorName, embed::ElementModes::READ),
                                                     uno::UNO_SET_THROW );
     xSourceStor->copyToStorage( xTargetStorage );
 }
