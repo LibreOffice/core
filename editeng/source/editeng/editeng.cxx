@@ -67,6 +67,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/help.hxx>
+#include <vcl/lazydelete.hxx>
 #include <vcl/transfer.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -80,8 +81,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-
-static rtl::Reference<SfxItemPool> pGlobalPool;
 
 ImpEditEngine& EditEngine::getImpl() const
 {
@@ -1721,37 +1720,10 @@ rtl::Reference<SfxItemPool> EditEngine::CreatePool()
 }
 
 
-/** If we let the libc runtime clean us up, we trigger a crash */
-namespace
-{
-class TerminateListener : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
-{
-    void SAL_CALL queryTermination( const lang::EventObject& ) override
-    {}
-    void SAL_CALL notifyTermination( const lang::EventObject& ) override
-    {
-        pGlobalPool.clear();
-    }
-    virtual void SAL_CALL disposing( const ::css::lang::EventObject& ) override
-    {}
-};
-};
-
 SfxItemPool& EditEngine::GetGlobalItemPool()
 {
-    if ( !pGlobalPool )
-    {
-        pGlobalPool = CreatePool();
-#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
-        // TerminateListener option not available, force it to leak
-        pGlobalPool->acquire();
-#else
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
-        uno::Reference< frame::XTerminateListener > xListener( new TerminateListener );
-        xDesktop->addTerminateListener( xListener );
-#endif
-    }
-    return *pGlobalPool;
+    static vcl::DeleteOnDeinit<rtl::Reference<SfxItemPool>> pGlobalPool(CreatePool());
+    return **pGlobalPool.get();
 }
 
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const vcl::Font& rFont )
