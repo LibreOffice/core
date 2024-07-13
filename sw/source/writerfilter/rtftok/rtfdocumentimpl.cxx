@@ -2402,7 +2402,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                                 aBuf.append("0");
                             aBuf.append(static_cast<sal_Int32>(ch), 16);
                         }
-                        m_aStates.top().getDestinationText() = aBuf;
+                        m_aStates.top().getDestinationText() = std::move(aBuf);
                     }
                 }
                 popState();

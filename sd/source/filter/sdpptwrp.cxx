@@ -152,12 +152,10 @@ bool SdPPTFilter::Import()
     {
         /* check if there is a dualstorage, then the
         document is probably a PPT95 containing PPT97 */
-        rtl::Reference<SotStorage> xDualStorage;
         OUString sDualStorage( u"PP97_DUALSTORAGE"_ustr  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
-            xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
-            pStorage = xDualStorage;
+            pStorage = pStorage->OpenSotStorage(sDualStorage, StreamMode::STD_READ);
         }
         if (pStorage->IsContained(u"\011DRMContent"_ustr))
         {

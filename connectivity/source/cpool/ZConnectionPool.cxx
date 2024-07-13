@@ -272,7 +272,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
         TActiveConnectionInfo aActiveInfo;
         aActiveInfo.aPos = _rIter;
         aActiveInfo.xPooledConnection = xPooledConnection;
-        m_aActiveConnections[xConnection] = aActiveInfo;
+        m_aActiveConnections[xConnection] = std::move(aActiveInfo);
     }
     return xConnection;
 }

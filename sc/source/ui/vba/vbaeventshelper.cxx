@@ -291,7 +291,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
             processWindowActivateEvent( mpActiveWindow, false );
         // fire activation event for the new window
         processWindowActivateEvent( pWindow, true );
-        mpActiveWindow = pWindow;
+        mpActiveWindow = std::move(pWindow);
     }
 }
 

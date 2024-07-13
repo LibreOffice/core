@@ -404,14 +404,14 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
 
         if (!sTypeName.isEmpty())
         {
-            std::shared_ptr<const SfxFilter> pNewFilter;
+            std::shared_ptr<const SfxFilter> xNewFilter;
             if (!aFilterName.isEmpty())
                 // Type detection returned a suitable filter for this.  Use it.
-                pNewFilter = SfxFilter::GetFilterByName(aFilterName);
+                xNewFilter = SfxFilter::GetFilterByName(aFilterName);
 
             // fdo#78742 respect requested document service if set
-            if (!pNewFilter || (!m_rImpl.aName.isEmpty()
-                             && m_rImpl.aName != pNewFilter->GetServiceName()))
+            if (!xNewFilter || (!m_rImpl.aName.isEmpty()
+                             && m_rImpl.aName != xNewFilter->GetServiceName()))
             {
                 // detect filter by given type
                 // In case of this matcher is bound to a particular document type:
@@ -420,12 +420,12 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
                 uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, css::uno::Any(sTypeName) } };
 
-                pNewFilter = GetFilterForProps(lQuery, nMust, nDont);
+                xNewFilter = GetFilterForProps(lQuery, nMust, nDont);
             }
 
-            if (pNewFilter)
+            if (xNewFilter)
             {
-                rpFilter = pNewFilter;
+                rpFilter = std::move(xNewFilter);
                 return ERRCODE_NONE;
             }
         }

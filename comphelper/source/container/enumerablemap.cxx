@@ -353,8 +353,8 @@ namespace comphelper
             throw IllegalTypeException(u"Unsupported key type."_ustr, *this );
 
         // init members
-        m_aData.m_aKeyType = aKeyType;
-        m_aData.m_aValueType = aValueType;
+        m_aData.m_aKeyType = std::move(aKeyType);
+        m_aData.m_aValueType = std::move(aValueType);
         m_aData.m_pKeyCompare = std::move(pComparator);
         m_aData.m_pValues.emplace( *m_aData.m_pKeyCompare );
         m_aData.m_bMutable = bMutable;

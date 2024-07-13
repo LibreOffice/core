@@ -248,7 +248,7 @@ static uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleShe
         if (pEntry == pNewEntry) //fdo#49587
             break;
 
-        pEntry = pNewEntry;
+        pEntry = std::move(pNewEntry);
     }
     return uno::Any();
 }
@@ -5997,7 +5997,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
             if (!bSuccess)
             {
                 aNewGrabBagSeq.realloc(aNewGrabBagSeq.size() + 1);
-                aNewGrabBagSeq.getArray()[aNewGrabBagSeq.size() - 1] = aLinkProp;
+                aNewGrabBagSeq.getArray()[aNewGrabBagSeq.size() - 1] = std::move(aLinkProp);
                 bSuccess = true;
             }
         }

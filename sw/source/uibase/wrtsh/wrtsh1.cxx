@@ -1121,7 +1121,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             }
             SwContentControlListItem aListItem;
             aListItem.m_aValue = aPlaceholder;
-            pContentControl->SetListItems({ aListItem });
+            pContentControl->SetListItems({ std::move(aListItem) });
             break;
         }
         case SwContentControlType::PICTURE:

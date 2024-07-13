@@ -259,7 +259,7 @@ namespace sfx2
         ::std::for_each(
             aFilterClasses.begin(),
             aFilterClasses.end(),
-            ReadGlobalFilter( aFilterClassesNode, aClassReferrer )
+            ReadGlobalFilter( std::move(aFilterClassesNode), aClassReferrer )
         );
     }
 

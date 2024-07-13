@@ -73,7 +73,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     if (!bIsChild)
         return;
 
-    ShapePtr pCurrParent(mpParentShape);
+    ShapePtr xCurrParent(mpParentShape);
 
     if (rAtom.getExistingShape())
     {
@@ -101,8 +101,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
             {
                 pShape->setInternalName(rAtom.getName());
-                pCurrParent->addChild(pShape);
-                pCurrParent = pShape;
+                xCurrParent->addChild(pShape);
+                xCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
                 mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
             }
@@ -120,7 +120,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // set new parent for children
     ShapePtr xPreviousParent(mpParentShape);
-    mpParentShape = pCurrParent;
+    mpParentShape = std::move(xCurrParent);
 
     // process children
     meLookFor = LAYOUT_NODE;

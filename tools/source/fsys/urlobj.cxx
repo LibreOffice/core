@@ -1974,7 +1974,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         return false;
     }
 
-    rTheAbsURIRef = aNewURI;
+    rTheAbsURIRef = std::move(aNewURI);
     return true;
 }
 

@@ -155,7 +155,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             sal_uInt32 nIndex = m_aPropSeq.getLength();
             m_aPropSeq.realloc( nIndex + 1 );
             auto pPropSeq = m_aPropSeq.getArray();
-            pPropSeq[ nIndex ] = aValue;
+            pPropSeq[ nIndex ] = std::move(aValue);
             m_aPropHashMap[ rSequenceName ] = nIndex;
 
             pSeqAny = &pPropSeq[ nIndex ].Value;
