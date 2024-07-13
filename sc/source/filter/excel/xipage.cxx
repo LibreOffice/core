@@ -153,14 +153,13 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
 
     bool bIgnore = GetBiff() == EXC_BIFF8;  // ignore start/end columns or rows in BIFF8
 
-    sal_uInt16 nCount, nBreak;
-    nCount = rStrm.ReaduInt16();
+    sal_uInt16 nCount = rStrm.ReaduInt16();
     pVec->clear();
     pVec->reserve( nCount );
 
     while( nCount-- )
     {
-        nBreak = rStrm.ReaduInt16();
+        sal_uInt16 nBreak = rStrm.ReaduInt16();
         if( nBreak )
             pVec->push_back( nBreak );
         if( bIgnore )
