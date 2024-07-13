@@ -759,7 +759,7 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
                         // longer EncapsulatedX509Certificate chain
                         datas.emplace_back(tempResult);
 #endif
-                        certs = encapsulatedCerts; // overwrite this seems easier
+                        certs = std::move(encapsulatedCerts); // overwrite this seems easier
                     }
                 }
                 else
