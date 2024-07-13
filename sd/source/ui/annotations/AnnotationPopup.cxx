@@ -74,14 +74,9 @@ void AnnotationPopup::openPopup()
     if (!pViewShell)
         return;
 
-    auto* pView = pViewShell->GetView();
-    if (!pView)
-        return;
-
     if (!mpAnnotationWindow)
     {
-        OutputDevice* pOut = pView->GetFirstOutputDevice();
-        vcl::Window* pWindow = pOut ? pOut->GetOwnerWindow() : nullptr;
+        vcl::Window* pWindow = pViewShell->GetActiveWindow();
         if (pWindow)
         {
             auto aRealPosition2D = mxAnnotation->getPosition();
