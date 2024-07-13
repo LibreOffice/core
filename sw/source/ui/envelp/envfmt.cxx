@@ -191,7 +191,7 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
         const OUString sFormatStr = pColl->GetName();
         VclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwCharDlg(GetFrameWeld(), pSh->GetView(), *xTmpSet, SwCharDlgMode::Env, &sFormatStr));
         pDlg->StartExecuteAsync(
-            [pDlg, xTmpSet, pCollSet] (sal_Int32 nResult)->void
+            [pDlg, xTmpSet=std::move(xTmpSet), pCollSet] (sal_Int32 nResult)->void
             {
                 if (nResult == RET_OK)
                 {
