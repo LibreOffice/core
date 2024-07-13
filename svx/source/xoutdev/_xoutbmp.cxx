@@ -275,7 +275,6 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     if( GRFILTER_FORMAT_NOTFOUND != nFilter )
     {
         Graphic aGraphic;
-        OUString aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
 
         if (bAnimated)
             aGraphic = rGraphic;
@@ -344,7 +343,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         if (aGraphic.GetType() != GraphicType::NONE)
         {
             if( !(nFlags & XOutFlags::DontAddExtension) )
-                aURL.setExtension( aExt );
+                aURL.setExtension(rFilter.GetExportFormatShortName(nFilter).toAsciiLowerCase());
             rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if (pMediaType)
                 *pMediaType = rFilter.GetExportFormatMediaType(nFilter);
