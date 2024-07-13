@@ -588,6 +588,8 @@ OUString replaceOrigin(
             index = nBytes;
         }
 
+        assert(index >= 0);
+
         if ((write_pos + index) > filtered.size())
             filtered.resize( (filtered.size() + index) * 2 );
         memcpy( filtered.data() + write_pos, pBytes, index );
