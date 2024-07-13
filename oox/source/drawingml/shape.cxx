@@ -1651,11 +1651,11 @@ Reference< XShape > const & Shape::createAndInsert(
                     {
                         sal_Int32 nLength = aGrabBag.getLength();
                         aGrabBag.realloc(nLength + 1);
-                        aGrabBag.getArray()[nLength] = aPair;
+                        aGrabBag.getArray()[nLength] = std::move(aPair);
                     }
                     else
                     {
-                        aGrabBag = { aPair };
+                        aGrabBag = { std::move(aPair) };
                     }
                     xPropertySet->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag));
                 }
