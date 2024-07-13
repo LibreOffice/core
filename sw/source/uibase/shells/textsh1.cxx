@@ -1310,7 +1310,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             auto xRequest = std::make_shared<SfxRequest>(rReq);
             rReq.Ignore(); // the 'old' request is not relevant any more
             pDlg->StartExecuteAsync(
-                [pDlg, xRequest] (sal_Int32 nResult)->void
+                [pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {
                     if (nResult == RET_OK)
                         pDlg->Apply();
