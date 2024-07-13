@@ -3177,6 +3177,8 @@ static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const
             if (xComp.is())
             {
                 ITiledRenderable* pDoc = dynamic_cast<ITiledRenderable*>(xComp.get());
+                if (!pDoc)
+                    return nullptr;
 
                 auto pBaseModel = dynamic_cast<SfxBaseModel*>(xComp.get());
                 if (!pBaseModel)
