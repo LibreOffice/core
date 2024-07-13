@@ -536,6 +536,7 @@ void VerticalTabControl::RemovePage(std::u16string_view rPageId)
         if (pData->sId == rPageId)
         {
             sal_Int32 nEntryListPos = m_xChooser->GetEntryListPos(pData->pEntry);
+            assert(nEntryListPos >= 0);
             m_xChooser->RemoveEntry(nEntryListPos);
             m_xChooser->ArrangeIcons();
             maPageList.erase(it);
