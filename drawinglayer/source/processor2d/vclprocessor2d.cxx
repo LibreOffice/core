@@ -434,13 +434,14 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                         MapMode aMapMode = mpOutputDevice->GetMapMode();
                         aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
                         aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
+                        Point origin = aMapMode.GetOrigin();
 
                         mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
                         mpOutputDevice->SetRelativeMapMode(aMapMode);
                         bChangeMapMode = true;
 
-                        aPointX /= nFontScalingFixX;
-                        aPointY /= nFontScalingFixY;
+                        aPointX = (aPointX + origin.X()) / nFontScalingFixX - origin.X();
+                        aPointY = (aPointY + origin.Y()) / nFontScalingFixY - origin.Y();
                     }
                 }
 
