@@ -1700,6 +1700,64 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
                 u"\u202F\u1824"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)
+{
+    auto pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a file with two frames, each having a subscript run, on pages 1 and 6:
+    createSwDoc("tdf161990-subscripts.fodt");
+
+    // When exporting to PDF:
+    save(u"writer_pdf_Export"_ustr);
+    auto pPdfDocument = parsePDFExport();
+
+    // Check that both subscripts are positioned correctly relative to the non-subscript runs
+    double expectedOffset = 0;
+
+    // Page 1
+    {
+        auto pPage = pPdfDocument->openPage(0);
+        auto pTextPage = pPage->getTextPage();
+
+        CPPUNIT_ASSERT_EQUAL(2, pPage->getObjectCount());
+
+        auto pObject = pPage->getObject(0);
+        CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pObject->getText(pTextPage));
+        auto textPPos = pObject->getBounds();
+        pObject = pPage->getObject(1);
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pObject->getText(pTextPage));
+        auto text1Pos = pObject->getBounds();
+        expectedOffset = textPPos.getMaxY() - text1Pos.getMaxY();
+        // Without the fix, this would fail with
+        // - Expected: 7.49
+        // - Actual  : 7.54150390625
+        // But if it fails in some configurations because of different page units, then this
+        // check is not as important as that this value is the same as on the 6th page below.
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7.49, expectedOffset, 0.01);
+    }
+
+    // Page 6
+    {
+        auto pPage = pPdfDocument->openPage(5);
+        auto pTextPage = pPage->getTextPage();
+
+        CPPUNIT_ASSERT_EQUAL(2, pPage->getObjectCount());
+
+        auto pObject = pPage->getObject(0);
+        CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pObject->getText(pTextPage));
+        auto textPPos = pObject->getBounds();
+        pObject = pPage->getObject(1);
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pObject->getText(pTextPage));
+        auto text1Pos = pObject->getBounds();
+        // Without the fix, this would fail with
+        // - Expected: 7.4925537109375
+        // - Actual  : 20.9005126953125
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(expectedOffset, textPPos.getMaxY() - text1Pos.getMaxY(), 0.01);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
