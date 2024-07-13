@@ -918,6 +918,36 @@ void SdrObject::SetOrdNum(sal_uInt32 nNum)
     m_nOrdNum = nNum;
 }
 
+/// Try to ensure the desired result __without__ triggering RecalcObjOrdNums
+void SdrObject::ensureSortedImmediatelyAfter(const SdrObject& rFirst)
+{
+    SdrObjList* pParentList = getParentSdrObjListFromSdrObject();
+    assert(pParentList == rFirst.getParentSdrObjListFromSdrObject());
+    bool bDirty = pParentList->IsObjOrdNumsDirty();
+    if (!bDirty)
+    {
+        pParentList->SetObjectOrdNum(GetOrdNum(), rFirst.GetOrdNum() + 1);
+    }
+    else
+    {
+        std::optional<decltype(pParentList->begin())> itFound1, itFound2;
+        for (auto it = pParentList->begin(), itEnd = pParentList->end(); it != itEnd; ++it)
+        {
+            if (*it == this)
+                itFound1 = it;
+            else if (*it == &rFirst)
+                itFound2 = it;
+            if (itFound1 && itFound2)
+            {
+                auto ord1 = std::distance(pParentList->begin(), *itFound1);
+                auto ord2 = std::distance(pParentList->begin(), *itFound2);
+                pParentList->SetObjectOrdNum(ord1, ord2 + 1);
+                break;
+            }
+        }
+    }
+}
+
 void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 {
     if (m_pGrabBagItem != nullptr)
