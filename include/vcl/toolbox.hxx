@@ -389,6 +389,9 @@ public:
 
     void                TriggerItem( ToolBoxItemId nItemId );
 
+    bool                ItemHasDropdown( ToolBoxItemId nItemId );
+    void                TriggerItemDropdown( ToolBoxItemId nItemId );
+
     /// Shows or hides items.
     void                ShowItem(ToolBoxItemId nItemId, bool bVisible = true);
 

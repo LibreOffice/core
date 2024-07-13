@@ -4153,6 +4153,28 @@ void ToolBox::TriggerItem( ToolBoxItemId nItemId )
     ImplActivateItem( aKeyCode );
 }
 
+bool ToolBox::ItemHasDropdown( ToolBoxItemId nItemId )
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+    return pItem && pItem->mnBits & ToolBoxItemBits::DROPDOWN;
+}
+
+void ToolBox::TriggerItemDropdown( ToolBoxItemId nItemId )
+{
+    if( mpFloatWin || !ItemHasDropdown( nItemId ) )
+        return;
+
+    // Prevent highlighting of triggered item
+    mnHighItemId = ToolBoxItemId(0);
+
+    mnDownItemId = mnCurItemId = nItemId;
+    mnCurPos = GetItemPos( mnCurItemId );
+    mnMouseModifier = 0;
+
+    mpData->mbDropDownByKeyboard = false;
+    mpData->maDropdownClickHdl.Call( this );
+}
+
 // calls the button's action handler
 // returns true if action was called
 bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
