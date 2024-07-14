@@ -302,26 +302,13 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
                                  backing: NSBackingStoreBuffered
                                  defer: Application::IsHeadlessModeEnabled()];
 
-    // Disallow full-screen mode on macOS >= 10.11 where it is enabled by default. We don't want it
-    // for now as it will just be confused with LibreOffice's home-grown full-screen concept, with
-    // which it has nothing to do, and one can get into all kinds of weird states by using them
-    // intermixedly.
-
-    // Ideally we should use the system full-screen mode and adapt the code for the home-grown thing
-    // to be in sync with that instead. (And we would then not need the button to get out of
-    // full-screen mode, as the normal way to get out of it is to either click on the green bubble
-    // again, or invoke the keyboard command again.)
-
-    // (Confusingly, at the moment the home-grown full-screen mode is bound to Cmd+Shift+F, which is
-    // the keyboard command normally used in apps to get in and out of the system full-screen mode.)
-
-    // Disabling system full-screen mode makes the green button on the title bar (on macOS >= 10.11)
-    // show a plus sign instead, and clicking it becomes identical to double-clicking the title bar,
-    // i.e. it maximizes / unmaximises the window. Sure, that state can also be confused with LO's
-    // home-grown full-screen mode. Oh well.
+    // Enable fullscreen options if available and useful
+    bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
+    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
+    bAllowFullScreen &= (mpFrame->mpParent == nullptr);
 
     [pNSWindow setReleasedWhenClosed: NO];
-    [pNSWindow setCollectionBehavior: NSWindowCollectionBehaviorFullScreenNone];
+    [pNSWindow setCollectionBehavior: (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary)];
 
     // Disable window restoration until we support it directly
     [pNSWindow setRestorable: NO];
@@ -566,7 +553,13 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
             // events and firing any pending timers.
             freezeWindowSizeAndReschedule( self );
 
-            if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
+            // Related: tdf128186 Always run timer in full screen mode windows
+            // When opening new windows by pressing and holding Command-N
+            // in a full screen window, some of the new windows will have
+            // content that does not fill the new window. So still run the
+            // timer on full screen windows even if live resizing ended
+            // during the call to freezeWindowSizeAndReschedule().
+            if ( ImplGetSVData()->mpWinData->mbIsLiveResize || [self styleMask] & NSWindowStyleMaskFullScreen )
             {
                 // tdf#152703 Force repaint after live resizing ends
                 // Repost this notification so that this selector will be called

@@ -76,10 +76,16 @@
     assert( pEvent );
     [NSApp postEvent: pEvent atStart: NO];
 
-    if( [NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)] )
-    {
-        [NSWindow setAllowsAutomaticWindowTabbing:NO];
-    }
+    // Disable native tabbed windows. Before native tabbed windows can be
+    // enabled the following known issues need to be fixed:
+    // - Live resizing a non-full screen window with multiple tabs open
+    //   causes the window height to increase far offscreen
+    // - The status bar is pushed off the bottom of the screen in a
+    //   non-full screen window with multiple tabs open
+    // - After closing all tabs in a non-full screen window with multiple
+    //   tabs, the last window leaves an empty space below the status bar
+    //   equal in height to the hidden tab bar
+    [NSWindow setAllowsAutomaticWindowTabbing: NO];
 
     // listen to dark mode change
     [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options: 0 context: nil];

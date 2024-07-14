@@ -685,7 +685,7 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
 
     // set normal state
     NSRect aStateRect = [mpNSWindow frame];
-    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: [mpNSWindow styleMask]];
+    aStateRect = [mpNSWindow contentRectForFrameRect: aStateRect];
     CocoaToVCL(aStateRect);
     if (pState->mask() & vcl::WindowDataMask::X)
         aStateRect.origin.x = float(pState->x());
@@ -696,7 +696,15 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
     if (pState->mask() & vcl::WindowDataMask::Height)
         aStateRect.size.height = float(pState->height());
     VCLToCocoa(aStateRect);
-    aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: [mpNSWindow styleMask]];
+
+    // Related: tdf#128186 don't change size of native full screen windows
+    if ([mpNSWindow styleMask] & NSWindowStyleMaskFullScreen)
+    {
+        maNativeFullScreenRestoreRect = aStateRect;
+        return;
+    }
+
+    aStateRect = [mpNSWindow frameRectForContentRect: aStateRect];
     [mpNSWindow setFrame: aStateRect display: NO];
 
     if (pState->state() == vcl::WindowState::Minimized)
@@ -755,7 +763,7 @@ bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
     pState->setMask(vcl::WindowDataMask::PosSizeState);
 
     NSRect aStateRect = [mpNSWindow frame];
-    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: [mpNSWindow styleMask]];
+    aStateRect = [mpNSWindow contentRectForFrameRect: aStateRect];
     CocoaToVCL( aStateRect );
 
     if( mbInternalFullScreen && !NSIsEmptyRect( maInternalFullScreenRestoreRect ) )
@@ -786,7 +794,7 @@ bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
 
         pState->rMask() |= vcl::WindowDataMask::MaximizedX | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
 
-        pState->setState(vcl::WindowState::FullScreen);
+        pState->setState(vcl::WindowState::Maximized);
     }
     else
     {
@@ -1775,7 +1783,7 @@ void AquaSalFrame::SetPosSize(
         [mpNSWindow deminiaturize: NSApp]; // expand the window
 
     NSRect aFrameRect = [mpNSWindow frame];
-    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: [mpNSWindow styleMask]];
+    NSRect aContentRect = [mpNSWindow contentRectForFrameRect: aFrameRect];
 
     // position is always relative to parent frame
     NSRect aParentContentRect;
@@ -1790,13 +1798,20 @@ void AquaSalFrame::SetPosSize(
                 nX = static_cast<tools::Long>(mpParent->maGeometry.width()) - aContentRect.size.width - 1 - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpNSWindow frame];
-        aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: [mpParent->mpNSWindow styleMask]];
+        aParentContentRect = [mpParent->mpNSWindow contentRectForFrameRect: aParentFrameRect];
     }
     else
         aParentContentRect = maScreenRect; // use screen if no parent
 
     CocoaToVCL( aContentRect );
     CocoaToVCL( aParentContentRect );
+
+    // Related: tdf#128186 don't change size of native full screen windows
+    if ([mpNSWindow styleMask] & NSWindowStyleMaskFullScreen)
+    {
+        maNativeFullScreenRestoreRect = aContentRect;
+        return;
+    }
 
     bool bPaint = false;
     if( (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) != 0 )
@@ -1821,7 +1836,7 @@ void AquaSalFrame::SetPosSize(
 
     // do not display yet, we need to update our backbuffer
     {
-        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: [mpNSWindow styleMask]] display: NO];
+        [mpNSWindow setFrame: [mpNSWindow frameRectForContentRect: aContentRect] display: NO];
     }
 
     UpdateFrameGeometry();
@@ -2066,7 +2081,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     }
 
     NSRect aFrameRect = [mpNSWindow frame];
-    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: [mpNSWindow styleMask]];
+    NSRect aContentRect = [mpNSWindow contentRectForFrameRect: aFrameRect];
 
     NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
 
