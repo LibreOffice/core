@@ -60,7 +60,6 @@ CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxCon
                              const OUString& aClipboardName)
     : m_xContext(rxContext)
     , m_itsName(aClipboardName)
-    , m_pCurrentClipContent(nullptr)
 {
     // necessary to reassociate from
     // the static callback function
@@ -92,6 +91,12 @@ void CWinClipboard::disposing(std::unique_lock<std::mutex>& mutex)
 
 // XClipboard
 
+CXNotifyingDataObject* CWinClipboard::getOwnClipContent() const
+{
+    assert(!m_pCurrentOwnClipContent || !m_pNewOwnClipContent); // Both can be null, or only one set
+    return m_pCurrentOwnClipContent ? m_pCurrentOwnClipContent : m_pNewOwnClipContent;
+}
+
 // to avoid unnecessary traffic we check first if there is a clipboard
 // content which was set via setContent, in this case we don't need
 // to query the content from the clipboard, create a new wrapper object
@@ -110,12 +115,12 @@ css::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
-    assert(!m_pCurrentClipContent || !m_foreignContent); // Both can be null, or only one set
+    assert(!getOwnClipContent() || !m_foreignContent); // Both can be null, or only one set
 
     // use the shortcut or create a transferable from
     // system clipboard
-    if (nullptr != m_pCurrentClipContent)
-        return m_pCurrentClipContent->m_XTransferable;
+    if (auto pOwnClipContent = getOwnClipContent())
+        return pOwnClipContent->m_XTransferable;
 
     // Content cached?
     if (m_foreignContent.is())
@@ -175,18 +180,21 @@ void SAL_CALL CWinClipboard::setContents(
     IDataObjectPtr pIDataObj;
 
     m_foreignContent.clear();
+    m_pCurrentOwnClipContent = nullptr;
 
     if (xTransferable.is())
     {
-        m_pCurrentClipContent = new CXNotifyingDataObject(
+        // Store the new object's pointer to temporary m_pNewOwnClipContent, to be moved to
+        // m_pCurrentOwnClipContent in handleClipboardContentChanged.
+        m_pNewOwnClipContent = new CXNotifyingDataObject(
             CDTransObjFactory::createDataObjFromTransferable(m_xContext, xTransferable),
             xTransferable, xClipboardOwner, this);
 
-        pIDataObj = IDataObjectPtr(m_pCurrentClipContent);
+        pIDataObj = IDataObjectPtr(m_pNewOwnClipContent);
     }
     else
     {
-        m_pCurrentClipContent = nullptr;
+        m_pNewOwnClipContent = nullptr;
     }
 
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
@@ -219,7 +227,7 @@ void SAL_CALL CWinClipboard::flushClipboard()
     // It may be possible to move the request to the clipboard STA thread by saving the
     // DataObject and call OleIsCurrentClipboard before flushing.
 
-    if (nullptr != m_pCurrentClipContent)
+    if (getOwnClipContent())
     {
         aGuard.unlock();
         m_MtaOleClipboard.flushClipboard();
@@ -272,13 +280,16 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
     maClipboardListeners.removeInterface(aGuard, listener);
 }
 
-void CWinClipboard::clearCacheAndAllClipboardListener()
+void CWinClipboard::handleClipboardContentChanged()
 {
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         return;
 
     m_foreignContent.clear();
+    // If new own content assignment is pending, do it; otherwise, clear it.
+    // This makes sure that there will be no stuck clipboard content.
+    m_pCurrentOwnClipContent = std::exchange(m_pNewOwnClipContent, nullptr);
 
     if (!maClipboardListeners.getLength(aGuard))
         return;
@@ -351,8 +362,8 @@ void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
     // because an external source must be the clipboardowner now
     std::unique_lock aGuard(m_aMutex);
 
-    if (m_pCurrentClipContent == theCaller)
-        m_pCurrentClipContent = nullptr;
+    if (getOwnClipContent() == theCaller)
+        m_pCurrentOwnClipContent = m_pNewOwnClipContent = nullptr;
 }
 
 void CWinClipboard::registerClipboardViewer()
@@ -372,7 +383,7 @@ void WINAPI CWinClipboard::onClipboardContentChanged()
     }
 
     if (pWinClipboard)
-        pWinClipboard->clearCacheAndAllClipboardListener();
+        pWinClipboard->handleClipboardContentChanged();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
