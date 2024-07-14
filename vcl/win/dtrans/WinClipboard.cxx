@@ -52,7 +52,7 @@ using namespace com::sun::star;
 namespace
 {
 CWinClipboard* s_pCWinClipbImpl = nullptr;
-osl::Mutex s_aClipboardSingletonMutex;
+std::mutex s_aClipboardSingletonMutex;
 }
 
 /*XEventListener,*/
@@ -65,7 +65,7 @@ CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxCon
     // necessary to reassociate from
     // the static callback function
     {
-        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        std::unique_lock aGuard(s_aClipboardSingletonMutex);
         s_pCWinClipbImpl = this;
     }
 
@@ -74,18 +74,14 @@ CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxCon
 
 CWinClipboard::~CWinClipboard()
 {
-    {
-        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
-        s_pCWinClipbImpl = nullptr;
-    }
-
-    unregisterClipboardViewer();
+    assert(m_bDisposed);
+    assert(!s_pCWinClipbImpl);
 }
 
 void CWinClipboard::disposing(std::unique_lock<std::mutex>& mutex)
 {
     {
-        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        std::unique_lock aGuard(s_aClipboardSingletonMutex);
         s_pCWinClipbImpl = nullptr;
     }
 
@@ -104,27 +100,26 @@ void CWinClipboard::disposing(std::unique_lock<std::mutex>& mutex)
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents()
 {
-    osl::MutexGuard aGuard(m_aContentMutex);
+    std::unique_lock aGuard(m_aMutex);
+    return getContents_noLock();
+}
 
+css::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents_noLock()
+{
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
+    assert(!m_pCurrentClipContent || !m_foreignContent); // Both can be null, or only one set
+
     // use the shortcut or create a transferable from
     // system clipboard
-    {
-        osl::MutexGuard aGuard2(m_aContentCacheMutex);
+    if (nullptr != m_pCurrentClipContent)
+        return m_pCurrentClipContent->m_XTransferable;
 
-        if (nullptr != m_pCurrentClipContent)
-            return m_pCurrentClipContent->m_XTransferable;
-
-        // Content cached?
-        if (m_foreignContent.is())
-            return m_foreignContent;
-
-        // release the mutex, so that the variable may be
-        // changed by other threads
-    }
+    // Content cached?
+    if (m_foreignContent.is())
+        return m_foreignContent;
 
     uno::Reference<datatransfer::XTransferable> rClipContent;
 
@@ -138,7 +133,6 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
             std::vector<sal_uInt32> aFormats(aUINTFormats.begin(), aUINTFormats.end());
             rClipContent = new CDOTransferable(m_xContext, this, aFormats);
 
-            osl::MutexGuard aGuard2(m_aContentCacheMutex);
             m_foreignContent = rClipContent;
         }
     }
@@ -148,7 +142,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
 
 IDataObjectPtr CWinClipboard::getIDataObject()
 {
-    osl::MutexGuard aGuard(m_aContentMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -172,7 +166,7 @@ void SAL_CALL CWinClipboard::setContents(
     const uno::Reference<datatransfer::XTransferable>& xTransferable,
     const uno::Reference<datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
-    osl::MutexGuard aGuard(m_aContentMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -180,19 +174,19 @@ void SAL_CALL CWinClipboard::setContents(
 
     IDataObjectPtr pIDataObj;
 
+    m_foreignContent.clear();
+
     if (xTransferable.is())
     {
-        {
-            osl::MutexGuard aGuard2(m_aContentCacheMutex);
-
-            m_foreignContent.clear();
-
-            m_pCurrentClipContent = new CXNotifyingDataObject(
-                CDTransObjFactory::createDataObjFromTransferable(m_xContext, xTransferable),
-                xTransferable, xClipboardOwner, this);
-        }
+        m_pCurrentClipContent = new CXNotifyingDataObject(
+            CDTransObjFactory::createDataObjFromTransferable(m_xContext, xTransferable),
+            xTransferable, xClipboardOwner, this);
 
         pIDataObj = IDataObjectPtr(m_pCurrentClipContent);
+    }
+    else
+    {
+        m_pCurrentClipContent = nullptr;
     }
 
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
@@ -200,6 +194,7 @@ void SAL_CALL CWinClipboard::setContents(
 
 OUString SAL_CALL CWinClipboard::getName()
 {
+    std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
@@ -211,24 +206,24 @@ OUString SAL_CALL CWinClipboard::getName()
 
 void SAL_CALL CWinClipboard::flushClipboard()
 {
-    osl::MutexGuard aGuard(m_aContentMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
-    // actually it should be ClearableMutexGuard aGuard( m_aContentCacheMutex );
-    // but it does not work since FlushClipboard does a callback and frees DataObject
-    // which results in a deadlock in onReleaseDataObject.
-    // FlushClipboard had to be synchron in order to prevent shutdown until all
-    // clipboard-formats are rendered.
-    // The request is needed to prevent flushing if we are not clipboard owner (it is
-    // not known what happens if we flush but aren't clipboard owner).
+    // FlushClipboard does a callback and frees DataObject, which calls onReleaseDataObject and
+    // locks mutex. FlushClipboard has to be synchron in order to prevent shutdown until all
+    // clipboard-formats are rendered. The request is needed to prevent flushing if we are not
+    // clipboard owner (it is not known what happens if we flush but aren't clipboard owner).
     // It may be possible to move the request to the clipboard STA thread by saving the
     // DataObject and call OleIsCurrentClipboard before flushing.
 
     if (nullptr != m_pCurrentClipContent)
+    {
+        aGuard.unlock();
         m_MtaOleClipboard.flushClipboard();
+    }
 }
 
 // XClipboardEx
@@ -248,6 +243,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
 void SAL_CALL CWinClipboard::addClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
+    std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
@@ -257,13 +253,13 @@ void SAL_CALL CWinClipboard::addClipboardListener(
         throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
                                              1);
 
-    std::unique_lock aGuard(m_aMutex);
     maClipboardListeners.addInterface(aGuard, listener);
 }
 
 void SAL_CALL CWinClipboard::removeClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
+    std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
@@ -273,25 +269,23 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
         throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
                                              1);
 
-    std::unique_lock aGuard(m_aMutex);
     maClipboardListeners.removeInterface(aGuard, listener);
 }
 
-void CWinClipboard::notifyAllClipboardListener()
+void CWinClipboard::clearCacheAndAllClipboardListener()
 {
-    if (m_bDisposed)
-        return;
-
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         return;
+
+    m_foreignContent.clear();
 
     if (!maClipboardListeners.getLength(aGuard))
         return;
 
     try
     {
-        uno::Reference<datatransfer::XTransferable> rXTransf(getContents());
+        uno::Reference<datatransfer::XTransferable> rXTransf(getContents_noLock());
         datatransfer::clipboard::ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this),
                                                             rXTransf);
         maClipboardListeners.notifyEach(
@@ -355,7 +349,7 @@ void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
 
     // if the current caller is the one we currently hold, then set it to NULL
     // because an external source must be the clipboardowner now
-    osl::MutexGuard aGuard(m_aContentCacheMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (m_pCurrentClipContent == theCaller)
         m_pCurrentClipContent = nullptr;
@@ -373,15 +367,12 @@ void WINAPI CWinClipboard::onClipboardContentChanged()
     rtl::Reference<CWinClipboard> pWinClipboard;
     {
         // Only hold the mutex to obtain a safe reference to the impl, to avoid deadlock
-        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        std::unique_lock aGuard(s_aClipboardSingletonMutex);
         pWinClipboard.set(s_pCWinClipbImpl);
     }
 
     if (pWinClipboard)
-    {
-        pWinClipboard->m_foreignContent.clear();
-        pWinClipboard->notifyAllClipboardListener();
-    }
+        pWinClipboard->clearCacheAndAllClipboardListener();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
