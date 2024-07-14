@@ -23,6 +23,11 @@
 
 #include <basic/sberrors.hxx>
 
+static bool EndsIfBranch(SbiToken eTok)
+{
+    return eTok == ELSEIF || eTok == ELSE || eTok == ENDIF;
+}
+
 // Single-line IF and Multiline IF
 
 void SbiParser::If()
@@ -45,8 +50,7 @@ void SbiParser::If()
         // multiline IF
         nEndLbl = aGen.Gen( SbiOpcode::JUMPF_, 0 );
         eTok = Peek();
-        while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
-                !bAbort && Parse() )
+        while (!EndsIfBranch(eTok) && !bAbort && Parse())
         {
             eTok = Peek();
             if( IsEof() )
@@ -73,8 +77,7 @@ void SbiParser::If()
             pCond.reset();
             TestToken( THEN );
             eTok = Peek();
-            while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
-                    !bAbort && Parse() )
+            while (!EndsIfBranch(eTok) && !bAbort && Parse())
             {
                 eTok = Peek();
                 if( IsEof() )
