@@ -287,7 +287,7 @@ def remove_entry_shadow_type(current):
         shadow_type = child
 
   if isentry:
-    if shadow_typeis not None:
+    if shadow_type is not None:
       current.remove(shadow_type)
 
 def remove_label_pad(current):
