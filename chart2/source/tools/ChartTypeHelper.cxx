@@ -208,6 +208,8 @@ bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
             return true;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
             return true;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM) )
+            return true;
     }
     return false;
 }
@@ -311,6 +313,18 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         *pSeq++ = css::chart::DataLabelPlacement::CENTER;
         if(!bStacked)
             *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
+    }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+    {
+        aRet.realloc(6);
+        sal_Int32* pSeq = aRet.getArray();
+
+        *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+        *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
         *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
         *pSeq++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
     }
@@ -458,7 +472,9 @@ bool ChartTypeHelper::isSupportingCategoryPositioning( const rtl::Reference< Cha
             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
             return true;
         else if (nDimensionCount == 2 &&
-                (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)))
+                (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
+                 aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
+                 aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)))
             return true;
     }
     return false;
@@ -625,6 +641,13 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
         aRet.realloc( 2 );
         sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+    {
+        // Assuming histograms typically use zero for missing values
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )

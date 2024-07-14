@@ -574,6 +574,7 @@ void ChartTypeTemplate::adaptScales(
                                 // Bar types, but not BarOfPie
                                 aData.ShiftedCategoryPosition =
                                     m_aServiceName.indexOf("Column") != -1 ||
+                                    m_aServiceName.indexOf("Histogram") != -1 ||
                                     (m_aServiceName.indexOf("Bar") != -1 &&
                                      !m_aServiceName.indexOf("BarOfPie")) ||
                                     m_aServiceName.endsWith("Close");
