@@ -550,11 +550,11 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
-    auto pOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
+    auto xOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
 
-    pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
+    xOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
 
-    pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
+    xOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
 
     // We only allow these border line types.
     std::vector<sal_Int32> aBorderStyles{
@@ -566,11 +566,11 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
         table::BorderLineStyle::DASH_DOT_DOT,
         table::BorderLineStyle::DOUBLE_THIN };
 
-    pOldSet->Put(SfxIntegerListItem(SID_ATTR_BORDER_STYLES, std::move(aBorderStyles)));
+    xOldSet->Put(SfxIntegerListItem(SID_ATTR_BORDER_STYLES, std::move(aBorderStyles)));
 
     // Set the default border width to 0.75 points.
     SfxInt64Item aBorderWidthItem(SID_ATTR_BORDER_DEFAULT_WIDTH, 75);
-    pOldSet->Put(aBorderWidthItem);
+    xOldSet->Put(aBorderWidthItem);
 
     // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );
@@ -589,27 +589,27 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
         aLineInner->SetValid( SvxBoxInfoItemValidFlags::LEFT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::RIGHT));
         aLineInner->SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::LEFT));
 
-        pOldSet->Put( std::move(aNewFrame) );
+        xOldSet->Put( std::move(aNewFrame) );
     }
     else
     {
-        pOldSet->Put( *aLineOuter );
+        xOldSet->Put( *aLineOuter );
     }
 
-    pOldSet->Put( *aLineInner );
+    xOldSet->Put( *aLineInner );
 
     // Generate NumberFormat Value from Value and Language and box it.
-    pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
+    xOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
-    pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
-    pOldSet->Put( std::move(pNumberInfoItem) );
+    xOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
+    xOldSet->Put( std::move(pNumberInfoItem) );
 
     bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetFrameWeld(), pOldSet.get()));
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetFrameWeld(), xOldSet.get()));
 
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
@@ -617,7 +617,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([pDlg, pOldSet, xRequest=std::move(xRequest), this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, xOldSet=std::move(xOldSet), xRequest=std::move(xRequest), this](sal_Int32 nResult){
         bInFormatDialog = false;
 
         if ( nResult == RET_OK )
@@ -628,7 +628,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
                 UpdateNumberFormatter(*pItem);
             }
 
-            ApplyAttributes(*pOutSet, *pOldSet);
+            ApplyAttributes(*pOutSet, *xOldSet);
 
             xRequest->Done(*pOutSet);
         }

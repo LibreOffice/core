@@ -288,16 +288,16 @@ void ScSelectionTransferObj::CreateCellData()
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
-                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
+                rtl::Reference<ScTransferObj> xTransferObj = new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
 
                 // SetDragHandlePos is not used - there is no mouse position
-                //? pTransferObj->SetVisibleTab( nTab );
+                //? xTransferObj->SetVisibleTab( nTab );
 
-                pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
+                xTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
 
-                pTransferObj->SetDragSource( pDocSh, aNewMark );
+                xTransferObj->SetDragSource( pDocSh, aNewMark );
 
-                mxCellData = pTransferObj;
+                mxCellData = std::move(xTransferObj);
             }
         }
     }

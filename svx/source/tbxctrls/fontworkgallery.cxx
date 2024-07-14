@@ -191,7 +191,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         return;
 
     // Clone directly to target SdrModel (may be different due to user/caller (!))
-    rtl::Reference<SdrObject> pNewObject(
+    rtl::Reference<SdrObject> xNewObject(
         pPage->GetObj(0)->CloneSdrObject(
             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
@@ -203,11 +203,11 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     if (aModuleIdentifier != "com.sun.star.drawing.DrawingDocument"  &&
         aModuleIdentifier != "com.sun.star.presentation.PresentationDocument" )
     {
-        pNewObject->SetName(SvxResId(STR_ObjNameSingulFONTWORK) + u" 1");
-        pNewObject->MakeNameUnique();
+        xNewObject->SetName(SvxResId(STR_ObjNameSingulFONTWORK) + u" 1");
+        xNewObject->MakeNameUnique();
     }
     else
-        pNewObject->SetName(OUString());
+        xNewObject->SetName(OUString());
 
     // tdf#117629
     // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
@@ -219,9 +219,9 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     // TTTT: This also *might* be the hidden reason for the strange code at the
     // end of SdrObject::SetPage that tries to delete the SvxShape under some
     // circumstances...
-    // pNewObject->SetPage(nullptr);
+    // xNewObject->SetPage(nullptr);
 
-    tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
+    tools::Rectangle aObjRect( xNewObject->GetLogicRect() );
     Point aPagePos;
     Size aFontworkSize = aObjRect.GetSize();
 
@@ -254,11 +254,11 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         aPagePos.AdjustY( -(aFontworkSize.getHeight() / 2) );
 
     tools::Rectangle aNewObjectRectangle(aPagePos, aFontworkSize);
-    pNewObject->SetLogicRect(aNewObjectRectangle);
+    xNewObject->SetLogicRect(aNewObjectRectangle);
 
     if (bUseSpecialCalcMode)
     {
-        mxSdrObject = pNewObject;
+        mxSdrObject = std::move(xNewObject);
     }
     else
     {
@@ -266,7 +266,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
         if (nullptr != pPV)
         {
-            mrSdrView.InsertObjectAtView( pNewObject.get(), *pPV );
+            mrSdrView.InsertObjectAtView( xNewObject.get(), *pPV );
         }
     }
 }

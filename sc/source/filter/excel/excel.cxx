@@ -206,14 +206,14 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
         {
             /*  Only "Workbook" stream exists; or both streams exist,
                 and "Workbook" has higher BIFF version than "Book" stream. */
-            xStrgStrm = xWorkbookStrm;
+            xStrgStrm = std::move(xWorkbookStrm);
             eBiff = eWorkbookBiff;
         }
         else if( eBookBiff != EXC_BIFF_UNKNOWN )
         {
             /*  Only "Book" stream exists; or both streams exist,
                 and "Book" has higher BIFF version than "Workbook" stream. */
-            xStrgStrm = xBookStrm;
+            xStrgStrm = std::move(xBookStrm);
             eBiff = eBookBiff;
         }
 

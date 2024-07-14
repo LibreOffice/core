@@ -31,7 +31,7 @@ void SwRewriter::AddRule(SwUndoArg eWhat, const OUString& rWith)
                   [&aRule](SwRewriteRule const& a) { return a.first == aRule.first; });
 
     if (aIt != mRules.end())
-        *aIt = aRule;
+        *aIt = std::move(aRule);
     else
         mRules.push_back(aRule);
 }
