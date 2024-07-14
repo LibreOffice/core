@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <set>
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/ustring.hxx>
 
@@ -45,7 +45,7 @@ private:
     Partial& operator=(const Partial&) = delete;
 
     struct Node {
-        typedef std::unordered_map< OUString, Node > Children;
+        typedef boost::unordered_map< OUString, Node, OUStringHash > Children;
 
         Node(): startInclude(false) {}
         void clear() { startInclude=false; children.clear(); }
