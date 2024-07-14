@@ -78,6 +78,7 @@ src/org/mozilla/javascript/NativeBoolean.java
 src/org/mozilla/javascript/NativeCall.java
 src/org/mozilla/javascript/NativeCallSite.java
 src/org/mozilla/javascript/NativeCollectionIterator.java
+src/org/mozilla/javascript/NativeConsole.java
 src/org/mozilla/javascript/NativeContinuation.java
 src/org/mozilla/javascript/NativeDate.java
 src/org/mozilla/javascript/NativeError.java
@@ -290,6 +291,7 @@ src/org/mozilla/javascript/tools/shell/Main.java
 src/org/mozilla/javascript/tools/shell/QuitAction.java
 src/org/mozilla/javascript/tools/shell/SecurityProxy.java
 src/org/mozilla/javascript/tools/shell/ShellConsole.java
+src/org/mozilla/javascript/tools/shell/ShellConsolePrinter.java
 src/org/mozilla/javascript/tools/shell/ShellContextFactory.java
 src/org/mozilla/javascript/tools/shell/ShellLine.java
 src/org/mozilla/javascript/tools/shell/Timers.java
