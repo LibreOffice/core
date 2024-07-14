@@ -413,6 +413,10 @@ void SwRedlineAcceptDlg::Activate()
     if (!pSh)
         return;
 
+    // tdf#162018 keep the selected entry selected
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    const OUString& rId = rTreeView.get_selected_id();
+
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     // check the number of pointers
@@ -477,7 +481,6 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     // check comment
-    weld::TreeView& rTreeView = m_pTable->GetWidget();
     bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
     for (SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
@@ -501,6 +504,12 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     InitAuthors();
+
+    // tdf#162018 keep the selected entry selected
+    rTreeView.select_id(rId);
+    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
+    if (rTreeView.get_selected(xEntry.get()))
+        rTreeView.set_cursor(*xEntry);
 }
 
 void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
