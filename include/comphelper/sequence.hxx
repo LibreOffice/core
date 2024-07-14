@@ -300,7 +300,7 @@ namespace comphelper
     {
         css::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
         std::transform(map.begin(), map.end(), ret.getArray(),
-                       [](const auto& i) { return i.first; });
+                       [](const auto& i) -> const typename M::key_type& { return i.first; });
         return ret;
     }
 
@@ -309,7 +309,7 @@ namespace comphelper
     {
         css::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
         std::transform(map.begin(), map.end(), ret.getArray(),
-                       [](const auto& i) { return i.second; });
+                       [](const auto& i) -> const typename M::mapped_type& { return i.second; });
         return ret;
     }
 

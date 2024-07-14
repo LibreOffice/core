@@ -1236,7 +1236,7 @@ namespace accessibility
             // create sorted sequences according to index array
             uno::Sequence<beans::PropertyValue> aNewValues( nLength );
             std::transform(indices.begin(), indices.end(), aNewValues.getArray(),
-                           [&aRes](sal_Int32 index) { return aRes[index]; });
+                           [&aRes](sal_Int32 index) -> const beans::PropertyValue& { return aRes[index]; });
 
             return aNewValues;
         }
