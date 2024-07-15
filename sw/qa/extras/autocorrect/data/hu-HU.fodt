@@ -3,7 +3,7 @@
  <office:styles>
   <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
   <style:default-style style:family="paragraph">
-   <style:text-properties fo:language="de" fo:country="DE"/>
+   <style:text-properties fo:language="hu" fo:country="HU"/>
   </style:default-style>
  </office:styles>
  <office:body>
