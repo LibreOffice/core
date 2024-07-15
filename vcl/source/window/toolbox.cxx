@@ -3222,7 +3222,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
             // update actual data
             StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
-            mnCurPos         = i;
+            mnCurPos         = nNewPos;
             mnCurItemId      = mpData->m_aItems[nNewPos].mnId;
             mnDownItemId     = mnCurItemId;
             mnMouseModifier  = rMEvt.GetModifier();
