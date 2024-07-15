@@ -376,7 +376,7 @@ public:
     /// SdrObjects in the SdrObjList.
     sal_uInt32 GetOrdNum() const;
 
-    /// Ensure this object is sorted immediatedly after rFirst
+    /// Ensure this object is sorted immediately after rFirst
     /// ie. rFirst.GetOrdNum() + 1 == this->GetOrdNum()
     void ensureSortedImmediatelyAfter(const SdrObject& rFirst);
 
