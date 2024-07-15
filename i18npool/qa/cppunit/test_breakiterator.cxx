@@ -477,6 +477,27 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_EQUAL(sal_Int32{ 5 }, res.breakIndex);
         }
     }
+
+    // tdf#114160: ZWJ shouldn't be treated as a breaking character
+    {
+        aLocale.Language = "mn";
+        aLocale.Country = "MN";
+
+        {
+            auto res = m_xBreak->getLineBreak(u"\u1828\u1820\u200d\u00a0\u200d\u1873\u1873"_ustr, 6,
+                                              aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), res.breakIndex);
+        }
+
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+
+        {
+            auto res = m_xBreak->getLineBreak(u"AB\u200d\u00a0\u200dCD"_ustr, 6, aLocale, 0,
+                                              aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), res.breakIndex);
+        }
+    }
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
