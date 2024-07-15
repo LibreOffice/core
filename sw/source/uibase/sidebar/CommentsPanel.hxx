@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <svtools/ctrlbox.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -33,6 +35,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/time.hxx>
+#include <svtools/ctrlbox.hxx>
 
 class SwWrtShell;
 class SwView;
@@ -81,6 +84,8 @@ public:
 
     void InitControls(const SwPostItField* pPostItField);
     void SetCommentText(OUString sText) { msText = sText; }
+    OUString GetAuthor() { return msAuthor; }
+    Date GetDate() { return maDate; }
 };
 
 class Thread final
@@ -126,6 +131,9 @@ public:
 
     void ReplyComment(Comment* pComment);
 
+    DECL_LINK(FilterByAuthor, weld::ComboBox&, void);
+    DECL_LINK(FilterByDate, SvtCalendarBox&, void);
+    DECL_LINK(ResetDate, weld::Button&, void);
     DECL_LINK(SortHdl, weld::Toggleable&, void);
 
     // utility functions
@@ -137,8 +145,11 @@ private:
 
     std::unordered_map<sal_uInt32, std::unique_ptr<Thread>> mpThreadsMap;
     std::unordered_map<sal_uInt32, std::unique_ptr<Comment>> mpCommentsMap;
+    std::unordered_set<OUString> mpAuthorSet;
+
     std::unique_ptr<weld::ComboBox> mxFilterAuthor;
-    std::unique_ptr<weld::ComboBox> mxFilterTime;
+    std::unique_ptr<SvtCalendarBox> mxFilterDate;
+    std::unique_ptr<weld::Button> mxResetDate;
     std::unique_ptr<weld::CheckButton> mxShowTime;
     std::unique_ptr<weld::CheckButton> mxShowResolved;
     std::unique_ptr<weld::CheckButton> mxShowReference;
@@ -147,6 +158,7 @@ private:
     std::unique_ptr<weld::Box> mxThreadsContainer;
 
     sal_uInt16 mnThreads = 0;
+    bool mbResetDate = false;
 
     // utility functions
     sw::annotation::SwAnnotationWin* getRootCommentWin(const SwFormatField* pField);
@@ -162,6 +174,8 @@ private:
     void deleteComment(sal_uInt32 nId);
     void setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotationWin);
     static void editComment(SwPostItField* pPostItField, Comment* pComment);
+
+    void populateAuthorComboBox();
 };
 
 } //end of namespace sw::sidebar

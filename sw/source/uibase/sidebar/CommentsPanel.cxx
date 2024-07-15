@@ -43,6 +43,7 @@
 #include <tools/link.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
+#include <svtools/ctrlbox.hxx>
 
 #include <strings.hrc>
 #include <cmdid.h>
@@ -136,7 +137,8 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
     : PanelLayout(pParent, "CommentsPanel", "modules/swriter/ui/commentspanel.ui")
     , mpPostItMgr(nullptr)
     , mxFilterAuthor(m_xBuilder->weld_combo_box("filter_author"))
-    , mxFilterTime(m_xBuilder->weld_combo_box("filter_time"))
+    , mxFilterDate(new SvtCalendarBox(m_xBuilder->weld_menu_button("filter_date"), true))
+    , mxResetDate(m_xBuilder->weld_button("reset"))
     , mxShowTime(m_xBuilder->weld_check_button("show_time"))
     , mxShowResolved(m_xBuilder->weld_check_button("show_resolved"))
     , mxShowReference(m_xBuilder->weld_check_button("show_reference"))
@@ -144,6 +146,9 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
     , mxSortbyTime(m_xBuilder->weld_radio_button("sortby_time"))
     , mxThreadsContainer(m_xBuilder->weld_box("comment_threads"))
 {
+    mxFilterAuthor->connect_changed(LINK(this, CommentsPanel, FilterByAuthor));
+    mxFilterDate->connect_activated(LINK(this, CommentsPanel, FilterByDate));
+    mxResetDate->connect_clicked(LINK(this, CommentsPanel, ResetDate));
     mxSortbyPosition->connect_toggled(LINK(this, CommentsPanel, SortHdl));
     mxSortbyTime->connect_toggled(LINK(this, CommentsPanel, SortHdl));
 
@@ -367,6 +372,7 @@ void CommentsPanel::populateComments()
                 pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                               pThread->mnComments++);
                 pComment->InitControls(pPostItField);
+                mpAuthorSet.insert(pComment->GetAuthor());
                 mpCommentsMap[nId] = std::move(pComment);
                 continue;
             }
@@ -384,6 +390,7 @@ void CommentsPanel::populateComments()
                 pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                               pThread->mnComments++);
                 pComment->InitControls(pCurrent->GetPostItField());
+                mpAuthorSet.insert(pComment->GetAuthor());
                 mpCommentsMap[nId] = std::move(pComment);
                 sw::annotation::SwAnnotationWin* next
                     = mpPostItMgr->GetNextPostIt(KEY_PAGEDOWN, pCurrent);
@@ -400,10 +407,12 @@ void CommentsPanel::populateComments()
             pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                           pThread->mnComments++);
             pComment->InitControls(pPostItField);
+            mpAuthorSet.insert(pComment->GetAuthor());
             mpCommentsMap[nId] = std::move(pComment);
         }
         mpThreadsMap[nRootId] = std::move(pThread);
     }
+    populateAuthorComboBox();
 }
 
 void CommentsPanel::addComment(const SwFormatField* pField)
@@ -431,6 +440,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                       pThread->mnComments++);
         pComment->InitControls(pNote->GetPostItField());
+        mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
     // If a new thread is created
@@ -443,6 +453,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
                                                       pThread->mnComments++);
         mpThreadsMap[nRootId] = std::move(pThread);
         pComment->InitControls(pNote->GetPostItField());
+        mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
     populateComments();
@@ -537,6 +548,73 @@ void CommentsPanel::ReplyComment(Comment* pComment)
         return;
     sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
     pWin->ExecuteCommand(FN_REPLY);
+}
+
+void CommentsPanel::populateAuthorComboBox()
+{
+    mxFilterAuthor->clear();
+    if (mpAuthorSet.empty())
+        return;
+    mxFilterAuthor->append_text("All");
+    for (const OUString& rAuthor : mpAuthorSet)
+    {
+        mxFilterAuthor->append_text(rAuthor);
+    }
+    mxFilterAuthor->set_active_text("All");
+}
+
+IMPL_LINK_NOARG(CommentsPanel, FilterByAuthor, weld::ComboBox&, void)
+{
+    OUString sAuthor = mxFilterAuthor->get_active_text();
+    if (sAuthor == "All")
+    {
+        for (auto & [ nId, pComment ] : mpCommentsMap)
+        {
+            if (!mbResetDate && mxFilterDate->get_date() != pComment->GetDate())
+                continue;
+            pComment->get_widget()->set_visible(true);
+        }
+    }
+    else
+    {
+        for (auto & [ nId, pComment ] : mpCommentsMap)
+        {
+            if (sAuthor == pComment->GetAuthor())
+            {
+                if (!mbResetDate && mxFilterDate->get_date() != pComment->GetDate())
+                    continue;
+                pComment->get_widget()->set_visible(true);
+            }
+            else
+            {
+                pComment->get_widget()->set_visible(false);
+            }
+        }
+    }
+}
+
+IMPL_LINK_NOARG(CommentsPanel, FilterByDate, SvtCalendarBox&, void)
+{
+    Date aDate(mxFilterDate->get_date());
+    for (auto & [ nId, pComment ] : mpCommentsMap)
+    {
+        if (aDate == pComment->GetDate())
+        {
+            pComment->get_widget()->set_visible(true);
+        }
+        else
+        {
+            pComment->get_widget()->set_visible(false);
+        }
+    }
+    FilterByAuthor(*mxFilterAuthor);
+}
+
+IMPL_LINK_NOARG(CommentsPanel, ResetDate, weld::Button&, void)
+{
+    mbResetDate = true;
+    FilterByAuthor(*mxFilterAuthor);
+    mbResetDate = false;
 }
 
 CommentsPanel::~CommentsPanel() {}

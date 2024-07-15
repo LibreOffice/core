@@ -181,7 +181,7 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=2 -->
+                  <!-- n-columns=3 n-rows=2 -->
                   <object class="GtkGrid" id="filter_options">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -203,14 +203,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label_time">
+                      <object class="GtkLabel" id="label_date">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes" context="commentspanel|label_time">Time</property>
+                        <property name="label" translatable="yes" context="commentspanel|label_time">Date</property>
                         <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">filter_time</property>
+                        <property name="mnemonic-widget">filter_date</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -229,15 +229,34 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="filter_time">
+                      <object class="GtkMenuButton" id="filter_date">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="focus-on-click">False</property>
+                        <property name="receives-default">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="reset">
+                        <property name="label" translatable="yes" context="commentspanel|label_author">Reset</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
