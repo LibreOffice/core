@@ -342,7 +342,10 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     mxDoc->SetInXMLImport( false );
     mxDoc->SetInWriterfilterImport(false);
 
-    mxDoc->InvalidateNumRules();
+    if (!mbSkipInvalidateNumRules)
+    {
+        mxDoc->InvalidateNumRules();
+    }
     mxDoc->UpdateNumRule();
     mxDoc->ChkCondColls();
     mxDoc->SetAllUniqueFlyNames();
