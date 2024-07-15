@@ -8,6 +8,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
+from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -19,21 +20,38 @@ class tdf125051(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-            enter_text_to_cell(gridwin, "A1", "text")
+            enter_text_to_cell(gridwin, "A1", "teext")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            with self.ui_test.execute_dialog_through_command(".uno:SpellDialog"):
-                pass
+            with self.ui_test.execute_dialog_through_command(".uno:SpellDialog", close_button="close") as xDialog:
+                xSentence = xDialog.getChild("sentence")
+                self.assertEqual("teext", get_state_as_dict(xSentence)['Text'])
 
-            xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
-            #open options
-            optionsBtn = xDialog.getChild("options")
+                xLanguagelb = xDialog.getChild("languagelb")
+                self.assertEqual("English (USA)", get_state_as_dict(xLanguagelb)["DisplayText"])
 
-            self.ui_test.execute_dialog_through_action(optionsBtn, "CLICK", None, "DialogExecute", "cancel")
+                xSuggestionslb = xDialog.getChild("suggestionslb")
+                nSuggestions = len(xSuggestionslb.getChildren())
+                self.assertGreaterEqual(nSuggestions, 1)
+                self.assertEqual("text", get_state_as_dict(xSuggestionslb.getChild("0"))["Text"])
+                for i in range(1, nSuggestions):
+                    # Check the first suggestion is not duplicated
+                    self.assertNotEqual("text", get_state_as_dict(xSuggestionslb.getChild(str(i)))["Text"])
 
-            closeBtn = xDialog.getChild("close")    #close Spelling dialog
-            self.ui_test.close_dialog_through_button(closeBtn)
+                self.assertEqual("true", get_state_as_dict(xSuggestionslb.getChild("0"))["IsSelected"])
 
-            #verify, we didn't crash
+                for i in range(1, nSuggestions):
+                    self.assertEqual("false", get_state_as_dict(xSuggestionslb.getChild(str(i)))["IsSemiTransparent"])
+
+                xChangeBtn = xDialog.getChild("change")
+
+                # Without the fix in place, this would have crashed here
+                with self.ui_test.execute_blocking_action(xChangeBtn.executeAction, args=('CLICK', ())):
+                    pass
+
+                for i in range(nSuggestions):
+                    self.assertEqual("false", get_state_as_dict(xSuggestionslb.getChild(str(i)))["IsSemiTransparent"])
+
+            #verify it didn't crash and autocorrect worked
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "text")
 
 
