@@ -172,7 +172,6 @@ CPPUNIT_TEST_FIXTURE(Test, testN751077)
     createSwDoc("n751077.docx");
 /*
 xray ThisComponent.DrawPage(1).getByIndex(0).String
-xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 */
     uno::Reference<drawing::XShapes> xShapes(getShape(2), uno::UNO_QUERY);
     // The groupshape should be in the foreground, not the background.
@@ -180,11 +179,10 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 
     uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"TEXT1\n"_ustr, xShape->getString());
-    // we want to test the textbox is on the first page (it was put onto another page without the fix),
-    // use a small trick and instead of checking the page layout, check the page style
-    uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, getProperty<OUString>(xTextContent->getAnchor(), u"PageStyleName"_ustr));
-    // TODO - This is not a reliable way to determine if something is on first page
+
+    // test the textbox is on the first page (it was put onto another page without the fix)
+    const xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "//page[1]//OutlinerParaObject[1]//text"_ostr, "TEXT1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129237)
