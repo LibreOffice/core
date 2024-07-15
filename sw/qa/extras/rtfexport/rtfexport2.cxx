@@ -354,27 +354,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo47107)
     verify();
 }
 
-// TODO - First Page Headers Support
-// This assumption is false now - we only have "Standard" page style, which should have properties properly set
-/*CPPUNIT_TEST_FIXTURE(Test, testFdo44176)
+CPPUNIT_TEST_FIXTURE(Test, testFdo44176)
 {
     auto verify = [this]() {
-        uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
-        uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),
-                                                       uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xDefault(xPageStyles->getByName("Standard"),
-                                                     uno::UNO_QUERY);
-        sal_Int32 nFirstTop = 0, nDefaultTop = 0, nDefaultHeader = 0;
-        xFirstPage->getPropertyValue("TopMargin") >>= nFirstTop;
-        xDefault->getPropertyValue("TopMargin") >>= nDefaultTop;
-        xDefault->getPropertyValue("HeaderHeight") >>= nDefaultHeader;
-        CPPUNIT_ASSERT_EQUAL(nFirstTop, nDefaultTop + nDefaultHeader);
+        // given a document with an empty first header, and a non-empty follow header,
+        // ensure that the body text space is equal on the first and follow page
+        // (since in this case the default margins are large enough to fully include the header)
+        const OUString sBodyHeight = parseDump("//page[1]/body/infos"_ostr, "height"_ostr);
+        CPPUNIT_ASSERT_EQUAL(sBodyHeight, parseDump("//page[2]/body/infos"_ostr, "height"_ostr));
     };
     createSwDoc("fdo44176.rtf");
     verify();
     saveAndReload(mpFilter);
     verify();
-}*/
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo39053)
 {
