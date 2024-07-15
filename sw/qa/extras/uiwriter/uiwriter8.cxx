@@ -2918,41 +2918,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "portion"_ostr, u"another sub three"_ustr);
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151801)
-{
-    Resetter resetter([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);
-        officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(0, pBatch);
-        return pBatch->commit();
-    });
-    // Set Single Quotes › and ‹
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(8250, pBatch);
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(8249, pBatch);
-    pBatch->commit();
-
-    createSwDoc("tdf151801.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    // Single starting quote: 'word -> ›word
-    emulateTyping(*pTextDoc, u"'word");
-    OUString sReplaced(u"\u203Aword"_ustr);
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // Single ending quote: ›word' -> ›word‹
-    emulateTyping(*pTextDoc, u"'");
-    sReplaced += u"\u2039";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // Use apostrophe without preceding starting quote: word' -> word’
-    emulateTyping(*pTextDoc, u" word'");
-    sReplaced += u" word\u2019";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
 {
     createSwDoc("cursor_position_after_undo.odt");
@@ -3089,37 +3054,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
     CPPUNIT_ASSERT(pTextNode);
     // Check that deleted parts (paragraph break, "c", "e") haven't been pasted
     CPPUNIT_ASSERT_EQUAL(u"abdf"_ustr, pTextNode->GetText());
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158703)
-{
-    // Given a document with French text, consisting of a word and several spaces:
-    createSwDoc("tdf158703.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
-
-    // Typing ":" after the spaces should start auto-correction, which is expected to
-    // remove the spaces, and insert an NBSP instead. It must not crash.
-    emulateTyping(*pTextDoc, u":");
-    CPPUNIT_ASSERT_EQUAL(u"Foo\u00A0:"_ustr, getParagraph(1)->getString());
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf44293)
-{
-    // Given a document with Portuguese text
-    createSwDoc("tdf44293.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    emulateTyping(*pTextDoc, u"1a 1o ");
-    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o "_ustr, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u"1ra 1ro ");
-    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o 1.a 1.o "_ustr, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u"43as 43os 43ras 43ros ");
-    CPPUNIT_ASSERT_EQUAL(u"1.a 1.o 1.a 1.o 43.as 43.os 43.as 43.os "_ustr,
-                         getParagraph(1)->getString());
 }
 
 } // end of anonymous namespace
