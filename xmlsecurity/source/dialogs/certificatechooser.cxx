@@ -56,6 +56,14 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     auto nControlWidth = m_xCertLB->get_approximate_digit_width() * 105;
     m_xCertLB->set_size_request(nControlWidth, m_xCertLB->get_height_rows(12));
 
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(30*nControlWidth/100),
+        o3tl::narrowing<int>(30*nControlWidth/100),
+        o3tl::narrowing<int>(10*nControlWidth/100),
+        o3tl::narrowing<int>(20*nControlWidth/100)
+    };
+    m_xCertLB->set_column_fixed_widths(aWidths);
     m_xCertLB->connect_changed( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_xViewBtn->connect_clicked( LINK( this, CertificateChooser, ViewButtonHdl ) );
@@ -221,7 +229,6 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             mvUserData.push_back(userData);
 
             OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName(), xCert->getCertificateKind());
-            OUString sExpDate = utl::GetDateString(xCert->getNotValidAfter());
 
             // If we are searching and there is no match skip
             if (mbSearch
@@ -232,11 +239,13 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
             m_xCertLB->append();
             int nRow = m_xCertLB->n_children() - 1;
-            OUString sId(weld::toId(userData.get()));
-            m_xCertLB->set_id(nRow, sId);
             m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()), 0);
             m_xCertLB->set_text(nRow, sIssuer, 1);
-            m_xCertLB->set_text(nRow, sExpDate, 2);
+            m_xCertLB->set_text(nRow, xmlsec::GetCertificateKind(xCert->getCertificateKind()), 2);
+            m_xCertLB->set_text(nRow, utl::GetDateString(xCert->getNotValidAfter()), 3);
+            m_xCertLB->set_text(nRow, UsageInClearText(xCert->getCertificateUsage()), 4);
+            OUString sId(weld::toId(userData.get()));
+            m_xCertLB->set_id(nRow, sId);
 
 #if HAVE_FEATURE_GPGME
             // only GPG has preferred keys
