@@ -244,6 +244,14 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, en_US)
     emulateTyping(rTextDoc, u" i'");
     OUString sText(sIApostrophe + u" " + sIApostrophe);
     CPPUNIT_ASSERT_EQUAL(sText, getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // tdf#57640: Without the fix in place, this test would have failed with
+    // - Expected: ǅ
+    // - Actual  : Ǆ
+    emulateTyping(rTextDoc, u"ǆ  ");
+    CPPUNIT_ASSERT_EQUAL(u"ǅ  "_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
