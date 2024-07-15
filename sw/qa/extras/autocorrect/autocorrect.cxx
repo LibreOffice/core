@@ -252,6 +252,19 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, en_US)
     // - Actual  : Ǆ
     emulateTyping(rTextDoc, u"ǆ  ");
     CPPUNIT_ASSERT_EQUAL(u"ǅ  "_ustr, getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    emulateTyping(rTextDoc, u"foo. bar ");
+    CPPUNIT_ASSERT_EQUAL(u"Foo. Bar "_ustr, getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // tdf#42893: Without the fix in place, this test would have failed with
+    // - Expected: F.o.o. bar
+    // - Actual  : F.o.o. Bar
+    emulateTyping(rTextDoc, u"F.o.o. bar ");
+    CPPUNIT_ASSERT_EQUAL(u"F.o.o. bar "_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
