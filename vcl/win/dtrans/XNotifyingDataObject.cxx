@@ -71,8 +71,8 @@ STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
 
     if ( 0 == nRefCnt )
     {
-        if ( m_pWinClipImpl )
-            m_pWinClipImpl->onReleaseDataObject( this );
+        if (auto pWinClipImpl = m_pWinClipImpl.get())
+            pWinClipImpl->onReleaseDataObject(*this);
 
         delete this;
     }
@@ -137,8 +137,7 @@ void CXNotifyingDataObject::lostOwnership( )
     try
     {
         if (m_XClipboardOwner.is())
-            m_XClipboardOwner->lostOwnership(
-                static_cast<XClipboardEx*>(m_pWinClipImpl), m_XTransferable);
+            m_XClipboardOwner->lostOwnership(m_pWinClipImpl.get(), m_XTransferable);
     }
     catch(RuntimeException&)
     {

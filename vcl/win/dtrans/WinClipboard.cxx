@@ -352,18 +352,15 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
     }
 }
 
-void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
+void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject& theCaller)
 {
-    OSL_ASSERT(nullptr != theCaller);
-
-    if (theCaller)
-        theCaller->lostOwnership();
+    theCaller.lostOwnership();
 
     // if the current caller is the one we currently hold, then set it to NULL
     // because an external source must be the clipboardowner now
     std::unique_lock aGuard(m_aMutex);
 
-    if (getOwnClipContent() == theCaller)
+    if (getOwnClipContent() == &theCaller)
         m_pCurrentOwnClipContent = m_pNewOwnClipContent = nullptr;
 }
 

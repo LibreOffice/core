@@ -66,7 +66,7 @@ class CWinClipboard final
     CXNotifyingDataObject* getOwnClipContent() const;
 
     void handleClipboardContentChanged();
-    void onReleaseDataObject(CXNotifyingDataObject* theCaller);
+    void onReleaseDataObject(CXNotifyingDataObject& theCaller);
 
     void registerClipboardViewer();
     void unregisterClipboardViewer();

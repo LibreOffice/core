@@ -29,6 +29,7 @@
 #include <objidl.h>
 
 #include <systools/win32/comtools.hxx>
+#include <unotools/weakref.hxx>
 
 /*--------------------------------------------------------------------------
     To implement the lostOwnership mechanism cleanly we need this wrapper
@@ -76,7 +77,7 @@ private:
     IDataObjectPtr                                                                m_aIDataObject;
     const css::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
     const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
-    CWinClipboard* const m_pWinClipImpl;
+    unotools::WeakReference<CWinClipboard> m_pWinClipImpl;
 
     friend class CWinClipboard;
 };
