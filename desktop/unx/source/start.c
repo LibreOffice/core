@@ -785,7 +785,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if ((fd=connect_pipe(pPipePath)) >= 0)
         {
             // Wait for answer
-            char resp[strlen("InternalIPC::SendArguments") + 1];
+            char resp[27]; // strlen("InternalIPC::SendArguments") + 1
             ssize_t n = read(fd, resp, SAL_N_ELEMENTS(resp));
             if (n == (ssize_t) SAL_N_ELEMENTS(resp) &&
                 (memcmp(resp, "InternalIPC::SendArguments",
