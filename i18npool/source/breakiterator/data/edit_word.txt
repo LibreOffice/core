@@ -50,7 +50,6 @@ $Katakana           = [\p{Word_Break = Katakana}];
 $Hebrew_Letter      = [\p{Word_Break = Hebrew_Letter}];
 $ALetter            = [\p{Word_Break = ALetter}];
 $Single_Quote       = [\p{Word_Break = Single_Quote}];
-$Double_Quote       = [\p{Word_Break = Double_Quote}];
 $MidLetter          = [\p{Word_Break = MidLetter}];
 $MidNum             = [\p{Word_Break = MidNum}];
 $Numeric            = [\p{Word_Break = Numeric}];
@@ -66,6 +65,10 @@ $MidNumLet          = [\p{Word_Break = MidNumLet}-[:name= FULL STOP:]];
 
 # $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
 $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}-[:name= LOW LINE:]-[:name = NARROW NO-BREAK SPACE:]];
+
+### tdf#46950: Right double-quotes are also used as substitutes for Hebrew gershaim
+# $Double_Quote       = [\p{Word_Break = Double_Quote}];
+$Double_Quote       = [[\p{Word_Break = Double_Quote}][:name= RIGHT DOUBLE QUOTATION MARK:]];
 
 ### END CUSTOMIZATION
 
