@@ -537,8 +537,8 @@
       <prop oor:name="PenWidth" oor:type="xs:double" oor:nillable="false">
         <!-- UIHints: slide show context menu -->
         <info>
-          <desc>Width of the pen during slideshow.</desc>
-          <label>Pen Width</label>
+          <desc>Thickness of the pen during slideshow.</desc>
+          <label>Pen Thickness</label>
         </info>
         <value>150</value>
       </prop>
