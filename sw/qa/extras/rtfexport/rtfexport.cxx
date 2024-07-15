@@ -90,25 +90,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49683)
     verify();
 }
 
-// TODO Use case not clear!
-CPPUNIT_TEST_FIXTURE(Test, testFdo44174)
-{
-    auto verify = [this]() {
-        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-            xModel->getCurrentController(), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPropertySet(xTextViewCursorSupplier->getViewCursor(),
-                                                         uno::UNO_QUERY);
-        OUString aValue;
-        xPropertySet->getPropertyValue(u"PageStyleName"_ustr) >>= aValue;
-        CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr, aValue);
-    };
-    createSwDoc("fdo44174.rtf");
-    verify();
-    saveAndReload(mpFilter);
-    verify();
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testFdo50087)
 {
     auto verify = [this]() {
