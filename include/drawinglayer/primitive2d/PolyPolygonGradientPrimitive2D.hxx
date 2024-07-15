@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
     decomosition will create a MaskPrimitive2D containing a
     FillGradientPrimitive2D.
  */
-class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D
     : public BufferedDecompositionPrimitive2D
 {
 private:
@@ -62,6 +62,45 @@ public:
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
     const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
     const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// helper primitive that can be used to directly express RGBA
+// gradient definitions. It will be decomposed to a combined
+// TransparencePrimitive2D if not handled directly. Use the
+// already existing PolyPolygonGradientPrimitive2D as base class,
+// only the additional FillGradientAlpha needs to be added.
+// NOTE: FillGradientAlpha *has* to fulfil the
+// 'sameDefinitionThanAlpha' coindition defined by the check
+// method with the same name
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonRGBAGradientPrimitive2D final
+    : public PolyPolygonGradientPrimitive2D
+{
+private:
+    /// the gradient alpha definition
+    attribute::FillGradientAttribute maFillGradientAlpha;
+
+    /// local decomposition.
+    virtual Primitive2DReference
+    create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructors. The one without definition range will use output range as definition range
+    PolyPolygonRGBAGradientPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+                                       const basegfx::B2DRange& rDefinitionRange,
+                                       attribute::FillGradientAttribute aFillGradient,
+                                       attribute::FillGradientAttribute aFillGradientAlpha);
+
+    /// data read access
+    const attribute::FillGradientAttribute& getFillGradientAlpha() const
+    {
+        return maFillGradientAlpha;
+    }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

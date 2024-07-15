@@ -223,6 +223,39 @@ namespace drawinglayer::attribute
             return mpFillGradientAttribute->getSteps();
         }
 
+        bool FillGradientAttribute::sameDefinitionThanAlpha(const FillGradientAttribute& rAlpha) const
+        {
+            // entries that are used by all gradient styles
+            if (getStyle() != rAlpha.getStyle()
+                || getBorder() != rAlpha.getBorder()
+                || getSteps() != rAlpha.getSteps())
+            {
+                return false;
+            }
+
+            // check for offsets if not ignored
+            const bool bIgnoreOffset(css::awt::GradientStyle_LINEAR == getStyle() || css::awt::GradientStyle_AXIAL == getStyle());
+            if (!bIgnoreOffset && (getOffsetX() != rAlpha.getOffsetX() || getOffsetY() != rAlpha.getOffsetY()))
+            {
+                return false;
+            }
+
+            // check for angle if not ignored
+            const bool bIgnoreAngle(css::awt::GradientStyle_RADIAL == getStyle());
+            if (!bIgnoreAngle && getAngle() != rAlpha.getAngle())
+            {
+                return false;
+            }
+
+            // check for same count & offsets in the gradients (all except 'colors')
+            if (!getColorStops().sameSizeAndDistances(rAlpha.getColorStops()))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

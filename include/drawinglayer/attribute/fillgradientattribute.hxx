@@ -83,6 +83,10 @@ public:
     // cannot do at all)
     bool cannotBeHandledByVCL() const;
 
+    // check if local and given FillGradientAttribute are identical,
+    // do take care of exceptions (e.g. no offset for linear/axial, ...)
+    bool sameDefinitionThanAlpha(const FillGradientAttribute& rAlpha) const;
+
     // compare operator
     bool operator==(const FillGradientAttribute& rCandidate) const;
 

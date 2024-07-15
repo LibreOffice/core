@@ -47,13 +47,13 @@ namespace drawinglayer::primitive2d
         Primitive2DReference SVXCORE_DLLPUBLIC createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute& rFillGradient);
+            const attribute::FillGradientAttribute& rAlphaGradient);
 
         Primitive2DReference SVXCORE_DLLPUBLIC createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute& rFillGradient);
+            const attribute::FillGradientAttribute& rAlphaGradient);
 
         Primitive2DReference SVXCORE_DLLPUBLIC createPolygonLinePrimitive(
             const basegfx::B2DPolygon& rPolygon,

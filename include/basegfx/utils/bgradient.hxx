@@ -264,6 +264,10 @@ public:
 
     // Apply BColorModifierStack changes
     void tryToApplyBColorModifierStack(const BColorModifierStack& rBColorModifierStack);
+
+    // check if local and given BColorStops have same count and distances,
+    // ignore colors
+    bool sameSizeAndDistances(const BColorStops& rComp) const;
 };
 
 class BASEGFX_DLLPUBLIC BGradient final

@@ -368,12 +368,10 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
 }; // end of anonymous namespace
 
-        class TransparencePrimitive2D;
-
         Primitive2DReference createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute& rFillGradient)
+            const attribute::FillGradientAttribute& rAlphaGradient)
         {
             // when we have no given definition range, use the range of the given geometry
             // also for definition (simplest case)
@@ -383,29 +381,53 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 rPolyPolygon,
                 aRange,
                 rFill,
-                rFillGradient);
+                rAlphaGradient);
         }
 
         Primitive2DReference createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute& rFillGradient)
+            const attribute::FillGradientAttribute& rAlphaGradient)
         {
             if(basegfx::fTools::moreOrEqual(rFill.getTransparence(), 1.0))
             {
                 return Primitive2DReference();
             }
 
+            const attribute::FillGradientAttribute& rFillGradient(rFill.getGradient());
+
+            // SDPR: check if RGB and A definitions of gradients are both
+            // used and equal, so that they could be combined to a single
+            // RGBA one
+            if (!rFillGradient.isDefault()
+                && 0.0 == rFill.getTransparence()
+                && !rAlphaGradient.isDefault()
+                && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient))
+            {
+                // if yes, create a primitive expressing that. That primitive's
+                // decomnpose will do the same as if the code below would be executed,
+                // so no primitive renderer who does not want to will have to handle
+                // it - but SDPR renderers that can directly render that may choose to
+                // do so. NOTE: That helper primitive just holds references to what
+                // would be created anyways, so one depth step added but not really any
+                // additional data
+                return new PolyPolygonRGBAGradientPrimitive2D(
+                    rPolyPolygon,
+                    rDefinitionRange,
+                    rFillGradient,
+                    rAlphaGradient);
+            }
+
             // prepare fully scaled polygon
             rtl::Reference<BasePrimitive2D> pNewFillPrimitive;
 
-            if(!rFill.getGradient().isDefault())
+            if(!rFillGradient.isDefault())
             {
                 pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(
                     rPolyPolygon,
                     rDefinitionRange,
-                    rFill.getGradient());
+                    rFillGradient);
             }
             else if(!rFill.getHatch().isDefault())
             {
@@ -442,7 +464,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 Primitive2DContainer aContent { pNewFillPrimitive };
                 return new UnifiedTransparencePrimitive2D(std::move(aContent), rFill.getTransparence());
             }
-            else if(!rFillGradient.isDefault())
+            else if(!rAlphaGradient.isDefault())
             {
                 // create sequence with created fill primitive
                 Primitive2DContainer aContent { pNewFillPrimitive };
@@ -453,7 +475,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                     new FillGradientPrimitive2D(
                         basegfx::utils::getRange(rPolyPolygon),
                         rDefinitionRange,
-                        rFillGradient)
+                        rAlphaGradient)
                 };
 
                 // create TransparencePrimitive2D using alpha and content

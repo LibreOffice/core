@@ -22,6 +22,8 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <rtl/ref.hxx>
 #include <utility>
 
@@ -82,6 +84,50 @@ bool PolyPolygonGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitiv
 sal_uInt32 PolyPolygonGradientPrimitive2D::getPrimitive2DID() const
 {
     return PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D;
+}
+
+Primitive2DReference PolyPolygonRGBAGradientPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    Primitive2DContainer aContent{ new PolyPolygonGradientPrimitive2D(
+        getB2DPolyPolygon(), getDefinitionRange(), getFillGradient()) };
+
+    Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
+        basegfx::utils::getRange(getB2DPolyPolygon()), getDefinitionRange(),
+        getFillGradientAlpha()) };
+
+    return Primitive2DReference{ new TransparencePrimitive2D(std::move(aContent),
+                                                             std::move(aAlpha)) };
+}
+
+PolyPolygonRGBAGradientPrimitive2D::PolyPolygonRGBAGradientPrimitive2D(
+    basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
+    attribute::FillGradientAttribute aFillGradient,
+    attribute::FillGradientAttribute aFillGradientAlpha)
+    : PolyPolygonGradientPrimitive2D(aPolyPolygon, rDefinitionRange, aFillGradient)
+    , maFillGradientAlpha(aFillGradientAlpha)
+{
+    // assert when the definition is not allowed, it HAS to fulfil the
+    // requested preconditions
+    assert(aFillGradient.sameDefinitionThanAlpha(aFillGradientAlpha));
+}
+
+bool PolyPolygonRGBAGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (PolyPolygonGradientPrimitive2D::operator==(rPrimitive))
+    {
+        const PolyPolygonRGBAGradientPrimitive2D& rCompare
+            = static_cast<const PolyPolygonRGBAGradientPrimitive2D&>(rPrimitive);
+
+        return getFillGradientAlpha() == rCompare.getFillGradientAlpha();
+    }
+
+    return false;
+}
+
+sal_uInt32 PolyPolygonRGBAGradientPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_POLYPOLYGONRGBAGRADIENTPRIMITIVE2D;
 }
 
 } // end drawinglayer::primitive2d namespace

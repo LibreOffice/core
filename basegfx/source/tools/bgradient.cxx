@@ -746,6 +746,25 @@ void BColorStops::tryToApplyBColorModifierStack(const BColorModifierStack& rBCol
     }
 }
 
+bool BColorStops::sameSizeAndDistances(const BColorStops& rComp) const
+{
+    if (size() != rComp.size())
+    {
+        return false;
+    }
+
+    BColorStops::const_iterator EntryA(begin());
+    BColorStops::const_iterator EntryB(rComp.begin());
+
+    while (EntryA != end() && fTools::equal(EntryA->getStopOffset(), EntryB->getStopOffset()))
+    {
+        EntryA++;
+        EntryB++;
+    }
+
+    return EntryA == end();
+}
+
 std::string BGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
 {
     switch (eStyle)
