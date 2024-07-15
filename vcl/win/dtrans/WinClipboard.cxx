@@ -147,12 +147,13 @@ css::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents
 
 IDataObjectPtr CWinClipboard::getIDataObject()
 {
-    std::unique_lock aGuard(m_aMutex);
+    {
+        std::unique_lock aGuard(m_aMutex);
 
-    if (m_bDisposed)
-        throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
-
+        if (m_bDisposed)
+            throw lang::DisposedException("object is already disposed",
+                                          static_cast<XClipboardEx*>(this));
+    }
     // get the current dataobject from clipboard
     IDataObjectPtr pIDataObject;
     HRESULT hr = m_MtaOleClipboard.getClipboard(&pIDataObject);
