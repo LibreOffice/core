@@ -5386,7 +5386,7 @@
         <info>
           <desc>Determines whether to show a donation button in the start center or extension.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
         <info>

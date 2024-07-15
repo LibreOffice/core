@@ -458,7 +458,7 @@
       <value install:module="wnt">true</value>
     </prop>
     <prop oor:name="ShowDonation">
-     <value install:module="macosxsandbox">false</value>
+      <value>false</value>
     </prop>
   </node>
   <node oor:name="Save">
