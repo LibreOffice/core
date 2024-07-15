@@ -154,6 +154,7 @@ class SW_DLLPUBLIC SwReader: public SwDocFac
     OUString maFileName;
     OUString msBaseURL;
     bool mbSkipImages;
+    bool mbSkipInvalidateNumRules = false;
 
 public:
 
@@ -174,6 +175,11 @@ public:
     // Ask for glossaries.
     bool HasGlossaries( const Reader& );
     bool ReadGlossaries( const Reader&, SwTextBlocks&, bool bSaveRelFiles );
+
+    void SetSkipInvalidateNumRules(bool bSkipInvalidateNumRules)
+    {
+        mbSkipInvalidateNumRules = bSkipInvalidateNumRules;
+    }
 
 protected:
     void                SetBaseURL( const OUString& rURL ) { msBaseURL = rURL; }

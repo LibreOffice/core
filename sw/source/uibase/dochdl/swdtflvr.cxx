@@ -2157,11 +2157,22 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
     SvStream* pStream = nullptr;
     Reader* pRead = nullptr;
     OUString sData;
+    bool bSkipInvalidateNumRules = false;
     switch( nFormat )
     {
     case SotClipboardFormatId::STRING:
         {
             pRead = ReadAscii;
+
+            const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
+            SwTextNode* pTextNode = rInsertPosition.GetNode().GetTextNode();
+            if (pTextNode && !pTextNode->GetNum())
+            {
+                // Insertion point is not a numbering and we paste plain text: then no need to
+                // invalidate all numberings.
+                bSkipInvalidateNumRules = true;
+            }
+
             if( rData.GetString( nFormat, sData ) )
             {
                 pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
@@ -2221,6 +2232,10 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
 
         if (bIgnoreComments)
             pRead->SetIgnoreHTMLComments(true);
+        if (bSkipInvalidateNumRules)
+        {
+            aReader.SetSkipInvalidateNumRules(bSkipInvalidateNumRules);
+        }
 
         if( aReader.Read( *pRead ).IsError() )
             pResId = STR_ERROR_CLPBRD_READ;

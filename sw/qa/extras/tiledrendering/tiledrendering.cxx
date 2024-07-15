@@ -768,6 +768,8 @@ namespace {
         OString m_aViewSelection;
         OString m_aViewRenderState;
         bool m_bTilesInvalidated;
+        tools::Rectangle m_aInvalidations;
+        bool m_bFullInvalidateSeen = false;
         bool m_bViewCursorVisible;
         bool m_bGraphicViewSelection;
         bool m_bGraphicSelection;
@@ -829,6 +831,20 @@ namespace {
                 case LOK_CALLBACK_INVALIDATE_TILES:
                     {
                         m_bTilesInvalidated = true;
+                        if (std::string_view("EMPTY") == pPayload)
+                        {
+                            m_bFullInvalidateSeen = true;
+                            return;
+                        }
+                        uno::Sequence<OUString> aSeq
+                            = comphelper::string::convertCommaSeparated(OUString::fromUtf8(pPayload));
+                        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                        tools::Rectangle aInvalidation;
+                        aInvalidation.SetLeft(aSeq[0].toInt32());
+                        aInvalidation.SetTop(aSeq[1].toInt32());
+                        aInvalidation.setWidth(aSeq[2].toInt32());
+                        aInvalidation.setHeight(aSeq[3].toInt32());
+                        m_aInvalidations.Union(aInvalidation);
                     }
                     break;
                 case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
@@ -4363,6 +4379,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_blackPatternFill)
     // The document should be entirely black (except for text margin markings).
     CPPUNIT_ASSERT(nEdgePlusWhitePlusAntialiasPixels > 0);
     CPPUNIT_ASSERT(nPureBlackPixels / 10 > nEdgePlusWhitePlusAntialiasPixels);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRules)
+{
+    // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have
+    // bullets:
+    SwXTextDocument* pXTextDocument = createDoc("numrules.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView;
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Insert(u"test"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    aView.m_aInvalidations = tools::Rectangle();
+    aView.m_bFullInvalidateSeen = false;
+
+    // When pasting at the end of page 1:
+    dispatchCommand(mxComponent, u".uno:PasteUnformatted"_ustr, {});
+
+    // Then make sure we only invalidate page 1, not page 2 or page 3:
+    CPPUNIT_ASSERT(!aView.m_bFullInvalidateSeen);
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage1 = pLayout->GetLower();
+    CPPUNIT_ASSERT(aView.m_aInvalidations.Overlaps(pPage1->getFrameArea().SVRect()));
+    SwFrame* pPage2 = pPage1->GetNext();
+    // Without the accompanying fix in place, this test would have failed, we invalidated page 2 and
+    // page 3 as well.
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage2->getFrameArea().SVRect()));
+    SwFrame* pPage3 = pPage2->GetNext();
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage3->getFrameArea().SVRect()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
