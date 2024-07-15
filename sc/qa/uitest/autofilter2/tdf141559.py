@@ -64,8 +64,7 @@ class tdf141559(UITestCase):
             select_by_text(xfield1, "A")
             select_by_text(xcond1, ">")
             xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            self.ui_test.close_dialog_through_button("ok")
 
             row = get_row(document, 1)
             self.assertFalse(row.getPropertyValue("IsVisible"))

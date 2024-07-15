@@ -192,6 +192,8 @@ class UITest(object):
     def close_dialog_through_button(self, button, dialog=None):
         if dialog is None:
             dialog = self._xUITest.getTopFocusWindow()
+        if isinstance(button, str):
+            button = dialog.getChild(button)
         with EventListener(self._xContext, "DialogClosed" ) as event:
             button.executeAction("CLICK", tuple())
             while True:

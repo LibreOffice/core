@@ -63,8 +63,7 @@ class tdf46184(UITestCase):
             if get_state_as_dict(xdestpers)['Selected'] == 'false':
                 xdestpers.executeAction("CLICK", tuple())
             self.assertEqual('true', get_state_as_dict(xcopyresult)['Selected'])
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            self.ui_test.close_dialog_through_button("ok")
 
 
             row1 = get_row(document, 1)
