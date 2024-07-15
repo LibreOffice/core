@@ -104,12 +104,13 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
 
         */
         struct SAL_DLLPRIVATE EquationResult {
-            bool bReady;
-            double fValue;
+            mutable bool bParsed = false;
+            bool bReady = false;
+            double fValue = 0;
+            mutable std::shared_ptr< EnhancedCustomShape::ExpressionNode > xNode;
         };
         css::uno::Sequence< OUString >                                                       m_seqEquations;
-        std::vector< std::shared_ptr< EnhancedCustomShape::ExpressionNode > >                           m_vNodesSharedPtr;
-        std::vector< EquationResult >                                                                   m_vEquationResults;
+        std::vector< EquationResult >                                                        m_vEquationResults;
 
         css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            m_seqSegments;
         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqCoordinates;

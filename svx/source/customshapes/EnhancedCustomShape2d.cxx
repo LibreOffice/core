@@ -853,23 +853,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     if ( !nLength )
         return;
 
-    m_vNodesSharedPtr.resize( nLength );
     m_vEquationResults.resize( nLength );
-    for ( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        m_vEquationResults[ i ].bReady = false;
-        try
-        {
-            m_vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( m_seqEquations[ i ], *this );
-        }
-        catch ( EnhancedCustomShape::ParseError& )
-        {
-            SAL_INFO(
-                "svx",
-                "error: equation number: " << i << ", parser failed ("
-                    << m_seqEquations[i] << ")");
-        }
-    }
 }
 
 using EnhancedCustomShape::ExpressionFunct;
@@ -916,39 +900,55 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
 {
     double fNumber = 0.0;
     static sal_uInt32 nLevel = 0;
-    if ( nIndex < static_cast<sal_Int32>(m_vNodesSharedPtr.size()) )
+    if ( nIndex >= static_cast<sal_Int32>(m_vEquationResults.size()) )
+        return fNumber;
+
+    if (!m_vEquationResults[nIndex].bParsed)
     {
-        if ( m_vNodesSharedPtr[ nIndex ] ) {
-            nLevel ++;
-            try
-            {
-                if ( m_vEquationResults[ nIndex ].bReady )
-                    fNumber = m_vEquationResults[ nIndex ].fValue;
-                else {
-                    // cast to non const, so that we can optimize by caching
-                    // equation results, without changing all the const in the stack
-                    struct EquationResult &aResult = const_cast<EnhancedCustomShape2d*>(this)->m_vEquationResults[ nIndex ];
-
-                    fNumber = aResult.fValue = (*m_vNodesSharedPtr[ nIndex ])();
-                    aResult.bReady = true;
-
-                    SAL_INFO("svx", "equation " << nLevel << " (level: " << m_seqEquations[nIndex] << "): "
-                             << fNumber << " --> " << 180.0*fNumber/10800000.0);
-                }
-                if ( !std::isfinite( fNumber ) )
-                    fNumber = 0.0;
-            }
-            catch ( ... )
-            {
-                SAL_WARN("svx", "EnhancedCustomShape2d::GetEquationValueAsDouble failed");
-            }
-            nLevel --;
+        m_vEquationResults[nIndex].bParsed = true;
+        try
+        {
+            m_vEquationResults[nIndex].xNode = EnhancedCustomShape::FunctionParser::parseFunction( m_seqEquations[ nIndex ], *this );
         }
-        SAL_INFO(
-            "svx",
-            "?" << nIndex << " --> " << fNumber << " (angle: "
-                << 180.0*fNumber/10800000.0 << ")");
+        catch ( EnhancedCustomShape::ParseError& )
+        {
+            SAL_INFO(
+                "svx",
+                "error: equation number: " << nIndex << ", parser failed ("
+                    << m_seqEquations[nIndex] << ")");
+        }
     }
+    if ( m_vEquationResults[ nIndex ].xNode )
+    {
+        nLevel ++;
+        try
+        {
+            if ( m_vEquationResults[ nIndex ].bReady )
+                fNumber = m_vEquationResults[ nIndex ].fValue;
+            else {
+                // cast to non const, so that we can optimize by caching
+                // equation results, without changing all the const in the stack
+                struct EquationResult &aResult = const_cast<EnhancedCustomShape2d*>(this)->m_vEquationResults[ nIndex ];
+
+                fNumber = aResult.fValue = (*m_vEquationResults[ nIndex ].xNode)();
+                aResult.bReady = true;
+
+                SAL_INFO("svx", "equation " << nLevel << " (level: " << m_seqEquations[nIndex] << "): "
+                         << fNumber << " --> " << 180.0*fNumber/10800000.0);
+            }
+            if ( !std::isfinite( fNumber ) )
+                fNumber = 0.0;
+        }
+        catch ( ... )
+        {
+            SAL_WARN("svx", "EnhancedCustomShape2d::GetEquationValueAsDouble failed");
+        }
+        nLevel --;
+    }
+    SAL_INFO(
+        "svx",
+        "?" << nIndex << " --> " << fNumber << " (angle: "
+            << 180.0*fNumber/10800000.0 << ")");
 
     return fNumber;
 }
