@@ -759,7 +759,7 @@ private:
 
 /**
   Utility template to reduce boilerplate code when creating item instance managers
-  for specific PoolItem subclasses that can be hashed which is fatsre than using
+  for specific PoolItem subclasses that can be hashed which is faster than using
   the linear search with operator== that DefaultItemInstanceManager has to do
 */
 class HashedItemInstanceManager : public ItemInstanceManager
