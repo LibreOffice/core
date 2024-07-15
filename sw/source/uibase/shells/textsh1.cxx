@@ -128,6 +128,7 @@
 #include <unoprnms.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <formatcontentcontrol.hxx>
+#include <rtl/uri.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2156,6 +2157,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pDataJson)
             {
                 aDataJson = pDataJson->GetValue();
+                aDataJson = rtl::Uri::decode(aDataJson, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
             }
 
             // parse the JSON got prom parameter
