@@ -48,7 +48,7 @@ public:
     void testLegacyDictWordPrepostDash_nds_DE();
     void testLegacyDictWordPrepostDash_nl_NL();
     void testLegacyDictWordPrepostDash_sv_SE();
-    void testLegacyHebrewQuoteInsideWord();
+    void testHebrewGereshGershaim();
     void testLegacySurrogatePairs();
     void testWordCount();
 
@@ -71,7 +71,7 @@ public:
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nds_DE);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nl_NL);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_sv_SE);
-    CPPUNIT_TEST(testLegacyHebrewQuoteInsideWord);
+    CPPUNIT_TEST(testHebrewGereshGershaim);
     CPPUNIT_TEST(testLegacySurrogatePairs);
     CPPUNIT_TEST(testWordCount);
     CPPUNIT_TEST_SUITE_END();
@@ -1708,41 +1708,108 @@ void TestBreakIterator::testLegacyDictWordPrepostDash_sv_SE()
     }
 }
 
-void TestBreakIterator::testLegacyHebrewQuoteInsideWord()
+void TestBreakIterator::testHebrewGereshGershaim()
 {
+    // In Hebrew documents, there are multiple valid ways to represent the geresh and gershaim
+    // intra-word punctuation marks. This test exhaustively exercises them.
+    //
+    // See the following bugs:
+    // i#51661: Add quotation mark as middle letter for Hebrew
+    // tdf#46950: Spell-checking breaks Hebrew words at intra-word single and double quotes
+
     lang::Locale aLocale;
 
     aLocale.Language = "he";
     aLocale.Country = "IL";
 
-    // i#51661: Add quotation mark as middle letter for Hebrew
+    // Unicode U+05F3 HEBREW PUNCTUATION GERESH
     {
-        auto aTest = u"פַּרְדּ״ס פַּרְדּ\"ס"_ustr;
+        auto aTest = u"ג׳ירפה"_ustr;
 
-        i18n::Boundary aBounds
+        auto aBounds
             = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
 
-        aBounds
-            = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
+        aBounds = m_xBreak->getWordBoundary(aTest, 3, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
 
-    // i#51661: Add quotation mark as middle letter for Hebrew
+    // Apostrophe as geresh
     {
-        auto aTest = u"פַּרְדּ״ס פַּרְדּ\"ס"_ustr;
+        auto aTest = u"ג'ירפה"_ustr;
 
-        i18n::Boundary aBounds = m_xBreak->getWordBoundary(
-            aTest, 3, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        auto aBounds
+            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 13, aLocale,
+        aBounds = m_xBreak->getWordBoundary(aTest, 3, aLocale,
                                             i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+    }
+
+    // Right single quote as geresh
+    {
+        auto aTest = u"ג’ירפה"_ustr;
+
+        auto aBounds
+            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 3, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+    }
+
+    // Unicode U+05F4 HEBREW PUNCTUATION GERSHAYIM
+    {
+        auto aTest = u"דו״ח"_ustr;
+
+        auto aBounds
+            = m_xBreak->getWordBoundary(aTest, 2, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
+    }
+
+    // Double quote as gershayim
+    {
+        auto aTest = u"דו\"ח"_ustr;
+
+        auto aBounds
+            = m_xBreak->getWordBoundary(aTest, 2, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
+    }
+
+    // Right double quote as gershayim
+    {
+        auto aTest = u"דו”ח"_ustr;
+
+        auto aBounds
+            = m_xBreak->getWordBoundary(aTest, 2, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
     }
 }
 
