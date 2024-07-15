@@ -21,6 +21,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>
 #include <sfx2/msgpool.hxx>
+#include <comphelper/string.hxx>
 
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -42,7 +43,7 @@ public:
     virtual void tearDown() override;
 
 protected:
-    SwXTextDocument* createDoc();
+    SwXTextDocument* createDoc(const char* pName = nullptr);
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -69,9 +70,12 @@ void SwTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-SwXTextDocument* SwTiledRenderingTest::createDoc()
+SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 {
-    createSwDoc();
+    if (!pName)
+        createSwDoc();
+    else
+        createSwDoc(pName);
     auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDocument);
     pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -86,6 +90,8 @@ class ViewCallback final
 
 public:
     std::vector<OString> m_aStateChanges;
+    tools::Rectangle m_aInvalidations;
+    bool m_bFullInvalidateSeen = false;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback()
@@ -112,6 +118,24 @@ public:
     {
         switch (nType)
         {
+            case LOK_CALLBACK_INVALIDATE_TILES:
+            {
+                if (std::string_view("EMPTY") == pPayload)
+                {
+                    m_bFullInvalidateSeen = true;
+                    return;
+                }
+                uno::Sequence<OUString> aSeq
+                    = comphelper::string::convertCommaSeparated(OUString::fromUtf8(pPayload));
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                tools::Rectangle aInvalidation;
+                aInvalidation.SetLeft(aSeq[0].toInt32());
+                aInvalidation.SetTop(aSeq[1].toInt32());
+                aInvalidation.setWidth(aSeq[2].toInt32());
+                aInvalidation.setHeight(aSeq[3].toInt32());
+                m_aInvalidations.Union(aInvalidation);
+                break;
+            }
             case LOK_CALLBACK_STATE_CHANGED:
             {
                 m_aStateChanges.push_back(pPayload);
@@ -174,6 +198,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     // - Actual  : .uno:StatePageNumber=Page 1 of 2
     // i.e. view 2 got the page number of view 1.
     CPPUNIT_ASSERT_EQUAL(".uno:StatePageNumber=Page 2 of 2"_ostr, aView2.m_aStateChanges[0]);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRules)
+{
+    // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have
+    // bullets:
+    SwXTextDocument* pXTextDocument = createDoc("numrules.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView;
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Insert(u"test"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    aView.m_aInvalidations = tools::Rectangle();
+    aView.m_bFullInvalidateSeen = false;
+
+    // When pasting at the end of page 1:
+    dispatchCommand(mxComponent, u".uno:PasteUnformatted"_ustr, {});
+
+    // Then make sure we only invalidate page 1, not page 2 or page 3:
+    CPPUNIT_ASSERT(!aView.m_bFullInvalidateSeen);
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage1 = pLayout->GetLower();
+    CPPUNIT_ASSERT(aView.m_aInvalidations.Overlaps(pPage1->getFrameArea().SVRect()));
+    SwFrame* pPage2 = pPage1->GetNext();
+    // Without the accompanying fix in place, this test would have failed, we invalidated page 2 and
+    // page 3 as well.
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage2->getFrameArea().SVRect()));
+    SwFrame* pPage3 = pPage2->GetNext();
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage3->getFrameArea().SVRect()));
 }
 }
 
