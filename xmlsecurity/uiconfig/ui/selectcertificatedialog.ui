@@ -8,7 +8,11 @@
       <column type="gchararray"/>
       <!-- column-name text2 -->
       <column type="gchararray"/>
+      <!-- column-name text3 -->
+      <column type="gchararray"/>
       <!-- column-name text4 -->
+      <column type="gchararray"/>
+      <!-- column-name text5 -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -168,13 +172,43 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn5">
                         <property name="resizable">True</property>
                         <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="selectcertificatedialog|type">Expiration date</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|type">Type</property>
                         <property name="sort-indicator">True</property>
                         <property name="sort-column-id">2</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer3"/>
                           <attributes>
                             <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn6">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|expiration">Expiration date</property>
+                        <property name="sort-indicator">True</property>
+                        <property name="sort-column-id">3</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer4"/>
+                          <attributes>
+                            <attribute name="text">3</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="selectcertificatedialog|usage">Certificate usage</property>
+                        <property name="sort-indicator">True</property>
+                        <property name="sort-column-id">4</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer5"/>
+                          <attributes>
+                            <attribute name="text">4</attribute>
                           </attributes>
                         </child>
                       </object>
