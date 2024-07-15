@@ -1052,8 +1052,7 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
         if (bCopyLeftHeader && bEvenAndOdd)
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_LEFT);
         if (bCopyFirstHeader && bTitlePage)
-            copyHeaderFooterTextProperty(rDM_Impl.GetLastFirstHeader(), xStyle,
-                                         PROP_HEADER_TEXT_FIRST);
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_HEADER_TEXT_FIRST);
     }
 
     if (bPreviousHasFooter && bCopyFooter)
@@ -1063,8 +1062,7 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
         if (bCopyLeftFooter && bEvenAndOdd)
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_LEFT);
         if (bCopyFirstFooter && bTitlePage)
-            copyHeaderFooterTextProperty(rDM_Impl.GetLastFirstFooter(), xStyle,
-                                         PROP_FOOTER_TEXT_FIRST);
+            copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_FIRST);
     }
 
     xStyle->setPropertyValue(sHeaderIsOn, uno::Any(bPreviousHasHeader || bHasHeader));

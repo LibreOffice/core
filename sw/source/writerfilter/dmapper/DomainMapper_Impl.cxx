@@ -3980,16 +3980,6 @@ void DomainMapper_Impl::PopPageHeaderFooter(PagePartType ePagePartType, PageType
     if (pSectionContext)
     {
         pSectionContext->clearHeaderFooterLinkToPrevious(ePagePartType, eType);
-
-        // remember most recent "first page" header/footer so follow sections can "link" to them
-        if (eType == PageType::FIRST)
-        {
-            if (ePagePartType == PagePartType::Header)
-                m_pLastFirstHeader = pSectionContext->GetPageStyle(*this);
-            else if (ePagePartType == PagePartType::Footer)
-                m_pLastFirstFooter = pSectionContext->GetPageStyle(*this);
-        }
-
         m_HeaderFooterSeen.emplace(ePagePartType, eType);
     }
 

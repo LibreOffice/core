@@ -525,19 +525,6 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf145998_firstHeader)
     CPPUNIT_ASSERT_EQUAL(u"Normal Header"_ustr, parseDump("/root/page[2]/header/txt"_ostr));
 }
 
-CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf1159013_firstHeaderCopy)
-{
-    // given a document with a first-header-section, a non-first-section, then a first-link-section
-    createSwDoc("tdf1159013_firstHeaderCopy.docx");
-    saveAndReload(u"Office Open XML Text"_ustr);
-
-    // Sanity check - always good to test when dealing with page styles and breaks.
-    CPPUNIT_ASSERT_EQUAL(5, getPages());
-
-    // This was copying the non-first-section header instead of "linking" to the first
-    CPPUNIT_ASSERT_EQUAL(u"First Page header"_ustr, parseDump("/root/page[5]/header/txt"_ostr));
-}
-
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testEvenPageOddPageFooter_Import)
 {
     // Related tdf#135216
