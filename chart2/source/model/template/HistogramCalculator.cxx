@@ -26,70 +26,93 @@ void HistogramCalculator::computeBinFrequencyHistogram(const std::vector<double>
     maBinRanges.clear();
     maBinFrequencies.clear();
 
-    // Set min, max to the first value
+    // Calculate statistics
+    double fSum = 0.0;
+    double fSquareSum = 0.0;
     double fMinValue = rDataPoints[0];
     double fMaxValue = rDataPoints[0];
+    sal_Int32 nValidCount = 0;
 
     // Compute min and max values, ignoring non-finite values
-    for (auto const& rValue : rDataPoints)
+    for (const auto& rValue : rDataPoints)
     {
         if (std::isfinite(rValue))
         {
+            fSum += rValue;
+            fSquareSum += rValue * rValue;
             fMinValue = std::min(fMinValue, rValue);
             fMaxValue = std::max(fMaxValue, rValue);
+            ++nValidCount;
         }
     }
 
-    // Round min and max to 6 decimal places
-    // Not sure this is needed or desired
-    fMinValue = std::round(fMinValue * 1e6) / 1e6;
-    fMaxValue = std::round(fMaxValue * 1e6) / 1e6;
-
-    // Handle the case where all values are the same
-    if (fMinValue == fMaxValue)
+    if (nValidCount < 2 || fMinValue == fMaxValue) // Need at least two points for variance
     {
-        maBinRanges = { { fMinValue, fMinValue } };
-        maBinFrequencies = { sal_Int32(rDataPoints.size()) };
+        mnBins = 1;
+        mfBinWidth = 1.0;
+        maBinRanges = { { std::floor(fMinValue), std::ceil(fMinValue + 1.0) } };
+        maBinFrequencies = { nValidCount };
         return;
     }
 
-    mnBins = sal_Int32(std::sqrt(rDataPoints.size()));
+    double fMean = fSum / nValidCount;
+    double fVariance = (fSquareSum - fSum * fMean) / (nValidCount - 1);
+    double fStdDev = std::sqrt(fVariance);
 
-    // Calculate bin width, ensuring it's not zero and rounding to 6 decimal places
-    mfBinWidth = std::round((fMaxValue - fMinValue) / mnBins * 1e6) / 1e6;
+    // Apply Scott's rule for bin width
+    mfBinWidth = (3.5 * fStdDev) / std::cbrt(nValidCount);
 
-    if (mfBinWidth <= 0.0)
+    // Calculate number of bins
+    mnBins = static_cast<sal_Int32>(std::ceil((fMaxValue - fMinValue) / mfBinWidth));
+    mnBins = std::max<sal_Int32>(mnBins, 1); // Ensure at least one bin
+
+    // Set up bin ranges
+    maBinRanges.reserve(mnBins);
+    double fBinStart = fMinValue;
+
+    for (sal_Int32 i = 0; i < mnBins; ++i)
     {
-        mfBinWidth = 0.000001; //minimum bin width of 0.000001
-        mnBins = sal_Int32(std::ceil((fMaxValue - fMinValue) / mfBinWidth));
+        double fBinEnd = fBinStart + mfBinWidth;
+
+        // Correct rounding to avoid discrepancies
+        fBinStart = std::round(fBinStart * 100.0) / 100.0;
+        fBinEnd = std::round(fBinEnd * 100.0) / 100.0;
+
+        if (i == 0)
+        {
+            // First bin includes the minimum value, so use closed interval [fMinValue, fBinEnd]
+            maBinRanges.emplace_back(fMinValue, fBinEnd);
+        }
+        else
+        {
+            // Subsequent bins use half-open interval (fBinStart, fBinEnd]
+            maBinRanges.emplace_back(fBinStart, fBinEnd);
+        }
+        fBinStart = fBinEnd;
     }
 
-    //recalculate maxValue to ensure it's included in the last bin
-    fMaxValue = fMinValue + mfBinWidth * mnBins;
-
-    // Initialize bin ranges and frequencies
-    maBinRanges.resize(mnBins);
-    maBinFrequencies.resize(mnBins, 0);
-
-    // Calculate bin ranges
-    for (sal_Int32 nBin = 0; nBin < mnBins; ++nBin)
-    {
-        double fBinStart = fMinValue + nBin * mfBinWidth;
-        double fBinEnd = (nBin == mnBins - 1) ? fMaxValue : (fBinStart + mfBinWidth);
-        maBinRanges[nBin] = { std::round(fBinStart * 1e6) / 1e6, std::round(fBinEnd * 1e6) / 1e6 };
-    }
+    // Adjust the last bin end to be inclusive
+    maBinRanges.back().second = std::max(maBinRanges.back().second, fMaxValue);
 
     // Calculate frequencies
+    maBinFrequencies.assign(mnBins, 0);
     for (double fValue : rDataPoints)
     {
         if (std::isfinite(fValue))
         {
-            // Calculate into which bin the value falls into
-            sal_Int32 nBinIndex = sal_Int32((fValue - fMinValue) / mfBinWidth);
-            // Sanitize
-            nBinIndex = std::clamp(nBinIndex, sal_Int32(0), mnBins - 1);
-
-            maBinFrequencies[nBinIndex]++;
+            for (size_t i = 0; i < maBinRanges.size(); ++i)
+            {
+                if (i == 0 && fValue >= maBinRanges[i].first && fValue <= maBinRanges[i].second)
+                {
+                    maBinFrequencies[i]++;
+                    break;
+                }
+                else if (i > 0 && fValue > maBinRanges[i].first && fValue <= maBinRanges[i].second)
+                {
+                    maBinFrequencies[i]++;
+                    break;
+                }
+            }
         }
     }
 }

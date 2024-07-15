@@ -69,13 +69,23 @@ InterpretedData HistogramDataInterpreter::interpretDataSource(
     const auto& binFrequencies = aHistogramCalculator.getBinFrequencies();
 
     // Create labels and values for HistogramDataSequence
-    std::vector<OUString> labels;
-    std::vector<double> values;
+    std::vector<OUString> aLabels;
+    std::vector<double> aValues;
     for (size_t i = 0; i < binRanges.size(); ++i)
     {
-        labels.push_back(u"[" + OUString::number(binRanges[i].first) + u"-"
-                         + OUString::number(binRanges[i].second) + u")");
-        values.push_back(static_cast<double>(binFrequencies[i]));
+        OUString aLabel;
+        if (i == 0)
+        {
+            aLabel = u"["_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
+                     + OUString::number(binRanges[i].second) + u"]"_ustr;
+        }
+        else
+        {
+            aLabel = u"("_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
+                     + OUString::number(binRanges[i].second) + u"]"_ustr;
+        }
+        aLabels.push_back(aLabel);
+        aValues.push_back(static_cast<double>(binFrequencies[i]));
     }
 
     rtl::Reference<DataSeries> xSeries = new DataSeries;
@@ -83,8 +93,8 @@ InterpretedData HistogramDataInterpreter::interpretDataSource(
     aNewData.push_back(aData[0]);
 
     rtl::Reference<HistogramDataSequence> aValuesDataSequence = new HistogramDataSequence();
-    aValuesDataSequence->setValues(comphelper::containerToSequence(values));
-    aValuesDataSequence->setLabels(comphelper::containerToSequence(labels));
+    aValuesDataSequence->setValues(comphelper::containerToSequence(aValues));
+    aValuesDataSequence->setLabels(comphelper::containerToSequence(aLabels));
 
     uno::Reference<chart2::data::XDataSequence> aDataSequence = aValuesDataSequence;
     SetRole(aDataSequence, u"values-y"_ustr);
