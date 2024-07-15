@@ -314,12 +314,12 @@ CMtaOleClipboard::~CMtaOleClipboard( )
                 "Clipboard viewer not properly unregistered" );
 }
 
-HRESULT CMtaOleClipboard::flushClipboard( )
+void CMtaOleClipboard::flushClipboard()
 {
     if ( !WaitForThreadReady( ) )
     {
         OSL_FAIL( "clipboard sta thread not ready" );
-        return E_FAIL;
+        return;
     }
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId,
@@ -327,10 +327,8 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 
     MsgCtx  aMsgCtx;
 
-    const bool bWaitSuccess = postMessage(MSG_FLUSHCLIPBOARD, 0, reinterpret_cast<LPARAM>(&aMsgCtx))
-                              && aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
-
-    return bWaitSuccess ? aMsgCtx.hr : E_ABORT;
+    postMessage(MSG_FLUSHCLIPBOARD, 0, reinterpret_cast<LPARAM>(&aMsgCtx));
+    aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
 }
 
 HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
@@ -370,12 +368,12 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 // this is an asynchronous method that's why we don't wait until the
 // request is completed
 
-HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
+void CMtaOleClipboard::setClipboard(IDataObject* pIDataObject)
 {
     if ( !WaitForThreadReady( ) )
     {
         OSL_FAIL( "clipboard sta thread not ready" );
-        return E_FAIL;
+        return;
     }
 
     CAutoComInit comAutoInit;
@@ -397,20 +395,16 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
     postMessage(
         MSG_SETCLIPBOARD,
         reinterpret_cast< WPARAM >( pIDataObject ) );
-
-    // because this is an asynchronous function
-    // the return value is useless
-    return S_OK;
 }
 
 // register a clipboard viewer
 
-bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
+void CMtaOleClipboard::registerClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback)
 {
     if ( !WaitForThreadReady( ) )
     {
         OSL_FAIL( "clipboard sta thread not ready" );
-        return false;
+        return;
     }
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
@@ -420,16 +414,12 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
     if (postMessage(MSG_REGCLIPVIEWER, reinterpret_cast<WPARAM>(pfncClipViewerCallback),
                     reinterpret_cast<LPARAM>(&aMsgCtx)))
         aMsgCtx.aCondition.wait(m_hEvtWndDisposed);
-
-    return false;
 }
 
 // register a clipboard viewer
 
-bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback )
+void CMtaOleClipboard::onRegisterClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback)
 {
-    bool bRet = false;
-
     // we need exclusive access because the clipboard changed notifier
     // thread also accesses this variable
     std::unique_lock aGuard( m_pfncClipViewerCallbackMutex );
@@ -440,7 +430,7 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
         // SetClipboardViewer sends a WM_DRAWCLIPBOARD message we ignore
         // this message if we register ourself as clip viewer
         m_bInRegisterClipViewer = true;
-        bRet = AddClipboardFormatListener(m_hwndMtaOleReqWnd);
+        AddClipboardFormatListener(m_hwndMtaOleReqWnd);
         m_bInRegisterClipViewer = false;
 
         // save the new callback function
@@ -452,16 +442,13 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 
         // unregister if input parameter is NULL and we previously registered
         // as clipboard viewer
-        bRet = RemoveClipboardFormatListener(m_hwndMtaOleReqWnd);
+        RemoveClipboardFormatListener(m_hwndMtaOleReqWnd);
     }
-
-    return bRet;
 }
 
-HRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
+void CMtaOleClipboard::onSetClipboard(IDataObject* pIDataObject)
 {
-    return sal::systools::RetryIfFailed(10, 100,
-                                        [pIDataObject] { return OleSetClipboard(pIDataObject); });
+    sal::systools::RetryIfFailed(10, 100, [pIDataObject] { return OleSetClipboard(pIDataObject); });
 }
 
 HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
@@ -508,9 +495,9 @@ LRESULT CMtaOleClipboard::onClipboardUpdate()
 // SendMessage so we don't need to supply the HWND if we send
 // something to our wrapped window
 
-LRESULT CMtaOleClipboard::sendMessage( UINT msg, WPARAM wParam, LPARAM lParam )
+void CMtaOleClipboard::sendMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    return ::SendMessageW( m_hwndMtaOleReqWnd, msg, wParam, lParam );
+    ::SendMessageW(m_hwndMtaOleReqWnd, msg, wParam, lParam);
 }
 
 // PostMessage so we don't need to supply the HWND if we send

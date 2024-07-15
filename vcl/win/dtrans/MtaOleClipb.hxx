@@ -41,16 +41,14 @@ public:
     ~CMtaOleClipboard( );
 
     // clipboard functions
-    HRESULT setClipboard( IDataObject* pIDataObject );
+    void setClipboard(IDataObject* pIDataObject);
     HRESULT getClipboard( IDataObject** ppIDataObject );
-    HRESULT flushClipboard( );
+    void flushClipboard();
 
     // register/unregister a clipboard viewer; there can only
     // be one at a time; parameter NULL means unregister
     // a clipboard viewer
-    // returns true on success else false; use GetLastError( ) in
-    // false case
-    bool registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
+    void registerClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback);
 
 private:
     unsigned int run( );
@@ -61,15 +59,15 @@ private:
 
     // message support
     bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
-    LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
+    void sendMessage(UINT msg, WPARAM wParam = 0, LPARAM lParam = 0);
 
     // message handler functions; remember these functions are called
     // from a different thread context!
 
-    static HRESULT onSetClipboard( IDataObject* pIDataObject );
+    static void onSetClipboard(IDataObject* pIDataObject);
     static HRESULT onGetClipboard( LPSTREAM* ppStream );
     static HRESULT onFlushClipboard( );
-    bool     onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback );
+    void onRegisterClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback);
 
     // win32 clipboard listener support
     LRESULT onClipboardUpdate();
