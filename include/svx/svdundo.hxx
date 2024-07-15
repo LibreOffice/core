@@ -373,8 +373,8 @@ public:
 
 class SdrUndoObjOrdNum final : public SdrUndoObj
 {
-    sal_uInt32 nOldOrdNum;
-    sal_uInt32 nNewOrdNum;
+    sal_uInt32 m_nOldOrdNum;
+    sal_uInt32 m_nNewOrdNum;
 
 public:
     SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);

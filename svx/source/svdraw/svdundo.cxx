@@ -900,8 +900,8 @@ void SdrUndoObjectLayerChange::Redo()
 
 SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
     : SdrUndoObj(rNewObj)
-    , nOldOrdNum(nOldOrdNum1)
-    , nNewOrdNum(nNewOrdNum1)
+    , m_nOldOrdNum(nOldOrdNum1)
+    , m_nNewOrdNum(nNewOrdNum1)
 {
 }
 
@@ -916,7 +916,7 @@ void SdrUndoObjOrdNum::Undo()
         OSL_FAIL("UndoObjOrdNum: mxObj does not have an ObjList.");
         return;
     }
-    pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
+    pOL->SetObjectOrdNum(m_nNewOrdNum,m_nOldOrdNum);
 }
 
 void SdrUndoObjOrdNum::Redo()
@@ -927,7 +927,7 @@ void SdrUndoObjOrdNum::Redo()
         OSL_FAIL("RedoObjOrdNum: mxObj does not have an ObjList.");
         return;
     }
-    pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
+    pOL->SetObjectOrdNum(m_nOldOrdNum,m_nNewOrdNum);
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
