@@ -688,22 +688,22 @@ Module.addOnPostRun(function() {
     css.task.XJobExecutor.query(obj).trigger('from JS');
     {
         const attrs = Module.uno.org.libreoffice.embindtest.XAttributes.query(obj);
-        console.assert(attrs.getLongAttribute() === -123456);
-        attrs.setLongAttribute(789);
-        console.assert(attrs.getLongAttribute() === 789);
-        console.assert(attrs.getStringAttribute() === 'hä');
-        attrs.setStringAttribute('foo');
-        console.assert(attrs.getStringAttribute() === 'foo');
-        console.assert(attrs.getReadOnlyAttribute() === 1); //TODO: true
+        console.assert(attrs.LongAttribute === -123456);
+        attrs.LongAttribute = 789;
+        console.assert(attrs.LongAttribute === 789);
+        console.assert(attrs.StringAttribute === 'hä');
+        attrs.StringAttribute = 'foo';
+        console.assert(attrs.StringAttribute === 'foo');
+        console.assert(attrs.ReadOnlyAttribute === 1); //TODO: true
         try {
-            attrs.setReadOnlyAttribute(false);
+            attrs.ReadOnlyAttribute = false;
             console.assert(false);
         } catch (e) {}
         console.assert(test.checkAttributes(attrs));
     }
-    console.assert(test.getStringAttribute() === 'hä');
-    test.setStringAttribute('foo');
-    console.assert(test.getStringAttribute() === 'foo');
+    console.assert(test.StringAttribute === 'hä');
+    test.StringAttribute = 'foo';
+    console.assert(test.StringAttribute === 'foo');
 
     const args = new Module.uno_Sequence_any(
         [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);
