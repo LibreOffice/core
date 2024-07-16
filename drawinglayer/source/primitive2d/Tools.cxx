@@ -235,6 +235,8 @@ OUString idToString(sal_uInt32 nId)
             return u"EXCLUSIVEEDITVIEWPRIMITIVE2D"_ustr;
         case PRIMITIVE2D_ID_POLYPOLYGONRGBAGRADIENTPRIMITIVE2D:
             return u"POLYPOLYGONRGBAGRADIENTPRIMITIVE2D"_ustr;
+        case PRIMITIVE2D_ID_ANIMATEDGRAPHICPRIMITIVE2D:
+            return u"ANIMATEDGRAPHICPRIMITIVE2D"_ustr;
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }
