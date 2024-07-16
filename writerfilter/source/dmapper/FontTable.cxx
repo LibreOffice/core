@@ -236,11 +236,13 @@ bool FontTable::IsReadOnly() const
 
 void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                                 const OUString& fontName, std::u16string_view extra,
-                                std::vector<unsigned char> const & key)
+                                std::vector<unsigned char> const & key,
+                                bool bSubsetted)
 {
     if (!m_pImpl->xEmbeddedFontHelper)
         m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
-    m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
+    m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key,
+            /*eot=*/false, bSubsetted);
 }
 
 EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, OUString _fontName, std::u16string_view style )
@@ -255,11 +257,6 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
 {
     if( !m_inputStream.is())
         return;
-
-    if (m_bSubsetted && !m_fontTable.IsReadOnly())
-    {
-        return;
-    }
 
     std::vector< unsigned char > key( 32 );
     if( !m_fontKey.isEmpty())
@@ -280,7 +277,9 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
             key[ i + 16 ] = val;
         }
     }
-    m_fontTable.addEmbeddedFont( m_inputStream, m_fontName, m_style, key );
+    // Ignore the "subsetted" flag if we're not editing anyway.
+    bool bSubsetted = m_bSubsetted && !m_fontTable.IsReadOnly();
+    m_fontTable.addEmbeddedFont( m_inputStream, m_fontName, m_style, key, bSubsetted );
     m_inputStream->closeInput();
 }
 
