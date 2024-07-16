@@ -47,7 +47,7 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    if ( IsRunningUnitTest() )
+    if ( IsRunningUnitTest() || IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );
 
     SelectionManager& rManager = SelectionManager::get();

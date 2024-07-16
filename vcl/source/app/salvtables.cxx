@@ -180,6 +180,13 @@ void SalInstance::DoQuit()
         std::abort();
 }
 
+// static
+bool SalInstance::IsRunningUITest()
+{
+    static const bool bRunningUITest = getenv("LIBO_TEST_UNIT");
+    return bRunningUITest;
+}
+
 SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE {}
 
 void SalBitmap::DropScaledCache()

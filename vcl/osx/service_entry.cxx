@@ -38,7 +38,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
-    if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() )
+    if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest() )
         return SalInstance::CreateClipboard( i_rArguments );
 
     SalData* pSalData = GetSalData();

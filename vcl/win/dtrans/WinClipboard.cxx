@@ -336,7 +336,7 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // like the system clipboard, so rather use the dummy GenericClipboard.
-    static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+    static const bool bRunningUnitTest = getenv("LO_TESTNAME") || getenv("LIBO_TEST_UNIT");
 
     if (bRunningUnitTest)
     {

@@ -1578,7 +1578,7 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
 {
-    if ( IsRunningUnitTest() )
+    if ( IsRunningUnitTest() || IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );
 
     OUString sel;

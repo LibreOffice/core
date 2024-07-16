@@ -446,7 +446,7 @@ Reference< XInterface > SalInstance::CreateDragSource(const SystemEnvData* pSysE
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // the system clipboard, so rather use the dummy GenericClipboard.
-    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
+    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest())
         return getXWeak(new vcl::GenericDragSource());
     return ImplCreateDragSource(pSysEnv);
 }
@@ -459,7 +459,7 @@ uno::Reference<uno::XInterface> SalInstance::ImplCreateDropTarget(const SystemEn
 Reference< XInterface > SalInstance::CreateDropTarget(const SystemEnvData* pSysEnv)
 {
     // see SalInstance::CreateDragSource
-    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest())
+    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest())
         return getXWeak(new vcl::GenericDropTarget());
     return ImplCreateDropTarget(pSysEnv);
 }
