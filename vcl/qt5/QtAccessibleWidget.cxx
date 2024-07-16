@@ -368,7 +368,7 @@ QString QtAccessibleWidget::text(QAccessible::Text text) const
         case QAccessible::Accelerator:
         case QAccessible::UserText:
         default:
-            return QString("Unknown");
+            return QString();
     }
 }
 QAccessible::Role QtAccessibleWidget::role() const
