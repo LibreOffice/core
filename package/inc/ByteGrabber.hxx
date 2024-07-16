@@ -66,6 +66,7 @@ public:
 
     sal_uInt16 ReadUInt16();
     sal_uInt32 ReadUInt32();
+    sal_uInt64 ReadUInt64();
     sal_Int16 ReadInt16()
     {
         return static_cast<sal_Int16>(ReadUInt16());

@@ -30,6 +30,12 @@
 #include <scmod.hxx>
 
 #include <svx/svdpage.hxx>
+#if 0
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -823,6 +829,28 @@ void ScFiltersTest::testSortWithFormattingXLS()
     bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
     xDocSh->DoClose();
+}
+
+// just needs to not crash on recalc
+void ScFiltersTest::testForcepoint107()
+{
+    // It expectedly fails to load normally
+    CPPUNIT_ASSERT(!loadDoc(u"forcepoint107.", FORMAT_XLSX, true));
+
+    // type detection fails on this branch due to the broken zip, can't test
+#if 0
+    // importing it must succeed with RepairPackage set to true.
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue("RepairPackage", true) };
+    OUString url;
+    createFileURL(u"forcepoint107.", u"xlsx", url);
+
+    css::uno::Reference<css::frame::XDesktop2> xDesktop(css::frame::Desktop::create(comphelper::getProcessComponentContext()));
+    m_xCalcComponent = xDesktop->loadComponentFromURL(url, "_default", 0, aParams);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+#endif
 }
 
 ScFiltersTest::ScFiltersTest()

@@ -1638,7 +1638,9 @@ void PdfExportTest::testTdf113143()
 void PdfExportTest::testForcePoint71()
 {
     // I just care it doesn't crash
-    topdf("forcepoint71.key");
+    // numerous Zip errors are detected now and libetonyek cannot RepairPackage
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + u"forcepoint71.key";
+    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromDesktop(aURL));
 }
 
 void PdfExportTest::testTdf115262()

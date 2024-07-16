@@ -101,6 +101,22 @@ public:
         nInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 24;
         return nInt32;
     }
+
+    sal_uInt64 ReadUInt64()
+    {
+        if (mnCurrent + 8 > mnEnd)
+            return 0;
+
+        sal_uInt64 nInt64 = mpBuffer[mnCurrent++] & 0xFF;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 8;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 16;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 24;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 32;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 40;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 48;
+        nInt64 |= static_cast<sal_Int64>(mpBuffer[mnCurrent++] & 0xFF) << 56;
+        return nInt64;
+    }
 };
 
 #endif

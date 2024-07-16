@@ -745,7 +745,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
     return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, true, aMediaType );
 }
 
-void ZipFile::readLOC( ZipEntry &rEntry )
+sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -761,19 +761,23 @@ void ZipFile::readLOC( ZipEntry &rEntry )
     // Just verify the path and calculate the data offset and otherwise
     // rely on the central directory info.
 
-    aGrabber.ReadInt16(); //version
-    aGrabber.ReadInt16(); //flag
-    aGrabber.ReadInt16(); //how
+    aGrabber.ReadInt16(); // version - ignore any mismatch (Maven created JARs)
+    sal_uInt16 const nLocFlag = aGrabber.ReadUInt16(); // general purpose bit flag
+    sal_uInt16 const nLocMethod = aGrabber.ReadUInt16(); // compression method
+    // Do *not* compare timestamps, since MSO 2010 can produce documents
+    // with timestamp difference in the central directory entry and local
+    // file header.
     aGrabber.ReadInt32(); //time
-    aGrabber.ReadInt32(); //crc
-    aGrabber.ReadInt32(); //compressed size
-    aGrabber.ReadInt32(); //size
+    sal_uInt32 nLocCrc = aGrabber.ReadUInt32(); //crc
+    sal_uInt64 nLocCompressedSize = aGrabber.ReadUInt32(); //compressed size
+    sal_uInt64 nLocSize = aGrabber.ReadUInt32(); //size
     sal_Int16 nPathLen = aGrabber.ReadInt16();
     sal_Int16 nExtraLen = aGrabber.ReadInt16();
     rEntry.nOffset = aGrabber.getPosition() + nPathLen + nExtraLen;
 
     // FIXME64: need to read 64bit LOC
 
+    sal_Int64 nEnd = {}; // avoid -Werror=maybe-uninitialized
     bool bBroken = false;
 
     try
@@ -801,8 +805,140 @@ void ZipFile::readLOC( ZipEntry &rEntry )
             rEntry.sPath = sLOCPath;
         }
 
-        bBroken = rEntry.nPathLen != nPathLen
-                        || rEntry.sPath != sLOCPath;
+        if (rEntry.nPathLen != nPathLen || rEntry.sPath != sLOCPath)
+        {
+            SAL_INFO("package", "LOC inconsistent name: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+        bool isZip64{false};
+        //::std::optional<sal_uInt64> oOffset64;
+        if (nExtraLen != 0)
+        {
+            Sequence<sal_Int8> aExtraBuffer;
+            aGrabber.readBytes(aExtraBuffer, nExtraLen);
+            MemoryByteGrabber extraMemGrabber(aExtraBuffer);
+
+            isZip64 = readExtraFields(extraMemGrabber, nExtraLen,
+                    nLocSize, nLocCompressedSize, /*oOffset64,*/ &sLOCPath);
+            if (isZip64)
+            {
+                SAL_INFO("package", "Zip64 not supported: \"" << rEntry.sPath << "\"");
+                bBroken = true; // this version does NOT support Zip64 files
+            }
+        }
+
+        // Just plain ignore bits 1 & 2 of the flag field - they are either
+        // purely informative, or even fully undefined (depending on method).
+        // Also ignore bit 11 ("Language encoding flag"): tdf125300.docx is
+        // example with mismatch - and the actual file names are compared in
+        // any case and required to be UTF-8.
+        if ((rEntry.nFlag & ~0x806U) != (nLocFlag & ~0x806U))
+        {
+            SAL_INFO("package", "LOC inconsistent flag: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+        // TODO: "older versions with encrypted streams write mismatching DEFLATE/STORE" ???
+        if (rEntry.nMethod != nLocMethod)
+        {
+            SAL_INFO("package", "LOC inconsistent method: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+        if (o3tl::checked_add<sal_Int64>(rEntry.nOffset, rEntry.nCompressedSize, nEnd))
+        {
+            throw ZipException("Integer-overflow");
+        }
+
+        // read "data descriptor" - this can be 12, 16, 20, or 24 bytes in size
+        if ((rEntry.nFlag & 0x08) != 0)
+        {
+#if 0
+            if (nLocMethod == STORED) // example: fdo68983.odt has this :(
+            {
+                SAL_INFO("package", "LOC STORED with data descriptor: \"" << rEntry.sPath << "\"");
+                bBroken = true;
+            }
+            else
+#endif
+            {
+                decltype(nLocCrc) nDDCrc;
+                decltype(nLocCompressedSize) nDDCompressedSize;
+                decltype(nLocSize) nDDSize;
+                aGrabber.seek(aGrabber.getPosition() + rEntry.nCompressedSize);
+                sal_uInt32 nTemp = aGrabber.ReadUInt32();
+                if (nTemp == 0x08074b50) // APPNOTE says PK78 is optional???
+                {
+                    nDDCrc = aGrabber.ReadUInt32();
+                }
+                else
+                {
+                    nDDCrc = nTemp;
+                }
+                if (isZip64)
+                {
+                    nDDCompressedSize = aGrabber.ReadUInt64();
+                    nDDSize = aGrabber.ReadUInt64();
+                }
+                else
+                {
+                    nDDCompressedSize = aGrabber.ReadUInt32();
+                    nDDSize = aGrabber.ReadUInt32();
+                }
+                if (nEnd < aGrabber.getPosition())
+                {
+                    nEnd = aGrabber.getPosition();
+                }
+                else
+                {
+                    SAL_INFO("package", "LOC invalid size: \"" << rEntry.sPath << "\"");
+                    bBroken = true;
+                }
+                // tdf91429.docx has same values in LOC and in (superfluous) DD
+                if ((nLocCrc == 0 || nLocCrc == nDDCrc)
+                    && (nLocCompressedSize == 0 || nLocCompressedSize == sal_uInt64(-1) || nLocCompressedSize == nDDCompressedSize)
+                    && (nLocSize == 0 || nLocSize == sal_uInt64(-1) || nLocSize == nDDSize))
+
+                {
+                    nLocCrc = nDDCrc;
+                    nLocCompressedSize = nDDCompressedSize;
+                    nLocSize = nDDSize;
+                }
+                else
+                {
+                    SAL_INFO("package", "LOC non-0 with data descriptor: \"" << rEntry.sPath << "\"");
+                    bBroken = true;
+                }
+            }
+        }
+
+        // unit test file export64.zip has nLocCrc/nLocCS/nLocSize = 0 on mimetype
+        if (nLocCrc != 0 && static_cast<sal_uInt32>(rEntry.nCrc) != nLocCrc)
+        {
+            SAL_INFO("package", "LOC inconsistent CRC: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+        if (nLocCompressedSize != 0 && static_cast<sal_uInt64>(rEntry.nCompressedSize) != nLocCompressedSize)
+        {
+            SAL_INFO("package", "LOC inconsistent compressed size: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+        if (nLocSize != 0 && static_cast<sal_uInt64>(rEntry.nSize) != nLocSize)
+        {
+            SAL_INFO("package", "LOC inconsistent size: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+
+#if 0
+        if (oOffset64 && o3tl::make_unsigned(nPos) != *oOffset64)
+        {
+            SAL_INFO("package", "LOC inconsistent offset: \"" << rEntry.sPath << "\"");
+            bBroken = true;
+        }
+#endif
     }
     catch(...)
     {
@@ -811,6 +947,8 @@ void ZipFile::readLOC( ZipEntry &rEntry )
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException("The stream seems to be broken!" );
+
+    return nEnd;
 }
 
 sal_Int32 ZipFile::findEND()
@@ -898,7 +1036,7 @@ sal_Int32 ZipFile::readCEN()
 
         ZipEntry aEntry;
         sal_Int16 nCommentLen;
-        sal_Int64 nMinOffset{nEndPos};
+        ::std::vector<std::pair<sal_uInt64, sal_uInt64>> unallocated = { { 0, nCenPos } };
 
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
@@ -941,7 +1079,6 @@ sal_Int32 ZipFile::readCEN()
 
             if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
                 throw ZipException("Integer-overflow");
-            nMinOffset = std::min(nMinOffset, aEntry.nOffset);
             if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
                 throw ZipException("Integer-overflow");
 
@@ -969,10 +1106,75 @@ sal_Int32 ZipFile::readCEN()
 
             if (aEntry.nExtraLen>0)
             {
-                readExtraFields(aMemGrabber, aEntry.nExtraLen, /*nSize, nCompressedSize, &nOffset,*/ &aEntry.sPath);
+                //::std::optional<sal_uInt64> oOffset64;
+                bool const isZip64 = readExtraFields(aMemGrabber, aEntry.nExtraLen, nSize, nCompressedSize, /*oOffset64,*/ &aEntry.sPath);
+#if 0
+                if (oOffset64)
+                {
+                    nOffset = *oOffset64;
+                }
+#endif
+                if (isZip64)
+                {
+                    SAL_INFO("package", "Zip64 not supported: \"" << aEntry.sPath << "\"");
+                    throw ZipException("Zip64 not supported");
+                }
             }
 
             aMemGrabber.skipBytes(nCommentLen);
+
+            // unfortunately readLOC is required now to check the consistency
+            assert(aEntry.nOffset <= 0);
+            sal_uInt64 const nStart{ o3tl::make_unsigned(-aEntry.nOffset) };
+            sal_uInt64 const nEnd = readLOC(aEntry);
+            assert(nStart < nEnd);
+            for (auto it = unallocated.begin(); ; ++it)
+            {
+                if (it == unallocated.end())
+                {
+                    throw ZipException("overlapping entries");
+                }
+                if (nStart < it->first)
+                {
+                    throw ZipException("overlapping entries");
+                }
+                else if (it->first == nStart)
+                {
+                    if (it->second == nEnd)
+                    {
+                        unallocated.erase(it);
+                        break;
+                    }
+                    else if (nEnd < it->second)
+                    {
+                        it->first = nEnd;
+                        break;
+                    }
+                    else
+                    {
+                        throw ZipException("overlapping entries");
+                    }
+                }
+                else if (nStart < it->second)
+                {
+                    if (nEnd < it->second)
+                    {
+                        auto const temp{it->first};
+                        it->first = nEnd;
+                        unallocated.insert(it, { temp, nStart });
+                        break;
+                    }
+                    else if (nEnd == it->second)
+                    {
+                        it->second = nStart;
+                        break;
+                    }
+                    else
+                    {
+                        throw ZipException("overlapping entries");
+                    }
+                }
+            }
 
             if (aEntries.find(aEntry.sPath) != aEntries.end())
             {
@@ -991,9 +1193,9 @@ sal_Int32 ZipFile::readCEN()
 
         if (nCount != nTotal)
             throw ZipException("Count != Total" );
-        if (nMinOffset != 0)
+        if (!unallocated.empty())
         {
-            throw ZipException("Extra bytes at beginning of zip file");
+            throw ZipException("Zip file has holes! It will leak!");
         }
     }
     catch ( IllegalArgumentException & )
@@ -1004,37 +1206,48 @@ sal_Int32 ZipFile::readCEN()
     return nCenPos;
 }
 
-void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
-        /*sal_uInt64& nSize, sal_uInt64& nCompressedSize,
-        sal_uInt64* nOffset, */OUString const*const pCENFilenameToCheck)
+bool ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
+        sal_uInt64/*&*/ nLocSize, sal_uInt64/*&*/ nLocCompressedSize,
+//        std::optional<sal_uInt64> & roOffset,
+        OUString const*const pCENFilenameToCheck)
 {
+    bool isZip64{false};
     while (nExtraLen > 0) // Extensible data fields
     {
         sal_Int16 nheaderID = aMemGrabber.ReadInt16();
         sal_uInt16 dataSize = aMemGrabber.ReadUInt16();
-#if 0
         if (nheaderID == 1) // Load Zip64 Extended Information Extra Field
         {
             // Datasize should be 28byte but some files have less (maybe non standard?)
-            nSize = aMemGrabber.ReadUInt64();
+            auto const nSize = aMemGrabber.ReadUInt64();
+            if (nSize != 0 && nSize != nLocSize)
+            {   // this may look weird but then there is tdf128550.pptx produced reportedly by an Apple product
+                isZip64 = true;
+            }
             sal_uInt16 nReadSize = 8;
             if (dataSize >= 16)
             {
-                nCompressedSize = aMemGrabber.ReadUInt64();
-                nReadSize = 16;
-                if (dataSize >= 24 && nOffset)
+                auto const nCompressedSize = aMemGrabber.ReadUInt64();
+                if (nCompressedSize != 0 && nCompressedSize != nLocCompressedSize)
                 {
-                    *nOffset = aMemGrabber.ReadUInt64();
+                    isZip64 = true;
+                }
+                nReadSize = 16;
+                if (dataSize >= 24 /*&& roOffset*/)
+                {
+                    isZip64 = true;
+#if 0
+                    roOffset.emplace(aMemGrabber.ReadUInt64());
                     nReadSize = 24;
                     // 4 byte should be "Disk Start Number" but we not need it
+#endif
                 }
             }
             if (dataSize > nReadSize)
                 aMemGrabber.skipBytes(dataSize - nReadSize);
         }
-#endif
         // Info-ZIP Unicode Path Extra Field - pointless as we expect UTF-8 in CEN already
-        if (nheaderID == 0x7075 && pCENFilenameToCheck) // ignore in recovery mode
+        else if (nheaderID == 0x7075 && pCENFilenameToCheck) // ignore in recovery mode
         {
             if (aMemGrabber.remainingSize() < dataSize)
             {
@@ -1068,6 +1281,7 @@ void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
         }
         nExtraLen -= dataSize + 4;
     }
+    return isZip64;
 }
 
 void ZipFile::recover()
