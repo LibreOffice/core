@@ -81,7 +81,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
-    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 140, (nWinStyle & WB_DETAILS) ?  20 : 70);
+    Size gridSize((nWinStyle & WB_DETAILS) ? 150 : 140, (nWinStyle & WB_DETAILS) ?  26 : 70);
     if(pView->GetDPIScaleFactor() > 1)
     {
       gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
@@ -990,7 +990,20 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
 {
     if (eItem == IcnViewFieldType::Text)
     {
-        rRenderContext.DrawText(rRect, pEntry->GetText(), nCurTextDrawFlags);
+        if (nWinBits & WB_DETAILS)
+        {
+            // Vertically center text when the entry is text-only
+            tools::Long nBoundingHeight(CalcBoundingHeight());
+            tools::Long nStringHeight = GetItemSize(IcnViewFieldType::Text).Height();
+            tools::Long nNewY = (nBoundingHeight - nStringHeight) / 2;
+            Point aRectTL(rRect.TopLeft().getX(), rRect.TopLeft().getY() + nNewY);
+            tools::Rectangle aTextRect(aRectTL, rRect.GetSize());
+            rRenderContext.DrawText(aTextRect, pEntry->GetText(), nCurTextDrawFlags);
+        }
+        else
+        {
+            rRenderContext.DrawText(rRect, pEntry->GetText(), nCurTextDrawFlags);
+        }
     }
     else
     {
@@ -1054,9 +1067,38 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     PaintEmphasis(aTextRect, bSelected, rRenderContext);
 
+    // Background of selected entry
+    tools::Rectangle aFocusRect(CalcFocusRect(pEntry));
+    bool bNativeSelection = rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, ControlPart::Entire);
     if (bSelected)
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, CalcFocusRect(pEntry),
-                                                  bActiveSelection ? 1 : 2, false, false, false);
+    {
+        if (bNativeSelection)
+        {
+            ControlState nState = ControlState::ENABLED;
+            ImplControlValue aControlValue(0);
+            bNativeSelection = rRenderContext.DrawNativeControl(ControlType::WindowBackground, ControlPart::Entire,
+                                                                aFocusRect, nState, aControlValue, OUString());
+        }
+
+        if (bNativeSelection)
+        {
+            // If a native control was drawn, then draw a mark at the left side of the selected tab
+            aFocusRect.setWidth(TAB_MARK_WIDTH);
+            Color aOldFillColor(rRenderContext.GetFillColor());
+            Color aOldLineColor(rRenderContext.GetLineColor());
+            Color aAccentColor(rRenderContext.GetSettings().GetStyleSettings().GetAccentColor());
+            rRenderContext.SetFillColor(aAccentColor);
+            rRenderContext.SetLineColor(aAccentColor);
+            rRenderContext.DrawRect(aFocusRect);
+            rRenderContext.SetFillColor(aOldFillColor);
+            rRenderContext.SetLineColor(aOldLineColor);
+        }
+        else
+        {
+            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, aFocusRect,
+                                                      bActiveSelection ? 1 : 2, false, false, false);
+        }
+    }
 
     if (pEntry->IsFocused())
         DrawFocusRect(rRenderContext, pEntry);
@@ -1080,6 +1122,11 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     }
 
     PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
+
+    // Move text a bit to the right for native controls due to the tab mark (applies to text-only entries)
+    if (bNativeSelection && (nWinBits & WB_DETAILS))
+        aTextRect.SetPos(Point(aTextRect.GetPos().X() + TAB_MARK_WIDTH, aTextRect.GetPos().Y()));
+
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
 
     rRenderContext.Pop();
@@ -1233,7 +1280,7 @@ tools::Long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
             break;
 
         case WB_DETAILS:
-            nHeight = nStringHeight;
+            nHeight = nStringHeight + 2 * VERT_TEXT_PADDING;;
             break;
 
         case WB_SMALLICON:

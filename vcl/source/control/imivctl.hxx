@@ -70,6 +70,10 @@ namespace o3tl {
 #define VER_DIST_BMP_STRING         3
 //  width offset of highlight rectangle for Text
 #define LROFFS_TEXT                 2
+// Vertical text padding when the item contains only text
+#define VERT_TEXT_PADDING           4
+// Width of the marker used for the selected tab (native controls only)
+#define TAB_MARK_WIDTH              3
 
 #define DEFAULT_MAX_VIRT_WIDTH      200
 #define DEFAULT_MAX_VIRT_HEIGHT     200
