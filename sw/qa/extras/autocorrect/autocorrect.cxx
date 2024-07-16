@@ -28,13 +28,13 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, nl_BE)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf92029)
 {
     createSwDoc("nl-BE.fodt");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
-    // tdf#92029: Without the fix in place, this test would have failed with
+    // Without the fix in place, this test would have failed with
     // - Expected: Ik ben ’s morgens opgestaan
     // - Actual  : Ik ben ‘s morgens opgestaan
     emulateTyping(*pTextDoc, u"Ik ben 's morgens opgestaan");
@@ -42,36 +42,46 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, nl_BE)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, fr_FR)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf158703)
 {
     createSwDoc("fr-FR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    // tdf#158703: Typing ":" after the spaces should start auto-correction, which is expected to
+    // Typing ":" after the spaces should start auto-correction, which is expected to
     // remove the spaces, and insert an NBSP instead. It must not crash.
     emulateTyping(*pTextDoc, u"Foo             :");
     CPPUNIT_ASSERT_EQUAL(u"Foo\u00A0:"_ustr, getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    // tdf#38394: testing autocorrect of French l'" -> l'« (instead of l'»)
-    emulateTyping(*pTextDoc, u"l'\"");
-    OUString sReplaced(u"l\u2019« "_ustr);
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // tdf#132301 autocorrect of qu'«
-    emulateTyping(*pTextDoc, u" qu'\"");
-    sReplaced += u" qu\u2019« ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, pt_BR)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf38394)
+{
+    createSwDoc("fr-FR.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // testing autocorrect of French l'" -> l'« (instead of l'»)
+    emulateTyping(*pTextDoc, u"l'\"");
+    CPPUNIT_ASSERT_EQUAL(u"l\u2019« "_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf132301)
+{
+    createSwDoc("fr-FR.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // autocorrect of qu'«
+    emulateTyping(*pTextDoc, u" qu'\"");
+    CPPUNIT_ASSERT_EQUAL(u" qu\u2019« "_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, tdfTdf44293)
 {
     createSwDoc("pt-BR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    // tdf#44293
     emulateTyping(*pTextDoc, u"1a 1o ");
     CPPUNIT_ASSERT_EQUAL(u"1.a 1.o "_ustr, getParagraph(1)->getString());
     emulateTyping(*pTextDoc, u"1ra 1ro ");
@@ -81,8 +91,15 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, pt_BR)
                          getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, de_DE)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf151801)
 {
+    Resetter resetter([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);
+        officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(0, pBatch);
+        return pBatch->commit();
+    });
     // Set Single Quotes › and ‹
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
         comphelper::ConfigurationChanges::create());
@@ -91,48 +108,44 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, de_DE)
     pBatch->commit();
 
     createSwDoc("de-DE.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    // tdf#151801: Single starting quote: 'word -> ›word
+
+    // Single starting quote: 'word -> ›word
     emulateTyping(*pTextDoc, u"'word");
     OUString sReplaced(u"\u203Aword"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // tdf#151801: Single ending quote: ›word' -> ›word‹
+    // Single ending quote: ›word' -> ›word‹
     emulateTyping(*pTextDoc, u"'");
     sReplaced += u"\u2039";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // tdf#151801: Use apostrophe without preceding starting quote: word' -> word’
+    // Use apostrophe without preceding starting quote: word' -> word’
     emulateTyping(*pTextDoc, u" word'");
     sReplaced += u" word\u2019";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
 
-    // Reset
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtStart::set(0, pBatch);
-    officecfg::Office::Common::AutoCorrect::SingleQuoteAtEnd::set(0, pBatch);
-    pBatch->commit();
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf128860)
+{
+    createSwDoc("de-DE.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    // tdf#128860: Second level ending quote: ‚word' -> ,word‘
+    // Second level ending quote: ‚word' -> ,word‘
     emulateTyping(*pTextDoc, u",word'");
     OUString sReplaced2(u",word\u2019"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    // tdf#128860: Us apostrophe without preceding starting quote: word' -> word’
+    // Us apostrophe without preceding starting quote: word' -> word’
     emulateTyping(*pTextDoc, u" word'");
     sReplaced2 += u" word\u2019";
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    // tdf#128860: But only after letters: word.' -> word.‘
+    // But only after letters: word.' -> word.‘
     emulateTyping(*pTextDoc, u" word.'");
     sReplaced2 += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, ru_RU)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf123786)
 {
     createSwDoc("ru-RU.fodt");
-    SwDoc* pDoc = getSwDoc();
 
     // On Windows, it will detect that system input language is en-US (despite "typing" e.g. Cyrillic characters),
     // and will change Russian into English (US); in the latter language,
@@ -141,10 +154,8 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, ru_RU)
     aOptions.SetIgnoreLanguageChange(true);
     aOptions.Commit();
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    // tdf#123786: Second level ending quote: „word' -> „word“
+    // Second level ending quote: „word' -> „word“
     emulateTyping(*pTextDoc, u"„слово'");
     OUString sReplaced(u"„слово“"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
@@ -158,70 +169,77 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, ru_RU)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, en_US)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf106164)
 {
-    // Default lang is en-US
-    createSwDoc();
-
+    createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
-    // tdf#106164: testing autocorrect of we're -> We're on start of first paragraph
+    // Testing autocorrect of we're -> We're on start of first paragraph
     emulateTyping(rTextDoc, u"we're ");
     CPPUNIT_ASSERT_EQUAL(u"We\u2019re "_ustr, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf59666)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
-    // tdf#59666: Testing missing autocorrect of single Greek letters
+    // Testing missing autocorrect of single Greek letters
     emulateTyping(rTextDoc, u"π ");
     CPPUNIT_ASSERT_EQUAL(u"\u03C0 "_ustr, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf74363)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
-    //tdf#74363: testing autocorrect of initial capitals on start of first paragraph
+    //testing autocorrect of initial capitals on start of first paragraph
     //Inserting one all-lowercase word into the first paragraph
     emulateTyping(rTextDoc, u"testing ");
     //The word should be capitalized due to autocorrect
     CPPUNIT_ASSERT_EQUAL(u"Testing "_ustr, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf155407)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
     emulateTyping(rTextDoc, u"Foo - 11’--’22 ");
-    // tdf#155407: Without the fix in place, this would fail with
+    OUString sReplaced(u"Foo – 11’—’22 "_ustr);
+    // Without the fix in place, this would fail with
     // - Expected: Foo – 11’—’22
     // - Actual  : Foo – 11’--’22
-    CPPUNIT_ASSERT_EQUAL(u"Foo – 11’—’22 "_ustr, getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     emulateTyping(rTextDoc, u"Bar -- 111--222 ");
-    // tdf#155407: Without the fix in place, this would fail with
+    sReplaced += u"Bar – 111–222 "_ustr;
+    // Without the fix in place, this would fail with
     // - Expected: Bar – 111–222
     // - Actual  : Bar – 111-–22
-    CPPUNIT_ASSERT_EQUAL(u"Bar – 111–222 "_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf159797)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
     emulateTyping(rTextDoc, u"This - is replaced. - But this is not replaced ");
-    // tdf#159797: Without the fix in place, this would fail with
+    // Without the fix in place, this would fail with
     // - Expected: This – is replaced. – But this is not replaced.
     // - Actual  : This – is replaced. - But this is not replaced.
     CPPUNIT_ASSERT_EQUAL(u"This – is replaced. – But this is not replaced "_ustr,
                          getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf54409)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
-    // Check quotation marks are added to the selection
-    emulateTyping(rTextDoc, u"\"");
-
-    CPPUNIT_ASSERT_EQUAL(u"\u201CThis – is replaced. – But this is not replaced \u201D"_ustr,
-                         getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    // Use delete before typing the quotation mark
-    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
-
-    // tdf#54409: testing autocorrect of "tset -> "test with typographical double quotation mark U+201C
+    // testing autocorrect of "tset -> "test with typographical double quotation mark U+201C
     emulateTyping(rTextDoc, u"\"test ");
     OUString sReplaced(u"\u201Ctest "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
@@ -233,48 +251,57 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, en_US)
     emulateTyping(rTextDoc, u"\"tset\" ");
     OUString sReplaced3(sReplaced2 + u"\u201Ctest\u201D ");
     CPPUNIT_ASSERT_EQUAL(sReplaced3, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf108423)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
     // testing autocorrect of i' -> I' on start of first paragraph
     emulateTyping(rTextDoc, u"i'");
-    // tdf#108423: The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
+    // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
     OUString sIApostrophe(u"I\u2019"_ustr);
     CPPUNIT_ASSERT_EQUAL(sIApostrophe, getParagraph(1)->getString());
     emulateTyping(rTextDoc, u" i'");
     OUString sText(sIApostrophe + u" " + sIApostrophe);
     CPPUNIT_ASSERT_EQUAL(sText, getParagraph(1)->getString());
+}
 
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf57640)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
 
-    // tdf#57640: Without the fix in place, this test would have failed with
+    // Without the fix in place, this test would have failed with
     // - Expected: ǅ
     // - Actual  : Ǆ
     emulateTyping(rTextDoc, u"ǆ  ");
     CPPUNIT_ASSERT_EQUAL(u"ǅ  "_ustr, getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    emulateTyping(rTextDoc, u"foo. bar ");
-    CPPUNIT_ASSERT_EQUAL(u"Foo. Bar "_ustr, getParagraph(1)->getString());
-
-    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-
-    // tdf#42893: Without the fix in place, this test would have failed with
-    // - Expected: F.o.o. bar
-    // - Actual  : F.o.o. Bar
-    emulateTyping(rTextDoc, u"F.o.o. bar ");
-    CPPUNIT_ASSERT_EQUAL(u"F.o.o. bar "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf42893)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    OUString sReplaced(u"Foo. Bar "_ustr);
+    emulateTyping(rTextDoc, u"foo. bar ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: F.o.o. bar
+    // - Actual  : F.o.o. Bar
+    sReplaced += u"F.o.o. bar "_ustr;
+    emulateTyping(rTextDoc, u"F.o.o. bar ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524)
 {
     createSwDoc("hu-HU.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    // tdf#133524: 1. Testing autocorrect of >> and <<
+    // 1. Testing autocorrect of >> and <<
     // Example: »word«
     emulateTyping(*pTextDoc, u">>");
     OUString sReplaced(u"»"_ustr);
@@ -283,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
     emulateTyping(*pTextDoc, u"word<<");
     sReplaced += u"word«";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // tdf#133524: 2. Testing autocorrect of " to >> and << inside „...”
+    // 2. Testing autocorrect of " to >> and << inside „...”
     // Example: „Sentence and »word«.”
     // opening primary level quote
     emulateTyping(*pTextDoc, u" \"");
@@ -301,19 +328,29 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
     emulateTyping(*pTextDoc, u".\"");
     sReplaced += u".”";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
-    // tdf#134940 avoid premature replacement of "--" in "-->"
-    emulateTyping(*pTextDoc, u" -->");
-    OUString sReplaced2(sReplaced + u" -->");
-    // This was "–>" instead of "-->"
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u" ");
-    sReplaced += u" → ";
-    // This was "–>" instead of "→"
-    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
 
-    // tdf#83037
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf134940)
+{
+    createSwDoc("hu-HU.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    // avoid premature replacement of "--" in "-->"
+    emulateTyping(*pTextDoc, u" -->");
+    // This was "–>" instead of "-->"
+    CPPUNIT_ASSERT_EQUAL(u" -->"_ustr, getParagraph(1)->getString());
+    emulateTyping(*pTextDoc, u" ");
+    // This was "–>" instead of "→"
+    CPPUNIT_ASSERT_EQUAL(u" → "_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf83037)
+{
+    createSwDoc("hu-HU.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
     emulateTyping(*pTextDoc, u"-> ");
-    sReplaced += u"→ ";
+    OUString sReplaced(u"→ "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     emulateTyping(*pTextDoc, u"<- ");
     sReplaced += u"← ";
@@ -326,14 +363,11 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, hu_HU)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, ro_RO)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524_Romanian)
 {
     createSwDoc("ro-RO.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    // tdf#133524: 1. Testing autocorrect of " to << and >> inside „...”
+    // 1. Testing autocorrect of " to << and >> inside „...”
     // Example: „Sentence and «word».”
     // opening primary level quote
     emulateTyping(*pTextDoc, u"\"");
