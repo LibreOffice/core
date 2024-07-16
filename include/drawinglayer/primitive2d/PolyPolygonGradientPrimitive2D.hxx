@@ -76,7 +76,7 @@ public:
 // already existing PolyPolygonGradientPrimitive2D as base class,
 // only the additional FillGradientAlpha needs to be added.
 // NOTE: FillGradientAlpha *has* to fulfil the
-// 'sameDefinitionThanAlpha' coindition defined by the check
+// 'sameDefinitionThanAlpha' condition defined by the check
 // method with the same name
 class DRAWINGLAYER_DLLPUBLIC PolyPolygonRGBAGradientPrimitive2D final
     : public PolyPolygonGradientPrimitive2D
