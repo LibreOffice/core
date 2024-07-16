@@ -29,6 +29,7 @@
 #include "HashMaps.hxx"
 #include "EncryptionData.hxx"
 
+#include <optional>
 #include <unordered_set>
 
 class MemoryByteGrabber;
@@ -87,13 +88,13 @@ private:
 
     void getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC );
 
-    void readLOC( ZipEntry &rEntry );
+    sal_uInt64 readLOC(ZipEntry &rEntry);
     sal_Int32 readCEN();
     sal_Int32 findEND();
     void recover();
-    static void readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
-                                /*sal_uInt64& nSize, sal_uInt64& nCompressedSize,
-                                sal_uInt64* nOffset,*/
+    static bool readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
+                                sal_uInt64/*&*/ nSize, sal_uInt64/*&*/ nCompressedSize,
+                                /*::std::optional<sal_uInt64> & roOffset,*/
                                 OUString const* pCENFilenameToCheck);
 
 public:

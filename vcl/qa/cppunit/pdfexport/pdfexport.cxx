@@ -1783,8 +1783,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
 {
     // I just care it doesn't crash
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    saveAsPDF(u"forcepoint71.key");
+    // numerous Zip errors are detected now and libetonyek cannot RepairPackage
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + u"forcepoint71.key";
+    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromDesktop(aURL));
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint80)
