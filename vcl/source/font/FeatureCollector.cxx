@@ -181,7 +181,7 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         }
 
         if (aDefinition)
-            rFeature.m_aDefinition = aDefinition;
+            rFeature.m_aDefinition = std::move(aDefinition);
     }
 }
 

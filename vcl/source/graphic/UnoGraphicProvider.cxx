@@ -411,7 +411,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             {
                 Graphic aGraphic = rFilter.ImportUnloadedGraphic(*pIStm);
                 if (!aGraphic.IsNone())
-                    aVCLGraphic = aGraphic;
+                    aVCLGraphic = std::move(aGraphic);
             }
             if (aVCLGraphic.IsNone())
                 error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE);

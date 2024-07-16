@@ -56,7 +56,7 @@ bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexCo
         return false;
     }
 
-    rComplexColor = aComplexColor;
+    rComplexColor = std::move(aComplexColor);
     return true;
 }
 

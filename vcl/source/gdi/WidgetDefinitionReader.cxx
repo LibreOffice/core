@@ -332,7 +332,7 @@ void WidgetDefinitionReader::readDefinition(tools::XmlWalker& rWalker,
 }
 
 void WidgetDefinitionReader::readPart(tools::XmlWalker& rWalker,
-                                      std::shared_ptr<WidgetDefinitionPart> rpPart)
+                                      const std::shared_ptr<WidgetDefinitionPart>& rpPart)
 {
     rWalker.children();
     while (rWalker.isValid())

@@ -487,21 +487,19 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
  */
 
 {
-    std::shared_ptr<const SfxFilter> pOldFilter = rMedium.GetFilter();
-    if ( pOldFilter )
+    std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
+    if ( pFilter )
     {
-        if( !IsFilterInstalled_Impl( pOldFilter ) )
-            pOldFilter = nullptr;
+        if( !IsFilterInstalled_Impl( pFilter ) )
+            pFilter = nullptr;
         else
         {
             const SfxStringItem* pSalvageItem = rMedium.GetItemSet().GetItem(SID_DOC_SALVAGE, false);
-            if ( ( pOldFilter->GetFilterFlags() & SfxFilterFlags::PACKED ) && pSalvageItem )
+            if ( ( pFilter->GetFilterFlags() & SfxFilterFlags::PACKED ) && pSalvageItem )
                 // Salvage is always done without packing
-                pOldFilter = nullptr;
+                pFilter = nullptr;
         }
     }
-
-    std::shared_ptr<const SfxFilter> pFilter = pOldFilter;
 
     bool bPreview = rMedium.IsPreview_Impl();
     const SfxStringItem* pReferer = rMedium.GetItemSet().GetItem(SID_REFERER, false);

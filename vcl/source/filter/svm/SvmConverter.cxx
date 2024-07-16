@@ -643,7 +643,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     else
                     {
                         nLastPolygonAction = rMtf.GetActionSize();
-                        rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                        rMtf.AddAction(new MetaPolyPolygonAction(std::move(aPolyPoly)));
                     }
                 }
             }

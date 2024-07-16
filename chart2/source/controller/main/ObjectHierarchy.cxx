@@ -400,7 +400,7 @@ void ObjectHierarchy::createDataSeriesTree(
                     }
 
                     if( ! aSeriesSubContainer.empty())
-                        m_aChildMap[ aSeriesOID ] = aSeriesSubContainer;
+                        m_aChildMap[ aSeriesOID ] = std::move(aSeriesSubContainer);
                 }
             }
         }

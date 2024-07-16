@@ -316,7 +316,7 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                               + " | " + sUIItemId;
                     }
                     aCategoryList.push_back(aCategoryEntry);
-                    aCurItemEntry = aCategoryEntry;
+                    aCurItemEntry = std::move(aCategoryEntry);
                 }
                 else if (sClassId == "svtlo-ManagedMenuButton")
                 {

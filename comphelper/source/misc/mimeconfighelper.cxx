@@ -277,7 +277,7 @@ bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
               && ( xVerbsProps->getByName(sVerbFlags) >>= aTempDescr.VerbFlags )
               && ( xVerbsProps->getByName(sVerbAttributes) >>= aTempDescr.VerbAttributes ) )
             {
-                aDescriptor = aTempDescr;
+                aDescriptor = std::move(aTempDescr);
                 bResult = true;
             }
         }

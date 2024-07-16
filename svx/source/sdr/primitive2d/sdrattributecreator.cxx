@@ -880,7 +880,7 @@ namespace drawinglayer::primitive2d
             attribute::FillGradientAttribute aFillFloatTransGradient;
 
             // try line style
-            const attribute::SdrLineAttribute aLine(createNewSdrLineAttribute(rSet));
+            attribute::SdrLineAttribute aLine(createNewSdrLineAttribute(rSet));
 
             if(!aLine.isDefault())
             {
@@ -906,7 +906,8 @@ namespace drawinglayer::primitive2d
                 aShadow = createNewSdrShadowAttribute(rSet);
 
                 return attribute::SdrLineFillShadowAttribute3D(
-                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient);
+                    std::move(aLine), std::move(aFill), std::move(aLineStartEnd),
+                    std::move(aShadow), std::move(aFillFloatTransGradient));
             }
 
             return attribute::SdrLineFillShadowAttribute3D();

@@ -28,7 +28,7 @@ private:
                                        WidgetDefinition& rWidgetDefinition, ControlType eType);
 
     SAL_DLLPRIVATE void readPart(tools::XmlWalker& rWalker,
-                                 std::shared_ptr<WidgetDefinitionPart> rpPart);
+                                 const std::shared_ptr<WidgetDefinitionPart>& rpPart);
 
     SAL_DLLPRIVATE void
     readDrawingDefinition(tools::XmlWalker& rWalker,

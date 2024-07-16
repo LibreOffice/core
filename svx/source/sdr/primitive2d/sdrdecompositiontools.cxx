@@ -892,7 +892,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 return std::move(rContent);
             Primitive2DContainer aRetval(2);
             aRetval[0] = new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), Primitive2DContainer(rContent));
-            aRetval[1] = new GroupPrimitive2D(Primitive2DContainer(rContent));
+            aRetval[1] = new GroupPrimitive2D(Primitive2DContainer(std::move(rContent)));
             return aRetval;
         }
 

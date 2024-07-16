@@ -169,7 +169,7 @@ rtl::Reference<Content> Content::create(
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
-        return new Content( rxContext, pProvider, xId, xPackage, aURI, std::move(aProps) );
+        return new Content( rxContext, pProvider, xId, xPackage, std::move(aURI), std::move(aProps) );
     }
     else
     {
@@ -191,7 +191,7 @@ rtl::Reference<Content> Content::create(
         else
             aInfo.Type = getContentType( aURI.getScheme(), false );
 
-        return new Content( rxContext, pProvider, xId, xPackage, aURI, aInfo );
+        return new Content( rxContext, pProvider, xId, xPackage, std::move(aURI), std::move(aInfo) );
     }
 }
 

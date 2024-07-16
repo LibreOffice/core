@@ -1758,8 +1758,6 @@ void Window::ImplNewInputContext()
     SalInputContext         aNewContext;
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetFamilyName();
-    rtl::Reference<LogicalFontInstance> pFontInstance;
-    aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
@@ -1773,11 +1771,10 @@ void Window::ImplNewInputContext()
             else
                 aSize.setHeight( (12*pFocusWin->GetOutDev()->mnDPIY)/72 );
         }
-        pFontInstance = pFocusWin->GetOutDev()->mxFontCache->GetFontInstance(
+        aNewContext.mpFont =
+                        pFocusWin->GetOutDev()->mxFontCache->GetFontInstance(
                             pFocusWin->GetOutDev()->mxFontCollection.get(),
                             rFont, aSize, static_cast<float>(aSize.Height()) );
-        if ( pFontInstance )
-            aNewContext.mpFont = pFontInstance;
     }
     aNewContext.mnOptions   = rInputContext.GetOptions();
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
