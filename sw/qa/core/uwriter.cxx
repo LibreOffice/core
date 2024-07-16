@@ -654,7 +654,7 @@ void SwDocTest::testSwScanner()
         pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, test.getLength());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("words", static_cast<sal_uLong>(58), aDocStat.nWord);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean syllables", static_cast<sal_uLong>(43), aDocStat.nAsianWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean words", static_cast<sal_uLong>(43), aDocStat.nAsianWord);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("non-whitespace chars", static_cast<sal_uLong>(105), aDocStat.nCharExcludingSpaces);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("characters", static_cast<sal_uLong>(128), aDocStat.nChar);
     }
@@ -928,6 +928,46 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(17), aDocStat.nChar);
         aDocStat.Reset();
+    }
+
+    // tdf#150621 Korean words should be counted individually, rather than by syllable.
+    //
+    // Per i#80815, the intention for the word count feature is to emulate the behavior of MS Word.
+    {
+        auto fnAssertWords = [&](const OUString& aStr, sal_uLong nWords, sal_uLong nAsianWords)
+        {
+            m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
+
+            SvxLanguageItem aCJKLangItem(LANGUAGE_KOREAN, RES_CHRATR_CJK_LANGUAGE);
+            SvxLanguageItem aWestLangItem(LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE);
+            m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem);
+            m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem);
+
+            m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aStr);
+
+            SwDocStat aDocStat;
+            pTextNode = aPaM.GetPointNode().GetTextNode();
+            pTextNode->CountWords(aDocStat, 0, aStr.getLength());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("words", nWords, aDocStat.nWord);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean words", nAsianWords,
+                                         aDocStat.nAsianWord);
+        };
+
+        // Basic case: Korean words are counted as space-delimited. In particular, grammatical
+        // particles are treated as part of the previous word.
+        fnAssertWords(u"저는 영화를 봤어요"_ustr, 3, 3);
+
+        // Mixed script: Korean is mostly written in hangul, but hanja are still used in certain
+        // situations (e.g. abbreviations in newspaper articles). For Chinese and Japanese, such
+        // ideographs would be counted individually as words. In Korean, however, they are treated
+        // no differently than hangul characters.
+        fnAssertWords(u"尹탄핵"_ustr, 1, 1);
+        fnAssertWords(u"尹 탄핵"_ustr, 2, 2);
+
+        // These mixed-script results are anomalous, but reflect the behavior of MSW.
+        fnAssertWords(u"불렀다...與"_ustr, 1, 1);
+        fnAssertWords(u"불렀다 ...與"_ustr, 2, 1);
+        fnAssertWords(u"불렀다 ... 與"_ustr, 3, 2);
     }
 }
 

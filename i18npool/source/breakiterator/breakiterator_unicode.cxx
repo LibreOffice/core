@@ -364,7 +364,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
     Boundary rv;
     rv.startPos = icuBI->mpValue->mpBreakIterator->following(nStartPos);
     if( rv.startPos >= Text.getLength() || rv.startPos == icu::BreakIterator::DONE )
-        rv.endPos = result.startPos;
+        rv.endPos = rv.startPos;
     else {
         if ((rWordType == WordType::ANYWORD_IGNOREWHITESPACES
              && u_isUWhiteSpace(Text.iterateCodePoints(&rv.startPos, 0)))

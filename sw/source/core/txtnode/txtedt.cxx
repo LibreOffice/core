@@ -793,40 +793,62 @@ SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> aGe
 
 namespace
 {
-    //fdo#45271 for Asian words count characters instead of words
-    sal_Int32 forceEachAsianCodePointToWord(const OUString &rText, sal_Int32 nBegin, sal_Int32 nLen)
+// tdf#45271 For Chinese and Japanese, count characters instead of words
+sal_Int32
+forceEachCJCodePointToWord(const OUString& rText, sal_Int32 nBegin, sal_Int32 nLen,
+                           const ModelToViewHelper* pModelToView,
+                           std::function<LanguageType(sal_Int32, sal_Int32, bool)>& fnGetLangOfChar)
+{
+    if (nLen > 1)
     {
-        if (nLen > 1)
+        const uno::Reference<XBreakIterator>& rxBreak = g_pBreakIt->GetBreakIter();
+
+        sal_uInt16 nCurrScript = rxBreak->getScriptType(rText, nBegin);
+
+        sal_Int32 indexUtf16 = nBegin;
+        rText.iterateCodePoints(&indexUtf16);
+
+        // First character is Asian
+        if (nCurrScript == i18n::ScriptType::ASIAN)
         {
-            const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
+            auto aModelBeginPos = pModelToView->ConvertToModelPosition(nBegin);
+            auto aCurrentLang = fnGetLangOfChar(aModelBeginPos.mnPos, nCurrScript, false);
 
-            sal_uInt16 nCurrScript = rxBreak->getScriptType( rText, nBegin );
-
-            sal_Int32 indexUtf16 = nBegin;
-            rText.iterateCodePoints(&indexUtf16);
-
-            //First character is Asian, consider it a word :-(
-            if (nCurrScript == i18n::ScriptType::ASIAN)
+            // tdf#150621 Korean words must be counted as-is
+            if (primary(aCurrentLang) == primary(LANGUAGE_KOREAN))
             {
-                nLen = indexUtf16 - nBegin;
                 return nLen;
             }
 
-            //First character was not Asian, consider appearance of any Asian character
-            //to be the end of the word
-            while (indexUtf16 < nBegin + nLen)
+            // Word is Chinese or Japanese, and must be truncated to a single character
+            return indexUtf16 - nBegin;
+        }
+
+        // First character was not Asian, consider appearance of any Asian character
+        // to be the end of the word
+        while (indexUtf16 < nBegin + nLen)
+        {
+            nCurrScript = rxBreak->getScriptType(rText, indexUtf16);
+            if (nCurrScript == i18n::ScriptType::ASIAN)
             {
-                nCurrScript = rxBreak->getScriptType( rText, indexUtf16 );
-                if (nCurrScript == i18n::ScriptType::ASIAN)
+                auto aModelBeginPos = pModelToView->ConvertToModelPosition(indexUtf16);
+                auto aCurrentLang = fnGetLangOfChar(aModelBeginPos.mnPos, nCurrScript, false);
+
+                // tdf#150621 Korean words must be counted as-is.
+                // Note that script changes intentionally do not delimit words for counting.
+                if (primary(aCurrentLang) == primary(LANGUAGE_KOREAN))
                 {
-                    nLen = indexUtf16 - nBegin;
                     return nLen;
                 }
-                rText.iterateCodePoints(&indexUtf16);
+
+                // Word tail contains Chinese or Japanese, and must be truncated
+                return indexUtf16 - nBegin;
             }
+            rText.iterateCodePoints(&indexUtf16);
         }
-        return nLen;
     }
+    return nLen;
+}
 }
 
 bool SwScanner::NextWord()
@@ -959,8 +981,11 @@ bool SwScanner::NextWord()
     if( ! m_nLength )
         return false;
 
-    if ( m_nWordType == i18n::WordType::WORD_COUNT )
-        m_nLength = forceEachAsianCodePointToWord(m_aText, m_nBegin, m_nLength);
+    if (m_nWordType == i18n::WordType::WORD_COUNT)
+    {
+        m_nLength = forceEachCJCodePointToWord(m_aText, m_nBegin, m_nLength, &m_ModelToView,
+                                               m_pGetLangOfChar);
+    }
 
     m_aPrevWord = m_aWord;
     m_aWord = m_aPreDashReplacementText.copy( m_nBegin, m_nLength );

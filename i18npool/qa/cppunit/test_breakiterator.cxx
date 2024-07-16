@@ -1867,33 +1867,32 @@ void TestBreakIterator::testLegacySurrogatePairs()
 
 void TestBreakIterator::testWordCount()
 {
-    auto count_words_fn = [&](const OUString& str, const lang::Locale& aLocale) -> int
+    auto fnCountWords = [&](const OUString& aStr, const lang::Locale& aLocale) -> int
     {
-        int num_words = 0;
-        sal_Int32 next_pos = 0;
-        int iter_guard = 0;
+        int nWords = 0;
+        sal_Int32 nNextPos = 0;
+        int nIterGuard = 0;
 
-        if (m_xBreak->isBeginWord(str, next_pos, aLocale, i18n::WordType::WORD_COUNT))
+        if (m_xBreak->isBeginWord(aStr, nNextPos, aLocale, i18n::WordType::WORD_COUNT))
         {
-            ++num_words;
+            ++nWords;
         }
 
         while (true)
         {
-            CPPUNIT_ASSERT_MESSAGE("Tripped infinite loop check", ++iter_guard < 100);
+            CPPUNIT_ASSERT_MESSAGE("Tripped infinite loop check", ++nIterGuard < 100);
 
-            auto aBounds = m_xBreak->nextWord(str, next_pos, aLocale, i18n::WordType::WORD_COUNT);
-
-            if (aBounds.endPos < next_pos || aBounds.startPos == aBounds.endPos)
+            auto aBounds = m_xBreak->nextWord(aStr, nNextPos, aLocale, i18n::WordType::WORD_COUNT);
+            if (aBounds.endPos == aBounds.startPos)
             {
                 break;
             }
 
-            next_pos = aBounds.endPos;
-            ++num_words;
+            nNextPos = aBounds.endPos;
+            ++nWords;
         }
 
-        return num_words;
+        return nWords;
     };
 
     // i#80815: "Word count differs from MS Word"
@@ -1903,29 +1902,29 @@ void TestBreakIterator::testWordCount()
         aLocale.Language = "en";
         aLocale.Country = "US";
 
-        const OUString str = u""
-                             "test data for word count issue #80815\n"
-                             "fo\\\'sforos\n"
-                             "archipi\\\'elago\n"
-                             "do\\^me\n"
-                             "f**k\n"
-                             "\n"
-                             "battery-driven\n"
-                             "and/or\n"
-                             "apple(s)\n"
-                             "money+opportunity\n"
-                             "Micro$oft\n"
-                             "\n"
-                             "300$\n"
-                             "I(not you)\n"
-                             "a****n\n"
-                             "1+3=4\n"
-                             "\n"
-                             "aaaaaaa.aaaaaaa\n"
-                             "aaaaaaa,aaaaaaa\n"
-                             "aaaaaaa;aaaaaaa\n"_ustr;
+        const OUString aStr = u""
+                              "test data for word count issue #80815\n"
+                              "fo\\\'sforos\n"
+                              "archipi\\\'elago\n"
+                              "do\\^me\n"
+                              "f**k\n"
+                              "\n"
+                              "battery-driven\n"
+                              "and/or\n"
+                              "apple(s)\n"
+                              "money+opportunity\n"
+                              "Micro$oft\n"
+                              "\n"
+                              "300$\n"
+                              "I(not you)\n"
+                              "a****n\n"
+                              "1+3=4\n"
+                              "\n"
+                              "aaaaaaa.aaaaaaa\n"
+                              "aaaaaaa,aaaaaaa\n"
+                              "aaaaaaa;aaaaaaa\n"_ustr;
 
-        CPPUNIT_ASSERT_EQUAL(24, count_words_fn(str, aLocale));
+        CPPUNIT_ASSERT_EQUAL(24, fnCountWords(aStr, aLocale));
     }
 
     // Test that the switch to upstream ICU for CJ word boundary analysis doesn't change word count.
@@ -1934,9 +1933,32 @@ void TestBreakIterator::testWordCount()
         aLocale.Language = "ja";
         aLocale.Country = "JP";
 
-        const OUString str = u"Wordの様にワード数をするのにTest\n植松町"_ustr;
+        const OUString aStr = u"Wordの様にワード数をするのにTest\n植松町"_ustr;
 
-        CPPUNIT_ASSERT_EQUAL(7, count_words_fn(str, aLocale));
+        CPPUNIT_ASSERT_EQUAL(7, fnCountWords(aStr, aLocale));
+    }
+
+    // tdf#150621 Korean words should be counted individually, rather than by syllable.
+    //
+    // Per i#80815, the intention for the word count feature is to emulate the behavior of MS Word.
+    {
+        lang::Locale aLocale;
+        aLocale.Language = "ko";
+        aLocale.Country = "KR";
+
+        // Basic case: Korean words are counted as space-delimited. In particular, grammatical
+        // particles are treated as part of the previous word.
+        CPPUNIT_ASSERT_EQUAL(3, fnCountWords(u"저는 영화를 봤어요"_ustr, aLocale));
+
+        // Mixed script: Korean is mostly written in hangul, but hanja are still used in certain
+        // situations (e.g. abbreviations in newspaper articles). For Chinese and Japanese, such
+        // ideographs would be counted individually as words. In Korean, however, they are treated
+        // no differently than hangul characters.
+        CPPUNIT_ASSERT_EQUAL(1, fnCountWords(u"불렀다...與"_ustr, aLocale));
+        CPPUNIT_ASSERT_EQUAL(2, fnCountWords(u"불렀다 ...與"_ustr, aLocale));
+        CPPUNIT_ASSERT_EQUAL(3, fnCountWords(u"불렀다 ... 與"_ustr, aLocale));
+        CPPUNIT_ASSERT_EQUAL(1, fnCountWords(u"尹탄핵"_ustr, aLocale));
+        CPPUNIT_ASSERT_EQUAL(2, fnCountWords(u"尹 탄핵"_ustr, aLocale));
     }
 }
 
