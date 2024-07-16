@@ -280,6 +280,23 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf57640)
     CPPUNIT_ASSERT_EQUAL(u"ǅ  "_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf62923)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    OUString sReplaced(u"1–2 "_ustr);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1—2
+    // - Actual  : 1–2
+    emulateTyping(rTextDoc, u"1--2 ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    sReplaced += u"a—b "_ustr;
+    emulateTyping(rTextDoc, u"a--b ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf42893)
 {
     createSwDoc(); // Default lang is en-US
