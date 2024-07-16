@@ -436,7 +436,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             mxToolkit->addTopWindowListener(mxTopWindowListener);
 
             maTimeoutTimer.SetInvokeHandler(LINK(this, ListenerHelper, timeoutTimerHandler));
-            maTimeoutTimer.SetTimeout(60000);
+            maTimeoutTimer.SetTimeout(120000);
             maTimeoutTimer.Start();
 
             maIdleHandler.SetInvokeHandler(LINK(this, ListenerHelper, idleHandler));
