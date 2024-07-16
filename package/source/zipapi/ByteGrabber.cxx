@@ -120,4 +120,22 @@ sal_uInt32 ByteGrabber::ReadUInt32()
           | ( pSequence[3] & 0xFF ) << 24 );
 }
 
+sal_uInt64 ByteGrabber::ReadUInt64()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if (xStream->readBytes(aSequence, 8) != 8)
+        return 0;
+
+    pSequence = aSequence.getConstArray();
+    return  static_cast<sal_uInt64>(pSequence[0] & 0xFF)
+          | static_cast<sal_uInt64>(pSequence[1] & 0xFF) << 8
+          | static_cast<sal_uInt64>(pSequence[2] & 0xFF) << 16
+          | static_cast<sal_uInt64>(pSequence[3] & 0xFF) << 24
+          | static_cast<sal_uInt64>(pSequence[4] & 0xFF) << 32
+          | static_cast<sal_uInt64>(pSequence[5] & 0xFF) << 40
+          | static_cast<sal_uInt64>(pSequence[6] & 0xFF) << 48
+          | static_cast<sal_uInt64>(pSequence[7] & 0xFF) << 56;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
