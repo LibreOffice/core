@@ -676,6 +676,7 @@ Module.addOnPostRun(function() {
     test.passJob(css.task.XJob.query(obj));
     test.passJobExecutor(css.task.XJobExecutor.query(obj));
     test.passInterface(obj);
+    css.task.XJobExecutor.query(obj).trigger('from JS');
     console.assert(test.getStringAttribute() === 'hä');
     test.setStringAttribute('foo');
     console.assert(test.getStringAttribute() === 'foo');
