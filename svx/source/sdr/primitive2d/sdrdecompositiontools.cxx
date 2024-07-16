@@ -406,7 +406,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient))
             {
                 // if yes, create a primitive expressing that. That primitive's
-                // decomnpose will do the same as if the code below would be executed,
+                // decompose will do the same as if the code below would be executed,
                 // so no primitive renderer who does not want to will have to handle
                 // it - but SDPR renderers that can directly render that may choose to
                 // do so. NOTE: That helper primitive just holds references to what
