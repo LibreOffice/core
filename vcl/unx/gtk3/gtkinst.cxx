@@ -3458,6 +3458,20 @@ public:
         if (!bTakeOwnership)
             g_object_ref(m_pWidget);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        const char* pId = gtk_buildable_get_name(GTK_BUILDABLE(m_pWidget));
+        if (pId)
+        {
+            static auto func = reinterpret_cast<void(*)(AtkObject*, const char*)>(dlsym(nullptr, "atk_object_set_accessible_id"));
+            if (func)
+            {
+                AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+                assert(pAtkObject);
+                (*func)(pAtkObject, pId);
+            }
+        }
+#endif
+
         localizeDecimalSeparator();
     }
 
