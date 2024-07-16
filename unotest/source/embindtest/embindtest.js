@@ -647,7 +647,8 @@ Module.addOnPostRun(function() {
         any.delete();
     }
     const obj = Module.unoObject(
-        ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor'],
+        ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor',
+         'org.libreoffice.embindtest.XAttributes'],
         {
             execute(args) {
                 if (args.size() !== 1 || args.get(0).Name !== 'name') {
@@ -658,14 +659,22 @@ Module.addOnPostRun(function() {
                 console.log('Hello ' + args.get(0).Value.get());
                 return new Module.uno_Any(Module.uno_Type.Void(), undefined);
             },
-            trigger(event) { console.log('Ola ' + event); }
+            trigger(event) { console.log('Ola ' + event); },
+            the_LongAttribute: -123456,
+            getLongAttribute() { return this.the_LongAttribute; },
+            setLongAttribute(value) { this.the_LongAttribute = value; },
+            the_StringAttribute: 'hä',
+            getStringAttribute() { return this.the_StringAttribute; },
+            setStringAttribute(value) { this.the_StringAttribute = value; },
+            getReadOnlyAttribute() { return true; }
         });
     {
         const s = css.lang.XTypeProvider.query(obj).getTypes();
-        console.assert(s.size() === 3);
+        console.assert(s.size() === 4);
         console.assert(s.get(0).toString() === 'com.sun.star.lang.XTypeProvider');
         console.assert(s.get(1).toString() === 'com.sun.star.task.XJob');
         console.assert(s.get(2).toString() === 'com.sun.star.task.XJobExecutor');
+        console.assert(s.get(3).toString() === 'org.libreoffice.embindtest.XAttributes');
         s.delete();
     }
     {
@@ -677,6 +686,21 @@ Module.addOnPostRun(function() {
     test.passJobExecutor(css.task.XJobExecutor.query(obj));
     test.passInterface(obj);
     css.task.XJobExecutor.query(obj).trigger('from JS');
+    {
+        const attrs = Module.uno.org.libreoffice.embindtest.XAttributes.query(obj);
+        console.assert(attrs.getLongAttribute() === -123456);
+        attrs.setLongAttribute(789);
+        console.assert(attrs.getLongAttribute() === 789);
+        console.assert(attrs.getStringAttribute() === 'hä');
+        attrs.setStringAttribute('foo');
+        console.assert(attrs.getStringAttribute() === 'foo');
+        console.assert(attrs.getReadOnlyAttribute() === 1); //TODO: true
+        try {
+            attrs.setReadOnlyAttribute(false);
+            console.assert(false);
+        } catch (e) {}
+        console.assert(test.checkAttributes(attrs));
+    }
     console.assert(test.getStringAttribute() === 'hä');
     test.setStringAttribute('foo');
     console.assert(test.getStringAttribute() === 'foo');

@@ -604,6 +604,18 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
             ->trigger(u"queried executor"_ustr);
     }
 
+    sal_Bool SAL_CALL checkAttributes(
+        css::uno::Reference<org::libreoffice::embindtest::XAttributes> const& object) override
+    {
+        auto const ok1 = object->getLongAttribute() == 789;
+        assert(ok1);
+        auto const ok2 = object->getStringAttribute() == u"foo"_ustr;
+        assert(ok2);
+        auto const ok3 = object->getReadOnlyAttribute();
+        assert(ok3);
+        return ok1 && ok2 && ok3;
+    }
+
     OUString SAL_CALL getStringAttribute() override { return stringAttribute_; }
 
     void SAL_CALL setStringAttribute(OUString const& value) override { stringAttribute_ = value; }
