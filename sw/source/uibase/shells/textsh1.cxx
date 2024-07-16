@@ -2300,7 +2300,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     if (!xContentControlProps.is())
                                         continue;
 
-                                    // Compare the loaded and the actual idetifier
+                                    // Compare the loaded and the actual identifier
                                     switch (iKeyId)
                                     {
                                         case ContentFilterType::INDEX:
