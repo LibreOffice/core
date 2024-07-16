@@ -425,6 +425,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 m_xPrefBox->set_text(*m_xScratchIter, "", 1);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 2);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 3);
+                m_xPrefBox->set_text_emphasis(*m_xScratchIter, false, -1);
                 m_xPrefBox->set_sensitive(*m_xScratchIter, true);
             }
         }
@@ -1077,6 +1078,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
             m_xPrefBox->set_text(*xParentEntry, "", 1);
             m_xPrefBox->set_text(*xParentEntry, "", 2);
             m_xPrefBox->set_text(*xParentEntry, "", 3);
+            m_xPrefBox->set_text_emphasis(*xParentEntry, false, -1);
             m_xPrefBox->set_sensitive(*xParentEntry, true);
         }
 
