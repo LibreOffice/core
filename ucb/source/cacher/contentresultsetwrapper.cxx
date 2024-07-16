@@ -413,7 +413,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
 
-    if( !getPropertySetInfo().is() )
+    if( !getPropertySetInfoImpl(aGuard).is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
@@ -455,7 +455,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
 
-    if( !getPropertySetInfo().is() )
+    if( !getPropertySetInfoImpl(aGuard).is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
@@ -509,7 +509,7 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
     {
         if( !rPropertyName.isEmpty() )
         {
-            if( !getPropertySetInfo().is() )
+            if( !getPropertySetInfoImpl(aGuard).is() )
                 throw UnknownPropertyException();
 
             m_xPropertySetInfo->getPropertyByName( rPropertyName );
@@ -557,7 +557,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
     {
         if( !rPropertyName.isEmpty() )
         {
-            if( !getPropertySetInfo().is() )
+            if( !getPropertySetInfoImpl(aGuard).is() )
                 throw UnknownPropertyException(rPropertyName);
 
             m_xPropertySetInfo->getPropertyByName( rPropertyName );
