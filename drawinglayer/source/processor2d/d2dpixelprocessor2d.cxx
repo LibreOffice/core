@@ -1269,8 +1269,7 @@ void D2DPixelProcessor2D::processUnifiedTransparencePrimitive2D(
         increaseError();
 }
 
-void D2DPixelProcessor2D::processMaskPrimitive2DPixel(
-    const primitive2d::MaskPrimitive2D& rMaskCandidate)
+void D2DPixelProcessor2D::processMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate)
 {
     if (rMaskCandidate.getChildren().empty())
     {
@@ -2082,8 +2081,7 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
         {
-            processMaskPrimitive2DPixel(
-                static_cast<const primitive2d::MaskPrimitive2D&>(rCandidate));
+            processMaskPrimitive2D(static_cast<const primitive2d::MaskPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:

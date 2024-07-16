@@ -36,6 +36,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1263,8 +1264,10 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
     cairo_restore(mpRT);
 }
 
-void CairoPixelProcessor2D::processMaskPrimitive2DPixel(
-    const primitive2d::MaskPrimitive2D& rMaskCandidate)
+void CairoPixelProcessor2D::processMaskPrimitive2D(
+    const primitive2d::MaskPrimitive2D& rMaskCandidate,
+    const primitive2d::FillGradientPrimitive2D* pFillGradientPrimitive2D,
+    const attribute::FillGradientAttribute* pFillGradientAlpha)
 {
     if (rMaskCandidate.getChildren().empty())
     {
@@ -1314,8 +1317,20 @@ void CairoPixelProcessor2D::processMaskPrimitive2DPixel(
     cairo_clip(mpRT);
     cairo_new_path(mpRT);
 
-    // process sub-content (that shall be masked)
-    process(rMaskCandidate.getChildren());
+    if (nullptr != pFillGradientPrimitive2D && nullptr != pFillGradientAlpha)
+    {
+        // special case: render given FillGradientPrimitive2D using
+        // FillGradientAlpha as RGBA gradient directly
+        // note that calling this method with nullptr != pFillGradientAlpha
+        // is only allowed internal from
+        // CairoPixelProcessor2D::processPolyPolygonRGBAGradientPrimitive2D
+        processFillGradientPrimitive2D(*pFillGradientPrimitive2D, pFillGradientAlpha);
+    }
+    else
+    {
+        // process sub-content (that shall be masked)
+        process(rMaskCandidate.getChildren());
+    }
 
     cairo_restore(mpRT);
 }
@@ -1922,7 +1937,8 @@ bool CairoPixelProcessor2D::processFillGradientPrimitive2D_isCompletelyBordered(
 }
 
 void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
-    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
+    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+    const attribute::FillGradientAttribute* pFillGradientAlpha)
 {
     assert(
         (css::awt::GradientStyle_LINEAR == rFillGradientPrimitive2D.getFillGradient().getStyle()
@@ -1964,6 +1980,10 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
 
     // get color stops (make copy, might have to be changed)
     basegfx::BColorStops aBColorStops(rFillGradient.getColorStops());
+    basegfx::BColorStops aBColorStopsAlpha;
+    const bool bHasAlpha(nullptr != pFillGradientAlpha);
+    if (bHasAlpha)
+        aBColorStopsAlpha = pFillGradientAlpha->getColorStops();
     const bool bAxial(css::awt::GradientStyle_AXIAL == rFillGradient.getStyle());
 
     // get and apply border - create soace at start in gradient
@@ -1971,30 +1991,58 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
     if (!basegfx::fTools::equalZero(fBorder))
     {
         if (bAxial)
+        {
             aBColorStops.reverseColorStops();
+            if (bHasAlpha)
+                aBColorStopsAlpha.reverseColorStops();
+        }
+
         aBColorStops.createSpaceAtStart(fBorder);
+        if (bHasAlpha)
+            aBColorStopsAlpha.createSpaceAtStart(fBorder);
+
         if (bAxial)
+        {
             aBColorStops.reverseColorStops();
+            if (bHasAlpha)
+                aBColorStopsAlpha.reverseColorStops();
+        }
     }
 
     if (bAxial)
     {
         // expand with mirrored ColorStops to create axial
         aBColorStops.doApplyAxial();
+        if (bHasAlpha)
+            aBColorStopsAlpha.doApplyAxial();
     }
 
     // Apply steps if used to 'emulate' LO's 'discrete step' feature
     if (rFillGradient.getSteps())
     {
         aBColorStops.doApplySteps(rFillGradient.getSteps());
+        if (bHasAlpha)
+            aBColorStopsAlpha.doApplySteps(rFillGradient.getSteps());
     }
 
     // add color stops
-    for (const auto& aStop : aBColorStops)
+    for (size_t a(0); a < aBColorStops.size(); a++)
     {
-        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(aStop.getStopColor()));
-        cairo_pattern_add_color_stop_rgb(pPattern, aStop.getStopOffset(), aColor.getRed(),
-                                         aColor.getGreen(), aColor.getBlue());
+        const basegfx::BColorStop& rStop(aBColorStops[a]);
+        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rStop.getStopColor()));
+
+        if (bHasAlpha)
+        {
+            const basegfx::BColor aAlpha(aBColorStopsAlpha[a].getStopColor());
+            cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                              aColor.getGreen(), aColor.getBlue(),
+                                              aAlpha.luminance());
+        }
+        else
+        {
+            cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                             aColor.getGreen(), aColor.getBlue());
+        }
     }
 
     // draw OutRange
@@ -2273,7 +2321,8 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_square_rect(
 }
 
 void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
-    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
+    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+    const attribute::FillGradientAttribute* pFillGradientAlpha)
 {
     assert((css::awt::GradientStyle_RADIAL == rFillGradientPrimitive2D.getFillGradient().getStyle()
             || css::awt::GradientStyle_ELLIPTICAL
@@ -2337,26 +2386,46 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
 
     // get color stops (make copy, might have to be changed)
     basegfx::BColorStops aBColorStops(rFillGradient.getColorStops());
+    basegfx::BColorStops aBColorStopsAlpha;
+    const bool bHasAlpha(nullptr != pFillGradientAlpha);
+    if (bHasAlpha)
+        aBColorStopsAlpha = pFillGradientAlpha->getColorStops();
 
     // get and apply border - create soace at start in gradient
     const double fBorder(std::max(std::min(rFillGradient.getBorder(), 1.0), 0.0));
     if (!basegfx::fTools::equalZero(fBorder))
     {
         aBColorStops.createSpaceAtStart(fBorder);
+        if (bHasAlpha)
+            aBColorStopsAlpha.createSpaceAtStart(fBorder);
     }
 
     // Apply steps if used to 'emulate' LO's 'discrete step' feature
     if (rFillGradient.getSteps())
     {
         aBColorStops.doApplySteps(rFillGradient.getSteps());
+        if (bHasAlpha)
+            aBColorStopsAlpha.doApplySteps(rFillGradient.getSteps());
     }
 
     // add color stops
-    for (const auto& aStop : aBColorStops)
+    for (size_t a(0); a < aBColorStops.size(); a++)
     {
-        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(aStop.getStopColor()));
-        cairo_pattern_add_color_stop_rgb(pPattern, aStop.getStopOffset(), aColor.getRed(),
-                                         aColor.getGreen(), aColor.getBlue());
+        const basegfx::BColorStop& rStop(aBColorStops[a]);
+        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rStop.getStopColor()));
+
+        if (bHasAlpha)
+        {
+            const basegfx::BColor aAlpha(aBColorStopsAlpha[a].getStopColor());
+            cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                              aColor.getGreen(), aColor.getBlue(),
+                                              aAlpha.luminance());
+        }
+        else
+        {
+            cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                             aColor.getGreen(), aColor.getBlue());
+        }
     }
 
     cairo_set_source(mpRT, pPattern);
@@ -2446,7 +2515,8 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_fallback_decompose(
 }
 
 void CairoPixelProcessor2D::processFillGradientPrimitive2D(
-    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
+    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+    const attribute::FillGradientAttribute* pFillGradientAlpha)
 {
     if (rFillGradientPrimitive2D.getDefinitionRange().isEmpty())
     {
@@ -2494,13 +2564,21 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
+    // for dfirect RGBA gradient render support: assert when the definition
+    // is not allowed, it HAS to fulfil the requested preconditions. Note that
+    // the form to call this function using nullptr != pFillGradientAlpha is
+    // only allowed locally in CairoPixelProcessor2D::processMaskPrimitive2D
+    assert(nullptr == pFillGradientAlpha
+           || rFillGradient.sameDefinitionThanAlpha(*pFillGradientAlpha));
+
     switch (rFillGradient.getStyle())
     {
         case css::awt::GradientStyle_LINEAR:
         case css::awt::GradientStyle_AXIAL:
         {
             // use specialized renderer for this cases - linear, axial
-            processFillGradientPrimitive2D_linear_axial(rFillGradientPrimitive2D);
+            processFillGradientPrimitive2D_linear_axial(rFillGradientPrimitive2D,
+                                                        pFillGradientAlpha);
             return;
         }
         case css::awt::GradientStyle_RADIAL:
@@ -2517,13 +2595,20 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
             // also rare. IF that should make problems reactivation of that case
             // for the default case below is possible. main reason is that speed
             // for direct rendering in cairo is much better.
-            processFillGradientPrimitive2D_radial_elliptical(rFillGradientPrimitive2D);
+            processFillGradientPrimitive2D_radial_elliptical(rFillGradientPrimitive2D,
+                                                             pFillGradientAlpha);
             return;
         }
         case css::awt::GradientStyle_SQUARE:
         case css::awt::GradientStyle_RECT:
         {
             // use specialized renderer for this cases - square, rect
+            // NOTE: *NO* support for FillGradientAlpha here. it is anyways
+            // hard to map these to direct rendering, but to do so the four
+            // trapezoids/sides are 'stitched' together, so painting RGBA
+            // directly will make the overlaps look bad and like errors.
+            // Anyways, these gradient types are only our internal heritage
+            // and rendering them directly is already much faster, will be okay.
             processFillGradientPrimitive2D_square_rect(rFillGradientPrimitive2D);
             return;
         }
@@ -2536,6 +2621,53 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
             break;
         }
     }
+}
+
+void CairoPixelProcessor2D::processPolyPolygonRGBAGradientPrimitive2D(
+    const primitive2d::PolyPolygonRGBAGradientPrimitive2D& rPolyPolygonRGBAGradientPrimitive2D)
+{
+    const attribute::FillGradientAttribute& rFill(
+        rPolyPolygonRGBAGradientPrimitive2D.getFillGradient());
+    const attribute::FillGradientAttribute& rAlpha(
+        rPolyPolygonRGBAGradientPrimitive2D.getFillGradientAlpha());
+
+    if (rFill.isDefault())
+    {
+        // no gradient definition, done
+        return;
+    }
+
+    // assert when the definition is not allowed, it HAS to fulfil the
+    // requested preconditions
+    assert(rFill.sameDefinitionThanAlpha(rAlpha));
+
+    // the gradient still needs to be masked to getB2DPolyPolygon() at the
+    // primitive, see PolyPolygonGradientPrimitive2D::create2DDecomposition.
+    // we could repeat here the code inside localprocessMaskPrimitive2D, but
+    // it is easier to just locally temporarily create the needed data structure
+    // and hand over the needed extra-data
+    const basegfx::B2DRange aPolyPolygonRange(
+        rPolyPolygonRGBAGradientPrimitive2D.getB2DPolyPolygon().getB2DRange());
+    primitive2d::FillGradientPrimitive2D* pFillGradientPrimitive2D(
+        new primitive2d::FillGradientPrimitive2D(
+            aPolyPolygonRange, rPolyPolygonRGBAGradientPrimitive2D.getDefinitionRange(), rFill));
+    primitive2d::Primitive2DContainer aContent{ pFillGradientPrimitive2D };
+
+    // NOTE: I had this like
+    //   const primitive2d::MaskPrimitive2D aMaskPrimitive2D(
+    //       rPolyPolygonRGBAGradientPrimitive2D.getB2DPolyPolygon(), std::move(aContent));
+    // but I got
+    //   error: salhelper::SimpleReferenceObject subclass being directly stack managed, should
+    //   be managed via rtl::Reference, const primitive2d::MaskPrimitive2D [loplugin:refcounting]
+    // thus I have *no choice* and have to use the heap here (?) It is no problem to use the stack
+    // and I wanted to do this here by purpose... sigh
+    primitive2d::MaskPrimitive2D* pMaskPrimitive2D(new primitive2d::MaskPrimitive2D(
+        rPolyPolygonRGBAGradientPrimitive2D.getB2DPolyPolygon(), std::move(aContent)));
+    primitive2d::Primitive2DContainer aMask{ pMaskPrimitive2D };
+    (void)aMask;
+
+    // render masked RGBA gradient
+    processMaskPrimitive2D(*pMaskPrimitive2D, pFillGradientPrimitive2D, &rAlpha);
 }
 
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
@@ -2582,8 +2714,7 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         }
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
         {
-            processMaskPrimitive2DPixel(
-                static_cast<const primitive2d::MaskPrimitive2D&>(rCandidate));
+            processMaskPrimitive2D(static_cast<const primitive2d::MaskPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
@@ -2652,6 +2783,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processFillGradientPrimitive2D(
                 static_cast<const primitive2d::FillGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_POLYPOLYGONRGBAGRADIENTPRIMITIVE2D:
+        {
+            processPolyPolygonRGBAGradientPrimitive2D(
+                static_cast<const primitive2d::PolyPolygonRGBAGradientPrimitive2D&>(rCandidate));
             break;
         }
 

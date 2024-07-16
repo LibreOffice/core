@@ -35,7 +35,13 @@ class LineRectanglePrimitive2D;
 class FilledRectanglePrimitive2D;
 class SingleLinePrimitive2D;
 class FillGradientPrimitive2D;
+class PolyPolygonRGBAGradientPrimitive2D;
 class FillGraphicPrimitive2D;
+}
+
+namespace drawinglayer::attribute
+{
+class FillGradientAttribute;
 }
 
 namespace drawinglayer::processor2d
@@ -59,7 +65,11 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     void processInvertPrimitive2D(const primitive2d::InvertPrimitive2D& rTransCandidate);
     void processUnifiedTransparencePrimitive2D(
         const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);
-    void processMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
+    void processMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate,
+                                const primitive2d::FillGradientPrimitive2D* pFillGradientPrimitive2D
+                                = nullptr,
+                                const attribute::FillGradientAttribute* pFillGradientAlpha
+                                = nullptr);
     void processModifiedColorPrimitive2D(
         const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
     void processTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
@@ -78,9 +88,12 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     void
     processSingleLinePrimitive2D(const primitive2d::SingleLinePrimitive2D& rSingleLinePrimitive2D);
     void processFillGradientPrimitive2D(
-        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+        const attribute::FillGradientAttribute* pFillGradientAlpha = nullptr);
     void processFillGraphicPrimitive2D(
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
+    void processPolyPolygonRGBAGradientPrimitive2D(
+        const primitive2d::PolyPolygonRGBAGradientPrimitive2D& rPolyPolygonRGBAGradientPrimitive2D);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
@@ -95,9 +108,11 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     bool processFillGradientPrimitive2D_isCompletelyBordered(
         const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
     void processFillGradientPrimitive2D_linear_axial(
-        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+        const attribute::FillGradientAttribute* pFillGradientAlpha = nullptr);
     void processFillGradientPrimitive2D_radial_elliptical(
-        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D,
+        const attribute::FillGradientAttribute* pFillGradientAlpha = nullptr);
     void processFillGradientPrimitive2D_square_rect(
         const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
 

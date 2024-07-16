@@ -81,7 +81,7 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     processTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate);
     void processUnifiedTransparencePrimitive2D(
         const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);
-    void processMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
+    void processMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate);
     void processModifiedColorPrimitive2D(
         const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
     void processTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
