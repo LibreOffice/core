@@ -29,6 +29,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -360,11 +361,17 @@ namespace drawinglayer::primitive2d
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
+            /// provide unique ID
+            virtual sal_uInt32 getPrimitive2DID() const override { return PRIMITIVE2D_ID_ANIMATEDGRAPHICPRIMITIVE2D; }
+
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// override to deliver the correct expected frame dependent of timing
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+
+            /// get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
         };
 
         }
@@ -499,6 +506,18 @@ namespace drawinglayer::primitive2d
             aRetval = createFromBuffer();
 
             rVisitor.visit(aRetval);
+        }
+
+        basegfx::B2DRange AnimatedGraphicPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            // get object's range
+            basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+            aUnitRange.transform(getTransform());
+
+            // intersect with visible part
+            aUnitRange.intersect(rViewInformation.getViewport());
+
+            return aUnitRange;
         }
 
 } // end of namespace

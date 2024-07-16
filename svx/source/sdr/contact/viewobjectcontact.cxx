@@ -97,6 +97,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D :
         case PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D :
         case PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D :
+        case PRIMITIVE2D_ID_ANIMATEDGRAPHICPRIMITIVE2D :
         {
             const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& rSwitchPrimitive = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D& >(rCandidate);
 

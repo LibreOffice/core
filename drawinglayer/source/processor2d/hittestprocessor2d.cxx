@@ -468,6 +468,7 @@ namespace drawinglayer::processor2d
                 case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D :
                 case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
                 case PRIMITIVE2D_ID_MEDIAPRIMITIVE2D:
+                case PRIMITIVE2D_ID_ANIMATEDGRAPHICPRIMITIVE2D:
                 {
                     if(!getHitTextOnly())
                     {
