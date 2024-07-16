@@ -360,6 +360,7 @@ constexpr auto constTransitionTypeToString = mapEnumToString<sal_Int16>({
     { animations::TransitionType::ELLIPSEWIPE, "EllipseWipe"}, // Shape
     { animations::TransitionType::BARNDOORWIPE, "BarnDoorWipe"}, // Split
     { animations::TransitionType::WATERFALLWIPE, "WaterfallWipe"}, // Diagonal
+    { animations::TransitionType::MISCSHAPEWIPE, "MiscShapeWipe"},
 });
 
 constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
