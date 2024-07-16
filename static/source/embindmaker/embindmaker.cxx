@@ -481,57 +481,44 @@ void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manage
 {
     for (auto const& attr : entity->getDirectAttributes())
     {
-        out << "        .function(\"get" << attr.name << "\", ";
-        if (baseTrail.empty())
+        out << "        .property<";
+        dumpType(out, manager, attr.type);
+        out << ">(\"" << attr.name << "\", +[](" << cppName(name) << " const & the_self) { return ";
+        for (auto const& base : baseTrail)
         {
-            out << "&" << cppName(name) << "::get" << attr.name;
+            out << "static_cast<" << cppName(base) << " &>(";
         }
-        else
+        out << "const_cast<" << cppName(name) << " &>(the_self)";
+        for (std::size_t i = 0; i != baseTrail.size(); ++i)
         {
-            out << "+[](::com::sun::star::uno::Reference<" << cppName(name)
-                << "> const & the_self) { return ";
+            out << ")";
+        }
+        out << ".get" << attr.name << "(); }";
+        if (!attr.readOnly)
+        {
+            out << ", +[](" << cppName(name) << " & the_self, ";
+            dumpType(out, manager, attr.type);
+            if (passByReference(manager, attr.type))
+            {
+                out << " const &";
+            }
+            out << " the_value) { ";
             for (auto const& base : baseTrail)
             {
-                out << "static_cast<" << cppName(base) << " *>(";
+                out << "static_cast<" << cppName(base) << " &>(";
             }
-            out << "the_self.get()";
+            out << "the_self";
             for (std::size_t i = 0; i != baseTrail.size(); ++i)
             {
                 out << ")";
             }
-            out << "->get" << attr.name << "(); }";
+            out << ".set" << attr.name << "(the_value); }";
         }
-        out << ", ::emscripten::pure_virtual())\n";
-        if (!attr.readOnly)
-        {
-            out << "        .function(\"set" << attr.name << "\", ";
-            if (baseTrail.empty())
-            {
-                out << "&" << cppName(name) << "::set" << attr.name;
-            }
-            else
-            {
-                out << "+[](::com::sun::star::uno::Reference<" << cppName(name)
-                    << "> const & the_self, ";
-                dumpType(out, manager, attr.type);
-                if (passByReference(manager, attr.type))
-                {
-                    out << " const &";
-                }
-                out << " the_value) { ";
-                for (auto const& base : baseTrail)
-                {
-                    out << "static_cast<" << cppName(base) << " *>(";
-                }
-                out << "the_self.get()";
-                for (std::size_t i = 0; i != baseTrail.size(); ++i)
-                {
-                    out << ")";
-                }
-                out << "->set" << attr.name << "(the_value); }";
-            }
-            out << ", ::emscripten::pure_virtual())\n";
-        }
+        out << "/*only supported since "
+               "<https://github.com/emscripten-core/emscripten/commit/"
+               "09b765f76e052e6bfcf741ed6d2bae1788200734> \"[embind] Return value policy support "
+               "for properties. (#21935)\" towards emsdk 3.1.62: , "
+               "::emscripten::pure_virtual()*/)\n";
     }
 }
 
