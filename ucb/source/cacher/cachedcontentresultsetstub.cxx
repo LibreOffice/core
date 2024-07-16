@@ -386,7 +386,7 @@ void CachedContentResultSetStub
     {
         //check whether the properties 'FetchSize' and 'FetchDirection' do exist
 
-        Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
+        Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfoImpl(rGuard);
         bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
         bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
 
