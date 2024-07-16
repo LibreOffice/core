@@ -36,6 +36,8 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
@@ -363,6 +365,15 @@ QString QtAccessibleWidget::text(QAccessible::Text text) const
         case QAccessible::Description:
         case QAccessible::DebugDescription:
             return toQString(xAc->getAccessibleDescription());
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+        case QAccessible::Identifier:
+        {
+            Reference<XAccessibleContext2> xContext(getAccessibleContextImpl(), UNO_QUERY);
+            if (!xContext.is())
+                return QString();
+            return toQString(xContext->getAccessibleId());
+        }
+#endif
         case QAccessible::Value:
         case QAccessible::Help:
         case QAccessible::Accelerator:
