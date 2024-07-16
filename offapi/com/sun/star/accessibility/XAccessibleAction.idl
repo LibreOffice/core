@@ -47,8 +47,7 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
     /** Perform the specified Action on the object.
 
         @param nIndex
-            This index specifies the action to perform.  If it lies outside
-            the valid range `FALSE` is returned and no action is performed.
+            This index specifies the action to perform.
         @return
             Returns `TRUE` if the action was successfully performed.  If
             the action could not be performed successfully `FALSE` is
@@ -66,14 +65,13 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @param nIndex
             This index specifies the action of which to return a
-            description.  If it lies outside the valid range an empty string
-            is returned.
+            description.
 
         @return
             The returned value is a localized string of the specified action.
 
         @throws IndexOutOfBoundsException
-            If the given index lies not in the valid range then an
+            If the given index does not lie in the valid range then a
             ::com::sun::star::lang::IndexOutOfBoundsException
             exception is thrown.
     */
@@ -86,7 +84,7 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
         more information about how key bindings are represented.
 
         @param nIndex
-            This index specifies the action of which to return the key
+            This index specifies the action for which to return the key
             binding.
 
         @return
