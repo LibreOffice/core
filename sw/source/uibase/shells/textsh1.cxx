@@ -2264,7 +2264,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             };
             std::vector<std::string> aIdTexts = { ".ByIndex.", ".ByTag.", ".ByAlias.", ".ById." };
 
-            // Iterate trough the JSON data loaded into a tree structure
+            // Iterate through the JSON data loaded into a tree structure
             for (const auto& aItem : aTree)
             {
                 if (aItem.first == "Transforms")
