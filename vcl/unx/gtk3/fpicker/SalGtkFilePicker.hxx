@@ -162,6 +162,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
             PREVIEW,
             SELECTION,
             GPGENCRYPTION,
+            GPGSIGN,
             TOGGLE_LAST
               };
 

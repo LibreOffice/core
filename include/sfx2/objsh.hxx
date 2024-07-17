@@ -477,6 +477,7 @@ public:
     bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
 
     bool                        IsRememberingSignature() const { return bRememberSignature; }
+    void                        SetRememberCurrentSignature(bool bRemember);
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }

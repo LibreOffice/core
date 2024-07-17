@@ -127,6 +127,7 @@ public:
     std::unique_ptr<weld::Button> m_xBtnNewFolder;
     std::unique_ptr<weld::CheckButton> m_xCbPassword;
     std::unique_ptr<weld::CheckButton> m_xCbGPGEncrypt;
+    std::unique_ptr<weld::CheckButton> m_xCbGPGSign;
     std::unique_ptr<SvtURLBox> m_xEdCurrentPath;
     std::unique_ptr<weld::CheckButton> m_xCbAutoExtension;
     std::unique_ptr<weld::CheckButton> m_xCbOptions;

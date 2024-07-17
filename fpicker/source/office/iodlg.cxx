@@ -302,6 +302,7 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     m_xImpl->m_xBtnNewFolder = m_xBuilder->weld_button(u"new_folder"_ustr);
     m_xImpl->m_xCbPassword = m_xBuilder->weld_check_button(u"password"_ustr);
     m_xImpl->m_xCbGPGEncrypt = m_xBuilder->weld_check_button(u"gpgencrypt"_ustr);
+    m_xImpl->m_xCbGPGSign = m_xBuilder->weld_check_button(u"gpgsign"_ustr);
     m_xImpl->m_xCbAutoExtension = m_xBuilder->weld_check_button(u"extension"_ustr);
     m_xImpl->m_xSharedLabel = m_xBuilder->weld_label(u"shared_label"_ustr);
     m_xImpl->m_xSharedListBox = m_xBuilder->weld_combo_box(u"shared"_ustr);
@@ -367,8 +368,12 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
         m_xImpl->m_xCbPassword->set_label( FpsResId( STR_SVT_FILEPICKER_PASSWORD ) );
         m_xImpl->m_xCbPassword->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xImpl->m_xCbPassword->show();
+
         m_xImpl->m_xCbGPGEncrypt->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         m_xImpl->m_xCbGPGEncrypt->show();
+
+        m_xImpl->m_xCbGPGSign->connect_toggled( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        m_xImpl->m_xCbGPGSign->show();
     }
 
     // set the ini file for extracting the size
@@ -1240,6 +1245,8 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, weld::Toggleable&, rCheckBox, void )
         nId = CHECKBOX_PASSWORD;
     else if ( &rCheckBox == m_xImpl->m_xCbGPGEncrypt.get() )
         nId = CHECKBOX_GPGENCRYPTION;
+    else if ( &rCheckBox == m_xImpl->m_xCbGPGSign.get() )
+        nId = CHECKBOX_GPGSIGN;
     else if ( &rCheckBox == m_xCbLinkBox.get() )
         nId = CHECKBOX_LINK;
     else if ( &rCheckBox == m_xCbPreviewBox.get() )
@@ -1916,6 +1923,10 @@ weld::Widget* SvtFileDialog::getControl( sal_Int16 nControlId, bool bLabelContro
 
         case CHECKBOX_GPGENCRYPTION:
             pReturn = m_xImpl->m_xCbGPGEncrypt.get();
+            break;
+
+        case CHECKBOX_GPGSIGN:
+            pReturn = m_xImpl->m_xCbGPGSign.get();
             break;
 
         case CHECKBOX_FILTEROPTIONS:

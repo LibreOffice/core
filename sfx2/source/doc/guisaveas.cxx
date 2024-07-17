@@ -16,6 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <config_gpgme.h>
+#if HAVE_FEATURE_GPGME
+#include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#endif
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
@@ -63,6 +71,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -275,6 +284,7 @@ class ModelData_Impl
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
     bool m_bRecommendReadOnly;
+    bool m_bSignWithDefaultSignature;
 
     DECL_LINK(OptionsDialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
@@ -294,6 +304,7 @@ public:
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
     bool IsRecommendReadOnly() const { return m_bRecommendReadOnly; }
+    bool IsSignWithDefaultSignature() const { return m_bSignWithDefaultSignature; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
@@ -1093,6 +1104,10 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
+    const SfxBoolItem* pSignWithDefaultKey = SfxItemSet::GetItem<SfxBoolItem>(&*pDialogParams, SID_GPGSIGN, false);
+    m_bSignWithDefaultSignature = (pSignWithDefaultKey && pSignWithDefaultKey->GetValue());
+    pDialogParams->ClearItem( SID_GPGSIGN );
+
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
     TransformItems( nSlotID, *pDialogParams, aPropsFromDialog );
     GetMediaDescr() << aPropsFromDialog;
@@ -1876,6 +1891,52 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             // will remain blocked if we rethrow an exception.
         }
 #endif
+    }
+
+    if (aModelData.IsSignWithDefaultSignature())
+    {
+        auto SignWithDefaultSignature = [&]()
+        {
+#if HAVE_FEATURE_GPGME
+            auto aSigningKey = SvtUserOptions().GetSigningKey();
+            if (aSigningKey.isEmpty())
+                return;
+
+            std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecurityContexts{
+                xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
+                    ->createSecurityContext({}),
+                xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
+                    ->createSecurityContext({}),
+            };
+
+            for (const auto& xSecurityContext : xSecurityContexts)
+            {
+                if (xSecurityContext.is())
+                {
+                    css::uno::Reference<css::security::XCertificate> xCert
+                        = comphelper::xmlsec::FindCertInContext(xSecurityContext, aSigningKey);
+
+                    if (xCert.is() && SfxViewShell::Current())
+                    {
+                        SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
+                        bool bSigned = pDocShell->SignDocumentContentUsingCertificate(xCert);
+                        if (bSigned && pDocShell->HasValidSignatures())
+                        {
+                            std::unique_ptr<weld::MessageDialog> xBox(
+                                Application::CreateMessageDialog(
+                                    SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
+                                    VclMessageType::Question, VclButtonsType::YesNo,
+                                    SfxResId(STR_QUERY_REMEMBERSIGNATURE)));
+                            pDocShell->SetRememberCurrentSignature(xBox->run() == RET_YES);
+                        }
+                        return;
+                    }
+                }
+            }
+            return;
+#endif
+        };
+        SignWithDefaultSignature();
     }
 
     // Launch PDF viewer

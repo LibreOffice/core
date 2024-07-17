@@ -600,16 +600,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog( pDialogParent,
                                                       VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_REMEMBERSIGNATURE)));
-            if (xBox->run() == RET_YES)
-            {
-                rSignatureInfosRemembered = GetDocumentSignatureInformation(false);
-                bRememberSignature = true;
-            }
-            else
-            {
-                rSignatureInfosRemembered = uno::Sequence< security::DocumentSignatureInformation >();
-                bRememberSignature = false;
-            }
+            SetRememberCurrentSignature(xBox->run() == RET_YES);
         }
 
         return;
@@ -1897,6 +1888,20 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
     }
 
     return aResult;
+}
+
+void SfxObjectShell::SetRememberCurrentSignature(bool bRemember)
+{
+    if (bRemember)
+    {
+        rSignatureInfosRemembered = GetDocumentSignatureInformation(false);
+        bRememberSignature = true;
+    }
+    else
+    {
+        rSignatureInfosRemembered = uno::Sequence<security::DocumentSignatureInformation>();
+        bRememberSignature = false;
+    }
 }
 
 SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )

@@ -27,6 +27,16 @@
 
 #include <vector>
 
+namespace com::sun::star::xml::crypto
+{
+class XXMLSecurityContext;
+}
+
+namespace com::sun::star::security
+{
+class XCertificate;
+}
+
 namespace comphelper::xmlsec
 {
 COMPHELPER_DLLPUBLIC OUString GetCertificateKind(const css::security::CertificateKind& rKind);
@@ -40,6 +50,10 @@ COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
 
 COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _rSeq,
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
+
+COMPHELPER_DLLPUBLIC css::uno::Reference<css::security::XCertificate> FindCertInContext(
+    const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
+    const OUString& rContentPart);
 }
 
 #endif

@@ -170,7 +170,7 @@
       <prop oor:name="signingkey" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies user's preferred OpenPGP key used for document signing.</desc>
+          <desc>Specifies user's preferred key used for document signing.</desc>
         </info>
         <value/>
       </prop>

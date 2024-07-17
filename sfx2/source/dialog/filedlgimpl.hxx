@@ -95,6 +95,7 @@ namespace sfx2
         bool                    mbSelectionEnabled      : 1;
         bool                    mbHasSelectionBox       : 1;
         bool                    mbSelectionFltrEnabled  : 1;
+        bool                    mbHasSignByDefault      : 1;
 
     private:
         void                    addFilters( const OUString& rFactory,
@@ -108,6 +109,7 @@ namespace sfx2
         void                    updateFilterOptionsBox();
         void                    updateExportButton();
         void                    updateSelectionBox();
+        void                    updateSignByDefault();
         void                    updateVersions();
         void                    updatePreviewState( bool _bUpdatePreviewWindow );
         void                    dispose();

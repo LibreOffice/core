@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 #include <utility>
 #include <vector>
@@ -307,6 +308,34 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
         }
 
         return aStr.makeStringAndClear();
+    }
+
+    css::uno::Reference<css::security::XCertificate> FindCertInContext(
+        const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
+        const OUString& rContentPart)
+    {
+        if (!xSecurityContext.is())
+            return {};
+
+        css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSE
+            = xSecurityContext->getSecurityEnvironment();
+        css::uno::Sequence<css::uno::Reference<css::security::XCertificate>> xCertificates
+            = xSE->getPersonalCertificates();
+
+        auto aCertsIter = asNonConstRange(xCertificates);
+
+        auto pxCert
+            = std::find_if(aCertsIter.begin(), aCertsIter.end(),
+                           [&rContentPart](auto& xCert)
+                           {
+                               return comphelper::xmlsec::GetContentPart(
+                                          xCert->getSubjectName(), xCert->getCertificateKind())
+                                      == rContentPart;
+                           });
+        if (pxCert == aCertsIter.end())
+            return {};
+
+        return *pxCert;
     }
 }
 

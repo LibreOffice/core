@@ -49,6 +49,7 @@ published constants ExtendedFilePickerElementIds
     /** @since LibreOffice 6.0 */ const short CHECKBOX_GPGENCRYPTION = 211;
     /** @since LibreOffice 6.1 */ const short LISTBOX_IMAGE_ANCHOR   = 212;
     /** @since LibreOffice 6.1 */ const short LISTBOX_IMAGE_ANCHOR_LABEL = 213;
+    /** @since LibreOffice 25.2 */ const short CHECKBOX_GPGSIGN = 214;
 };
 
 

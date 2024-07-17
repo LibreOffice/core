@@ -641,6 +641,13 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
         setLabelToControl(iCustom, nControlId);
     }
 
+    if ((nFeatures & FEATURE_GPGSIGN) == FEATURE_GPGSIGN)
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN;
+        iCustom->AddCheckButton (nControlId, L"GpgSign", false);
+        setLabelToControl(iCustom, nControlId);
+    }
+
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY;
@@ -1093,6 +1100,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(Request& rRequest)
         {
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION :
+        case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK :

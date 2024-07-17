@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_gpgme.h>
 
 #include "VistaFilePicker.hxx"
 
@@ -362,6 +363,9 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
             nFeatures        |= FEATURE_GPGPASSWORD;
+#if HAVE_FEATURE_GPGME
+            nFeatures        |= FEATURE_GPGSIGN;
+#endif
         }
         break;
 
@@ -372,6 +376,9 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             nFeatures        |= FEATURE_PASSWORD;
             nFeatures        |= FEATURE_FILTEROPTIONS;
             nFeatures        |= FEATURE_GPGPASSWORD;
+#if HAVE_FEATURE_GPGME
+            nFeatures        |= FEATURE_GPGSIGN;
+#endif
         }
         break;
 

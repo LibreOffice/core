@@ -96,6 +96,15 @@
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <config_gpgme.h>
+#if HAVE_FEATURE_GPGME
+# include <com/sun/star/xml/crypto/SEInitializer.hpp>
+# include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
+# include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#endif
+#include <comphelper/xmlsechelper.hxx>
+#include <unotools/useroptions.hxx>
+
 #ifdef UNX
 #include <errno.h>
 #include <sys/stat.h>
@@ -284,6 +293,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
             enablePasswordBox( false );
             enableGpgEncrBox( false );
             updateSelectionBox();
+            updateSignByDefault();
             // only use it for export and with our own dialog
             if ( mbExport && !mbSystemPicker )
                 updateExportButton();
@@ -506,6 +516,43 @@ void FileDialogHelper_Impl::updateSelectionBox()
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, Any( mbSelection ) );
     }
+}
+
+void FileDialogHelper_Impl::updateSignByDefault()
+{
+#if HAVE_FEATURE_GPGME
+    if (!mbHasSignByDefault)
+        return;
+
+    auto HaveMatchingUserSigningKey = []() -> bool
+    {
+        auto aSigningKey = SvtUserOptions{}.GetSigningKey();
+        if (aSigningKey.isEmpty())
+            return false;
+
+        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecurityContexts{
+            xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
+                ->createSecurityContext({}),
+            xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
+                ->createSecurityContext({}),
+        };
+
+        for (const auto& xSecurityContext : xSecurityContexts)
+        {
+            if (xSecurityContext.is())
+            {
+                css::uno::Reference<css::security::XCertificate> xCert
+                    = comphelper::xmlsec::FindCertInContext(xSecurityContext, aSigningKey);
+                if (xCert.is())
+                    return true;
+            }
+        }
+        return false;
+    };
+
+    updateExtendedControl(ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN,
+                          HaveMatchingUserSigningKey());
+#endif
 }
 
 void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
@@ -918,6 +965,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
+    mbHasSignByDefault      = false;
     m_bHaveFilterOptions    = false;
     mbIsPwdEnabled          = true;
     mbIsGpgEncrEnabled      = true;
@@ -982,6 +1030,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPassword = true;
                 mbHasAutoExt = true;
                 mbIsSaveDlg = true;
+                mbHasSignByDefault = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -998,6 +1047,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
                 mbHasAutoExt = true;
                 mbIsSaveDlg = true;
+                mbHasSignByDefault = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_SELECTION:
@@ -1257,6 +1307,7 @@ IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls, void*, void )
     enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
+    updateSignByDefault();
 }
 
 void FileDialogHelper_Impl::preExecute()
@@ -1602,6 +1653,19 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                         rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
                     else
                         return ERRCODE_ABORT;
+                }
+            }
+            catch( const IllegalArgumentException& ){}
+        }
+        if ( pCurrentFilter && xCtrlAccess.is() )
+        {
+            try
+            {
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, 0 );
+                bool bSign = false;
+                if ((aValue >>= bSign) && bSign)
+                {
+                    rpSet->Put(SfxBoolItem(SID_GPGSIGN, bSign));
                 }
             }
             catch( const IllegalArgumentException& ){}

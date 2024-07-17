@@ -18,6 +18,7 @@
  */
 
 #include <config_gio.h>
+#include <config_gpgme.h>
 
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -201,6 +202,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         LABEL_TOGGLE( AUTOEXTENSION );
         LABEL_TOGGLE( PASSWORD );
         LABEL_TOGGLE( GPGENCRYPTION );
+        LABEL_TOGGLE( GPGSIGN );
         LABEL_TOGGLE( FILTEROPTIONS );
         LABEL_TOGGLE( READONLY );
         LABEL_TOGGLE( LINK );
@@ -1118,6 +1120,7 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_TOGGLE( AUTOEXTENSION );
         MAP_TOGGLE( PASSWORD );
         MAP_TOGGLE( GPGENCRYPTION );
+        MAP_TOGGLE( GPGSIGN );
         MAP_TOGGLE( FILTEROPTIONS );
         MAP_TOGGLE( READONLY );
         MAP_TOGGLE( LINK );
@@ -1698,6 +1701,9 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
             first_button_text = sSave.getStr();
             mbToggleVisibility[PASSWORD] = true;
             mbToggleVisibility[GPGENCRYPTION] = true;
+#if HAVE_FEATURE_GPGME
+            mbToggleVisibility[GPGSIGN] = true;
+#endif
             // TODO
             break;
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -1705,6 +1711,9 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
             first_button_text = sSave.getStr();
             mbToggleVisibility[PASSWORD] = true;
             mbToggleVisibility[GPGENCRYPTION] = true;
+#if HAVE_FEATURE_GPGME
+            mbToggleVisibility[GPGSIGN] = true;
+#endif
             mbToggleVisibility[FILTEROPTIONS] = true;
             // TODO
                 break;

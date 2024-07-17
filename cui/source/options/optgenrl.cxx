@@ -25,6 +25,8 @@
 # include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
 # include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #endif
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <comphelper/xmlsechelper.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -300,26 +302,52 @@ void SvxGeneralTabPage::InitCryptography()
 #if HAVE_FEATURE_GPGME
     m_xCryptoFrame->show();
 
-    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try
     {
-        xSEInitializer = xml::crypto::GPGSEInitializer::create( comphelper::getProcessComponentContext() );
-        uno::Reference<xml::crypto::XXMLSecurityContext> xSC = xSEInitializer->createSecurityContext( OUString() );
-        if (xSC.is())
+        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+            = xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
+                  ->createSecurityContext("");
+        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContextGPG
+            = xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
+                  ->createSecurityContext("");
+        if (xSecurityContextGPG.is())
         {
-            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSC->getSecurityEnvironment();
+            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSecurityContextGPG->getSecurityEnvironment();
             uno::Sequence<uno::Reference<security::XCertificate>> xCertificates = xSE->getPersonalCertificates();
 
             if (xCertificates.hasElements())
             {
                 for (auto& xCert : asNonConstRange(xCertificates))
                 {
-                    m_xSigningKeyLB->append_text( xCert->getIssuerName());
-                    m_xEncryptionKeyLB->append_text( xCert->getIssuerName());
+                    const auto aIssuer = comphelper::xmlsec::GetContentPart(
+                        xCert->getSubjectName(), xCert->getCertificateKind());
+                    m_xSigningKeyLB->append_text(aIssuer);
+                    m_xEncryptionKeyLB->append_text(aIssuer);
                 }
             }
+        }
 
-             //tdf#115015: wrap checkbox text and listboxes if necessary
+        if (xSecurityContext.is())
+        {
+            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSecurityContext->getSecurityEnvironment();
+            uno::Sequence<uno::Reference<security::XCertificate>> xCertificates
+                = xSE->getPersonalCertificates();
+
+            if (xCertificates.hasElements())
+            {
+                for (auto& xCert : asNonConstRange(xCertificates))
+                {
+                    const auto aIssuer
+                        = comphelper::xmlsec::GetContentPart(xCert->getSubjectName(),
+                                                             xCert->getCertificateKind());
+                    m_xSigningKeyLB->append_text(aIssuer);
+                }
+            }
+        }
+
+        if (xSecurityContext.is() || xSecurityContextGPG.is())
+        {
+            //tdf#115015: wrap checkbox text and listboxes if necessary
             int nPrefWidth(m_xEncryptToSelfCB->get_preferred_size().Width());
             int nMaxWidth = m_xEncryptToSelfCB->get_approximate_digit_width() * 40;
             if (nPrefWidth > nMaxWidth)
