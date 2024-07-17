@@ -24,6 +24,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <vcl/weld.hxx>
 #include <ChartModel.hxx>
+#include "DialogModel.hxx"
 
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -39,12 +40,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pController)
-{
-    weld::Window* pWeldDialog = pController->getDialog();
-    pWeldDialog->set_modal(!bEnable);
-    pWeldDialog->set_visible(!bEnable);
-}
 
 sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 {
@@ -447,7 +442,7 @@ IMPL_LINK(ErrorBarResources, ChooseRange, weld::Button&, rButton, void)
         aUIString = m_xUIStringNeg->get_label();
     }
 
-    lcl_enableRangeChoosing(true, m_pController);
+    enableRangeChoosing(true, m_pController);
     m_apRangeSelectionHelper->chooseRange(
         m_pCurrentRangeChoosingField->get_text(),
         aUIString, *this );
@@ -684,7 +679,7 @@ void ErrorBarResources::listeningFinished(
     m_pCurrentRangeChoosingField = nullptr;
 
     UpdateControlStates();
-    lcl_enableRangeChoosing(false, m_pController);
+    enableRangeChoosing(false, m_pController);
 }
 
 void ErrorBarResources::disposingRangeSelection()

@@ -111,15 +111,6 @@ OUString lcl_GetSequenceNameForLabel(const ::chart::SeriesEntry* pEntry)
     return aResult;
 }
 
-void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pDialog)
-{
-    if (!pDialog)
-        return;
-    weld::Dialog* pDlg = pDialog->getDialog();
-    pDlg->set_modal(!bEnable);
-    pDlg->set_visible(!bEnable);
-}
-
 void lcl_addLSequenceToDataSource(
     const uno::Reference< chart2::data::XLabeledDataSequence > & xLSequence,
     const Reference< ::chart::DataSeries > & xSource )
@@ -526,7 +517,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, voi
                                       m_xLB_SERIES->get_text(nEntry));
         }
 
-        lcl_enableRangeChoosing(true, m_pDialogController);
+        enableRangeChoosing(true, m_pDialogController);
         m_rDialogModel.getRangeSelectionHelper()->chooseRange( aSelectedRolesRange, aUIStr, *this );
     }
     else
@@ -542,7 +533,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl, weld::Button
         return;
 
     OUString aStr(SchResId(m_xFT_CATEGORIES->get_visible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS));
-    lcl_enableRangeChoosing(true, m_pDialogController);
+    enableRangeChoosing(true, m_pDialogController);
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );
 }
@@ -720,7 +711,7 @@ void DataSourceTabPage::listeningFinished(
     m_pCurrentRangeChoosingField = nullptr;
 
     updateControlState();
-    lcl_enableRangeChoosing(false, m_pDialogController);
+    enableRangeChoosing(false, m_pDialogController);
 }
 
 void DataSourceTabPage::disposingRangeSelection()
