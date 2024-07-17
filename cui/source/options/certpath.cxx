@@ -29,7 +29,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     , m_sAddDialogText(m_xBuilder->weld_label(u"certdir"_ustr)->get_label())
     , m_sManualLabel(m_xBuilder->weld_label(u"manual"_ustr)->get_label())
 {
-    m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 70,
+    m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 140,
                                       m_xCertPathList->get_height_rows(6));
 
     // needed for VLCPLUGIN != gtk3 (e.g. "gen")

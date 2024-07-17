@@ -22,7 +22,6 @@
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="selectcertificatedialog|SelectCertificateDialog">Select Certificate</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
@@ -88,34 +87,41 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=6 -->
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row-spacing">12</property>
-            <property name="column-spacing">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkLabel" id="sign">
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="selectcertificatedialog|sign">Select the certificate you want to use for signing:</property>
+                <property name="wrap">True</property>
+                <property name="width-chars">56</property>
+                <property name="max-width-chars">56</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="encrypt">
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="selectcertificatedialog|encrypt">Select the certificate you want to use for encryption:</property>
+                <property name="wrap">True</property>
+                <property name="width-chars">56</property>
+                <property name="max-width-chars">56</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -222,8 +228,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -240,8 +247,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -274,15 +282,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -331,8 +340,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
