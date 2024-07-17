@@ -762,7 +762,9 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     OUString message;
     try
     {
-        m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, true, m_bForceRecovery);
+        m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, true,
+            m_bForceRecovery,
+            m_nFormat == embed::StorageFormats::ZIP ? ZipFile::Checks::Default : ZipFile::Checks::CheckInsensitive);
         getZipFileContents();
     }
     catch ( IOException & e )
@@ -1135,7 +1137,9 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, false);
+        m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, false,
+            false,
+            m_nFormat == embed::StorageFormats::ZIP ? ZipFile::Checks::Default : ZipFile::Checks::CheckInsensitive);
 }
 
 namespace
