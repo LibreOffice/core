@@ -666,6 +666,10 @@ private:
 
     ::std::set<::std::pair<PagePartType, PageType>> m_HeaderFooterSeen;
 
+    // LN_CT_PPrBase_spacing has specified both a line and a lineRule?
+    bool m_bSpacingHadLine = false;
+    bool m_bSpacingHadLineRule = false;
+
     //annotation import
     rtl::Reference< SwXTextField > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
@@ -896,6 +900,8 @@ public:
     css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* bIsDocDefault = nullptr);
     // current paragraph style - including inherited properties
     css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
+    // only get inherited property
+    css::uno::Any GetInheritedParaProperty(PropertyIds eId);
     // context's character style - including inherited properties
     css::uno::Any GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext);
     // get property first from the given context, or secondly via inheritance from styles/docDefaults
@@ -1212,6 +1218,10 @@ public:
 
     void SetParaAutoBefore(bool const bParaAutoBefore) { m_StreamStateStack.top().bParaAutoBefore = bParaAutoBefore; }
 
+    bool GetSpacingHadLine() const { return m_bSpacingHadLine; }
+    void SetSpacingHadLine(bool bSet) { m_bSpacingHadLine = bSet; }
+    bool GetSpacingHadLineRule() const { return m_bSpacingHadLineRule; }
+    void SetSpacingHadLineRule(bool bSet) { m_bSpacingHadLineRule = bSet; }
     void SetLineSpacing(const Id nName, sal_Int32 nIntValue);
 
     /// Forget about the previous paragraph, as it's not inside the same

@@ -327,6 +327,42 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125469_singleSpacing, "tdf125469_singleSpacing.docx")
+{
+    // Given a document with 4 paragraphs of varying strange line spacing definitions,
+    // and a DocDefault of single line spacing (AUTO 240pt) (240pt is 0.423 cm)
+
+    // Paragraph 1 - DocDefaults specifies size 240 without a lineRule - default is AUTO(aka PROP)
+    // Visually, this should clearly say "Single spacing"
+    auto aSpacing = getProperty<style::LineSpacing>(getParagraph(1), u"ParaLineSpacing"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aSpacing.Height);
+
+    // Paragraph 2 - paragraph style specifies atLeast 240, para overrides with only -240.
+    // The negative value (always) turns the (inherited) "atLeast" into an "exact".
+    // Visually, this is hardly readable (36pt font forced into 12pt space)
+    aSpacing = getProperty<style::LineSpacing>(getParagraph(2), u"ParaLineSpacing"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+
+    // Paragraph 3 - paragraph style specifies exact 240, para overrides with exact -240.
+    // The negative value turns the non-inherited "exact" into an "atLeast".
+    // Visually, this should clearly say "Negative exact"
+    aSpacing = getProperty<style::LineSpacing>(getParagraph(3), u"ParaLineSpacing"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::MINIMUM), aSpacing.Mode);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+
+    // Paragraph 4 - paragraph style specifies exact 240, para overrides with only -240.
+    // The negative value does nothing to the inherited "exact".
+    // Visually, this is hardly readable (36pt font forced into 12pt space)
+    aSpacing = getProperty<style::LineSpacing>(getParagraph(4), u"ParaLineSpacing"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
+    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+
+    // all of this ends up being squeezed onto a single page
+    // CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumbering.odt")
 {
     // given a document with 2 numbered Lists [each entry restarts numbering for visual comparison]

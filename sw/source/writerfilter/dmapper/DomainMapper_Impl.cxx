@@ -1536,6 +1536,19 @@ uno::Any DomainMapper_Impl::GetPropertyFromParaStyleSheet(PropertyIds eId)
     return GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
 }
 
+uno::Any DomainMapper_Impl::GetInheritedParaProperty(PropertyIds eId)
+{
+    StyleSheetEntryPtr pEntry;
+    if ( m_bInStyleSheetImport )
+        pEntry = pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(
+            GetStyleSheetTable()->GetCurrentEntry()->m_sBaseStyleIdentifier);
+    else
+        pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
+
+    const bool bCheckDocDefaults = !IsDocDefaultsImport();
+    return GetPropertyFromStyleSheet(eId, pEntry, bCheckDocDefaults, /*bPara=*/true);
+}
+
 uno::Any DomainMapper_Impl::GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext)
 {
     if ( m_bInStyleSheetImport || eId == PROP_CHAR_STYLE_NAME || !isCharacterProperty(eId) )

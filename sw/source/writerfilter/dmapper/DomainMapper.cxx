@@ -508,6 +508,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Spacing_line: //91434
         case NS_ooxml::LN_CT_Spacing_lineRule: //91435
         {
+            if (nName == NS_ooxml::LN_CT_Spacing_line)
+                m_pImpl->SetSpacingHadLine(true);
+            else
+                m_pImpl->SetSpacingHadLineRule(true);
+
             m_pImpl->SetLineSpacing(nName, nIntValue);
         }
         break;
@@ -2398,12 +2403,37 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
     }
     break;
+    case NS_ooxml::LN_CT_PPrBase_spacing:
+    {
+        m_pImpl->SetSpacingHadLine(false);
+        m_pImpl->SetSpacingHadLineRule(false);
+
+        resolveSprmProps(*this, rSprm);
+
+        // The implementation default is FIXED line spacing instead of the documented default AUTO.
+        // If w:line seen, but no w:lineRule was provided, send appropriate mode to finalize height.
+        if (m_pImpl->GetSpacingHadLine() && !m_pImpl->GetSpacingHadLineRule())
+        {
+            sal_Int32 nLineRule = NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto; // default
+            // lineRule may have been provided via inherited paragraph style.
+            style::LineSpacing aInheritedSpacing;
+            m_pImpl->GetInheritedParaProperty(PROP_PARA_LINE_SPACING) >>= aInheritedSpacing;
+            if (aInheritedSpacing.Mode == style::LineSpacingMode::FIX)
+                nLineRule = NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact;
+            else if (aInheritedSpacing.Mode == style::LineSpacingMode::MINIMUM)
+                nLineRule = NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast;
+
+            m_pImpl->SetLineSpacing(NS_ooxml::LN_CT_Spacing_lineRule, nLineRule);
+        }
+
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"spacing"_ustr, m_pImpl->m_aSubInteropGrabBag);
+    }
+    break;
     case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
     case NS_ooxml::LN_EG_RPrBase_lang:
-    case NS_ooxml::LN_CT_PPrBase_spacing:
     case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_CT_RPrDefault_rPr:
     case NS_ooxml::LN_CT_PPrDefault_pPr:
@@ -2415,9 +2445,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (nSprmId == NS_ooxml::LN_CT_PPr_sectPr)
             m_pImpl->SetParaSectpr(true);
         resolveSprmProps(*this, rSprm);
-        if (nSprmId == NS_ooxml::LN_CT_PPrBase_spacing)
-            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"spacing"_ustr, m_pImpl->m_aSubInteropGrabBag);
-        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_rFonts)
+        if (nSprmId == NS_ooxml::LN_EG_RPrBase_rFonts)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"rFonts"_ustr, m_pImpl->m_aSubInteropGrabBag);
         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_lang)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"lang"_ustr, m_pImpl->m_aSubInteropGrabBag);
