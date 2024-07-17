@@ -179,6 +179,8 @@ constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 #define CHAR_WJ             u'\x2060'
 #define CHAR_NNBSP          u'\x202F' //NARROW NO-BREAK SPACE
 
+inline constexpr OUString vEnSpaces = u"\u2002\u2002\u2002\u2002\u2002"_ustr;
+
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
