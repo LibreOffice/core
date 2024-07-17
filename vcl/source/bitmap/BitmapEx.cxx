@@ -1291,7 +1291,8 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
             // causes clipping of any shadows or other semi-transaprent
             // areas in the image. So, instead of testing for fully opaque
             // pixels, treat pixels that are not fully transparent as opaque.
-            const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( COL_ALPHA_TRANSPARENT );
+            // tdf#162062 only apply fix for tdf#161833 if there is a palette
+            const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( pAcc->HasPalette() ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
 
             pPoints1.reset(new Point[ nHeight ]);
             pPoints2.reset(new Point[ nHeight ]);
