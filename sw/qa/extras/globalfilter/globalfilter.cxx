@@ -1824,8 +1824,7 @@ void Test::testTextFormField()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"TextFieldStart"_ustr, getProperty<OUString>(getRun(xPara, 1), u"TextPortionType"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"TextFieldSeparator"_ustr, getProperty<OUString>(getRun(xPara, 2), u"TextPortionType"_ustr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"Text"_ustr, getProperty<OUString>(getRun(xPara, 3), u"TextPortionType"_ustr));
-        sal_Unicode vEnSpaces[5] = {8194, 8194, 8194, 8194, 8194};
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), getRun(xPara, 3)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), vEnSpaces, getRun(xPara, 3)->getString());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"TextFieldEnd"_ustr, getProperty<OUString>(getRun(xPara, 4), u"TextPortionType"_ustr));
 
         // In the second paragraph we have a set text
@@ -2024,8 +2023,7 @@ void Test::testDateFormField()
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"MM/DD/YY"_ustr, sDateFormat);
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"en-US"_ustr, sLang);
-                    sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), vEnSpaces, sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().GetContentIndex());
@@ -2117,8 +2115,7 @@ void Test::testDateFormField()
                 {
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"MM/DD/YY"_ustr, sDateFormat);
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), u"en-US"_ustr, sLang);
-                    sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), vEnSpaces, sCurrentDate);
                 }
                 else if (nIndex == 1) // The second has the default format
                 {

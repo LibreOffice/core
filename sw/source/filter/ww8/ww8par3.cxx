@@ -2456,9 +2456,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     }
     else
     {
-        static constexpr OUStringLiteral aBlank =
-            u"\u2002\u2002\u2002\u2002\u2002";
-        rSz = mrRdr.MiserableDropDownFormHack(aBlank, xPropSet);
+        rSz = mrRdr.MiserableDropDownFormHack(vEnSpaces, xPropSet);
     }
 
     return true;
