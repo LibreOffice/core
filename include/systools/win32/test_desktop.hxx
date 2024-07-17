@@ -14,7 +14,7 @@
 
 namespace sal::systools
 {
-// Create a desktop, to avoid popups interferring with active user session, because we don't use svp
+// Create a desktop, to avoid popups interfering with active user session, because we don't use svp
 // vcl plugin on Windows for unit testing. Set LIBO_TEST_DEFAULT_DESKTOP environment variable to any
 // value when running the unit test process, to avoid use of a separate desktop.
 void maybeCreateTestDesktop()
