@@ -78,6 +78,8 @@ class trackedchanges(UITestCase):
             self.xUITest.executeCommand(".uno:ShowTrackedChanges")
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+                changesList.getChild(0).executeAction("SELECT", tuple())
 
                 xRejBtn = xTrackDlg.getChild("reject")
                 xRejBtn.executeAction("CLICK", tuple())
@@ -152,6 +154,8 @@ class trackedchanges(UITestCase):
                     "The tennis ball is a small ball. The basketball is much bigger.",
                     "The tennis ball is a small ball. The basketball is much bigger."]
 
+                changesList.getChild(0).executeAction("SELECT", tuple())
+
                 for i in range(len(listText)):
                     self.assertEqual(document.Text.String.strip(), resultsAccept[i])
                     self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
@@ -175,6 +179,8 @@ class trackedchanges(UITestCase):
                     "The tenis ball is a small bal. The baskedtball is much bigger.",
                     "The tenis ball is a small bal. The baskedball is much bigger.",
                     "The tenis ball is a small bal. The baskedball is much biger."]
+
+                changesList.getChild(0).executeAction("SELECT", tuple())
 
                 for i in range(len(listText)):
                     self.assertEqual(document.Text.String.strip(), resultsReject[i])
@@ -230,6 +236,8 @@ class trackedchanges(UITestCase):
                 # This was 14 (every cell is a different change instead of counting rows or tables)
                 # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
                 self.assertEqual(4, len(changesList.getChildren()))
+
+                changesList.getChild(0).executeAction("SELECT", tuple())
 
                 # Without the fix in place, it would have crashed here
                 for i in (3, 2, 1, 0):
@@ -521,6 +529,7 @@ class trackedchanges(UITestCase):
             # check and reject changes
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
+                changesList.getChild(0).executeAction("SELECT", tuple())
 
                 # six changes, but only one visible in the Manage Changes dialog window
                 state = get_state_as_dict(changesList)
@@ -562,6 +571,7 @@ class trackedchanges(UITestCase):
             # check and reject changes
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
+                changesList.getChild(0).executeAction("SELECT", tuple())
 
                 # six changes, but only one visible in the Manage Changes dialog window
                 state = get_state_as_dict(changesList)
