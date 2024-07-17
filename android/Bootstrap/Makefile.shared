@@ -113,7 +113,7 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
 		&& echo "android.defaultConfig {" \
 		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
 		&& echo "    archivesBaseName = 'LibreOfficeViewer'" \
-		&& echo "    minSdkVersion = $(ANDROID_API_LEVEL)" \
+		&& echo "    minSdkVersion $(ANDROID_API_LEVEL)" \
 		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
 		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)'" \
 		&& echo "    buildConfigField('String', 'BUILD_ID_SHORT', '\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\"')" \
