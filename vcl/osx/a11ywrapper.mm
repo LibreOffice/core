@@ -108,6 +108,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     mIsDisposed = NO;
     // Querying all supported interfaces
     try {
+        // XAccessibleContext2
+        maReferenceWrapper.rAccessibleContext2.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleComponent
         maReferenceWrapper.rAccessibleComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleExtendedComponent
@@ -454,6 +456,14 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     // CreateNSString() is not a getter. It expects the caller to
     // release the returned string.
     return [ CreateNSString ( [ self accessibleContext ] -> getAccessibleDescription() ) autorelease ];
+}
+
+-(id)identifierAttribute {
+    if ([ self accessibleContext2]) {
+        return [ CreateNSString ( [ self accessibleContext2 ] -> getAccessibleId() ) autorelease ];
+    } else {
+        return nil;
+    }
 }
 
 -(id)roleDescriptionAttribute {
@@ -1192,6 +1202,10 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
     return maReferenceWrapper.rAccessibleContext.get();
 }
 
+-(XAccessibleContext2 *)accessibleContext2 {
+    return maReferenceWrapper.rAccessibleContext2.get();
+}
+
 -(XAccessibleComponent *)accessibleComponent {
     return maReferenceWrapper.rAccessibleComponent.get();
 }
@@ -1355,6 +1369,12 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
 - (NSString *)accessibilityHelp
 {
     return [ self accessibilityAttributeValue: NSAccessibilityHelpAttribute ];
+}
+
+
+- (NSString *) accessibilityIdentifier
+{
+    return [ self accessibilityAttributeValue: NSAccessibilityIdentifierAttribute ];
 }
 
 - (BOOL)isAccessibilityExpanded

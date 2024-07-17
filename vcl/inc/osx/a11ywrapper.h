@@ -22,6 +22,7 @@
 #include "osxvcltypes.h"
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -38,6 +39,7 @@ struct ReferenceWrapper
 {
     css::uno::Reference < css::accessibility::XAccessibleAction > rAccessibleAction;
     css::uno::Reference < css::accessibility::XAccessibleContext > rAccessibleContext;
+    css::uno::Reference < css::accessibility::XAccessibleContext2 > rAccessibleContext2;
     css::uno::Reference < css::accessibility::XAccessibleComponent > rAccessibleComponent;
     css::uno::Reference < css::accessibility::XAccessibleExtendedComponent > rAccessibleExtendedComponent;
     css::uno::Reference < css::accessibility::XAccessibleSelection > rAccessibleSelection;
