@@ -4413,6 +4413,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRules)
     CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage3->getFrameArea().SVRect()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRulesBullet)
+{
+    // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have
+    // bullets:
+    SwXTextDocument* pXTextDocument = createDoc("numrules.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView;
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Insert(u"test"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+    aView.m_aInvalidations = tools::Rectangle();
+    aView.m_bFullInvalidateSeen = false;
+
+    // When pasting at the end of page 1, in a paragraph that is a bullet (a list, but not a
+    // numbering):
+    dispatchCommand(mxComponent, u".uno:PasteUnformatted"_ustr, {});
+
+    // Then make sure we only invalidate page 1, not page 2 or page 3:
+    CPPUNIT_ASSERT(!aView.m_bFullInvalidateSeen);
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage1 = pLayout->GetLower();
+    CPPUNIT_ASSERT(aView.m_aInvalidations.Overlaps(pPage1->getFrameArea().SVRect()));
+    SwFrame* pPage2 = pPage1->GetNext();
+    // Without the accompanying fix in place, this test would have failed, we invalidated page 2 and
+    // page 3 as well.
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage2->getFrameArea().SVRect()));
+    SwFrame* pPage3 = pPage2->GetNext();
+    CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage3->getFrameArea().SVRect()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
