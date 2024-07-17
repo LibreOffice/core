@@ -1695,25 +1695,38 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     bool bRemovePostItEntries = true;
     bool bRemoveUpdateIndexEntry = true;
-    bool bRemoveReadonlyIndexEntry = true;    bool bRemoveCopyEntry = true;
+    bool bRemoveReadonlyIndexEntry = true;
+    bool bRemoveCopyEntry = true;
     bool bRemoveEditEntry = true;
     bool bRemoveUnprotectEntry = true;
     bool bRemoveDeleteChapterEntry = true,
+         bRemoveDeleteAllTablesEntry = true,
          bRemoveDeleteTableEntry = true,
+         bRemoveDeleteAllFramesEntry = true,
          bRemoveDeleteFrameEntry = true,
+         bRemoveDeleteAllImagesEntry = true,
          bRemoveDeleteImageEntry = true,
+         bRemoveDeleteAllOLEObjectsEntry = true,
          bRemoveDeleteOLEObjectEntry = true,
+         bRemoveDeleteAllBookmarksEntry = true,
          bRemoveDeleteBookmarkEntry = true,
+         bRemoveDeleteAllRegionsEntry = true,
          bRemoveDeleteRegionEntry = true,
+         bRemoveDeleteAllHyperlinksEntry = true,
          bRemoveDeleteHyperlinkEntry = true,
+         bRemoveDeleteAllReferencesEntry = true,
          bRemoveDeleteReferenceEntry = true,
+         bRemoveDeleteAllIndexesEntry = true,
          bRemoveDeleteIndexEntry= true,
+         bRemoveDeleteAllCommentsEntry = true,
          bRemoveDeleteCommentEntry = true,
+         bRemoveDeleteAllDrawingObjectsEntry = true,
          bRemoveDeleteDrawingObjectEntry = true,
+         bRemoveDeleteAllFieldsEntry = true,
          bRemoveDeleteFieldEntry = true,
          bRemoveDeleteAllFootnotesEntry = true,
-         bRemoveDeleteAllEndnotesEntry = true,
          bRemoveDeleteFootnoteEntry = true,
+         bRemoveDeleteAllEndnotesEntry = true,
          bRemoveDeleteEndnoteEntry = true;
     bool bRemoveRenameEntry = true;
     bool bRemoveSelectEntry = true;
@@ -1976,6 +1989,56 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                      && !m_pActiveShell->GetView().GetDocShell()->IsReadOnly()
                      && pType->GetMemberCount() > 0)
             {
+                // Choose which Delete All entry to show.
+                if (pType->IsDeletable() && IsDeletable(*xEntry))
+                {
+                    switch (nContentType)
+                    {
+                        case ContentTypeId::TABLE:
+                            bRemoveDeleteAllTablesEntry = false;
+                        break;
+                        case ContentTypeId::FRAME:
+                            bRemoveDeleteAllFramesEntry = false;
+                        break;
+                        case ContentTypeId::GRAPHIC:
+                            bRemoveDeleteAllImagesEntry = false;
+                        break;
+                        case ContentTypeId::OLE:
+                            bRemoveDeleteAllOLEObjectsEntry = false;
+                        break;
+                        case ContentTypeId::BOOKMARK:
+                            bRemoveDeleteAllBookmarksEntry = false;
+                        break;
+                        case ContentTypeId::REGION:
+                            bRemoveDeleteAllRegionsEntry = false;
+                        break;
+                        case ContentTypeId::URLFIELD:
+                            bRemoveDeleteAllHyperlinksEntry = false;
+                        break;
+                        case ContentTypeId::REFERENCE:
+                            bRemoveDeleteAllReferencesEntry = false;
+                        break;
+                        case ContentTypeId::INDEX:
+                            bRemoveDeleteAllIndexesEntry = false;
+                        break;
+                        case ContentTypeId::POSTIT:
+                            bRemoveDeleteAllCommentsEntry = false;
+                        break;
+                        case ContentTypeId::DRAWOBJECT:
+                            bRemoveDeleteAllDrawingObjectsEntry = false;
+                        break;
+                        case ContentTypeId::TEXTFIELD:
+                            bRemoveDeleteAllFieldsEntry = false;
+                        break;
+                        case ContentTypeId::FOOTNOTE:
+                            bRemoveDeleteAllFootnotesEntry = false;
+                        break;
+                        case ContentTypeId::ENDNOTE:
+                            bRemoveDeleteAllEndnotesEntry = false;
+                        break;
+                        default: break;
+                    }
+                }
                 if (nContentType == ContentTypeId::POSTIT)
                 {
                     const SwViewOption* m_pViewOpt = m_pActiveShell->GetViewOptions();
@@ -1983,10 +2046,6 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     xPop->set_active(u"showresolvedcomments"_ustr, m_pViewOpt->IsResolvedPostIts());
                     bRemovePostItEntries = false;
                 }
-                else if (nContentType == ContentTypeId::FOOTNOTE)
-                    bRemoveDeleteAllFootnotesEntry = false;
-                else if (nContentType == ContentTypeId::ENDNOTE)
-                    bRemoveDeleteAllEndnotesEntry = false;
             }
         }
     }
@@ -2015,41 +2074,64 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         xPop->remove(u"showcomments"_ustr);
         xPop->remove(u"showresolvedcomments"_ustr);
-        xPop->remove(OUString::number(602));
     }
 
     if (bRemoveDeleteChapterEntry)
         xPop->remove(u"deletechapter"_ustr);
+    if (bRemoveDeleteAllTablesEntry)
+        xPop->remove(u"deletealltables"_ustr);
     if (bRemoveDeleteTableEntry)
         xPop->remove(u"deletetable"_ustr);
+    if (bRemoveDeleteAllFramesEntry)
+        xPop->remove(u"deleteallframes"_ustr);
     if (bRemoveDeleteFrameEntry)
         xPop->remove(u"deleteframe"_ustr);
+    if (bRemoveDeleteAllImagesEntry)
+        xPop->remove(u"deleteallimages"_ustr);
     if (bRemoveDeleteImageEntry)
         xPop->remove(u"deleteimage"_ustr);
+    if (bRemoveDeleteAllOLEObjectsEntry)
+        xPop->remove(u"deletealloleobjects"_ustr);
     if (bRemoveDeleteOLEObjectEntry)
         xPop->remove(u"deleteoleobject"_ustr);
+    if (bRemoveDeleteAllBookmarksEntry)
+        xPop->remove(u"deleteallbookmarks"_ustr);
     if (bRemoveDeleteBookmarkEntry)
         xPop->remove(u"deletebookmark"_ustr);
+    if (bRemoveDeleteAllRegionsEntry)
+        xPop->remove(u"deleteallregions"_ustr);
     if (bRemoveDeleteRegionEntry)
         xPop->remove(u"deleteregion"_ustr);
+    if (bRemoveDeleteAllHyperlinksEntry)
+        xPop->remove(u"deleteallhyperlinks"_ustr);
     if (bRemoveDeleteHyperlinkEntry)
         xPop->remove(u"deletehyperlink"_ustr);
+    if (bRemoveDeleteAllReferencesEntry)
+        xPop->remove(u"deleteallreferences"_ustr);
     if (bRemoveDeleteReferenceEntry)
         xPop->remove(u"deletereference"_ustr);
+    if (bRemoveDeleteAllIndexesEntry)
+        xPop->remove(u"deleteallindexes"_ustr);
     if (bRemoveDeleteIndexEntry)
         xPop->remove(u"deleteindex"_ustr);
+    if (bRemoveDeleteAllCommentsEntry)
+        xPop->remove(u"deleteallcomments"_ustr);
     if (bRemoveDeleteCommentEntry)
         xPop->remove(u"deletecomment"_ustr);
+    if (bRemoveDeleteAllDrawingObjectsEntry)
+        xPop->remove(u"deletealldrawingobjects"_ustr);
     if (bRemoveDeleteDrawingObjectEntry)
         xPop->remove(u"deletedrawingobject"_ustr);
+    if (bRemoveDeleteAllFieldsEntry)
+        xPop->remove(u"deleteallfields"_ustr);
     if (bRemoveDeleteFieldEntry)
         xPop->remove(u"deletefield"_ustr);
     if (bRemoveDeleteAllFootnotesEntry)
         xPop->remove(u"deleteallfootnotes"_ustr);
-    if (bRemoveDeleteAllEndnotesEntry)
-        xPop->remove(u"deleteallendnotes"_ustr);
     if (bRemoveDeleteFootnoteEntry)
         xPop->remove(u"deletefootnote"_ustr);
+    if (bRemoveDeleteAllEndnotesEntry)
+        xPop->remove(u"deleteallendnotes"_ustr);
     if (bRemoveDeleteEndnoteEntry)
         xPop->remove(u"deleteendnote"_ustr);
 
@@ -2068,10 +2150,22 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteCommentEntry &&
             bRemoveDeleteDrawingObjectEntry &&
             bRemoveDeleteFieldEntry &&
-            bRemoveDeleteAllFootnotesEntry &&
-            bRemoveDeleteAllEndnotesEntry &&
             bRemoveDeleteFootnoteEntry &&
-            bRemoveDeleteEndnoteEntry;
+            bRemoveDeleteEndnoteEntry &&
+            bRemoveDeleteAllTablesEntry &&
+            bRemoveDeleteAllFramesEntry &&
+            bRemoveDeleteAllImagesEntry &&
+            bRemoveDeleteAllOLEObjectsEntry &&
+            bRemoveDeleteAllBookmarksEntry &&
+            bRemoveDeleteAllRegionsEntry &&
+            bRemoveDeleteAllHyperlinksEntry &&
+            bRemoveDeleteAllReferencesEntry &&
+            bRemoveDeleteAllIndexesEntry &&
+            bRemoveDeleteCommentEntry &&
+            bRemoveDeleteAllDrawingObjectsEntry &&
+            bRemoveDeleteAllFieldsEntry &&
+            bRemoveDeleteAllFootnotesEntry &&
+            bRemoveDeleteAllEndnotesEntry;
 
     if (bRemoveRenameEntry)
         xPop->remove(OUString::number(502));
@@ -5356,7 +5450,15 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     if (!m_xTreeView->get_selected(xFirst.get()))
         return; // this shouldn't happen, but better to be safe than ...
 
-    if (rSelectedPopupEntry == "deleteallfootnotes" || rSelectedPopupEntry == "deleteallendnotes")
+    if (rSelectedPopupEntry == "deletealltables" || rSelectedPopupEntry == "deleteallframes"
+        || rSelectedPopupEntry == "deleteallimages" || rSelectedPopupEntry == "deletealloleobjects"
+        || rSelectedPopupEntry == "deleteallbookmarks" || rSelectedPopupEntry == "deleteallregions"
+        || rSelectedPopupEntry == "deleteallhyperlinks"
+        || rSelectedPopupEntry == "deleteallreferences" || rSelectedPopupEntry == "deleteallindexes"
+        || rSelectedPopupEntry == "deleteallcomments"
+        || rSelectedPopupEntry == "deletealldrawingobjects"
+        || rSelectedPopupEntry == "deleteallfields" || rSelectedPopupEntry == "deleteallfootnotes"
+        || rSelectedPopupEntry == "deleteallendnotes")
     {
         DeleteAllContentOfEntryContentType(*xFirst);
         return;
@@ -5523,12 +5625,6 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         case 502 :
             EditEntry(*xFirst, EditEntryMode::RENAME);
         break;
-        case 602:
-            {
-                m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
-                m_pActiveShell->GetView().GetPostItMgr()->Delete();
-                break;
-            }
         case 700:
             {
                 m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);

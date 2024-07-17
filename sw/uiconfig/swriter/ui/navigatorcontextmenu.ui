@@ -131,10 +131,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deletealltables">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_TABLES">Delete All Tables</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deletetable">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_TABLE">Delete Table</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallframes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_FRAMES">Delete All Frames</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -149,10 +167,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteallimages">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_IMAGES">Delete All Images</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deleteimage">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_IMAGE">Delete Image</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deletealloleobjects">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_OLE_OBJECTS">Delete All OLE objects</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -167,10 +203,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteallbookmarks">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_BOOKMARKS">Delete All Bookmarks</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deletebookmark">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_BOOKMARK">Delete Bookmark</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallregions">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_SECTIONS">Delete All Sections</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -185,10 +239,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteallhyperlinks">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_HYPERLINKS">Delete All Hyperlinks</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deletehyperlink">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_HYPERLINK">Delete Hyperlink</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallreferences">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_REFERENCES">Delete All References</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -202,10 +274,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteallindexes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_INDEXES">Delete All Indexes</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deleteindex">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_INDEX">Delete Index</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallcomments">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_COMMENTS">Delete All Comments</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -220,10 +310,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deletealldrawingobjects">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_DRAWING_OBJECTS">Delete All Drawing objects</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deletedrawingobject">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_DRAWING_OBJECT">Delete Drawing object</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallfields">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_FIELDS">Delete All Fields</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -242,14 +350,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_FOOTNOTES">Delete All Footnotes</property>
-        <accelerator key="Delete" signal="activate"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="deleteallendnotes">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_ENDNOTES">Delete All Endnotes</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -259,6 +359,15 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_FOOTNOTE">Delete Footnote</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="deleteallendnotes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_ALL_ENDNOTES">Delete All Endnotes</property>
         <property name="use-underline">True</property>
         <accelerator key="Delete" signal="activate"/>
       </object>
@@ -309,14 +418,6 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_SHOW_RESOLVED">Show Resolved Comments</property>
-        <property name="use-underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="602">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_POSTIT_DELETE">Delete All</property>
         <property name="use-underline">True</property>
       </object>
     </child>
