@@ -18,6 +18,7 @@
  */
 
 #include <limitedformats.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
@@ -266,6 +267,11 @@ namespace frm
         Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
         sal_Int32 nOldEnumValue = -1;
         ::cppu::enum2int(nOldEnumValue, aEnumPropertyValue);
+        if (nOldEnumValue < 0)
+        {
+            SAL_WARN("forms.misc", "Negative OldEnumValue!");
+            return false;
+        }
 
         // get the translation table
         std::span<FormatEntry> pFormats = lcl_getFormatTable(m_nTableId);
