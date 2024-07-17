@@ -1023,7 +1023,7 @@ bool Printer::Setup(weld::Window* pWindow, PrinterSetupMode eMode)
     {
         ImplUpdateJobSetupPaper( aJobSetup );
         mbNewJobSetup = true;
-        maJobSetup = aJobSetup;
+        maJobSetup = std::move(aJobSetup);
         ImplUpdatePageData();
         ImplUpdateFontList();
         return true;

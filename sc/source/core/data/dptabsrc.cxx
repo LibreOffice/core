@@ -2408,7 +2408,7 @@ ScDPMember* ScDPMembers::getByIndex(sal_Int32 nIndex) const
                 const std::vector<SCROW>& memberIndexs = pSource->GetData()->GetColumnEntries(nSrcDim);
                 pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, memberIndexs[nIndex]));
             }
-            maMembers[nIndex] = pNew;
+            maMembers[nIndex] = std::move(pNew);
         }
 
         return maMembers[nIndex].get();

@@ -1026,7 +1026,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             pWriteAccess.reset();
             bRet = true;
             aBitmap.AdaptBitCount(aOutBmp);
-            aBitmap = aOutBmp;
+            aBitmap = std::move(aOutBmp);
         }
     }
 

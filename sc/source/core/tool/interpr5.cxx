@@ -2324,7 +2324,7 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
             else
                 pNewY->PutDouble(log(fVal), nElem);
         }
-        pMatY = pNewY;
+        pMatY = std::move(pNewY);
     }
 
     if (pMatX)

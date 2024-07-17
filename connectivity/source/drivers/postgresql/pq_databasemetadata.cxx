@@ -1778,7 +1778,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
             if( closeable.is() )
                 closeable->close();
         }
-        ret[elements] = row;
+        ret[elements] = std::move(row);
         elements ++;
     }
     return new SequenceResultSet(

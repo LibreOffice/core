@@ -814,7 +814,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
                         aNew.append(aDstPoly, 1, aDstPoly.count() - 1);
-                        aDstPoly = aNew;
+                        aDstPoly = std::move(aNew);
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(0) == rSrcPoly.getB2DPoint(0))

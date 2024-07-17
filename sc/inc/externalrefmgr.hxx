@@ -219,7 +219,7 @@ public:
         sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const OUString& rName);
-    void setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray);
+    void setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, const TokenArrayRef& pArray);
     bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName) const;
     void setRangeName(sal_uInt16 nFileId, const OUString& rName);
 

@@ -3645,7 +3645,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
         if (pParent)
             applyAtkProperties(pParent, aAtkProperties, bToolbarItem);
         if (pAtkProps)
-            *pAtkProps = aAtkProperties;
+            *pAtkProps = std::move(aAtkProperties);
         return nullptr;
     }
 

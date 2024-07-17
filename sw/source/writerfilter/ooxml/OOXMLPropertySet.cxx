@@ -758,7 +758,7 @@ void OOXMLTable::resolve(Table & rTable)
             (rPropSet->getProperties());
 
         if (pProperties)
-            pTable->entry(nPos, pProperties);
+            pTable->entry(nPos, std::move(pProperties));
 
         ++nPos;
     }

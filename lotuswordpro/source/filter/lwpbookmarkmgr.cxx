@@ -67,7 +67,7 @@ void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName, XFBookmarkStart* 
         auto xFind = iter->second;
         OUString totalName = xFind->GetDivision() + ":" + xFind->GetName();
         xFind->SetName(totalName);
-        m_MapStart[totalName] = xFind;
+        m_MapStart[totalName] = std::move(xFind);
         m_MapStart[sName] = pMark;
     }
 }
@@ -83,7 +83,7 @@ void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName, XFBookmarkEnd* pMar
         auto xFind = iter->second;
         OUString totalName = xFind->GetDivision() + ":" + xFind->GetName();
         xFind->SetName(totalName);
-        m_MapEnd[totalName] = xFind;
+        m_MapEnd[totalName] = std::move(xFind);
         m_MapEnd[sName] = pMark;
     }
 }

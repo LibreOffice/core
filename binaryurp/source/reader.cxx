@@ -330,8 +330,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         }
         std::unique_ptr< IncomingRequest > req(
             new IncomingRequest(
-                bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
-                bSetter, std::move(inArgs), ccMode, cc));
+                bridge_, tid, oid, std::move(obj), type, functionId, synchronous,
+                memberTd, bSetter, std::move(inArgs), ccMode, cc));
         if (synchronous) {
             bridge_->incrementActiveCalls();
         }

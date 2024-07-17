@@ -306,8 +306,8 @@ void ShapeBase::finalizeFragmentImport()
         aMergedFillModel.assignUsed(maTypeModel.maFillModel);
 
         maTypeModel.assignUsed( pShapeType->getTypeModel() );
-        maTypeModel.maStrokeModel = aMergedStrokeModel;
-        maTypeModel.maFillModel = aMergedFillModel;
+        maTypeModel.maStrokeModel = std::move(aMergedStrokeModel);
+        maTypeModel.maFillModel = std::move(aMergedFillModel);
     }
     else {
         // Temporary fix, shapetype not found if referenced from different substream

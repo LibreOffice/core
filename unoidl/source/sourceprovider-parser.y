@@ -810,7 +810,7 @@ Found findEntity(
                 for (std::size_t i = 0; i != rank; ++i) {
                     t = unoidl::detail::SourceProviderType(&t);
                 }
-                *typedefedType = t;
+                *typedefedType = std::move(t);
                 typedefedType->typedefName = *name;
             }
             *entity = nullptr;

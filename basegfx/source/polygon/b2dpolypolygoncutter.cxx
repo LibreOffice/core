@@ -1118,7 +1118,7 @@ namespace basegfx::utils
                     }
                 }
 
-                aResult = aResult2;
+                aResult = std::move(aResult2);
             }
 
             // third step: get result

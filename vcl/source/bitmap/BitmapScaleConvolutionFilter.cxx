@@ -355,7 +355,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
     if(bResult)
     {
         rBitmap.AdaptBitCount(aResult);
-        rBitmap = aResult;
+        rBitmap = std::move(aResult);
     }
 
     return bResult;

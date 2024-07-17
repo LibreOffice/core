@@ -100,7 +100,7 @@ namespace dbaui
                         aCurrentSet.put( rFeatureMapping.nItemID );
                 }
 
-                tmp[ pattern ] = aCurrentSet;
+                tmp[pattern] = std::move(aCurrentSet);
             }
             return tmp;
         }();

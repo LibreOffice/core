@@ -751,7 +751,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uIn
     return itr->second;
 }
 
-void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray)
+void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, const TokenArrayRef& pArray)
 {
     std::unique_lock aGuard(maMtxDocs);
 

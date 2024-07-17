@@ -866,7 +866,7 @@ void DAVResourceAccess::MOVE(
                               rDestinationURI,
                               DAVRequestEnvironment(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                  aHeaders ),
+                                  std::move(aHeaders) ),
                               bOverwrite );
         }
         catch (DAVException const& e)

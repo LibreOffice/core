@@ -153,7 +153,7 @@ void SvgFeDropShadowNode::apply(drawinglayer::primitive2d::Primitive2DContainer&
     // Append the original target
     aTempTarget.append(rTarget);
 
-    rTarget = aTempTarget;
+    rTarget = std::move(aTempTarget);
 
     pParent->addGraphicSourceToMapper(maResult, rTarget);
 }
