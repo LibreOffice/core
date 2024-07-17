@@ -431,7 +431,12 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
-uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
+uno::Sequence<beans::NamedValue>
+OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>&
+#if HAVE_FEATURE_GPGME
+                                                   xParentWindow
+#endif
+)
 {
 #if HAVE_FEATURE_GPGME
     // generate session key
@@ -450,6 +455,8 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         // here none of the version-dependent methods are called
         security::DocumentDigitalSignatures::createDefault(
             comphelper::getProcessComponentContext()));
+
+    xSigner->setParentWindow(xParentWindow);
 
     // fire up certificate chooser dialog - user can multi-select!
     const uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=

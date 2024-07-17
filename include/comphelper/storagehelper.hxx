@@ -45,6 +45,7 @@ namespace com::sun::star {
     }
     namespace lang { class XSingleServiceFactory; }
     namespace uno { class XComponentContext; }
+    namespace awt { class XWindow; }
 }
 
 namespace comphelper {
@@ -175,7 +176,7 @@ public:
             std::u16string_view aPassword );
 
     static css::uno::Sequence< css::beans::NamedValue >
-        CreateGpgPackageEncryptionData();
+    CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>& xParentWindow);
 
     static bool IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed );
 

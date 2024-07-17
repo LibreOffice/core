@@ -1584,7 +1584,9 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                         try
                         {
                             // ask for keys
-                            aEncryptionData = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData();
+                            aEncryptionData
+                                = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData(
+                                    GetFrameInterface());
                             break; // user cancelled or we've some keys now
                         }
                         catch( const IllegalArgumentException& )
