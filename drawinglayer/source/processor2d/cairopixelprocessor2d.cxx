@@ -2564,7 +2564,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
-    // for dfirect RGBA gradient render support: assert when the definition
+    // for direct RGBA gradient render support: assert when the definition
     // is not allowed, it HAS to fulfil the requested preconditions. Note that
     // the form to call this function using nullptr != pFillGradientAlpha is
     // only allowed locally in CairoPixelProcessor2D::processMaskPrimitive2D
