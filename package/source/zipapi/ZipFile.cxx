@@ -80,30 +80,13 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
-                  uno::Reference < XInputStream > const &xInput,
-                  uno::Reference < XComponentContext > xContext,
-                  bool bInitialise )
-: m_aMutexHolder(std::move( aMutexHolder ))
-, aGrabber( xInput )
-, aInflater( true )
-, xStream(xInput)
-, m_xContext (std::move( xContext ))
-, bRecoveryMode( false )
-{
-    if (bInitialise && readCEN() == -1 )
-    {
-        aEntries.clear();
-        m_EntriesInsensitive.clear();
-        throw ZipException( "stream data looks to be broken" );
-    }
-}
-
 ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
                   uno::Reference < XInputStream > const &xInput,
                   uno::Reference < XComponentContext > xContext,
-                  bool bInitialise, bool bForceRecovery)
+                  bool bInitialise, bool bForceRecovery,
+                  Checks const checks)
 : m_aMutexHolder(std::move( aMutexHolder ))
+, m_Checks(checks)
 , aGrabber( xInput )
 , aInflater( true )
 , xStream(xInput)
@@ -1165,7 +1148,7 @@ sal_Int32 ZipFile::readCEN()
             }
             // this is required for OOXML, but not for ODF
             auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
-            if (!m_EntriesInsensitive.insert(lowerPath).second)
+            if (!m_EntriesInsensitive.insert(lowerPath).second && m_Checks == Checks::CheckInsensitive)
             {
                 SAL_INFO("package", "Duplicate CEN entry (case insensitive): \"" << aEntry.sPath << "\"");
                 throw ZipException(u"Duplicate CEN entry (case insensitive)"_ustr);

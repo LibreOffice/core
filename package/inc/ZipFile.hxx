@@ -52,9 +52,14 @@ class ZipEnumeration;
 
 class ZipFile
 {
+public:
+    enum class Checks { Default, CheckInsensitive };
+
+private:
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
     std::unordered_set<OUString> m_EntriesInsensitive;
+    Checks m_Checks;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
@@ -98,13 +103,9 @@ public:
     ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
              css::uno::Reference < css::io::XInputStream > const &xInput,
              css::uno::Reference < css::uno::XComponentContext > xContext,
-             bool bInitialise );
-
-    ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
-             css::uno::Reference < css::io::XInputStream > const &xInput,
-             css::uno::Reference < css::uno::XComponentContext > xContext,
              bool bInitialise,
-             bool bForceRecover );
+             bool bForceRecover,
+             Checks checks);
 
     ~ZipFile();
 
