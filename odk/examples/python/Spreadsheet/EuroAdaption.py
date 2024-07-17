@@ -25,8 +25,6 @@ def get_desktop():
             print("Can't create a desktop. No connection, no remote office servicemanager available!")
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to get desktop: {e}")
         traceback.print_exc()
@@ -50,8 +48,6 @@ def get_number_format_key(number_formats, format: str, language) -> int:
             # If not exist, create a new one
             if (key := number_formats.addNew(format, language)) == -1:
                 key == 0
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to get key: {e}")
         traceback.print_exc()
@@ -79,8 +75,6 @@ def create_example_data(sheet, number_formats):
             cell.NumberFormat = number_format_key
             cell_range = sheet[counter + 1:counter + 2, 2:3]
             cell_range.NumberFormat = number_format_key
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to create example data: {e}")
         traceback.print_exc()
@@ -128,8 +122,6 @@ def convert(sheet, number_formats, old_symbol: str, new_symbol: str, factor: flo
                 if sheet_cell_ranges.getCount() > 0:
                     for cell in sheet_cell_ranges.getCells():
                         cell.Value = cell.Value / factor
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to convert currency: {e}")
         traceback.print_exc()
@@ -143,8 +135,6 @@ def main():
     try:
         doc = desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, tuple())
         print("Create a new Spreadsheet")
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to load component from URL: {e}")
         traceback.print_exc()
@@ -156,8 +146,6 @@ def main():
 
     try:
         sheet = doc.Sheets[0]
-    # removing bare except: and handling it similar to the try/except already
-    # committed in './SCalc.py'
     except Exception as e:
         print(f"Failed to get sheet: {e}")
         traceback.print_exc()

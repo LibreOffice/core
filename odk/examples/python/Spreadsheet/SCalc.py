@@ -36,8 +36,6 @@ def main():
         desktop = srv_mgr.createInstanceWithContext(
             "com.sun.star.frame.Desktop", remote_context
         )
-    # removing bare except: and handling it similar to the try/except already
-    # committed in other parts of this script
     except Exception as e:
         print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
@@ -52,8 +50,6 @@ def main():
     doc_url = "private:factory/scalc"
     try:
         doc = desktop.loadComponentFromURL(doc_url, "_blank", 0, tuple())
-    # removing bare except: and handling it similar to the try/except already
-    # committed in other parts of this script
     except Exception as e:
         print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
@@ -76,8 +72,6 @@ def main():
         cell_styles["My Style2"] = cell_style
         cell_style.IsCellBackgroundTransparent = False
         cell_style.CellBackColor = 13421823
-    # removing bare except: and handling it similar to the try/except already
-    # committed in other parts of this script
     except Exception as e:
         print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
