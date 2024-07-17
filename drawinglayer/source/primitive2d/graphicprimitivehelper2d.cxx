@@ -60,7 +60,7 @@ namespace drawinglayer::primitive2d
                 an instance of Graphic is used here since it's ref-counted
                 and thus a safe copy for now
              */
-            const Graphic                               maGraphic;
+            Graphic                                     maGraphic;
 
             /// local animation processing data, excerpt from maGraphic
             ::Animation                                 maAnimation;
@@ -441,6 +441,8 @@ namespace drawinglayer::primitive2d
 
             maVirtualDevice.disposeAndClear();
             maVirtualDeviceMask.disposeAndClear();
+            maAnimation.Clear();
+            maGraphic.Clear();
         }
 
         bool AnimatedGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
