@@ -114,7 +114,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
 
-
 namespace
 {
     /**
@@ -1287,11 +1286,47 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                             XML_NAMESPACE_CHART, GetXMLToken(eXMLChartType )) );
             }
 
+            bool bIsOfPie = false;
             // Handle subtype for of-pie charts
             if (sChartType == u"com.sun.star.chart.BarOfPieDiagram") {
                 mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUB_BAR, OUString::boolean(true));
+                bIsOfPie = true;
             } else if (sChartType == u"com.sun.star.chart.PieOfPieDiagram") {
                 mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUB_PIE, OUString::boolean(true));
+                bIsOfPie = true;
+            }
+
+            if (bIsOfPie) {
+
+                // Find the split position. We have to dig deep into the
+                // structure tree to get it, which is awkward. Part of the
+                // problem is that the split position is sort of a series-level
+                // parameter, but is generally handled at the chart level since
+                // of-pie charts have only a single series.
+                double fSplitPos = 2.0;
+
+                Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xNewDiagram, uno::UNO_QUERY );
+                if (xBCooSysCnt.is()) {
+                    const Sequence< Reference< chart2::XCoordinateSystem > >
+                        aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+                    for (const auto& rCooSys : aCooSysSeq ) {
+                        Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY );
+                        if( ! xCTCnt.is())
+                            continue;
+                        const Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
+                        for (const auto& rChartType : aCTSeq ) {
+                            Reference< beans::XPropertySet > xCTProp( rChartType, uno::UNO_QUERY );
+
+                            if (xCTProp.is()) {
+                                xCTProp->getPropertyValue(u"SplitPos"_ustr) >>= fSplitPos;
+                            }
+                        }
+                    }
+                }
+
+                // Insert split position for of-pie chart
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SPLIT_POSITION,
+                        OUString::number(fSplitPos));
             }
 
             //column-mapping or row-mapping

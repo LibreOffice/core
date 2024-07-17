@@ -32,7 +32,7 @@ UpDownBarsModel::~UpDownBarsModel()
 }
 
 TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc ) :
-    mfSplitPos( 0.0 ),
+    mfSplitPos( 2.0 ),
     mnBarDir( XML_col ),
     mnBubbleScale( 100 ),
     mnFirstAngle( 0 ),

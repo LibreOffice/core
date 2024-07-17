@@ -296,7 +296,7 @@ ContextHandlerRef OfPieTypeGroupContext::onCreateContext( sal_Int32 nElement, co
         case C_TOKEN( serLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxSerLines.create() );
         case C_TOKEN( splitPos ):
-            mrModel.mfSplitPos = rAttribs.getDouble( XML_val, 0.0 );
+            mrModel.mfSplitPos = rAttribs.getDouble( XML_val, 2.0 );
             return nullptr;
         case C_TOKEN( splitType ):
             mrModel.mnSplitType = rAttribs.getToken( XML_val, XML_auto );

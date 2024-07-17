@@ -101,8 +101,8 @@ public:
 class OfPieDataSrc : public PieDataSrcBase
 {
 public:
-    OfPieDataSrc(sal_Int32 nCompositeSize):
-        m_nCompositeSize(nCompositeSize)
+    OfPieDataSrc(sal_Int32 nSplitPos):
+        m_nSplitPos(nSplitPos)
     {}
 
     // Minimum sensible number of data points
@@ -118,7 +118,7 @@ public:
             const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const;
 private:
-    sal_Int32 m_nCompositeSize;
+    double    m_nSplitPos;
 };
 
 //=======================
@@ -276,7 +276,7 @@ private: //member
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
     ::css::chart2::PieChartSubType m_eSubType;
     // Number of entries in an of-pie composite wedge
-    sal_Int32             m_nCompositeSize;
+    double                m_nSplitPos;
 
     struct PieLabelInfo
     {

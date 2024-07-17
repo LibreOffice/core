@@ -98,6 +98,7 @@ enum
     PROP_DIAGRAM_3DRELATIVEHEIGHT,
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_OF_PIE_TYPE,
+    PROP_DIAGRAM_SPLIT_POS,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
     PROP_DIAGRAM_EXTERNALDATA
@@ -188,6 +189,10 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_OF_PIE_TYPE,
                   cppu::UnoType<chart2::PieChartSubType>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "SplitPos",
+                  PROP_DIAGRAM_SPLIT_POS,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
@@ -209,6 +214,7 @@ const ::chart::tPropertyValueMap& StaticDiagramDefaults()
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
         ::chart::PropertyHelper::setPropertyValueDefault< chart2::PieChartSubType >( aMap, PROP_DIAGRAM_OF_PIE_TYPE,
                 chart2::PieChartSubType_NONE);
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_SPLIT_POS, 2 );
         ::chart::SceneProperties::AddDefaultsToMap( aMap );
         return aMap;
     }();

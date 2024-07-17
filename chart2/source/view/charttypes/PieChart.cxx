@@ -195,7 +195,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
         , m_eSubType(PieChartSubType_NONE)
-        , m_nCompositeSize(2)
+        , m_nSplitPos(2)
         , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
     PlotterBase::m_pPosHelper = &m_aPosHelper;
@@ -230,7 +230,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
     }
     try
     {
-        xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_COMPOSITESIZE) >>= m_nCompositeSize; //  "CompositeSize"
+        xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_SPLIT_POS) >>= m_nSplitPos; //  "CompositeSize"
     }
     catch( const uno::Exception& )
     {
@@ -1050,7 +1050,7 @@ void PieChart::createShapes()
 
         PieDataSrcBase *pDataSrc = nullptr;
         PieDataSrc normalPieSrc;
-        OfPieDataSrc ofPieSrc(m_nCompositeSize);
+        OfPieDataSrc ofPieSrc(m_nSplitPos);
 
         // Default to regular pie if too few points for of-pie
         ::css::chart2::PieChartSubType eSubType =
@@ -2303,26 +2303,25 @@ uno::Reference< beans::XPropertySet > PieDataSrc::getProps(
 // class OfPieDataSrc
 //=======================
 
-// For now, just implement the default Excel behavior, which is that the
-// right pie consists of the last three entries in the series. Other
-// behaviors should be supported later.
+// Support data splits only of the type "last n entries go in right subchart",
+// for now.
 // TODO
 
 sal_Int32 OfPieDataSrc::getNPoints(const VDataSeries* pSeries,
             enum SubPieType eType) const
 {
     if (eType == SubPieType::LEFT) {
-        return pSeries->getTotalPointCount() - m_nCompositeSize + 1;
+        return pSeries->getTotalPointCount() - m_nSplitPos + 1;
     } else {
         assert(eType == SubPieType::RIGHT);
-        return m_nCompositeSize;
+        return m_nSplitPos;
     }
 }
 
 double OfPieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
             enum SubPieType eType) const
 {
-    const sal_Int32 n = pSeries->getTotalPointCount() - m_nCompositeSize;
+    const sal_Int32 n = pSeries->getTotalPointCount() - m_nSplitPos;
     if (eType == SubPieType::LEFT) {
         // nPtIdx should be in [0, n]
         if (nPtIdx < n) {
@@ -2331,7 +2330,7 @@ double OfPieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
             // composite wedge
             assert(nPtIdx == n);
             double total = 0;
-            for (sal_Int32 i = n; i < n + m_nCompositeSize; ++i) {
+            for (sal_Int32 i = n; i < n + m_nSplitPos; ++i) {
                 total += pSeries->getYValue(i);
             }
             return total;
@@ -2347,7 +2346,7 @@ uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
             enum SubPieType eType) const
 {
     const sal_Int32 nPts = pSeries->getTotalPointCount();
-    const sal_Int32 n = nPts - m_nCompositeSize;
+    const sal_Int32 n = nPts - m_nSplitPos;
     if (eType == SubPieType::LEFT) {
         // nPtIdx should be in [0, n]
         if (nPtIdx < n) {

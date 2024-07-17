@@ -166,7 +166,8 @@ void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
         return;
 
     m_aTimerTriggeredControllerLock.startTimer();
-    m_pCurrentMainType->commitToModel( rParameter, m_xChartModel );
+    uno::Reference< beans::XPropertySet > xTemplateProps( static_cast<cppu::OWeakObject*>(getCurrentTemplate().get()), uno::UNO_QUERY );
+    m_pCurrentMainType->commitToModel( rParameter, m_xChartModel, xTemplateProps );
 }
 
 void ChartTypeTabPage::stateChanged()

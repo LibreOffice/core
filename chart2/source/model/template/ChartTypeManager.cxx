@@ -396,52 +396,52 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
         case TEMPLATE_PIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, false,
-                chart2::PieChartSubType_NONE, 2 ));
+                chart2::PieChartSubType_NONE, 3, 2));
             break;
         case TEMPLATE_PIEALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, false,
-                chart2::PieChartSubType_NONE, 2 ));
+                chart2::PieChartSubType_NONE, 3, 2 ));
             break;
         case TEMPLATE_DONUT:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, true,
-                chart2::PieChartSubType_NONE, 2 ));
+                chart2::PieChartSubType_NONE, 3, 2 ));
             break;
         case TEMPLATE_DONUTALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, true,
-                chart2::PieChartSubType_NONE, 2 ));
+                chart2::PieChartSubType_NONE, 3, 2 ));
             break;
         case TEMPLATE_BAROFPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, false,
-                chart2::PieChartSubType_BAR, 2 ));
+                chart2::PieChartSubType_BAR, 3, 2 ));
             break;
         case TEMPLATE_PIEOFPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, false,
-                chart2::PieChartSubType_PIE, 2 ));
+                chart2::PieChartSubType_PIE, 3, 2 ));
             break;
         case TEMPLATE_THREEDPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, false,
-                chart2::PieChartSubType_NONE, 3 ));
+                chart2::PieChartSubType_NONE, 3, 3 ));
             break;
         case TEMPLATE_THREEDPIEALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, false,
-                chart2::PieChartSubType_NONE, 3 ));
+                chart2::PieChartSubType_NONE, 3, 3 ));
             break;
         case TEMPLATE_THREEDDONUT:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, true,
-                chart2::PieChartSubType_NONE, 3 ));
+                chart2::PieChartSubType_NONE, 3, 3 ));
             break;
         case TEMPLATE_THREEDDONUTALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, true,
-                chart2::PieChartSubType_NONE, 3 ));
+                chart2::PieChartSubType_NONE, 3, 3 ));
             break;
 
         case TEMPLATE_SCATTERLINESYMBOL:

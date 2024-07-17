@@ -130,8 +130,10 @@ public:
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter);
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter);
     OUString getServiceNameForParameter(const ChartTypeParameter& rParameter) const;
-    void commitToModel(const ChartTypeParameter& rParameter,
-                       const rtl::Reference<::chart::ChartModel>& xChartModel);
+    void
+    commitToModel(const ChartTypeParameter& rParameter,
+                  const rtl::Reference<::chart::ChartModel>& xChartModel,
+                  const css::uno::Reference<com::sun::star::beans::XPropertySet>& xTemplateProps);
     rtl::Reference<::chart::ChartTypeTemplate>
     getCurrentTemplate(const ChartTypeParameter& rParameter,
                        const rtl::Reference<::chart::ChartTypeManager>& xTemplateManager) const;

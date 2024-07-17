@@ -1764,8 +1764,13 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
                                     default:
                                         assert(false);
                                 }
+                                double fSplitPos;
+                                if (!xChartTypeProp.getProperty(fSplitPos,
+                                            PROP_SplitPos)) {
+                                    fSplitPos = 2;
+                                }
 
-                                exportOfPieChart(xChartType, sSubType);
+                                exportOfPieChart(xChartType, sSubType, fSplitPos);
                             } else {
                                 exportPieChart( xChartType );
                             }
@@ -2323,7 +2328,8 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
 
 void ChartExport::exportOfPieChart(
         const Reference< chart2::XChartType >& xChartType,
-        const char* sSubType )
+        const char* sSubType,
+        double fSplitPos)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_ofPieChart));
@@ -2334,6 +2340,9 @@ void ChartExport::exportOfPieChart(
 
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
+
+    pFS->singleElement(FSNS(XML_c, XML_splitType), XML_val, "pos");
+    pFS->singleElement(FSNS(XML_c, XML_splitPos), XML_val, OString::number(fSplitPos));
 
     pFS->endElement( FSNS( XML_c, XML_ofPieChart ) );
 }

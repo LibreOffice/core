@@ -305,7 +305,8 @@ rtl::Reference< ChartTypeTemplate > ChartTypeDialogController::getCurrentTemplat
 }
 
 void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParameter
-                , const rtl::Reference<::chart::ChartModel>& xChartModel )
+                , const rtl::Reference<::chart::ChartModel>& xChartModel
+                , const uno::Reference<beans::XPropertySet>& xTemplateProps)
 {
     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartModel->getTypeManager();
     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
@@ -329,6 +330,20 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     if (xDiagram.is())
     {
         xDiagram->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
+
+        sal_Int32 nSplitPos;
+        try {
+            if (xTemplateProps.is()) {
+                xTemplateProps->getPropertyValue(u"SplitPos"_ustr) >>= nSplitPos;
+                xDiagram->setPropertyValue(u"SplitPos"_ustr, uno::Any(nSplitPos));
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            //not all templates need to support SplitPos
+            ex.Context.is();//to have debug information without compilation warnings
+        }
+
     }
 }
 void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
@@ -763,7 +778,7 @@ void OfPieChartDialogController::fillExtraControls(
     {
         try
         {
-            xTemplateProps->getPropertyValue( u"CompositeSize"_ustr ) >>= nCompositeSize;
+            xTemplateProps->getPropertyValue( u"SplitPos"_ustr ) >>= nCompositeSize;
         }
         catch( const uno::Exception & )
         {
@@ -801,7 +816,7 @@ void OfPieChartDialogController::setTemplateProperties( const uno::Reference< be
     if( xTemplateProps.is())
     {
         sal_Int32 nCompositeSize = m_xMF_CompositeSize->get_value();
-        xTemplateProps->setPropertyValue( u"CompositeSize"_ustr , uno::Any(nCompositeSize) );
+        xTemplateProps->setPropertyValue( u"SplitPos"_ustr , uno::Any(nCompositeSize) );
     }
 }
 

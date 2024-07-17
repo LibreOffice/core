@@ -232,7 +232,8 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
         mbRowHasLabels( false ),
         meDataRowSource( chart::ChartDataRowSource_COLUMNS ),
         mbIsStockChart( false ),
-        mPieSubType(css::chart2::PieChartSubType_NONE)
+        mPieSubType(css::chart2::PieChartSubType_NONE),
+        mfPieSplitPos(2.0)
 {
 }
 
@@ -399,6 +400,9 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 if (aIter.toString().toBoolean()) {
                     mPieSubType = css::chart2::PieChartSubType_PIE;
                 }
+                break;
+            case XML_ELEMENT(LO_EXT, XML_SPLIT_POSITION):
+                mfPieSplitPos = aIter.toDouble();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -748,12 +752,13 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     // cleanup: remove empty chart type groups
     lcl_removeEmptyChartTypeGroups( xNewDoc );
 
-    // Handle sub-pie type. Is this the right place to do this?
+    // Handle of-pie paramters. Is this the right place to do this?
     if (maChartTypeServiceName == "com.sun.star.chart2.PieChartType") {
         Reference< chart2::XDiagram> xDia(xNewDoc->getFirstDiagram());
         uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
         if( xDiaProp.is()) {
             xDiaProp->setPropertyValue(u"SubPieType"_ustr, uno::Any(mPieSubType));
+            xDiaProp->setPropertyValue(u"SplitPos"_ustr, uno::Any(mfPieSplitPos));
         }
     }
 

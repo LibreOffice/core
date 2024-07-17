@@ -595,6 +595,7 @@ inline constexpr OUString PROP_Speed = u"Speed"_ustr;
 inline constexpr OUString PROP_SplineOrder = u"SplineOrder"_ustr;
 inline constexpr OUString PROP_SplineResolution = u"SplineResolution"_ustr;
 inline constexpr OUString PROP_SplineType = u"SplineType"_ustr;
+inline constexpr OUString PROP_SplitPos = u"SplitPos"_ustr;
 inline constexpr OUString PROP_Stacked = u"Stacked"_ustr;
 inline constexpr OUString PROP_StackedBarsConnected = u"StackedBarsConnected"_ustr;
 inline constexpr OUString PROP_StackedText = u"StackedText"_ustr;

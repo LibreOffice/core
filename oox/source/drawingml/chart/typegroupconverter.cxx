@@ -358,6 +358,10 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                 if (maTypeInfo.meTypeId == TYPEID_OFPIE) {
                     aDiaProp.setProperty(PROP_SubPieType,
                             convertOfPieType(mrModel.mnOfPieType));
+                    if (mrModel.mnSplitType == XML_auto ||
+                            mrModel.mnSplitType == XML_pos) {
+                        aDiaProp.setProperty(PROP_SplitPos, mrModel.mfSplitPos);
+                    }
                 } else {
                     aDiaProp.setProperty(PROP_SubPieType, PieChartSubType_NONE);
                 }

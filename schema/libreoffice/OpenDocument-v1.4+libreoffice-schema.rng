@@ -2765,6 +2765,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     <!-- TODO no proposal -->
   <rng:define name="chart-chart-attlist" combine="interleave">
     <rng:optional>
+      <rng:attribute name="loext:split-position">
+        <rng:ref name="string"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+    <!-- TODO no proposal -->
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
       <rng:attribute name="loext:sub-bar">
         <rng:ref name="boolean"/>
       </rng:attribute>

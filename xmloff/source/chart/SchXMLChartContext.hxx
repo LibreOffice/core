@@ -101,6 +101,7 @@ private:
     css::chart::ChartDataRowSource meDataRowSource;
     bool mbIsStockChart;
     css::chart2::PieChartSubType mPieSubType;
+    double mfPieSplitPos;
 
     OUString msCategoriesAddress;
     OUString msChartAddress;

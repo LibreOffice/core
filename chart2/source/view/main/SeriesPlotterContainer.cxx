@@ -154,6 +154,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     sal_Int32 nStartingAngle = 90;
     sal_Int32 n3DRelativeHeight = 100;
     PieChartSubType ePieChartSubType = PieChartSubType_NONE;
+    double nSplitPos = 2;
     try
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
@@ -167,6 +168,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             xDiagram->getPropertyValue(u"3DRelativeHeight"_ustr) >>= n3DRelativeHeight;
         }
         xDiagram->getPropertyValue(u"SubPieType"_ustr) >>= ePieChartSubType;
+
+        xDiagram->getPropertyValue(u"SplitPos"_ustr) >>= nSplitPos;
     }
     catch (const uno::Exception&)
     {
@@ -234,6 +237,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                                                  uno::Any(ePieChartSubType));
                 // Reset the diagram-level property so it's not persistent.
                 xDiagram->setPropertyValue(u"SubPieType"_ustr, uno::Any(PieChartSubType_NONE));
+
+                xChartType->setFastPropertyValue(PROP_PIECHARTTYPE_SPLIT_POS, uno::Any(nSplitPos));
+                //xDiagram->setPropertyValue(u"SplitPos"_ustr, uno::Any(nSplitPos));
             }
 
             if (nT == 0)

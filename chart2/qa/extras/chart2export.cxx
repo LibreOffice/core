@@ -546,6 +546,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarOfPieChart)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]", "val", u"bar");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieOfPieSplitPos)
+{
+    loadFromFile(u"xlsx/pieOfPieChart2.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:splitPos[1]", "val", u"4");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarOfPieSplitPos)
+{
+    loadFromFile(u"xlsx/barOfPieChart2.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:splitPos[1]", "val", u"5");
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
 {
     loadFromFile(u"docx/DisplayUnits.docx");
@@ -1131,6 +1153,49 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_pieOfPie)
     chart2::PieChartSubType subPieType;
     aAny >>= subPieType;
     CPPUNIT_ASSERT_EQUAL(chart2::PieChartSubType_PIE, subPieType);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf161800_barOfPie_split_pos)
+{
+    loadFromFile(u"ods/tdf161800_barOfPie_split_pos.ods");
+    saveAndReload(u"calc8"_ustr);
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    // Verify that it saves and loads with the correct split position
+    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
+    uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
+    CPPUNIT_ASSERT(aAny.hasValue());
+    double nSplitPos;
+    aAny >>= nSplitPos;
+    CPPUNIT_ASSERT_EQUAL(4.0, nSplitPos);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf161800_pieOfPie_split_pos)
+{
+    loadFromFile(u"ods/tdf161800_pieOfPie_split_pos.ods");
+    saveAndReload(u"calc8"_ustr);
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.PieChartType"_ustr,
+            xChartType->getChartType());
+
+    // Verify that it saves and loads with the correct split position
+    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
+    uno::Any aAny = xPropSet->getPropertyValue(u"SplitPos"_ustr);
+    CPPUNIT_ASSERT(aAny.hasValue());
+    double nSplitPos;
+    aAny >>= nSplitPos;
+    CPPUNIT_ASSERT_EQUAL(3.0, nSplitPos);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartCrash)

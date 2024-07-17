@@ -195,7 +195,7 @@ private:
     void exportDoughnutChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportLineChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportOfPieChart( const css::uno::Reference< css::chart2::XChartType >&
-            xChartType, const char* s_subtype );
+            xChartType, const char* s_subtype, double nSplitPos );
     void exportPieChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportRadarChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportScatterChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
