@@ -3721,7 +3721,7 @@ if test $_os = Darwin; then
     if test "$my_xcode_ver3" -ge 1205; then
         AC_MSG_RESULT([yes ($my_xcode_ver2)])
         if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 120000; then
-            if test "$my_xcode_ver3" -ge 1600; then
+            if test "$my_xcode_ver3" -ge 1700; then
                 dnl the Xcode 15 relnotes state that the classic linker will disappear in the next version, but nothing about
                 dnl fixing the problem with weak symbols/macOS 11 compatibility, so assume for now that Xcode 16 will break it...
                 AC_MSG_ERROR([Check that Xcode 16 still supports the old linker/that it doesn't break macOS 11 compatibility, then remove this check]);
