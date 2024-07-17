@@ -946,7 +946,6 @@ bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
-
     return false;
 }
 

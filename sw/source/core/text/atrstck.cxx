@@ -344,6 +344,13 @@ void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
     {
         const SfxItemSet* pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return;
+        const SfxPoolItem* pHiddenItem;
+        //hidden attributes must not change the font if they are not shown
+        if (RES_TXTATR_AUTOFMT == rAttr.Which() &&
+            SfxItemState::SET == pSet->GetItemState( RES_CHRATR_HIDDEN, true, &pHiddenItem ) &&
+            pHiddenItem->StaticWhichCast(RES_CHRATR_HIDDEN).GetValue() &&
+            !m_pShell->GetViewOptions()->IsShowHiddenChar())
+            return;
 
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
