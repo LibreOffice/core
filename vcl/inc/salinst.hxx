@@ -211,9 +211,7 @@ public:
 
     virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
 
-    // Note: we cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
-    static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
-
+    static bool IsRunningUnitTest();
     static bool IsRunningUITest();
 
     // both must be implemented, if the VCL plugin needs to run via system event loop

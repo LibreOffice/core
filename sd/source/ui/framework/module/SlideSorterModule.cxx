@@ -81,8 +81,9 @@ SlideSorterModule::SlideSorterModule (
 
     UpdateViewTabBar(nullptr);
 
+    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().value_or(true)
-        && (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive()))
+        && (!bRunningUnitTest || !comphelper::LibreOfficeKit::isActive()))
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);

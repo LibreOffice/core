@@ -278,7 +278,7 @@ SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool 
 {
     // if we are running a UITest, e.g. UITest_sw_options then
     // don't attempt to downloading anything
-    static const bool bUITest = getenv("LIBO_TEST_UNIT");
+    static const bool bUITest = getenv("LO_RUNNING_UI_TEST");
 
     m_bUITest = bUITest;
 }

@@ -1458,17 +1458,18 @@ bool SfxApplication::IsHeadlessOrUITest()
     if (Application::IsHeadlessModeEnabled())
         return true;
 
-    bool bIsUITest = getenv("LO_TESTNAME") == nullptr; //uitest.uicheck fails when the dialog is open
+    static const bool bIsUITest = getenv("LO_RUNNING_UI_TEST"); //uitest.uicheck fails when the dialog is open
 
+    bool bRet = bIsUITest;
     for (sal_uInt16 i = 0, nCount = Application::GetCommandLineParamCount(); i < nCount; ++i)
     {
         if (Application::GetCommandLineParam(i) == "--nologo")
         {
-            bIsUITest = true;
+            bRet = true;
             break;
         }
     }
-    return bIsUITest;
+    return bRet;
 }
 
 bool SfxApplication::IsTipOfTheDayDue()

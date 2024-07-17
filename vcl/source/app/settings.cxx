@@ -2788,7 +2788,8 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 
         mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
 
-        if (getenv("LO_TESTNAME") != nullptr)
+        static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+        if (bRunningUnitTest)
             return; // No registry changing; no SettingsConfigItem modification
 
         HKEY hkey;

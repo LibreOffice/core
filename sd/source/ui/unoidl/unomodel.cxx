@@ -2779,7 +2779,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     auto xChanges = comphelper::ConfigurationChanges::create();
     officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
 
-    if (!getenv("LO_TESTNAME") || !comphelper::LibreOfficeKit::isActive())
+    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+    if (!bRunningUnitTest || !comphelper::LibreOfficeKit::isActive())
         officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::set(true,xChanges);
     xChanges->commit();
 

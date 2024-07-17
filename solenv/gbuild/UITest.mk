@@ -74,6 +74,7 @@ else
 		PYTHONPATH="$(PYPATH)" \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*)))" \
 		PYTHONDONTWRITEBYTECODE=0 \
+		LO_RUNNING_UI_TEST=1 \
 		$(if $(ENABLE_WERROR),PYTHONWARNINGS=error) \
 		$(if $(filter WNT,$(OS)),TZ=) \
 		$(gb_TEST_ENV_VARS) \

@@ -528,7 +528,10 @@ void FontNameBox::Fill( const FontList* pList )
         set_active_or_entry_text(aOldText);
 }
 
-static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
+static bool IsRunningUnitTest() {
+    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+    return bRunningUnitTest;
+}
 
 void FontNameBox::EnableWYSIWYG(bool bEnable)
 {

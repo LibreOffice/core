@@ -100,10 +100,8 @@
 static bool supportNativeWebp()
 {
     // Enable support only for unittests
-    const char* const testname = getenv("LO_TESTNAME");
-    if(testname)
-        return true;
-    return false;
+    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+    return bRunningUnitTest;
 }
 
 static std::vector< GraphicFilter* > gaFilterHdlList;

@@ -102,7 +102,7 @@ ScSheetLimits ScSheetLimits::CreateDefault()
     if( SC_MOD())
         jumboSheets = SC_MOD()->GetDefaultsOptions().GetInitJumboSheets();
     else
-        assert( getenv("LO_TESTNAME") != nullptr ); // in unittests
+        assert( getenv("LO_RUNNING_UNIT_TEST") != nullptr ); // in unittests
     if (jumboSheets)
         return ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
     else

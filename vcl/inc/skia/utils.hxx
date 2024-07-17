@@ -143,8 +143,8 @@ inline bool isUnitTestRunning(const char* name = nullptr)
 {
     if (name == nullptr)
     {
-        static const char* const testname = getenv("LO_TESTNAME");
-        if (testname != nullptr)
+        static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+        if (bRunningUnitTest)
             return true;
         return !vcl::test::activeGraphicsRenderTest().isEmpty();
     }

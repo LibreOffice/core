@@ -173,7 +173,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
         }
 #endif
 
-        static const size_t FONTCACHE_MAX = getenv("LO_TESTNAME") ? 1 : 50;
+        static const size_t FONTCACHE_MAX = getenv("LO_RUNNING_UNIT_TEST") ? 1 : 50;
 
         if (maFontInstanceList.size() >= FONTCACHE_MAX)
         {
