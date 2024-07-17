@@ -23,15 +23,8 @@
 #include <sal/macros.h>
 #include <unordered_map>
 #include <memory>
-#include <mutex>
 
 typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
-static TypeNameHashMap* pHashMap = nullptr;
-static std::mutex& getHashMapMutex()
-{
-    static std::mutex s_aHashMapProtection;
-    return s_aHashMapProtection;
-}
 
 namespace {
 
@@ -110,21 +103,19 @@ const TokenTable pTokenTableArray[] =
     { "NotFound",           TK_NotFound }
 };
 
+static TypeNameHashMap* createHashMap()
+{
+    TypeNameHashMap* pH = new TypeNameHashMap;
+    const TokenTable* pPtr = pTokenTableArray;
+    const TokenTable* pEnd = pPtr + SAL_N_ELEMENTS( pTokenTableArray );
+    for ( ; pPtr < pEnd; pPtr++ )
+        (*pH)[ pPtr->pS ] = pPtr->pE;
+    return pH;
+}
+
 PPPOptimizerTokenEnum TKGet( std::u16string_view rToken )
 {
-    if ( !pHashMap )
-    {   // init hash map
-        std::scoped_lock aGuard( getHashMapMutex() );
-        if ( !pHashMap )
-        {
-            TypeNameHashMap* pH = new TypeNameHashMap;
-            const TokenTable* pPtr = pTokenTableArray;
-            const TokenTable* pEnd = pPtr + SAL_N_ELEMENTS( pTokenTableArray );
-            for ( ; pPtr < pEnd; pPtr++ )
-                (*pH)[ pPtr->pS ] = pPtr->pE;
-            pHashMap = pH;
-        }
-    }
+    static TypeNameHashMap* pHashMap = createHashMap();
     PPPOptimizerTokenEnum eRetValue = TK_NotFound;
     size_t i, nLen = rToken.size();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
