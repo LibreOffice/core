@@ -14,7 +14,9 @@ $(eval $(call gb_ExternalProject_use_externals,raptor,\
 	libxml2 \
 ))
 
+ifeq ($(SYSTEM_ICU),)
 $(eval $(call gb_ExternalProject_use_package,raptor,icu_ure))
+endif
 
 $(eval $(call gb_ExternalProject_register_targets,raptor,\
 	build \
