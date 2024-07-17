@@ -1212,6 +1212,8 @@ public:
 
     void SetParaAutoBefore(bool const bParaAutoBefore) { m_StreamStateStack.top().bParaAutoBefore = bParaAutoBefore; }
 
+    void SetLineSpacing(const Id nName, sal_Int32 nIntValue);
+
     /// Forget about the previous paragraph, as it's not inside the same
     /// start/end node.
     void ClearPreviousParagraph();

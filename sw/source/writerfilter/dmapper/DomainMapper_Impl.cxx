@@ -5079,6 +5079,68 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter() const
     return m_bDiscardHeaderFooter;
 }
 
+void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue)
+{
+    static const int nSingleLineSpacing = 240;
+
+    style::LineSpacing aSpacing;
+    const PropertyMapPtr pTopContext = GetTopContext();
+    std::optional<PropertyMap::Property> aLineSpacingVal;
+    if (pTopContext && (aLineSpacingVal = pTopContext->getProperty(PROP_PARA_LINE_SPACING)))
+        aLineSpacingVal->second >>= aSpacing;
+    else
+    {
+        // default to exact 12pt spacing
+        aSpacing.Mode = style::LineSpacingMode::FIX;
+        aSpacing.Height = convertTwipToMm100(nSingleLineSpacing);
+    }
+    if (nName == NS_ooxml::LN_CT_Spacing_line)
+    {
+        appendGrabBag(m_aSubInteropGrabBag, u"line"_ustr, OUString::number(nIntValue));
+        // now set the value depending on the Mode
+        if (aSpacing.Mode == style::LineSpacingMode::PROP)
+            aSpacing.Height = sal_Int16(nIntValue * 100 / nSingleLineSpacing);
+        else
+            aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMm100_Limited(nIntValue));
+    }
+    else // NS_ooxml::LN_CT_Spacing_lineRule:
+    {
+        // exactly, atLeast, auto
+        if (sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto)
+        {
+            appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"auto"_ustr);
+            if (aSpacing.Height >= 0)
+            {
+                aSpacing.Mode = style::LineSpacingMode::PROP;
+                // reinterpret the already set value
+                aSpacing.Height
+                    = sal_Int16(aSpacing.Height * 100
+                                / ConversionHelper::convertTwipToMm100_Limited(nSingleLineSpacing));
+            }
+            else
+            {
+                // Negative value still means a positive height,
+                // just the mode is "exact".
+                aSpacing.Mode = style::LineSpacingMode::FIX;
+                aSpacing.Height *= -1;
+            }
+        }
+        else if (sal::static_int_cast<Id>(nIntValue)
+                 == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast)
+        {
+            appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"atLeast"_ustr);
+            aSpacing.Mode = style::LineSpacingMode::MINIMUM;
+        }
+        else // NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact
+        {
+            appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"exact"_ustr);
+            aSpacing.Mode = style::LineSpacingMode::FIX;
+        }
+    }
+    if (pTopContext)
+        pTopContext->Insert(PROP_PARA_LINE_SPACING, uno::Any(aSpacing));
+}
+
 // called from TableManager::closeCell()
 void DomainMapper_Impl::ClearPreviousParagraph()
 {
