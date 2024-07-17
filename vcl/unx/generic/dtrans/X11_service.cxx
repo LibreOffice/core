@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/test_info.hxx>
 #include <unx/salinst.h>
 #include <dndhelper.hxx>
 #include <vcl/sysdata.hxx>
@@ -47,7 +50,7 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    if ( IsRunningUnitTest() || IsRunningUITest() )
+    if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );
 
     SelectionManager& rManager = SelectionManager::get();

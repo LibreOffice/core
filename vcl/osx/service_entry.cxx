@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/test_info.hxx>
 #include <vcl/svapp.hxx>
 #include <dndhelper.hxx>
 #include <vcl/sysdata.hxx>
@@ -38,7 +40,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
-    if ( Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest() )
+    if ( Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( i_rArguments );
 
     SalData* pSalData = GetSalData();

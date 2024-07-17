@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/test_info.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>
@@ -336,8 +337,7 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // like the system clipboard, so rather use the dummy GenericClipboard.
-    static const bool bRunningUnitTest
-        = SalInstance::IsRunningUnitTest() || SalInstance::IsRunningUITest();
+    static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
 
     if (bRunningUnitTest)
     {

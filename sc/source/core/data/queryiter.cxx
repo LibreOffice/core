@@ -1625,7 +1625,7 @@ static bool CanBeUsedForSorterCache(ScDocument& /*rDoc*/, const ScQueryParam& /*
         && rParam.GetEntry(0).eOp != SC_EQUAL)
         return false;
     // For unittests allow inefficient caching, in order for the code to be checked.
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
+    static const bool bRunningUnitTest = o3tl::IsRunningUnitTest();
     if(refData == nullptr || refData->Ref1.IsRowRel() || refData->Ref2.IsRowRel())
     {
         // If this is not a range, then a cache is not worth it. If rows are relative, then each

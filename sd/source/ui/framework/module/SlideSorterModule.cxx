@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <o3tl/test_info.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
@@ -81,9 +82,8 @@ SlideSorterModule::SlideSorterModule (
 
     UpdateViewTabBar(nullptr);
 
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().value_or(true)
-        && (!bRunningUnitTest || !comphelper::LibreOfficeKit::isActive()))
+        && (!o3tl::IsRunningUnitTest() || !comphelper::LibreOfficeKit::isActive()))
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);

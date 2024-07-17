@@ -29,6 +29,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/test_info.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 
@@ -957,7 +958,7 @@ bool Dialog::ImplStartExecute()
                     SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
             }
 
-            if (SalInstance::IsRunningUnitTest())
+            if (o3tl::IsRunningUnitTest())
             { // helps starbasic unit tests show their errors
                 std::cerr << "Dialog \"" << ImplGetDialogText(this)
                           << "\"cancelled in silent mode";

@@ -25,6 +25,7 @@
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFamily.hxx>
 #include <font/LogicalFontInstance.hxx>
+#include <o3tl/test_info.hxx>
 #include <tools/debug.hxx>
 #include <impfontcache.hxx>
 
@@ -173,7 +174,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
         }
 #endif
 
-        static const size_t FONTCACHE_MAX = getenv("LO_RUNNING_UNIT_TEST") ? 1 : 50;
+        static const size_t FONTCACHE_MAX = o3tl::IsRunningUnitTest() ? 1 : 50;
 
         if (maFontInstanceList.size() >= FONTCACHE_MAX)
         {

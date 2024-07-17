@@ -211,9 +211,6 @@ public:
 
     virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
 
-    static bool IsRunningUnitTest();
-    static bool IsRunningUITest();
-
     // both must be implemented, if the VCL plugin needs to run via system event loop
     virtual bool DoExecute(int &nExitCode);
     virtual void DoQuit();

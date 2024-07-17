@@ -20,6 +20,7 @@
 #include <config_feature_desktop.h>
 #include <config_wasm_strip.h>
 
+#include <o3tl/test_info.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
@@ -1458,9 +1459,7 @@ bool SfxApplication::IsHeadlessOrUITest()
     if (Application::IsHeadlessModeEnabled())
         return true;
 
-    static const bool bIsUITest = getenv("LO_RUNNING_UI_TEST"); //uitest.uicheck fails when the dialog is open
-
-    bool bRet = bIsUITest;
+    bool bRet = o3tl::IsRunningUITest(); //uitest.uicheck fails when the dialog is open
     for (sal_uInt16 i = 0, nCount = Application::GetCommandLineParamCount(); i < nCount; ++i)
     {
         if (Application::GetCommandLineParam(i) == "--nologo")

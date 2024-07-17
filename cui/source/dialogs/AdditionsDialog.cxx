@@ -19,6 +19,7 @@
 #include <dialmgr.hxx>
 #include <strings.hrc>
 
+#include <o3tl/test_info.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -278,9 +279,7 @@ SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool 
 {
     // if we are running a UITest, e.g. UITest_sw_options then
     // don't attempt to downloading anything
-    static const bool bUITest = getenv("LO_RUNNING_UI_TEST");
-
-    m_bUITest = bUITest;
+    m_bUITest = o3tl::IsRunningUITest();
 }
 
 SearchAndParseThread::~SearchAndParseThread() {}

@@ -21,6 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/test_info.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -446,7 +447,7 @@ Reference< XInterface > SalInstance::CreateDragSource(const SystemEnvData* pSysE
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // the system clipboard, so rather use the dummy GenericClipboard.
-    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest())
+    if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest())
         return getXWeak(new vcl::GenericDragSource());
     return ImplCreateDragSource(pSysEnv);
 }
@@ -459,7 +460,7 @@ uno::Reference<uno::XInterface> SalInstance::ImplCreateDropTarget(const SystemEn
 Reference< XInterface > SalInstance::CreateDropTarget(const SystemEnvData* pSysEnv)
 {
     // see SalInstance::CreateDragSource
-    if (Application::IsHeadlessModeEnabled() || IsRunningUnitTest() || IsRunningUITest())
+    if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest())
         return getXWeak(new vcl::GenericDropTarget());
     return ImplCreateDropTarget(pSysEnv);
 }

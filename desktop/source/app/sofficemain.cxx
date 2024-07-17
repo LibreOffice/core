@@ -30,6 +30,7 @@
 #include <prewin.h>
 
 #if defined _WIN32
+#include <o3tl/test_info.hxx>
 #include <systools/win32/test_desktop.hxx>
 #endif
 
@@ -57,7 +58,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined _WIN32
     // If this is a UI test, we may need to switch to a dedicated desktop
-    if (getenv("LO_RUNNING_UI_TEST") != nullptr)
+    if (o3tl::IsRunningUITest())
         sal::systools::maybeCreateTestDesktop();
 #endif
 

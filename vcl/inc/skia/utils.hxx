@@ -22,6 +22,7 @@
 
 #include <vcl/skia/SkiaHelper.hxx>
 
+#include <o3tl/test_info.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <driverblocklist.hxx>
@@ -143,8 +144,7 @@ inline bool isUnitTestRunning(const char* name = nullptr)
 {
     if (name == nullptr)
     {
-        static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-        if (bRunningUnitTest)
+        if (o3tl::IsRunningUnitTest())
             return true;
         return !vcl::test::activeGraphicsRenderTest().isEmpty();
     }

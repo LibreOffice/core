@@ -26,6 +26,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/test_info.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
@@ -2788,8 +2789,7 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 
         mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
 
-        static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-        if (bRunningUnitTest)
+        if (o3tl::IsRunningUnitTest())
             return; // No registry changing; no SettingsConfigItem modification
 
         HKEY hkey;

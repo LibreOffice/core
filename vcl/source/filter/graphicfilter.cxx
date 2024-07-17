@@ -86,6 +86,7 @@
 #include <mutex>
 #include <string_view>
 #include <o3tl/string_view.hxx>
+#include <o3tl/test_info.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 #include "FilterConfigCache.hxx"
@@ -100,8 +101,7 @@
 static bool supportNativeWebp()
 {
     // Enable support only for unittests
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-    return bRunningUnitTest;
+    return o3tl::IsRunningUnitTest();
 }
 
 static std::vector< GraphicFilter* > gaFilterHdlList;

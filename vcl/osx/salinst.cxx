@@ -32,6 +32,7 @@
 #include <comphelper/solarmutex.hxx>
 
 #include <comphelper/lok.hxx>
+#include <o3tl/test_info.hxx>
 
 #include <osl/process.h>
 
@@ -647,7 +648,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             // events, we can end up blocking and waiting forever so
             // don't block and wait when running unit tests.
             pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
-                            untilDate: SalInstance::IsRunningUnitTest() ? [NSDate distantPast] : [NSDate distantFuture]
+                            untilDate: o3tl::IsRunningUnitTest() ? [NSDate distantPast] : [NSDate distantFuture]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )

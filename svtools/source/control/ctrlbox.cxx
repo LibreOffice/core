@@ -22,6 +22,7 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/test_info.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
 #include <vcl/customweld.hxx>
@@ -528,14 +529,9 @@ void FontNameBox::Fill( const FontList* pList )
         set_active_or_entry_text(aOldText);
 }
 
-static bool IsRunningUnitTest() {
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-    return bRunningUnitTest;
-}
-
 void FontNameBox::EnableWYSIWYG(bool bEnable)
 {
-    if (IsRunningUnitTest())
+    if (o3tl::IsRunningUnitTest())
         return;
     if (mbWYSIWYG == bEnable)
         return;

@@ -180,20 +180,6 @@ void SalInstance::DoQuit()
         std::abort();
 }
 
-// static
-bool SalInstance::IsRunningUnitTest()
-{
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-    return bRunningUnitTest;
-}
-
-// static
-bool SalInstance::IsRunningUITest()
-{
-    static const bool bRunningUITest = getenv("LO_RUNNING_UI_TEST");
-    return bRunningUITest;
-}
-
 SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE {}
 
 void SalBitmap::DropScaledCache()

@@ -16,6 +16,7 @@
 #include <string_view>
 
 #include <dndhelper.hxx>
+#include <o3tl/test_info.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <unx/gtk/gtkdata.hxx>
@@ -1578,7 +1579,7 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
 {
-    if ( IsRunningUnitTest() || IsRunningUITest() )
+    if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
         return SalInstance::CreateClipboard( arguments );
 
     OUString sel;

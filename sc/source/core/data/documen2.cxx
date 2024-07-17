@@ -20,6 +20,7 @@
 #include <scextopt.hxx>
 #include <autonamecache.hxx>
 
+#include <o3tl/test_info.hxx>
 #include <osl/thread.h>
 #include <svx/xtable.hxx>
 #include <sfx2/bindings.hxx>
@@ -102,7 +103,7 @@ ScSheetLimits ScSheetLimits::CreateDefault()
     if( SC_MOD())
         jumboSheets = SC_MOD()->GetDefaultsOptions().GetInitJumboSheets();
     else
-        assert( getenv("LO_RUNNING_UNIT_TEST") != nullptr ); // in unittests
+        assert(o3tl::IsRunningUnitTest());
     if (jumboSheets)
         return ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
     else

@@ -61,6 +61,7 @@
 #include <svx/svdoutl.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/test_info.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
@@ -2779,8 +2780,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     auto xChanges = comphelper::ConfigurationChanges::create();
     officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
 
-    static const bool bRunningUnitTest = getenv("LO_RUNNING_UNIT_TEST");
-    if (!bRunningUnitTest || !comphelper::LibreOfficeKit::isActive())
+    if (!o3tl::IsRunningUnitTest() || !comphelper::LibreOfficeKit::isActive())
         officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::set(true,xChanges);
     xChanges->commit();
 
