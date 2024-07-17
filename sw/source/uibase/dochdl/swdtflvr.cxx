@@ -2140,6 +2140,39 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
     return nRet;
 }
 
+namespace
+{
+bool CanSkipInvalidateNumRules(const SwPosition& rInsertPosition)
+{
+    SwTextNode* pTextNode = rInsertPosition.GetNode().GetTextNode();
+    if (!pTextNode)
+    {
+        return false;
+    }
+
+    const SwNodeNum* pNum = pTextNode->GetNum();
+    if (pNum)
+    {
+        SwNumRule* pNumRule = pNum->GetNumRule();
+        if (pNumRule)
+        {
+            const SvxNumberType rType = pNumRule->Get(pTextNode->GetActualListLevel());
+            if (rType.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+            {
+                // Bullet list, skip invalidation.
+                return true;
+            }
+        }
+
+        // Numbered list, invalidate.
+        return false;
+    }
+
+    // Not a list, skip invalidation.
+    return true;
+}
+}
+
 bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
@@ -2160,8 +2193,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
             pRead = ReadAscii;
 
             const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
-            SwTextNode* pTextNode = rInsertPosition.GetNode().GetTextNode();
-            if (pTextNode && !pTextNode->GetNum())
+            if (CanSkipInvalidateNumRules(rInsertPosition))
             {
                 // Insertion point is not a numbering and we paste plain text: then no need to
                 // invalidate all numberings.
