@@ -41,15 +41,6 @@ namespace
         }
     }
 
-    void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pDialog)
-    {
-        if (!pDialog)
-            return;
-        weld::Dialog* pDlg = pDialog->getDialog();
-        pDlg->set_modal(!bEnable);
-        pDlg->set_visible(!bEnable);
-    }
-
 } // anonymous namespace
 
 namespace chart
@@ -337,7 +328,7 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl, weld::Button&, void)
     OUString aRange = m_xED_Range->get_text();
     OUString aTitle = m_xFTTitle->get_label();
 
-    lcl_enableRangeChoosing(true, m_pDialogController);
+    enableRangeChoosing(true, m_pDialogController);
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
 }
 
@@ -361,7 +352,7 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
     if( isValid())
         changeDialogModelAccordingToControls();
 
-    lcl_enableRangeChoosing(false, m_pDialogController);
+    enableRangeChoosing(false, m_pDialogController);
 }
 
 void RangeChooserTabPage::disposingRangeSelection()

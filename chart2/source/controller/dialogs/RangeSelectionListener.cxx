@@ -19,6 +19,7 @@
 
 #include <RangeSelectionListener.hxx>
 #include <ChartModel.hxx>
+#include <vcl/weld.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -54,6 +55,23 @@ void SAL_CALL RangeSelectionListener::aborted( const sheet::RangeSelectionEvent&
 void SAL_CALL RangeSelectionListener::disposing( const lang::EventObject& /*Source*/ )
 {
     m_rParent.disposingRangeSelection();
+}
+
+void RangeSelectionListenerParent::enableRangeChoosing(bool bEnable, weld::DialogController* pDialog)
+{
+    if (!pDialog)
+        return;
+    weld::Dialog* pDlg = pDialog->getDialog();
+    // tdf#158753 save the current page when hiding the wizard,
+    // and restore it on showing the wizard to workaround that
+    // that GtkAssistant resets to page 0 on hide+show
+    weld::Assistant* pAss = dynamic_cast<weld::Assistant*>(pDlg);
+    if (pAss && bEnable)
+        m_sRestorePageIdent = pAss->get_current_page_ident();
+    pDlg->set_modal(!bEnable);
+    pDlg->set_visible(!bEnable);
+    if (pAss && !bEnable)
+        pAss->set_current_page(m_sRestorePageIdent);
 }
 
 } //  namespace chart
