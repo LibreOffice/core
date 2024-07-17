@@ -30,7 +30,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="pdfsignpage|label2">Use this certificate to digitally sign PDF documents:</property>
+                <property name="label" translatable="yes" context="pdfsignpage|label2">Use this X.509 certificate to digitally sign PDF documents:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">cert</property>
                 <property name="xalign">0</property>
@@ -50,7 +50,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cert-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|cert">Allows you to select a certificate to be used for signing this PDF export.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfsignpage|extended_tip|cert">Allows you to select an X.509 certificate to be used for signing this PDF export.</property>
                   </object>
                 </child>
               </object>
@@ -287,7 +287,7 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="pdfsignpage|label1">Certificate</property>
+        <property name="label" translatable="yes" context="pdfsignpage|label1">X.509 Certificate</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
