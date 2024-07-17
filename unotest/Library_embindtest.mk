@@ -15,6 +15,12 @@ $(eval $(call gb_Library_add_exception_objects,embindtest, \
 
 $(eval $(call gb_Library_set_componentfile,embindtest,unotest/source/embindtest/embindtest,services))
 
+$(eval $(call gb_Library_use_libraries,embindtest, \
+    cppu \
+    cppuhelper \
+    sal \
+))
+
 $(eval $(call gb_Library_use_sdk_api,embindtest))
 
 # vim: set noet sw=4 ts=4:
