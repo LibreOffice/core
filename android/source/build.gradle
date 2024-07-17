@@ -37,6 +37,10 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.1'
 }
 
+base {
+    archivesName = "LibreOfficeViewer"
+}
+
 android {
     namespace 'org.libreoffice'
     compileSdk 34
