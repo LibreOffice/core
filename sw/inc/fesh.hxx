@@ -733,6 +733,7 @@ public:
     /// Set table style of the current table.
     void SetTableStyle(const OUString& rStyleName);
     SW_DLLPUBLIC bool SetTableStyle(const SwTableAutoFormat& rNew);
+    SW_DLLPUBLIC bool ResetTableStyle();
 
     /// Update the direct formatting according to the current table style.
     /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
