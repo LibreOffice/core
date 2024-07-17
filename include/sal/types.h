@@ -288,6 +288,7 @@ typedef void *                   sal_Handle;
 #   define SAL_WARN_UNUSED_RESULT
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
 /** Use this as markup for functions and methods whose return value may be
     null and should not be dereferenced unconditionally.
 
@@ -299,7 +300,7 @@ typedef void *                   sal_Handle;
 #else
 #   define SAL_RET_MAYBENULL
 #endif
-
+#endif
 
 /** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
     This hinders the compiler from setting a generic vtable stating that
