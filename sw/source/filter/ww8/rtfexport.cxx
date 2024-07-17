@@ -1087,7 +1087,9 @@ void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
     if (pNewPgDescFormat)
         m_pSections->AppendSection(*pNewPgDescFormat, rNd, pFormat, nLnNm);
     else if (pNewPgDesc)
-        m_pSections->AppendSection(pNewPgDesc, rNd, pFormat, nLnNm);
+    {
+        m_pSections->AppendSection(SwFormatPageDesc(pNewPgDesc), rNd, pFormat, nLnNm);
+    }
 
     // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
     if (!m_pAttrOutput->GetPrevPageDesc()

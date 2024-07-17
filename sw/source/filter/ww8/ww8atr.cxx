@@ -754,7 +754,7 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
     }
     else if ( pNewPgDesc )
     {
-        m_pSepx->AppendSep( Fc2Cp( nFcPos ), pNewPgDesc, rNd, pFormat, nLnNm );
+        m_pSepx->AppendSep( Fc2Cp( nFcPos ), SwFormatPageDesc(pNewPgDesc), rNd, pFormat, nLnNm );
     }
 }
 

@@ -660,7 +660,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     }
     else if ( pNewPgDesc )
     {
-        m_pSections->AppendSection( pNewPgDesc, rNd, pFormat, nLnNm );
+        m_pSections->AppendSection( SwFormatPageDesc(pNewPgDesc), rNd, pFormat, nLnNm );
     }
 
 }
