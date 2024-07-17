@@ -623,14 +623,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if (pDBData == rDoc.GetAnonymousDBData( nTab) || rDoc.GetDBCollection()->getAnonDBs().has( pDBData))
         pDBData->UpdateFromSortParam( rSortParam);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (SfxViewShell* pKitSomeViewForThisDoc = comphelper::LibreOfficeKit::isActive() ?
+                                               rDocShell.GetBestViewShell(false) : nullptr)
     {
-        SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell && pSomeViewForThisDoc && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+            if (pTabViewShell && pTabViewShell->GetDocId() == pKitSomeViewForThisDoc->GetDocId())
             {
                 if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nTab))
                     pPosHelper->invalidateByIndex(nStartRow);
@@ -639,7 +639,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         }
 
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-            pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+            pKitSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,
             true /* bHidden */, true /* bFiltered */, true /* bGroups */, nTab);
     }
 
