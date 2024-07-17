@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf84684)
     // This was Pie 2.
     CPPUNIT_ASSERT_EQUAL(u"Rectangle 1"_ustr, xChild1->getName());
     uno::Reference<container::XNamed> xChild2(xGroup->getByIndex(1), uno::UNO_QUERY);
-    // This was Rectangle 1.
+    // This was Rectangle 1./y
     CPPUNIT_ASSERT_EQUAL(u"Pie 2"_ustr, xChild2->getName());
 }
 
@@ -1921,6 +1921,15 @@ CPPUNIT_TEST_FIXTURE(Test, test148544Tdf)
             CPPUNIT_ASSERT(!bottomBorder.OuterLineWidth);
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test162268Tdf)
+{
+    createSwDoc("tdf162268.rtf");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    sal_Int32 nBodyTop
+        = getXPath(pLayout, "/root/page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1387), nBodyTop);
 }
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
