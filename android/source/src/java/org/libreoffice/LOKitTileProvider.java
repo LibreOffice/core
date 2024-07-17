@@ -11,7 +11,6 @@ package org.libreoffice;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.os.Build;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
@@ -629,6 +628,14 @@ class LOKitTileProvider implements TileProvider {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.KEYCODE_DEL:
                 return com.sun.star.awt.Key.BACKSPACE;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                return com.sun.star.awt.Key.DOWN;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                return com.sun.star.awt.Key.LEFT;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                return com.sun.star.awt.Key.RIGHT;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                return com.sun.star.awt.Key.UP;
             case KeyEvent.KEYCODE_ENTER:
                 return com.sun.star.awt.Key.RETURN;
         }
