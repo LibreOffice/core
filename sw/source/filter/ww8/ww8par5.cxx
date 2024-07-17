@@ -805,7 +805,7 @@ void WW8FieldEntry::SetBookmarkCode(const OUString& bookmarkCode)
 tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
     typedef eF_ResT (SwWW8ImplReader::*FNReadField)( WW8FieldDesc*, OUString& );
-    enum Limits {eMax = 96};
+    constexpr sal_uInt16 eMax = 96;
     static const FNReadField aWW8FieldTab[eMax+1] =
     {
         nullptr,
@@ -937,7 +937,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : o3tl::narrowing<sal_uInt16>(eMax);
+    sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : eMax;
     sal_uInt16 nI = n / 32;                     // # of sal_uInt32
     sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
