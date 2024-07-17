@@ -2281,7 +2281,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             xContentControlText->setString(
                                                 OStringToOUString(aContent, RTL_TEXTENCODING_UTF8));
 
-                                            sal_Int32 iType;
+                                            sal_Int32 iType = 0;
                                             xContentControlProps->getPropertyValue(
                                                 UNO_NAME_CONTENT_CONTROL_TYPE)
                                                 >>= iType;
