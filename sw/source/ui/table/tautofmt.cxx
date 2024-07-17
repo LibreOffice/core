@@ -125,14 +125,10 @@ void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
 
     m_xBtnAdd->set_sensitive(m_bSetAutoFormat);
 
-    m_nIndex = 0;
-    if( !m_bSetAutoFormat )
-    {
-        // Then the list to be expanded by the entry "- none -".
-        m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
-        m_nDfltStylePos = 1;
-        m_nIndex = 255;
-    }
+    // Then the list to be expanded by the entry "- none -".
+    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
+    m_nDfltStylePos = 1;
+    m_nIndex = 255;
 
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size());
             i < nCount; i++)
@@ -401,7 +397,12 @@ short SwAutoFormatDlg::run()
 {
     short nRet = SfxDialogController::run();
     if (nRet == RET_OK && m_bSetAutoFormat)
-        m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);
+    {
+        if (m_nIndex == 255)
+            m_pShell->ResetTableStyle();
+        else
+            m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);
+    }
     return nRet;
 }
 

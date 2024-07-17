@@ -1255,7 +1255,7 @@ public:
 
     /// AutoFormat for table/table selection.
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, bool isSetStyleName = false);
+    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, OUString const* pStyleNameToSet = nullptr);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
