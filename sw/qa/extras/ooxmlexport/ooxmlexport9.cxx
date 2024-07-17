@@ -1305,8 +1305,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf111964)
     loadAndSave("tdf111964.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
-    static constexpr OUStringLiteral sWSReference = u"\u2002\u2002\u2002\u2002\u2002";
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t"_ostr, sWSReference);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t"_ostr, vEnSpaces);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")

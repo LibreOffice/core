@@ -755,8 +755,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTextFormFieldInsertion)
 
     // The text form field has the placeholder text in it
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
-    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(vEnSpaces, xPara->getString());
 
     // Undo insertion
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -768,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTextFormFieldInsertion)
     dispatchCommand(mxComponent, ".uno:Redo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     xPara.set(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(vEnSpaces, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
@@ -1506,8 +1505,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldInsertion)
 
     // The date form field has the placeholder text in it
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
-    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(vEnSpaces, xPara->getString());
 
     // Undo insertion
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -1544,8 +1542,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
 
     // Check the default content added by insertion
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
-    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), pFieldmark->GetContent());
+    CPPUNIT_ASSERT_EQUAL(vEnSpaces, pFieldmark->GetContent());
 
     // Set content to empty string
     pFieldmark->ReplaceContent("");
@@ -1578,8 +1575,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
 
     // The default content is not a valid date
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
-    sal_Unicode vEnSpaces[5] = { 8194, 8194, 8194, 8194, 8194 };
-    CPPUNIT_ASSERT_EQUAL(OUString(vEnSpaces, 5), pFieldmark->GetContent());
+    CPPUNIT_ASSERT_EQUAL(vEnSpaces, pFieldmark->GetContent());
     std::pair<bool, double> aResult = pFieldmark->GetCurrentDate();
     CPPUNIT_ASSERT(!aResult.first);
 

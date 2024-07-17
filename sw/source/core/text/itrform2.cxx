@@ -1189,7 +1189,6 @@ namespace sw::mark {
                 return vListEntries[nCurrentIdx];
         }
 
-        static constexpr OUStringLiteral vEnSpaces = u"\u2002\u2002\u2002\u2002\u2002";
         return vEnSpaces;
     }
 }
