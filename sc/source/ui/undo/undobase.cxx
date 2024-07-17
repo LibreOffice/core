@@ -570,11 +570,6 @@ ScUndoWrapper::~ScUndoWrapper()
 {
 }
 
-void ScUndoWrapper::ForgetWrappedUndo()
-{
-    pWrappedUndo = nullptr;    // don't delete in dtor - pointer must be stored outside
-}
-
 OUString ScUndoWrapper::GetComment() const
 {
     if (pWrappedUndo)

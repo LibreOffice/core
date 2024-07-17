@@ -167,7 +167,7 @@ public:
     virtual                 ~ScUndoWrapper() override;
 
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo.get(); }
-    void                    ForgetWrappedUndo();
+    std::unique_ptr<SfxUndoAction> ReleaseWrappedUndo() { return std::move(pWrappedUndo); }
 
     virtual void            Undo() override;
     virtual void            Redo() override;

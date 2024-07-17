@@ -109,14 +109,13 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
     if ( bPartOfPaste )
         if ( auto pWrapper = dynamic_cast<ScUndoWrapper*>( pNextAction) )
         {
-            SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
-            if ( dynamic_cast<const ScUndoPaste*>( pWrappedAction) )
+            if (dynamic_cast<const ScUndoPaste*>(pWrapper->GetWrappedUndo()))
             {
                 //  Store paste action if this is part of paste with inserting cells.
                 //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
 
-                pPasteUndo.reset( pWrappedAction );
-                pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
+                // Pass ownership of the wrapped SfxUndoAction* to pPasteUndO
+                pPasteUndo = pWrapper->ReleaseWrappedUndo();
                 return true;
             }
         }
