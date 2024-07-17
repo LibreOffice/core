@@ -5092,7 +5092,7 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter() const
     return m_bDiscardHeaderFooter;
 }
 
-void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue)
+void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue, bool bNegativeFlip)
 {
     static const int nSingleLineSpacing = 240;
 
@@ -5142,12 +5142,25 @@ void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue)
                  == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast)
         {
             appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"atLeast"_ustr);
-            aSpacing.Mode = style::LineSpacingMode::MINIMUM;
+            if (aSpacing.Height < 0)
+            {
+                aSpacing.Mode = style::LineSpacingMode::FIX;
+                aSpacing.Height *= -1;
+            }
+            else
+                aSpacing.Mode = style::LineSpacingMode::MINIMUM;
         }
         else // NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact
         {
             appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"exact"_ustr);
-            aSpacing.Mode = style::LineSpacingMode::FIX;
+            if (aSpacing.Height < 0)
+            {
+                if (bNegativeFlip)
+                    aSpacing.Mode = style::LineSpacingMode::MINIMUM;
+                aSpacing.Height *= -1;
+            }
+            else
+                aSpacing.Mode = style::LineSpacingMode::FIX;
         }
     }
     if (pTopContext)

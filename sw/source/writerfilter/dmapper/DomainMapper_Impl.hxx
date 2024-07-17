@@ -1222,7 +1222,7 @@ public:
     void SetSpacingHadLine(bool bSet) { m_bSpacingHadLine = bSet; }
     bool GetSpacingHadLineRule() const { return m_bSpacingHadLineRule; }
     void SetSpacingHadLineRule(bool bSet) { m_bSpacingHadLineRule = bSet; }
-    void SetLineSpacing(const Id nName, sal_Int32 nIntValue);
+    void SetLineSpacing(const Id nName, sal_Int32 nIntValue, bool bNegativeFlip = true);
 
     /// Forget about the previous paragraph, as it's not inside the same
     /// start/end node.

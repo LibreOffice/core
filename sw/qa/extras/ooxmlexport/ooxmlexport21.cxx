@@ -342,25 +342,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125469_singleSpacing, "tdf125469_singleSpacing.d
     // The negative value (always) turns the (inherited) "atLeast" into an "exact".
     // Visually, this is hardly readable (36pt font forced into 12pt space)
     aSpacing = getProperty<style::LineSpacing>(getParagraph(2), u"ParaLineSpacing"_ustr);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
 
     // Paragraph 3 - paragraph style specifies exact 240, para overrides with exact -240.
     // The negative value turns the non-inherited "exact" into an "atLeast".
     // Visually, this should clearly say "Negative exact"
     aSpacing = getProperty<style::LineSpacing>(getParagraph(3), u"ParaLineSpacing"_ustr);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::MINIMUM), aSpacing.Mode);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::MINIMUM), aSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
 
     // Paragraph 4 - paragraph style specifies exact 240, para overrides with only -240.
     // The negative value does nothing to the inherited "exact".
     // Visually, this is hardly readable (36pt font forced into 12pt space)
     aSpacing = getProperty<style::LineSpacing>(getParagraph(4), u"ParaLineSpacing"_ustr);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
-    // CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::FIX), aSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(423), aSpacing.Height);
 
     // all of this ends up being squeezed onto a single page
-    // CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumbering.odt")

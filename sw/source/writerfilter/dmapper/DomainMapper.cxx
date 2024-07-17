@@ -2423,7 +2423,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             else if (aInheritedSpacing.Mode == style::LineSpacingMode::MINIMUM)
                 nLineRule = NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast;
 
-            m_pImpl->SetLineSpacing(NS_ooxml::LN_CT_Spacing_lineRule, nLineRule);
+            const bool bNegativeFlip = nLineRule != NS_ooxml::LN_Value_doc_ST_LineSpacingRule_exact;
+            m_pImpl->SetLineSpacing(NS_ooxml::LN_CT_Spacing_lineRule, nLineRule, bNegativeFlip);
         }
 
         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"spacing"_ustr, m_pImpl->m_aSubInteropGrabBag);
