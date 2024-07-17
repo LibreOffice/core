@@ -29,6 +29,10 @@
 // needed before sal/main.h to avoid redefinition of macros
 #include <prewin.h>
 
+#if defined _WIN32
+#include <systools/win32/test_desktop.hxx>
+#endif
+
 #include <rtl/bootstrap.hxx>
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
@@ -51,6 +55,12 @@
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
+#if defined _WIN32
+    // If this is a UI test, we may need to switch to a dedicated desktop
+    if (getenv("LO_RUNNING_UI_TEST") != nullptr)
+        sal::systools::maybeCreateTestDesktop();
+#endif
+
     sal_detail_initialize(sal::detail::InitializeSoffice, nullptr);
 
 #if HAVE_FEATURE_BREAKPAD
