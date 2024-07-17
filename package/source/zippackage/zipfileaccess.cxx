@@ -244,7 +244,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
                 m_aMutexHolder,
                 m_xContentStream,
                 m_xContext,
-                true );
+                true, false, ZipFile::Checks::Default);
 }
 
 // XNameAccess
