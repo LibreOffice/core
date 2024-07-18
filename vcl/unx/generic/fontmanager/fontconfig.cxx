@@ -984,6 +984,22 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     const FcChar8* pTargetNameUtf8 = reinterpret_cast<FcChar8 const *>(aTargetName.getStr());
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
+    // Try to map tools FontFamily to fontconfig FC_FAMILY. Note that FcPatternAddString() appends
+    // to a list, so it won't overwrite the previous FcPatternAddString(FC_FAMILY), this way we can
+    // express that we wanted a certain font, and otherwise a given family style.
+    FontFamily eFamilyType = rPattern.GetFamilyType();
+    switch (eFamilyType)
+    {
+        case FAMILY_ROMAN:
+            FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<const FcChar8*>("serif"));
+            break;
+        case FAMILY_SWISS:
+            FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<const FcChar8*>("sans"));
+            break;
+        default:
+            break;
+    }
+
     LanguageTag aLangTag(rPattern.meLanguage);
     OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
 
