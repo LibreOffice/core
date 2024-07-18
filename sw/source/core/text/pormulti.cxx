@@ -1923,7 +1923,7 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
 // next line, this function is called to truncate
 // the rest of the remaining multi portion
 static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
-                                     TextFrameIndex const nStartIdx, bool bIsBidiPortion)
+                                     TextFrameIndex const nStartIdx)
 {
     rMulti.GetRoot().Truncate();
     rMulti.GetRoot().SetLen(TextFrameIndex(0));
@@ -1939,28 +1939,25 @@ static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& r
     rMulti.SetLen(TextFrameIndex(0));
     rInf.SetIdx( nStartIdx );
 
-    if (bIsBidiPortion)
+    if (rMulti.IsBidi())
     {
         // The truncated portion is a bidi portion. Bidi portions contain ordinary text, and may
         // potentially underflow in the case that none of the text fits on the current line.
-        if (auto* pPrevPor = rInf.GetLast();
-            pPrevPor && pPrevPor->GetWhichPor() == PortionType::Text)
-        {
-            // Check if the start of the bidi portion is a valid break. In that case, truncating
-            // the multi portion is sufficient.
-            css::i18n::LineBreakHyphenationOptions aHyphOptions;
-            css::i18n::LineBreakUserOptions aUserOptions;
-            css::lang::Locale aLocale;
-            auto aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
-                rInf.GetText(), sal_Int32(nStartIdx), aLocale, sal_Int32(rInf.GetLineStart()),
-                aHyphOptions, aUserOptions);
 
-            if (aResult.breakIndex != sal_Int32{ nStartIdx })
-            {
-                // The start of the bidi portion is not a valid break. Instead, a break should be
-                // inserted into a previous text portion on this line.
-                rInf.SetUnderflow(&rMulti);
-            }
+        // Check if the start of the bidi portion is a valid break. In that case, truncating
+        // the multi portion is sufficient.
+        css::i18n::LineBreakHyphenationOptions aHyphOptions;
+        css::i18n::LineBreakUserOptions aUserOptions;
+        css::lang::Locale aLocale;
+        auto aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
+            rInf.GetText(), sal_Int32(nStartIdx), aLocale, sal_Int32(rInf.GetLineStart()),
+            aHyphOptions, aUserOptions);
+
+        if (aResult.breakIndex != sal_Int32{ nStartIdx })
+        {
+            // The start of the bidi portion is not a valid break. Instead, a break should be
+            // inserted into a previous text portion on this line.
+            rInf.SetUnderflow(&rMulti);
         }
     }
 }
@@ -2119,6 +2116,15 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         aInf.SetFirstMulti( bFirstMulti );
         aInf.SetNumDone( rInf.IsNumDone() );
         aInf.SetFootnoteDone( rInf.IsFootnoteDone() );
+
+        // tdf#157829: Bidi portions contain text; word wrapping should underflow.
+        // By default, the SwTextFormatInfo constructor assumes the current index is the start of
+        // a new line. As a result, Writer cut breaks MultiPortions as if they were wider than the
+        // entire document. This is incorrect behavior for bidi portions.
+        if (rMulti.IsBidi())
+        {
+            aInf.SetLineStart(rInf.GetLineStart());
+        }
 
         // if there's a bookmark at the start of the MultiPortion, it will be
         // painted with the rotation etc. of the MultiPortion; move it *inside*
@@ -2373,7 +2379,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             else
             {
                 // we try to keep our ruby portion together
-                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/false);
+                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx);
                 pTmp = nullptr;
                 // A follow field portion may still be waiting. If nobody wants
                 // it, we delete it.
@@ -2383,7 +2389,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         else if( rMulti.HasRotation() )
         {
             // we try to keep our rotated portion together
-            lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/false);
+            lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx);
             pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
                                          rMulti.GetDirection() );
         }
@@ -2391,9 +2397,9 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         // a new SwBidiPortion, this would cause a memory leak
         else if( rMulti.IsBidi() && ! m_pMulti )
         {
-            if (!rMulti.GetLen())
+            if (aInf.IsUnderflow() || !rMulti.GetLen())
             {
-                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, /*bIsBidiPortion=*/true);
+                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx);
             }
 
             // If there is a HolePortion at the end of the bidi portion,
