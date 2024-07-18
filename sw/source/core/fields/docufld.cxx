@@ -1982,7 +1982,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_DATE:
         if( auto aSetDate = o3tl::tryAccess<util::Date>(rAny) )
         {
-            m_aDateTime = Date(aSetDate->Day, aSetDate->Month, aSetDate->Year);
+            m_aDateTime = DateTime( Date(aSetDate->Day, aSetDate->Month, aSetDate->Year) );
         }
         break;
     case FIELD_PROP_DATE_TIME:

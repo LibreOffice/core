@@ -4750,7 +4750,7 @@ void VCLXDateField::setDate( const util::Date& aDate )
     VclPtr< DateField > pDateField = GetAs< DateField >();
     if ( pDateField )
     {
-        pDateField->SetDate( aDate );
+        pDateField->SetDate( ::Date(aDate) );
 
         // #107218# Call same listeners like VCL would do after user interaction
         SetSynthesizingVCLEvent( true );
@@ -4777,7 +4777,7 @@ void VCLXDateField::setMin( const util::Date& aDate )
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
     if ( pDateField )
-        pDateField->SetMin( aDate );
+        pDateField->SetMin( ::Date(aDate) );
 }
 
 util::Date VCLXDateField::getMin()
@@ -4797,7 +4797,7 @@ void VCLXDateField::setMax( const util::Date& aDate )
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
     if ( pDateField )
-        pDateField->SetMax( aDate );
+        pDateField->SetMax( ::Date(aDate) );
 }
 
 util::Date VCLXDateField::getMax()
@@ -4817,7 +4817,7 @@ void VCLXDateField::setFirst( const util::Date& aDate )
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
     if ( pDateField )
-        pDateField->SetFirst( aDate );
+        pDateField->SetFirst( ::Date(aDate) );
 }
 
 util::Date VCLXDateField::getFirst()
@@ -4837,7 +4837,7 @@ void VCLXDateField::setLast( const util::Date& aDate )
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
     if ( pDateField )
-        pDateField->SetLast( aDate );
+        pDateField->SetLast( ::Date(aDate) );
 }
 
 util::Date VCLXDateField::getLast()
@@ -4969,7 +4969,7 @@ void VCLXTimeField::setTime( const util::Time& aTime )
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
     {
-        pTimeField->SetTime( aTime );
+        pTimeField->SetTime( tools::Time(aTime) );
 
         // #107218# Call same listeners like VCL would do after user interaction
         SetSynthesizingVCLEvent( true );
@@ -4996,7 +4996,7 @@ void VCLXTimeField::setMin( const util::Time& aTime )
 
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
-        pTimeField->SetMin( aTime );
+        pTimeField->SetMin( tools::Time(aTime) );
 }
 
 util::Time VCLXTimeField::getMin()
@@ -5016,7 +5016,7 @@ void VCLXTimeField::setMax( const util::Time& aTime )
 
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
-        pTimeField->SetMax( aTime );
+        pTimeField->SetMax( tools::Time(aTime) );
 }
 
 util::Time VCLXTimeField::getMax()
@@ -5036,7 +5036,7 @@ void VCLXTimeField::setFirst( const util::Time& aTime )
 
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
-        pTimeField->SetFirst( aTime );
+        pTimeField->SetFirst( tools::Time(aTime) );
 }
 
 util::Time VCLXTimeField::getFirst()
@@ -5056,7 +5056,7 @@ void VCLXTimeField::setLast( const util::Time& aTime )
 
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
-        pTimeField->SetLast( aTime );
+        pTimeField->SetLast( tools::Time(aTime) );
 }
 
 util::Time VCLXTimeField::getLast()

@@ -2267,14 +2267,14 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     }
 
     rControlFormatter.SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
-    rControlFormatter.SetMin( aMin );
-    rControlFormatter.SetMax( aMax );
+    rControlFormatter.SetMin( ::Date(aMin) );
+    rControlFormatter.SetMax( ::Date(aMax) );
     rControlFormatter.SetStrictFormat( bStrict );
     rControlFormatter.EnableEmptyField( true );
 
     rPainterFormatter.SetExtDateFormat( static_cast<ExtDateFieldFormat>(nFormat) );
-    rPainterFormatter.SetMin( aMin );
-    rPainterFormatter.SetMax( aMax );
+    rPainterFormatter.SetMin( ::Date(aMin) );
+    rPainterFormatter.SetMax( ::Date(aMax) );
     rPainterFormatter.SetStrictFormat( bStrict );
     rPainterFormatter.EnableEmptyField( true );
 }
@@ -2375,8 +2375,8 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     weld::TimeFormatter& rControlFormatter = static_cast<weld::TimeFormatter&>(pControl->get_formatter());
 
     rControlFormatter.SetExtFormat(static_cast<ExtTimeFieldFormat>(nFormat));
-    rControlFormatter.SetMin(aMin);
-    rControlFormatter.SetMax(aMax);
+    rControlFormatter.SetMin(tools::Time(aMin));
+    rControlFormatter.SetMax(tools::Time(aMax));
     rControlFormatter.SetStrictFormat(bStrict);
     rControlFormatter.EnableEmptyField(true);
 
@@ -2384,8 +2384,8 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     weld::TimeFormatter& rPainterFormatter = static_cast<weld::TimeFormatter&>(pPainter->get_formatter());
 
     rPainterFormatter.SetExtFormat(static_cast<ExtTimeFieldFormat>(nFormat));
-    rPainterFormatter.SetMin(aMin);
-    rPainterFormatter.SetMax(aMax);
+    rPainterFormatter.SetMin(tools::Time(aMin));
+    rPainterFormatter.SetMax(tools::Time(aMax));
     rPainterFormatter.SetStrictFormat(bStrict);
     rPainterFormatter.EnableEmptyField(true);
 }

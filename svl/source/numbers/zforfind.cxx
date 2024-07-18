@@ -1807,7 +1807,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
     CalendarWrapper* pCal = mrCurrentLanguageData.GetCalendar();
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
-        pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // today
+        pCal->setGregorianDateTime( DateTime( Date( Date::SYSTEM ) ) ); // today
         OUString aOrgCalendar; // empty => not changed yet
         DateOrder DateFmt;
         bool bFormatTurn;
@@ -2063,7 +2063,7 @@ input for the following reasons:
                 {
                     if ( !bHadExact && nExactDateOrder )
                     {
-                        pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // reset today
+                        pCal->setGregorianDateTime( DateTime( Date( Date::SYSTEM ) ) ); // reset today
                     }
                     switch (DateFmt)
                     {

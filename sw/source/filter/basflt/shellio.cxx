@@ -562,7 +562,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, m_bTemplateBrowseMode );
     mxTemplate->getIDocumentDeviceAccess().getPrinter( true );
     mxTemplate->RemoveAllFormatLanguageDependencies();
-    m_aCheckDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
+    m_aCheckDateTime = DateTime( Date( 1, 1, 2300 ) );  // year 2300 should be sufficient
     m_aTemplateName = "$$Dummy$$";
 }
 

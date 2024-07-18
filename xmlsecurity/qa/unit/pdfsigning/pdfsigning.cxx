@@ -141,7 +141,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
             css::util::DateTime aNotValidBefore = cert->getNotValidBefore();
 
             // Only try certificates that are already active and not expired
-            if ((now > aNotValidAfter) || (now < aNotValidBefore))
+            if ((now > DateTime(aNotValidAfter)) || (now < DateTime(aNotValidBefore)))
             {
                 SAL_WARN("xmlsecurity.qa",
                          "Skipping a certificate that is not yet valid or already not valid");

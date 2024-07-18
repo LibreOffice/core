@@ -61,8 +61,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestCalcMenu)
     CPPUNIT_ASSERT(xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr)
                    >>= nullDate);
     const Date afterDate(Date::SYSTEM);
-    CPPUNIT_ASSERT_GREATEREQUAL(double(beforeDate - nullDate), value);
-    CPPUNIT_ASSERT_LESSEQUAL(double(afterDate - nullDate), value);
+    CPPUNIT_ASSERT_GREATEREQUAL(double(beforeDate - Date(nullDate)), value);
+    CPPUNIT_ASSERT_LESSEQUAL(double(afterDate - Date(nullDate)), value);
 
     // cell A2 contains time, no date, so we have to be careful passing midnight
     xCell = sheet->getAccessibleCellAt(1, 0)->getAccessibleContext();

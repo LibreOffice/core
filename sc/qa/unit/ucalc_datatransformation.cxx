@@ -449,10 +449,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDateString)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -476,10 +476,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetYear)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -503,10 +503,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfYear)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -530,10 +530,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfYear)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -557,10 +557,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonth)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -584,10 +584,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonthName)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -611,10 +611,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfMonth)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -638,10 +638,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfMonth)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -665,10 +665,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDay)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -692,10 +692,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDayOfWeek)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -719,10 +719,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDayOfYear)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -746,10 +746,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetQuarter)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -773,10 +773,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfQuarter)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);
@@ -800,10 +800,10 @@ CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfQuarter)
     css::util::Date aDate3(23,9,1996);
     css::util::Date aDate4(15,8,1947);
 
-    double nDate1 = static_cast<double>(aDate1 - pFormatter->GetNullDate());
-    double nDate2 = static_cast<double>(aDate2 - pFormatter->GetNullDate());
-    double nDate3 = static_cast<double>(aDate3 - pFormatter->GetNullDate());
-    double nDate4 = static_cast<double>(aDate4 - pFormatter->GetNullDate());
+    double nDate1 = static_cast<double>(Date(aDate1) - pFormatter->GetNullDate());
+    double nDate2 = static_cast<double>(Date(aDate2) - pFormatter->GetNullDate());
+    double nDate3 = static_cast<double>(Date(aDate3) - pFormatter->GetNullDate());
+    double nDate4 = static_cast<double>(Date(aDate4) - pFormatter->GetNullDate());
 
     m_pDoc->SetValue(2, 0, 0, nDate1);
     m_pDoc->SetValue(2, 1, 0, nDate2);

@@ -1621,7 +1621,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         }
         else
         {
-            pDoc->GetMedium()->SetExpired_Impl( Date( 1, 1, 1970 ) );
+            pDoc->GetMedium()->SetExpired_Impl( DateTime(Date( 1, 1, 1970 )) );
         }
     }
 }

@@ -253,7 +253,7 @@ OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScD
                 SAL_WARN("sc", "PivotCacheField::getFormattedName - invalid date");
                 return OUString();
             }
-            return pObj->GetFormattedString(rSaveDim.GetName(), DateTime::Sub(aDateTime, rNullDate));
+            return pObj->GetFormattedString(rSaveDim.GetName(), DateTime::Sub(DateTime(aDateTime), rNullDate));
         }
         case XML_e: return maValue.get< OUString >();
     }

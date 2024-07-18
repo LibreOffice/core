@@ -77,11 +77,11 @@ public:
                     Date( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
                         { setDateFromDMY(nDay, nMonth, nYear); }
 
-                    Date( const css::util::Date& rUDate )
+                    explicit Date( const css::util::Date& rUDate )
                     {
                         setDateFromDMY(rUDate.Day, rUDate.Month, rUDate.Year);
                     }
-                    Date( const css::util::DateTime& _rDateTime );
+                    explicit Date( const css::util::DateTime& _rDateTime );
 
     bool            IsEmpty() const { return mnDate == 0; }
 

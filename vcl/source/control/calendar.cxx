@@ -1173,7 +1173,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
 
             if ( rHEvt.GetMode() & HelpEventMode::QUICK )
             {
-                maCalendarWrapper.setGregorianDateTime( aDate);
+                maCalendarWrapper.setGregorianDateTime( DateTime(aDate) );
                 sal_uInt16      nWeek = static_cast<sal_uInt16>(maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR));
                 sal_uInt16      nMonth = aDate.GetMonth();
                 OUString   aStr = maDayText

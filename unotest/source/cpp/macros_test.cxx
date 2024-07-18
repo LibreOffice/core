@@ -219,7 +219,7 @@ struct Valid
     }
     bool operator()(const css::uno::Reference<css::security::XCertificate>& cert) const
     {
-        if (!now.IsBetween(cert->getNotValidBefore(), cert->getNotValidAfter()))
+        if (!now.IsBetween(DateTime(cert->getNotValidBefore()), DateTime(cert->getNotValidAfter())))
             return false;
         if (!subjectName.isEmpty() && subjectName != cert->getSubjectName())
             return false;

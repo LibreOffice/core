@@ -114,7 +114,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
     {
         OUStringBuffer sDate;
         ScXMLConverter::ConvertDateTimeToString(bRemovePersonalInfo
-                                                    ? util::DateTime(0, 0, 0, 12, 1, 1, 1970, true)
+                                                    ? DateTime( util::DateTime(0, 0, 0, 12, 1, 1, 1970, true) )
                                                     : pAction->GetDateTimeUTC(),
                                                 sDate);
         SvXMLElementExport aDateElem(rExport, XML_NAMESPACE_DC, XML_DATE, true, false);

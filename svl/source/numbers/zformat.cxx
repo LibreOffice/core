@@ -3766,7 +3766,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
-    if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
+    if (!lcl_getValidDate( DateTime( rScan.GetNullDate() ), rCal.getEpochStart(), fNumber))
     {
         sBuff = ImpSvNumberformatScan::sErrStr;
         return false;
@@ -4039,7 +4039,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
-    if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
+    if (!lcl_getValidDate( DateTime( rScan.GetNullDate() ), rCal.getEpochStart(), fNumber))
     {
         sBuff = ImpSvNumberformatScan::sErrStr;
         return false;

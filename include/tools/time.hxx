@@ -76,7 +76,7 @@ public:
                     explicit Time( TimeInitSystem );
                     explicit Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
-                    Time( const css::util::Time& rTime );
+                    explicit Time( const css::util::Time& rTime );
                     explicit Time( const css::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
