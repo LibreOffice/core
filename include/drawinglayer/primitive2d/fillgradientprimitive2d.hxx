@@ -47,6 +47,12 @@ namespace drawinglayer::primitive2d
             default one since it works with and without AntiAliasing. The non-overlapping
             version is used in the MetafilePrimitive2D decomposition when the old XOR
             paint was recorded.
+
+            SDPR: Have now added to directly support alpha in the definition so that
+            all implementations of primitive renderers may use it. Be aware that if a
+            renderer does not support using that alpha it is advised to use the
+            decomposition which separates content and alpha in a TransparencePrimitive2D.
+            That way all stuff being used to that before will work unchanged.
          */
         class DRAWINGLAYER_DLLPUBLIC FillGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -60,6 +66,9 @@ namespace drawinglayer::primitive2d
 
             /// the gradient definition
             attribute::FillGradientAttribute        maFillGradient;
+
+            /// evtl. fitting alphaGradient definition
+            attribute::FillGradientAttribute        maAlphaGradient;
 
 
         protected:
@@ -79,16 +88,19 @@ namespace drawinglayer::primitive2d
             /// constructors. The one without definition range will use output range as definition range
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
-                attribute::FillGradientAttribute aFillGradient);
+                const attribute::FillGradientAttribute& rFillGradient);
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
                 const basegfx::B2DRange& rDefinitionRange,
-                attribute::FillGradientAttribute aFillGradient);
+                const attribute::FillGradientAttribute& rFillGradient,
+                const attribute::FillGradientAttribute* pAlphaGradient = nullptr);
 
             /// data read access
             const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }
             const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
+            const attribute::FillGradientAttribute& getAlphaGradient() const { return maAlphaGradient; }
+            bool hasAlphaGradient() const { return !maAlphaGradient.isDefault(); }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override final;

@@ -39,7 +39,8 @@ Primitive2DReference PolyPolygonGradientPrimitive2D::create2DDecomposition(
         // create SubSequence with FillGradientPrimitive2D
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
         rtl::Reference<FillGradientPrimitive2D> pNewGradient = new FillGradientPrimitive2D(
-            aPolyPolygonRange, getDefinitionRange(), getFillGradient());
+            aPolyPolygonRange, getDefinitionRange(), getFillGradient(),
+            hasAlphaGradient() ? &getAlphaGradient() : nullptr);
         Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
@@ -49,35 +50,50 @@ Primitive2DReference PolyPolygonGradientPrimitive2D::create2DDecomposition(
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, attribute::FillGradientAttribute aFillGradient)
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    const attribute::FillGradientAttribute& rFillGradient)
     : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rPolyPolygon.getB2DRange())
-    , maFillGradient(std::move(aFillGradient))
+    , maFillGradient(rFillGradient)
+    , maAlphaGradient()
 {
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
     basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
-    attribute::FillGradientAttribute aFillGradient)
+    const attribute::FillGradientAttribute& rFillGradient,
+    const attribute::FillGradientAttribute* pAlphaGradient)
     : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
-    , maFillGradient(std::move(aFillGradient))
+    , maFillGradient(rFillGradient)
+    , maAlphaGradient()
 {
+    // copy alpha gradient if we got one
+    if (nullptr != pAlphaGradient)
+        maAlphaGradient = *pAlphaGradient;
 }
 
 bool PolyPolygonGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 {
-    if (BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-    {
-        const PolyPolygonGradientPrimitive2D& rCompare
-            = static_cast<const PolyPolygonGradientPrimitive2D&>(rPrimitive);
+    if (!(BufferedDecompositionPrimitive2D::operator==(rPrimitive)))
+        return false;
 
-        return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                && getDefinitionRange() == rCompare.getDefinitionRange()
-                && getFillGradient() == rCompare.getFillGradient());
-    }
+    const PolyPolygonGradientPrimitive2D& rCompare(
+        static_cast<const PolyPolygonGradientPrimitive2D&>(rPrimitive));
 
-    return false;
+    if (getB2DPolyPolygon() != rCompare.getB2DPolyPolygon())
+        return false;
+
+    if (getDefinitionRange() != rCompare.getDefinitionRange())
+        return false;
+
+    if (getFillGradient() != rCompare.getFillGradient())
+        return false;
+
+    if (maAlphaGradient != rCompare.maAlphaGradient)
+        return false;
+
+    return true;
 }
 
 // provide unique ID
@@ -85,51 +101,6 @@ sal_uInt32 PolyPolygonGradientPrimitive2D::getPrimitive2DID() const
 {
     return PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D;
 }
-
-Primitive2DReference PolyPolygonRGBAGradientPrimitive2D::create2DDecomposition(
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
-{
-    Primitive2DContainer aContent{ new PolyPolygonGradientPrimitive2D(
-        getB2DPolyPolygon(), getDefinitionRange(), getFillGradient()) };
-
-    Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
-        basegfx::utils::getRange(getB2DPolyPolygon()), getDefinitionRange(),
-        getFillGradientAlpha()) };
-
-    return Primitive2DReference{ new TransparencePrimitive2D(std::move(aContent),
-                                                             std::move(aAlpha)) };
-}
-
-PolyPolygonRGBAGradientPrimitive2D::PolyPolygonRGBAGradientPrimitive2D(
-    basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
-    attribute::FillGradientAttribute aFillGradient,
-    attribute::FillGradientAttribute aFillGradientAlpha)
-    : PolyPolygonGradientPrimitive2D(aPolyPolygon, rDefinitionRange, aFillGradient)
-    , maFillGradientAlpha(aFillGradientAlpha)
-{
-    // assert when the definition is not allowed, it HAS to fulfil the
-    // requested preconditions
-    assert(aFillGradient.sameDefinitionThanAlpha(aFillGradientAlpha));
-}
-
-bool PolyPolygonRGBAGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-{
-    if (PolyPolygonGradientPrimitive2D::operator==(rPrimitive))
-    {
-        const PolyPolygonRGBAGradientPrimitive2D& rCompare
-            = static_cast<const PolyPolygonRGBAGradientPrimitive2D&>(rPrimitive);
-
-        return getFillGradientAlpha() == rCompare.getFillGradientAlpha();
-    }
-
-    return false;
-}
-
-sal_uInt32 PolyPolygonRGBAGradientPrimitive2D::getPrimitive2DID() const
-{
-    return PRIMITIVE2D_ID_POLYPOLYGONRGBAGRADIENTPRIMITIVE2D;
-}
-
 } // end drawinglayer::primitive2d namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

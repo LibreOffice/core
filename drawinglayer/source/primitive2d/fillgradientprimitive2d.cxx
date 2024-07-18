@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <utility>
 #include <algorithm>
 
@@ -260,51 +261,86 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference FillGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
+            // SDPR: support alpha directly now. If a primitive processor
+            // cannot deal with it, use it's decomposition. For that purpose
+            // this decomposition has two stages now: This 1st one will
+            // separate content and alpha into a TransparencePrimitive2D,
+            // so all processors can work as before
+            if (hasAlphaGradient())
+            {
+                Primitive2DContainer aContent{ new FillGradientPrimitive2D(
+                    getOutputRange(),
+                    getDefinitionRange(),
+                    getFillGradient()) };
+
+                Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
+                    getOutputRange(),
+                    getDefinitionRange(),
+                    getAlphaGradient()) };
+
+                return Primitive2DReference{ new TransparencePrimitive2D(std::move(aContent),
+                                                                        std::move(aAlpha)) };
+            }
+
             // default creates overlapping fill which works with AntiAliasing and without.
             // The non-overlapping version does not create single filled polygons, but
             // PolyPolygons where each one describes a 'ring' for the gradient such
             // that the rings will not overlap. This is useful for the old XOR-paint
             // 'trick' of VCL which is recorded in Metafiles; so this version may be
             // used from the MetafilePrimitive2D in its decomposition.
-
             if(!getFillGradient().isDefault())
             {
                 return createFill(/*bOverlapping*/true);
             }
+
             return nullptr;
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
-            attribute::FillGradientAttribute aFillGradient)
-        :   maOutputRange(rOutputRange),
-            maDefinitionRange(rOutputRange),
-            maFillGradient(std::move(aFillGradient))
+            const attribute::FillGradientAttribute& rFillGradient)
+        : maOutputRange(rOutputRange)
+        , maDefinitionRange(rOutputRange)
+        , maFillGradient(rFillGradient)
+        , maAlphaGradient()
         {
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
             const basegfx::B2DRange& rDefinitionRange,
-            attribute::FillGradientAttribute aFillGradient)
-        :   maOutputRange(rOutputRange),
-            maDefinitionRange(rDefinitionRange),
-            maFillGradient(std::move(aFillGradient))
+            const attribute::FillGradientAttribute& rFillGradient,
+            const attribute::FillGradientAttribute* pAlphaGradient)
+        : maOutputRange(rOutputRange)
+        , maDefinitionRange(rDefinitionRange)
+        , maFillGradient(rFillGradient)
+        , maAlphaGradient()
         {
+            // copy alpha gradient if we got one
+            if (nullptr != pAlphaGradient)
+                maAlphaGradient = *pAlphaGradient;
         }
 
         bool FillGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const FillGradientPrimitive2D& rCompare = static_cast<const FillGradientPrimitive2D&>(rPrimitive);
+            if(!BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+                return false;
 
-                return (getOutputRange() == rCompare.getOutputRange()
-                    && getDefinitionRange() == rCompare.getDefinitionRange()
-                    && getFillGradient() == rCompare.getFillGradient());
-            }
+            const FillGradientPrimitive2D& rCompare(static_cast<const FillGradientPrimitive2D&>(rPrimitive));
 
-            return false;
+            if (getOutputRange() != rCompare.getOutputRange())
+                return false;
+
+            if (getDefinitionRange() != rCompare.getDefinitionRange())
+                return false;
+
+            if (getFillGradient() != rCompare.getFillGradient())
+                return false;
+
+            if (maAlphaGradient != rCompare.maAlphaGradient)
+                return false;
+
+            return true;
         }
 
         basegfx::B2DRange FillGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const

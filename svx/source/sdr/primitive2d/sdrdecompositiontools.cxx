@@ -395,39 +395,33 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 return Primitive2DReference();
             }
 
+            // prepare access to FillGradientAttribute
             const attribute::FillGradientAttribute& rFillGradient(rFill.getGradient());
-
-            // SDPR: check if RGB and A definitions of gradients are both
-            // used and equal, so that they could be combined to a single
-            // RGBA one
-            if (!rFillGradient.isDefault()
-                && 0.0 == rFill.getTransparence()
-                && !rAlphaGradient.isDefault()
-                && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient))
-            {
-                // if yes, create a primitive expressing that. That primitive's
-                // decompose will do the same as if the code below would be executed,
-                // so no primitive renderer who does not want to will have to handle
-                // it - but SDPR renderers that can directly render that may choose to
-                // do so. NOTE: That helper primitive just holds references to what
-                // would be created anyways, so one depth step added but not really any
-                // additional data
-                return new PolyPolygonRGBAGradientPrimitive2D(
-                    rPolyPolygon,
-                    rDefinitionRange,
-                    rFillGradient,
-                    rAlphaGradient);
-            }
 
             // prepare fully scaled polygon
             rtl::Reference<BasePrimitive2D> pNewFillPrimitive;
 
             if(!rFillGradient.isDefault())
             {
+                // SDPR: check early if we have a radient and a alpha
+                // gradient that 'fits' in it's geometric definition
+                // so that it can be rendered as RGBA directly. If yes,
+                // create it and return early
+                const bool bIncludeAlpha(
+                    0.0 == rFill.getTransparence()
+                    && !rAlphaGradient.isDefault()
+                    && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient));
+
                 pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(
                     rPolyPolygon,
                     rDefinitionRange,
-                    rFillGradient);
+                    rFillGradient,
+                    bIncludeAlpha ? &rAlphaGradient : nullptr);
+
+                if (bIncludeAlpha)
+                {
+                    return pNewFillPrimitive;
+                }
             }
             else if(!rFill.getHatch().isDefault())
             {

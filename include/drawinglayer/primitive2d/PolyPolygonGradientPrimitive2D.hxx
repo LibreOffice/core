@@ -46,6 +46,9 @@ private:
     /// the gradient definition
     attribute::FillGradientAttribute maFillGradient;
 
+    /// evtl. fitting alphaGradient definition
+    attribute::FillGradientAttribute maAlphaGradient;
+
     /// local decomposition.
     virtual Primitive2DReference
     create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
@@ -53,15 +56,19 @@ private:
 public:
     /// constructors. The one without definition range will use output range as definition range
     PolyPolygonGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
-                                   attribute::FillGradientAttribute rFillGradient);
+                                   const attribute::FillGradientAttribute& rFillGradient);
     PolyPolygonGradientPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                    const basegfx::B2DRange& rDefinitionRange,
-                                   attribute::FillGradientAttribute aFillGradient);
+                                   const attribute::FillGradientAttribute& rFillGradient,
+                                   const attribute::FillGradientAttribute* pAlphaGradient
+                                   = nullptr);
 
     /// data read access
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
     const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
     const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
+    const attribute::FillGradientAttribute& getAlphaGradient() const { return maAlphaGradient; }
+    bool hasAlphaGradient() const { return !maAlphaGradient.isDefault(); }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -69,46 +76,6 @@ public:
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
-
-// helper primitive that can be used to directly express RGBA
-// gradient definitions. It will be decomposed to a combined
-// TransparencePrimitive2D if not handled directly. Use the
-// already existing PolyPolygonGradientPrimitive2D as base class,
-// only the additional FillGradientAlpha needs to be added.
-// NOTE: FillGradientAlpha *has* to fulfil the
-// 'sameDefinitionThanAlpha' condition defined by the check
-// method with the same name
-class DRAWINGLAYER_DLLPUBLIC PolyPolygonRGBAGradientPrimitive2D final
-    : public PolyPolygonGradientPrimitive2D
-{
-private:
-    /// the gradient alpha definition
-    attribute::FillGradientAttribute maFillGradientAlpha;
-
-    /// local decomposition.
-    virtual Primitive2DReference
-    create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
-
-public:
-    /// constructors. The one without definition range will use output range as definition range
-    PolyPolygonRGBAGradientPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
-                                       const basegfx::B2DRange& rDefinitionRange,
-                                       attribute::FillGradientAttribute aFillGradient,
-                                       attribute::FillGradientAttribute aFillGradientAlpha);
-
-    /// data read access
-    const attribute::FillGradientAttribute& getFillGradientAlpha() const
-    {
-        return maFillGradientAlpha;
-    }
-
-    /// compare operator
-    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-    /// provide unique ID
-    virtual sal_uInt32 getPrimitive2DID() const override;
-};
-
 } // end of namespace primitive2d::drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

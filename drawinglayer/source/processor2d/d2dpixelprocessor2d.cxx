@@ -1926,6 +1926,14 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
 void D2DPixelProcessor2D::processFillGradientPrimitive2D(
     const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
 {
+    if (rFillGradientPrimitive2D.hasAlphaGradient())
+    {
+        // SDPR: As long as direct alpha is not supported by this
+        // renderer we need to work on the decomposition, so call it
+        process(rFillGradientPrimitive2D);
+        return;
+    }
+
     // draw all-covering initial BG polygon 1st
     bool bDone(drawPolyPolygonColorTransformed(
         basegfx::B2DHomMatrix(),
