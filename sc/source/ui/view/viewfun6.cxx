@@ -180,7 +180,7 @@ void ScViewFunc::DetectiveMarkPred()
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
     else
-        aRanges.push_back(aCurPos);
+        aRanges.push_back(ScRange(aCurPos));
 
     vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
@@ -243,7 +243,7 @@ void ScViewFunc::DetectiveMarkSucc()
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
     else
-        aRanges.push_back(aCurPos);
+        aRanges.push_back(ScRange(aCurPos));
 
     vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
@@ -283,7 +283,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScAddress aCurPos = rViewData.GetCurPos();
-    const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(aCurPos);
+    const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(ScRange(aCurPos));
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?

@@ -2688,7 +2688,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
 
     // Cell Text uses the Cell format while the URL uses
     // the default format for the type.
-    const sal_uInt32 nCellFormat = rDocument.GetNumberFormat( aPos );
+    const sal_uInt32 nCellFormat = rDocument.GetNumberFormat( ScRange(aPos) );
     ScInterpreterContext& rContext = rDocument.GetNonThreadedContext();
 
     const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat(rContext, nCellFormat, SvNumFormatType::NUMBER);

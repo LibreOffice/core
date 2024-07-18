@@ -392,7 +392,7 @@ void ScDocument::DelayFormulaGrouping( bool delay )
 void ScDocument::AddDelayedFormulaGroupingCell( const ScFormulaCell* cell )
 {
     if( !pDelayedFormulaGrouping->Contains( cell->aPos ))
-        pDelayedFormulaGrouping->ExtendTo( cell->aPos );
+        pDelayedFormulaGrouping->ExtendTo( ScRange(cell->aPos) );
 }
 
 void ScDocument::EnableDelayStartListeningFormulaCells( ScColumn* column, bool delay )

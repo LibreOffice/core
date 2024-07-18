@@ -213,7 +213,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
     {
         //  like in GetString for document (column)
         const Color* pColor;
-        sal_uInt32 nNumFmt = rDoc.GetNumberFormat(rPos);
+        sal_uInt32 nNumFmt = rDoc.GetNumberFormat(ScRange(rPos));
         return GetString(rCell, nNumFmt, &pColor, nullptr, rDoc);
     }
 }

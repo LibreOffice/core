@@ -2212,7 +2212,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     }
                     else if (pCell->getFormula()->IsValue())
                     {
-                        sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
+                        sal_uInt32 nFormat = m_pDocument->GetNumberFormat(ScRange(aPos));
                         if ( bFixedWidth || bSaveAsShown )
                         {
                             const Color* pDummy;
@@ -2229,7 +2229,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     {
                         if ( bSaveAsShown )
                         {
-                            sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
+                            sal_uInt32 nFormat = m_pDocument->GetNumberFormat(ScRange(aPos));
                             const Color* pDummy;
                             aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
                         }
@@ -2242,7 +2242,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
             case CELLTYPE_STRING :
                 if ( bSaveAsShown )
                 {
-                    sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
+                    sal_uInt32 nFormat = m_pDocument->GetNumberFormat(ScRange(aPos));
                     const Color* pDummy;
                     aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
                 }

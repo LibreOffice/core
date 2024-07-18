@@ -165,7 +165,7 @@ void FuText::StopEditMode()
             pUndoMgr->RemoveLastUndoAction();
 
             // Make sure the former area of the note anchor is invalidated.
-            ScRangeList aRangeList(aNotePos);
+            ScRangeList aRangeList((ScRange(aNotePos)));
             ScMarkData aMarkData(rDoc.GetSheetLimits(), aRangeList);
             rViewShell.UpdateSelectionArea(aMarkData);
         }

@@ -2709,7 +2709,7 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
     SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aPos( nPosX, nPosY, nTab );
 
-    pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, aPos, 0/*nRefresh*/, false, false );
+    pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, ScRange(aPos), 0/*nRefresh*/, false, false );
 }
 
 void ScViewFunc::InsertTableLink( const OUString& rFile,

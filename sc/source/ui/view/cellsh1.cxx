@@ -3416,7 +3416,7 @@ void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
     }
 
     if ( pNewDPObject )
-        pNewDPObject->SetOutRange( rDestPos );
+        pNewDPObject->SetOutRange( ScRange(rDestPos) );
 
     RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
 }
@@ -3498,7 +3498,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                                     pServDlg->GetParPass() );
                             std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
                             pNewDPObject->SetServiceData( aServDesc );
-                            pNewDPObject->SetOutRange(aDestPos);
+                            pNewDPObject->SetOutRange(ScRange(aDestPos));
 
                             RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                         }
@@ -3521,7 +3521,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                             pDataDlg->GetValues( aImpDesc );
                             std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
                             pNewDPObject->SetImportDesc( aImpDesc );
-                            pNewDPObject->SetOutRange(aDestPos);
+                            pNewDPObject->SetOutRange(ScRange(aDestPos));
 
                             RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                         }

@@ -1471,7 +1471,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument& 
         case formula::FormulaGrammar::CONV_XL_A1:
         case formula::FormulaGrammar::CONV_XL_OOX:
         {
-            ScRange rRange = rAddr;
+            ScRange rRange(rAddr);
             ScRefFlags nFlags = lcl_ScRange_Parse_XL_A1(
                     rRange, p, rDoc, true, pExtInfo,
                     (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : nullptr),
@@ -1481,7 +1481,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument& 
         }
         case formula::FormulaGrammar::CONV_XL_R1C1:
         {
-            ScRange rRange = rAddr;
+            ScRange rRange(rAddr);
             ScRefFlags nFlags = lcl_ScRange_Parse_XL_R1C1( rRange, p, rDoc, rDetails, true, pExtInfo, pSheetEndPos);
             rAddr = rRange.aStart;
             return nFlags;

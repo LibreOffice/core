@@ -223,7 +223,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
         case CELLTYPE_STRING:
         {
             const Color* pColor;
-            sal_uInt32 nFormat = pDoc->GetNumberFormat(rAddr);
+            sal_uInt32 nFormat = pDoc->GetNumberFormat(ScRange(rAddr));
             return ScCellFormat::GetString(rCell, nFormat, &pColor, nullptr, *pDoc);
         }
         case CELLTYPE_EDIT:

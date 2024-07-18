@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoClearContentForSparkline)
     // Clear content of cell D7 - including sparkline
     {
         ScMarkData aMark(m_pDoc->GetSheetLimits());
-        aMark.SetMarkArea(ScAddress(3, 6, 0));
+        aMark.SetMarkArea(ScRange(ScAddress(3, 6, 0)));
         rDocFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
     }
 

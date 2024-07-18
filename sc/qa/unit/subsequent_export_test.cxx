@@ -2080,7 +2080,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testEmbeddedChartXLS)
     ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
     CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.",
                            aRanges.Contains(ScRange(1, 2, 1, 1, 4, 1)));
-    CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.Contains(ScAddress(2, 1, 1)));
+    CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.",
+                           aRanges.Contains(ScRange(ScAddress(2, 1, 1))));
     CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.",
                            aRanges.Contains(ScRange(2, 2, 1, 2, 4, 1)));
 }

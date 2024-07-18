@@ -280,7 +280,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         case CELLTYPE_STRING:
         {
-            sal_uInt32 nNumFmt = mrDoc.GetNumberFormat(aPos);
+            sal_uInt32 nNumFmt = mrDoc.GetNumberFormat(ScRange(aPos));
             const Color* pColor;
             OUString aText = ScCellFormat::GetString(aCell, nNumFmt, &pColor, nullptr, mrDoc);
 

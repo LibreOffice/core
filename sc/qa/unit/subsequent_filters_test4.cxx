@@ -267,7 +267,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportODS)
     ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
 
     CPPUNIT_ASSERT_MESSAGE("Data series title cell not found.",
-                           aRanges.Contains(ScAddress(1, 0, 3))); // B1 on Title
+                           aRanges.Contains(ScRange(ScAddress(1, 0, 3)))); // B1 on Title
     CPPUNIT_ASSERT_MESSAGE("Data series label range not found.",
                            aRanges.Contains(ScRange(0, 1, 2, 0, 3, 2))); // A2:A4 on Data
     CPPUNIT_ASSERT_MESSAGE("Data series value range not found.",

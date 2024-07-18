@@ -154,7 +154,7 @@ void initFromCell(
     else if (rCell.hasNumeric())
     {
         double fVal = rCell.getRawValue();
-        rNumFormat = rDoc.GetNumberFormat(rPos);
+        rNumFormat = rDoc.GetNumberFormat(ScRange(rPos));
         rData.SetValue(fVal);
     }
     else if (!rCell.isEmpty())

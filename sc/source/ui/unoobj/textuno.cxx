@@ -818,7 +818,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         }
         else
         {
-            sal_uInt32 nFormat = rDoc.GetNumberFormat(aCellPos);
+            sal_uInt32 nFormat = rDoc.GetNumberFormat(ScRange(aCellPos));
             OUString aText = ScCellFormat::GetInputString(aCell, nFormat, nullptr, rDoc);
             // tdf#157568 check if edit engine already has text
             // If the input string is empty but the edit engine's existing

@@ -717,7 +717,7 @@ void lcl_getLongVarCharString(
 {
     const Color* pColor;
     ScAddress aPos(nCol, nRow, nTab);
-    sal_uInt32 nFormat = rDoc.GetNumberFormat(aPos);
+    sal_uInt32 nFormat = rDoc.GetNumberFormat(ScRange(aPos));
     rString = ScCellFormat::GetString(rDoc, aPos, nFormat, &pColor, &rContext);
 }
 

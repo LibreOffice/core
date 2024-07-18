@@ -112,8 +112,8 @@ public:
         ASSERT_DOUBLES_EQUAL(lExpected(m_nStart1), m_pDoc->GetValue(aPos));
 
         // Copy formula cell to clipboard.
-        ScClipParam aClipParam(aPos, false);
-        aMark.SetMarkArea(aPos);
+        ScClipParam aClipParam(ScRange(aPos), false);
+        aMark.SetMarkArea(ScRange(aPos));
         m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
         // Paste it to first range.
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaDepTracking2)
 
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 1, 0)); // B2 should equal 2.
 
-    clearRange(m_pDoc, ScAddress(2, 0, 0)); // Delete C1.
+    clearRange(m_pDoc, ScRange(ScAddress(2, 0, 0))); // Delete C1.
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(1, 1, 0)); // B2 should now equal 0.
 
@@ -3685,8 +3685,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf97587)
     m_pDoc->SetString(aPos, u"=SUM(A1:A10)"_ustr);
 
     // Copy formula cell to clipboard.
-    ScClipParam aClipParam(aPos, false);
-    aMark.SetMarkArea(aPos);
+    ScClipParam aClipParam(ScRange(aPos), false);
+    aMark.SetMarkArea(ScRange(aPos));
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to first range.

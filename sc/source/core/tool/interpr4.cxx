@@ -3668,9 +3668,9 @@ void ScInterpreter::ScTableOp()
     }
     else
     {   // broadcast and indirectly collect cell pointers and positions
-        mrDoc.SetTableOpDirty( aTableOp.aOld1 );
+        mrDoc.SetTableOpDirty( ScRange(aTableOp.aOld1) );
         if ( nParamCount == 5 )
-            mrDoc.SetTableOpDirty( aTableOp.aOld2 );
+            mrDoc.SetTableOpDirty( ScRange(aTableOp.aOld2) );
     }
     aTableOp.bCollectNotifications = false;
 

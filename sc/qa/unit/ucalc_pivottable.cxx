@@ -56,7 +56,7 @@ ScDPObject* createDPFromSourceDesc(
 {
     ScDPObject* pDPObj = new ScDPObject(pDoc);
     pDPObj->SetSheetDesc(rDesc);
-    pDPObj->SetOutRange(ScAddress(0, 0, 1));
+    pDPObj->SetOutRange(ScRange(ScAddress(0, 0, 1)));
 
     ScDPSaveData aSaveData;
     // Set data pilot table output options.
@@ -2203,7 +2203,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(15.0, fVal);
 
-    clearRange(m_pDoc, aPos); // Delete the formula.
+    clearRange(m_pDoc, ScRange(aPos)); // Delete the formula.
 
     pDPs->FreeTable(pDPObj);
 

@@ -965,7 +965,7 @@ void ScDBData::Notify( const SfxHint& rHint )
             {
                 aHintAddress.SetRow( aHeaderRange.aStart.Row());
                 if (!aHeaderRange.Contains( aHintAddress))
-                    mpContainer->GetDirtyTableColumnNames().Join( aHintAddress);
+                    mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
             }
         }
         else
@@ -973,7 +973,7 @@ void ScDBData::Notify( const SfxHint& rHint )
             // We need *some* range in the dirty list even without header area,
             // otherwise the container would not attempt to call a refresh.
             aHintAddress.SetRow( nStartRow);
-            mpContainer->GetDirtyTableColumnNames().Join( aHintAddress);
+            mpContainer->GetDirtyTableColumnNames().Join( ScRange(aHintAddress) );
         }
     }
 

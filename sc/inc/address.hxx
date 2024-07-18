@@ -515,7 +515,7 @@ public:
     ScRange( const ScRange& rRange ) :
         aStart( rRange.aStart ), aEnd( rRange.aEnd )
     {}
-    ScRange( const ScAddress& rRange ) :
+    explicit ScRange( const ScAddress& rRange ) :
         aStart( rRange ), aEnd( rRange )
     {}
     ScRange( SCCOL nCol, SCROW nRow, SCTAB nTab ) :

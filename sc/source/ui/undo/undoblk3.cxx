@@ -1522,7 +1522,7 @@ void ScUndoInsertAreaLink::Redo()
     sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
-                                            aAreaName, aRange.aStart, nRefreshDelay );
+                                            aAreaName, ScRange(aRange.aStart), nRefreshDelay );
     pLink->SetInCreate( true );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, aDocName, &aFltName, &aAreaName );
@@ -1571,7 +1571,7 @@ void ScUndoRemoveAreaLink::Undo()
     sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
-                                        aAreaName, aRange.aStart, nRefreshDelay );
+                                        aAreaName, ScRange(aRange.aStart), nRefreshDelay );
     pLink->SetInCreate( true );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, aDocName, &aFltName, &aAreaName );

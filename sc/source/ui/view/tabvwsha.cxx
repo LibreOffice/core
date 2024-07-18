@@ -755,7 +755,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             else
             {
                 ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
-                sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
+                sal_uInt32 nNumFmt = rDoc.GetNumberFormat( ScRange(aPos) );
 
                 aString = ScCellFormat::GetInputString( rCell, nNumFmt, &rContext, rDoc );
                 if (rCell.getType() == CELLTYPE_STRING)

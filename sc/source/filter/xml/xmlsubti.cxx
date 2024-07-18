@@ -279,7 +279,7 @@ void ScMyTables::AddMatrixRange(
 bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
 {
     if (!maMatrixRangeList.empty())
-        return maMatrixRangeList.Contains(rScAddress);
+        return maMatrixRangeList.Contains(ScRange(rScAddress));
     return false;
 }
 

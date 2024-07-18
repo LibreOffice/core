@@ -2537,18 +2537,18 @@ void ScInterpreter::ScCell()
         else if( aInfoType == "FORMAT" )
         {   // specific format code for standard formats
             OUString aFuncResult;
-            sal_uInt32 nFormat = mrDoc.GetNumberFormat( aCellPos );
+            sal_uInt32 nFormat = mrDoc.GetNumberFormat( ScRange(aCellPos) );
             getFormatString(mrContext, nFormat, aFuncResult);
             PushString( aFuncResult );
         }
         else if( aInfoType == "COLOR" )
         {   // 1 = negative values are colored, otherwise 0
-            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( aCellPos ) );
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( ScRange(aCellPos) ) );
             PushInt( lcl_FormatHasNegColor( pFormat ) ? 1 : 0 );
         }
         else if( aInfoType == "PARENTHESES" )
         {   // 1 = format string contains a '(' character, otherwise 0
-            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( aCellPos ) );
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( ScRange(aCellPos) ) );
             PushInt( lcl_FormatHasOpenPar( pFormat ) ? 1 : 0 );
         }
         else

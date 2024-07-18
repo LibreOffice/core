@@ -713,7 +713,7 @@ bool ScDocFunc::DeleteCell(
 
     sal_uInt16 nExtFlags = 0;       // extra flags are needed only if attributes are deleted
     if (nFlags & InsertDeleteFlags::ATTRIB)
-        rDocShell.UpdatePaintExt(nExtFlags, rPos);
+        rDocShell.UpdatePaintExt(nExtFlags, ScRange(rPos));
 
     //  order of operations:
     //  1) BeginDrawUndo
@@ -735,8 +735,8 @@ bool ScDocFunc::DeleteCell(
     ScDocumentUniquePtr pUndoDoc;
     if (bRecord)
     {
-        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, rPos, nFlags, false);
-        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos);
+        pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, ScRange(rPos), nFlags, false);
+        pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, ScRange(rPos));
     }
 
     tools::Long nBefore(rDocShell.GetTwipWidthHint(rPos));
@@ -745,11 +745,11 @@ bool ScDocFunc::DeleteCell(
     if (bRecord)
     {
         sc::DocFuncUtil::addDeleteContentsUndo(
-            rDocShell.GetUndoManager(), &rDocShell, rMark, rPos, std::move(pUndoDoc),
+            rDocShell.GetUndoManager(), &rDocShell, rMark, ScRange(rPos), std::move(pUndoDoc),
             nFlags, pDataSpans, false, bDrawUndo);
     }
 
-    if (!AdjustRowHeight(rPos, true, bApi))
+    if (!AdjustRowHeight(ScRange(rPos), true, bApi))
         rDocShell.PostPaint(
             rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
             PaintPartFlags::Grid, nExtFlags, nBefore);
@@ -893,7 +893,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
+    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -910,7 +910,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos, true, !bInteraction);
+        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -962,7 +962,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
+    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -981,7 +981,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos, true, !bInteraction);
+        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -999,7 +999,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
+    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -1016,7 +1016,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos, true, !bInteraction);
+        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1051,7 +1051,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
+    bool bHeight = rDoc.HasAttrib(ScRange(rPos), HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -1080,7 +1080,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos, true, !bInteraction);
+        AdjustRowHeight(ScRange(rPos), true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();

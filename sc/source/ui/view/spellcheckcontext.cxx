@@ -272,7 +272,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
         if (ScDPCollection* pDPs = pDoc->GetDPCollection())
         {
             ScRangeList aPivotRanges = pDPs->GetAllTableRanges(mnTab);
-            if (aPivotRanges.Contains(ScAddress(nCol, nRow, mnTab))) // Don't spell check within pivot tables
+            if (aPivotRanges.Contains(ScRange(ScAddress(nCol, nRow, mnTab)))) // Don't spell check within pivot tables
             {
                 mpResult->set(nCol, nRow, nullptr);
                 return;

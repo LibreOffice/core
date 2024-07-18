@@ -1220,26 +1220,26 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
             if (std::isfinite( fVal))
             {
                 // t='n' is omitted
-                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr));
+                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(aAdr)));
                 pFS->startElement(XML_v);
                 pFS->write( fVal );
             }
             else
             {
-                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr), XML_t, "e");
+                pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(aAdr)), XML_t, "e");
                 pFS->startElement(XML_v);
                 pFS->write( "#VALUE!" );    // OOXTODO: support other error values
             }
         }
         else if( rValue.has< OUString >() )
         {
-            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr), XML_t, "str");
+            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(aAdr)), XML_t, "str");
             pFS->startElement(XML_v);
             pFS->write( rValue.get< OUString >() );
         }
         else if( rValue.has< bool >() )
         {
-            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr), XML_t, "b");
+            pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(aAdr)), XML_t, "b");
             pFS->startElement(XML_v);
             pFS->write( rValue.get< bool >() ? "1" : "0" );
         }

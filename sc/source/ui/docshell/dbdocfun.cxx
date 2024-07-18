@@ -1318,7 +1318,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
     ScRangeList aRanges;
     aRanges.push_back(pOldObj->GetOutRange());
-    aRanges.push_back(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
+    aRanges.push_back(ScRange(pNewObj->GetOutRange().aStart)); // at least one cell in the output position must be editable.
     if (!isEditable(rDocShell, aRanges, bApi))
         return false;
 

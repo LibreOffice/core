@@ -916,7 +916,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerSingleCellToSingleCell)
 
     ScFormulaListener aListener(*m_pDoc);
 
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 0)));
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
     CPPUNIT_ASSERT(aListener.NeedsRepaint());
@@ -934,7 +934,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerSingleCellToMultipleCell
 
     ScFormulaListener aListener(*m_pDoc);
 
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 0)));
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
     CPPUNIT_ASSERT(aListener.NeedsRepaint());
@@ -952,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerMultipleCellsToSingleCel
 
     ScFormulaListener aListener(*m_pDoc);
 
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 0)));
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
     CPPUNIT_ASSERT(aListener.NeedsRepaint());
@@ -970,7 +970,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerMultipleCellsToMultipleC
 
     ScFormulaListener aListener(*m_pDoc);
 
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 0)));
 
     m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
     CPPUNIT_ASSERT(aListener.NeedsRepaint());
@@ -986,7 +986,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerUpdateInsertTab)
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString(u"A1"_ustr));
 
     ScFormulaListener aListener(*m_pDoc);
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 0)));
     CPPUNIT_ASSERT(!aListener.NeedsRepaint());
 
     m_pDoc->InsertTab(0, u"new_tab"_ustr);
@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testFormulaListenerUpdateDeleteTab)
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString(u"A1"_ustr));
 
     ScFormulaListener aListener(*m_pDoc);
-    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 1));
+    aListener.addTokenArray(pTokenArray.get(), ScRange(ScAddress(10, 10, 1)));
     CPPUNIT_ASSERT(!aListener.NeedsRepaint());
 
     m_pDoc->DeleteTab(0);

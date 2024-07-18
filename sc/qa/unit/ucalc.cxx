@@ -161,15 +161,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
     CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, rPool.getCountIgnoreCase());
 
     // Clear A1
-    clearRange(m_pDoc, ScAddress(0,0,0));
+    clearRange(m_pDoc, ScRange(ScAddress(0,0,0)));
     // Clear A2
-    clearRange(m_pDoc, ScAddress(0,1,0));
+    clearRange(m_pDoc, ScRange(ScAddress(0,1,0)));
     // Clear A3
-    clearRange(m_pDoc, ScAddress(0,2,0));
+    clearRange(m_pDoc, ScRange(ScAddress(0,2,0)));
     // Clear A4
-    clearRange(m_pDoc, ScAddress(0,3,0));
+    clearRange(m_pDoc, ScRange(ScAddress(0,3,0)));
     // Clear A5 and the pool should be completely empty.
-    clearRange(m_pDoc, ScAddress(0,4,0));
+    clearRange(m_pDoc, ScRange(ScAddress(0,4,0)));
     rPool.purge();
     CPPUNIT_ASSERT_EQUAL(extraCount, rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, rPool.getCountIgnoreCase());
@@ -941,7 +941,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyToDocument)
     pDestDoc->InitDrawLayer(xDocSh2.get());     // for note caption objects
 
     m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, *pDestDoc); // Copy A2:A4
-    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0,     *pDestDoc); // Copy A1
+    m_pDoc->CopyStaticToDocument(ScRange(ScAddress(0,0,0)), 0,     *pDestDoc); // Copy A1
     m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, *pDestDoc); // Copy A5:A8
 
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), pDestDoc->GetString(0,0,0));
@@ -1492,7 +1492,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellBroadcaster)
     // Delete formula in C2, which should remove the broadcaster in B3.
     pBC = m_pDoc->GetBroadcaster(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("Broadcaster in B3 should still exist.", pBC);
-    clearRange(m_pDoc, ScAddress(2,0,0));
+    clearRange(m_pDoc, ScRange(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(2,0,0))); // C2 should be empty.
     pBC = m_pDoc->GetBroadcaster(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("Broadcaster in B3 should have been removed.", !pBC);
@@ -4196,11 +4196,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSearchCells)
     CPPUNIT_ASSERT_MESSAGE("Search And Replace should succeed", bSuccess);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 3 matching cells.", size_t(3), aMatchedRanges.size());
     ScAddress aHit(0,0,0);
-    CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.Contains(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.Contains(ScRange(aHit)));
     aHit.SetRow(2);
-    CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.Contains(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.Contains(ScRange(aHit)));
     aHit.SetRow(4);
-    CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.Contains(aHit));
+    CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.Contains(ScRange(aHit)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -4291,7 +4291,7 @@ CPPUNIT_TEST_FIXTURE(Test, testJumpToPrecedentsDependents)
     {
         // C1's precedent should be A1:A2,B3.
         ScAddress aC1(2, 0, 0);
-        ScRangeList aRange(aC1);
+        ScRangeList aRange((ScRange(aC1)));
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
         CPPUNIT_ASSERT_MESSAGE("A1:A2 should be a precedent of C1.",
                                hasRange(m_pDoc, aRefTokens, ScRange(0, 0, 0, 0, 1, 0), aC1));
@@ -4302,7 +4302,7 @@ CPPUNIT_TEST_FIXTURE(Test, testJumpToPrecedentsDependents)
     {
         // C2's precedent should be A1 only.
         ScAddress aC2(2, 1, 0);
-        ScRangeList aRange(aC2);
+        ScRangeList aRange((ScRange(aC2)));
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("there should only be one reference token.",
                                static_cast<size_t>(1), aRefTokens.size());
@@ -4313,7 +4313,7 @@ CPPUNIT_TEST_FIXTURE(Test, testJumpToPrecedentsDependents)
     {
         // A1's dependent should be C1:C2.
         ScAddress aA1(0, 0, 0);
-        ScRangeList aRange(aA1);
+        ScRangeList aRange((ScRange(aA1)));
         rDocFunc.DetectiveCollectAllSuccs(aRange, aRefTokens);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("C1:C2 should be the only dependent of A1.",
                                std::vector<ScTokenRef>::size_type(1), aRefTokens.size());
@@ -5056,7 +5056,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoteLifeCycle)
 
     // Copy B2 with note to a clipboard.
 
-    ScClipParam aClipParam(aPos, false);
+    ScClipParam aClipParam(ScRange(aPos), false);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectOneTable(0);
@@ -5147,7 +5147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoteLifeCycle)
         CPPUNIT_ASSERT_MESSAGE("No caption at B5.", pOtherCaptionB5);
 
         ScDocument aClipDoc2(SCDOCMODE_CLIP);
-        copyToClip( pDoc2, aPosB5, &aClipDoc2);
+        copyToClip( pDoc2, ScRange(aPosB5), &aClipDoc2);
 
         // There's no ScTransferObject involved in the "fake" clipboard copy
         // and ScDocument dtor asking IsClipboardSource() gets no, so emulate
@@ -5159,7 +5159,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoteLifeCycle)
         xDocSh2->DoClose();
         xDocSh2.clear();
 
-        pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash... tdf#104967
+        pasteFromClip( m_pDoc, ScRange(aPosB5), &aClipDoc2); // should not crash... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
         const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);
@@ -6049,9 +6049,9 @@ CPPUNIT_TEST_FIXTURE(Test, testColumnFindEditCells)
     m_pDoc->SetScriptType(ScAddress(1,12,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
     m_pDoc->SetScriptType(ScAddress(1,13,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
 
-    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,11,0));
+    nResRow = m_pDoc->GetFirstEditTextRow(ScRange(ScAddress(1,11,0)));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), nResRow);
-    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(1,12,0));
+    nResRow = m_pDoc->GetFirstEditTextRow(ScRange(ScAddress(1,12,0)));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), nResRow);
 
     for (SCROW i = 0; i <= 5; ++i)
@@ -6059,7 +6059,7 @@ CPPUNIT_TEST_FIXTURE(Test, testColumnFindEditCells)
 
     m_pDoc->SetScriptType(ScAddress(2,5,0), (SvtScriptType::LATIN | SvtScriptType::ASIAN));
 
-    nResRow = m_pDoc->GetFirstEditTextRow(ScAddress(2,1,0));
+    nResRow = m_pDoc->GetFirstEditTextRow(ScRange(ScAddress(2,1,0)));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(-1), nResRow);
 
     m_pDoc->DeleteTab(0);

@@ -29,7 +29,7 @@ ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
     mrDoc(pCell->GetDocument())
 {
-    startListening( pCell->GetCode(), pCell->aPos );
+    startListening( pCell->GetCode(), ScRange(pCell->aPos) );
 }
 
 ScFormulaListener::ScFormulaListener(ScDocument& rDoc):

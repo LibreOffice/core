@@ -1448,7 +1448,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             pNewEditData = pEditObj->Clone();
         }
 
-        aChangeRanges.push_back(aPos);
+        aChangeRanges.push_back(ScRange(aPos));
         std::optional<ScPatternAttr> pOldPat(*rDoc.GetPattern( nCol, nRow, nTab ));
 
         rDoc.ApplyPattern( nCol, nRow, nTab, rAttr );

@@ -1040,7 +1040,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
     sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
 
     pStream->startElement(nElement,
-        XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), rPosition),
+        XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(rPosition)),
         XML_s, nullptr,   // OOXTODO: not supported
         XML_t, lcl_GetType(pData),
         XML_cm, nullptr,   // OOXTODO: not supported
@@ -1108,7 +1108,7 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
         lcl_WriteCell( rRevisionLogStrm, XML_oc, aPosition, pOldData.get() );
         if (!pNewData)
         {
-            pStream->singleElement(XML_nc, XML_r, XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), aPosition));
+            pStream->singleElement(XML_nc, XML_r, XclXmlUtils::ToOString(rRevisionLogStrm.GetRoot().GetDoc(), ScRange(aPosition)));
         }
     }
     if( pNewData )

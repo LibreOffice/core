@@ -9440,7 +9440,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
     // Set up clip document for cutting of B2.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     aClipDoc.ResetClip(m_pDoc, &aMark);
-    ScClipParam aParam(ScAddress(1, 1, 0), true);
+    ScClipParam aParam(ScRange(ScAddress(1, 1, 0)), true);
     aClipDoc.SetClipParam(aParam);
     aClipDoc.SetValue(ScAddress(1, 1, 0), 12.0);
 
@@ -9449,8 +9449,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
-    m_pDoc->CopyFromClip(ScAddress(2, 1, 0), aMark, InsertDeleteFlags::CONTENTS, pUndoDoc.get(),
-                         &aClipDoc);
+    m_pDoc->CopyFromClip(ScRange(ScAddress(2, 1, 0)), aMark, InsertDeleteFlags::CONTENTS,
+                         pUndoDoc.get(), &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0, 1, 0));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A2 should be referencing C2.", u"=C2"_ustr,
@@ -9769,7 +9769,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
     CPPUNIT_ASSERT(!pFC->IsShared()); // single formula cell is never shared.
 
     // Copy A1 to clipboard.
-    aClipParam = ScClipParam(ScAddress(0, 0, 0), false);
+    aClipParam = ScClipParam(ScRange(ScAddress(0, 0, 0)), false);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     pFC = aClipDoc.GetFormulaCell(ScAddress(0, 0, 0));
@@ -9786,7 +9786,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
     CPPUNIT_ASSERT(!pFC->IsShared());
 
     // Delete A3 and make sure it doesn't crash (see fdo#76132).
-    clearRange(m_pDoc, ScAddress(0, 2, 0));
+    clearRange(m_pDoc, ScRange(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 2, 0)));
 
     m_pDoc->DeleteTab(0);
@@ -9830,8 +9830,8 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRepeatOneFormula)
 #endif
 
     // Copy C1 to clipboard.
-    ScClipParam aClipParam(aPos, false);
-    aMark.SetMarkArea(aPos);
+    ScClipParam aClipParam(ScRange(aPos), false);
+    aMark.SetMarkArea(ScRange(aPos));
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to C2:C10.
@@ -10612,7 +10612,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
     // Copy cell A1 to clipboard.
     ScAddress aPos(0, 0, 0); // A1
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScClipParam aParam(aPos, false);
+    ScClipParam aParam(ScRange(aPos), false);
     m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark, false, false);
     // Formula string should be equal.
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));

@@ -1543,7 +1543,7 @@ OUString ScChangeActionContent::GetStringOfCell(
     const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos )
 {
     if (NeedsNumberFormat(rCell))
-        return GetStringOfCell(rCell, pDoc, pDoc->GetNumberFormat(rPos));
+        return GetStringOfCell(rCell, pDoc, pDoc->GetNumberFormat(ScRange(rPos)));
     else
         return GetStringOfCell(rCell, pDoc, 0);
 }
@@ -1637,7 +1637,7 @@ void ScChangeActionContent::SetValue(
     OUString& rStr, ScCellValue& rCell, const ScAddress& rPos, const ScCellValue& rOrgCell,
     const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    sal_uInt32 nFormat = NeedsNumberFormat(rOrgCell) ? pFromDoc->GetNumberFormat(rPos) : 0;
+    sal_uInt32 nFormat = NeedsNumberFormat(rOrgCell) ? pFromDoc->GetNumberFormat(ScRange(rPos)) : 0;
     SetValue(rStr, rCell, nFormat, rOrgCell, pFromDoc, pToDoc);
 }
 
@@ -2604,7 +2604,7 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
 void ScChangeTrack::AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell )
 {
     if (ScChangeActionContent::NeedsNumberFormat(rOldCell))
-        AppendContent(rPos, rOldCell, rDoc.GetNumberFormat(rPos), &rDoc);
+        AppendContent(rPos, rOldCell, rDoc.GetNumberFormat(ScRange(rPos)), &rDoc);
     else
         AppendContent(rPos, rOldCell, 0, &rDoc);
 }

@@ -3062,7 +3062,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateDeleteContent)
     // Delete B2.
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
-    aMark.SetMarkArea(ScAddress(1,1,0));
+    aMark.SetMarkArea(ScRange(ScAddress(1,1,0)));
     rFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("B2 should be empty.", CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(1,1,0)));

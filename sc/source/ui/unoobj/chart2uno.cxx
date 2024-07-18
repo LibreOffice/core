@@ -3208,7 +3208,7 @@ namespace {
 
 sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
 {
-    sal_uInt32 nFormat = pDoc->GetNumberFormat(rPos); // original format from cell.
+    sal_uInt32 nFormat = pDoc->GetNumberFormat(ScRange(rPos)); // original format from cell.
     return nFormat;
 }
 

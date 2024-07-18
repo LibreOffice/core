@@ -1299,7 +1299,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
     // Since the English formatter was constructed with
     // LANGUAGE_ENGLISH_US the "General" format has index key 0,
     // we don't have to query.
-    sal_uInt32 nNumFmt = bEnglish ? 0 : rDoc.GetNumberFormat(rPos);
+    sal_uInt32 nNumFmt = bEnglish ? 0 : rDoc.GetNumberFormat(ScRange(rPos));
 
     if (eType == CELLTYPE_EDIT)
     {
@@ -3318,7 +3318,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             {
                 //  notes count as non-empty
                 if (!aIter.isEmpty())
-                    aMarkData.SetMultiMarkArea(aIter.GetPos(), false);
+                    aMarkData.SetMultiMarkArea(ScRange(aIter.GetPos()), false);
             }
         }
 
@@ -3397,7 +3397,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                 }
 
                 if (bAdd)
-                    aMarkData.SetMultiMarkArea(aIter.GetPos());
+                    aMarkData.SetMultiMarkArea(ScRange(aIter.GetPos()));
             }
         }
 
@@ -3408,7 +3408,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
 
             for (const auto& i : aNotes)
             {
-                aMarkData.SetMultiMarkArea(i.maPos);
+                aMarkData.SetMultiMarkArea(ScRange(i.maPos));
             }
         }
 
@@ -3461,7 +3461,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
                     }
 
                     if (bAdd)
-                        aMarkData.SetMultiMarkArea(aIter.GetPos());
+                        aMarkData.SetMultiMarkArea(ScRange(aIter.GetPos()));
                 }
             }
         }
@@ -5868,7 +5868,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
 
     ScDocument& rDoc = pDocSh->GetDocument();
     ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
-    sal_uInt32 nOldFormat = rDoc.GetNumberFormat( aCellPos );
+    sal_uInt32 nOldFormat = rDoc.GetNumberFormat( ScRange(aCellPos) );
     if (rContext.NFGetType(nOldFormat) == SvNumFormatType::TEXT)
     {
         SetString_Impl(rText, false, false);      // text cell

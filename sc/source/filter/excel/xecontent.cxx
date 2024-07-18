@@ -540,7 +540,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
     if (mxTextMark)
         sTextMark = XclXmlUtils::ToOString(*mxTextMark);
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
-            XML_ref,                XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maScPos),
+            XML_ref,                XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), ScRange(maScPos)),
             FSNS( XML_r, XML_id ),  sax_fastparser::UseIf(sId, !sId.isEmpty()),
             XML_location,           sTextMark,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip

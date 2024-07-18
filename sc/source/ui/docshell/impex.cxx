@@ -1942,7 +1942,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
                 ScAddress aPos(nCol, nRow, nStartTab);
-                sal_uInt32 nNumFmt = rDoc.GetNumberFormat(aPos);
+                sal_uInt32 nNumFmt = rDoc.GetNumberFormat(ScRange(aPos));
                 ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
 
                 ScRefCellValue aCell(rDoc, aPos, blockPos[ nCol - nStartCol ]);

@@ -56,7 +56,7 @@ sal_uInt16 ScDBFunc::DoUpdateCharts(const ScAddress& rPos, ScDocument& rDoc, boo
                     bool bColHeaders = false;
                     bool bRowHeaders = false;
                     rDoc.GetOldChartParameters(aName, aRanges, bColHeaders, bRowHeaders);
-                    bHit = aRanges.Contains(rPos);
+                    bHit = aRanges.Contains(ScRange(rPos));
                 }
                 if (bHit)
                 {

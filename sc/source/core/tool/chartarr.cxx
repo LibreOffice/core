@@ -87,7 +87,7 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
             fRet = aCell.getValue();
             if (bCalcAsShown && fRet != 0.0)
             {
-                sal_uInt32 nFormat = rDoc.GetNumberFormat(rPos);
+                sal_uInt32 nFormat = rDoc.GetNumberFormat(ScRange(rPos));
                 fRet = rDoc.RoundValueAsShown(fRet, nFormat);
             }
         }

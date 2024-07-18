@@ -601,7 +601,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     ScMarkData aMark(rMark);
     aMark.MarkToMulti();
     if (!aMark.IsMultiMarked() && !aMark.IsCellMarked(rCursor.Col(), rCursor.Row()))
-        aMark.SetMarkArea(rCursor);
+        aMark.SetMarkArea(ScRange(rCursor));
 
     SCTAB nMax = GetTableCount();
     ScMarkData::const_iterator itr = aMark.begin(), itrEnd = aMark.end();
