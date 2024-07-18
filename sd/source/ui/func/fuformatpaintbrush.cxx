@@ -62,7 +62,7 @@ FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, 
 : FuText(pViewSh, pWin, pView, pDoc, rReq)
     , mnDepth(-1)
     , mbPermanent( false )
-, mbOldIsQuickTextEditMode( true )
+    , mbOldIsQuickTextEditMode(true)
 {
 }
 
@@ -145,6 +145,14 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         unmarkimpl( mpView );
+
+        if (aVEvt.mpObj)
+        {
+            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, false/*bToggle*/);
+            return true;
+        }
+
     }
     return false;
 }
@@ -282,8 +290,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        const OutlinerView* pOLV = rDrawViewShell.GetDrawView()->GetTextEditOutlinerView();
-        if( pObj && pOLV &&
+        if (pObj &&
             SdrObjEditView::SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
             return;
     }
