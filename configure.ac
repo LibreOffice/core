@@ -3722,7 +3722,7 @@ if test $_os = Darwin; then
         AC_MSG_RESULT([yes ($my_xcode_ver2)])
         if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 120000; then
             if test "$my_xcode_ver3" -eq 1500; then
-                dnl the bug was aleady fixed on 15.1 and 15.2 still has the same OS requirements as 15.0
+                dnl the bug was already fixed on 15.1 and 15.2 still has the same OS requirements as 15.0
                 dnl in other words all affected users could update to a working Xcode version
                 AC_MSG_WARN([Use a current version of XCode or bump the minimum deployment target])
                 AC_MSG_WARN([[see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Linking]])
