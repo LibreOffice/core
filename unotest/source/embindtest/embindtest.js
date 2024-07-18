@@ -9,9 +9,8 @@
 
 'use strict';
 
-Module.addOnPostRun(function() {
+Module.uno_init.then(function() {
     console.log('Running embindtest');
-    Module.initUno();
     let css = Module.uno.com.sun.star;
     let test = Module.uno.org.libreoffice.embindtest.Test.create(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');

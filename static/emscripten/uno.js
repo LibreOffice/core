@@ -11,11 +11,13 @@
 
 Module.unoTagSymbol = Symbol('unoTag');
 
-Module.initUno = function() {
-    if (Module.uno === undefined) {
+Module.uno_init = new Promise(function (resolve, reject) {
+    Module.uno_init$resolve = function() {
         Module.uno = init_unoembind_uno(Module, Module.unoTagSymbol);
-    }
-};
+        resolve();
+    };
+    Module.uno_init$reject = reject;
+});
 
 Module.catchUnoException = function(exception) {
     // Rethrow non-C++ exceptions (non-UNO C++ exceptions are mapped to css.uno.RuntimeException in
@@ -30,7 +32,6 @@ Module.catchUnoException = function(exception) {
 }
 
 Module.unoObject = function(interfaces, obj) {
-    Module.initUno();
     interfaces = ['com.sun.star.lang.XTypeProvider'].concat(interfaces);
     obj.impl_refcount = 0;
     obj.queryInterface = function(type) {
