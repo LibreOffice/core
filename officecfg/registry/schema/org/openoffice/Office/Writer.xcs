@@ -1987,6 +1987,13 @@
           </constraints>
           <value>2</value>
         </prop>
+        <prop oor:name="ApplyTableAutoFormat" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Determines if editing a table causes the table's AutoFormat to be applied automatically to update the formatting of the table and its contents.</desc>
+            <label>Apply table AutoFormat automatically when table is edited.</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="Input">
         <info>
