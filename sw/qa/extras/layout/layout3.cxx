@@ -3081,6 +3081,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408NoUnderflow)
                 u"עברית English"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf56408AfterFieldCrash)
+{
+    // Verify there is no crash/assertion for underflow after a number field
+    createSwDoc("tdf56408-after-field.fodt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf146081)
 {
     // Verifies that proportional line spacing is consistent with the
