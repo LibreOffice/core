@@ -1278,6 +1278,32 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             xSet->setPropertyValue(u"Decorative"_ustr, Any(m_isDecorative));
         }
+        if (!msMacro.isEmpty())
+        {
+            putPropertyToGrabBag(u"mso-sp-macro"_ustr, Any(msMacro));
+        }
+        if (!msTextLink.isEmpty())
+        {
+            putPropertyToGrabBag(u"mso-sp-textlink"_ustr, Any(msTextLink));
+        }
+        if (!mbFLocksText) // set only if "false", otherwise it will use "true" by default
+        {
+            putPropertyToGrabBag(u"mso-sp-fLocksText"_ustr, Any(mbFLocksText));
+        }
+        if (mbFPublished)
+        {
+            putPropertyToGrabBag(u"mso-sp-fPublished"_ustr, Any(mbFPublished));
+        }
+        if (!msTitle.isEmpty())
+        {
+            xSet->setPropertyValue(u"Title"_ustr, Any(msTitle));
+        }
+
+        // get tooltip attribute of <hlinkClick>
+        OUString sTooltip;
+        getShapeProperties().getProperty(PROP_Representation) >>= sTooltip;
+        if (!sTooltip.isEmpty())
+            putPropertyToGrabBag(u"mso-hlinkClick-tooltip"_ustr, Any(sTooltip));
 
         // Placeholder uses the height set on the slide instead of the height from the master slide,
         // if it has the "TextAutoGrowHeight" property

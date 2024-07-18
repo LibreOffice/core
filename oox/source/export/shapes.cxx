@@ -90,6 +90,7 @@
 #include <frozen/set.h>
 #include <frozen/unordered_map.h>
 
+#include <sax/fastattribs.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -840,13 +841,62 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
+        // get InteropGrabBag to export attributes stored in the grabbag
+        uno::Sequence<beans::PropertyValue> aGrabBagProps;
+        rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagProps;
+
         bool bUseBackground = false;
         if (GetProperty(rXPropSet, u"FillUseSlideBackground"_ustr))
             mAny >>= bUseBackground;
         if (bUseBackground)
             mpFS->startElementNS(mnXmlNamespace, XML_sp, XML_useBgFill, "1");
         else
-            mpFS->startElementNS(mnXmlNamespace, XML_sp);
+        {
+            rtl::Reference<sax_fastparser::FastAttributeList> pAttrListSp
+                = sax_fastparser::FastSerializerHelper::createAttrList();
+
+            for (auto const& it : aGrabBagProps)
+            {
+                // export macro attribute of <sp> element
+                if (it.Name == u"mso-sp-macro"_ustr)
+                {
+                    OUString sMacro;
+                    it.Value >>= sMacro;
+
+                    if (!sMacro.isEmpty())
+                        pAttrListSp->add(XML_macro, sMacro);
+                }
+
+                // export textlink attribute of <sp> element
+                if (it.Name == u"mso-sp-textlink"_ustr)
+                {
+                    OUString sTextLink;
+                    it.Value >>= sTextLink;
+
+                    if (!sTextLink.isEmpty())
+                        pAttrListSp->add(XML_textlink, sTextLink);
+                }
+
+                // export fLocksText attribute of <sp> element
+                if (it.Name == u"mso-sp-fLocksText"_ustr)
+                {
+                    bool bFLocksText = true; // default="true"
+                    it.Value >>= bFLocksText;
+                    pAttrListSp->add(XML_fLocksText, ToPsz10(bFLocksText));
+                }
+
+                // export fPublished attribute of <sp> element
+                if (it.Name == u"mso-sp-fPublished"_ustr)
+                {
+                    bool bFPublished = false;
+                    it.Value >>= bFPublished;
+                    pAttrListSp->add(XML_fPublished, ToPsz10(bFPublished));
+                }
+            }
+
+            // export <sp> element (with a namespace prefix)
+            mpFS->startElementNS(mnXmlNamespace, XML_sp, pAttrListSp);
+        }
 
         bool isVisible = true ;
         if( GetProperty(rXPropSet, u"Visible"_ustr))
@@ -854,10 +904,40 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             mAny >>= isVisible;
         }
         pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
+
+        // export descr attribute of <cNvPr> element
+        OUString sDescr;
+        if (GetProperty(rXPropSet, u"Description"_ustr))
+            mAny >>= sDescr;
+
+        // export title attribute of <cNvPr> element
+        OUString sTitle;
+        if (GetProperty(rXPropSet, u"Title"_ustr))
+            mAny >>= sTitle;
+
+        // export <cNvPr> element
         pFS->startElementNS(
             mnXmlNamespace, XML_cNvPr, XML_id,
             OString::number(GetShapeID(xShape) == -1 ? GetNewShapeID(xShape) : GetShapeID(xShape)),
-            XML_name, GetShapeName(xShape), XML_hidden, sax_fastparser::UseIf("1", !isVisible));
+            XML_name, GetShapeName(xShape), XML_hidden, sax_fastparser::UseIf("1", !isVisible),
+            XML_descr, sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()), XML_title,
+            sax_fastparser::UseIf(sTitle, !sTitle.isEmpty()));
+
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttrListHlinkClick
+            = sax_fastparser::FastSerializerHelper::createAttrList();
+
+        for (auto const& it : aGrabBagProps)
+        {
+            // export tooltip attribute of <hlinkClick> element
+            if (it.Name == u"mso-hlinkClick-tooltip"_ustr)
+            {
+                OUString sTooltip;
+                it.Value >>= sTooltip;
+
+                if (!sTooltip.isEmpty())
+                    pAttrListHlinkClick->add(XML_tooltip, sTooltip);
+            }
+        }
 
         if( GetProperty(rXPropSet, u"URL"_ustr) )
         {
@@ -871,8 +951,12 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                         mpURLTransformer->isExternalURL(sURL));
 
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                // pAttrListHlinkClick->add(FSNS(XML_r, XML_id), sRelId);
             }
         }
+
+        // // export <hlinkClick> element
+        // mpFS->singleElementNS(XML_a, XML_hlinkClick, pAttrListHlinkClick);
 
         OUString sBookmark;
         if (GetProperty(rXPropSet, u"Bookmark"_ustr))

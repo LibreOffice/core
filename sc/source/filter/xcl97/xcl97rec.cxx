@@ -260,6 +260,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 
     sal_Int32 nDrawing = drawingml::DrawingML::getNewDrawingUniqueId();
     OUString sId;
+    // export in [Content_Types].xml
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/drawing", nDrawing ),
             XclXmlUtils::GetStreamName( "../", "drawings/drawing", nDrawing ),

@@ -56,12 +56,14 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
             sURL = getRelations().getInternalTargetFromRelId( aRelId );
         }
     }
-    OUString sTooltip = rAttribs.getStringDefaulted( R_TOKEN( tooltip ) );
+    OUString sTooltip = rAttribs.getStringDefaulted( XML_tooltip );
     if ( !sTooltip.isEmpty() )
         maProperties.setProperty(PROP_Representation, sTooltip);
-    OUString sFrame = rAttribs.getStringDefaulted( R_TOKEN( tgtFrame ) );
+
+    OUString sFrame = rAttribs.getStringDefaulted( XML_tgtFrame );
     if( !sFrame.isEmpty() )
         maProperties.setProperty(PROP_TargetFrame, sFrame);
+
     OUString aAction = rAttribs.getStringDefaulted( XML_action );
     if ( !aAction.isEmpty() )
     {
@@ -130,15 +132,27 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                 }
             }
         }
+        maProperties.setProperty(PROP_Action, aAction);
     }
+
     if ( !sURL.isEmpty() )
         maProperties.setProperty(PROP_URL, sURL);
 
-    // TODO unhandled
-    // XML_invalidUrl
-    // XML_history
-    // XML_highlightClick
-    // XML_endSnd
+    OUString sInvalidUrl = rAttribs.getStringDefaulted(XML_invalidUrl);
+    if (!sInvalidUrl.isEmpty())
+        maProperties.setProperty(PROP_InvalidUrl, sInvalidUrl);
+
+    bool bHistory = rAttribs.getBool(XML_history, true); // default="true"
+    if (!bHistory) // set only if it is false
+        maProperties.setProperty(PROP_History, bHistory);
+
+    bool bHighlightClick = rAttribs.getBool(XML_highlightClick, false);
+    if (bHighlightClick)
+        maProperties.setProperty(PROP_HighlightClick, bHighlightClick);
+
+    bool bEndSnd = rAttribs.getBool(XML_endSnd, false);
+    if (bEndSnd)
+        maProperties.setProperty(PROP_EndSnd, bEndSnd);
 }
 
 HyperLinkContext::~HyperLinkContext()

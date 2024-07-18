@@ -175,6 +175,11 @@ public:
     const OUString&                 getId() const { return msId; }
     void                            setDescription( const OUString& rDescr ) { msDescription = rDescr; }
     void                            setDecorative(bool const isDecorative) { m_isDecorative = isDecorative; }
+    void                            setMacro(const OUString& rMacro) { msMacro = rMacro; }
+    void                            setTextLinkAttr(const OUString& rTextLink) { msTextLink = rTextLink; }
+    void                            setFLocksText(bool bFLocksText) { mbFLocksText = bFLocksText; }
+    void                            setFPublished(bool bFPublished) { mbFPublished = bFPublished; }
+    void                            setTitle(const OUString& rTitle) { msTitle = rTitle; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
@@ -362,7 +367,33 @@ protected:
     OUString                    msInternalName; // used by diagram; not displayed in UI
     OUString                    msId;
     OUString                    msDescription;
+    OUString                    msTitle;
     bool                        m_isDecorative = false;
+
+    /* <sp> (Shape) : This element specifies the existence of a single shape.
+
+        Attributes:
+            - macro (Reference to Custom Function)
+            - textlink (Text Link)
+            - fLocksText (Lock Text Flag)
+            - fPublished (Publish to Server Flag)
+
+        <sp> element can exist as a namespace format like <xdr:sp>, <cdr:sp> etc...
+    */
+
+    /* specifies the custom function associated with the object.
+       "macro" attribute for <sp> element */
+    OUString                    msMacro;
+    /* specifies a formula linking to spreadsheet cell data.
+       "textlink" attribute for <sp> element */
+    OUString                    msTextLink;
+    /* indicates whether to allow text editing within this drawing object when the parent worksheet is protected.
+      "fLocksText" attribute for <sp> element */
+    bool                        mbFLocksText = true; // default="true"
+    /* indicates whether the shape shall be published with the worksheet when sent to the server.
+       "fPublished" attribute for <sp> element */
+    bool                        mbFPublished = false;
+
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
     std::optional< sal_Int32 >  moSubTypeIndex;
 

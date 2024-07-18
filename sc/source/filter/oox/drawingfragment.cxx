@@ -136,6 +136,12 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
         {
             ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.CustomShape"_ustr );
             if( pxShape ) *pxShape = xShape;
+
+            xShape->setMacro(rAttribs.getXString(XML_macro, OUString()));
+            xShape->setTextLinkAttr(rAttribs.getXString(XML_textlink, OUString()));
+            xShape->setFLocksText(rAttribs.getBool(XML_fLocksText, true));  // default="true"
+            xShape->setFPublished(rAttribs.getBool(XML_fPublished, false)); // default="false"
+
             return new ShapeContext( rParent, rxParentShape, std::move(xShape) );
         }
         case XDR_TOKEN( cxnSp ):
