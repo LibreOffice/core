@@ -3119,6 +3119,34 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf146081)
     CPPUNIT_ASSERT_EQUAL(nTotalHeight, nHeight1 * 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf157829LTR)
+{
+    // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions
+    createSwDoc("tdf157829-ltr.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"English English English "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"עברית English"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf157829RTL)
+{
+    // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions
+    createSwDoc("tdf157829-rtl.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"עברית עברית עברית עברית "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"English עברית"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
