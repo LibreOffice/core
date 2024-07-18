@@ -1422,7 +1422,7 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
 void LwpTableLayout::SetCellsMap(sal_uInt16 nRow1, sal_uInt8 nCol1,
                                  sal_uInt16 nRow2, sal_uInt8 nCol2, XFCell* pXFCell)
 {
-    m_CellsMap.insert({{nRow1, nCol1}, {nRow2, nCol2}}, pXFCell);
+    m_CellsMap.insert({{nRow1, nCol1}, {nRow2, nCol2}}, XFCellListener(pXFCell));
 }
 
 /**

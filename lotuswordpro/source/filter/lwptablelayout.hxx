@@ -101,7 +101,7 @@ struct TableConvertAttempt
 class XFCellListener : public SfxListener
 {
 public:
-    XFCellListener(XFCell* pCell)
+    explicit XFCellListener(XFCell* pCell)
         : m_pCell(pCell)
     {
         if (m_pCell)
