@@ -1005,8 +1005,6 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
 
 void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext)
 {
-    bool bSelected = pEntry->IsSelected();
-
     rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos));
@@ -1014,6 +1012,8 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
 
+    const bool bMouseHovered = pEntry == pCurHighlightFrame;
+    const bool bSelected = pEntry->IsSelected();
     if (bSelected)
     {
         const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -1026,11 +1026,12 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         else
             aNewFont.SetFillColor(rSettings.GetDeactiveColor());
 
-        Color aWinCol = rSettings.GetWindowTextColor();
-        if (!bActiveSelection && rSettings.GetFaceColor().IsBright() == aWinCol.IsBright())
-            aNewFont.SetColor(rSettings.GetWindowTextColor());
-        else
-            aNewFont.SetColor(rSettings.GetHighlightTextColor());
+        Color aTextColor(rSettings.GetTabTextColor());
+        if (bSelected)
+            aTextColor = rSettings.GetTabHighlightTextColor();
+        else if (bMouseHovered)
+            aTextColor = rSettings.GetTabRolloverTextColor();
+        aNewFont.SetColor(aTextColor);
 
         rRenderContext.SetFont(aNewFont);
 
@@ -1066,7 +1067,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         DrawFocusRect(rRenderContext, pEntry);
 
     // highlight mouse-hovered entry
-    if (pEntry == pCurHighlightFrame)
+    if (bMouseHovered)
     {
         const tools::Rectangle aRect = CalcFocusRect(pEntry);
         bool bNativeOK
