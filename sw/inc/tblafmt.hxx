@@ -225,6 +225,7 @@ public:
     /// Check if style is defined by user.
     bool IsUserDefined() const  { return m_bUserDefined; }
 
+    void DisableAll();
     void SetFont( const bool bNew )         { m_bInclFont = bNew; }
     void SetJustify( const  bool bNew )     { m_bInclJustify = bNew; }
     void SetFrame( const bool bNew )        { m_bInclFrame = bNew; }
