@@ -501,7 +501,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextBody has 1pt space below paragraph", sal_Int32(35), getProperty<sal_Int32>(xPara, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table has 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("TextBody has 1.07 line-spacing", sal_Int16(107), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height, 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TextBody has 1.07 line-spacing", sal_Int16(107), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height);
     // table-style based paragraph background color
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing paragraph background color in cell A1", Color(0xCCFFCC), getProperty<Color>(xPara, u"ParaBackColor"_ustr));
 
@@ -516,7 +516,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Normal has 0pt space below paragraph", sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaBottomMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height, 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph background color in cell A2", sal_Int32(-1), getProperty<sal_Int32>(xPara, u"ParaBackColor"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_RIGHT,
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));

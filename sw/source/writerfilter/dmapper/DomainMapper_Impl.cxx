@@ -5112,7 +5112,7 @@ void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue, bool
         appendGrabBag(m_aSubInteropGrabBag, u"line"_ustr, OUString::number(nIntValue));
         // now set the value depending on the Mode
         if (aSpacing.Mode == style::LineSpacingMode::PROP)
-            aSpacing.Height = sal_Int16(nIntValue * 100 / nSingleLineSpacing);
+            aSpacing.Height = sal_Int16(round(nIntValue * 100.0 / nSingleLineSpacing));
         else
             aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMm100_Limited(nIntValue));
     }
@@ -5126,9 +5126,9 @@ void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue, bool
             {
                 aSpacing.Mode = style::LineSpacingMode::PROP;
                 // reinterpret the already set value
-                aSpacing.Height
-                    = sal_Int16(aSpacing.Height * 100
-                                / ConversionHelper::convertTwipToMm100_Limited(nSingleLineSpacing));
+                aSpacing.Height = sal_Int16(
+                    round(aSpacing.Height * 100.0
+                          / ConversionHelper::convertTwipToMm100_Limited(nSingleLineSpacing)));
             }
             else
             {
