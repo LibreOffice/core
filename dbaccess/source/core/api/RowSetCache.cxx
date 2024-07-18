@@ -203,7 +203,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                         {
                             Reference<XNameAccess> xSelColumns = xColSup->getColumns();
                             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+                            SelectColumnsMetaData aColumnNames(comphelper::UStringMixLess(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()));
                             ::dbaccess::getColumnPositions(xSelColumns,xPrimaryKeyColumns->getElementNames(),aUpdateTableName,aColumnNames);
                             bAllKeysFound = !aColumnNames.empty() && aColumnNames.size() == o3tl::make_unsigned(xPrimaryKeyColumns->getElementNames().getLength());
                         }
@@ -269,7 +269,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         else
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+            SelectColumnsMetaData aColumnNames(comphelper::UStringMixLess(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()));
             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();

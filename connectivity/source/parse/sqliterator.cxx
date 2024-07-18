@@ -84,8 +84,8 @@ namespace connectivity
             m_xDatabaseMetaData = m_xConnection->getMetaData();
 
             m_bIsCaseSensitive = m_xDatabaseMetaData.is() && m_xDatabaseMetaData->supportsMixedCaseQuotedIdentifiers();
-            m_pTables = std::make_shared<OSQLTables>( m_bIsCaseSensitive );
-            m_pSubTables = std::make_shared<OSQLTables>( m_bIsCaseSensitive );
+            m_pTables = std::make_shared<OSQLTables>( UStringMixLess(m_bIsCaseSensitive) );
+            m_pSubTables = std::make_shared<OSQLTables>( UStringMixLess(m_bIsCaseSensitive) );
 
             m_xTableContainer = _rxTables;
 

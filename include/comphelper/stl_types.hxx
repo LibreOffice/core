@@ -38,7 +38,7 @@ struct UStringMixLess
 private:
     bool m_bCaseSensitive;
 public:
-    UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
+    explicit UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
     bool operator() (std::u16string_view x, std::u16string_view y) const
     {
         if (m_bCaseSensitive)
@@ -55,7 +55,7 @@ class UStringMixEqual
     bool const m_bCaseSensitive;
 
 public:
-    UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
+    explicit UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
     bool operator() (std::u16string_view lhs, std::u16string_view rhs) const
     {
         return m_bCaseSensitive ? lhs == rhs : o3tl::equalsIgnoreAsciiCase( lhs, rhs );

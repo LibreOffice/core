@@ -136,10 +136,10 @@ void OKeySet::initColumns()
 {
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     bool bCase = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
-    m_pKeyColumnNames.reset( new SelectColumnsMetaData(bCase) );
-    m_pColumnNames.reset( new SelectColumnsMetaData(bCase) );
-    m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
-    m_pForeignColumnNames.reset( new SelectColumnsMetaData(bCase) );
+    m_pKeyColumnNames.reset( new SelectColumnsMetaData(comphelper::UStringMixLess(bCase)) );
+    m_pColumnNames.reset( new SelectColumnsMetaData(comphelper::UStringMixLess(bCase)) );
+    m_pParameterNames.reset( new SelectColumnsMetaData(comphelper::UStringMixLess(bCase)) );
+    m_pForeignColumnNames.reset( new SelectColumnsMetaData(comphelper::UStringMixLess(bCase)) );
 }
 
 void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,

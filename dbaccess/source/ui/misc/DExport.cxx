@@ -76,7 +76,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  bool _bAutoIncrementEnabled,
                                  SvStream& _rInputStream)
     :m_vColumnPositions(std::move(_rColumnPositions))
-    ,m_aDestColumns(true)
+    ,m_aDestColumns(comphelper::UStringMixLess(true))
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
     ,m_pFormatter(nullptr)
@@ -125,7 +125,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< css::uno::XComponentContext >& _rxContext,
                                  SvStream& _rInputStream)
-    :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+    :m_aDestColumns(comphelper::UStringMixLess(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()))
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)

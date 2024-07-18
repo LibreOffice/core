@@ -439,7 +439,7 @@ namespace
                         OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
                         OUString sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
-                        ColumnInformationMap aInfo(_bCase);
+                        ColumnInformationMap aInfo((UStringMixLess(_bCase)));
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
                         ColumnInformationMap::const_iterator aIter = aInfo.begin();
                         if ( aIter != aInfo.end() )

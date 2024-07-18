@@ -60,7 +60,7 @@ namespace
         ObjectMap                               m_aNameMap;         // hold the elements and a name
     public:
         OHardRefMap(bool _bCase)
-            : m_aNameMap(_bCase)
+            : m_aNameMap(::comphelper::UStringMixLess(_bCase))
         {
         }
 

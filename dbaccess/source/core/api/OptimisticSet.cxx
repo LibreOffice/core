@@ -98,7 +98,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
     const Reference<XNameAccess> xTables = xTabSup->getTables();
     for (auto& tableName : xTables->getElementNames())
     {
-        std::unique_ptr<SelectColumnsMetaData> pKeyColumNames(new SelectColumnsMetaData(bCase));
+        std::unique_ptr<SelectColumnsMetaData> pKeyColumNames(new SelectColumnsMetaData(comphelper::UStringMixLess(bCase)));
         findTableColumnsMatching_throw(xTables->getByName(tableName),tableName,xMeta,xQueryColumns,pKeyColumNames);
         m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }

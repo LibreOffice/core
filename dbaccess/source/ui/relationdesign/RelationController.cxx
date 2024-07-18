@@ -254,7 +254,7 @@ namespace
                         ,const Sequence< OUString>& _aTableList
                         ,const sal_Int32 _nStartIndex
                         ,const sal_Int32 _nEndIndex)
-            :m_aTableData(_xMetaData.is() && _xMetaData->supportsMixedCaseQuotedIdentifiers())
+            :m_aTableData(comphelper::UStringMixLess(_xMetaData.is() && _xMetaData->supportsMixedCaseQuotedIdentifiers()))
             ,m_aTableList(_aTableList)
             ,m_pParent(_pParent)
             ,m_xMetaData(_xMetaData)

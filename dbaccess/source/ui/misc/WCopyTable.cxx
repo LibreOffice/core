@@ -481,7 +481,7 @@ OCopyTableWizard::OCopyTableWizard(weld::Window* pParent, const OUString& _rDefa
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
         const Reference< XInteractionHandler>& _xInteractionHandler)
     : vcl::RoadmapWizardMachine(pParent)
-    , m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+    , m_mNameMapping(comphelper::UStringMixLess(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()))
     , m_xDestConnection( _xConnection )
     , m_rSourceObject( _rSourceObject )
     , m_xFormatter( getNumberFormatter( _xConnection, _rxContext ) )
@@ -584,7 +584,7 @@ OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, OUString _sDefaultNam
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
     : vcl::RoadmapWizardMachine(pParent)
     , m_vSourceColumns(std::move(_rSourceColumns))
-    , m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+    , m_mNameMapping(comphelper::UStringMixLess(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()))
     , m_xDestConnection( _xConnection )
     , m_rSourceObject( DummyCopySource::Instance() )
     , m_xFormatter(_xFormatter)

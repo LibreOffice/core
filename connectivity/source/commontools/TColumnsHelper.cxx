@@ -43,7 +43,7 @@ namespace connectivity
     {
     public:
         explicit OColumnsHelperImpl(bool _bCase)
-            : m_aColumnInfo(_bCase)
+            : m_aColumnInfo(UStringMixLess(_bCase))
         {
         }
         ColumnInformationMap m_aColumnInfo;

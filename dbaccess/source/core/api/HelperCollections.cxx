@@ -75,9 +75,9 @@ namespace dbaccess
     {
         if ( m_aColumns.is() )
         {
-            ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+            ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,UStringMixEqual(isCaseSensitive()));
             if(aIter == m_aColumns->end())
-                aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+                aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,UStringMixEqual(isCaseSensitive()));
 
             if(aIter != m_aColumns->end())
                 return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
