@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <officecfg/Office/Writer.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
 #include <hintids.hxx>
@@ -507,7 +508,12 @@ bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
     rDoc.UpdateCharts( GetFrameFormat()->GetName() );
 
     if (SwFEShell* pFEShell = rDoc.GetDocShell()->GetFEShell())
-        pFEShell->UpdateTableStyleFormatting();
+    {
+        if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+        {
+            pFEShell->UpdateTableStyleFormatting();
+        }
+    }
 
     return bRes;
 }
@@ -631,7 +637,12 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
     if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
-        pFEShell->UpdateTableStyleFormatting(pTableNd);
+    {
+        if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+        {
+            pFEShell->UpdateTableStyleFormatting(pTableNd);
+        }
+    }
 
     return true;
 }
