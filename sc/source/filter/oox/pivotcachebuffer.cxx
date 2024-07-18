@@ -236,7 +236,7 @@ OUString PivotCacheItem::getName() const
     return OUString();
 }
 
-OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const DateTime& rNullDate) const
+OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const Date& rNullDate) const
 {
     switch( mnType )
     {
@@ -253,7 +253,7 @@ OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScD
                 SAL_WARN("sc", "PivotCacheField::getFormattedName - invalid date");
                 return OUString();
             }
-            return pObj->GetFormattedString(rSaveDim.GetName(), DateTime::Sub(DateTime(aDateTime), rNullDate));
+            return pObj->GetFormattedString(rSaveDim.GetName(), DateTime::Sub(DateTime(aDateTime), DateTime(rNullDate)));
         }
         case XML_e: return maValue.get< OUString >();
     }

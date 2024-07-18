@@ -323,9 +323,9 @@ SvNumberFormatter& XclRoot::GetFormatter() const
     return *GetDoc().GetFormatTable();
 }
 
-DateTime XclRoot::GetNullDate() const
+Date XclRoot::GetNullDate() const
 {
-    return DateTime( GetFormatter().GetNullDate() );
+    return GetFormatter().GetNullDate();
 }
 
 sal_uInt16 XclRoot::GetBaseYear() const
@@ -339,7 +339,7 @@ const DateTime theExcelCutOverDate( Date( 1, 3, 1900 ));
 
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
-    double fValue = DateTime::Sub( rDateTime, GetNullDate());
+    double fValue = DateTime::Sub( rDateTime, DateTime( GetNullDate()));
     // adjust dates before 1900-03-01 to get correct time values in the range [0.0,1.0)
     /* XXX: this is only used when reading BIFF, otherwise we'd have to check
      * for dateCompatibility==true as mentioned below. */
@@ -350,7 +350,7 @@ double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 
 DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
 {
-    DateTime aDateTime = GetNullDate() + fValue;
+    DateTime aDateTime = DateTime( GetNullDate()) + fValue;
     // adjust dates before 1900-03-01 to get correct time values
     /* FIXME: correction should only be done when writing BIFF or OOXML
      * transitional with dateCompatibility==true (or absent for default true),

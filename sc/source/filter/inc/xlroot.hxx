@@ -30,6 +30,7 @@ namespace comphelper { class IDocPasswordVerifier; }
 
 // Forward declarations of objects in public use ==============================
 
+class Date;
 class DateTime;
 class SotStorage;
 class SotStorageStream;
@@ -216,7 +217,7 @@ public:
     /** Returns the number formatter of the Calc document. */
     SvNumberFormatter&  GetFormatter() const;
     /** Returns the null date of the current number formatter. */
-    DateTime            GetNullDate() const;
+    Date                GetNullDate() const;
     /** Returns the base year depending on the current null date (1900 or 1904). */
     sal_uInt16          GetBaseYear() const;
     /** Converts a date/time value to a floating-point value. */

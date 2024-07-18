@@ -35,7 +35,7 @@ namespace oox::core { class Relations; }
 
 class ScDPSaveDimension;
 class ScDPObject;
-class DateTime;
+class Date;
 
 namespace oox::xls {
 
@@ -83,7 +83,7 @@ public:
     OUString     getName() const;
 
     /** Returns the string representation of the item, using the actual formatting. */
-    OUString     getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const DateTime& rNullDate) const;
+    OUString     getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const Date& rNullDate) const;
     /** Returns true if the item is unused. */
     bool         isUnused() const { return mbUnused; }
 

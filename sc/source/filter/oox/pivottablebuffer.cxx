@@ -581,7 +581,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
             ScDPObject* pDPObj = mrPivotTable.getDPObject();
             ScDPSaveData* pSaveData = pDPObj->GetSaveData();
             ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
-            OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, ::DateTime(::Date(getWorkbookSettings().getNullDate())));
+            OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, Date( getWorkbookSettings().getNullDate()));
             aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
         }
     }
@@ -798,7 +798,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
 
                         try
                         {
-                            ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getFormattedName(*pDim, pDPObj, ::DateTime(::Date(getWorkbookSettings().getNullDate()))));
+                            ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getFormattedName(*pDim, pDPObj, Date( getWorkbookSettings().getNullDate())));
                             pMem->SetShowDetails(rItem.mbShowDetails);
                             pMem->SetIsVisible(!rItem.mbHidden);
                         }
