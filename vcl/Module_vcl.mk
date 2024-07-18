@@ -291,4 +291,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,vcl,\
 ))
 endif
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_slowcheck_targets,vcl,\
+    CppunitTest_vcl_unx_generic \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
