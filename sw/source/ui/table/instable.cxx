@@ -173,16 +173,6 @@ sal_uInt8 SwInsTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
     return 255;
 }
 
-static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
-{
-    pTableAutoFormat->SetFont( bVal );
-    pTableAutoFormat->SetJustify( bVal );
-    pTableAutoFormat->SetFrame( bVal );
-    pTableAutoFormat->SetBackground( bVal );
-    pTableAutoFormat->SetValueFormat( bVal );
-    pTableAutoFormat->SetWidthHeight( bVal );
-}
-
 IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
     // Get index of selected item from the listbox
@@ -196,7 +186,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
     else
     {
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
-        lcl_SetProperties( &aTmp, false );
+        aTmp.DisableAll();
 
         m_aWndPreview.NotifyChange( aTmp );
     }
@@ -217,7 +207,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
     else
     {
         m_xTAutoFormat.reset(new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone ));
-        lcl_SetProperties( m_xTAutoFormat.get(), false );
+        m_xTAutoFormat->DisableAll();
     }
 
     m_xDialog->response(RET_OK);
