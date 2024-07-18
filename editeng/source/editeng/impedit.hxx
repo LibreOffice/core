@@ -398,6 +398,7 @@ public:
 
     const EditSelection&  GetEditSelection() const { return maEditSelection; }
     void SetEditSelection(const EditSelection& rEditSelection);
+    void SetEditSelection(const EditPaM& rEditPaM) { SetEditSelection(EditSelection(rEditPaM)); }
     bool HasSelection() const { return maEditSelection.HasRange(); }
 
     void SelectionChanged();

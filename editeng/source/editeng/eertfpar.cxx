@@ -94,7 +94,7 @@ SvParserState EditRTFParser::CallParser()
     // Useful or not?
     aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
     AddRTFDefaultValues( aStart2PaM, aStart2PaM );
-    EditPaM aEnd1PaM = mpEditEngine->InsertParaBreak(aCurSel.Max());
+    EditPaM aEnd1PaM = mpEditEngine->InsertParaBreak(EditSelection(aCurSel.Max()));
     // aCurCel now points to the gap
 
     if (mpEditEngine->IsRtfImportHandlerSet())

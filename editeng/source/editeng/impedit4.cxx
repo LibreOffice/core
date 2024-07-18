@@ -2289,10 +2289,10 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
                 }
                 SfxItemSet aSet( maEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
                 aSet.Put(SvxLanguageItem(rCurrentNewPortion.eLanguage, nLangWhichId));
-                SetAttribs( aCurrentPaM, aSet );
+                SetAttribs( EditSelection(aCurrentPaM), aSet );
             }
             //insert the new string and set the cursor to the end of the inserted string
-            aCurrentPaM = ImpInsertText( aCurrentPaM , rCurrentNewPortion.sText );
+            aCurrentPaM = ImpInsertText( EditSelection(aCurrentPaM) , rCurrentNewPortion.sText );
         }
     }
     UndoActionEnd();

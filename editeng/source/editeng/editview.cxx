@@ -365,7 +365,7 @@ void EditView::setEditEngine(EditEngine* pEditEngine)
     assert(pEditEngine);
 
     getImpl().mpEditEngine = pEditEngine;
-    EditSelection aStartSel = getEditEngine().GetEditDoc().GetStartPaM();
+    EditSelection aStartSel( getEditEngine().GetEditDoc().GetStartPaM() );
     getImpl().SetEditSelection( aStartSel );
 }
 
@@ -1301,7 +1301,7 @@ void EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     EditSelection aCurSel( getImpl().GetEditSelection() );
     getImpl().DrawSelectionXOR();
-    aCurSel = getEditEngine().SelectWord(aCurSel.Max(), nWordType);
+    aCurSel = getEditEngine().SelectWord(EditSelection(aCurSel.Max()), nWordType);
     getImpl().SetEditSelection( aCurSel );
     getImpl().DrawSelectionXOR();
     ShowCursor( true, false );

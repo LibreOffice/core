@@ -517,7 +517,7 @@ bool EdtAutoCorrDoc::Delete(sal_Int32 nStt, sal_Int32 nEnd)
 
 bool EdtAutoCorrDoc::Insert(sal_Int32 nPos, const OUString& rTxt)
 {
-    EditSelection aSel = EditPaM( pCurNode, nPos );
+    EditSelection aSel(EditPaM( pCurNode, nPos ));
     mpEditEngine->InsertText(aSel, rTxt);
     SAL_WARN_IF(nCursor < nPos, "editeng",
             "Cursor in the heart of the action?!");

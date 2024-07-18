@@ -147,8 +147,8 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
     //get the initial para count before paste
     sal_uInt32 initialParaCount = rEditEngine.GetEditDoc().Count();
     //insert para breaks before inserting the copied text
-    rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
-    rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
+    rEditEngine.InsertParaBreak( EditSelection(rEditEngine.CreateSelection( rSel ).Max()) );
+    rEditEngine.InsertParaBreak( EditSelection(rEditEngine.CreateSelection( rSel ).Max()) );
 
     // Init return PaM.
     EditPaM aPaM( rEditEngine.CreateSelection( rSel ).Max());

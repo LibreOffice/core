@@ -1767,7 +1767,7 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
     bool bIsWrong = false;
     if ( rPaM.GetNode()->GetWrongList() )
     {
-        EditSelection aSel = getEditEngine().SelectWord( rPaM, css::i18n::WordType::DICTIONARY_WORD );
+        EditSelection aSel = getEditEngine().SelectWord( EditSelection(rPaM), css::i18n::WordType::DICTIONARY_WORD );
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
@@ -1787,7 +1787,7 @@ OUString ImpEditView::SpellIgnoreWord()
         EditPaM aPaM = GetEditSelection().Max();
         if ( !HasSelection() )
         {
-            EditSelection aSel = getEditEngine().SelectWord(aPaM);
+            EditSelection aSel = getEditEngine().SelectWord(EditSelection(aPaM));
             aWord = getImpEditEngine().GetSelected( aSel );
         }
         else

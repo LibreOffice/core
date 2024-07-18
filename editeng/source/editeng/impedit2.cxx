@@ -435,7 +435,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                         sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         EditPaM aPaM( mpIMEInfos->aPos );
                         aPaM.SetIndex( aPaM.GetIndex() + nNewIMETextLen );
-                        ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
+                        ImpInsertText( EditSelection(aPaM), mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
                     }
                     else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
                               ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
@@ -467,7 +467,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatAndLayout( pView );
             }
 
-            EditSelection aNewSel = EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
+            EditSelection aNewSel( EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() ) );
             pView->SetSelection( CreateESel( aNewSel ) );
             pView->SetInsertMode( !pData->IsCursorOverwrite() );
 
@@ -2771,7 +2771,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     // #i107201# do the expensive SelectWord call only if online spelling is active
     EditSelection aCurWord;
     if ( GetStatus().DoOnlineSpelling() )
-        aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
+        aCurWord = SelectWord( EditSelection(aCurPaM), i18n::WordType::DICTIONARY_WORD );
 
     OUString aText(convertLineEnd(rStr, LINEEND_LF));
     if (mbFuzzing)    //tab expansion performance in editeng is appalling
@@ -2918,7 +2918,7 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const OUString& rStr )
     }
     else
     {
-        aPaM = ImpInsertText( aPaM, rStr );
+        aPaM = ImpInsertText( EditSelection(aPaM), rStr );
     }
 
     return aPaM;
@@ -3068,9 +3068,9 @@ EditPaM ImpEditEngine::InsertParaBreak(const EditSelection& rCurSel)
                 ( ( aPrevParaText[n] == ' ' ) || ( aPrevParaText[n] == '\t' ) ) )
         {
             if ( aPrevParaText[n] == '\t' )
-                aPaM = ImpInsertFeature( aPaM, SfxVoidItem( EE_FEATURE_TAB ) );
+                aPaM = ImpInsertFeature( EditSelection(aPaM), SfxVoidItem( EE_FEATURE_TAB ) );
             else
-                aPaM = ImpInsertText( aPaM, OUString(aPrevParaText[n]) );
+                aPaM = ImpInsertText( EditSelection(aPaM), OUString(aPrevParaText[n]) );
             n++;
         }
 
@@ -3998,7 +3998,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 aData >>= aSeq;
                 {
                     SvMemoryStream aODFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                    aNewSelection = Read( aODFStream, rBaseURL, EETextFormat::Xml, rPaM );
+                    aNewSelection = Read( aODFStream, rBaseURL, EETextFormat::Xml, EditSelection(rPaM) );
                 }
                 bDone = true;
             }
@@ -4023,7 +4023,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                         SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
                         SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(aHtmlStream);
                         if (pHtmlStream != nullptr) {
-                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, EditSelection(rPaM));
                         }
                     }
                     bDone = true;
@@ -4056,7 +4056,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     aData >>= aSeq;
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                        aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, rPaM );
+                        aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, EditSelection(rPaM) );
                     }
                     bDone = true;
                 }
@@ -4080,7 +4080,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     uno::Sequence<sal_Int8> aSeq;
                     aData >>= aSeq;
                     SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
-                    aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                    aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, EditSelection(rPaM));
                     bDone = true;
                 }
                 catch (const css::uno::Exception&)
@@ -4100,7 +4100,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 uno::Any aData = rxDataObj->getTransferData( aFlavor );
                 OUString aText;
                 aData >>= aText;
-                aNewSelection = ImpInsertText( rPaM, aText );
+                aNewSelection = ImpInsertText( EditSelection(rPaM), aText );
             }
             catch( ... )
             {

@@ -836,7 +836,7 @@ void ImpEditEngine::InsertView(EditView* pEditView, size_t nIndex)
 
     maEditViews.insert(maEditViews.begin()+nIndex, pEditView);
 
-    EditSelection aStartSel = maEditDoc.GetStartPaM();
+    EditSelection aStartSel( maEditDoc.GetStartPaM() );
     pEditView->getImpl().SetEditSelection( aStartSel );
     if (!mpActiveView)
         SetActiveView(pEditView);

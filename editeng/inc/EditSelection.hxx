@@ -30,7 +30,7 @@ private:
 public:
     EditSelection() = default;
 
-    EditSelection(const EditPaM& rStartAndEnd)
+    explicit EditSelection(const EditPaM& rStartAndEnd)
         : aStartPaM(rStartAndEnd)
         , aEndPaM(rStartAndEnd)
     {
