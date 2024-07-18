@@ -89,6 +89,7 @@
 #include <calbck.hxx>
 #include <fntcache.hxx>
 #include <frameformats.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
@@ -2120,9 +2121,6 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         getIDocumentContentOperations().DeleteSection( pTableNd );
     }
 
-    if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
-        pFEShell->UpdateTableStyleFormatting();
-
     getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
 }
@@ -2194,7 +2192,12 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
         if (bRet)
         {
             if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
-                pFEShell->UpdateTableStyleFormatting();
+            {
+                if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+                {
+                    pFEShell->UpdateTableStyleFormatting();
+                }
+            }
 
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -2257,7 +2260,12 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
         if (bRet)
         {
             if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
-                pFEShell->UpdateTableStyleFormatting();
+            {
+                if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+                {
+                    pFEShell->UpdateTableStyleFormatting();
+                }
+            }
 
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -3286,8 +3294,11 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     // update table style formatting of both the tables
     if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
     {
-        pFEShell->UpdateTableStyleFormatting(pTNd);
-        pFEShell->UpdateTableStyleFormatting(pNew);
+        if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+        {
+            pFEShell->UpdateTableStyleFormatting(pTNd);
+            pFEShell->UpdateTableStyleFormatting(pNew);
+        }
     }
 
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -3561,7 +3572,12 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev )
     if( bRet )
     {
         if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
-            pFEShell->UpdateTableStyleFormatting();
+        {
+            if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+            {
+                pFEShell->UpdateTableStyleFormatting();
+            }
+        }
 
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
