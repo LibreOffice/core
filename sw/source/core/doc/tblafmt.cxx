@@ -441,6 +441,16 @@ SwTableAutoFormat::~SwTableAutoFormat()
             delete *ppFormat;
 }
 
+void SwTableAutoFormat::DisableAll()
+{
+    SetFont(false);
+    SetJustify(false);
+    SetFrame(false);
+    SetBackground(false);
+    SetValueFormat(false);
+    SetWidthHeight(false);
+}
+
 void SwTableAutoFormat::SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos )
 {
     OSL_ENSURE( nPos < 16, "wrong area" );

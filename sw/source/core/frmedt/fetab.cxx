@@ -1447,6 +1447,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     if (pStyleName && pStyleName->isEmpty())
     {
         pNone.reset(new SwTableAutoFormat(SwViewShell::GetShellRes()->aStrNone));
+        pNone->DisableAll();
         pTableStyle = pNone.get();
     }
     else
