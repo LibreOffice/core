@@ -1943,8 +1943,8 @@ static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& r
     {
         // The truncated portion is a bidi portion. Bidi portions contain ordinary text, and may
         // potentially underflow in the case that none of the text fits on the current line.
-        if (auto* pPrevTextPor = dynamic_cast<SwTextPortion*>(rInf.GetLast());
-            pPrevTextPor != nullptr)
+        if (auto* pPrevPor = rInf.GetLast();
+            pPrevPor && pPrevPor->GetWhichPor() == PortionType::Text)
         {
             // Check if the start of the bidi portion is a valid break. In that case, truncating
             // the multi portion is sufficient.
@@ -1959,7 +1959,7 @@ static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& r
             {
                 // The start of the bidi portion is not a valid break. Instead, a break should be
                 // inserted into a previous text portion on this line.
-                rInf.SetUnderflow(pPrevTextPor);
+                rInf.SetUnderflow(&rMulti);
             }
         }
     }
