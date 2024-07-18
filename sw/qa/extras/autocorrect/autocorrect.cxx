@@ -11,7 +11,10 @@
 
 #include <comphelper/configuration.hxx>
 #include <docsh.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <ndtxt.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <swacorr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
@@ -19,16 +22,16 @@
 // If you want to add a test for a language that doesn't exists yet
 // copy an existing document and adapt "fo:language" and "fo:country"
 
-class SwAutoCorrect : public SwModelTestBase
+class SwAutoCorrectTest : public SwModelTestBase
 {
 public:
-    SwAutoCorrect()
+    SwAutoCorrectTest()
         : SwModelTestBase(u"/sw/qa/extras/autocorrect/data/"_ustr)
     {
     }
 };
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf92029)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf92029)
 {
     createSwDoc("nl-BE.fodt");
 
@@ -42,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf92029)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf158703)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf158703)
 {
     createSwDoc("fr-FR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -54,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf158703)
     CPPUNIT_ASSERT_EQUAL(u"Foo\u00A0:"_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf38394)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf38394)
 {
     createSwDoc("fr-FR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -65,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf38394)
     CPPUNIT_ASSERT_EQUAL(u"l\u2019« "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf132301)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf132301)
 {
     createSwDoc("fr-FR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -76,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf132301)
     CPPUNIT_ASSERT_EQUAL(u" qu\u2019« "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, tdfTdf44293)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, tdfTdf44293)
 {
     createSwDoc("pt-BR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -91,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, tdfTdf44293)
                          getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf151801)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf151801)
 {
     Resetter resetter([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -124,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf151801)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf128860)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf128860)
 {
     createSwDoc("de-DE.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -143,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf128860)
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf123786)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf123786)
 {
     createSwDoc("ru-RU.fodt");
 
@@ -169,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf123786)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf106164)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf106164)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -179,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf106164)
     CPPUNIT_ASSERT_EQUAL(u"We\u2019re "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf59666)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf59666)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -189,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf59666)
     CPPUNIT_ASSERT_EQUAL(u"\u03C0 "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf74363)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf74363)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -201,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf74363)
     CPPUNIT_ASSERT_EQUAL(u"Testing "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf155407)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf155407)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -221,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf155407)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf159797)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf159797)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -234,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf159797)
                          getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf54409)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf54409)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -253,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf54409)
     CPPUNIT_ASSERT_EQUAL(sReplaced3, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf108423)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf108423)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -268,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf108423)
     CPPUNIT_ASSERT_EQUAL(sText, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf57640)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf57640)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -280,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf57640)
     CPPUNIT_ASSERT_EQUAL(u"ǅ  "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf62923)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf62923)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -297,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf62923)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf42893)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf42893)
 {
     createSwDoc(); // Default lang is en-US
     SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
@@ -314,7 +317,91 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf42893)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf55693)
+{
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    OUString sReplaced(u"Test-Test "_ustr);
+    emulateTyping(rTextDoc, u"TEst-TEst ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    sReplaced += u"Test/Test "_ustr;
+    emulateTyping(rTextDoc, u"TEst/TEst ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    sReplaced += u"Test. Test "_ustr;
+    emulateTyping(rTextDoc, u"Test. test ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testFieldMark)
+{
+    // it's not possible to insert '\x01' with emulateTyping, use Insert instead
+    // getString also strips it out, use GetText instead
+
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+
+    // don't autocapitalize after a field mark
+    pWrtShell->Insert(u"Test. \x01 test"_ustr);
+    pWrtShell->AutoCorrect(corr, ' ');
+
+    OUString sReplaced(u"Test. \x01 test "_ustr);
+    CPPUNIT_ASSERT_EQUAL(sReplaced,
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+
+    // consider field contents as text for auto quotes
+    pWrtShell->Insert(u"T\x01"_ustr);
+    pWrtShell->AutoCorrect(corr, '"');
+
+    sReplaced += u"T\x01\u201d"_ustr;
+    CPPUNIT_ASSERT_EQUAL(sReplaced,
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testUnderlineWeight)
+{
+    Resetter resetter([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(false, pBatch);
+        officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(true, pBatch);
+    officecfg::Office::Common::AutoCorrect::ChangeUnderlineWeight::set(true, pBatch);
+    pBatch->commit();
+
+    createSwDoc(); // Default lang is en-US
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    //bold
+    OUString sReplaced(u"Foo "_ustr);
+    emulateTyping(rTextDoc, u"*foo* ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    //underline
+    sReplaced += u"foo "_ustr;
+    emulateTyping(rTextDoc, u"_foo_ ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    //italic
+    sReplaced += u"foo "_ustr;
+    emulateTyping(rTextDoc, u"/foo/ ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+
+    //strikeout
+    sReplaced += u"foo "_ustr;
+    emulateTyping(rTextDoc, u"-foo- ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf133524)
 {
     createSwDoc("hu-HU.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -347,7 +434,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf134940)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf134940)
 {
     createSwDoc("hu-HU.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -361,7 +448,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf134940)
     CPPUNIT_ASSERT_EQUAL(u" → "_ustr, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf83037)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf83037)
 {
     createSwDoc("hu-HU.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -380,7 +467,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf83037)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524_Romanian)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf133524_Romanian)
 {
     createSwDoc("ro-RO.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -412,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf133524_Romanian)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(SwAutoCorrect, testTdf158051)
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf158051)
 {
     createSwDoc("el-GR.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());

@@ -72,9 +72,6 @@ public:
     /// Test UNO service class that implements text field items.
     void testUnoTextFields();
 
-    /// AutoCorrect tests
-    void testAutocorrect();
-
     /// Test Copy/Paste with hyperlinks in text using Legacy Format
     void testHyperlinkCopyPaste();
 
@@ -139,7 +136,6 @@ public:
 #endif
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
-    CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHTMLPaste);
@@ -381,182 +377,6 @@ void Test::testUnoTextFields()
         uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, u"com.sun.star.presentation.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
-    }
-}
-
-class TestAutoCorrDoc : public SvxAutoCorrDoc
-{
-public:
-    /// just like the real thing, this dummy modifies the rText parameter :(
-    TestAutoCorrDoc(OUString& rText, LanguageType eLang)
-        : m_rText(rText)
-        , m_eLang(eLang)
-    {
-    }
-    OUString const& getResult() const { return m_rText; }
-
-private:
-    OUString& m_rText;
-    LanguageType m_eLang;
-    virtual bool Delete(sal_Int32 nStt, sal_Int32 nEnd) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
-        m_rText = m_rText.replaceAt(nStt, nEnd - nStt, u"");
-        return true;
-    }
-    virtual bool Insert(sal_Int32 nPos, const OUString& rTxt) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
-        m_rText = m_rText.replaceAt(nPos, 0, rTxt);
-        return true;
-    }
-    virtual bool Replace(sal_Int32 nPos, const OUString& rTxt) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
-        return ReplaceRange(nPos, rTxt.getLength(), rTxt);
-    }
-    virtual bool ReplaceRange(sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
-        m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
-        return true;
-    }
-    virtual void SetAttr(sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem&) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
-    }
-    virtual bool SetINetAttr(sal_Int32, sal_Int32, const OUString&) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
-        return true;
-    }
-    virtual OUString const* GetPrevPara(bool) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
-        return nullptr;
-    }
-    virtual bool ChgAutoCorrWord(sal_Int32& rSttPos, sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
-                                 OUString* pPara) override
-    {
-        //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
-
-        if (m_rText.isEmpty()) {
-            return false;
-        }
-
-        LanguageTag aLanguageTag(m_eLang);
-        sal_Int32 sttPos = rSttPos;
-        auto pStatus = rACorrect.SearchWordsInList(m_rText, sttPos, nEndPos,
-                                                   *this, aLanguageTag);
-        if (pStatus)
-        {
-            sal_Int32 minSttPos = sttPos;
-            do {
-                const SvxAutocorrWord* pFnd = pStatus->GetAutocorrWord();
-                if (pFnd && pFnd->IsTextOnly())
-                {
-                    m_rText = m_rText.replaceAt(sttPos, nEndPos, pFnd->GetLong());
-                    nEndPos = sttPos + pFnd->GetLong().getLength();
-                    if( pPara ) {
-                        pPara->clear(); // =&pCurNode->GetString();
-                    }
-                    return true;
-                }
-                if (sttPos < minSttPos) {
-                    minSttPos = sttPos;
-                }
-                sttPos = rSttPos;
-            } while (SvxAutoCorrect::SearchWordsNext(m_rText, sttPos, nEndPos,
-                                                     *pStatus));
-            rSttPos = minSttPos;
-        }
-
-        return false;
-    }
-    virtual bool TransliterateRTLWord(sal_Int32& /*rSttPos*/, sal_Int32 /*nEndPos*/,
-                                      bool /*bApply*/) override
-    {
-        return false;
-    }
-};
-
-//https://bugs.libreoffice.org/show_bug.cgi?id=55693
-//Two capitalized letters are not corrected if dash or slash are directly
-//before the two letters
-void Test::testAutocorrect()
-{
-    SvxAutoCorrect aAutoCorrect((OUString()), (OUString()));
-
-    {
-        OUString sInput(u"TEst-TEst"_ustr);
-        sal_Unicode const cNextChar(' ');
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test-Test "_ustr, aFoo.getResult());
-    }
-
-    {
-        OUString sInput(u"TEst/TEst"_ustr);
-        sal_Unicode const cNextChar(' ');
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test/Test "_ustr, aFoo.getResult());
-    }
-
-    {
-        // test auto-bolding with '*'
-        OUString sInput(u"*foo"_ustr);
-        sal_Unicode const cNextChar('*');
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-
-        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, aFoo.getResult());
-    }
-
-    {
-        OUString sInput(u"Test. test"_ustr);
-        sal_Unicode const cNextChar(' ');
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test. Test "_ustr, aFoo.getResult());
-    }
-
-    // don't autocapitalize after a field mark
-    {
-        OUString sInput(u"Test. \x01 test"_ustr);
-        sal_Unicode const cNextChar(' ');
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", u"Test. \x01 test "_ustr, aFoo.getResult());
-    }
-
-    // consider field contents as text for auto quotes
-    {
-        OUString sInput(u"T\x01"_ustr);
-        sal_Unicode const cNextChar('"');
-        static constexpr OUStringLiteral sExpected = u"T\x01\u201d";
-        bool bNbspRunNext = false;
-
-        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.SetAutoCorrFlag(ACFlags::ChgQuotes, true);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
-        fprintf(stderr, "text is %x\n", aFoo.getResult()[aFoo.getResult().getLength() - 1]);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString(sExpected), aFoo.getResult());
     }
 }
 
