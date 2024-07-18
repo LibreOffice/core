@@ -693,14 +693,14 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
         {
             vcl::Font aNewFont(aFormat.GetFont(nFontDesc));
             aNewFont.SetItalic(rFont.GetItalic());
-            aFormat.SetFont(nFontDesc, aNewFont);
+            aFormat.SetFont(nFontDesc, SmFace(aNewFont));
         }
 
         if (aFormat.GetFont(nFontDesc).GetWeight() != rFont.GetWeight())
         {
             vcl::Font aNewFont(aFormat.GetFont(nFontDesc));
             aNewFont.SetWeight(rFont.GetWeight());
-            aFormat.SetFont(nFontDesc, aNewFont);
+            aFormat.SetFont(nFontDesc, SmFace(aNewFont));
         }
 
         if (aFormat.GetFont(nFontDesc).GetFontSize() != rFont.GetFontSize())

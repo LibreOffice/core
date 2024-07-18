@@ -50,7 +50,7 @@ class SM_DLLPUBLIC SmFace final : public vcl::Font
 public:
     SmFace() :
         Font(), nBorderWidth(-1) { Impl_Init(); }
-    SmFace(const Font& rFont) :
+    explicit SmFace(const Font& rFont) :
         Font(rFont), nBorderWidth(-1) { Impl_Init(); }
     SmFace(const OUString& rName, const Size& rSize) :
         Font(rName, rSize), nBorderWidth(-1) { Impl_Init(); }

@@ -63,7 +63,7 @@ public:
 
     ~SmMlAttribute() { clearPreviousAttributeValue(); };
 
-    SmMlAttribute(SmMlAttributeValueType)
+    explicit SmMlAttribute(SmMlAttributeValueType)
         : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
         , m_bSet(false)
     {
@@ -77,7 +77,7 @@ public:
         setAttributeValue(&aMlAttribute);
     }
 
-    SmMlAttribute(const SmMlAttribute* aMlAttribute)
+    explicit SmMlAttribute(const SmMlAttribute* aMlAttribute)
         : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
         , m_bSet(aMlAttribute->isSet())
     {

@@ -2196,7 +2196,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );
         SetText( aTmp );
-        GetFont() = pSym->GetFace(&rFormat);
+        GetFont() = SmFace(pSym->GetFace(&rFormat));
 
         OUString aSymbolSetName = SmLocalizedSymbolData::GetExportSymbolSetName(pSym->GetSymbolSetName());
         if (aSymbolSetName == "Greek")

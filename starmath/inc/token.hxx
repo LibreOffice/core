@@ -171,14 +171,15 @@ struct SmColorTokenTableEntry
     {
     }
 
-    SmColorTokenTableEntry(const SmColorTokenTableEntry* amColorTokenTableEntry)
+    explicit SmColorTokenTableEntry(const SmColorTokenTableEntry* amColorTokenTableEntry)
         : aIdent(amColorTokenTableEntry->aIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)
     {
     }
 
-    SmColorTokenTableEntry(const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry)
+    explicit SmColorTokenTableEntry(
+        const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry)
         : aIdent(amColorTokenTableEntry->aIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)

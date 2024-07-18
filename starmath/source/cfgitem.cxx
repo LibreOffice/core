@@ -1042,7 +1042,7 @@ void SmMathConfig::LoadFormat()
         ++pVal;
 
         aFnt.SetFontSize( pFormat->GetBaseSize() );
-        pFormat->SetFont( i, aFnt, bUseDefaultFont );
+        pFormat->SetFont( i, SmFace(aFnt), bUseDefaultFont );
     }
 
     OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );

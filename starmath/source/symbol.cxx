@@ -49,7 +49,7 @@ SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
 {
     m_aUiName   = m_aExportName   = rName;
 
-    m_aFace     = rFont;
+    m_aFace     = SmFace(rFont);
     m_aFace.SetTransparent(true);
     m_aFace.SetAlignment(ALIGN_BASELINE);
 

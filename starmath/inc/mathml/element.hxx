@@ -34,7 +34,7 @@ public:
     /* Mathml stuff */
 
 public:
-    SmMlElement(SmMlElementType aElementType)
+    explicit SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
         , m_aText(u"\u00B6"_ustr)
         , m_aESelection(0, 0, 0, 0)

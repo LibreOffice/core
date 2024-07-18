@@ -640,14 +640,14 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
     pp->GetConfig()->GetFontPickList(FNT_SANS)     = *m_xSansFont;
     pp->GetConfig()->GetFontPickList(FNT_FIXED)    = *m_xFixedFont;
 
-    rFormat.SetFont( FNT_MATH,     m_xMathFont->Get() );
-    rFormat.SetFont( FNT_VARIABLE, m_xVariableFont->Get() );
-    rFormat.SetFont( FNT_FUNCTION, m_xFunctionFont->Get() );
-    rFormat.SetFont( FNT_NUMBER,   m_xNumberFont->Get() );
-    rFormat.SetFont( FNT_TEXT,     m_xTextFont->Get() );
-    rFormat.SetFont( FNT_SERIF,    m_xSerifFont->Get() );
-    rFormat.SetFont( FNT_SANS,     m_xSansFont->Get() );
-    rFormat.SetFont( FNT_FIXED,    m_xFixedFont->Get() );
+    rFormat.SetFont( FNT_MATH,     SmFace(m_xMathFont->Get()) );
+    rFormat.SetFont( FNT_VARIABLE, SmFace(m_xVariableFont->Get()) );
+    rFormat.SetFont( FNT_FUNCTION, SmFace(m_xFunctionFont->Get()) );
+    rFormat.SetFont( FNT_NUMBER,   SmFace(m_xNumberFont->Get()) );
+    rFormat.SetFont( FNT_TEXT,     SmFace(m_xTextFont->Get()) );
+    rFormat.SetFont( FNT_SERIF,    SmFace(m_xSerifFont->Get()) );
+    rFormat.SetFont( FNT_SANS,     SmFace(m_xSansFont->Get()) );
+    rFormat.SetFont( FNT_FIXED,    SmFace(m_xFixedFont->Get()) );
 
     rFormat.RequestApplyChanges();
 }
