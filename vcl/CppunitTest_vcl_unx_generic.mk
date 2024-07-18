@@ -51,7 +51,7 @@ $(eval $(call gb_CppunitTest_use_custom_headers,vcl_unx_generic,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_unx_generic))
 
-# Note that this is intentionally 'deny' and not 'abort', so we allow font fallback (we want to to
+# Note that this is intentionally 'deny' and not 'abort', so we allow font fallback (we want to
 # test that code), but we want predictable results, so not considering system fonts.
 $(eval $(call gb_CppunitTest_set_non_application_font_use,vcl_unx_generic,deny))
 
