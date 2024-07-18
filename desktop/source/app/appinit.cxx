@@ -46,6 +46,7 @@
 #include <map>
 
 #if defined EMSCRIPTEN
+#include <emscripten.h>
 #include <bindings_uno.hxx>
 #endif
 
@@ -89,6 +90,7 @@ void Desktop::InitApplicationServiceManager()
     comphelper::setProcessServiceFactory(sm);
 #if defined EMSCRIPTEN
     init_unoembind_uno();
+    EM_ASM(Module.uno_init$resolve(););
 #endif
 }
 
