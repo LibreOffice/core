@@ -28,7 +28,7 @@ public abstract class TileLayer extends Layer {
         return mImage;
     }
 
-    public enum PaintMode { NORMAL, REPEAT, STRETCH };
+    public enum PaintMode { NORMAL, REPEAT, STRETCH }
     private PaintMode mPaintMode;
 
     public TileLayer(CairoImage image, PaintMode paintMode) {
