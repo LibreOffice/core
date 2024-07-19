@@ -16,11 +16,14 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <vcl/scheduler.hxx>
+#include <sfx2/dispatch.hxx>
+#include <svl/stritem.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 
 #include <DrawDocShell.hxx>
 #include <unomodel.hxx>
@@ -106,6 +109,68 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsert)
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDeleteAll)
+{
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, u".uno:DeleteAllAnnotation"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->getAnnotations().size());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->getAnnotations().size());
+}
+
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDeleteAllByAuthor)
+{
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
+
+    pPage->getAnnotations().at(0)->setAuthor(u"A"_ustr);
+    pPage->getAnnotations().at(1)->setAuthor(u"A"_ustr);
+    pPage->getAnnotations().at(2)->setAuthor(u"A"_ustr);
+
+    // tdf#161899: Without the fix in place, this test would have crashed here
+    const SfxStringItem aItem(SID_DELETEALLBYAUTHOR_POSTIT, u"A"_ustr);
+    pViewShell->GetDispatcher()->ExecuteList(SID_DELETEALLBYAUTHOR_POSTIT, SfxCallMode::ASYNCHRON,
+                                             { &aItem });
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->getAnnotations().size());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->getAnnotations().size());
 }
 
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
