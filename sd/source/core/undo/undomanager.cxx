@@ -33,6 +33,7 @@ void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRep
         ClearLinkedRedoActions();
         SdrUndoManager::EnterListAction( rComment, rRepeatComment, nId, nViewShellId );
     }
+    else assert(false);
 }
 
 void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg /* = sal_False */ )
@@ -42,6 +43,7 @@ void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bT
         ClearLinkedRedoActions();
         SdrUndoManager::AddUndoAction( std::move(pAction), bTryMerg );
     }
+    else assert(false);
 }
 
 void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)

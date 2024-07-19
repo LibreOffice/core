@@ -185,6 +185,7 @@ struct SfxUndoManager_Data
     bool            mbDoing;
     bool            mbClearUntilTopLevel;
     bool            mbEmptyActions;
+    std::optional<bool> moNeedsClearRedo;
 
     UndoListeners   aListeners;
 
@@ -474,6 +475,11 @@ void SfxUndoManager::ClearAllLevels()
 
 void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
 {
+    if (IsDoing())
+    {
+        SetNeedsClearRedo(i_currentLevel);
+        return;
+    }
     UndoManagerGuard aGuard( *m_xData );
     ImplClearRedo( aGuard, i_currentLevel );
 }
@@ -486,6 +492,15 @@ void SfxUndoManager::ClearRedo()
     ImplClearRedo_NoLock( CurrentLevel );
 }
 
+const std::optional<bool>& SfxUndoManager::GetNeedsClearRedo() const
+{
+    return m_xData->moNeedsClearRedo;
+}
+
+void SfxUndoManager::SetNeedsClearRedo(const std::optional<bool>& oSet)
+{
+    m_xData->moNeedsClearRedo = oSet;
+}
 
 void SfxUndoManager::Reset()
 {
@@ -685,6 +700,8 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     assert( !IsDoing() && "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aDoingGuard( m_xData->mbDoing );
+    m_xData->mbDoing = true;
+
     LockGuard aLockGuard( *this );
 
     if ( ImplIsInListAction_Lock() )
@@ -744,6 +761,13 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
         }
         SAL_WARN("svl", "SfxUndoManager::Undo: can't clear the Undo stack after the failure - some other party was faster ..." );
         throw;
+    }
+
+    m_xData->mbDoing = false;
+    if (GetNeedsClearRedo().has_value())
+    {
+        ImplClearRedo_NoLock(*GetNeedsClearRedo());
+        SetNeedsClearRedo(std::optional<bool>());
     }
 
     aGuard.scheduleNotification( &SfxUndoListener::actionUndone, sActionComment );
@@ -810,6 +834,8 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     assert( !IsDoing() && "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aDoingGuard( m_xData->mbDoing );
+    m_xData->mbDoing = true;
+
     LockGuard aLockGuard( *this );
 
     if ( ImplIsInListAction_Lock() )
@@ -856,6 +882,8 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
         throw;
     }
 
+    m_xData->mbDoing = false;
+    assert(!GetNeedsClearRedo().has_value() && "Assuming I don't need to handle it here. What about if thrown?");
     ImplCheckEmptyActions();
     aGuard.scheduleNotification( &SfxUndoListener::actionRedone, sActionComment );
 

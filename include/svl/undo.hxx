@@ -25,6 +25,7 @@
 #include <o3tl/strong_int.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
@@ -220,6 +221,10 @@ public:
         Will assert and bail out when called while within a list action (<member>IsInListAction</member>).
     */
     virtual void            ClearRedo();
+
+    const std::optional<bool>& GetNeedsClearRedo() const;
+    void SetNeedsClearRedo(const std::optional<bool>& oSet);
+
     /** leaves any possible open list action (<member>IsInListAction</member>), and clears both the Undo and the
         Redo stack.
 

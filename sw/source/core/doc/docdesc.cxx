@@ -434,7 +434,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     {
         SwUndoId nBeingUndone(SwUndoId::EMPTY);
         GetIDocumentUndoRedo().GetFirstRedoInfo(nullptr, &nBeingUndone);
-        if (SwUndoId::HEADER_FOOTER == nBeingUndone)
+        if (SwUndoId::HEADER_FOOTER == nBeingUndone || SwUndoId::INSERT_PAGE_NUMBER == nBeingUndone)
         {
             // The last format change is currently being undone. Remove header/footer and corresponding nodes.
             SwFormatHeader aDescMasterHeaderFormat = rDesc.GetMaster().GetFormatAttr(RES_HEADER);
@@ -509,6 +509,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                 lDelHFFormat(&aDescLeftFooterFormat, aDescLeftFooterFormat.GetFooterFormat());
             else if (aDescFirstLeftFooterFormat.GetFooterFormat() && aDescFirstLeftFooterFormat != aChgedFirstLeftFooterFormat)
                 lDelHFFormat(&aDescFirstLeftFooterFormat, aDescFirstLeftFooterFormat.GetFooterFormat());
+
+            // tdf#141613 FIXME: Disable redoing header/footer changes for now.
+            // The proper solution would be to write a SwUndoHeaderFooter class
+            // to represent the addition of a header or footer to the current page.
+            GetIDocumentUndoRedo().ClearRedo();
         }
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());

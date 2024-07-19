@@ -680,12 +680,6 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 
                 for (SwViewShell& rShell : rWrtShell.GetRingContainer())
                     rShell.UnlockPaint();
-
-                // tdf#141613 FIXME: Disable redoing header/footer changes for now.
-                // The proper solution would be to write a SwUndoHeaderFooter class
-                // to represent the addition of a header or footer to the current page.
-                if (nUndoId == SwUndoId::HEADER_FOOTER)
-                    rUndoRedo.ClearRedo();
             }
             break;
 
