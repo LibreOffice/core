@@ -23,7 +23,7 @@ public class GraphicSelectionHandle extends CommonCanvasElement {
     /**
      * The factor used to inflate the hit area.
      */
-    private final float HIT_AREA_INFLATE_FACTOR = 1.75f;
+    private static final float HIT_AREA_INFLATE_FACTOR = 1.75f;
 
     private final HandlePosition mHandlePosition;
     public PointF mPosition = new PointF();
