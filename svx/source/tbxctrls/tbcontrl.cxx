@@ -2119,7 +2119,15 @@ ColorWindow::ColorWindow(OUString  rCommand,
     for (const auto& rPalette : aPaletteList)
         mxPaletteListBox->append_text(rPalette);
     mxPaletteListBox->thaw();
-    OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
+
+    // tdf#162104 If the current palette does not exist, select the equivalent to the localized "Standard" palette
+    // This is required because the names are now localized and in Common.xcs the "Standard" (in English)
+    // palette is selected by default
+    OUString aPaletteName(officecfg::Office::Common::UserColors::PaletteName::get());
+    auto it = std::find(aPaletteList.begin(), aPaletteList.end(), aPaletteName);
+    if (it == aPaletteList.end())
+        aPaletteName = SvxResId(RID_SVXSTR_COLOR_PALETTE_STANDARD);
+
     mxPaletteListBox->set_active_text(aPaletteName);
     const int nSelectedEntry(mxPaletteListBox->get_active());
     if (nSelectedEntry != -1)

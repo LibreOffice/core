@@ -3253,7 +3253,7 @@
         <info>
           <desc>Name of selected palette</desc>
         </info>
-        <value>standard</value>
+        <value>Standard</value>
       </prop>
       <prop oor:name="CustomColor" oor:type="oor:int-list" oor:nillable="false">
         <info>
