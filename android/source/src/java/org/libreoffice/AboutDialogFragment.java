@@ -81,7 +81,7 @@ public class AboutDialogFragment extends DialogFragment {
         // when privacy policy URL is set (via '--with-privacy-policy-url=<url>' autogen option),
         // add button to open that URL
         final String privacyUrl = BuildConfig.PRIVACY_POLICY_URL;
-        if (!privacyUrl.isEmpty() && privacyUrl != "undefined") {
+        if (!privacyUrl.isEmpty() && !privacyUrl.equals("undefined")) {
             builder.setNeutralButton(R.string.about_privacy_policy, (DialogInterface dialog, int id) -> {
                 Intent openPrivacyUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyUrl));
                 startActivity(openPrivacyUrlIntent);
