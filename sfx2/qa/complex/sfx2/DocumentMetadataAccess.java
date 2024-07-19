@@ -826,22 +826,6 @@ public class DocumentMetadataAccess
             ((i_Left.Second).equals(i_Right.Second));
     }
 
-    static String mkNamespace(String i_prefix, String i_namespace)
-    {
-        return "PREFIX " + i_prefix + ": <" + i_namespace + ">\n";
-    }
-
-    static String mkNss()
-    {
-        String namespaces = mkNamespace("rdf",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        namespaces += mkNamespace("pkg",
-            "http://docs.oasis-open.org/opendocument/meta/package/common#");
-        namespaces += mkNamespace("odf",
-            "http://docs.oasis-open.org/opendocument/meta/package/odf#");
-        return namespaces;
-    }
-
     Statement[] getManifestStmts(XURI xBaseURI) throws Exception
     {
         XURI xManifest = URI.createNS(xContext, xBaseURI.getStringValue(),
