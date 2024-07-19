@@ -160,7 +160,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                     pixelMode = PixelMode::DirectRead;
                     break;
                 default:
-                    config.output.colorspace = MODE_RGBA;
+                    config.output.colorspace = MODE_RGB;
                     pixelMode = PixelMode::SetPixel;
                     break;
             }
