@@ -179,6 +179,11 @@ private:
     css::uno::Reference< css::io::XStream > openStreamElementImpl(
             std::unique_lock<std::mutex>& rGuard,
             std::u16string_view aStreamName, sal_Int32 nOpenMode );
+    void copyElementToImpl(std::unique_lock<std::mutex>& rGuard,
+            std::u16string_view ElementName,
+            const css::uno::Reference< css::embed::XStorage >& xDest,
+            const OUString& rNewName);
+
     void disposeImpl(std::unique_lock<std::mutex>& rGuard);
 };
 
