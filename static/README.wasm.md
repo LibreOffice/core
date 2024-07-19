@@ -171,36 +171,6 @@ The lode setup expects, inside the lode/docker subdir, the following directories
 - cache (`ccache tree`)
 - tarballs (external project tarballs gets written and cached there)
 
-
-## Ideas for an UNO bridge implementation
-
-My post to Discord #emscripten:
-
-"I'm looking for a way to do an abstract call
-from one WASM C++ object to another WASM C++ object, so like FFI / WebIDL,
-just within WASM. All my code is C++ and normally I have bridge code, with
-assembler to implement the function call /RTTI and exception semantics of the
-specified platform. Code is at
-<https://cgit.freedesktop.org/libreoffice/core/tree/bridges/source/cpp_uno>.
-I've read a bit about `call_indirect` and stuff, but I don't have yet a good
-idea, how I could implement this (and  there is an initial feature/wasm branch
-for the interested). I probably need some fixed lookup table, like on iOS,
-because AFAIK you can't dynamically generate code in WASM. So any pointers or
-ideas for an implementation? I can disassemble some minimalistic WASM example
-and read clang code for `WASM_EmscriptenInvoke`, but if there were some
-standalone code or documentation I'm missing, that would be nice to know."
-
-We basically would go the same way then the other backends. Write the bridge in
-C++, which is probably largely boilerplate code, but the function call in WAT
-(<https://github.com/WebAssembly/wabt>) based on the LLVM WASM calling
-conventions in `WASM_EmscriptenInvoke`. I didn't get a reply to that question for
-hours. Maybe I'll open an Emscripten issue, if we really have to implement
-this.
-
-WASM dynamic dispatch:
-
-- <https://fitzgeraldnick.com/2018/04/26/how-does-dynamic-dispatch-work-in-wasm.html>
-
 ### UNO bindings with Embind
 
 Right now there's a very rough implementation in place. With lots of different
