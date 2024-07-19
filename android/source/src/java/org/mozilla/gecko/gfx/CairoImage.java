@@ -18,7 +18,6 @@ public abstract class CairoImage {
     public abstract IntSize getSize();
     public abstract int getFormat();
 
-    public static final int FORMAT_INVALID = -1;
     public static final int FORMAT_ARGB32 = 0;
     public static final int FORMAT_RGB24 = 1;
     public static final int FORMAT_A8 = 2;
