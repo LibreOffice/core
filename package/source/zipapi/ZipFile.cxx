@@ -953,18 +953,19 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     return nEnd;
 }
 
-sal_Int32 ZipFile::findEND()
+std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
 {
     // this method is called in constructor only, no need for mutex
-    sal_Int32 nLength, nPos, nEnd;
     Sequence < sal_Int8 > aBuffer;
     try
     {
-        nLength = static_cast <sal_Int32 > (aGrabber.getLength());
+        sal_Int64 const nLength = aGrabber.getLength();
         if (nLength < ENDHDR)
-            return -1;
-        nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
-        nEnd = nPos >= 0 ? nPos : 0 ;
+        {
+            throw ZipException("Zip too small!");
+        }
+        sal_Int64 nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
+        sal_Int64 nEnd = nPos >= 0 ? nPos : 0;
 
         aGrabber.seek( nEnd );
 
@@ -974,13 +975,145 @@ sal_Int32 ZipFile::findEND()
 
         const sal_Int8 *pBuffer = aBuffer.getConstArray();
 
+        sal_Int64 nEndPos = {};
         nPos = nSize - ENDHDR;
         while ( nPos >= 0 )
         {
             if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
-                return nPos + nEnd;
+            {
+                nEndPos = nPos + nEnd;
+                break;
+            }
             nPos--;
+            if (nPos == 0)
+            {
+                throw ZipException("Zip END signature not found!");
+            }
         }
+
+        aGrabber.seek(nEndPos + 4);
+        sal_uInt16 const nEndDisk = aGrabber.ReadUInt16();
+        if (nEndDisk != 0)
+        {   // only single disk is supported!
+            throw ZipException("invalid end (disk)" );
+        }
+        sal_uInt16 const nEndDirDisk = aGrabber.ReadUInt16();
+        if (nEndDirDisk != 0)
+        {
+            throw ZipException("invalid end (directory disk)" );
+        }
+        sal_uInt16 const nEndDiskEntries = aGrabber.ReadUInt16();
+        sal_uInt16 const nEndEntries = aGrabber.ReadUInt16();
+        if (nEndDiskEntries != nEndEntries)
+        {
+            throw ZipException("invalid end (entries)" );
+        }
+        sal_Int32 const nEndDirSize = aGrabber.ReadInt32();
+        sal_Int32 const nEndDirOffset = aGrabber.ReadInt32();
+
+        // Zip64 end of central directory locator must immediately precede
+        // end of central directory record
+        if (20 <= nEndPos)
+        {
+            aGrabber.seek(nEndPos - 20);
+            Sequence<sal_Int8> aZip64EndLocator;
+            aGrabber.readBytes(aZip64EndLocator, 20);
+            MemoryByteGrabber loc64Grabber(aZip64EndLocator);
+            if (loc64Grabber.ReadUInt8() == 'P'
+                && loc64Grabber.ReadUInt8() == 'K'
+                && loc64Grabber.ReadUInt8() == 6
+                && loc64Grabber.ReadUInt8() == 7)
+            {
+                sal_uInt32 const nLoc64Disk = loc64Grabber.ReadUInt32();
+                if (nLoc64Disk != 0)
+                {
+                    throw ZipException("invalid Zip64 end locator (disk)");
+                }
+                sal_Int64 const nLoc64End64Offset = loc64Grabber.ReadUInt64();
+                if (nEndPos < 20 + 56 || (nEndPos - 20 - 56) < nLoc64End64Offset
+                    || nLoc64End64Offset < 0)
+                {
+                    throw ZipException("invalid Zip64 end locator (offset)");
+                }
+                sal_uInt32 const nLoc64Disks = loc64Grabber.ReadUInt32();
+                if (nLoc64Disks != 1)
+                {
+                    throw ZipException("invalid Zip64 end locator (number of disks)");
+                }
+                aGrabber.seek(nLoc64End64Offset);
+                Sequence<sal_Int8> aZip64EndDirectory;
+                aGrabber.readBytes(aZip64EndDirectory, nEndPos - 20 - nLoc64End64Offset);
+                MemoryByteGrabber end64Grabber(aZip64EndDirectory);
+                if (end64Grabber.ReadUInt8() != 'P'
+                    || end64Grabber.ReadUInt8() != 'K'
+                    || end64Grabber.ReadUInt8() != 6
+                    || end64Grabber.ReadUInt8() != 6)
+                {
+                    throw ZipException("invalid Zip64 end (signature)");
+                }
+                sal_Int64 const nEnd64Size = end64Grabber.ReadUInt64();
+                if (nEnd64Size != nEndPos - 20 - nLoc64End64Offset - 12)
+                {
+                    throw ZipException("invalid Zip64 end (size)");
+                }
+                end64Grabber.ReadUInt16(); // ignore version made by
+                end64Grabber.ReadUInt16(); // ignore version needed to extract
+                sal_uInt32 const nEnd64Disk = end64Grabber.ReadUInt32();
+                if (nEnd64Disk != 0)
+                {
+                    throw ZipException("invalid Zip64 end (disk)");
+                }
+                sal_uInt32 const nEnd64EndDisk = end64Grabber.ReadUInt32();
+                if (nEnd64EndDisk != 0)
+                {
+                    throw ZipException("invalid Zip64 end (directory disk)");
+                }
+                sal_uInt64 const nEnd64DiskEntries = end64Grabber.ReadUInt64();
+                sal_uInt64 const nEnd64Entries = end64Grabber.ReadUInt64();
+                if (nEnd64DiskEntries != nEnd64Entries)
+                {
+                    throw ZipException("invalid Zip64 end (entries)");
+                }
+                sal_Int64 const nEnd64DirSize = end64Grabber.ReadUInt64();
+                sal_Int64 const nEnd64DirOffset = end64Grabber.ReadUInt64();
+                if (nEndEntries != sal_uInt16(-1) && nEnd64Entries != nEndEntries)
+                {
+                    throw ZipException("inconsistent Zip/Zip64 end (entries)");
+                }
+                if (o3tl::make_unsigned(nEndDirSize) != sal_uInt32(-1)
+                    && nEnd64DirSize != nEndDirSize)
+                {
+                    throw ZipException("inconsistent Zip/Zip64 end (size)");
+                }
+                if (o3tl::make_unsigned(nEndDirOffset) != sal_uInt32(-1)
+                    && nEnd64DirOffset != nEndDirOffset)
+                {
+                    throw ZipException("inconsistent Zip/Zip64 end (offset)");
+                }
+
+                sal_Int64 end;
+                if (o3tl::checked_add<sal_Int64>(nEnd64DirOffset, nEnd64DirSize, end)
+                    || nLoc64End64Offset < end
+                    || nEnd64DirOffset < 0
+                    || nLoc64End64Offset - nEnd64DirSize != nEnd64DirOffset)
+                {
+                    throw ZipException("Invalid Zip64 end (bad central directory size)");
+                }
+
+                return { nEnd64Entries, nEnd64DirSize, nEnd64DirOffset };
+            }
+        }
+
+        sal_Int32 end;
+        if (o3tl::checked_add<sal_Int32>(nEndDirOffset, nEndDirSize, end)
+            || nEndPos < end
+            || nEndDirOffset < 0
+            || nEndPos - nEndDirSize != nEndDirOffset)
+        {
+            throw ZipException("Invalid END header (bad central directory size)");
+        }
+
+        return { nEndEntries, nEndDirSize, nEndDirOffset };
     }
     catch ( IllegalArgumentException& )
     {
@@ -994,41 +1127,30 @@ sal_Int32 ZipFile::findEND()
     {
         throw ZipException("Zip END signature not found!" );
     }
-    throw ZipException("Zip END signature not found!" );
 }
 
 sal_Int32 ZipFile::readCEN()
 {
     // this method is called in constructor only, no need for mutex
-    sal_Int32 nCenPos = -1, nEndPos, nLocPos;
-    sal_uInt16 nCount;
+    sal_Int32 nCenPos = -1;
 
     try
     {
-        nEndPos = findEND();
-        if (nEndPos == -1)
-            return -1;
-        aGrabber.seek(nEndPos + ENDTOT);
-        sal_uInt16 nTotal = aGrabber.ReadUInt16();
-        sal_Int32 nCenLen = aGrabber.ReadInt32();
-        sal_Int32 nCenOff = aGrabber.ReadInt32();
-
-        if ( nTotal * CENHDR > nCenLen )
-            throw ZipException("invalid END header (bad entry count)" );
+        auto [nTotal, nCenLen, nCenOff] = findCentralDirectory();
+        nCenPos = nCenOff; // data before start of zip is not supported
 
         if ( nTotal > ZIP_MAXENTRIES )
             throw ZipException("too many entries in ZIP File" );
 
-        if ( nCenLen < 0 || nCenLen > nEndPos )
-            throw ZipException("Invalid END header (bad central directory size)" );
+        if (nCenLen < nTotal * CENHDR) // prevent overflow with ZIP_MAXENTRIES
+            throw ZipException("invalid END header (bad entry count)" );
 
-        nCenPos = nEndPos - nCenLen;
+        if (SAL_MAX_INT32 < nCenLen)
+        {
+            throw ZipException("central directory too big");
+        }
 
-        if ( nCenOff < 0 || nCenOff > nCenPos )
-            throw ZipException("Invalid END header (bad central directory size)" );
-
-        nLocPos = nCenPos - nCenOff;
-        aGrabber.seek( nCenPos );
+        aGrabber.seek(nCenPos);
         Sequence < sal_Int8 > aCENBuffer ( nCenLen );
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
         if ( static_cast < sal_Int64 > ( nCenLen ) != nRead )
@@ -1040,6 +1162,7 @@ sal_Int32 ZipFile::readCEN()
         sal_Int16 nCommentLen;
         ::std::vector<std::pair<sal_uInt64, sal_uInt64>> unallocated = { { 0, nCenPos } };
 
+        sal_Int64 nCount;
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
             sal_Int32 nTestSig = aMemGrabber.ReadInt32();
@@ -1079,8 +1202,6 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nSize = nSize;
             aEntry.nOffset = nOffset;
 
-            if (o3tl::checked_add<sal_Int64>(aEntry.nOffset, nLocPos, aEntry.nOffset))
-                throw ZipException("Integer-overflow");
             if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
                 throw ZipException("Integer-overflow");
 
