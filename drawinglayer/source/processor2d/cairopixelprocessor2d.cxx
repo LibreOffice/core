@@ -2498,7 +2498,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_fallback_decompose(
 {
     if (rFillGradientPrimitive2D.hasAlphaGradient())
     {
-        // process recursively to elliminate alpha, cannot be used in decompose fallback
+        // process recursively to eliminate alpha, cannot be used in decompose fallback
         process(rFillGradientPrimitive2D);
         return;
     }
