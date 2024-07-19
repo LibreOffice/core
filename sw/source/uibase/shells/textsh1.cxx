@@ -2023,7 +2023,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Ignore(); // the 'old' request is not relevant any more
             auto pWrtSh = &rWrtSh;
             pDlg->StartExecuteAsync(
-                [pDlg, pFieldBM, pWrtSh, xRequest] (sal_Int32 nResult)->void
+                [pDlg, pFieldBM, pWrtSh, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {
                     if (nResult == RET_OK)
                     {

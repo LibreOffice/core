@@ -3628,7 +3628,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if(aStartArrow.Count())
                         {
-                            mapCurShape->maShapePolyPoly = aStartArrow;
+                            mapCurShape->maShapePolyPoly = std::move(aStartArrow);
 
                             if( bUseElementId ) // #i124825# aElementId is optional, may be zero
                             {
@@ -3640,7 +3640,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if(aEndArrow.Count())
                         {
-                            mapCurShape->maShapePolyPoly = aEndArrow;
+                            mapCurShape->maShapePolyPoly = std::move(aEndArrow);
 
                             if( bUseElementId ) // #i124825# aElementId is optional, may be zero
                             {

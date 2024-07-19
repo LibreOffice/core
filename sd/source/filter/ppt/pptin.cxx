@@ -2703,15 +2703,15 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                                 pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
 
                                                 //--remove object from maAnimations list and add the new object instead
-                                                Ppt97AnimationPtr pAnimation;
+                                                Ppt97AnimationPtr xAnimation;
                                                 {
                                                     tAnimationMap::iterator aFound = maAnimations.find( pObj.get() );
                                                     if( aFound != maAnimations.end() )
                                                     {
-                                                        pAnimation = (*aFound).second;
+                                                        xAnimation = (*aFound).second;
                                                         maAnimations.erase(aFound);
                                                     }
-                                                    maAnimations[pMediaObj.get()] = pAnimation;
+                                                    maAnimations[pMediaObj.get()] = std::move(xAnimation);
                                                 }
 
                                                 pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list

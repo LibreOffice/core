@@ -76,7 +76,7 @@ void XStyleLoader::testLoadStylesFromStream()
     uno::Any aTmp;
     aTmp <<= xInputStream;
     aInputStream.Value = aTmp;
-    aOptions.getArray()[nLength] = aInputStream;
+    aOptions.getArray()[nLength] = std::move(aInputStream);
 
     xStyleLoader->loadStylesFromURL(u"private:stream"_ustr, aOptions);
 

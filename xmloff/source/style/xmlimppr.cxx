@@ -253,7 +253,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     if( nReference == -1 )
                         rProperties.push_back( aNewProperty );
                     else
-                        rProperties[nReference] = aNewProperty;
+                        rProperties[nReference] = std::move(aNewProperty);
                 }
                 else
                 {

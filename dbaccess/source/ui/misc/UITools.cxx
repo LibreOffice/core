@@ -1084,7 +1084,7 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
             pFallback = elem.second; // alternative
     }
     if ( !pTypeInfo ) // just a fallback
-        pTypeInfo = pFallback ? pFallback : queryTypeInfoByType(DataType::VARCHAR, _rTypeInfo);
+        pTypeInfo = pFallback ? std::move(pFallback) : queryTypeInfoByType(DataType::VARCHAR, _rTypeInfo);
 
     OSL_ENSURE(pTypeInfo,"checkColumns: can't find a type which is usable as a key!");
     return pTypeInfo;

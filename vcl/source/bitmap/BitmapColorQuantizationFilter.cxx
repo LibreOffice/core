@@ -189,7 +189,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     const MapMode aMap(aBitmap.GetPrefMapMode());
     const Size aSize(aBitmap.GetPrefSize());
 
-    aBitmap = aNewBmp;
+    aBitmap = std::move(aNewBmp);
 
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aSize);

@@ -745,7 +745,7 @@ void DAVResourceAccess::POST(
                               rOutputStream,
                               DAVRequestEnvironment(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                  aHeaders ) );
+                                  std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {

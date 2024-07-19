@@ -362,7 +362,7 @@ const std::vector< LanguageType >& LocaleDataWrapper::getInstalledLanguageTypes(
         if ( eLang != LANGUAGE_DONTKNOW )
             xLang.push_back(eLang);
     }
-    rInstalledLanguageTypes = xLang;
+    rInstalledLanguageTypes = std::move(xLang);
 
     return rInstalledLanguageTypes;
 }

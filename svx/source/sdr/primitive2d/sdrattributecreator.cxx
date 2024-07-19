@@ -791,12 +791,15 @@ namespace drawinglayer::primitive2d
             if(!aLine.isDefault() || !aText.isDefault())
             {
                 // try shadow
-                const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
-                const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
+                attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
+                attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
-                return attribute::SdrLineEffectsTextAttribute(aLine, aLineStartEnd, aShadow, aText,
-                                                              aGlow, nSoftEdgeRadius);
+                return attribute::SdrLineEffectsTextAttribute(std::move(aLine),
+                                                              std::move(aLineStartEnd),
+                                                              std::move(aShadow),
+                                                              std::move(aText),
+                                                              std::move(aGlow), nSoftEdgeRadius);
             }
 
             return attribute::SdrLineEffectsTextAttribute();
