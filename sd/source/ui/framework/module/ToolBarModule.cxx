@@ -194,13 +194,16 @@ void ToolBarModule::HandleUpdateEnd()
         // no longer visible.  This is done before the old view shell is
         // destroyed in order to avoid unnecessary updates of those tool
         // bars.
-        std::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
-        std::shared_ptr<FrameworkHelper> pFrameworkHelper (
-            FrameworkHelper::Instance(*mpBase));
-        auto pViewShell
-            = pFrameworkHelper->GetViewShell(FrameworkHelper::msCenterPaneURL);
+        if (mpBase != nullptr)
+        {
+            std::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
+            std::shared_ptr<FrameworkHelper> pFrameworkHelper (
+                FrameworkHelper::Instance(*mpBase));
+            auto pViewShell
+                = pFrameworkHelper->GetViewShell(FrameworkHelper::msCenterPaneURL);
 
-        UpdateToolbars(pViewShell.get());
+            UpdateToolbars(pViewShell.get());
+        }
     }
     // Releasing the update lock of the ToolBarManager  will let the
     // ToolBarManager with the help of the ViewShellManager take care of
