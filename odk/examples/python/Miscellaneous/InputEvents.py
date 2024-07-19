@@ -24,8 +24,8 @@ There are two families of interfaces for this, called Listeners and Handlers.
 In many cases the Handlers are easier to use and provide more flexibility. But
 sometimes it's necessary to use the Listeners, as being shown below.
 
-The Listeners usually need to be added exactly the correct widget. So this
-example adds them recursivly them to all widgets below the given one.
+The Listeners usually need to be added exactly to the correct widget. So this
+example adds them recursively them to all widgets below the given one.
 """
 
 
