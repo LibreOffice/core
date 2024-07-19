@@ -1868,49 +1868,44 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
         return 0;
 
     sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
-    if ( !static_cast<const SwRootFrame*>(pPage->GetUpper())->IsVirtPageNum() )
+    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
+    if ( !pRootFrame->IsVirtPageNum() )
         return nPhyPage;
 
     //Search the nearest section using the virtual page number.
-    //Because searching backwards needs a lot of time we search specific using
-    //the dependencies. From the PageDescs we get the attributes and from the
-    //attributes we get the sections.
-    const SwPageFrame *pVirtPage = nullptr;
-    const SwFrame *pFrame = nullptr;
-    const SfxItemPool &rPool = pPage->GetFormat()->GetDoc()->GetAttrPool();
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, RES_PAGEDESC);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    const SwFrame *pFoundFrame = nullptr;
+    const SwPageFrame* pPageFrameIter = pPage;
+    while (pPageFrameIter)
     {
-        const SwFormatPageDesc *pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
-        if ( !pDesc )
-            continue;
-
-        if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+        const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+        if (pContentFrame)
         {
-            auto pMod = pDesc->GetDefinedIn();
-            sw::VirtPageNumHint aHint(pPage);
-            pMod->CallSwClientNotify(aHint);
-            if(aHint.GetPage())
+            const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+
+            if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
             {
-                if(!pVirtPage || aHint.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum())
+                const sw::BroadcastingModify* pMod = rFormatPageDesc.GetDefinedIn();
+                sw::VirtPageNumHint aHint(pPage);
+                pMod->CallSwClientNotify(aHint);
+                if(aHint.GetPage())
                 {
-                    pVirtPage = aHint.GetPage();
-                    pFrame = aHint.GetFrame();
+                    pFoundFrame = aHint.GetFrame();
+                    break;
                 }
             }
         }
+        pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
     }
-    if ( pFrame )
+    if ( pFoundFrame )
     {
-        ::std::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
+        ::std::optional<sal_uInt16> oNumOffset = pFoundFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
-            return nPhyPage - pFrame->GetPhyPageNum() + *oNumOffset;
+            return nPhyPage - pFoundFrame->GetPhyPageNum() + *oNumOffset;
         }
         else
         {
-            return nPhyPage - pFrame->GetPhyPageNum();
+            return nPhyPage - pFoundFrame->GetPhyPageNum();
         }
     }
     return nPhyPage;
