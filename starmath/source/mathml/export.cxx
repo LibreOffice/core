@@ -803,9 +803,8 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             }
             case SmMlAttributeValueType::MlMathsize:
             {
-                auto aSizeData = aAttribute.getMlMathsize();
-                auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributeLength(XML_MATHSIZE, aLengthData);
+                auto pSizeData = aAttribute.getMlMathsize();
+                exportMlAttributeLength(XML_MATHSIZE, pSizeData->m_aLengthValue);
                 break;
             }
             case SmMlAttributeValueType::MlMathvariant:

@@ -104,7 +104,7 @@ namespace basegfx::utils
             }
 
             // provide callback as lambda
-            auto aLineCallback(
+            const auto& rLineCallback(
                 nullptr == pLineTarget
                 ? std::function<void(const basegfx::B3DPolygon&)>()
                 : [&pLineTarget](const basegfx::B3DPolygon& rSnippet){ pLineTarget->append(rSnippet); });
@@ -113,7 +113,7 @@ namespace basegfx::utils
             applyLineDashing(
                 rCandidate,
                 rDotDashArray,
-                aLineCallback,
+                rLineCallback,
                 fDotDashLength);
         }
 

@@ -548,9 +548,9 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pPoolItem))
     {
         SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pPoolItem));
-        const auto pGrabBagInner = pGrabBag->GetGrabBag();
-        const auto iter = pGrabBagInner.find(u"BackgroundFullSize"_ustr);
-        assert(iter != pGrabBagInner.end());
+        const auto& rGrabBagInner = pGrabBag->GetGrabBag();
+        const auto iter = rGrabBagInner.find(u"BackgroundFullSize"_ustr);
+        assert(iter != rGrabBagInner.end());
         if (iter->second >>= bFullSize)
         {
             if (pMasterPage->IsBackgroundFullSize() != bFullSize)

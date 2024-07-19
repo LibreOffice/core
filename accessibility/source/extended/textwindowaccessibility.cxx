@@ -1013,7 +1013,7 @@ Document::retrieveCharacterAttributes(
     std::vector<css::beans::PropertyValue> aNewValues;
     aNewValues.reserve(nLength);
     std::transform(&pIndices[0], &pIndices[nLength], std::back_inserter(aNewValues),
-        [&aRes](const sal_Int32 nIdx) { return aRes[nIdx]; });
+        [&aRes](const sal_Int32 nIdx) -> const css::beans::PropertyValue& { return aRes[nIdx]; });
 
     return comphelper::containerToSequence(aNewValues);
 }

@@ -1154,18 +1154,18 @@ sal_uInt32 SdrTextObj::GetSnapPointCount() const
 Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP;
-    auto aRectangle = getRectangle();
+    const auto& rRectangle = getRectangle();
     switch (i) {
-        case 0: aP = aRectangle.TopLeft(); break;
-        case 1: aP = aRectangle.TopRight(); break;
-        case 2: aP = aRectangle.BottomLeft(); break;
-        case 3: aP = aRectangle.BottomRight(); break;
-        default: aP = aRectangle.Center(); break;
+        case 0: aP = rRectangle.TopLeft(); break;
+        case 1: aP = rRectangle.TopRight(); break;
+        case 2: aP = rRectangle.BottomLeft(); break;
+        case 3: aP = rRectangle.BottomRight(); break;
+        default: aP = rRectangle.Center(); break;
     }
     if (maGeo.m_nShearAngle)
-        ShearPoint(aP, aRectangle.TopLeft(), maGeo.mfTanShearAngle);
+        ShearPoint(aP, rRectangle.TopLeft(), maGeo.mfTanShearAngle);
     if (maGeo.m_nRotationAngle)
-        RotatePoint(aP, aRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
+        RotatePoint(aP, rRectangle.TopLeft(), maGeo.mfSinRotationAngle, maGeo.mfCosRotationAngle);
     return aP;
 }
 
