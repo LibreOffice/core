@@ -299,7 +299,7 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                     aCategoryEntry.sClassType = sClassId;
                     aCategoryList.push_back(aCategoryEntry);
 
-                    aCurItemEntry = aCategoryEntry;
+                    aCurItemEntry = std::move(aCategoryEntry);
                 }
                 else if (sClassId == "sfxlo-PriorityMergedHBox")
                 {

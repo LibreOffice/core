@@ -1501,7 +1501,7 @@ SwXText::convertToTextFrame(
             SwPosition aBefore(aTableIdx);
             bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
             pStartPam->DeleteMark();
-            *pStartPam->GetPoint() = aBefore;
+            *pStartPam->GetPoint() = std::move(aBefore);
             pStartStartNode = pStartPam->GetPointNode().StartOfSectionNode();
         }
         if (pEndStartNode->GetStartNodeType() == SwTableBoxStartNode)
@@ -1511,7 +1511,7 @@ SwXText::convertToTextFrame(
             SwPosition aTableEnd(*pTableEnd);
             bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aTableEnd );
             pEndPam->DeleteMark();
-            *pEndPam->GetPoint() = aTableEnd;
+            *pEndPam->GetPoint() = std::move(aTableEnd);
             pEndStartNode = pEndPam->GetPointNode().StartOfSectionNode();
         }
         // now we should have the positions in the same hierarchy

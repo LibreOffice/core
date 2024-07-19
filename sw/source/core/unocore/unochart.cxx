@@ -403,7 +403,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 // HACK: remove pending actions for old style tables
                 UnoActionRemoveContext aRemoveContext(rCursor);
                 rCursor.MakeBoxSels();
-                rpUnoCursor = pUnoCursor;
+                rpUnoCursor = std::move(pUnoCursor);
             }
         }
     }

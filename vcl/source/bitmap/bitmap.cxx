@@ -1090,7 +1090,7 @@ bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColo
     const MapMode aMap(maPrefMapMode);
     const Size aSize(maPrefSize);
 
-    *this = aNewBmp;
+    *this = std::move(aNewBmp);
 
     maPrefMapMode = aMap;
     maPrefSize = aSize;

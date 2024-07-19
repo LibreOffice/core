@@ -616,7 +616,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     aRestorePos.SetContent(nMaxValidIndex);
                 }
 
-                *m_pPaM->GetPoint() = aRestorePos;
+                *m_pPaM->GetPoint() = std::move(aRestorePos);
                 break;
             }
             case ww::eIF: // IF-field

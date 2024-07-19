@@ -942,9 +942,9 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
     xNewList->Join( *pEntry, true );
 
     if (bColumn)
-        rDoc.GetColNameRangesRef() = xNewList;
+        rDoc.GetColNameRangesRef() = std::move(xNewList);
     else
-        rDoc.GetRowNameRangesRef() = xNewList;
+        rDoc.GetRowNameRangesRef() = std::move(xNewList);
 
     rDoc.CompileColRowNameFormula();
     pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );
