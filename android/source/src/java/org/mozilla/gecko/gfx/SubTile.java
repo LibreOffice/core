@@ -169,8 +169,6 @@ public class SubTile extends Layer {
 
         bindAndSetGLParameters();
 
-        IntSize bufferSize = mImage.getSize();
-
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, glInfo.internalFormat,
                 mSize.width, mSize.height, 0, glInfo.format, glInfo.type, imageBuffer);
 
