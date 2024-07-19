@@ -105,7 +105,6 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsert)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
@@ -186,7 +185,6 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), pPage->GetObjCount());
 
@@ -203,7 +201,6 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
         { "Id", uno::Any(OUString::number(xAnnotation->GetId())) },
     }));
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
@@ -224,7 +221,6 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
 
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     SdrObject* pObject = pPage->GetObj(0);
@@ -247,13 +243,13 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 1), pPage->getAnnotations().at(1)->GetId());
 
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->getAnnotations().size());
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(nID + 0), pPage->getAnnotations().at(0)->GetId());
