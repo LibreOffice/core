@@ -40,7 +40,8 @@ class PageNumberWizard(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
             self.assertIsNone(document.StyleFamilies.PageStyles.Standard.HeaderText)
-            self.assertIsNone(document.StyleFamilies.PageStyles.Standard.FooterText)
+            # FIXME: tdf#164033: Undo is disabled to avoid the crash
+            self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.FooterText)
 
             with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
                 xPositionCombo = xDialog.getChild("positionCombo")
@@ -50,11 +51,11 @@ class PageNumberWizard(UITestCase):
 
             xHeader = document.StyleFamilies.PageStyles.Standard.HeaderText.createEnumeration().nextElement()
             self.assertEqual("A", xHeader.String)
-            self.assertIsNone(document.StyleFamilies.PageStyles.Standard.FooterText)
+            self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.FooterText)
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertIsNone(document.StyleFamilies.PageStyles.Standard.HeaderText)
-            self.assertIsNone(document.StyleFamilies.PageStyles.Standard.FooterText)
+            self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.HeaderText)
+            self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.FooterText)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
