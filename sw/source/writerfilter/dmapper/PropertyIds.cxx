@@ -395,6 +395,7 @@ OUString getPropertyName( PropertyIds eId )
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
         { PROP_PAPER_TRAY, u"PrinterPaperTray"},
+        { PROP_CHAR_FONT_FAMILY, u"CharFontFamily"},
     };
     auto iterator = constPropertyMap.find(eId);
     if (iterator != constPropertyMap.end())
