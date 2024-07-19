@@ -403,7 +403,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
             if(!rFillGradient.isDefault())
             {
-                // SDPR: check early if we have a radient and a alpha
+                // SDPR: check early if we have a gradient and an alpha
                 // gradient that 'fits' in it's geometric definition
                 // so that it can be rendered as RGBA directly. If yes,
                 // create it and return early
