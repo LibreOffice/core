@@ -648,12 +648,11 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
     }
 }
 
-void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
-                                        const uno::Reference< embed::XStorage >& xDest,
-                                        const OUString& aNewName )
+void FSStorage::copyElementToImpl(std::unique_lock<std::mutex>& /*rGuard*/,
+                                  std::u16string_view aElementName,
+                                  const uno::Reference< embed::XStorage >& xDest,
+                                  const OUString& aNewName )
 {
-    std::unique_lock aGuard( m_aMutex );
-
     if ( !xDest.is() )
         throw uno::RuntimeException();
 
@@ -719,12 +718,20 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
     }
 }
 
+void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
+                                        const uno::Reference< embed::XStorage >& xDest,
+                                        const OUString& aNewName )
+{
+    std::unique_lock aGuard( m_aMutex );
+    copyElementToImpl(aGuard, aElementName, xDest, aNewName);
+}
+
 void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
     std::unique_lock aGuard( m_aMutex );
-    copyElementTo( aElementName, xDest, aNewName );
+    copyElementToImpl(aGuard, aElementName, xDest, aNewName);
 
     INetURLObject aOwnURL( m_aURL );
     aOwnURL.Append( aElementName );
