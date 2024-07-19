@@ -2371,6 +2371,7 @@
           <info>
             <desc>Contains the last path manually selected by the user for the CertDir property.</desc>
           </info>
+          <value></value>
         </prop>
         <prop oor:name="CertMgrPath" oor:type="xs:string" oor:nillable="false">
           <info>
