@@ -80,7 +80,7 @@ void Sidebar::ShowPanel (
     // - Make the deck switching asynchronous
     // - Make sure to use a context that really shows the panel
 
-    // All that is not necessary for the current use cases so lets
+    // All that is not necessary for the current use cases so let's
     // keep it simple for the time being.
     pController->OpenThenSwitchToDeck(xPanelDescriptor->msDeckId);
 
@@ -105,7 +105,7 @@ void Sidebar::TogglePanel (
     // - Make the deck switching asynchronous
     // - Make sure to use a context that really shows the panel
 
-    // All that is not necessary for the current use cases so lets
+    // All that is not necessary for the current use cases so let's
     // keep it simple for the time being.
     pController->OpenThenToggleDeck(xPanelDescriptor->msDeckId);
 }

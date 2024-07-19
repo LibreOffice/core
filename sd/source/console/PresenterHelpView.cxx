@@ -395,7 +395,7 @@ void PresenterHelpView::CheckFontSize()
         }
 
         // Use a simple linear transformation to calculate initial guess of
-        // a size that lets all help text be shown inside the window.
+        // a size that lets all help text to be shown inside the window.
         const double nScale (double(mnSeparatorY-gnVerticalBorder) / nY);
         if (nScale > 1.0 && nScale < 1.05)
             break;

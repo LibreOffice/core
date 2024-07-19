@@ -435,7 +435,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
 
     //remove all attributes and reset our standard ones
     GetOutlinerView()->GetEditView().RemoveAttribsKeepLanguages(true);
-    // lets insert an undo step so the initial text can be easily deleted
+    // let's insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
     mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     IDocumentUndoRedo & rUndoRedo(

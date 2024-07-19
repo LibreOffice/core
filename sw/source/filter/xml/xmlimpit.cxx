@@ -101,7 +101,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
         if( pEntry )
         {
-            // we have a valid map entry here, so lets use it...
+            // we have a valid map entry here, so let's use it...
             if( 0 == (pEntry->nMemberId & (MID_SW_FLAG_NO_ITEM_IMPORT|
                                        MID_SW_FLAG_ELEMENT_ITEM_IMPORT)) )
             {

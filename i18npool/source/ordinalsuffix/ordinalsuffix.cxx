@@ -114,7 +114,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
         if (!U_SUCCESS(nCode))
             continue;
 
-        // fdo#54486 lets make sure that the ordinal format and the non-ordinal
+        // fdo#54486 let's make sure that the ordinal format and the non-ordinal
         // format match at the start, so that the expectation can be verified
         // that there is some trailing "ordinal suffix" which can be extracted
         bool bSimpleOrdinalSuffix = sValueWithOrdinal.startsWith(sValueWithNoOrdinal);

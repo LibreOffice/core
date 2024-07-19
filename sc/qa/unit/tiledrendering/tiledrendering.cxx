@@ -3790,7 +3790,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Set client rect to 2000 x 2000 pixels
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
 
-    // Lets make sure we are in view #2
+    // Let's make sure we are in view #2
     SfxLokHelper::setView(nView2);
     Scheduler::ProcessEventsToIdle();
 

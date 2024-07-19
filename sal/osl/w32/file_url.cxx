@@ -750,7 +750,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
         if ( dwPathType & PATHTYPE_IS_LONGPATH )
         {
-            /* the path has the longpath prefix, lets remove it */
+            /* the path has the longpath prefix, let's remove it */
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
@@ -864,7 +864,7 @@ oslFileError SAL_CALL osl_searchFileURL(
         } while ( dwResult && dwResult >= nBufferLength );
 
         /*  ... until an error occurs or buffer is large enough.
-            dwResult == nBufferLength can not happen according to documentation but lets be robust ;-) */
+            dwResult == nBufferLength can not happen according to documentation but let's be robust ;-) */
 
         if ( dwResult )
         {

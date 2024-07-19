@@ -527,7 +527,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
             else if (nParam < 750)
                 // Values in between 1 and 250 visually closer to 0% shading (white)
                 // But this will mean "no shading" while cell actually have some.
-                // So lets use minimal available value.
+                // So let's use minimal available value.
                 nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
             else if (nParam < 1100)
                 nValue = NS_ooxml::LN_Value_ST_Shd_pct10;

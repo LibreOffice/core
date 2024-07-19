@@ -344,7 +344,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
             if (nHeaderColCount && !bFoundValuesInCol && bFoundAnythingInCol && nCol == nHeaderColCount)
             {
                 // There is no values in row, but some data. And this column is next to header
-                // So lets put it to header
+                // So let's put it to header
                 nHeaderColCount++;
             }
         }

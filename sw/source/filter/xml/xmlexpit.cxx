@@ -74,7 +74,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
     {
         SvXMLItemMapEntry const & rEntry = mrMapEntries->getByIndex( nIndex );
 
-        // we have a valid map entry here, so lets use it...
+        // we have a valid map entry here, so let's use it...
         if( 0 == (rEntry.nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
         {
             const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId );

@@ -203,7 +203,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
         // Handle other cell types e.g. formulas ( and ? ) that have associated
         // hyperlinks.
         // Ideally all hyperlinks should be treated  as below. For the moment,
-        // given the current absence of ods support lets just handle what we
+        // given the current absence of ods support let's just handle what we
         // previously didn't handle the new way.
         // Unfortunately we won't be able to preserve such hyperlinks when
         // saving to ods. Note: when we are able to save such hyperlinks to ods

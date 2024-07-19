@@ -114,7 +114,7 @@ namespace sax_fastparser {
         XmlFilterBase::openFragmentStreamWithSerializer (oox/source/core/xmlfilterbase.cxx), and it
         only passes false for bWriteHeader when the given rMediaType contains "vml" but not "+xml"
         (see <https://git.libreoffice.org/core/+/6a11add2c4ea975356cfb7bab02301788c79c904%5E!/>
-        "XLSX VML Export fixes", stating "Don't write xml headers for vml files").  But lets assume
+        "XLSX VML Export fixes", stating "Don't write xml headers for vml files").  But let's assume
         that even such Vector Markup Language files are written as UTF-8.
      */
     template<typename Int> static std::optional<std::pair<unsigned, Int>> invalidChar(

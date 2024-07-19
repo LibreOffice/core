@@ -833,7 +833,7 @@ void SwPostItMgr::LayoutPostIts()
                     }
                     else if (sal_Int32 nScrollSize = GetScrollSize())
                     {
-                        //when we changed our zoom level, the offset value can be too big, so lets check for the largest possible zoom value
+                        //when we changed our zoom level, the offset value can be too big, so let's check for the largest possible zoom value
                         tools::Long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,pPage->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
                         tools::Long lOffset = -1 * nScrollSize * (aVisiblePostItList.size() - aAvailableHeight / nScrollSize);
                         if (pPage->lOffset < lOffset)
@@ -845,7 +845,7 @@ void SwPostItMgr::LayoutPostIts()
                                        TODO
                                        - enlarge all notes till GetNextBorder(), as we resized to average value before
                                        */
-                    //lets hide the ones which overlap the page
+                    //let's hide the ones which overlap the page
                     for (auto const& visiblePostIt : aVisiblePostItList)
                     {
                         if (pPage->lOffset != 0)
@@ -1107,7 +1107,7 @@ void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const tools::ULong a
 void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
 {
     tools::Long aPage = -1;
-    // we don't know the page yet, lets find it ourselves
+    // we don't know the page yet, let's find it ourselves
     std::vector<SwPostItPageItem*>::size_type n=0;
     for (auto const& page : mPages)
     {
@@ -1881,7 +1881,7 @@ SwAnnotationWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                 return nullptr;
             }
         }
-        // lets quit, we are back at the beginning
+        // let's quit, we are back at the beginning
         if ( (*iNextPostIt)->mpPostIt == aPostIt)
             return nullptr;
         return (*iNextPostIt)->mpPostIt;
@@ -2006,7 +2006,7 @@ bool SwPostItMgr::IsHit(const Point& aPointPixel)
         return false;
 
     // we hit the note's sidebar
-    // lets now test for the arrow area
+    // let's now test for the arrow area
     SwRect aPageFrame;
     const tools::ULong nPageNum
         = SwPostItHelper::getPageInfo(aPageFrame, mpWrtShell->GetLayout(), aPoint);
