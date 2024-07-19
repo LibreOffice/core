@@ -3269,6 +3269,15 @@ SdrTextObj* DynCastSdrTextObj(SdrObject* pObj)
     return nullptr;
 }
 
+SdrOle2Obj* DynCastSdrOle2Obj(SdrObject* pObj)
+{
+    // SdrTextObj has subclasses, with lots of SdrObjKind identifiers, so use a virtual method
+    // to be safer.
+    if( pObj && pObj->IsSdrOle2Obj() )
+        return static_cast<SdrOle2Obj*>(pObj);
+    return nullptr;
+}
+
 rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier, rSdrModel };

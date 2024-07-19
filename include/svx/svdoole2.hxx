@@ -183,6 +183,8 @@ public:
 
     // #i118485# missing converter added
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+
+    virtual bool IsSdrOle2Obj() const final { return true; }
 };
 
 class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink

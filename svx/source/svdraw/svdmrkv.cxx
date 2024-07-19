@@ -2426,7 +2426,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 
     const bool bCheckIfMarkable(nOptions & SdrSearchOptions::TESTMARKABLE);
     const bool bDeep(nOptions & SdrSearchOptions::DEEP);
-    const bool bOLE(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
+    const bool bOLE(DynCastSdrOle2Obj(pObj) !=  nullptr);
     auto pTextObj = DynCastSdrTextObj( pObj);
     const bool bTXT(pTextObj && pTextObj->IsTextFrame());
     SdrObject* pRet=nullptr;

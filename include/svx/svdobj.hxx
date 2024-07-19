@@ -51,6 +51,7 @@ class SdrItemPool;
 class SdrModel;
 class SdrObjList;
 class SdrObject;
+class SdrOle2Obj;
 class SdrPage;
 class SdrPageView;
 class SdrTextObj;
@@ -768,6 +769,7 @@ public:
     void SetMarkProtect(bool bProt);
     bool IsMarkProtect() const { return m_bMarkProt;}
     virtual bool IsSdrTextObj() const { return false; }
+    virtual bool IsSdrOle2Obj() const { return false; }
     virtual bool IsTextPath() const { return false ; }
 
     /// Whether the aspect ratio should be kept by default when resizing.
@@ -1007,6 +1009,8 @@ SVXCORE_DLLPUBLIC E3dObject* DynCastE3dObject(SdrObject*);
 inline const E3dObject* DynCastE3dObject(const SdrObject* p) { return DynCastE3dObject(const_cast<SdrObject*>(p)); }
 SVXCORE_DLLPUBLIC SdrTextObj* DynCastSdrTextObj(SdrObject*);
 inline const SdrTextObj* DynCastSdrTextObj(const SdrObject* p) { return DynCastSdrTextObj(const_cast<SdrObject*>(p)); }
+SVXCORE_DLLPUBLIC SdrOle2Obj* DynCastSdrOle2Obj(SdrObject*);
+inline const SdrOle2Obj* DynCastSdrOle2Obj(const SdrObject* p) { return DynCastSdrOle2Obj(const_cast<SdrObject*>(p)); }
 
 
 struct SdrObjCreatorParams
