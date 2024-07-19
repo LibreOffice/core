@@ -160,13 +160,6 @@ public class LOEvent implements Comparable<LOEvent> {
         mPageHeight = pageHeight;
     }
 
-    public String getTypeString() {
-        if (mTypeString == null) {
-            return "Event type: " + mType;
-        }
-        return mTypeString;
-    }
-
     @Override
     public int compareTo(LOEvent another) {
         return mPriority - another.mPriority;
