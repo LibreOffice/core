@@ -11,7 +11,6 @@
 package org.libreoffice;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.Handler;
 
 public class LibreOfficeApplication extends Application {
