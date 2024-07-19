@@ -459,6 +459,9 @@ static GtkStyleProvider* CreateStyleProvider()
       "spinbutton.small-button, spinbutton.small-button entry, spinbutton.small-button button { "
       "padding: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;"
       "border-width: 0; min-height: 0; min-width: 0; }"
+      // tdf#161662 the bullet list is too tall with the Arabic text in it, remove its vert padding
+      "combobox.novertpad *.combo, box#combobox.novertpad *.combo { "
+      "padding-top: 0; padding-bottom: 0; }"
 #if GTK_CHECK_VERSION(4, 0, 0)
       // we basically assumed during dialog design that the frame's were invisible, because
       // they used to be in the default theme during gtk3

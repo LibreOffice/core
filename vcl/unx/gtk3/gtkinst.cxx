@@ -22212,6 +22212,8 @@ public:
 
         if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox)), "small-button"))
             gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(getContainer())), "small-button");
+        if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox)), "novertpad"))
+            gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(getContainer())), "novertpad");
 
         if (gtk_widget_get_has_tooltip(GTK_WIDGET(m_pComboBox)))
         {

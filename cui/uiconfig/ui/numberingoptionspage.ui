@@ -268,6 +268,10 @@
                             <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering scheme for the selected levels.</property>
                           </object>
                         </child>
+                        <style>
+                          <!-- tdf#161662 try and shrink this height to min and then use the size-group with charstyle to bring it back up to that height -->
+                          <class name="novertpad"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -858,5 +862,12 @@
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="charstyle"/>
+      <widget name="numfmtlb"/>
+    </widgets>
   </object>
 </interface>
