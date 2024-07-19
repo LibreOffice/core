@@ -1077,7 +1077,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
 
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
 
-    // Make Random ID.. cehcek if it is unique
+    // Make Random ID... check if it is unique
     // warning: possible infinite loop if there would be billions of content controls.
     SwContentControlManager& pManager = GetDoc()->GetContentControlManager();
     size_t nCCCount = pManager.GetCount();
