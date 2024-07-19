@@ -140,30 +140,36 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         return;
 
     // check the flag since the layout NEVER sets it back
-    const SfxItemPool &rPool = pDoc->GetAttrPool();
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, RES_PAGEDESC);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    for (SwRootFrame* pRootFrame : pDoc->GetAllLayouts())
     {
-        auto pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
-        if( pDesc && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+        const SwPageFrame* pPageFrameIter = pRootFrame->GetLastPage();
+        while (pPageFrameIter)
         {
-            const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
-            if( pNd )
+            const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+            if (pContentFrame)
             {
-                if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pNd).First())
-                // sw_redlinehide: not sure if this should happen only if
-                // it's the first node, because that's where RES_PAGEDESC
-                // is effective?
-                    m_bVirtual = true;
+                const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+                if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
+                {
+                    const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( rFormatPageDesc.GetDefinedIn()  );
+                    if( pNd )
+                    {
+                        if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pNd).First())
+                        // sw_redlinehide: not sure if this should happen only if
+                        // it's the first node, because that's where RES_PAGEDESC
+                        // is effective?
+                            m_bVirtual = true;
+                    }
+                    else if( dynamic_cast< const SwFormat* >(rFormatPageDesc.GetDefinedIn()) !=  nullptr)
+                    {
+                        m_bVirtual = false;
+                        sw::AutoFormatUsedHint aHint(m_bVirtual, pDoc->GetNodes());
+                        rFormatPageDesc.GetDefinedIn()->CallSwClientNotify(aHint);
+                        break;
+                    }
+                }
             }
-            else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
-            {
-                m_bVirtual = false;
-                sw::AutoFormatUsedHint aHint(m_bVirtual, pDoc->GetNodes());
-                pDesc->GetDefinedIn()->CallSwClientNotify(aHint);
-                break;
-            }
+            pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
         }
     }
 }
