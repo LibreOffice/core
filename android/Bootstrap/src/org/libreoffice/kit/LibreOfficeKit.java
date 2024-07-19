@@ -14,7 +14,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 // Native methods in this class are all implemented in
