@@ -63,11 +63,10 @@ public:
                 , m_aSubType(aSubType)
                 , m_nScale(nScale)
                 , m_sCharsetName(std::move(sCharset)) {}
-            explicit ColumnTypeInfo( short aType, OUString sCharset )
-                : m_aType(aType)
-                , m_aSubType(0)
-                , m_nScale(0)
-                , m_sCharsetName(std::move(sCharset)) {}
+            explicit ColumnTypeInfo(const XSQLVAR& var, OUString sCharset)
+                : ColumnTypeInfo(var.sqltype, var.sqlsubtype, -var.sqlscale, std::move(sCharset)) {}
+            explicit ColumnTypeInfo(const XSQLDA* pXSQLDA, sal_Int32 column, OUString sCharset = {})
+                : ColumnTypeInfo(pXSQLDA->sqlvar[column-1], std::move(sCharset)) {}
             short getType() const { return m_aType; }
             short getSubType() const { return m_aSubType; }
             short getScale() const { return m_nScale; }
