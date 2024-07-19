@@ -94,7 +94,7 @@ private:
 
     sal_uInt64 readLOC(ZipEntry &rEntry);
     sal_Int32 readCEN();
-    sal_Int32 findEND();
+    std::tuple<sal_Int64, sal_Int64, sal_Int64> findCentralDirectory();
     void HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize);
     void HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset);
     void recover();
