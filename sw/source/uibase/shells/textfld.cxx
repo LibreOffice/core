@@ -1466,6 +1466,10 @@ FIELD_INSERT:
                 rSh.EndAllAction();
                 rSh.LockView(false);
                 rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_PAGE_NUMBER, nullptr);
+
+                // avoid various ways to crash related to undo of SwPageDesc (tdf#161741, tdf#161705)
+                if (bChangePageDesc)
+                    rDoc.GetIDocumentUndoRedo().DelAllUndoObj();
             }
             pDlg->disposeOnce();
         });
