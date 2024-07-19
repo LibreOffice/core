@@ -8,7 +8,6 @@
  */
 package org.libreoffice;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;

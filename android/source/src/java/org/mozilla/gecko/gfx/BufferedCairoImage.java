@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
  * A Cairo image that simply saves a buffer of pixel data.
  */
 public class BufferedCairoImage extends CairoImage {
-    private static String LOGTAG = "GeckoBufferedCairoImage";
+    private static final String LOGTAG = "GeckoBufferedCairoImage";
     private ByteBuffer mBuffer;
     private IntSize mSize;
     private int mFormat;
