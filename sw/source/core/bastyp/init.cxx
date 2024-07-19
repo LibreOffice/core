@@ -395,7 +395,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_MARGIN_GUTTER_RIGHT, new SvxGutterRightMarginItem(RES_MARGIN_GUTTER_RIGHT), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_LR_SPACE, new SvxLRSpaceItem( RES_LR_SPACE ), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE },
             { RES_UL_SPACE, new SvxULSpaceItem( RES_UL_SPACE ), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE },
-            { RES_PAGEDESC, new SwFormatPageDesc, 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_PAGEDESC, new SwFormatPageDesc, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BREAK, new SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK), SID_ATTR_PARA_PAGEBREAK, SFX_ITEMINFOFLAG_NONE },
             { RES_CNTNT, new SwFormatContent, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_HEADER, new SwFormatHeader, 0, SFX_ITEMINFOFLAG_NONE },
