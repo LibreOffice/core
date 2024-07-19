@@ -1963,7 +1963,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
     const bool bAngle(!basegfx::fTools::equalZero(fAngle));
     const basegfx::B2DPoint aCenter(aAdaptedRange.getCenter());
 
-    // pack rotation and offset into a transformation that coverts that part
+    // pack rotation and offset into a transformation covering that part
     basegfx::B2DHomMatrix aRotation(basegfx::utils::createRotateAroundPoint(aCenter, fAngle));
 
     // create local transform to work in object coordinates based on OutputRange,
@@ -2378,7 +2378,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
     const double fOffxsetX(std::max(std::min(rFillGradient.getOffsetX(), 1.0), 0.0));
     const double fOffxsetY(std::max(std::min(rFillGradient.getOffsetY(), 1.0), 0.0));
 
-    // pack rotation and offset into a combined transformation that coverts that parts
+    // pack rotation and offset into a combined transformation covering that parts
     basegfx::B2DHomMatrix aRotAndTranslate;
     aRotAndTranslate.translate(-aCenter.getX(), -aCenter.getY());
     if (bAngle)
