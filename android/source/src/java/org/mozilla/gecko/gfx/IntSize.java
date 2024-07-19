@@ -62,10 +62,6 @@ public class IntSize {
         return value + 1;
     }
 
-    public static int nextPowerOfTwo(float value) {
-        return nextPowerOfTwo((int) value);
-    }
-
     public IntSize nextPowerOfTwo() {
         return new IntSize(nextPowerOfTwo(width), nextPowerOfTwo(height));
     }
