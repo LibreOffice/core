@@ -29,9 +29,11 @@
 
 class IntlWrapper;
 
-/** Pagedescriptor
- Client of SwPageDesc that is "described" by the attribute. */
-
+/**
+    SwFormatPageDesc ("use this page style with xyz parameters") is the wrapper
+    around SwPageDesc ("page style"),
+    multiple SwFormatPageDesc can refer to the same SwPageDesc.
+ */
 class SW_DLLPUBLIC SwFormatPageDesc final : public SfxPoolItem, public SwClient
 {
     ::std::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
