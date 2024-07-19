@@ -183,8 +183,21 @@ sal_Int32 IndexedStyleSheets::FindStyleSheetPosition(const SfxStyleSheetBase& st
 void
 IndexedStyleSheets::Clear(StyleSheetDisposer& disposer)
 {
-    for (const auto& rxStyleSheet : mStyleSheets) {
+    for (auto& rxStyleSheet : mStyleSheets) {
         disposer.Dispose(rxStyleSheet);
+
+        // tdf#161729 clear style sheets in same order as they were added
+        // std::vector::clear() appears to delete elements in the
+        // reverse order added. In the case of tdf#161729, a style
+        // sheet's SfxItemSet can have a parent SfxItemSet and that
+        // parent is the SfxItemSet for a style sheet added later.
+        // Deleting from the end of the vector deletes a style sheet
+        // and its SfxItemSet. If the now deleted SfxItemSet is a
+        // parent SfxItemSet of a style sheet that was added earlier,
+        // the style sheet added earlier will now have an SfxItemSet
+        // with its parent set to an already deleted pointer. And so
+        // a crash will occur when that earlier style sheet is deleted.
+        rxStyleSheet.clear();
     }
     mStyleSheets.clear();
     mPositionsByName.clear();
