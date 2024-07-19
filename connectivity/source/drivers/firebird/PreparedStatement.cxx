@@ -391,7 +391,6 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType*/)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
     checkParameterIndex(nIndex);
@@ -407,7 +406,6 @@ template <typename T>
 void OPreparedStatement::setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT nType)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
     checkParameterIndex(nIndex);
@@ -426,20 +424,48 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, const T& nValue, ISC_SHORT n
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 
+// Integral type setters convert transparently to bigger types
+
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
 {
     // there's no TINYINT or equivalent on Firebird,
     // so do the same as setShort
-    setValue< sal_Int16 >(nIndex, nValue, SQL_SHORT);
+    setShort(nIndex, nValue);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
 {
+    MutexGuard aGuard(m_aMutex);
+    ensurePrepared();
+
+    ColumnTypeInfo columnType{ m_pInSqlda, nIndex };
+    switch (columnType.getSdbcType())
+    {
+        case DataType::INTEGER:
+            return setValue<sal_Int32>(nIndex, nValue, columnType.getType());
+        case DataType::BIGINT:
+            return setValue<sal_Int64>(nIndex, nValue, columnType.getType());
+        case DataType::FLOAT:
+            return setValue<float>(nIndex, nValue, columnType.getType());
+        case DataType::DOUBLE:
+            return setValue<double>(nIndex, nValue, columnType.getType());
+    }
     setValue< sal_Int16 >(nIndex, nValue, SQL_SHORT);
 }
 
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 nIndex, sal_Int32 nValue)
 {
+    MutexGuard aGuard(m_aMutex);
+    ensurePrepared();
+
+    ColumnTypeInfo columnType{ m_pInSqlda, nIndex };
+    switch (columnType.getSdbcType())
+    {
+        case DataType::BIGINT:
+            return setValue<sal_Int64>(nIndex, nValue, columnType.getType());
+        case DataType::DOUBLE:
+            return setValue<double>(nIndex, nValue, columnType.getType());
+    }
     setValue< sal_Int32 >(nIndex, nValue, SQL_LONG);
 }
 
@@ -456,51 +482,35 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 nIndex, float nValue)
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     ensurePrepared();
 
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
-    short dType = (pVar->sqltype & ~1); // drop flag bit for now
-    short dSubType = pVar->sqlsubtype;
+    ColumnTypeInfo columnType{ m_pInSqlda, nIndex };
     // Assume it is a sub type of a number.
-    if(dSubType < 0 || dSubType > 2)
+    if (columnType.getSubType() < 0 || columnType.getSubType() > 2)
     {
         ::dbtools::throwSQLException(
             u"Incorrect number sub type"_ustr,
             ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
-    // firebird stores scale as a negative number
-    ColumnTypeInfo columnType{ dType, dSubType,
-        static_cast<short>(-pVar->sqlscale) };
 
     // Caller might try to set an integer type here. It makes sense to convert
     // it instead of throwing an error.
-    switch(columnType.getSdbcType())
+    switch(auto sdbcType = columnType.getSdbcType())
     {
         case DataType::SMALLINT:
-            setValue< sal_Int16 >(nIndex,
-                    static_cast<sal_Int16>(nValue),
-                    dType);
-            break;
+            return setValue(nIndex, static_cast<sal_Int16>(nValue), columnType.getType());
         case DataType::INTEGER:
-            setValue< sal_Int32 >(nIndex,
-                    static_cast<sal_Int32>(nValue),
-                    dType);
-            break;
+            return setValue(nIndex, static_cast<sal_Int32>(nValue), columnType.getType());
         case DataType::BIGINT:
-            setValue< sal_Int64 >(nIndex,
-                    static_cast<sal_Int64>(nValue),
-                    dType);
-            break;
+            return setValue(nIndex, static_cast<sal_Int64>(nValue), columnType.getType());
         case DataType::NUMERIC:
         case DataType::DECIMAL:
             // take decimal places into account, later on they are removed in makeNumericString
-            setObjectWithInfo(nIndex,Any{nValue}, columnType.getSdbcType(), columnType.getScale());
-            break;
-        default:
-            setValue< double >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
+            return setObjectWithInfo(nIndex, Any{ nValue }, sdbcType, columnType.getScale());
+        // TODO: SQL_D_FLOAT?
     }
+    setValue<double>(nIndex, nValue, SQL_DOUBLE);
 }
 
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 nIndex, const Date& rDate)
