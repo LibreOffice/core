@@ -948,8 +948,8 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
     }
     else
     {
-        // Alternative: for RGBA, resize/scale SLIGHTLY so that
-        // half pixel overlap is forced to be inside the unit range.
+        // Alternative: for RGBA, resize/scale it SLIGHTLY to force
+        // that half pixel overlap to be inside the unit range.
         // That makes the error disappear, so no clip needed, but
         // SLIGHTLY smaller.
         if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(pTarget))
@@ -1038,7 +1038,7 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
     cairo_set_source_rgb(mpRT, aHairlineColor.getRed(), aHairlineColor.getGreen(),
                          aHairlineColor.getBlue());
 
-    // set LineWidth, use cairo special cairo_set_hairline
+    // set LineWidth, use Cairo's special cairo_set_hairline
     impl_cairo_set_hairline(mpRT, getViewInformation2D());
 
     // get PathGeometry & paint it
@@ -2574,7 +2574,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
     // basegfx::BColorStops (as tooling, like isSymmetrical() or similar).
     // due to the nature of 'step'ing this also means a low number of
     // filled polygons to be drawn (no 'smooth' parts to be replicated),
-    // so this is not runtime burner by definition.
+    // so this is no runtime burner by definition.
     // Making this configurable using static bool, may be moved to settings
     // somewhere later. Do not forget to deactivate when working on 'step'ping
     // stuff in the other helpers (!)
