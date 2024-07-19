@@ -189,8 +189,15 @@ local file="$1"
         */libofficebean.so)
             allowlist="${allowlist} libjawt.so"
         ;;
+        */libcurl.so.4)
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
+        ;;
         */libpostgresql-sdbc-impllo.so)
-            allowlist="${allowlist} ${kerberosallowlist}"
+            if [ "$WITH_GSSAPI" = TRUE ]; then
+                allowlist="${allowlist} ${kerberosallowlist}"
+            fi
         ;;
         */libconfigmgrlo.so)
             if [ "$ENABLE_DCONF" = TRUE ]; then
