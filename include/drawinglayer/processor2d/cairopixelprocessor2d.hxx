@@ -37,6 +37,12 @@ class SingleLinePrimitive2D;
 class FillGradientPrimitive2D;
 class PolyPolygonRGBAGradientPrimitive2D;
 class FillGraphicPrimitive2D;
+class PolyPolygonRGBAPrimitive2D;
+}
+
+namespace basegfx
+{
+class B2DPolyPolygon;
 }
 
 namespace drawinglayer::processor2d
@@ -50,6 +56,8 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     cairo_t* mpRT;
 
     // helpers for direct paints
+    void paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                              const basegfx::BColor& rColor, double fTransparency = 0.0);
     void processPolygonHairlinePrimitive2D(
         const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);
     void processPolyPolygonColorPrimitive2D(
@@ -82,6 +90,8 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
     void processFillGraphicPrimitive2D(
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
+    void processPolyPolygonRGBAPrimitive2D(
+        const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

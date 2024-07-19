@@ -37,6 +37,7 @@
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1052,7 +1053,20 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
 void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D)
 {
-    const basegfx::B2DPolyPolygon& rPolyPolygon(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon());
+    paintPolyPoylgonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(),
+                         rPolyPolygonColorPrimitive2D.getBColor());
+}
+
+void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                                 const basegfx::BColor& rColor,
+                                                 double fTransparency)
+{
+    // transparency invalid or completely transparent, done
+    if (fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        return;
+    }
+
     const sal_uInt32 nCount(rPolyPolygon.count());
 
     if (!nCount)
@@ -1074,9 +1088,14 @@ void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     cairo_set_matrix(mpRT, &aMatrix);
 
     // determine & set color
-    const basegfx::BColor aFillColor(
-        maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
-    cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
+    const basegfx::BColor aFillColor(maBColorModifierStack.getModifiedColor(rColor));
+
+    if (!basegfx::fTools::equalZero(fTransparency))
+        cairo_set_source_rgba(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
+                              aFillColor.getBlue(), 1.0 - fTransparency);
+    else
+        cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
+                             aFillColor.getBlue());
 
     // get PathGeometry & paint it
     cairo_new_path(mpRT);
@@ -2636,6 +2655,23 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
     }
 }
 
+void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
+    const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D)
+{
+    if (!rPolyPolygonRGBAPrimitive2D.hasTransparency())
+    {
+        // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
+        paintPolyPoylgonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
+                             rPolyPolygonRGBAPrimitive2D.getBColor());
+        return;
+    }
+
+    // draw wiath alpha directly
+    paintPolyPoylgonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
+                         rPolyPolygonRGBAPrimitive2D.getBColor(),
+                         rPolyPolygonRGBAPrimitive2D.getTransparency());
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -2750,6 +2786,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processFillGradientPrimitive2D(
                 static_cast<const primitive2d::FillGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D:
+        {
+            processPolyPolygonRGBAPrimitive2D(
+                static_cast<const primitive2d::PolyPolygonRGBAPrimitive2D&>(rCandidate));
             break;
         }
 

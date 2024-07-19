@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -1210,6 +1211,20 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 Primitive3DXmlDump aPrimitive3DXmlDump;
                 aPrimitive3DXmlDump.decomposeAndWrite(rScenePrimitive2D.getChildren3D(), rWriter);
 
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D:
+            {
+                const PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D
+                    = dynamic_cast<const PolyPolygonRGBAPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("polypolygonrgba");
+                rWriter.attribute("color",
+                                  convertColorToString(rPolyPolygonRGBAPrimitive2D.getBColor()));
+                rWriter.attribute("transparence",
+                                  std::lround(100 * rPolyPolygonRGBAPrimitive2D.getTransparency()));
+                writePolyPolygon(rWriter, rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon());
                 rWriter.endElement();
                 break;
             }

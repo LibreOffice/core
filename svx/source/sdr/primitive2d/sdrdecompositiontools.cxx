@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -447,6 +448,14 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             }
             else
             {
+                if(0.0 != rFill.getTransparence())
+                {
+                    return new PolyPolygonRGBAPrimitive2D(
+                        rPolyPolygon,
+                        rFill.getColor(),
+                        rFill.getTransparence());
+                }
+
                 pNewFillPrimitive = new PolyPolygonColorPrimitive2D(
                     rPolyPolygon,
                     rFill.getColor());

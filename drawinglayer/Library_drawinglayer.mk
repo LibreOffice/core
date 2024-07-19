@@ -142,6 +142,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/PolyPolygonMarkerPrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonStrokePrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonColorPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonRGBAPrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonGradientPrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonHatchPrimitive2D \
     drawinglayer/source/primitive2d/PolyPolygonGraphicPrimitive2D \
