@@ -696,18 +696,24 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
         {
             SwFindNearestNode aInfo( *pNd );
             // Over all Nodes of all PageDescs
-            ItemSurrogates aSurrogates;
-            rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_PAGEDESC);
-            for (const SfxPoolItem* pItem : aSurrogates)
+            for (SwRootFrame* pRootFrame : const_cast<SwDoc&>(rDoc).GetAllLayouts())
             {
-                auto pPageDescItem = dynamic_cast<const SwFormatPageDesc*>(pItem);
-                if( pPageDescItem && pPageDescItem->GetDefinedIn() )
+                const SwPageFrame* pPageFrameIter = pRootFrame->GetLastPage();
+                while (pPageFrameIter)
                 {
-                    const sw::BroadcastingModify* pMod = pPageDescItem->GetDefinedIn();
-                    if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
-                        aInfo.CheckNode( *pContentNode );
-                    else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
-                        pFormat->GetInfo( aInfo );
+                    const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+                    if (pContentFrame)
+                    {
+                        const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+                        if ( const sw::BroadcastingModify* pMod = rFormatPageDesc.GetDefinedIn() )
+                        {
+                            if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
+                                aInfo.CheckNode( *pContentNode );
+                            else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
+                                pFormat->GetInfo( aInfo );
+                        }
+                    }
+                    pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
                 }
             }
 
