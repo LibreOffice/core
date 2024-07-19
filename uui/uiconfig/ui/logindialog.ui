@@ -90,13 +90,13 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">9</property>
+                <property name="top-attach">8</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="remember">
-                <property name="label" translatable="yes" context="logindialog|remember">_Remember password</property>
+                <property name="label" translatable="yes" context="logindialog|remember">_Remember credentials</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -105,7 +105,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">9</property>
                 <property name="width">2</property>
               </packing>
             </child>
