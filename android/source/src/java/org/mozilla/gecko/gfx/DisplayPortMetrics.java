@@ -47,17 +47,6 @@ public final class DisplayPortMetrics {
             && FloatUtils.fuzzyEquals(mResolution, metrics.mResolution);
     }
 
-    public String toJSON() {
-        StringBuffer sb = new StringBuffer(256);
-        sb.append("{ \"left\": ").append(mPosition.left)
-          .append(", \"top\": ").append(mPosition.top)
-          .append(", \"right\": ").append(mPosition.right)
-          .append(", \"bottom\": ").append(mPosition.bottom)
-          .append(", \"resolution\": ").append(mResolution)
-          .append('}');
-        return sb.toString();
-    }
-
     @Override
     public String toString() {
         return "DisplayPortMetrics v=(" + mPosition.left + ","
