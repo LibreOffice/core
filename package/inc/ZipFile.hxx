@@ -94,7 +94,7 @@ private:
 
     sal_uInt64 readLOC(ZipEntry &rEntry);
     sal_Int32 readCEN();
-    sal_Int32 findEND();
+    std::tuple<sal_Int64, sal_Int64, sal_Int64> findCentralDirectory();
     void recover();
     static bool readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
                                 sal_uInt64/*&*/ nSize, sal_uInt64/*&*/ nCompressedSize,
