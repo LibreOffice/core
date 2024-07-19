@@ -418,6 +418,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (m_pImpl->GetTopContext())
             {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::Any( sStringValue ));
+
+                // Set the matching font family if we have one.
+                FontEntry::Pointer_t pFontEntry = m_pImpl->GetFontTable()->getFontEntryByName(sStringValue);
+                if (pFontEntry)
+                {
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_FAMILY,
+                                                     uno::Any(pFontEntry->m_nFontFamily));
+                }
             }
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:

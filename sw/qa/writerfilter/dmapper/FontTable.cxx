@@ -9,6 +9,10 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <com/sun/star/awt/FontFamily.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+
 #include <vcl/embeddedfontshelper.hxx>
 
 using namespace com::sun::star;
@@ -56,6 +60,38 @@ CPPUNIT_TEST_FIXTURE(Test, testSubsettedFullEmbeddedFont)
     // glyphs:
     CPPUNIT_ASSERT(!aUrl.isEmpty());
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontFamily)
+{
+    // Given a document with 2 paragraphs, first is sans, second is serif:
+    // When loading that document:
+    loadFromFile(u"font-family.docx");
+
+    // Then make sure we import <w:family w:val="...">:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    // First paragraph: sans.
+    uno::Reference<container::XEnumerationAccess> xPortionEnumAccess(xParaEnum->nextElement(),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPortionEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int16 nFontFamily = awt::FontFamily::DONTKNOW;
+    xPortion->getPropertyValue(u"CharFontFamily"_ustr) >>= nFontFamily;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5 (SWISS)
+    // - Actual  : 3 (ROMAN)
+    // i.e. the font family was not imported, all font family was roman.
+    CPPUNIT_ASSERT_EQUAL(awt::FontFamily::SWISS, nFontFamily);
+    // Second paragraph: serif.
+    xPortionEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPortionEnum = xPortionEnumAccess->createEnumeration();
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    nFontFamily = awt::FontFamily::DONTKNOW;
+    xPortion->getPropertyValue(u"CharFontFamily"_ustr) >>= nFontFamily;
+    CPPUNIT_ASSERT_EQUAL(awt::FontFamily::ROMAN, nFontFamily);
 }
 }
 
