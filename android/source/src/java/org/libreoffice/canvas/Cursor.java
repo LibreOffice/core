@@ -13,7 +13,6 @@ public class Cursor extends CommonCanvasElement {
     private final Paint mCursorPaint = new Paint();
     public RectF mPosition = new RectF();
     public RectF mScaledPosition = new RectF();
-    public int mAlpha = 0;
 
     /**
      * Construct the cursor and set the default values.
