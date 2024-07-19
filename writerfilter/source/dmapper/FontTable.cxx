@@ -136,7 +136,21 @@ void FontTable::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_Font_panose1:
             break;
         case NS_ooxml::LN_CT_Font_family:
+        {
+            Value::Pointer_t pValue = rSprm.getValue();
+            sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
+            // Map OOXML's ST_FontFamily to UNO's awt::FontFamily.
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_ST_FontFamily_roman:
+                    m_pImpl->pCurrentEntry->m_nFontFamily = awt::FontFamily::ROMAN;
+                    break;
+                case NS_ooxml::LN_Value_ST_FontFamily_swiss:
+                    m_pImpl->pCurrentEntry->m_nFontFamily = awt::FontFamily::SWISS;
+                    break;
+            }
             break;
+        }
         case NS_ooxml::LN_CT_Font_sig:
             break;
         case NS_ooxml::LN_CT_Font_notTrueType:
@@ -227,6 +241,19 @@ FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 sal_uInt32 FontTable::size()
 {
     return m_pImpl->aFontEntries.size();
+}
+
+FontEntry::Pointer_t FontTable::getFontEntryByName(std::u16string_view rName)
+{
+    for (const auto& pEntry : m_pImpl->aFontEntries)
+    {
+        if (pEntry->sFontName == rName)
+        {
+            return pEntry;
+        }
+    }
+
+    return nullptr;
 }
 
 bool FontTable::IsReadOnly() const
