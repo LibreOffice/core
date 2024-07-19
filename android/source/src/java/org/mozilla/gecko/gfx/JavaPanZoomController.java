@@ -7,7 +7,6 @@ package org.mozilla.gecko.gfx;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.InputDevice;

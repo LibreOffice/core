@@ -4,8 +4,6 @@ import android.opengl.GLSurfaceView;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.microedition.khronos.opengles.GL10;
-
 /**
  * Thread which controls the rendering to OpenGL context. Render commands are queued and
  * processed and delegated by this thread.
