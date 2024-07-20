@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
     needed, so no changes have to be done to any primitive processor.
 
     OTOH e.g. SDPR implementations *may* use this directly if they
-    are capable to draw a filled PolyPoylgon with transparency
+    are capable to draw a filled PolyPolygon with transparency
     directly (e.g. CairoPixelProcessor2D)
  */
 class DRAWINGLAYER_DLLPUBLIC PolyPolygonRGBAPrimitive2D final
