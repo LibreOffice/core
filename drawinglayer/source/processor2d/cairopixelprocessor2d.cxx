@@ -1212,74 +1212,119 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
     aContent.process(rInvertCandidate.getChildren());
     cairo_surface_flush(pContent);
 
-    // get read access to target - XOR unfortunately needs that
-    cairo_surface_t* pRenderTarget(pTarget);
+    // decide if to use builtin or create XOR yourself
+    // NOTE: not using and doing self is closer to what the
+    //       current default does, so keep it
+    static bool bUseBuiltinXOR(false);
 
-    if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pRenderTarget))
+    if (!bUseBuiltinXOR)
     {
-        pRenderTarget = cairo_surface_map_to_image(pRenderTarget, nullptr);
-    }
+        // get read access to target - XOR unfortunately needs that
+        cairo_surface_t* pRenderTarget(pTarget);
 
-    // iterate over pre-rendered pContent, call Dst due to being changed
-    const sal_uInt32 nDstWidth(cairo_image_surface_get_width(pContent));
-    const sal_uInt32 nDstHeight(cairo_image_surface_get_height(pContent));
-    const sal_uInt32 nDstStride(cairo_image_surface_get_stride(pContent));
-    unsigned char* pDstDataRoot(cairo_image_surface_get_data(pContent));
-
-    // in parallel, iterate over Src data
-    const sal_uInt32 nSrcOffX(floor(aVisibleRange.getMinX()));
-    const sal_uInt32 nSrcOffY(floor(aVisibleRange.getMinY()));
-    const sal_uInt32 nSrcStride(cairo_image_surface_get_stride(pRenderTarget));
-    unsigned char* pSrcDataRoot(cairo_image_surface_get_data(pRenderTarget));
-
-    if (nullptr != pDstDataRoot && nullptr != pSrcDataRoot)
-    {
-        for (sal_uInt32 y(0); y < nDstHeight; ++y)
+        if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pRenderTarget))
         {
-            // get mem locations
-            unsigned char* pDstData(pDstDataRoot + (nDstStride * y));
-            unsigned char* pSrcData(pSrcDataRoot + (nSrcStride * (y + nSrcOffY)) + (nSrcOffX * 4));
-
-            for (sal_uInt32 x(0); x < nDstWidth; ++x)
-            {
-                // do not forget pre-multiply -> need to get both alphas
-                sal_uInt8 nSrcAlpha(pSrcData[SVP_CAIRO_ALPHA]);
-                sal_uInt8 nDstAlpha(pDstData[SVP_CAIRO_ALPHA]);
-
-                // create XOR r,g,b
-                const sal_uInt8 b(
-                    vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_BLUE])
-                    ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_BLUE]));
-                const sal_uInt8 g(
-                    vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_GREEN])
-                    ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_GREEN]));
-                const sal_uInt8 r(vcl::bitmap::unpremultiply(nDstAlpha, pDstData[SVP_CAIRO_RED])
-                                  ^ vcl::bitmap::unpremultiply(nSrcAlpha, pSrcData[SVP_CAIRO_RED]));
-
-                // write back
-                pDstData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nDstAlpha, b);
-                pDstData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nDstAlpha, g);
-                pDstData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nDstAlpha, r);
-
-                // advance memory
-                pSrcData += 4;
-                pDstData += 4;
-            }
+            pRenderTarget = cairo_surface_map_to_image(pRenderTarget, nullptr);
         }
 
-        cairo_surface_mark_dirty(pContent);
+        // iterate over pre-rendered pContent (call it Front)
+        const sal_uInt32 nFrontWidth(cairo_image_surface_get_width(pContent));
+        const sal_uInt32 nFrontHeight(cairo_image_surface_get_height(pContent));
+        const sal_uInt32 nFrontStride(cairo_image_surface_get_stride(pContent));
+        unsigned char* pFrontDataRoot(cairo_image_surface_get_data(pContent));
+
+        // in parallel, iterate over original data (call it Back)
+        const sal_uInt32 nBackOffX(floor(aVisibleRange.getMinX()));
+        const sal_uInt32 nBackOffY(floor(aVisibleRange.getMinY()));
+        const sal_uInt32 nBackStride(cairo_image_surface_get_stride(pRenderTarget));
+        unsigned char* pBackDataRoot(cairo_image_surface_get_data(pRenderTarget));
+
+        if (nullptr != pFrontDataRoot && nullptr != pBackDataRoot)
+        {
+            for (sal_uInt32 y(0); y < nFrontHeight; ++y)
+            {
+                // get mem locations
+                unsigned char* pFrontData(pFrontDataRoot + (nFrontStride * y));
+                unsigned char* pBackData(pBackDataRoot + (nBackStride * (y + nBackOffY))
+                                         + (nBackOffX * 4));
+
+                for (sal_uInt32 x(0); x < nFrontWidth; ++x)
+                {
+                    // do not forget pre-multiply -> need to get both alphas
+                    const sal_uInt8 nBackAlpha(pBackData[SVP_CAIRO_ALPHA]);
+                    const sal_uInt8 nFrontAlpha(pFrontData[SVP_CAIRO_ALPHA]);
+
+                    // only something to do if not fully transparent
+                    if (0 != nFrontAlpha)
+                    {
+                        sal_uInt8 nFrontB(pFrontData[SVP_CAIRO_BLUE]);
+                        sal_uInt8 nFrontG(pFrontData[SVP_CAIRO_GREEN]);
+                        sal_uInt8 nFrontR(pFrontData[SVP_CAIRO_RED]);
+
+                        if (255 != nFrontAlpha)
+                        {
+                            nFrontB = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontB);
+                            nFrontG = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontG);
+                            nFrontR = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontR);
+                        }
+
+                        sal_uInt8 nBackB(pBackData[SVP_CAIRO_BLUE]);
+                        sal_uInt8 nBackG(pBackData[SVP_CAIRO_GREEN]);
+                        sal_uInt8 nBackR(pBackData[SVP_CAIRO_RED]);
+
+                        if (255 != nBackAlpha)
+                        {
+                            nBackB = vcl::bitmap::unpremultiply(nBackAlpha, nBackB);
+                            nBackG = vcl::bitmap::unpremultiply(nBackAlpha, nBackG);
+                            nBackR = vcl::bitmap::unpremultiply(nBackAlpha, nBackR);
+                        }
+
+                        // create XOR r,g,b
+                        const sal_uInt8 b(nFrontB ^ nBackB);
+                        const sal_uInt8 g(nFrontG ^ nBackG);
+                        const sal_uInt8 r(nFrontR ^ nBackR);
+
+                        // write back
+                        if (255 == nFrontAlpha)
+                        {
+                            pFrontData[SVP_CAIRO_BLUE] = b;
+                            pFrontData[SVP_CAIRO_GREEN] = g;
+                            pFrontData[SVP_CAIRO_RED] = r;
+                        }
+                        else
+                        {
+                            pFrontData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nFrontAlpha, b);
+                            pFrontData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nFrontAlpha, g);
+                            pFrontData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nFrontAlpha, r);
+                        }
+                    }
+
+                    // advance memory
+                    pBackData += 4;
+                    pFrontData += 4;
+                }
+            }
+
+            cairo_surface_mark_dirty(pContent);
+        }
+
+        if (pRenderTarget != pTarget)
+        {
+            // cleanup mapping for read access to target
+            cairo_surface_unmap_image(pTarget, pRenderTarget);
+        }
     }
 
-    if (pRenderTarget != pTarget)
-    {
-        // cleanup mapping for read access to target
-        cairo_surface_unmap_image(pTarget, pRenderTarget);
-    }
-
-    // draw created XOR to target
+    // draw XOR to target
     cairo_set_source_surface(mpRT, pContent, aVisibleRange.getMinX(), aVisibleRange.getMinY());
     cairo_rectangle(mpRT, aVisibleRange.getMinX(), aVisibleRange.getMinY(),
                     aVisibleRange.getWidth(), aVisibleRange.getHeight());
+
+    if (bUseBuiltinXOR)
+    {
+        cairo_set_operator(mpRT, CAIRO_OPERATOR_XOR);
+    }
+
     cairo_fill(mpRT);
 
     // cleanup temporary surface
