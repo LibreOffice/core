@@ -1460,8 +1460,9 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     return m_sDefaultParaStyleName;
 }
 
-uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* pIsDocDefault)
+uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, const StyleSheetEntryPtr& pInitEntry, const bool bDocDefaults, const bool bPara, bool* pIsDocDefault)
 {
+    StyleSheetEntryPtr pEntry = pInitEntry;
     while(pEntry)
     {
         if(pEntry->m_pProperties)
