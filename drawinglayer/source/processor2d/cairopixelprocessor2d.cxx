@@ -2666,7 +2666,7 @@ void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
         return;
     }
 
-    // draw wiath alpha directly
+    // draw with alpha directly
     paintPolyPoylgonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
                          rPolyPolygonRGBAPrimitive2D.getBColor(),
                          rPolyPolygonRGBAPrimitive2D.getTransparency());
