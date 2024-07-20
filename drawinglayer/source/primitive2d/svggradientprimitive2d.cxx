@@ -27,6 +27,7 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -65,39 +66,40 @@ namespace drawinglayer::primitive2d
 {
         Primitive2DReference SvgGradientHelper::createSingleGradientEntryFill() const
         {
-            const SvgGradientEntryVector& rEntries = getGradientEntries();
+            const SvgGradientEntryVector& rEntries(getGradientEntries());
             const sal_uInt32 nCount(rEntries.size());
 
-            if(nCount)
+            if(0 == nCount)
             {
-                const SvgGradientEntry& rSingleEntry = rEntries[nCount - 1];
-                const double fOpacity(rSingleEntry.getOpacity());
-
-                if(fOpacity > 0.0)
-                {
-                    Primitive2DReference xRef(
-                        new PolyPolygonColorPrimitive2D(
-                            getPolyPolygon(),
-                            rSingleEntry.getColor()));
-
-                    if(fOpacity < 1.0)
-                    {
-                        Primitive2DContainer aContent { xRef };
-
-                        xRef =
-                            new UnifiedTransparencePrimitive2D(
-                                std::move(aContent),
-                                1.0 - fOpacity);
-                    }
-
-                    return xRef;
-                }
-            }
-            else
-            {
+                // no entries, done
                 OSL_ENSURE(false, "Single gradient entry construction without entry (!)");
+                return nullptr;
             }
-            return nullptr;
+
+            const SvgGradientEntry& rSingleEntry(rEntries[nCount - 1]);
+            const double fOpacity(rSingleEntry.getOpacity());
+
+            if (basegfx::fTools::lessOrEqual(fOpacity, 0.0))
+            {
+                // completely opaque, done
+                return nullptr;
+            }
+
+            if (basegfx::fTools::moreOrEqual(fOpacity, 1.0))
+            {
+                // no opacity
+                return Primitive2DReference {
+                    new PolyPolygonColorPrimitive2D(
+                        getPolyPolygon(),
+                        rSingleEntry.getColor()) };
+            }
+
+            // if transparent, use PolyPolygonRGBAPrimitive2D
+            return Primitive2DReference {
+                new PolyPolygonRGBAPrimitive2D(
+                    getPolyPolygon(),
+                    rSingleEntry.getColor(),
+                    1.0 - fOpacity) };
         }
 
         void SvgGradientHelper::checkPreconditions()

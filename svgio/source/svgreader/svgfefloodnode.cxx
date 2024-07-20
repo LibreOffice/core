@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svgfefloodnode.hxx>
 #include <o3tl/string_view.hxx>
@@ -143,22 +143,25 @@ void SvgFeFloodNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     const double fX(maX.solve(*this, NumberType::xcoordinate));
     const double fY(maY.solve(*this, NumberType::ycoordinate));
     const basegfx::B2DRange aRange(fX, fY, fX + fWidth, fY + fHeight);
-
-    drawinglayer::primitive2d::Primitive2DReference xRef(
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
-            maFloodColor.getBColor()));
-
-    rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
-
     const double fOpacity(maFloodOpacity.solve(*this));
 
-    if (basegfx::fTools::less(fOpacity, 1.0))
+    if (basegfx::fTools::moreOrEqual(fOpacity, 1.0))
     {
-        xRef = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(rTarget),
-                                                                             1.0 - fOpacity);
-
-        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+        // no transparence
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
+                maFloodColor.getBColor())
+        };
+    }
+    else
+    {
+        // transparence
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
+                maFloodColor.getBColor(), 1.0 - fOpacity)
+        };
     }
 
     pParent->addGraphicSourceToMapper(maResult, rTarget);

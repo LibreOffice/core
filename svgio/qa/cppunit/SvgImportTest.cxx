@@ -325,12 +325,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeFlood)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/filterFeFlood.svg");
 
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence"_ostr, "transparence"_ostr, u"50"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor"_ostr, "color"_ostr, u"#008000"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon"_ostr, "height"_ostr, u"100"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon"_ostr, "width"_ostr, u"100"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon"_ostr, "minx"_ostr, u"50"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence/polypolygoncolor/polypolygon"_ostr, "miny"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba"_ostr, "transparence"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba"_ostr, "color"_ostr, u"#008000"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba/polypolygon"_ostr, "height"_ostr, u"100"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba/polypolygon"_ostr, "width"_ostr, u"100"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba/polypolygon"_ostr, "minx"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonrgba/polypolygon"_ostr, "miny"_ostr, u"50"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeDropShadow)
@@ -618,8 +618,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155932)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf155932.svg");
 
-    assertXPath(pDocument, "/primitive2D/transform/mask/mask/unifiedtransparence"_ostr, "transparence"_ostr, u"50"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/mask/mask/unifiedtransparence[1]/polypolygoncolor"_ostr, "color"_ostr, u"#0000ff"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/polypolygonrgba"_ostr, "transparence"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/polypolygonrgba[1]"_ostr, "color"_ostr, u"#0000ff"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf97717)
@@ -1050,8 +1050,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155814)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf155814.svg");
 
-    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/unifiedtransparence"_ostr, "transparence"_ostr, u"50"_ustr);
-    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/unifiedtransparence/polypolygoncolor"_ostr, "color"_ostr, u"#0000ff"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/polypolygonrgba"_ostr, "transparence"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/mask/mask/transform/polypolygonrgba"_ostr, "color"_ostr, u"#0000ff"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClipPathAndStyle)
@@ -1136,7 +1136,7 @@ CPPUNIT_TEST_FIXTURE(Test, test123926)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf123926.svg");
 
-    assertXPath(pDocument, "/primitive2D/transform/transform/transform/unifiedtransparence/polypolygoncolor"_ostr, "color"_ostr, u"#7cb5ec"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygonrgba"_ostr, "color"_ostr, u"#7cb5ec"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test47446)
@@ -1370,7 +1370,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155733)
     // Without the fix in place, the softedge would have been applied to the second element
     // - Expected: 1
     // - Actual  : 0
-    assertXPath(pDocument, "/primitive2D/transform/transform/unifiedtransparence"_ostr, "transparence"_ostr, u"50"_ustr);
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonrgba"_ostr, "transparence"_ostr, u"50"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158445)

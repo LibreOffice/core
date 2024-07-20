@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <svggradientnode.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
@@ -607,7 +608,7 @@ namespace svgio::svgreader
             if(!(pFill || pFillGradient || pFillPattern))
                 return;
 
-            const double fFillOpacity(getFillOpacity().solve(mrOwner));
+            double fFillOpacity(getFillOpacity().solve(mrOwner));
 
             if(!basegfx::fTools::more(fFillOpacity, 0.0))
                 return;
@@ -627,10 +628,23 @@ namespace svgio::svgreader
             else // if(pFill)
             {
                 // create fill content
-                aNewFill.push_back(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                    rPath,
-                    *pFill));
+                if(basegfx::fTools::moreOrEqual(fFillOpacity, 1.0))
+                {
+                    // no transparence
+                    aNewFill.push_back(
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            rPath, *pFill));
+                }
+                else
+                {
+                    // transparence
+                    aNewFill.push_back(
+                        new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
+                            rPath, *pFill, 1.0 - fFillOpacity));
+
+                    // do not embed  again below
+                    fFillOpacity = 1.0;
+                }
             }
 
             if(aNewFill.empty())

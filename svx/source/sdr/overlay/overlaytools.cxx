@@ -31,6 +31,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -327,17 +328,20 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                 aPolyPolygon.append(aInnerPolygon);
 
                 // create fill primitive
-                aRetval =
-                    new PolyPolygonColorPrimitive2D(
+                if (basegfx::fTools::lessOrEqual(getTransparence(), 0.0))
+                {
+                    // no transparence
+                    aRetval = new PolyPolygonColorPrimitive2D(
                         std::move(aPolyPolygon),
                         getColor());
-
-                // embed filled to transparency (if used)
-                if(getTransparence() > 0.0)
+                }
+                else
                 {
-                    aRetval = new UnifiedTransparencePrimitive2D(
-                                Primitive2DContainer { std::move(aRetval) },
-                                getTransparence());
+                    // transparence
+                    aRetval = new PolyPolygonRGBAPrimitive2D(
+                        std::move(aPolyPolygon),
+                        getColor(),
+                        getTransparence());
                 }
             }
             else

@@ -31,6 +31,7 @@
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
@@ -683,14 +684,11 @@ namespace emfplushelper
         }
         else
         {
-            const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            polygon,
-                            color.getBColor()));
-
+            // transparent
             mrTargetHolders.Current().append(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
+                        new drawinglayer::primitive2d::PolyPolygonRGBAPrimitive2D(
+                            polygon,
+                            color.getBColor(),
                             (255 - color.GetAlpha()) / 255.0));
         }
     }
