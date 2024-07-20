@@ -152,6 +152,9 @@ void OStatementBase::disposing()
         catch(RuntimeException& )
         {// don't care for anymore
         }
+        catch (SQLException&)
+        {// don't care for anymore
+        }
     }
     m_xAggregateAsSet = nullptr;
 
