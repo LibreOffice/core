@@ -1026,12 +1026,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         else
             aNewFont.SetFillColor(rSettings.GetDeactiveColor());
 
-        Color aTextColor(rSettings.GetTabTextColor());
-        if (bSelected)
-            aTextColor = rSettings.GetTabHighlightTextColor();
-        else if (bMouseHovered)
-            aTextColor = rSettings.GetTabRolloverTextColor();
-        aNewFont.SetColor(aTextColor);
+        aNewFont.SetColor(rSettings.GetTabHighlightTextColor());
 
         rRenderContext.SetFont(aNewFont);
 
