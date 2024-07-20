@@ -96,4 +96,5 @@
     <string name="compress_photo_medium_size">普通サイズ</string>
     <string name="compress_photo_no_compress">圧縮しない</string>
     <string name="compress_photo_title">写真を圧縮しますか？</string>
+    <string name="pref_developer_mode">開発者モード</string>
 </resources>
