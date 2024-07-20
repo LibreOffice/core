@@ -136,7 +136,7 @@ private:
     sal_Int32          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
                                      const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_Int32 nIndexOne, sal_Int32 nIndexTwo );
-    void                PropertyChanged( const css::beans::PropertyChangeEvent& rEvt );
+    void               PropertyChangedImpl(std::unique_lock<std::mutex>& rGuard, const css::beans::PropertyChangeEvent& rEvt);
 
 public:
                         SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > const & aResult );
