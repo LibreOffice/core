@@ -649,7 +649,7 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
         return;
 
     bool bUseDeleteFunctionsToolbar = true;
-    OUString aContentTypeName; // used in creation of delete button tooltip
+    ContentTypeId eContentTypeId = ContentTypeId::UNKNOWN;
 
     const bool bContentType
         = weld::fromId<const SwTypeNumber*>(rTreeView.get_id(*xEntry))->GetTypeId() == 1;
@@ -657,10 +657,7 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
     if (bContentType)
     {
         const SwContentType* pContentType = weld::fromId<SwContentType*>(rTreeView.get_id(*xEntry));
-
-        aContentTypeName = pContentType->GetName();
-
-        ContentTypeId eContentTypeId = pContentType->GetType();
+        eContentTypeId = pContentType->GetType();
         if (eContentTypeId == ContentTypeId::OUTLINE)
             return;
         weld::Toolbar& rContentTypeToolbar = *m_aContentTypeUnoToolbarMap[eContentTypeId];
@@ -679,10 +676,7 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
     {
         const SwContentType* pContentType
             = weld::fromId<SwContent*>(rTreeView.get_id(*xEntry))->GetParent();
-
-        aContentTypeName = pContentType->GetSingleName();
-
-        ContentTypeId eContentTypeId = pContentType->GetType();
+        eContentTypeId = pContentType->GetType();
         if (eContentTypeId == ContentTypeId::OUTLINE)
         {
             m_xHeadingsContentFunctionsToolbar->show();
@@ -711,10 +705,62 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
 
     if (bUseDeleteFunctionsToolbar && m_xContentTree->IsDeletable(*xEntry))
     {
-        OUString sToolTip = SwResId(bContentType ? STR_DELETE_CONTENT_TYPE : STR_DELETE_CONTENT);
-        sToolTip = sToolTip.replaceFirst("%1", aContentTypeName);
-        m_xDeleteFunctionToolbar->set_item_tooltip_text("delete", sToolTip);
-        m_xDeleteFunctionToolbar->show();
+        OUString sToolTip;
+        switch (eContentTypeId)
+        {
+            case ContentTypeId::OUTLINE:
+                sToolTip = SwResId(STR_DELETE_OUTLINE);
+                break;
+            case ContentTypeId::TABLE:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_TABLES : STR_DELETE_TABLE);
+                break;
+            case ContentTypeId::FRAME:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_FRAMES : STR_DELETE_FRAME);
+                break;
+            case ContentTypeId::GRAPHIC:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_GRAPHIC : STR_DELETE_GRAPHIC);
+                break;
+            case ContentTypeId::OLE:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_OLE_OBJECTS : STR_DELETE_OLE_OBJECT);
+                break;
+            case ContentTypeId::BOOKMARK:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_BOOKMARKS : STR_DELETE_BOOKMARK);
+                break;
+            case ContentTypeId::REGION:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_REGIONS : STR_DELETE_REGION);
+                break;
+            case ContentTypeId::URLFIELD:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_URLFIELDS : STR_DELETE_URLFIELD);
+                break;
+            case ContentTypeId::REFERENCE:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_REFERENCES : STR_DELETE_REFERENCE);
+                break;
+            case ContentTypeId::INDEX:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_INDEXES : STR_DELETE_INDEX);
+                break;
+            case ContentTypeId::POSTIT:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_POSTITS : STR_DELETE_POSTIT);
+                break;
+            case ContentTypeId::DRAWOBJECT:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_DRAWOBJECTS : STR_DELETE_DRAWOBJECT);
+                break;
+            case ContentTypeId::TEXTFIELD:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_TEXTFIELDS : STR_DELETE_TEXTFIELD);
+                break;
+            case ContentTypeId::FOOTNOTE:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_FOOTNOTES : STR_DELETE_FOOTNOTE);
+                break;
+            case ContentTypeId::ENDNOTE:
+                sToolTip = SwResId(bContentType ? STR_DELETE_ALL_ENDNOTES : STR_DELETE_ENDNOTE);
+                break;
+            default:
+                break;
+        }
+        if (!sToolTip.isEmpty())
+        {
+            m_xDeleteFunctionToolbar->set_item_tooltip_text("delete", sToolTip);
+            m_xDeleteFunctionToolbar->show();
+        }
     }
 }
 
