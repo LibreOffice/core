@@ -1534,7 +1534,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromParaStyleSheet(PropertyIds eId)
         pEntry = GetStyleSheetTable()->GetCurrentEntry();
     else
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
-    return GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
+    return GetPropertyFromStyleSheet(eId, std::move(pEntry), /*bDocDefaults=*/true, /*bPara=*/true);
 }
 
 uno::Any DomainMapper_Impl::GetInheritedParaProperty(PropertyIds eId)
@@ -1547,7 +1547,7 @@ uno::Any DomainMapper_Impl::GetInheritedParaProperty(PropertyIds eId)
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
 
     const bool bCheckDocDefaults = !IsDocDefaultsImport();
-    return GetPropertyFromStyleSheet(eId, pEntry, bCheckDocDefaults, /*bPara=*/true);
+    return GetPropertyFromStyleSheet(eId, std::move(pEntry), bCheckDocDefaults, /*bPara=*/true);
 }
 
 uno::Any DomainMapper_Impl::GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext)
@@ -1559,7 +1559,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromCharStyleSheet(PropertyIds eId, const
     OUString sCharStyleName;
     if ( GetAnyProperty(PROP_CHAR_STYLE_NAME, rContext) >>= sCharStyleName )
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sCharStyleName);
-    return GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/false, /*bPara=*/false);
+    return GetPropertyFromStyleSheet(eId, std::move(pEntry), /*bDocDefaults=*/false, /*bPara=*/false);
 }
 
 uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext)

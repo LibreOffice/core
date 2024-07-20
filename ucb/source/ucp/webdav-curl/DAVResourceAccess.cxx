@@ -266,7 +266,7 @@ void DAVResourceAccess::PROPFIND(
                                   rResInfo,
                                   DAVRequestEnvironment(
                                       new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                      aHeaders ) ) ;
+                                      std::move(aHeaders) ) ) ;
         }
         catch (DAVException const& e)
         {
@@ -379,7 +379,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                        DAVRequestEnvironment(
                                            new DAVAuthListener_Impl(
                                                xEnv, m_aURL ),
-                                           aHeaders ) );
+                                           std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {

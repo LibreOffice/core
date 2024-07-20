@@ -1266,7 +1266,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rReq.Ignore(); // the 'old' request is not relevant any more
             VclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(GetView().GetEditWin().GetFrameWeld()));
             pDlg->StartExecuteAsync(
-                [pDlg, xRequest] (sal_Int32 /*nResult*/)->void
+                [pDlg, xRequest=std::move(xRequest)] (sal_Int32 /*nResult*/)->void
                 {
                     pDlg->disposeOnce();
                     xRequest->Done();

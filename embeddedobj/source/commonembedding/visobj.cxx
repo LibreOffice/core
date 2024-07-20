@@ -197,7 +197,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         if( !xTransferable->isDataFlavorSupported( aDataFlavor ))
             throw uno::RuntimeException();
         aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
-        aVisualRepresentation.Flavor = aDataFlavor;
+        aVisualRepresentation.Flavor = std::move(aDataFlavor);
     }
 
     if ( bBackToLoaded )

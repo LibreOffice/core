@@ -1491,12 +1491,15 @@ uno::Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addS
 {
     SolarMutexGuard aGuard;
     size_t nIndex = 0;
-    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aSheetName, true, &nIndex);
+    ScExternalRefCache::TableTypeRef xTable = mpRefMgr->getCacheTable(mnFileId, aSheetName, true, &nIndex);
     if (!bDynamicCache)
+    {
         // Set the whole table cached to prevent access to the source document.
-        pTable->setWholeTableCached();
+        xTable->setWholeTableCached();
+    }
 
-    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(
+        mpDocShell, std::move(xTable), nIndex));
     return aSheetCache;
 }
 
@@ -1504,11 +1507,12 @@ Any SAL_CALL ScExternalDocLinkObj::getByName(const OUString &aName)
 {
     SolarMutexGuard aGuard;
     size_t nIndex = 0;
-    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false, &nIndex);
-    if (!pTable)
+    ScExternalRefCache::TableTypeRef xTable = mpRefMgr->getCacheTable(mnFileId, aName, false, &nIndex);
+    if (!xTable)
         throw container::NoSuchElementException();
 
-    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(
+        mpDocShell, std::move(xTable), nIndex));
 
     return Any(aSheetCache);
 }

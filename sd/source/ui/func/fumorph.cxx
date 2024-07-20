@@ -256,7 +256,7 @@ void FuMorph::ImpEqualizePolyPointCount(
     }
 
     aPoly2.setClosed(rBig.isClosed());
-    rSmall = aPoly2;
+    rSmall = std::move(aPoly2);
 }
 
 sal_uInt32 FuMorph::ImpGetNearestIndex(

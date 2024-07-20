@@ -517,7 +517,7 @@ private:
 
     // Get tokens at specific parameters for LET (lambda) function
     void getTokensAtParameter( std::unique_ptr<ScTokenArray>& pTokens, short nPos );
-    static void replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes,
+    static void replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
         std::unique_ptr<ScTokenArray>& pTokens );
 
     void ScTableOp();                                       // repeated operations

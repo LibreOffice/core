@@ -142,7 +142,7 @@ void ZipOutputStream::consumeFinishedScheduledThreadTaskEntries()
     }
 
     // always reset to non-consumed entries
-    m_aEntries = aNonFinishedEntries;
+    m_aEntries = std::move(aNonFinishedEntries);
 }
 
 void ZipOutputStream::reduceScheduledThreadTasksToGivenNumberOrLess(std::size_t nThreadTasks)

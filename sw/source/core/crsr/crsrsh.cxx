@@ -4255,7 +4255,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
 
     aPos.SetContent( nBegin + nLeft );
     pCursor = GetCursor();
-    *pCursor->GetPoint() = aPos;
+    *pCursor->GetPoint() = std::move(aPos);
     pCursor->SetMark();
     ExtendSelection( true, nLen - nLeft - nRight );
     // do not determine the rectangle in the current line

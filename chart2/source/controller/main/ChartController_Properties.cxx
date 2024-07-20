@@ -791,8 +791,8 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
         }
 
         //open the dialog
-        SfxTabDialogController::runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter,bSuccessOnUnchanged,
-                                                   xUndoGuard=std::move(xUndoGuard)] (int nResult)
+        SfxTabDialogController::runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter=std::move(pItemConverter),
+                                                   bSuccessOnUnchanged, xUndoGuard=std::move(xUndoGuard)] (int nResult)
         {
             if (nResult == RET_OK || (bSuccessOnUnchanged && aDlgPtr->DialogWasClosedWithOK())) {
                 const SfxItemSet* pOutItemSet = aDlgPtr->GetOutputItemSet();

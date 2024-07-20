@@ -342,7 +342,7 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetC
         else
             pStyleSheetPool->Remove(a.m_xStyleSheet.get());
     }
-    rStyles = aUsedStyles;
+    rStyles = std::move(aUsedStyles);
 }
 
 void

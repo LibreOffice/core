@@ -1964,7 +1964,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
             }
         }
     }
-    aLastLocale = aCurLocale;
+    aLastLocale = std::move(aCurLocale);
 }
 
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, weld::Button&, rBtn, void )

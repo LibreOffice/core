@@ -2124,7 +2124,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             }
 
             SetMark();
-            *GetPoint() = aPos;
+            *GetPoint() = std::move(aPos);
             GetMark()->Assign(aNdIdx.GetIndex() + 1);
             pCNd = GetMark()->GetNode().GetContentNode();
             if( pCNd )

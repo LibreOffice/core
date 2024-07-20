@@ -694,13 +694,13 @@ void SwView::Replace()
 
                 if(! s_pSrchItem->GetBackward() )
                 {
-                    (* m_pWrtShell->GetCursor()->Start()) = aStartPos;
-                    (* m_pWrtShell->GetCursor()->End()) = aEndPos;
+                    (* m_pWrtShell->GetCursor()->Start()) = std::move(aStartPos);
+                    (* m_pWrtShell->GetCursor()->End()) = std::move(aEndPos);
                 }
                 else
                 {
-                    (* m_pWrtShell->GetCursor()->Start()) = aEndPos;
-                    (* m_pWrtShell->GetCursor()->End()) = aStartPos;
+                    (* m_pWrtShell->GetCursor()->Start()) = std::move(aEndPos);
+                    (* m_pWrtShell->GetCursor()->End()) = std::move(aStartPos);
                 }
                 bReqReplace = false;
             }

@@ -178,7 +178,7 @@ namespace dbaccess
                 SubComponentDescriptor aCompDesc;
                 if ( !lcl_extractCompDesc( sLine, sStorageName, aCompDesc ) )
                     continue;
-                o_mapStorageToObjectName[ sStorageName ] = aCompDesc;
+                o_mapStorageToObjectName[ sStorageName ] = std::move(aCompDesc);
             }
         }
 

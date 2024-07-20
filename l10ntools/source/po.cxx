@@ -625,11 +625,11 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
         {
             if( rPoEntry.m_pGenPo )
             {
-                *(rPoEntry.m_pGenPo) = aGenPo;
+                *(rPoEntry.m_pGenPo) = std::move(aGenPo);
             }
             else
             {
-                rPoEntry.m_pGenPo.reset( new GenPoEntry( aGenPo ) );
+                rPoEntry.m_pGenPo.reset( new GenPoEntry(std::move(aGenPo)) );
             }
             rPoEntry.m_bIsInitialized = true;
         }

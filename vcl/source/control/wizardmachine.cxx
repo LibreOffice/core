@@ -669,7 +669,7 @@ namespace vcl
             nCurrentRollbackState = aTravelVirtually.top();
             aTravelVirtually.pop();
         }
-        m_xWizardImpl->aStateHistory = aTravelVirtually;
+        m_xWizardImpl->aStateHistory = std::move(aTravelVirtually);
         if ( !ShowPage( _nTargetState ) )
         {
             m_xWizardImpl->aStateHistory = std::move(aOldStateHistory);
@@ -1110,7 +1110,7 @@ namespace vcl
             // get the next state
             nCurrentState = nNextState;
         }
-        m_pImpl->aStateHistory = aTravelVirtually;
+        m_pImpl->aStateHistory = std::move(aTravelVirtually);
         // show the target page
         if ( !ShowPage( nCurrentState ) )
         {

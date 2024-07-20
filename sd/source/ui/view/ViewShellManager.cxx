@@ -271,7 +271,7 @@ void ViewShellManager::RemoveOverridingMainShell()
         mpImpl->RemoveOverridingMainShell();
 }
 
-void ViewShellManager::SetOverridingMainShell(std::shared_ptr<ViewShell> pViewShell)
+void ViewShellManager::SetOverridingMainShell(const std::shared_ptr<ViewShell>& pViewShell)
 {
     if(mbValid)
         mpImpl->SetOverridingShell(pViewShell);

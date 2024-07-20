@@ -74,7 +74,7 @@ public:
 
        @param pProps      the properties to add
      */
-    void insertProperties(TablePropertyMapPtr pProps)
+    void insertProperties(const TablePropertyMapPtr& pProps)
     {
         if( mpProps )
             mpProps->InsertProps(pProps.get());
@@ -194,7 +194,7 @@ public:
 
        @param pProperties   the properties to set
      */
-    void insertProperties(TablePropertyMapPtr pProperties)
+    void insertProperties(const TablePropertyMapPtr& pProperties)
     {
         if( pProperties )
         {

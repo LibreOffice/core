@@ -1453,12 +1453,12 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aGraf = Graphic(vcl::bitmap::CreateFromData(std::move(aResult)));
                         }
 
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), std::move(aGraf)));
                     }
                     else if ( eMSO_FillType == mso_fillTexture )
                     {
                         rSet.Put(XFillBmpTileItem(true));
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), std::move(aGraf)));
                         rSet.Put(XFillBmpSizeXItem(GetPropertyValue(DFF_Prop_fillWidth, 0) / 360));
                         rSet.Put(XFillBmpSizeYItem(GetPropertyValue(DFF_Prop_fillHeight, 0) / 360));
                         rSet.Put(XFillBmpSizeLogItem(true));

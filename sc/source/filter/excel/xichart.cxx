@@ -3730,8 +3730,10 @@ void XclImpChAxesSet::ReadChTypeGroup( XclImpStream& rStrm )
     sal_uInt16 nGroupIdx = xTypeGroup->GetGroupIdx();
     XclImpChTypeGroupMap::iterator itr = maTypeGroups.lower_bound(nGroupIdx);
     if (itr != maTypeGroups.end() && !maTypeGroups.key_comp()(nGroupIdx, itr->first))
+    {
         // Overwrite the existing element.
-        itr->second = xTypeGroup;
+        itr->second = std::move(xTypeGroup);
+    }
     else
         maTypeGroups.insert(
             itr, XclImpChTypeGroupMap::value_type(nGroupIdx, xTypeGroup));

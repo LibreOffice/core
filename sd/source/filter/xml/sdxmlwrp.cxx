@@ -622,9 +622,9 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if( !nRet )
         {
             if( nWarn )
-                nRet = nWarn;
+                nRet = std::move(nWarn);
             else if( nWarn2 )
-                nRet = nWarn2;
+                nRet = std::move(nWarn2);
         }
     }
 

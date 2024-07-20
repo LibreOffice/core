@@ -1389,7 +1389,7 @@ void PDFWriterImpl::setupDocInfo()
     m_aCreationDateString = PDFWriter::GetDateTime();
     computeDocumentIdentifier( aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aContext.DocumentInfo.ModificationDate, m_aCreationMetaDateString );
     if( m_aContext.Encryption.DocumentIdentifier.empty() )
-        m_aContext.Encryption.DocumentIdentifier = aId;
+        m_aContext.Encryption.DocumentIdentifier = std::move(aId);
 }
 
 OString PDFWriter::GetDateTime()

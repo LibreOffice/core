@@ -1015,7 +1015,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    rCell.maStr = aStr;
+                    rCell.maStr = std::move(aStr);
                     rCell.mbValue = false;
                 }
                 else
@@ -7885,7 +7885,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
         {
             svl::SharedString aStr;
             const ScMatValType nType = GetDoubleOrStringFromMatrix(rItem.mfVal, aStr);
-            rItem.maString = aStr;
+            rItem.maString = std::move(aStr);
             rItem.meType = ScMatrix::IsNonValueType(nType) ?
                 ScQueryEntry::ByString : ScQueryEntry::ByValue;
         }
@@ -8966,14 +8966,14 @@ void ScInterpreter::getTokensAtParameter( std::unique_ptr<ScTokenArray>& pTokens
     }
 }
 
-void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes,
+void ScInterpreter::replaceNamesToResult(const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
     std::unique_ptr<ScTokenArray>& pTokens )
 {
     formula::FormulaTokenArrayPlainIterator aIterResult(*pTokens);
     for (FormulaToken* t = aIterResult.GetNextStringName(); t; t = aIterResult.GetNextStringName())
     {
-        auto iRes = nResultIndexes.find(t->GetString().getString());
-        if (iRes != nResultIndexes.end())
+        auto iRes = rResultIndexes.find(t->GetString().getString());
+        if (iRes != rResultIndexes.end())
             pTokens->ReplaceToken(aIterResult.GetIndex() - 1, iRes->second->Clone(),
                 FormulaTokenArray::ReplaceMode::CODE_ONLY);
     }

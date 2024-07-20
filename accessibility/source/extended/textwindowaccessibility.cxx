@@ -1053,7 +1053,7 @@ void Document::retrieveRunAttributesImpl(
     }
     if ( !RequestedAttributes.hasElements() )
     {
-        rRunAttrSeq = aRunAttrSeq;
+        rRunAttrSeq = std::move(aRunAttrSeq);
     }
     else
     {

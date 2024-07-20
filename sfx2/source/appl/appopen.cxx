@@ -353,7 +353,7 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
             xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
         //pMedium takes ownership of pSet
-        SfxMedium *pMedium = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
+        SfxMedium *pMedium = new SfxMedium(rFileName, StreamMode::STD_READ, std::move(pFilter), std::move(pSet));
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCodeMsg nErrCode = xDoc->GetErrorCode();

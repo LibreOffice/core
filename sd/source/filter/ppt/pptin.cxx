@@ -2625,15 +2625,15 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                             if ( SeekToRec( rSt, PPT_PST_AnimationInfoAtom, nHdRecEnd, &aHdAnimInfoAtom ) )
                             {
                                 // read data from stream
-                                Ppt97AnimationPtr pAnimation = std::make_shared<Ppt97Animation>( rSt );
+                                Ppt97AnimationPtr xAnimation = std::make_shared<Ppt97Animation>( rSt );
                                 // store animation information
-                                if( pAnimation->HasEffect() )
+                                if( xAnimation->HasEffect() )
                                 {
                                     // translate color to RGB
-                                    pAnimation->SetDimColor( MSO_CLR_ToColor(pAnimation->GetDimColor()) );
+                                    xAnimation->SetDimColor( MSO_CLR_ToColor(xAnimation->GetDimColor()) );
                                     // translate sound bits to file url
-                                    if( pAnimation->HasSoundEffect() )
-                                        pAnimation->SetSoundFileUrl( ReadSound( pAnimation->GetSoundRef() ) );
+                                    if( xAnimation->HasSoundEffect() )
+                                        xAnimation->SetSoundFileUrl( ReadSound( xAnimation->GetSoundRef() ) );
 
                                     bool bDontAnimateInvisibleShape = false;
                                     {
@@ -2641,7 +2641,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
 
                                         if( pTextObj && pTextObj->HasText() &&
                                             dynamic_cast< SdrObjGroup *>( pObj.get() ) ==  nullptr &&
-                                            pAnimation->HasAnimateAssociatedShape() )
+                                            xAnimation->HasAnimateAssociatedShape() )
                                         {
                                             const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
@@ -2653,12 +2653,12 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                         }
                                     }
                                     if( bDontAnimateInvisibleShape )
-                                        pAnimation->SetAnimateAssociatedShape(false);
+                                        xAnimation->SetAnimateAssociatedShape(false);
 
                                     //maybe some actions necessary to ensure that animations on master pages are played before animations on normal pages
                                     //maybe todo in future: bool bIsEffectOnMasterPage = !bInhabitanceChecked;?
 
-                                    maAnimations[pObj.get()] = pAnimation;
+                                    maAnimations[pObj.get()] = std::move(xAnimation);
 
                                     bAnimationInfoFound = true;
                                 }

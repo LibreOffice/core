@@ -827,7 +827,9 @@ static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr 
     if( error->file != nullptr )
         aXMLParsingFile = error->file;
     int nXMLParsingLine = error->line;
-    GpXMLParsingException = new HelpProcessingException(error->message, aXMLParsingFile, nXMLParsingLine);
+    GpXMLParsingException = new HelpProcessingException(error->message,
+                                                        std::move(aXMLParsingFile),
+                                                        nXMLParsingLine);
 
     // Reset error handler
     xmlSetStructuredErrorFunc( nullptr, nullptr );

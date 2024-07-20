@@ -1555,7 +1555,7 @@ SwXText::convertToTextFrame(
         bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
-        *oAnchorCheckPam->End() = aEnd;
+        *oAnchorCheckPam->End() = std::move(aEnd);
     }
     pStartPam->SetMark();
     *pStartPam->End() = *pEndPam->End();

@@ -201,7 +201,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
     //now to what was available at dialog close time
     if (!bSelectedEntry && !aLastSelectedPath.empty())
     {
-        std::deque<OUString> aTmpSelectedPath(aLastSelectedPath);
+        std::deque<OUString> aTmpSelectedPath(std::move(aLastSelectedPath));
         std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
         if (!mxLbTree->get_iter_first(*xEntry))
             xEntry.reset();

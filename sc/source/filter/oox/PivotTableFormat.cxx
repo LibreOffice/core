@@ -102,7 +102,7 @@ void PivotTableFormat::finalizeImport()
     aFormat.bOutline = mbOutline;
     aFormat.oFieldPosition = moFieldPosition;
 
-    aFormat.pPattern = pPattern;
+    aFormat.pPattern = std::move(pPattern);
     for (auto& rReference : maReferences)
     {
         if (rReference->mnField)

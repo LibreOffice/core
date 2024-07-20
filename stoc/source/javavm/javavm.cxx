@@ -431,7 +431,7 @@ void initVMConfiguration(
         SAL_INFO("stoc", "couldn't get safety settings because of " << exception);
     }
 
-    *pjvm= jvm;
+    *pjvm = std::move(jvm);
 
     // rhbz#1285356, native look will be gtk2, which crashes
     // when gtk3 is already loaded. Until there is a solution

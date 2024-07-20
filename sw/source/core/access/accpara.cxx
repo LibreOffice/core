@@ -1717,7 +1717,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
         if ( !aRequestedAttributes.hasElements() )
         {
-            rRunAttrSeq = aRunAttrSeq;
+            rRunAttrSeq = std::move(aRunAttrSeq);
         }
         else
         {

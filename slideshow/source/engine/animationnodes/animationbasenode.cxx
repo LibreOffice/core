@@ -467,7 +467,7 @@ AnimationBaseNode::fillCommonParameters() const
         basegfx::fround(nDuration * FrameRate::MinimumFramesPerSecond), 1, 10));
 
     return ActivitiesFactory::CommonParameters(
-        pEndEvent,
+        std::move(pEndEvent),
         getContext().mrEventQueue,
         getContext().mrActivitiesQueue,
         nDuration,

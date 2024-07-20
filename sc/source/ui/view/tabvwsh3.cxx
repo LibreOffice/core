@@ -259,7 +259,8 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
         const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         if (pProtect)
             pDlg->SetDialogData(*pProtect);
-        weld::DialogController::runAsync(pDlg, [this, pDlg, pScMod, nTab, xRequest](sal_uInt32 nResult) {
+        weld::DialogController::runAsync(pDlg, [this, pDlg, pScMod, nTab,
+                                               xRequest=std::move(xRequest)](sal_uInt32 nResult) {
             if (nResult == RET_OK)
             {
                 pScMod->InputEnterHandler();

@@ -2510,7 +2510,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             }
             RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
             maRowMap.emplace(nFrom, p);
-            pPrevEntry = p;
+            pPrevEntry = std::move(p);
         }
         ++nFrom;
     }
