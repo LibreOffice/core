@@ -2899,12 +2899,9 @@ void ScDocument::CopyFromClip(
         overwrite/delete existing cells but to insert the notes into
         these cells. In this case, just delete old notes from the
         destination area. */
-    InsertDeleteFlags nDelFlag = InsertDeleteFlags::NONE;
+    InsertDeleteFlags nDelFlag = nInsFlag;
     if ( (nInsFlag & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES)) == (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES) )
-        nDelFlag |= InsertDeleteFlags::NOTE;
-    // tdf#141440 - do not delete notes when pasting contents (see InsertDeleteFlags::CONTENTS)
-    else if ( nInsFlag & (InsertDeleteFlags::CONTENTS & ~InsertDeleteFlags::NOTE) )
-        nDelFlag |= InsertDeleteFlags::CONTENTS & ~InsertDeleteFlags::NOTE;
+        nDelFlag &= ~InsertDeleteFlags::NOTE;
 
     if (nInsFlag & InsertDeleteFlags::ATTRIB)
         nDelFlag |= InsertDeleteFlags::ATTRIB;

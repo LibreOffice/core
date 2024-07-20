@@ -9350,11 +9350,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
 
     // Check the content after the paste.
     {
-        // tdf#141440 - do not delete notes when pasting contents
         static const Check aChecks[] = {
-            { "Clip1", COL_YELLOW, true }, { "B", COL_BLUE, true },
-            { "Clip2", COL_YELLOW, true }, { "D", COL_BLUE, true },
-            { "Clip3", COL_YELLOW, true },
+            { "Clip1", COL_YELLOW, false }, { "B", COL_BLUE, true },
+            { "Clip2", COL_YELLOW, false }, { "D", COL_BLUE, true },
+            { "Clip3", COL_YELLOW, false },
         };
 
         bool bRes
@@ -9378,11 +9377,10 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
     // Redo, and check the content again.
     aUndo.Redo();
     {
-        // tdf#141440 - do not delete notes when pasting contents
         static const Check aChecks[] = {
-            { "Clip1", COL_YELLOW, true }, { "B", COL_BLUE, true },
-            { "Clip2", COL_YELLOW, true }, { "D", COL_BLUE, true },
-            { "Clip3", COL_YELLOW, true },
+            { "Clip1", COL_YELLOW, false }, { "B", COL_BLUE, true },
+            { "Clip2", COL_YELLOW, false }, { "D", COL_BLUE, true },
+            { "Clip3", COL_YELLOW, false },
         };
 
         bool bRes
