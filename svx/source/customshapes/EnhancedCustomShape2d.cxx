@@ -559,8 +559,12 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
     {
         m_nCoordLeft    = aViewBox.X;
         m_nCoordTop     = aViewBox.Y;
-        m_nCoordWidthG  = std::abs( aViewBox.Width );
-        m_nCoordHeightG = std::abs( aViewBox.Height);
+        m_nCoordWidthG  = aViewBox.Width;
+        if (m_nCoordWidthG < 0)
+            m_nCoordWidthG = o3tl::saturating_toggle_sign(m_nCoordWidthG);
+        m_nCoordHeightG = aViewBox.Height;
+        if (m_nCoordHeightG < 0)
+            m_nCoordHeightG = o3tl::saturating_toggle_sign(m_nCoordHeightG);
     }
     static constexpr OUString sPath( u"Path"_ustr );
     static constexpr OUStringLiteral sCoordinates( u"Coordinates" );
