@@ -1141,24 +1141,21 @@ sal_Int32 SortedResultSet::FindPos( SortListData const *pEntry,
         return nMid+1;
 }
 
-
-void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
+void SortedResultSet::PropertyChangedImpl(std::unique_lock<std::mutex>& rGuard, const PropertyChangeEvent& rEvt)
 {
-    std::unique_lock aGuard( maMutex );
-
-    if ( !maPropChangeListeners.hasContainedTypes(aGuard) )
+    if ( !maPropChangeListeners.hasContainedTypes(rGuard) )
         return;
 
     // Notify listeners interested especially in the changed property.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pPropsContainer =
-            maPropChangeListeners.getContainer( aGuard, rEvt.PropertyName );
+            maPropChangeListeners.getContainer( rGuard, rEvt.PropertyName );
     if ( pPropsContainer )
-        pPropsContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvt );
+        pPropsContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
 
     // Notify listeners interested in all properties.
-    pPropsContainer = maPropChangeListeners.getContainer( aGuard, OUString() );
+    pPropsContainer = maPropChangeListeners.getContainer( rGuard, OUString() );
     if ( pPropsContainer )
-        pPropsContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvt );
+        pPropsContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
 }
 
 
@@ -1264,7 +1261,7 @@ void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
             aEvt.OldValue <<= nOldCount;
             aEvt.NewValue <<= GetCount();
 
-            PropertyChanged( aEvt );
+            PropertyChangedImpl(aGuard, aEvt);
 
             OUString aName = u"IsRowCountFinal"_ustr;
             Any aRet = getPropertyValue( aName );
@@ -1275,7 +1272,7 @@ void SortedResultSet::CheckProperties( sal_Int32 nOldCount, bool bWasFinal )
                 aEvt.PropertyHandle = -1;
                 aEvt.OldValue <<= bWasFinal;
                 aEvt.NewValue <<= bIsFinal;
-                PropertyChanged( aEvt );
+                PropertyChangedImpl(aGuard, aEvt);
             }
         }
     }
