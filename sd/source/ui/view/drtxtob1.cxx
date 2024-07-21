@@ -163,9 +163,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                         }
                         pNewItem->SetLeftValue( static_cast<sal_uInt16>(nLeft) );
 
-                        SfxItemSet aNewAttrs( aAttr );
-                        aNewAttrs.Put( std::move(pNewItem) );
-                        pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
+                        aAttr.Put( std::move(pNewItem) );
+                        pOLV->GetOutliner()->SetParaAttribs( nPara, aAttr );
                     }
                 }
                 pOLV->GetOutliner()->UndoActionEnd();
