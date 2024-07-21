@@ -363,7 +363,7 @@ bool OResultSet::isNull(const sal_Int32 nColumnIndex)
     return false;
 }
 
-template <typename T>
+template <typename T> requires std::is_integral_v<T>
 OUString OResultSet::makeNumericString(const sal_Int32 nColumnIndex)
 {
     //  minus because firebird stores scale as a negative number
@@ -377,40 +377,14 @@ OUString OResultSet::makeNumericString(const sal_Int32 nColumnIndex)
 
     OUStringBuffer sRetBuffer;
     T nAllDigits = *reinterpret_cast<T*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
-    sal_Int64 nDecimalCountExp = pow10Integer(nDecimalCount);
+    sRetBuffer.append(static_cast<sal_Int64>(nAllDigits));
+    sal_Int32 insertionPos = nAllDigits < 0 ? 1 : 0; // consider leading minus
+    int nMissingNulls = nDecimalCount - (sRetBuffer.getLength() - insertionPos) + 1;
+    for (int i = 0; i < nMissingNulls; ++i)
+        sRetBuffer.insert(insertionPos, '0');
 
-    if(nAllDigits < 0)
-    {
-        sRetBuffer.append('-');
-        nAllDigits = -nAllDigits; // abs
-    }
-
-    sRetBuffer.append(static_cast<sal_Int64>(nAllDigits / nDecimalCountExp) );
-    if( nDecimalCount > 0)
-    {
-        sRetBuffer.append('.');
-
-        sal_Int64 nFractionalPart = nAllDigits % nDecimalCountExp;
-
-        int iCount = 0; // digit count
-        sal_Int64 nFracTemp = nFractionalPart;
-        while(nFracTemp>0)
-        {
-            nFracTemp /= 10;
-            iCount++;
-        }
-
-        int nMissingNulls = nDecimalCount - iCount;
-
-        // append nulls after dot and before nFractionalPart
-        for(int i=0; i<nMissingNulls; i++)
-        {
-            sRetBuffer.append('0');
-        }
-
-        // the rest
-        sRetBuffer.append(nFractionalPart);
-    }
+    if (nDecimalCount)
+        sRetBuffer.insert(sRetBuffer.getLength() - nDecimalCount, '.');
 
     return sRetBuffer.makeStringAndClear();
 }

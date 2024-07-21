@@ -35,6 +35,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
+#include <type_traits>
+
 namespace connectivity::firebird
     {
         /*
@@ -86,8 +88,8 @@ namespace connectivity::firebird
 
             bool isNull(const sal_Int32 nColumnIndex);
 
-            template <typename T> OUString makeNumericString(
-                    const sal_Int32 nColumnIndex);
+            template <typename T> requires std::is_integral_v<T>
+            OUString makeNumericString(const sal_Int32 nColumnIndex);
 
             template <typename T> T     retrieveValue(const sal_Int32 nColumnIndex,
                                                       const ISC_SHORT nType);

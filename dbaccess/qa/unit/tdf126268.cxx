@@ -45,9 +45,9 @@ struct expect_t
 }
 
 const expect_t expect[] = {
-    { 1, u"0.00"_ustr },   { 2, u"25.00"_ustr }, { 3, u"26.00"_ustr },
-    { 4, u"30.4"_ustr },   { 5, u"45.8"_ustr },  { 6, u"-25.00"_ustr },
-    { 7, u"-26.00"_ustr }, { 8, u"-30.4"_ustr }, { 9, u"-45.8"_ustr },
+    { 1, u"0.0"_ustr },   { 2, u"25.0"_ustr },  { 3, u"26.0"_ustr },
+    { 4, u"30.4"_ustr },  { 5, u"45.8"_ustr },  { 6, u"-25.0"_ustr },
+    { 7, u"-26.0"_ustr }, { 8, u"-30.4"_ustr }, { 9, u"-45.8"_ustr },
 };
 
 void Tdf126268Test::testNumbers()

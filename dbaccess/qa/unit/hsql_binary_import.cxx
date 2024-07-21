@@ -87,6 +87,18 @@ void HsqlBinaryImportTest::testBinaryImport()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16{ 2 }, date.Month);
     CPPUNIT_ASSERT_EQUAL(sal_Int16{ 1998 }, date.Year);
 
+    // assert third row
+    CPPUNIT_ASSERT(xRes->next());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xRow->getShort(1)); // ID
+    CPPUNIT_ASSERT_EQUAL(u"12.00"_ustr, xRow->getString(2)); // numeric
+    CPPUNIT_ASSERT_EQUAL(u"mind-reading"_ustr, xRow->getString(3)); // varchar
+    CPPUNIT_ASSERT(xRow->getBoolean(4)); // boolean
+
+    date = xRow->getDate(5);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16{ 20 }, date.Day);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16{ 5 }, date.Month);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16{ 1967 }, date.Year);
+
     if (!oldValue)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xChanges(

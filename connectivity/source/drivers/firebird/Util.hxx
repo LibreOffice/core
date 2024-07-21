@@ -63,7 +63,7 @@ public:
                 , m_aSubType(aSubType)
                 , m_nScale(nScale)
                 , m_sCharsetName(std::move(sCharset)) {}
-            explicit ColumnTypeInfo(const XSQLVAR& var, OUString sCharset)
+            explicit ColumnTypeInfo(const XSQLVAR& var, OUString sCharset = {})
                 : ColumnTypeInfo(var.sqltype, var.sqlsubtype, -var.sqlscale, std::move(sCharset)) {}
             explicit ColumnTypeInfo(const XSQLDA* pXSQLDA, sal_Int32 column, OUString sCharset = {})
                 : ColumnTypeInfo(pXSQLDA->sqlvar[column-1], std::move(sCharset)) {}
