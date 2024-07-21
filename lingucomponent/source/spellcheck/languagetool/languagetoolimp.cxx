@@ -210,7 +210,16 @@ uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string
 {
     std::stringstream aStream(std::move(json)); // Optimized in C++20
     boost::property_tree::ptree aRoot;
-    boost::property_tree::read_json(aStream, aRoot);
+
+    // tdf#161858 prevent crashing by catching any JSON exceptions
+    try
+    {
+        boost::property_tree::read_json(aStream, aRoot);
+    }
+    catch (std::runtime_error&)
+    {
+        SAL_WARN("languagetool", "parseJson: read_json() threw exception");
+    }
 
     if (auto tree = aRoot.get_child_optional(path))
     {
