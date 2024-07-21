@@ -289,6 +289,8 @@ class trackedchanges(UITestCase):
                 # Now: 4 changes (2 deleted/inserted rows and 2 deleted/inserted tables)
                 self.assertEqual(4, len(changesList.getChildren()))
 
+                changesList.getChild(0).executeAction("SELECT", tuple())
+
                 # jump to the parent to allow rejecting the table change
                 changesList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 

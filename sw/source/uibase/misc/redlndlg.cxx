@@ -144,6 +144,48 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
     mbInDestruction = true;
 }
 
+namespace
+{
+const SwRedlineData* lcl_get_selected_redlinedata(weld::TreeView& rTreeView)
+{
+    std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
+    if (rTreeView.get_selected(xEntry.get()))
+    {
+        RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(*xEntry));
+        if (rTreeView.get_iter_depth(*xEntry))
+            return static_cast<SwRedlineDataChild*>(pRedlinData->pData)->pChild;
+        else
+            return static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
+    }
+    return nullptr;
+}
+
+void lcl_reselect(weld::TreeView& rTreeView, const SwRedlineData* pSelectedEntryRedlineData)
+{
+    if (!pSelectedEntryRedlineData)
+    {
+        rTreeView.set_cursor(-1);
+        return;
+    }
+    rTreeView.all_foreach(
+        [&rTreeView, &pSelectedEntryRedlineData](weld::TreeIter& rIter)
+        {
+            RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(rIter));
+            const SwRedlineData* pRedlineData;
+            if (rTreeView.get_iter_depth(rIter))
+                pRedlineData = static_cast<SwRedlineDataChild*>(pRedlinData->pData)->pChild;
+            else
+                pRedlineData = static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
+            if (pRedlineData == pSelectedEntryRedlineData)
+            {
+                rTreeView.set_cursor(rIter);
+                return true;
+            }
+            return false;
+        });
+}
+}
+
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder,
                                        weld::Container *pContentArea, bool bAutoFormat)
     : m_xParentDlg(std::move(xParent))
@@ -230,13 +272,7 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     m_aUsedSeqNo.clear();
 
     // tdf#162018 keep the selected entry selected
-    const OUString& rId = rTreeView.get_selected_id();
-    auto reselect = [&rTreeView, &rId]() {
-        rTreeView.select_id(rId);
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-        if (rTreeView.get_selected(xEntry.get()))
-            rTreeView.set_cursor(*xEntry);
-    };
+    const SwRedlineData* pSelectedEntryRedlineData = lcl_get_selected_redlinedata(rTreeView);
 
     rTreeView.freeze();
     if (nStart)
@@ -254,7 +290,7 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
     InsertParents(nStart);
     InitAuthors();
 
-    reselect();
+    lcl_reselect(rTreeView, pSelectedEntryRedlineData);
 }
 
 void SwRedlineAcceptDlg::InitAuthors()
@@ -421,13 +457,7 @@ void SwRedlineAcceptDlg::Activate()
 
     // tdf#162018 keep the selected entry selected
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    const OUString& rId = rTreeView.get_selected_id();
-    auto reselect = [&rTreeView, &rId]() {
-        rTreeView.select_id(rId);
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-        if (rTreeView.get_selected(xEntry.get()))
-            rTreeView.set_cursor(*xEntry);
-    };
+    const SwRedlineData* pSelectedEntryRedlineData = lcl_get_selected_redlinedata(m_pTable->GetWidget());
 
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
@@ -449,10 +479,7 @@ void SwRedlineAcceptDlg::Activate()
             // Redline-Parents were inserted, changed or deleted
             i = CalcDiff(i, false);
             if (i == SwRedlineTable::npos)
-            {
-                reselect();
                 return;
-            }
             continue;
         }
 
@@ -464,10 +491,7 @@ void SwRedlineAcceptDlg::Activate()
             // Redline-Children were deleted
             i = CalcDiff(i, true);
             if (i == SwRedlineTable::npos)
-            {
-                reselect();
                 return;
-            }
             continue;
         }
         else
@@ -479,10 +503,7 @@ void SwRedlineAcceptDlg::Activate()
                     // Redline-Children were inserted, changed or deleted
                     i = CalcDiff(i, true);
                     if (i == SwRedlineTable::npos)
-                    {
-                        reselect();
                         return;
-                    }
 
                     // here was a continue; targetted to the outer loop
                     // now a break will do, as there is nothing after it in the outer loop
@@ -526,7 +547,7 @@ void SwRedlineAcceptDlg::Activate()
 
     InitAuthors();
 
-    reselect();
+    lcl_reselect(rTreeView, pSelectedEntryRedlineData);
 }
 
 void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
