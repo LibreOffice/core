@@ -5437,9 +5437,8 @@ tools::Long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 
     if( pRes->nSprmId < 280 )
     {
-        sal_uInt8 nIdx = static_cast< sal_uInt8 >(pRes->nSprmId - eFTN);
-        if( nIdx < SAL_N_ELEMENTS(aWwSprmTab)
-            && aWwSprmTab[nIdx] )
+        sal_uInt16 nIdx = pRes->nSprmId - eFTN;
+        if (nIdx < SAL_N_ELEMENTS(aWwSprmTab) && aWwSprmTab[nIdx])
             return (this->*aWwSprmTab[nIdx])(pRes);
         else
             return 0;

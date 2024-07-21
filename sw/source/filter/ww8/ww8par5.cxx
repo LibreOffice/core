@@ -938,7 +938,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         return 0;
 
     sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : eMax;
-    sal_uInt16 nI = n / 32;                     // # of sal_uInt32
+    sal_uInt32 nI = n / 32U;                     // # of sal_uInt32
     sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
     if (SAL_N_ELEMENTS(m_nFieldTagAlways) <= nI)

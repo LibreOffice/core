@@ -385,7 +385,7 @@ public:
 enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 
 //It's hardcoded that eFTN be the first one: a very poor hack, needs to be fixed
-enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATNBKN = 261, eFACTOIDBKN = 262 };
+enum eExtSprm : sal_uInt16 { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATNBKN = 261, eFACTOIDBKN = 262 };
 
 /*
     pure virtual:
