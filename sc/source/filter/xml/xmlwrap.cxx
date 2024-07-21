@@ -519,13 +519,13 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         xStatusIndicator->end();
 
     if (nDocRetval)
-        rError = nDocRetval;
+        rError = std::move(nDocRetval);
     else if (nStylesRetval)
-        rError = nStylesRetval;
+        rError = std::move(nStylesRetval);
     else if (nMetaRetval)
-        rError = nMetaRetval;
+        rError = std::move(nMetaRetval);
     else if (nSettingsRetval)
-        rError = nSettingsRetval;
+        rError = std::move(nSettingsRetval);
 
     bool bRet = !rError.IsError();
 

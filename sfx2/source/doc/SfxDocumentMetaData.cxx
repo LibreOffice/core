@@ -1229,9 +1229,7 @@ void SfxDocumentMetaData::init(
 
     // select nodes for elements of which we handle all occurrences
     for (const auto & name : s_stdMetaList) {
-        std::vector<css::uno::Reference<css::xml::dom::XNode> > nodes =
-            getChildNodeListByName(m_xParent, name);
-        m_metaList[name] = nodes;
+        m_metaList[name] = getChildNodeListByName(m_xParent, name);
     }
 
     // initialize members corresponding to attributes from DOM nodes

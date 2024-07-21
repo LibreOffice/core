@@ -2624,7 +2624,7 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
                     }
                 }
             }
-            m_aPostItNodeExpandMap = aCurrentPostItNodeExpandMap;
+            m_aPostItNodeExpandMap = std::move(aCurrentPostItNodeExpandMap);
             return;
         }
         else // content entry

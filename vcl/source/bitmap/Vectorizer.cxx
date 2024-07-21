@@ -776,7 +776,7 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
     }
     while( nNewCount > VECT_POLY_MAX );
 
-    rPolyPoly = aNewPolyPoly;
+    rPolyPoly = std::move(aNewPolyPoly);
 }
 
 void ImplExpand( std::optional<ImplVectMap>& oMap, const BitmapReadAccess* pRAcc, const Color& rColor )

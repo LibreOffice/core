@@ -749,7 +749,8 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
 
             bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
 
-            pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm, nFormatId, pStrBuffer,
+            pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm=std::move(pStrm),
+                                     nFormatId, pStrBuffer=std::move(pStrBuffer),
                                      pObj=std::move(pObj), bAllowDialogs](sal_Int32 nResult){
                 bool bShowErrorDialog = bAllowDialogs;
                 if (RET_OK == nResult)

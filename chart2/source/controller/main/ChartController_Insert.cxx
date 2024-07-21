@@ -565,7 +565,8 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        SfxTabDialogController::runAsync(aDlg, [this, aDlg, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
+        SfxTabDialogController::runAsync(aDlg, [this, aDlg, aItemConverter=std::move(aItemConverter),
+                                                xUndoGuard=std::move(xUndoGuard)](int nResult) {
             if ( nResult == RET_OK || aDlg->DialogWasClosedWithOK() )
             {
                 const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();

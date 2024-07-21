@@ -1580,9 +1580,10 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
     auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
     pDlg->StartExecuteAsync(
-        [this, pDlg, xRequest=std::move(xRequest), pStyleSheet, nRetMask, xOldSet, nSlotId, bAddUndo, bUndo,
-            aOldData=rOldData, aNewData=rNewData, aOldName, eFamily, bStyleToMarked, bListAction,
-            pEditObject, aSelection]
+        [this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
+            nRetMask, xOldSet=std::move(xOldSet), nSlotId, bAddUndo, bUndo,
+            aOldData=rOldData, aNewData=rNewData, aOldName, eFamily, bStyleToMarked,
+            bListAction, pEditObject, aSelection]
         (sal_Int32 nResult) mutable -> void
         {
             SetInFormatDialog(false);

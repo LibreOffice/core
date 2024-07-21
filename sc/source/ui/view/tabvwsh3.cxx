@@ -219,7 +219,8 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
 
             pDlg->PreRun();
 
-            weld::DialogController::runAsync(pDlg, [this, nTab, pDlg, xRequest](sal_Int32 response) {
+            weld::DialogController::runAsync(pDlg, [this, nTab, pDlg,
+                                                    xRequest=std::move(xRequest)](sal_Int32 response) {
                 if (response == RET_OK)
                 {
                     OUString aPassword = pDlg->GetPassword();

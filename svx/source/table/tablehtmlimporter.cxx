@@ -239,7 +239,7 @@ void SdrTableHTMLParser::InsertCell(sal_Int32 nStartPara, sal_Int32 nEndPara)
         {
             HTMLCellInfoPtr xLastCell((*mxLastRow)[mnVMergeIdx]);
             if (xLastCell->mnRowSpan)
-                xCellInfo->mxVMergeCell = xLastCell;
+                xCellInfo->mxVMergeCell = std::move(xLastCell);
             else
                 xCellInfo->mxVMergeCell = xLastCell->mxVMergeCell;
         }
