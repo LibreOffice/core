@@ -68,13 +68,15 @@ class SAL_DLLPUBLIC_RTTI PropertyValueSet final :
 
 private:
     const css::uno::Reference< css::script::XTypeConverter >&
-    getTypeConverter();
+    getTypeConverter(const std::unique_lock<std::mutex>& rGuard);
 
     template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
     T getValue(PropsSet nTypeName, sal_Int32 columnIndex);
 
     template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
     void appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue);
+
+    css::uno::Any getObjectImpl(const std::unique_lock<std::mutex>& rGuard, sal_Int32 columnIndex);
 
 public:
     UCBHELPER_DLLPUBLIC PropertyValueSet(

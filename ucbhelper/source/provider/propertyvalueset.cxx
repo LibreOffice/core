@@ -176,7 +176,7 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
     if ( !(rValue.nPropsSet & PropsSet::Object) )
     {
         /* Value is not (yet) available as Any. Create it. */
-        getObject( columnIndex, Reference< XNameAccess >() );
+        getObjectImpl(aGuard, columnIndex);
     }
 
     if ( rValue.nPropsSet & PropsSet::Object )
@@ -196,7 +196,7 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
             {
                 /* Last chance. Try type converter service... */
 
-                Reference< XTypeConverter > xConverter = getTypeConverter();
+                Reference< XTypeConverter > xConverter = getTypeConverter(aGuard);
                 if ( xConverter.is() )
                 {
                     try
@@ -337,14 +337,8 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
     return getValue<Reference< XInputStream >, &ucbhelper_impl::PropertyValue::xCharacterStream>(PropsSet::CharacterStream, columnIndex);
 }
 
-
-// virtual
-Any SAL_CALL PropertyValueSet::getObject(
-                                    sal_Int32 columnIndex,
-                                         const Reference< XNameAccess >& )
+Any PropertyValueSet::getObjectImpl(const std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 columnIndex)
 {
-    std::unique_lock aGuard( m_aMutex );
-
     Any aValue;
 
     m_bWasNull = true;
@@ -466,6 +460,13 @@ Any SAL_CALL PropertyValueSet::getObject(
     return aValue;
 }
 
+// virtual
+Any SAL_CALL PropertyValueSet::getObject(sal_Int32 columnIndex, const Reference<XNameAccess>&)
+{
+    std::unique_lock aGuard( m_aMutex );
+
+    return getObjectImpl(aGuard, columnIndex);
+}
 
 // virtual
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
@@ -519,10 +520,8 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 // Non-interface methods.
 
 
-const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
+const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter(const std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    std::unique_lock aGuard( m_aMutex );
-
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = true;
