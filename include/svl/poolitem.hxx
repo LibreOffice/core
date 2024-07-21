@@ -675,6 +675,9 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
+    // Used by HashedItemInstanceManager
+    virtual bool             supportsHashCode() const;
+    virtual size_t           hashCode() const;
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
@@ -762,14 +765,12 @@ private:
   for specific PoolItem subclasses that can be hashed which is faster than using
   the linear search with operator== that DefaultItemInstanceManager has to do
 */
-class HashedItemInstanceManager : public ItemInstanceManager
+class HashedItemInstanceManager final : public ItemInstanceManager
 {
     struct ItemHash {
-        HashedItemInstanceManager& mrManager;
-        ItemHash(HashedItemInstanceManager& rManager) : mrManager(rManager) {}
         size_t operator()(const SfxPoolItem* p) const
         {
-            return mrManager.hashCode(*p);
+            return p->hashCode();
         }
     };
     struct ItemEqual {
@@ -781,13 +782,10 @@ class HashedItemInstanceManager : public ItemInstanceManager
 
     std::unordered_set<const SfxPoolItem*, ItemHash, ItemEqual> maRegistered;
 
-protected:
-    virtual size_t hashCode(const SfxPoolItem&) const = 0;
-
 public:
     HashedItemInstanceManager(SfxItemType aSfxItemType)
     : ItemInstanceManager(aSfxItemType)
-    , maRegistered(0, ItemHash(*this), ItemEqual())
+    , maRegistered(0, ItemHash(), ItemEqual())
     {
     }
 

@@ -216,38 +216,25 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     delete pFormat;
 }
 
-namespace
-{
-    class SwFormatFrameSizeInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rFormatItem = static_cast<const SwFormatFrameSize&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rFormatItem.GetHeightSizeType());
-            o3tl::hash_combine(seed, rFormatItem.GetWidthSizeType());
-            o3tl::hash_combine(seed, rFormatItem.GetWidthPercent());
-            o3tl::hash_combine(seed, rFormatItem.GetWidthPercentRelation());
-            o3tl::hash_combine(seed, rFormatItem.GetHeightPercent());
-            o3tl::hash_combine(seed, rFormatItem.GetHeightPercentRelation());
-            o3tl::hash_combine(seed, rFormatItem.GetSize().Width());
-            o3tl::hash_combine(seed, rFormatItem.GetSize().Height());
-            return seed;
-        }
-    public:
-        SwFormatFrameSizeInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SwFormatFrameSize::getItemInstanceManager() const
 {
-    static SwFormatFrameSizeInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
+}
+
+size_t SwFormatFrameSize::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, GetHeightSizeType());
+    o3tl::hash_combine(seed, GetWidthSizeType());
+    o3tl::hash_combine(seed, GetWidthPercent());
+    o3tl::hash_combine(seed, GetWidthPercentRelation());
+    o3tl::hash_combine(seed, GetHeightPercent());
+    o3tl::hash_combine(seed, GetHeightPercentRelation());
+    o3tl::hash_combine(seed, GetSize().Width());
+    o3tl::hash_combine(seed, GetSize().Height());
+    return seed;
 }
 
 void SwFormatFrameSize::ScaleMetrics(tools::Long lMult, tools::Long lDiv) {
@@ -1409,35 +1396,21 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-namespace
-{
-    class SwFormatVertOrientInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rFormatItem = static_cast<const SwFormatVertOrient&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rFormatItem.GetPos());
-            o3tl::hash_combine(seed, rFormatItem.GetVertOrient());
-            o3tl::hash_combine(seed, rFormatItem.GetRelationOrient());
-            return seed;
-        }
-    public:
-        SwFormatVertOrientInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SwFormatVertOrient::getItemInstanceManager() const
 {
-    static SwFormatVertOrientInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
+size_t SwFormatVertOrient::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, GetPos());
+    o3tl::hash_combine(seed, GetVertOrient());
+    o3tl::hash_combine(seed, GetRelationOrient());
+    return seed;
+}
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
@@ -1530,36 +1503,22 @@ void SwFormatVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-namespace
-{
-    class SwFormatHoriOrientInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rFormatItem = static_cast<const SwFormatHoriOrient&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rFormatItem.GetPos());
-            o3tl::hash_combine(seed, rFormatItem.GetHoriOrient());
-            o3tl::hash_combine(seed, rFormatItem.GetRelationOrient());
-            o3tl::hash_combine(seed, rFormatItem.IsPosToggle());
-            return seed;
-        }
-    public:
-        SwFormatHoriOrientInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SwFormatHoriOrient::getItemInstanceManager() const
 {
-    static SwFormatHoriOrientInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
+size_t SwFormatHoriOrient::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, GetPos());
+    o3tl::hash_combine(seed, GetHoriOrient());
+    o3tl::hash_combine(seed, GetRelationOrient());
+    o3tl::hash_combine(seed, IsPosToggle());
+    return seed;
+}
 // Partially implemented inline in hxx
 SwFormatHoriOrient::SwFormatHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )

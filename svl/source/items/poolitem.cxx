@@ -557,6 +557,16 @@ bool SfxPoolItem::operator==(const SfxPoolItem& rCmp) const
     return true;
 }
 
+bool SfxPoolItem::supportsHashCode() const { return false; }
+
+size_t SfxPoolItem::hashCode() const
+{
+    assert(false
+           && "this should never be called, classes should implement both supportsHashCode() and "
+              "hashCode(), or neither");
+    return 0;
+}
+
 /**
  * This virtual method allows to get a textual representation of the value
  * for the SfxPoolItem subclasses. It should be overridden by all UI-relevant

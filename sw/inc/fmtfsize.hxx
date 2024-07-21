@@ -77,6 +77,7 @@ public:
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual size_t          hashCode() const override;
     virtual SwFormatFrameSize* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

@@ -49,6 +49,7 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
+    virtual size_t hashCode() const override;
     virtual SvxFontItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

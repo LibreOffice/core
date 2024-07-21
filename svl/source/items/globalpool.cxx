@@ -125,7 +125,7 @@ void DefaultItemInstanceManager::remove(const SfxPoolItem& rItem)
 //     ignored and start sharing ALL Item derivations instantly.
 class InstanceManagerHelper
 {
-    typedef std::unordered_map<SfxItemType, std::pair<sal_uInt16, DefaultItemInstanceManager*>>
+    typedef std::unordered_map<SfxItemType, std::pair<sal_uInt16, ItemInstanceManager*>>
         managerTypeMap;
     managerTypeMap maManagerPerType;
 
@@ -169,7 +169,11 @@ public:
             if (g_bShareImmediately)
             {
                 // create, insert locally and immediately start sharing
-                DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(rItem.ItemType()));
+                ItemInstanceManager* pNew;
+                if (rItem.supportsHashCode())
+                    pNew = new HashedItemInstanceManager(rItem.ItemType());
+                else
+                    pNew = new DefaultItemInstanceManager(rItem.ItemType());
                 maManagerPerType.insert({ rItem.ItemType(), std::make_pair(0, pNew) });
                 return pNew;
             }
@@ -194,7 +198,11 @@ public:
         // here the countdown is zero and there is not yet a ItemInstanceManager
         // incarnated. Do so, register and return it
         assert(nullptr == aHit->second.second);
-        DefaultItemInstanceManager* pNew(new DefaultItemInstanceManager(rItem.ItemType()));
+        ItemInstanceManager* pNew;
+        if (rItem.supportsHashCode())
+            pNew = new HashedItemInstanceManager(rItem.ItemType());
+        else
+            pNew = new DefaultItemInstanceManager(rItem.ItemType());
         aHit->second.second = pNew;
 
         return pNew;

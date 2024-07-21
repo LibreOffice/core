@@ -159,35 +159,22 @@ bool SvxFontListItem::GetPresentation
 
 // class SvxFontItem -----------------------------------------------------
 
-namespace
-{
-    class SvxFontItemInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            const SvxFontItem& rFontItem(static_cast<const SvxFontItem&>(rItem));
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rFontItem.GetFamilyName().hashCode());
-            o3tl::hash_combine(seed, rFontItem.GetStyleName().hashCode());
-            o3tl::hash_combine(seed, rFontItem.GetFamily());
-            o3tl::hash_combine(seed, rFontItem.GetPitch());
-            o3tl::hash_combine(seed, rFontItem.GetCharSet());
-            return seed;
-        }
-    public:
-        SvxFontItemInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SvxFontItem::getItemInstanceManager() const
 {
-    static SvxFontItemInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
+}
+
+size_t SvxFontItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, GetFamilyName().hashCode());
+    o3tl::hash_combine(seed, GetStyleName().hashCode());
+    o3tl::hash_combine(seed, GetFamily());
+    o3tl::hash_combine(seed, GetPitch());
+    o3tl::hash_combine(seed, GetCharSet());
+    return seed;
 }
 
 SvxFontItem::SvxFontItem(
@@ -414,31 +401,9 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxPostureItem --------------------------------------------------
 
-namespace
-{
-    class SvxPostureItemInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rPostureItem = static_cast<const SvxPostureItem&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rPostureItem.Which());
-            o3tl::hash_combine(seed, rPostureItem. GetEnumValue());
-            return seed;
-        }
-    public:
-        SvxPostureItemInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SvxPostureItem::getItemInstanceManager() const
 {
-    static SvxPostureItemInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 
@@ -688,34 +653,20 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class SvxFontHeightItem -----------------------------------------------
 
-namespace
-{
-    class SvxFontHeightItemInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rFontHeightItem = static_cast<const SvxFontHeightItem&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rFontHeightItem.Which());
-            o3tl::hash_combine(seed, rFontHeightItem.GetHeight());
-            o3tl::hash_combine(seed, rFontHeightItem.GetProp());
-            o3tl::hash_combine(seed, rFontHeightItem.GetPropUnit());
-            return seed;
-        }
-    public:
-        SvxFontHeightItemInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SvxFontHeightItem::getItemInstanceManager() const
 {
-    static SvxFontHeightItemInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
+}
+
+size_t SvxFontHeightItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, GetHeight());
+    o3tl::hash_combine(seed, GetProp());
+    o3tl::hash_combine(seed, GetPropUnit());
+    return seed;
 }
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uInt32 nSz,
@@ -2986,31 +2937,9 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
 // class SvxRsidItem -----------------------------------------------------
 
-namespace
-{
-    class SvxRsidItemInstanceManager : public HashedItemInstanceManager
-    {
-    protected:
-        virtual size_t hashCode(const SfxPoolItem& rItem) const override
-        {
-            auto const & rRsidItem = static_cast<const SvxRsidItem&>(rItem);
-            std::size_t seed(0);
-            o3tl::hash_combine(seed, rItem.Which());
-            o3tl::hash_combine(seed, rRsidItem.Which());
-            o3tl::hash_combine(seed, rRsidItem.GetValue());
-            return seed;
-        }
-    public:
-        SvxRsidItemInstanceManager(SfxItemType aSfxItemType)
-        : HashedItemInstanceManager(aSfxItemType)
-        {
-        }
-    };
-}
-
 ItemInstanceManager* SvxRsidItem::getItemInstanceManager() const
 {
-    static SvxRsidItemInstanceManager aInstanceManager(ItemType());
+    static HashedItemInstanceManager aInstanceManager(ItemType());
     return &aInstanceManager;
 }
 

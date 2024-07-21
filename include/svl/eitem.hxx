@@ -62,6 +62,16 @@ public:
         return SfxEnumItemInterface::operator==(other) &&
                m_nValue == static_cast<const SfxEnumItem<EnumT> &>(other).m_nValue;
     }
+
+    virtual bool supportsHashCode() const override final
+    {
+        return true;
+    }
+
+    virtual size_t hashCode() const override final
+    {
+        return Which() ^ GetEnumValue();
+    }
 };
 
 class SVL_DLLPUBLIC SfxBoolItem

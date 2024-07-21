@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/uno/Any.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <svl/cintitem.hxx>
 #include <sal/log.hxx>
 
@@ -27,6 +28,21 @@ bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast< const CntByteItem * >(&rItem)->m_nValue;
+}
+
+// virtual
+bool CntByteItem::supportsHashCode() const
+{
+    return true;
+}
+
+// virtual
+size_t CntByteItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, m_nValue);
+    return seed;
 }
 
 // virtual
@@ -71,6 +87,21 @@ bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast<const CntUInt16Item *>(&rItem)->m_nValue;
+}
+
+// virtual
+bool CntUInt16Item::supportsHashCode() const
+{
+    return true;
+}
+
+// virtual
+size_t CntUInt16Item::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, m_nValue);
+    return seed;
 }
 
 // virtual
@@ -121,6 +152,21 @@ bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
+bool CntInt32Item::supportsHashCode() const
+{
+    return true;
+}
+
+// virtual
+size_t CntInt32Item::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, m_nValue);
+    return seed;
+}
+
+// virtual
 bool CntInt32Item::GetPresentation(SfxItemPresentation,
                                    MapUnit, MapUnit,
                                    OUString & rText,
@@ -163,6 +209,21 @@ bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast<const CntUInt32Item *>(&rItem)->m_nValue;
+}
+
+// virtual
+bool CntUInt32Item::supportsHashCode() const
+{
+    return true;
+}
+
+// virtual
+size_t CntUInt32Item::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, m_nValue);
+    return seed;
 }
 
 // virtual
