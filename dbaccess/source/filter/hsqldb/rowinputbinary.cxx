@@ -29,10 +29,11 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <tools/datetime.hxx>
+#include <tools/duration.hxx>
 #include <tools/stream.hxx>
+#include <tools/time.hxx>
 #include <rtl/ustrbuf.hxx>
-
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace
 {
@@ -129,6 +130,16 @@ OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
     sBuf.insert(sBuf.getLength() - nScale, ".");
     return sBuf.makeStringAndClear();
 }
+
+DateTime HsqlDateTime(sal_Int64 nanoseconds)
+{
+    const DateTime epoch(Date(1, 1, 1970));
+    const bool negative = nanoseconds < 0;
+    tools::Duration duration(0, 0, 0, 0, negative ? -nanoseconds : nanoseconds);
+    if (negative)
+        duration = -duration;
+    return epoch + duration;
+}
 }
 
 namespace dbahsql
@@ -136,8 +147,6 @@ namespace dbahsql
 using namespace css::uno;
 using namespace css::sdbc;
 using namespace css::io;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
 
 HsqlRowInputStream::HsqlRowInputStream() {}
 
@@ -315,12 +324,8 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value); // in millisec, from 1970
-                ptime epoch = time_from_string("1970-01-01 00:00:00.000");
-                ptime time = epoch + milliseconds(value);
-                date asDate = time.date();
-
-                css::util::Date loDate(asDate.day(), asDate.month(),
-                                       asDate.year()); // day, month, year
+                css::util::Date loDate(
+                    HsqlDateTime(value * tools::Time::nanoPerMilli).GetUNODate());
                 aData.emplace_back(loDate);
             }
             break;
@@ -328,18 +333,13 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value);
-                auto valueInSecs = value / 1000;
-                /* Observed valueInSecs fall in the range from
+                /* Observed value fall in the range from
                    negative one day to positive two days.  Coerce
-                   valueInSecs between zero and positive one day.*/
-                const int secPerDay = 24 * 60 * 60;
-                valueInSecs = (valueInSecs + secPerDay) % secPerDay;
+                   value between zero and positive one day.*/
+                value = (value + tools::Time::milliSecPerDay) % tools::Time::milliSecPerDay;
+                tools::Duration duration(0, 0, 0, 0, value * tools::Time::nanoPerMilli);
 
-                auto nHours = valueInSecs / (60 * 60);
-                valueInSecs = valueInSecs % 3600;
-                const sal_uInt16 nMins = valueInSecs / 60;
-                const sal_uInt16 nSecs = valueInSecs % 60;
-                css::util::Time time((value % 1000) * 1000000, nSecs, nMins, nHours, true);
+                css::util::Time time(duration.GetTime().GetUNOTime());
                 aData.emplace_back(time);
             }
             break;
@@ -347,22 +347,12 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
             {
                 sal_Int64 nEpochMillis = 0;
                 m_pStream->ReadInt64(nEpochMillis);
-                ptime epoch = time_from_string("1970-01-01 00:00:00.000");
-                ptime time = epoch + milliseconds(nEpochMillis);
-                date asDate = time.date();
-
                 sal_Int32 nNanos = 0;
                 m_pStream->ReadInt32(nNanos);
+                DateTime result(HsqlDateTime(nEpochMillis * tools::Time::nanoPerMilli + nNanos));
 
                 // convert into LO internal representation of dateTime
-                css::util::DateTime dateTime;
-                dateTime.NanoSeconds = nNanos;
-                dateTime.Seconds = time.time_of_day().seconds();
-                dateTime.Minutes = time.time_of_day().minutes();
-                dateTime.Hours = time.time_of_day().hours();
-                dateTime.Day = asDate.day();
-                dateTime.Month = asDate.month();
-                dateTime.Year = asDate.year();
+                css::util::DateTime dateTime(result.GetUNODateTime());
                 aData.emplace_back(dateTime);
             }
             break;

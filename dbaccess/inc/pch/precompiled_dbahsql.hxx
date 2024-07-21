@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <string_view>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <rtl/ustrbuf.hxx>
