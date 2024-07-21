@@ -193,41 +193,36 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     checkParameterIndex(nParameterIndex);
     setParameterNull(nParameterIndex, false);
 
-    OString str = OUStringToOString(sInput , RTL_TEXTENCODING_UTF8 );
-
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+    ColumnTypeInfo columnType(*pVar);
 
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
-
-    if (str.getLength() > pVar->sqllen)
-        str = str.copy(0, pVar->sqllen);
-
-    switch (dtype) {
-    case SQL_VARYING:
+    switch (auto sdbcType = columnType.getSdbcType()) {
+    case DataType::VARCHAR:
+    case DataType::CHAR:
     {
-        const sal_Int32 max_varchar_len = 0xFFFF;
-        // First 2 bytes indicate string size
-        if (str.getLength() > max_varchar_len)
+        OString str = OUStringToOString(sInput, RTL_TEXTENCODING_UTF8);
+        const ISC_SHORT nLength = std::min(str.getLength(), static_cast<sal_Int32>(pVar->sqllen));
+        int offset = 0;
+        if (sdbcType == DataType::VARCHAR)
         {
-            str = str.copy(0, max_varchar_len);
+            // First 2 bytes indicate string size
+            static_assert(sizeof(nLength) == 2, "must match dest memcpy len");
+            memcpy(pVar->sqldata, &nLength, 2);
+            offset = 2;
         }
-        const sal_uInt16 nLength = str.getLength();
-        static_assert(sizeof(nLength) == 2, "must match dest memcpy len");
-        memcpy(pVar->sqldata, &nLength, 2);
         // Actual data
-        memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
+        memcpy(pVar->sqldata + offset, str.getStr(), nLength);
+        if (sdbcType == DataType::CHAR)
+        {
+            // Fill remainder with spaces
+            memset(pVar->sqldata + offset + nLength, ' ', pVar->sqllen - nLength);
+        }
         break;
     }
-    case SQL_TEXT:
-        memcpy(pVar->sqldata, str.getStr(), str.getLength());
-        // Fill remainder with spaces
-        memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
-        break;
-    case SQL_BLOB: // Clob
-        assert( pVar->sqlsubtype == static_cast<short>(BlobSubtype::Clob) );
+    case DataType::CLOB:
         setClob(nParameterIndex, sInput );
         break;
-    case SQL_SHORT:
+    case DataType::SMALLINT:
     {
         sal_Int32 int32Value = sInput.toInt32();
         if ( (int32Value < std::numeric_limits<sal_Int16>::min()) ||
@@ -241,31 +236,38 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         setShort(nParameterIndex, int32Value);
         break;
     }
-    case SQL_LONG:
+    case DataType::INTEGER:
     {
         sal_Int32 int32Value = sInput.toInt32();
         setInt(nParameterIndex, int32Value);
         break;
     }
-    case SQL_INT64:
+    case DataType::BIGINT:
     {
         sal_Int64 int64Value = sInput.toInt64();
         setLong(nParameterIndex, int64Value);
         break;
     }
-    case SQL_FLOAT:
+    case DataType::FLOAT:
     {
         float floatValue = sInput.toFloat();
         setFloat(nParameterIndex, floatValue);
         break;
     }
-    case SQL_BOOLEAN:
+    case DataType::DOUBLE:
+        setDouble(nParameterIndex, sInput.toDouble());
+        break;
+    case DataType::NUMERIC:
+    case DataType::DECIMAL:
+        return setObjectWithInfo(nParameterIndex, Any{ sInput }, sdbcType, columnType.getScale());
+        break;
+    case DataType::BOOLEAN:
     {
         bool boolValue = sInput.toBoolean();
         setBoolean(nParameterIndex, boolValue);
         break;
     }
-    case SQL_NULL:
+    case DataType::SQLNULL:
     {
         // See https://www.firebirdsql.org/file/documentation/html/en/refdocs/fblangref25/firebird-25-language-reference.html#fblangref25-datatypes-special-sqlnull
         pVar->sqldata = nullptr;
@@ -359,32 +361,59 @@ namespace {
  * the information of where is the fractional part from a
  * string representation of a number. (e.g. 54.654 -> 54654)
  */
-sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
+sal_Int64 toNumericWithoutDecimalPlace(const Any& x, sal_Int32 scale)
 {
-    OUString sNumber(sSource);
+    if (double value = 0; x >>= value)
+        return static_cast<sal_Int64>(value * pow10Integer(scale) + 0.5);
 
-    // cut off leading 0 eventually ( eg. 0.567 -> .567)
-    (void)sSource.startsWith("0", &sNumber);
+    // Can't use conversion of string to double, because it could be not representable in double
 
-    sal_Int32 nDotIndex = sNumber.indexOf('.');
-
-    if( nDotIndex < 0)
+    OUString s;
+    x >>= s;
+    std::u16string_view num(o3tl::trim(s));
+    size_t end = num.starts_with('-') ? 1 : 0;
+    for (bool seenDot = false; end < num.size(); ++end)
     {
-        return sNumber.toInt64(); // no dot -> it's an integer
-    }
-    else
-    {
-        // remove dot
-        OUStringBuffer sBuffer(15);
-        if(nDotIndex > 0)
+        if (num[end] == '.')
         {
-            sBuffer.append(sNumber.subView(0, nDotIndex));
+            if (seenDot)
+                break;
+            seenDot = true;
         }
-        sBuffer.append(sNumber.subView(nDotIndex + 1));
-        return o3tl::toInt64(sBuffer);
+        else if (!rtl::isAsciiDigit(num[end]))
+            break;
     }
+    num = num.substr(0, end);
+
+    // fill in the number with nulls in fractional part.
+    // We need this because  e.g. 0.450 != 0.045 despite
+    // their scale is equal
+    OUStringBuffer buffer(num);
+    if (auto dotPos = num.find('.'); dotPos != std::u16string_view::npos) // there is a dot
+    {
+        scale -= num.substr(dotPos + 1).size();
+        buffer.remove(dotPos, 1);
+        if (scale < 0)
+        {
+            assert(buffer.getLength() >= -scale);
+            buffer.truncate(buffer.getLength() + scale);
+            scale = 0;
+        }
+    }
+    for (sal_Int32 i = 0; i < scale; ++i)
+        buffer.append('0');
+
+    return OUString::unacquired(buffer).toInt64();
 }
 
+double toDouble(const Any& x)
+{
+    if (double value = 0; x >>= value)
+        return value;
+    OUString s;
+    x >>= s;
+    return s.toDouble();
+}
 }
 
 //----- XParameters -----------------------------------------------------------
@@ -806,57 +835,20 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 
     if(sqlType == DataType::DECIMAL || sqlType == DataType::NUMERIC)
     {
-        double dbValue =0.0;
-        OUString sValue;
-        if( x >>= dbValue )
-        {
-            // truncate and round to 'scale' number of decimal places
-            sValue = OUString::number( std::floor((dbValue * pow10Integer(scale)) + .5) / pow10Integer(scale) );
-        }
-        else
-        {
-            x >>= sValue;
-        }
-
-        // fill in the number with nulls in fractional part.
-        // We need this because  e.g. 0.450 != 0.045 despite
-        // their scale is equal
-        OUStringBuffer sBuffer(15);
-        sBuffer.append(sValue);
-        if(sValue.indexOf('.') != -1) // there is a dot
-        {
-            for(sal_Int32 i=sValue.subView(sValue.indexOf('.')+1).size(); i<scale;i++)
-            {
-                sBuffer.append('0');
-            }
-        }
-        else
-        {
-            for (sal_Int32 i=0; i<scale; i++)
-            {
-                sBuffer.append('0');
-            }
-        }
-
-        sValue = sBuffer.makeStringAndClear();
         switch(dType)
         {
             case SQL_SHORT:
-                setValue< sal_Int16 >(parameterIndex,
-                        static_cast<sal_Int16>( toNumericWithoutDecimalPlace(sValue) ),
-                        dType);
-                break;
+                return setValue(parameterIndex,
+                                static_cast<sal_Int16>(toNumericWithoutDecimalPlace(x, scale)),
+                                dType);
             case SQL_LONG:
-            case SQL_DOUBLE:
-                setValue< sal_Int32 >(parameterIndex,
-                        static_cast<sal_Int32>( toNumericWithoutDecimalPlace(sValue) ),
-                        dType);
-                break;
+                return setValue(parameterIndex,
+                                static_cast<sal_Int32>(toNumericWithoutDecimalPlace(x, scale)),
+                                dType);
             case SQL_INT64:
-                setValue< sal_Int64 >(parameterIndex,
-                        toNumericWithoutDecimalPlace(sValue),
-                        dType);
-                break;
+                return setValue(parameterIndex, toNumericWithoutDecimalPlace(x, scale), dType);
+            case SQL_DOUBLE:
+                return setValue(parameterIndex, toDouble(x), dType);
             default:
                 SAL_WARN("connectivity.firebird",
                         "No Firebird sql type found for numeric or decimal types");
