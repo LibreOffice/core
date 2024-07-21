@@ -605,7 +605,7 @@ public:
     SC_DLLPUBLIC static void Clear();                    // at the end of the program
 
     static void             InitTextHeight(SfxItemPool& rPool);
-    static SvxBrushItem*    GetEmptyBrushItem() { return xEmptyBrushItem.get(); }
+    static const SvxBrushItem* GetEmptyBrushItem() { return xEmptyBrushItem.get(); }
     static SvxBrushItem*    GetButtonBrushItem();
 
     static bool             HasStarCalcFunctionList();
