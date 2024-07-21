@@ -149,7 +149,7 @@ ObjectType Tables::appendObject(const OUString& rName,
         + " (");
 
     // columns
-    Reference<XColumnsSupplier> xColumnSup(rDescriptor,UNO_QUERY);
+    Reference<XColumnsSupplier> xColumnSup(rDescriptor, UNO_QUERY_THROW);
     Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
     // check if there are columns
     if(!xColumns.is() || !xColumns->getCount())
