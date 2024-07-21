@@ -803,17 +803,17 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const 
     {
         return Reference< XPreparedStatement > ();
     }
-    std::vector<OUString> aInsertList(aDestColumnNames.getLength() + 1);
-    for(size_t j=0; j < aInsertList.size(); ++j)
+
+    std::vector<OUString> aInsertList;
+    auto sortedColumns = _rvColumns;
+    std::sort(sortedColumns.begin(), sortedColumns.end());
+    aInsertList.reserve(_rvColumns.size());
+    for (const auto& [nSrc, nDest] : sortedColumns)
     {
-        ODatabaseExport::TPositions::const_iterator aFind = std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            [j] (const ODatabaseExport::TPositions::value_type& tPos)
-                { return tPos.second == static_cast<sal_Int32>(j+1); });
-        if ( _rvColumns.end() != aFind && aFind->second != COLUMN_POSITION_NOT_FOUND && aFind->first != COLUMN_POSITION_NOT_FOUND )
-        {
-            OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
-            aInsertList[aFind->first] = ::dbtools::quoteName(aQuote, aDestColumnNames[j]);
-        }
+        if (nSrc == COLUMN_POSITION_NOT_FOUND || nDest == COLUMN_POSITION_NOT_FOUND)
+            continue;
+        assert(nDest > 0 && nDest <= aDestColumnNames.getLength());
+        aInsertList.push_back(dbtools::quoteName(aQuote, aDestColumnNames[nDest - 1]));
     }
 
     // create the sql string
