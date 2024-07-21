@@ -36,9 +36,9 @@
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool goLeft,
                             bool* const pUndo)
 {
-    auto const oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
+    const ExtendedSelection oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
         ? ExtendedSelectedAll()
-        : ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode *>>>{});
+        : ExtendedSelection{});
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()

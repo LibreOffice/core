@@ -142,11 +142,12 @@ class ScTabViewObj final : public ScViewPaneBase,
                      public css::sheet::XSelectedSheetsSupplier
 {
 private:
+    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener>> RangeSelListeners;
+
     SfxItemPropertySet                      aPropSet;
     std::vector<css::uno::Reference<css::view::XSelectionChangeListener> >
                                             aSelectionChgListeners;
-    std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener> >
-                                            aRangeSelListeners;
+    RangeSelListeners                       aRangeSelListeners;
     std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener> >
                                             aRangeChgListeners;
     std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> >

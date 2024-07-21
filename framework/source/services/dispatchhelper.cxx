@@ -113,9 +113,10 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
 
     if (bOnMainThread)
-        return vcl::solarthread::syncExecute([this, &xDispatch, &aURL, &lArguments]() {
-            return executeDispatch(xDispatch, aURL, true, lArguments);
-        });
+        return vcl::solarthread::syncExecute(
+            [this, &xDispatch, &aURL, &lArguments]() -> css::uno::Any {
+                return executeDispatch(xDispatch, aURL, true, lArguments);
+            });
     else
         return executeDispatch(xDispatch, aURL, true, lArguments);
 }

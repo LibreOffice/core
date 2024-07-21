@@ -833,8 +833,7 @@ static typename SwCursorShell::StartsWith EndsWith(SwStartNode const& rStart)
 
 // return the node that is the start of the extended selection (to include table
 // or section start nodes; looks like extending for end nodes is not required)
-::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>>
-SwCursorShell::ExtendedSelectedAll() const
+SwCursorShell::ExtendedSelection SwCursorShell::ExtendedSelectedAll() const
 {
     if (m_pTableCursor)
     {

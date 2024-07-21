@@ -753,9 +753,8 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             }
             case SmMlAttributeValueType::MlLspace:
             {
-                auto aSizeData = aAttribute.getMlLspace();
-                auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributeLength(XML_LSPACE, aLengthData);
+                auto pSizeData = aAttribute.getMlLspace();
+                exportMlAttributeLength(XML_LSPACE, pSizeData->m_aLengthValue);
                 break;
             }
             case SmMlAttributeValueType::MlMathbackground:
@@ -874,9 +873,8 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             }
             case SmMlAttributeValueType::MlMaxsize:
             {
-                auto aSizeData = aAttribute.getMlMaxsize();
-                auto aLengthData = aSizeData->m_aLengthValue;
-                switch (aSizeData->m_aMaxsize)
+                auto pSizeData = aAttribute.getMlMaxsize();
+                switch (pSizeData->m_aMaxsize)
                 {
                     case SmMlAttributeValueMaxsize::MlInfinity:
                     {
@@ -885,7 +883,7 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
                     }
                     case SmMlAttributeValueMaxsize::MlFinite:
                     {
-                        exportMlAttributeLength(XML_MAXSIZE, aLengthData);
+                        exportMlAttributeLength(XML_MAXSIZE, pSizeData->m_aLengthValue);
                         break;
                     }
                 }
@@ -893,9 +891,8 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             }
             case SmMlAttributeValueType::MlMinsize:
             {
-                auto aSizeData = aAttribute.getMlMinsize();
-                auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributeLength(XML_MINSIZE, aLengthData);
+                auto pSizeData = aAttribute.getMlMinsize();
+                exportMlAttributeLength(XML_MINSIZE, pSizeData->m_aLengthValue);
                 break;
             }
             case SmMlAttributeValueType::MlMovablelimits:
@@ -917,8 +914,8 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
             }
             case SmMlAttributeValueType::MlRspace:
             {
-                auto aSizeData = aAttribute.getMlRspace();
-                exportMlAttributeLength(XML_RSPACE, aSizeData->m_aLengthValue);
+                auto pSizeData = aAttribute.getMlRspace();
+                exportMlAttributeLength(XML_RSPACE, pSizeData->m_aLengthValue);
                 break;
             }
             case SmMlAttributeValueType::MlSeparator:

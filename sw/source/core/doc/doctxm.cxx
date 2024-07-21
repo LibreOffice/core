@@ -1296,7 +1296,7 @@ void SwTOXBaseSection::UpdateMarks(const SwTOXInternational& rIntl,
         auto& rNode = rMark.get().GetTextNode();
         if(IsFromChapter() && !IsHeadingContained(pOwnChapterNode, rNode))
             continue;
-        auto rTOXMark = rMark.get().GetTOXMark();
+        const SwTOXMark& rTOXMark = rMark.get().GetTOXMark();
         if(TOX_INDEX == eTOXTyp)
         {
             // index entry mark

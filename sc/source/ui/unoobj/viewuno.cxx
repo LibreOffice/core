@@ -2067,7 +2067,7 @@ void ScTabViewObj::RangeSelDone( const OUString& rText )
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
-    auto const listeners(aRangeSelListeners);
+    const RangeSelListeners listeners(aRangeSelListeners);
 
     for (const auto& rListener : listeners)
         rListener->done( aEvent );
@@ -2080,7 +2080,7 @@ void ScTabViewObj::RangeSelAborted( const OUString& rText )
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
-    auto const listeners(aRangeSelListeners);
+    const RangeSelListeners listeners(aRangeSelListeners);
 
     for (const auto& rListener : listeners)
         rListener->aborted( aEvent );

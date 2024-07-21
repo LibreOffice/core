@@ -345,7 +345,8 @@ public:
     // only for usage in special cases allowed!
     void ExtendedSelectAll(bool bFootnotes = true);
     /// If ExtendedSelectAll() was called and selection didn't change since then.
-    ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>> ExtendedSelectedAll() const;
+    typedef std::optional<std::pair<SwNode const*, std::vector<SwTableNode*>>> ExtendedSelection;
+    ExtendedSelection ExtendedSelectedAll() const;
     enum class StartsWith { None, Table, HiddenPara, HiddenSection };
     /// If document body starts with a table or starts/ends with hidden paragraph.
     StartsWith StartsWith_();

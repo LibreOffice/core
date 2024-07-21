@@ -197,9 +197,9 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
         bool bColSel = GetCursor_()->IsColumnSelection();
         if( bColSel && rInsDoc.IsClipBoard() )
             rInsDoc.SetColumnSelection( true );
-        auto const oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
+        const ExtendedSelection oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
             ? ExtendedSelectedAll()
-            : ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>>{});
+            : ExtendedSelection{});
         {
             for(SwPaM& rPaM : GetCursor()->GetRingContainer())
             {
