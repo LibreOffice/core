@@ -127,6 +127,8 @@
 #include <unotxdoc.hxx>
 #include <unoidxcoll.hxx>
 
+#include <rootfrm.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -535,6 +537,18 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
                 SwTextNode* pNode = rOutlineNodes[i]->GetTextNode();
+
+                OUString aEntry(comphelper::string::stripStart(
+                                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
+                                i, m_pWrtShell->GetLayout(), true, false, false), ' '));
+                aEntry = SwNavigationPI::CleanEntry(aEntry);
+
+                // tdf#157250 Show deleted headings tracked changes in the Navigator only when show
+                // tracked changes is on
+                if (m_pWrtShell->GetLayout()->IsHideRedlines()
+                    && pNode->GetRedlineMergeFlag() != SwNode::Merge::None && aEntry.isEmpty())
+                    continue;
+
                 const sal_uInt8 nLevel = pNode->GetAttrOutlineLevel() - 1;
                 if (nLevel >= m_nOutlineLevel)
                     continue;
@@ -544,10 +558,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     nYPos += nOutlinesInFramesIndexAdjustment;
                     nOutlinesInFramesIndexAdjustment += 0.00001;
                 }
-                OUString aEntry(comphelper::string::stripStart(
-                                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
-                                i, m_pWrtShell->GetLayout(), true, false, false), ' '));
-                aEntry = SwNavigationPI::CleanEntry(aEntry);
+
                 auto pCnt(std::make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable(i), nYPos));
                 if (!pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
@@ -3846,6 +3857,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
             break;
         }
         case SfxHintId::DocChanged:
+        case SfxHintId::SwRedlineShowChanged:
             OverlayObject();
             if (!m_bIgnoreDocChange)
             {

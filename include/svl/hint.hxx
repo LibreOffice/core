@@ -214,6 +214,7 @@ enum class SfxHintId {
     SwRedlineUnDelText,
     SwMoveText,
     SwRedlineContentAtPos,
+    SwRedlineShowChanged,
     SwTableBoxFormatChanged,
     SwFindContentFrame,
     SwTableLineFormatChanged,

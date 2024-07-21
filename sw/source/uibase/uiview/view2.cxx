@@ -863,6 +863,7 @@ void SwView::Execute(SfxRequest &rReq)
                 m_pWrtShell->EndAllAction();
                 if (m_pWrtShell->IsRedlineOn())
                     m_pWrtShell->SetInsMode();
+                GetDocShell()->Broadcast(SfxHint(SfxHintId::SwRedlineShowChanged));
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
