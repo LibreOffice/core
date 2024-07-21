@@ -53,6 +53,7 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
         if( nBlockBufSize==255 )
             FlushBlockBuf();
 
+        assert(nBlockBufSize != 255 && "FlushBlockBuf ensures this is incrementable without overflow");
         pBlockBuf[nBlockBufSize++] = static_cast<sal_uInt8>(nBitsBuf);
         nBitsBuf >>= 8;
         nBitsBufSize -= 8;
