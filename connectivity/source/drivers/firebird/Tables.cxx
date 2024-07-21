@@ -166,20 +166,19 @@ ObjectType Tables::appendObject(const OUString& rName,
                 + ",");
         }
     }
-    OUString sSql = aSqlBuffer.makeStringAndClear();
 
     const OUString sKeyStmt = ::dbtools::createStandardKeyStatement(rDescriptor,xConnection);
     if ( !sKeyStmt.isEmpty() )
-        sSql += sKeyStmt;
+        aSqlBuffer.append(sKeyStmt);
     else
     {
-        if ( sSql.endsWith(",") )
-            sSql = sSql.replaceAt(sSql.getLength()-1, 1, u")");
+        if (aSqlBuffer[aSqlBuffer.getLength() - 1] == ',')
+            aSqlBuffer[aSqlBuffer.getLength() - 1] = ')';
         else
-            sSql += ")";
+            aSqlBuffer.append(")");
     }
 
-    m_xMetaData->getConnection()->createStatement()->execute(sSql);
+    m_xMetaData->getConnection()->createStatement()->execute(OUString::unacquired(aSqlBuffer));
 
     return createObject(rName);
 }
