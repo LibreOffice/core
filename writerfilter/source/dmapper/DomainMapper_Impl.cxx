@@ -3805,7 +3805,7 @@ bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<tex
     auto xDrawPage = xDrawPageSupplier->getDrawPage();
     if (xDrawPage && xDrawPage->hasElements())
     {
-        for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+        for (sal_Int32 i = 0, nCount = xDrawPage->getCount(); i < nCount; ++i)
         {
             uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
             if (xShape.is())
