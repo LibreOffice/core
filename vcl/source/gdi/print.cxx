@@ -1205,7 +1205,7 @@ void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
         rData.SetPapersizeFromSetup(bPaperSizeFromSetup);
 
         mbNewJobSetup = true;
-        maJobSetup = aJobSetup;
+        maJobSetup = std::move(aJobSetup);
     }
 }
 

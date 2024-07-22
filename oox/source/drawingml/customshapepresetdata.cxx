@@ -1048,7 +1048,7 @@ void CustomShapeProperties::initializePresetDataMap()
         }
         bNotDone = aStream.ReadLine(aLine);
     }
-    maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
+    maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = std::move(aPropertyMap);
 }
 }
 

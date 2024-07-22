@@ -207,7 +207,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             aProp.Value <<= true;
             aProp.Handle = -1;
             aProp.State = beans::PropertyState_DIRECT_VALUE;
-            lComponentDataPV.getArray()[nCDSize] = aProp;
+            lComponentDataPV.getArray()[nCDSize] = std::move(aProp);
             pDescriptor[nComponentDataLocation].Value <<= lComponentDataPV;
         }
     }

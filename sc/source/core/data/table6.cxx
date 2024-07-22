@@ -899,7 +899,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
 
             aNewRanges.push_back(rRange);
         }
-        aRanges = aNewRanges;
+        aRanges = std::move(aNewRanges);
     }
 
     SvxSearchCmd nCommand = rSearchItem.GetCommand();

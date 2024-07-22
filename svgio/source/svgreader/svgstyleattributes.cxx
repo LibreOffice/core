@@ -1450,7 +1450,7 @@ namespace svgio::svgreader
                         }
                         else if(readSvgNumberVector(aContent, aVector))
                         {
-                            maStrokeDasharray = aVector;
+                            maStrokeDasharray = std::move(aVector);
                         }
                     }
                     break;

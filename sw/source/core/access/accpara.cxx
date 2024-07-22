@@ -1583,7 +1583,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 
     if ( !aRequestedAttributes.hasElements() )
     {
-        rDefAttrSeq = aDefAttrSeq;
+        rDefAttrSeq = std::move(aDefAttrSeq);
     }
     else
     {

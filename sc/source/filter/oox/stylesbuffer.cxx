@@ -1718,7 +1718,7 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
         fPosition = rStrm.readDouble();
     }
     if( !rStrm.isEof() && (fPosition >= 0.0) )
-        maColors[ fPosition ] = aColor;
+        maColors[ fPosition ] = std::move(aColor);
 }
 
 ApiSolidFillData::ApiSolidFillData() :

@@ -1495,7 +1495,7 @@ void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
     AlphaMask aNewMask = maBitmap.CreateAlphaMask( maskColor, nTol );
     if ( IsAlpha() )
          aNewMask.AlphaCombineOr( maAlphaMask );
-    maAlphaMask = aNewMask;
+    maAlphaMask = std::move(aNewMask);
 }
 
 /**
