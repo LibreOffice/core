@@ -1040,10 +1040,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         aNewFont.SetColor(rSettings.GetTabHighlightTextColor());
 
         rRenderContext.SetFont(aNewFont);
-
-        rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
-        rRenderContext.DrawRect(CalcFocusRect(pEntry));
-        rRenderContext.SetFillColor();
     }
 
     bool bResetClipRegion = false;
