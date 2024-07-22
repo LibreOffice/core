@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -826,10 +827,23 @@ CairoPixelProcessor2D::~CairoPixelProcessor2D()
 void CairoPixelProcessor2D::processBitmapPrimitive2D(
     const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
+    paintBitmapAlpha(rBitmapCandidate.getBitmap(), rBitmapCandidate.getTransform());
+}
+
+void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
+                                             const basegfx::B2DHomMatrix& rTransform,
+                                             double fTransparency)
+{
+    // transparency invalid or completely transparent, done
+    if (fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        return;
+    }
+
     // check if graphic content is inside discrete local ViewPort
     const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
     const basegfx::B2DHomMatrix aLocalTransform(
-        getViewInformation2D().getObjectToViewTransformation() * rBitmapCandidate.getTransform());
+        getViewInformation2D().getObjectToViewTransformation() * rTransform);
 
     if (!rDiscreteViewPort.isEmpty())
     {
@@ -844,7 +858,7 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
         }
     }
 
-    BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
+    BitmapEx aBitmapEx(rBitmapEx);
 
     if (aBitmapEx.IsEmpty() || aBitmapEx.GetSizePixel().IsEmpty())
     {
@@ -966,8 +980,11 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
 
     cairo_pattern_set_matrix(sourcepattern, &aMatrix);
 
-    // paint bitmap data
-    cairo_paint(mpRT);
+    // paint bitmap data, evtl. with additional alpha channel
+    if (!basegfx::fTools::equalZero(fTransparency))
+        cairo_paint_with_alpha(mpRT, 1.0 - fTransparency);
+    else
+        cairo_paint(mpRT);
 
     cairo_restore(mpRT);
 }
@@ -2717,6 +2734,22 @@ void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
                          rPolyPolygonRGBAPrimitive2D.getTransparency());
 }
 
+void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
+    const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D)
+{
+    if (!rBitmapAlphaPrimitive2D.hasTransparency())
+    {
+        // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
+        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
+                         rBitmapAlphaPrimitive2D.getTransform());
+        return;
+    }
+
+    // draw wiath alpha directly
+    paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(), rBitmapAlphaPrimitive2D.getTransform(),
+                     rBitmapAlphaPrimitive2D.getTransparency());
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -2837,6 +2870,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processPolyPolygonRGBAPrimitive2D(
                 static_cast<const primitive2d::PolyPolygonRGBAPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_BITMAPALPHAPRIMITIVE2D:
+        {
+            processBitmapAlphaPrimitive2D(
+                static_cast<const primitive2d::BitmapAlphaPrimitive2D&>(rCandidate));
             break;
         }
 

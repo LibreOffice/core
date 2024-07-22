@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/animatedprimitive2d \
     drawinglayer/source/primitive2d/backgroundcolorprimitive2d \
     drawinglayer/source/primitive2d/bitmapprimitive2d \
+    drawinglayer/source/primitive2d/BitmapAlphaPrimitive2D \
     drawinglayer/source/primitive2d/borderlineprimitive2d \
     drawinglayer/source/primitive2d/BufferedDecompositionGroupPrimitive2D \
     drawinglayer/source/primitive2d/controlprimitive2d \

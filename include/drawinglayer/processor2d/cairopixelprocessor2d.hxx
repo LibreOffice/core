@@ -38,12 +38,15 @@ class FillGradientPrimitive2D;
 class PolyPolygonRGBAGradientPrimitive2D;
 class FillGraphicPrimitive2D;
 class PolyPolygonRGBAPrimitive2D;
+class BitmapAlphaPrimitive2D;
 }
 
 namespace basegfx
 {
 class B2DPolyPolygon;
 }
+
+class BitmapEx;
 
 namespace drawinglayer::processor2d
 {
@@ -92,6 +95,10 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
     void processPolyPolygonRGBAPrimitive2D(
         const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D);
+    void paintBitmapAlpha(const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform,
+                          double fTransparency = 0.0);
+    void processBitmapAlphaPrimitive2D(
+        const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
