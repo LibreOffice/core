@@ -2745,7 +2745,7 @@ void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
         return;
     }
 
-    // draw wiath alpha directly
+    // draw with alpha directly
     paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(), rBitmapAlphaPrimitive2D.getTransform(),
                      rBitmapAlphaPrimitive2D.getTransparency());
 }
