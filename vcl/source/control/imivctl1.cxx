@@ -962,25 +962,17 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
                                            vcl::RenderContext& rRenderContext)
 {
-    Color aOldFillColor(rRenderContext.GetFillColor());
-
-    bool bSolidTextRect = false;
-
     if (!bSelected)
     {
+        Color aOldFillColor(rRenderContext.GetFillColor());
         const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
         rRenderContext.SetFillColor(rFillColor);
+        // draw text rectangle
         if (rFillColor != COL_TRANSPARENT)
-            bSolidTextRect = true;
-    }
+            rRenderContext.DrawRect(rTextRect);
 
-    // draw text rectangle
-    if (bSolidTextRect)
-    {
-        rRenderContext.DrawRect(rTextRect);
+        rRenderContext.SetFillColor(aOldFillColor);
     }
-
-    rRenderContext.SetFillColor(aOldFillColor);
 }
 
 
