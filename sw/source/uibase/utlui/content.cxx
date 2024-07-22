@@ -1600,6 +1600,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             m_xTreeView->set_cursor(0);
     }
 
+    UpdateContentFunctionsToolbar();
+
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), u"modules/swriter/ui/navigatorcontextmenu.ui"_ustr));
     std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu(u"navmenu"_ustr);
 
