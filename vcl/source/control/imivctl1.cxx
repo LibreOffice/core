@@ -1023,8 +1023,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos));
     tools::Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
 
-    bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
-
     const bool bMouseHovered = pEntry == pCurHighlightFrame;
     const bool bSelected = pEntry->IsSelected();
     if (bSelected)
@@ -1034,7 +1032,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
         // font fill colors that are attributed "hard" need corresponding "hard"
         // attributed highlight colors
-        if ((nWinBits & WB_NOHIDESELECTION) || pView->HasFocus())
+        if (pView->HasFocus())
             aNewFont.SetFillColor(rSettings.GetHighlightColor());
         else
             aNewFont.SetFillColor(rSettings.GetDeactiveColor());
@@ -1096,7 +1094,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         else
         {
             vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, aFocusRect,
-                                                      bActiveSelection ? 1 : 2, false, false, false);
+                                                      pView->HasFocus() ? 1 : 2, false, false, false);
         }
     }
 
