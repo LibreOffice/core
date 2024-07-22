@@ -1048,68 +1048,45 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-    // Background of selected entry
     tools::Rectangle aFocusRect(CalcFocusRect(pEntry));
-    bool bNativeSelection = rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, ControlPart::Entire);
-    if (bSelected)
-    {
-        if (bNativeSelection)
-        {
-            ControlState nState = ControlState::ENABLED;
-            ImplControlValue aControlValue(0);
-            bNativeSelection = rRenderContext.DrawNativeControl(ControlType::WindowBackground, ControlPart::Entire,
-                                                                aFocusRect, nState, aControlValue, OUString());
-        }
 
-        if (bNativeSelection)
-        {
-            // If a native control was drawn, then draw a mark at the left side of the selected tab
-            aFocusRect.setWidth(TAB_MARK_WIDTH);
-            Color aOldFillColor(rRenderContext.GetFillColor());
-            Color aOldLineColor(rRenderContext.GetLineColor());
-            Color aAccentColor(rRenderContext.GetSettings().GetStyleSettings().GetAccentColor());
-            rRenderContext.SetFillColor(aAccentColor);
-            rRenderContext.SetLineColor(aAccentColor);
-            rRenderContext.DrawRect(aFocusRect);
-            rRenderContext.SetFillColor(aOldFillColor);
-            rRenderContext.SetLineColor(aOldLineColor);
-        }
+    bool bNativeOK
+        = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
+    if (bNativeOK)
+    {
+        ControlState nState = ControlState::ENABLED;
+        if (bSelected)
+            nState |= ControlState::SELECTED;
+        if (pEntry->IsFocused())
+            nState |= ControlState::FOCUSED;
+        if (bMouseHovered)
+            nState |= ControlState::ROLLOVER;
+
+        TabitemValue tiValue(aFocusRect, TabBarPosition::Left);
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
+                                                     aFocusRect, nState, tiValue, OUString());
+    }
+
+    if (!bNativeOK)
+    {
+        if (bSelected)
+            vcl::RenderTools::DrawSelectionBackground(
+                rRenderContext, *pView, aFocusRect, pView->HasFocus() ? 1 : 2, false, false, false);
         else
-        {
-            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, aFocusRect,
-                                                      pView->HasFocus() ? 1 : 2, false, false, false);
-        }
-    }
-    else
-    {
-        PaintEmphasis(aTextRect, rRenderContext);
-    }
+            PaintEmphasis(aTextRect, rRenderContext);
 
-    if (pEntry->IsFocused())
-        DrawFocusRect(rRenderContext, pEntry);
+        if (pEntry->IsFocused())
+            DrawFocusRect(rRenderContext, pEntry);
 
-    // highlight mouse-hovered entry
-    if (bMouseHovered)
-    {
-        const tools::Rectangle aRect = CalcFocusRect(pEntry);
-        bool bNativeOK
-            = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire);
-        if (bNativeOK)
-        {
-            ControlState nState = ControlState::ENABLED | ControlState::ROLLOVER;
-            TabitemValue tiValue(aRect, TabBarPosition::Left);
-            bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
-                                                         aRect, nState, tiValue, OUString());
-        }
-
-        if (!bNativeOK)
-            DrawHighlightFrame(rRenderContext, aRect);
+        // highlight mouse-hovered entry
+        if (bMouseHovered)
+            DrawHighlightFrame(rRenderContext, aFocusRect);
     }
 
     PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
 
-    // Move text a bit to the right for native controls due to the tab mark (applies to text-only entries)
-    if (bNativeSelection && (nWinBits & WB_DETAILS))
+    // Move text a bit to the right for native controls due to potential tab mark (applies to text-only entries)
+    if (bNativeOK && (nWinBits & WB_DETAILS))
         aTextRect.SetPos(Point(aTextRect.GetPos().X() + TAB_MARK_WIDTH, aTextRect.GetPos().Y()));
 
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
