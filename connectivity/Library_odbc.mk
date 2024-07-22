@@ -45,8 +45,6 @@ $(eval $(call gb_Library_use_libraries,odbc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,odbc,\
-	connectivity/source/drivers/odbc/ORealDriver \
-	connectivity/source/drivers/odbc/OFunctions \
 	connectivity/source/drivers/odbc/OPreparedStatement \
 	connectivity/source/drivers/odbc/OStatement \
 	connectivity/source/drivers/odbc/OResultSetMetaData \

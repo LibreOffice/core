@@ -158,10 +158,7 @@ namespace connectivity::odbc
             OStatement_Base(OConnection* _pConnection );
             using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
-            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
-            {
-                return m_pConnection->getOdbcFunction(_nIndex);
-            }
+            const Functions& functions() const { return m_pConnection->functions(); }
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface

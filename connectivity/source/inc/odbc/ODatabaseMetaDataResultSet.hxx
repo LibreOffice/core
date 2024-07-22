@@ -114,10 +114,7 @@ namespace connectivity::odbc
             ODatabaseMetaDataResultSet(OConnection* _pConnection);
 
 
-            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
-            {
-                return m_pConnection->getOdbcFunction(_nIndex);
-            }
+            const Functions& functions() const { return m_pConnection->functions(); }
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface

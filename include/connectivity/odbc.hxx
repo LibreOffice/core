@@ -24,10 +24,6 @@
 
 // just to go with calling convention of windows
 #if SYSTEM_ODBC_HEADERS
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
 #define SQL_API __stdcall
 #include <sqlext.h>
 #else

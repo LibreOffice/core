@@ -147,7 +147,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  )
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     try
     {
-        SQLRETURN nReturn = N3SQLExecute(m_aStatementHandle);
+        SQLRETURN nReturn = functions().Execute(m_aStatementHandle);
 
         OTools::ThrowException(m_pConnection.get(),nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         bool needData = nReturn == SQL_NEED_DATA;
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  )
             // Get the parameter number that requires data
 
             sal_Int32* paramIndex = nullptr;
-            N3SQLParamData(m_aStatementHandle, reinterpret_cast<SQLPOINTER*>(&paramIndex));
+            functions().ParamData(m_aStatementHandle, reinterpret_cast<SQLPOINTER*>(&paramIndex));
 
             // If the parameter index is -1, there is no
             // more data required
@@ -373,7 +373,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     rDataLen = _nDataLen;
 
     SQLRETURN nRetcode;
-    nRetcode = (*reinterpret_cast<T3SQLBindParameter>(m_pConnection->getOdbcFunction(ODBC3SQLFunctionId::BindParameter)))(
+    nRetcode = functions().BindParameter(
                   m_aStatementHandle,
                   // checkParameterIndex guarantees this is safe
                   static_cast<SQLUSMALLINT>(parameterIndex),
@@ -513,7 +513,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_I
                             fCType,
                             fSqlType);
 
-    SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
+    SQLRETURN nReturn = functions().BindParameter( m_aStatementHandle,
                                             static_cast<SQLUSMALLINT>(parameterIndex),
                                             SQL_PARAM_INPUT,
                                             fCType,
@@ -639,8 +639,8 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     prepareStatement();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
-    N3SQLFreeStmt (m_aStatementHandle, SQL_UNBIND);
+    functions().FreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
+    functions().FreeStmt (m_aStatementHandle, SQL_UNBIND);
 }
 
 void SAL_CALL OPreparedStatement::clearBatch(  )
@@ -673,7 +673,7 @@ void OPreparedStatement::initBoundParam ()
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     // Get the number of parameters
     numParams = 0;
-    N3SQLNumParams (m_aStatementHandle,&numParams);
+    functions().NumParams (m_aStatementHandle,&numParams);
 
     // There are parameter markers, allocate the bound
     // parameter objects
@@ -772,7 +772,7 @@ void OPreparedStatement::putParamData (sal_Int32 index)
 
             // Put the data
             OSL_ENSURE( m_aStatementHandle, "OPreparedStatement::putParamData: StatementHandle is null!" );
-            N3SQLPutData ( m_aStatementHandle, buf.getArray(), buf.getLength() );
+            functions().PutData ( m_aStatementHandle, buf.getArray(), buf.getLength() );
 
             // decrement the number of bytes still needed
             maxBytesLeft -= haveRead;
@@ -823,7 +823,7 @@ void OPreparedStatement::setStream(
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    N3SQLBindParameter(m_aStatementHandle,
+    functions().BindParameter(m_aStatementHandle,
                        static_cast<SQLUSMALLINT>(ParameterIndex),
                        SQL_PARAM_INPUT,
                        fCType,
@@ -883,7 +883,7 @@ void OPreparedStatement::prepareStatement()
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
         OString aSql(OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
-        SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength());
+        SQLRETURN nReturn = functions().Prepare(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength());
         OTools::ThrowException(m_pConnection.get(),nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         m_bPrepared = true;
         initBoundParam();

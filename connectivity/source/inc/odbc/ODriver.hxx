@@ -27,6 +27,7 @@
 #include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
+#include <odbc/OFunctions.hxx>
 #include <odbc/OTools.hxx>
 
 namespace connectivity::odbc
@@ -43,16 +44,15 @@ namespace connectivity::odbc
                                                         //  for this Driver
 
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
-            SQLHANDLE   m_pDriverHandle;
 
-            virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) = 0;
+            virtual SQLHANDLE EnvironmentHandle() = 0;
 
         public:
 
             ODBCDriver(css::uno::Reference< css::uno::XComponentContext > xContext);
 
             // only possibility to get the odbc functions
-            virtual oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const = 0;
+            virtual const Functions& functions() const = 0;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 

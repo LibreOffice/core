@@ -231,10 +231,7 @@ namespace connectivity::odbc
 
             void construct();
 
-            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
-            {
-                return m_pStatement->getOdbcFunction(_nIndex);
-            }
+            const Functions& functions() const { return m_pStatement->functions(); }
 
             css::uno::Reference< css::uno::XInterface > operator *()
             {

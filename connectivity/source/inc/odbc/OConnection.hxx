@@ -37,6 +37,7 @@
 namespace connectivity::odbc
     {
         class ODBCDriver;
+        class Functions;
 
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
@@ -69,7 +70,7 @@ namespace connectivity::odbc
             SQLRETURN       OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, bool bSilent);
 
         public:
-            oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const;
+            const Functions& functions() const;
             /// @throws css::sdbc::SQLException
             SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 

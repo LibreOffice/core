@@ -38,7 +38,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     SQLSMALLINT BUFFER_LEN = 128;
     std::unique_ptr<char[]> pName(new char[BUFFER_LEN+1]);
     SQLSMALLINT nRealLen=0;
-    SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
+    SQLRETURN nRet = functions().ColAttribute(m_aStatementHandle,
                                     static_cast<SQLUSMALLINT>(column),
                                     static_cast<SQLUSMALLINT>(ident),
                                     static_cast<SQLPOINTER>(pName.get()),
@@ -58,7 +58,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     if(nRealLen > BUFFER_LEN)
     {
         pName.reset(new char[nRealLen+1]);
-        nRet = N3SQLColAttribute(m_aStatementHandle,
+        nRet = functions().ColAttribute(m_aStatementHandle,
                                     static_cast<SQLUSMALLINT>(column),
                                     static_cast<SQLUSMALLINT>(ident),
                                     static_cast<SQLPOINTER>(pName.get()),
@@ -81,7 +81,7 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection const * _pConnection
                                               ,sal_Int32 _ident)
 {
     SQLLEN nValue=0;
-    OTools::ThrowException(_pConnection,(*reinterpret_cast<T3SQLColAttribute>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::ColAttribute)))(_aStatementHandle,
+    OTools::ThrowException(_pConnection,_pConnection->functions().ColAttribute(_aStatementHandle,
                                          static_cast<SQLUSMALLINT>(_column),
                                          static_cast<SQLUSMALLINT>(_ident),
                                          nullptr,
@@ -161,7 +161,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
     if(m_nColCount != -1)
         return m_nColCount;
     sal_Int16 nNumResultCols=0;
-    OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection,functions().NumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     m_nColCount = nNumResultCols;
     return m_nColCount;
 }

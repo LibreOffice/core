@@ -83,10 +83,7 @@ namespace connectivity::odbc
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column);
 
-            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
-            {
-                return m_pConnection->getOdbcFunction(_nIndex);
-            }
+            const Functions& functions() const { return m_pConnection->functions(); }
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
             virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;

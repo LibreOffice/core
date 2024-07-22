@@ -495,7 +495,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 
     m_bEOF = false;
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
+    m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     bool bRet = ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO );
     if( bRet )
@@ -510,7 +510,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
+    m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
     bool bRet = ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO );
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
 
     m_bEOF = false;
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
+    m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
@@ -543,7 +543,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
 
     m_bEOF = false;
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
+    m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
@@ -559,7 +559,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 
     m_bEOF = false;
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
+    m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet)
@@ -625,8 +625,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
     m_bEOF = false;
 
     SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
-    //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
-    m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
+    //  m_nCurrentFetchState = functions().FetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
+    m_nCurrentFetchState = functions().Fetch(m_aStatementHandle);
     OTools::ThrowException(m_pConnection.get(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     if(bRet || ( m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA ) )
@@ -661,7 +661,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  )
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    N3SQLCancel(m_aStatementHandle);
+    functions().Cancel(m_aStatementHandle);
 }
 
 void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  )
@@ -826,7 +826,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo()
 
     m_aValueRange[2] = aMap;
 
-    OTools::ThrowException(m_pConnection.get(),N3SQLGetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection.get(),functions().GetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
@@ -868,7 +868,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
     else
         pCOL = SQL_ALL_TABLE_TYPES;
 
-    SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -880,7 +880,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
 
 void ODatabaseMetaDataResultSet::openTablesTypes( )
 {
-    SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
                             nullptr,0,
                             nullptr,0,
                             nullptr,0,
@@ -896,7 +896,7 @@ void ODatabaseMetaDataResultSet::openTablesTypes( )
 
 void ODatabaseMetaDataResultSet::openCatalogs()
 {
-    SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_CATALOGS)),SQL_NTS,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
@@ -913,7 +913,7 @@ void ODatabaseMetaDataResultSet::openCatalogs()
 
 void ODatabaseMetaDataResultSet::openSchemas()
 {
-    SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_SCHEMAS)),SQL_NTS,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
@@ -952,7 +952,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
                 *pCOL = aCOL.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLColumnPrivileges(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().ColumnPrivileges(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -985,7 +985,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
                 *pCOL = aCOL.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLColumns(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Columns(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -1052,7 +1052,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
                 *pCOL = aCOL.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLProcedureColumns(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().ProcedureColumns(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -1084,7 +1084,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
                 *pPKN = aPKN.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLProcedures(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Procedures(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
@@ -1123,7 +1123,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
                 *pPKN = aPKN.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLSpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
+    SQLRETURN nRetcode = functions().SpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -1183,7 +1183,7 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
         pFKN = aFKN.getStr();
     }
 
-    SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().ForeignKeys(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), pPKN ? SQL_NTS : 0,
@@ -1230,7 +1230,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
                 *pPKN = aPKN.getStr();
 
 
-    SQLRETURN nRetcode = N3SQLPrimaryKeys(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().PrimaryKeys(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
@@ -1259,7 +1259,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
                 *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr();
 
-    SQLRETURN nRetcode = N3SQLTablePrivileges(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().TablePrivileges(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
@@ -1288,7 +1288,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
                 *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
                 *pPKN = aPKN.getStr();
 
-    SQLRETURN nRetcode = N3SQLStatistics(m_aStatementHandle,
+    SQLRETURN nRetcode = functions().Statistics(m_aStatementHandle,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
                             reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
@@ -1301,7 +1301,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
 void ODatabaseMetaDataResultSet::checkColumnCount()
 {
     sal_Int16 nNumResultCols=0;
-    OTools::ThrowException(m_pConnection.get(),N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pConnection.get(),functions().NumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     m_nDriverColumnCount = nNumResultCols;
 }
 
