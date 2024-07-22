@@ -1161,7 +1161,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pE
             return tools::Rectangle( aPos, aImageSize );
 
         default:
-            OSL_FAIL("IconView: Viewmode not set");
+            assert(false && "IconView: Viewmode not set");
             return aBound;
     }
 }
