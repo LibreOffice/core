@@ -187,8 +187,11 @@ void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr&
     }
 }
 
+static std::mutex gCharClassMutex;
+
 void ScCompiler::DeInit()
 {
+    std::scoped_lock aGuard(gCharClassMutex);
     if (pCharClassEnglish)
     {
         delete pCharClassEnglish;
@@ -224,38 +227,26 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
     return !aIntName.isEmpty();       // no valid function name
 }
 
-static std::mutex& getCharClassMutex()
-{
-    static std::mutex aMutex;
-    return aMutex;
-}
-
 const CharClass* ScCompiler::GetCharClassEnglish()
 {
+    std::scoped_lock aGuard(gCharClassMutex);
     if (!pCharClassEnglish)
     {
-        std::scoped_lock aGuard(getCharClassMutex());
-        if (!pCharClassEnglish)
-        {
-            pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
-                    LanguageTag( LANGUAGE_ENGLISH_US));
-        }
+        pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
+                LanguageTag( LANGUAGE_ENGLISH_US));
     }
     return pCharClassEnglish;
 }
 
 const CharClass* ScCompiler::GetCharClassLocalized()
 {
+    // Switching UI language requires restart; if not, we would have to
+    // keep track of that.
+    std::scoped_lock aGuard(gCharClassMutex);
     if (!pCharClassLocalized)
     {
-        // Switching UI language requires restart; if not, we would have to
-        // keep track of that.
-        std::scoped_lock aGuard(getCharClassMutex());
-        if (!pCharClassLocalized)
-        {
-            pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
-                    Application::GetSettings().GetUILanguageTag());
-        }
+        pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetUILanguageTag());
     }
     return pCharClassLocalized;
 }
