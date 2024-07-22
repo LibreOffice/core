@@ -792,6 +792,13 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         {
             // pTextConfigColor can be used to avoid repeated lookup of the configured color
             aSysTextColor = *pTextConfigColor;
+            if (SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
+            {
+                if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
+                    aSysTextColor = COL_WHITE;
+                else
+                    aSysTextColor = COL_BLACK;
+            }
         }
         else
         {
