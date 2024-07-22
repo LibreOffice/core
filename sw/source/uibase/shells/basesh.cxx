@@ -806,11 +806,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rWrtSh.StartAction();
 
     std::vector<const SwFormatRefMark*> aRefMarks;
-
-    for (sal_uInt16 i = 0; i < pDoc->GetRefMarks(); ++i)
-    {
-        aRefMarks.push_back(pDoc->GetRefMark(i));
-    }
+    pDoc->GetRefMarks(aRefMarks);
 
     std::sort(aRefMarks.begin(), aRefMarks.end(),
               [](const SwFormatRefMark* pMark1, const SwFormatRefMark* pMark2) -> bool {

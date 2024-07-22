@@ -1142,6 +1142,22 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     return nCount;
 }
 
+void SwDoc::GetRefMarks( std::vector<const SwFormatRefMark*>& rMarks ) const
+{
+    ItemSurrogates aSurrogates;
+    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
+    rMarks.reserve(aSurrogates.size());
+    for (const SfxPoolItem* pItem : aSurrogates)
+    {
+        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
+        if( !pRefMark )
+            continue;
+        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+            rMarks.push_back(pRefMark);
+    }
+}
+
 void SwDoc::DeleteFormatRefMark(const SwFormatRefMark* pFormatRefMark)
 {
     const SwTextRefMark* pTextRefMark = pFormatRefMark->GetTextRefMark();

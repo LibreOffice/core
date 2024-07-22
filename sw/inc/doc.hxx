@@ -1331,6 +1331,7 @@ public:
     /** @return names of all references that are set in document.
      If array pointer is 0 return only whether a RefMark is set in document. */
     SW_DLLPUBLIC sal_uInt16 GetRefMarks( std::vector<OUString>* = nullptr ) const;
+    SW_DLLPUBLIC void GetRefMarks( std::vector<const SwFormatRefMark*>& ) const;
 
     void DeleteFormatRefMark(const SwFormatRefMark* pFormatRefMark);
 
