@@ -1276,43 +1276,50 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static bool lcl_checkNameUnique(const SdrObject& rObj, const OUString& rCmpName)
+static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, std::u16string_view rName, std::u16string_view rCmpName)
 {
-    if (rCmpName == rObj.GetName())
-        return false;
+    if (o3tl::starts_with(rName, rCmpName))
+    {
+        // Only get and set the Flag
+        const sal_Int32 nNum = o3tl::toInt32(rName.substr(nNmLen)) - 1;
+        if (nNum >= 0)
+            rSetFlags.push_back(nNum);
+    }
+}
+
+static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const SdrObject& rObj, const OUString& rCmpName)
+{
+    OUString sName = rObj.GetName();
+    lcl_collectUsedNums(rSetFlags, nNmLen, sName, rCmpName);
     // tdf#122487 take groups into account, iterate and recurse through their
     // contents for name collision check
     if (!rObj.IsGroupObject())
-        return true;
+        return;
 
     const SdrObjList* pSub(rObj.GetSubList());
     assert(pSub && "IsGroupObject is implemented as GetSubList != nullptr");
     for (const rtl::Reference<SdrObject>& pObj : *pSub)
     {
-        if (!lcl_checkNameUnique(*pObj, rCmpName))
-            return false;
+        lcl_collectUsedNums(rSetFlags, nNmLen, *pObj, rCmpName);
     }
-    return true;
 }
 
-static bool lcl_checkNameUnique(const SwDoc& rDoc, sal_uInt16 eType, const OUString& rCmpName)
+namespace
 {
-    for(sw::SpzFrameFormat* pFlyFormat: *rDoc.GetSpzFrameFormats())
+    int first_available_number(std::vector<unsigned int>& numbers)
     {
-        if (eType != pFlyFormat->Which())
-            continue;
-        if (eType == RES_DRAWFRMFMT)
+        std::sort(numbers.begin(), numbers.end());
+        auto last = std::unique(numbers.begin(), numbers.end());
+        numbers.erase(last, numbers.end());
+
+        for (size_t i = 0; i < numbers.size(); ++i)
         {
-            const SdrObject *pObj = pFlyFormat->FindSdrObject();
-            if (pObj)
-                if (!lcl_checkNameUnique(*pObj, rCmpName))
-                    return false;
+            if (numbers[i] != i)
+                return i;
         }
 
-        if (pFlyFormat->GetName() == rCmpName)
-            return false;
+        return numbers.size();
     }
-    return true;
 }
 
 static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType, std::u16string_view rPrefix = std::u16string_view(), SwNodeType nNdTyp = SwNodeType::NONE)
@@ -1346,13 +1353,29 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
         return aTmp;
     }
 
-    OUString aBaseName(SwResId(pDefStrId));
-    for (;;)
+    OUString aName(SwResId(pDefStrId));
+    sal_Int32 nNmLen = aName.getLength();
+
+    std::vector<unsigned int> aUsedNums;
+    aUsedNums.reserve(rDoc.GetSpzFrameFormats()->size());
+
+    for(sw::SpzFrameFormat* pFlyFormat: *rDoc.GetSpzFrameFormats())
     {
-        OUString aName = aBaseName + OUString::number(const_cast<SwDoc&>(rDoc).GetNextDefaultFlyNumber(eType));
-        if (lcl_checkNameUnique(rDoc, eType, aName))
-            return aName;
+        if (eType != pFlyFormat->Which())
+            continue;
+        if (eType == RES_DRAWFRMFMT)
+        {
+            const SdrObject *pObj = pFlyFormat->FindSdrObject();
+            if (pObj)
+                lcl_collectUsedNums(aUsedNums, nNmLen, *pObj, aName);
+        }
+
+        lcl_collectUsedNums(aUsedNums, nNmLen, pFlyFormat->GetName(), aName);
     }
+
+    // All numbers are flagged accordingly, so determine the right one
+    auto nNum = first_available_number(aUsedNums) + 1;
+    return aName + OUString::number(nNum);
 }
 
 OUString SwDoc::GetUniqueGrfName(std::u16string_view rPrefix) const

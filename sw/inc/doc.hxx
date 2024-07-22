@@ -306,7 +306,6 @@ private:
 
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
-    std::unordered_map<sal_uInt16, sal_Int32> maDefaultFlyNameCounters; //< counters used to generate unique fly names
 
     oslInterlockedCount  mReferenceCount;
 
@@ -759,7 +758,6 @@ public:
     // LayoutFormats (frames, DrawObjects), sometimes const sometimes not
     const sw::FrameFormats<sw::SpzFrameFormat*>* GetSpzFrameFormats() const   { return mpSpzFrameFormatTable.get(); }
           sw::FrameFormats<sw::SpzFrameFormat*>* GetSpzFrameFormats()         { return mpSpzFrameFormatTable.get(); }
-    sal_Int32 GetNextDefaultFlyNumber(sal_uInt16 nWhich) { return ++maDefaultFlyNameCounters[nWhich]; }
 
     const SwFrameFormat *GetDfltFrameFormat() const   { return mpDfltFrameFormat.get(); }
           SwFrameFormat *GetDfltFrameFormat()         { return mpDfltFrameFormat.get(); }

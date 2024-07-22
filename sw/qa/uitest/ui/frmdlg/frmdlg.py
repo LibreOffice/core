@@ -78,7 +78,7 @@ class Test(UITestCase):
                 # Without the accompanying fix in place, this test would have failed with:
                 # AssertionError: 0 != 2000.0
                 # i.e. the width was empty instead of the size from the UI.
-                self.assertEqual(xComponent.TextFrames.Frame2.Size.Width, expected_mm100)
+                self.assertEqual(xComponent.TextFrames.Frame1.Size.Width, expected_mm100)
 
     def test_insert_floating_table(self):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
@@ -101,7 +101,7 @@ class Test(UITestCase):
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: 2 != 0
             # i.e. the frame had a border by default when the table already had its own border.
-            self.assertEqual(xComponent.TextFrames.Frame2.LeftBorder.LineWidth, 0)
+            self.assertEqual(xComponent.TextFrames.Frame1.LeftBorder.LineWidth, 0)
 
     def test_insert_simple_frame(self):
         # Given a Writer document:

@@ -186,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Frame", u"Frame..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><TEXT_FRAME name=\"Frame2\"><PARAGRAPH/></TEXT_FRAME>"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"_ustr,
                          collectText());
 }
 
