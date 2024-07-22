@@ -73,7 +73,7 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xNumFormatLB->get_widget().set_size_request(nWidth, nHeight/2);
 
     m_xValueED->get_widget().set_size_request(m_xValueED->get_widget().get_preferred_size().Width(),
-                                   m_xValueED->get_widget().get_height_rows(3));
+                                   m_xValueED->get_widget().get_height_rows(6));
 
     m_sOldValueFT = m_xValueFT->get_label();
     m_sOldNameFT = m_xNameFT->get_label();
