@@ -3707,9 +3707,9 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
         rAttrPool.GetItemSurrogates(aSurrogates, RES_TXTATR_CJK_RUBY);
         for (const SfxPoolItem* pItem : aSurrogates)
         {
-            auto pRubyItem = dynamic_cast<const SwFormatRuby*>(pItem);
-            if ( pRubyItem && pRubyItem->GetTextRuby() )
-                vRubyItems.push_back(pRubyItem);
+            const auto & rRubyItem = static_cast<const SwFormatRuby&>(*pItem);
+            if ( rRubyItem.GetTextRuby() )
+                vRubyItems.push_back(&rRubyItem);
         }
         for (const SwFormatRuby* pRubyItem : vRubyItems)
         {

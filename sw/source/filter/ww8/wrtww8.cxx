@@ -3372,11 +3372,9 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pItem);
-        if (!pINetFormat)
-            continue;
+        const auto & rINetFormat = static_cast<const SwFormatINetFormat&>(*pItem);
 
-        const SwTextINetFormat* pTextAttr = pINetFormat->GetTextINetFormat();
+        const SwTextINetFormat* pTextAttr = rINetFormat.GetTextINetFormat();
         if (!pTextAttr)
             continue;
 
@@ -3387,18 +3385,16 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
         if (!pTextNd->GetNodes().IsDocNodes())
             continue;
 
-        AddLinkTarget( pINetFormat->GetValue() );
+        AddLinkTarget( rINetFormat.GetValue() );
     }
 
     rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pURL = dynamic_cast<const SwFormatURL*>(pItem);
-        if (!pURL)
-            continue;
+        const auto & rURL = static_cast<const SwFormatURL&>(*pItem);
 
-        AddLinkTarget(pURL->GetURL());
-        const ImageMap *pIMap = pURL->GetMap();
+        AddLinkTarget(rURL.GetURL());
+        const ImageMap *pIMap = rURL.GetMap();
         if (!pIMap)
             continue;
 

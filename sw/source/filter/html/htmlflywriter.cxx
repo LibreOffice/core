@@ -2237,35 +2237,31 @@ void SwHTMLWriter::CollectLinkTargets()
     m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pItem);
+        const auto & rINetFormat = static_cast<const SwFormatINetFormat&>(*pItem);
         const SwTextNode* pTextNd;
 
-        if( pINetFormat &&
-            nullptr != ( pTextAttr = pINetFormat->GetTextINetFormat()) &&
+        if( nullptr != ( pTextAttr = rINetFormat.GetTextINetFormat()) &&
             nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
             pTextNd->GetNodes().IsDocNodes() )
         {
-            AddLinkTarget( pINetFormat->GetValue() );
+            AddLinkTarget( rINetFormat.GetValue() );
         }
     }
 
     m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pURL = dynamic_cast<const SwFormatURL*>(pItem);
-        if( pURL )
+        const auto & rURL = static_cast<const SwFormatURL&>(*pItem);
+        AddLinkTarget( rURL.GetURL() );
+        const ImageMap *pIMap = rURL.GetMap();
+        if( pIMap )
         {
-            AddLinkTarget( pURL->GetURL() );
-            const ImageMap *pIMap = pURL->GetMap();
-            if( pIMap )
+            for( size_t i=0; i<pIMap->GetIMapObjectCount(); ++i )
             {
-                for( size_t i=0; i<pIMap->GetIMapObjectCount(); ++i )
+                const IMapObject* pObj = pIMap->GetIMapObject( i );
+                if( pObj )
                 {
-                    const IMapObject* pObj = pIMap->GetIMapObject( i );
-                    if( pObj )
-                    {
-                        AddLinkTarget( pObj->GetURL() );
-                    }
+                    AddLinkTarget( pObj->GetURL() );
                 }
             }
         }

@@ -603,28 +603,22 @@ bool SwViewShell::IsAnyFieldInDoc() const
     mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_FIELD);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pFormatField = dynamic_cast<const SwFormatField*>(pItem);
-        if(pFormatField)
+        const auto & rFormatField = static_cast<const SwFormatField&>(*pItem);
+        const SwTextField* pTextField = rFormatField.GetTextField();
+        if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
         {
-            const SwTextField* pTextField = pFormatField->GetTextField();
-            if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            {
-                return true;
-            }
+            return true;
         }
     }
 
     mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INPUTFIELD);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        const SwFormatField* pFormatField = dynamic_cast<const SwFormatField*>(pItem);
-        if(pFormatField)
+        const SwFormatField& rFormatField = static_cast<const SwFormatField&>(*pItem);
+        const SwTextField* pTextField = rFormatField.GetTextField();
+        if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
         {
-            const SwTextField* pTextField = pFormatField->GetTextField();
-            if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            {
-                return true;
-            }
+            return true;
         }
     }
 

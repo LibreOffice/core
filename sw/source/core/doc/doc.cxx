@@ -1075,14 +1075,11 @@ const SwFormatRefMark* SwDoc::GetRefMark( std::u16string_view rName ) const
     GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pFormatRef = dynamic_cast<const SwFormatRefMark*>(pItem);
-        if(!pFormatRef)
-            continue;
-
-        const SwTextRefMark* pTextRef = pFormatRef->GetTextRefMark();
+        const auto & rFormatRef = static_cast<const SwFormatRefMark&>(*pItem);
+        const SwTextRefMark* pTextRef = rFormatRef.GetTextRefMark();
         if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() &&
-            rName == pFormatRef->GetRefName() )
-            return pFormatRef;
+            rName == rFormatRef.GetRefName() )
+            return &rFormatRef;
     }
     return nullptr;
 }
@@ -1097,15 +1094,13 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
-        if( !pRefMark )
-            continue;
-        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
+        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
         if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if(nCount == nIndex)
             {
-                pRet = pRefMark;
+                pRet = &rRefMark;
                 break;
             }
             nCount++;
@@ -1124,15 +1119,13 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
-        if( !pRefMark )
-            continue;
-        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
+        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
         if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if( pNames )
             {
-                OUString aTmp(pRefMark->GetRefName());
+                OUString aTmp(rRefMark.GetRefName());
                 pNames->insert(pNames->begin() + nCount, aTmp);
             }
             ++nCount;
@@ -1149,12 +1142,10 @@ void SwDoc::GetRefMarks( std::vector<const SwFormatRefMark*>& rMarks ) const
     rMarks.reserve(aSurrogates.size());
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
-        if( !pRefMark )
-            continue;
-        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
+        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
         if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
-            rMarks.push_back(pRefMark);
+            rMarks.push_back(&rRefMark);
     }
 }
 
@@ -1273,16 +1264,16 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( std::u16string_view rName ) const
     GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
-        if( !pFormatItem || pFormatItem->GetName() != rName )
+        const auto & rFormatItem = static_cast<const SwFormatINetFormat&>(*pItem);
+        if( rFormatItem.GetName() != rName )
             continue;
-        const SwTextINetFormat* pTextAttr = pFormatItem->GetTextINetFormat();
+        const SwTextINetFormat* pTextAttr = rFormatItem.GetTextINetFormat();
         if( !pTextAttr )
             continue;
         const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
         if( pTextNd && &pTextNd->GetNodes() == &GetNodes() )
         {
-            return pFormatItem;
+            return &rFormatItem;
         }
     }
     return nullptr;
