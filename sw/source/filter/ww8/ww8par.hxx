@@ -1307,8 +1307,9 @@ private:
     sal_uInt32 m_nIniFlags;            // flags from writer.ini
     sal_uInt32 m_nIniFlags1;           // ditto ( additional flags )
     sal_uInt32 m_nFieldFlags;          // ditto for fields
-    sal_uInt32 m_nFieldTagAlways[3];   // ditto for tagging of fields
-    sal_uInt32 m_nFieldTagBad[3];      // ditto for tagging of fields that can't be imported
+    static constexpr size_t FieldTagSize = 3;
+    sal_uInt32 m_nFieldTagAlways[FieldTagSize]; // ditto for tagging of fields
+    sal_uInt32 m_nFieldTagBad[FieldTagSize]; // ditto for tagging of fields that can't be imported
     bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
     bool m_bDrawCpOValid;

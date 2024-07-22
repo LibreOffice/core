@@ -939,13 +939,18 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : eMax;
     sal_uInt32 nI = n / 32U;                     // # of sal_uInt32
-    sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
-    if (SAL_N_ELEMENTS(m_nFieldTagAlways) <= nI)
+    static_assert(FieldTagSize == SAL_N_ELEMENTS(m_nFieldTagAlways) &&
+                  FieldTagSize == SAL_N_ELEMENTS(m_nFieldTagBad),
+                  "m_nFieldTagAlways and m_nFieldTagBad should have the same FieldTagSize num of elements");
+
+    if (nI >= FieldTagSize)
     {   // if indexes larger than 95 are needed, then a new configuration
         // item has to be added, and nFieldTagAlways/nFieldTagBad expanded!
         return aF.nLen;
     }
+
+    sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
     if( m_nFieldTagAlways[nI] & nMask )       // Flag: Tag it
         return Read_F_Tag( &aF );           // Result not as text
