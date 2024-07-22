@@ -1513,42 +1513,48 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
 
     pShpObj = pShape->FindRealSdrObject();
 
-    if (pShpObj)
+    if (!pShpObj)
     {
-        auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj);
-        if (!pTextBox)
-            return false;
-        SdrObject* pFrmObj = pTextBox->FindRealSdrObject();
-        if (!pFrmObj)
-        {
-            // During loading there is no ready SdrObj for z-ordering, so create and cache it here
-            pFrmObj
-                = SwXTextFrame::GetOrCreateSdrObject(*dynamic_cast<SwFlyFrameFormat*>(pTextBox));
-        }
-        if (pFrmObj)
-        {
-            // Get the draw model from the doc
-            SwDrawModel* pDrawModel
-                = pShape->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
-            if (pDrawModel)
-            {
-                // Not really sure this will work on all pages, but it seems it will.
-                // If the shape is behind the frame, is good, but if there are some objects
-                // between of them that is wrong so put the frame exactly one level higher
-                // than the shape.
-                pFrmObj->ensureSortedImmediatelyAfter(*pShpObj);
-                return true; // Success
-            }
-            SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
-                                "No Valid Draw model for SdrObject for the shape!");
-        }
+        SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                            "No Valid SdrObject for the shape!");
+        return false;
+    }
+
+    auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj);
+    if (!pTextBox)
+        return false;
+    SdrObject* pFrmObj = pTextBox->FindRealSdrObject();
+    if (!pFrmObj)
+    {
+        // During loading there is no ready SdrObj for z-ordering, so create and cache it here
+        pFrmObj = SwXTextFrame::GetOrCreateSdrObject(*dynamic_cast<SwFlyFrameFormat*>(pTextBox));
+    }
+    if (!pFrmObj)
+    {
         SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
                             "No Valid SdrObject for the frame!");
+        return false;
     }
-    SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
-                        "No Valid SdrObject for the shape!");
-
-    return false;
+    // Get the draw model from the doc
+    SwDrawModel* pDrawModel = pShape->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+    if (!pDrawModel)
+    {
+        SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                            "No Valid Draw model for SdrObject for the shape!");
+        return false;
+    }
+    if (!pFrmObj->getParentSdrObjListFromSdrObject())
+    {
+        SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
+                            "Frame object is not inserted into any parent");
+        return false;
+    }
+    // Not really sure this will work on all pages, but it seems it will.
+    // If the shape is behind the frame, is good, but if there are some objects
+    // between of them that is wrong so put the frame exactly one level higher
+    // than the shape.
+    pFrmObj->ensureSortedImmediatelyAfter(*pShpObj);
+    return true; // Success
 }
 
 void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
