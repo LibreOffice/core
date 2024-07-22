@@ -64,7 +64,6 @@ namespace o3tl {
 #define TBOFFS_WINBORDER            4
 // for the bounding rectangle
 #define LROFFS_BOUND                2
-#define TBOFFS_BOUND                2
 // distance icon to text
 #define HOR_DIST_BMP_STRING         3
 #define VER_DIST_BMP_STRING         3

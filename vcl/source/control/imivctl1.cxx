@@ -1557,7 +1557,6 @@ Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
 
     Size aMinSize( aImageSize );
     aMinSize.AdjustWidth(2 * LROFFS_BOUND );
-    aMinSize.AdjustHeight(TBOFFS_BOUND );  // single offset is enough (FileDlg)
     if( nWinBits & WB_ICON )
     {
         aMinSize.AdjustHeight(VER_DIST_BMP_STRING );
@@ -1636,7 +1635,6 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
     tools::Long nDY = nGridDY;
     nDY -= aImageSize.Height();
     nDY -= VER_DIST_BMP_STRING;
-    nDY -= 2 * TBOFFS_BOUND;
     if (nDY <= 0)
         nDY = 2;
 
