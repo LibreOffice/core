@@ -233,7 +233,7 @@ public:
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos );
 
-    void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
+    void                MakeEntryVisible(SvxIconChoiceCtrlEntry* pEntry);
 
     void                Arrange(tools::Long nSetMaxVirtHeight);
 

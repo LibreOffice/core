@@ -463,7 +463,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     ToDocPos( aDocPos );
     SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos );
     if( pEntry )
-        MakeEntryVisible( pEntry, false );
+        MakeEntryVisible(pEntry);
 
     if( !pEntry )
         return false;
@@ -1112,23 +1112,10 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos )
     return nullptr;
 }
 
-void SvxIconChoiceCtrl_Impl::MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound )
+void SvxIconChoiceCtrl_Impl::MakeEntryVisible(SvxIconChoiceCtrlEntry* pEntry)
 {
-    if ( bBound )
-    {
-        const tools::Rectangle& rRect = GetEntryBoundRect( pEntry );
-        MakeVisible( rRect );
-    }
-    else
-    {
-        tools::Rectangle aRect = CalcBmpRect( pEntry );
-        aRect.Union( CalcTextRect( pEntry ) );
-        aRect.AdjustTop(TBOFFS_BOUND );
-        aRect.AdjustBottom(TBOFFS_BOUND );
-        aRect.AdjustLeft(LROFFS_BOUND );
-        aRect.AdjustRight(LROFFS_BOUND );
-        MakeVisible( aRect );
-    }
+    const tools::Rectangle& rRect = GetEntryBoundRect( pEntry );
+    MakeVisible(rRect);
 }
 
 const tools::Rectangle& SvxIconChoiceCtrl_Impl::GetEntryBoundRect( SvxIconChoiceCtrlEntry* pEntry )
