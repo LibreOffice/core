@@ -61,11 +61,10 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
-        const SwFormatINetFormat* pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
-        if( pFormatItem != nullptr &&
-            ( pFormatItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pFormatItem->GetValue() == sBkmk )))
+        const SwFormatINetFormat& rFormatItem = static_cast<const SwFormatINetFormat&>(*pItem);
+        if( rFormatItem.GetValue() == sURL || ( !sBkmk.isEmpty() && rFormatItem.GetValue() == sBkmk ) )
         {
-            const SwTextINetFormat* pTextAttr = pFormatItem->GetTextINetFormat();
+            const SwTextINetFormat* pTextAttr = rFormatItem.GetTextINetFormat();
             if (pTextAttr != nullptr)
             {
                 const SwTextNode* pTextNd = pTextAttr->GetpTextNode();

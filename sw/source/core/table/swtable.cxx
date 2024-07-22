@@ -1634,14 +1634,13 @@ void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
     GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
     for(const SfxPoolItem* pItem: aSurrogates)
     {
-        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
-        assert(pBoxFormula); // use StaticWhichCast instead?
-        if(!pBoxFormula->GetDefinedIn())
+        const auto & rBoxFormula = static_cast<const SwTableBoxFormula&>(*pItem);
+        if(!rBoxFormula.GetDefinedIn())
             continue;
-        const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
+        const SwNode* pNd = rBoxFormula.GetNodeOfFormula();
         if(!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes()) // is this ever valid or should we assert here?
             continue;
-        rvFormulas.push_back(const_cast<SwTableBoxFormula*>(pBoxFormula));
+        rvFormulas.push_back(const_cast<SwTableBoxFormula*>(&rBoxFormula));
     }
 }
 
@@ -1727,15 +1726,15 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
     for(const SfxPoolItem* pItem : aSurrogates)
     {
         // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
-        if(pBoxFormula && pBoxFormula->GetDefinedIn())
+        auto & rBoxFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
+        if(rBoxFormula.GetDefinedIn())
         {
             if(eFlags == TBL_BOXPTR)
-                pBoxFormula->TryBoxNmToPtr();
+                rBoxFormula.TryBoxNmToPtr();
             else if(eFlags == TBL_RELBOXNAME)
-                pBoxFormula->TryRelBoxNm();
+                rBoxFormula.TryRelBoxNm();
             else
-                pBoxFormula->ChangeState();
+                rBoxFormula.ChangeState();
         }
     }
 }

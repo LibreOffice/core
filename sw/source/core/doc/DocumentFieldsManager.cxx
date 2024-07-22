@@ -619,9 +619,9 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     for (const SfxPoolItem* pItem : aSurrogates)
     {
         // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
-        if(pBoxFormula && pBoxFormula->GetDefinedIn())
-            pBoxFormula->ChangeState();
+        auto & rBoxFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
+        if(rBoxFormula.GetDefinedIn())
+            rBoxFormula.ChangeState();
     }
 
     SwRootFrame const* pLayout(nullptr);
@@ -720,10 +720,10 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     for (const SfxPoolItem* pItem : aSurrogates)
     {
         // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto pFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
-        if(!pFormula || !pFormula->GetDefinedIn() || pFormula->IsValid())
+        auto & rFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
+        if(!rFormula.GetDefinedIn() || rFormula.IsValid())
             continue;
-        SwTableBox* pBox = pFormula->GetTableBox();
+        SwTableBox* pBox = rFormula.GetTableBox();
         if(!pBox || !pBox->GetSttNd() || !pBox->GetSttNd()->GetNodes().IsDocNodes())
             continue;
         const SwTableNode* pTableNd = pBox->GetSttNd()->FindTableNode();
@@ -773,14 +773,14 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
         }
 
         SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
-        pFormula->Calc( aPara, nValue );
+        rFormula.Calc( aPara, nValue );
 
         if( aPara.IsStackOverflow() )
         {
             bool const bResult = aPara.CalcWithStackOverflow();
             if (bResult)
             {
-                pFormula->Calc( aPara, nValue );
+                rFormula.Calc( aPara, nValue );
             }
             OSL_ENSURE(bResult,
                     "the chained formula could no be calculated");

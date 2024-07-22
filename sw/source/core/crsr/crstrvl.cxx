@@ -426,15 +426,13 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
             for (const SfxPoolItem* pItem : aSurrogates)
             {
                 const SwTableBox* pTBox;
-                auto pFormulaItem = dynamic_cast<const SwTableBoxFormula*>(pItem);
-                if( !pFormulaItem )
-                    continue;
-                pTBox = pFormulaItem->GetTableBox();
+                auto & rFormulaItem = static_cast<const SwTableBoxFormula&>(*pItem);
+                pTBox = rFormulaItem.GetTableBox();
                 if( pTBox &&
                     pTBox->GetSttNd() &&
                     pTBox->GetSttNd()->GetNodes().IsDocNodes() &&
                     ( !bOnlyErrors ||
-                      !pFormulaItem->HasValidBoxes() ) )
+                      !rFormulaItem.HasValidBoxes() ) )
                 {
                     SwNodeIndex aIdx( *pTBox->GetSttNd() );
                     const SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
@@ -535,10 +533,8 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     do {
         for (const SfxPoolItem* pItem : aSurrogates)
         {
-            auto pToxMarkItem = dynamic_cast<const SwTOXMark*>(pItem);
-            if( !pToxMarkItem )
-                continue;
-            pTextTOX = pToxMarkItem->GetTextTOXMark();
+            auto & rToxMarkItem = static_cast<const SwTOXMark&>(*pItem);
+            pTextTOX = rToxMarkItem.GetTextTOXMark();
             if( !pTextTOX )
                 continue;
             pTextNd = &pTextTOX->GetTextNode();

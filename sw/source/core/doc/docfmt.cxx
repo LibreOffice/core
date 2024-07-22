@@ -644,9 +644,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 // Item and *should* not be changed that way. lcl_SetNewDefTabStops
                 // seems to change pTabStopItem (!). This may need to be changed
                 // to use iterateItemSurrogates and a defined write cycle.
-                if(auto pTabStopItem = pItem2->DynamicWhichCast(RES_PARATR_TABSTOP))
-                    bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
-                                                   *const_cast<SvxTabStopItem*>(pTabStopItem) );
+                const auto & rTabStopItem = static_cast<const SvxTabStopItem&>(*pItem2);
+                bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
+                                               const_cast<SvxTabStopItem&>(rTabStopItem) );
             }
 
             aNew.ClearItem( RES_PARATR_TABSTOP );

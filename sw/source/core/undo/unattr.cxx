@@ -690,12 +690,11 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             for (const SfxPoolItem* pItem : aSurrogates)
             {
-                assert(dynamic_cast<const SwFormatRefMark*>(pItem));
-                const auto pFormatRefMark = static_cast<const SwFormatRefMark*>(pItem);
+                const auto & rFormatRefMark = static_cast<const SwFormatRefMark&>(*pItem);
                 if (static_cast<SwHistorySetRefMark*>(pHistoryHint)->GetRefName() ==
-                        pFormatRefMark->GetRefName())
+                        rFormatRefMark.GetRefName())
                 {
-                    rDoc.DeleteFormatRefMark(pFormatRefMark);
+                    rDoc.DeleteFormatRefMark(&rFormatRefMark);
                     rDoc.GetEditShell()->SwViewShell::UpdateFields();
                     break;
                 }

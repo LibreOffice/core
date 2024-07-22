@@ -93,21 +93,19 @@ void SwDoc::GetTOIKeys(SwTOIKeyType eTyp, std::vector<OUString>& rArr,
     GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_TOXMARK);
     for (const SfxPoolItem* pPoolItem : aSurrogates)
     {
-        const SwTOXMark* pItem = dynamic_cast<const SwTOXMark*>(pPoolItem);
-        if( !pItem )
-            continue;
-        const SwTOXType* pTOXType = pItem->GetTOXType();
+        const SwTOXMark& rItem = static_cast<const SwTOXMark&>(*pPoolItem);
+        const SwTOXType* pTOXType = rItem.GetTOXType();
         if ( !pTOXType || pTOXType->GetType()!=TOX_INDEX )
             continue;
-        const SwTextTOXMark* pMark = pItem->GetTextTOXMark();
+        const SwTextTOXMark* pMark = rItem.GetTextTOXMark();
         if ( pMark && pMark->GetpTextNd() &&
              pMark->GetpTextNd()->GetNodes().IsDocNodes() &&
              (!rLayout.IsHideRedlines()
                 || !sw::IsMarkHintHidden(rLayout, *pMark->GetpTextNd(), *pMark)))
         {
             const OUString sStr = TOI_PRIMARY == eTyp
-                ? pItem->GetPrimaryKey()
-                : pItem->GetSecondaryKey();
+                ? rItem.GetPrimaryKey()
+                : rItem.GetSecondaryKey();
 
             if( !sStr.isEmpty() )
                 rArr.push_back( sStr );
