@@ -38,6 +38,8 @@
 #include <tools/long.hxx>
 #include <rtl/ref.hxx>
 
+#include <sal/log.hxx>
+
 #include "LocaleNode.hxx"
 
 using namespace ::cppu;
@@ -102,13 +104,13 @@ static Reference< XInputStream > createStreamFromFile(
 
     if (!f)
     {
-        fprintf(stderr, "failure opening %s\n", pcFile);
+        SAL_WARN("i18npool", "failure opening " << pcFile);
         return r;
     }
 
     if (fseek( f , 0 , SEEK_END ) == -1)
     {
-        fprintf(stderr, "failure fseeking %s\n", pcFile);
+        SAL_WARN("i18npool", "failure fseeking " << pcFile);
         fclose(f);
         return r;
     }
@@ -116,14 +118,14 @@ static Reference< XInputStream > createStreamFromFile(
     tools::Long nLength = ftell( f );
     if (nLength == -1)
     {
-        fprintf(stderr, "failure ftelling %s\n", pcFile);
+        SAL_WARN("i18npool", "failure ftelling " << pcFile);
         fclose(f);
         return r;
     }
 
     if (fseek( f , 0 , SEEK_SET ) == -1)
     {
-        fprintf(stderr, "failure fseeking %s\n", pcFile);
+        SAL_WARN("i18npool", "failure fseeking " << pcFile);
         fclose(f);
         return r;
     }
@@ -132,7 +134,7 @@ static Reference< XInputStream > createStreamFromFile(
     if (fread( seqIn.getArray(), nLength , 1 , f ) == 1)
         r.set( new OInputStream( seqIn ) );
     else
-        fprintf(stderr, "failure reading %s\n", pcFile);
+        SAL_WARN("i18npool", "failure reading " << pcFile);
     fclose( f );
     return r;
 }
@@ -162,7 +164,7 @@ public: // Error handler
     virtual void SAL_CALL error(const Any& aSAXParseException) override
     {
         ++nError;
-        printf( "Error !\n" );
+        SAL_WARN("i18npool", "Error !");
         throw  SAXException(
             u"error from error handler"_ustr,
             Reference < XInterface >() ,
@@ -171,11 +173,11 @@ public: // Error handler
     virtual void SAL_CALL fatalError(const Any& /*aSAXParseException*/) override
     {
         ++nError;
-        printf( "Fatal Error !\n" );
+        SAL_WARN("i18npool", "Fatal Error !");
     }
     virtual void SAL_CALL warning(const Any& /*aSAXParseException*/) override
     {
-        printf( "Warning !\n" );
+        SAL_WARN("i18npool", "Warning !");
     }
 
 
@@ -187,7 +189,7 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL startDocument() override
     {
-    printf( "parsing document %s started\n", theLocale.c_str());
+    SAL_INFO("i18npool", "parsing document " << theLocale.c_str() << " started");
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
     of.writeAsciiString("#include <rtl/ustring.hxx>\n\n\n");
     of.writeAsciiString("extern \"C\" {\n\n");
@@ -201,16 +203,16 @@ public: // ExtendedDocumentHandler
             int err = rootNode->getError();
             if (err)
             {
-                printf( "Error: in data for %s: %d\n", theLocale.c_str(), err);
+                SAL_WARN("i18npool", "Error: in data for " << theLocale.c_str() << ": " << err);
                 nError += err;
             }
         }
         else
         {
             ++nError;
-            printf( "Error: no data for %s\n", theLocale.c_str());
+            SAL_INFO("i18npool", "Error: no data for " << theLocale.c_str());
         }
-        printf( "parsing document %s finished\n", theLocale.c_str());
+        SAL_INFO("i18npool", "parsing document " << theLocale.c_str() << " finished");
 
         of.writeAsciiString("} // extern \"C\"\n\n");
         of.closeOutput();
