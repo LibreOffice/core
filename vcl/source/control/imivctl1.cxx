@@ -959,20 +959,17 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
 }
 
 // priorities of the emphasis:  bSelected
-void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
+void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect,
                                            vcl::RenderContext& rRenderContext)
 {
-    if (!bSelected)
-    {
-        Color aOldFillColor(rRenderContext.GetFillColor());
-        const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
-        rRenderContext.SetFillColor(rFillColor);
-        // draw text rectangle
-        if (rFillColor != COL_TRANSPARENT)
-            rRenderContext.DrawRect(rTextRect);
+    Color aOldFillColor(rRenderContext.GetFillColor());
+    const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
+    rRenderContext.SetFillColor(rFillColor);
+    // draw text rectangle
+    if (rFillColor != COL_TRANSPARENT)
+        rRenderContext.DrawRect(rTextRect);
 
-        rRenderContext.SetFillColor(aOldFillColor);
-    }
+    rRenderContext.SetFillColor(aOldFillColor);
 }
 
 
@@ -1051,8 +1048,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-    PaintEmphasis(aTextRect, bSelected, rRenderContext);
-
     // Background of selected entry
     tools::Rectangle aFocusRect(CalcFocusRect(pEntry));
     bool bNativeSelection = rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, ControlPart::Entire);
@@ -1084,6 +1079,10 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
             vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, aFocusRect,
                                                       pView->HasFocus() ? 1 : 2, false, false, false);
         }
+    }
+    else
+    {
+        PaintEmphasis(aTextRect, rRenderContext);
     }
 
     if (pEntry->IsFocused())
