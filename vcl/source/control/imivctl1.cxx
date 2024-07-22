@@ -1312,15 +1312,10 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
 
 void SvxIconChoiceCtrl_Impl::FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry )
 {
-    Size aSize( CalcBoundingSize() );
+    CalcBoundingSize();
     Point aPos(pGridMap->GetGridRect(pGridMap->GetUnoccupiedGrid()).TopLeft());
-    SetBoundingRect_Impl( pEntry, aPos, aSize );
-}
 
-void SvxIconChoiceCtrl_Impl::SetBoundingRect_Impl( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos,
-    const Size& /*rBoundingSize*/ )
-{
-    tools::Rectangle aGridRect( rPos, Size(nGridDX, nGridDY) );
+    tools::Rectangle aGridRect(aPos, Size(nGridDX, nGridDY));
     pEntry->aGridRect = aGridRect;
     Center( pEntry );
     AdjustVirtSize( pEntry->aRect );

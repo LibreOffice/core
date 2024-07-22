@@ -248,11 +248,6 @@ public:
     tools::Long                CalcBoundingHeight() const;
     Size                CalcBoundingSize() const;
     void                FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry );
-    void                SetBoundingRect_Impl(
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            const Point& rPos,
-                            const Size& rBoundingSize
-                        );
     // recalculates all invalid BoundRects
     void                RecalcAllBoundingRectsSmart();
     const tools::Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
