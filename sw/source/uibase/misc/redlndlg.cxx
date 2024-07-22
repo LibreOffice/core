@@ -572,10 +572,10 @@ void SwRedlineAcceptDlg::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         rTreeView.all_foreach([&rTreeView, &rRedlineData](weld::TreeIter& rIter) {
             RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(rIter));
             const SwRedlineData* pRedlineData;
-            if (rTreeView.iter_has_child(rIter))
-                pRedlineData = static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
-            else
+            if (rTreeView.get_iter_depth(rIter))
                 pRedlineData = static_cast<SwRedlineDataChild*>(pRedlinData->pData)->pChild;
+            else
+                pRedlineData = static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
             if (pRedlineData == &rRedlineData)
             {
                 rTreeView.set_cursor(rIter);
