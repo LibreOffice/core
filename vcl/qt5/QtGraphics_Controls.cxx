@@ -223,6 +223,24 @@ void QtGraphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* im
     QApplication::style()->drawPrimitive(element, &option, &painter);
 }
 
+static QTabBar::Shape lcl_mapTabBarPosition(TabBarPosition eTabPos)
+{
+    switch (eTabPos)
+    {
+        case TabBarPosition::Bottom:
+            return QTabBar::RoundedSouth;
+        case TabBarPosition::Left:
+            return QTabBar::RoundedWest;
+        case TabBarPosition::Right:
+            return QTabBar::RoundedEast;
+        case TabBarPosition::Top:
+            return QTabBar::RoundedNorth;
+        default:
+            assert(false && "Unhandled tab bar position");
+            return QTabBar::RoundedNorth;
+    }
+}
+
 void QtGraphics_Controls::fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
 {
     const TabitemValue& rValue = static_cast<const TabitemValue&>(value);
@@ -232,6 +250,8 @@ void QtGraphics_Controls::fillQStyleOptionTab(const ImplControlValue& value, QSt
         sot.position = rValue.isFirst() ? QStyleOptionTab::OnlyOneTab : QStyleOptionTab::End;
     else
         sot.position = QStyleOptionTab::Middle;
+
+    sot.shape = lcl_mapTabBarPosition(rValue.meTabBarPosition);
 }
 
 void QtGraphics_Controls::fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option,

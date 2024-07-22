@@ -384,16 +384,27 @@ namespace o3tl
     template<> struct typed_flags<TabitemFlags> : is_typed_flags<TabitemFlags, 0x0f> {};
 }
 
+/* Tab bar position (relative to content on the tab page). */
+enum class TabBarPosition
+{
+    Top,
+    Left,
+    Right,
+    Bottom
+};
+
 class SAL_DLLPUBLIC_RTTI TabitemValue final : public ImplControlValue
 {
     public:
         TabitemFlags    mnAlignment;
         tools::Rectangle       maContentRect;
+        TabBarPosition meTabBarPosition;
 
-        TabitemValue(const tools::Rectangle &rContentRect)
+        TabitemValue(const tools::Rectangle &rContentRect, TabBarPosition eTabBarPosition)
             : ImplControlValue( ControlType::TabItem, 0 )
             , mnAlignment(TabitemFlags::NONE)
             , maContentRect(rContentRect)
+            , meTabBarPosition(eTabBarPosition)
         {
         }
         virtual ~TabitemValue() override;

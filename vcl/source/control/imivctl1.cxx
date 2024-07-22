@@ -1112,7 +1112,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         if (bNativeOK)
         {
             ControlState nState = ControlState::ENABLED | ControlState::ROLLOVER;
-            TabitemValue tiValue(aRect);
+            TabitemValue tiValue(aRect, TabBarPosition::Left);
             bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
                                                          aRect, nState, tiValue, OUString());
         }

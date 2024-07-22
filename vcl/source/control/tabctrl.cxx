@@ -242,8 +242,9 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, tools::Long nMaxWidth )
     tools::Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
     tools::Rectangle aBoundingRgn, aContentRgn;
     const TabitemValue aControlValue(tools::Rectangle(TAB_ITEM_OFFSET_X, TAB_ITEM_OFFSET_Y,
-                                               aSize.Width() - TAB_ITEM_OFFSET_X * 2,
-                                               aSize.Height() - TAB_ITEM_OFFSET_Y * 2));
+                                                      aSize.Width() - TAB_ITEM_OFFSET_X * 2,
+                                                      aSize.Height() - TAB_ITEM_OFFSET_Y * 2),
+                                     TabBarPosition::Top);
     if(GetNativeControlRegion( ControlType::TabItem, ControlPart::Entire, aCtrlRegion,
                                            ControlState::ENABLED, aControlValue,
                                            aBoundingRgn, aContentRgn ) )
@@ -875,9 +876,10 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
     if ( bNativeOK )
     {
         TabitemValue tiValue(tools::Rectangle(pItem->maRect.Left() + TAB_ITEM_OFFSET_X,
-                                       pItem->maRect.Top() + TAB_ITEM_OFFSET_Y,
-                                       pItem->maRect.Right() - TAB_ITEM_OFFSET_X,
-                                       pItem->maRect.Bottom() - TAB_ITEM_OFFSET_Y));
+                                              pItem->maRect.Top() + TAB_ITEM_OFFSET_Y,
+                                              pItem->maRect.Right() - TAB_ITEM_OFFSET_X,
+                                              pItem->maRect.Bottom() - TAB_ITEM_OFFSET_Y),
+                             TabBarPosition::Top);
         if (pItem->maRect.Left() < 5)
             tiValue.mnAlignment |= TabitemFlags::LeftAligned;
         if (pItem->maRect.Right() > mnLastWidth - 5)
