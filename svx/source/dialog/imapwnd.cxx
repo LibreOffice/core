@@ -297,7 +297,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
 
-        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( pCloneIMapObj )) );
+        pSdrObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new IMapUserData( std::move(pCloneIMapObj) )) );
         pSdrObj->SetUserCall( GetSdrUserCall() );
     }
 

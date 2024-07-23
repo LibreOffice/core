@@ -32,10 +32,10 @@ public:
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript ) override;
 
     /// Start of the paragraph.
-    virtual sal_Int32 StartParagraph( ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, bool /*bGenerateParaId*/ ) override { return 0; }
+    virtual sal_Int32 StartParagraph( const ww8::WW8TableNodeInfo::Pointer_t& /*pTextNodeInfo*/, bool /*bGenerateParaId*/ ) override { return 0; }
 
     /// End of the paragraph.
-    virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) override;
+    virtual void EndParagraph( const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner ) override;
 
     /// Called in order to output section breaks.
     virtual void SectionBreaks(const SwNode& /*rNode*/) override {}

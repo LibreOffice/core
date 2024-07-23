@@ -556,8 +556,10 @@ namespace drawinglayer::primitive2d
                 std::optional<OutlinerParaObject> aTextEditOutlinerParaObject(rTextObj.CreateEditOutlinerParaObject());
 
                 if (aTextEditOutlinerParaObject)
+                {
                     // if we got one, prefer text from active TextEdit
-                    aOutlinerParaObject = aTextEditOutlinerParaObject;
+                    aOutlinerParaObject = std::move(aTextEditOutlinerParaObject);
+                }
             }
 
             if(aOutlinerParaObject)
@@ -868,7 +870,7 @@ namespace drawinglayer::primitive2d
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
                 return attribute::SdrLineFillEffectsTextAttribute(aLine, aFill, aLineStartEnd,
-                                                                  aShadow, aFillFloatTransGradient,
+                                                                  aShadow, std::move(aFillFloatTransGradient),
                                                                   aText, aGlow, nSoftEdgeRadius);
             }
 

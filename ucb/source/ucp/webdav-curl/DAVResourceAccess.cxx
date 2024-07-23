@@ -227,7 +227,7 @@ void DAVResourceAccess::PROPFIND(
                                   rResources,
                                   DAVRequestEnvironment(
                                       new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                      aHeaders ) );
+                                      std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -631,7 +631,7 @@ void DAVResourceAccess::PUT(
                              xSeekableStream,
                              DAVRequestEnvironment(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                 aHeaders ) );
+                                 std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {

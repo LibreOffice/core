@@ -926,7 +926,7 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
         std::shared_ptr<SvStream> pIStrm(aMSGifChunk.getAsStream());
         ImportGIF(*pIStrm, rGraphic);
         rLinkType = GfxLinkType::NativeGif;
-        rpGraphicContent = aMSGifChunk;
+        rpGraphicContent = std::move(aMSGifChunk);
         return aReturnCode;
     }
 

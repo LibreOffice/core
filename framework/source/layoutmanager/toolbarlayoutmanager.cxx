@@ -3270,7 +3270,7 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
 
     SolarMutexGuard g;
     m_bDockingInProgress = bWinFound;
-    m_aDockUIElement = aUIElement;
+    m_aDockUIElement = std::move(aUIElement);
     m_aDockUIElement.m_bUserActive = true;
 }
 

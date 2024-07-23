@@ -142,7 +142,7 @@ drawinglayer::primitive3d::Primitive3DContainer const & ViewContactOfE3d::getVIP
     if(mxViewIndependentPrimitive3DContainer != xNew)
     {
         // has changed, copy content
-        const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DContainer = xNew;
+        const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DContainer = std::move(xNew);
     }
 
     // return current Primitive2DContainer

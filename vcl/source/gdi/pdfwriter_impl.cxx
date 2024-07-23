@@ -1260,16 +1260,14 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     m_aStructure[0].m_nParentElement    = 0;
     //m_StructElementStack.push(0);
 
-    Font aFont;
-    aFont.SetFamilyName( u"Times"_ustr );
-    aFont.SetFontSize( Size( 0, 12 ) );
-
     // tdf#150786 use the same settings for widgets regardless of theme
     m_aWidgetStyleSettings.SetStandardStyles();
 
     GraphicsState aState;
     aState.m_aMapMode       = m_aMapMode;
-    aState.m_aFont          = aFont;
+    aState.m_aFont.SetFamilyName( u"Times"_ustr );
+    aState.m_aFont.SetFontSize( Size( 0, 12 ) );
+
     m_aGraphicsStack.push_front( aState );
 
     osl::File::RC aError = m_aFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);

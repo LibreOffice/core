@@ -1112,7 +1112,7 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
     }
 }
 
-void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
+void WW8AttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner )
 {
     m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() - (mbOnTOXEnding?2:0), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
     mbOnTOXEnding = false;

@@ -148,7 +148,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
         aSeriesVec.push_back( xSeries );
     }
 
-    return { { aSeriesVec }, xCategories };
+    return { { std::move(aSeriesVec) }, xCategories };
 }
 
 InterpretedData BubbleDataInterpreter::reinterpretDataSeries(

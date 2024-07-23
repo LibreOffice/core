@@ -217,10 +217,10 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper 
                 {
                     if( bAllowMultiClickSelectionChange )
                     {
-                        m_aSelectedOID = aLastChild;
+                        m_aSelectedOID = std::move(aLastChild);
                     }
                     else
-                        m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = aLastChild;
+                        m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = std::move(aLastChild);
                     break;
                 }
             }

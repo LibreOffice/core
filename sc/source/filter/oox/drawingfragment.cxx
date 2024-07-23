@@ -136,7 +136,7 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
         {
             ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.CustomShape"_ustr );
             if( pxShape ) *pxShape = xShape;
-            return new ShapeContext( rParent, rxParentShape, xShape );
+            return new ShapeContext( rParent, rxParentShape, std::move(xShape) );
         }
         case XDR_TOKEN( cxnSp ):
         {

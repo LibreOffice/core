@@ -919,7 +919,7 @@ double ScInterpreter::Compare( ScQueryOp eOp )
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    rCell.maStr = aStr;
+                    rCell.maStr = std::move(aStr);
                     rCell.mbValue = false;
                 }
                 else

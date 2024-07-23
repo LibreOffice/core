@@ -1375,7 +1375,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                 break;
         }
     }
-    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
+    return EntryDescriptor( std::move(aDocument), eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly (bool b)

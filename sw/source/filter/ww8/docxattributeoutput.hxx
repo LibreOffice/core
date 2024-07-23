@@ -204,11 +204,11 @@ public:
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript ) override;
 
     /// Start of the paragraph.
-    virtual sal_Int32 StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+    virtual sal_Int32 StartParagraph(const ww8::WW8TableNodeInfo::Pointer_t& pTextNodeInfo,
                                      bool bGenerateParaId) override;
 
     /// End of the paragraph.
-    virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) override;
+    virtual void EndParagraph( const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner ) override;
 
     /// Empty paragraph.
     virtual void EmptyParagraph() override;

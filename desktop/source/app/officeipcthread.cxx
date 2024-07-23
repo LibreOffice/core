@@ -810,7 +810,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
     if ( nPipeMode == PIPEMODE_CREATED )
     {
         // Seems we are the one and only, so create listening thread
-        *thread = new PipeIpcThread(pipe);
+        *thread = new PipeIpcThread(std::move(pipe));
         return RequestHandler::IPC_STATUS_OK;
     }
     else

@@ -808,7 +808,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         aColor = aSysTextColor;
     }
     aComplexColor.setFinalColor(aColor);
-    rComplexColor = aComplexColor;
+    rComplexColor = std::move(aComplexColor);
 }
 
 ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)

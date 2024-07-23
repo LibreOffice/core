@@ -221,7 +221,7 @@ void RtfAttributeOutput::RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript)
     m_bControlLtrRtl = true;
 }
 
-sal_Int32 RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+sal_Int32 RtfAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Pointer_t& pTextNodeInfo,
                                              bool /*bGenerateParaId*/)
 {
     if (m_bIsBeforeFirstParagraph && m_rExport.m_nTextTyp != TXT_HDFT)
@@ -281,7 +281,8 @@ sal_Int32 RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pT
     return 0;
 }
 
-void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner)
+void RtfAttributeOutput::EndParagraph(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner)
 {
     bool bLastPara = false;
     if (m_rExport.m_nTextTyp == TXT_FTN || m_rExport.m_nTextTyp == TXT_EDN

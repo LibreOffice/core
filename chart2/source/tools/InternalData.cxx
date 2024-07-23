@@ -418,8 +418,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
                 m_aData[ std::slice( nCol + 1, m_nRowCount, m_nColumnCount ) ] );
 
     m_nColumnCount = nNewColumnCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
+    m_aData = std::move(aNewData);
 
     // labels
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))

@@ -1184,7 +1184,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     if( !bCleanUp )
         return;
 
-    INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
+    INetURLObject aPrevUserBasicInetObj_Err(std::move(aUserBasicInetObj));
     aPrevUserBasicInetObj_Err.removeSegment();
     aPrevUserBasicInetObj_Err.Append( u"__basic_80_err" );
     OUString aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::DecodeMechanism::NONE );

@@ -280,7 +280,7 @@ void CustomAnimationPresets::importEffects()
                     {
                         pDescriptor = std::make_shared<CustomAnimationPreset>( pEffect );
                         pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
-                        maEffectDescriptorMap[aPresetId] = pDescriptor;
+                        maEffectDescriptorMap[aPresetId] = std::move(pDescriptor);
                     }
 
                     ++aIter;

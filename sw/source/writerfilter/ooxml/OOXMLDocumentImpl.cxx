@@ -348,7 +348,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
 
     pBlipSet->add(NS_ooxml::LN_payload, pPayloadValue, OOXMLProperty::ATTRIBUTE);
 
-    OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(pBlipSet));
+    OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(std::move(pBlipSet)));
 
     OOXMLPropertySet * pProps = new OOXMLPropertySet;
 

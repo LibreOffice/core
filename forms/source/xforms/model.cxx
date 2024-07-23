@@ -205,7 +205,7 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
 
         // inherit from current node (or set if we are at the start node)
         if( xCurrent == xNode )
-            aRet = aMIP;
+            aRet = std::move(aMIP);
         else
             aRet.inherit( aMIP );
     }

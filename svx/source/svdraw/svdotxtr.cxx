@@ -359,7 +359,7 @@ rtl::Reference<SdrObject> SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool 
                     pPathObj = new SdrPathObj(
                         getSdrModelFromSdrObject(),
                         SdrObjKind::PathFill,
-                        aPolyPolygon);
+                        std::move(aPolyPolygon));
                 }
                 else
                 {

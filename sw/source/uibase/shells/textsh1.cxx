@@ -212,7 +212,8 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
             pRequest = std::make_shared<SfxRequest>(*pReq);
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
-        pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet, bSel, bSelectionPut, bApplyToParagraph, pRequest](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet=std::move(pCoreSet), bSel,
+                                 bSelectionPut, bApplyToParagraph, pRequest](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
                 sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut,

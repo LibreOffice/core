@@ -211,7 +211,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 OUString sColumn = rPar1.getToken(0, DB_DELIM, nIdx);
 
                 auto pOldType = static_cast<SwDBFieldType*>(pTmpField->GetTyp());
-                auto pType = static_cast<SwDBFieldType*>(pSh->InsertFieldType(SwDBFieldType(pSh->GetDoc(), sColumn, aData)));
+                auto pType = static_cast<SwDBFieldType*>(pSh->InsertFieldType(SwDBFieldType(pSh->GetDoc(), sColumn, std::move(aData))));
                 if(auto pFormatField = pOldType->FindFormatForField(m_pCurField))
                 {
                     pFormatField->RegisterToFieldType(*pType);

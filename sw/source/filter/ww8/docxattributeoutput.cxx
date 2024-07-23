@@ -499,7 +499,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
     }
 }
 
-sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo,
+sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Pointer_t& pTextNodeInfo,
                                               bool bGenerateParaId)
 {
     // Paragraphs (in headers/footers/comments/frames etc) can start before another finishes.
@@ -1125,7 +1125,7 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
     return bRet;
 }
 
-void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
+void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks(Tag_StartParagraph_2);

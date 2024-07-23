@@ -341,7 +341,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                         documentId = hid;
                     extendedHelpText.push_back(hid);
                     HCDBG(std::cerr << "hid pushback" << (anchor.empty() ? hid : hid + "#" + anchor) << std::endl);
-                    hidlist->push_back( anchor.empty() ? hid : hid + "#" + anchor);
+                    hidlist->push_back( anchor.empty() ? std::move(hid) : hid + "#" + anchor);
                 }
                 else
                     continue;

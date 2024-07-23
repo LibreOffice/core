@@ -462,7 +462,7 @@ void FilePolicy::refresh()
     // assign new ones
     MutexGuard guard( m_aMutex );
     m_defaultPermissions = defaultPermissions;
-    m_userPermissions = userPermissions;
+    m_userPermissions = std::move(userPermissions);
 }
 
 

@@ -1036,11 +1036,11 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
 
     if (bRet)
     {
-        rBmp = aNewBmp;
+        rBmp = std::move(aNewBmp);
 
         if(bAlphaPossible)
         {
-            *pBmpAlpha = aNewBmpAlpha;
+            *pBmpAlpha = std::move(aNewBmpAlpha);
         }
     }
 
