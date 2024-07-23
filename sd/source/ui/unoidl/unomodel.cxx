@@ -475,6 +475,7 @@ public:
 
 private:
     void exportNode(const Reference<XAnimationNode>& xNode);
+    void exportNodeImpl(const Reference<XAnimationNode>& xNode);
     void exportContainer(const Reference<XTimeContainer>& xContainer);
 
     void exportAnimate(const Reference<XAnimate>& xAnimate);
@@ -574,24 +575,43 @@ void convertColor(OStringBuffer& rBuffer, sal_Int32 nColor)
     rBuffer.append(aUBuffer.makeStringAndClear().toUtf8());
 }
 
+bool isValidNode(const Reference<XAnimationNode>& xNode)
+{
+    if (xNode.is())
+    {
+        sal_Int16 nNodeType = xNode->getType();
+        auto iterator = constAnimationNodeTypeToString.find(nNodeType);
+        return iterator != constAnimationNodeTypeToString.end();
+    }
+    return false;
+}
+
 void AnimationsExporter::exportAnimations()
 {
     if (!mxDrawPage.is() || !mxPageProps.is() || !mxRootNode.is() || !hasEffects())
         return;
 
-    exportNode(mxRootNode);
+    if (isValidNode(mxRootNode))
+    {
+        auto aNode = mrWriter.startNode("root");
+        exportNodeImpl(mxRootNode);
+    }
+}
+void AnimationsExporter::exportNode(const Reference<XAnimationNode>& xNode)
+{
+     if (!isValidNode(mxRootNode))
+         return;
+     auto aStruct = mrWriter.startStruct();
+     exportNodeImpl(xNode);
 }
 
-void AnimationsExporter::exportNode(const Reference<XAnimationNode>& xNode)
+void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
 {
     try
     {
         sal_Int16 nNodeType = xNode->getType();
         auto iterator = constAnimationNodeTypeToString.find(nNodeType);
-        if (iterator == constAnimationNodeTypeToString.end())
-            return;
-
-        auto aNode = mrWriter.startNode(iterator->second);
+        mrWriter.put("nodeName", iterator->second);
 
         // common properties
         OStringBuffer sTmp;
@@ -851,6 +871,8 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 {
     try
     {
+        auto anArray = mrWriter.startArray("children");
+
         Reference<XEnumerationAccess> xEnumerationAccess(xContainer, UNO_QUERY_THROW);
         Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(),
                                              css::uno::UNO_SET_THROW);
