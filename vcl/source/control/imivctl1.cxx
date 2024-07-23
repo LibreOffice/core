@@ -1853,7 +1853,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
             sHelpText = sQuickHelpText;
         else
             sHelpText = aEntryText;
-        Help::ShowQuickHelp( static_cast<vcl::Window*>(pView), aOptTextRect, sHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter );
+        Help::ShowQuickHelp(pView, aOptTextRect, sHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter);
     }
 
     return true;
