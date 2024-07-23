@@ -35,30 +35,36 @@
 {
     if( pEvent && [pEvent type] == NSEventTypeKeyDown )
     {
-        unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+        // Related tdf#126638 and tdf#162010: match against -[NSEvent characters]
+        // When using some non-Western European keyboard layouts, the event's
+        // "characters ignoring modifiers" will be set to the original Unicode
+        // character instead of the resolved key equivalent character so match
+        // against the -[NSEvent characters] instead.
+        NSEventModifierFlags nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+        NSString *pCharacters = [pEvent characters];
         if( nModMask == NSEventModifierFlagCommand )
         {
-            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"v"] )
+            if( [pCharacters isEqualToString: @"v"] )
             {
                 if( [NSApp sendAction: @selector(paste:) to: nil from: nil] )
                     return YES;
             }
-            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"c"] )
+            else if( [pCharacters isEqualToString: @"c"] )
             {
                 if( [NSApp sendAction: @selector(copy:) to: nil from: nil] )
                     return YES;
             }
-            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"x"] )
+            else if( [pCharacters isEqualToString: @"x"] )
             {
                 if( [NSApp sendAction: @selector(cut:) to: nil from: nil] )
                     return YES;
             }
-            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"a"] )
+            else if( [pCharacters isEqualToString: @"a"] )
             {
                 if( [NSApp sendAction: @selector(selectAll:) to: nil from: nil] )
                     return YES;
             }
-            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"z"] )
+            else if( [pCharacters isEqualToString: @"z"] )
             {
                 if( [NSApp sendAction: @selector(undo:) to: nil from: nil] )
                     return YES;
@@ -66,7 +72,7 @@
         }
         else if( nModMask == (NSEventModifierFlagCommand|NSEventModifierFlagShift) )
         {
-            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"Z"] )
+            if( [pCharacters isEqualToString: @"z"] || [pCharacters isEqualToString: @"Z"] )
             {
                 if( [NSApp sendAction: @selector(redo:) to: nil from: nil] )
                     return YES;
@@ -159,20 +165,54 @@
     // tdf#49853 Keyboard shortcuts are also handled by the menu bar, but at least some of them
     // must still end up in the view. This is necessary to handle common edit actions in docked
     // windows (e.g. in toolbar fields).
-    NSEvent* pEvent = [NSApp currentEvent];
-    if( pEvent && [pEvent type] == NSEventTypeKeyDown )
+    if( pKeyWin )
     {
-        unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
-        NSString* charactersIgnoringModifiers = [pEvent charactersIgnoringModifiers];
+        // tdf#162010 match based on key equivalent instead of key event
+        // The original fix for tdf#49853 only looked worked in the
+        // case when both a key shortcut was pressed and the resulting
+        // key event was not an input method event. If either of these
+        // conditions weren't true, tdf#49853 would still occur.
+        // Since we know which menu item is being triggered, check if
+        // this menu item's key equivalent has been set to one of the
+        // edit actions.
+        // This change basically expands the fix for tdf#49853 to
+        // include all cases that trigger a menu item, not just simple
+        // key events.
+        NSEventModifierFlags nModMask = [self keyEquivalentModifierMask];
+        NSString* pCharacters = [self keyEquivalent];
         if( nModMask == NSEventModifierFlagCommand &&
-          ( [charactersIgnoringModifiers isEqualToString: @"v"] ||
-            [charactersIgnoringModifiers isEqualToString: @"c"] ||
-            [charactersIgnoringModifiers isEqualToString: @"x"] ||
-            [charactersIgnoringModifiers isEqualToString: @"a"] ||
-            [charactersIgnoringModifiers isEqualToString: @"z"] ) )
+          ( [pCharacters isEqualToString: @"v"] ||
+            [pCharacters isEqualToString: @"c"] ||
+            [pCharacters isEqualToString: @"x"] ||
+            [pCharacters isEqualToString: @"a"] ||
+            [pCharacters isEqualToString: @"z"] ) )
         {
-            [[[NSApp keyWindow] contentView] keyDown: pEvent];
-            return;
+            NSEvent* pEvent = [NSApp currentEvent];
+            NSEvent* pKeyEvent = nil;
+            if( pEvent )
+            {
+                switch( [pEvent type] )
+                {
+                    case NSEventTypeKeyDown:
+                    case NSEventTypeKeyUp:
+                    case NSEventTypeFlagsChanged:
+                        pKeyEvent = pEvent;
+                        break;
+                    default:
+                        break;
+                }
+
+                if( !pKeyEvent )
+                {
+                    // Native key events appear to set the location to the
+                    // top left corner of the key window
+                    NSPoint aPoint = NSMakePoint(0, [pKeyWin frame].size.height);
+                    pKeyEvent = [NSEvent keyEventWithType: NSEventTypeKeyDown location: aPoint modifierFlags: nModMask timestamp: [[NSProcessInfo processInfo] systemUptime] windowNumber: [pKeyWin windowNumber] context: nil characters: pCharacters charactersIgnoringModifiers: pCharacters isARepeat: NO keyCode: 0];
+                }
+
+                [[pKeyWin contentView] keyDown: pKeyEvent];
+                return;
+            }
         }
     }
 
