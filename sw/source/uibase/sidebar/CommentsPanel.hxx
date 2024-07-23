@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vcl/event.hxx>
 #include <annotationmark.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <rtl/ustring.hxx>
@@ -57,6 +58,7 @@ class Comment final
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<weld::Expander> mxExpander;
     std::unique_ptr<weld::Label> mxAuthor;
     std::unique_ptr<weld::Label> mxDate;
     std::unique_ptr<weld::Label> mxTime;
@@ -72,14 +74,18 @@ private:
     Date maDate;
     tools::Time maTime;
 
+    void makeEditable() { mxTextView->set_editable(true); }
+
 public:
     Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel);
     ~Comment();
     weld::Widget* get_widget() const { return mxContainer.get(); }
+    weld::TextView* getTextView() const { return mxTextView.get(); }
 
     DECL_LINK(ReplyClicked, weld::Button&, void);
     DECL_LINK(ResolveClicked, weld::Toggleable&, void);
     DECL_LINK(OnFocusOut, weld::Widget&, void);
+    DECL_LINK(ContextMenuHdl, const MouseEvent&, bool);
 
     bool mbResolved;
 
@@ -127,10 +133,11 @@ public:
     void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     void EditComment(Comment* pComment);
-
     void ToggleResolved(Comment* pComment);
-
     void ReplyComment(Comment* pComment);
+    void DeleteComment(Comment* pComment);
+    void DeleteThread(Comment* pComment);
+    void ResolveThread(Comment* pComment);
 
     DECL_LINK(FilterByAuthor, weld::ComboBox&, void);
     DECL_LINK(FilterByDate, SvtCalendarBox&, void);

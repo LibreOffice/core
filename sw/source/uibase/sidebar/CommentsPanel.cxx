@@ -46,6 +46,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vcl/event.hxx>
 
 #include <strings.hrc>
 #include <cmdid.h>
@@ -61,6 +62,7 @@ namespace sw::sidebar
 Comment::Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/commentwidget.ui"))
     , mxContainer(mxBuilder->weld_container("Comment"))
+    , mxExpander(mxBuilder->weld_expander("expander"))
     , mxAuthor(mxBuilder->weld_label("authorlabel"))
     , mxDate(mxBuilder->weld_label("datelabel"))
     , mxTime(mxBuilder->weld_label("timelabel"))
@@ -72,9 +74,43 @@ Comment::Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel)
     , maTime(tools::Time::EMPTY)
     , mbResolved(false)
 {
+    mxTextView->set_editable(false);
+    mxTextView->set_tooltip_text("View Mode");
     mxTextView->connect_focus_out(LINK(this, Comment, OnFocusOut));
     mxResolve->connect_toggled(LINK(this, Comment, ResolveClicked));
     mxReply->connect_clicked(LINK(this, Comment, ReplyClicked));
+    mxExpander->connect_mouse_press(LINK(this, Comment, ContextMenuHdl));
+}
+
+IMPL_LINK(Comment, ContextMenuHdl, const MouseEvent&, rMEvt, bool)
+{
+    if (rMEvt.IsRight())
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+            mxExpander.get(), u"modules/swriter/ui/commentcontextmenu.ui"_ustr));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu(u"contextmenu"_ustr));
+        Point aPos = rMEvt.GetPosPixel();
+        OUString sId
+            = xPopMenu->popup_at_rect(mxExpander.get(), tools::Rectangle(aPos, Size(1, 1)));
+
+        if (sId == "edit")
+        {
+            this->makeEditable();
+            getTextView()->set_tooltip_text("Edit Mode");
+        }
+        else if (sId == "reply")
+            mrCommentsPanel.ReplyComment(this);
+        else if (sId == "delete")
+            mrCommentsPanel.DeleteComment(this);
+        else if (sId == "toggle_resolved")
+            mrCommentsPanel.ToggleResolved(this);
+        else if (sId == "delete_thread")
+            mrCommentsPanel.DeleteThread(this);
+        else if (sId == "resolve_thread")
+            mrCommentsPanel.ResolveThread(this);
+        return true;
+    }
+    return false;
 }
 
 OUString CommentsPanel::getReferenceText(SwTextNode* pTextNode, sw::mark::AnnotationMark* pMark)
@@ -119,7 +155,11 @@ void Comment::InitControls(const SwPostItField* pPostItField)
     mxTextView->set_text(msText);
 }
 
-IMPL_LINK_NOARG(Comment, OnFocusOut, weld::Widget&, void) { mrCommentsPanel.EditComment(this); }
+IMPL_LINK_NOARG(Comment, OnFocusOut, weld::Widget&, void)
+{
+    mrCommentsPanel.EditComment(this);
+    getTextView()->set_tooltip_text("View Mode");
+}
 
 IMPL_LINK_NOARG(Comment, ResolveClicked, weld::Toggleable&, void)
 {
@@ -457,6 +497,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                       pThread->mnComments++);
         pComment->InitControls(pNote->GetPostItField());
+        pComment->getTextView()->set_tooltip_text("Edit Mode");
         mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
@@ -471,6 +512,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         mpThreadsMap[nRootId] = std::move(pThread);
         setReferenceText(nRootId);
         pComment->InitControls(pNote->GetPostItField());
+        pComment->getTextView()->set_tooltip_text("Edit Mode");
         mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
@@ -559,12 +601,15 @@ void CommentsPanel::EditComment(Comment* pComment)
 {
     if (!pComment)
         return;
+    if (!pComment->mxTextView->get_editable())
+        return;
     const OUString sText = pComment->mxTextView->get_text();
 
     sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
     Outliner* pOutliner = pWin->GetOutliner();
     pOutliner->Clear();
     pOutliner->SetText(sText, pOutliner->GetParagraph(0));
+    pComment->mxTextView->set_editable(false);
 }
 
 void CommentsPanel::ToggleResolved(Comment* pComment)
@@ -581,6 +626,30 @@ void CommentsPanel::ReplyComment(Comment* pComment)
         return;
     sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
     pWin->ExecuteCommand(FN_REPLY);
+}
+
+void CommentsPanel::DeleteComment(Comment* pComment)
+{
+    if (!pComment)
+        return;
+    sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
+    pWin->ExecuteCommand(FN_DELETE_COMMENT);
+}
+
+void CommentsPanel::DeleteThread(Comment* pComment)
+{
+    if (!pComment)
+        return;
+    sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
+    pWin->ExecuteCommand(FN_DELETE_COMMENT_THREAD);
+}
+
+void CommentsPanel::ResolveThread(Comment* pComment)
+{
+    if (!pComment)
+        return;
+    sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
+    pWin->ExecuteCommand(FN_RESOLVE_NOTE_THREAD);
 }
 
 void CommentsPanel::populateAuthorComboBox()
