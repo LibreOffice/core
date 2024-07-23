@@ -43,12 +43,25 @@ public:
                                     SQLSMALLINT BufferLength,
                                     SQLSMALLINT* StringLength2Ptr,
                                     SQLUSMALLINT DriverCompletion) const = 0;
+    virtual SQLRETURN DriverConnectW(SQLHDBC ConnectionHandle,
+                                     HWND WindowHandle,
+                                     SQLWCHAR* InConnectionString,
+                                     SQLSMALLINT StringLength1,
+                                     SQLWCHAR* OutConnectionString,
+                                     SQLSMALLINT BufferLength,
+                                     SQLSMALLINT* StringLength2Ptr,
+                                     SQLUSMALLINT DriverCompletion) const = 0;
     // Obtaining information about a driver and data source
     virtual SQLRETURN GetInfo(SQLHDBC ConnectionHandle,
                               SQLUSMALLINT InfoType,
                               SQLPOINTER InfoValuePtr,
                               SQLSMALLINT BufferLength,
                               SQLSMALLINT* StringLengthPtr) const = 0;
+    virtual SQLRETURN GetInfoW(SQLHDBC ConnectionHandle,
+                               SQLUSMALLINT InfoType,
+                               SQLPOINTER InfoValuePtr,
+                               SQLSMALLINT BufferLength,
+                               SQLSMALLINT* StringLengthPtr) const = 0;
     virtual SQLRETURN GetFunctions(SQLHDBC ConnectionHandle,
                                    SQLUSMALLINT FunctionId,
                                    SQLUSMALLINT* SupportedPtr) const = 0;
@@ -58,11 +71,20 @@ public:
                                      SQLINTEGER Attribute,
                                      SQLPOINTER ValuePtr,
                                      SQLINTEGER StringLength) const = 0;
+    virtual SQLRETURN SetConnectAttrW(SQLHDBC ConnectionHandle,
+                                      SQLINTEGER Attribute,
+                                      SQLPOINTER ValuePtr,
+                                      SQLINTEGER StringLength) const = 0;
     virtual SQLRETURN GetConnectAttr(SQLHDBC ConnectionHandle,
                                      SQLINTEGER Attribute,
                                      SQLPOINTER ValuePtr,
                                      SQLINTEGER BufferLength,
                                      SQLINTEGER* StringLength) const = 0;
+    virtual SQLRETURN GetConnectAttrW(SQLHDBC ConnectionHandle,
+                                      SQLINTEGER Attribute,
+                                      SQLPOINTER ValuePtr,
+                                      SQLINTEGER BufferLength,
+                                      SQLINTEGER* StringLength) const = 0;
     virtual SQLRETURN SetEnvAttr(SQLHENV EnvironmentHandle,
                                  SQLINTEGER Attribute,
                                  SQLPOINTER ValuePtr,
@@ -120,6 +142,9 @@ public:
     virtual SQLRETURN Prepare(SQLHSTMT StatementHandle,
                               SQLCHAR* StatementText,
                               SQLINTEGER TextLength) const = 0;
+    virtual SQLRETURN PrepareW(SQLHSTMT StatementHandle,
+                               SQLWCHAR* StatementText,
+                               SQLINTEGER TextLength) const = 0;
     virtual SQLRETURN BindParameter(SQLHSTMT StatementHandle,
                                     SQLUSMALLINT ParameterNumber,
                                     SQLSMALLINT InputOutputType,
@@ -139,11 +164,17 @@ public:
     virtual SQLRETURN SetCursorName(SQLHSTMT StatementHandle,
                                     SQLCHAR* CursorName,
                                     SQLSMALLINT NameLength) const = 0;
+    virtual SQLRETURN SetCursorNameW(SQLHSTMT StatementHandle,
+                                     SQLWCHAR* CursorName,
+                                     SQLSMALLINT NameLength) const = 0;
     // Submitting requests
     virtual SQLRETURN Execute(SQLHSTMT StatementHandle) const = 0;
     virtual SQLRETURN ExecDirect(SQLHSTMT StatementHandle,
                                  SQLCHAR* StatementText,
                                  SQLINTEGER TextLength) const = 0;
+    virtual SQLRETURN ExecDirectW(SQLHSTMT StatementHandle,
+                                  SQLWCHAR* StatementText,
+                                  SQLINTEGER TextLength) const = 0;
     virtual SQLRETURN DescribeParam(SQLHSTMT StatementHandle,
                                     SQLUSMALLINT ParameterNumber,
                                     SQLSMALLINT* DataTypePtr,
@@ -165,6 +196,13 @@ public:
                                    SQLSMALLINT BufferLength,
                                    SQLSMALLINT* StringLengthPtr,
                                    SQLLEN* NumericAttributePtr) const = 0;
+    virtual SQLRETURN ColAttributeW(SQLHSTMT StatementHandle,
+                                    SQLUSMALLINT ColumnNumber,
+                                    SQLUSMALLINT FieldIdentifier,
+                                    SQLPOINTER CharacterAttributePtr,
+                                    SQLSMALLINT BufferLength,
+                                    SQLSMALLINT* StringLengthPtr,
+                                    SQLLEN* NumericAttributePtr) const = 0;
     virtual SQLRETURN BindCol(SQLHSTMT StatementHandle,
                               SQLUSMALLINT ColumnNumber,
                               SQLSMALLINT TargetType,
@@ -204,6 +242,14 @@ public:
                                  SQLCHAR* MessageText,
                                  SQLSMALLINT BufferLength,
                                  SQLSMALLINT* TextLengthPtr) const = 0;
+    virtual SQLRETURN GetDiagRecW(SQLSMALLINT HandleType,
+                                  SQLHANDLE Handle,
+                                  SQLSMALLINT RecNumber,
+                                  SQLWCHAR* Sqlstate,
+                                  SQLINTEGER* NativeErrorPtr,
+                                  SQLWCHAR* MessageText,
+                                  SQLSMALLINT BufferLength,
+                                  SQLSMALLINT* TextLengthPtr) const = 0;
     // Obtaining information about the data source's system tables (catalog functions)
     virtual SQLRETURN ColumnPrivileges(SQLHSTMT StatementHandle,
                                        SQLCHAR* CatalogName,
@@ -214,6 +260,15 @@ public:
                                        SQLSMALLINT NameLength3,
                                        SQLCHAR* ColumnName,
                                        SQLSMALLINT NameLength4) const = 0;
+    virtual SQLRETURN ColumnPrivilegesW(SQLHSTMT StatementHandle,
+                                        SQLWCHAR* CatalogName,
+                                        SQLSMALLINT NameLength1,
+                                        SQLWCHAR* SchemaName,
+                                        SQLSMALLINT NameLength2,
+                                        SQLWCHAR* TableName,
+                                        SQLSMALLINT NameLength3,
+                                        SQLWCHAR* ColumnName,
+                                        SQLSMALLINT NameLength4) const = 0;
     virtual SQLRETURN Columns(SQLHSTMT StatementHandle,
                               SQLCHAR* CatalogName,
                               SQLSMALLINT NameLength1,
@@ -223,6 +278,15 @@ public:
                               SQLSMALLINT NameLength3,
                               SQLCHAR* ColumnName,
                               SQLSMALLINT NameLength4) const = 0;
+    virtual SQLRETURN ColumnsW(SQLHSTMT StatementHandle,
+                               SQLWCHAR* CatalogName,
+                               SQLSMALLINT NameLength1,
+                               SQLWCHAR* SchemaName,
+                               SQLSMALLINT NameLength2,
+                               SQLWCHAR* TableName,
+                               SQLSMALLINT NameLength3,
+                               SQLWCHAR* ColumnName,
+                               SQLSMALLINT NameLength4) const = 0;
     virtual SQLRETURN ForeignKeys(SQLHSTMT StatementHandle,
                                   SQLCHAR* PKCatalogName,
                                   SQLSMALLINT NameLength1,
@@ -236,6 +300,19 @@ public:
                                   SQLSMALLINT NameLength5,
                                   SQLCHAR* FKTableName,
                                   SQLSMALLINT NameLength6) const = 0;
+    virtual SQLRETURN ForeignKeysW(SQLHSTMT StatementHandle,
+                                   SQLWCHAR* PKCatalogName,
+                                   SQLSMALLINT NameLength1,
+                                   SQLWCHAR* PKSchemaName,
+                                   SQLSMALLINT NameLength2,
+                                   SQLWCHAR* PKTableName,
+                                   SQLSMALLINT NameLength3,
+                                   SQLWCHAR* FKCatalogName,
+                                   SQLSMALLINT NameLength4,
+                                   SQLWCHAR* FKSchemaName,
+                                   SQLSMALLINT NameLength5,
+                                   SQLWCHAR* FKTableName,
+                                   SQLSMALLINT NameLength6) const = 0;
     virtual SQLRETURN PrimaryKeys(SQLHSTMT StatementHandle,
                                   SQLCHAR* CatalogName,
                                   SQLSMALLINT NameLength1,
@@ -243,6 +320,13 @@ public:
                                   SQLSMALLINT NameLength2,
                                   SQLCHAR* TableName,
                                   SQLSMALLINT NameLength3) const = 0;
+    virtual SQLRETURN PrimaryKeysW(SQLHSTMT StatementHandle,
+                                   SQLWCHAR* CatalogName,
+                                   SQLSMALLINT NameLength1,
+                                   SQLWCHAR* SchemaName,
+                                   SQLSMALLINT NameLength2,
+                                   SQLWCHAR* TableName,
+                                   SQLSMALLINT NameLength3) const = 0;
     virtual SQLRETURN ProcedureColumns(SQLHSTMT StatementHandle,
                                        SQLCHAR* CatalogName,
                                        SQLSMALLINT NameLength1,
@@ -252,6 +336,15 @@ public:
                                        SQLSMALLINT NameLength3,
                                        SQLCHAR* ColumnName,
                                        SQLSMALLINT NameLength4) const = 0;
+    virtual SQLRETURN ProcedureColumnsW(SQLHSTMT StatementHandle,
+                                        SQLWCHAR* CatalogName,
+                                        SQLSMALLINT NameLength1,
+                                        SQLWCHAR* SchemaName,
+                                        SQLSMALLINT NameLength2,
+                                        SQLWCHAR* ProcName,
+                                        SQLSMALLINT NameLength3,
+                                        SQLWCHAR* ColumnName,
+                                        SQLSMALLINT NameLength4) const = 0;
     virtual SQLRETURN Procedures(SQLHSTMT StatementHandle,
                                  SQLCHAR* CatalogName,
                                  SQLSMALLINT NameLength1,
@@ -259,6 +352,13 @@ public:
                                  SQLSMALLINT NameLength2,
                                  SQLCHAR* ProcName,
                                  SQLSMALLINT NameLength3) const = 0;
+    virtual SQLRETURN ProceduresW(SQLHSTMT StatementHandle,
+                                  SQLWCHAR* CatalogName,
+                                  SQLSMALLINT NameLength1,
+                                  SQLWCHAR* SchemaName,
+                                  SQLSMALLINT NameLength2,
+                                  SQLWCHAR* ProcName,
+                                  SQLSMALLINT NameLength3) const = 0;
     virtual SQLRETURN SpecialColumns(SQLHSTMT StatementHandle,
                                      SQLUSMALLINT IdentifierType,
                                      SQLCHAR* CatalogName,
@@ -269,6 +369,16 @@ public:
                                      SQLSMALLINT NameLength3,
                                      SQLUSMALLINT Scope,
                                      SQLUSMALLINT Nullable) const = 0;
+    virtual SQLRETURN SpecialColumnsW(SQLHSTMT StatementHandle,
+                                      SQLUSMALLINT IdentifierType,
+                                      SQLWCHAR* CatalogName,
+                                      SQLSMALLINT NameLength1,
+                                      SQLWCHAR* SchemaName,
+                                      SQLSMALLINT NameLength2,
+                                      SQLWCHAR* TableName,
+                                      SQLSMALLINT NameLength3,
+                                      SQLUSMALLINT Scope,
+                                      SQLUSMALLINT Nullable) const = 0;
     virtual SQLRETURN Statistics(SQLHSTMT StatementHandle,
                                  SQLCHAR* CatalogName,
                                  SQLSMALLINT NameLength1,
@@ -278,6 +388,15 @@ public:
                                  SQLSMALLINT NameLength3,
                                  SQLUSMALLINT Unique,
                                  SQLUSMALLINT Reserved) const = 0;
+    virtual SQLRETURN StatisticsW(SQLHSTMT StatementHandle,
+                                  SQLWCHAR* CatalogName,
+                                  SQLSMALLINT NameLength1,
+                                  SQLWCHAR* SchemaName,
+                                  SQLSMALLINT NameLength2,
+                                  SQLWCHAR* TableName,
+                                  SQLSMALLINT NameLength3,
+                                  SQLUSMALLINT Unique,
+                                  SQLUSMALLINT Reserved) const = 0;
     virtual SQLRETURN TablePrivileges(SQLHSTMT StatementHandle,
                                       SQLCHAR* CatalogName,
                                       SQLSMALLINT NameLength1,
@@ -285,6 +404,13 @@ public:
                                       SQLSMALLINT NameLength2,
                                       SQLCHAR* TableName,
                                       SQLSMALLINT NameLength3) const = 0;
+    virtual SQLRETURN TablePrivilegesW(SQLHSTMT StatementHandle,
+                                       SQLWCHAR* CatalogName,
+                                       SQLSMALLINT NameLength1,
+                                       SQLWCHAR* SchemaName,
+                                       SQLSMALLINT NameLength2,
+                                       SQLWCHAR* TableName,
+                                       SQLSMALLINT NameLength3) const = 0;
     virtual SQLRETURN Tables(SQLHSTMT StatementHandle,
                              SQLCHAR* CatalogName,
                              SQLSMALLINT NameLength1,
@@ -294,6 +420,15 @@ public:
                              SQLSMALLINT NameLength3,
                              SQLCHAR* TableType,
                              SQLSMALLINT NameLength4) const = 0;
+    virtual SQLRETURN TablesW(SQLHSTMT StatementHandle,
+                              SQLWCHAR* CatalogName,
+                              SQLSMALLINT NameLength1,
+                              SQLWCHAR* SchemaName,
+                              SQLSMALLINT NameLength2,
+                              SQLWCHAR* TableName,
+                              SQLSMALLINT NameLength3,
+                              SQLWCHAR* TableType,
+                              SQLSMALLINT NameLength4) const = 0;
     // Terminating a statement
     virtual SQLRETURN FreeStmt(SQLHSTMT StatementHandle, SQLUSMALLINT Option) const = 0;
     virtual SQLRETURN CloseCursor(SQLHSTMT StatementHandle) const = 0;
@@ -308,12 +443,22 @@ public:
                                     SQLCHAR* CursorName,
                                     SQLSMALLINT BufferLength,
                                     SQLSMALLINT* NameLength2) const = 0;
+    virtual SQLRETURN GetCursorNameW(SQLHSTMT StatementHandle,
+                                     SQLWCHAR* CursorName,
+                                     SQLSMALLINT BufferLength,
+                                     SQLSMALLINT* NameLength2) const = 0;
     virtual SQLRETURN NativeSql(SQLHDBC ConnectionHandle,
                                 SQLCHAR* InStatementText,
                                 SQLINTEGER TextLength1,
                                 SQLCHAR* OutStatementText,
                                 SQLINTEGER BufferLength,
                                 SQLINTEGER* TextLength2Ptr) const = 0;
+    virtual SQLRETURN NativeSqlW(SQLHDBC ConnectionHandle,
+                                 SQLWCHAR* InStatementText,
+                                 SQLINTEGER TextLength1,
+                                 SQLWCHAR* OutStatementText,
+                                 SQLINTEGER BufferLength,
+                                 SQLINTEGER* TextLength2Ptr) const = 0;
 };
 }
 

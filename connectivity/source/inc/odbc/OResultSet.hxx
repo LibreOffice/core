@@ -60,10 +60,8 @@ namespace connectivity::odbc
                                                       css::sdbc::XColumnLocate,
                                                       css::lang::XServiceInfo> OResultSet_BASE;
 
+        class BindData;
 
-        typedef std::pair<sal_Int64,sal_Int32> TVoidPtr;
-        typedef std::allocator< TVoidPtr > TVoidAlloc;
-        typedef std::vector<TVoidPtr> TVoidVector;
         /// Functor object for class ZZ returntype is void
         struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare
         {
@@ -114,7 +112,7 @@ namespace connectivity::odbc
             // used top hold the information about the value and the datatype to save calls to metadata
             typedef std::vector<ORowSetValue>         TDataRow;
 
-            TVoidVector                                 m_aBindVector;
+            std::vector<std::unique_ptr<BindData>>    m_aBindVector;
             std::vector<SQLLEN>                       m_aLengthVector;
             std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
 
@@ -169,7 +167,6 @@ namespace connectivity::odbc
             void updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void const * _pValue);
             void fillNeededData(SQLRETURN _nRet);
             bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset);
-            TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
             SQLRETURN unbind(bool _bUnbindHandle = true);
             SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);
 

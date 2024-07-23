@@ -202,6 +202,32 @@ bool LoadFunctions(oslModule pODBCso)
         return rpFunc != nullptr;
     };
 
+    // Optional functions for Unicode support
+    if (bUseWChar)
+    {
+        load(ODBC3SQLFunctionId::DriverConnectW,    u"SQLDriverConnectW"_ustr);
+        load(ODBC3SQLFunctionId::GetInfoW,          u"SQLGetInfoW"_ustr);
+        load(ODBC3SQLFunctionId::SetConnectAttrW,   u"SQLSetConnectAttrW"_ustr);
+        load(ODBC3SQLFunctionId::GetConnectAttrW,   u"SQLGetConnectAttrW"_ustr);
+        load(ODBC3SQLFunctionId::PrepareW,          u"SQLPrepareW"_ustr);
+        load(ODBC3SQLFunctionId::SetCursorNameW,    u"SQLSetCursorNameW"_ustr);
+        load(ODBC3SQLFunctionId::ExecDirectW,       u"SQLExecDirectW"_ustr);
+        load(ODBC3SQLFunctionId::ColAttributeW,     u"SQLColAttributeW"_ustr);
+        load(ODBC3SQLFunctionId::GetDiagRecW,       u"SQLGetDiagRecW"_ustr);
+        load(ODBC3SQLFunctionId::ColumnPrivilegesW, u"SQLColumnPrivilegesW"_ustr);
+        load(ODBC3SQLFunctionId::ColumnsW,          u"SQLColumnsW"_ustr);
+        load(ODBC3SQLFunctionId::ForeignKeysW,      u"SQLForeignKeysW"_ustr);
+        load(ODBC3SQLFunctionId::PrimaryKeysW,      u"SQLPrimaryKeysW"_ustr);
+        load(ODBC3SQLFunctionId::ProcedureColumnsW, u"SQLProcedureColumnsW"_ustr);
+        load(ODBC3SQLFunctionId::ProceduresW,       u"SQLProceduresW"_ustr);
+        load(ODBC3SQLFunctionId::SpecialColumnsW,   u"SQLSpecialColumnsW"_ustr);
+        load(ODBC3SQLFunctionId::StatisticsW,       u"SQLStatisticsW"_ustr);
+        load(ODBC3SQLFunctionId::TablePrivilegesW,  u"SQLTablePrivilegesW"_ustr);
+        load(ODBC3SQLFunctionId::TablesW,           u"SQLTablesW"_ustr);
+        load(ODBC3SQLFunctionId::GetCursorNameW,    u"SQLGetCursorNameW"_ustr);
+        load(ODBC3SQLFunctionId::NativeSqlW,        u"SQLNativeSqlW"_ustr);
+    }
+
     return load(ODBC3SQLFunctionId::AllocHandle,      u"SQLAllocHandle"_ustr)
         && load(ODBC3SQLFunctionId::DriverConnect,    u"SQLDriverConnect"_ustr)
         && load(ODBC3SQLFunctionId::GetInfo,          u"SQLGetInfo"_ustr)
@@ -329,10 +355,28 @@ public:
                         StringLength2Ptr, DriverCompletion);
     }
 
+    SQLRETURN DriverConnectW(SQLHDBC ConnectionHandle, HWND WindowHandle,
+                             SQLWCHAR* InConnectionString, SQLSMALLINT StringLength1,
+                             SQLWCHAR* OutConnectionString, SQLSMALLINT BufferLength,
+                             SQLSMALLINT* StringLength2Ptr,
+                             SQLUSMALLINT DriverCompletion) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::DriverConnectW, ConnectionHandle, WindowHandle,
+                        InConnectionString, StringLength1, OutConnectionString, BufferLength,
+                        StringLength2Ptr, DriverCompletion);
+    }
+
     SQLRETURN GetInfo(SQLHDBC ConnectionHandle, SQLUSMALLINT InfoType, SQLPOINTER InfoValuePtr,
                       SQLSMALLINT BufferLength, SQLSMALLINT* StringLengthPtr) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::GetInfo, ConnectionHandle, InfoType, InfoValuePtr,
+                        BufferLength, StringLengthPtr);
+    }
+
+    SQLRETURN GetInfoW(SQLHDBC ConnectionHandle, SQLUSMALLINT InfoType, SQLPOINTER InfoValuePtr,
+                       SQLSMALLINT BufferLength, SQLSMALLINT* StringLengthPtr) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::GetInfoW, ConnectionHandle, InfoType, InfoValuePtr,
                         BufferLength, StringLengthPtr);
     }
 
@@ -355,10 +399,24 @@ public:
                         StringLength);
     }
 
+    SQLRETURN SetConnectAttrW(SQLHDBC ConnectionHandle, SQLINTEGER Attribute, SQLPOINTER ValuePtr,
+                              SQLINTEGER StringLength) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::SetConnectAttrW, ConnectionHandle, Attribute, ValuePtr,
+                        StringLength);
+    }
+
     SQLRETURN GetConnectAttr(SQLHDBC ConnectionHandle, SQLINTEGER Attribute, SQLPOINTER ValuePtr,
                              SQLINTEGER BufferLength, SQLINTEGER* StringLength) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::GetConnectAttr, ConnectionHandle, Attribute, ValuePtr,
+                        BufferLength, StringLength);
+    }
+
+    SQLRETURN GetConnectAttrW(SQLHDBC ConnectionHandle, SQLINTEGER Attribute, SQLPOINTER ValuePtr,
+                              SQLINTEGER BufferLength, SQLINTEGER* StringLength) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::GetConnectAttrW, ConnectionHandle, Attribute, ValuePtr,
                         BufferLength, StringLength);
     }
 
@@ -396,6 +454,12 @@ public:
         return ODBCFunc(ODBC3SQLFunctionId::Prepare, StatementHandle, StatementText, TextLength);
     }
 
+    SQLRETURN PrepareW(SQLHSTMT StatementHandle, SQLWCHAR* StatementText,
+                       SQLINTEGER TextLength) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::PrepareW, StatementHandle, StatementText, TextLength);
+    }
+
     SQLRETURN BindParameter(SQLHSTMT StatementHandle, SQLUSMALLINT ParameterNumber,
                             SQLSMALLINT InputOutputType, SQLSMALLINT ValueType,
                             SQLSMALLINT ParameterType, SQLULEN ColumnSize,
@@ -413,6 +477,12 @@ public:
         return ODBCFunc(ODBC3SQLFunctionId::SetCursorName, StatementHandle, CursorName, NameLength);
     }
 
+    SQLRETURN SetCursorNameW(SQLHSTMT StatementHandle, SQLWCHAR* CursorName,
+                             SQLSMALLINT NameLength) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::SetCursorNameW, StatementHandle, CursorName, NameLength);
+    }
+
     SQLRETURN Execute(SQLHSTMT StatementHandle) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::Execute, StatementHandle);
@@ -422,6 +492,12 @@ public:
                          SQLINTEGER TextLength) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::ExecDirect, StatementHandle, StatementText, TextLength);
+    }
+
+    SQLRETURN ExecDirectW(SQLHSTMT StatementHandle, SQLWCHAR* StatementText,
+                          SQLINTEGER TextLength) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ExecDirectW, StatementHandle, StatementText, TextLength);
     }
 
     SQLRETURN DescribeParam(SQLHSTMT StatementHandle, SQLUSMALLINT ParameterNumber,
@@ -464,6 +540,16 @@ public:
                            SQLLEN* NumericAttributePtr) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::ColAttribute, StatementHandle, ColumnNumber,
+                        FieldIdentifier, CharacterAttributePtr, BufferLength, StringLengthPtr,
+                        NumericAttributePtr);
+    }
+
+    SQLRETURN ColAttributeW(SQLHSTMT StatementHandle, SQLUSMALLINT ColumnNumber,
+                            SQLUSMALLINT FieldIdentifier, SQLPOINTER CharacterAttributePtr,
+                            SQLSMALLINT BufferLength, SQLSMALLINT* StringLengthPtr,
+                            SQLLEN* NumericAttributePtr) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ColAttributeW, StatementHandle, ColumnNumber,
                         FieldIdentifier, CharacterAttributePtr, BufferLength, StringLengthPtr,
                         NumericAttributePtr);
     }
@@ -521,6 +607,14 @@ public:
                         NativeErrorPtr, MessageText, BufferLength, TextLengthPtr);
     }
 
+    SQLRETURN GetDiagRecW(SQLSMALLINT HandleType, SQLHANDLE Handle, SQLSMALLINT RecNumber,
+                          SQLWCHAR* Sqlstate, SQLINTEGER* NativeErrorPtr, SQLWCHAR* MessageText,
+                          SQLSMALLINT BufferLength, SQLSMALLINT* TextLengthPtr) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::GetDiagRecW, HandleType, Handle, RecNumber, Sqlstate,
+                        NativeErrorPtr, MessageText, BufferLength, TextLengthPtr);
+    }
+
     SQLRETURN ColumnPrivileges(SQLHSTMT StatementHandle, SQLCHAR* CatalogName,
                                SQLSMALLINT NameLength1, SQLCHAR* SchemaName,
                                SQLSMALLINT NameLength2, SQLCHAR* TableName, SQLSMALLINT NameLength3,
@@ -531,12 +625,31 @@ public:
                         NameLength4);
     }
 
+    SQLRETURN ColumnPrivilegesW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName,
+                                SQLSMALLINT NameLength1, SQLWCHAR* SchemaName,
+                                SQLSMALLINT NameLength2, SQLWCHAR* TableName, SQLSMALLINT NameLength3,
+                                SQLWCHAR* ColumnName, SQLSMALLINT NameLength4) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ColumnPrivilegesW, StatementHandle, CatalogName,
+                        NameLength1, SchemaName, NameLength2, TableName, NameLength3, ColumnName,
+                        NameLength4);
+    }
+
     SQLRETURN Columns(SQLHSTMT StatementHandle, SQLCHAR* CatalogName, SQLSMALLINT NameLength1,
                       SQLCHAR* SchemaName, SQLSMALLINT NameLength2, SQLCHAR* TableName,
                       SQLSMALLINT NameLength3, SQLCHAR* ColumnName,
                       SQLSMALLINT NameLength4) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::Columns, StatementHandle, CatalogName, NameLength1,
+                        SchemaName, NameLength2, TableName, NameLength3, ColumnName, NameLength4);
+    }
+
+    SQLRETURN ColumnsW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName, SQLSMALLINT NameLength1,
+                       SQLWCHAR* SchemaName, SQLSMALLINT NameLength2, SQLWCHAR* TableName,
+                       SQLSMALLINT NameLength3, SQLWCHAR* ColumnName,
+                       SQLSMALLINT NameLength4) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ColumnsW, StatementHandle, CatalogName, NameLength1,
                         SchemaName, NameLength2, TableName, NameLength3, ColumnName, NameLength4);
     }
 
@@ -552,11 +665,31 @@ public:
                         NameLength6);
     }
 
+    SQLRETURN ForeignKeysW(SQLHSTMT StatementHandle, SQLWCHAR* PKCatalogName, SQLSMALLINT NameLength1,
+                           SQLWCHAR* PKSchemaName, SQLSMALLINT NameLength2, SQLWCHAR* PKTableName,
+                           SQLSMALLINT NameLength3, SQLWCHAR* FKCatalogName, SQLSMALLINT NameLength4,
+                           SQLWCHAR* FKSchemaName, SQLSMALLINT NameLength5, SQLWCHAR* FKTableName,
+                           SQLSMALLINT NameLength6) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ForeignKeysW, StatementHandle, PKCatalogName,
+                        NameLength1, PKSchemaName, NameLength2, PKTableName, NameLength3,
+                        FKCatalogName, NameLength4, FKSchemaName, NameLength5, FKTableName,
+                        NameLength6);
+    }
+
     SQLRETURN PrimaryKeys(SQLHSTMT StatementHandle, SQLCHAR* CatalogName, SQLSMALLINT NameLength1,
                           SQLCHAR* SchemaName, SQLSMALLINT NameLength2, SQLCHAR* TableName,
                           SQLSMALLINT NameLength3) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::PrimaryKeys, StatementHandle, CatalogName, NameLength1,
+                        SchemaName, NameLength2, TableName, NameLength3);
+    }
+
+    SQLRETURN PrimaryKeysW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName, SQLSMALLINT NameLength1,
+                           SQLWCHAR* SchemaName, SQLSMALLINT NameLength2, SQLWCHAR* TableName,
+                           SQLSMALLINT NameLength3) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::PrimaryKeysW, StatementHandle, CatalogName, NameLength1,
                         SchemaName, NameLength2, TableName, NameLength3);
     }
 
@@ -570,11 +703,29 @@ public:
                         NameLength4);
     }
 
+    SQLRETURN ProcedureColumnsW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName,
+                                SQLSMALLINT NameLength1, SQLWCHAR* SchemaName,
+                                SQLSMALLINT NameLength2, SQLWCHAR* ProcName, SQLSMALLINT NameLength3,
+                                SQLWCHAR* ColumnName, SQLSMALLINT NameLength4) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ProcedureColumnsW, StatementHandle, CatalogName,
+                        NameLength1, SchemaName, NameLength2, ProcName, NameLength3, ColumnName,
+                        NameLength4);
+    }
+
     SQLRETURN Procedures(SQLHSTMT StatementHandle, SQLCHAR* CatalogName, SQLSMALLINT NameLength1,
                          SQLCHAR* SchemaName, SQLSMALLINT NameLength2, SQLCHAR* ProcName,
                          SQLSMALLINT NameLength3) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::Procedures, StatementHandle, CatalogName, NameLength1,
+                        SchemaName, NameLength2, ProcName, NameLength3);
+    }
+
+    SQLRETURN ProceduresW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName, SQLSMALLINT NameLength1,
+                          SQLWCHAR* SchemaName, SQLSMALLINT NameLength2, SQLWCHAR* ProcName,
+                          SQLSMALLINT NameLength3) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::ProceduresW, StatementHandle, CatalogName, NameLength1,
                         SchemaName, NameLength2, ProcName, NameLength3);
     }
 
@@ -588,12 +739,31 @@ public:
                         Scope, Nullable);
     }
 
+    SQLRETURN SpecialColumnsW(SQLHSTMT StatementHandle, SQLUSMALLINT IdentifierType,
+                              SQLWCHAR* CatalogName, SQLSMALLINT NameLength1, SQLWCHAR* SchemaName,
+                              SQLSMALLINT NameLength2, SQLWCHAR* TableName, SQLSMALLINT NameLength3,
+                              SQLUSMALLINT Scope, SQLUSMALLINT Nullable) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::SpecialColumnsW, StatementHandle, IdentifierType,
+                        CatalogName, NameLength1, SchemaName, NameLength2, TableName, NameLength3,
+                        Scope, Nullable);
+    }
+
     SQLRETURN Statistics(SQLHSTMT StatementHandle, SQLCHAR* CatalogName, SQLSMALLINT NameLength1,
                          SQLCHAR* SchemaName, SQLSMALLINT NameLength2, SQLCHAR* TableName,
                          SQLSMALLINT NameLength3, SQLUSMALLINT Unique,
                          SQLUSMALLINT Reserved) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::Statistics, StatementHandle, CatalogName, NameLength1,
+                        SchemaName, NameLength2, TableName, NameLength3, Unique, Reserved);
+    }
+
+    SQLRETURN StatisticsW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName, SQLSMALLINT NameLength1,
+                          SQLWCHAR* SchemaName, SQLSMALLINT NameLength2, SQLWCHAR* TableName,
+                          SQLSMALLINT NameLength3, SQLUSMALLINT Unique,
+                          SQLUSMALLINT Reserved) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::StatisticsW, StatementHandle, CatalogName, NameLength1,
                         SchemaName, NameLength2, TableName, NameLength3, Unique, Reserved);
     }
 
@@ -605,12 +775,29 @@ public:
                         NameLength1, SchemaName, NameLength2, TableName, NameLength3);
     }
 
+    SQLRETURN TablePrivilegesW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName,
+                               SQLSMALLINT NameLength1, SQLWCHAR* SchemaName, SQLSMALLINT NameLength2,
+                               SQLWCHAR* TableName, SQLSMALLINT NameLength3) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::TablePrivilegesW, StatementHandle, CatalogName,
+                        NameLength1, SchemaName, NameLength2, TableName, NameLength3);
+    }
+
     SQLRETURN Tables(SQLHSTMT StatementHandle, SQLCHAR* CatalogName, SQLSMALLINT NameLength1,
                      SQLCHAR* SchemaName, SQLSMALLINT NameLength2, SQLCHAR* TableName,
                      SQLSMALLINT NameLength3, SQLCHAR* TableType,
                      SQLSMALLINT NameLength4) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::Tables, StatementHandle, CatalogName, NameLength1,
+                        SchemaName, NameLength2, TableName, NameLength3, TableType, NameLength4);
+    }
+
+    SQLRETURN TablesW(SQLHSTMT StatementHandle, SQLWCHAR* CatalogName, SQLSMALLINT NameLength1,
+                      SQLWCHAR* SchemaName, SQLSMALLINT NameLength2, SQLWCHAR* TableName,
+                      SQLSMALLINT NameLength3, SQLWCHAR* TableType,
+                      SQLSMALLINT NameLength4) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::TablesW, StatementHandle, CatalogName, NameLength1,
                         SchemaName, NameLength2, TableName, NameLength3, TableType, NameLength4);
     }
 
@@ -652,11 +839,26 @@ public:
                         BufferLength, NameLength2);
     }
 
+    SQLRETURN GetCursorNameW(SQLHSTMT StatementHandle, SQLWCHAR* CursorName, SQLSMALLINT BufferLength,
+                             SQLSMALLINT* NameLength2) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::GetCursorNameW, StatementHandle, CursorName,
+                        BufferLength, NameLength2);
+    }
+
     SQLRETURN NativeSql(SQLHDBC ConnectionHandle, SQLCHAR* InStatementText, SQLINTEGER TextLength1,
                         SQLCHAR* OutStatementText, SQLINTEGER BufferLength,
                         SQLINTEGER* TextLength2Ptr) const override
     {
         return ODBCFunc(ODBC3SQLFunctionId::NativeSql, ConnectionHandle, InStatementText,
+                        TextLength1, OutStatementText, BufferLength, TextLength2Ptr);
+    }
+
+    SQLRETURN NativeSqlW(SQLHDBC ConnectionHandle, SQLWCHAR* InStatementText, SQLINTEGER TextLength1,
+                         SQLWCHAR* OutStatementText, SQLINTEGER BufferLength,
+                         SQLINTEGER* TextLength2Ptr) const override
+    {
+        return ODBCFunc(ODBC3SQLFunctionId::NativeSqlW, ConnectionHandle, InStatementText,
                         TextLength1, OutStatementText, BufferLength, TextLength2Ptr);
     }
 

@@ -314,9 +314,6 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     m_sSqlStatement = sql;
 
-
-    OString aSql(OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
-
     bool hasResultSet = false;
 
     // Reset the statement handle and warning
@@ -332,15 +329,24 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
-        THROW_SQL(functions().ExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength()));
+        if (bUseWChar && functions().has(ODBC3SQLFunctionId::ExecDirectW))
+        {
+            SQLWChars directSQL(sql);
+            THROW_SQL(functions().ExecDirectW(m_aStatementHandle, directSQL.get(), directSQL.cch()));
+        }
+        else
+        {
+            SQLChars directSQL(sql, getOwnConnection()->getTextEncoding());
+            THROW_SQL(functions().ExecDirect(m_aStatementHandle, directSQL.get(), directSQL.cch()));
+        }
     }
-    catch (const SQLWarning&) {
-
+    catch (const SQLWarning&)
+    {
         //TODO: Save pointer to warning and save with ResultSet
         // object once it is created.
     }
 
-    // Now determine if there is a result set associated with
+        // Now determine if there is a result set associated with
     // the SQL statement that was executed.  Get the column
     // count, and if it is not zero, there is a result set.
 
@@ -470,19 +476,22 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    OStringBuffer aBatchSql;
     sal_Int32 nLen = m_aBatchVector.size();
 
-    for (auto const& elem : m_aBatchVector)
-    {
-        aBatchSql.append(OUStringToOString(elem,getOwnConnection()->getTextEncoding())
-            + ";");
-    }
-
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    auto s = aBatchSql.makeStringAndClear();
-    THROW_SQL(functions().ExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(s.getStr())), s.getLength()));
 
+    OUStringBuffer uSql;
+    comphelper::intersperse(m_aBatchVector.begin(), m_aBatchVector.end(), comphelper::OUStringBufferAppender(uSql), u";");
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ExecDirectW))
+    {
+        SQLWChars statement(uSql.makeStringAndClear());
+        THROW_SQL(functions().ExecDirectW(m_aStatementHandle, statement.get(), statement.cch()));
+    }
+    else
+    {
+        SQLChars statement(uSql, getOwnConnection()->getTextEncoding());
+        THROW_SQL(functions().ExecDirect(m_aStatementHandle, statement.get(), statement.cch()));
+    }
     Sequence< sal_Int32 > aRet(nLen);
     sal_Int32* pArray = aRet.getArray();
     for(sal_Int32 j=0;j<nLen;++j)
@@ -702,10 +711,19 @@ sal_Int64 OStatement_Base::getMaxFieldSize() const
 OUString OStatement_Base::getCursorName() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
-    functions().GetCursorName(m_aStatementHandle,pName,256,&nRealLen);
-    return OUString::createFromAscii(reinterpret_cast<char*>(pName));
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::GetCursorNameW))
+    {
+        SQLWCHAR pName[258]{};
+        functions().GetCursorNameW(m_aStatementHandle, pName, 256, &nRealLen);
+        return toUString(pName, nRealLen);
+    }
+    else
+    {
+        SQLCHAR pName[258]{};
+        functions().GetCursorName(m_aStatementHandle, pName, 256, &nRealLen);
+        return toUString(pName);
+    }
 }
 
 void OStatement_Base::setQueryTimeOut(sal_Int64 seconds)
@@ -829,11 +847,19 @@ void OStatement_Base::setMaxFieldSize(sal_Int64 _par0)
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH, _par0);
 }
 
-void OStatement_Base::setCursorName(std::u16string_view _par0)
+void OStatement_Base::setCursorName(const OUString& _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    OString aName(OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
-    functions().SetCursorName(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aName.getStr())), static_cast<SQLSMALLINT>(aName.getLength()));
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::SetCursorNameW))
+    {
+        SQLWChars name(_par0);
+        functions().SetCursorNameW(m_aStatementHandle, name.get(), name.cch());
+    }
+    else
+    {
+        SQLChars name(_par0, getOwnConnection()->getTextEncoding());
+        functions().SetCursorName(m_aStatementHandle, name.get(), name.cch());
+    }
 }
 
 bool OStatement_Base::isUsingBookmarks() const

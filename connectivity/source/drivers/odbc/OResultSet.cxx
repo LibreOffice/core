@@ -31,6 +31,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
@@ -55,11 +56,77 @@ static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_ON, "ODBC_SQL_NOT_DEFINED must be u
 static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_FIXED, "ODBC_SQL_NOT_DEFINED must be unique");
 static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_VARIABLE, "ODBC_SQL_NOT_DEFINED must be unique");
 
+class connectivity::odbc::BindData
+{
+public:
+    virtual void* data() = 0;
+    virtual SQLLEN len() const = 0;
+
+    virtual ~BindData() {}
+};
+
 namespace
 {
-    const SQLLEN nMaxBookmarkLen = 20;
-}
+const SQLLEN nMaxBookmarkLen = 20;
 
+template <typename T> class SimpleBindData : public connectivity::odbc::BindData
+{
+public:
+    SimpleBindData(const void* p)
+        : value(*static_cast<const T*>(p))
+    {
+    }
+    void* data() override { return &value; }
+    SQLLEN len() const override { return sizeof(T); }
+
+private:
+    T value;
+};
+
+template <class CHARS_t> class CharsBindData : public connectivity::odbc::BindData
+{
+public:
+    template <typename... Args>
+    CharsBindData(const void* p, Args... args)
+        : value(*static_cast<const OUString*>(p), args...)
+    {
+    }
+    template <class S> requires std::is_class_v<S>
+    CharsBindData(const S& val)
+        : value(val)
+    {
+    }
+    void* data() override { return value.get(); }
+    SQLLEN len() const override { return value.cch(); }
+
+private:
+    CHARS_t value;
+};
+
+class NullBindData : public connectivity::odbc::BindData
+{
+public:
+    void* data() override { return &value; }
+    SQLLEN len() const override { return SQL_NULL_DATA; }
+
+private:
+    char value[2] = {};
+};
+
+class BinaryBindData : public connectivity::odbc::BindData
+{
+public:
+    BinaryBindData(const void* p)
+        : value(*static_cast<const css::uno::Sequence<sal_Int8>*>(p))
+    {
+    }
+    void* data() override { return const_cast<sal_Int8*>(value.getConstArray()); }
+    SQLLEN len() const override { return value.getLength(); }
+
+private:
+    css::uno::Sequence<sal_Int8> value; // ref-counted CoW
+};
+}
 
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 OUString SAL_CALL OResultSet::getImplementationName(  )
@@ -180,133 +247,15 @@ void OResultSet::disposing()
     m_xMetaData.clear();
 }
 
+// See OResultSet::updateValue
 SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
 {
     SQLRETURN nRet = 0;
     if ( _bUnbindHandle )
         nRet = functions().FreeStmt(m_aStatementHandle,SQL_UNBIND);
 
-    if ( !m_aBindVector.empty() )
-    {
-        for(auto& [rPtrAddr, rType] : m_aBindVector)
-        {
-            switch (rType)
-            {
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                    delete static_cast< OString* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::BIGINT:
-                    delete static_cast< sal_Int64* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
-                    delete static_cast< OString* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::REAL:
-                case DataType::DOUBLE:
-                    delete static_cast< double* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::LONGVARCHAR:
-                case DataType::CLOB:
-                    delete [] static_cast< char* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::LONGVARBINARY:
-                case DataType::BLOB:
-                    delete [] static_cast< char* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::DATE:
-                    delete static_cast< DATE_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::TIME:
-                    delete static_cast< TIME_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::TIMESTAMP:
-                    delete static_cast< TIMESTAMP_STRUCT* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::BIT:
-                case DataType::TINYINT:
-                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::SMALLINT:
-                    delete static_cast< sal_Int16* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::INTEGER:
-                    delete static_cast< sal_Int32* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::FLOAT:
-                    delete static_cast< float* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                    delete static_cast< sal_Int8* >(reinterpret_cast< void * >(rPtrAddr));
-                    break;
-            }
-        }
-        m_aBindVector.clear();
-    }
+    m_aBindVector.clear();
     return nRet;
-}
-
-TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
-{
-    TVoidPtr aPair;
-    switch (_nType)
-    {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new OString()),_nType);
-            break;
-        case DataType::BIGINT:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int64(0)),_nType);
-            break;
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new OString()),_nType);
-            break;
-        case DataType::REAL:
-        case DataType::DOUBLE:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new double(0.0)),_nType);
-            break;
-        case DataType::LONGVARCHAR:
-        case DataType::CLOB:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // only for finding
-            break;
-        case DataType::LONGVARBINARY:
-        case DataType::BLOB:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // only for finding
-            break;
-        case DataType::DATE:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new DATE_STRUCT),_nType);
-            break;
-        case DataType::TIME:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new TIME_STRUCT),_nType);
-            break;
-        case DataType::TIMESTAMP:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new TIMESTAMP_STRUCT),_nType);
-            break;
-        case DataType::BIT:
-        case DataType::TINYINT:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int8(0)),_nType);
-            break;
-        case DataType::SMALLINT:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int16(0)),_nType);
-            break;
-        case DataType::INTEGER:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int32(0)),_nType);
-            break;
-        case DataType::FLOAT:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new float(0)),_nType);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int8[m_aRow[_nColumnIndex].getSequence().getLength()]),_nType);
-            break;
-        default:
-            SAL_WARN( "connectivity.odbc", "Unknown type");
-            aPair = TVoidPtr(0,_nType);
-    }
-    return aPair;
 }
 
 void OResultSet::allocBuffer()
@@ -852,18 +801,9 @@ void SAL_CALL OResultSet::insertRow(  )
         fillNeededData( nRet );
     }
     aBookmark.realloc(nRealLen);
-    try
-    {
-        OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    }
-    catch(const SQLException&)
-    {
-        nRet = unbind();
-        throw;
-    }
-
-    nRet = unbind();
+    SQLRETURN nRet2 = unbind();
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet2,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if ( bPositionByBookmark )
     {
@@ -996,30 +936,115 @@ void OResultSet::updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void con
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    m_aBindVector.push_back(allocBindColumn(OTools::MapOdbcType2Jdbc(_nType),columnIndex));
-    void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
-    OSL_ENSURE(pData != nullptr,"Data for update is NULL!");
-    OTools::bindValue(  m_pStatement->getOwnConnection(),
-                        m_aStatementHandle,
-                        columnIndex,
-                        _nType,
-                        0,
-                        _pValue,
-                        pData,
-                        &m_aLengthVector[columnIndex],
-                        **this,
-                        m_nTextEncoding,
-                        m_pStatement->getOwnConnection()->useOldDateFormat());
+    SQLSMALLINT fCType, dummy;
+    OTools::getBindTypes(m_pStatement->getOwnConnection()->useOldDateFormat(), _nType, fCType,
+                         dummy);
+
+    SQLLEN* const pLen = &m_aLengthVector[columnIndex];
+    *pLen = 0;
+    std::unique_ptr<BindData> bindData;
+    void* pData = nullptr;
+
+    if (columnIndex != 0 && !_pValue)
+    {
+        bindData = std::make_unique<NullBindData>();
+    }
+    else
+    {
+        assert(_pValue);
+
+        switch (_nType)
+        {
+            case SQL_CHAR:
+            case SQL_VARCHAR:
+            case SQL_WCHAR:
+            case SQL_WVARCHAR:
+                if (fCType == SQL_C_CHAR)
+                    bindData = std::make_unique<CharsBindData<SQLChars>>(_pValue, m_nTextEncoding);
+                else
+                    bindData = std::make_unique<CharsBindData<SQLWChars>>(_pValue);
+                break;
+            case SQL_DECIMAL:
+            case SQL_NUMERIC:
+                if (fCType == SQL_C_CHAR)
+                    bindData = std::make_unique<CharsBindData<SQLChars>>(
+                        OString::number(*static_cast<const double*>(_pValue)));
+                else
+                    bindData = std::make_unique<CharsBindData<SQLWChars>>(
+                        OUString::number(*static_cast<const double*>(_pValue)));
+                break;
+            case SQL_BIT:
+            case SQL_TINYINT:
+                bindData = std::make_unique<SimpleBindData<sal_Int8>>(_pValue);
+                break;
+            case SQL_SMALLINT:
+                bindData = std::make_unique<SimpleBindData<sal_Int16>>(_pValue);
+                break;
+            case SQL_INTEGER:
+                bindData = std::make_unique<SimpleBindData<sal_Int32>>(_pValue);
+                break;
+            case SQL_BIGINT:
+                bindData = std::make_unique<SimpleBindData<sal_Int64>>(_pValue);
+                break;
+            case SQL_FLOAT:
+                bindData = std::make_unique<SimpleBindData<float>>(_pValue);
+                break;
+            case SQL_REAL:
+            case SQL_DOUBLE:
+                bindData = std::make_unique<SimpleBindData<double>>(_pValue);
+                break;
+            case SQL_BINARY:
+            case SQL_VARBINARY:
+                bindData = std::make_unique<BinaryBindData>(_pValue);
+                break;
+            case SQL_LONGVARBINARY:
+            {
+                /* see https://msdn.microsoft.com/en-us/library/ms716238%28v=vs.85%29.aspx
+                     * for an explanation of that apparently weird cast */
+                pData = reinterpret_cast<void*>(static_cast<sal_uIntPtr>(columnIndex));
+                sal_Int32 nLen
+                    = static_cast<const css::uno::Sequence<sal_Int8>*>(_pValue)->getLength();
+                *pLen = SQL_LEN_DATA_AT_EXEC(nLen);
+            }
+            break;
+            case SQL_LONGVARCHAR:
+            case SQL_WLONGVARCHAR:
+            {
+                /* see https://msdn.microsoft.com/en-us/library/ms716238%28v=vs.85%29.aspx
+                     * for an explanation of that apparently weird cast */
+                pData = reinterpret_cast<void*>(static_cast<sal_uIntPtr>(columnIndex));
+                sal_Int32 nLen = static_cast<const OUString*>(_pValue)->getLength();
+                *pLen = SQL_LEN_DATA_AT_EXEC(nLen);
+            }
+            break;
+            case SQL_DATE:
+                bindData = std::make_unique<SimpleBindData<DATE_STRUCT>>(_pValue);
+                break;
+            case SQL_TIME:
+                bindData = std::make_unique<SimpleBindData<TIME_STRUCT>>(_pValue);
+                break;
+            case SQL_TIMESTAMP:
+                bindData = std::make_unique<SimpleBindData<TIMESTAMP_STRUCT>>(_pValue);
+                break;
+        }
+    }
+
+    if (bindData)
+    {
+        pData = bindData->data();
+        *pLen = bindData->len();
+        m_aBindVector.push_back(std::move(bindData));
+    }
+
+    SQLRETURN nRetcode
+        = functions().BindCol(m_aStatementHandle, columnIndex, fCType, pData, 0, pLen);
+    OTools::ThrowException(m_pStatement->getOwnConnection(), nRetcode, m_aStatementHandle,
+                           SQL_HANDLE_STMT, **this);
 }
 
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    m_aBindVector.push_back(allocBindColumn(DataType::CHAR,columnIndex));
-    void* pData = reinterpret_cast<void*>(m_aBindVector.rbegin()->first);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,nullptr,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex, SQL_CHAR, nullptr);
 }
 
 
@@ -1320,10 +1345,19 @@ sal_Int32 OResultSet::getFetchSize() const
 
 OUString OResultSet::getCursorName() const
 {
-    SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
-    functions().GetCursorName(m_aStatementHandle,pName,256,&nRealLen);
-    return OUString::createFromAscii(reinterpret_cast<char*>(pName));
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::GetCursorNameW))
+    {
+        SQLWCHAR pName[258]{};
+        functions().GetCursorNameW(m_aStatementHandle, pName, 256, &nRealLen);
+        return toUString(pName, nRealLen);
+    }
+    else
+    {
+        SQLCHAR pName[258]{};
+        functions().GetCursorName(m_aStatementHandle, pName, 256, &nRealLen);
+        return toUString(pName);
+    }
 }
 
 bool  OResultSet::isBookmarkable() const
@@ -1793,16 +1827,15 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 break;
             case SQL_WLONGVARCHAR:
             {
-                OUString const & sRet = m_aRow[nColumnIndex].getString();
-                functions().PutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
+                SQLWChars data(m_aRow[nColumnIndex].getString());
+                functions().PutData(m_aStatementHandle, data.get(), data.cb());
                 break;
             }
             case DataType::LONGVARCHAR:
             case DataType::CLOB:
             {
-                OUString sRet = m_aRow[nColumnIndex].getString();
-                OString aString(OUStringToOString(sRet,m_nTextEncoding));
-                functions().PutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
+                SQLChars data(m_aRow[nColumnIndex].getString(), m_nTextEncoding);
+                functions().PutData(m_aStatementHandle, data.get(), data.cb());
                 break;
             }
             default:

@@ -47,14 +47,6 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,u"com.sun.star.sdbcx.OPreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 
-namespace
-{
-    // for now, never use wchar,
-    // but most of code is prepared to handle it
-    // in case we make this configurable
-    const bool bUseWChar = false;
-}
-
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,numParams(0)
@@ -314,36 +306,21 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          *
          * Our internal OUString storage is always UTF-16, so no conversion to do here.
          */
-        static_assert(sizeof (SQLWCHAR) == 2 || sizeof (SQLWCHAR) == 4, "must be 2 or 4");
-        if (sizeof (SQLWCHAR) == 2)
-        {
-            nCharLen = _sData.getLength();
-            nByteLen = 2 * nCharLen;
-            pData = allocBindBuf(parameterIndex, nByteLen);
-            memcpy(pData, _sData.getStr(), nByteLen);
-        }
-        else
-        {
-            pData = allocBindBuf(parameterIndex, _sData.getLength() * 4);
-            sal_uInt32* pCursor = static_cast<sal_uInt32*>(pData);
-            nCharLen = 0;
-            for (sal_Int32 i = 0; i != _sData.getLength();)
-            {
-                *pCursor++ = _sData.iterateCodePoints(&i);
-                nCharLen += 1;
-            }
-            nByteLen = 4 * nCharLen;
-        }
+        SQLWChars data(_sData);
+        nCharLen = data.cch();
+        nByteLen = data.cb();
+        pData = allocBindBuf(parameterIndex, nByteLen);
+        memcpy(pData, data.get(), nByteLen);
     }
     else
     {
         assert(getOwnConnection()->getTextEncoding() != RTL_TEXTENCODING_UCS2 &&
                getOwnConnection()->getTextEncoding() != RTL_TEXTENCODING_UCS4);
-        OString sOData(
-            OUStringToOString(_sData, getOwnConnection()->getTextEncoding()));
-        nCharLen = nByteLen = sOData.getLength();
+        SQLChars data(_sData, getOwnConnection()->getTextEncoding());
+        nCharLen = data.cch();
+        nByteLen = data.cb();
         pData = allocBindBuf(parameterIndex, nByteLen);
-        memcpy(pData, sOData.getStr(), nByteLen);
+        memcpy(pData, data.get(), nByteLen);
     }
 
     setParameter( parameterIndex, _nType, nCharLen, _nScale, pData, nByteLen, nByteLen );
@@ -367,7 +344,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
 void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const SQLULEN _nColumnSize, const sal_Int32 _nScale, const void* const _pData, const SQLULEN _nDataLen, const SQLLEN _nDataAllocLen)
 {
     SQLSMALLINT fCType, fSqlType;
-    OTools::getBindTypes(bUseWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
+    OTools::getBindTypes(m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
     SQLLEN& rDataLen = boundParams[parameterIndex-1].getBindLengthBuffer();
     rDataLen = _nDataLen;
@@ -507,8 +484,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_I
     SQLSMALLINT fCType;
     SQLSMALLINT fSqlType;
 
-    OTools::getBindTypes(   bUseWChar,
-                            m_pConnection->useOldDateFormat(),
+    OTools::getBindTypes(   m_pConnection->useOldDateFormat(),
                             OTools::jdbcTypeToOdbc(_nType),
                             fCType,
                             fSqlType);
@@ -819,7 +795,7 @@ void OPreparedStatement::setStream(
     *lenBuf = SQL_LEN_DATA_AT_EXEC (length);
 
     SQLSMALLINT fCType, fSqlType;
-    OTools::getBindTypes(bUseWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
+    OTools::getBindTypes(m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -882,8 +858,17 @@ void OPreparedStatement::prepareStatement()
     if(!isPrepared())
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-        OString aSql(OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
-        SQLRETURN nReturn = functions().Prepare(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength());
+        SQLRETURN nReturn;
+        if (bUseWChar && functions().has(ODBC3SQLFunctionId::PrepareW))
+        {
+            SQLWChars aSql(m_sSqlStatement);
+            nReturn = functions().PrepareW(m_aStatementHandle, aSql.get(), aSql.cch());
+        }
+        else
+        {
+            SQLChars aSql(m_sSqlStatement, getOwnConnection()->getTextEncoding());
+            nReturn = functions().Prepare(m_aStatementHandle, aSql.get(), aSql.cch());
+        }
         OTools::ThrowException(m_pConnection.get(),nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         m_bPrepared = true;
         initBoundParam();

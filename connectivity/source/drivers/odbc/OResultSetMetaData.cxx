@@ -35,40 +35,77 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     if(_column <static_cast<sal_Int32>(m_vMapping.size())) // use mapping
         column = m_vMapping[_column];
 
-    SQLSMALLINT BUFFER_LEN = 128;
-    std::unique_ptr<char[]> pName(new char[BUFFER_LEN+1]);
-    SQLSMALLINT nRealLen=0;
-    SQLRETURN nRet = functions().ColAttribute(m_aStatementHandle,
-                                    static_cast<SQLUSMALLINT>(column),
-                                    static_cast<SQLUSMALLINT>(ident),
-                                    static_cast<SQLPOINTER>(pName.get()),
-                                    BUFFER_LEN,
-                                    &nRealLen,
-                                    nullptr
-                                    );
     OUString sValue;
-    if ( nRet == SQL_SUCCESS )
+    SQLSMALLINT cbRealLen = 0;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ColAttributeW))
     {
-        if ( nRealLen < 0 )
-            nRealLen = BUFFER_LEN;
-        sValue = OUString(pName.get(),nRealLen,m_pConnection->getTextEncoding());
+        // SQLColAttributeW gets/returns count of bytes, not characters
+        SQLSMALLINT cbBufferLen = 128 * sizeof(SQLWCHAR);
+        auto pName = std::make_unique<SQLWCHAR[]>(cbBufferLen / sizeof(SQLWCHAR) + 1);
+        SQLRETURN nRet = functions().ColAttributeW(m_aStatementHandle,
+                                                   column,
+                                                   ident,
+                                                   pName.get(),
+                                                   cbBufferLen,
+                                                   &cbRealLen,
+                                                   nullptr);
+        OTools::ThrowException(m_pConnection, nRet, m_aStatementHandle, SQL_HANDLE_STMT, *this);
+        if (nRet == SQL_SUCCESS)
+        {
+            if (cbRealLen < 0)
+                cbRealLen = cbBufferLen;
+            sValue = toUString(pName.get(), cbRealLen / sizeof(SQLWCHAR));
+        }
+        if (cbRealLen > cbBufferLen)
+        {
+            cbBufferLen = (cbRealLen + 1) & ~1; // Make sure it's even
+            pName = std::make_unique<SQLWCHAR[]>(cbBufferLen / sizeof(SQLWCHAR) + 1);
+            nRet = functions().ColAttributeW(m_aStatementHandle,
+                                             column,
+                                             ident,
+                                             pName.get(),
+                                             cbBufferLen,
+                                             &cbRealLen,
+                                             nullptr);
+            OTools::ThrowException(m_pConnection, nRet, m_aStatementHandle, SQL_HANDLE_STMT, *this);
+            if (nRet == SQL_SUCCESS && cbRealLen > 0)
+                sValue = toUString(pName.get(), cbRealLen / sizeof(SQLWCHAR));
+        }
     }
-    pName.reset();
-    OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    if(nRealLen > BUFFER_LEN)
+    else
     {
-        pName.reset(new char[nRealLen+1]);
-        nRet = functions().ColAttribute(m_aStatementHandle,
-                                    static_cast<SQLUSMALLINT>(column),
-                                    static_cast<SQLUSMALLINT>(ident),
-                                    static_cast<SQLPOINTER>(pName.get()),
-                                    nRealLen,
-                                    &nRealLen,
-                                    nullptr
-                                    );
-        if ( nRet == SQL_SUCCESS && nRealLen > 0)
-            sValue = OUString(pName.get(),nRealLen,m_pConnection->getTextEncoding());
+        SQLSMALLINT BUFFER_LEN = 128;
+        auto pName = std::make_unique<SQLCHAR[]>(BUFFER_LEN + 1);
+        SQLRETURN nRet = functions().ColAttribute(m_aStatementHandle,
+                                        static_cast<SQLUSMALLINT>(column),
+                                        static_cast<SQLUSMALLINT>(ident),
+                                        static_cast<SQLPOINTER>(pName.get()),
+                                        BUFFER_LEN,
+                                        &cbRealLen,
+                                        nullptr
+                                        );
+        if ( nRet == SQL_SUCCESS )
+        {
+            if ( cbRealLen < 0 )
+                cbRealLen = BUFFER_LEN;
+            sValue = toUString(pName.get(), cbRealLen, m_pConnection->getTextEncoding());
+        }
         OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        if(cbRealLen > BUFFER_LEN)
+        {
+            pName = std::make_unique<SQLCHAR[]>(cbRealLen + 1);
+            nRet = functions().ColAttribute(m_aStatementHandle,
+                                        static_cast<SQLUSMALLINT>(column),
+                                        static_cast<SQLUSMALLINT>(ident),
+                                        static_cast<SQLPOINTER>(pName.get()),
+                                        cbRealLen,
+                                        &cbRealLen,
+                                        nullptr
+                                        );
+            if ( nRet == SQL_SUCCESS && cbRealLen > 0)
+                sValue = toUString(pName.get(), cbRealLen, m_pConnection->getTextEncoding());
+            OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        }
     }
 
     return  sValue;
@@ -143,11 +180,10 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
             catch(SQLException& ) // in this case we have an odbc 2.0 driver
             {
                 m_bUseODBC2Types = true;
-                nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
             }
         }
-        else
-            nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
+        if (m_bUseODBC2Types)
+            nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column, SQL_DESC_CONCISE_TYPE));
         aFind = m_aColumnTypes.emplace(column,nType).first;
     }
 
@@ -230,30 +266,38 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column )
 {
     sal_Int32 nType = 0;
-    try
+    if (!m_bUseODBC2Types)
     {
-        nType = getNumColAttrib(column,SQL_DESC_PRECISION);
+        try
+        {
+            nType = getNumColAttrib(column, SQL_DESC_PRECISION);
+        }
+        catch (const SQLException&) // in this case we have an odbc 2.0 driver
+        {
+            m_bUseODBC2Types = true;
+        }
     }
-    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
-    {
-        m_bUseODBC2Types = true;
-        nType = getNumColAttrib(column,SQL_COLUMN_PRECISION );
-    }
+    if (m_bUseODBC2Types)
+        nType = getNumColAttrib(column, SQL_COLUMN_PRECISION);
     return nType;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column )
 {
     sal_Int32 nType = 0;
-    try
+    if (!m_bUseODBC2Types)
     {
-        nType = getNumColAttrib(column,SQL_DESC_SCALE);
+        try
+        {
+            nType = getNumColAttrib(column, SQL_DESC_SCALE);
+        }
+        catch (const SQLException&) // in this case we have an odbc 2.0 driver
+        {
+            m_bUseODBC2Types = true;
+        }
     }
-    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
-    {
-        m_bUseODBC2Types = true;
-        nType = getNumColAttrib(column,SQL_COLUMN_SCALE );
-    }
+    if (m_bUseODBC2Types)
+        nType = getNumColAttrib(column, SQL_COLUMN_SCALE);
     return nType;
 }
 

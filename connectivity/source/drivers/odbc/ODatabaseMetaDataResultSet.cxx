@@ -24,6 +24,7 @@
 #include <comphelper/property.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/stl_types.hxx>
 #include <odbc/OResultSetMetaData.hxx>
 #include <odbc/OTools.hxx>
 #include <comphelper/types.hxx>
@@ -831,48 +832,52 @@ void ODatabaseMetaDataResultSet::openTypeInfo()
 }
 
 void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& schemaPattern,
-                            std::u16string_view tableNamePattern,
+                            const OUString& tableNamePattern,
                             const Sequence< OUString >& types )
 {
-    OString aPKQ,aPKO,aPKN,aCOL;
-    const OUString *pSchemaPat = nullptr;
-
-    if(schemaPattern != "%")
-        pSchemaPat = &schemaPattern;
-    else
-        pSchemaPat = nullptr;
-
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
-    aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-
-    const char  *pCOL = nullptr;
-    const char* const pComma = ",";
-    const OUString* pBegin = types.getConstArray();
-    const OUString* pEnd = pBegin + types.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    OUStringBuffer uCOL;
+    comphelper::intersperse(types.begin(), types.end(), comphelper::OUStringBufferAppender(uCOL), u",");
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
     {
-        aCOL += OUStringToOString(*pBegin,m_nTextEncoding) + pComma;
-    }
-    if ( !aCOL.isEmpty() )
-    {
-        aCOL = aCOL.replaceAt(aCOL.getLength()-1,1,pComma);
-        pCOL = aCOL.getStr();
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLWChars(schemaPattern);
+        SQLWChars aPKN(tableNamePattern);
+        SQLWChars aCOL = !uCOL.isEmpty() ? SQLWChars(uCOL.makeStringAndClear()) : SQLWChars(u"" SQL_ALL_TABLE_TYPES ""_ustr);
+
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().TablesW(m_aStatementHandle,
+                                       pPKQ, pPKQ ? SQL_NTSL : 0,
+                                       pPKO, pPKO ? SQL_NTSL : 0,
+                                       aPKN.get(), SQL_NTSL,
+                                       aCOL.get(), SQL_NTSL);
     }
     else
-        pCOL = SQL_ALL_TABLE_TYPES;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
+        SQLChars aPKN(tableNamePattern, m_nTextEncoding);
+        SQLChars aCOL = !uCOL.isEmpty() ? SQLChars(uCOL, m_nTextEncoding) : SQLChars(SQL_ALL_TABLE_TYPES ""_ostr);
 
-    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), pCOL ? SQL_NTS : 0);
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().Tables(m_aStatementHandle,
+                                      pPKQ, pPKQ ? SQL_NTS : 0,
+                                      pPKO, pPKO ? SQL_NTS : 0,
+                                      aPKN.get(), SQL_NTS,
+                                      aCOL.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 
@@ -880,11 +885,23 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
 
 void ODatabaseMetaDataResultSet::openTablesTypes( )
 {
-    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
-                            nullptr,0,
-                            nullptr,0,
-                            nullptr,0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_TABLE_TYPES)),SQL_NTS);
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
+    {
+        nRetcode = functions().TablesW(m_aStatementHandle,
+                                       nullptr, 0,
+                                       nullptr, 0,
+                                       nullptr, 0,
+                                       SQLWChars(u"" SQL_ALL_TABLE_TYPES ""_ustr).get(), SQL_NTSL);
+    }
+    else
+    {
+        nRetcode = functions().Tables(m_aStatementHandle,
+                                      nullptr,0,
+                                      nullptr,0,
+                                      nullptr,0,
+                                      SQLChars(SQL_ALL_TABLE_TYPES ""_ostr).get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
@@ -896,12 +913,23 @@ void ODatabaseMetaDataResultSet::openTablesTypes( )
 
 void ODatabaseMetaDataResultSet::openCatalogs()
 {
-    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_CATALOGS)),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS);
-
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
+    {
+        nRetcode = functions().TablesW(m_aStatementHandle,
+                                       SQLWChars(u"" SQL_ALL_CATALOGS ""_ustr).get(), SQL_NTSL,
+                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
+                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
+                                       SQLWChars(u""_ustr).get(), SQL_NTSL);
+    }
+    else
+    {
+        nRetcode = functions().Tables(m_aStatementHandle,
+                                      SQLChars(SQL_ALL_CATALOGS ""_ostr).get(), SQL_NTS,
+                                      SQLChars(""_ostr).get(), SQL_NTS,
+                                      SQLChars(""_ostr).get(), SQL_NTS,
+                                      SQLChars(""_ostr).get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
@@ -913,11 +941,23 @@ void ODatabaseMetaDataResultSet::openCatalogs()
 
 void ODatabaseMetaDataResultSet::openSchemas()
 {
-    SQLRETURN nRetcode = functions().Tables(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_SCHEMAS)),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS);
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
+    {
+        nRetcode = functions().TablesW(m_aStatementHandle,
+                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
+                                       SQLWChars(u"" SQL_ALL_SCHEMAS ""_ustr).get(), SQL_NTSL,
+                                       SQLWChars(u""_ustr).get(),SQL_NTSL,
+                                       SQLWChars(u""_ustr).get(),SQL_NTSL);
+    }
+    else
+    {
+        nRetcode = functions().Tables(m_aStatementHandle,
+                                      SQLChars(""_ostr).get(), SQL_NTS,
+                                      SQLChars(SQL_ALL_SCHEMAS ""_ostr).get(), SQL_NTS,
+                                      SQLChars(""_ostr).get(), SQL_NTS,
+                                      SQLChars(""_ostr).get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
@@ -928,69 +968,99 @@ void ODatabaseMetaDataResultSet::openSchemas()
 }
 
 void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const OUString& schema,
-                                        std::u16string_view table,
-                                        std::u16string_view columnNamePattern )
+                                        const OUString& table,
+                                        const OUString& columnNamePattern )
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ColumnPrivilegesW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLWChars(schema);
+        SQLWChars aPKN(table);
+        SQLWChars aCOL(columnNamePattern);
 
-    if(schema != "%")
-        pSchemaPat = &schema;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().ColumnPrivilegesW(m_aStatementHandle,
+                                                 pPKQ, pPKQ ? SQL_NTSL : 0,
+                                                 pPKO, pPKO ? SQL_NTSL : 0,
+                                                 aPKN.get(), SQL_NTSL,
+                                                 aCOL.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLChars(schema, m_nTextEncoding);
+        SQLChars aPKN(table, m_nTextEncoding);
+        SQLChars aCOL(columnNamePattern, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN,aCOL;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schema,m_nTextEncoding);
-    aPKN = OUStringToOString(table,m_nTextEncoding);
-    aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr(),
-                *pCOL = aCOL.getStr();
-
-
-    SQLRETURN nRetcode = functions().ColumnPrivileges(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
+        nRetcode = functions().ColumnPrivileges(m_aStatementHandle,
+                                                pPKQ, pPKQ ? SQL_NTS : 0,
+                                                pPKO, pPKO ? SQL_NTS : 0,
+                                                aPKN.get(), SQL_NTS,
+                                                aCOL.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             const OUString& schemaPattern,
-                                std::u16string_view tableNamePattern,    std::u16string_view columnNamePattern )
+                                const OUString& tableNamePattern,    const OUString& columnNamePattern )
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ColumnsW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLWChars(schemaPattern);
+        SQLWChars aPKN(tableNamePattern);
+        SQLWChars aCOL(columnNamePattern);
 
-    if(schemaPattern != "%")
-        pSchemaPat = &schemaPattern;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().ColumnsW(m_aStatementHandle,
+                                        pPKQ, pPKQ ? SQL_NTSL : 0,
+                                        pPKO, pPKO ? SQL_NTSL : 0,
+                                        aPKN.get(), SQL_NTSL,
+                                        aCOL.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
+        SQLChars aPKN(tableNamePattern, m_nTextEncoding);
+        SQLChars aCOL(columnNamePattern, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN,aCOL;
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
-    aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
-    aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr(),
-                *pCOL = aCOL.getStr();
-
-
-    SQLRETURN nRetcode = functions().Columns(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
-
+        nRetcode = functions().Columns(m_aStatementHandle,
+                                       pPKQ, pPKQ ? SQL_NTS : 0,
+                                       pPKO, pPKO ? SQL_NTS : 0,
+                                       aPKN.get(), SQL_NTS,
+                                       aCOL.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     ::std::map<sal_Int32,sal_Int32> aMap;
     aMap[SQL_BIT]               = DataType::BIT;
@@ -1030,74 +1100,103 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 }
 
 void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     const OUString& schemaPattern,
-                                std::u16string_view procedureNamePattern,std::u16string_view columnNamePattern )
+                                const OUString& procedureNamePattern,const OUString& columnNamePattern )
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ProcedureColumnsW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLWChars(schemaPattern);
+        SQLWChars aPKN(procedureNamePattern);
+        SQLWChars aCOL(columnNamePattern);
 
-    if(schemaPattern != "%")
-        pSchemaPat = &schemaPattern;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().ProcedureColumnsW(m_aStatementHandle,
+                                                 pPKQ, pPKQ ? SQL_NTSL : 0,
+                                                 pPKO, pPKO ? SQL_NTSL : 0,
+                                                 aPKN.get(), SQL_NTSL,
+                                                 aCOL.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
+        SQLChars aPKN(procedureNamePattern, m_nTextEncoding);
+        SQLChars aCOL(columnNamePattern, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN,aCOL;
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
-    aPKN = OUStringToOString(procedureNamePattern,m_nTextEncoding);
-    aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr(),
-                *pCOL = aCOL.getStr();
-
-
-    SQLRETURN nRetcode = functions().ProcedureColumns(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
-
+        nRetcode = functions().ProcedureColumns(m_aStatementHandle,
+                                                pPKQ, pPKQ ? SQL_NTS : 0,
+                                                pPKO, pPKO ? SQL_NTS : 0,
+                                                aPKN.get(), SQL_NTS,
+                                                aCOL.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUString& schemaPattern,
-                                std::u16string_view procedureNamePattern)
+                                const OUString& procedureNamePattern)
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ProceduresW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLWChars(schemaPattern);
+        SQLWChars aPKN(procedureNamePattern);
 
-    if(schemaPattern != "%")
-        pSchemaPat = &schemaPattern;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().ProceduresW(m_aStatementHandle,
+                                           pPKQ, pPKQ ? SQL_NTSL : 0,
+                                           pPKO, pPKO ? SQL_NTSL : 0,
+                                           aPKN.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
+        SQLChars aPKN(procedureNamePattern, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
-    aPKN = OUStringToOString(procedureNamePattern,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-
-    SQLRETURN nRetcode = functions().Procedures(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
+        nRetcode = functions().Procedures(m_aStatementHandle,
+                                          pPKQ, pPKQ ? SQL_NTS : 0,
+                                          pPKO, pPKO ? SQL_NTS : 0,
+                                          aPKN.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& catalog, const OUString& schema,
-                                    std::u16string_view table,sal_Int32 scope,   bool nullable )
+                                    const OUString& table,sal_Int32 scope,   bool nullable )
 {
     // Some ODBC drivers really don't like getting an empty string as tableName
     // E.g. psqlodbc up to at least version 09.01.0100 segfaults
-    if (table.empty())
+    if (table.isEmpty())
     {
         static constexpr OUStringLiteral errMsg
             = u"ODBC: Trying to get special columns of empty table name";
@@ -1105,42 +1204,59 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
         throw SQLException( errMsg, *this, SQLState, -1, Any() );
     }
 
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::SpecialColumnsW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLWChars(schema);
+        SQLWChars aPKN(table);
 
-    if(schema != "%")
-        pSchemaPat = &schema;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().SpecialColumnsW(m_aStatementHandle, _bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
+                                               pPKQ, pPKQ ? SQL_NTSL : 0,
+                                               pPKO, pPKO ? SQL_NTSL : 0,
+                                               aPKN.get(), SQL_NTSL,
+                                               scope,
+                                               nullable ? SQL_NULLABLE : SQL_NO_NULLS);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLChars(schema, m_nTextEncoding);
+        SQLChars aPKN(table, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN;
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schema,m_nTextEncoding);
-    aPKN = OUStringToOString(table,m_nTextEncoding);
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-
-    SQLRETURN nRetcode = functions().SpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            static_cast<SQLSMALLINT>(scope),
-                            nullable ? SQL_NULLABLE : SQL_NO_NULLS);
+        nRetcode = functions().SpecialColumns(m_aStatementHandle, _bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
+                                              pPKQ, pPKQ ? SQL_NTS : 0,
+                                              pPKO, pPKO ? SQL_NTS : 0,
+                                              aPKN.get(), SQL_NTS,
+                                              static_cast<SQLSMALLINT>(scope),
+                                              nullable ? SQL_NULLABLE : SQL_NO_NULLS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openVersionColumns(const Any& catalog, const OUString& schema,
-                                    std::u16string_view table)
+                                    const OUString& table)
 {
     openSpecialColumns(true,catalog,schema,table,SQL_SCOPE_TRANSACTION,false);
 }
 
 void ODatabaseMetaDataResultSet::openBestRowIdentifier( const Any& catalog, const OUString& schema,
-                                        std::u16string_view table,sal_Int32 scope,bool nullable )
+                                        const OUString& table,sal_Int32 scope,bool nullable )
 {
     openSpecialColumns(false,catalog,schema,table,scope,nullable);
 }
@@ -1150,47 +1266,72 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
                                   const Any& catalog2, const OUString* schema2,
                                   const OUString* table2)
 {
-    OString aPKQ, aPKO, aPKN, aFKQ, aFKO, aFKN;
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    if ( catalog2.hasValue() )
-        aFKQ = OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
+    OUString uPKQ, uFKQ;
+    catalog >>= uPKQ;
+    catalog2 >>= uFKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ForeignKeysW))
+    {
+        SQLWChars aPKQ, aPKO, aPKN, aFKQ, aFKO, aFKN;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!uFKQ.isEmpty())
+            aFKQ = SQLWChars(uFKQ);
+        if (schema && !schema->isEmpty())
+            aPKO = SQLWChars(*schema);
+        if (table)
+            aPKN = SQLWChars(*table);
+        if (schema2 && !schema2->isEmpty())
+            aFKO = SQLWChars(*schema2);
+        if (table2)
+            aFKN = SQLWChars(*table2);
 
-    const char *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr;
-    const char *pPKO = nullptr;
-    if (schema && !schema->isEmpty())
-    {
-        aPKO = OUStringToOString(*schema,m_nTextEncoding);
-        pPKO = aPKO.getStr();
-    }
-    const char *pPKN = nullptr;
-    if (table)
-    {
-        aPKN = OUStringToOString(*table,m_nTextEncoding);
-        pPKN = aPKN.getStr();
-    }
-    const char *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : nullptr;
-    const char *pFKO = nullptr;
-    if (schema2 && !schema2->isEmpty())
-    {
-        aFKO = OUStringToOString(*schema2,m_nTextEncoding);
-        pFKO = aFKO.getStr();
-    }
-    const char *pFKN = nullptr;
-    if (table2)
-    {
-        aFKN = OUStringToOString(*table2,m_nTextEncoding);
-        pFKN = aFKN.getStr();
-    }
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr;
+        auto pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+        auto pPKN = !aPKN.empty() ? aPKN.get() : nullptr;
+        auto pFKQ = !aFKQ.empty() ? aFKQ.get() : nullptr;
+        auto pFKO = !aFKO.empty() ? aFKO.get() : nullptr;
+        auto pFKN = !aFKN.empty() ? aFKN.get() : nullptr;
 
-    SQLRETURN nRetcode = functions().ForeignKeys(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), pPKN ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKQ)), (catalog2.hasValue() && !aFKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKO)), pFKO ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKN)), SQL_NTS
-                            );
+        nRetcode = functions().ForeignKeysW(m_aStatementHandle,
+                                            pPKQ, pPKQ ? SQL_NTSL : 0,
+                                            pPKO, pPKO ? SQL_NTSL : 0,
+                                            pPKN, pPKN ? SQL_NTSL : 0,
+                                            pFKQ, pFKQ ? SQL_NTSL : 0,
+                                            pFKO, pFKO ? SQL_NTSL : 0,
+                                            pFKN, pFKN ? SQL_NTSL : 0);
+    }
+    else
+    {
+        SQLChars aPKQ, aPKO, aPKN, aFKQ, aFKO, aFKN;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!uFKQ.isEmpty())
+            aFKQ = SQLChars(uFKQ, m_nTextEncoding);
+        if (schema && !schema->isEmpty())
+            aPKO = SQLChars(*schema, m_nTextEncoding);
+        if (table)
+            aPKN = SQLChars(*table, m_nTextEncoding);
+        if (schema2 && !schema2->isEmpty())
+            aFKO = SQLChars(*schema2, m_nTextEncoding);
+        if (table2)
+            aFKN = SQLChars(*table2, m_nTextEncoding);
+
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr;
+        auto pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+        auto pPKN = !aPKN.empty() ? aPKN.get() : nullptr;
+        auto pFKQ = !aFKQ.empty() ? aFKQ.get() : nullptr;
+        auto pFKO = !aFKO.empty() ? aFKO.get() : nullptr;
+        auto pFKN = !aFKN.empty() ? aFKN.get() : nullptr;
+
+        nRetcode = functions().ForeignKeys(m_aStatementHandle,
+                                           pPKQ, pPKQ ? SQL_NTS : 0,
+                                           pPKO, pPKO ? SQL_NTS : 0,
+                                           pPKN, pPKN ? SQL_NTS : 0,
+                                           pFKQ, pFKQ ? SQL_NTS : 0,
+                                           pFKO, pFKO ? SQL_NTS : 0,
+                                           pFKN, pFKN ? SQL_NTS : 0);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
@@ -1209,91 +1350,137 @@ void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const OUSt
 }
 
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUString& schema,
-                                  std::u16string_view table)
+                                  const OUString& table)
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::PrimaryKeysW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLWChars(schema);
+        SQLWChars aPKN(table);
 
-    if(schema != "%")
-        pSchemaPat = &schema;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().PrimaryKeysW(m_aStatementHandle,
+                                            pPKQ, pPKQ ? SQL_NTSL : 0,
+                                            pPKO, pPKO ? SQL_NTSL : 0,
+                                            aPKN.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLChars(schema, m_nTextEncoding);
+        SQLChars aPKN(table, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schema,m_nTextEncoding);
-    aPKN = OUStringToOString(table,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-
-    SQLRETURN nRetcode = functions().PrimaryKeys(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
+        nRetcode = functions().PrimaryKeys(m_aStatementHandle,
+                                           pPKQ, pPKQ ? SQL_NTS : 0,
+                                           pPKO, pPKO ? SQL_NTS : 0,
+                                           aPKN.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const OUString& schemaPattern,
-                                  std::u16string_view tableNamePattern)
+                                  const OUString& tableNamePattern)
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablePrivilegesW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLWChars(schemaPattern);
+        SQLWChars aPKN(tableNamePattern);
 
-    if(schemaPattern != "%")
-        pSchemaPat = &schemaPattern;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().TablePrivilegesW(m_aStatementHandle,
+                                                pPKQ, pPKQ ? SQL_NTSL : 0,
+                                                pPKO, pPKO ? SQL_NTSL : 0,
+                                                aPKN.get(), SQL_NTSL);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schemaPattern.isEmpty() && schemaPattern != "%")
+            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
+        SQLChars aPKN(tableNamePattern, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
-    aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-    SQLRETURN nRetcode = functions().TablePrivileges(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
+        nRetcode = functions().TablePrivileges(m_aStatementHandle,
+                                               pPKQ, pPKQ ? SQL_NTS : 0,
+                                               pPKO, pPKO ? SQL_NTS : 0,
+                                               aPKN.get(), SQL_NTS);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
 
 void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUString& schema,
-                                std::u16string_view table, bool unique, bool approximate )
+                                const OUString& table, bool unique, bool approximate )
 {
-    const OUString *pSchemaPat = nullptr;
+    OUString uPKQ;
+    catalog >>= uPKQ;
+    SQLRETURN nRetcode;
+    if (bUseWChar && functions().has(ODBC3SQLFunctionId::StatisticsW))
+    {
+        SQLWChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLWChars(uPKQ);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLWChars(schema);
+        SQLWChars aPKN(table);
 
-    if(schema != "%")
-        pSchemaPat = &schema;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
+
+        nRetcode = functions().StatisticsW(m_aStatementHandle,
+                                           pPKQ, pPKQ ? SQL_NTSL : 0,
+                                           pPKO, pPKO ? SQL_NTSL : 0,
+                                           aPKN.get(), SQL_NTSL,
+                                           unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
+                                           approximate ? 1 : 0);
+    }
     else
-        pSchemaPat = nullptr;
+    {
+        SQLChars aPKQ, aPKO;
+        if (!uPKQ.isEmpty())
+            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
+        if (!schema.isEmpty() && schema != "%")
+            aPKO = SQLChars(schema, m_nTextEncoding);
+        SQLChars aPKN(table, m_nTextEncoding);
 
-    OString aPKQ,aPKO,aPKN;
+        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
+             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
 
-    if ( catalog.hasValue() )
-        aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aPKO = OUStringToOString(schema,m_nTextEncoding);
-    aPKN = OUStringToOString(table,m_nTextEncoding);
-
-    const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : nullptr,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : nullptr,
-                *pPKN = aPKN.getStr();
-
-    SQLRETURN nRetcode = functions().Statistics(m_aStatementHandle,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
-                            unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
-                            approximate ? 1 : 0);
+        nRetcode = functions().Statistics(m_aStatementHandle,
+                                          pPKQ, pPKQ ? SQL_NTS : 0,
+                                          pPKO, pPKO ? SQL_NTS : 0,
+                                          aPKN.get(), SQL_NTS,
+                                          unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
+                                          approximate ? 1 : 0);
+    }
     OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
