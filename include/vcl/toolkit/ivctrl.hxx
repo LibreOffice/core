@@ -64,7 +64,6 @@ class SvxIconChoiceCtrlEntry
     friend class IcnGridMap_Impl;
 
     tools::Rectangle               aRect;              // Bounding-Rectangle of the entry
-    tools::Rectangle               aGridRect;          // Only valid in Grid-mode
 
     SvxIconChoiceCtrlTextMode       eTextMode;
     sal_uInt16                      nX,nY;      // for keyboard control

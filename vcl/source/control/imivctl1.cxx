@@ -1264,7 +1264,7 @@ void SvxIconChoiceCtrl_Impl::FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry )
     Point aPos(pGridMap->GetGridRect(pGridMap->GetUnoccupiedGrid()).TopLeft());
 
     tools::Rectangle aGridRect(aPos, Size(nGridDX, nGridDY));
-    pEntry->aGridRect = aGridRect;
+    pEntry->aRect = aGridRect;
     Center( pEntry );
     AdjustVirtSize( pEntry->aRect );
     pGridMap->OccupyGrids( pEntry );
@@ -1574,12 +1574,8 @@ void SvxIconChoiceCtrl_Impl::SetGrid( const Size& rSize )
 
 tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    tools::Rectangle aBoundRect;
-    // avoid infinite recursion: don't calculate the bounding rectangle here
-    if( IsBoundingRectValid( pEntry->aRect ) )
-        aBoundRect = pEntry->aRect;
-    else
-        aBoundRect = pEntry->aGridRect;
+    assert(IsBoundingRectValid(pEntry->aRect) && "Bounding rect for entry hasn't been calculated yet.");
+    tools::Rectangle aBoundRect = pEntry->aRect;
 
     tools::Rectangle aBmpRect( const_cast<SvxIconChoiceCtrl_Impl*>(this)->CalcBmpRect(
         const_cast<SvxIconChoiceCtrlEntry*>(pEntry) ) );
@@ -1641,12 +1637,11 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
 
 void SvxIconChoiceCtrl_Impl::Center( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    pEntry->aRect = pEntry->aGridRect;
     Size aSize( CalcBoundingSize() );
     if( nWinBits & WB_ICON )
     {
         // center horizontally
-        tools::Long nBorder = pEntry->aGridRect.GetWidth() - aSize.Width();
+        tools::Long nBorder = pEntry->aRect.GetWidth() - aSize.Width();
         pEntry->aRect.AdjustLeft(nBorder / 2 );
         pEntry->aRect.AdjustRight( -(nBorder / 2) );
     }
