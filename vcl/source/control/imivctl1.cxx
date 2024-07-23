@@ -1265,7 +1265,6 @@ void SvxIconChoiceCtrl_Impl::FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry )
 
     tools::Rectangle aGridRect(aPos, Size(nGridDX, nGridDY));
     pEntry->aRect = aGridRect;
-    Center( pEntry );
     AdjustVirtSize( pEntry->aRect );
     pGridMap->OccupyGrids( pEntry );
 }
@@ -1633,22 +1632,6 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
     }
     aDefaultTextSize = Size(nDX, nDY);
 }
-
-
-void SvxIconChoiceCtrl_Impl::Center( SvxIconChoiceCtrlEntry* pEntry ) const
-{
-    Size aSize( CalcBoundingSize() );
-    if( nWinBits & WB_ICON )
-    {
-        // center horizontally
-        tools::Long nBorder = pEntry->aRect.GetWidth() - aSize.Width();
-        pEntry->aRect.AdjustLeft(nBorder / 2 );
-        pEntry->aRect.AdjustRight( -(nBorder / 2) );
-    }
-    // center vertically
-    pEntry->aRect.SetBottom( pEntry->aRect.Top() + aSize.Height() );
-}
-
 
 // The deltas are the offsets by which the view is moved on the document.
 // left, up: offsets < 0

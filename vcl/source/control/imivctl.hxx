@@ -165,7 +165,6 @@ class SvxIconChoiceCtrl_Impl
                         }
     void                InitScrollBarBox();
     void                DeselectAllBut( SvxIconChoiceCtrlEntry const * );
-    void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
 
     tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
