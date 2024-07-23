@@ -434,6 +434,16 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             }
             else if(!rFill.getFillGraphic().isDefault())
             {
+                // SDPR: check early if we have alpha and add directly
+                if(0.0 != rFill.getTransparence())
+                {
+                    return new PolyPolygonGraphicPrimitive2D(
+                        rPolyPolygon,
+                        rDefinitionRange,
+                        rFill.getFillGraphic().createFillGraphicAttribute(rDefinitionRange),
+                        rFill.getTransparence());
+                }
+
                 pNewFillPrimitive = new PolyPolygonGraphicPrimitive2D(
                     rPolyPolygon,
                     rDefinitionRange,
@@ -448,6 +458,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             }
             else
             {
+                // SDPR: check early if we have alpha and add directly
                 if(0.0 != rFill.getTransparence())
                 {
                     return new PolyPolygonRGBAPrimitive2D(

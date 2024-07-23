@@ -550,6 +550,20 @@ void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2
 void VclProcessor2D::RenderFillGraphicPrimitive2D(
     const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate)
 {
+    if (rFillBitmapCandidate.getTransparency() < 0.0
+        || rFillBitmapCandidate.getTransparency() > 1.0)
+    {
+        // invalid transparence, done
+        return;
+    }
+
+    if (rFillBitmapCandidate.hasTransparency())
+    {
+        // cannot handle yet, use decomposition
+        process(rFillBitmapCandidate);
+        return;
+    }
+
     bool bPrimitiveAccepted = RenderFillGraphicPrimitive2DImpl(rFillBitmapCandidate);
 
     if (!bPrimitiveAccepted)
@@ -820,7 +834,8 @@ void VclProcessor2D::RenderPolyPolygonGraphicPrimitive2D(
             case GraphicType::Bitmap:
             {
                 if (!rFillGraphicAttribute.getGraphic().IsTransparent()
-                    && !rFillGraphicAttribute.getGraphic().IsAlpha())
+                    && !rFillGraphicAttribute.getGraphic().IsAlpha()
+                    && !rPolygonCandidate.hasTransparency())
                 {
                     // bitmap is not transparent and has no alpha
                     const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());

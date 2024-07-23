@@ -1828,6 +1828,13 @@ void CairoPixelProcessor2D::processSingleLinePrimitive2D(
 void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D)
 {
+    if (rFillGraphicPrimitive2D.getTransparency() < 0.0
+        || rFillGraphicPrimitive2D.getTransparency() > 1.0)
+    {
+        // invalid transparence, done
+        return;
+    }
+
     BitmapEx aPreparedBitmap;
     basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
     constexpr double fBigDiscreteArea(300.0 * 300.0);
@@ -1870,12 +1877,24 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
             // local primitive, that is not part of DisplayInfo yet
             aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
 
-            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
-                new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
-                                                             aModifiedColor));
+            if (rFillGraphicPrimitive2D.hasTransparency())
+            {
+                rtl::Reference<primitive2d::PolyPolygonRGBAPrimitive2D> aTemp(
+                    new primitive2d::PolyPolygonRGBAPrimitive2D(
+                        basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
+                        rFillGraphicPrimitive2D.getTransparency()));
+                // draw as colored and transparent Polygon, done
+                processPolyPolygonRGBAPrimitive2D(*aTemp);
+            }
+            else
+            {
+                rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
+                    new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
+                                                                 aModifiedColor));
+                // draw as colored Polygon, done
+                processPolyPolygonColorPrimitive2D(*aTemp);
+            }
 
-            // draw as colored Polygon, done
-            processPolyPolygonColorPrimitive2D(*aTemp);
             return;
         }
     }
@@ -1941,7 +1960,10 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
 
     // paint
-    cairo_paint(mpRT);
+    if (rFillGraphicPrimitive2D.hasTransparency())
+        cairo_paint_with_alpha(mpRT, 1.0 - rFillGraphicPrimitive2D.getTransparency());
+    else
+        cairo_paint(mpRT);
 
     static bool bRenderTransformationBounds(false);
     if (bRenderTransformationBounds)

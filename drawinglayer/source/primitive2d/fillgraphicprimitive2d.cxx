@@ -69,7 +69,8 @@ namespace drawinglayer::primitive2d
                 Primitive2DContainer xSeq;
                 create2DDecompositionOfGraphic(xSeq,
                     rGraphic,
-                    basegfx::B2DHomMatrix());
+                    basegfx::B2DHomMatrix(),
+                    getTransparency());
 
                 rtl::Reference<GroupPrimitive2D> xGroup = new GroupPrimitive2D(std::move(xSeq));
                 for(const auto &a : aMatrices)
@@ -89,17 +90,21 @@ namespace drawinglayer::primitive2d
 
                 create2DDecompositionOfGraphic(aContainer,
                     rGraphic,
-                    aObjectTransform);
+                    aObjectTransform,
+                    getTransparency());
             }
+
             return new GroupPrimitive2D(std::move(aContainer));
         }
 
         FillGraphicPrimitive2D::FillGraphicPrimitive2D(
             basegfx::B2DHomMatrix aTransformation,
-            const attribute::FillGraphicAttribute& rFillGraphic)
-        :   maTransformation(std::move(aTransformation)),
-            maFillGraphic(rFillGraphic),
-            maOffsetXYCreatedBitmap()
+            const attribute::FillGraphicAttribute& rFillGraphic,
+            double fTransparency)
+        :   maTransformation(std::move(aTransformation))
+        , maFillGraphic(rFillGraphic)
+        , maOffsetXYCreatedBitmap()
+        , mfTransparency(std::max(0.0, std::min(1.0, fTransparency)))
         {
         }
 
@@ -110,7 +115,8 @@ namespace drawinglayer::primitive2d
                 const FillGraphicPrimitive2D& rCompare = static_cast< const FillGraphicPrimitive2D& >(rPrimitive);
 
                 return (getTransformation() == rCompare.getTransformation()
-                    && getFillGraphic() == rCompare.getFillGraphic());
+                    && getFillGraphic() == rCompare.getFillGraphic()
+                    && basegfx::fTools::equal(getTransparency(), rCompare.getTransparency()));
             }
 
             return false;

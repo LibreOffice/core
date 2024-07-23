@@ -33,11 +33,16 @@ namespace drawinglayer::primitive2d
             and GraphicPrimitive2D at the same time. It is able to handle
             Bitmaps (with the sub-categories animated bitmap, and SVG),
             and Metafiles.
+
+            SDPR: create2DDecompositionOfGraphic now supports a given
+            alpha directly: all paths are now capable of handling a
+            given alpha, including metafile, SVG and animated graphics
          */
         void DRAWINGLAYER_DLLPUBLIC create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
-            const basegfx::B2DHomMatrix& rTransform);
+            const basegfx::B2DHomMatrix& rTransform,
+            double fTransparency = 0.0);
 
         /** Helper to embed given sequence of primitives to evtl. a stack
             of ModifiedColorPrimitive2D's to get all the needed modifications

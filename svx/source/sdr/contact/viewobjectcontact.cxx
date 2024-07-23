@@ -126,7 +126,11 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
             {
                 // create temporary GraphicPrimitive to recursively extract evtl. animation
                 drawinglayer::primitive2d::Primitive2DContainer aContainer;
-                drawinglayer::primitive2d::create2DDecompositionOfGraphic(aContainer, rGraphic, rFill.getTransformation());
+                drawinglayer::primitive2d::create2DDecompositionOfGraphic(
+                    aContainer,
+                    rGraphic,
+                    rFill.getTransformation(),
+                    rFill.getTransparency());
                 process(aContainer);
             }
 

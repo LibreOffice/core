@@ -1867,10 +1867,11 @@ void VclMetafileProcessor2D::processPolyPolygonGraphicPrimitive2D(
         aTransform.matrix[5] = aTransformPosition.getY();
 
         pSvtGraphicFill.reset(new SvtGraphicFill(
-            getFillPolyPolygon(aLocalPolyPolygon), Color(), 0.0, SvtGraphicFill::fillEvenOdd,
-            SvtGraphicFill::fillTexture, aTransform, rFillGraphicAttribute.getTiling(),
-            SvtGraphicFill::hatchSingle, Color(), SvtGraphicFill::GradientType::Linear, Color(),
-            Color(), 0, rFillGraphicAttribute.getGraphic()));
+            getFillPolyPolygon(aLocalPolyPolygon), Color(), rBitmapCandidate.getTransparency(),
+            SvtGraphicFill::fillEvenOdd, SvtGraphicFill::fillTexture, aTransform,
+            rFillGraphicAttribute.getTiling(), SvtGraphicFill::hatchSingle, Color(),
+            SvtGraphicFill::GradientType::Linear, Color(), Color(), 0,
+            rFillGraphicAttribute.getGraphic()));
     }
 
     // Do use decomposition; encapsulate with SvtGraphicFill

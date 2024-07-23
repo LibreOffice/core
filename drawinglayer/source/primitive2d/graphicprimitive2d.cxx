@@ -113,9 +113,11 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
     }
 
     // create sub-content; helper takes care of correct handling of
-    // bitmap, svg or metafile content
+    // bitmap, svg or metafile content. also handle alpha there directly
     Primitive2DContainer aRetval;
-    create2DDecompositionOfGraphic(aRetval, aTransformedGraphic, aTransform);
+    const double fTransparency(
+        std::clamp((255 - getGraphicAttr().GetAlpha()) * (1.0 / 255.0), 0.0, 1.0));
+    create2DDecompositionOfGraphic(aRetval, aTransformedGraphic, aTransform, fTransparency);
 
     if (aRetval.empty())
     {
@@ -141,19 +143,6 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
         {
             // content is invisible, done
             return nullptr;
-        }
-    }
-
-    if (getGraphicAttr().IsTransparent())
-    {
-        // check for transparency
-        const double fTransparency(
-            std::clamp((255 - getGraphicAttr().GetAlpha()) * (1.0 / 255.0), 0.0, 1.0));
-
-        if (!basegfx::fTools::equalZero(fTransparency))
-        {
-            aRetval = Primitive2DContainer{ new UnifiedTransparencePrimitive2D(std::move(aRetval),
-                                                                               fTransparency) };
         }
     }
 

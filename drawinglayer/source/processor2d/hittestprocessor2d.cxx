@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonWavePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
@@ -141,6 +142,46 @@ namespace drawinglayer::processor2d
             }
 
             return bRetval;
+        }
+
+        void HitTestProcessor2D::checkBitmapHit(basegfx::B2DRange aRange, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform)
+        {
+            if(!getHitTextOnly())
+            {
+                // The recently added BitmapEx::GetTransparency() makes it easy to extend
+                // the BitmapPrimitive2D HitTest to take the contained BitmapEx and it's
+                // transparency into account
+                if(!aRange.isEmpty())
+                {
+                    const Size& rSizePixel(rBitmapEx.GetSizePixel());
+
+                    // When tiled rendering, don't bother with the pixel size of the candidate.
+                    if(rSizePixel.Width() && rSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
+                    {
+                        basegfx::B2DHomMatrix aBackTransform(
+                            getViewInformation2D().getObjectToViewTransformation() *
+                            rTransform);
+                        aBackTransform.invert();
+
+                        const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
+                        const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                        if(aUnitRange.isInside(aRelativePoint))
+                        {
+                            const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
+                            const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
+
+                            mbHit = (0 != rBitmapEx.GetAlpha(nX, nY));
+                        }
+                    }
+                    else
+                    {
+                        // fallback to standard HitTest
+                        const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
+                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    }
+                }
+            }
         }
 
         void HitTestProcessor2D::check3DHit(const primitive2d::ScenePrimitive2D& rCandidate)
@@ -416,49 +457,28 @@ namespace drawinglayer::processor2d
 
                     break;
                 }
+                case PRIMITIVE2D_ID_BITMAPALPHAPRIMITIVE2D :
+                {
+                    // avoid decompose of this primitive by handling directly
+                    const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaCandidate(static_cast< const primitive2d::BitmapAlphaPrimitive2D& >(rCandidate));
+
+                    if (!basegfx::fTools::equal(rBitmapAlphaCandidate.getTransparency(), 1.0))
+                    {
+                        checkBitmapHit(
+                            rCandidate.getB2DRange(getViewInformation2D()),
+                            rBitmapAlphaCandidate.getBitmap(),
+                            rBitmapAlphaCandidate.getTransform());
+                    }
+                    break;
+                }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
-                    if(!getHitTextOnly())
-                    {
-                        // The recently added BitmapEx::GetTransparency() makes it easy to extend
-                        // the BitmapPrimitive2D HitTest to take the contained BitmapEx and it's
-                        // transparency into account
-                        const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-
-                        if(!aRange.isEmpty())
-                        {
-                            const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                            const BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
-                            const Size& rSizePixel(aBitmapEx.GetSizePixel());
-
-                            // When tiled rendering, don't bother with the pixel size of the candidate.
-                            if(rSizePixel.Width() && rSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
-                            {
-                                basegfx::B2DHomMatrix aBackTransform(
-                                    getViewInformation2D().getObjectToViewTransformation() *
-                                    rBitmapCandidate.getTransform());
-                                aBackTransform.invert();
-
-                                const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
-                                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-
-                                if(aUnitRange.isInside(aRelativePoint))
-                                {
-                                    const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
-                                    const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
-
-                                    mbHit = (0 != aBitmapEx.GetAlpha(nX, nY));
-                                }
-                            }
-                            else
-                            {
-                                // fallback to standard HitTest
-                                const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
-                                mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
-                            }
-                        }
-                    }
-
+                    // use common tooling
+                    const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                    checkBitmapHit(
+                        rCandidate.getB2DRange(getViewInformation2D()),
+                        rBitmapCandidate.getBitmap(),
+                        rBitmapCandidate.getTransform());
                     break;
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :

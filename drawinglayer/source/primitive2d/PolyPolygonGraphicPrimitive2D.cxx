@@ -34,21 +34,36 @@ namespace drawinglayer::primitive2d
 Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    if (getFillGraphic().isDefault())
+    if (basegfx::fTools::equal(getTransparency(), 1.0))
+    {
+        // completely transparent, done
         return nullptr;
+    }
+
+    if (getFillGraphic().isDefault())
+    {
+        // no geometry data, done
+        return nullptr;
+    }
 
     const Graphic& rGraphic = getFillGraphic().getGraphic();
     const GraphicType aType(rGraphic.GetType());
 
     // is there a bitmap or a metafile (do we have content)?
     if (GraphicType::Bitmap != aType && GraphicType::GdiMetafile != aType)
+    {
+        // no geometry data, done
         return nullptr;
+    }
 
     const Size aPrefSize(rGraphic.GetPrefSize());
 
     // does content have a size?
     if (!(aPrefSize.Width() && aPrefSize.Height()))
+    {
+        // no geometry data with size, done
         return nullptr;
+    }
 
     // create SubSequence with FillGraphicPrimitive2D based on polygon range
     const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
@@ -85,11 +100,13 @@ Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
             getFillGraphic().getGraphic(), aAdaptedRange, getFillGraphic().getTiling(),
             getFillGraphic().getOffsetX(), getFillGraphic().getOffsetY());
 
-        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, aAdaptedFillGraphicAttribute);
+        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, aAdaptedFillGraphicAttribute,
+                                             getTransparency());
     }
     else
     {
-        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, getFillGraphic());
+        xSubRef
+            = new FillGraphicPrimitive2D(aNewObjectTransform, getFillGraphic(), getTransparency());
     }
 
     // embed to mask primitive
@@ -98,10 +115,11 @@ Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
     basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
-    const attribute::FillGraphicAttribute& rFillGraphic)
+    const attribute::FillGraphicAttribute& rFillGraphic, double fTransparency)
     : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
     , maFillGraphic(rFillGraphic)
+    , mfTransparency(std::max(0.0, std::min(1.0, fTransparency)))
 {
 }
 
@@ -114,7 +132,8 @@ bool PolyPolygonGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive
 
         return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
                 && getDefinitionRange() == rCompare.getDefinitionRange()
-                && getFillGraphic() == rCompare.getFillGraphic());
+                && getFillGraphic() == rCompare.getFillGraphic()
+                && basegfx::fTools::equal(getTransparency(), rCompare.getTransparency()));
     }
 
     return false;

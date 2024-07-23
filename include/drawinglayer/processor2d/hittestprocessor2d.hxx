@@ -27,6 +27,7 @@
 namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
 namespace drawinglayer::primitive2d { class ScenePrimitive2D; }
+class BitmapEx;
 
 namespace drawinglayer::processor2d
     {
@@ -65,6 +66,7 @@ namespace drawinglayer::processor2d
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DVector& rDiscreteHitTolerancePerAxis) const;
             void check3DHit(const primitive2d::ScenePrimitive2D& rCandidate);
+            void checkBitmapHit(basegfx::B2DRange aRange, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform);
 
         public:
             HitTestProcessor2D(

@@ -1803,6 +1803,20 @@ void D2DPixelProcessor2D::processSingleLinePrimitive2D(
 void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
     const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D)
 {
+    if (rFillGraphicPrimitive2D.getTransparency() < 0.0
+        || rFillGraphicPrimitive2D.getTransparency() > 1.0)
+    {
+        // invalid transparence, done
+        return;
+    }
+
+    if (rFillGraphicPrimitive2D.hasTransparency())
+    {
+        // cannot handle yet, use decomposition
+        process(rFillGraphicPrimitive2D);
+        return;
+    }
+
     BitmapEx aPreparedBitmap;
     basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
     constexpr double fBigDiscreteArea(300.0 * 300.0);

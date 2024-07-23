@@ -56,6 +56,12 @@ namespace drawinglayer::primitive2d
             Renderers should handle this primitive; it has a geometrically correct
             decomposition, but on pixel outputs the areas where the tiled pieces are
             aligned tend to show up (one overlapping or empty pixel)
+
+            SDPR: support alpha directly now. If a primitive processor
+            cannot deal with it, use it's decomposition. The decompositon
+            uses create2DDecompositionOfGraphic, there all paths are now
+            capable of handling a given alpha, including metafile, SVG and
+            animated graphics
          */
         class DRAWINGLAYER_DLLPUBLIC FillGraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
@@ -68,6 +74,9 @@ namespace drawinglayer::primitive2d
 
             /// the evtl. buffered OffsetXYCreatedBitmap
             BitmapEx                                    maOffsetXYCreatedBitmap;
+
+            /// the transparency in range [0.0 .. 1.0]
+            double mfTransparency;
 
             /// local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
@@ -87,12 +96,15 @@ namespace drawinglayer::primitive2d
             /// constructor
             FillGraphicPrimitive2D(
                 basegfx::B2DHomMatrix aTransformation,
-                const attribute::FillGraphicAttribute& rFillGraphic);
+                const attribute::FillGraphicAttribute& rFillGraphic,
+                double fTransparency = 0.0);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
             const BitmapEx& getOffsetXYCreatedBitmap() const { return maOffsetXYCreatedBitmap; }
+            double getTransparency() const { return mfTransparency; }
+            bool hasTransparency() const { return !basegfx::fTools::equalZero(mfTransparency); }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;

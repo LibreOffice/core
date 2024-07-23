@@ -24,6 +24,8 @@
 #include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -65,6 +67,9 @@ namespace drawinglayer::primitive2d
             /// local animation processing data, excerpt from maGraphic
             ::Animation                                 maAnimation;
 
+            /// the transparency in range [0.0 .. 1.0]
+            double mfTransparency;
+
             /// the on-demand created VirtualDevices for frame creation
             ScopedVclPtrInstance< VirtualDevice >       maVirtualDevice;
             ScopedVclPtrInstance< VirtualDevice >       maVirtualDeviceMask;
@@ -88,7 +93,8 @@ namespace drawinglayer::primitive2d
             {
                 return (GraphicType::Bitmap == maGraphic.GetType()
                     && maGraphic.IsAnimated()
-                    && maAnimation.Count());
+                    && maAnimation.Count()
+                    && !basegfx::fTools::equal(getTransparency(), 1.0));
             }
 
             void ensureVirtualDeviceSizeAndState()
@@ -192,7 +198,9 @@ namespace drawinglayer::primitive2d
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
 
-                return new BitmapPrimitive2D(bitmap, getTransform());
+                if(basegfx::fTools::equal(getTransparency(), 0.0))
+                    return new BitmapPrimitive2D(bitmap, getTransform());
+                return new BitmapAlphaPrimitive2D(bitmap, getTransform(), getTransparency());
             }
 
             void checkSafeToBuffer(sal_uInt32 nIndex)
@@ -355,11 +363,13 @@ namespace drawinglayer::primitive2d
             /// constructor
             AnimatedGraphicPrimitive2D(
                 const Graphic& rGraphic,
-                basegfx::B2DHomMatrix aTransform);
+                basegfx::B2DHomMatrix aTransform,
+                double fTransparency = 0.0);
             virtual ~AnimatedGraphicPrimitive2D();
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            double getTransparency() const { return mfTransparency; }
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override { return PRIMITIVE2D_ID_ANIMATEDGRAPHICPRIMITIVE2D; }
@@ -378,7 +388,8 @@ namespace drawinglayer::primitive2d
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
             const Graphic& rGraphic,
-            basegfx::B2DHomMatrix aTransform)
+            basegfx::B2DHomMatrix aTransform,
+            double fTransparency)
         :   AnimatedSwitchPrimitive2D(
                 animation::AnimationEntryList(),
                 Primitive2DContainer(),
@@ -386,6 +397,7 @@ namespace drawinglayer::primitive2d
             maTransform(std::move(aTransform)),
             maGraphic(rGraphic),
             maAnimation(rGraphic.GetAnimation()),
+            mfTransparency(std::max(0.0, std::min(1.0, fTransparency))),
             maVirtualDevice(*Application::GetDefaultDevice()),
             maVirtualDeviceMask(*Application::GetDefaultDevice()),
             mnNextFrameToPrepare(SAL_MAX_UINT32),
@@ -529,9 +541,14 @@ namespace drawinglayer::primitive2d
         void create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
-            const basegfx::B2DHomMatrix& rTransform)
+            const basegfx::B2DHomMatrix& rTransform,
+            double fTransparency)
         {
-            Primitive2DContainer aRetval;
+            if (basegfx::fTools::equal(fTransparency, 1.0))
+            {
+                // completely transparent, done
+                return;
+            }
 
             switch(rGraphic.GetType())
             {
@@ -539,10 +556,12 @@ namespace drawinglayer::primitive2d
                 {
                     if(rGraphic.IsAnimated())
                     {
-                        // prepare specialized AnimatedGraphicPrimitive2D
-                        aRetval = Primitive2DContainer { new AnimatedGraphicPrimitive2D(
+                        // prepare specialized AnimatedGraphicPrimitive2D, now with
+                        // support for alpha
+                        rContainer.append(new AnimatedGraphicPrimitive2D(
                             rGraphic,
-                            rTransform) };
+                            rTransform,
+                            fTransparency));
                     }
                     else if(rGraphic.getVectorGraphicData())
                     {
@@ -565,16 +584,37 @@ namespace drawinglayer::primitive2d
                             aEmbedVectorGraphic = rTransform * aEmbedVectorGraphic;
 
                             // add Vector Graphic Data primitives embedded
-                            aRetval = Primitive2DContainer { new TransformPrimitive2D(
-                                aEmbedVectorGraphic,
-                                Primitive2DContainer(rGraphic.getVectorGraphicData()->getPrimitive2DSequence()))};
+                            rtl::Reference<BasePrimitive2D> aPrimitive(
+                                new TransformPrimitive2D(
+                                    aEmbedVectorGraphic,
+                                    Primitive2DContainer(rGraphic.getVectorGraphicData()->getPrimitive2DSequence())));
+
+                            // if needed embed to UnifiedTransparencePrimitive2D
+                            if (!basegfx::fTools::equalZero(fTransparency, 0.0))
+                                aPrimitive = new UnifiedTransparencePrimitive2D(
+                                    Primitive2DContainer { aPrimitive }, fTransparency);
+
+                            rContainer.append(aPrimitive);
                         }
                     }
                     else
                     {
-                        aRetval = Primitive2DContainer { new BitmapPrimitive2D(
-                            rGraphic.GetBitmapEx(),
-                            rTransform) };
+                        // dependent of transparency used create the needed bitmap primitive
+                        if(basegfx::fTools::equal(fTransparency, 0.0))
+                        {
+                            rContainer.append(
+                                new BitmapPrimitive2D(
+                                    rGraphic.GetBitmapEx(),
+                                    rTransform));
+                        }
+                        else
+                        {
+                            rContainer.append(
+                                new BitmapAlphaPrimitive2D(
+                                    rGraphic.GetBitmapEx(),
+                                    rTransform,
+                                    fTransparency));
+                        }
                     }
 
                     break;
@@ -585,9 +625,10 @@ namespace drawinglayer::primitive2d
                     // create MetafilePrimitive2D
                     const GDIMetaFile& rMetafile = rGraphic.GetGDIMetaFile();
 
-                    aRetval = Primitive2DContainer { new MetafilePrimitive2D(
-                        rTransform,
-                        rMetafile) };
+                    rtl::Reference<BasePrimitive2D> aPrimitive(
+                        new MetafilePrimitive2D(
+                            rTransform,
+                            rMetafile));
 
                     // #i100357# find out if clipping is needed for this primitive. Unfortunately,
                     // there exist Metafiles who's content is bigger than the proposed PrefSize set
@@ -604,12 +645,17 @@ namespace drawinglayer::primitive2d
                         basegfx::B2DPolygon aMaskPolygon(basegfx::utils::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 
-                        aRetval = Primitive2DContainer {
-                            new MaskPrimitive2D(
-                                basegfx::B2DPolyPolygon(aMaskPolygon),
-                                std::move(aRetval))
-                        };
+                        aPrimitive = new MaskPrimitive2D(
+                            basegfx::B2DPolyPolygon(aMaskPolygon),
+                            Primitive2DContainer { aPrimitive });
                     }
+
+                    // if needed embed to UnifiedTransparencePrimitive2D
+                    if (!basegfx::fTools::equalZero(fTransparency, 0.0))
+                        aPrimitive = new UnifiedTransparencePrimitive2D(
+                            Primitive2DContainer { aPrimitive }, fTransparency);
+
+                    rContainer.append(aPrimitive);
                     break;
                 }
 
@@ -619,8 +665,6 @@ namespace drawinglayer::primitive2d
                     break;
                 }
             }
-
-            rContainer.append(std::move(aRetval));
         }
 
         Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
