@@ -5046,6 +5046,71 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156528)
                                  bounds.getHeight(), 1);
 }
 
+// tdf#162161 reexport appears to have blank image
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportXnViewColorspace)
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    // Load the PDF and save as PDF
+    vcl::filter::PDFDocument aDocument;
+    load(u"xnview-colorspace.pdf", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+
+    auto pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject
+        = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    auto pSubResources
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pSubResources);
+    pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pSubResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
+    pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    pSubResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pSubResources);
+    pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pSubResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
+    pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // Dig all the way down to this element which is originally
+    // 8 0 obj
+    // /DeviceRGB
+    // endobj
+    // and appeared blank when we lost the /DeviceRGB line
+    auto pColorspace = pXObject->LookupObject("ColorSpace");
+    CPPUNIT_ASSERT(pColorspace);
+    auto pColorSpaceElement = pColorspace->GetNameElement();
+    CPPUNIT_ASSERT(pColorSpaceElement);
+    CPPUNIT_ASSERT_EQUAL(OString("DeviceRGB"), pColorSpaceElement->GetValue());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

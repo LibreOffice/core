@@ -143,6 +143,21 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
         pNumber->writeString(aLine);
         aLine.append("\n");
     }
+    // If the object has a name element outside a dictionary or array, copy that.
+    else if (filter::PDFNameElement* pName = rObject.GetNameElement())
+    {
+        // currently just handle the exact case seen in the real world
+        if (pName->GetValue() == "DeviceRGB")
+        {
+            pName->writeString(aLine);
+            aLine.append("\n");
+        }
+        else
+        {
+            SAL_INFO("vcl.pdfwriter",
+                     "PDFObjectCopier::copyExternalResource: skipping: " << pName->GetValue());
+        }
+    }
 
     // We have the whole object, now write it to the output.
     if (!m_rContainer.updateObject(nObject))
