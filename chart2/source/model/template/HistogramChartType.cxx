@@ -54,7 +54,7 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
         "FrequencyType", PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
-    rOutProperties.emplace_back("GapWidthSequence", PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
+    rOutProperties.emplace_back("GapwidthSequence", PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
                                 cppu::UnoType<sal_Int32>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);

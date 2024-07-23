@@ -53,7 +53,7 @@ HistogramChart::HistogramChart(const rtl::Reference<ChartType>& xChartTypeModel,
     try
     {
         if (m_xChartTypeModel.is())
-            m_xChartTypeModel->getPropertyValue(u"GapWidthSequence"_ustr) >>= m_aGapwidthSequence;
+            m_xChartTypeModel->getPropertyValue(u"GapwidthSequence"_ustr) >>= m_aGapwidthSequence;
     }
     catch (const uno::Exception&)
     {
