@@ -619,6 +619,36 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
     aJsonWriter.put("index", mnDPLayerIndex);
 
     bool bDoRendering = false;
+
+    std::shared_ptr<ShapeImporter> pMasterShapeImporter = std::make_shared<ShapeImporter>(mxMasterPage, mxDrawPage, mxDrawPagesSupplier, mrContext, 0, true);
+
+    ShapeSharedPtr const& rBGShape(pMasterShapeImporter->importBackgroundShape());
+    if (rBGShape)
+    {
+        bDoRendering = true;
+        mpLayerManager->addShape(rBGShape);
+    }
+
+    while (!pMasterShapeImporter->isImportDone())
+    {
+        ShapeSharedPtr const& rShape(pMasterShapeImporter->importShape());
+        if (!rShape)
+            continue;
+
+        rShape->setIsForeground(false);
+
+        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        if (xShape.is())
+        {
+
+            mpLayerManager->addShape(rShape);
+            bDoRendering = true;
+        }
+    }
+
+    auto nCurrCount = static_cast<sal_Int32>(pMasterShapeImporter->getImportedShapesCount());
+    mpShapesFunctor = std::make_shared<ShapeImporter>(mxDrawPage, mxDrawPage, mxDrawPagesSupplier, mrContext, nCurrCount, false);
+
     while (!mpShapesFunctor->isImportDone())
     {
         ShapeSharedPtr const& rShape(mpShapesFunctor->importShape());
