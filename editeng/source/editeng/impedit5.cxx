@@ -728,14 +728,16 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         }
     }
 
-    bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
-                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
-                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
-
     pNode->GetContentAttribs().GetItems().Set( rSet );
 
-    if ( bCheckLanguage && pNode->GetWrongList() )
-        pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
+    if ( auto pWrongList = pNode->GetWrongList() )
+    {
+        bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
+                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
+                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
+        if (bCheckLanguage)
+            pWrongList->ResetInvalidRange(0, pNode->Len());
+    }
 
     if (maStatus.UseCharAttribs())
         pNode->CreateDefFont();
