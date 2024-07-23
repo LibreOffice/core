@@ -1777,17 +1777,6 @@ void SvxIconChoiceCtrl_Impl::CancelUserEvents()
     }
 }
 
-void SvxIconChoiceCtrl_Impl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
-{
-    if( pEntry == pCursor )
-        ShowCursor( false );
-    pView->Invalidate( pEntry->aRect );
-    Center( pEntry );
-    pView->Invalidate( pEntry->aRect );
-    if( pEntry == pCursor )
-        ShowCursor( true );
-}
-
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
 {
     size_t nCount = maEntries.size();

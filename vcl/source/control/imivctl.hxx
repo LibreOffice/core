@@ -225,8 +225,6 @@ public:
     void                LoseFocus();
     void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext);
 
-    void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
-
     SvxIconChoiceCtrlEntry* GetCurEntry() const { return pCursor; }
     void                SetCursor( SvxIconChoiceCtrlEntry* );
 
