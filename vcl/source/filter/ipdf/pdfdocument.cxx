@@ -1102,6 +1102,14 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                     pObjectStream = pObject;
                 else
                     pObjectKey = pNameElement;
+
+                if (bInObject && !nDepth && pObject)
+                {
+                    // Name element inside an object, but outside a
+                    // dictionary / array: remember it.
+                    pObject->SetNameElement(pNameElement);
+                }
+
                 break;
             }
             case '(':
@@ -2291,6 +2299,7 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
     , m_fObjectValue(fObjectValue)
     , m_fGenerationValue(fGenerationValue)
     , m_pNumberElement(nullptr)
+    , m_pNameElement(nullptr)
     , m_nDictionaryOffset(0)
     , m_nDictionaryLength(0)
     , m_pDictionaryElement(nullptr)
@@ -2461,6 +2470,13 @@ void PDFObjectElement::SetNumberElement(PDFNumberElement* pNumberElement)
 }
 
 PDFNumberElement* PDFObjectElement::GetNumberElement() const { return m_pNumberElement; }
+
+void PDFObjectElement::SetNameElement(PDFNameElement* pNameElement)
+{
+    m_pNameElement = pNameElement;
+}
+
+PDFNameElement* PDFObjectElement::GetNameElement() const { return m_pNameElement; }
 
 const std::vector<PDFReferenceElement*>& PDFObjectElement::GetDictionaryReferences() const
 {
