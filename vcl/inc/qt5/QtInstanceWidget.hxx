@@ -106,9 +106,9 @@ public:
 
     virtual int get_margin_end() const override;
 
-    virtual void set_accessible_name(const OUString&) override;
+    virtual void set_accessible_name(const OUString& rName) override;
 
-    virtual void set_accessible_description(const OUString&) override;
+    virtual void set_accessible_description(const OUString& rDescription) override;
 
     virtual OUString get_accessible_name() const override;
 

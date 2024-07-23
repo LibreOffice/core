@@ -93,13 +93,29 @@ int QtInstanceWidget::get_margin_start() const { return 1; }
 
 int QtInstanceWidget::get_margin_end() const { return 1; }
 
-void QtInstanceWidget::set_accessible_name(const OUString&) {}
+void QtInstanceWidget::set_accessible_name(const OUString& rName)
+{
+    assert(m_pWidget);
+    m_pWidget->setAccessibleName(toQString(rName));
+}
 
-void QtInstanceWidget::set_accessible_description(const OUString&) {}
+void QtInstanceWidget::set_accessible_description(const OUString& rDescription)
+{
+    assert(m_pWidget);
+    m_pWidget->setAccessibleDescription(toQString(rDescription));
+}
 
-OUString QtInstanceWidget::get_accessible_name() const { return OUString(); }
+OUString QtInstanceWidget::get_accessible_name() const
+{
+    assert(m_pWidget);
+    return toOUString(m_pWidget->accessibleName());
+}
 
-OUString QtInstanceWidget::get_accessible_description() const { return OUString(); }
+OUString QtInstanceWidget::get_accessible_description() const
+{
+    assert(m_pWidget);
+    return toOUString(m_pWidget->accessibleDescription());
+}
 
 void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*) {}
 
