@@ -1923,19 +1923,11 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     return true;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect)
+void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext,
+                                                const tools::Rectangle& rRect)
 {
-    tools::Rectangle aBmpRect(rBmpRect);
-    tools::Long nBorder = 2;
-    if (aImageSize.Width() < 32)
-        nBorder = 1;
-    aBmpRect.AdjustRight(nBorder );
-    aBmpRect.AdjustLeft( -nBorder );
-    aBmpRect.AdjustBottom(nBorder );
-    aBmpRect.AdjustTop( -nBorder );
-
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawHighlightFrame(aBmpRect, DrawHighlightFrameStyle::Out);
+    aDecoView.DrawHighlightFrame(rRect, DrawHighlightFrameStyle::Out);
 }
 
 void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry)

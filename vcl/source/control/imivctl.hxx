@@ -299,7 +299,7 @@ public:
     tools::Rectangle           GetOutputRect() const;
 
     void                SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry);
-    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect);
+    static void         DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
 
