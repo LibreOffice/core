@@ -44,6 +44,7 @@ class PDFDocument;
 class PDFDictionaryElement;
 class PDFArrayElement;
 class PDFStreamElement;
+class PDFNameElement;
 class PDFNumberElement;
 
 /// A byte range in a PDF file.
@@ -73,6 +74,8 @@ class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
     double m_fGenerationValue;
     /// If set, the object contains this number element (outside any dictionary/array).
     PDFNumberElement* m_pNumberElement;
+    /// If set, the object contains this name element (outside any dictionary/array).
+    PDFNameElement* m_pNameElement;
     /// Position after the '<<' token.
     sal_uInt64 m_nDictionaryOffset;
     /// Length of the dictionary buffer till (before) the '>>' token.
@@ -113,7 +116,9 @@ public:
     PDFDictionaryElement* GetDictionary();
     SAL_DLLPRIVATE void SetDictionary(PDFDictionaryElement* pDictionaryElement);
     SAL_DLLPRIVATE void SetNumberElement(PDFNumberElement* pNumberElement);
-    SAL_DLLPRIVATE PDFNumberElement* GetNumberElement() const;
+    PDFNumberElement* GetNumberElement() const;
+    SAL_DLLPRIVATE void SetNameElement(PDFNameElement* pNameElement);
+    PDFNameElement* GetNameElement() const;
     /// Get access to the parsed key-value items from the object dictionary.
     const std::map<OString, PDFElement*>& GetDictionaryItems();
     SAL_DLLPRIVATE const std::vector<PDFReferenceElement*>& GetDictionaryReferences() const;
