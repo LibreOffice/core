@@ -93,6 +93,8 @@ static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const char c 
 static OUString lcl_GetDelimitedString( const EditTextObject& rEdit, const char c )
 {
     sal_Int32 nParCount = rEdit.GetParagraphCount();
+    if (nParCount == 0)
+        return u""_ustr;
     OUStringBuffer aRet( nParCount * 80 );
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
     {
