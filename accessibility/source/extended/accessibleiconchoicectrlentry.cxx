@@ -135,15 +135,6 @@ namespace accessibility
         return bShowing;
     }
 
-    tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox()
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-        return GetBoundingBox_Impl();
-    }
-
     AbsoluteScreenPixelRectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen()
     {
         SolarMutexGuard aSolarGuard;

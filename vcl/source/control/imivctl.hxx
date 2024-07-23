@@ -146,7 +146,6 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK( ScrollUpDownHdl, ScrollBar*, void );
                         DECL_LINK( ScrollLeftRightHdl, ScrollBar*, void );
                         DECL_LINK( UserEventHdl, void*, void );
-                        DECL_LINK( AutoArrangeHdl, Timer*, void );
                         DECL_LINK( DocRectChangedHdl, Timer*, void );
                         DECL_LINK( VisRectChangedHdl, Timer*, void );
 

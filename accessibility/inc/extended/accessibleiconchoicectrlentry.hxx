@@ -66,9 +66,6 @@ namespace accessibility
 
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
-        tools::Rectangle               GetBoundingBox();
-        /// @throws css::lang::DisposedException
-        /// @throws css::uno::RuntimeException
         AbsoluteScreenPixelRectangle   GetBoundingBoxOnScreen();
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;

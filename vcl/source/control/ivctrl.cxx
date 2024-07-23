@@ -189,11 +189,6 @@ void SvtIconChoiceCtrl::SetPointFont(const vcl::Font& rFont)
     }
 }
 
-WinBits SvtIconChoiceCtrl::GetStyle() const
-{
-    return _pImpl->GetStyle();
-}
-
 void SvtIconChoiceCtrl::Command(const CommandEvent& rCEvt)
 {
     _pImpl->Command( rCEvt );

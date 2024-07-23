@@ -191,9 +191,6 @@ public:
     getSequenceOfAny(css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList);
     /** Returns the unique connection identifier. */
     sal_Int32    getConnectionId() const { return maModel.mnId; }
-    /** Returns the version of the application which last refreshed this connection. */
-    sal_Int16    getConnectionRefreshedVersion() const { return maModel.mnRefreshedVersion; }
-    OUString    getConnectionName() const { return maModel.maName; }
     /** Returns the source data type of the connection. */
     sal_Int32    getConnectionType() const { return maModel.mnType; }
     /** Returns read-only access to the connection model data. */
@@ -206,10 +203,6 @@ public:
     css::uno::Sequence<css::uno::Any> getOlapPrSequenceAny() const
     {
         return maModel.maOlapPrSequenceAny;
-    }
-    css::uno::Sequence<css::uno::Any> getTextPrSequenceAny() const
-    {
-        return maModel.mxTextPr->maTextPrSequenceAny;
     }
 
 private:

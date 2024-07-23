@@ -146,8 +146,6 @@ public:
     virtual             ~SvtIconChoiceCtrl() override;
     virtual void        dispose() override;
 
-    WinBits             GetStyle() const;
-
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );
 
