@@ -623,22 +623,6 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_SPACE:
             break;
-
-#ifdef DBG_UTIL
-        case KEY_F10:
-            if( rKEvt.GetKeyCode().IsShift() )
-            {
-                if( pCursor )
-                    SetEntryTextMode(SvxIconChoiceCtrlTextMode::Full, *pCursor);
-            }
-            if( rKEvt.GetKeyCode().IsMod1() )
-            {
-                if( pCursor )
-                    SetEntryTextMode(SvxIconChoiceCtrlTextMode::Short, *pCursor);
-            }
-            break;
-#endif
-
         case KEY_ADD:
         case KEY_DIVIDE :
         case KEY_A:
@@ -1714,19 +1698,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
 {
     aDocRectChangedIdle.Stop();
 }
-
-#ifdef DBG_UTIL
-void SvxIconChoiceCtrl_Impl::SetEntryTextMode(SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry& rEntry)
-{
-    if (rEntry.eTextMode != eMode)
-    {
-        rEntry.eTextMode = eMode;
-        InvalidateEntry(&rEntry );
-        pView->Invalidate(GetEntryBoundRect(&rEntry));
-        AdjustVirtSize(rEntry.aRect);
-    }
-}
-#endif
 
 // Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see

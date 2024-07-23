@@ -277,12 +277,6 @@ public:
                             bool bInScrollBarEvent=false
                         );
 
-#ifdef DBG_UTIL
-    void                SetEntryTextMode(
-                            SvxIconChoiceCtrlTextMode,
-                            SvxIconChoiceCtrlEntry& rEntry
-                        );
-#endif
     size_t              GetEntryCount() const { return maEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {
