@@ -5344,6 +5344,60 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportXnViewColorspace)
     CPPUNIT_ASSERT_EQUAL("DeviceRGB"_ostr, pColorSpaceElement->GetValue());
 }
 
+// tdf#157390 - Verifies metrics are correct for PDF export mixing horizontal and vertical CJK
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157390)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf157390-overlapping-kanji.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    // This bug manifests as aberrant character advances in the middle horizontal text.
+
+    // Locate the text on the page
+    auto aStr = u"無い有る有る"_ustr;
+
+    int nBaseIndex = 0;
+    for (int i = 0; i < pTextPage->countChars(); ++i)
+    {
+        if (pTextPage->getUnicode(i) == static_cast<unsigned int>(aStr[0]))
+        {
+            nBaseIndex = i;
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT(nBaseIndex + 6 <= pTextPage->countChars());
+
+    // Extract the character rects
+    std::vector<basegfx::B2DRectangle> aRects;
+    for (int i = 0; i < 6; ++i)
+    {
+        auto nPageIndex = nBaseIndex + i;
+        CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(aStr[i]), pTextPage->getUnicode(nPageIndex));
+        aRects.push_back(pTextPage->getCharBox(nPageIndex, /*fPageHeight*/ 1000.0));
+    }
+
+    // Verify glyph advances don't exceed some pessimistic range
+    double nGuess = aRects.at(0).getMinX();
+    for (const auto& stRect : aRects)
+    {
+        std::cout << stRect << std::endl;
+
+        CPPUNIT_ASSERT_GREATER(nGuess - 0.1 * stRect.getWidth(), stRect.getMinX());
+        CPPUNIT_ASSERT_LESS(nGuess + 0.5 * stRect.getWidth(), stRect.getMinX());
+
+        nGuess = stRect.getMaxX();
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
