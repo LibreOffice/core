@@ -4564,7 +4564,8 @@ Label_Rewind:
             if (cSymbol[0] == '#')
             {
                 // Check for TableRef item specifiers first.
-                if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
+                sal_uInt16 nLevel;
+                if (!maTableRefs.empty() && ((nLevel = maTableRefs.back().mnLevel) == 2 || nLevel == 1))
                 {
                     if (ParseTableRefItem( aUpper ))
                         return true;
