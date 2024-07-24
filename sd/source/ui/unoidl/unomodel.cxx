@@ -400,7 +400,7 @@ constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
     { AnimationNodeType::ANIMATECOLOR, "AnimateColor" },
     { AnimationNodeType::ANIMATEMOTION, "Animate" },
     { AnimationNodeType::ANIMATEPHYSICS, "Animate" },
-    { AnimationNodeType::ANIMATETRANSFORM, "Animate" },
+    { AnimationNodeType::ANIMATETRANSFORM, "AnimateTransform" },
     { AnimationNodeType::AUDIO, "Audio" },
     { AnimationNodeType::COMMAND, "Command" },
     { AnimationNodeType::CUSTOM, "Custom" },
