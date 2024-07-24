@@ -22,7 +22,7 @@
 #include <iostream>
 
 // Modify source/virtualmachine.cxx before running this test, by letting the
-// AttachGuard ctor directly throw a CreationExcepiton (without even setting the
+// AttachGuard ctor directly throw a CreationException (without even setting the
 // m_xMachine member).
 
 int main()
