@@ -494,8 +494,12 @@ bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
     if( pView->IsTracking() )
         return false;
 
-    const Point aDocPos(pView->PixelToLogic(rMEvt.GetPosPixel()));
-    SvxIconChoiceCtrlEntry* pEntry = GetEntry(aDocPos);
+    SvxIconChoiceCtrlEntry* pEntry = nullptr;
+    if (!rMEvt.IsLeaveWindow())
+    {
+        const Point aDocPos(pView->PixelToLogic(rMEvt.GetPosPixel()));
+        pEntry = GetEntry(aDocPos);
+    }
     SetEntryHighlightFrame(pEntry);
     return true;
 }
