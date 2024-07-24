@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
 
@@ -46,7 +47,7 @@ Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
         return nullptr;
     }
 
-    const Graphic& rGraphic = getFillGraphic().getGraphic();
+    const Graphic& rGraphic(getFillGraphic().getGraphic());
     const GraphicType aType(rGraphic.GetType());
 
     // is there a bitmap or a metafile (do we have content)?
@@ -67,10 +68,9 @@ Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
 
     // create SubSequence with FillGraphicPrimitive2D based on polygon range
     const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
-    const basegfx::B2DHomMatrix aNewObjectTransform(
-        basegfx::utils::createScaleTranslateB2DHomMatrix(aOutRange.getRange(),
-                                                         aOutRange.getMinimum()));
-    Primitive2DReference xSubRef;
+    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
+        aOutRange.getRange(), aOutRange.getMinimum()));
+    drawinglayer::attribute::FillGraphicAttribute aFillGraphicAttribute(getFillGraphic());
 
     if (aOutRange != getDefinitionRange())
     {
@@ -96,21 +96,18 @@ Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
 
         aAdaptedRange.transform(aFromGlobalToOutRange);
 
-        const drawinglayer::attribute::FillGraphicAttribute aAdaptedFillGraphicAttribute(
+        aFillGraphicAttribute = drawinglayer::attribute::FillGraphicAttribute(
             getFillGraphic().getGraphic(), aAdaptedRange, getFillGraphic().getTiling(),
             getFillGraphic().getOffsetX(), getFillGraphic().getOffsetY());
+    }
 
-        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, aAdaptedFillGraphicAttribute,
-                                             getTransparency());
-    }
-    else
-    {
-        xSubRef
-            = new FillGraphicPrimitive2D(aNewObjectTransform, getFillGraphic(), getTransparency());
-    }
+    // use tooling due to evtl. animation info needs to be created if
+    // the Graphic is animated somehow
+    Primitive2DReference aContent(
+        createFillGraphicPrimitive2D(aTransform, aFillGraphicAttribute, getTransparency()));
 
     // embed to mask primitive
-    return new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef });
+    return new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ aContent });
 }
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(

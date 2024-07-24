@@ -24,6 +24,11 @@
 
 class Graphic;
 
+namespace drawinglayer::attribute
+{
+class FillGraphicAttribute;
+}
+
 namespace drawinglayer::primitive2d
 {
         /** Helper method with supports decomposing a Graphic with all
@@ -38,10 +43,17 @@ namespace drawinglayer::primitive2d
             alpha directly: all paths are now capable of handling a
             given alpha, including metafile, SVG and animated graphics
          */
-        void DRAWINGLAYER_DLLPUBLIC create2DDecompositionOfGraphic(
+        void create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
             const basegfx::B2DHomMatrix& rTransform,
+            double fTransparency = 0.0);
+
+        // helper to create either a FillGraphicPrimitive2D or a
+        // AnimatedGraphicPrimitive2D if the content is animated
+        Primitive2DReference createFillGraphicPrimitive2D(
+            const basegfx::B2DHomMatrix& rTransform,
+            const drawinglayer::attribute::FillGraphicAttribute& rFillGraphicAttribute,
             double fTransparency = 0.0);
 
         /** Helper to embed given sequence of primitives to evtl. a stack

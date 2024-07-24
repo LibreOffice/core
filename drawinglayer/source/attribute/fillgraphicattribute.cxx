@@ -94,6 +94,11 @@ namespace drawinglayer::attribute
             }
         }
 
+        FillGraphicAttribute::FillGraphicAttribute()
+        :   mpFillGraphicAttribute(theGlobalDefault())
+        {
+        }
+
         FillGraphicAttribute::FillGraphicAttribute(
             const Graphic& rGraphic,
             const basegfx::B2DRange& rGraphicRange,

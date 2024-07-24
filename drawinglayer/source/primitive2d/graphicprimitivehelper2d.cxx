@@ -31,6 +31,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -63,6 +64,12 @@ namespace drawinglayer::primitive2d
                 and thus a safe copy for now
              */
             Graphic                                     maGraphic;
+
+            /** defines parameters for tiling if this AnimatedGraphicPrimitive2D
+                is to be used for a FillGraphicPrimitive2D. In that case,
+                maFillGraphicAttribute.isDefault() will be false
+             */
+            drawinglayer::attribute::FillGraphicAttribute maFillGraphicAttribute;
 
             /// local animation processing data, excerpt from maGraphic
             ::Animation                                 maAnimation;
@@ -198,8 +205,26 @@ namespace drawinglayer::primitive2d
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
 
-                if(basegfx::fTools::equal(getTransparency(), 0.0))
+                if (!maFillGraphicAttribute.isDefault())
+                {
+                    // need to create FillGraphicPrimitive2D
+                    const drawinglayer::attribute::FillGraphicAttribute aAttribute(
+                        Graphic(bitmap),
+                        maFillGraphicAttribute.getGraphicRange(),
+                        maFillGraphicAttribute.getTiling(),
+                        maFillGraphicAttribute.getOffsetX(),
+                        maFillGraphicAttribute.getOffsetY());
+
+                    return new FillGraphicPrimitive2D(
+                        getTransform(),
+                        aAttribute,
+                        getTransparency());
+                }
+
+                // need to create BitmapAlphaPrimitive2D/BitmapPrimitive2D
+                if (basegfx::fTools::equal(getTransparency(), 0.0))
                     return new BitmapPrimitive2D(bitmap, getTransform());
+
                 return new BitmapAlphaPrimitive2D(bitmap, getTransform(), getTransparency());
             }
 
@@ -363,6 +388,7 @@ namespace drawinglayer::primitive2d
             /// constructor
             AnimatedGraphicPrimitive2D(
                 const Graphic& rGraphic,
+                const drawinglayer::attribute::FillGraphicAttribute* pFillGraphicAttribute,
                 basegfx::B2DHomMatrix aTransform,
                 double fTransparency = 0.0);
             virtual ~AnimatedGraphicPrimitive2D();
@@ -388,6 +414,7 @@ namespace drawinglayer::primitive2d
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
             const Graphic& rGraphic,
+            const drawinglayer::attribute::FillGraphicAttribute* pFillGraphicAttribute,
             basegfx::B2DHomMatrix aTransform,
             double fTransparency)
         :   AnimatedSwitchPrimitive2D(
@@ -396,6 +423,7 @@ namespace drawinglayer::primitive2d
                 false),
             maTransform(std::move(aTransform)),
             maGraphic(rGraphic),
+            maFillGraphicAttribute(),
             maAnimation(rGraphic.GetAnimation()),
             mfTransparency(std::max(0.0, std::min(1.0, fTransparency))),
             maVirtualDevice(*Application::GetDefaultDevice()),
@@ -404,6 +432,10 @@ namespace drawinglayer::primitive2d
             mbBufferingAllowed(false),
             mbHugeSize(false)
         {
+            // if FillGraphicAttribute copy it -> FillGraphicPrimitive2D is intended
+            if (nullptr != pFillGraphicAttribute)
+                maFillGraphicAttribute = *pFillGraphicAttribute;
+
             // initialize AnimationTiming, needed to detect which frame is requested
             // in get2DDecomposition
             createAndSetAnimationTiming();
@@ -538,6 +570,35 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
+        Primitive2DReference createFillGraphicPrimitive2D(
+            const basegfx::B2DHomMatrix& rTransform,
+            const drawinglayer::attribute::FillGraphicAttribute& rFillGraphicAttribute,
+            double fTransparency)
+        {
+            if (basegfx::fTools::equal(fTransparency, 1.0))
+            {
+                // completely transparent, done
+                return nullptr;
+            }
+
+            const Graphic& rGraphic(rFillGraphicAttribute.getGraphic());
+            const GraphicType aType(rGraphic.GetType());
+
+            if (GraphicType::Bitmap == aType && rGraphic.IsAnimated())
+            {
+                return new AnimatedGraphicPrimitive2D(
+                    rGraphic,
+                    &rFillGraphicAttribute,
+                    rTransform,
+                    fTransparency);
+            }
+
+            return new FillGraphicPrimitive2D(
+                rTransform,
+                rFillGraphicAttribute,
+                fTransparency);
+        }
+
         void create2DDecompositionOfGraphic(
             Primitive2DContainer& rContainer,
             const Graphic& rGraphic,
@@ -560,6 +621,7 @@ namespace drawinglayer::primitive2d
                         // support for alpha
                         rContainer.append(new AnimatedGraphicPrimitive2D(
                             rGraphic,
+                            nullptr,
                             rTransform,
                             fTransparency));
                     }

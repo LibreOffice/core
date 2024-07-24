@@ -26,8 +26,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
-#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -109,31 +107,6 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
                 const drawinglayer::primitive2d::Primitive2DReference xReference(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
                 maPrimitive2DSequence.push_back(xReference);
             }
-            break;
-        }
-
-        // CairoSDPR: handle FillGraphicPrimitive2D to avoid expensive decompose,
-        // this also activates that tiled stuff gets *animated*. If that is not
-        // wanted this primitive might just be ignored
-        case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
-        {
-            const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFill(
-                static_cast<const drawinglayer::primitive2d::FillGraphicPrimitive2D&>(rCandidate));
-            const drawinglayer::attribute::FillGraphicAttribute& rAttribute(rFill.getFillGraphic());
-            const Graphic& rGraphic(rAttribute.getGraphic());
-
-            if(rGraphic.IsAnimated())
-            {
-                // create temporary GraphicPrimitive to recursively extract evtl. animation
-                drawinglayer::primitive2d::Primitive2DContainer aContainer;
-                drawinglayer::primitive2d::create2DDecompositionOfGraphic(
-                    aContainer,
-                    rGraphic,
-                    rFill.getTransformation(),
-                    rFill.getTransparency());
-                process(aContainer);
-            }
-
             break;
         }
 
