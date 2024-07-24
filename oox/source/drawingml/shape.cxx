@@ -2461,7 +2461,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
                     }
                     // Restore the original color map
-                    pPowerPointImport->getActualSlidePersist()->setClrMap(pClrMap);
+                    pPowerPointImport->getActualSlidePersist()->setClrMap(std::move(pClrMap));
                 }
 #endif
             }

@@ -178,7 +178,7 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
         aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
 
     if( ! aTopLevelContainer.empty())
-        m_aChildMap[ObjectHierarchy::getRootNodeOID()] = aTopLevelContainer;
+        m_aChildMap[ObjectHierarchy::getRootNodeOID()] = std::move(aTopLevelContainer);
 }
 
 void ObjectHierarchy::createLegendTree(

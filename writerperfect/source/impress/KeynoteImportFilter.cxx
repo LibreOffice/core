@@ -195,7 +195,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             beans::NamedValue aValue;
             aValue.Name = "IsPackage";
             aValue.Value <<= true;
-            lComponentDataNV.getArray()[nCDSize] = aValue;
+            lComponentDataNV.getArray()[nCDSize] = std::move(aValue);
             pDescriptor[nComponentDataLocation].Value <<= lComponentDataNV;
         }
         else

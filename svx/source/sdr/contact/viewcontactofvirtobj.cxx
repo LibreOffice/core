@@ -79,7 +79,7 @@ void ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence(drawinglayer
         drawinglayer::primitive2d::Primitive2DReference xReference(
             new drawinglayer::primitive2d::TransformPrimitive2D(
                 aObjectMatrix,
-                drawinglayer::primitive2d::Primitive2DContainer(xSequenceVirtual)));
+                drawinglayer::primitive2d::Primitive2DContainer(std::move(xSequenceVirtual))));
 
         rVisitor.visit(xReference);
     }

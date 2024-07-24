@@ -1045,7 +1045,7 @@ namespace sdr::contact {
             return false;
 
         m_pOutputDeviceForWindow = const_cast< OutputDevice * >( &_rDevice );
-        m_aControl = aControl;
+        m_aControl = std::move(aControl);
         m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,

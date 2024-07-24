@@ -1534,7 +1534,7 @@ void VclGtkClipboard::setContents(
             aEntry.info = 0;
             aGtkTargets.push_back(aEntry);
 #endif
-            m_aGtkTargets = aGtkTargets;
+            m_aGtkTargets = std::move(aGtkTargets);
 
             if (!m_pSetClipboardEvent)
                 m_pSetClipboardEvent = Application::PostUserEvent(LINK(this, VclGtkClipboard, AsyncSetGtkClipboard));

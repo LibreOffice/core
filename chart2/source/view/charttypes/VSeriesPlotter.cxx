@@ -1423,7 +1423,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly );
-        aRegressionPoly = aClippedPoly;
+        aRegressionPoly = std::move(aClippedPoly);
         m_pPosHelper->transformScaledLogicToScene( aRegressionPoly );
 
         awt::Point aDefaultPos;

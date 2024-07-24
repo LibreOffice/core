@@ -121,7 +121,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_v
             if ( pFilter && pFilter->CanExport() && pFilter->GetWildcard().Matches( rUrl ) )
             {
                 if ( !pBestMatch || ( SfxFilterFlags::PREFERED & pFilter->GetFilterFlags() ) )
-                    pBestMatch = pFilter;
+                    pBestMatch = std::move(pFilter);
             }
         }
     }

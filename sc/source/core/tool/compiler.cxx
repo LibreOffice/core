@@ -5057,7 +5057,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         delete [] pFunctionStack;
 
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
-    std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aArr ));
+    std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( std::move(aArr) ));
     pNew->GenHash();
     // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
     pArr = pNew.get();

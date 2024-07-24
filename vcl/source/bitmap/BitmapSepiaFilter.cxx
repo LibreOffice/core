@@ -87,7 +87,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
     const MapMode aMap(aBitmap.GetPrefMapMode());
     const Size aPrefSize(aBitmap.GetPrefSize());
 
-    aBitmap = aNewBmp;
+    aBitmap = std::move(aNewBmp);
 
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aPrefSize);

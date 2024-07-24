@@ -132,7 +132,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return { { aSeriesVec }, xCategories };
+    return { { std::move(aSeriesVec) }, xCategories };
 }
 
 InterpretedData XYDataInterpreter::reinterpretDataSeries(

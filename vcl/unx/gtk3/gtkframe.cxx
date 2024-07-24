@@ -4455,11 +4455,11 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
                 VclPtr<vcl::Window> xVclWindow = pThis->GetWindow();
                 ImplFrameData* pFrameData = xVclWindow->ImplGetWindowImpl()->mpFrameData;
                 if (pFrameData->mpFocusWin == xTopLevelInterimWindow)
-                    pFrameData->mpFocusWin = xOrigFrameFocusWin;
+                    pFrameData->mpFocusWin = std::move(xOrigFrameFocusWin);
 
                 ImplSVData* pSVData = ImplGetSVData();
                 if (pSVData->mpWinData->mpFocusWin == xTopLevelInterimWindow)
-                    pSVData->mpWinData->mpFocusWin = xOrigFocusWin;
+                    pSVData->mpWinData->mpFocusWin = std::move(xOrigFocusWin);
 
                 if (bRestoreDisallowCycleFocusOut)
                 {

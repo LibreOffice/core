@@ -2458,7 +2458,7 @@ namespace accessibility
                 {
                     continue;
                 }
-                pProperties[ nCurLen++ ] = aProp;
+                pProperties[ nCurLen++ ] = std::move(aProp);
             }
             aProperties.realloc( nCurLen );
         }

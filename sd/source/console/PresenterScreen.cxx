@@ -827,7 +827,7 @@ void PresenterScreen::ProcessViewDescription (
         rValues[3] >>= aViewDescriptor.mbIsOpaque;
         if (aViewDescriptor.msAccessibleTitle.isEmpty())
             aViewDescriptor.msAccessibleTitle = aViewDescriptor.msTitle;
-        maViewDescriptors[sViewURL] = aViewDescriptor;
+        maViewDescriptors[sViewURL] = std::move(aViewDescriptor);
     }
     catch (const Exception&)
     {

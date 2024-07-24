@@ -186,7 +186,7 @@ void DAVResourceAccess::OPTIONS(
                                   rOptions,
                                   DAVRequestEnvironment(
                                       new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                      aHeaders ) );
+                                      std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -303,7 +303,7 @@ void DAVResourceAccess::PROPPATCH(
                                    rValues,
                                    DAVRequestEnvironment(
                                        new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                       aHeaders ) );
+                                       std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -342,7 +342,7 @@ void DAVResourceAccess::HEAD(
                               rResource,
                               DAVRequestEnvironment(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                  aHeaders ) );
+                                  std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -418,7 +418,7 @@ void DAVResourceAccess::GET(
                              rStream,
                              DAVRequestEnvironment(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                 aHeaders ) );
+                                 std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -459,7 +459,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                        DAVRequestEnvironment(
                                            new DAVAuthListener_Impl(
                                                xEnv, m_aURL ),
-                                           aHeaders ) );
+                                           std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -543,7 +543,7 @@ void DAVResourceAccess::GET(
                              rResource,
                              DAVRequestEnvironment(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                 aHeaders ) );
+                                 std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -684,7 +684,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
                                         DAVRequestEnvironment(
                                             new DAVAuthListener_Impl(
                                                 xEnv, m_aURL ),
-                                            aHeaders ) );
+                                            std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -787,7 +787,7 @@ void DAVResourceAccess::MKCOL(
             m_xSession->MKCOL( getRequestURI(),
                                DAVRequestEnvironment(
                                    new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                   aHeaders ) );
+                                   std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -826,7 +826,7 @@ void DAVResourceAccess::COPY(
                               rDestinationURI,
                               DAVRequestEnvironment(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                  aHeaders ),
+                                  std::move(aHeaders) ),
                               bOverwrite );
         }
         catch (DAVException const& e)
@@ -902,7 +902,7 @@ void DAVResourceAccess::DESTROY(
             m_xSession->DESTROY( getRequestURI(),
                                  DAVRequestEnvironment(
                                      new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                     aHeaders ) );
+                                     std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -940,7 +940,7 @@ void DAVResourceAccess::LOCK(
                               inLock,
                               DAVRequestEnvironment(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                  aHeaders ) );
+                                  std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {
@@ -974,7 +974,7 @@ void DAVResourceAccess::UNLOCK(
             m_xSession->UNLOCK( getRequestURI(),
                                 DAVRequestEnvironment(
                                     new DAVAuthListener_Impl( xEnv, m_aURL ),
-                                    aHeaders ) );
+                                    std::move(aHeaders) ) );
         }
         catch (DAVException const& e)
         {

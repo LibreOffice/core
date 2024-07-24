@@ -912,7 +912,7 @@ lcl_TableData lcl_getDataForLocalTable(
                     aResult.aDataInRows[nIdx][nSeqIdx] = aNumbers[nIdx];
             }
             else
-                aResult.aDataInRows[nSeqIdx] = aNumbers;
+                aResult.aDataInRows[nSeqIdx] = std::move(aNumbers);
 
             if( rDataSequence.second.is())
             {

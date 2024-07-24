@@ -222,7 +222,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                 if (bRet)
                 {
                     aOriginal.AdaptBitCount(aNewBmp);
-                    aBitmap = aNewBmp;
+                    aBitmap = std::move(aNewBmp);
                 }
             }
         }

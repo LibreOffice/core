@@ -944,7 +944,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                                             return localesAreEqual(aImportDefaultLocale, aTmpLocale);
                                         }))
                         {
-                            aFirstLocale = aImportDefaultLocale;
+                            aFirstLocale = std::move(aImportDefaultLocale);
                         }
                     }
 

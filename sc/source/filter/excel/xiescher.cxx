@@ -1183,17 +1183,16 @@ rtl::Reference<SdrObject> XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDf
         }
 #undef EXC_ARROW_POINT
 
-        ::basegfx::B2DPolyPolygon aArrowPolyPoly( aArrowPoly );
         tools::Long nWidth = static_cast< tools::Long >( 125 * fArrowWidth );
         if( bLineStart )
         {
-            xSdrObj->SetMergedItem( XLineStartItem( OUString(), aArrowPolyPoly ) );
+            xSdrObj->SetMergedItem( XLineStartItem( OUString(), basegfx::B2DPolyPolygon(aArrowPoly) ) );
             xSdrObj->SetMergedItem( XLineStartWidthItem( nWidth ) );
             xSdrObj->SetMergedItem( XLineStartCenterItem( false ) );
         }
         if( bLineEnd )
         {
-            xSdrObj->SetMergedItem( XLineEndItem( OUString(), aArrowPolyPoly ) );
+            xSdrObj->SetMergedItem( XLineEndItem( OUString(), basegfx::B2DPolyPolygon(aArrowPoly) ) );
             xSdrObj->SetMergedItem( XLineEndWidthItem( nWidth ) );
             xSdrObj->SetMergedItem( XLineEndCenterItem( false ) );
         }

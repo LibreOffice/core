@@ -236,7 +236,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
         }
 
         // insert the handler info into the normal handler cache
-        rHandlerHash[lNames[nSource]] = aHandler;
+        rHandlerHash[lNames[nSource]] = std::move(aHandler);
         ++nSource;
     }
 }

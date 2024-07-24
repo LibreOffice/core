@@ -111,7 +111,7 @@ void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
         // Execute dispatch asynchronously
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aTargetURL    = std::move(aTargetURL);
         pExecuteInfo->aArgs         = aArgs;
         Application::PostUserEvent( LINK(nullptr, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }

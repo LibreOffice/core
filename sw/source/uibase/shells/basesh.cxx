@@ -466,7 +466,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
 
                     pDlg->StartExecuteAsync(
-                        [aDataHelper, pDlg, &rSh, this](sal_Int32 nResult)
+                        [aDataHelper=std::move(aDataHelper), pDlg, &rSh, this](sal_Int32 nResult)
                         {
                             if (nResult == RET_OK)
                             {

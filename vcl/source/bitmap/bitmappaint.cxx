@@ -440,7 +440,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
             pWriteAcc.reset();
         }
 
-        aRotatedBmp = aNewBmp;
+        aRotatedBmp = std::move(aNewBmp);
     }
 
     pReadAcc.reset();
@@ -967,7 +967,7 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
     const MapMode aMap(maPrefMapMode);
     const Size aSize(maPrefSize);
 
-    *this = aNewBmp;
+    *this = std::move(aNewBmp);
 
     maPrefMapMode = aMap;
     maPrefSize = aSize;

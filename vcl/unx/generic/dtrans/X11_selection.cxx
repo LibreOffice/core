@@ -1369,7 +1369,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             for( i = 0; i < nNewFlavors-1; i++ )
                 aNativeTemp[ i + 1 ] = aNativeTypes[ i ];
             aNativeTemp[0] = None;
-            aNativeTypes = aNativeTemp;
+            aNativeTypes = std::move(aNativeTemp);
         }
     }
 

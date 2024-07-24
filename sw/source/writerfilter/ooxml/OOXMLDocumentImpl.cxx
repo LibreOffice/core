@@ -89,7 +89,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
         return;
     }
     OOXMLStream::Pointer_t savedStream = mpStream;
-    mpStream = pStream;
+    mpStream = std::move(pStream);
 
     uno::Reference<xml::sax::XFastParser> xParser(mpStream->getFastParser());
 

@@ -2326,7 +2326,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    xParentAccImpl.get(), aFrameOrObj, rOldBox );
+                    xParentAccImpl.get(), std::move(aFrameOrObj), rOldBox );
                 AppendEvent( aEvent );
             }
         }

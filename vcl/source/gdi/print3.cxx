@@ -1506,7 +1506,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsFirstPage";
         aVal.Value <<= mpImplData->mbFirstPage;
-        pResult[nCur++] = aVal;
+        pResult[nCur++] = std::move(aVal);
     }
     // append IsLastPage
     if( aMergeSet.find( u"IsLastPage"_ustr ) == aMergeSet.end() )
@@ -1514,7 +1514,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsLastPage";
         aVal.Value <<= mpImplData->mbLastPage;
-        pResult[nCur++] = aVal;
+        pResult[nCur++] = std::move(aVal);
     }
     // append IsPrinter
     if( aMergeSet.find( u"IsPrinter"_ustr ) == aMergeSet.end() )
@@ -1522,7 +1522,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsPrinter";
         aVal.Value <<= true;
-        pResult[nCur++] = aVal;
+        pResult[nCur++] = std::move(aVal);
     }
     aResult.realloc( nCur );
     return aResult;

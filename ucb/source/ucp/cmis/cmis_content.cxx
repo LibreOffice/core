@@ -495,7 +495,7 @@ namespace cmis
                             // FIXME Improve performances by adding getBaseTypeId( ) method to libcmis
                             if ( type->getBaseType( )->getId( ) == typeId )
                             {
-                                m_pObjectType = type;
+                                m_pObjectType = std::move(type);
                                 break;
                             }
                         }

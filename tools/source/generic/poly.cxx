@@ -1352,7 +1352,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
         if( bChangeInThisRun && nNewPos )
         {
             aNewPoly.SetSize( nNewPos );
-            rPoly = aNewPoly;
+            rPoly = std::move(aNewPoly);
             nNumNoChange = 0;
         }
         else

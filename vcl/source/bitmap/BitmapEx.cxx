@@ -620,12 +620,12 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
         pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
         if ( pSalMask->Create( xBitmapCanvas, aLocalSize, true ) )
         {
-            *this = BitmapEx(Bitmap(pSalBmp), Bitmap(pSalMask) );
+            *this = BitmapEx(Bitmap(std::move(pSalBmp)), Bitmap(std::move(pSalMask)) );
             return true;
         }
         else
         {
-            *this = BitmapEx(Bitmap(pSalBmp));
+            *this = BitmapEx(Bitmap(std::move(pSalBmp)));
             return true;
         }
     }

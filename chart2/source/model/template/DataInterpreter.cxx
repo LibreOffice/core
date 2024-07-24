@@ -119,7 +119,7 @@ InterpretedData DataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return { { aSeriesVec }, xCategories };
+    return { { std::move(aSeriesVec) }, xCategories };
 }
 
 InterpretedData DataInterpreter::reinterpretDataSeries(

@@ -857,7 +857,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
         }
         pB.reset();
         pW.reset();
-        res = aDither;
+        res = std::move(aDither);
     }
     else
     {

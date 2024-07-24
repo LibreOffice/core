@@ -173,7 +173,7 @@ void ScInterpreter::ScIfJump()
                             }
                         }
                     }
-                    xNew = new ScJumpMatrixToken( pJumpMat );
+                    xNew = new ScJumpMatrixToken(std::move(pJumpMat));
                     GetTokenMatrixMap().emplace(pCur, xNew);
                 }
                 if (!xNew)

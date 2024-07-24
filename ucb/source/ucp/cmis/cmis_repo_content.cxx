@@ -171,7 +171,7 @@ namespace cmis
 
                     std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", false, oauth2Data ));
+                            rUsername, rPassword, "", false, std::move(oauth2Data) ));
                     if (!session)
                         ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,

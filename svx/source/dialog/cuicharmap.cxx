@@ -319,7 +319,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
         return;
 
     m_xFontLB->set_active_text(sFontFamilyName);
-    aFont = aTmp;
+    aFont = std::move(aTmp);
     FontSelectHdl(*m_xFontLB);
     if (m_xSubsetLB->get_count())
         m_xSubsetLB->set_active(0);

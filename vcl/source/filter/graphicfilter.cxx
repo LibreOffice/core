@@ -936,7 +936,7 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
     aPNGReader.read(aGraphic);
     if (!aGraphic.GetBitmapEx().IsEmpty())
     {
-        rGraphic = aGraphic;
+        rGraphic = std::move(aGraphic);
         rLinkType = GfxLinkType::NativePng;
     }
     else

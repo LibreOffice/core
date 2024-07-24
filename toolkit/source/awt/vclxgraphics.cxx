@@ -213,7 +213,7 @@ void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rx
     {
         vcl::Region aRegion( VCLUnoHelper::GetRegion( rxRegion ) );
         if ( !mpClipRegion )
-            mpClipRegion.reset( new vcl::Region( aRegion ) );
+            mpClipRegion.reset( new vcl::Region(std::move(aRegion)) );
         else
             mpClipRegion->Intersect( aRegion );
     }

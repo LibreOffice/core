@@ -727,7 +727,7 @@ ScDPTableData* ScDPObject::GetTableData()
             pData = pGroupData;
         }
 
-        mpTableData = pData;                        // after SetCacheId
+        mpTableData = std::move(pData);             // after SetCacheId
     }
 
     return mpTableData.get();

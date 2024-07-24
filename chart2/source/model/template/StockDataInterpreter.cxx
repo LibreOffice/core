@@ -250,7 +250,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         }
     }
 
-    return { aResultSeries, xCategories };
+    return { std::move(aResultSeries), xCategories };
 }
 
 // criterion: there must be two groups for stock-charts with volume and all

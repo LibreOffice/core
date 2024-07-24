@@ -157,7 +157,7 @@ void GraphicNativeTransform::rotateJPEG(Degree10 aRotation)
         Graphic aGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.ImportGraphic(aGraphic, u"import", aTargetStream);
-        mrGraphic = aGraphic;
+        mrGraphic = std::move(aGraphic);
     }
 }
 

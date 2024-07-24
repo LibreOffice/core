@@ -3055,8 +3055,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             PushError(FormulaError::MatrixSize);
             return;
         }
-        pMatX = pCopyX;
-        pMatY = pCopyY;
+        pMatX = std::move(pCopyX);
+        pMatY = std::move(pCopyY);
         // DeltaY is possible here; DeltaX depends on nCase, so later
         fMeanY = lcl_GetMeanOverAll(pMatY, N);
         for (SCSIZE i=0; i<N; i++)
