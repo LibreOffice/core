@@ -13834,12 +13834,12 @@ then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $KF5_CFLAGS"
     AC_MSG_CHECKING([whether KDE is >= 5.0])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+       AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <kcoreaddons_version.h>
 
 int main(int argc, char **argv) {
-       if (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0) return 0;
-       else return 1;
+       static_assert(KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0);
+       return 0;
 }
        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
     CXXFLAGS=$save_CXXFLAGS
@@ -13910,12 +13910,12 @@ then
     CXXFLAGS="$CXXFLAGS $KF6_CFLAGS"
     dnl KF6 development version as of 2023-06 uses version number 5.240
     AC_MSG_CHECKING([whether KDE is >= 5.240])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+       AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <kcoreaddons_version.h>
 
 int main(int argc, char **argv) {
-       if (KCOREADDONS_VERSION_MAJOR == 6 || (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 240)) return 0;
-       else return 1;
+       static_assert(KCOREADDONS_VERSION_MAJOR == 6 || (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 240));
+       return 0;
 }
        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
     CXXFLAGS=$save_CXXFLAGS
