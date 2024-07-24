@@ -1274,7 +1274,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
 
     // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
     // original property of our aggregate isn't
-    RemoveProperty( _rAggregateProps, PROPERTY_DATASOURCE );
+    RemoveProperty( _rAggregateProps, PROPERTY_DATASOURCENAME );
 
     // for connection sharing, we need to override the ActiveConnection property, too
     RemoveProperty( _rAggregateProps, PROPERTY_ACTIVE_CONNECTION );
@@ -1294,7 +1294,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     *pProperties++ = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_MASTERFIELDS, PROPERTY_ID_MASTERFIELDS, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_DETAILFIELDS, PROPERTY_ID_DETAILFIELDS, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_DATASOURCE, PROPERTY_ID_DATASOURCE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
+    *pProperties++ = css::beans::Property(PROPERTY_DATASOURCENAME, PROPERTY_ID_DATASOURCE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::CONSTRAINED);
     *pProperties++ = css::beans::Property(PROPERTY_CYCLE, PROPERTY_ID_CYCLE, cppu::UnoType<TabulatorCycle>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_FILTER, PROPERTY_ID_FILTER, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_HAVINGCLAUSE, PROPERTY_ID_HAVINGCLAUSE, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
@@ -1452,7 +1452,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_DATASOURCE:
-            rValue = m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE );
+            rValue = m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCENAME );
             break;
 
         case PROPERTY_ID_TARGET_URL:
@@ -1646,7 +1646,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
             try
             {
-                m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+                m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCENAME, rValue);
             }
             catch(const Exception&)
             {
@@ -2360,7 +2360,7 @@ void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInte
     bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
 
     if ( bIsEmbedded )
-        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, Any( OUString() ) );
+        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCENAME, Any( OUString() ) );
 }
 
 
@@ -2605,14 +2605,14 @@ bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxPare
 {
     // our own data source
     OUString sOwnDatasource;
-    m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE ) >>= sOwnDatasource;
+    m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sOwnDatasource;
 
     // our parents data source
     OUString sParentDataSource;
-    OSL_ENSURE( _rxParentProps.is() && _rxParentProps->getPropertySetInfo().is() && _rxParentProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_DATASOURCE ),
+    OSL_ENSURE( _rxParentProps.is() && _rxParentProps->getPropertySetInfo().is() && _rxParentProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_DATASOURCENAME ),
         "ODatabaseForm::doShareConnection: invalid parent form!" );
     if ( _rxParentProps.is() )
-        _rxParentProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sParentDataSource;
+        _rxParentProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sParentDataSource;
 
     bool bCanShareConnection = false;
 
@@ -3744,7 +3744,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
 
     OUString sDataSource;
     if (m_xAggregateSet.is())
-        m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCE) >>= sDataSource;
+        m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCENAME) >>= sDataSource;
     _rxOutStream << sDataSource;
 
     // former CursorSource
@@ -3864,7 +3864,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     OUString sAggregateProp;
     _rxInStream >> sAggregateProp;
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, Any(sAggregateProp));
+        m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCENAME, Any(sAggregateProp));
     _rxInStream >> sAggregateProp;
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND, Any(sAggregateProp));
