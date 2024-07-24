@@ -190,7 +190,7 @@ inline constexpr OUString PROPERTY_TITLE = u"Title"_ustr;
 inline constexpr OUString PROPERTY_ACTIVE_CONNECTION = u"ActiveConnection"_ustr;
 inline constexpr OUString PROPERTY_SCALE = u"Scale"_ustr;
 inline constexpr OUString PROPERTY_SORT = u"Order"_ustr;
-inline constexpr OUString PROPERTY_DATASOURCE = u"DataSourceName"_ustr;
+inline constexpr OUString PROPERTY_DATASOURCENAME = u"DataSourceName"_ustr;
 inline constexpr OUString PROPERTY_DETAILFIELDS = u"DetailFields"_ustr;
 
 inline constexpr OUString PROPERTY_COLUMNSERVICENAME = u"ColumnServiceName"_ustr;
