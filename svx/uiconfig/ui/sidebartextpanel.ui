@@ -149,16 +149,6 @@
                 <property name="homogeneous">False</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkToggleToolButton" id=".uno:Shadowed">
-                <property name="visible">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">False</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -233,6 +223,16 @@
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
+               <child>
+                 <object class="GtkToggleToolButton" id=".uno:Shadowed">
+                   <property name="visible">True</property>
+                   <property name="use-underline">True</property>
+                 </object>
+                 <packing>
+                   <property name="expand">False</property>
+                   <property name="homogeneous">False</property>
+                 </packing>
+               </child>
               </object>
               <packing>
                 <property name="expand">False</property>
