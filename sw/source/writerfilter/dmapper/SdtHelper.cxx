@@ -360,11 +360,6 @@ void SdtHelper::createPlainTextControl()
 
     try
     {
-        bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
-                              != (0 < m_rDM_Impl.m_StreamStateStack.top().nTableDepth)
-                          && m_rDM_Impl.GetIsDummyParaAddedForTableInSection();
-        if (bIsInTable)
-            xCrsr->goRight(1, false);
         xCrsr->gotoEnd(true);
     }
     catch (uno::Exception&)
