@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
     (including transparence). The decomosition will create a MaskPrimitive2D
     containing a FillGraphicPrimitive2D.
 
-    SDPR: support alpha now directly: the decompositon creates
+    SDPR: support alpha now directly: the decomposition creates
     FillGraphicPrimitive2D which also supports alpha directly
     now. All direct usages are covered
  */
