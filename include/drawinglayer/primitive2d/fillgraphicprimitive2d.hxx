@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
             aligned tend to show up (one overlapping or empty pixel)
 
             SDPR: support alpha directly now. If a primitive processor
-            cannot deal with it, use it's decomposition. The decompositon
+            cannot deal with it, use it's decomposition. The decomposition
             uses create2DDecompositionOfGraphic, there all paths are now
             capable of handling a given alpha, including metafile, SVG and
             animated graphics
