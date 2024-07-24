@@ -6904,11 +6904,20 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             }
         }
 
-        auto nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, pGlyph->IsVertical(), false);
+        // tdf#157390: The width stored by registerGlyph() must be the actual glyph width.
+        // This must be obtained by calling GetGlyphWidth(vertical=false), otherwise an incorrect
+        // width value will be returned for CJK characters.
+        auto nMappedGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, /*vertical*/ false, false);
+        auto nGlyphWidth = nMappedGlyphWidth;
+        if (pGlyph->IsVertical())
+        {
+            nGlyphWidth = pGlyphFont->GetGlyphWidth(nGlyphId, /*vertical*/ true, false);
+        }
 
         sal_uInt8 nMappedGlyph;
         sal_Int32 nMappedFontObject;
-        registerGlyph(nGlyphId, pFace, pGlyphFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
+        registerGlyph(nGlyphId, pFace, pGlyphFont, aCodeUnits, nMappedGlyphWidth, nMappedGlyph,
+                      nMappedFontObject);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
