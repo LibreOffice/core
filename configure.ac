@@ -4731,7 +4731,7 @@ if test "$CCACHE" != ""; then
                       [use_ccache=yes], [use_ccache=no])
     CFLAGS=$save_CFLAGS
     ac_c_werror_flag=$save_ac_c_werror_flag
-    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
+    if test $use_ccache = yes -a "${CCACHE##*sccache*}" != ""; then
         AC_MSG_RESULT([yes])
     else
         CC="$CCACHE $CC"
@@ -7095,9 +7095,8 @@ if test "$_os" = "WINNT"; then
         WINDOWS_SDK_LIB_SUBDIR=$winsdklibsubdir
         # The variable also contains the Windows SDK version
         echo $WINDOWS_SDK_LIB_SUBDIR
-        IFS='.' read -r SDK_v1 SDK_v2 SDK_v3 SDK_v4 <<< "$WINDOWS_SDK_LIB_SUBDIR"
         # Assuming maximum of 5 digits for each part and ignoring last part
-        SDK_NORMALIZED_VER=$((SDK_v1 * 10000000000 + SDK_v2 * 100000 + SDK_v3))
+        SDK_NORMALIZED_VER=$(echo $WINDOWS_SDK_LIB_SUBDIR | awk -F. '{printf("%d%05d%05d\n", $1, $2, $3)}')
         # 10.0.20348.0 is the minimum required version
         if test "$SDK_NORMALIZED_VER" -lt 100000020348; then
             AC_MSG_ERROR([You need Windows SDK greater than or equal 10.0.20348.0])
@@ -7407,7 +7406,7 @@ if test "$CCACHE" != ""; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
-    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
+    if test $use_ccache = yes -a "${CCACHE##*sccache*}" != ""; then
         AC_MSG_RESULT([yes])
     else
         CXX="$CCACHE $CXX"
@@ -13048,7 +13047,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
                       [use_ccache=yes], [use_ccache=no])
     CFLAGS=$save_CFLAGS
     CC=$save_CC
-    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
+    if test $use_ccache = yes -a "${CCACHE##*sccache*}" != ""; then
         AC_MSG_RESULT([yes])
     else
         LO_CLANG_CC="$CCACHE $LO_CLANG_CC"
@@ -13065,7 +13064,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
-    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
+    if test $use_ccache = yes -a "${CCACHE##*sccache*}" != ""; then
         AC_MSG_RESULT([yes])
     else
         LO_CLANG_CXX="$CCACHE $LO_CLANG_CXX"
