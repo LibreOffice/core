@@ -465,6 +465,68 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The path to w:sdt contained a w:p.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:sdt"_ostr);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                            uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Android Security Final Design Report"_ustr, xTextPortionRange->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158661_blockSDT)
+{
+    loadAndReload("tdf158661_blockSDT.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                            uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Survey Strategy"_ustr, xTextPortionRange->getString());
+
+    xTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
+    xCell = xTable->getCellByName(u"A1"_ustr);
+    xParagraphsAccess.set(xCell, uno::UNO_QUERY);
+    xParagraphs = xParagraphsAccess->createEnumeration();
+    xParagraph.set(xParagraphs->nextElement(), uno::UNO_QUERY);
+    xPortions = xParagraph->createEnumeration();
+    xTextPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+    xContentControlProps.set(xContentControl, uno::UNO_QUERY);
+    xContentControlEnumAccess.set(xContentControl, uno::UNO_QUERY);
+    xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+    xTextPortionRange.set(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Test"_ustr, xTextPortionRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
