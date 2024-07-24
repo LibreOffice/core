@@ -49,7 +49,7 @@ void GtkAccessibleEventListener::notifyEvent(
 #endif
         case css::accessibility::AccessibleEventId::STATE_CHANGED:
         {
-            sal_Int64 nState;
+            sal_Int64 nState = 0;
             bool bNewValueSet = false;
             if (rEvent.NewValue >>= nState)
             {
