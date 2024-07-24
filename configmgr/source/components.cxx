@@ -51,7 +51,6 @@
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/backupfilehelper.hxx>
 #include <o3tl/string_view.hxx>
 
 #include "additions.hxx"
@@ -607,34 +606,7 @@ Components::Components(
 
 Components::~Components()
 {
-    // get flag if _exit was already called which is a sign to not secure user config.
-    // this is used for win only currently where calling _exit() unfortunately still
-    // calls destructors (what is not wanted). May be needed for other systems, too
-    // (unknown yet) but can do no harm
-    const bool bExitWasCalled(comphelper::BackupFileHelper::getExitWasCalled());
-
-#ifndef _WIN32
-    // we can add a SAL_WARN here for other systems where the destructor gets called after
-    // an _exit() call. Still safe - the getExitWasCalled() is used, but a hint that _exit
-    // behaves different on a system
-    SAL_WARN_IF(bExitWasCalled, "configmgr", "Components::~Components() called after _exit() call");
-#endif
-
-    if (bExitWasCalled)
-    {
-        // do not write, re-join threads
-        osl::MutexGuard g(*lock_);
-
-        if (writeThread_.is())
-        {
-            writeThread_->join();
-        }
-    }
-    else
-    {
-        // write changes
-        flushModifications();
-    }
+    flushModifications();
 
     for (auto const& rootElem : roots_)
     {
