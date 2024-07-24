@@ -696,6 +696,13 @@ void SwSelPaintRects::HighlightContentControl()
         }
     }
 
+    // clear an obsolete dropdown if the cursor has moved away from the content control
+    if (m_pContentControlButton
+        && (!pContentControl || m_pContentControlButton->GetContentControl() != pContentControl))
+    {
+        m_pContentControlButton.disposeAndClear();
+    }
+
     auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
     if (!aContentControlRanges.empty())
     {
@@ -756,11 +763,6 @@ void SwSelPaintRects::HighlightContentControl()
             if (pWrtShell)
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
-                if (m_pContentControlButton
-                    && m_pContentControlButton->GetContentControl() != pContentControl)
-                {
-                    m_pContentControlButton.disposeAndClear();
-                }
                 if (!m_pContentControlButton)
                 {
                     m_pContentControlButton = VclPtr<SwDropDownContentControlButton>::Create(
@@ -783,11 +785,6 @@ void SwSelPaintRects::HighlightContentControl()
             if (pWrtShell)
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
-                if (m_pContentControlButton
-                    && m_pContentControlButton->GetContentControl() != pContentControl)
-                {
-                    m_pContentControlButton.disposeAndClear();
-                }
                 if (!m_pContentControlButton)
                 {
                     m_pContentControlButton = VclPtr<SwDateContentControlButton>::Create(
@@ -823,11 +820,6 @@ void SwSelPaintRects::HighlightContentControl()
             GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
         }
         m_pContentControlOverlay.reset();
-
-        if (m_pContentControlButton)
-        {
-            m_pContentControlButton.disposeAndClear();
-        }
 
         if (pWrtShell)
         {
