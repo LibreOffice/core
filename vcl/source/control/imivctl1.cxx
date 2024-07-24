@@ -997,22 +997,16 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     const bool bMouseHovered = pEntry == pCurHighlightFrame;
     const bool bSelected = pEntry->IsSelected();
+
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    vcl::Font aNewFont(rRenderContext.GetFont());
     if (bSelected)
-    {
-        const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
-        vcl::Font aNewFont(rRenderContext.GetFont());
-
-        // font fill colors that are attributed "hard" need corresponding "hard"
-        // attributed highlight colors
-        if (pView->HasFocus())
-            aNewFont.SetFillColor(rSettings.GetHighlightColor());
-        else
-            aNewFont.SetFillColor(rSettings.GetDeactiveColor());
-
         aNewFont.SetColor(rSettings.GetTabHighlightTextColor());
-
-        rRenderContext.SetFont(aNewFont);
-    }
+    else if (bMouseHovered)
+        aNewFont.SetColor(rSettings.GetTabRolloverTextColor());
+    else
+        aNewFont.SetColor(rSettings.GetTabTextColor());
+    rRenderContext.SetFont(aNewFont);
 
     bool bResetClipRegion = false;
     if (!rRenderContext.IsClipRegion() && (aVerSBar->IsVisible() || aHorSBar->IsVisible()))
