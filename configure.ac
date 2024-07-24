@@ -5980,6 +5980,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-xmlhelp \
         --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
+        --without-gssapi \
         --without-doxygen \
         --without-tls \
         --without-webdav \
