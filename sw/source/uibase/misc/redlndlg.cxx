@@ -479,7 +479,10 @@ void SwRedlineAcceptDlg::Activate()
             // Redline-Parents were inserted, changed or deleted
             i = CalcDiff(i, false);
             if (i == SwRedlineTable::npos)
+            {
+                lcl_reselect(rTreeView, pSelectedEntryRedlineData);
                 return;
+            }
             continue;
         }
 
@@ -491,7 +494,10 @@ void SwRedlineAcceptDlg::Activate()
             // Redline-Children were deleted
             i = CalcDiff(i, true);
             if (i == SwRedlineTable::npos)
+            {
+                lcl_reselect(rTreeView, pSelectedEntryRedlineData);
                 return;
+            }
             continue;
         }
         else
@@ -503,7 +509,10 @@ void SwRedlineAcceptDlg::Activate()
                     // Redline-Children were inserted, changed or deleted
                     i = CalcDiff(i, true);
                     if (i == SwRedlineTable::npos)
+                    {
+                        lcl_reselect(rTreeView, pSelectedEntryRedlineData);
                         return;
+                    }
 
                     // here was a continue; targetted to the outer loop
                     // now a break will do, as there is nothing after it in the outer loop
