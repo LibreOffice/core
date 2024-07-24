@@ -102,7 +102,6 @@ public:
         WB_NODRAGSELECTION  // No selection with tracking rectangle
         WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
         WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
-        WB_HIGHLIGHTFRAME   // The entry beneath the mouse will be highlighted
 */
 
 #define WB_ICON                 WB_RECTSTYLE
@@ -112,7 +111,6 @@ public:
 #define WB_NOVSCROLL            WB_DRAG
 #define WB_NODRAGSELECTION      WB_PATHELLIPSIS
 #define WB_NOCOLUMNHEADER       WB_CENTER
-#define WB_HIGHLIGHTFRAME       WB_IGNORETAB
 
 class MnemonicGenerator;
 

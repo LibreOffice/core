@@ -491,17 +491,12 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
 
 bool SvxIconChoiceCtrl_Impl::MouseMove( const MouseEvent& rMEvt )
 {
-    const Point aDocPos( pView->PixelToLogic(rMEvt.GetPosPixel()) );
-
     if( pView->IsTracking() )
         return false;
-    else if( nWinBits & WB_HIGHLIGHTFRAME )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDocPos );
-        SetEntryHighlightFrame(pEntry);
-    }
-    else
-        return false;
+
+    const Point aDocPos(pView->PixelToLogic(rMEvt.GetPosPixel()));
+    SvxIconChoiceCtrlEntry* pEntry = GetEntry(aDocPos);
+    SetEntryHighlightFrame(pEntry);
     return true;
 }
 
