@@ -148,8 +148,8 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
                 for (tools::Long x = 0; x < access->Width(); ++x)
                 {
                     BitmapColor color = access->GetPixelFromData(srcB, x);
-                    BitmapColor transparency = accessAlpha->GetPixelFromData(srcA, x);
-                    color.SetAlpha(255 - transparency.GetIndex());
+                    BitmapColor alpha = accessAlpha->GetPixelFromData(srcA, x);
+                    color.SetAlpha(alpha.GetIndex());
                     dst[0] = color.GetRed();
                     dst[1] = color.GetGreen();
                     dst[2] = color.GetBlue();
