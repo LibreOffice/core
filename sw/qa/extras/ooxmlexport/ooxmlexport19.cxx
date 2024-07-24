@@ -977,6 +977,43 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
+{
+    loadAndReload("tdf138093B.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt"_ostr, 3);
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bDate{};
+    xContentControlProps->getPropertyValue(u"Date"_ustr) >>= bDate;
+    CPPUNIT_ASSERT(bDate);
+    uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                            uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentControlEnum
+        = xContentControlEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
+                                                       uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"2019"_ustr, xTextPortionRange->getString());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf131722, "tdf131722.docx")
 {
     if (isExported())
