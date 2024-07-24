@@ -6,7 +6,7 @@
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
 -CC_DEBUG    = $(CC) /Od /Gm /Zi /D_DEBUG /GZ
 +CC_DEBUG    = $(CC) /Od /Gm $(DEBUG_FLAGS_VALUE) /D_DEBUG /GZ
- CFLAGS      = /I. /I../lib /I../include /nologo /W4 /GX /DWIN32 /YX /FD /c /DBUILDING_LIBCURL
+ CFLAGS      = /I. /I../lib /I../include /nologo /W4 /GX /YX /FD /c /DBUILDING_LIBCURL
  !ELSE
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
 @@ -64,7 +64,7 @@
