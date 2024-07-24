@@ -256,7 +256,7 @@ inline constexpr OUString SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.dbu.OColu
 // other DBU properties
 
 inline constexpr OUString PROPERTY_ENABLEOUTERJOIN(u"EnableOuterJoinEscape"_ustr);
-inline constexpr OUString PROPERTY_TABSTOP(u"TabStop"_ustr);
+inline constexpr OUString PROPERTY_TABSTOP2(u"TabStop"_ustr);
 inline constexpr OUString PROPERTY_DEFAULTCONTROL(u"DefaultControl"_ustr);
 inline constexpr OUString PROPERTY_ENABLED(u"Enabled"_ustr);
 inline constexpr OUString PROPERTY_MOUSE_WHEEL_BEHAVIOR(u"MouseWheelBehavior"_ustr);
