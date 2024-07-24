@@ -337,6 +337,31 @@ Emscripten supports standalone WASI binaries:
 - <https://emscripten.org/docs/introducing_emscripten/about_emscripten.html#about-emscripten-porting-code>
 - <https://emscripten.org/docs/compiling/Building-Projects.html>
 
+### Threads and the event loop
+
+The Emscripten emulation of pthreads requires the JS main thread event loop to be able to promptly
+respond both when spawning and when exiting a pthread.  But the Qt5 event loop runs on the JS main
+thread, so the JS main thread event loop is blocked while a LO VCL Task is executed.  And our
+pthreads are typically spawned and joined from within such Task executions, which means that the JS
+main thread event loop is not available to reliably perform those Emscripten pthread operations.
+
+For pthread spawning, the solution is to set -sPTHREAD_POOL_SIZE to a sufficiently large value, so
+that each of our pthread spawning requests during an inappropriate time finds a pre-spawned JS
+Worker available.
+
+There are patterns (like, at the time of writing this, the configmgr::Components::WriteThread) where
+a pthread can get spawned and joined and then re-spawned (and re-joined) multiple times during a
+single VCL Task execution (i.e., without the JS main thread event loop having a chance to get in
+between any of those operations).  But as the underlying Emscripten ptherad exiting operations will
+therefore queue up, the pthread spawning operations will eventually run out of -sPTHREAD_POOL_SIZE
+pre-spawned JS Workers.  The solution here is to change our pthread usage patterns accordingly, so
+that such pthreads are rather kept running than being joined and re-spawned.
+
+(-sPROXY_TO_PTHREAD would move the Qt5 event loop off the JS main thread, which should elegantly
+solve all of the above issues.  But Qt5 just doesn't appear to be prepared to run on anything but
+the JS main thread; e.g., it tries to access the global JS `window` object in various places, which
+is available on the JS main thread but not in a JS Worker.)
+
 ## Building headless LibreOffice as WASM for use in another product
 
 ### Set up Emscripten
