@@ -103,4 +103,9 @@ void QtGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     aPainter.update(toQRect(rDamagedRegion));
 }
 
+void QtGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    QtGraphicsBase::ImplGetResolution(m_pFrame, rDPIX, rDPIY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,9 +25,6 @@
 #include <sal/log.hxx>
 
 #include <QtGui/QPainter>
-#include <QtGui/QScreen>
-#include <QtGui/QWindow>
-#include <QtWidgets/QWidget>
 
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -688,23 +685,6 @@ bool QtGraphicsBackend::supportsOperation(OutDevSupportType eType) const
         default:
             return false;
     }
-}
-
-void QtGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
-{
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        rDPIX = rDPIY = o3tl::toInt32(std::string_view(pForceDpi));
-        return;
-    }
-
-    if (!m_pFrame)
-        return;
-
-    QScreen* pScreen = m_pFrame->GetQWidget()->screen();
-    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
-    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

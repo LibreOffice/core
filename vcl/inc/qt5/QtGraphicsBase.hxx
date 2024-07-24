@@ -9,7 +9,11 @@
 
 #pragma once
 
+#include "QtFrame.hxx"
+
 #include <QtWidgets/QApplication>
+
+#include <sal/types.h>
 
 class QtGraphicsBase
 {
@@ -24,6 +28,9 @@ public:
     void setDevicePixelRatioF(qreal fDPR) { m_fDPR = fDPR; }
 
     qreal devicePixelRatioF() const { return m_fDPR; }
+
+protected:
+    static void ImplGetResolution(QtFrame* pFrame, sal_Int32& rDPIX, sal_Int32& rDPIY);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

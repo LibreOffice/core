@@ -86,6 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtFontFace \
     vcl/qt6/QtFrame \
     vcl/qt6/QtGraphics \
+    vcl/qt6/QtGraphicsBase \
     vcl/qt6/QtGraphics_Controls \
     vcl/qt6/QtGraphics_GDI \
     vcl/qt6/QtGraphics_Text \

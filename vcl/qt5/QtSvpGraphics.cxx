@@ -21,8 +21,6 @@
 #include <QtSvpSurface.hxx>
 #include <QtTools.hxx>
 
-#include <QtGui/QScreen>
-#include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
 QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
@@ -96,19 +94,7 @@ void QtSvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
 void QtSvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
 {
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        rDPIX = rDPIY = o3tl::toInt32(std::string_view(pForceDpi));
-        return;
-    }
-
-    if (!m_pFrame)
-        return;
-
-    QScreen* pScreen = m_pFrame->GetQWidget()->screen();
-    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
-    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
+    QtGraphicsBase::ImplGetResolution(m_pFrame, rDPIX, rDPIY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
