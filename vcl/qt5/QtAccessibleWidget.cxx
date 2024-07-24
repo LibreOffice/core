@@ -516,7 +516,7 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::TEXT:
             return QAccessible::EditableText;
         case AccessibleRole::TEXT_FRAME:
-            return QAccessible::UserRole;
+            return QAccessible::Pane;
         case AccessibleRole::TOGGLE_BUTTON:
             return QAccessible::Button;
         case AccessibleRole::TOOL_BAR:
