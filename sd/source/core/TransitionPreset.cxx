@@ -211,7 +211,9 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionSubType::TWOBOXLEFT,
             TransitionSubType::TWOBOXRIGHT,
             TransitionSubType::FOURBOXVERTICAL,
-            TransitionSubType::FOURBOXHORIZONTAL
+            TransitionSubType::FOURBOXHORIZONTAL,
+            TransitionSubType::COMBVERTICAL,
+            TransitionSubType::COMBHORIZONTAL,
     };
 
     try {

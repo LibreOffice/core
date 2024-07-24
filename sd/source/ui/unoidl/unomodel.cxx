@@ -391,6 +391,8 @@ constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
     { animations::TransitionSubType::FROMTOP, "FromTop"},
     { animations::TransitionSubType::HORIZONTALLEFT, "HorizontalLeft"},
     { animations::TransitionSubType::HORIZONTALRIGHT, "HorizontalRight"},
+    { animations::TransitionSubType::COMBVERTICAL, "CombVertical"},
+    { animations::TransitionSubType::COMBHORIZONTAL, "CombHorizontal"},
 });
 
 constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
