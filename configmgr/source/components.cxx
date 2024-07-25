@@ -21,6 +21,8 @@
 
 #include <cassert>
 #include <chrono>
+#include <condition_variable>
+#include <mutex>
 #include <utility>
 #include <vector>
 #include <set>
@@ -153,7 +155,16 @@ public:
         rtl::Reference< WriteThread > * reference, Components & components,
         OUString url, Data const & data);
 
-    void flush() { delay_.set(); }
+    void trigger() {
+        std::scoped_lock l(triggerMutex_);
+        triggered_ = true;
+        triggerCondition_.notify_all();
+    }
+
+    void flush() {
+        delayOrTerminate_.set();
+        trigger();
+    }
 
 private:
     virtual ~WriteThread() override {}
@@ -164,7 +175,10 @@ private:
     Components & components_;
     OUString url_;
     Data const & data_;
-    osl::Condition delay_;
+    osl::Condition delayOrTerminate_;
+    std::mutex triggerMutex_;
+    std::condition_variable triggerCondition_;
+    bool triggered_;
     std::shared_ptr<osl::Mutex> lock_;
 };
 
@@ -173,26 +187,41 @@ Components::WriteThread::WriteThread(
     OUString url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
     url_(std::move(url)), data_(data),
+    triggered_(false),
     lock_( lock() )
 {
     assert(reference != nullptr);
 }
 
 void Components::WriteThread::execute() {
-    delay_.wait(std::chrono::seconds(1)); // must not throw; result_error is harmless and ignored
-    osl::MutexGuard g(*lock_); // must not throw
-    try {
-        try {
-            writeModFile(components_, url_, data_);
-        } catch (css::uno::RuntimeException &) {
-            // Ignore write errors, instead of aborting:
-            TOOLS_WARN_EXCEPTION("configmgr", "error writing modifications");
+    for (;;) {
+        {
+            std::unique_lock l(triggerMutex_);
+            while (!triggered_) {
+                triggerCondition_.wait(l);
+            }
+            triggered_ = false;
         }
-    } catch (...) {
+        delayOrTerminate_.wait(std::chrono::seconds(1));
+            // must not throw; result_error is harmless and ignored
+        osl::MutexGuard g(*lock_); // must not throw
+        try {
+            try {
+                writeModFile(components_, url_, data_);
+            } catch (css::uno::RuntimeException &) {
+                // Ignore write errors, instead of aborting:
+                TOOLS_WARN_EXCEPTION("configmgr", "error writing modifications");
+            }
+        } catch (...) {
+            reference_->clear();
+            throw;
+        }
+        if (!delayOrTerminate_.check()) {
+            continue;
+        }
         reference_->clear();
-        throw;
+        break;
     }
-    reference_->clear();
 }
 
 Components & Components::getSingleton(
@@ -284,6 +313,7 @@ void Components::writeModifications() {
                 &writeThread_, *this, modificationFileUrl_, data_);
             writeThread_->launch();
         }
+        writeThread_->trigger();
         break;
     case ModificationTarget::Dconf:
 #if ENABLE_DCONF
