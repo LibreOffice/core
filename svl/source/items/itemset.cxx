@@ -110,7 +110,7 @@ SfxPoolItemHolder::~SfxPoolItemHolder()
 #endif
     if (nullptr != m_pItem)
         implCleanupItemEntry(*m_pPool, m_pItem);
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     m_bDeleted = true;
 #endif
 }
