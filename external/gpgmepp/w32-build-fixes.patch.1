@@ -1,7 +1,7 @@
-diff -ru gpgme.orig/src/debug.h gpgme/src/debug.h
---- gpgme.orig/src/debug.h
-+++ gpgme/src/debug.h
-@@ -180,7 +180,7 @@ static inline gpgme_ssize_t
+diff -ur gpgmepp.org/src/debug.h gpgmepp/src/debug.h
+--- gpgmepp.org/src/debug.h	2024-07-25 17:58:02.489364600 +0200
++++ gpgmepp/src/debug.h	2024-07-25 18:00:39.361407200 +0200
+@@ -180,7 +180,7 @@
  _trace_sysres_ssize_t (gpgme_ssize_t res, int lvl, const char *func, int line)
  {
    if (res >= 0)
@@ -10,10 +10,10 @@ diff -ru gpgme.orig/src/debug.h gpgme/src/debug.h
    else
      _gpgme_debug (NULL, lvl, -1, NULL, NULL, NULL,
                    "%s:%d: error: %s (%d)\n",
-diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
---- gpgme.orig/src/dirinfo.c	2017-03-21 11:09:41.000000000 +0100
-+++ gpgme/src/dirinfo.c	2017-09-30 08:36:13.239279300 +0200
-@@ -34,6 +34,10 @@
+diff -ur gpgmepp.org/src/dirinfo.c gpgmepp/src/dirinfo.c
+--- gpgmepp.org/src/dirinfo.c	2024-07-25 17:58:02.484361100 +0200
++++ gpgmepp/src/dirinfo.c	2024-07-25 18:00:39.363419600 +0200
+@@ -40,6 +40,10 @@
  
  DEFINE_STATIC_LOCK (dirinfo_lock);
  
@@ -24,10 +24,10 @@ diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
  /* Constants used internally to select the data.  */
  enum
    {
-diff -ru gpgme.orig/src/gpgme-w32spawn.c gpgme/src/gpgme-w32spawn.c
---- gpgme.orig/src/gpgme-w32spawn.c	2023-10-27 21:27:30.000000000 +0900
-+++ gpgme/src/gpgme-w32spawn.c	2024-02-26 17:32:59.949338645 +0900
-@@ -52,6 +52,9 @@
+diff -ur gpgmepp.org/src/gpgme-w32spawn.c gpgmepp/src/gpgme-w32spawn.c
+--- gpgmepp.org/src/gpgme-w32spawn.c	2024-07-25 17:58:02.487363200 +0200
++++ gpgmepp/src/gpgme-w32spawn.c	2024-07-25 18:00:39.365388700 +0200
+@@ -53,6 +53,9 @@
  #define mystderr stderr
  #endif
  
@@ -37,61 +37,9 @@ diff -ru gpgme.orig/src/gpgme-w32spawn.c gpgme/src/gpgme-w32spawn.c
  
  
  static wchar_t *
-diff -ru gpgme.orig/src/mbox-util.c gpgme/src/mbox-util.c
---- gpgme.orig/src/mbox-util.c	2016-11-16 13:22:41.000000000 +0100
-+++ gpgme/src/mbox-util.c	2017-09-30 08:18:29.270567500 +0200
-@@ -29,7 +29,9 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#if HAVE_UNISTD_H
- #include <unistd.h>
-+#endif
- #include <errno.h>
- 
- #include "mbox-util.h"
-diff -ru gpgme.orig/src/priv-io.h gpgme/src/priv-io.h
---- gpgme.orig/src/priv-io.h	2016-11-16 13:23:14.000000000 +0100
-+++ gpgme/src/priv-io.h	2017-09-30 08:20:38.770562400 +0200
-@@ -33,6 +33,9 @@
- #ifdef HAVE_SYS_TYPES_H
- # include <sys/types.h>
- #endif
-+#if _MSC_VER
-+typedef int pid_t;
-+#endif
- 
- 
- /* A single file descriptor passed to spawn.  For child fds, dup_to
-diff -ru gpgme.orig/src/util.h gpgme/src/util.h
---- gpgme.orig/src/util.h	2017-03-28 11:41:30.000000000 +0200
-+++ gpgme/src/util.h	2017-09-30 08:10:54.194049100 +0200
-@@ -36,6 +36,9 @@
- # include <unistd.h>
- #endif
- #include <stdint.h>
-+#ifdef _MSC_VER
-+typedef int pid_t;
-+#endif
- 
- 
- #include "gpgme.h"
-diff -ru gpgme.orig/src/w32-util.c gpgme/src/w32-util.c
---- gpgme.orig/src/w32-util.c	2017-03-09 09:01:10.000000000 +0100
-+++ gpgme/src/w32-util.c	2017-09-30 08:32:02.114330500 +0200
-@@ -772,7 +772,8 @@
-       v /= 62;
-       XXXXXX[5] = letters[v % 62];
- 
--      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-+      //fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-+      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL);
-       if (fd >= 0)
- 	{
- 	  gpg_err_set_errno (save_errno);
-diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
---- gpgme.orig/src/Makefile.am	2017-09-30 11:50:07.456960000 +0200
-+++ gpgme/src/Makefile.am	2017-09-30 11:51:29.609649400 +0200
+diff -ur gpgmepp.org/src/Makefile.am gpgmepp/src/Makefile.am
+--- gpgmepp.org/src/Makefile.am	2024-07-25 17:58:02.485362200 +0200
++++ gpgmepp/src/Makefile.am	2024-07-25 18:00:39.375415900 +0200
 @@ -35,7 +35,7 @@
  m4data_DATA = gpgme.m4
  nodist_include_HEADERS = gpgme.h
@@ -117,7 +65,7 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
  
  
  if HAVE_W32_SYSTEM
-@@ -126,7 +126,7 @@
+@@ -128,7 +128,7 @@
  SUFFIXES = .rc .lo
  
  .rc.lo:
@@ -126,9 +74,56 @@ diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
  
  gpgme_res = versioninfo.lo
  no_undefined = -no-undefined
-diff -ru gpgme.orig/src/vfs-mount.c gpgme/src/vfs-mount.c
---- gpgme.orig/src/vfs-mount.c	2017-03-09 09:01:10.000000000 +0100
-+++ gpgme/src/vfs-mount.c	2017-09-30 13:10:51.845807600 +0200
+diff -ur gpgmepp.org/src/mbox-util.c gpgmepp/src/mbox-util.c
+--- gpgmepp.org/src/mbox-util.c	2024-07-25 17:58:02.485362200 +0200
++++ gpgmepp/src/mbox-util.c	2024-07-25 18:00:39.368412500 +0200
+@@ -29,7 +29,9 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#if HAVE_UNISTD_H
+ #include <unistd.h>
++#endif
+ #include <errno.h>
+ 
+ #include "mbox-util.h"
+diff -ur gpgmepp.org/src/priv-io.h gpgmepp/src/priv-io.h
+--- gpgmepp.org/src/priv-io.h	2024-07-25 17:58:02.506376700 +0200
++++ gpgmepp/src/priv-io.h	2024-07-25 18:03:32.929548000 +0200
+@@ -33,6 +33,13 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#if _MSC_VER
++#ifdef _WIN64
++typedef long long pid_t;
++#else
++typedef int pid_t;
++#endif
++#endif
+ 
+ 
+ /* A single file descriptor passed to spawn.  For child fds, dup_to
+diff -ur gpgmepp.org/src/util.h gpgmepp/src/util.h
+--- gpgmepp.org/src/util.h	2024-07-25 17:58:02.483361200 +0200
++++ gpgmepp/src/util.h	2024-07-25 18:02:24.250226500 +0200
+@@ -36,6 +36,13 @@
+ # include <unistd.h>
+ #endif
+ #include <stdint.h>
++#ifdef _MSC_VER
++#ifdef _WIN64
++typedef long long pid_t;
++#else
++typedef int pid_t;
++#endif
++#endif
+ 
+ 
+ #include "gpgme.h"
+diff -ur gpgmepp.org/src/vfs-mount.c gpgmepp/src/vfs-mount.c
+--- gpgmepp.org/src/vfs-mount.c	2024-07-25 17:58:02.496369600 +0200
++++ gpgmepp/src/vfs-mount.c	2024-07-25 18:00:39.377426000 +0200
 @@ -68,7 +68,7 @@
    if (err)
      return err;
@@ -139,8 +134,8 @@ diff -ru gpgme.orig/src/vfs-mount.c gpgme/src/vfs-mount.c
        if (opd->result.mount_dir)
  	free (opd->result.mount_dir);
 diff -ur gpgmepp.org/src/w32-glib-io.c gpgmepp/src/w32-glib-io.c
---- gpgmepp.org/src/w32-glib-io.c	2016-11-16 13:22:41.000000000 +0100
-+++ gpgmepp/src/w32-glib-io.c	2017-11-20 06:40:44.793945300 +0100
+--- gpgmepp.org/src/w32-glib-io.c	2024-07-25 17:58:02.497370300 +0200
++++ gpgmepp/src/w32-glib-io.c	2024-07-25 18:00:39.378415700 +0200
 @@ -37,6 +37,7 @@
  #ifdef HAVE_SYS_TYPES_H
  # include <sys/types.h>
@@ -149,3 +144,16 @@ diff -ur gpgmepp.org/src/w32-glib-io.c gpgmepp/src/w32-glib-io.c
  #include <glib.h>
  #include <windows.h>
  #include <io.h>
+diff -ur gpgmepp.org/src/w32-util.c gpgmepp/src/w32-util.c
+--- gpgmepp.org/src/w32-util.c	2024-07-25 17:58:02.476355800 +0200
++++ gpgmepp/src/w32-util.c	2024-07-25 18:00:39.373425500 +0200
+@@ -877,7 +877,8 @@
+       v /= 62;
+       XXXXXX[5] = letters[v % 62];
+ 
+-      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      //fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL);
+       if (fd >= 0)
+ 	{
+ 	  gpg_err_set_errno (save_errno);
