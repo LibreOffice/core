@@ -15,6 +15,7 @@
 #include "netoptions.hxx"
 #include "netproduce.hxx"
 
+// coverity[tainted_data] - this is a build time tool
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     try
