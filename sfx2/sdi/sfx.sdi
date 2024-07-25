@@ -5914,7 +5914,7 @@ SfxVoidItem ChangeTheme FN_CHANGE_THEME
 ]
 
 SfxVoidItem InvertBackground FN_INVERT_BACKGROUND
-()
+(SfxStringItem NewTheme FN_PARAM_NEW_THEME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
