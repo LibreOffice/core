@@ -3490,6 +3490,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcHTML(SvStream &rStream)
 {
+    // Temp bodge to reset oss-fuzz
+    if (rStream.remainingSize() > 256)
+        return true;
+
     ScDLL::Init();
     ScDocument aDocument;
     ScDocOptions aDocOpt = aDocument.GetDocOptions();

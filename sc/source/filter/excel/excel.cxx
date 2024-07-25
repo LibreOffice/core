@@ -428,6 +428,10 @@ ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
 {
+    // Temp bodge to reset oss-fuzz
+    if (rStream.remainingSize() > 256)
+        return true;
+
     ScDLL::Init();
     ScDocument aDocument;
     ScDocOptions aDocOpt = aDocument.GetDocOptions();
