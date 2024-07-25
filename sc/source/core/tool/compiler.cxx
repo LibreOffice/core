@@ -2311,7 +2311,8 @@ Label_MaskStateMachine:
                 else if( nMask & ScCharFlags::CharErrConst )
                 {
                     *pSym++ = c;
-                    if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
+                    sal_uInt16 nLevel;
+                    if (!maTableRefs.empty() && ((nLevel = maTableRefs.back().mnLevel) == 2 || nLevel == 1))
                         eState = ssGetTableRefItem;
                     else
                         eState = ssGetErrorConstant;
