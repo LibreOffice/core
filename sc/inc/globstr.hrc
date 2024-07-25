@@ -271,7 +271,7 @@
 #define STR_PRINT                               NC_("STR_PRINT", "Print")
 #define STR_INVALID_AFAREA                      NC_("STR_INVALID_AFAREA", "To apply an AutoFormat,\na table range of at least\n3 × 3 cells must be selected.")
 #define STR_AUTOFORMAT_WAIT_WARNING_TITLE       NC_("STR_AUTOFORMAT_WAIT_WARNING_TITLE", "")
-#define STR_AUTOFORMAT_WAIT_WARNING             NC_("STR_AUTOFORMAT_WAIT_WARNING", "Applying AutoFormat to the selected range may take a long time.\nDo you want to proceed?")
+#define STR_AUTOFORMAT_WAIT_WARNING             NC_("STR_AUTOFORMAT_WAIT_WARNING", "Applying AutoFormat to the selected range (more than one million cells) may take a long time.\nDo you want to proceed?")
 #define STR_OPTIONAL                            NC_("STR_OPTIONAL", "(optional)")
 #define STR_REQUIRED                            NC_("STR_REQUIRED", "(required)")
 #define STR_NOTES                               NC_("STR_NOTES", "Comments")
