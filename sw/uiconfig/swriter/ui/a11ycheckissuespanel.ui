@@ -40,7 +40,7 @@
             <property name="use-underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="bOptions-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bOptions">Opens the "Accesibility options" page.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|bOptions">Opens the "Accessibility options" page.</property>
               </object>
             </child>
           </object>
