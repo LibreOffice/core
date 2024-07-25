@@ -352,7 +352,7 @@ Worker available.
 There are patterns (like, at the time of writing this, the configmgr::Components::WriteThread) where
 a pthread can get spawned and joined and then re-spawned (and re-joined) multiple times during a
 single VCL Task execution (i.e., without the JS main thread event loop having a chance to get in
-between any of those operations).  But as the underlying Emscripten ptherad exiting operations will
+between any of those operations).  But as the underlying Emscripten pthread exiting operations will
 therefore queue up, the pthread spawning operations will eventually run out of -sPTHREAD_POOL_SIZE
 pre-spawned JS Workers.  The solution here is to change our pthread usage patterns accordingly, so
 that such pthreads are rather kept running than being joined and re-spawned.
