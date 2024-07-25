@@ -70,7 +70,7 @@ fix16_t fix16_mul(fix16_t inArg0, fix16_t inArg1)
             return fix16_overflow;
     }
 
-    fix16_t result = product >> 16;
+    fix16_t result = static_cast<fix16_t>(product >> 16);
     result += (product & 0x8000) >> 15;
 
     return result;
