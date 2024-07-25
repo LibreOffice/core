@@ -1986,6 +1986,13 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
 {
     bool useDecompose(false);
 
+    // SDPR: Caution: metafile export cannot handle added TransparencyGradient
+    if (rGradientCandidate.hasAlphaGradient())
+    {
+        // SDPR: metafile cannot handle this, use decompose
+        useDecompose = true;
+    }
+
     if (!useDecompose)
     {
         basegfx::B2DVector aScale, aTranslate;
@@ -2049,7 +2056,8 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
         GDIMetaFile* pMetaFile(mpOutputDevice->GetConnectMetaFile());
 
         // tdf#155479 only add 'BGRAD_SEQ_BEGIN' if SVG export
-        if (nullptr != pMetaFile && pMetaFile->getSVG())
+        // SDPR: Caution: metafile export cannot handle added TransparencyGradient
+        if (nullptr != pMetaFile && pMetaFile->getSVG() && !rGradientCandidate.hasAlphaGradient())
         {
             // write the color stops to a memory stream
             SvMemoryStream aMemStm;
