@@ -22,13 +22,13 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-const sal_Int32 n_ConstBufferSize = 32768;
+inline constexpr sal_Int32 n_ConstBufferSize = 32768;
 
 // by calculation of the digest we read 32 bytes more ( if available )
 // it allows to ignore the padding if the stream is longer than n_ConstDigestDecrypt since we read at least two blocks more;
 // if the stream is shorter or equal the padding will be done successfully
-const sal_Int32 n_ConstDigestLength = 1024;
-const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
+inline constexpr sal_Int32 n_ConstDigestLength = 1024;
+inline constexpr sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 
 // the constants related to the manifest.xml entries
 // these primarily exist so that ManifestImport can directly write into Sequence
