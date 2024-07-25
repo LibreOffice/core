@@ -464,7 +464,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
         aArgument.Name        = rDesc.maDefArgNames[i];
         aArgument.Description = rDesc.maDefArgDescs[i];
         aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
-        pArgAry[j++] = aArgument;
+        pArgAry[j++] = std::move(aArgument);
     }
     pArray[4].Value <<= aArgSeq;
 }

@@ -474,7 +474,7 @@ void HelpCompiler::compile()
     streamTable.appl_keywords = std::move(aparser.keywords);
 
     streamTable.document_path = fileName;
-    streamTable.document_title = title;
+    streamTable.document_title = std::move(title);
     std::string actMod = module;
 
     if ( !bExtensionMode && !fileName.empty())

@@ -119,7 +119,7 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     }
     aNewPoly[0]=rRect1.BottomCenter();
     aNewPoly[nPointCnt]=aNewPoly[0];
-    aXPoly=aNewPoly;
+    aXPoly=std::move(aNewPoly);
 
     // these angles always relate to the top left corner of aRect
     if (maGeo.m_nShearAngle) ShearXPoly(aXPoly, getRectangle().TopLeft(), maGeo.mfTanShearAngle);

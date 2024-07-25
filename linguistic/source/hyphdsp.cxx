@@ -674,7 +674,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
         {
             auto pTmpEntry = std::make_shared<LangSvcEntries_Hyph>( rSvcImplNames[0] );
             pTmpEntry->aSvcRefs = Sequence< Reference < XHyphenator > >( 1 );
-            aSvcMap[ nLanguage ] = pTmpEntry;
+            aSvcMap[ nLanguage ] = std::move(pTmpEntry);
         }
     }
 }

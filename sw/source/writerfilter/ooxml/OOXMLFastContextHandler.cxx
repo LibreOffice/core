@@ -1583,7 +1583,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for(sal_uInt32 border : borders)
                     pBorderProps->add(border, fakeNoBorder(), OOXMLProperty::SPRM);
-                OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pBorderProps ));
+                OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue(std::move(pBorderProps)) );
                 pCellProps->add(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLProperty::SPRM);
                 mpParserState->setCellProperties(pCellProps);
             }

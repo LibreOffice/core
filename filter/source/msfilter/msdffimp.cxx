@@ -6686,7 +6686,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
 
             if (!aGraphic.IsNone())
             {
-                rData = aGraphic;
+                rData = std::move(aGraphic);
                 nRes = ERRCODE_NONE;
             }
             else

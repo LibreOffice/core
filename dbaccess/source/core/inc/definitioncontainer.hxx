@@ -63,7 +63,7 @@ public:
     void erase( const OUString& _rName ) { m_aDefinitions.erase( _rName ); }
     void erase( const TContentPtr& _pDefinition );
 
-    void insert( const OUString& _rName, TContentPtr _pDefinition )
+    void insert( const OUString& _rName, const TContentPtr& _pDefinition )
     {
         m_aDefinitions.emplace(  _rName, _pDefinition );
     }

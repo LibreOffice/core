@@ -235,7 +235,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             ONDXPagePtr aNewRoot = rIndex.CreatePage(nNewPagePos + 1);
             aNewRoot->SetChild(this);
 
-            rIndex.m_aRoot = aNewRoot;
+            rIndex.m_aRoot = std::move(aNewRoot);
             rIndex.SetRootPos(nNewPagePos + 1);
             rIndex.SetPageCount(++nNewPageCount);
         }
