@@ -1,23 +1,23 @@
---- libassuan.orig/src/mkheader.c	2013-03-15 20:26:09.000000000 +0100
-+++ libassuan/src/mkheader.c	2017-09-24 14:17:33.584583300 +0200
-@@ -99,7 +99,7 @@
-                "# include <unistd.h>\n"
-                "#endif\n", stdout);
-       else
--        fputs ("#include <unistd.h>\n", stdout);
-+        fputs ("#include <io.h>\n", stdout);
-     }
-   else if (!strcmp (tag, "include:types"))
-     {
+--- libassuan.orig/src/assuan.h.in.back	2024-06-20 17:52:17.473923519 +0200
++++ libassuan/src/assuan.h.in	2024-06-20 21:32:24.589095787 +0200
+@@ -33,7 +33,7 @@
+ 
+ #include <stdio.h>
+ #include <sys/types.h>
+-#include <unistd.h>
++#include <io.h>
+ #include <stdarg.h>
+ 
+ #ifndef _ASSUAN_NO_SOCKET_WRAPPER
 diff -ru libassuan.orig/src/Makefile.in libassuan/src/Makefile.in
 --- libassuan.orig/src/Makefile.in	2020-06-10 17:26:08.699728800 +0200
 +++ libassuan/src/Makefile.in	2020-06-10 17:22:11.066865300 +0200
 @@ -462,7 +462,7 @@
  	assuan-pipe-connect.c assuan-socket-connect.c assuan-uds.c \
- 	assuan-logging.c assuan-socket.c $(am__append_2) \
- 	$(am__append_3) $(am__append_4)
-+@HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RC) \
+ 	assuan-logging.c assuan-socket.c $(am__append_1) \
+ 	$(am__append_2)
 -@HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile $(RC) \
++@HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RC) \
  @HAVE_W32_SYSTEM_TRUE@     `echo $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) | \
  @HAVE_W32_SYSTEM_TRUE@     sed -e 's/-I/--include-dir /g;s/-D/--define /g'`
  
@@ -36,14 +36,14 @@ diff -ru libassuan.orig/src/Makefile.am libassuan/src/Makefile.am
 diff -ru libassuan.orig/src/assuan-handler.c libassuan/src/assuan-handler.c
 --- libassuan.orig/src/assuan-handler.c 2016-06-25 16:27:49.000000000 +0200
 +++ libassuan/src/assuan-handler.c      2017-09-24 15:32:51.200956200 +0200
-@@ -395,7 +395,7 @@
-
-   { "INPUT",  std_handler_input, std_help_input, 0 },
-   { "OUTPUT", std_handler_output, std_help_output, 0 },
+@@ -414,7 +414,7 @@
+ #if HAVE_W32_SYSTEM
+   { "SENDFD",  w32_handler_sendfd, w32_help_sendfd, 1 },
+ #endif
 -  { } };
 +};
-
-
+ 
+ 
  /**
 diff -ru libassuan.orig/Makefile.am libassuan/Makefile.am
 --- libassuan.orig/Makefile.am	2016-07-14 10:09:22.000000000 +0200
