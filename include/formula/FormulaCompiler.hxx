@@ -195,7 +195,7 @@ public:
 
             Does NOT check eOp range!
          */
-        void putCopyOpCode( const OUString& rSymbol, OpCode eOp );
+        void putCopyOpCode( const OUString& rSymbol, OpCode eOp, const CharClass* pCharClass );
     };
 
 public:
