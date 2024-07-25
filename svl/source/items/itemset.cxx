@@ -166,7 +166,7 @@ SfxPoolItemHolder::~SfxPoolItemHolder()
         getPool().unregisterPoolItemHolder(*this);
     if (nullptr != m_pItem)
         implCleanupItemEntry(m_pItem);
-#ifdef DBG_UTIL
+#ifndef NDEBUG
     m_bDeleted = true;
 #endif
 }
