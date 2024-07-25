@@ -55,19 +55,27 @@ for callInfo, callValues in iter(callDict.items()):
     if "pure" in callValue:
         continue
     srcloc = callInfo[1]
-    if srcloc.startswith("workdir/"): continue
+    if srcloc.startswith("workdir/"):
+        continue
     # ignore Qt stuff
-    if srcloc.startswith("Gui/"): continue
-    if srcloc.startswith("Widgets/"): continue
-    if srcloc.startswith("Core/"): continue
-    if srcloc.startswith("/Qt"): continue
-    if srcloc.startswith("Qt"): continue
-    if srcloc.startswith("64-"): continue
+    if srcloc.startswith("Gui/"):
+        continue
+    if srcloc.startswith("Widgets/"):
+        continue
+    if srcloc.startswith("Core/"):
+        continue
+    if srcloc.startswith("/Qt"):
+        continue
+    if srcloc.startswith("Qt"):
+        continue
+    if srcloc.startswith("64-"):
+        continue
     functionSig = callInfo[0]
     tmp1list.append((srcloc, functionSig, callValue))
 
 def merge_bitfield(a, b):
-    if len(a) == 0: return b
+    if len(a) == 0:
+        return b
     ret = ""
     for i, c in enumerate(b):
         if c == "1" or a[i] == "1":
@@ -80,10 +88,14 @@ tmp2list = list()
 for paramInfo in paramSet:
     name = paramInfo[0]
     bitfield = paramInfo[1]
-    if re.match( r"\w+ com::", name): continue
-    if re.match( r"\w+ ooo::vba::", name): continue
-    if re.match( r"\w+ orcus::", name): continue
-    if re.match( r"\w+ std::", name): continue
+    if re.match( r"\w+ com::", name):
+        continue
+    if re.match( r"\w+ ooo::vba::", name):
+        continue
+    if re.match( r"\w+ orcus::", name):
+        continue
+    if re.match( r"\w+ std::", name):
+        continue
     if name not in tmp2dict:
         tmp2dict[name] = bitfield
     else:
@@ -91,16 +103,24 @@ for paramInfo in paramSet:
 for name, bitfield in iter(tmp2dict.items()):
     srcloc = definitionToSourceLocationMap[name]
     # ignore Qt stuff
-    if srcloc.startswith("Gui/"): continue
-    if srcloc.startswith("Widgets/"): continue
-    if srcloc.startswith("Core/"): continue
-    if srcloc.startswith("/Qt"): continue
-    if srcloc.startswith("Qt"): continue
-    if srcloc.startswith("64-"): continue
+    if srcloc.startswith("Gui/"):
+        continue
+    if srcloc.startswith("Widgets/"):
+        continue
+    if srcloc.startswith("Core/"):
+        continue
+    if srcloc.startswith("/Qt"):
+        continue
+    if srcloc.startswith("Qt"):
+        continue
+    if srcloc.startswith("64-"):
+        continue
     # ignore external stuff
-    if srcloc.startswith("workdir/"): continue
+    if srcloc.startswith("workdir/"):
+        continue
     # referenced by generated code in workdir/
-    if srcloc.startswith("sw/source/writerfilter/ooxml/OOXMLFactory.hxx"): continue
+    if srcloc.startswith("sw/source/writerfilter/ooxml/OOXMLFactory.hxx"):
+        continue
     if "0" in bitfield:
         tmp2list.append((srcloc, name, bitfield))
 

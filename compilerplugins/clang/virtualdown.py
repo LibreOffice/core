@@ -28,7 +28,8 @@ for clazz in (definitionSet - callSet):
 #    if clazz.startswith("canvas::"): continue
 #    if clazz == "basegfx::unotools::UnoPolyPolygon::void-modifying()const": continue
     # ignore external code
-    if definitionToSourceLocationMap[clazz].startswith("external/"): continue
+    if definitionToSourceLocationMap[clazz].startswith("external/"):
+        continue
 
     unnecessaryVirtualSet.add((clazz,definitionToSourceLocationMap[clazz] ))
 

@@ -260,6 +260,7 @@ def print_partitions():
             for c in print_tree_recurse_set:
                 callDict2.pop(c, None)
             count = count + 1
-            if count>1000: break
+            if count>1000:
+                break
 
 print_partitions()

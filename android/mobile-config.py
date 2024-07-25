@@ -62,7 +62,7 @@ if __name__ == '__main__':
     for child in root:
         section = child.attrib['{http://openoffice.org/2001/registry}name']
         package = child.attrib['{http://openoffice.org/2001/registry}package']
-        size = len(ET.tostring(child));
+        size = len(ET.tostring(child))
         key = '%s/%s' % (package, section)
         if key in main_xcd_discard:
             print('removed %s - saving %d' % (key, size))

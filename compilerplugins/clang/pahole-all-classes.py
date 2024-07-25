@@ -31,9 +31,11 @@ with a.stdout as txt:
         className = tokens[2].strip()
         srcLoc = tokens[5].strip()
         # ignore things like unions
-        if "anonymous" in className: continue
+        if "anonymous" in className:
+            continue
         # ignore duplicates
-        if className in classSet: continue
+        if className in classSet:
+            continue
         classSet.add(className)
         classSourceLocDict[className] = srcLoc
         locToClassDict[srcLoc] = className
@@ -57,13 +59,16 @@ def write_pahole_commands(classes):
 def read_generator(gdbOutput):
     while True:
         line = gdbOutput.readline()
-        if line == "": return # end of file
+        if line == "":
+            return # end of file
         line = line.decode('utf8').strip()
         print("gdb: " + line)
         for split in line.split("(gdb)"):
             split = split.strip()
-            if len(split) == 0: continue
-            if "all-done" in split: return
+            if len(split) == 0:
+                continue
+            if "all-done" in split:
+                return
             yield split
 
 # build list of classes sorted by source location to increase the chances of

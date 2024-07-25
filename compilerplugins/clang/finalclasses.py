@@ -37,28 +37,44 @@ tmpset = set()
 for clazz in sorted(definitionSet - inheritFromSet):
     file = definitionToFileDict[clazz]
     # ignore classes defined inside compilation units, the compiler knows they are final already
-    if (".cxx" in file): continue
+    if (".cxx" in file):
+        continue
     # ignore test and external code
-    if ("/qa/" in file): continue
-    if (file.startswith("workdir/")): continue
+    if ("/qa/" in file):
+        continue
+    if (file.startswith("workdir/")):
+        continue
     # We are only really interested in classes that are shared between linkage units, where the compiler
     # is not able to figure out for itself that classes are final.
-    if not(file.startswith("include/") or match_module_inc1.match(file) or match_module_inc2.match(file)): continue
-    #if not(file.endswith(".hxx")): continue
+    if not(file.startswith("include/") or match_module_inc1.match(file) or match_module_inc2.match(file)):
+        continue
+    #if not(file.endswith(".hxx")):
+        continue
     # Exclude URE
-    if file.startswith("include/com/"): continue
-    if file.startswith("include/cppu/"): continue
-    if file.startswith("include/cppuhelper/"): continue
-    if file.startswith("include/osl/"): continue
-    if file.startswith("include/rtl/"): continue
-    if file.startswith("include/sal/"): continue
-    if file.startswith("include/salhelper/"): continue
-    if file.startswith("include/typelib/"): continue
-    if file.startswith("include/uno/"): continue
+    if file.startswith("include/com/"):
+        continue
+    if file.startswith("include/cppu/"):
+        continue
+    if file.startswith("include/cppuhelper/"):
+        continue
+    if file.startswith("include/osl/"):
+        continue
+    if file.startswith("include/rtl/"):
+        continue
+    if file.startswith("include/sal/"):
+        continue
+    if file.startswith("include/salhelper/"):
+        continue
+    if file.startswith("include/typelib/"):
+        continue
+    if file.startswith("include/uno/"):
+        continue
     # some kind of template noise
-    if file.startswith("include/unotest/"): continue
+    if file.startswith("include/unotest/"):
+        continue
     # no point optimising test code
-    if file.startswith("include/test/"): continue
+    if file.startswith("include/test/"):
+        continue
     tmpset.add((clazz, file))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely

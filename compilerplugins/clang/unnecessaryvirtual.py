@@ -30,35 +30,54 @@ unnecessaryVirtualSet = set()
 
 for clazz in (definitionSet - overridingSet):
     # windows-specific stuff
-    if clazz.startswith("canvas::"): continue
-    if clazz.startswith("psp::PrinterInfoManager"): continue
-    if clazz.startswith("DdeTopic::"): continue
-    if clazz == "basegfx::unotools::UnoPolyPolygon::void-modifying()const": continue
-    if clazz == "SalLayout::_Bool-IsKashidaPosValid(int,)const": continue
-    if clazz == "SalLayout::void-DisableGlyphInjection(_Bool,)": continue
+    if clazz.startswith("canvas::"):
+        continue
+    if clazz.startswith("psp::PrinterInfoManager"):
+        continue
+    if clazz.startswith("DdeTopic::"):
+        continue
+    if clazz == "basegfx::unotools::UnoPolyPolygon::void-modifying()const":
+        continue
+    if clazz == "SalLayout::_Bool-IsKashidaPosValid(int,)const":
+        continue
+    if clazz == "SalLayout::void-DisableGlyphInjection(_Bool,)":
+        continue
     # Linux-TDF specific
-    if clazz == "X11SalFrame::void-updateGraphics(_Bool,)": continue
+    if clazz == "X11SalFrame::void-updateGraphics(_Bool,)":
+        continue
     # OSX specific
-    if clazz == "SalFrame::void-SetRepresentedURL(const class rtl::OUString &,)": continue
-    if clazz == "SalMenu::_Bool-AddMenuBarButton(const struct SalMenuButtonItem &,)": continue
-    if clazz == "SalMenu::class Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)": continue
-    if clazz == "SalMenu::void-RemoveMenuBarButton(sal_uInt16,)": continue
-    if clazz == "SalLayout::_Bool-DrawTextSpecial(class SalGraphics &,sal_uInt32,)const": continue
+    if clazz == "SalFrame::void-SetRepresentedURL(const class rtl::OUString &,)":
+        continue
+    if clazz == "SalMenu::_Bool-AddMenuBarButton(const struct SalMenuButtonItem &,)":
+        continue
+    if clazz == "SalMenu::class Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)":
+        continue
+    if clazz == "SalMenu::void-RemoveMenuBarButton(sal_uInt16,)":
+        continue
+    if clazz == "SalLayout::_Bool-DrawTextSpecial(class SalGraphics &,sal_uInt32,)const":
+        continue
     # GTK < 3
-    if clazz == "GtkSalDisplay::int-CaptureMouse(class SalFrame *,)": continue
+    if clazz == "GtkSalDisplay::int-CaptureMouse(class SalFrame *,)":
+        continue
     # some test magic
-    if clazz.startswith("apitest::"): continue
+    if clazz.startswith("apitest::"):
+        continue
 
     loc = definitionToSourceLocationMap[clazz]
 
     # ignore external code
-    if loc.startswith("external/"): continue
-    if loc.startswith("workdir/"): continue
-    if loc.startswith("64-linux-gnu/"): continue
+    if loc.startswith("external/"):
+        continue
+    if loc.startswith("workdir/"):
+        continue
+    if loc.startswith("64-linux-gnu/"):
+        continue
     # there is a bunch of Windows specific code that we don't see
-    if loc.startswith("include/canvas/"): continue
+    if loc.startswith("include/canvas/"):
+        continue
     # not sure what the problem is here
-    if loc.startswith("include/test/"): continue
+    if loc.startswith("include/test/"):
+        continue
 
     unnecessaryVirtualSet.add( (clazz,loc) )
 
@@ -68,14 +87,18 @@ deadSet = set()
 for clazz in (definitionSet - nonEmptySet):
 
     # ignore destructors
-    if "::~" in clazz: continue
+    if "::~" in clazz:
+        continue
 
     loc = definitionToSourceLocationMap[clazz]
 
     # ignore external code
-    if loc.startswith("external/"): continue
-    if loc.startswith("workdir/"): continue
-    if loc.startswith("64-linux-gnu/"): continue
+    if loc.startswith("external/"):
+        continue
+    if loc.startswith("workdir/"):
+        continue
+    if loc.startswith("64-linux-gnu/"):
+        continue
 
     deadSet.add( (clazz,loc) )
 
