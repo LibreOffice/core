@@ -84,6 +84,7 @@ public:
     bool                    mbFirstClipRect;
     sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
     bool                    mbPropertiesStored;     // has values stored in the window property store
+    POINT                   maFirstPanGesturePt;    // has value stores the start point of the panning gesture
 
     void updateScreenNumber();
 

@@ -5780,6 +5780,18 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
     }
 
+    case CommandEventId::GesturePan:
+    {
+        if (m_pSavedOutlineFrame && rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        {
+            GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            m_pSavedOutlineFrame = nullptr;
+        }
+        m_pShadCursor.reset();
+        bCallBase = !m_rView.HandleGesturePanCommand(rCEvt);
+        break;
+    }
+
     case CommandEventId::GestureLongPress:
     case CommandEventId::GestureSwipe: //nothing yet
             break;

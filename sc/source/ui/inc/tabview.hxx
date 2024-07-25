@@ -476,6 +476,7 @@ public:
     SC_DLLPUBLIC void           ScrollLines( tools::Long nDeltaX, tools::Long nDeltaY );              // active
 
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
+    bool            GesturePanCommand(const CommandEvent& rCEvt);
     bool            GestureZoomCommand(const CommandEvent& rCEvt);
 
     void            ScrollToObject( const SdrObject* pDrawObj );

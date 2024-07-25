@@ -791,21 +791,51 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
             case CommandEventId::GesturePan:
             {
-                if (pVScrl)
+                const CommandGesturePanData* pData = rCmd.GetGesturePanData();
+                if (pData)
                 {
-                    const CommandGesturePanData* pData = rCmd.GetGesturePanData();
-                    if (pData->meEventType == GestureEventPanType::Begin)
+                    if (pData && pData->meEventType == GestureEventPanType::Begin)
                     {
-                        mpWindowImpl->mpFrameData->mnTouchPanPosition = pVScrl->GetThumbPos();
+                        if (pHScrl)
+                            mpWindowImpl->mpFrameData->mnTouchPanPositionX = pHScrl->GetThumbPos();
+                        if (pVScrl)
+                            mpWindowImpl->mpFrameData->mnTouchPanPositionY = pVScrl->GetThumbPos();
                     }
-                    else if(pData->meEventType == GestureEventPanType::Update)
+                    else if (pData && pData->meEventType == GestureEventPanType::Update)
                     {
-                        tools::Long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
-                        pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
+                        bool bHorz = pData->meOrientation == PanningOrientation::Horizontal;
+                        Scrollable* pScrl = bHorz ? pHScrl : pVScrl;
+                        if (pScrl)
+                        {
+                            Point aGesturePt(pData->mfX, pData->mfY);
+                            tools::Rectangle aWinRect(this->GetOutputRectPixel());
+                            bool bContains = aWinRect.Contains(aGesturePt);
+                            if (bContains)
+                            {
+                                tools::Long nOriginalPos
+                                    = bHorz ? mpWindowImpl->mpFrameData->mnTouchPanPositionX
+                                            : mpWindowImpl->mpFrameData->mnTouchPanPositionY;
+
+                                tools::Long nNewPos;
+                                double nOffset = pData->mfOffset;
+                                tools::Long nSize = pScrl->GetVisibleSize();
+                                if (aWinRect.GetSize().Width() < nSize
+                                    || aWinRect.GetSize().Height() < nSize)
+                                {
+                                    sal_Int32 nVelocity = 15;
+                                    nNewPos = nOriginalPos - (nOffset * nVelocity);
+                                }
+                                else
+                                    nNewPos = nOriginalPos - (nOffset / nSize);
+
+                                pScrl->DoScroll(nNewPos);
+                            }
+                        }
                     }
-                    if (pData->meEventType == GestureEventPanType::End)
+                    else if (pData->meEventType == GestureEventPanType::End)
                     {
-                        mpWindowImpl->mpFrameData->mnTouchPanPosition = -1;
+                        mpWindowImpl->mpFrameData->mnTouchPanPositionX = -1;
+                        mpWindowImpl->mpFrameData->mnTouchPanPositionY = -1;
                     }
                     bRet = true;
                 }

@@ -2176,6 +2176,11 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
                                             m_pVScroll->IsVisible() ? m_pVScroll : nullptr);
             }
         }
+        else if (rCEvt.GetCommand() == CommandEventId::GesturePan)
+        {
+            bDone = HandleScrollCommand(rCEvt, m_pHScroll->IsVisible() ? m_pHScroll : nullptr,
+                                        m_pVScroll->IsVisible() ? m_pVScroll : nullptr);
+        }
     }
 
     return bDone || VclBin::EventNotify( rNEvt );

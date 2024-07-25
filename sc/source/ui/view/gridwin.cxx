@@ -3271,6 +3271,14 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
+    if (nCmd == CommandEventId::GesturePan)
+    {
+        bool bDone = mrViewData.GetView()->GesturePanCommand(rCEvt);
+        if (!bDone)
+            Window::Command(rCEvt);
+        return;
+    }
+
     if (nCmd == CommandEventId::GestureZoom)
     {
         bool bDone = mrViewData.GetView()->GestureZoomCommand(rCEvt);

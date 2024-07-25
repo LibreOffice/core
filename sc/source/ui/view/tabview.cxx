@@ -1015,6 +1015,29 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     return bDone;
 }
 
+bool ScTabView::GesturePanCommand(const CommandEvent& rCEvt)
+{
+    HideNoteMarker();
+
+    bool bDone = false;
+    const CommandGesturePanData* pData = rCEvt.GetGesturePanData();
+    if (!pData)
+        return false;
+
+    if (aViewData.GetViewShell()->GetViewFrame().GetFrame().IsInPlace())
+        return false;
+
+    ScSplitPos ePos = aViewData.GetActivePart();
+    ScHSplitPos eHPos = WhichH(ePos);
+    ScVSplitPos eVPos = WhichV(ePos);
+    ScrollAdaptor* pHScroll = (eHPos == SC_SPLIT_LEFT) ? aHScrollLeft.get() : aHScrollRight.get();
+    ScrollAdaptor* pVScroll = (eVPos == SC_SPLIT_TOP) ? aVScrollTop.get() : aVScrollBottom.get();
+    if (pGridWin[ePos])
+        bDone = pGridWin[ePos]->HandleScrollCommand(rCEvt, pHScroll, pVScroll);
+
+    return bDone;
+}
+
 bool ScTabView::GestureZoomCommand(const CommandEvent& rCEvt)
 {
     HideNoteMarker();

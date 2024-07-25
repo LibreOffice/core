@@ -481,6 +481,7 @@ public:
 
     bool            HandleWheelCommands( const CommandEvent& );
     bool            HandleGestureZoomCommand(const CommandEvent&);
+    bool            HandleGesturePanCommand(const CommandEvent&);
 
     // insert frames
     void            InsFrameMode(sal_uInt16 nCols);

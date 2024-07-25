@@ -904,6 +904,7 @@ WinSalFrame::WinSalFrame()
     mnDisplay           = 0;
     mbPropertiesStored  = false;
     m_pTaskbarList3     = nullptr;
+    maFirstPanGesturePt = POINT(0,0);
 
     // get data, when making 1st frame
     if ( !pSalData->mpFirstFrame )
@@ -5840,6 +5841,93 @@ static bool ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     return true;
 }
 
+static bool ImplHandleGestureMsg(HWND hWnd, LPARAM lParam)
+{
+    ImplSalYieldMutexAcquireWithWait();
+
+    bool nRet = false;
+
+    WinSalFrame* pFrame = GetWindowPtr(hWnd);
+    if (pFrame)
+    {
+        GESTUREINFO gi;
+        ZeroMemory(&gi, sizeof(GESTUREINFO));
+        gi.cbSize = sizeof(GESTUREINFO);
+
+        BOOL result = GetGestureInfo((HGESTUREINFO)lParam, &gi);
+        if (!result)
+            return nRet;
+
+        switch (gi.dwID)
+        {
+            case GID_PAN:
+            {
+                SalGestureEvent aEvent;
+                POINT aPt(gi.ptsLocation.x, gi.ptsLocation.y);
+                ScreenToClient(hWnd, &aPt);
+                aEvent.mnX = aPt.x;
+                aEvent.mnY = aPt.y;
+
+                if (gi.dwFlags & GF_BEGIN)
+                {
+                    pFrame->maFirstPanGesturePt.x = gi.ptsLocation.x;
+                    pFrame->maFirstPanGesturePt.y = gi.ptsLocation.y;
+                    aEvent.meEventType = GestureEventPanType::Begin;
+                }
+                else if (gi.dwFlags & GF_END)
+                    aEvent.meEventType = GestureEventPanType::End;
+                else
+                {
+                    POINT aFirstPt(pFrame->maFirstPanGesturePt.x, pFrame->maFirstPanGesturePt.y);
+                    POINT aSecondPt(gi.ptsLocation.x, gi.ptsLocation.y);
+                    tools::Long deltaX = (aSecondPt.x - aFirstPt.x);
+                    tools::Long deltaY = (aSecondPt.y - aFirstPt.y);
+
+                    if (std::abs(deltaX) > std::abs(deltaY))
+                    {
+                        aEvent.mfOffset = aSecondPt.x - aFirstPt.x;
+                        aEvent.meOrientation = PanningOrientation::Horizontal;
+                    }
+                    else
+                    {
+                        aEvent.mfOffset = aSecondPt.y - aFirstPt.y;
+                        aEvent.meOrientation = PanningOrientation::Vertical;
+                    }
+
+                    aEvent.meEventType = GestureEventPanType::Update;
+                }
+                nRet = pFrame->CallCallback(SalEvent::GesturePan, &aEvent);
+            }
+            break;
+
+            case GID_ZOOM:
+            {
+                SalGestureZoomEvent aEvent;
+                POINT aPt(gi.ptsLocation.x, gi.ptsLocation.y);
+                ScreenToClient(hWnd, &aPt);
+                aEvent.mnX = aPt.x;
+                aEvent.mnY = aPt.y;
+                aEvent.mfScaleDelta = gi.ullArguments;
+
+                if (gi.dwFlags & GF_BEGIN)
+                    aEvent.meEventType = GestureEventZoomType::Begin;
+                else if (gi.dwFlags & GF_END)
+                    aEvent.meEventType = GestureEventZoomType::End;
+                else
+                    aEvent.meEventType = GestureEventZoomType::Update;
+
+                nRet = pFrame->CallCallback(SalEvent::GestureZoom, &aEvent);
+            }
+            break;
+        }
+        CloseGestureInfoHandle((HGESTUREINFO)lParam);
+    }
+
+    ImplSalYieldMutexRelease();
+
+    return nRet;
+}
+
 static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
     LRESULT     nRet = 0;
@@ -5867,6 +5955,15 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             // when messages are being sent by CreateWindow()
             pFrame->mhWnd = hWnd;
             pFrame->maSysData.hWnd = hWnd;
+
+            DWORD dwPanWant = GC_PAN | GC_PAN_WITH_SINGLE_FINGER_VERTICALLY
+                              | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;
+            DWORD dwPanBlock = GC_PAN_WITH_GUTTER;
+            GESTURECONFIG gc[] = { { GID_ZOOM, GC_ZOOM, 0 },
+                                   { GID_ROTATE, GC_ROTATE, 0 },
+                                   { GID_PAN, dwPanWant, dwPanBlock } };
+            UINT uiGcs = 3;
+            SetGestureConfig(hWnd, 0, uiGcs, gc, sizeof(GESTURECONFIG));
         }
         return 0;
     }
@@ -5885,6 +5982,12 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
     switch( nMsg )
     {
+        case WM_GESTURE:
+            ImplSalYieldMutexAcquireWithWait();
+            rDef = !ImplHandleGestureMsg(hWnd, lParam);
+            ImplSalYieldMutexRelease();
+            break;
+
         case WM_MOUSEMOVE:
         case WM_LBUTTONDOWN:
         case WM_MBUTTONDOWN:

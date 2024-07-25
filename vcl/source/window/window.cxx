@@ -812,7 +812,8 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     mbInBufferedPaint = false;
     mnDPIX = 96;
     mnDPIY = 96;
-    mnTouchPanPosition = -1;
+    mnTouchPanPositionX = -1;
+    mnTouchPanPositionY = -1;
 }
 
 namespace vcl {

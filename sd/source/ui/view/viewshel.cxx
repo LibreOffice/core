@@ -875,6 +875,13 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
         }
         break;
 
+        case CommandEventId::GesturePan:
+        {
+            bDone = pWin->HandleScrollCommand(rCEvt, mpHorizontalScrollBar.get(),
+                                              mpVerticalScrollBar.get());
+        }
+        break;
+
         case CommandEventId::GestureZoom:
         {
             const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();

@@ -1261,4 +1261,9 @@ bool SwView::HandleGestureZoomCommand(const CommandEvent& rCEvt)
     return true;
 }
 
+bool SwView::HandleGesturePanCommand(const CommandEvent& rCEvt)
+{
+    return m_pEditWin->HandleScrollCommand(rCEvt, m_pHScrollbar, m_pVScrollbar);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
