@@ -1,9 +1,9 @@
 --- src/assuan-handler.c
 +++ src/assuan-handler.c
-@@ -938,7 +938,7 @@
- #if defined(HAVE_W32CE_SYSTEM)
-         fdarray[n++] = (void*)fileno (ctx->outbound.data.fp);
- #elif defined(HAVE_W32_SYSTEM)
+@@ -954,7 +954,7 @@
+         fdarray[n++] = ctx->outbound.fd;
+       if (ctx->outbound.data.fp)
+ #if defined(HAVE_W32_SYSTEM)
 -        fdarray[n++] = (void*)_get_osfhandle (fileno (ctx->outbound.data.fp));
 +        fdarray[n++] = (void*)_get_osfhandle (_fileno (ctx->outbound.data.fp));
  #else
@@ -48,7 +48,7 @@
 +# define getpid _getpid
  # include <windows.h>
  # include <wincrypt.h>
- #ifndef HAVE_W32CE_SYSTEM
+ # include <io.h>
 --- src/conversion.c
 +++ src/conversion.c
 @@ -27,6 +27,9 @@
