@@ -1466,7 +1466,7 @@ namespace {
 
 sal_Unicode toUniChar(sal_uInt8 n)
 {
-    char c;
+    sal_Unicode c;
     if (n < 10)
     {
         c = '0' + n;
@@ -1475,7 +1475,7 @@ sal_Unicode toUniChar(sal_uInt8 n)
     {
         c = 'A' + n - 10;
     }
-    return sal_Unicode(c);
+    return c;
 }
 
 bool IsCombiningSymbol( OUStringBuffer& rStringBuffer, sal_Int32 nPos )
