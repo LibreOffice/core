@@ -182,7 +182,15 @@ Some usage examples through javascript of the current implementation:
 // inserts a string at the start of the Writer document.
 Module.uno_init.then(function() {
     const css = Module.uno.com.sun.star;
-    const xModel = Module.getCurrentModelFromViewSh();
+    let xModel = Module.getCurrentModelFromViewSh();
+    if (xModel === null || !css.text.XTextDocument.query(xModel)) {
+        const desktop = css.frame.Desktop.create(Module.getUnoComponentContext());
+        const args = new Module.uno_Sequence_com$sun$star$beans$PropertyValue(
+            0, Module.uno_Sequence.FromSize);
+        xModel = css.frame.XComponentLoader.query(desktop).loadComponentFromURL(
+            'file:///android/default-document/example.odt', '_default', 0, args);
+        args.delete();
+    }
     const xTextDocument = css.text.XTextDocument.query(xModel);
     const xText = xTextDocument.getText();
     const xTextCursor = xText.createTextCursor();
@@ -194,7 +202,15 @@ Module.uno_init.then(function() {
 // changes each paragraph of the Writer document to a random color.
 Module.uno_init.then(function() {
     const css = Module.uno.com.sun.star;
-    const xModel = Module.getCurrentModelFromViewSh();
+    let xModel = Module.getCurrentModelFromViewSh();
+    if (xModel === null || !css.text.XTextDocument.query(xModel)) {
+        const desktop = css.frame.Desktop.create(Module.getUnoComponentContext());
+        const args = new Module.uno_Sequence_com$sun$star$beans$PropertyValue(
+            0, Module.uno_Sequence.FromSize);
+        xModel = css.frame.XComponentLoader.query(desktop).loadComponentFromURL(
+            'file:///android/default-document/example.odt', '_default', 0, args);
+        args.delete();
+    }
     const xTextDocument = css.text.XTextDocument.query(xModel);
     const xText = xTextDocument.getText();
     const xEnumAccess = css.container.XEnumerationAccess.query(xText);
