@@ -6930,7 +6930,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 m_pActiveShell->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
                 for (const SfxPoolItem* pItem : aSurrogates)
                 {
-                    const auto rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
+                    const auto& rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
                     const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
                     if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
                             &m_pActiveShell->GetNodes())
