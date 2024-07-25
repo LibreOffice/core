@@ -10,11 +10,11 @@
 # a consistent look for dialogs
 
 import sys
+import xml.etree.ElementTree as ET
+import re
 # Force python XML parser not faster C accelerators
 # because we can't hook the C implementation
 sys.modules['_elementtree'] = None
-import xml.etree.ElementTree as ET
-import re
 
 DEFAULT_WARNING_STR = 'Lint assertion failed'
 
@@ -51,7 +51,7 @@ class LineNumberingParser(ET.XMLParser):
 
 def lint_assert(predicate, warning=DEFAULT_WARNING_STR, node=None):
     if not predicate:
-        if not(node is None):
+        if node is not None:
             print(sys.argv[1] + ":" + str(node._start_line_number) + ": " + warning)
         else:
             print(sys.argv[1] + ": " + warning)
@@ -59,7 +59,7 @@ def lint_assert(predicate, warning=DEFAULT_WARNING_STR, node=None):
 def check_top_level_widget(element):
     # check widget type
     widget_type = element.attrib['class']
-    if not(widget_type in POSSIBLE_TOP_LEVEL_WIDGETS):
+    if widget_type not in POSSIBLE_TOP_LEVEL_WIDGETS:
         return
 
     # check border_width property

@@ -64,7 +64,7 @@ class Trace:
         self.clock = Trace.clock
 
 def addTrace(traces, lines):
-    if not(traces is None) and len(lines) > 0:
+    if traces is not None and len(lines) > 0:
         traces.append(Trace(lines))
 
 def readGdbLog(infile):

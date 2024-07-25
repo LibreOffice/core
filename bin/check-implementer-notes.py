@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-import json, re, subprocess, sys, urllib3
+import json
+import re
+import subprocess
+import sys
+import urllib3
 
 http = urllib3.PoolManager()
 

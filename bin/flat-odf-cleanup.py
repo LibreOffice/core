@@ -71,7 +71,7 @@ def add_parent_styles(usedstyles, styles):
 def remove_unused_styles(root, usedstyles, styles, name):
     for style in styles:
         print(style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
-        if not(style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") in usedstyles):
+        if style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") not in usedstyles:
             print("removing unused " + name + " " + style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
             # it is really dumb that there is no parent pointer in dom
             try:
@@ -82,7 +82,7 @@ def remove_unused_styles(root, usedstyles, styles, name):
 def remove_unused_drawings(root, useddrawings, drawings, name):
     for drawing in drawings:
         print(drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name"))
-        if not(drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name") in useddrawings):
+        if drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name") not in useddrawings:
             print("removing unused " + name + " " + drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name"))
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}styles").remove(drawing)
 
@@ -132,7 +132,7 @@ def remove_unused(root):
                     usedmasterpages.add(mp.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}next-style-name"))
     # remove unused masterpages
     for mp in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}master-page"):
-        if not(mp.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") in usedmasterpages):
+        if mp.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") not in usedmasterpages:
             print("removing unused master page " + mp.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
             # there is no way to get the parent element???
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}master-styles").remove(mp)
@@ -370,7 +370,7 @@ def remove_unused(root):
     collect_all_attribute(usedfonts, "{urn:oasis:names:tc:opendocument:xmlns:style:1.0}font-name-complex")
     fonts = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}font-face")
     for font in fonts:
-        if not(font.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") in usedfonts):
+        if font.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name") not in usedfonts:
             print("removing unused font-face " + font.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}font-face-decls").remove(font)
 
@@ -393,7 +393,7 @@ def remove_unused(root):
     for field in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-input"):
         useduserfields.add(field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name"))
     for field in root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-decl"):
-        if not(field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name") in useduserfields):
+        if field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name") not in useduserfields:
             print("removing unused user-field-decl " + field.get("{urn:oasis:names:tc:opendocument:xmlns:text:1.0}name"))
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:text:1.0}user-field-decls").remove(field)
 
