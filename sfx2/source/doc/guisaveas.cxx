@@ -356,6 +356,7 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_xModel(std::move( xModel ))
 , m_aMediaDescrHM( aMediaDescr )
 , m_bRecommendReadOnly( false )
+, m_bSignWithDefaultSignature( false )
 {
     CheckInteractionHandler();
 }
