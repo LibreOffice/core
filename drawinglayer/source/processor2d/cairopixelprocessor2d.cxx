@@ -2151,8 +2151,17 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
         }
         else
         {
-            cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
-                                             aColor.getGreen(), aColor.getBlue());
+            if (rFillGradientPrimitive2D.hasTransparency())
+            {
+                cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                                  aColor.getGreen(), aColor.getBlue(),
+                                                  1.0 - rFillGradientPrimitive2D.getTransparency());
+            }
+            else
+            {
+                cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                                 aColor.getGreen(), aColor.getBlue());
+            }
         }
     }
 
@@ -2177,9 +2186,12 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_linear_axial(
 void CairoPixelProcessor2D::processFillGradientPrimitive2D_square_rect(
     const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
 {
-    if (rFillGradientPrimitive2D.hasAlphaGradient())
+    if (rFillGradientPrimitive2D.hasAlphaGradient() || rFillGradientPrimitive2D.hasTransparency())
     {
-        // process recursively
+        // Do not use direct alpha for this: It paints using four trapez that
+        // do not add up at edges due to being painted AntiAliased; that means
+        // common pixels do not add up, but blend by transparency, so leaving
+        // visual traces -> process recursively
         process(rFillGradientPrimitive2D);
         return;
     }
@@ -2542,8 +2554,17 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_radial_elliptical(
         }
         else
         {
-            cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
-                                             aColor.getGreen(), aColor.getBlue());
+            if (rFillGradientPrimitive2D.hasTransparency())
+            {
+                cairo_pattern_add_color_stop_rgba(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                                  aColor.getGreen(), aColor.getBlue(),
+                                                  1.0 - rFillGradientPrimitive2D.getTransparency());
+            }
+            else
+            {
+                cairo_pattern_add_color_stop_rgb(pPattern, rStop.getStopOffset(), aColor.getRed(),
+                                                 aColor.getGreen(), aColor.getBlue());
+            }
         }
     }
 

@@ -70,6 +70,8 @@ namespace drawinglayer::primitive2d
             /// evtl. fitting alphaGradient definition
             attribute::FillGradientAttribute        maAlphaGradient;
 
+            /// the transparency in range [0.0 .. 1.0]
+            double mfTransparency;
 
         protected:
             /// local helper
@@ -93,14 +95,19 @@ namespace drawinglayer::primitive2d
                 const basegfx::B2DRange& rOutputRange,
                 const basegfx::B2DRange& rDefinitionRange,
                 const attribute::FillGradientAttribute& rFillGradient,
-                const attribute::FillGradientAttribute* pAlphaGradient = nullptr);
+                const attribute::FillGradientAttribute* pAlphaGradient = nullptr,
+                double fTransparency = 0.0);
 
             /// data read access
             const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }
             const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
+
             const attribute::FillGradientAttribute& getAlphaGradient() const { return maAlphaGradient; }
             bool hasAlphaGradient() const { return !maAlphaGradient.isDefault(); }
+
+            double getTransparency() const { return mfTransparency; }
+            bool hasTransparency() const { return !basegfx::fTools::equalZero(mfTransparency); }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override final;

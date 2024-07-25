@@ -1940,7 +1940,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
 void D2DPixelProcessor2D::processFillGradientPrimitive2D(
     const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
 {
-    if (rFillGradientPrimitive2D.hasAlphaGradient())
+    if (rFillGradientPrimitive2D.hasAlphaGradient() || rFillGradientPrimitive2D.hasTransparency())
     {
         // SDPR: As long as direct alpha is not supported by this
         // renderer we need to work on the decomposition, so call it

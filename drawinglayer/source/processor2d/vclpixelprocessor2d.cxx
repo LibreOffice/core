@@ -930,7 +930,7 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
 void VclPixelProcessor2D::processFillGradientPrimitive2D(
     const primitive2d::FillGradientPrimitive2D& rPrimitive)
 {
-    if (rPrimitive.hasAlphaGradient())
+    if (rPrimitive.hasAlphaGradient() || rPrimitive.hasTransparency())
     {
         // SDPR: As long as direct alpha is not supported by this
         // renderer we need to work on the decomposition, so call it

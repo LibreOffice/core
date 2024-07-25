@@ -404,25 +404,34 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
             if(!rFillGradient.isDefault())
             {
-                // SDPR: check early if we have a gradient and an alpha
-                // gradient that 'fits' in its geometric definition
-                // so that it can be rendered as RGBA directly. If yes,
-                // create it and return early
-                const bool bIncludeAlpha(
-                    0.0 == rFill.getTransparence()
+                const bool bHasTransparency(!basegfx::fTools::equalZero(rFill.getTransparence()));
+                // note: need to use !bHasTransparency to do the same as below
+                // where embedding to transparency is done. There, simple transparency
+                // gets priority over gradient transparency (and none). Thus here only one
+                // option is used. Note that the implementation of FillGradientPrimitive2D
+                // and PolyPolygonGradientPrimitive2D do support both alphas being used
+                const bool bHasAlphaGradient(!bHasTransparency
                     && !rAlphaGradient.isDefault()
                     && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient));
+
+                if(bHasTransparency || bHasAlphaGradient)
+                {
+                    // SDPR: check early if we have a gradient and an alpha
+                    // gradient that 'fits' in its geometric definition
+                    // so that it can be rendered as RGBA directly. If yes,
+                    // create it and return early
+                    return new PolyPolygonGradientPrimitive2D(
+                        rPolyPolygon,
+                        rDefinitionRange,
+                        rFillGradient,
+                        bHasAlphaGradient ? &rAlphaGradient : nullptr,
+                        bHasTransparency ? rFill.getTransparence() : 0.0);
+                }
 
                 pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(
                     rPolyPolygon,
                     rDefinitionRange,
-                    rFillGradient,
-                    bIncludeAlpha ? &rAlphaGradient : nullptr);
-
-                if (bIncludeAlpha)
-                {
-                    return pNewFillPrimitive;
-                }
+                    rFillGradient);
             }
             else if(!rFill.getHatch().isDefault())
             {

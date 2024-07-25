@@ -1984,14 +1984,44 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
 void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
     const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate)
 {
-    bool useDecompose(false);
-
     // SDPR: Caution: metafile export cannot handle added TransparencyGradient
-    if (rGradientCandidate.hasAlphaGradient())
+    if (rGradientCandidate.hasAlphaGradient() || rGradientCandidate.hasTransparency())
     {
-        // SDPR: metafile cannot handle this, use decompose
-        useDecompose = true;
+        // if it has alpha added directly we need to use the decomposition.
+        // unfortunately VclMetafileProcessor2D does *not* support the
+        // primitive created in the decomposition, the FillGradientPrimitive2D.
+        // at the same time extra stuff like adding gradient info to the
+        // metafile (BGRAD_SEQ_BEGIN) only is done HERE. To solve that and to
+        // not add PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D now, create a temporary
+        // decomposition to again get a PolyPolygonGradientPrimitive2D, but
+        // *without* directly added alpha
+        primitive2d::Primitive2DReference aRetval(new primitive2d::PolyPolygonGradientPrimitive2D(
+            rGradientCandidate.getB2DPolyPolygon(), rGradientCandidate.getDefinitionRange(),
+            rGradientCandidate.getFillGradient()));
+
+        if (rGradientCandidate.hasAlphaGradient())
+        {
+            const basegfx::B2DRange aPolyPolygonRange(
+                rGradientCandidate.getB2DPolyPolygon().getB2DRange());
+            primitive2d::Primitive2DContainer aAlpha{ new primitive2d::FillGradientPrimitive2D(
+                aPolyPolygonRange, rGradientCandidate.getDefinitionRange(),
+                rGradientCandidate.getAlphaGradient()) };
+
+            aRetval = new primitive2d::TransparencePrimitive2D(
+                primitive2d::Primitive2DContainer{ aRetval }, std::move(aAlpha));
+        }
+
+        if (rGradientCandidate.hasTransparency())
+        {
+            aRetval = new primitive2d::UnifiedTransparencePrimitive2D(
+                primitive2d::Primitive2DContainer{ aRetval }, rGradientCandidate.getTransparency());
+        }
+
+        process(primitive2d::Primitive2DContainer{ aRetval });
+        return;
     }
+
+    bool useDecompose(false);
 
     if (!useDecompose)
     {

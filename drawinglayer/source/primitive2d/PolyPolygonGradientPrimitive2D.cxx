@@ -40,7 +40,7 @@ Primitive2DReference PolyPolygonGradientPrimitive2D::create2DDecomposition(
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
         rtl::Reference<FillGradientPrimitive2D> pNewGradient = new FillGradientPrimitive2D(
             aPolyPolygonRange, getDefinitionRange(), getFillGradient(),
-            hasAlphaGradient() ? &getAlphaGradient() : nullptr);
+            hasAlphaGradient() ? &getAlphaGradient() : nullptr, getTransparency());
         Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
@@ -56,17 +56,19 @@ PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
     , maDefinitionRange(rPolyPolygon.getB2DRange())
     , maFillGradient(rFillGradient)
     , maAlphaGradient()
+    , mfTransparency(0.0)
 {
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
     basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
     const attribute::FillGradientAttribute& rFillGradient,
-    const attribute::FillGradientAttribute* pAlphaGradient)
+    const attribute::FillGradientAttribute* pAlphaGradient, double fTransparency)
     : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
     , maFillGradient(rFillGradient)
     , maAlphaGradient()
+    , mfTransparency(fTransparency)
 {
     // copy alpha gradient if we got one
     if (nullptr != pAlphaGradient)
@@ -91,6 +93,9 @@ bool PolyPolygonGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitiv
         return false;
 
     if (maAlphaGradient != rCompare.maAlphaGradient)
+        return false;
+
+    if (!basegfx::fTools::equal(getTransparency(), rCompare.getTransparency()))
         return false;
 
     return true;

@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <utility>
 #include <algorithm>
 
@@ -264,22 +265,33 @@ namespace drawinglayer::primitive2d
             // SDPR: support alpha directly now. If a primitive processor
             // cannot deal with it, use it's decomposition. For that purpose
             // this decomposition has two stages now: This 1st one will
-            // separate content and alpha into a TransparencePrimitive2D,
+            // (if needed) separate content and alpha into a TransparencePrimitive2D
+            // and (if needed) embed that to a UnifiedTransparencePrimitive2D,
             // so all processors can work as before
-            if (hasAlphaGradient())
+            if (hasAlphaGradient() || hasTransparency())
             {
-                Primitive2DContainer aContent{ new FillGradientPrimitive2D(
-                    getOutputRange(),
-                    getDefinitionRange(),
-                    getFillGradient()) };
+                Primitive2DReference aRetval(
+                    new FillGradientPrimitive2D(
+                        getOutputRange(),
+                        getDefinitionRange(),
+                        getFillGradient()));
 
-                Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
-                    getOutputRange(),
-                    getDefinitionRange(),
-                    getAlphaGradient()) };
+                if (hasAlphaGradient())
+                {
+                    Primitive2DContainer aAlpha{ new FillGradientPrimitive2D(
+                        getOutputRange(),
+                        getDefinitionRange(),
+                        getAlphaGradient()) };
 
-                return Primitive2DReference{ new TransparencePrimitive2D(std::move(aContent),
-                                                                        std::move(aAlpha)) };
+                    aRetval = new TransparencePrimitive2D(Primitive2DContainer{ aRetval }, std::move(aAlpha));
+                }
+
+                if (hasTransparency())
+                {
+                    aRetval = new UnifiedTransparencePrimitive2D(Primitive2DContainer{ aRetval }, getTransparency());
+                }
+
+                return aRetval;
             }
 
             // default creates overlapping fill which works with AntiAliasing and without.
@@ -303,6 +315,7 @@ namespace drawinglayer::primitive2d
         , maDefinitionRange(rOutputRange)
         , maFillGradient(rFillGradient)
         , maAlphaGradient()
+        , mfTransparency(0.0)
         {
         }
 
@@ -310,11 +323,13 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rOutputRange,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::FillGradientAttribute& rFillGradient,
-            const attribute::FillGradientAttribute* pAlphaGradient)
+            const attribute::FillGradientAttribute* pAlphaGradient,
+            double fTransparency)
         : maOutputRange(rOutputRange)
         , maDefinitionRange(rDefinitionRange)
         , maFillGradient(rFillGradient)
         , maAlphaGradient()
+        , mfTransparency(fTransparency)
         {
             // copy alpha gradient if we got one
             if (nullptr != pAlphaGradient)
@@ -338,6 +353,9 @@ namespace drawinglayer::primitive2d
                 return false;
 
             if (maAlphaGradient != rCompare.maAlphaGradient)
+                return false;
+
+            if (!basegfx::fTools::equal(getTransparency(), rCompare.getTransparency()))
                 return false;
 
             return true;
