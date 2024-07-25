@@ -10,16 +10,25 @@ a = subprocess.Popen("git ls-files include/", stdout=subprocess.PIPE, shell=True
 with a.stdout as txt:
     for line in txt:
         header = line[8:].strip()
-        if b"README" in header: continue
-        if header == b"version.hrc": continue
+        if b"README" in header:
+            continue
+        if header == b"version.hrc":
+            continue
         # ignore URE headers
-        if header.startswith(b"IwyuFilter_include.yaml"): continue
-        if header.startswith(b"cppu/"): continue
-        if header.startswith(b"cppuhelper/"): continue
-        if header.startswith(b"osl/"): continue
-        if header.startswith(b"sal/"): continue
-        if header.startswith(b"salhelper/"): continue
-        if header.startswith(b"uno/"): continue
+        if header.startswith(b"IwyuFilter_include.yaml"):
+            continue
+        if header.startswith(b"cppu/"):
+            continue
+        if header.startswith(b"cppuhelper/"):
+            continue
+        if header.startswith(b"osl/"):
+            continue
+        if header.startswith(b"sal/"):
+            continue
+        if header.startswith(b"salhelper/"):
+            continue
+        if header.startswith(b"uno/"):
+            continue
         headerSet.add(header)
 
 headerSetUnused = headerSet.copy()

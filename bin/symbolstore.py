@@ -365,7 +365,7 @@ class Dumper:
             # we use -L to read the targets of symlinks,
             # and -b to print just the content, not the filename
             return os.popen("file -Lb " + file).read()
-        except:
+        except Exception:
             return ""
 
     # This is a no-op except on Win32
@@ -475,7 +475,7 @@ class Dumper:
             except StopIteration:
                 print("WARN: dump_syms - no debug info extracted for {}".format(file), file=sys.stderr)
                 pass
-            except:
+            except Exception:
                 print("Unexpected error: ", sys.exc_info()[0], file=sys.stderr)
                 raise
         return result
@@ -600,7 +600,7 @@ class Dumper_Solaris(Dumper):
         try:
             output = os.popen("file " + file).read()
             return output.split('\t')[1]
-        except:
+        except Exception:
             return ""
 
     def ShouldProcess(self, file):

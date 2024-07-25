@@ -33,7 +33,8 @@ def init_hids():
         return subprocess.check_output(['git','grep','hid="[^"]*/[^"]*">','.'])
     else:
         repo_dir = '/var/tmp/help.git'
-        if not os.path.exists(repo_dir):os.makedirs(repo_dir)
+        if not os.path.exists(repo_dir):
+            os.makedirs(repo_dir)
         os.chdir(repo_dir)
 
         if not os.path.exists(os.path.join(repo_dir,'config')):
@@ -50,7 +51,8 @@ def init_core_files():
         core_repo_dir = os.path.dirname(os.path.abspath(os.path.dirname(sys.argv[0])))
         local_repo = True
 
-    if not os.path.exists(core_repo_dir):os.makedirs(core_repo_dir)
+    if not os.path.exists(core_repo_dir):
+        os.makedirs(core_repo_dir)
     os.chdir(core_repo_dir)
 
     if not os.path.exists(os.path.join(core_repo_dir,'.git')):
@@ -81,7 +83,8 @@ if __name__ == "__main__":
     for row in rows:
         fname, rawtext = row.split(':',1)[0:]
         hid = rawtext.split('hid="')[1].split('"')[0]
-        if hid.startswith('.uno'): continue
+        if hid.startswith('.uno'):
+            continue
         uifileraw, compname = hid.rsplit('/',1)
         uifile = uifileraw + ".ui"
         # map modules/ etc, which exist only in install

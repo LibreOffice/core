@@ -33,7 +33,8 @@ for pair in commandSet:
     with a.stdout as txt2:
         for line2 in txt2:
             cnt = cnt + 1
-    if cnt > 0: continue
+    if cnt > 0:
+        continue
 
     # check to see if the SID is used programmatically
     foundLines = ""
@@ -41,11 +42,15 @@ for pair in commandSet:
     with a.stdout as txt2:
         for line2 in txt2:
             foundLines = foundLines + line2
-    if foundLines.find("ExecuteList") != -1: continue
-    if foundLines.find("GetDispatcher()->Execute") != -1: continue
-    if foundLines.find("ExecuteScenarioSlot") != -1: continue
+    if foundLines.find("ExecuteList") != -1:
+        continue
+    if foundLines.find("GetDispatcher()->Execute") != -1:
+        continue
+    if foundLines.find("ExecuteScenarioSlot") != -1:
+        continue
     # TODO not sure about this, but let's tackle the easy ones first
-    if foundLines.find("Invalidate(") != -1: continue
+    if foundLines.find("Invalidate(") != -1:
+        continue
 
     # dump any lines that contain the SID, so we can eyeball the results
     print("remove: " + commandName)

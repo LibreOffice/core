@@ -231,7 +231,7 @@ def retryInvoke(connection, test):
                 connection.postTest()
         except KeyboardInterrupt:
             raise # Ctrl+C should work
-        except:
+        except Exception:
             log("retryInvoke: caught exception")
     raise Exception("FAILED retryInvoke")
 
@@ -244,7 +244,7 @@ def runConnectionTests(connection, invoker, tests):
                 invoker(connection, test)
             except KeyboardInterrupt:
                 raise # Ctrl+C should work
-            except:
+            except Exception:
                 failed.append(test.file)
                 estr = traceback.format_exc()
                 log("... FAILED with exception:\n" + estr)
@@ -292,7 +292,7 @@ def loadFromURL(xContext, url):
             time.sleep(1)
         log("timeout: no OnLayoutFinished received")
         return xDoc
-    except:
+    except Exception:
         if xDoc:
             log("CLOSING")
             xDoc.close(True)
@@ -431,13 +431,13 @@ def usage():
 def checkTools():
     try:
         subprocess.check_output(["gs", "--version"])
-    except:
+    except Exception:
         print("Cannot execute 'gs'. Please install ghostscript.")
         sys.exit(1)
     try:
         subprocess.check_output(["composite", "-version"])
         subprocess.check_output(["identify", "-version"])
-    except:
+    except Exception:
         print("Cannot execute 'composite' or 'identify'.")
         print("Please install ImageMagick.")
         sys.exit(1)

@@ -15,7 +15,8 @@ with a.stdout as txt:
         if typedefName.startswith(b"*"):
            typedefName = typedefName[1:]
         # ignore anything less than 5 characters, it's probably a parsing error
-        if len(typedefName) < 5: continue
+        if len(typedefName) < 5:
+            continue
         typedefSet.add(typedefName)
 
 for typedefName in sorted(typedefSet):
@@ -27,7 +28,8 @@ for typedefName in sorted(typedefSet):
         for line2 in txt2:
             cnt = cnt + 1
             foundLine2 += line2
-            if cnt > 2: break
+            if cnt > 2:
+                break
     a.kill()
     if cnt == 1:
         print(b"remove: " + foundLine2)

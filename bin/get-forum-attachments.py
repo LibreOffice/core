@@ -136,7 +136,7 @@ def get_attachments_from_url(forum, config, args):
                     suffixDir = os.path.join(args.outdir, suffix)
                     try:
                         os.mkdir(suffixDir)
-                    except:
+                    except Exception:
                         pass
 
                     download = os.path.join(suffixDir,

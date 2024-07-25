@@ -82,7 +82,7 @@ def execute_make_and_parse_output(fileName, makeName):
         if line.startswith('DECLARE'):
             try:
                 testName = re.findall('"([^"]*)"', line)[0]
-            except:
+            except Exception:
                 #check in the next line when line is broken into 2 lines
                 testName = re.findall('"([^"]*)"', lines[i + 1])[0]
 

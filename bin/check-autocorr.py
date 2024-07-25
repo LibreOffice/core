@@ -33,6 +33,6 @@ for element in elements_x:
     print('In ' + complete_file + ' same value: ' + value_a)
     bAllFilesOk = False
 
-if bAllFilesOk == True:
+if bAllFilesOk:
   exit(0)
 exit(1)
