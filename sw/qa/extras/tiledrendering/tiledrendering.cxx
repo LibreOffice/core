@@ -1794,12 +1794,12 @@ static Bitmap getTile(SwXTextDocument* pXTextDocument)
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color
-static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int nPixelY, Color aColor)
+static Color getTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int nPixelY)
 {
     Bitmap aBitmap = getTile(pXTextDocument);
     BitmapScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
-    CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
+    return aActualColor;
 }
 
 static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor)
@@ -1845,7 +1845,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
     // First view is in light scheme
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
     // Create second view
     SfxLokHelper::createView();
     int nSecondViewId = SfxLokHelper::getView();
@@ -1862,13 +1862,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         );
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
-    assertTilePixelColor(pXTextDocument, 255, 255, aDarkColor);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
     // First view still in light scheme
     SfxLokHelper::setView(nFirstViewId);
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
     // Second view still in dark scheme
     SfxLokHelper::setView(nSecondViewId);
-    assertTilePixelColor(pXTextDocument, 255, 255, aDarkColor);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
     // Switch second view back to light scheme
     {
         SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1882,7 +1882,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
     // Now in light scheme
-    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
 }
 
 // Test that changing the theme sends the document background color as LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR
