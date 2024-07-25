@@ -146,6 +146,28 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
     CPPUNIT_ASSERT_EQUAL(u"Filial"_ustr, pDoc->GetString(0, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf162093)
+{
+    createScDoc("xlsx/tdf162093.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Surname
+    // - Actual  : #NAME?
+    CPPUNIT_ASSERT_EQUAL(u"Surname"_ustr, pDoc->GetString(5, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(6, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Region"_ustr, pDoc->GetString(7, 3, 0));
+
+    CPPUNIT_ASSERT_EQUAL(u"Murray"_ustr, pDoc->GetString(5, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"15"_ustr, pDoc->GetString(6, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"North"_ustr, pDoc->GetString(7, 4, 0));
+
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(5, 14, 0));
+    CPPUNIT_ASSERT_EQUAL(u"296"_ustr, pDoc->GetString(6, 14, 0));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(7, 14, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLegacyOptionButtonGroupBox)
 {
     createScDoc("xls/tdf79542_radioGroupBox.xls");
