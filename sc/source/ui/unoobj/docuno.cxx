@@ -505,13 +505,15 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
 static OString getTabViewRenderState(ScTabViewShell& rTabViewShell)
 {
     OStringBuffer aState;
+    const ScViewRenderingOptions& rViewRenderingOptions = rTabViewShell.GetViewRenderingData();
 
     if (rTabViewShell.IsAutoSpell())
         aState.append('S');
+    if (rViewRenderingOptions.GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
+        aState.append('D');
 
     aState.append(';');
 
-    const ScViewRenderingOptions& rViewRenderingOptions = rTabViewShell.GetViewRenderingData();
     OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
     aState.append(aThemeName);
 
