@@ -307,7 +307,7 @@ public:
     SwFrameFormat* GetFlyFormat() const;
 
     /// If node is in a table return the respective table box.
-    SwTableBox* GetTableBox() const;
+    SAL_RET_MAYBENULL SwTableBox* GetTableBox() const;
 
     SwNodeOffset GetIndex() const { return SwNodeOffset(GetPos()); }
 

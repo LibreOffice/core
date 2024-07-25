@@ -243,21 +243,24 @@ void SwASCWriter::WriteTable(SwTableNode* pTableNd, SwTextNode* pNd)
             Out( aASCNodeFnTab, *pNd, *this );
 
             Point aPrevBoxPoint;
-            if (const SwTableBox* pPrevBox = pNd->GetTableBox())
-                aPrevBoxPoint = pPrevBox->GetCoordinates();
+            SwTableBox* pTableBox = pNd->GetTableBox();
+            if (pTableBox)
+                aPrevBoxPoint = pTableBox->GetCoordinates();
             m_pCurrentPam->Move(fnMoveForward, GoInNode);
             pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
+            pTableBox = pNd->GetTableBox();
 
             // Line break in a box
             // Each line is a new SwTextNode so we
             // need to parse inside the current box
-            while (pNd->GetTableBox() && (pNd->GetTableBox()->GetCoordinates() == aPrevBoxPoint))
+            while (pTableBox && pTableBox->GetCoordinates() == aPrevBoxPoint)
             {
                 Strm().WriteUnicodeOrByteText(sPreLineEnd);
                 Out(aASCNodeFnTab, *pNd, *this);
 
                 m_pCurrentPam->Move(fnMoveForward, GoInNode);
                 pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
+                pTableBox = pNd->GetTableBox();
             }
             if (pBox != pLine->GetTabBoxes().back())
                 Strm().WriteUChar( 0x9 );
