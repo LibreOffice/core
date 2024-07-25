@@ -645,6 +645,28 @@ Module.uno_init.then(function() {
         console.assert(exc.Message.startsWith('test'));
         any.delete();
     }
+    try {
+        const wrapped = new Module.uno_Any(
+            Module.uno_Type.Exception('com.sun.star.uno.RuntimeException'),
+            {Message: 'test', Context: test});
+        Module.throwUnoException(
+            Module.uno_Type.Exception('com.sun.star.lang.WrappedTargetException'),
+            {Message: 'wrapped', Context: test, TargetException: wrapped}, [wrapped]);
+        console.assert(false);
+    } catch (e) {
+        const any = Module.catchUnoException(e);
+        console.assert(any.getType() == 'com.sun.star.lang.WrappedTargetException');
+        const exc = any.get();
+        console.assert(exc.Message.startsWith('wrapped'));
+        console.assert(Module.sameUnoObject(exc.Context, test));
+        const wrappedAny = exc.TargetException;
+        console.assert(wrappedAny.getType() == 'com.sun.star.uno.RuntimeException');
+        const wrappedExc = wrappedAny.get();
+        console.assert(wrappedExc.Message.startsWith('test'));
+        console.assert(Module.sameUnoObject(wrappedExc.Context, test));
+        any.delete();
+        wrappedAny.delete();
+    }
     const obj = Module.unoObject(
         ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor',
          'org.libreoffice.embindtest.XAttributes'],
@@ -653,7 +675,7 @@ Module.uno_init.then(function() {
                 if (args.size() !== 1 || args.get(0).Name !== 'name') {
                     Module.throwUnoException(
                         Module.uno_Type.Exception('com.sun.star.lang.IllegalArgumentException'),
-                        {Message: 'bad args', Context: null, ArgumentPosition: 0});
+                        {Message: 'bad args', Context: null, ArgumentPosition: 0}, []);
                 }
                 console.log('Hello ' + args.get(0).Value.get());
                 return new Module.uno_Any(Module.uno_Type.Void(), undefined);

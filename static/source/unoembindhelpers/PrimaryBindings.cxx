@@ -34,6 +34,7 @@
 #include <uno/data.h>
 
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <stdexcept>
 #include <string>
@@ -407,8 +408,15 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
-    function("throwUnoException", +[](css::uno::Type const& type, emscripten::val const& value) {
-        cppu::throwException(constructAny(type, value));
+    function("throwUnoException", +[](css::uno::Type const& type, emscripten::val const& value,
+                                      emscripten::val const& toDelete) {
+        auto const any = constructAny(type, value);
+        auto const len = toDelete["length"].as<std::size_t>();
+        for (std::size_t i = 0; i != len; ++i)
+        {
+            toDelete[i].call<void>("delete");
+        }
+        cppu::throwException(any);
     });
     function("sameUnoObject",
              +[](css::uno::Reference<css::uno::XInterface> const& ref1,
