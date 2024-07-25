@@ -438,6 +438,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         {
             INetURLObject aURL (xModel->getURL ());
             if (aURL.GetProtocol () != INetProtocol::File
+                && aURL.GetProtocol() != INetProtocol::PrivSoffice
                 && aURL.GetProtocol () != INetProtocol::NotValid)
             {
                 OUString sRemoteText (FwkResId (STR_REMOTE_TITLE));
