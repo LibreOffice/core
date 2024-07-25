@@ -130,6 +130,28 @@
 #include <formatcontentcontrol.hxx>
 #include <rtl/uri.hxx>
 
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+//#include <../../../../chart2/source/controller/inc/ChartController.hxx>
+//#include <DataSeries.hxx>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -783,6 +805,109 @@ void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         pDoc->DeleteFormatRefMark(pMark);
     }
+}
+
+bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,
+                                bool bInsert, bool bResize = false)
+{
+    uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    if (!xDiagram.is())
+        return false;
+    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
+    if (!xCooSysContainer.is())
+        return false;
+    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence(
+        xCooSysContainer->getCoordinateSystems());
+    if (xCooSysSequence.getLength() <= 0)
+        return false;
+    uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSysSequence[0],
+                                                                    uno::UNO_QUERY);
+    if (!xChartTypeContainer.is())
+        return false;
+    uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSequence(
+        xChartTypeContainer->getChartTypes());
+    if (xChartTypeSequence.getLength() <= 0)
+        return false;
+    uno::Reference<chart2::XDataSeriesContainer> xDSContainer(xChartTypeSequence[0],
+                                                              uno::UNO_QUERY);
+    if (!xDSContainer.is())
+        return false;
+
+    uno::Reference<chart2::XInternalDataProvider> xIDataProvider(xChartDoc->getDataProvider(),
+                                                                 uno::UNO_QUERY);
+    if (!xIDataProvider.is())
+        return false;
+
+    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSContainer->getDataSeries());
+
+    int nSeriesCount = aSeriesSeq.getLength();
+
+    if (bResize)
+    {
+        // Resize is actually some inserts, or deletes
+        if (nId > nSeriesCount)
+        {
+            bInsert = true;
+        }
+        else if (nId < nSeriesCount)
+        {
+            bInsert = false;
+        }
+        else
+        {
+            // Resize to the same size. No change needed
+            return true;
+        }
+    }
+
+    // insert or delete
+    if (bInsert)
+    {
+        // insert
+        if (nId > nSeriesCount && !bResize)
+            return false;
+
+        int nInsertCount = bResize ? nId - nSeriesCount : 1;
+
+        // call dialog code
+        if (bResize)
+        {
+            for (int i = 0; i < nInsertCount; i++)
+            {
+                xIDataProvider->insertDataSeries(nSeriesCount);
+            }
+            return true;
+        }
+
+        xIDataProvider->insertDataSeries(nId);
+    }
+    else
+    {
+        // delete 1 or more columns
+        if (nId >= nSeriesCount)
+            return false;
+        int nDeleteCount = bResize ? nSeriesCount - nId : 1;
+        for (int i = 0; i < nDeleteCount; i++)
+        {
+            xDSContainer->removeDataSeries(aSeriesSeq[nId]);
+        }
+    }
+    return true;
+}
+
+bool lcl_ResizeChartColumns(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nSize)
+{
+    return lcl_ChangeChartColumnCount(xChartDoc, nSize, false, true);
+}
+
+bool lcl_InsertChartColumns(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId)
+{
+    return lcl_ChangeChartColumnCount(xChartDoc, nId, true);
+}
+
+bool lcl_DeleteChartColumns(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId)
+{
+    return lcl_ChangeChartColumnCount(xChartDoc, nId, false);
 }
 }
 
@@ -2165,6 +2290,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             std::stringstream aStream(
                 (std::string(OUStringToOString(aDataJson, RTL_TEXTENCODING_UTF8))));
             boost::property_tree::read_json(aStream, aTree);
+            // Todo: try catch - in case of fail: log wrong JSON format
 
             // get the loaded content controls
             uno::Reference<text::XContentControlsSupplier> xCCSupplier(
@@ -2186,7 +2312,30 @@ void SwTextShell::Execute(SfxRequest &rReq)
             };
             std::vector<std::string> aIdTexts = { ".ByIndex.", ".ByTag.", ".ByAlias.", ".ById." };
 
-            // Iterate trough the JSON data loaded into a tree structure
+            // get charts
+            uno::Reference<text::XTextEmbeddedObjectsSupplier> xEOS(
+                GetView().GetDocShell()->GetModel(), uno::UNO_QUERY);
+            if (!xEOS.is())
+                break;
+            uno::Reference<container::XIndexAccess> xEmbeddeds(xEOS->getEmbeddedObjects(),
+                                                               uno::UNO_QUERY);
+            if (!xEmbeddeds.is())
+                break;
+
+            sal_Int32 nEOcount = xEmbeddeds->getCount();
+
+            enum class ChartFilterType
+            {
+                ERROR = -1,
+                INDEX,
+                NAME,
+                TITLE,
+                SUBTITLE
+            };
+            std::vector<std::string> aIdChartTexts
+                = { ".ByEmbedIndex.", ".ByEmbedName.", ".ByTitle.", ".BySubTitle." };
+
+            // Iterate through the JSON data loaded into a tree structure
             for (const auto& aItem : aTree)
             {
                 if (aItem.first == "Transforms")
@@ -2194,6 +2343,431 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     // Handle all transformations
                     for (const auto& aItem2 : aItem.second)
                     {
+                        if (aItem2.first.starts_with("Charts"))
+                        {
+                            std::string aTextEnd = aItem2.first.substr(6);
+                            std::string aValue = "";
+                            ChartFilterType iKeyId = ChartFilterType::ERROR;
+                            // Find how the chart is identified: ByIndex, ByTitle...
+                            for (size_t i = 0; i < aIdChartTexts.size(); i++)
+                            {
+                                if (aTextEnd.starts_with(aIdChartTexts[i]))
+                                {
+                                    iKeyId = static_cast<ChartFilterType>(i);
+                                    aValue = aTextEnd.substr(aIdChartTexts[i].length());
+                                    break;
+                                }
+                            }
+                            if (iKeyId != ChartFilterType::ERROR)
+                            {
+                                for (int i = 0; i < nEOcount; ++i)
+                                {
+                                    uno::Reference<beans::XPropertySet> xShapeProps(
+                                        xEmbeddeds->getByIndex(i), uno::UNO_QUERY);
+                                    if (!xShapeProps.is())
+                                        continue;
+
+                                    uno::Reference<frame::XModel> xDocModel;
+                                    xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
+                                    if (!xDocModel.is())
+                                        continue;
+
+                                    uno::Reference<chart2::XChartDocument> xChartDoc(
+                                        xDocModel, uno::UNO_QUERY);
+                                    if (!xChartDoc.is())
+                                        continue;
+
+                                    uno::Reference<chart2::data::XDataProvider> xDataProvider(
+                                        xChartDoc->getDataProvider());
+                                    if (!xDataProvider.is())
+                                        continue;
+
+                                    uno::Reference<chart::XChartDataArray> xDataArray(
+                                        xChartDoc->getDataProvider(), uno::UNO_QUERY);
+                                    if (!xDataArray.is())
+                                        continue;
+
+                                    uno::Reference<chart2::XInternalDataProvider> xIDataProvider(
+                                        xChartDoc->getDataProvider(), uno::UNO_QUERY);
+                                    if (!xIDataProvider.is())
+                                        continue;
+
+                                    uno::Reference<util::XModifiable> xModi(xDocModel,
+                                                                            uno::UNO_QUERY);
+                                    if (!xModi.is())
+                                        continue;
+
+                                    switch (iKeyId)
+                                    {
+                                        case ChartFilterType::INDEX:
+                                        {
+                                            if (stoi(aValue) != i)
+                                                continue;
+                                        }
+                                        break;
+                                        case ChartFilterType::NAME:
+                                        {
+                                            uno::Reference<container::XNamed> xNamedShape(
+                                                xEmbeddeds->getByIndex(i), uno::UNO_QUERY);
+                                            if (xNamedShape.is())
+                                            {
+                                                OUString aName;
+                                                aName = xNamedShape->getName();
+                                                if (OStringToOUString(aValue, RTL_TEXTENCODING_UTF8)
+                                                    != aName)
+                                                    continue;
+                                            }
+                                        }
+                                        break;
+                                        case ChartFilterType::TITLE:
+                                        {
+                                            uno::Reference<chart2::XTitled> xTitled(
+                                                xChartDoc, uno::UNO_QUERY_THROW);
+                                            if (!xTitled.is())
+                                                continue;
+                                            uno::Reference<chart2::XTitle> xTitle
+                                                = xTitled->getTitleObject();
+                                            if (!xTitle.is())
+                                                continue;
+
+                                            OUString aTitle;
+                                            const uno::Sequence<
+                                                uno::Reference<chart2::XFormattedString>>
+                                                aFSSeq = xTitle->getText();
+                                            for (auto const& fs : aFSSeq)
+                                                aTitle += fs->getString();
+                                            if (OStringToOUString(aValue, RTL_TEXTENCODING_UTF8)
+                                                != aTitle)
+                                                continue;
+                                        }
+                                        break;
+                                        case ChartFilterType::SUBTITLE:
+                                        {
+                                            uno::Reference<chart2::XDiagram> xDiagram
+                                                = xChartDoc->getFirstDiagram();
+                                            if (!xDiagram.is())
+                                                continue;
+
+                                            uno::Reference<chart2::XTitled> xTitled(
+                                                xDiagram, uno::UNO_QUERY_THROW);
+                                            if (!xTitled.is())
+                                                continue;
+
+                                            uno::Reference<chart2::XTitle> xSubTitle(
+                                                xTitled->getTitleObject());
+                                            if (!xSubTitle.is())
+                                                continue;
+
+                                            OUString aSubTitle;
+                                            const uno::Sequence<
+                                                uno::Reference<chart2::XFormattedString>>
+                                                aFSSeq = xSubTitle->getText();
+                                            for (auto const& fs : aFSSeq)
+                                                aSubTitle += fs->getString();
+                                            if (OStringToOUString(aValue, RTL_TEXTENCODING_UTF8)
+                                                != aSubTitle)
+                                                continue;
+                                        }
+                                        break;
+                                        default:
+                                            continue;
+                                    }
+
+                                    // We have a match, this chart need to be transformed
+                                    // Set all the values (of the chart) what is needed
+
+                                    // Check if the InternalDataProvider is row or column based.
+                                    bool bChartUseColumns = false;
+                                    uno::Sequence<beans::PropertyValue> aArguments(
+                                        xDataProvider->detectArguments(nullptr));
+                                    for (sal_Int32 j = 0; j < aArguments.getLength(); ++j)
+                                    {
+                                        if (aArguments[j].Name == "DataRowSource")
+                                        {
+                                            css::chart::ChartDataRowSource eRowSource;
+                                            if (aArguments[j].Value >>= eRowSource)
+                                                bChartUseColumns
+                                                    = (eRowSource
+                                                       == css::chart::ChartDataRowSource_COLUMNS);
+                                            break;
+                                        }
+                                    }
+
+                                    for (const auto& aItem3 : aItem2.second)
+                                    {
+                                        if (aItem3.first.starts_with("deletecolumn.")
+                                            || aItem3.first.starts_with("deleterow.")
+                                            || aItem3.first.starts_with("insertcolumn.")
+                                            || aItem3.first.starts_with("insertrow.")
+                                            || aItem3.first.starts_with("modifycolumn.")
+                                            || aItem3.first.starts_with("modifyrow."))
+                                        {
+                                            // delete insert, or modify a row, or column
+                                            // column, or row?
+                                            bool bSetColumn = (aItem3.first[6] == 'c');
+                                            int nId = stoi(aItem3.first.substr(bSetColumn ? 13 : 10));
+                                            bool bDelete = aItem3.first.starts_with("delete");
+                                            // delete/insert a row/column if needed
+                                            if (!aItem3.first.starts_with("modify"))
+                                            {
+                                                if (bChartUseColumns == bSetColumn)
+                                                {
+                                                    if (bDelete)
+                                                    {
+                                                        if (!lcl_DeleteChartColumns(xChartDoc, nId))
+                                                            continue;
+                                                        xIDataProvider->deleteSequence(nId);
+                                                    }
+                                                    else
+                                                    {
+                                                        if (!lcl_InsertChartColumns(xChartDoc, nId))
+                                                            continue;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (bDelete)
+                                                    {
+                                                        xIDataProvider
+                                                            ->deleteDataPointForAllSequences(nId);
+                                                    }
+                                                    else
+                                                    {
+                                                        xIDataProvider
+                                                            ->insertDataPointForAllSequences(nId
+                                                                                             - 1);
+                                                    }
+                                                }
+                                            }
+                                            // set values also, if needed
+                                            if (!bDelete && aItem3.second.size() > 0)
+                                            {
+                                                uno::Sequence<uno::Sequence<double>> aData
+                                                    = xDataArray->getData();
+                                                uno::Sequence<double>* pRows = aData.getArray();
+
+                                                int nIndex = 0;
+                                                int nX = nId;
+                                                int nY = nId;
+                                                for (const auto& aItem4 : aItem3.second)
+                                                {
+                                                    if (bSetColumn)
+                                                    {
+                                                        nY = nIndex;
+                                                    }
+                                                    else
+                                                    {
+                                                        nX = nIndex;
+                                                    }
+                                                    if (nY < aData.getLength() && nY >= 0
+                                                        && nX < pRows[nY].getLength() && nX >= 0)
+                                                    {
+                                                        double* pCols = pRows[nY].getArray();
+                                                        pCols[nX]
+                                                            = aItem4.second.get_value<double>();
+                                                    }
+                                                    // else log: set invalid cell: index [nY,Nx]
+                                                    nIndex++;
+                                                }
+
+                                                xDataArray->setData(aData);
+                                            }
+                                        }
+                                        else if (aItem3.first.starts_with("setrowdesc"))
+                                        {
+                                            // set row descriptions
+                                            uno::Sequence<OUString> aRowDesc
+                                                = xDataArray->getRowDescriptions();
+                                            OUString* aRowdata = aRowDesc.getArray();
+
+                                            if (aItem3.first.starts_with("setrowdesc."))
+                                            {
+                                                // set only 1 description
+                                                int nValue = stoi(aItem3.first.substr(11));
+                                                if (nValue >= 0 && nValue < aRowDesc.getLength())
+                                                {
+                                                    aRowdata[nValue] = OStringToOUString(
+                                                        aItem3.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8);
+                                                }
+                                                // Todo: else log: wrong index at setcolumndesc.
+                                            }
+                                            else
+                                            {
+                                                // set an array of description at once
+                                                int nIndex = 0;
+                                                for (const auto& aItem4 : aItem3.second)
+                                                {
+                                                    if (nIndex >= aRowDesc.getLength())
+                                                    {
+                                                        // Todo log: too many parameters
+                                                        break;
+                                                    }
+                                                    aRowdata[nIndex] = OStringToOUString(
+                                                        aItem4.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8);
+                                                    nIndex++;
+                                                }
+                                            }
+                                            xDataArray->setRowDescriptions(aRowDesc);
+                                        }
+                                        else if (aItem3.first.starts_with("setcolumndesc"))
+                                        {
+                                            // set colimn descriptions
+                                            uno::Sequence<OUString> aColDesc
+                                                = xDataArray->getColumnDescriptions();
+                                            OUString* aColdata = aColDesc.getArray();
+
+                                            if (aItem3.first.starts_with("setcolumndesc."))
+                                            {
+                                                int nValue = stoi(aItem3.first.substr(14));
+                                                if (nValue >= 0 && nValue < aColDesc.getLength())
+                                                {
+                                                    aColdata[nValue] = OStringToOUString(
+                                                        aItem3.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8);
+                                                }
+                                                // Todo: else log: wrong index at setcolumndesc.
+                                            }
+                                            else
+                                            {
+                                                int nIndex = 0;
+                                                for (const auto& aItem4 : aItem3.second)
+                                                {
+                                                    if (nIndex >= aColDesc.getLength())
+                                                    {
+                                                        // Todo log: too many parameters
+                                                        break;
+                                                    }
+                                                    aColdata[nIndex] = OStringToOUString(
+                                                        aItem4.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8);
+                                                    nIndex++;
+                                                }
+                                            }
+                                            xDataArray->setColumnDescriptions(aColDesc);
+                                        }
+                                        else if (aItem3.first.starts_with("resize"))
+                                        {
+                                            if (aItem3.second.size() >= 2)
+                                            {
+                                                auto aItem4 = aItem3.second.begin();
+                                                int nY = aItem4->second.get_value<int>();
+                                                int nX = (++aItem4)->second.get_value<int>();
+
+                                                if (nX < 1 || nY < 1)
+                                                {
+                                                    // Todo log: wrong resize argument
+                                                    continue;
+                                                }
+                                                // here we need to use the new insert column thing
+                                                if (!lcl_ResizeChartColumns(xChartDoc, nX))
+                                                    continue;
+
+                                                uno::Sequence<uno::Sequence<double>> aData
+                                                    = xDataArray->getData();
+                                                if (aData.getLength() != nY)
+                                                    aData.realloc(nY);
+
+                                                for (sal_Int32 j = 0; j < nY; ++j)
+                                                {
+                                                    uno::Sequence<double>* pRows = aData.getArray();
+                                                    // resize row if needed
+                                                    if (pRows[j].getLength() != nX)
+                                                    {
+                                                        pRows[j].realloc(nX);
+                                                    }
+                                                }
+                                                xDataArray->setData(aData);
+                                            }
+                                            // Todo: else log: not enought parameter for resize
+                                        }
+                                        else if (aItem3.first.starts_with("data"))
+                                        {
+                                            // set table data values
+                                            uno::Sequence<uno::Sequence<double>> aData
+                                                = xDataArray->getData();
+
+                                            // set only 1 cell data
+                                            if (aItem3.first.starts_with("datayx."))
+                                            {
+                                                int nPoint = aItem3.first.find('.', 7);
+                                                int nY = stoi(aItem3.first.substr(7, nPoint - 7));
+                                                int nX = stoi(aItem3.first.substr(nPoint + 1));
+                                                if (nY < aData.getLength() && nY >= 0)
+                                                {
+                                                    uno::Sequence<double>* pRows = aData.getArray();
+                                                    if (nX < pRows[nY].getLength() && nX >= 0)
+                                                    {
+                                                        double* pCols = pRows[nY].getArray();
+                                                        pCols[nX]
+                                                            = aItem3.second.get_value<double>();
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // set the whole data table
+                                                // resize if needed
+                                                int nRowsCount = aItem3.second.size();
+                                                int nColsCount = 0;
+
+                                                for (const auto& aItem4 : aItem3.second)
+                                                {
+                                                    if (nColsCount
+                                                        < static_cast<int>(aItem4.second.size()))
+                                                    {
+                                                        nColsCount = aItem4.second.size();
+                                                    }
+                                                }
+
+                                                if (nColsCount > 0)
+                                                {
+                                                    // here we need to use the new insert column thing
+                                                    if(!lcl_ResizeChartColumns(xChartDoc, nColsCount))
+                                                        continue;
+
+                                                    if (aData.getLength() != nRowsCount)
+                                                        aData.realloc(nRowsCount);
+
+                                                    // set all the rows
+                                                    sal_Int32 nY = 0;
+                                                    for (const auto& aItem4 : aItem3.second)
+                                                    {
+                                                        uno::Sequence<double>* pRows
+                                                            = aData.getArray();
+                                                        // resize row if needed
+                                                        if (pRows[nY].getLength() != nColsCount)
+                                                        {
+                                                            pRows[nY].realloc(nColsCount);
+                                                        }
+                                                        double* pCols = pRows[nY].getArray();
+                                                        // set all values in the row
+                                                        sal_Int32 nX = 0;
+                                                        for (const auto& aItem5 : aItem4.second)
+                                                        {
+                                                            if (nX >= nColsCount)
+                                                            {
+                                                                break;
+                                                            }
+                                                            pCols[nX]
+                                                                = aItem5.second.get_value<double>();
+                                                            nX++;
+                                                        }
+                                                        nY++;
+                                                    }
+                                                }
+                                            }
+                                            xDataArray->setData(aData);
+                                        }
+                                        // Todo: else Log that this chart command was not recognised
+                                        xModi->setModified(true);
+                                    }
+                                }
+                            }
+                            // todo: else log chart transfrom not recognised
+                        }
+
                         if (aItem2.first.starts_with("ContentControls"))
                         {
                             std::string aTextEnd = aItem2.first.substr(15);
@@ -2371,6 +2945,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             if (!xContentControlText.is())
                                                 continue;
                                             xContentControlText->setString(aCheckContent);
+                                        }
+                                        else if (aItem3.first == "date")
+                                        {
+                                            std::string aDate
+                                                = aItem3.second.get_value<std::string>();
+                                            xContentControlProps->setPropertyValue(
+                                                UNO_NAME_CURRENT_DATE,
+                                                uno::Any(OStringToOUString(aDate,
+                                                                           RTL_TEXTENCODING_UTF8)));
                                         }
                                         else if (aItem3.first == "alias")
                                         {

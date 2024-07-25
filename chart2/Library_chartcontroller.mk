@@ -100,8 +100,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/ChartResourceGroups \
     chart2/source/controller/dialogs/ChartTypeDialogController \
     chart2/source/controller/dialogs/DataBrowser \
-    chart2/source/controller/dialogs/DataBrowserModel \
-    chart2/source/controller/dialogs/DialogModel \
     chart2/source/controller/dialogs/dlg_ChartType \
     chart2/source/controller/dialogs/dlg_ChartType_UNO \
     chart2/source/controller/dialogs/dlg_CreationWizard \
@@ -120,8 +118,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_ShapeParagraph \
     chart2/source/controller/dialogs/dlg_View3D \
     chart2/source/controller/dialogs/ObjectNameProvider \
-    chart2/source/controller/dialogs/RangeSelectionHelper \
-    chart2/source/controller/dialogs/RangeSelectionListener \
     chart2/source/controller/dialogs/res_BarGeometry \
     chart2/source/controller/dialogs/res_DataLabel \
     chart2/source/controller/dialogs/res_DataTableProperties \
@@ -130,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/res_Titles \
     chart2/source/controller/dialogs/res_Trendline \
     chart2/source/controller/dialogs/TextDirectionListBox \
-    chart2/source/controller/dialogs/TimerTriggeredControllerLock \
     chart2/source/controller/dialogs/TitleDialogData \
     chart2/source/controller/dialogs/tp_3D_SceneAppearance \
     chart2/source/controller/dialogs/tp_3D_SceneGeometry \

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <ControllerLockGuard.hxx>
+#include "ControllerLockGuard.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 #include <rtl/ref.hxx>
@@ -36,7 +36,7 @@ namespace chart
 {
 class ChartModel;
 
-class RangeSelectionListenerParent
+class OOO_DLLPUBLIC_CHARTTOOLS RangeSelectionListenerParent
 {
 public:
     virtual void listeningFinished(const OUString& rNewRange) = 0;

@@ -33,6 +33,7 @@
 #include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataBrowserModel.hxx>
 #include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -311,6 +312,7 @@ InternalDataProvider::InternalDataProvider(
 {
     if (!xModel.is())
         return;
+    m_xChartModel = xModel.get();
     try
     {
         rtl::Reference< Diagram > xDiagram( xModel->getFirstChartDiagram() );
@@ -405,6 +407,11 @@ InternalDataProvider::InternalDataProvider( const InternalDataProvider & rOther 
 
 InternalDataProvider::~InternalDataProvider()
 {}
+
+void InternalDataProvider::setChartModel(ChartModel* pChartModel)
+{
+    m_xChartModel = pChartModel;
+}
 
 void InternalDataProvider::addDataSequenceToMap(
     const OUString & rRangeRepresentation,
@@ -1157,6 +1164,14 @@ void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Refere
 {
     if( xSeq.is())
         addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
+}
+
+void SAL_CALL InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
+{
+    // call the dialog insertion
+    rtl::Reference<ChartModel> xChartModel(m_xChartModel);
+    DataBrowserModel* pDBM = new DataBrowserModel(xChartModel);
+    pDBM->insertDataSeries(nAfterIndex);
 }
 
 // ____ XRangeXMLConversion ____

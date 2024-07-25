@@ -71,6 +71,13 @@ interface XInternalDataProvider  : com::sun::star::chart2::data::XDataProvider
     @since OOo 3.3
     */
     void deleteComplexCategoryLevel( [in] long nLevel );
+
+    /** similar to insertSequence, but it also insert data series
+        and handle other things needed for the chart, like set color, format...
+        it calls the DataBrowserModel::insertDataSeries()
+        @since LibreOffice 25.2
+    */
+    void insertDataSeries( [in] long nAfterIndex );
 };
 
 } ; // chart2

@@ -44,6 +44,14 @@
 #include <unocontentcontrol.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
+
 using namespace ::com::sun::star;
 
 namespace
@@ -403,7 +411,6 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
 
     int iCCcount = xContentControls->getCount();
 
-    auto commentsNode = rJsonWriter.startNode("DocStructure");
     for (int i = 0; i < iCCcount; ++i)
     {
         OString aNodeName("ContentControls.ByIndex."_ostr + OString::number(i));
@@ -477,6 +484,9 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
                 OUString aDateLanguage;
                 xContentControlProps->getPropertyValue(UNO_NAME_DATE_LANGUAGE) >>= aDateLanguage;
                 rJsonWriter.put(UNO_NAME_DATE_LANGUAGE, aDateLanguage);
+                OUString aCurrentDate;
+                xContentControlProps->getPropertyValue(UNO_NAME_CURRENT_DATE) >>= aCurrentDate;
+                rJsonWriter.put(UNO_NAME_CURRENT_DATE, aCurrentDate);
             }
             break;
             case SwContentControlType::PLAIN_TEXT:
@@ -493,6 +503,125 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
             default:
                 //it should never happen
                 rJsonWriter.put("type", "no type?");
+        }
+    }
+}
+
+void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
+                           const std::map<OUString, OUString>& rArguments,
+                           uno::Reference<container::XIndexAccess>& xEmbeddeds)
+{
+    auto it = rArguments.find(u"filter"_ustr);
+    if (it != rArguments.end())
+    {
+        // If filter is present but we are filtering not to charts
+        if (!it->second.equals(u"charts"_ustr))
+            return;
+    }
+
+    sal_Int32 nEOcount = xEmbeddeds->getCount();
+
+    for (int i = 0; i < nEOcount; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xEmbeddeds->getByIndex(i), uno::UNO_QUERY);
+        if (!xShapeProps.is())
+            continue;
+
+        uno::Reference<frame::XModel> xDocModel;
+        xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
+        if (!xDocModel.is())
+            continue;
+
+        uno::Reference<chart2::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
+        if (!xChartDoc.is())
+            continue;
+
+        uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider());
+        if (!xDataProvider.is())
+            continue;
+
+        uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc->getDataProvider(),
+                                                          uno::UNO_QUERY);
+        if (!xDataArray.is())
+            continue;
+
+        uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+        if (!xDiagram.is())
+            continue;
+
+        //we have the chart Data now, we can start to extract it
+        OString aNodeName("Charts.ByEmbedIndex."_ostr + OString::number(i));
+        auto aChartNode = rJsonWriter.startNode(aNodeName);
+
+        //get the object name
+        uno::Reference<container::XNamed> xNamedShape(xEmbeddeds->getByIndex(i), uno::UNO_QUERY);
+        if (xNamedShape.is())
+        {
+            OUString aName;
+            aName = xNamedShape->getName();
+            rJsonWriter.put("name", aName);
+        }
+
+        //get the chart title, if there is one
+        uno::Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+        if (xTitled.is())
+        {
+            uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+            if (xTitle.is())
+            {
+                OUString aTitle;
+                const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
+                    = xTitle->getText();
+                for (auto const& fs : aFSSeq)
+                    aTitle += fs->getString();
+                rJsonWriter.put("title", aTitle);
+            }
+        }
+
+        //get the chart subtitle, if there is one
+        uno::Reference<chart2::XTitled> xSubTitled(xDiagram, uno::UNO_QUERY_THROW);
+        if (xSubTitled.is())
+        {
+            uno::Reference<chart2::XTitle> xSubTitle = xSubTitled->getTitleObject();
+            if (xSubTitle.is())
+            {
+                OUString aSubTitle;
+                const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
+                    = xSubTitle->getText();
+                for (auto const& fs : aFSSeq)
+                    aSubTitle += fs->getString();
+                rJsonWriter.put("subtitle", aSubTitle);
+            }
+        }
+
+        {
+            uno::Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
+            auto aRowDescNode = rJsonWriter.startArray("RowDescriptions");
+            for (int j = 0; j < aRowDesc.getLength(); j++)
+            {
+                rJsonWriter.putSimpleValue(aRowDesc[j]);
+            }
+        }
+        {
+            uno::Sequence<OUString> aColDesc = xDataArray->getColumnDescriptions();
+            auto aColDescNode = rJsonWriter.startArray("ColumnDescriptions");
+            for (int j = 0; j < aColDesc.getLength(); j++)
+            {
+                rJsonWriter.putSimpleValue(aColDesc[j]);
+            }
+        }
+        {
+            uno::Sequence<uno::Sequence<double>> aData = xDataArray->getData();
+            auto aDataValuesNode = rJsonWriter.startArray("DataValues");
+            for (int j = 0; j < aData.getLength(); j++)
+            {
+                OString aRowNodeName("Row."_ostr + OString::number(j));
+                auto aRowNode = rJsonWriter.startArray(aRowNodeName);
+                for (int k = 0; k < aData[j].getLength(); k++)
+                {
+                    rJsonWriter.putSimpleValue(OUString::number(aData[j][k]));
+                }
+            }
         }
     }
 }
@@ -609,6 +738,14 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     }
     else if (o3tl::starts_with(rCommand, aExtractDocStructure))
     {
+        auto commentsNode = rJsonWriter.startNode("DocStructure");
+
+        uno::Reference<container::XIndexAccess> xEmbeddeds(getEmbeddedObjects(), uno::UNO_QUERY);
+        if (xEmbeddeds.is())
+        {
+            GetDocStructureCharts(rJsonWriter, m_pDocShell, aMap, xEmbeddeds);
+        }
+
         uno::Reference<container::XIndexAccess> xContentControls = getContentControls();
         GetDocStructure(rJsonWriter, m_pDocShell, aMap, xContentControls);
     }

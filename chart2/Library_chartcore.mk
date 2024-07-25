@@ -62,6 +62,11 @@ $(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore,ser
 
 # view pieces ...
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
+    chart2/source/controller/dialogs/DataBrowserModel \
+    chart2/source/controller/dialogs/DialogModel \
+    chart2/source/controller/dialogs/RangeSelectionHelper \
+    chart2/source/controller/dialogs/RangeSelectionListener \
+    chart2/source/controller/dialogs/TimerTriggeredControllerLock \
     chart2/source/view/axes/DateHelper \
     chart2/source/view/axes/DateScaling \
     chart2/source/view/axes/MinimumAndMaximumSupplier \

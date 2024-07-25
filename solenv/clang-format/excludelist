@@ -802,7 +802,6 @@ chart2/source/controller/dialogs/ChartTypeDialogController.cxx
 chart2/source/controller/dialogs/DataBrowser.cxx
 chart2/source/controller/dialogs/DataBrowser.hxx
 chart2/source/controller/dialogs/DataBrowserModel.cxx
-chart2/source/controller/dialogs/DataBrowserModel.hxx
 chart2/source/controller/dialogs/DialogModel.cxx
 chart2/source/controller/dialogs/DialogModel.hxx
 chart2/source/controller/dialogs/ObjectNameProvider.cxx
@@ -883,7 +882,6 @@ chart2/source/controller/inc/MultipleItemConverter.hxx
 chart2/source/controller/inc/ObjectHierarchy.hxx
 chart2/source/controller/inc/ObjectNameProvider.hxx
 chart2/source/controller/inc/PositionAndSizeHelper.hxx
-chart2/source/controller/inc/RangeSelectionHelper.hxx
 chart2/source/controller/inc/RegressionCurveItemConverter.hxx
 chart2/source/controller/inc/RegressionEquationItemConverter.hxx
 chart2/source/controller/inc/SelectionHelper.hxx
@@ -1003,6 +1001,7 @@ chart2/source/inc/ColorPerPointHelper.hxx
 chart2/source/inc/CommonConverters.hxx
 chart2/source/inc/CommonFunctors.hxx
 chart2/source/inc/ConfigColorScheme.hxx
+chart2/source/inc/DataBrowserModel.hxx
 chart2/source/inc/DataInterpreter.hxx
 chart2/source/inc/DataSeries.hxx
 chart2/source/inc/DataSeriesHelper.hxx
@@ -1040,6 +1039,7 @@ chart2/source/inc/PolynomialRegressionCurveCalculator.hxx
 chart2/source/inc/PotentialRegressionCurveCalculator.hxx
 chart2/source/inc/PropertyHelper.hxx
 chart2/source/inc/RangeHighlighter.hxx
+chart2/source/inc/RangeSelectionHelper.hxx
 chart2/source/inc/ReferenceSizeProvider.hxx
 chart2/source/inc/RegressionCalculationHelper.hxx
 chart2/source/inc/RegressionCurveCalculator.hxx

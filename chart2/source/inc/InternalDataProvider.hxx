@@ -19,6 +19,7 @@
 #pragma once
 
 #include "InternalData.hxx"
+#include <ChartModel.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
@@ -30,6 +31,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <map>
 
@@ -101,6 +103,7 @@ public:
     virtual void SAL_CALL swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex ) override;
     virtual void SAL_CALL registerDataSequenceForChanges(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xSeq ) override;
+    virtual void SAL_CALL insertDataSeries( ::sal_Int32 nAfterIndex ) override;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
     virtual sal_Bool SAL_CALL createDataSourcePossible(
@@ -175,6 +178,8 @@ public:
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
 
+    void setChartModel(ChartModel* pChartModel);
+
 private:
     void addDataSequenceToMap(
         const OUString & rRangeRepresentation,
@@ -213,6 +218,9 @@ private:
     tSequenceMap m_aSequenceMap;
     InternalData m_aInternalData;
     bool m_bDataInColumns;
+
+    // keep a weak reference to the owning m_xChartModel for insertDataSeries
+    unotools::WeakReference<ChartModel> m_xChartModel;
 };
 
 } //  namespace chart

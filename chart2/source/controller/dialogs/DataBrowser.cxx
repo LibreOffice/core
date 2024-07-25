@@ -20,7 +20,7 @@
 #include <svl/zforlist.hxx>
 
 #include "DataBrowser.hxx"
-#include "DataBrowserModel.hxx"
+#include <DataBrowserModel.hxx>
 #include <strings.hrc>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>

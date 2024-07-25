@@ -13,6 +13,9 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -41,6 +44,8 @@
 #include <ndtxt.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
+#include <unotxdoc.hxx>
+#include <tools/json_writer.hxx>
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
@@ -585,6 +590,197 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
         ++nActual;
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
+{
+    createSwDoc("docStructureChartExampleOriginal.odt");
+    OString aJson = R"json(
+{
+    "Transforms": {
+        "Charts.ByEmbedIndex.0": {
+            "modifyrow.1": [ 19, 15 ],
+            "datayx.3.1": 37,
+            "deleterow.0": "",
+            "deleterow.1": "",
+            "insertrow.0": [ 15, 17 ],
+            "setrowdesc.0": "Paul",
+            "insertrow.2": [ 19, 22 ],
+            "setrowdesc.2": "Barbara",
+            "insertrow.4": [ 29, 27 ],
+            "setrowdesc.4": "Elizabeth",
+            "insertrow.5": [ 14, 26 ],
+            "setrowdesc.5": "William",
+            "insertcolumn.1": [ 1,2,3,4,5,6 ],
+            "insertcolumn.0": [ 2,1,2,1,2,1 ],
+            "insertcolumn.4": [ 7,7,7,7,7,7 ],
+            "setcolumndesc.4": "c4",
+            "setcolumndesc.0": "c0",
+            "setcolumndesc.2": "c2"
+        },
+        "Charts.BySubTitle.Subtitle2": {
+            "deletecolumn.3": ""
+        },
+        "Charts.ByEmbedName.Object3": {
+            "resize": [ 12, 3 ],
+            "setrowdesc":
+            [
+                "United Kingdom",
+                "United States of America",
+                "Canada",
+                "Brazil",
+                "Germany",
+                "India",
+                "Japan",
+                "Sudan",
+                "Norway",
+                "Italy",
+                "France",
+                "Egypt"
+            ],
+            "modifycolumn.0": [ 12, 9, 8, 5, 5, 4, 3, 3, 2, 2, 1, 1],
+            "resize": [ 12, 2 ]
+        },
+        "Charts.ByTitle.Fixed issues": {
+            "data": [ [ 3,1,2 ],
+                      [ 2,0,1 ],
+                      [ 3,2,0 ],
+                      [ 2,1,1 ],
+                      [ 4,2,2 ],
+                      [ 2,2,1 ],
+                      [ 3,2,0,0 ],
+                      [ 3,1,2,1 ],
+                      [ 3,3,1,0,1 ],
+                      [ 2,1,0,1,2 ],
+                      [ 4,2,1,2,2,3 ],
+                      [ 2,1,0,0,1,4 ],
+                      [ 3,2,2,1,3,2 ],
+                      [ 4,2,1,1,2,3 ],
+                      [ 3,3,2,0,3,5 ],
+                      [ 3,3,1,2,2,3 ],
+                      [ 5,1,1,1,1,4 ],
+                      [ 2,2,2,1,2,3 ] ],
+            "setrowdesc": ["2023.01",".02",".03",".04",".05",".06",".07",".08",".09",".10",".11",".12","2023.01",".02",".03",".04",".05",".06"],
+            "setcolumndesc": ["Jennifer", "Charles", "Thomas", "Maria", "Lisa", "Daniel"]
+        }
+    }
+}
+)json"_ostr;
+
+    //transform
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"DataJson"_ustr,
+                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+
+    // Check transformed values of the 3 chart
+    for (int nShape = 0; nShape < 3; nShape++)
+    {
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xEOS(mxComponent, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xEOS.is());
+        uno::Reference<container::XIndexAccess> xEmbeddeds(xEOS->getEmbeddedObjects(),
+                                                           uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xEmbeddeds.is());
+
+        uno::Reference<beans::XPropertySet> xShapeProps(xEmbeddeds->getByIndex(nShape),
+                                                        uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapeProps.is());
+
+        uno::Reference<frame::XModel> xDocModel;
+        xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
+        CPPUNIT_ASSERT(xDocModel.is());
+
+        uno::Reference<chart2::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc->getDataProvider(),
+                                                          uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDataArray.is());
+
+        switch (nShape)
+        {
+            case 0:
+            {
+                std::vector<std::vector<double>> aValues = {
+                    { 2, 15, 1, 7 }, { 1, 19, 2, 7 }, { 2, 19, 3, 7 },
+                    { 1, 25, 4, 7 }, { 2, 29, 5, 7 }, { 1, 14, 6, 7 },
+                };
+                // RowDescriptions
+                std::vector<OUString> aRowDescsValues
+                    = { u"Paul"_ustr,  u"Mary"_ustr,      u"Barbara"_ustr,
+                        u"David"_ustr, u"Elizabeth"_ustr, u"William"_ustr };
+                // ColumnDescriptions
+                std::vector<OUString> aColDescsValues
+                    = { u"c0"_ustr, u"2022"_ustr, u"c2"_ustr, u"c4"_ustr };
+
+                uno::Sequence<uno::Sequence<double>> aData = xDataArray->getData();
+                for (size_t nY = 0; nY < aValues.size(); nY++)
+                {
+                    for (size_t nX = 0; nX < aValues[nY].size(); nX++)
+                    {
+                        CPPUNIT_ASSERT_EQUAL(aData[nY][nX], aValues[nY][nX]);
+                    }
+                }
+
+                uno::Sequence<OUString> aColDescs = xDataArray->getColumnDescriptions();
+                for (size_t i = 0; i < aColDescsValues.size(); i++)
+                {
+                    CPPUNIT_ASSERT_EQUAL(aColDescs[i], aColDescsValues[i]);
+                }
+                uno::Sequence<OUString> aRowDescs = xDataArray->getRowDescriptions();
+                for (size_t i = 0; i < aRowDescsValues.size(); i++)
+                {
+                    CPPUNIT_ASSERT_EQUAL(aRowDescs[i], aRowDescsValues[i]);
+                }
+            }
+            break;
+            case 1:
+            {
+                uno::Sequence<uno::Sequence<double>> aData = xDataArray->getData();
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(18), aData.getLength());
+                uno::Sequence<double>* pRows = aData.getArray();
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), pRows[0].getLength());
+            }
+            break;
+            case 2:
+            {
+                uno::Sequence<uno::Sequence<double>> aData = xDataArray->getData();
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(12), aData.getLength());
+                uno::Sequence<double>* pRows = aData.getArray();
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), pRows[0].getLength());
+            }
+            break;
+            default:
+                break;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
+{
+    createSwDoc("docStructureChartExampleOriginal.odt");
+
+    //extract
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:ExtractDocumentStructure");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    OString aExpectedStr
+        = "{ \"DocStructure\": { \"Charts.ByEmbedIndex.0\": { \"name\": \"Object1\", \"title\": "
+          "\"Paid leave days\", \"subtitle\": \"Subtitle2\", \"RowDescriptions\": [ \"James\", "
+          "\"Mary\", \"Patricia\", \"David\"], \"ColumnDescriptions\": [ \"2022\", \"2023\"], "
+          "\"DataValues\": [ \"Row.0\": [ \"22\", \"24\"], \"Row.1\": [ \"18\", \"16\"], "
+          "\"Row.2\": [ \"32\", \"32\"], \"Row.3\": [ \"25\", \"23\"]]}, "
+          "\"Charts.ByEmbedIndex.1\": { \"name\": \"Object2\", \"title\": \"Fixed issues\", "
+          "\"subtitle\": \"Subtitle1\", \"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \" "
+          "\"], \"DataValues\": [ \"Row.0\": [ \"NaN\"]]}, \"Charts.ByEmbedIndex.2\": { \"name\": "
+          "\"Object3\", \"title\": \"Employees from countries\", \"subtitle\": \"Subtitle3\", "
+          "\"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \"Column 1\"], \"DataValues\": "
+          "[ \"Row.0\": [ \"NaN\"]]}}}"_ostr;
+
+    CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)

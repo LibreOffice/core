@@ -743,7 +743,10 @@ void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingDat
         if( bCloneExistingData )
             m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( this, true );
         else
+        {
             m_xInternalDataProvider = ChartModelHelper::createInternalDataProvider( nullptr, true );
+            m_xInternalDataProvider->setChartModel(this);
+        }
         m_xDataProvider.set( m_xInternalDataProvider );
     }
     setModified( true );
