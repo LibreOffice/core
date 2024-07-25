@@ -24,7 +24,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -261,11 +260,10 @@ void SwHtmlDomExportTest::ExportToReqif()
 
 void SwHtmlDomExportTest::ExportToHTML()
 {
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 }
 
 void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
@@ -274,7 +272,7 @@ void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
     };
-    mxComponent = loadFromDesktop(rUrl, u"com.sun.star.text.TextDocument"_ustr, aLoadProperties);
+    loadWithParams(rUrl, aLoadProperties);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo81276)
@@ -803,14 +801,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
 
     ImportFromReqif(createFileURL(u"reqif-png-img.xhtml"));
     verify(/*bExported=*/false);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
-    mxComponent->dispose();
+    saveWithParams(aStoreProperties);
     ImportFromReqif(maTempFile.GetURL());
     verify(/*bExported=*/true);
 }
@@ -1046,13 +1042,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTransparentImage)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
 {
     createSwDoc("transparent-image.odt");
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
     OUString aSource = getXPath(
@@ -1184,13 +1179,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
     ImportFromReqif(createFileURL(u"reqif-ole-data.xhtml"));
 
     // Export it.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, aType),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -1294,8 +1288,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x99ed), aOle1Reader.m_nNativeDataSize);
 
     // Now import this back and check the ODT result.
-    mxComponent->dispose();
-    mxComponent.clear();
     ImportFromReqif(maTempFile.GetURL());
     save(u"writer8"_ustr);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -1366,13 +1358,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
     createSwDoc("paint-ole-bitmap-format.odt");
 
     // When exporting to reqif-xhtml with ExportImagesAsOLE enabled:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure the resulting bitmap is 24bpp:
     OUString aRtfUrl = GetOlePath();
@@ -1717,13 +1708,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure we export that PNG as WMF in ReqIF mode:
     OUString aRtfUrl = GetOlePath();
@@ -1862,13 +1852,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure the PNG is embedded with an RTF wrapper:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -1981,13 +1970,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
     sal_Int32 nDPI = 600;
 
     // When exporting to XHTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ShapeDPI"_ustr, nDPI),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure the shape is embedded as a PNG:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -2023,13 +2011,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // When exporting to reqif with ExportImagesAsOLE=true:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure the transparent pixel turns into white:
     SvMemoryStream aOle1;
@@ -2206,10 +2193,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     assertXPath(pXmlDoc, "//reqif-xhtml:br"_ostr, 1);
 
     // Then test the import side:
-
     // Given an empty document:
-    mxComponent->dispose();
-
     // When importing a <br> from reqif-xhtml:
     ImportFromReqif(maTempFile.GetURL());
 
@@ -2237,13 +2221,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
     pWrtShell->Insert(u"thi \t rd"_ustr);
 
     // When exporting to HTML, using LeadingTabWidth=2:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure that leading tabs are replaced with 2 nbsps:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -2267,12 +2250,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     pWrtShell->Insert(u"\t test"_ustr);
 
     // When exporting to plain HTML, using LeadingTabWidth=2:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Then make sure that leading tabs are replaced with 2 nbsps:
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
@@ -2670,14 +2652,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
     xController->select(xDrawPage->getByIndex(0));
 
     // Store only the selection
-    auto xStorable(mxComponent.queryThrow<css::frame::XStorable>());
     css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, u"text/rtf"_ustr),
         comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
 
@@ -2787,7 +2768,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf156647_CellPaddingRoundtrip)
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     assertXPath(pXmlDoc, "//reqif-xhtml:table"_ostr, "cellpadding"_ostr, u"48"_ustr); // px
     // Now import it
-    mxComponent->dispose();
     ImportFromReqif(maTempFile.GetURL());
     // Then make sure that padding is not lost:
     {
@@ -3029,13 +3009,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
     createSwDoc("embedded_formula.fodt");
 
     // When exporting to reqif with ExportFormulasAsPDF=true:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportFormulasAsPDF"_ustr, true),
     };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    saveWithParams(aStoreProperties);
 
     // Make sure that the formula is exported as PDF:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
