@@ -147,6 +147,43 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     // left spot available
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf162180)
+{
+    createSwDoc("tdf162180.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Select the whole table
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // Without the fix in place, this test would have crashed here
+    rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
+    xTransferable->Copy(); // Ctl-C
+    xTransferable.get();
+
+    // Get the plain text version of the selection
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = "text/plain;charset=utf-16";
+    aFlavor.DataType = cppu::UnoType<OUString>::get();
+    uno::Any aData = xTransferable->getTransferData(aFlavor);
+    CPPUNIT_ASSERT(aData.hasValue());
+
+    OUString aActual;
+    aData >>= aActual;
+
+#if !defined(_WIN32) //FIXME
+    OUString aExpected
+        = u"2010\t2011"_ustr SAL_NEWLINE_STRING u"All Projects"_ustr SAL_NEWLINE_STRING u"Pending\t"_ustr SAL_NEWLINE_STRING u"USA\tWest\tApproved"_ustr SAL_NEWLINE_STRING u"\tCentral\tPending"_ustr SAL_NEWLINE_STRING u"\tEast\tApproved"_ustr;
+#else
+    OUString aExpected
+        = u"2010\t2011"_ustr SAL_NEWLINE_STRING u"All Projects\nPending\t"_ustr SAL_NEWLINE_STRING u"USA\tWest\tApproved"_ustr SAL_NEWLINE_STRING u"\tCentral\tPending"_ustr SAL_NEWLINE_STRING u"\tEast\tApproved"_ustr;
+#endif
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual.trim());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
