@@ -37,18 +37,11 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
 
     Idle aModifyIdle;
 
-    SdrTextObj* mpTextObj = nullptr;
-    bool mbIgnoreNotifications = false;
     bool mbInFocus = false;
-
-    void removeListener();
-    void addListener();
-
-    void setListenerIgnored(bool bIgnore);
-    bool isListenerIgnored();
 
     void getNotesFromDoc();
     void setNotesToDoc();
+    SdrTextObj* getNotesTextObj();
 
 public:
     NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
@@ -71,7 +64,6 @@ public:
 
     void SetLinks();
     void ResetLinks();
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     virtual void GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr = false) const override;
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false,

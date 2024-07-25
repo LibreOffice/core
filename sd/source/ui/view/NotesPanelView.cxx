@@ -77,23 +77,28 @@ void NotesPanelView::FillOutliner()
     maOutliner.GetUndoManager().Clear();
     maOutliner.EnableUndo(false);
     ResetLinks();
-    removeListener();
-    mpTextObj = nullptr;
     maOutliner.Clear();
 
-    SdPage* pNotesPage = mrNotesPanelViewShell.getCurrentPage();
-    if (!pNotesPage)
+    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    if (!pNotesTextObj)
         return;
 
-    SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
-    if (!pNotesObj)
-        return;
-
-    mpTextObj = dynamic_cast<SdrTextObj*>(pNotesObj);
-    addListener();
     getNotesFromDoc();
     SetLinks();
     maOutliner.EnableUndo(true);
+}
+
+SdrTextObj* NotesPanelView::getNotesTextObj()
+{
+    SdPage* pNotesPage = mrNotesPanelViewShell.getCurrentPage();
+    if (!pNotesPage)
+        return nullptr;
+
+    SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+    if (!pNotesObj)
+        return nullptr;
+
+    return dynamic_cast<SdrTextObj*>(pNotesObj);
 }
 
 void NotesPanelView::SetLinks()
@@ -103,78 +108,36 @@ void NotesPanelView::SetLinks()
 
 void NotesPanelView::ResetLinks() { maOutliner.SetStatusEventHdl(Link<EditStatus&, void>()); }
 
-void NotesPanelView::removeListener()
-{
-    if (mpTextObj)
-        mpTextObj->RemoveListener(*this);
-}
-void NotesPanelView::addListener()
-{
-    if (mpTextObj)
-        mpTextObj->AddListener(*this);
-}
-
-void NotesPanelView::setListenerIgnored(bool bIgnore) { mbIgnoreNotifications = bIgnore; }
-bool NotesPanelView::isListenerIgnored() { return mbIgnoreNotifications; }
-
 void NotesPanelView::getNotesFromDoc()
 {
-    if (!mpTextObj)
+    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    if (!pNotesTextObj)
         return;
 
     // Ignore notifications that will rebound from updating the text
     maOutliner.SetModifyHdl(Link<LinkParamNone*, void>());
-    setListenerIgnored(true);
 
-    if (OutlinerParaObject* pPara = mpTextObj->GetOutlinerParaObject())
+    if (OutlinerParaObject* pPara = pNotesTextObj->GetOutlinerParaObject())
         maOutliner.SetText(*pPara);
 
-    setListenerIgnored(false);
     maOutliner.SetModifyHdl(LINK(this, NotesPanelView, EditModifiedHdl));
 }
 
 void NotesPanelView::setNotesToDoc()
 {
-    if (!mpTextObj)
+    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    if (!pNotesTextObj)
         return;
 
-    setListenerIgnored(true);
-
     std::optional<OutlinerParaObject> pNewText = maOutliner.CreateParaObject();
-    mpTextObj->SetOutlinerParaObject(std::move(pNewText));
-    if (mpTextObj->IsEmptyPresObj())
-        mpTextObj->SetEmptyPresObj(false);
-
-    setListenerIgnored(false);
+    pNotesTextObj->SetOutlinerParaObject(std::move(pNewText));
+    if (pNotesTextObj->IsEmptyPresObj())
+        pNotesTextObj->SetEmptyPresObj(false);
 }
 
 void NotesPanelView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const* /*pWin*/)
 {
     maOutlinerView.Paint(rRect);
-}
-
-void NotesPanelView::Notify(SfxBroadcaster&, const SfxHint& rHint)
-{
-    if (isListenerIgnored())
-        return;
-
-    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
-    {
-        const SdrHint& rSdrHint = reinterpret_cast<const SdrHint&>(rHint);
-        switch (rSdrHint.GetKind())
-        {
-            case SdrHintKind::ObjectRemoved:
-            case SdrHintKind::ModelCleared:
-                FillOutliner();
-                break;
-            case SdrHintKind::ObjectChange:
-            case SdrHintKind::EndEdit:
-                FillOutliner();
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 OutlinerView* NotesPanelView::GetOutlinerView() { return &maOutlinerView; }
@@ -233,7 +196,8 @@ void NotesPanelView::onGrabFocus()
         return;
     mbInFocus = true;
 
-    if (mpTextObj && mpTextObj->IsEmptyPresObj())
+    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    if (pNotesTextObj && pNotesTextObj->IsEmptyPresObj())
     {
         // clear the "Click to add Notes" text on entering the window.
         maOutliner.SetToEmptyText();
@@ -247,14 +211,15 @@ void NotesPanelView::onLoseFocus()
     mbInFocus = false;
 
     aModifyIdle.Stop();
-    if (mpTextObj)
+    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    if (pNotesTextObj)
     {
         if (maOutliner.GetEditEngine().GetText().getLength() == 0)
         {
             // if the notes are empty restore the placeholder text and state.
-            SdPage* pPage = dynamic_cast<SdPage*>(mpTextObj->getSdrPageFromSdrObject());
+            SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject());
             if (pPage)
-                pPage->RestoreDefaultText(mpTextObj);
+                pPage->RestoreDefaultText(pNotesTextObj);
         }
         else
             setNotesToDoc();
