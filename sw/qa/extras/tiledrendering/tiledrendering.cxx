@@ -1860,6 +1860,106 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
 }
 
+// Test that changing the theme in one view doesn't change it in the other view
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
+{
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nFirstViewId = SfxLokHelper::getView();
+    ViewCallback aView1;
+    // Set view to dark scheme
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    // First view is in dark scheme
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+    // Create second view
+    SfxLokHelper::createView();
+    int nSecondViewId = SfxLokHelper::getView();
+    ViewCallback aView2;
+    // Set second view to dark scheme
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    }
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+
+    // Set view 1 to invert document background
+    SfxLokHelper::setView(nFirstViewId);
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Light")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+    }
+    // First view has inverted background
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
+
+    SfxLokHelper::setView(nSecondViewId);
+    // Second view still has regular background
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+
+    // Set view 2 to invert document background
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Light")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+    }
+    // Second view has inverted background
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
+
+    SfxLokHelper::setView(nFirstViewId);
+    // First view still has inverted background
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
+
+    SfxLokHelper::setView(nSecondViewId);
+    // Set view 2 to regular document background
+    {
+        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+        SwView* pView = pDoc->GetDocShell()->GetView();
+        uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        comphelper::dispatchCommand(".uno:InvertBackground", xFrame, aPropertyValues);
+    }
+    // Second view has regular background
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
+
+    SfxLokHelper::setView(nFirstViewId);
+    // First view still has inverted background
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
+}
+
 // Test that changing the theme sends the document background color as LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
 {
