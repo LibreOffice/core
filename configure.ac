@@ -1437,7 +1437,7 @@ dnl ===================================================================
 
 EMSCRIPTEN_MIN_MAJOR=3
 EMSCRIPTEN_MIN_MINOR=1
-EMSCRIPTEN_MIN_TINY=3
+EMSCRIPTEN_MIN_TINY=46
 EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRIPTEN_MIN_TINY}"
 
 if test "$_os" = "Emscripten"; then
