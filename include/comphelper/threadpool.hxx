@@ -67,7 +67,13 @@ public:
     /** Wait until all queued tasks associated with the tag are completed
         @param  bJoin - if set call joinThreadsIfIdle() at the end
     */
-    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoin = true);
+    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoin =
+#if defined EMSCRIPTEN
+                                                                     false
+#else
+                                                                     true
+#endif
+                             );
 
     /// join all threads if there are no tasks presently.
     void        joinThreadsIfIdle();
