@@ -2294,7 +2294,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
             }
 
             // change painting color depending of dark/bright background
-            if (!pVSh->GetWin() || // ie. IsPrinting, see SwViewShell::GetWin()
+            if ((pVSh && !pVSh->GetWin()) || // ie. IsPrinting, see SwViewShell::GetWin()
                 svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO) // GetFontColor() uses the smart flag
             {
                 if ( pCol->IsDark() )
