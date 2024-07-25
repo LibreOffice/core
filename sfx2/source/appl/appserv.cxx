@@ -734,15 +734,29 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case FN_INVERT_BACKGROUND:
         {
+            const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
+
             svtools::EditableColorConfig aColorConfig;
-            ::Color aCurrentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
             ::Color aDefLightColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 0);
             ::Color aDefDarkColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1);
+
+            OUString aNewTheme;
+            if (!pNewThemeArg) {
+                ::Color aCurrentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+
+                if (aCurrentColor == aDefLightColor) {
+                    aNewTheme = OUString("Dark");
+                } else {
+                    aNewTheme = OUString("Light");
+                }
+            } else {
+                aNewTheme = pNewThemeArg->GetValue();
+            }
 
             svtools::ColorConfigValue aValue;
             aValue.bIsVisible = true;
 
-            if(aCurrentColor == aDefLightColor)
+            if(aNewTheme == "Dark")
                 aValue.nColor = aDefDarkColor;
             else
                 aValue.nColor = aDefLightColor;
