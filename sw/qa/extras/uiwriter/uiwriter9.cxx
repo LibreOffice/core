@@ -330,6 +330,67 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
+{
+    // Unit test for tdf#139631
+    // Test to see if preceding space is cut when cutting a word with track changes (redline) on
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(u"New World!\""_ustr);
+    // Assert that the string, New World!", is inserted correctly into the document
+    CPPUNIT_ASSERT_EQUAL(u"New World!\""_ustr, getParagraph(1)->getString());
+
+    // Enable redline
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // Hide redline changes
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, false, 2, false);
+    // Select and cut "World" from string
+    pWrtShell->Left(SwCursorSkipMode::Chars, true, 5, false);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    pXmlDoc = parseLayoutDump();
+    // Verifies that the leading space before "World" was also cut
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
+                "portion"_ostr, "New!\"");
+
+    // Reset to initial string
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
+                "portion"_ostr, "New World!\"");
+
+    pWrtShell->EndPara(false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, false, 1, false);
+    // Replace ! with .
+    pWrtShell->Left(SwCursorSkipMode::Chars, true, 1, false);
+    pWrtShell->Delete();
+    pWrtShell->Insert(u"."_ustr);
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
+                "portion"_ostr, "New World.\"");
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, false, 1, false);
+    // Select and cut "World" from string
+    pWrtShell->Left(SwCursorSkipMode::Chars, true, 5, false);
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // Without the test in place, the leading space before "World" is not also cut.
+    // Expected: New."
+    // Actual: New ."
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
+                "portion"_ostr, "New.\"");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 {
     createSwDoc();
