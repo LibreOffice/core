@@ -616,10 +616,13 @@ static void lcl_setRowNotTracked(SwNode& rNode)
     if ( rDoc.GetIDocumentUndoRedo().DoesUndo() && rNode.GetTableBox() )
     {
         SvxPrintItem aSetTracking(RES_PRINT, false);
-        SwNodeIndex aInsPos( *(rNode.GetTableBox()->GetSttNd()), 1);
-        SwCursor aCursor( SwPosition(aInsPos), nullptr );
-        ::sw::UndoGuard const undoGuard(rNode.GetDoc().GetIDocumentUndoRedo());
-        rDoc.SetRowNotTracked( aCursor, aSetTracking );
+        if (const SwTableBox* pTableBox = rNode.GetTableBox())
+        {
+            SwNodeIndex aInsPos( *(pTableBox->GetSttNd()), 1);
+            SwCursor aCursor( SwPosition(aInsPos), nullptr );
+            ::sw::UndoGuard const undoGuard(rNode.GetDoc().GetIDocumentUndoRedo());
+            rDoc.SetRowNotTracked( aCursor, aSetTracking );
+        }
     }
 }
 
