@@ -481,7 +481,6 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphSdt)
     CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
     uno::Reference<text::XTextContent> xContentControl;
     xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
-    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
