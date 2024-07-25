@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataBrowserModel.hxx"
 #include "DialogModel.hxx"
+#include <DataBrowserModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeManager.hxx>

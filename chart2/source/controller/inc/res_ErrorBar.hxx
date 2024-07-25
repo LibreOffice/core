@@ -22,7 +22,7 @@
 #include <tools/link.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include "RangeSelectionListener.hxx"
+#include <RangeSelectionListener.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XChartDocument; }

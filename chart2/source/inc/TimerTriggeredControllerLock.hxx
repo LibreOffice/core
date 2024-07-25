@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include "charttoolsdllapi.hxx"
+
 namespace com::sun::star::frame
 {
 class XModel;
@@ -37,7 +39,7 @@ namespace chart
 {
 class ChartModel;
 
-class TimerTriggeredControllerLock final
+class OOO_DLLPUBLIC_CHARTTOOLS TimerTriggeredControllerLock final
 {
 public:
     TimerTriggeredControllerLock(rtl::Reference<::chart::ChartModel> xModel);

@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <DataSeries.hxx>
-#include <ChartType.hxx>
+#include "DataSeries.hxx"
+#include "ChartType.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
@@ -44,7 +44,7 @@ class ChartModel;
 class ChartType;
 class DataSeries;
 
-class DataBrowserModel final
+class OOO_DLLPUBLIC_CHARTTOOLS DataBrowserModel final
 {
 public:
     explicit DataBrowserModel(

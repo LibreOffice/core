@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "TimerTriggeredControllerLock.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 #include "TabPageNotifiable.hxx"
 
 #include <rtl/ref.hxx>
