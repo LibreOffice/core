@@ -58,7 +58,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 	  && $(MAKE) \
 	  $(if $(filter MACOSX,$(OS)),\
 		  && $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			  $(EXTERNAL_WORKDIR)/src/.libs/libassuan.0.dylib \
+			  $(EXTERNAL_WORKDIR)/src/.libs/libassuan.9.dylib \
 		) \
 	)
 	$(call gb_Trace_EndRange,libassuan,EXTERNAL)
