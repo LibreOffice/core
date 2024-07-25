@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
@@ -727,8 +726,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     // Open it.
     uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
-    mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.drawing.DrawingDocument"_ustr, aArgs);
+    loadWithParams(maTempFile.GetURL(), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
@@ -1276,9 +1274,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
         const OUString sLoadMessage = "loading failed: " + aURL;
 
         // load the template as-is to validate signatures
-        mxComponent = loadFromDesktop(
-            aURL, OUString(),
-            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        loadWithParams(aURL,
+                       comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a valid document and macro signature
         assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::OK,
@@ -1305,10 +1302,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
             save(u"writer8_template"_ustr);
 
             // load the saved OTT template as-is to validate signatures
-            mxComponent->dispose();
-            mxComponent = loadFromDesktop(
-                maTempFile.GetURL(), OUString(),
-                comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+            loadWithParams(maTempFile.GetURL(),
+                           comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
         }
 
         // the loaded document is a OTT/ODT with a macro signature
@@ -1319,17 +1314,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
         save(u"writer8_template"_ustr);
 
         // load the template as-is to validate signatures
-        mxComponent->dispose();
-        mxComponent = loadFromDesktop(
-            maTempFile.GetURL(), OUString(),
-            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        loadWithParams(maTempFile.GetURL(),
+                       comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a valid macro signature
         assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::OK, ODFVER_013_TEXT);
-
-        mxComponent->dispose();
-        mxComponent.clear();
     }
 }
 
@@ -1340,8 +1330,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
     const OUString sLoadMessage = "loading failed: " + aURL;
 
     // load the template as-is to validate signatures
-    mxComponent = loadFromDesktop(
-        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    loadWithParams(aURL, comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
@@ -1364,9 +1353,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 
     // load the template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent = loadFromDesktop(
-        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    loadWithParams(aURL, comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // we are a template, and have a non-invalid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
@@ -1376,10 +1363,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
     save(u"writer8_template"_ustr);
 
     // load the template as-is to validate signatures
-    mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), OUString(),
-                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+    loadWithParams(maTempFile.GetURL(),
+                   comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
     // the loaded document is a 1.2 OTT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
@@ -1409,9 +1394,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
         const OUString sLoadMessage = "loading failed: " + aURL;
 
         // load the template as-is to validate signatures
-        mxComponent = loadFromDesktop(
-            aURL, OUString(),
-            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        loadWithParams(aURL,
+                       comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // we are a template, and have a non-invalid macro signature
         assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
@@ -1438,10 +1422,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
             save(u"writer8_template"_ustr);
 
             // load the saved OTT template as-is to validate signatures
-            mxComponent->dispose();
-            mxComponent = loadFromDesktop(
-                maTempFile.GetURL(), OUString(),
-                comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+            loadWithParams(maTempFile.GetURL(),
+                           comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
         }
 
         assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
@@ -1450,17 +1432,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
         save(u"writer8_template"_ustr);
 
         // load the template as-is to validate signatures
-        mxComponent->dispose();
-        mxComponent = loadFromDesktop(
-            maTempFile.GetURL(), OUString(),
-            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        loadWithParams(maTempFile.GetURL(),
+                       comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
 
         // the loaded document is a OTT with a non-invalid macro signature
         assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
                        SignatureState::NOTVALIDATED, OUString());
-
-        mxComponent->dispose();
-        mxComponent.clear();
     }
 }
 
