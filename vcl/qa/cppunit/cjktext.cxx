@@ -156,13 +156,13 @@ void VclCjkTextTest::testVerticalText()
     font.SetFontSize(Size(0, 36));
     device->Erase();
     device->SetFont(font);
-    device->DrawText(Point(90, 10), text);
+    device->DrawText(Point(80, 0), text);
     exportDevice(u"vertical-text-36.png"_ustr, device);
     // Height of U+30E8 with font 36 size should be roughly 28 pixels,
     // but since we don't know which font will be used, allow even more range.
-    tools::Long height36 = getCharacterRightSideHeight(device, Point(99, 22));
+    tools::Long height36 = getCharacterRightSideHeight(device, Point(99, 50));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(28), height36, 6);
-    tools::Long width36 = getCharacterTopWidth(device, Point(65, 0));
+    tools::Long width36 = getCharacterTopWidth(device, Point(50, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(25), width36, 6);
 
     // Horizontal writing of vertical glyphs. For some reason in this case
@@ -176,20 +176,20 @@ void VclCjkTextTest::testVerticalText()
     // Here width and height should be the same, since the glyphs actually
     // not rotated compared to the vertical writing.
     tools::Long height36Rotated = getCharacterRightSideHeight(device, Point(99, 35));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(height36, height36Rotated, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, height36Rotated, 2);
     tools::Long width36Rotated = getCharacterTopWidth(device, Point(25, 0));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, width36Rotated, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(height36, width36Rotated, 2);
 
     font = baseFont;
     font.SetFontSize(Size(0, 72));
     device->Erase();
     device->SetFont(font);
-    device->DrawText(Point(90, 10), text);
+    device->DrawText(Point(105, -50), text);
     exportDevice(u"vertical-text-72.png"_ustr, device);
     // Font size is doubled, so pixel sizes should also roughly double.
-    tools::Long height72 = getCharacterRightSideHeight(device, Point(99, 35));
+    tools::Long height72 = getCharacterRightSideHeight(device, Point(99, 50));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 * 2, height72, 4);
-    tools::Long width72 = getCharacterTopWidth(device, Point(40, 0));
+    tools::Long width72 = getCharacterTopWidth(device, Point(68, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 * 2, width72, 4);
 
     font.SetOrientation(0_deg10);
@@ -199,9 +199,9 @@ void VclCjkTextTest::testVerticalText()
     device->DrawText(Point(10, 10), text);
     exportDevice(u"vertical-text-72-0deg.png"_ustr, device);
     tools::Long height72Rotated = getCharacterRightSideHeight(device, Point(99, 60));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(height72, height72Rotated, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(width72, height72Rotated, 1);
     tools::Long width72Rotated = getCharacterTopWidth(device, Point(45, 0));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(width72, width72Rotated, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(height72, width72Rotated, 1);
 
     // On Windows scaling of vertical glyphs is broken.
     if (device->GetGraphics()->getRenderBackendName() == "gdi")
