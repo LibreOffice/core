@@ -402,9 +402,9 @@
 #define RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC      NC_("RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", "Automatic")
 
 // A11Y Options
-#define STR_NO_ALT_OLE                              NC_("STR_NO_ALT_OLE", "Check Ole Object have alternative name or discription")
-#define STR_NO_ALT_GRAPHIC                          NC_("STR_NO_ALT_GRAPHIC", "Check Graphic Object have alternative name or discription")
-#define STR_NO_ALT_SHAPE                            NC_("STR_NO_ALT_SHAPE", "Check Shape Object have alternative name or discription")
+#define STR_NO_ALT_OLE                              NC_("STR_NO_ALT_OLE", "Check Ole Object have alternative name or description")
+#define STR_NO_ALT_GRAPHIC                          NC_("STR_NO_ALT_GRAPHIC", "Check Graphic Object have alternative name or description")
+#define STR_NO_ALT_SHAPE                            NC_("STR_NO_ALT_SHAPE", "Check Shape Object have alternative name or description")
 #define STR_LINKED_GRAPHIC                          NC_("STR_LINKED_GRAPHIC", "Check Graphic object referenced as “LINK”")
 #define STR_TABLE_MERGE_SPLIT                       NC_("STR_TABLE_MERGE_SPLIT", "Check Table object contains merges or splits")
 #define STR_FAKE_NUMBERING                          NC_("STR_FAKE_NUMBERING", "Check document contains simulated numbering")
