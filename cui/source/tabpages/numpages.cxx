@@ -338,6 +338,8 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
     m_xBtChangeBullet->connect_clicked(LINK(this, SvxBulletPickTabPage, ClickAddChangeHdl_Impl));
+    m_aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
+    m_aBulletSymbolsFonts = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
 }
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
@@ -443,10 +445,9 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     bPreset = false;
     bModified = true;
     sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
-    sal_Unicode cChar = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get()[nIndex].toChar();
+    sal_Unicode cChar = m_aBulletSymbols[nIndex].toChar();
     vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
-    rActBulletFont.SetFamilyName(
-        officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get()[nIndex]);
+    rActBulletFont.SetFamilyName(m_aBulletSymbolsFonts[nIndex]);
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -527,8 +528,6 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
         _nMask <<= 1;
     }
 
-    m_aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
-    m_aBulletSymbolsFonts = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
     css::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
     css::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
     auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
