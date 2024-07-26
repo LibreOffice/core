@@ -115,12 +115,14 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     org::libreoffice::embindtest::Struct SAL_CALL getStruct() override
     {
-        return { -123456, 100.5, u"hä"_ustr };
+        return { -123456, 100.5, u"hä"_ustr, css::uno::Any(true) };
     }
 
     sal_Bool SAL_CALL isStruct(org::libreoffice::embindtest::Struct const& value) override
     {
-        return value == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
+        return value
+               == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
+                                                        css::uno::Any(true) };
     }
 
     org::libreoffice::embindtest::StructLong SAL_CALL getStructLong() override
@@ -293,14 +295,16 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     css::uno::Any SAL_CALL getAnyStruct() override
     {
-        return css::uno::Any(org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr });
+        return css::uno::Any(org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
+                                                                   css::uno::Any(true) });
     }
 
     sal_Bool SAL_CALL isAnyStruct(css::uno::Any const& value) override
     {
         return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
                && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
-                      == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
+                      == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
+                                                               css::uno::Any(true) };
     }
 
     css::uno::Any SAL_CALL getAnyException() override
@@ -517,9 +521,9 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     css::uno::Sequence<org::libreoffice::embindtest::Struct> SAL_CALL getSequenceStruct() override
     {
-        return { { -123456, -100.5, u"foo"_ustr },
-                 { 1, 1.25, u"barr"_ustr },
-                 { 123456, 100.75, u"bazzz"_ustr } };
+        return { { -123456, -100.5, u"foo"_ustr, css::uno::Any() },
+                 { 1, 1.25, u"barr"_ustr, css::uno::Any(true) },
+                 { 123456, 100.75, u"bazzz"_ustr, css::uno::Any(u"buzzz"_ustr) } };
     }
 
     sal_Bool SAL_CALL
@@ -527,9 +531,9 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     {
         return value
                == css::uno::Sequence<org::libreoffice::embindtest::Struct>{
-                      { -123456, -100.5, u"foo"_ustr },
-                      { 1, 1.25, u"barr"_ustr },
-                      { 123456, 100.75, u"bazzz"_ustr }
+                      { -123456, -100.5, u"foo"_ustr, css::uno::Any() },
+                      { 1, 1.25, u"barr"_ustr, css::uno::Any(true) },
+                      { 123456, 100.75, u"bazzz"_ustr, css::uno::Any(u"buzzz"_ustr) }
                   };
     }
 
@@ -569,7 +573,7 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         value14 = css::uno::Any(sal_Int32(-123456));
         value15 = { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
         value16 = org::libreoffice::embindtest::Enum_E_2;
-        value17 = { -123456, 100.5, u"hä"_ustr };
+        value17 = { -123456, 100.5, u"hä"_ustr, css::uno::Any(true) };
         value18 = this;
     }
 
@@ -758,7 +762,9 @@ private:
         }
         {
             auto const val = ifcCpp->getStruct();
-            assert((val == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr }));
+            assert((val
+                    == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
+                                                             css::uno::Any(true) }));
             auto const ok = ifcCpp->isStruct(val);
             assert(ok == css::uno::Any(true));
         }
@@ -831,7 +837,9 @@ private:
             assert((value15
                     == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr }));
             assert(value16 == org::libreoffice::embindtest::Enum_E_2);
-            assert((value17 == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr }));
+            assert((value17
+                    == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
+                                                             css::uno::Any(true) }));
             assert(value18 == ifcCpp);
         }
         try
