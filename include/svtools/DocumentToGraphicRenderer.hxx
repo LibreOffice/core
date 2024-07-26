@@ -42,7 +42,7 @@ namespace com::sun::star {
     }
 }
 
-class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) DocumentToGraphicRenderer
+class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
     const css::uno::Reference<css::lang::XComponent>& mxDocument;
 
