@@ -1088,7 +1088,7 @@ public:
     */
     bool startsWith(std::string_view str, OString * rest) const {
         assert(rest);
-        bool b = match(str);
+        bool b = startsWith(str);
         if (b) {
             *rest = copy(str.size());
         }
@@ -1109,7 +1109,7 @@ public:
     */
     bool startsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
-        bool b = match(str);
+        bool b = startsWith(str);
         if (b) {
             *rest = subView(str.size());
         }
@@ -1163,7 +1163,7 @@ public:
     {
         RTL_STRING_CONST_FUNCTION
         assert(rest);
-        bool b = match(literal, 0);
+        bool b = startsWith(literal);
         if (b) {
             *rest = copy(
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -1180,7 +1180,7 @@ public:
     {
         RTL_STRING_CONST_FUNCTION
         assert(rest);
-        bool b = match(literal, 0);
+        bool b = startsWith(literal);
         if (b) {
             *rest = subView(
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -1252,7 +1252,7 @@ public:
         const
     {
         assert(rest);
-        bool b = matchIgnoreAsciiCase(str);
+        bool b = startsWithIgnoreAsciiCase(str);
         if (b) {
             *rest = copy(str.size());
         }
@@ -1281,7 +1281,7 @@ public:
         const
     {
         assert(rest);
-        bool b = matchIgnoreAsciiCase(str);
+        bool b = startsWithIgnoreAsciiCase(str);
         if (b) {
             *rest = subView(str.size());
         }
@@ -1343,10 +1343,8 @@ public:
     startsWithIgnoreAsciiCase(T & literal, OString * rest) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         assert(rest);
-        bool b = matchIgnoreAsciiCase(literal);
+        bool b = startsWithIgnoreAsciiCase(literal);
         if (b) {
             *rest = copy(
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -1358,10 +1356,8 @@ public:
     startsWithIgnoreAsciiCase(T & literal, std::string_view * rest) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         assert(rest);
-        bool b = matchIgnoreAsciiCase(literal);
+        bool b = startsWithIgnoreAsciiCase(literal);
         if (b) {
             *rest = subView(
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -1421,8 +1417,7 @@ public:
     */
     bool endsWith(std::string_view str, OString * rest) const {
         assert(rest);
-        bool b = str.size() <= sal_uInt32(getLength())
-            && match(str, getLength() - str.size());
+        bool b = endsWith(str);
         if (b) {
             *rest = copy(0, getLength() - str.size());
         }
@@ -1443,8 +1438,7 @@ public:
     */
     bool endsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
-        bool b = str.size() <= sal_uInt32(getLength())
-            && match(str, getLength() - str.size());
+        bool b = endsWith(str);
         if (b) {
             *rest = subView(0, getLength() - str.size());
         }
@@ -1508,17 +1502,8 @@ public:
         T & literal, OString * rest) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         assert(rest);
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
-               <= sal_uInt32(getLength()))
-            && match(
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                (getLength()
-                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+        bool b = endsWith(literal);
         if (b) {
             *rest = copy(
                 0,
@@ -1537,17 +1522,8 @@ public:
         T & literal, std::string_view * rest) const
     {
         RTL_STRING_CONST_FUNCTION
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         assert(rest);
-        bool b
-            = (libreoffice_internal::ConstCharArrayDetector<T>::length
-               <= sal_uInt32(getLength()))
-            && match(
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                (getLength()
-                 - libreoffice_internal::ConstCharArrayDetector<T>::length));
+        bool b = endsWith(literal);
         if (b) {
             *rest = subView(
                 0,
