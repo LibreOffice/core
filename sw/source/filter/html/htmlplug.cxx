@@ -1259,8 +1259,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         aAny = xSet->getPropertyValue(u"PluginURL"_ustr);
         if( (aAny >>= aStr) && !aStr.isEmpty() )
         {
-            aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
-                      aStr);
+            aURL = rWrt.normalizeURL(aStr, false);
         }
 
         if( !aURL.isEmpty() )
@@ -1308,7 +1307,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         aAny = xSet->getPropertyValue(u"AppletCodeBase"_ustr);
         if( (aAny >>= aCd) && !aCd.isEmpty() )
         {
-            OUString sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
+            OUString sCodeBase(rWrt.normalizeURL(aCd, false));
             if( !sCodeBase.isEmpty() )
             {
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_codebase "=\"");
@@ -1524,13 +1523,14 @@ static void OutHTMLGraphic(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat
         nFlags |= HtmlFrmOpts::Replacement;
     HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart(aHtml, rWrt, rFrameFormat, aGraphicURL, rGraphic, pOLENd->GetTitle(),
-                       pOLENd->GetTwipSize(), nFlags, "ole", nullptr, aMimeType);
+                       pOLENd->GetTwipSize(), nFlags, "ole", nullptr, aMimeType, true);
     OutHTML_ImageEnd(aHtml, rWrt);
 }
 
 static void OutHTMLStartObject(SwHTMLWriter& rWrt, const OUString& rFileName, const OUString& rFileType)
 {
-    OUString aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), rFileName);
+    // OutHTMLStartObject is only for own objects
+    OUString aFileName = rWrt.normalizeURL(rFileName, true);
 
     if (rWrt.IsLFPossible())
         rWrt.OutNewLine();

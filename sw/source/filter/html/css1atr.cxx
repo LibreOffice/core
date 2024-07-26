@@ -3050,6 +3050,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
     const Color & rColor = static_cast<const SvxBrushItem &>(rHt).GetColor();
     OUString aLink = pGraphicName ? *pGraphicName
                             : static_cast<const SvxBrushItem &>(rHt).GetGraphicLink();
+    bool bOwn = false;
     SvxGraphicPosition ePos = static_cast<const SvxBrushItem &>(rHt).GetGraphicPos();
     if( sw::Css1Background::Page == nMode && !rWrt.mbEmbedImages )
     {
@@ -3089,7 +3090,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
     else if( !pGraphicName && rWrt.m_bCfgCpyLinkedGrfs )
     {
         OUString aGraphicAsLink = aLink;
-        rWrt.CopyLocalFileToINet( aGraphicAsLink );
+        bOwn = rWrt.CopyLocalFileToINet( aGraphicAsLink );
         aLink = aGraphicAsLink;
     }
     // In tables we only export something if there is a Graphic
@@ -3188,8 +3189,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
             else
             {
                 sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US)+
-                     "(" +  URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-                             aLink) + ")";
+                     "(" +  rWrt.normalizeURL(aLink, bOwn) + ")";
             }
 
             if( !pRepeat.empty() )

@@ -1234,7 +1234,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
                        const Size &rRealSize, HtmlFrmOpts nFrameOpts,
                        const char *pMarkType,
                        const ImageMap *pAltImgMap,
-                       const OUString& rMimeType )
+                       const OUString& rMimeType,
+                       bool bOwn)
 {
     // <object data="..."> instead of <img src="...">
     bool bReplacement = (nFrameOpts & HtmlFrmOpts::Replacement) || rWrt.mbReqIF;
@@ -1250,8 +1251,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     }
 
     OUString aGraphicURL( rGraphicURL );
-    if( !rWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) && !rWrt.mpTempBaseURL )
-        aGraphicURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGraphicURL);
+    if (!rWrt.mbEmbedImages)
+        aGraphicURL = rWrt.normalizeURL(aGraphicURL, bOwn);
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
@@ -1496,6 +1497,7 @@ SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
 {
     OUString aGraphicInBase64;
     OUString aLink;
+    bool bOwn = false;
     if( pBrush )
     {
         aLink = pBrush->GetGraphicLink();
@@ -1510,11 +1512,11 @@ SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
                 }
             }
         }
-        else if(!aLink.isEmpty())
+        else
         {
             if( rWrt.m_bCfgCpyLinkedGrfs )
             {
-                rWrt.CopyLocalFileToINet( aLink );
+                bOwn = rWrt.CopyLocalFileToINet(aLink);
             }
 
         }
@@ -1525,8 +1527,7 @@ SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
     }
     if(!aLink.isEmpty())
     {
-        if( !HTMLOutFuncs::PrivateURLToInternalImg(aLink) )
-            aLink = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aLink);
+        aLink = rWrt.normalizeURL(aLink, bOwn);
     }
 
     OStringBuffer sOut;
@@ -1787,7 +1788,7 @@ static void OutHTML_ImageOLEStart(SwHTMLWriter& rWrt, const Graphic& rGraphic,
         SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
 
     // Refer to this data.
-    aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
+    aFileName = rWrt.normalizeURL(aFileName, true);
     rWrt.Strm().WriteOString(
         Concat2View("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
     rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
@@ -1884,7 +1885,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
     HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
-                    aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType );
+                    aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType, true);
 
     GfxLink aLink = aGraphic.GetGfxLink();
     if (bWritePNGFallback && aLink.GetType() != GfxLinkType::NativePng)
@@ -1928,6 +1929,7 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
 
     OUString aGraphicURL;
     OUString aMimeType;
+    bool bOwn = false;
     if(!rWrt.mbEmbedImages)
     {
         const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
@@ -2012,12 +2014,13 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
             aGraphicURL = URIHelper::SmartRel2Abs(
                 INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
                 URIHelper::GetMaybeFileHdl() );
+            bOwn = true;
         }
         else
         {
             pGrfNd->GetFileFilterNms( &aGraphicURL, nullptr );
             if( rWrt.m_bCfgCpyLinkedGrfs )
-                rWrt.CopyLocalFileToINet( aGraphicURL );
+                bOwn = rWrt.CopyLocalFileToINet(aGraphicURL);
         }
 
     }
@@ -2029,7 +2032,7 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
 
     HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
-                  pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
+                  pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType, bOwn );
 
     GfxLink aLink = aGraphic.GetGfxLink();
     if (bWritePNGFallback && aLink.GetType() != GfxLinkType::NativePng)

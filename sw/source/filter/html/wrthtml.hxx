@@ -282,6 +282,8 @@ class SwHTMLWriter : public Writer
     bool m_bLFPossible = false; // a line break can be inserted
     bool m_bSpacePreserve = false; // Using xml::space="preserve", or "white-space: pre-wrap" style
     bool m_bPreserveSpacesOnWrite = false; // If export should use m_bSpacePreserve
+    // If "Save URLs relative to *" is ignored for self-generated images / objects
+    bool m_bRelativeURLsForOwnObjects = false;
 
     sal_uInt16 OutHeaderAttrs();
     const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
@@ -629,6 +631,8 @@ public:
     bool IsSpacePreserve() const { return m_bSpacePreserve; }
     void SetSpacePreserve(bool val) { m_bSpacePreserve = val; }
     bool IsPreserveSpacesOnWritePrefSet() const { return m_bPreserveSpacesOnWrite; }
+
+    OUString normalizeURL(const OUString& url, bool own) const;
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
@@ -706,7 +710,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter&, const SwFram
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const char *pMarkType,
                        const ImageMap *pGenImgMap,
-                       const OUString& rMimeType = {} );
+                       const OUString& rMimeType,
+                       bool bOwn = false );
 SwHTMLWriter& OutHTML_ImageEnd( HtmlWriter& rHtml, SwHTMLWriter& );
 
 SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt, const char *pTag,
