@@ -61,6 +61,10 @@ $(eval $(call gb_CppunitTest_use_api,sw_htmlexport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_htmlexport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_htmlexport))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_htmlexport,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_rdb,sw_htmlexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_htmlexport))
