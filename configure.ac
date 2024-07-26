@@ -2278,7 +2278,7 @@ AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
         [Specify package format(s) for LibreOffice installation sets. The
          implicit --without-package-format leads to no installation sets being
-         generated. Possible values: archive, bsd, deb, dmg,
+         generated. Possible values: archive, bsd, deb, dmg, emscripten,
          installed, msi, pkg, and rpm.
          Example: --with-package-format='deb rpm']),
 ,)
@@ -5725,7 +5725,7 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        bsd | deb | pkg | rpm | archive | dmg | installed | msi)
+        bsd | deb | pkg | rpm | archive | dmg | installed | msi | emscripten)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -5737,6 +5737,7 @@ rpm - RedHat software distribution
 LibreOffice additionally supports:
 archive - .tar.gz or .zip
 dmg - macOS .dmg
+emscripten - directory with qt_soffice.html etc.
 installed - installation tree
 msi - Windows .msi
         ])
