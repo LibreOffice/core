@@ -597,7 +597,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut = "\""_ostr;
                 }
             }
-            sOut += ">";
+            sOut += "/>";
             Strm().WriteOString( sOut );
 
             m_nFormCntrlCnt++;
@@ -918,7 +918,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     if( eTag == TAG_NONE )
         return rWrt;
 
-    OString sOut = OString::Concat("<") + TagNames[eTag];
+    const OString tag = rWrt.GetNamespace() + TagNames[eTag];
+    OString sOut = OString::Concat("<") + tag;
     if( eType != TYPE_NONE )
     {
         sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") +
@@ -1200,7 +1201,6 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             rWrt.DecIndentLevel();
             rWrt.OutNewLine();// the </SELECT> gets its own line
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_select), false );
     }
     else if( TAG_TEXTAREA == eTag )
     {
@@ -1226,7 +1226,6 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine );
             }
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_textarea), false );
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {
@@ -1239,6 +1238,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             }
         }
     }
+    HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), tag, false);
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteOString( aEndTags );
