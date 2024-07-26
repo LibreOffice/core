@@ -2212,6 +2212,11 @@ void SwPostItMgr::SetSidebarWidth(Point aMousePos)
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Notes::DisplayWidthFactor::set(nFactor, xChanges);
     xChanges->commit();
+
+    // tdf#159146 After resizing the sidebar the layout and the ruler needs to be updated
+    mpWrtShell->InvalidateLayout(true);
+    mpView->GetHRuler().Invalidate();
+
     LayoutPostIts();
 }
 
