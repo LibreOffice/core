@@ -631,179 +631,7 @@ void SwXMLImport::endDocument()
     if( HasShapeImport() )
         ClearShapeImport();
 
-    SwDoc *pDoc = nullptr;
-    if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
-    {
-        Reference<XInterface> xCursorTunnel( GetTextImport()->GetCursor(),
-                                              UNO_QUERY);
-        assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-        OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
-        assert(pTextCursor && "SwXTextCursor missing");
-        SwPaM *pPaM = pTextCursor->GetPaM();
-        if( IsInsertMode() && m_oSttNdIdx->GetIndex() )
-        {
-            // If we are in insert mode, join the split node that is in front
-            // of the new content with the first new node. Or in other words:
-            // Revert the first split node.
-            SwTextNode* pTextNode = m_oSttNdIdx->GetNode().GetTextNode();
-            SwNodeIndex aNxtIdx( *m_oSttNdIdx );
-            if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
-                m_oSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
-            {
-                // If the PaM points to the first new node, move the PaM to the
-                // end of the previous node.
-                if( pPaM->GetPoint()->GetNode() == aNxtIdx.GetNode() )
-                {
-                    pPaM->GetPoint()->Assign( *pTextNode,
-                                            pTextNode->GetText().getLength());
-                }
-
-#if OSL_DEBUG_LEVEL > 0
-                // !!! This should be impossible !!!!
-                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound().GetNodeIndex(),
-                        "PaM.Bound1 point to new node " );
-                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound( false ).GetNodeIndex(),
-                        "PaM.Bound2 points to new node" );
-
-                if( m_oSttNdIdx->GetIndex()+1 ==
-                                        pPaM->GetBound().GetNodeIndex() )
-                {
-                    const sal_Int32 nCntPos =
-                            pPaM->GetBound().GetContentIndex();
-                    pPaM->GetBound().SetContent(
-                            pTextNode->GetText().getLength() + nCntPos );
-                }
-                if( m_oSttNdIdx->GetIndex()+1 ==
-                                pPaM->GetBound( false ).GetNodeIndex() )
-                {
-                    const sal_Int32 nCntPos =
-                            pPaM->GetBound( false ).GetContentIndex();
-                    pPaM->GetBound( false ).SetContent(
-                            pTextNode->GetText().getLength() + nCntPos );
-                }
-#endif
-                // If the first new node isn't empty, convert  the node's text
-                // attributes into hints. Otherwise, set the new node's
-                // paragraph style at the previous (empty) node.
-                SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
-                if (!pTextNode->GetText().isEmpty())
-                    pDelNd->FormatToTextAttr( pTextNode );
-                else
-                {
-                    pTextNode->ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END);
-                    pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
-                    if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
-                    {
-                        // MergeListsAtDocumentInsertPosition() will deal with lists below, copy
-                        // paragraph direct formatting otherwise.
-                        pDelNd->CopyCollFormat(*pTextNode);
-                    }
-                }
-                pTextNode->JoinNext();
-            }
-        }
-
-        SwPosition* pPos = pPaM->GetPoint();
-        OSL_ENSURE( !pPos->GetContentIndex(), "last paragraph isn't empty" );
-        if( !pPos->GetContentIndex() )
-        {
-            SwTextNode* pCurrNd;
-            SwNodeOffset nNodeIdx = pPos->GetNodeIndex();
-            pDoc = &pPaM->GetDoc();
-
-            OSL_ENSURE( pPos->GetNode().IsContentNode(),
-                        "insert position is not a content node" );
-            if( !IsInsertMode() )
-            {
-                // If we're not in insert mode, the last node is deleted.
-                const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
-                if( pPrev->IsContentNode() ||
-                     ( pPrev->IsEndNode() &&
-                      pPrev->StartOfSectionNode()->IsSectionNode() ) )
-                {
-                    SwContentNode* pCNd = pPaM->GetPointContentNode();
-                    if( pCNd && pCNd->StartOfSectionIndex()+2 <
-                        pCNd->EndOfSectionIndex() )
-                    {
-                        SwNode& rDelNode = pPaM->GetPoint()->GetNode();
-                        // move so we don't have a dangling SwContentIndex to the deleted node
-                        pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
-                        if (pPaM->HasMark())
-                            pPaM->GetMark()->Adjust(SwNodeOffset(+1));
-                        pDoc->GetNodes().Delete( rDelNode );
-                    }
-                }
-            }
-            else if( nullptr != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTextNode()) )
-            {
-                // Id we're in insert mode, the empty node is joined with
-                // the next and the previous one.
-                if( pCurrNd->CanJoinNext( pPos ))
-                {
-                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
-                    bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
-                    SwNode *pLastPar = pDoc->GetNodes()[nNodeIdx -2];
-                    if ( !pLastPar->IsTextNode() ) {
-                        pLastPar = pDoc->GetNodes()[nNodeIdx -1];
-                    }
-                    if ( !endNodeFound && pLastPar->IsTextNode() )
-                    {
-                        pNextNd->ChgFormatColl(pLastPar->GetTextNode()->GetTextColl());
-                    }
-
-                    pPaM->SetMark(); pPaM->DeleteMark();
-                    pNextNd->JoinPrev();
-
-                    // Remove line break that has been inserted by the import,
-                    // but only if one has been inserted and
-                    // no endNode found to avoid removing section
-                    if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) && !endNodeFound &&
-                         *m_oSttNdIdx != pPos->GetNode() )
-                    {
-                        pNextNd->JoinPrev();
-                    }
-                }
-                else if (pCurrNd->GetText().isEmpty())
-                {
-                    pPaM->SetMark(); pPaM->DeleteMark();
-                    SwNode& rDelNode = pPos->GetNode();
-                    // move so we don't have a dangling SwContentIndex to the deleted node
-                    pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
-                    pDoc->GetNodes().Delete( rDelNode );
-                    pPaM->Move( fnMoveBackward );
-                }
-            }
-
-            // tdf#113877
-            // when we insert one document with list inside into another one with list at the insert position,
-            // the resulting numbering in these lists is not consequent.
-            //
-            // Main document:
-            //  1. One
-            //  2. Two
-            //  3. Three
-            //  4.                      <-- insert position
-            //
-            // Inserted document:
-            //  1. One
-            //  2. Two
-            //  3. Three
-            //  4.
-            //
-            // Expected result
-            //  1. One
-            //  2. Two
-            //  3. Three
-            //  4. One
-            //  5. Two
-            //  6. Three
-            //  7.
-            //
-            MergeListsAtDocumentInsertPosition(pDoc);
-        }
-    }
+    SwDoc *pDoc = endDocAdjustNodes();
 
     /* Was called too early. Moved from SwXMLBodyContext_Impl::EndElement */
 
@@ -1067,6 +895,188 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
 
         node2 = pDoc->GetNodes()[m_oSttNdIdx->GetIndex() + index];
     }
+}
+
+SwDoc* SwXMLImport::endDocAdjustNodes()
+{
+    SwDoc *pDoc = nullptr;
+    if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
+    {
+        Reference<XInterface> xCursorTunnel( GetTextImport()->GetCursor(),
+                                              UNO_QUERY);
+        assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
+        OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(xCursorTunnel.get());
+        if (!pTextCursor)
+        {
+            SAL_WARN("sw", "SwXMLImport::endDocAdjustNodes: SwXTextCursor missing");
+            return nullptr;
+        }
+        SwPaM *pPaM = pTextCursor->GetPaM();
+        if( IsInsertMode() && m_oSttNdIdx->GetIndex() )
+        {
+            // If we are in insert mode, join the split node that is in front
+            // of the new content with the first new node. Or in other words:
+            // Revert the first split node.
+            SwTextNode* pTextNode = m_oSttNdIdx->GetNode().GetTextNode();
+            SwNodeIndex aNxtIdx( *m_oSttNdIdx );
+            if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
+                m_oSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
+            {
+                // If the PaM points to the first new node, move the PaM to the
+                // end of the previous node.
+                if( pPaM->GetPoint()->GetNode() == aNxtIdx.GetNode() )
+                {
+                    pPaM->GetPoint()->Assign( *pTextNode,
+                                            pTextNode->GetText().getLength());
+                }
+
+#if OSL_DEBUG_LEVEL > 0
+                // !!! This should be impossible !!!!
+                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
+                                        pPaM->GetBound().GetNodeIndex(),
+                        "PaM.Bound1 point to new node " );
+                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
+                                        pPaM->GetBound( false ).GetNodeIndex(),
+                        "PaM.Bound2 points to new node" );
+
+                if( m_oSttNdIdx->GetIndex()+1 ==
+                                        pPaM->GetBound().GetNodeIndex() )
+                {
+                    const sal_Int32 nCntPos =
+                            pPaM->GetBound().GetContentIndex();
+                    pPaM->GetBound().SetContent(
+                            pTextNode->GetText().getLength() + nCntPos );
+                }
+                if( m_oSttNdIdx->GetIndex()+1 ==
+                                pPaM->GetBound( false ).GetNodeIndex() )
+                {
+                    const sal_Int32 nCntPos =
+                            pPaM->GetBound( false ).GetContentIndex();
+                    pPaM->GetBound( false ).SetContent(
+                            pTextNode->GetText().getLength() + nCntPos );
+                }
+#endif
+                // If the first new node isn't empty, convert  the node's text
+                // attributes into hints. Otherwise, set the new node's
+                // paragraph style at the previous (empty) node.
+                SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+                if (!pTextNode->GetText().isEmpty())
+                    pDelNd->FormatToTextAttr( pTextNode );
+                else
+                {
+                    pTextNode->ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END);
+                    pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
+                    if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                    {
+                        // MergeListsAtDocumentInsertPosition() will deal with lists below, copy
+                        // paragraph direct formatting otherwise.
+                        pDelNd->CopyCollFormat(*pTextNode);
+                    }
+                }
+                pTextNode->JoinNext();
+            }
+        }
+
+        SwPosition* pPos = pPaM->GetPoint();
+        OSL_ENSURE( !pPos->GetContentIndex(), "last paragraph isn't empty" );
+        if( !pPos->GetContentIndex() )
+        {
+            SwTextNode* pCurrNd;
+            SwNodeOffset nNodeIdx = pPos->GetNodeIndex();
+            pDoc = &pPaM->GetDoc();
+
+            OSL_ENSURE( pPos->GetNode().IsContentNode(),
+                        "insert position is not a content node" );
+            if( !IsInsertMode() )
+            {
+                // If we're not in insert mode, the last node is deleted.
+                const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
+                if( pPrev->IsContentNode() ||
+                     ( pPrev->IsEndNode() &&
+                      pPrev->StartOfSectionNode()->IsSectionNode() ) )
+                {
+                    SwContentNode* pCNd = pPaM->GetPointContentNode();
+                    if( pCNd && pCNd->StartOfSectionIndex()+2 <
+                        pCNd->EndOfSectionIndex() )
+                    {
+                        SwNode& rDelNode = pPaM->GetPoint()->GetNode();
+                        // move so we don't have a dangling SwContentIndex to the deleted node
+                        pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
+                        if (pPaM->HasMark())
+                            pPaM->GetMark()->Adjust(SwNodeOffset(+1));
+                        pDoc->GetNodes().Delete( rDelNode );
+                    }
+                }
+            }
+            else if( nullptr != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTextNode()) )
+            {
+                // Id we're in insert mode, the empty node is joined with
+                // the next and the previous one.
+                if( pCurrNd->CanJoinNext( pPos ))
+                {
+                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
+                    bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
+                    SwNode *pLastPar = pDoc->GetNodes()[nNodeIdx -2];
+                    if ( !pLastPar->IsTextNode() ) {
+                        pLastPar = pDoc->GetNodes()[nNodeIdx -1];
+                    }
+                    if ( !endNodeFound && pLastPar->IsTextNode() )
+                    {
+                        pNextNd->ChgFormatColl(pLastPar->GetTextNode()->GetTextColl());
+                    }
+
+                    pPaM->SetMark(); pPaM->DeleteMark();
+                    pNextNd->JoinPrev();
+
+                    // Remove line break that has been inserted by the import,
+                    // but only if one has been inserted and
+                    // no endNode found to avoid removing section
+                    if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) && !endNodeFound &&
+                         *m_oSttNdIdx != pPos->GetNode() )
+                    {
+                        pNextNd->JoinPrev();
+                    }
+                }
+                else if (pCurrNd->GetText().isEmpty())
+                {
+                    pPaM->SetMark(); pPaM->DeleteMark();
+                    SwNode& rDelNode = pPos->GetNode();
+                    // move so we don't have a dangling SwContentIndex to the deleted node
+                    pPaM->GetPoint()->Adjust(SwNodeOffset(+1));
+                    pDoc->GetNodes().Delete( rDelNode );
+                    pPaM->Move( fnMoveBackward );
+                }
+            }
+
+            // tdf#113877
+            // when we insert one document with list inside into another one with list at the insert position,
+            // the resulting numbering in these lists is not consequent.
+            //
+            // Main document:
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4.                      <-- insert position
+            //
+            // Inserted document:
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4.
+            //
+            // Expected result
+            //  1. One
+            //  2. Two
+            //  3. Three
+            //  4. One
+            //  5. Two
+            //  6. Three
+            //  7.
+            //
+            MergeListsAtDocumentInsertPosition(pDoc);
+        }
+    }
+    return pDoc;
 }
 
 namespace {
