@@ -109,21 +109,46 @@
             [static_cast<SalFrameWindow*>(pKeyWin) endExtTextInput];
 
             AquaSalFrame* pFrame = [static_cast<SalFrameWindow*>(pKeyWin) getSalFrame];
-            unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+
+            // Related tdf#162010: match against -[NSEvent characters]
+            // When using some non-Western European keyboard layouts, the
+            // event's "characters ignoring modifiers" will be set to the
+            // original Unicode character instead of the resolved key
+            // equivalent character so match against the -[NSEvent characters]
+            // instead.
+            NSEventModifierFlags nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+
+            // Note: when pressing Command-Option keys, some non-Western
+            // keyboards will set the "characters ignoring modifiers"
+            // property  to the key shortcut character instead of setting
+            // the "characters property. So check for both cases.
+            NSString *pCharacters = [pEvent characters];
+            NSString *pCharactersIgnoringModifiers = [pEvent charactersIgnoringModifiers];
+
             /*
              * #i98949# - Cmd-M miniaturize window, Cmd-Option-M miniaturize all windows
              */
-            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"m"] )
+            if( [pCharacters isEqualToString: @"m"] || [pCharactersIgnoringModifiers isEqualToString: @"m"] )
             {
                 if ( nModMask == NSEventModifierFlagCommand && ([pFrame->getNSWindow() styleMask] & NSWindowStyleMaskMiniaturizable) )
                 {
                     [pFrame->getNSWindow() performMiniaturize: nil];
                     return;
                 }
-
-                if ( nModMask == ( NSEventModifierFlagCommand | NSEventModifierFlagOption ) )
+                else if ( nModMask == ( NSEventModifierFlagCommand | NSEventModifierFlagOption ) )
                 {
                     [NSApp miniaturizeAll: nil];
+                    return;
+                }
+            }
+            // tdf#162190 handle Command-w
+            // On macOS, Command-w should attempt to close the key window.
+            // TODO: Command-Option-w should attempt to close all windows.
+            else if( [pCharacters isEqualToString: @"w"] || [pCharactersIgnoringModifiers isEqualToString: @"w"] )
+            {
+                if ( nModMask == NSEventModifierFlagCommand && ([pFrame->getNSWindow() styleMask] & NSWindowStyleMaskClosable ) )
+                {
+                    [pFrame->getNSWindow() performClose: nil];
                     return;
                 }
             }
