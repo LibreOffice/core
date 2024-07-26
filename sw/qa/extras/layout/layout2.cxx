@@ -47,7 +47,6 @@ protected:
 // this mainly tests that splitting portions across redlines in SwAttrIter works
 void SwLayoutWriter2::CheckRedlineCharAttributesHidden()
 {
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"9"_ustr);
@@ -215,7 +214,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 0);
@@ -234,7 +232,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 1);
@@ -254,7 +251,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 0);
@@ -288,7 +284,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     calcLayout();
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -555,7 +550,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     // hide redlines - all still visible footnotes move to page 1
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn"_ostr, 2);
@@ -564,7 +558,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     // show again - should now get the same result as on loading
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // check footnotes
@@ -855,7 +848,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(1);
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 6 (not tracked paragraph mark of the moveTo list item)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 5);
@@ -874,7 +866,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 5);
@@ -895,7 +886,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
@@ -918,7 +908,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 1 (moveFrom was extended to the paragraph mark)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
@@ -1108,7 +1097,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 {
-    discardDumpedLayout();
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -2621,7 +2609,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Grow"_ustr, {});
     pViewShell->Reformat();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(
         pXmlDoc,
@@ -2797,7 +2784,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
         "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']"_ostr,
         "expand"_ostr, u"1,234.56"_ustr);
 
-    discardDumpedLayout();
     // Now change the system locale to English (before this was failing, 1234,56 -> 0.00)
     aOptions.SetLocaleConfigString(u"en-GB"_ustr);
     aOptions.Commit();
@@ -2812,7 +2798,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
         pXmlDoc,
         "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']"_ostr,
         "expand"_ostr, u"1,234.56"_ustr);
-    discardDumpedLayout();
     // Now change the system locale to German
     aOptions.SetLocaleConfigString(u"de-DE"_ustr);
     aOptions.Commit();

@@ -361,7 +361,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
 
     // Reset to initial string
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
                 "portion"_ostr, "New World!\"");
@@ -372,7 +371,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     pWrtShell->Left(SwCursorSkipMode::Chars, true, 1, false);
     pWrtShell->Delete();
     pWrtShell->Insert(u"."_ustr);
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
                 "portion"_ostr, "New World.\"");
@@ -382,7 +380,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     pWrtShell->Left(SwCursorSkipMode::Chars, true, 5, false);
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Without the test in place, the leading space before "World" is not also cut.
     // Expected: New."

@@ -643,7 +643,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 3);
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
                     "portion"_ostr, u"This paragraph is even longer so that "_ustr);
-        discardDumpedLayout();
     }
 
     // this should bring one line back
@@ -660,7 +659,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 2);
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
                     "portion"_ostr, u"it is now three lines long though "_ustr);
-        discardDumpedLayout();
     }
 
     // this should bring second line back
@@ -679,7 +677,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
                     "portion"_ostr, u"containing a single sentence."_ustr);
-        discardDumpedLayout();
     }
 }
 
@@ -761,7 +758,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testKeepWithNextPlusFlyFollowTextFlow)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/bounds"_ostr, "height"_ostr,
                     u"276"_ustr);
         assertXPath(pXmlDoc, "/root/page"_ostr, 1);
-        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, {});
@@ -783,7 +779,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testKeepWithNextPlusFlyFollowTextFlow)
         assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/infos/bounds"_ostr, "height"_ostr,
                     u"276"_ustr);
         assertXPath(pXmlDoc, "/root/page"_ostr, 2);
-        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, {});
@@ -802,7 +797,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testKeepWithNextPlusFlyFollowTextFlow)
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/bounds"_ostr, "height"_ostr,
                     u"276"_ustr);
         assertXPath(pXmlDoc, "/root/page"_ostr, 1);
-        discardDumpedLayout();
     }
 }
 
@@ -826,7 +820,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
 {
-    discardDumpedLayout();
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -871,7 +864,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
 {
-    discardDumpedLayout();
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -1720,7 +1712,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128399)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
 {
-    discardDumpedLayout();
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -1915,7 +1906,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128959)
     createSwDoc("tdf128959.docx");
     SwDoc* pDocument = getSwDoc();
     CPPUNIT_ASSERT(pDocument);
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // first two lines of the paragraph in the split table cell on the first page
@@ -2251,7 +2241,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf54465_ColumnsWithFootnoteDoNotOccup
     CPPUNIT_ASSERT_GREATER(1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
 
-    discardDumpedLayout();
     createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
     pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -2788,7 +2777,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_page_break)
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
     xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
 
-    discardDumpedLayout();
     calcLayout();
     pExportDump = parseLayoutDump();
     assertXPath(pExportDump, "//page"_ostr, 1);
@@ -2814,7 +2802,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_page_break)
     xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
 
     // Check that the layout has been restored
-    discardDumpedLayout();
     calcLayout();
     pExportDump = parseLayoutDump();
     assertXPath(pExportDump, "//page"_ostr, 2);
@@ -2879,7 +2866,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
     auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
     xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
 
-    discardDumpedLayout();
     calcLayout();
     pExportDump = parseLayoutDump();
     assertXPath(pExportDump, "//page"_ostr, 1);
@@ -2891,7 +2877,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_orphans)
     xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
 
     // Check that the layout has been restored
-    discardDumpedLayout();
     calcLayout();
     pExportDump = parseLayoutDump();
     assertXPath(pExportDump, "//page"_ostr, 2);

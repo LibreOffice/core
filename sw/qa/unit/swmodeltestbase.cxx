@@ -105,15 +105,6 @@ void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rCompon
     xmlFreeTextWriter(pXmlWriter);
 }
 
-void SwModelTestBase::discardDumpedLayout()
-{
-    if (mpXmlBuffer)
-    {
-        xmlBufferFree(mpXmlBuffer);
-        mpXmlBuffer = nullptr;
-    }
-}
-
 void SwModelTestBase::calcLayout()
 {
     getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
@@ -160,14 +151,22 @@ uno::Reference<style::XAutoStyleFamily> SwModelTestBase::getAutoStyles(const OUS
     return xAutoStyleFamily;
 }
 
-xmlDocUniquePtr SwModelTestBase::parseLayoutDump()
+xmlDocUniquePtr SwModelTestBase::parseLayoutDump(const uno::Reference<lang::XComponent>& xComponent)
 {
-    if (!mpXmlBuffer)
+    if (xComponent)
+        dumpLayout(xComponent);
+    else
         dumpLayout(mxComponent);
 
     auto pBuffer = reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer));
     SAL_INFO("sw.qa", "SwModelTestBase::parseLayoutDump: pBuffer is '" << pBuffer << "'");
-    return xmlDocUniquePtr(xmlParseMemory(pBuffer, xmlBufferLength(mpXmlBuffer)));
+    xmlDocUniquePtr pXmlDoc(xmlParseMemory(pBuffer, xmlBufferLength(mpXmlBuffer)));
+
+    // Discard dumped layout
+    xmlBufferFree(mpXmlBuffer);
+    mpXmlBuffer = nullptr;
+
+    return pXmlDoc;
 }
 
 OUString SwModelTestBase::parseDump(const OString& aXPath, const OString& aAttribute)
@@ -444,7 +443,6 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 
     CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
 
-    discardDumpedLayout();
     calcLayout();
 }
 
@@ -473,7 +471,6 @@ void SwModelTestBase::finish()
 {
     sal_uInt32 nEndTime = osl_getGlobalTimer();
     std::cout << (nEndTime - mnStartTime) << std::endl;
-    discardDumpedLayout();
 }
 
 int SwModelTestBase::getPages() const

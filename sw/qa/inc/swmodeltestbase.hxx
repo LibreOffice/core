@@ -111,10 +111,6 @@ protected:
         CPPUNIT_FAIL( "verify method must be overridden" );
     }
 
-    void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
-
-    void discardDumpedLayout();
-
     void calcLayout();
 
     /// Get the body text of the whole document.
@@ -127,7 +123,7 @@ protected:
     css::uno::Reference<css::style::XAutoStyleFamily> getAutoStyles(const OUString& aFamily);
 
     /// Similar to parseExport(), but this gives the xmlDocPtr of the layout dump.
-    xmlDocUniquePtr parseLayoutDump();
+    xmlDocUniquePtr parseLayoutDump(const css::uno::Reference< css::lang::XComponent >& xComponent = nullptr);
 
     /**
      * Extract a value from the layout dump using an XPath expression and an attribute name.
@@ -277,6 +273,8 @@ protected:
 
 private:
     void loadURL(OUString const& rURL, const char* pPassword = nullptr);
+
+    void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
 };
 
 /**

@@ -200,7 +200,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
     pWrtShell->DelLeft();
 
     // Assert that paragraph "5" is now moved back to page 1 and is the last paragraph there.
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     SwNodeOffset nPage1LastNode(
         getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]"_ostr,
@@ -306,7 +305,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113445)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->StartOfSection();
     pWrtShell->SplitNode();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // Make sure that Table2:C5 and Table2:D5 has its section frame inside the cell frame.
@@ -366,7 +364,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113686)
     pWrtShell->DelLeft();
 
     // Assert that the second page is removed.
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was still 2, content from 2nd page was not moved.
     assertXPath(pXmlDoc, "/root/page"_ostr, 1);
@@ -490,7 +487,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable4)
     pWrtShell->DelLeft();
 
     // Assert that the page is removed.
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 3, page 2 was emptied, but it wasn't removed.
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
@@ -529,7 +525,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112160)
     pWrtShell->SplitNode();
 
     // Assert that after A2 got extended, D2 stays on page 1.
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     sal_uInt32 nD2CellNode
         = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]"_ostr,

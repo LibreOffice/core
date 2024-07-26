@@ -133,7 +133,7 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
 
-        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, lastname);
         assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[1]"_ostr, u"Fixed text."_ustr);
         assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[4]"_ostr, OUString());
@@ -244,7 +244,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
 {
     executeMailMerge();
 
-    xmlDocUniquePtr pXmlDoc = parseMMLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
     // check that conditions on sections and bookmarks are evaluated the same
     assertXPath(pXmlDoc, "/root/page"_ostr, 7);
     assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);

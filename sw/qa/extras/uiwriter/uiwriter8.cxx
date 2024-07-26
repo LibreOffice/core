@@ -221,7 +221,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -231,7 +230,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // only a single row is visible again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
@@ -239,7 +237,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     // tdf#148227 check Undo of tracked table row deletion
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 1
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -331,7 +328,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -341,7 +337,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // no visible row again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 0);
@@ -349,7 +344,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     // tdf#148228 check Undo of tracked table deletion
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 0
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -408,7 +402,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -418,7 +411,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // only a single row is visible again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
@@ -426,7 +418,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
     // tdf#148227 check Reject All of tracked table row deletion
 
     dispatchCommand(mxComponent, u".uno:RejectAllTrackedChanges"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 1
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -463,7 +454,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     // Undo
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -476,7 +466,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pWrtShell->Insert(u"Some text..."_ustr);
     pWrtShell->SplitNode();
     Scheduler::ProcessEventsToIdle();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt"_ostr, 2);
@@ -488,7 +477,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
 
     // insert the table, as a nested one in cell "A2"
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab"_ostr, 1);
@@ -497,7 +485,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     // Undo
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
@@ -512,7 +499,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pWrtShell->Insert(u"and some text again in the first paragraph to be sure..."_ustr);
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // 3-row, overwriting cells of the second row and inserting a new row
@@ -585,7 +571,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     pWrtShell->Up(/*bSelect=*/false);
     dispatchCommand(mxComponent, u".uno:PasteRowsBefore"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 5 (inserting only a single row for the 4-row clipboard content, and
     // overwriting 3 existing rows)
@@ -616,7 +601,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
         pWrtShell->Up(/*bSelect=*/false);
     dispatchCommand(mxComponent, u".uno:PasteRowsBefore"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // rows of the nested table doesn't effect row number of the main table
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 16);
@@ -640,7 +624,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
         pWrtShell->Up(/*bSelect=*/false);
     dispatchCommand(mxComponent, u".uno:PasteRowsBefore"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // repeating table header (and its thead/tbody indentation) doesn't effect row number
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 32);
@@ -1100,13 +1083,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
     // Delete the header
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
 
-    discardDumpedLayout();
     pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/header"_ostr, 0);
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    discardDumpedLayout();
     pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/header/tab/row"_ostr, 2);
 }

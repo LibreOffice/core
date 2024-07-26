@@ -998,7 +998,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125657)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 {
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds"_ostr, "top"_ostr, u"4193"_ustr);
 }

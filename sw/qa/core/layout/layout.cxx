@@ -241,7 +241,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     SdrObject* pShape = pPage->GetObj(0);
     tools::Rectangle aShapeRect = pShape->GetCurrentBoundRect();
 
-    discardDumpedLayout();
     xmlDocUniquePtr pLayout = parseLayoutDump();
     CPPUNIT_ASSERT(pLayout);
     sal_Int32 nFlyLeft

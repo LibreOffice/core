@@ -69,7 +69,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
 
     CPPUNIT_ASSERT_EQUAL(int(16), getParagraphs());
 
-    dumpLayout(mxComponent);
     pLayout = parseLayoutDump();
     for (size_t i = 1; i < 16; ++i)
     {
@@ -441,7 +440,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
                 "/root/page[5]/footer/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]"_ostr,
                 "expand"_ostr, u"4"_ustr);
 
-    discardDumpedLayout();
     // update and check again
     pDoc->getIDocumentFieldsAccess().UpdateFields(true);
     Scheduler::ProcessEventsToIdle();
@@ -601,7 +599,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         Scheduler::ProcessEventsToIdle();
     }
 
-    dumpLayout(mxComponent);
     xmlDocUniquePtr pLayoutXML2 = parseLayoutDump();
 
     for (auto nFly = 1; nFly < 8; ++nFly)

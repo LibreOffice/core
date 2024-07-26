@@ -269,7 +269,6 @@ public:
         mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename,
                                       u"com.sun.star.text.TextDocument"_ustr);
-        discardDumpedLayout();
         calcLayout();
     }
 
@@ -291,17 +290,6 @@ public:
         name += OUString::number(number)
                 + OStringToOUString(std::string_view(ext, strlen(ext)), RTL_TEXTENCODING_ASCII_US);
         loadMailMergeDocument(name);
-    }
-
-    /**
-     Resets currently opened layout of the original template,
-     and returns the layout dump of the document with N mails inside
-     (result run with text::MailMergeType::SHELL)
-    */
-    xmlDocUniquePtr parseMMLayoutDump()
-    {
-        dumpLayout(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
-        return parseLayoutDump();
     }
 
     // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).

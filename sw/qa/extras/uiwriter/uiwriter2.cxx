@@ -123,7 +123,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Grow"_ustr, {});
     pViewShell->Reformat();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(
         pXmlDoc,
@@ -136,7 +135,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // this was 220
     assertXPath(
@@ -363,7 +361,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
     pWrtShell->Undo();
 
     // the problem was that here the "A" showed up again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion"_ostr, 0);
@@ -375,7 +372,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
     pWrtShell->Undo();
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion"_ostr, 1);
@@ -387,7 +383,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
     pWrtShell->Undo();
 
     // now the "A" is no longer deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion"_ostr, 1);
@@ -697,7 +692,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
     // one paragraph deleted, section is gone
     CPPUNIT_ASSERT_EQUAL(nNodes - 3, pDoc->GetNodes().Count());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 3);
     assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 0);
@@ -706,7 +700,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
 
     CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 3);
     assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);
@@ -1806,7 +1799,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/tab"_ostr, 0);
-        discardDumpedLayout();
     }
     pWrtShell->Undo();
     // this did not create frames for the table
@@ -1815,14 +1807,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         // there are 2 tables
         assertXPath(pXmlDoc, "/root/page/body/tab"_ostr, 2);
-        discardDumpedLayout();
     }
     pWrtShell->Redo();
     pWrtShell->Redo();
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/tab"_ostr, 0);
-        discardDumpedLayout();
     }
     pWrtShell->Undo();
     pWrtShell->Undo();

@@ -509,7 +509,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
     calcLayout();
     sal_Int32 nSingleParaPageHeight
         = parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
-    discardDumpedLayout();
 
     // Insert a 2nd paragraph at the end of the first page, so the page height grows at least twice...
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -520,7 +519,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
     calcLayout();
     CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32()
                    >= 2 * nSingleParaPageHeight);
-    discardDumpedLayout();
 
     // ... and then delete the 2nd paragraph, which shrinks the page to the previous size.
     uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
@@ -1677,26 +1675,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
     Scheduler::ProcessEventsToIdle();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 3);
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
 
     // Accepting again: 3 rows (Undo of HasTextChangesOnly is correct)
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
     Scheduler::ProcessEventsToIdle();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 3);
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
 
@@ -1707,7 +1701,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     // Accepting again: 4 rows (extra text keeps the deleted row)
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
     Scheduler::ProcessEventsToIdle();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
 
@@ -1723,7 +1716,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     dispatchCommand(mxComponent, u".uno:SwBackSpace"_ustr, {});
     rIDRA.AcceptAllRedline(/*bAccept=*/true);
     Scheduler::ProcessEventsToIdle();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 3
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
@@ -1759,7 +1751,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked insertion results still 4 rows, but less redlines
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
@@ -1767,7 +1758,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
@@ -1775,14 +1765,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     // To check Undo of HasTextChangesOnly reject the same row results 3 rows
     dispatchCommand(mxComponent, u".uno:Escape"_ustr, {});
     dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (lost HasTextChangesOnly)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 3);
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
@@ -1809,7 +1797,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked changes in the selected table results 3 rows
     // This was 4 (only text changes of the first selected cell were accepted)
@@ -1818,7 +1805,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
@@ -1828,14 +1814,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (only text changes of the first selected cell were rejected)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 3);
 
     // Undo: 4 rows again
     pDoc->GetIDocumentUndoRedo().Undo();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row"_ostr, 4);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());

@@ -1759,7 +1759,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118311)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 }
@@ -1790,7 +1789,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
 
     // This was deleted without change tracking
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1801,7 +1799,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     pEditShell->AcceptRedline(0);
 
     // table row was still not deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1809,7 +1806,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     pEditShell->AcceptRedline(0);
 
     // table row (and the 1-row table) was deleted finally
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 
@@ -1821,7 +1817,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // table exists again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1830,7 +1825,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     // Table row still exists
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1839,7 +1833,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     pEditShell->AcceptRedline(0);
 
     // table row was still not deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1848,7 +1841,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
 
     // table row (and the 1-row table) still exists
     // (HasTextChangesOnly property wasn't set for table row deletion)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1859,7 +1851,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // table exists again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1874,7 +1865,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletion)
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
 
     // the table (row) was deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 }
@@ -1903,7 +1893,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
     // delete table row with enabled change tracking
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1927,7 +1916,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150976)
     // accept all tracked changes
     dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // tdf#151658 This was 1: not deleted table row (and table)
@@ -1957,7 +1945,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
     // delete table row with enabled change tracking
     dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -1981,7 +1968,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
     // accept all tracked changes
     dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // tdf#151658 This was 1: not deleted table row (and table)
@@ -2004,7 +1990,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
     // convert selected text content to uppercase
     dispatchCommand(mxComponent, u".uno:ChangeCaseToUpper"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPathContent(pXmlDoc, "//page[1]//body/tab/row/cell[2]/tab/row/cell[1]/txt"_ostr,
                        u"NESTED-A1"_ustr);
@@ -2112,7 +2097,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 
     // Deleted text content with change tracking,
     // but not table deletion
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -2135,7 +2119,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 
     // table row (and the 1-row table) was deleted finally
     // (working export/import of HasTextChangesOnly)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 }
@@ -2167,7 +2150,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
 
     // Deleted text content with change tracking,
     // but not table deletion
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -2192,7 +2174,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
 
     // table row (and the 1-row table) was deleted finally
     // (working export/import of HasTextChangesOnly)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 }
@@ -2701,7 +2682,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     // (HasTextChangesOnly property of the cell will be false)
     dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     // This was 1 (deleted cell without change tracking)
@@ -2713,7 +2693,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
     pEditShell->AcceptRedline(0);
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     // deleted column
@@ -2726,7 +2705,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // first column exists again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -2736,7 +2714,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     // Table column still exists
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -2746,7 +2723,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     pEditShell->AcceptRedline(0);
 
     // table column was still not deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -2757,7 +2733,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // table exists again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -2773,7 +2748,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
 
     // the table column was deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 1);
@@ -2872,7 +2846,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, tdf156475)
     // Without the fix in place, this couldn't work
     dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 2);
@@ -2965,7 +2938,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
     // (HasTextChangesOnly property of the cell will be false)
     dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 1);
@@ -2976,7 +2948,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
     // accept the deletion of the empty column
     dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 1);
@@ -2985,7 +2956,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
     // test Undo/Redo
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 1);
@@ -2993,7 +2963,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 1);
@@ -3073,7 +3042,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
 
     // Deleted text content with change tracking,
     // but not table deletion
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3090,7 +3058,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
 
     // first table column was deleted finally
     // (working export/import of HasTextChangesOnly)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 1);
@@ -3101,7 +3068,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     // table column exists again
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3116,7 +3082,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     // Table column still exists
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3126,7 +3091,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWi
     pEditShell->AcceptRedline(0);
 
     // table column is still not deleted
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3158,7 +3122,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
 
     // Deleted text content with change tracking,
     // but not table deletion
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3177,7 +3140,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletionWithDOCXExpo
 
     // table column was deleted
     // (working export/import of HasTextChangesOnly of table cells)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 1);
@@ -3207,7 +3169,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155341_RedlineTableColumnInsertionW
     dispatchCommand(mxComponent, u".uno:InsertColumnsAfter"_ustr, {});
 
     // text content with change tracking (dummy redline)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 3);
@@ -3224,7 +3185,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155341_RedlineTableColumnInsertionW
 
     // inserted table column was deleted
     // (working export/import of HasTextChangesOnly)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell"_ostr, 2);
@@ -3287,7 +3247,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
 
     // Deleted text content with change tracking,
     // but not table deletion
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -3316,7 +3275,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
 
     // This was table row deletion instead of remaining the empty row
     // (HasTextChangesOnly was false)
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
 
@@ -3332,7 +3290,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
         pEditShell->AcceptRedline(0);
 
     // table row (and the 1-row table) was deleted finally
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr, 0);
 }
@@ -3368,7 +3325,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowInsertionWithReject)
     // This was 0 (not tracked row insertion)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     assertXPath(pXmlDoc, "//page[1]//body/tab/row"_ostr, 3);
@@ -3377,7 +3333,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowInsertionWithReject)
     pEditShell->RejectRedline(0);
     pEditShell->RejectRedline(0);
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
     // This was 3 (not rejected row insertion)
@@ -3416,7 +3371,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     SwViewShell* pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
@@ -3429,8 +3383,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
     pEditShell->RejectRedline(0);
     pEditShell->RejectRedline(0);
-
-    discardDumpedLayout();
 
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
@@ -3606,7 +3558,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
     SwViewShell* pViewShell
         = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "//page[1]//body/tab"_ostr);
@@ -3614,8 +3565,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
 
     // accept all redlines
     dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
-
-    discardDumpedLayout();
 
     pXmlDoc = parseLayoutDump();
     // This was false (deleted table with accepting deletions)

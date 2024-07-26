@@ -410,7 +410,6 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
     // inserting the bookmark in paragraph
     xText->insertTextContent(xCursor, xBookmark, true);
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // check the bookmark portions are of the expected height

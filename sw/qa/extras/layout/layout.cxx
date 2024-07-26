@@ -40,7 +40,6 @@ protected:
 // this is a member because our test classes have protected members :(
 void SwLayoutWriter::CheckRedlineFootnotesHidden()
 {
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"24"_ustr);
@@ -102,7 +101,6 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
 
 void SwLayoutWriter::CheckRedlineSectionsHidden()
 {
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"12"_ustr);
@@ -150,7 +148,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -340,7 +337,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     // verify after hide
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-    discardDumpedLayout();
     CheckRedlineFootnotesHidden();
 }
 
@@ -412,7 +408,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"14"_ustr);
@@ -435,7 +430,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -533,7 +527,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"14"_ustr);
@@ -549,7 +542,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -646,7 +638,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"14"_ustr);
@@ -669,7 +660,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -768,7 +758,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
                 "height"_ostr, "0");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
                 "448");
-    discardDumpedLayout();
 
     // the problem was that now the fly was the same height as before hiding
     dispatchCommand(mxComponent, ".uno:Fieldnames", {});
@@ -779,7 +768,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
                 "height"_ostr, "828");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
                 "1000");
-    discardDumpedLayout();
 
     dispatchCommand(mxComponent, ".uno:Fieldnames", {});
     Scheduler::ProcessEventsToIdle();
@@ -789,7 +777,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
                 "height"_ostr, "0");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
                 "448");
-    discardDumpedLayout();
 
     dispatchCommand(mxComponent, ".uno:Fieldnames", {});
     Scheduler::ProcessEventsToIdle();
@@ -799,7 +786,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
                 "height"_ostr, "828");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
                 "1000");
-    discardDumpedLayout();
 
     // other test like testTdf143239 and testTdf159101 depend on this;
     // seems getting the previous value is only possible with a listener
@@ -818,7 +804,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
-    discardDumpedLayout();
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     ::std::unique_ptr<SwField> pField(pWrtShell->GetCurField()->CopyField());
@@ -838,7 +823,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     assertXPath(pXmlDoc, "/root/page[1]/body/section/infos/bounds"_ostr, "height"_ostr, "0");
     // the problem was that there were 3 pages now
     assertXPath(pXmlDoc, "/root/page"_ostr, 1);
-    discardDumpedLayout();
 
     pWrtShell->StartAllAction();
     manager.UpdateCurField(10000 /*(?)*/, "Foo", "0", std::move(pField));
@@ -849,7 +833,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
-    discardDumpedLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
@@ -981,7 +964,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout"_ostr,
                     "type"_ostr, u"PortionType::Para"_ustr);
@@ -1006,7 +988,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -1108,7 +1089,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         // now the frame has no Text portion? not sure why it's a 0-length one first and now none?
         //        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type", "PortionType::Para");
@@ -1127,7 +1107,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -1230,7 +1209,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
@@ -1259,7 +1237,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -1376,7 +1353,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
     pWrtShell->Down(false, 1);
     dispatchCommand(mxComponent, u".uno:DeleteTable"_ustr, {});
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/body/section/column/body/tab"_ostr, 0);
@@ -1385,7 +1361,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
     pWrtShell->Undo();
     Scheduler::ProcessEventsToIdle();
 
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page[1]/body/section/column[1]/body/tab"_ostr, 1);
@@ -1580,7 +1555,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"25"_ustr);
@@ -1616,7 +1590,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -1762,7 +1735,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
@@ -1789,7 +1761,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -1936,7 +1907,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"25"_ustr);
@@ -1970,7 +1940,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -2127,7 +2096,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
         p3txt1Left = getXPath(
             pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds"_ostr, "left"_ostr);
         assertXPath(pXmlDoc, "/root/page"_ostr, 3);
-        discardDumpedLayout();
     }
 
     pWrtShell->SelAll();
@@ -2154,7 +2122,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds"_ostr,
                     "left"_ostr, p3txt1Left);
         assertXPath(pXmlDoc, "/root/page"_ostr, 3);
-        discardDumpedLayout();
     }
 }
 
@@ -2406,7 +2373,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"19"_ustr);
@@ -2446,7 +2412,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -2599,7 +2564,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"19"_ustr);
@@ -2615,7 +2579,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -2766,7 +2729,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-        discardDumpedLayout();
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                     u"19"_ustr);
@@ -2806,7 +2768,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 
         dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-        discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
         // show: nothing is merged
@@ -2997,7 +2958,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"19"_ustr);
@@ -3036,7 +2996,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -3167,7 +3126,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"19"_ustr);
@@ -3183,7 +3141,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -3322,7 +3279,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     calcLayout();
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -3400,7 +3356,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
     calcLayout();
-    discardDumpedLayout();
     CheckRedlineSectionsHidden();
 }
 
@@ -3430,7 +3385,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
     // verify after load
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"12"_ustr);
@@ -3445,7 +3399,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -3505,7 +3458,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
                 u"12"_ustr);
@@ -3525,7 +3477,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // show tracked row deletions
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
@@ -3550,7 +3501,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // This was 4 (unhidden tracked table and table row deletions)
@@ -3566,7 +3516,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
     assertXPath(
@@ -3608,7 +3557,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
         pEditShell->AcceptRedline(0);
 
     calcLayout();
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // show tracked row deletions
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
@@ -3622,7 +3570,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // table is deleted with change tracking: it still exists
@@ -3634,7 +3581,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
         pEditShell->AcceptRedline(0);
 
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     assertXPath(pXmlDoc, "/root/page"_ostr, 1);
@@ -3662,7 +3608,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
     // delete table column with track changes
     dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
 
-    discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // show tracked column deletions
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
@@ -3671,7 +3616,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
     // This was 4 (unhidden tracked table column deletions)
@@ -3681,7 +3625,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     calcLayout();
-    discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
 }
