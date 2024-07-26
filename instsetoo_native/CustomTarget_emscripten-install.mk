@@ -24,12 +24,12 @@ emscripten_install_files := \
     soffice.worker.js \
     $(if $(ENABLE_SYMBOLS_FOR),soffice.wasm.dwp) \
 
+.PHONY: $(call gb_CustomTarget_get_target,instsetoo_native/emscripten-install)
 $(call gb_CustomTarget_get_target,instsetoo_native/emscripten-install): \
-    $(foreach i,$(emscripten_install_files),$(WORKDIR)/installation/LibreOffice/emscripten/$(i))
-
-$(foreach i,$(emscripten_install_files),$(WORKDIR)/installation/LibreOffice/emscripten/$(i)): \
-$(WORKDIR)/installation/LibreOffice/emscripten/%: $(INSTDIR)/program/%
-	mkdir -p $(dir $@)
-	cp $< $@
+    | $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+	mkdir -p $(WORKDIR)/installation/LibreOffice/emscripten
+	for i in $(emscripten_install_files); do \
+        cp $(INSTDIR)/program/$$i $(WORKDIR)/installation/LibreOffice/emscripten/ || exit 1; \
+    done
 
 # vim: set noet sw=4 ts=4:
