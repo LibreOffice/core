@@ -362,6 +362,17 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         it->second >>= bVal;
         m_bPreserveSpacesOnWrite = bVal;
     }
+
+    it = aStoreMap.find(u"RelativeOwnObjectURL"_ustr);
+    if (it != aStoreMap.end())
+    {
+        // URLs for images / objects created by export (from the document information) will be
+        // relative, regardless of org.openoffice.Office.Common/Save/URL/Internet and
+        // org.openoffice.Office.Common/Save/URL/FileSystem settings
+        bool bVal = false;
+        it->second >>= bVal;
+        m_bRelativeURLsForOwnObjects = bVal;
+    }
 }
 
 ErrCode SwHTMLWriter::WriteStream()
@@ -770,7 +781,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         OUString aFilter( aFName.getToken(0, sfx2::cTokenSeparator, nIdx) );
         OUString aSection( aFName.getToken(0, sfx2::cTokenSeparator, nIdx) );
 
-        OUString aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
+        OUString aEncURL(rHTMLWrt.normalizeURL(aURL, false));
         sal_Unicode cDelim = 255U;
         bool bURLContainsDelim = (-1 != aEncURL.indexOf( cDelim ) );
 
@@ -1381,7 +1392,7 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
         if (!aURL.HasError())
             sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
-    return URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL );
+    return normalizeURL(sURL, false);
 }
 
 void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
@@ -1422,11 +1433,12 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     }
     else
     {
+        bool bOwn = false;
         if( m_bCfgCpyLinkedGrfs )
         {
-            CopyLocalFileToINet( GraphicURL );
+            bOwn = CopyLocalFileToINet(GraphicURL);
         }
-        OUString s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), GraphicURL));
+        OUString s(normalizeURL(GraphicURL, bOwn));
         Strm().WriteOString(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
         HTMLOutFuncs::Out_String( Strm(), s );
         Strm().WriteOString("\"");
@@ -1603,6 +1615,21 @@ OString SwHTMLWriter::GetNamespace() const
         return OString();
 
     return maNamespace + ":";
+}
+
+OUString SwHTMLWriter::normalizeURL(const OUString& url, bool own) const
+{
+    OUString ret(url);
+    if (HTMLOutFuncs::PrivateURLToInternalImg(ret))
+        return ret;
+    OUString base;
+    if (!mpTempBaseURL)
+        base = GetBaseURL();
+    else if (own && m_bRelativeURLsForOwnObjects && GetOrigFileName())
+        base = *GetOrigFileName();
+    if (!base.isEmpty())
+        ret = URIHelper::simpleNormalizedMakeRelative(base, ret);
+    return ret;
 }
 
 // Structure caches the current data of the writer to output a

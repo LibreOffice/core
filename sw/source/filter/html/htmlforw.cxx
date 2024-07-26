@@ -467,8 +467,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         {
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_action "=\"";
             Strm().WriteOString( sOut );
-            OUString aURL
-                = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *s);
+            OUString aURL = normalizeURL(*s, false);
             HTMLOutFuncs::Out_String( Strm(), aURL );
             sOut = "\""_ostr;
         }
@@ -967,8 +966,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 sOut += " " OOO_STRING_SVTOOLS_HTML_O_src "=\"";
                 rWrt.Strm().WriteOString( sOut );
 
-                HTMLOutFuncs::Out_String( rWrt.Strm(),
-                            URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *s) );
+                HTMLOutFuncs::Out_String(rWrt.Strm(), rWrt.normalizeURL(*s, false));
                 sOut = "\""_ostr;
             }
         }
