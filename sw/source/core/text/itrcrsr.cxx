@@ -705,7 +705,6 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
-                        nTmpAscent = AdjustBaseLine( *m_pCurr, pPor );
                         GetInfo().SetMulti( true );
                         pOrig->Pos().AdjustY(nTmpAscent - nPorAscent );
 

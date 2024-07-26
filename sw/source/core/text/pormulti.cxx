@@ -1723,8 +1723,10 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             // Draw the ruby text on top of the preserved space.
             GetInfo().X( GetInfo().X() - pPor->Height() );
         }
-        else
-            GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
+        else if (!rMulti.IsBidi())
+        {
+            GetInfo().Y(nOfst + AdjustBaseLine(*pLay, pPor));
+        }
 
         bool bSeeked = true;
         GetInfo().SetLen( pPor->GetLen() );
