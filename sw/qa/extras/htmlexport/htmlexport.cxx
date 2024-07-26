@@ -28,11 +28,14 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <test/htmltesttools.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <svtools/parrtf.hxx>
 #include <rtl/strbuf.hxx>
 #include <svtools/rtftoken.h>
@@ -3146,6 +3149,224 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
                 ++numNonTransparent;
     CPPUNIT_ASSERT(numNonTransparent > 0);
     CPPUNIT_ASSERT(numNonTransparent < size.Height() * size.Width());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportAbsoluteURLs_ownRelative)
+{
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    Resetter resetter([
+        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
+        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
+    ]() {
+        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
+        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
+        return pBatch->commit();
+    });
+    // Set saving absolute URLs
+    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
+    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
+    pBatch->commit();
+
+    createSwDoc("URLs.odt");
+    // Export to ReqIF, using absolute URLs
+    saveWithParams({
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
+        comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
+    });
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+
+    // HTTP URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[1]/reqif-xhtml:a"_ostr, "href"_ostr,
+                u"http://www.example.org/"_ustr);
+    // file URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a"_ostr, "href"_ostr,
+                createFileURL(u"NonExistingPath/NonExistingFile.html"));
+    // form URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:form"_ostr, "action"_ostr,
+                u"https://www.example.org/submit"_ustr);
+    // linked image exported as object: generated, must be relative
+    OUString url = getXPath(pXmlDoc, "//reqif-xhtml:p[3]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its original image URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[3]/reqif-xhtml:object/reqif-xhtml:object"_ostr,
+                "data"_ostr, createFileURL(u"external.png"));
+    // embedded image exported as object: generated, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[4]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its image URL: generated, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[4]/reqif-xhtml:object/reqif-xhtml:object"_ostr,
+                   "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+    // unordered list with image bullet - it gets embedded as base64 data
+    OUString style = getXPath(pXmlDoc, "//reqif-xhtml:ul"_ostr, "style"_ostr);
+    CPPUNIT_ASSERT(style.indexOf("list-style-image: url(data:image/png;base64,") != -1);
+    // an as-char frame, exported as a whole to an object, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[5]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its file hyperlink must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[5]/reqif-xhtml:object/reqif-xhtml:a"_ostr, "href"_ostr,
+                createFileURL(u"foo/bar"));
+    // its image URL: generated, must be relative
+    url = getXPath(pXmlDoc,
+                   "//reqif-xhtml:p[5]/reqif-xhtml:object/reqif-xhtml:a/reqif-xhtml:object"_ostr,
+                   "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportRelativeURLs)
+{
+    CPPUNIT_ASSERT(officecfg::Office::Common::Save::URL::Internet::get());
+    CPPUNIT_ASSERT(officecfg::Office::Common::Save::URL::FileSystem::get());
+
+    createSwDoc("URLs.odt");
+    // Export to ReqIF, using relative URLs (the default)
+    saveWithParams({
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
+    });
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+
+    // HTTP URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:p[1]/reqif-xhtml:a"_ostr, "href"_ostr,
+                u"http://www.example.org/"_ustr);
+    // file URL: must be relative
+    OUString url = getXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a"_ostr, "href"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("NonExistingPath/NonExistingFile.html"));
+    // form URL: must be absolute
+    assertXPath(pXmlDoc, "//reqif-xhtml:form"_ostr, "action"_ostr,
+                u"https://www.example.org/submit"_ustr);
+    // linked image exported as object: generated, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[3]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its original image URL: must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[3]/reqif-xhtml:object/reqif-xhtml:object"_ostr,
+                   "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("external.png"));
+    // embedded image exported as object: generated, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[4]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its image URL: generated, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[4]/reqif-xhtml:object/reqif-xhtml:object"_ostr,
+                   "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+    // unordered list with image bullet - it gets embedded as base64 data
+    OUString style = getXPath(pXmlDoc, "//reqif-xhtml:ul"_ostr, "style"_ostr);
+    CPPUNIT_ASSERT(style.indexOf("list-style-image: url(data:image/png;base64,") != -1);
+    // an as-char frame, exported as a whole to an object, must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[5]/reqif-xhtml:object"_ostr, "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".ole"));
+    // its file hyperlink must be relative
+    url = getXPath(pXmlDoc, "//reqif-xhtml:p[5]/reqif-xhtml:object/reqif-xhtml:a"_ostr,
+                   "href"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("foo/bar"));
+    // its image URL: generated, must be relative
+    url = getXPath(pXmlDoc,
+                   "//reqif-xhtml:p[5]/reqif-xhtml:object/reqif-xhtml:a/reqif-xhtml:object"_ostr,
+                   "data"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_exportAbsoluteURLs_ownRelative)
+{
+    auto pBatch(comphelper::ConfigurationChanges::create());
+    Resetter resetter([
+        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
+        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
+    ]() {
+        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
+        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
+        return pBatch->commit();
+    });
+    // Set saving absolute URLs
+    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
+    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
+    pBatch->commit();
+
+    createSwDoc("URLs.odt");
+    // Export to HTML, using absolute URLs
+    saveWithParams({
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
+    });
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+
+    // HTTP URL: must be absolute
+    assertXPath(pHtmlDoc, "//p[1]/a"_ostr, "href"_ostr, u"http://www.example.org/"_ustr);
+    // file URL: must be absolute
+    assertXPath(pHtmlDoc, "//p[2]/a"_ostr, "href"_ostr,
+                createFileURL(u"NonExistingPath/NonExistingFile.html"));
+    // form URL: must be absolute
+    assertXPath(pHtmlDoc, "//form"_ostr, "action"_ostr, u"https://www.example.org/submit"_ustr);
+    // linked image: must be absolute
+    assertXPath(pHtmlDoc, "//p[3]/img"_ostr, "src"_ostr, createFileURL(u"external.png"));
+    // embedded image: generated, must be relative
+    OUString url = getXPath(pHtmlDoc, "//p[4]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+    // unordered list with image bullet - it gets embedded as base64 data
+    OUString style = getXPath(pHtmlDoc, "//ul"_ostr, "style"_ostr);
+    CPPUNIT_ASSERT(style.indexOf("list-style-image: url(data:image/png;base64,") != -1);
+    // image-in-frame file hyperlink must be absolute; FIXME: HTMLOutFuncs::Out_ImageMap
+    // assertXPath(pHtmlDoc, "//p[5]/map/area"_ostr, "href"_ostr, createFileURL(u"foo/bar"));
+    // its image URL: generated, must be relative
+    url = getXPath(pHtmlDoc, "//p[5]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".gif"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_exportRelativeURLs)
+{
+    CPPUNIT_ASSERT(officecfg::Office::Common::Save::URL::Internet::get());
+    CPPUNIT_ASSERT(officecfg::Office::Common::Save::URL::FileSystem::get());
+
+    createSwDoc("URLs.odt");
+    // Export to HTML, using relative URLs (the default)
+    ExportToHTML();
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+
+    // HTTP URL: must be absolute
+    assertXPath(pHtmlDoc, "//p[1]/a"_ostr, "href"_ostr, u"http://www.example.org/"_ustr);
+    // file URL: must be relative
+    OUString url = getXPath(pHtmlDoc, "//p[2]/a"_ostr, "href"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("NonExistingPath/NonExistingFile.html"));
+    // form URL: must be absolute
+    assertXPath(pHtmlDoc, "//form"_ostr, "action"_ostr, u"https://www.example.org/submit"_ustr);
+    // linked image: must be relative
+    url = getXPath(pHtmlDoc, "//p[3]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("external.png"));
+    // embedded image: generated, must be relative
+    url = getXPath(pHtmlDoc, "//p[4]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".png"));
+    // unordered list with image bullet - it gets embedded as base64 data
+    OUString style = getXPath(pHtmlDoc, "//ul"_ostr, "style"_ostr);
+    CPPUNIT_ASSERT(style.indexOf("list-style-image: url(data:image/png;base64,") != -1);
+    // image-in-frame file hyperlink must be relative
+    url = getXPath(pHtmlDoc, "//p[5]/map/area"_ostr, "href"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith("foo/bar"));
+    // its image URL: generated, must be relative
+    url = getXPath(pHtmlDoc, "//p[5]/img"_ostr, "src"_ostr);
+    CPPUNIT_ASSERT(!url.startsWith("file:"));
+    CPPUNIT_ASSERT(url.endsWith(".gif"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
