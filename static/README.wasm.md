@@ -15,9 +15,12 @@ purpose, look towards the end of the document for the section
 
 ## Status of LibreOffice as WASM with Qt
 
+Configure `--with-package-format=emscripten` to have `workdir/installation/LibreOffice/emscripten`
+populated with just the relevant files from `instdir`.
+
 The build generates a Writer-only LO build. You should be able to run either
 
-    $ emrun --serve_after_close instdir/program/qt_soffice.html
+    $ emrun --serve_after_close workdir/installation/LibreOffice/emscripten/qt_soffice.html
     $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
     $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_wasm-qt5-mandelbrot.html
 
@@ -399,6 +402,7 @@ For instance, this autogen.input works for me:
 `--host=wasm32-local-emscripten`
 `--disable-gui`
 `--with-main-module=writer`
+`--with-package-format=emscripten`
 
 For building LO core for use in COWASM, it is known to work to use
 Emscripten 3.1.30 (and not just 2.0.31 which is what the LO+Qt5 work

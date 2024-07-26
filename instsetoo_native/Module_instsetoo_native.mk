@@ -11,9 +11,15 @@ $(eval $(call gb_Module_Module,instsetoo_native))
 
 ifneq (,$(PKGFORMAT)$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX)))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Module_add_targets,instsetoo_native, \
+    CustomTarget_emscripten-install \
+))
+else
 $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_install \
 ))
+endif
 
 endif
 
