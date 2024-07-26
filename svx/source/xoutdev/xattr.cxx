@@ -101,18 +101,21 @@ NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex, Sf
     SfxStringItem(_nWhich, OUString(), eItemType),
     m_nPalIndex(nIndex)
 {
+    setNameOrIndex();
 }
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName, SfxItemType eItemType) :
     SfxStringItem(_nWhich, rName, eItemType),
     m_nPalIndex(-1)
 {
+    setNameOrIndex();
 }
 
 NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
     SfxStringItem(rNameOrIndex),
     m_nPalIndex(rNameOrIndex.m_nPalIndex)
 {
+    setNameOrIndex();
 }
 
 bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
@@ -131,11 +134,11 @@ NameOrIndex* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults )
+OUString NameOrIndex::CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults) const
 {
     bool bForceNew = false;
 
-    OUString aUniqueName = SvxUnogetInternalNameForItem(nWhich, pCheckItem->GetName());
+    OUString aUniqueName = SvxUnogetInternalNameForItem(nWhich, GetName());
 
     // 2. if we have a name check if there is already an item with the
     // same name in the documents pool with a different line end or start
@@ -143,16 +146,18 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     if (!aUniqueName.isEmpty() && pPool1)
     {
         ItemSurrogates aSurrogates;
-        pPool1->GetItemSurrogates(aSurrogates, nWhich);
+        // use special version to get buffered NameOrIndex Items
+        pPool1->GetItemSurrogatesForItem(aSurrogates, *this);
         for (const SfxPoolItem* pItem : aSurrogates)
         {
             const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
-            if( pNameOrIndex->GetName() == pCheckItem->GetName() )
+            // need to check for WhichID, GetItemSurrogatesForItem does buffer on type only
+            if( pNameOrIndex->Which() == nWhich && pNameOrIndex->GetName() == GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
-                if( !pCompareValueFunc( pNameOrIndex, pCheckItem ) )
+                if( !pCompareValueFunc( pNameOrIndex, this ) )
                 {
                     // same name but different value, we need a new name for this item
                     aUniqueName.clear();
@@ -185,26 +190,26 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     {
                     case XATTR_FILLBITMAP:
                     {
-                        const GraphicObject& rGraphicObjectA(static_cast<const XFillBitmapItem*>(pCheckItem)->GetGraphicObject());
+                        const GraphicObject& rGraphicObjectA(static_cast<const XFillBitmapItem*>(this)->GetGraphicObject());
                         const GraphicObject& rGraphicObjectB(static_cast<const XBitmapEntry*>(pEntry)->GetGraphicObject());
 
                         bFound = (rGraphicObjectA == rGraphicObjectB);
                         break;
                     }
                     case XATTR_LINEDASH:
-                        bFound = static_cast<const XLineDashItem*>(pCheckItem)->GetDashValue() == static_cast<const XDashEntry*>(pEntry)->GetDash();
+                        bFound = static_cast<const XLineDashItem*>(this)->GetDashValue() == static_cast<const XDashEntry*>(pEntry)->GetDash();
                         break;
                     case XATTR_LINESTART:
-                        bFound = static_cast<const XLineStartItem*>(pCheckItem)->GetLineStartValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
+                        bFound = static_cast<const XLineStartItem*>(this)->GetLineStartValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_LINEEND:
-                        bFound = static_cast<const XLineEndItem*>(pCheckItem)->GetLineEndValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
+                        bFound = static_cast<const XLineEndItem*>(this)->GetLineEndValue() == static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_FILLGRADIENT:
-                        bFound = static_cast<const XFillGradientItem*>(pCheckItem)->GetGradientValue() == static_cast<const XGradientEntry*>(pEntry)->GetGradient();
+                        bFound = static_cast<const XFillGradientItem*>(this)->GetGradientValue() == static_cast<const XGradientEntry*>(pEntry)->GetGradient();
                         break;
                     case XATTR_FILLHATCH:
-                        bFound = static_cast<const XFillHatchItem*>(pCheckItem)->GetHatchValue() == static_cast<const XHatchEntry*>(pEntry)->GetHatch();
+                        bFound = static_cast<const XFillHatchItem*>(this)->GetHatchValue() == static_cast<const XHatchEntry*>(pEntry)->GetHatch();
                         break;
                     }
 
@@ -230,14 +235,16 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
         if (aUniqueName.isEmpty() && pPool1)
         {
             ItemSurrogates aSurrogates;
-            pPool1->GetItemSurrogates(aSurrogates, nWhich);
+            // use special version to get buffered NameOrIndex Items
+            pPool1->GetItemSurrogatesForItem(aSurrogates, *this);
             for (const SfxPoolItem* pItem : aSurrogates)
             {
                 const NameOrIndex *pNameOrIndex = static_cast<const NameOrIndex*>(pItem);
 
-                if( !pNameOrIndex->GetName().isEmpty() )
+                // need to check for WhichID, GetItemSurrogatesForItem does buffer on type only
+                if( pNameOrIndex->Which() == nWhich && !pNameOrIndex->GetName().isEmpty() )
                 {
-                    if( !bForceNew && pCompareValueFunc( pNameOrIndex, pCheckItem ) )
+                    if( !bForceNew && pCompareValueFunc( pNameOrIndex, this ) )
                         return pNameOrIndex->GetName();
 
                     if( pNameOrIndex->GetName().startsWith( aUser ) )
@@ -958,10 +965,10 @@ bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* 
 
 std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel& rModel ) const
 {
-    const OUString aUniqueName = NameOrIndex::CheckNamedItem(
-            this, XATTR_LINEDASH, &rModel.GetItemPool(),
-            XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH20,
-            rModel.GetPropertyList( XPropertyListType::Dash ) );
+    const OUString aUniqueName(CheckNamedItem(
+        XATTR_LINEDASH, &rModel.GetItemPool(),
+        XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH20,
+        rModel.GetPropertyList(XPropertyListType::Dash)));
 
     // if the given name is not valid, replace it!
     if( aUniqueName != GetName() )
@@ -2467,10 +2474,10 @@ bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrInd
 
 std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrModel& rModel ) const
 {
-    const OUString aUniqueName = NameOrIndex::CheckNamedItem(
-            this, Which(), &rModel.GetItemPool(),
-            XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
-            rModel.GetPropertyList( XPropertyListType::Gradient ) );
+    const OUString aUniqueName(CheckNamedItem(
+        Which(), &rModel.GetItemPool(),
+        XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
+        rModel.GetPropertyList(XPropertyListType::Gradient)));
 
     // if the given name is not valid, replace it!
     if( aUniqueName != GetName() )
@@ -2586,12 +2593,12 @@ std::unique_ptr<XFillFloatTransparenceItem> XFillFloatTransparenceItem::checkFor
     // #85953# unique name only necessary when enabled
     if(IsEnabled())
     {
-        const OUString aUniqueName = NameOrIndex::CheckNamedItem( this,
-                                                                XATTR_FILLFLOATTRANSPARENCE,
-                                                                &rModel.GetItemPool(),
-                                                                XFillFloatTransparenceItem::CompareValueFunc,
-                                                                RID_SVXSTR_TRASNGR0,
-                                                                XPropertyListRef() );
+        const OUString aUniqueName(CheckNamedItem(
+            XATTR_FILLFLOATTRANSPARENCE,
+            &rModel.GetItemPool(),
+            XFillFloatTransparenceItem::CompareValueFunc,
+            RID_SVXSTR_TRASNGR0,
+            XPropertyListRef()));
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
@@ -2861,10 +2868,10 @@ bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex*
 
 std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel& rModel ) const
 {
-    const OUString aUniqueName = NameOrIndex::CheckNamedItem(
-            this, XATTR_FILLHATCH, &rModel.GetItemPool(),
-            XFillHatchItem::CompareValueFunc, RID_SVXSTR_HATCH10,
-            rModel.GetPropertyList( XPropertyListType::Hatch ) );
+    const OUString aUniqueName(CheckNamedItem(
+        XATTR_FILLHATCH, &rModel.GetItemPool(),
+        XFillHatchItem::CompareValueFunc, RID_SVXSTR_HATCH10,
+        rModel.GetPropertyList(XPropertyListType::Hatch)));
 
     // if the given name is not valid, replace it!
     if( aUniqueName != GetName() )

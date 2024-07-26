@@ -256,7 +256,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 : m_pPool( rASet.m_pPool )
 , m_pParent( rASet.m_pParent )
-, m_nRegister( rASet.m_nRegister )
+, m_nRegister( 0 )
 #ifdef DBG_UTIL
 , m_nRegisteredSfxItemIter(0)
 #endif
@@ -271,11 +271,14 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
         return;
 
     for (const auto& rSource : rASet.m_aPoolItemMap)
-        m_aPoolItemMap[rSource.first] = implCreateItemEntry(*GetPool(), rSource.second, false);
+    {
+        const SfxPoolItem* pNew(implCreateItemEntry(*GetPool(), rSource.second, false));
+        m_aPoolItemMap[rSource.first] = pNew;
+        if (m_nRegister != rASet.m_nRegister)
+            checkAddPoolRegistration(pNew);
+    }
 
     assert(m_aWhichRanges.validRanges2());
-    if (0 != m_nRegister)
-        GetPool()->registerItemSet(*this);
 }
 
 SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
@@ -397,6 +400,9 @@ void SfxItemSet::checkRemovePoolRegistration(const SfxPoolItem* pItem)
     // deregister when no more Items that NeedsSurrogateSupport exist
     if (0 == m_nRegister)
         GetPool()->unregisterItemSet(*this);
+
+    if (pItem->isNameOrIndex())
+        GetPool()->unregisterNameOrIndex(*pItem);
 }
 
 void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
@@ -420,6 +426,9 @@ void SfxItemSet::checkAddPoolRegistration(const SfxPoolItem* pItem)
     // register when first Item that NeedsSurrogateSupport exist
     if (0 == m_nRegister)
         GetPool()->registerItemSet(*this);
+
+    if (pItem->isNameOrIndex())
+        GetPool()->registerNameOrIndex(*pItem);
 
     // increment counter
     m_nRegister++;

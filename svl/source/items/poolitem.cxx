@@ -526,6 +526,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich, SfxItemType eType)
     , m_bDynamicDefault(false)
     , m_bIsSetItem(false)
     , m_bShareable(true)
+    , m_bNameOrIndex(false)
 #ifdef DBG_UTIL
     , m_bDeleted(false)
 #endif

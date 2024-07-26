@@ -312,10 +312,10 @@ std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel& 
     XPropertyListType aListType = XPropertyListType::Bitmap;
     if(isPattern())
         aListType = XPropertyListType::Pattern;
-    const OUString aUniqueName = NameOrIndex::CheckNamedItem(
-            this, XATTR_FILLBITMAP, &rModel.GetItemPool(),
-            XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
-            rModel.GetPropertyList( aListType ) );
+    const OUString aUniqueName(CheckNamedItem(
+        XATTR_FILLBITMAP, &rModel.GetItemPool(),
+        XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
+        rModel.GetPropertyList(aListType)));
 
     // if the given name is not valid, replace it!
     if( aUniqueName != GetName() )

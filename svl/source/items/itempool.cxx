@@ -402,6 +402,8 @@ void SfxItemPool::registerPoolItemHolder(SfxPoolItemHolder& rHolder)
         SAL_WARN("svl.items", "SfxItemPool::registerPoolItemHolder: SfxPoolItemHolder was already registered (!)");
     }
 #endif
+    if (rHolder.is() && rHolder.getItem()->isNameOrIndex())
+        registerNameOrIndex(*rHolder.getItem());
 }
 
 void SfxItemPool::unregisterPoolItemHolder(SfxPoolItemHolder& rHolder)
@@ -418,6 +420,31 @@ void SfxItemPool::unregisterPoolItemHolder(SfxPoolItemHolder& rHolder)
         SAL_WARN("svl.items", "SfxItemPool::unregisterPoolItemHolder: SfxPoolItemHolder was not registered (!)");
     }
 #endif
+    if (rHolder.is() && rHolder.getItem()->isNameOrIndex())
+        unregisterNameOrIndex(*rHolder.getItem());
+}
+
+void SfxItemPool::registerNameOrIndex(const SfxPoolItem& rItem)
+{
+    assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
+    NameOrIndexContent& rTarget(GetMasterPool()->maRegisteredNameOrIndex[rItem.ItemType()]);
+    NameOrIndexContent::iterator aHit(rTarget.find(&rItem));
+    if (aHit == rTarget.end())
+        rTarget.insert(std::pair<const SfxPoolItem*, sal_uInt32>(&rItem, 0));
+    else
+        aHit->second++;
+}
+
+void SfxItemPool::unregisterNameOrIndex(const SfxPoolItem& rItem)
+{
+    assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
+    NameOrIndexContent& rTarget(GetMasterPool()->maRegisteredNameOrIndex[rItem.ItemType()]);
+    NameOrIndexContent::iterator aHit(rTarget.find(&rItem));
+    assert(aHit != rTarget.end() && "ITEM: malformed order of buffered NameOrIndex Items, entry *expected* (!)");
+    if (0 == aHit->second)
+        rTarget.erase(aHit);
+    else
+        aHit->second--;
 }
 
 SfxItemPool* SfxItemPool::getTargetPool(sal_uInt16 nWhich) const
@@ -484,6 +511,7 @@ SfxItemPool::SfxItemPool(const OUString& rName) /* Pool name to identify in the 
 , eDefMetric(MapUnit::MapCM)
 , maRegisteredSfxItemSets()
 , maRegisteredSfxPoolItemHolders()
+, maRegisteredNameOrIndex()
 , mbShutdownHintSent(false)
 , maItemInfos()
 , maUserItemInfos()
@@ -509,6 +537,7 @@ SfxItemPool::SfxItemPool(const SfxItemPool& rPool) //  Copy from this instance
 , eDefMetric(MapUnit::MapCM)
 , maRegisteredSfxItemSets()
 , maRegisteredSfxPoolItemHolders()
+, maRegisteredNameOrIndex()
 , mbShutdownHintSent(false)
 , maItemInfos(rPool.maItemInfos)
 , maUserItemInfos(rPool.maUserItemInfos)
@@ -851,6 +880,21 @@ void SfxItemPool::iterateItemSurrogates(
                 if (!rItemCallback(rCand))
                     return;
     }
+}
+
+void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const
+{
+    assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
+    const registeredNameOrIndex& rRegistered(GetMasterPool()->maRegisteredNameOrIndex);
+    registeredNameOrIndex::const_iterator aHit(rRegistered.find(rItem.ItemType()));
+    if (aHit != rRegistered.end())
+    {
+        rTarget.clear();
+        rTarget.reserve(aHit->second.size());
+        for (const auto& entry : aHit->second)
+            rTarget.push_back(entry.first);
+    }
+        // rTarget = ItemSurrogates(aHit->second.begin(), aHit->second.end());
 }
 
 void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const

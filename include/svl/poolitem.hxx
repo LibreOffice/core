@@ -580,6 +580,10 @@ class SVL_DLLPUBLIC SfxPoolItem
     // be fixed at that Items we may remove this again.
     bool        m_bShareable : 1;
 
+    // for speedup/buffering we need to identify NameOrIndex
+    // Items quickly
+    bool        m_bNameOrIndex : 1;
+
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
@@ -590,6 +594,7 @@ protected:
     void setDynamicDefault() { m_bDynamicDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
     void setNonShareable() { m_bShareable = false; }
+    void setNameOrIndex() { m_bNameOrIndex = true; }
 
     // access ItemInstanceManager for this Item, default
     // is nullptr. If you overload this it is expected that
@@ -615,6 +620,7 @@ public:
     bool isDynamicDefault() const { return m_bDynamicDefault; }
     bool isSetItem() const { return m_bIsSetItem; }
     bool isShareable() const { return m_bShareable; }
+    bool isNameOrIndex() const { return m_bNameOrIndex; }
     bool isPooled() const { return GetRefCount() > 0; }
 
 

@@ -55,12 +55,11 @@ public:
             bool         IsIndex() const          { return (m_nPalIndex >= 0); }
             sal_Int32    GetPalIndex() const { return m_nPalIndex; }
 
-    /** this static checks if the given NameOrIndex item has a unique name for its value.
+    /** this checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.
-        Argument pPool2 can be null.
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
-    static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults );
+    OUString CheckNamedItem(const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

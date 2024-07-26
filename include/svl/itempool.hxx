@@ -136,6 +136,8 @@ typedef std::unordered_set<SfxPoolItemHolder*> registeredSfxPoolItemHolders;
 typedef std::vector<const SfxPoolItem*> ItemSurrogates;
 typedef std::unordered_map<sal_uInt16, const ItemInfo*> userItemInfos;
 typedef std::vector<const ItemInfo*> itemInfoVector;
+typedef std::unordered_map<const SfxPoolItem*, sal_uInt32> NameOrIndexContent;
+typedef std::unordered_map<SfxItemType, NameOrIndexContent> registeredNameOrIndex;
 
 /** Base class for providers of defaults of SfxPoolItems.
  *
@@ -165,6 +167,11 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
 
     registeredSfxItemSets maRegisteredSfxItemSets;
     registeredSfxPoolItemHolders maRegisteredSfxPoolItemHolders;
+
+    // place to register all NameOrIndex Items that are either set in an
+    // SfxItemSet or SfxPolItemHolder for this Model/Pool
+    registeredNameOrIndex maRegisteredNameOrIndex;
+
     bool mbShutdownHintSent;
 
     itemInfoVector maItemInfos;
@@ -203,6 +210,9 @@ private:
 
     void registerPoolItemHolder(SfxPoolItemHolder& rHolder);
     void unregisterPoolItemHolder(SfxPoolItemHolder& rHolder);
+
+    void registerNameOrIndex(const SfxPoolItem& rItem);
+    void unregisterNameOrIndex(const SfxPoolItem& rItem);
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
@@ -310,6 +320,9 @@ public:
     // NOTE: In *no* case use const_cast and change those Items (!)
     // Read commit text for more information
     void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
+
+    // special version for read-oly itemSurrogates for NameOrIndex Items
+    void GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const;
 
     sal_uInt16 GetFirstWhich() const { return mnStart; }
     sal_uInt16 GetLastWhich() const { return mnEnd; }
