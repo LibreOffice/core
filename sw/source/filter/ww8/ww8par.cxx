@@ -6383,9 +6383,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW6(SvStream &rStream)
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW2(SvStream &rStream)
 {
-    // Temp bodge to reset oss-fuzz
-    if (rStream.remainingSize() > 256)
-        return true;
     return TestImportDOC(rStream, u"WW6"_ustr);
 }
 
