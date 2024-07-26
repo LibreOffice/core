@@ -632,6 +632,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nVirt);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDefaultPageDescUsed)
+{
+    createSwDoc();
+    auto pDoc = getSwDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetPageDescCnt());
+    const SwPageDesc& rPageDesc = pDoc->GetPageDesc(0);
+    CPPUNIT_ASSERT(rPageDesc.IsUsed());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxWordWrap)
 {
     // Given a document with a shape in the header that extends horizontally when there is enough
