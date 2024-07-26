@@ -105,7 +105,9 @@ Module.uno_init.then(function() {
         console.assert(v.m1 === -123456);
         console.assert(v.m2 === 100.5);
         console.assert(v.m3 === 'hä');
+        console.assert(v.m4.get() === true);
         console.assert(test.isStruct(v));
+        v.m4.delete();
     }
     {
         let v = test.getAnyVoid();
@@ -282,12 +284,16 @@ Module.uno_init.then(function() {
         console.assert(v.get().m1 === -123456);
         console.assert(v.get().m2 === 100.5);
         console.assert(v.get().m3 === 'hä');
+        console.assert(v.get().m4.get() === true);
         console.assert(test.isAnyStruct(v));
+        v.get().m4.delete();
         v.delete();
+        let m4 = new Module.uno_Any(Module.uno_Type.Boolean(), true);
         let a = new Module.uno_Any(
             Module.uno_Type.Struct('org.libreoffice.embindtest.Struct'),
-            {m1: -123456, m2: 100.5, m3: 'hä'});
+            {m1: -123456, m2: 100.5, m3: 'hä', m4});
         console.assert(test.isAnyStruct(a));
+        m4.delete();
         a.delete();
     }
     {
@@ -509,13 +515,19 @@ Module.uno_init.then(function() {
         console.assert(v.get(0).m1 === -123456);
         console.assert(v.get(0).m2 === -100.5);
         console.assert(v.get(0).m3 === 'foo');
+        console.assert(v.get(0).m4.get() === undefined);
         console.assert(v.get(1).m1 === 1);
         console.assert(v.get(1).m2 === 1.25);
         console.assert(v.get(1).m3 === 'barr');
+        console.assert(v.get(1).m4.get() === true);
         console.assert(v.get(2).m1 === 123456);
         console.assert(v.get(2).m2 === 100.75);
         console.assert(v.get(2).m3 === 'bazzz');
+        console.assert(v.get(2).m4.get() === 'buzzz');
         console.assert(test.isSequenceStruct(v));
+        v.get(0).m4.delete();
+        v.get(1).m4.delete();
+        v.get(2).m4.delete();
         v.delete();
     }
     {
@@ -590,6 +602,7 @@ Module.uno_init.then(function() {
         console.assert(v17.val.m1 === -123456);
         console.assert(v17.val.m2 === 100.5);
         console.assert(v17.val.m3 === 'hä');
+        console.assert(v17.val.m4.get() === true);
         console.assert(Module.sameUnoObject(v18.val, test));
         v1.delete();
         v2.delete();
@@ -609,6 +622,7 @@ Module.uno_init.then(function() {
         v15.val.delete();
         v15.delete();
         v16.delete();
+        v17.val.m4.delete();
         v17.delete();
         v18.delete();
     }

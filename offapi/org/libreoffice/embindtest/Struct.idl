@@ -13,6 +13,7 @@ struct Struct {
     long m1;
     double m2;
     string m3;
+    any m4;
 };
 
 }; }; };
