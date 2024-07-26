@@ -14,7 +14,6 @@
 
 #include <config_fonts.h>
 
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -44,25 +43,19 @@ public:
     }
 
     void saveAsPDF(std::u16string_view rFile);
-    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-              bool bUseTaggedPDF = true);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
     loadFromFile(rFile);
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-                         bool bUseTaggedPDF)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(bUseTaggedPDF) } }));
-    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -72,17 +65,8 @@ void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rD
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testFigurePlacement)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
-
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
-    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"tdf159900_figurePlacement.odt");
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf159900_figurePlacement.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -124,18 +108,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFigurePlacement)
 /// Tests that a pdf image is roundtripped back to PDF as a vector format.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
 {
-    // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Explicitly enable the usage of the reference XObject markup.
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "UseReferenceXObject", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"tdf106059.odt");
 
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf106059.odt", aDocument);
 
     // Assert that the XObject in the page resources dictionary is a reference XObject.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -206,7 +185,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106693)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf105461.odp");
 
     // Parse the export result with pdfium.
@@ -362,7 +340,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf127217.odt");
 
     // Parse the export result with pdfium.
@@ -600,7 +577,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf148706.odt");
 
     // Parse the export result with pdfium.
@@ -765,7 +741,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680_2)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf108963.odp");
 
     // Parse the export result with pdfium.
@@ -842,17 +817,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
-
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
-    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"alternativeText.fodp");
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"alternativeText.fodp", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -891,8 +857,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     vcl::filter::PDFDocument aDocument;
-    // Loading fails with tagged PDF enabled
-    load(u"tdf105972.fodt", aDocument, false);
+    load(u"tdf105972.fodt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -956,8 +921,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
     vcl::filter::PDFDocument aDocument;
-    // Loading fails with tagged PDF enabled
-    load(u"tdf148442.odt", aDocument, false);
+    load(u"tdf148442.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -1026,8 +990,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
-    // Loading fails with tagged PDF enabled
-    load(u"tdf118244_radioButtonGroup.odt", aDocument, false);
+    load(u"tdf118244_radioButtonGroup.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -1187,7 +1150,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
 {
 #if HAVE_MORE_FONTS
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf115117-1.odt");
 
     // Parse the export result with pdfium.
@@ -1222,7 +1184,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     // See the comments in testTdf115117_1a() for explanation.
 
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf115117-2.odt");
 
     // Parse the export result with pdfium.
@@ -1252,7 +1213,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
 {
 // FIXME: On Windows, the number of chars is 4 instead of 3
 #ifndef _WIN32
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf154549.odt");
 
     // Parse the export result with pdfium.
@@ -1285,7 +1245,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
 {
     // Without the fix in place, this test would have failed with
     // An uncaught exception of type com.sun.star.io.IOException
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf150846.txt");
 
     // Parse the export result with pdfium.
@@ -1311,7 +1270,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160401)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
     saveAsPDF(u"tdf160401.pptx");
 
     // Parse the export result with pdfium.
@@ -1344,7 +1302,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160401)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf103492.odt");
 
     // Parse the export result with pdfium.
@@ -1391,7 +1348,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf145274.docx");
 
     // Parse the export result with pdfium.
@@ -1426,7 +1382,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156685)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf156685.docx");
 
     // Parse the export result with pdfium.
@@ -1749,7 +1704,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ReduceImageResolution", uno::Any(true) },
           { "MaxImageResolution", uno::Any(static_cast<sal_Int32>(300)) } }));
@@ -1779,7 +1733,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157679)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
     saveAsPDF(u"tdf157679.pptx");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -1807,7 +1760,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157679)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128445)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
     saveAsPDF(u"tdf128445.odp");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -1831,7 +1783,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
         return;
 
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
     saveAsPDF(u"tdf128630.odp");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
@@ -1864,7 +1815,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf106702.odt");
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
@@ -1911,7 +1861,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         { "ExportNotesPages", uno::Any(true) },
         // ReduceImageResolution is on by default and that hides the bug we
@@ -1978,27 +1927,23 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint80)
 {
     // printing asserted in SwCellFrame::FindStartEndOfRowSpanCell
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"forcepoint80-1.rtf");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint3)
 {
     // printing asserted in SwFrame::GetNextSctLeaf()
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"flowframe_null_ptr_deref.sample");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf84283)
 {
     // Without the fix in place, this test would have crashed
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf84283.doc");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"calc_pdf_Export"_ustr;
     saveAsPDF(u"tdf115262.ods");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(8, pPdfDocument->getPageCount());
@@ -2037,7 +1982,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf121962.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2061,7 +2005,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139065)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf139065.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2076,17 +2019,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139065)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"tdf157816.fodt");
 
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"tdf157816.fodt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -2476,17 +2415,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"LinkWithFly.fodt");
 
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"LinkWithFly.fodt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -2860,17 +2795,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142133)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    saveAsPDF(u"LinkPages.fodt");
 
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load(u"LinkPages.fodt", aDocument);
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPages.size());
@@ -3467,7 +3398,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf115967.odt");
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
