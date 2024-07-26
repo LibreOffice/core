@@ -37,6 +37,7 @@ enum
     PROP_HISTOGRAMCHARTTYPE_BINWIDTH,
     PROP_HISTOGRAMCHARTTYPE_BINRANGE,
     PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE,
+    PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
     PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE
 };
 
@@ -53,6 +54,11 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
     rOutProperties.emplace_back(
         "FrequencyType", PROP_HISTOGRAMCHARTTYPE_FREQUENCYTYPE, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back("OverlapSequence", PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
+                                cppu::UnoType<Sequence<sal_Int32>>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
 
     rOutProperties.emplace_back("GapwidthSequence", PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
                                 cppu::UnoType<sal_Int32>::get(),
@@ -153,6 +159,8 @@ void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) cons
         Sequence<sal_Int32> aSeq{ 0 }; // No gap for histogram
         ::chart::PropertyHelper::setPropertyValueDefault(
             aTmp, PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq);
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE, aSeq);
         ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_HISTOGRAMCHARTTYPE_BINWIDTH,
                                                          2.0);
         ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_HISTOGRAMCHARTTYPE_BINRANGE,
