@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyHeader)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->SplitNode();
     // Without the accompanying fix in place, this test would have crashed here.
-    pWrtShell->CalcLayout();
+    calcLayout();
 
     // Then make sure we get one more page, since the first page is now 2 pages:
     CPPUNIT_ASSERT_EQUAL(9, getPages());

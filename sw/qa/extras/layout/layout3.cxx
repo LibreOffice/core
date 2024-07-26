@@ -1364,9 +1364,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf130218)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf127235)
 {
     createSwDoc("tdf127235.odt");
-    SwDoc* pDoc = getSwDoc();
     // This resulted in a layout loop.
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf138039)

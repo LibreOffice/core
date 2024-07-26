@@ -287,7 +287,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -526,7 +526,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     CheckRedlineCharAttributesHidden();
 }
 
@@ -583,7 +583,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
 {
     // Open the bugdoc
     createSwDoc("tdf138951.odt");
-    auto pDoc = getSwDoc();
 
     // Get the only shape
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
@@ -595,7 +594,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
     const SwFrameFormat* pShFrm = SwTextBoxHelper::getOtherTextBoxFormat(pTxFrm, RES_FLYFRMFMT);
     CPPUNIT_ASSERT(pShFrm);
 
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
 
     // Get the bound rectangle of the textframe
     tools::Rectangle aTxtFrmRect(pTxFrm->FindRealSdrObject()->GetLogicRect());
@@ -2430,9 +2429,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion2)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116848)
 {
     createSwDoc("tdf116848.odt");
-    SwDoc* pDoc = getSwDoc();
     // This resulted in a layout loop.
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117245)

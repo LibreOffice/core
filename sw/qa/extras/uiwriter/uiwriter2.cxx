@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
-    pWrtShell->CalcLayout();
+    calcLayout();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 18, /*bBasicCall=*/false);
     pWrtShell->SplitNode(true);
     rUndoManager.Undo();

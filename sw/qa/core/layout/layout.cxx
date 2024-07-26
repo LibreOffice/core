@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
     pWrtShell->DelLeft();
 
     // Calc the layout and check the number of pages.
-    pWrtShell->CalcLayout();
+    calcLayout();
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

@@ -3321,7 +3321,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -3399,7 +3399,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     CheckRedlineSectionsHidden();
 }
@@ -3444,7 +3444,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
@@ -3504,7 +3504,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
     // why is this needed explicitly?
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
@@ -3549,7 +3549,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     // hide tracked table and table row deletions
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
@@ -3565,7 +3565,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     // show tracked table and table row deletions again
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
@@ -3607,7 +3607,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
     for (int i = 0; i < 12; ++i)
         pEditShell->AcceptRedline(0);
 
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // show tracked row deletions
@@ -3621,7 +3621,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
@@ -3633,7 +3633,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
     while (pEditShell->GetRedlineCount() > 0)
         pEditShell->AcceptRedline(0);
 
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
@@ -3670,7 +3670,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
     // hide tracked table column deletions
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
@@ -3680,7 +3680,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
     // show tracked table column deletions again
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page"_ostr, 4);
@@ -3768,9 +3768,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
     createSwDoc("tdf118058.fodt");
-    SwDoc* pDoc = getSwDoc();
     // This resulted in a layout loop.
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    calcLayout();
 }
 
 //just care it doesn't crash/assert
