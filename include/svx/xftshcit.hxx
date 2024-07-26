@@ -33,7 +33,10 @@ class SVXCORE_DLLPUBLIC XFormTextShadowColorItem final : public XColorItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-    XFormTextShadowColorItem() {}
+    XFormTextShadowColorItem()
+        : XColorItem(SfxItemType::XFormTextShadowColorItemType)
+    {
+    }
     XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
 
     virtual XFormTextShadowColorItem* Clone(SfxItemPool* pPool = nullptr) const override;

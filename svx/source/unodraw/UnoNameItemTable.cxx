@@ -44,7 +44,7 @@ namespace
     class SampleItem : public NameOrIndex
     {
     public:
-        SampleItem(sal_uInt16 nWhich, const OUString& rName) : NameOrIndex(TypedWhichId<NameOrIndex>(nWhich), rName) {}
+        SampleItem(sal_uInt16 nWhich, const OUString& rName) : NameOrIndex(TypedWhichId<NameOrIndex>(nWhich), rName, SfxItemType::NameOrIndexType) {}
 
         bool operator==(const SfxPoolItem& rCmp) const
         {

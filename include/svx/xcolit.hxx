@@ -35,10 +35,10 @@ class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
 
 public:
             static SfxPoolItem* CreateDefault();
-            XColorItem() {}
-            XColorItem(TypedWhichId<XColorItem> nWhich, sal_Int32 nIndex, const Color& rTheColor);
-            XColorItem(TypedWhichId<XColorItem> nWhich, const Color& rTheColor);
-            XColorItem(TypedWhichId<XColorItem> nWhich, const OUString& rName, const Color& rTheColor);
+            XColorItem(SfxItemType eItemType = SfxItemType::XColorItemType) : NameOrIndex(eItemType) {}
+            XColorItem(TypedWhichId<XColorItem> nWhich, sal_Int32 nIndex, const Color& rTheColor, SfxItemType eItemType = SfxItemType::XColorItemType);
+            XColorItem(TypedWhichId<XColorItem> nWhich, const Color& rTheColor, SfxItemType eItemType = SfxItemType::XColorItemType);
+            XColorItem(TypedWhichId<XColorItem> nWhich, const OUString& rName, const Color& rTheColor, SfxItemType eItemType = SfxItemType::XColorItemType);
             XColorItem(const XColorItem& rItem);
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

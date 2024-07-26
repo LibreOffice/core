@@ -97,14 +97,14 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
-NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
-    SfxStringItem(_nWhich, OUString(), SfxItemType::NameOrIndexType),
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex, SfxItemType eItemType) :
+    SfxStringItem(_nWhich, OUString(), eItemType),
     m_nPalIndex(nIndex)
 {
 }
 
-NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName) :
-    SfxStringItem(_nWhich, rName, SfxItemType::NameOrIndexType),
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName, SfxItemType eItemType) :
+    SfxStringItem(_nWhich, rName, eItemType),
     m_nPalIndex(-1)
 {
 }
@@ -265,22 +265,22 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
+SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem(SfxItemType::XColorItemType); }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
-    NameOrIndex(_nWhich, nIndex),
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor, SfxItemType eItemType) :
+    NameOrIndex(_nWhich, nIndex, eItemType),
     m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
-    NameOrIndex(_nWhich, rName),
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor, SfxItemType eItemType) :
+    NameOrIndex(_nWhich, rName, eItemType),
     m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
-    : NameOrIndex(_nWhich, OUString())
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor, SfxItemType eItemType)
+    : NameOrIndex(_nWhich, OUString(), eItemType)
     , m_aColor(rTheColor)
 {
 }
@@ -657,7 +657,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
 SfxPoolItem* XLineDashItem::CreateDefault() {return new XLineDashItem;}
 
 XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
-    NameOrIndex(XATTR_LINEDASH, rName),
+    NameOrIndex(XATTR_LINEDASH, rName, SfxItemType::XLineDashItemType),
     aDash(rTheDash)
 {
 }
@@ -669,7 +669,7 @@ XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
 }
 
 XLineDashItem::XLineDashItem(const XDash& rTheDash)
-:   NameOrIndex( XATTR_LINEDASH, -1 ),
+:   NameOrIndex( XATTR_LINEDASH, -1, SfxItemType::XLineDashItemType ),
     aDash(rTheDash)
 {
 }
@@ -1020,12 +1020,12 @@ bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 SfxPoolItem* XLineColorItem::CreateDefault() { return new XLineColorItem; }
 
 XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
+    XColorItem(XATTR_LINECOLOR, nIndex, rTheColor, SfxItemType::XLineColorItemType)
 {
 }
 
 XLineColorItem::XLineColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_LINECOLOR, rName, rTheColor)
+    XColorItem(XATTR_LINECOLOR, rName, rTheColor, SfxItemType::XLineColorItemType)
 {
 }
 
@@ -1115,12 +1115,12 @@ bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
 SfxPoolItem* XLineStartItem::CreateDefault() {return new XLineStartItem;}
 
 XLineStartItem::XLineStartItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINESTART, nIndex)
+:   NameOrIndex(XATTR_LINESTART, nIndex, SfxItemType::XLineStartItemType)
 {
 }
 
 XLineStartItem::XLineStartItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex(XATTR_LINESTART, rName),
+:   NameOrIndex(XATTR_LINESTART, rName, SfxItemType::XLineStartItemType),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1132,7 +1132,7 @@ XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
 }
 
 XLineStartItem::XLineStartItem(basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex( XATTR_LINESTART, -1 ),
+:   NameOrIndex( XATTR_LINESTART, -1, SfxItemType::XLineStartItemType ),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1418,12 +1418,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 SfxPoolItem* XLineEndItem::CreateDefault() {return new XLineEndItem;}
 
 XLineEndItem::XLineEndItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINEEND, nIndex)
+:   NameOrIndex(XATTR_LINEEND, nIndex, SfxItemType::XLineEndItemType)
 {
 }
 
 XLineEndItem::XLineEndItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex(XATTR_LINEEND, rName),
+:   NameOrIndex(XATTR_LINEEND, rName, SfxItemType::XLineEndItemType),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1435,7 +1435,7 @@ XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
 }
 
 XLineEndItem::XLineEndItem(basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex( XATTR_LINEEND, -1 ),
+:   NameOrIndex( XATTR_LINEEND, -1, SfxItemType::XLineEndItemType ),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -2007,12 +2007,12 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
 SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
 XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
+    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor, SfxItemType::XFillColorItemType)
 {
 }
 
 XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
+    XColorItem(XATTR_FILLCOLOR, rName, rTheColor, SfxItemType::XFillColorItemType)
 {
 }
 
@@ -2177,7 +2177,7 @@ boost::property_tree::ptree XFillColorItem::dumpAsJSON() const
 }
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
+    XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor, SfxItemType::XSecondaryFillColorItemType)
 {
 }
 
@@ -2202,14 +2202,14 @@ SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; 
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
                                    const basegfx::BGradient& rTheGradient) :
-    NameOrIndex(XATTR_FILLGRADIENT, nIndex),
+    NameOrIndex(XATTR_FILLGRADIENT, nIndex, SfxItemType::XFillGradientItemType),
     m_aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
                                    const basegfx::BGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
-    : NameOrIndex(nWhich, rName)
+    : NameOrIndex(nWhich, rName, SfxItemType::XFillGradientItemType)
     , m_aGradient(rTheGradient)
 {
 }
@@ -2221,7 +2221,7 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 }
 
 XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient )
-:   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
+:   NameOrIndex( XATTR_FILLGRADIENT, -1, SfxItemType::XFillGradientItemType ),
     m_aGradient(rTheGradient)
 {
 }
@@ -2654,7 +2654,7 @@ SfxPoolItem* XFillHatchItem::CreateDefault() { return new XFillHatchItem; }
 
 XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
-    NameOrIndex(XATTR_FILLHATCH, rName),
+    NameOrIndex(XATTR_FILLHATCH, rName, SfxItemType::XFillHatchItemType),
     m_aHatch(rTheHatch)
 {
 }
@@ -2666,7 +2666,7 @@ XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
 }
 
 XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
-:   NameOrIndex( XATTR_FILLHATCH, -1 ),
+:   NameOrIndex( XATTR_FILLHATCH, -1, SfxItemType::XFillHatchItemType ),
     m_aHatch(rTheHatch)
 {
 }
@@ -3027,7 +3027,7 @@ SfxPoolItem* XFormTextShadowColorItem::CreateDefault() { return new XFormTextSha
 
 XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
                                                      const Color& rTheColor) :
-    XColorItem(XATTR_FORMTXTSHDWCOLOR, rName, rTheColor)
+    XColorItem(XATTR_FORMTXTSHDWCOLOR, rName, rTheColor, SfxItemType::XFormTextShadowColorItemType)
 {
 }
 

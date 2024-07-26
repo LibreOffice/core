@@ -42,9 +42,9 @@ protected:
     void    Detach()    { m_nPalIndex = -1; }
 
 public:
-            NameOrIndex() { m_nPalIndex = -1; }
-            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex);
-            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName);
+            NameOrIndex(SfxItemType eItemType) : SfxStringItem(0, eItemType) { m_nPalIndex = -1; }
+            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex, SfxItemType eItemType);
+            NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName, SfxItemType eItemType);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;

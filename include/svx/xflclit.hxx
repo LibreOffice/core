@@ -33,7 +33,7 @@ class SVXCORE_DLLPUBLIC XFillColorItem final : public XColorItem
 {
 public:
             static SfxPoolItem* CreateDefault();
-            XFillColorItem() {}
+            XFillColorItem() : XColorItem(SfxItemType::XFillColorItemType) {}
             XFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XFillColorItem(const OUString& rName, const Color& rTheColor);
 
