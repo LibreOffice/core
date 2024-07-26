@@ -254,6 +254,66 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151886)
 }
 #endif
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087)
+{
+    auto verify = [this]() {
+        ScDocument* pDoc = getScDoc();
+        insertArrayToCell(u"E5"_ustr, u"=myData[[#Data]]");
+
+        CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(4, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(4, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(4, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(4, 7, 0));
+        CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(4, 8, 0));
+        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(5, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(5, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(5, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(5, 7, 0));
+        CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(5, 8, 0));
+
+        insertArrayToCell(u"H5"_ustr, u"=myData[[#Headers]]");
+
+        CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(7, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(8, 4, 0));
+
+        insertArrayToCell(u"K5"_ustr, u"=myData[[#All]]");
+
+        CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(10, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(10, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(10, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(10, 7, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(10, 8, 0));
+        CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(10, 9, 0));
+        CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(11, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(11, 5, 0));
+        CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(11, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(11, 7, 0));
+        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(11, 8, 0));
+        CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(11, 9, 0));
+    };
+
+    createScDoc("tdf162087.ods");
+    verify();
+
+    // change UseEnglishFuncName to true
+    ScDocShell* pDocSh = getScDocShell();
+    ScFormulaOptions aFormulaOptions = SC_MOD()->GetFormulaOptions();
+    bool bOldStatus = aFormulaOptions.GetUseEnglishFuncName();
+    aFormulaOptions.SetUseEnglishFuncName(true);
+    pDocSh->SetFormulaOptions(aFormulaOptions);
+
+    createScDoc("tdf162087.ods");
+    pDocSh = getScDocShell();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Elisabeth
+    // - Actual  : #NAME?
+    verify();
+
+    aFormulaOptions.SetUseEnglishFuncName(bOldStatus);
+    pDocSh->SetFormulaOptions(aFormulaOptions);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 {
     createScDoc();
