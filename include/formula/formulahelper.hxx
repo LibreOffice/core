@@ -44,6 +44,8 @@ namespace formula
         const sal_Unicode sep;
         const sal_Unicode arrayOpen;
         const sal_Unicode arrayClose;
+        const sal_Unicode tableRefOpen;
+        const sal_Unicode tableRefClose;
     public:
         FormulaHelper(const IFunctionManager* _pFunctionManager);
 

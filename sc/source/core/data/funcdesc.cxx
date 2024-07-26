@@ -1178,6 +1178,10 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
             return ScCompiler::GetNativeSymbolChar(ocArrayOpen);
         case eArrayClose:
             return ScCompiler::GetNativeSymbolChar(ocArrayClose);
+        case eTableRefOpen:
+            return ScCompiler::GetNativeSymbolChar(ocTableRefOpen);
+        case eTableRefClose:
+            return ScCompiler::GetNativeSymbolChar(ocTableRefClose);
     }
     return 0;
 }

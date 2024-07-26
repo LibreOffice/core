@@ -51,6 +51,10 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
             return '{';
         case eArrayClose:
             return '}';
+        case eTableRefOpen:
+            return '[';
+        case eTableRefClose:
+            return ']';
     }
     return 0;
 }

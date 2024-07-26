@@ -53,7 +53,9 @@ namespace formula
             eClose,
             eSep,
             eArrayOpen,
-            eArrayClose
+            eArrayClose,
+            eTableRefOpen,
+            eTableRefClose
         };
         virtual sal_uInt32 getCount() const = 0;
         virtual const IFunctionCategory* getCategory(sal_uInt32 nPos) const = 0;

@@ -68,6 +68,8 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
     ,sep(_pFunctionManager->getSingleToken(IFunctionManager::eSep))
     ,arrayOpen(_pFunctionManager->getSingleToken(IFunctionManager::eArrayOpen))
     ,arrayClose(_pFunctionManager->getSingleToken(IFunctionManager::eArrayClose))
+    ,tableRefOpen(_pFunctionManager->getSingleToken(IFunctionManager::eTableRefOpen))
+    ,tableRefClose(_pFunctionManager->getSingleToken(IFunctionManager::eTableRefClose))
 {
 }
 
@@ -306,14 +308,37 @@ sal_Int32  FormulaHelper::GetFunctionEnd( std::u16string_view rStr, sal_Int32 nS
         return nStart;
 
     short   nParCount = 0;
+    short   nTableRefCount = 0;
     bool    bInArray = false;
     bool    bFound = false;
+    bool    bTickEscaped = false;
 
     while ( !bFound && (nStart < nStrLen) )
     {
         sal_Unicode c = rStr[nStart];
 
-        if ( c == '"' )
+        if (nTableRefCount > 0)
+        {
+            // Column names may contain anything, skip. Also skip separator
+            // between item specifier and column name or whatever in a
+            // TableRef [[...]; [...]]
+            // But keep track of apostrophe ' tick escaped brackets.
+            if (c == '\'')
+                bTickEscaped = !bTickEscaped;
+            else
+            {
+                if (c == tableRefOpen && !bTickEscaped)
+                    ++nTableRefCount;
+                else if (c == tableRefClose && !bTickEscaped)
+                    --nTableRefCount;
+                bTickEscaped = false;
+            }
+        }
+        else if (c == tableRefOpen)
+        {
+            ++nTableRefCount;
+        }
+        else if ( c == '"' )
         {
             nStart++;
             while ( (nStart < nStrLen) && rStr[nStart] != '"' )
@@ -365,14 +390,37 @@ sal_Int32 FormulaHelper::GetArgStart( std::u16string_view rStr, sal_Int32 nStart
         return nStart;
 
     short   nParCount   = 0;
+    short   nTableRefCount = 0;
     bool    bInArray    = false;
     bool    bFound      = false;
+    bool    bTickEscaped = false;
 
     while ( !bFound && (nStart < nStrLen) )
     {
         sal_Unicode c = rStr[nStart];
 
-        if ( c == '"' )
+        if (nTableRefCount > 0)
+        {
+            // Column names may contain anything, skip. Also skip separator
+            // between item specifier and column name or whatever in a
+            // TableRef [[...]; [...]]
+            // But keep track of apostrophe ' tick escaped brackets.
+            if (c == '\'')
+                bTickEscaped = !bTickEscaped;
+            else
+            {
+                if (c == tableRefOpen && !bTickEscaped)
+                    ++nTableRefCount;
+                else if (c == tableRefClose && !bTickEscaped)
+                    --nTableRefCount;
+                bTickEscaped = false;
+            }
+        }
+        else if (c == tableRefOpen)
+        {
+            ++nTableRefCount;
+        }
+        else if ( c == '"' )
         {
             nStart++;
             while ( (nStart < nStrLen) && rStr[nStart] != '"' )
