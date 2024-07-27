@@ -144,6 +144,14 @@ SwPageDesc::~SwPageDesc()
 {
 }
 
+bool SwPageDesc::IsUsed() const
+{
+    for(const auto pFrameFormat: { &GetMaster(), &GetLeft(), &GetFirstMaster(), &GetFirstLeft() })
+        if(pFrameFormat->IsUsed())
+            return true;
+    return false;
+}
+
 bool SwPageDesc::SetName( const OUString& rNewName )
 {
     bool renamed = true;
@@ -296,13 +304,6 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 || isCHRATR(nWhich)
                 || (RES_PARATR_LINESPACING == nWhich))
             RegisterChange();
-    }
-    else if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
-    {
-        m_Master.SwClientNotify(rModify, rHint);
-        m_Left.SwClientNotify(rModify, rHint);
-        m_FirstMaster.SwClientNotify(rModify, rHint);
-        m_FirstLeft.SwClientNotify(rModify, rHint);
     }
     else if(rHint.GetId() == SfxHintId::SwModifyChanged)
     {

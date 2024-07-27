@@ -41,6 +41,7 @@ using namespace ::com::sun::star;
 class SfxPoolItem;
 class SwTextFormatColl;
 class SwNode;
+class SwNodes;
 class SwPageDescs;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
@@ -193,6 +194,7 @@ class SW_DLLPUBLIC SwPageDesc final
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
+    bool IsUsed() const;
     const OUString& GetName() const { return m_StyleName; }
     bool SetName(const OUString& rNewName);
 

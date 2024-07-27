@@ -2428,7 +2428,7 @@ SwFrameFormat* SwDocStyleSheet::GetFrameFormat()
     return m_pFrameFormat;
 }
 
-bool  SwDocStyleSheet::IsUsed() const
+bool SwDocStyleSheet::IsUsed() const
 {
     if( !m_bPhysical )
     {
@@ -2445,7 +2445,8 @@ bool  SwDocStyleSheet::IsUsed() const
     case SfxStyleFamily::Char : pMod = m_pCharFormat;   break;
     case SfxStyleFamily::Para : pMod = m_pColl;      break;
     case SfxStyleFamily::Frame: pMod = m_pFrameFormat;    break;
-    case SfxStyleFamily::Page : pMod = m_pDesc;      break;
+    case SfxStyleFamily::Page:
+            return m_pDesc->IsUsed();
 
     case SfxStyleFamily::Pseudo:
             return m_pNumRule && m_rDoc.IsUsed(*m_pNumRule);
@@ -3131,7 +3132,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
             const sal_uInt16 nId = rDesc.GetPoolFormatId();
-            bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rDesc));
+            bool bUsed = bIsSearchUsed && ( bOrganizer || rDesc.IsUsed() );
             if( !bUsed )
             {
                 if ( ( !bSearchHidden && rDesc.IsHidden() ) ||
