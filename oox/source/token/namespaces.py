@@ -15,7 +15,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import sys, re
+import sys
+import re
 
 infile_name = sys.argv[1]
 id_out_name = sys.argv[2]
@@ -69,7 +70,7 @@ shift = 16
 
 idfile.write("const size_t NMSP_SHIFT = {};\n".format(shift))
 
-i = 1;
+i = 1
 for token in sorted(namespaces.keys()):
     idfile.write("const sal_Int32 NMSP_{} = {} << NMSP_SHIFT;\n".format(token, i))
     cur_id = i << shift

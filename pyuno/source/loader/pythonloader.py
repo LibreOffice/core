@@ -40,16 +40,16 @@ def splitUrl( url ):
 
 g_loadedComponents = {}
 def checkForPythonPathBesideComponent( url ):
-    path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
+    path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" )
     if DEBUG == 1:
         print(b"checking for existence of " + encfile( path ))
-    if 1 == os.access( encfile( path ), os.F_OK) and not path in sys.path:
+    if 1 == os.access( encfile( path ), os.F_OK) and path not in sys.path:
         if DEBUG == 1:
             print(b"adding " + encfile( path ) + b" to sys.path")
         sys.path.append( path )
 
-    path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
-    if 1 == os.access( encfile( path ), os.F_OK) and not path in sys.path:
+    path = unohelper.fileUrlToSystemPath( url+"/pythonpath" )
+    if 1 == os.access( encfile( path ), os.F_OK) and path not in sys.path:
         if DEBUG == 1:
             print(b"adding " + encfile( path ) + b" to sys.path")
         sys.path.append( path )
@@ -107,7 +107,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                 if -1 != nSlash:
                     path = unohelper.fileUrlToSystemPath( dependent[0:nSlash] )
                     dependent = dependent[nSlash+1:len(dependent)]
-                    if not path in sys.path:
+                    if path not in sys.path:
                         sys.path.append( path )
                 mod =  __import__( dependent )
                 path_component, dot, rest = dependent.partition('.')
@@ -117,13 +117,13 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                 return mod
             else:
                 if DEBUG:
-                    print("Unknown protocol '" + protocol + "'");
+                    print("Unknown protocol '" + protocol + "'")
                 raise RuntimeException( "PythonLoader: Unknown protocol " +
                                          protocol + " in url " +url, self )
         except Exception as e:
             if DEBUG:
                 print ("Python import exception " + str(type(e)) +
-                       " message " + str(e) + " args " + str(e.args));
+                       " message " + str(e) + " args " + str(e.args))
             raise RuntimeException( "Couldn't load " + url + " for reason " + str(e), None )
         return None
 

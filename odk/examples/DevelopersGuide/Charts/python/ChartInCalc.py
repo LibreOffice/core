@@ -71,11 +71,6 @@ class ChartInCalc(object):
     def test_data_point_properties(self):
         #  set properties for a single data point
         try:
-            # determine the maximum value of the first series
-            data_array = self._chart_document.getData()
-            data = data_array.getData()
-            max_value = max([data[i][1] for i in range(len(data))])
-
             # first parameter is the index of the point, the second one is the series
             point_prop = self._diagram.getDataPointProperties(0, 1)
 

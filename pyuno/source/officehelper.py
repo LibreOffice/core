@@ -49,9 +49,16 @@ warning:: Tested platforms are Linux, Mac OS X & Windows
 :References:
 .. _ActiveState retry Python decorator: http://code.activestate.com/recipes/580745-retry-decorator-in-python/
 """
-import os, random, signal, subprocess  # in bootstrap()
-from sys import platform  # in bootstrap()
-import itertools, time  # in retry() decorator
+# in bootstrap()
+import os
+import random
+import signal
+import subprocess
+from sys import platform
+# in retry() decorator
+import itertools
+import time
+
 import uno
 from com.sun.star.connection import NoConnectException
 from com.sun.star.uno import Exception as UnoException

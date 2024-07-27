@@ -15,7 +15,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import sys, re
+import sys
+import re
 
 infile_name = sys.argv[1]
 id_out_name = sys.argv[2]
@@ -37,7 +38,7 @@ with open(infile_name) as infile:
 idfile = open(id_out_name, 'w')
 namefile = open(name_out_name, 'w')
 
-i = 0;
+i = 0
 for token in sorted(props.keys()):
     idfile.write("const sal_Int32 {}  = {};\n".format(props[token], i))
     namefile.write("/* {} */ \"{}\",\n".format(i, token))

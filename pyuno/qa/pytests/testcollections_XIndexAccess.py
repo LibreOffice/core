@@ -75,7 +75,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertEqual(0, count)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    num = len(obj)              # Number of elements
@@ -94,7 +94,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertEqual(1, count)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    val = obj[0]                # Access by index
@@ -119,7 +119,7 @@ class TestXIndexAccess(CollectionsTestBase):
         self.readValuesTestFixture(doc, 2, 1,          1)
         self.readValuesTestFixture(doc, 2, 2,          IndexError)
         self.readValuesTestFixture(doc, 2, 3,          IndexError)
-        doc.close(True);
+        doc.close(True)
 
     def test_XIndexAccess_ReadIndex_Single_Invalid(self):
         doc = self.createBlankTextDocument()
@@ -129,7 +129,7 @@ class TestXIndexAccess(CollectionsTestBase):
         self.readValuesTestFixture(doc, 0, (0, 1),     TypeError)
         self.readValuesTestFixture(doc, 0, [0, 1],     TypeError)
         self.readValuesTestFixture(doc, 0, {'a': 'b'}, TypeError)
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    val1,val2 = obj[2:4]        # Access by slice
@@ -143,7 +143,7 @@ class TestXIndexAccess(CollectionsTestBase):
                     key = slice(j, k)
                     expected = t[key]
                     self.readValuesTestFixture(doc, i, key, expected)
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    val1,val2 = obj[0:3:2]      # Access by extended slice
@@ -158,7 +158,7 @@ class TestXIndexAccess(CollectionsTestBase):
                         key = slice(j, k, l)
                         expected = t[key]
                         self.readValuesTestFixture(doc, i, key, expected)
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -179,7 +179,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertTrue(present)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -195,7 +195,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertFalse(present)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -211,7 +211,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertFalse(present)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    if val in obj: ...          # Test value presence
@@ -225,7 +225,7 @@ class TestXIndexAccess(CollectionsTestBase):
         with self.assertRaises(TypeError):
             _ = {} in doc.Footnotes
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    for val in obj: ...         # Implicit iterator (values)
@@ -243,7 +243,7 @@ class TestXIndexAccess(CollectionsTestBase):
         # Then
         self.assertEqual(0, len(read_footnotes))
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    for val in obj: ...         # Implicit iterator (values)
@@ -266,7 +266,7 @@ class TestXIndexAccess(CollectionsTestBase):
         self.assertEqual(1, len(read_footnotes))
         self.assertEqual('foo', read_footnotes[0].Label)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    for val in obj: ...         # Implicit iterator (values)
@@ -293,7 +293,7 @@ class TestXIndexAccess(CollectionsTestBase):
         self.assertEqual('foo', read_footnotes[0].Label)
         self.assertEqual('bar', read_footnotes[1].Label)
 
-        doc.close(True);
+        doc.close(True)
 
     # Tests syntax:
     #    itr = iter(obj)             # Named iterator (values)
@@ -315,7 +315,7 @@ class TestXIndexAccess(CollectionsTestBase):
         with self.assertRaises(StopIteration):
             next(itr)
 
-        doc.close(True);
+        doc.close(True)
 
 
 if __name__ == '__main__':

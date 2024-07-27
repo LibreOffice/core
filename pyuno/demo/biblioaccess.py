@@ -37,7 +37,7 @@ def main():
     rowset.CommandType = COMMAND
     rowset.Command = "SELECT IDENTIFIER, AUTHOR FROM biblio"
 
-    rowset.execute();
+    rowset.execute()
 
     print("Identifier\tAuthor")
 
@@ -46,7 +46,7 @@ def main():
     while rowset.next():
         print(rowset.getString(id) + "\t" + repr(rowset.getString(author)))
 
-    rowset.dispose();
+    rowset.dispose()
 
 main()
 

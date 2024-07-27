@@ -17,7 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import getopt,sys
+import getopt
+import sys
 import uno
 
 from unohelper import Base,systemPathToFileUrl
