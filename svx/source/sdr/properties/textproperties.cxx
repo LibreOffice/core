@@ -354,10 +354,8 @@ namespace sdr::properties
                 }
             }
 
-            if(rObj.IsTextFrame())
-            {
+            if(rObj.IsTextFrame() && !rObj.getSdrModelFromSdrObject().isLocked())
                 rObj.NbcAdjustTextFrameWidthAndHeight();
-            }
         }
 
         void TextProperties::ForceDefaultAttributes()
