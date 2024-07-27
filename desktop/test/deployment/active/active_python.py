@@ -76,8 +76,8 @@ class Dispatch(unohelper.Base, XServiceInfo, XDispatch):
                     "com.sun.star.frame.Desktop", self.context). \
                     getCurrentFrame().getComponentWindow(), \
                 INFOBOX, BUTTONS_OK, "active", "python")
-        box.execute();
-        box.dispose();
+        box.execute()
+        box.dispose()
 
     def addStatusListener(self, Control, URL):
         pass
@@ -100,7 +100,7 @@ def writeRegistryInfo(smgr, regKey):
         for i in (Provider, Dispatch):
             key = regKey.createKey("/" + i.implementationName + "/UNO")
             for j in i.serviceNames:
-                key.createKey("/SERVICES/" + j);
+                key.createKey("/SERVICES/" + j)
         regKey.createKey( \
             "/" + Dispatch.implementationName + "/UNO/SINGLETONS/" \
                 "com.sun.star.test.deployment.active_python_singleton"). \

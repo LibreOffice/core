@@ -91,7 +91,7 @@ def nsinstall(argv):
       # It causes problems with updating the files during a rebuild.
       if options.m == 0o444:
         options.m = 0o644
-    except:
+    except Exception:
       sys.stderr.write('nsinstall: ' + options.m + ' is not a valid mode\n')
       return 1
 

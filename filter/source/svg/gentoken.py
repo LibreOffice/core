@@ -45,9 +45,9 @@ hxx.write("#ifndef INCLUDED_AUTOGEN_TOKEN_HXX\n")
 hxx.write("#define INCLUDED_AUTOGEN_TOKEN_HXX\n\n")
 hxx.write("#include <sal/types.h>\n\n" )
 
-i = 0;
+i = 0
 for token in sorted(tokens.keys()):
-    i += 1;
+    i += 1
     hxx.write("const sal_Int32 {} = {};\n".format(tokens[token], i))
     gperf.write("{},{}\n".format(token, tokens[token]))
 

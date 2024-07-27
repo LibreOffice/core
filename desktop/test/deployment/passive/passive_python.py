@@ -75,8 +75,8 @@ class Dispatch(unohelper.Base, XServiceInfo, XDispatch):
                     "com.sun.star.frame.Desktop", self.context). \
                     getCurrentFrame().getComponentWindow(), \
                 INFOBOX, BUTTONS_OK, "passive", "python")
-        box.execute();
-        box.dispose();
+        box.execute()
+        box.dispose()
 
     def addStatusListener(self, Control, URL):
         pass

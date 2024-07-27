@@ -149,8 +149,6 @@ class Test(UITestCase):
     def testSvxCharEffectsPageWriterAutomatic(self):
         # Start Writer.
         with self.ui_test.create_doc_in_start_center("writer"):
-            doc = self.xUITest.getTopFocusWindow()
-
             # Use Format -> Character.
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")

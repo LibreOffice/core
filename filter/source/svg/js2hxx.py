@@ -18,7 +18,8 @@
 #
 # For minor contributions see the git repository.
 
-import os, sys
+import os
+import sys
 
 MAX_LINES = 150
 VARIABLE_NAME = 'aSVGScript'
