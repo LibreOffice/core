@@ -580,9 +580,21 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
         case DataType::NUMERIC:
             if(x.hasValue())
             {
+                // NB: sqlType and scale are not to be sent to the database, but to be used here.
+                // XParameters::setObjectWithInfo is required to convert the given object to the
+                // required type before being sent to the database; and scale may be needed for
+                // that conversion. But here we convert any object to a decimal string; and ODBC
+                // (or at least some drivers - see tdf#162219) needs DecimalDigits value passed
+                // to SQLBindParameter equal to the number of decimals in the string, otherwise
+                // the conversion from string to decimal fails. It may be not equal to the scale
+                // of the target parameter; ODBC driver handles that. Therefore, here we ignore
+                // the originally passed value of scale.
                 ORowSetValue aValue;
                 aValue.fill(x);
-                setParameter(parameterIndex, sqlType, scale, aValue.getString());
+                OUString number(aValue.getString());
+                sal_Int32 nIndex = number.indexOf('.');
+                sal_Int32 decimals = nIndex < 0 ? 0 : (number.getLength() - nIndex - 1);
+                setParameter(parameterIndex, sqlType, decimals, number);
             }
             else
                 setNull(parameterIndex,sqlType);
