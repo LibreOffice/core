@@ -269,7 +269,7 @@ inline OUString toUString(const SQLWCHAR* str, sal_Int32 len)
 }
 
 // A templated class to encapsulate conversion from our string types into arrays of
-// SQLCHAR / SQLWCHAR (non-const, even if used as input balues, and not modified),
+// SQLCHAR / SQLWCHAR (non-const, even if used as input values, and not modified),
 // that ODBC functions take. It owns its buffer (important for delayed reads/writes)
 
 template <typename C, size_t CHAR_SIZE = sizeof(C)> class CHARS {};
