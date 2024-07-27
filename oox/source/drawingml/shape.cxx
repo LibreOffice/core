@@ -2651,7 +2651,7 @@ void Shape::cloneFillProperties()
 {
     auto pFillProperties = std::make_shared<FillProperties>();
     pFillProperties->assignUsed(*mpFillPropertiesPtr);
-    mpFillPropertiesPtr = pFillProperties;
+    mpFillPropertiesPtr = std::move(pFillProperties);
 }
 }
 

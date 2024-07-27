@@ -3036,7 +3036,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         g.reset();
         // /* SAFE */ {
 
-        *pIt = aInfo;
+        *pIt = std::move(aInfo);
     }
 
     // Did we have some "dangerous candidates" ?
@@ -3054,7 +3054,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         g.reset();
         // /* SAFE */ {
 
-        *pIt = aInfo;
+        *pIt = std::move(aInfo);
     }
 
     } /* SAFE */

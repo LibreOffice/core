@@ -164,7 +164,7 @@ void PDFIProcessor::setFont( const FontAttributes& i_rFont )
     else
     {
         m_aFontToId[ aChangedFont ] = m_nNextFontId;
-        m_aIdToFont[ m_nNextFontId ] = aChangedFont;
+        m_aIdToFont[ m_nNextFontId ] = std::move(aChangedFont);
         rGC.FontId = m_nNextFontId;
         m_nNextFontId++;
     }

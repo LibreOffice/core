@@ -446,7 +446,7 @@ void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPo
         aPol[0].setY( aEscPos.Y() );
     }
 
-    rPoly = aPol;
+    rPoly = std::move(aPol);
 }
 
 void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)

@@ -3354,9 +3354,9 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
     // If we want de-CH, and the de localisation is available, we don't want to use de-DE as then
     // the magic in Translate::get() won't turn ess-zet into double s. Possibly other similar cases?
     if (comphelper::LibreOfficeKit::isActive() && aTag.getLanguage() == aFallbackTag.getLanguage())
-        maLOKLanguageTag = aTag;
+        maLOKLanguageTag = std::move(aTag);
     else
-        maLOKLanguageTag = aFallbackTag;
+        maLOKLanguageTag = std::move(aFallbackTag);
 }
 
 LOKDocumentFocusListener& SfxViewShell::GetLOKDocumentFocusListener()

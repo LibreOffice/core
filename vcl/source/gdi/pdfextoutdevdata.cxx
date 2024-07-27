@@ -660,7 +660,7 @@ void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const tools::R
     aLinkDestination.mMapMode = mrOutDev.GetMapMode();
     aLinkDestination.mPageNr = nPageNr == -1 ? mnPage : nPageNr;
     aLinkDestination.mAreaType = eType;
-    mpGlobalSyncData->mFutureDestinations[ nDestId ] = aLinkDestination;
+    mpGlobalSyncData->mFutureDestinations[ nDestId ] = std::move(aLinkDestination);
 }
 sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {

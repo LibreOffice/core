@@ -247,7 +247,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                 aResult.append(aLineTarget);
             }
 
-            aLinePolyPolygon = aResult;
+            aLinePolyPolygon = std::move(aResult);
         }
     }
 

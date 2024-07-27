@@ -269,7 +269,7 @@ void LineInfo::applyToB2DPolyPolygon(
                 aResult.append(aLineTarget);
             }
 
-            io_rLinePolyPolygon = aResult;
+            io_rLinePolyPolygon = std::move(aResult);
         }
     }
 

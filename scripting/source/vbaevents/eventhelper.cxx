@@ -411,7 +411,7 @@ ScriptEventHelper::createEvents( const OUString& sCodeName )
             ++nEvts;
             if ( nEvts > aDest.getLength() )
                 aDest.realloc( nEvts );// should never happen
-            aDest.getArray()[ dIndex ] = evtDesc;
+            aDest.getArray()[ dIndex ] = std::move(evtDesc);
         }
     }
     aDest.realloc( nEvts );

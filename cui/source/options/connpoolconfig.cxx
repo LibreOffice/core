@@ -98,7 +98,7 @@ namespace offapp
             aThisDriverSettings.getNodeValue(TIMEOUT) >>= aLookup->nTimeoutSeconds;
         }
 
-        _rFillItems.Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, aSettings));
+        _rFillItems.Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, std::move(aSettings)));
     }
 
 

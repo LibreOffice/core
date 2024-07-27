@@ -613,11 +613,11 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         {
             sal_Int32 nLength = aGrabBag.getLength();
             aGrabBag.realloc(nLength + 1);
-            aGrabBag.getArray()[nLength] = aPropertyValue;
+            aGrabBag.getArray()[nLength] = std::move(aPropertyValue);
         }
         else
         {
-            aGrabBag = { aPropertyValue };
+            aGrabBag = { std::move(aPropertyValue) };
         }
         xPropSet->setPropertyValue(u"CellInteropGrabBag"_ustr, Any(aGrabBag));
     }

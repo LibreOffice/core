@@ -1172,7 +1172,7 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
+            maJobSetup = std::move(aJobSetup);
             ImplUpdatePageData();
             ImplUpdateFontList();
             return true;

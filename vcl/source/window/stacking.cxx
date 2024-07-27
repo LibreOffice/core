@@ -231,7 +231,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
         ImplCalcToTopData* pData    = new ImplCalcToTopData;
         pPrevData->mpNext.reset(pData);
         pData->mpWindow             = this;
-        pData->mpInvalidateRegion.reset(new vcl::Region( aInvalidateRegion ));
+        pData->mpInvalidateRegion.reset(new vcl::Region(std::move(aInvalidateRegion)));
     }
 }
 

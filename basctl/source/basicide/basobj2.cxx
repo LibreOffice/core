@@ -342,7 +342,7 @@ OUString ChooseMacro(weld::Window* pParent,
             if ( !rxLimitToDocument.is() )
             {
                 MacroExecutionData* pExecData = new MacroExecutionData;
-                pExecData->aDocument = aDocument;
+                pExecData->aDocument = std::move(aDocument);
                 pExecData->xMethod = pMethod;   // keep alive until the event has been processed
                 Application::PostUserEvent( LINK( nullptr, MacroExecution, ExecuteMacroEvent ), pExecData );
             }

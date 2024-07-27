@@ -205,7 +205,7 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
             u"cannot get mappings"_ustr,
             css::uno::Reference<css::uno::XInterface>());
     }
-    return [mapFrom, mapTo, target, constructorFunction]
+    return [mapFrom=std::move(mapFrom), mapTo=std::move(mapTo), target, constructorFunction]
         (css::uno::XComponentContext *const context, css::uno::Sequence<css::uno::Any> const& args)
         {
             void *const ctxt = mapTo.mapInterface(

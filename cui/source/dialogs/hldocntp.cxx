@@ -365,7 +365,7 @@ void SvxHyperlinkNewDocTp::DoApply()
     sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
     if (nPos == -1)
         nPos = 0;
-    pExecuteInfo->aURL = aURL;
+    pExecuteInfo->aURL = std::move(aURL);
     pExecuteInfo->aStrDocName = weld::fromId<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos))->aStrURL;
 
     // current document

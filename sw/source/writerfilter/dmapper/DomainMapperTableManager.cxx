@@ -529,7 +529,8 @@ void DomainMapperTableManager::endOfCellAction()
     ++m_nCell.back( );
 }
 
-bool DomainMapperTableManager::shouldInsertRow(IntVectorPtr pCellWidths, IntVectorPtr pTableGrid, size_t nGrids, bool& rIsIncompleteGrid)
+bool DomainMapperTableManager::shouldInsertRow(const IntVectorPtr& pCellWidths, const IntVectorPtr& pTableGrid,
+                                               size_t nGrids, bool& rIsIncompleteGrid)
 {
     if (pCellWidths->empty())
         return false;

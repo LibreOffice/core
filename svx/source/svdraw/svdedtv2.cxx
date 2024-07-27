@@ -1074,7 +1074,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                         }
                         else
                         {
-                            aMergePolyPolygonA = aTmpPoly;
+                            aMergePolyPolygonA = std::move(aTmpPoly);
                         }
                     }
                     else
@@ -1088,7 +1088,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                         }
                         else
                         {
-                            aMergePolyPolygonB = aTmpPoly;
+                            aMergePolyPolygonB = std::move(aTmpPoly);
                         }
                     }
                 }

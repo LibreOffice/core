@@ -195,7 +195,7 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
     uno::Sequence < util::RevisionTag >& aList = rImport.GetList();
     sal_Int32 nLength = aList.getLength();
     aList.realloc( nLength+1 );
-    aList.getArray()[nLength] = aInfo;
+    aList.getArray()[nLength] = std::move(aInfo);
 }
 
 XMLVersionContext::~XMLVersionContext()

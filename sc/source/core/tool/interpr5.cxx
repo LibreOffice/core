@@ -2510,8 +2510,8 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
             PushError(FormulaError::CodeOverflow);
             return;
         }
-        pMatX = pNewX;
-        pMatY = pNewY;
+        pMatX = std::move(pNewX);
+        pMatY = std::move(pNewY);
         // DeltaY is possible here; DeltaX depends on nCase, so later
         fMeanY = lcl_GetMeanOverAll(pMatY, N);
         for (SCSIZE i=0; i<N; i++)

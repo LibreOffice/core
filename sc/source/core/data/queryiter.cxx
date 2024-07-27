@@ -1294,7 +1294,7 @@ public:
         assert(nIndex < it->first);
 
         size_t nOffset = nIndex - nBlkIndex;
-        aRet.first = itBlk;
+        aRet.first = std::move(itBlk);
         aRet.second = nOffset;
         return aRet;
     }

@@ -869,7 +869,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
             }
 
             // copy line as new line
-            aLine = aNewLine;
+            aLine = std::move(aNewLine);
             nYStart = nY;
         }
     }
