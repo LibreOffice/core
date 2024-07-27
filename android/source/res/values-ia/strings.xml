@@ -87,4 +87,5 @@
     <string name="current_uno_command">Commando UNO actual</string>
     <string name="insert_table">Inserer un tabella</string>
     <string name="UNO_commands_string_hint">Commando UNO</string>
+    <string name="take_photo">Prender un photo</string>
 </resources>
