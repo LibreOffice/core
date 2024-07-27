@@ -9,9 +9,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.beans import PropertyValue
-
 class tdf159707(UITestCase):
 
     def test_tdf159707(self):

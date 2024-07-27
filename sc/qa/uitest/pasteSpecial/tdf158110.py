@@ -47,7 +47,7 @@ class tdf158110(UITestCase):
             self.assertEqual("Comment 1", get_cell_by_position(document, 0, 1, 0).Annotation.String)
 
     def test_tdf158110_paste_special_overwrite_comments(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             # Insert a comments

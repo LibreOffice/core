@@ -39,7 +39,7 @@ class LocaleData(object):
         self.funcList = {}
 
     def addKeywordMap (self, funcName, localeName, engName):
-        if not funcName in self.funcList:
+        if funcName not in self.funcList:
             self.funcList[funcName] = []
 
         self.funcList[funcName].append([localeName, engName])
@@ -118,7 +118,7 @@ class Parser(object):
         bl = self.bytes[self.i+1]
         try:
             dbyte = ord(bl)*256 + ord(bh)
-        except:
+        except Exception:
             dbyte = bl*256 + bh
         self.i += 2
         return dbyte
