@@ -49,7 +49,6 @@
 #include <vcl/dibtools.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/brushitem.hxx>
-#include <comphelper/scopeguard.hxx>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
