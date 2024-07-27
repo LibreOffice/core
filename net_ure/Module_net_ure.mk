@@ -15,6 +15,9 @@ $(eval $(call gb_Module_add_targets,net_ure,\
 	DotnetLibrary_net_basetypes \
 	DotnetLibrary_net_uretypes \
 	DotnetLibrary_net_oootypes \
+	Package_net_basetypes \
+	Package_net_uretypes \
+	Package_net_oootypes \
 ))
 endif
 

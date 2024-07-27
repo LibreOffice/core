@@ -621,6 +621,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Lib_Dir
     Value = "${BRAND_BASE_DIR}/" LIBO_LIB_FOLDER;
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Dotnet_Dir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "LO_DOTNET_DIR";
+    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_DOTNET_FOLDER;
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Java_Dir
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;

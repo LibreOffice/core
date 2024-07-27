@@ -26,6 +26,9 @@
 /* where help files are */
 #undef LIBO_SHARE_HELP_FOLDER
 
+/* where dotnet libraries are */
+#undef LIBO_SHARE_DOTNET_FOLDER
+
 /* where java jars are */
 #undef LIBO_SHARE_JAVA_FOLDER
 

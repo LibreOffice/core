@@ -894,6 +894,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
     $(call gb_CondExeUno,uno_sh) \
 	ure_install \
+	$(if $(ENABLE_DOTNET),\
+		net_basetypes \
+		net_uretypes \
+		net_oootypes \
+	) \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_jvmfwk3_ini \
 		jvmfwk_javavendors \
