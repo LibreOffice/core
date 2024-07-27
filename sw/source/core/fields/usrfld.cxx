@@ -26,6 +26,7 @@
 #include <svl/numformat.hxx>
 #include <unotools/charclass.hxx>
 
+#include <calbck.hxx>
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
@@ -225,6 +226,18 @@ void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
     CallSwClientNotify(rHint);
     // update input fields that might be connected to the user field
+    if (!IsModifyLocked())
+    {
+        LockModify();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Input)->UpdateFields();
+        UnlockModify();
+    }
+}
+
+void SwUserFieldType::UpdateFields()
+{
+    m_bValidValue = false;
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
     if (!IsModifyLocked())
     {
         LockModify();

@@ -69,8 +69,9 @@ public:
     bool                    IsDeleted() const       { return m_bDeleted; }
     void                    SetDeleted( bool b )    { m_bDeleted = b; }
 
-    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
-    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
+    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual void UpdateFields() override;
     void EnsureValid();
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
