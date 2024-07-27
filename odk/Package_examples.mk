@@ -428,9 +428,11 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     cpp/Convertor/Convertor.cxx \
     cpp/Convertor/Makefile \
     cpp/Convertor/test.odt \
-    cpp/lokconvert/lokconvert.cxx \
-    cpp/lokconvert/Makefile \
-    cpp/lokconvert/test.odt \
+    $(if $(filter-out $(OS),MACOSX), \
+        cpp/lokconvert/lokconvert.cxx \
+        cpp/lokconvert/Makefile \
+        cpp/lokconvert/test.odt \
+    ) \
     cpp/Draw/Draw.cxx \
     cpp/Draw/Makefile \
     cpp/DocumentLoader/DocumentLoader.cxx \
