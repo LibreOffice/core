@@ -523,8 +523,9 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
 
     const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
 
-    for(const SfxItemPropertyMapEntry* pSrcProp : rSrc.getPropertyEntries())
+    for(const auto & rPair : rSrc.getPropertyEntries())
     {
+        const SfxItemPropertyMapEntry* pSrcProp = rPair.second;
         const sal_uInt16 nWID = pSrcProp->nWID;
         if(SfxItemPool::IsWhich(nWID)
                 && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
@@ -532,8 +533,9 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
             rSet.Put(rSet.GetPool()->GetUserOrPoolDefaultItem(nWID));
     }
 
-    for(const SfxItemPropertyMapEntry* pSrcProp : rSrc.getPropertyEntries())
+    for(const auto & rPair : rSrc.getPropertyEntries())
     {
+        const SfxItemPropertyMapEntry* pSrcProp = rPair.second;
         if(pSrcProp->nWID)
         {
             uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pSrcProp);

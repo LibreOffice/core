@@ -97,8 +97,9 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
 
         if( maUsrAnys.AreThereOwnUsrAnys() )
         {
-            for( const auto pProp : mpPropSet->getPropertyMap().getPropertyEntries() )
+            for( const auto & rPair : mpPropSet->getPropertyMap().getPropertyEntries() )
             {
+                const SfxItemPropertyMapEntry* pProp = rPair.second;
                 uno::Any* pAny = maUsrAnys.GetUsrAnyForID( *pProp );
                 if( pAny )
                 {
@@ -399,7 +400,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertyMapEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const noexcept
+const SfxItemPropertyMapEntry* SdUnoPageBackground::getPropertyMapEntry( const OUString& rPropertyName ) const noexcept
 {
     return mpPropSet->getPropertyMap().getByName(rPropertyName);
 }

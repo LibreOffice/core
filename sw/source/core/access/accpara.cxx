@@ -1499,8 +1499,9 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     {
         const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-        for ( const auto pEntry : rPropMap.getPropertyEntries() )
+        for ( const auto & rPair : rPropMap.getPropertyEntries() )
         {
+            const SfxItemPropertyMapEntry* pEntry = rPair.second;
             const SfxPoolItem* pItem = pSet->GetItem( pEntry->nWID );
             if ( pItem )
             {
@@ -1688,8 +1689,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
             const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-            for ( const auto pEntry : rPropMap.getPropertyEntries() )
+            for ( const auto & rPair : rPropMap.getPropertyEntries() )
             {
+                const SfxItemPropertyMapEntry* pEntry = rPair.second;
                 const SfxPoolItem* pItem( nullptr );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.

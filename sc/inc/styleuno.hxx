@@ -169,21 +169,21 @@ private:
     OUString                aStyleName;
     SfxStyleSheetBase*      pStyle_cached;
 
-    const SfxItemSet*       GetStyleItemSet_Impl( std::u16string_view rPropName, const SfxItemPropertyMapEntry*& rpEntry );
+    const SfxItemSet*       GetStyleItemSet_Impl( const OUString& rPropName, const SfxItemPropertyMapEntry*& rpEntry );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::beans::PropertyState getPropertyState_Impl( std::u16string_view PropertyName );
-    /// @throws css::beans::UnknownPropertyException
-    /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
-    css::uno::Any           getPropertyDefault_Impl( std::u16string_view aPropertyName );
+    css::beans::PropertyState getPropertyState_Impl( const OUString& PropertyName );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any           getPropertyValue_Impl( std::u16string_view aPropertyName );
+    css::uno::Any           getPropertyDefault_Impl( const OUString& aPropertyName );
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
+    css::uno::Any           getPropertyValue_Impl( const OUString& aPropertyName );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void                    setPropertyValue_Impl( std::u16string_view rPropertyName,
+    void                    setPropertyValue_Impl( const OUString& rPropertyName,
                                                  const SfxItemPropertyMapEntry* pEntry,
                                                  const css::uno::Any* pValue );
 

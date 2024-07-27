@@ -40,12 +40,12 @@ class ScDocOptionsHelper
 public:
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    std::u16string_view aPropertyName,
+                                    const OUString& rPropertyName,
                                     const css::uno::Any& aValue );
     static css::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    std::u16string_view PropertyName );
+                                    const OUString& rPropertyName );
 };
 
 //  empty doc object to supply only doc options

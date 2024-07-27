@@ -52,7 +52,7 @@ public:
 
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
-    const SfxItemPropertyMapEntry* getPropertyMapEntry(std::u16string_view rName) const;
+    const SfxItemPropertyMapEntry* getPropertyMapEntry(const OUString& rName) const;
 };
 
 struct SvxIDPropertyCombine
