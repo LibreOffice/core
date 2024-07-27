@@ -559,9 +559,10 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
             ScRange & rR = (*xLockedList)[i];
             if ( rR.Intersects( aRange ) )
             {
-                pE->nCol = rR.aEnd.Col() + 1;
-                SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
-                if ( pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
+                SCCOL nTmp(0);
+                bFail = o3tl::checked_add<SCCOL>(rR.aEnd.Col(), 1, pE->nCol) ||
+                        o3tl::checked_add<SCCOL>(pE->nCol, pE->nRowOverlap - 1, nTmp);
+                if ( bFail || pE->nCol > mpDoc->MaxCol() || nTmp > mpDoc->MaxCol() )
                     bBadCol = true;
                 else
                 {
