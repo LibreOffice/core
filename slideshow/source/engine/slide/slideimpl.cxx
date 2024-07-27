@@ -166,17 +166,9 @@ public:
                      const SlideShowContext& rContext,
                      const std::shared_ptr<LayerManager>& pLayerManager);
 
-    void renderBackground(unsigned char* pBuffer);
-    void renderTextFields(unsigned char* pBuffer);
-    void renderMasterPage(unsigned char* pBuffer);
-    void renderDrawPage(unsigned char* pBuffer);
     void renderNextLayer(unsigned char* pBuffer);
 
     const Size& getDeviceSize() const { return maDeviceSize; }
-    bool isBackgroundRenderingDone() const { return mbBackgroundRenderingDone; }
-    bool isTextFieldsRenderingDone() const { return mbTextFieldsRenderingDone; }
-    bool isMasterPageRenderingDone() const { return mbMasterPageRenderingDone; }
-    bool isDrawPageRenderingDone() const { return mbDrawPageRenderingDone; }
     bool isSlideRenderingDone() const { return mbSlideRenderingDone; }
     bool isBitmapLayer() const { return mbIsBitmapLayer; }
 
@@ -202,8 +194,8 @@ private:
 private:
     Size maDeviceSize;
     Size maSlideSize;
-    bool mbRenderBackground;
-    bool mbRenderMasterPageObjects;
+    //bool mbRenderBackground;
+    //bool mbRenderMasterPageObjects;
     basegfx::B2DHomMatrix maTransformation;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
     uno::Reference<drawing::XDrawPagesSupplier> mxDrawPagesSupplier;
@@ -236,7 +228,7 @@ private:
 };
 
 LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize,
-                                   bool bRenderBackground, bool bRenderMasterPageObjects,
+                                   bool /*bRenderBackground*/, bool /*bRenderMasterPageObjects*/,
                                    const uno::Reference<drawing::XDrawPage>& rxDrawPage,
                                    const uno::Reference<drawing::XDrawPagesSupplier>& rxDrawPagesSupplier,
                                    const uno::Reference<animations::XAnimationNode>& rxRootNode,
@@ -244,8 +236,8 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
                                    const std::shared_ptr<LayerManager>& pLayerManager) :
     maDeviceSize(rViewSize),
     maSlideSize(rSlideSize),
-    mbRenderBackground(bRenderBackground),
-    mbRenderMasterPageObjects(bRenderMasterPageObjects),
+    //mbRenderBackground(bRenderBackground),
+    //mbRenderMasterPageObjects(bRenderMasterPageObjects),
     maTransformation(createTransformation(maDeviceSize, maSlideSize)),
     mxDrawPage(rxDrawPage),
     mxDrawPagesSupplier(rxDrawPagesSupplier),
@@ -345,26 +337,6 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
         collectAnimatedShapes();
 }
 
-void LOKSlideRenderer::renderBackground(unsigned char* pBuffer)
-{
-    renderImpl(LayerGroupType::BACKGROUND, pBuffer);
-}
-
-void LOKSlideRenderer::renderMasterPage(unsigned char* pBuffer)
-{
-    renderImpl(LayerGroupType::MASTER_PAGE, pBuffer);
-}
-
-void LOKSlideRenderer::renderDrawPage(unsigned char* pBuffer)
-{
-    renderImpl(LayerGroupType::DRAW_PAGE, pBuffer);
-}
-
-void LOKSlideRenderer::renderTextFields(unsigned char* pBuffer)
-{
-    renderImpl(LayerGroupType::TEXT_FIELDS, pBuffer);
-}
-
 void LOKSlideRenderer::renderNextLayer(unsigned char* pBuffer)
 {
     OSL_ASSERT(pBuffer);
@@ -372,30 +344,9 @@ void LOKSlideRenderer::renderNextLayer(unsigned char* pBuffer)
     msLastJsonMessage = ""_ostr;
     mbIsBitmapLayer = false;
 
-    if (mbRenderBackground && !isBackgroundRenderingDone())
+    if (!mbDrawPageRenderingDone)
     {
-        renderBackground(pBuffer);
-        if (!msLastJsonMessage.isEmpty())
-            return;
-    }
-
-    if (!isTextFieldsRenderingDone())
-    {
-        renderTextFields(pBuffer);
-        if (!msLastJsonMessage.isEmpty())
-            return;
-    }
-
-    if (mbRenderMasterPageObjects && !isMasterPageRenderingDone())
-    {
-        renderMasterPage(pBuffer);
-        if (!msLastJsonMessage.isEmpty())
-            return;
-    }
-
-    if (!isDrawPageRenderingDone())
-    {
-        renderDrawPage(pBuffer);
+        renderImpl(LayerGroupType::DRAW_PAGE, pBuffer);
         if (!msLastJsonMessage.isEmpty())
             return;
     }
