@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <hintids.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/boxitem.hxx>
@@ -81,9 +83,25 @@ SvxFrameDirection GetDefaultFrameDirection(LanguageType nLanguage)
             SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
 }
 
-// See if the Paragraph/Character/Frame/Page style is in use
+namespace {
+#ifndef NDEBUG
+    bool lcl_isValidUsedStyle(const sw::BroadcastingModify* pModify)
+    {
+        const bool isParaStyle = dynamic_cast<const SwTextFormatColl*>(pModify);
+        const bool isCharStyle = dynamic_cast<const SwCharFormat*>(pModify);
+        const bool isFrameStyle = dynamic_cast<const SwFrameFormat*>(pModify);
+        const bool isFieldType = dynamic_cast<const SwFieldType*>(pModify); // just for insanity's sake, this is also used on FieldTypes
+        return isParaStyle || isCharStyle || isFrameStyle || isFieldType;
+    }
+#endif
+}
+
+
+// See if the Paragraph/Character/Frame style or Field Type is in use
 bool SwDoc::IsUsed( const sw::BroadcastingModify& rModify ) const
 {
+    assert(lcl_isValidUsedStyle(&rModify));
+
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
     bool isUsed = false;
