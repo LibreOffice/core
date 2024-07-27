@@ -34,19 +34,12 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     application_identifier=`/usr/libexec/PlistBuddy -c "print com.apple.application-identifier"  $BUILDDIR/lo.xcent`
     # remove the key from the entitlement - only use it when signing the whole bundle in the final step
     /usr/libexec/PlistBuddy -c "delete com.apple.application-identifier"  $BUILDDIR/lo.xcent
-    # All data files are in Resources and included in the app bundle signature
-    other_files=''
     # HACK: remove donate menu entries, need to support apple-pay and be verified
     # as non profit as a bare minimum to allow asking....
     sed -I "" -e '\#<menu:menuitem menu:id=".uno:Donation"/>#d' $APP_BUNDLE/Contents/Resources/config/soffice.cfg/modules/*/menubar/menubar.xml
 else
-    # We then want to sign data files, too, hmm.
     entitlements="--entitlements $BUILDDIR/hardened_runtime.xcent"
     entitlements_helper=$entitlements
-    other_files="\
- -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
- -or -name '*.jar' -or -name 'LICENSE' -or -name 'LICENSE.html' \
- -or -name '*.applescript' -or -name '*.odt'"
 fi
 
 if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
@@ -75,24 +68,14 @@ if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
     exit 0
 fi
 
-# Sign jnilibs first as workaround for signing issue on old baseline
-# order matters/screws things up otherwise
-find -d "$APP_BUNDLE" \( -name '*.jnilib' \) ! -type l |
-    while read file; do
-    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --force --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
-done
-
 # Sign dylibs
 #
 # The dylibs in the Python framework are called *.so. Go figure
 #
-# On Mavericks also would like to have data files signed...
-# add some where it makes sense. Make a depth-first search to sign the contents
-# of e.g. the spotlight plugin before attempting to sign the plugin itself
+# Make a depth-first search to sign the contents of e.g. the spotlight plugin
+# before attempting to sign the plugin itself
 
-find "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \
-        $other_files \) ! -type l |
+find "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' -or -name '*.jnilib' \) ! -type l |
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
     codesign --force --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
