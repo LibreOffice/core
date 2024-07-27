@@ -202,15 +202,23 @@ namespace
         Reference< XRow > xRow( _rxResult, UNO_QUERY_THROW );
         while ( _rxResult->next() )
         {
-            _out_rColumns.emplace_back(xRow->getString(4), // COLUMN_NAME,
-                                       xRow->getInt(5),
-                                       xRow->getString(6),
-                                       xRow->getInt(7),
-                                       xRow->getInt(9),
-                                       xRow->getInt(11),
-                                       xRow->getString(12),
-                                       xRow->getString(13),
-                                       xRow->getInt(17));  // ORDINAL_POSITION
+            // tdf#162227: ODBC SQLGetData requires that data must be retrieved in increasing
+            // column number order, unless the driver supports SQL_GD_ANY_ORDER extension (see
+            // https://learn.microsoft.com/en-us/sql/odbc/reference/syntax/sqlgetdata-function).
+            // We can't emplace_back(getString(4), getInt(5), ..., getString(12), getInt(17)),
+            // because MSVC would reorder calls into getInt(17) -> getString(12) -> ..., and then
+            // MS SQL Server ODBC driver will give error on access of column 12 after column 17.
+            OUString sName = xRow->getString(4); // COLUMN_NAME
+            sal_Int32 nField5 = xRow->getInt(5);
+            OUString aField6 = xRow->getString(6);
+            sal_Int32 nField7 = xRow->getInt(7);
+            sal_Int32 nField9 = xRow->getInt(9);
+            sal_Int32 nField11 = xRow->getInt(11);
+            OUString sField12 = xRow->getString(12);
+            OUString sField13 = xRow->getString(13);
+            OrdinalPosition nOrdinalPosition = xRow->getInt(17); // ORDINAL_POSITION
+            _out_rColumns.emplace_back(sName, nField5, aField6, nField7, nField9, nField11,
+                                       sField12, sField13, nOrdinalPosition);
         }
     }
 
