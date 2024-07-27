@@ -32,6 +32,7 @@
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/svdobj.hxx>
@@ -264,6 +265,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         }
     }
     aRectFnSet.Refresh(pOrientFrame);
+
+    // Microsoft allows WrapThrough shapes to be placed outside of the cell despite layoutInCell
+    // (Re-use existing compat flag to identify MSO formats. The name also matches this purpose.)
+    const bool bMSOLayout = rFrameFormat.getIDocumentSettingAccess().get(
+        DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+    const bool bMSOLayoutInCell
+        = bMSOLayout && DoesObjFollowsTextFlow() && GetAnchorTextFrame().IsInTab();
+    const bool bIgnoreVertLayoutInCell = bMSOLayoutInCell && bWrapThrough;
 
     // determine vertical position
     {
@@ -663,7 +672,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 const bool bCheckBottom = !DoesObjFollowsTextFlow();
                 nRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
                                               rVertEnvironLayFrame, nRelPosY,
-                                              DoesObjFollowsTextFlow(),
+                                              !bIgnoreVertLayoutInCell && DoesObjFollowsTextFlow(),
                                               bCheckBottom );
                 if ( aRectFnSet.IsVert() )
                     aRelPos.setX( nRelPosY );
@@ -887,7 +896,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
         }
 
-        if ( DoesObjFollowsTextFlow() &&
+        if (!bIgnoreVertLayoutInCell && DoesObjFollowsTextFlow() &&
              ( aVert.GetRelationOrient() != text::RelOrientation::PAGE_FRAME &&
                 aVert.GetRelationOrient() != text::RelOrientation::PAGE_PRINT_AREA ) )
         {

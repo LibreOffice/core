@@ -97,6 +97,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
     // tdf#77794: always force bLayoutInCell from false to true for MSO2013+
     // The fly is supposed to be inside the cell. Before, height was 998. Now it is 2839.
     CPPUNIT_ASSERT_MESSAGE("Image must be contained inside the table cell", nRowHeight > 2000);
+
+    // tdf#162211: wrap-through fly can escape cell in upward direction now
+    sal_Int32 nFooterImageBottom
+        = getXPath(pXmlDoc,
+                   "//page[1]/footer/tab/row/cell[1]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "bottom"_ostr)
+             .toInt32();
+    sal_Int32 nFooterBottom
+        = getXPath(pXmlDoc, "//page[1]/footer/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+    // the image is above the botom of the footer
+    CPPUNIT_ASSERT(nFooterBottom > nFooterImageBottom); // image is higher footer
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
