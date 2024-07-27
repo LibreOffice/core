@@ -35,6 +35,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/unolingu.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <wrtsh.hxx>
+#include <rootfrm.hxx>
 #include <unoprnms.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -1712,6 +1714,20 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
                        "//office:body/office:text/text:tracked-changes/text:changed-region/"
                        "text:deletion/office:change-info/dc:date"_ostr,
                        u"2001-01-01T00:00:00"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf122452)
+{
+    // FIXME:  Error: element "text:insertion" was found where no element may occur
+    skipValidation();
+    loadAndReload("tdf122452.doc");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Without the fix in place this fails with:
+    // Expected: 1
+    // Actual:   0
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Redlines should be Hidden", true, pWrtShell->GetLayout()->IsHideRedlines());
 }
 
 } // end of anonymous namespace

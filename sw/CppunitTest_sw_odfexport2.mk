@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_set_include,sw_odfexport2,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/qa/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
     $$(INCLUDE) \
 ))
 
