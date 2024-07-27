@@ -37,11 +37,20 @@ namespace com.sun.star.uno
             Type = type;
             Value = value;
         }
+        public void setValue<T>(T value) => setValue(typeof(T), value);
 
-        public bool equals(Any obj) => Type == obj.Type && Value == obj.Value;
+        public bool equals(Any other)
+        {
+            return other != null && Type.Equals(other.Type)
+                && (Value == null ? other.Value == null : Value.Equals(other.Value));
+        }
 
-        public override bool Equals(object obj) => (obj is Any other) && equals(other);
+        public static bool operator ==(Any left, Any right) => left?.Equals(right) ?? false;
+        public static bool operator !=(Any left, Any right) => !(left == right);
+
+        public override bool Equals(object obj) => obj is Any other && equals(other);
         public override int GetHashCode() => (Type, Value).GetHashCode();
+
         public override string ToString() => $"uno.Any {{ Type = {Type}, Value = {Value ?? "Null"} }}";
     }
 }

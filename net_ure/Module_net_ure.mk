@@ -19,6 +19,10 @@ $(eval $(call gb_Module_add_targets,net_ure,\
 	Package_net_uretypes \
 	Package_net_oootypes \
 ))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,net_ure,\
+	DotnetTest_net_basetypes_tests \
+))
 endif
 
 # vim: set noet sw=4 ts=4:

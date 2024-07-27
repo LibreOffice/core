@@ -65,6 +65,8 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_CxxObject_get_dwo_target = $(WORKDIR)/CxxObject/$(1).dwo
 gb_DotnetLibrary_get_target = $(WORKDIR)/DotnetLibrary/$(1)/$(1).dll
 gb_DotnetLibrary_workdir = $(WORKDIR)/DotnetLibrary
+gb_DotnetTest_get_target = $(WORKDIR)/DotnetTest/$(1)/done
+gb_DotnetTest_workdir = $(WORKDIR)/DotnetTest
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_GenCxxObject_get_dwo_target = $(WORKDIR)/GenCxxObject/$(1).dwo
 gb_GenAsmObject_get_target = $(WORKDIR)/GenAsmObject/$(1).o
@@ -276,6 +278,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	DescriptionTranslateTarget \
 	Dictionary \
 	DotnetLibrary \
+	DotnetTest \
 	Executable \
 	ExternalPackage \
 	Extension \

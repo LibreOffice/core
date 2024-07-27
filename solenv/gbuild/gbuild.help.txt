@@ -83,6 +83,7 @@ AVAILABLE TARGETS
            o CustomTarget
            o Dictionary
            o DotnetLibrary
+           o DotnetTest
            o Executable
            o Extension
            o ExternalPackage

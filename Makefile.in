@@ -138,6 +138,7 @@ gbuild_TARGETS := AllLangHelp \
 	CustomTarget \
 	Dictionary \
 	DotnetLibrary \
+	DotnetTest \
 	Executable \
 	Extension \
 	ExtensionPackage \
