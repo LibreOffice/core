@@ -9,7 +9,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import xml.etree.ElementTree as ET
 import os
 from prompt_toolkit import prompt
 import xml.dom.minidom

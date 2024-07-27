@@ -54,7 +54,7 @@ def create_example_text(component):
         cursor.collapseToEnd()
         cursor.setString(THIRD_PARAGRAPH)
         cursor.gotoStart(False)
-    except:
+    except Exception:
         traceback.print_exc()
 
 
@@ -71,7 +71,7 @@ def find_first(document, search_str):
         descriptor.setSearchString(search_str)
         descriptor.setPropertyValue("SearchRegularExpression", True)
         return document.findFirst(descriptor)
-    except:
+    except Exception:
         traceback.print_exc()
         return None
 
@@ -89,7 +89,7 @@ def insert_bookmark(document, text_range, bookmark_name):
         bookmark.setName(bookmark_name)
         document.getText().insertTextContent(text_range, bookmark, True)
         print("Insert bookmark:", bookmark_name)
-    except:
+    except Exception:
         traceback.print_exc()
 
 
@@ -106,7 +106,7 @@ def mark_list(component, mlist, prefix):
             if not search:
                 continue
             insert_bookmark(component, search, f"{prefix}{i}")
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
@@ -121,7 +121,7 @@ def get_desktop():
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
             print("Connected to a running office ...")
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
     return desktop
@@ -135,7 +135,7 @@ def main():
     # Open an empty text document.
     try:
         doc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, tuple([]))
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 

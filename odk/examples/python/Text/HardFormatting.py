@@ -27,7 +27,7 @@ def get_desktop():
             print("Can't create a desktop. No connection, no remote office servicemanager available!")
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
     return desktop
@@ -85,7 +85,7 @@ def main():
         text_range.setPropertyToDefault("CharWeight")
         # Then, check again
         check_property_state(text_range, text_range.getPropertyState("CharWeight"))
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 

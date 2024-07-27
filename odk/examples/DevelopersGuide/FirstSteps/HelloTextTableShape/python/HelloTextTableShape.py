@@ -37,7 +37,7 @@ class HelloTextTableShape:
             self.remote_context = officehelper.bootstrap()
             print("Connected to a running office ...")
             return self.remote_context.ServiceManager
-        except Exception as e:
+        except Exception:
             traceback.print_exc()
             sys.exit(1)
 

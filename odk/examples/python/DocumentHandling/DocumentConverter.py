@@ -50,7 +50,7 @@ def convert(src_file, dest_file, to_type):
         PropertyValue(Name="FilterName", Value=to_type),
     )
     try:
-        doc.storeAsURL(dest_url, opts);
+        doc.storeAsURL(dest_url, opts)
     finally:
         doc.dispose()
 

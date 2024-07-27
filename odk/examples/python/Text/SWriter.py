@@ -32,8 +32,8 @@ def main():
         print("Opening an empty Writer document")
         doc_url = "private:factory/swriter"
         doc = desktop.loadComponentFromURL(doc_url, "_blank", 0, tuple())
-    except Exception as e:
-        print(f"d", file=sys.stderr)
+    except Exception:
+        print("d", file=sys.stderr)
         traceback.print_exc()
         sys.exit(1)
 
@@ -55,7 +55,7 @@ def generate(doc):
     try:
         cursor.setPropertyValue("CharColor", 255)
         cursor.setPropertyValue("CharShadowed", True)
-    except:
+    except Exception:
         print("Couldn't change the color", file=sys.stderr)
         traceback.print_exc()
 

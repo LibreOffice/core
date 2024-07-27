@@ -28,7 +28,7 @@ def main():
         text = doc.getText()
         create_example_data(text)
         display_structure(text)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
@@ -44,7 +44,7 @@ def create_example_data(text):
         cursor.gotoEndOfWord(True)
         cursor.setPropertyValue("CharWeight", BOLD)
         print("create example data")
-    except:
+    except Exception:
         traceback.print_exc()
 
 

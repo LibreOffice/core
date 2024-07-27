@@ -23,7 +23,7 @@ def get_desktop():
             print("Can't create a desktop. No connection, no remote office servicemanager available!")
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
     return desktop
@@ -38,7 +38,7 @@ def main():
 
     try:
         doc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, tuple())
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
@@ -57,7 +57,7 @@ def main():
             replaced_cnt = doc.replaceAll(replace_descriptor)
             if replaced_cnt > 0:
                 print("Replaced", british_word, "with", us_word)
-    except:
+    except Exception:
         traceback.print_exc()
 
     print("Done")
@@ -94,7 +94,7 @@ def create_example_data(doc):
         )
         text.insertString(cursor, content, False)
         cursor.gotoStart(False)
-    except:
+    except Exception:
         traceback.print_exc()
 
 

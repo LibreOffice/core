@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from shutil import copytree, copy2, move, rmtree
 import json
 import createmsi

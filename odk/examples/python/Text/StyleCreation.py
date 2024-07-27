@@ -66,7 +66,7 @@ def get_desktop():
             print("Can't create a desktop. No connection, no remote office servicemanager available!")
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
     return desktop
@@ -81,7 +81,7 @@ def main():
         doc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, tuple())
         create_style(doc)
         apply_style(doc)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 

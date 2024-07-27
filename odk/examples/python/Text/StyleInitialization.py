@@ -23,7 +23,7 @@ def get_desktop():
             print("Can't create a desktop. No connection, no remote office servicemanager available!")
         else:
             desktop = srv_mgr.createInstanceWithContext("com.sun.star.frame.Desktop", remote_context)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
     return desktop
@@ -43,13 +43,13 @@ def main():
 
         try:
             cursor.setPropertyValue("CharFontName", "Arial")
-        except:
+        except Exception:
             pass
         text.insertString(cursor, "Headline", False)
 
         try:
             cursor.setPropertyValue("CharFontName", "Liberation Sans")
-        except:
+        except Exception:
             pass
         text.insertControlCharacter(cursor, PARAGRAPH_BREAK, False)
         text.insertString(cursor, "A very short paragraph for illustration only", False)
@@ -72,7 +72,6 @@ def main():
         paragraph_enumeration = text.createEnumeration()
         while paragraph_enumeration.hasMoreElements():
             paragraph = paragraph_enumeration.nextElement()
-            paragraph_text = paragraph.getAnchor().getString()
             # Create a cursor from this paragraph
             paragraph_cursor = paragraph.getAnchor().getText().createTextCursor()
 
@@ -96,7 +95,7 @@ def main():
                 text_range.setPropertyValue("ParaStyleName", style_name)
                 print("Apply the paragraph style:", style_name)
                 break
-    except:
+    except Exception:
         traceback.print_exc()
 
     print("Done")

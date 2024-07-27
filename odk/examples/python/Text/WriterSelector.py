@@ -54,9 +54,9 @@ def main():
         # XComponent.dispose.
         try:
             doc.close(False)
-        except:
+        except Exception:
             doc.dispose()
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 

@@ -30,7 +30,7 @@ class TestSequenceOutputStream(unittest.TestCase):
         self.data = uno.ByteSequence(b"some data")
         try:
             self.service_manager = self._uno.getContext().getServiceManager()
-        except:
+        except Exception:
             raise RuntimeError("Cannot create service factory!")
         if self.service_manager is None:
             raise RuntimeError("Cannot create service factory!")

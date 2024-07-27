@@ -34,14 +34,14 @@ def insert_graphic(filename):
 
     try:
         graphic = doc.createInstance("com.sun.star.text.TextGraphicObject")
-    except:
+    except Exception:
         traceback.print_exc(file=log_file)
         return
 
     log_file.write("inserting graphic\n")
     try:
         text.insertTextContent(cursor, graphic, True)
-    except:
+    except Exception:
         print("Could not insert Content")
         traceback.print_exc()
         return
@@ -70,7 +70,7 @@ def insert_graphic(filename):
         graphic.setPropertyValue("Width", 4400)
         # Setting the height
         graphic.setPropertyValue("Height", 4000)
-    except:
+    except Exception:
         print("Couldn't set property 'GraphicURL'")
         traceback.print_exc(file=log_file)
 
@@ -89,7 +89,7 @@ def main():
     args = parser.parse_args()
     try:
         insert_graphic(args.image)
-    except:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
