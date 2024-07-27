@@ -2450,9 +2450,10 @@ bool SwDocStyleSheet::IsUsed() const
     const sw::BroadcastingModify* pMod;
     switch( nFamily )
     {
-    case SfxStyleFamily::Char : pMod = m_pCharFormat;   break;
     case SfxStyleFamily::Para : pMod = m_pColl;      break;
     case SfxStyleFamily::Frame: pMod = m_pFrameFormat;    break;
+    case SfxStyleFamily::Char:
+            return m_pCharFormat->IsUsed();
     case SfxStyleFamily::Page:
             return m_pDesc->IsUsed();
 
@@ -2868,7 +2869,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             SwCharFormat* pFormat = (*rDoc.GetCharFormats())[ i ];
 
-            const bool bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(*pFormat));
+            // tdf#159168: default char format should be considered 'applied'/used, even if it apparently is not
+            const bool bUsed = bIsSearchUsed && (bOrganizer || pFormat->IsUsed() || pFormat == rDoc.GetDfltCharFormat());
             if( ( !bSearchHidden && pFormat->IsHidden() && !bUsed ) || ( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() ) )
                 continue;
 
