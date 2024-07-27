@@ -7560,6 +7560,8 @@ weld::Window* SalFrame::GetFrameWeld() const
         if (pWindow)
         {
             assert(pWindow == pWindow->GetFrameWindow());
+            // resolve from a possible BorderWindow to the ClientWindow (returns itself if not)
+            pWindow = pWindow->ImplGetWindow();
             m_xFrameWeld.reset(new SalInstanceWindow(pWindow, nullptr, false));
         }
     }
