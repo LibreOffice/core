@@ -1674,8 +1674,7 @@ void SwHTMLParser::NewStyle()
             sType = rOption.GetString();
     }
 
-    m_bIgnoreRawData = sType.getLength() &&
-                     !o3tl::equalsAscii(o3tl::getToken(sType, 0,';'), sCSS_mimetype);
+    m_bIgnoreRawData = sType.getLength() && o3tl::getToken(sType, 0,';') != sCSS_mimetype;
 }
 
 void SwHTMLParser::EndStyle()
@@ -1760,8 +1759,7 @@ void SwHTMLParser::InsertLink()
         }
 
         if( !sHRef.isEmpty() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
-            ( sType.isEmpty() ||
-              o3tl::equalsAscii(o3tl::getToken(sType, 0,';'), sCSS_mimetype) ) )
+            ( sType.isEmpty() || o3tl::getToken(sType, 0,';') == sCSS_mimetype ) )
         {
             if( GetMedium() )
             {

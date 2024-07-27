@@ -24,20 +24,20 @@
 
 #include <string_view>
 
-constexpr inline std::string_view sCSS_mimetype = "text/css";
+constexpr inline std::u16string_view sCSS_mimetype = u"text/css";
 
-constexpr inline std::string_view sCSS1_page = "page";
-//constexpr inline std::string_view sCSS1_media = "media";
+constexpr inline std::u16string_view sCSS1_page = u"page";
+//constexpr inline std::u16string_view sCSS1_media = u"media";
 
-constexpr inline std::string_view sCSS1_link = "link";
-constexpr inline std::string_view sCSS1_visited = "visited";
-constexpr inline std::string_view sCSS1_first_letter = "first-letter";
+constexpr inline OUString sCSS1_link = u"link"_ustr;
+constexpr inline OUString sCSS1_visited = u"visited"_ustr;
+constexpr inline std::u16string_view sCSS1_first_letter = u"first-letter";
 
-constexpr inline std::string_view sCSS1_left = "left";
-constexpr inline std::string_view sCSS1_right = "right";
-constexpr inline std::string_view sCSS1_first = "first";
+constexpr inline std::u16string_view sCSS1_left = u"left";
+constexpr inline std::u16string_view sCSS1_right = u"right";
+constexpr inline std::u16string_view sCSS1_first = u"first";
 
-constexpr inline std::string_view sCSS1_url = "url";
+constexpr inline std::u16string_view sCSS1_url = u"url";
 
 constexpr inline std::string_view sCSS1_UNIT_pt = "pt";
 constexpr inline std::string_view sCSS1_UNIT_mm = "mm";
@@ -50,11 +50,11 @@ constexpr inline std::string_view sCSS1_UNIT_px = "px";
 
 constexpr inline std::string_view sCSS1_P_font_family = "font-family";
 
-constexpr inline std::string_view sCSS1_PV_serif = "serif";
-constexpr inline std::string_view sCSS1_PV_sans_serif = "sans-serif";
-constexpr inline std::string_view sCSS1_PV_cursive = "cursive";
-constexpr inline std::string_view sCSS1_PV_fantasy = "fantasy";
-constexpr inline std::string_view sCSS1_PV_monospace = "monospace";
+constexpr inline OString sCSS1_PV_serif = "serif"_ostr;
+constexpr inline OString sCSS1_PV_sans_serif = "sans-serif"_ostr;
+constexpr inline OString sCSS1_PV_cursive = "cursive"_ostr;
+constexpr inline OString sCSS1_PV_fantasy = "fantasy"_ostr;
+constexpr inline OString sCSS1_PV_monospace = "monospace"_ostr;
 
 constexpr inline std::string_view sCSS1_P_font_style = "font-style";
 
@@ -94,16 +94,16 @@ constexpr inline std::string_view sCSS1_P_color = "color";
 constexpr inline std::string_view sCSS1_P_background = "background";
 constexpr inline std::string_view sCSS1_P_background_color = "background-color";
 
-constexpr inline std::string_view sCSS1_PV_transparent = "transparent";
+constexpr inline std::u16string_view sCSS1_PV_transparent = u"transparent";
 
-constexpr inline std::string_view sCSS1_PV_repeat = "repeat";
-constexpr inline std::string_view sCSS1_PV_no_repeat = "no-repeat";
+constexpr inline std::u16string_view sCSS1_PV_repeat = u"repeat";
+constexpr inline std::u16string_view sCSS1_PV_no_repeat = u"no-repeat";
 
-constexpr inline std::string_view sCSS1_PV_top = "top";
-constexpr inline std::string_view sCSS1_PV_middle = "middle";
-constexpr inline std::string_view sCSS1_PV_bottom = "bottom";
+constexpr inline std::u16string_view sCSS1_PV_top = u"top";
+constexpr inline std::u16string_view sCSS1_PV_middle = u"middle";
+constexpr inline std::u16string_view sCSS1_PV_bottom = u"bottom";
 
-constexpr inline std::string_view sCSS1_PV_scroll = "scroll";
+constexpr inline std::u16string_view sCSS1_PV_scroll = u"scroll";
 
 // Strings for text properties
 

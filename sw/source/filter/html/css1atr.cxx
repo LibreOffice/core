@@ -847,14 +847,14 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
-                    *pPseudo = OStringToOUString( sCSS1_link, RTL_TEXTENCODING_ASCII_US );
+                    *pPseudo = sCSS1_link;
                 }
                 break;
             case RES_POOLCHR_INET_VISIT:
                 if( pPseudo )
                 {
                     rToken = OOO_STRING_SVTOOLS_HTML_anchor ""_ostr;
-                    *pPseudo = OStringToOUString( sCSS1_visited, RTL_TEXTENCODING_ASCII_US );
+                    *pPseudo = sCSS1_visited;
                 }
                 break;
             }
@@ -1590,8 +1590,7 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
     // export Drop-Caps
     if( const SwFormatDrop *pDrop = aItemSet.GetItemIfSet( RES_PARATR_DROP, false ) )
     {
-        OUString sOut = aSelector +
-            ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
+        OUString sOut = aSelector + ":" + sCSS1_first_letter;
         OutCSS1DropCapRule( rWrt, sOut, *pDrop, CSS1_FMT_ISTAG != nDeep, bHasScriptDependencies );
     }
 
@@ -1609,11 +1608,11 @@ static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& r
     else if( pTemplate )
         pRefPageDesc = pTemplate->getIDocumentStylePoolAccess().GetPageDescFromPool( nRefPoolId, false );
 
-    OUString aSelector = "@" + OStringToOUString( sCSS1_page, RTL_TEXTENCODING_ASCII_US );
+    OUString aSelector = OUString::Concat("@") + sCSS1_page;
 
     if( bPseudo )
     {
-        std::string_view pPseudo;
+        std::u16string_view pPseudo;
         switch( rPageDesc.GetPoolFormatId() )
         {
         case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
@@ -1621,7 +1620,7 @@ static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& r
         case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
         }
         if( !pPseudo.empty() )
-            aSelector += ":" + OStringToOUString( pPseudo, RTL_TEXTENCODING_ASCII_US );
+            aSelector += OUString::Concat(":") + pPseudo;
     }
 
     SwCSS1OutMode aMode( rWrt, CSS1_OUTMODE_RULE_ON|CSS1_OUTMODE_TEMPLATE,
@@ -3098,7 +3097,8 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
         return rWrt;
 
     // if necessary, add the orientation of the Graphic
-    std::string_view pRepeat, pHori, pVert;
+    std::u16string_view pRepeat, pHori;
+    std::string_view pVert;
     if( pGrf || !aLink.isEmpty() )
     {
         if( GPOS_TILED==ePos )
@@ -3166,7 +3166,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
     {
         // no color and no Link, but a transparent Brush
         if( bTransparent && sw::Css1Background::Fly != nMode )
-            sOut += OStringToOUString(sCSS1_PV_transparent, RTL_TEXTENCODING_ASCII_US);
+            sOut += sCSS1_PV_transparent;
     }
     else
     {
@@ -3183,30 +3183,29 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
 
             if(pGrf)
             {
-                sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US) +
+                sOut += OUString::Concat(sCSS1_url) +
                     "(\'" OOO_STRING_SVTOOLS_HTML_O_data ":" + aGraphicInBase64 + "\')";
             }
             else
             {
-                sOut += OStringToOUString(sCSS1_url, RTL_TEXTENCODING_ASCII_US)+
-                     "(" +  rWrt.normalizeURL(aLink, bOwn) + ")";
+                sOut += OUString::Concat(sCSS1_url) + "(" + rWrt.normalizeURL(aLink, bOwn) + ")";
             }
 
             if( !pRepeat.empty() )
             {
-                sOut += " " + OStringToOUString(pRepeat, RTL_TEXTENCODING_ASCII_US);
+                sOut += OUString::Concat(" ") + pRepeat;
             }
 
             if( !pHori.empty() )
             {
-                sOut += " " + OStringToOUString(pHori, RTL_TEXTENCODING_ASCII_US);
+                sOut += OUString::Concat(" ") + pHori;
             }
             if( !pVert.empty() )
             {
                 sOut += " " + OStringToOUString(pVert, RTL_TEXTENCODING_ASCII_US);
             }
 
-            sOut += " " + OStringToOUString(sCSS1_PV_scroll, RTL_TEXTENCODING_ASCII_US) + " ";
+            sOut += OUString::Concat(" ") + sCSS1_PV_scroll + " ";
         }
     }
 
