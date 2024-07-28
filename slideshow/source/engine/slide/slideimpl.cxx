@@ -30,6 +30,7 @@
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
@@ -1039,6 +1040,14 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mbPaintOverlayActive( false ),
     mbFinalStateApplied( false )
 {
+    if (uno::Reference<frame::XModel> xModel{ mxDrawPagesSupplier, uno::UNO_QUERY })
+    {
+        OUString presentationURL = xModel->getURL();
+        auto fileDirectoryEndIdx = presentationURL.lastIndexOf("/");
+        if (presentationURL.startsWith("file:///") && fileDirectoryEndIdx != -1)
+            maContext.maFallbackDir = OUString::Concat(presentationURL.subView(0, fileDirectoryEndIdx + 1));
+    }
+
     // clone already existing views for slide bitmaps
     for( const auto& rView : rViewContainer )
         viewAdded( rView );

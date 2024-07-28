@@ -88,6 +88,7 @@ namespace slideshow::internal
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
             ViewMediaShapeVector                             maViewMediaShapes;
             bool                                             mbIsPlaying;
+            OUString                                         maFallbackDir;
         };
 
         }
@@ -97,7 +98,8 @@ namespace slideshow::internal
                                 const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
             maViewMediaShapes(),
-            mbIsPlaying(false)
+            mbIsPlaying(false),
+            maFallbackDir(rContext.maFallbackDir)
         {
         }
 
@@ -127,7 +129,8 @@ namespace slideshow::internal
             maViewMediaShapes.push_back(
                 std::make_shared<ViewMediaShape>( rNewLayer,
                                                   getXShape(),
-                                                  mxComponentContext ));
+                                                  mxComponentContext,
+                                                  maFallbackDir ));
 
             // push new size to view shape
             maViewMediaShapes.back()->resize( getBounds() );

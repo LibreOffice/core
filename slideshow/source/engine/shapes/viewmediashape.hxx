@@ -65,7 +65,8 @@ namespace slideshow::internal
              */
             ViewMediaShape( const ViewLayerSharedPtr&                                  rViewLayer,
                             css::uno::Reference< css::drawing::XShape >          xShape,
-                            css::uno::Reference< css::uno::XComponentContext >   xContext );
+                            css::uno::Reference< css::uno::XComponentContext >   xContext,
+                            const OUString&                                      aFallbackDir );
 
             /** destroy the object
              */
@@ -157,6 +158,7 @@ namespace slideshow::internal
             css::uno::Reference< css::media::XPlayerWindow >  mxPlayerWindow;
             css::uno::Reference< css::uno::XComponentContext> mxComponentContext;
             bool                                              mbIsSoundEnabled;
+            OUString                                          maFallbackDir;
         };
 
         typedef ::std::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;

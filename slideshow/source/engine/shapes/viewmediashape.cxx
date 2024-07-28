@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <canvas/canvastools.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdobj.hxx>
@@ -59,7 +60,8 @@ namespace slideshow::internal
 {
         ViewMediaShape::ViewMediaShape( const ViewLayerSharedPtr&                       rViewLayer,
                                         uno::Reference< drawing::XShape >         xShape,
-                                        uno::Reference< uno::XComponentContext >  xContext ) :
+                                        uno::Reference< uno::XComponentContext >  xContext,
+                                        const OUString&                           aFallbackDir ) :
             mpViewLayer( rViewLayer ),
             maWindowOffset( 0, 0 ),
             maBounds(),
@@ -67,7 +69,8 @@ namespace slideshow::internal
             mxPlayer(),
             mxPlayerWindow(),
             mxComponentContext(std::move( xContext )),
-            mbIsSoundEnabled(true)
+            mbIsSoundEnabled(true),
+            maFallbackDir(aFallbackDir)
         {
             ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
@@ -294,6 +297,16 @@ namespace slideshow::internal
                             }
                             else if (xPropSet->getPropertyValue(u"MediaURL"_ustr) >>= aURL)
                             {
+                                if ( maFallbackDir.getLength() &&
+                                     aURL.startsWith("file:///") &&
+                                     !comphelper::DirectoryHelper::fileExists(aURL) )
+                                {
+                                    auto fileNameStartIdx = aURL.lastIndexOf("/");
+                                    if (fileNameStartIdx != -1)
+                                    {
+                                        aURL = OUString::Concat(maFallbackDir) + aURL.subView(fileNameStartIdx + 1);
+                                    }
+                                }
                                 implInitializeMediaPlayer( aURL, sMimeType );
                             }
                         }
