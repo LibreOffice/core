@@ -912,6 +912,11 @@ SwDoc* SwXMLImport::endDocAdjustNodes()
             return nullptr;
         }
         SwPaM *pPaM = pTextCursor->GetPaM();
+        if (!pPaM)
+        {
+            SAL_WARN("sw", "SwXMLImport::endDocAdjustNodes: PaM missing");
+            return nullptr;
+        }
         if( IsInsertMode() && m_oSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the split node that is in front
