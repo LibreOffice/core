@@ -9,7 +9,7 @@
 
 try:
     from collections.abc import Mapping
-except:
+except Exception:
     from collections import Mapping
 import gdb
 import re

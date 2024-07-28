@@ -17,7 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import sys, os, re
+import sys
+import os
+import re
 import argparse
 
 global_list = []

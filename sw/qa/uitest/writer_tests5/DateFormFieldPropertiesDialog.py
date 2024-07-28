@@ -27,7 +27,7 @@ class dateFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
-                itemsList.getChild("11").executeAction("SELECT", tuple());
+                itemsList.getChild("11").executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
@@ -73,7 +73,7 @@ class dateFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
-                itemsList.getChild("11").executeAction("SELECT", tuple());
+                itemsList.getChild("11").executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
@@ -95,7 +95,7 @@ class dateFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Wed 01/Dec 99")
 
                 # select a new format
-                itemsList.getChild("11").executeAction("SELECT", tuple());
+                itemsList.getChild("11").executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-01")
 
 
@@ -120,7 +120,7 @@ class dateFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/01/99")
 
                 # select a new format
-                itemsList.getChild("3").executeAction("SELECT", tuple());
+                itemsList.getChild("3").executeAction("SELECT", tuple())
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Dec 1, 1999")
 
 

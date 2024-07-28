@@ -45,7 +45,7 @@ class TreeNode():
         return "<{}>".format(self.nodetype)
 
     def __eq__(self, other):
-        return type(self) == type(other)
+        return type(self) is type(other)
 
     def __ne__(self, other):
         return not self == other
@@ -192,7 +192,7 @@ class MetaNode(TreeNode):
 
     def __eq__(self, other):
         try:
-            return (type(other) == type(self) and
+            return (type(other) is type(self) and
                     MetaNode.eq(other.xmlid, self.xmlid))
         except AttributeError:
             return False
@@ -237,7 +237,7 @@ class BookmarkNode(MarkNode):
 
     def __eq__(self, other):
         try:
-            return (type(other) == type(self) and
+            return (type(other) is type(self) and
                     super().__eq__(other) and
                     MetaNode.eq(other.xmlid, self.xmlid))
         except AttributeError:
@@ -275,7 +275,7 @@ class ReferenceMarkNode(MarkNode):
         self.nodetype = "ReferenceMark"
 
     def __eq__(self, other):
-        return (type(other) == type(self) and super().__eq__(other))
+        return (type(other) is type(self) and super().__eq__(other))
 
     def dup(self):
         return self._dup(ReferenceMarkNode, self.name)
@@ -307,7 +307,7 @@ class DocumentIndexMarkNode(MarkNode):
         self.nodetype = "DocumentIndexMark"
 
     def __eq__(self, other):
-        return (type(other) == type(self) and super().__eq__(other))
+        return (type(other) is type(self) and super().__eq__(other))
 
     def dup(self):
         return self._dup(DocumentIndexMarkNode, self.name)
@@ -3474,7 +3474,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xText = xDoc.getText()
         xTextEnum = xText.createEnumeration()
         ## skip to right paragraph
-        xTextEnum.nextElement(); # skip first -- always empty!
+        xTextEnum.nextElement() # skip first -- always empty!
         xElement = xTextEnum.nextElement() # second contains test case
         xEnum = xElement.createEnumeration()
         outtree = EnumConverter().convert(xEnum)

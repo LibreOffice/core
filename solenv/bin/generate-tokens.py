@@ -15,7 +15,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import sys, re
+import sys
+import re
 
 infile_name = sys.argv[1]
 idfile_out_name = sys.argv[2]
@@ -37,7 +38,7 @@ struct xmltoken {
 %%
 """)
 
-token_count = 0;
+token_count = 0
 tokens = {}
 
 with open(infile_name) as infile:
@@ -45,16 +46,16 @@ with open(infile_name) as infile:
         line = line.strip()
         # check for valid characters
         if not re.match(r'[a-zA-Z0-9-_]+$', line):
-            sys.exit("Error: invalid character in token '{}'".format(line));
-        cur_id = "XML_" + line;
+            sys.exit("Error: invalid character in token '{}'".format(line))
+        cur_id = "XML_" + line
         # we have two ids with similar names("cut-offs" and "cut_offs")
         if cur_id == "XML_cut_offs":
-            cur_id = "cut_offs2";
+            cur_id = "cut_offs2"
         cur_id = cur_id.replace('-', '_')
         tokens[line] = cur_id
         idfile.write("const sal_Int32 {} = {};\n".format(cur_id, token_count))
-        namefile.write("\"{}\",\n".format(line));
-        gperffile.write("{},{}\n".format(line, cur_id));
+        namefile.write("\"{}\",\n".format(line))
+        gperffile.write("{},{}\n".format(line, cur_id))
         token_count += 1
 
 idfile.write("const sal_Int32 XML_TOKEN_COUNT = {};\n".format(token_count))

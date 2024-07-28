@@ -88,7 +88,7 @@ def main(args):
         try:
             LOGGER.info("Remove temporary directory %s", tmp_dir)
             shutil.rmtree(tmp_dir)
-        except Exception as e:
+        except Exception:
             LOGGER.error("Unable to remove temporary directory %s", tmp_dir)
             sys.exit(2)
     else:
@@ -507,7 +507,7 @@ def parse_image_list(imagelist_filenames):
 
         try:
             fh = open(imagelist_filename)
-        except IOError as e:
+        except IOError:
             LOGGER.error("Cannot open imagelist file %s", imagelist_filename)
             sys.exit(2)
         else:

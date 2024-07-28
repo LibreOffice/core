@@ -99,7 +99,7 @@ class dropDownFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList.getChild("3"))["Text"], "4000")
 
                 # select an item from the list and remove it
-                itemsList.getChild("1").executeAction("SELECT", tuple());
+                itemsList.getChild("1").executeAction("SELECT", tuple())
                 removeButton.executeAction("CLICK", tuple())
 
                 # check whether the right item was removed
@@ -120,7 +120,7 @@ class dropDownFormFieldDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(itemsList.getChild("2"))["Text"], "4000")
 
                 # remove all items
-                itemsList.getChild("1").executeAction("SELECT", tuple());
+                itemsList.getChild("1").executeAction("SELECT", tuple())
                 removeButton.executeAction("CLICK", tuple())
                 removeButton.executeAction("CLICK", tuple())
                 removeButton.executeAction("CLICK", tuple())

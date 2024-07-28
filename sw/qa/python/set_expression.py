@@ -27,8 +27,7 @@ class TestSetExpression(unittest.TestCase):
         xDoc = self.__class__._uno.openEmptyWriterDoc()
         self.__class__._uno.checkProperties(
             xDoc.createInstance("com.sun.star.text.textfield.SetExpression"),
-            {"NumberingType": 0,
-             "Content": "foo",
+            {"Content": "foo",
              "CurrentPresentation": "bar",
              "NumberFormat": 0,
              "NumberingType": 0,

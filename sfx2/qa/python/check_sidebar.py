@@ -44,7 +44,7 @@ class CheckSidebar(unittest.TestCase):
 
         xDecks = xSidebar.getDecks()
 
-        first_deck_name = "PropertyDeck";
+        first_deck_name = "PropertyDeck"
 
         deck_element_names = xDecks.getElementNames()
         assert ( first_deck_name in deck_element_names )

@@ -79,7 +79,7 @@ class PtrStdPrinterBase(object):
             try:
                 import libstdcxx.v6.printers
                 std = libstdcxx.v6.printers
-            except:
+            except Exception:
                 pass
 
     def _get_sequence_printer(self, typename):

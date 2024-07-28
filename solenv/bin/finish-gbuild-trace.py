@@ -84,7 +84,7 @@ with open(filename + ".tmp", "w") as outfile:
             slot_start_time[tid-1] = int(match.group(3))
         elif match.group(2) == 'E':
             tid = free_slot(match.group(1), match.group(4)) # "name", "args"
-            if not match.group(1) in totals_time:
+            if match.group(1) not in totals_time:
                 totals_time[match.group(1)] = 0
                 totals_count[match.group(1)] = 0
             totals_time[match.group(1)] += int(match.group(3)) - slot_start_time[tid-1]

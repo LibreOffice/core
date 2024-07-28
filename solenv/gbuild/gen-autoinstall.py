@@ -73,25 +73,25 @@ for (gid, link, target) in autosdklibs:
 
 scp2libtemplates = set([ "URE_PRIVATE_LIB", "LIBO_LIB_FILE", "LIBO_LIB_FILE_BINARYTABLE", "LIBO_LIB_FILE_COMPONENTCONDITION", "SHLXTHDL_LIB_FILE", "SHLXTHDL_X64_LIB_FILE_COMPONENTCONDITION" ])
 for (gid, libfile) in autolibs:
-    if not(scp2libtemplate in scp2libtemplates):
+    if scp2libtemplate not in scp2libtemplates:
         raise Exception("invalid scp2libtemplate \"" + scp2libtemplate + "\"")
     print(scp2libtemplate + "(" + gid + "," + libfile + scp2componentcondition + ")")
 
 scp2exetemplates = set([ "URE_EXECUTABLE", "LIBO_EXECUTABLE", "LIBO_EXECUTABLE_COMPONENTCONDITION", "SDK_EXECUTABLE" ])
 for (gid, exefile) in autoexes:
-    if not(scp2exetemplate in scp2exetemplates):
+    if scp2exetemplate not in scp2exetemplates:
         raise Exception("invalid scp2exetemplate \"" + scp2exetemplate + "\"")
     print(scp2exetemplate + "(" + gid + "," + exefile + scp2componentcondition + ")")
 
 scp2jartemplates = set([ "URE_JAR_FILE", "LIBO_JAR_FILE" ])
 for (gid, jarfile) in autojars:
-    if not(scp2jartemplate in scp2jartemplates):
+    if scp2jartemplate not in scp2jartemplates:
         raise Exception("invalid scp2jartemplate \"" + scp2jartemplate + "\"")
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
 scp2pkgtemplates = set([ "PACKAGE_FILELIST", "PACKAGE_FILELIST_COMPONENTCONDITION","PACKAGE_FILELIST_FONT", "SDK_PACKAGE_FILELIST" ])
 for (gid, pkgfilelist) in autopkgs:
-    if not(scp2pkgtemplate in scp2pkgtemplates):
+    if scp2pkgtemplate not in scp2pkgtemplates:
         raise Exception("invalid scp2pkgtemplate \"" + scp2pkgtemplate + "\"")
     print(scp2pkgtemplate + "(" + gid + "," + pkgfilelist + scp2componentcondition + ")")
 

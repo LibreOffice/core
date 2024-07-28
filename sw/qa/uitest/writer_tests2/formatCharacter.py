@@ -12,7 +12,6 @@ from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_by_text
 
 class formatCharacter(UITestCase):
 

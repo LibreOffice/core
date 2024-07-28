@@ -81,8 +81,6 @@ class tdf159102(UITestCase):
             self.xUITest.executeCommand(".uno:GoToEndOfLine")
             self.xUITest.executeCommand('.uno:StartOfDocumentSel')
             self.xUITest.executeCommand('.uno:Delete')
-            paragraphs = writer_doc.Text.createEnumeration()
-            para1 = paragraphs.nextElement()
 # disable UITest that fails reliably
 #            # This was "stas.", i.e. too much shrinking
 #            self.assertEqual("sus egestas.", para1.String)

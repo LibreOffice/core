@@ -871,7 +871,7 @@ class _BaseEntry(object):
             try:
                 usedirect = False
                 ret = u('\n').join(x.decode('utf-8') for x in ret)
-            except:
+            except Exception:
                 usedirect = True
         if usedirect:
             ret = u('\n').join(ret)
