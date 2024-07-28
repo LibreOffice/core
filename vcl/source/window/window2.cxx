@@ -812,21 +812,23 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             bool bContains = aWinRect.Contains(aGesturePt);
                             if (bContains)
                             {
-                                tools::Long nOriginalPos
-                                    = bHorz ? mpWindowImpl->mpFrameData->mnTouchPanPositionX
-                                            : mpWindowImpl->mpFrameData->mnTouchPanPositionY;
-
-                                tools::Long nNewPos;
-                                double nOffset = pData->mfOffset;
-                                tools::Long nSize = pScrl->GetVisibleSize();
-                                if (aWinRect.GetSize().Width() < nSize
-                                    || aWinRect.GetSize().Height() < nSize)
+                                double nWinSize;
+                                tools::Long nOriginalPos;
+                                if (bHorz)
                                 {
-                                    sal_Int32 nVelocity = 15;
-                                    nNewPos = nOriginalPos - (nOffset * nVelocity);
+                                    nWinSize = GetOutputSizePixel().getWidth();
+                                    nOriginalPos = mpWindowImpl->mpFrameData->mnTouchPanPositionX;
                                 }
                                 else
-                                    nNewPos = nOriginalPos - (nOffset / nSize);
+                                {
+                                    nWinSize = GetOutputSizePixel().getHeight();
+                                    nOriginalPos = mpWindowImpl->mpFrameData->mnTouchPanPositionY;
+                                }
+                                double nOffset = pData->mfOffset;
+                                double nRatio = nOffset / nWinSize;
+                                tools::Long nVisibleSize = pScrl->GetVisibleSize();
+                                tools::Long nDeltaInLogic = tools::Long(nVisibleSize * nRatio);
+                                tools::Long nNewPos = nOriginalPos - nDeltaInLogic;
 
                                 pScrl->DoScroll(nNewPos);
                             }
