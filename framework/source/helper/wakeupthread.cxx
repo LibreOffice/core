@@ -88,6 +88,13 @@ public:
         }
     }
 
+    static void startThread()
+    {
+        std::unique_lock g(getMutex());
+        if (!updatables.empty() && !wakeupThread)
+            wakeupThread = new SharedWakeUpThread();
+    }
+
     void stopWithLock(std::unique_lock<std::mutex>& g)
     {
         terminate = true;
@@ -135,6 +142,12 @@ public:
         if (updatables.empty())
             disposeThreadWithLock(g);
     }
+
+    static void joinThread()
+    {
+        std::unique_lock g(getMutex());
+        disposeThreadWithLock(g);
+    }
 };
 
 rtl::Reference<SharedWakeUpThread> SharedWakeUpThread::wakeupThread;
@@ -143,6 +156,8 @@ std::vector<css::uno::WeakReference<css::util::XUpdatable>> SharedWakeUpThread::
 
 namespace framework
 {
+/* static */ void WakeUpThread::startThread() { SharedWakeUpThread::startThread(); }
+
 WakeUpThread::WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& up)
     : _updatable(up)
 {
@@ -151,6 +166,8 @@ WakeUpThread::WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& up)
 }
 
 void WakeUpThread::stop() { SharedWakeUpThread::remove(_updatable); }
+
+/* static */ void WakeUpThread::joinThread() { SharedWakeUpThread::joinThread(); }
 
 } // namespace framework
 
