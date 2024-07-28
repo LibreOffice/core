@@ -30,32 +30,40 @@ public:
         : UnoApiTest(u"/vcl/qa/unx/generic/data/"_ustr)
     {
     }
+    static OUString GetFallbackFont(const vcl::Font& rFont)
+    {
+        Size aSize(0, 3840);
+        float fExactHeight = 3840;
+        bool bNonAntialias = false;
+        vcl::font::FontSelectPattern aPattern(rFont, rFont.GetFamilyName(), aSize, fExactHeight,
+                                              bNonAntialias);
+        aPattern.maTargetName = rFont.GetFamilyName();
+        psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+        OUString aMissingCodes;
+
+        rMgr.Substitute(aPattern, aMissingCodes);
+
+        return aPattern.maSearchName;
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testFontFallbackSerif)
 {
+    OUString sResolvedSerif = GetFallbackFont(vcl::Font("serif", Size(12, 12)));
+
     // Given a font select pattern with a font name we don't bundle and with a serif family:
     vcl::Font aFont;
     aFont.SetFamilyName("IBM Plex Serif");
     aFont.SetFamily(FAMILY_ROMAN);
-    Size aSize(0, 3840);
-    float fExactHeight = 3840;
-    bool bNonAntialias = false;
-    vcl::font::FontSelectPattern aPattern(aFont, aFont.GetFamilyName(), aSize, fExactHeight,
-                                          bNonAntialias);
-    aPattern.maTargetName = aFont.GetFamilyName();
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    OUString aMissingCodes;
 
-    // When substituting that font:
-    rMgr.Substitute(aPattern, aMissingCodes);
+    OUString sPlexFallback = GetFallbackFont(aFont);
 
     // Then make sure we get a serif fallback:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Noto Serif (or DejaVu Serif)
     // - Actual  : Noto Kufi Arabic
     // i.e. we got a sans fallback for a serif pattern, which is clearly poor.
-    CPPUNIT_ASSERT(aPattern.maSearchName.endsWith(u"Serif"));
+    CPPUNIT_ASSERT_EQUAL(sResolvedSerif, sPlexFallback);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontFallbackCaching)
