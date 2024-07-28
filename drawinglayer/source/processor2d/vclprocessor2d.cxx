@@ -434,14 +434,22 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                         MapMode aMapMode = mpOutputDevice->GetMapMode();
                         aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
                         aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
-                        Point origin = aMapMode.GetOrigin();
 
-                        mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
-                        mpOutputDevice->SetRelativeMapMode(aMapMode);
-                        bChangeMapMode = true;
+                        const bool bValidScaling
+                            = aMapMode.GetScaleX().IsValid() && aMapMode.GetScaleY().IsValid();
+                        if (!bValidScaling)
+                            SAL_WARN("drawinglayer", "skipping invalid scaling");
+                        else
+                        {
+                            Point origin = aMapMode.GetOrigin();
 
-                        aPointX = (aPointX + origin.X()) / nFontScalingFixX - origin.X();
-                        aPointY = (aPointY + origin.Y()) / nFontScalingFixY - origin.Y();
+                            mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+                            mpOutputDevice->SetRelativeMapMode(aMapMode);
+                            bChangeMapMode = true;
+
+                            aPointX = (aPointX + origin.X()) / nFontScalingFixX - origin.X();
+                            aPointY = (aPointY + origin.Y()) / nFontScalingFixY - origin.Y();
+                        }
                     }
                 }
 
