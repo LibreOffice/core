@@ -97,7 +97,7 @@ public:
     {
     }
     void* data() override { return value.get(); }
-    SQLLEN len() const override { return value.cch(); }
+    SQLLEN len() const override { return SQL_NTS; } // input data needs to tell it's null-terminated
 
 private:
     CHARS_t value;
