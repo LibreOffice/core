@@ -6805,7 +6805,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else
     {
-        SetLastExceptionMsg(u"Unknown command, no values returned"_ustr);
+        SetLastExceptionMsg(OUString::fromUtf8(aCommand) + u" : Unknown command, no values returned"_ustr);
         return nullptr;
     }
 }
