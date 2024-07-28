@@ -2899,6 +2899,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "portion"_ostr, u"another sub three"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
+{
+    // Unit test for tdf#157129
+    // Test to see if cursor moves to the end after paste
+
+    // First document containing test data
+    createSwDoc("tdf157129.doc");
+    CPPUNIT_ASSERT_EQUAL(5, getParagraphs());
+    // Copy data from first document
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // Create a new document
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    // Paste data from first document
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(5, getParagraphs());
+
+    // Save cursor position after paste occurs
+    SwPosition aCursorPosPaste(*pWrtShell->GetCursor()->GetPoint());
+
+    // Move cursor position to the end
+    pWrtShell->SttEndDoc(false); //bStart = false
+
+    // Save cursor position at end
+    SwPosition aCursorPosEnd(*pWrtShell->GetCursor()->GetPoint());
+
+    // Assert the cursor position after paste is at the end
+    // Without the test in place, the cursor position is at the beginning of the document
+    // - Expected : SwPosition (node 18, offset 0)
+    // - Actual : SwPosition (node 6, offset 0)
+    CPPUNIT_ASSERT_EQUAL(aCursorPosEnd, aCursorPosPaste);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
 {
     createSwDoc("cursor_position_after_undo.odt");
