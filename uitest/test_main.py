@@ -116,7 +116,7 @@ if __name__ == '__main__':
     if "-h" in opts or "--help" in opts:
         usage()
         sys.exit()
-    elif not "--soffice" in opts:
+    elif "--soffice" not in opts:
         usage()
         sys.exit(1)
     elif "--dir" in opts:

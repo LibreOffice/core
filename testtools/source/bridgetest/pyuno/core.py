@@ -46,21 +46,21 @@ def equalsEps( a,b,eps ):
 
 def assign( rData, bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper,\
               nUHyper, fFloat, fDouble, eEnum, rStr, xTest, rAny  ):
-    rData.Bool = bBool;
-    rData.Char = cChar;
-    rData.Byte = nByte;
-    rData.Short = nShort;
-    rData.UShort = nUShort;
-    rData.Long = nLong;
-    rData.ULong = nULong;
-    rData.Hyper = nHyper;
-    rData.UHyper = nUHyper;
-    rData.Float = fFloat;
-    rData.Double = fDouble;
-    rData.Enum = eEnum;
-    rData.String = rStr;
-    rData.Interface = xTest;
-    rData.Any = rAny;
+    rData.Bool = bBool
+    rData.Char = cChar
+    rData.Byte = nByte
+    rData.Short = nShort
+    rData.UShort = nUShort
+    rData.Long = nLong
+    rData.ULong = nULong
+    rData.Hyper = nHyper
+    rData.UHyper = nUHyper
+    rData.Float = fFloat
+    rData.Double = fDouble
+    rData.Enum = eEnum
+    rData.String = rStr
+    rData.Interface = xTest
+    rData.Any = rAny
 
 
 class PythonTransporter:

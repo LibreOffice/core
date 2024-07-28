@@ -265,7 +265,7 @@ def retryInvoke(connection, test):
                 connection.postTest()
         except KeyboardInterrupt:
             raise # Ctrl+C should work
-        except:
+        except Exception:
             print("retryInvoke: caught exception")
     raise Exception("FAILED retryInvoke")
 

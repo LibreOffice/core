@@ -16,14 +16,14 @@ def testAppDialog(UITestCase, app, dialog):
     with UITestCase.ui_test.create_doc_in_start_center(app):
         with UITestCase.ui_test.execute_dialog_through_command(
                 dialog['command'], close_button=dialog['closeButton']) as xDialog:
-            if 'skipTestOK' in dialog and dialog['skipTestOK'] == True:
+            if 'skipTestOK' in dialog and dialog['skipTestOK']:
                 xOKBtn = None
             else:
                 try:
                     xOKBtn = xDialog.getChild("ok")
                     if (get_state_as_dict(xOKBtn)["Enabled"] != "true"):
                         xOKBtn = None
-                except:
+                except Exception:
                     xOKBtn = None
 
         if (xOKBtn is not None):
@@ -47,14 +47,14 @@ def testChartDialog(UITestCase, dialog):
                 xObj, "COMMAND",
                 mkPropertyValues({"COMMAND": dialog['command']}),
                 close_button=dialog['closeButton']) as xDialog:
-            if 'skipTestOK' in dialog and dialog['skipTestOK'] == True:
+            if 'skipTestOK' in dialog and dialog['skipTestOK']:
                 xOKBtn = None
             else:
                 try:
                     xOKBtn = xDialog.getChild("ok")
                     if (get_state_as_dict(xOKBtn)["Enabled"] != "true"):
                         xOKBtn = None
-                except:
+                except Exception:
                     xOKBtn = None
 
         if (xOKBtn is not None):
