@@ -9,7 +9,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file
 
 class tdf155863(UITestCase):
     def test_tdf155863(self):

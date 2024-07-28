@@ -8,13 +8,11 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text, select_pos
+from uitest.uihelper.common import get_state_as_dict, select_pos
 
 class slideShowSettings(UITestCase):
     def test_slideShowSettings(self):
         with self.ui_test.create_doc_in_start_center("impress"):
-            MainWindow = self.xUITest.getTopFocusWindow()
             TemplateDialog = self.xUITest.getTopFocusWindow()
             cancel = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(cancel)

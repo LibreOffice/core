@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf159927(UITestCase):
 
    def test_tdf159927(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf159927_dateTime.odp")) as document:
+        with self.ui_test.load_file(get_url_for_data_file("tdf159927_dateTime.odp")):
 
             with self.ui_test.execute_dialog_through_command(".uno:HeaderAndFooter", close_button="cancel") as xDialog:
                 language_list = xDialog.getChild("language_list")

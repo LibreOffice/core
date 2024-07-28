@@ -9,14 +9,11 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import importlib
-from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict
 
 class customSlideShow(UITestCase):
     def test_customSlideShow(self):
         with self.ui_test.create_doc_in_start_center("impress"):
-            MainWindow = self.xUITest.getTopFocusWindow()
             TemplateDialog = self.xUITest.getTopFocusWindow()
             cancel = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(cancel)
@@ -45,29 +42,22 @@ class customSlideShow(UITestCase):
                     self.assertEqual(get_state_as_dict(customname)["Text"], "aa")
                     custompages = DefineCustomSlideShow.getChild("custompages")
                     pages = DefineCustomSlideShow.getChild("pages")
-                    remove = DefineCustomSlideShow.getChild("remove")
                     self.assertEqual(get_state_as_dict(custompages)["Children"], "1")
                     self.assertEqual(get_state_as_dict(pages)["Children"], "1")
                     xEntry = custompages.getChild("0")
                     xEntry.executeAction("SELECT", tuple())
-#            remove.executeAction("CLICK",tuple())  #tdf126951
                     self.assertEqual(get_state_as_dict(custompages)["Children"], "1")
                     self.assertEqual(get_state_as_dict(pages)["Children"], "1")
 
-                delete = CustomSlideShows.getChild("delete")
                 customshowlist = CustomSlideShows.getChild("customshowlist")
                 self.assertEqual(get_state_as_dict(customshowlist)["Children"], "1")
 
-#        delete.executeAction("CLICK",tuple())
-#        self.assertEqual(get_state_as_dict(customshowlist)["Children"], "0")
-
     def test_tdf143125(self):
         with self.ui_test.create_doc_in_start_center("impress"):
-            MainWindow = self.xUITest.getTopFocusWindow()
             TemplateDialog = self.xUITest.getTopFocusWindow()
             cancel = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(cancel)
-            with self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog") as CustomSlideShows:
+            with self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog"):
                 # Without the fix in place, this test would have crashed here
                 pass
 

@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, sel
 class tdf128787(UITestCase):
 
   def test_tdf128787(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf128787.odp")) as document:
+    with self.ui_test.load_file(get_url_for_data_file("tdf128787.odp")):
         xImpressDoc = self.xUITest.getTopFocusWindow()
         xEditWin = xImpressDoc.getChild("impress_win")
 

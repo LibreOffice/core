@@ -29,7 +29,6 @@ class autocorrectOptions(UITestCase):
                 xnew = xDialog.getChild("new")
                 xdelete = xDialog.getChild("delete")
                 xtabview = xDialog.getChild("tabview")
-                xreset = xDialog.getChild("reset")
                 nrRows = get_state_as_dict(xtabview)["VisibleCount"]
 
                 self.assertTrue(int(nrRows) > 0)
