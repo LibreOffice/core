@@ -568,6 +568,8 @@ void EditView::HideCursor(bool bDeactivate)
     }
 }
 
+bool EditView::IsCursorVisible() const { return getImpl().GetCursor()->IsVisible(); }
+
 Pair EditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck )
 {
     return getImpl().Scroll( ndX, ndY, nRangeCheck );
