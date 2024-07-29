@@ -283,7 +283,13 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
 
     OSL_ENSURE( nStartNode <= nEndNode, "Selection not sorted ?" );
 
-    OUStringBuffer aText(256);
+    // calculate buffer size we need
+    sal_Int32 nBufSize = (aSel.Max().GetIndex() - aSel.Min().GetIndex() + 1)
+                         + (nEndNode - nStartNode + 1);
+    // protect against sometimes whacky selection
+    if (nBufSize < 0 || nBufSize > 64 * 1024)
+        nBufSize = 256;
+    OUStringBuffer aText(nBufSize);
     const OUString aSep = EditDoc::GetSepStr( LINEEND_LF );
 
     // iterate over the paragraphs ...
