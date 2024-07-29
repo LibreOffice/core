@@ -384,7 +384,7 @@ void SdrObjGroup::NbcSetSnapRect(const tools::Rectangle& rRect)
 }
 
 
-void SdrObjGroup::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrObjGroup::NbcSetLogicRect(const tools::Rectangle& rRect, bool /*bAdaptTextMinSize*/)
 {
     NbcSetSnapRect(rRect);
 }

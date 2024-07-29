@@ -2637,11 +2637,11 @@ void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
-void SwDrawVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SwDrawVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
-    mxRefObj->NbcSetLogicRect(aR);
+    mxRefObj->NbcSetLogicRect(aR, bAdaptTextMinSize);
     SetBoundAndSnapRectsDirty();
 }
 

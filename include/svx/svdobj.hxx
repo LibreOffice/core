@@ -564,7 +564,9 @@ public:
     // Logic Rect: for the Rect for instance without regard to rotation angle, shear, ...
     virtual const tools::Rectangle& GetLogicRect() const;
     virtual void SetLogicRect(const tools::Rectangle& rRect);
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect);
+    // @param bAdaptTextMinSize pass false if you know it it safe to avoid the cost of doing
+    //              text layout right now.
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true);
 
     // the default is to set the logic rect to the given rectangle rMaxRect. If the shape
     // has an intrinsic aspect ratio it may set the logic rect so the aspect

@@ -72,12 +72,13 @@ const tools::Rectangle& SdrTextObj::GetLogicRect() const
     return getRectangle();
 }
 
-void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
     setRectangle(rRect);
     ImpJustifyRect(maRectangle);
 
-    AdaptTextMinSize();
+    if (bAdaptTextMinSize)
+        AdaptTextMinSize();
 
     SetBoundAndSnapRectsDirty();
 }

@@ -496,9 +496,9 @@ void OCustomShape::NbcResize(const Point& rRef, const Fraction& xFract, const Fr
     SetPropsFromRect(GetSnapRect());
 }
 
-void OCustomShape::NbcSetLogicRect(const tools::Rectangle& rRect)
+void OCustomShape::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrObjCustomShape::NbcSetLogicRect(rRect);
+    SdrObjCustomShape::NbcSetLogicRect(rRect, bAdaptTextMinSize);
     SetPropsFromRect(rRect);
 }
 
@@ -722,9 +722,9 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
     OObjectBase::StartListening();
 }
 
-void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect)
+void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrUnoObj::NbcSetLogicRect(rRect);
+    SdrUnoObj::NbcSetLogicRect(rRect, bAdaptTextMinSize);
     // stop listening
     OObjectBase::EndListening();
 
@@ -1042,9 +1042,9 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     OObjectBase::StartListening();
 }
 
-void OOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void OOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrOle2Obj::NbcSetLogicRect(rRect);
+    SdrOle2Obj::NbcSetLogicRect(rRect, bAdaptTextMinSize);
     // stop listening
     OObjectBase::EndListening();
 

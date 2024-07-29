@@ -133,7 +133,8 @@ public:
 
     virtual const tools::Rectangle& GetLogicRect() const override;
     virtual void SetLogicRect(const tools::Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect,
+                                 bool bAdaptTextMinSize = true) override;
 
     virtual Degree100 GetRotateAngle() const override;
     virtual Degree100 GetShearAngle(bool bVertical = false) const override;

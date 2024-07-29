@@ -1462,14 +1462,15 @@ void SdrObjCustomShape::SetSnapRect( const tools::Rectangle& rRect )
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObjCustomShape::NbcSetLogicRect(const tools::Rectangle& rRectangle)
+void SdrObjCustomShape::NbcSetLogicRect(const tools::Rectangle& rRectangle, bool bAdaptTextMinSize)
 {
     tools::Rectangle aRectangle(rRectangle);
     ImpJustifyRect(aRectangle);
     setRectangle(aRectangle);
     InvalidateRenderGeometry();
 
-    AdaptTextMinSize();
+    if (bAdaptTextMinSize)
+        AdaptTextMinSize();
 
     SetBoundAndSnapRectsDirty();
     SetChanged();

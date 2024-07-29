@@ -1688,9 +1688,9 @@ void SdrOle2Obj::NbcSetSnapRect(const tools::Rectangle& rRect)
     }
 }
 
-void SdrOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrRectObj::NbcSetLogicRect(rRect);
+    SdrRectObj::NbcSetLogicRect(rRect, bAdaptTextMinSize);
 
     if( !getSdrModelFromSdrObject().isLocked() )
         ImpSetVisAreaSize();

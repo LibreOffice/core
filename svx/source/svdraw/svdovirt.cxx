@@ -480,12 +480,12 @@ void SdrVirtObj::SetLogicRect(const tools::Rectangle& rRect)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
     tools::Rectangle aR(rRect);
     aR-=m_aAnchor;
     SetBoundAndSnapRectsDirty();
-    mxRefObj->NbcSetLogicRect(aR);
+    mxRefObj->NbcSetLogicRect(aR, bAdaptTextMinSize);
 }
 
 

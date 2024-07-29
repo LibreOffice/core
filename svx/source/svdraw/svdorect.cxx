@@ -272,9 +272,9 @@ void SdrRectObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrRectObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrTextObj::NbcSetLogicRect(rRect);
+    SdrTextObj::NbcSetLogicRect(rRect, bAdaptTextMinSize);
     SetXPolyDirty();
 }
 

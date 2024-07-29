@@ -214,7 +214,7 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
     aCaptPos.setY( ::std::max< tools::Long >( aCaptPos.Y(), rVisRect.Top() ) );
     // update caption
     aCaptRect.SetPos( aCaptPos );
-    mxCaption->SetLogicRect( aCaptRect );
+    mxCaption->NbcSetLogicRect( aCaptRect, /*bAdaptTextMinSize*/false );
 }
 
 void ScCaptionCreator::AutoPlaceCaption( const tools::Rectangle* pVisRect )
@@ -690,7 +690,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         tools::Long nPosX = bNegPage ? (aCellRect.Left() - xInitData->maCaptionOffset.X()) : (aCellRect.Right() + xInitData->maCaptionOffset.X());
         tools::Long nPosY = aCellRect.Top() + xInitData->maCaptionOffset.Y();
         tools::Rectangle aCaptRect( Point( nPosX, nPosY ), xInitData->maCaptionSize );
-        maNoteData.mxCaption->SetLogicRect( aCaptRect );
+        maNoteData.mxCaption->NbcSetLogicRect( aCaptRect, /*bAdaptTextMinSize*/false );
         aCreator.FitCaptionToRect();
     }
 

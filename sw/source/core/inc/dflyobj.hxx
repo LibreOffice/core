@@ -111,7 +111,7 @@ public:
     virtual       void       NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual const tools::Rectangle& GetLogicRect() const override;
     virtual       void       SetLogicRect(const tools::Rectangle& rRect) override;
-    virtual       void       NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual       void       NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual       void       NbcMove  (const Size& rSiz) override;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,

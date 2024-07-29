@@ -602,9 +602,9 @@ const tools::Rectangle& SdrCaptionObj::GetLogicRect() const
     return getRectangle();
 }
 
-void SdrCaptionObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrCaptionObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize)
 {
-    SdrRectObj::NbcSetLogicRect(rRect);
+    SdrRectObj::NbcSetLogicRect(rRect, bAdaptTextMinSize);
     ImpRecalcTail();
 }
 

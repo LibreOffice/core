@@ -481,7 +481,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeContour() const override;
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual const tools::Rectangle& GetLogicRect() const override;
     virtual Degree100 GetRotateAngle() const override;
     virtual Degree100 GetShearAngle(bool bVertical = false) const override;

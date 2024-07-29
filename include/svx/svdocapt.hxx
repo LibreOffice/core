@@ -124,7 +124,7 @@ public:
     SAL_DLLPRIVATE virtual Point GetRelativePos() const override;
 
     virtual const tools::Rectangle& GetLogicRect() const override;
-    SAL_DLLPRIVATE virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
 
     SAL_DLLPRIVATE virtual sal_uInt32 GetSnapPointCount() const override;
     SAL_DLLPRIVATE virtual Point GetSnapPoint(sal_uInt32 i) const override;

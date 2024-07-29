@@ -280,7 +280,7 @@ class SwDrawVirtObj final : public SdrVirtObj
         virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
         virtual const tools::Rectangle& GetLogicRect() const override;
         virtual void SetLogicRect(const tools::Rectangle& rRect) override;
-        virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+        virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
         virtual Point GetSnapPoint(sal_uInt32 i) const override;
         virtual Point GetPoint(sal_uInt32 i) const override;
         virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;

@@ -1889,7 +1889,7 @@ void SdrTableObj::NbcSetOutlinerParaObject( std::optional<OutlinerParaObject> pT
 }
 
 
-void SdrTableObj::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrTableObj::NbcSetLogicRect(const tools::Rectangle& rRect, bool /*bAdaptTextMinSize*/)
 {
     maLogicRect=rRect;
     ImpJustifyRect(maLogicRect);

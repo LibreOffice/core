@@ -1701,7 +1701,7 @@ const tools::Rectangle& SdrObject::GetLogicRect() const
     return GetSnapRect();
 }
 
-void SdrObject::NbcSetLogicRect(const tools::Rectangle& rRect)
+void SdrObject::NbcSetLogicRect(const tools::Rectangle& rRect, bool /*bAdaptTextMinSize*/)
 {
     NbcSetSnapRect(rRect);
 }

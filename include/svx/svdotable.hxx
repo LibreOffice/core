@@ -210,7 +210,7 @@ public:
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
 
     virtual const tools::Rectangle& GetLogicRect() const override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual void AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
     virtual sal_uInt32 GetHdlCount() const override;

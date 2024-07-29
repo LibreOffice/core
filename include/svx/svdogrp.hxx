@@ -107,7 +107,7 @@ public:
     virtual void NbcSetAnchorPos(const Point& rPnt) override;
     virtual void NbcSetRelativePos(const Point& rPnt) override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
 
     virtual void NbcReformatText() override;
 

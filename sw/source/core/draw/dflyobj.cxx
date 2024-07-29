@@ -624,7 +624,7 @@ void SwVirtFlyDrawObj::SetLogicRect(const tools::Rectangle& )
         m_pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
-void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
+void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle&, bool /*bAdaptTextMinSize*/ )
 {
     SetRect();
 }

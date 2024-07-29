@@ -179,7 +179,7 @@ public:
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
 
