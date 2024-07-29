@@ -7,13 +7,13 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UITest_UITest,gpg))
+$(eval $(call gb_UITest_UITest,xmlsecurity_gpg))
 
-$(eval $(call gb_UITest_add_modules,gpg,$(SRCDIR)/xmlsecurity/qa/uitest,\
+$(eval $(call gb_UITest_add_modules,xmlsecurity_gpg,$(SRCDIR)/xmlsecurity/qa/uitest,\
 	gpg/ \
 ))
 
-$(eval $(call gb_UITest_set_defs,gpg, \
+$(eval $(call gb_UITest_set_defs,xmlsecurity_gpg, \
     TDOC="$(SRCDIR)/xmlsecurity/qa/uitest/data" \
 ))
 
