@@ -3765,6 +3765,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         if ( rRect.Overlaps( aPaintRect ) )
         {
             if ( bCnt && pFrame->IsCompletePaint() &&
+                 !(comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isTiledPainting()) &&
                  !rRect.Contains( aPaintRect ) && Application::AnyInput( VclInputFlags::KEYBOARD ) )
             {
                 //fix(8104): It may happen, that the processing wasn't complete
