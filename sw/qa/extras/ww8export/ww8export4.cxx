@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
@@ -397,6 +398,21 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyGroup)
     saveAndReload(mpFilter);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf135709)
+{
+    createSwDoc("tdf135709.odt");
+    saveAndReload("MS Word 97");
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName("Frame1") , uno::UNO_QUERY);
+
+    xPropertySet->setPropertyValue("AnchorType",
+                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrap should be PARALLEL", text::WrapTextMode_PARALLEL, eValue);
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
