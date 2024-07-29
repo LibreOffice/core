@@ -60,14 +60,15 @@ DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addr
     // All header paragraphs should have numbering.
 
     // check first page
-    CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
 
     // check some other pages
-    CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-    CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+    assertXPath(pXmlDoc,  "/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
 }
 
 
@@ -77,9 +78,10 @@ DECLARE_FILE_MAILMERGE_TEST(testTd78611_file, "tdf78611.odt", "10-testing-addres
     for (int doc = 0; doc < 10; ++doc)
     {
         loadMailMergeDocument( doc );
-        CPPUNIT_ASSERT_EQUAL( u"1"_ustr, parseDump("/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( u"1.1"_ustr, parseDump("/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( u"1.2"_ustr, parseDump("/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
     }
 }
 
@@ -285,11 +287,12 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
 
     // check several pages page
     OUString aExpected(u"Text: Foo "_ustr);
-    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[1]/body/txt[2]"_ostr, ""_ostr));
-    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[3]/body/txt[2]"_ostr, ""_ostr));
-    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[5]/body/txt[2]"_ostr, ""_ostr));
-    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[7]/body/txt[2]"_ostr, ""_ostr));
-    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[9]/body/txt[2]"_ostr, ""_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[2]"_ostr, aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[3]/body/txt[2]"_ostr, aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[5]/body/txt[2]"_ostr, aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[7]/body/txt[2]"_ostr, aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[9]/body/txt[2]"_ostr, aExpected);
 }
 
 

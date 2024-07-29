@@ -132,11 +132,13 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( u"Second page."_ustr, getRun( getParagraph( 5 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
-        CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
-        CPPUNIT_ASSERT_EQUAL( u"Fixed text."_ustr, parseDump("/root/page[1]/body/txt[1]"_ostr, ""_ostr));
-        CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]"_ostr, ""_ostr));
-        CPPUNIT_ASSERT_EQUAL( u"Second page."_ustr, parseDump("/root/page[2]/body/txt[1]"_ostr, ""_ostr));
-        CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr));
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, lastname);
+        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[1]"_ostr, u"Fixed text."_ustr);
+        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[4]"_ostr, OUString());
+        assertXPathContent(pXmlDoc, "/root/page[2]/body/txt[1]"_ostr, u"Second page."_ustr);
+        assertXPath(pXmlDoc,  "/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, firstname);
     }
 }
 
