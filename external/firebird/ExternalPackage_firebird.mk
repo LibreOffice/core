@@ -25,7 +25,15 @@ $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libEngine1
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/intl/libfbintl.so,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/libfbintl.so))
 endif
 
+ifeq ($(OS),MACOSX)
+# only mach-o binaries allowed in bin folder (signing scripts would require extended attributes)
+# so install it into Resources folder and use a symlink instead
+# see https://developer.apple.com/library/archive/technotes/tn2206/_index.html
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/fbintl.conf,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/fbintl.conf))
+$(eval $(call gb_ExternalPackage_add_symbolic_link,firebird,$(LIBO_LIB_FOLDER)/intl/fbintl.conf,../../$(LIBO_SHARE_FOLDER)/firebird/fbintl.conf))
+else
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/intl/fbintl.conf,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/fbintl.conf))
+endif
 
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/firebird.msg,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/firebird.msg))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/security3.fdb,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/security3.fdb))
