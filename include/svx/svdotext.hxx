@@ -519,7 +519,9 @@ public:
     virtual EEAnchorMode GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject) override;
-    void NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText );
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    //              text layout right now.
+    void NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText, bool bAdjustTextFrameWidthAndHeight = true );
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
     bool CanCreateEditOutlinerParaObject() const;
     std::optional<OutlinerParaObject> CreateEditOutlinerParaObject() const;

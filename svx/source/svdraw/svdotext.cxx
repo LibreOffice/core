@@ -1335,7 +1335,7 @@ namespace
     }
 }
 
-void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText )
+void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText, bool bAdjustTextFrameWidthAndHeight )
 {
     if( pText )
         pText->SetOutlinerParaObject( std::move(pTextObject) );
@@ -1350,7 +1350,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObje
     }
 
     SetTextSizeDirty();
-    if (IsTextFrame() && IsAutoGrow(*this))
+    if (IsTextFrame() && IsAutoGrow(*this) && bAdjustTextFrameWidthAndHeight)
     { // adapt text frame!
         NbcAdjustTextFrameWidthAndHeight();
     }

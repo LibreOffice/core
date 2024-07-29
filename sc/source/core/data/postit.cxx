@@ -648,7 +648,10 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
             "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
         if (xInitData->mxOutlinerObj)
-            maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );
+            maNoteData.mxCaption->NbcSetOutlinerParaObjectForText(
+                std::move(xInitData->mxOutlinerObj),
+                maNoteData.mxCaption->getActiveText(),
+                /*bAdjustTextFrameWidthAndHeight*/false );
         else
             maNoteData.mxCaption->SetText( xInitData->maSimpleText );
     }
