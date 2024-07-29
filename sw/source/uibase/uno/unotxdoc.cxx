@@ -3763,6 +3763,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     aViewOption.SetUseHeaderFooterMenu(false);
 
     OUString sThemeName;
+    OUString sBackgroundThemeName;
     OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
     OUString sAuthor;
 
@@ -3786,6 +3787,8 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
             aViewOption.SetOnlineSpell(rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
             sThemeName = rValue.Value.get<OUString>();
+        else if (rValue.Name == ".uno:InvertBackground" && rValue.Value.has<OUString>())
+            sBackgroundThemeName = rValue.Value.get<OUString>();
     }
 
     if (!sAuthor.isEmpty() && sAuthor != sOrigAuthor)
@@ -3843,6 +3846,14 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
             { "NewTheme", uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, aPropertyValues);
+    }
+    if (!sBackgroundThemeName.isEmpty())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(sBackgroundThemeName) }
+        }));
+        comphelper::dispatchCommand(".uno:InvertBackground", aPropertyValues);
     }
 }
 
