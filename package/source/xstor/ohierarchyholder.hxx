@@ -94,12 +94,10 @@ public:
 
 class OHierarchyHolder_Impl : public ::cppu::OWeakObject
 {
-    unotools::WeakReference< OStorage > m_xWeakOwnStorage;
     ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
     explicit OHierarchyHolder_Impl( const rtl::Reference< OStorage >& xOwnStorage )
-    : m_xWeakOwnStorage( xOwnStorage )
-    , m_xChild( new OHierarchyElement_Impl( unotools::WeakReference< OStorage >( xOwnStorage ) ) )
+    : m_xChild( new OHierarchyElement_Impl( unotools::WeakReference< OStorage >( xOwnStorage ) ) )
     {}
 
     static std::vector<OUString> GetListPathFromString( std::u16string_view aPath );

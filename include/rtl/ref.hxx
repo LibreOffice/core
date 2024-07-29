@@ -95,20 +95,15 @@ public:
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
-    /** Up-casting conversion constructor: Copies interface reference.
+    /** Up-casting conversion operator
 
         Does not work for up-casts to ambiguous bases.
-
-        @param rRef another reference
     */
-    template< class derived_type >
-    inline Reference(
-        const Reference< derived_type > & rRef,
-        std::enable_if_t<std::is_base_of_v<reference_type, derived_type>, int> = 0 )
-        : m_pBody (rRef.get())
+    template <class super_type,
+              std::enable_if_t<std::is_base_of_v<super_type, reference_type>, int> = 0>
+    inline operator Reference<super_type>() const
     {
-        if (m_pBody)
-            m_pBody->acquire();
+        return Reference<super_type>(m_pBody);
     }
 
     /** Up-casting conversion operator to convert to css::uno::Interface

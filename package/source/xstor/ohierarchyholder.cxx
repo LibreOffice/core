@@ -39,8 +39,6 @@ using namespace ::com::sun::star;
 
 uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, std::vector<OUString>& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
-    rtl::Reference< OStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
-
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
         throw io::IOException(u"invalid storage/stream mode combo"_ustr);
 
@@ -54,8 +52,6 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
 
 void OHierarchyHolder_Impl::RemoveStreamHierarchically( std::vector<OUString>& aListPath )
 {
-    rtl::Reference< OStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
-
     m_xChild->RemoveStreamHierarchically( aListPath );
 }
 
@@ -95,20 +91,16 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     uno::Reference< embed::XExtendedStorageStream > xResult;
 
     rtl::Reference< OStorage > xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
-                : rtl::Reference< OStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
+                : m_xWeakOwnStorage.get();
+    if (!xOwnStor)
+        throw uno::RuntimeException(u"no own storage"_ustr);
 
     if ( aListPath.empty() )
     {
         if ( aEncryptionData.empty() )
-        {
-            rtl::Reference< OStorage > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
-            xResult = xHStorage->openStreamElementByHierarchicalName( aNextName, nStreamMode );
-        }
+            xResult = xOwnStor->openStreamElementByHierarchicalName( aNextName, nStreamMode );
         else
-        {
-            rtl::Reference< OStorage > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
-            xResult = xHStorage->openEncryptedStreamByHierarchicalName( aNextName, nStreamMode, aEncryptionData.getAsConstNamedValueList() );
-        }
+            xResult = xOwnStor->openEncryptedStreamByHierarchicalName( aNextName, nStreamMode, aEncryptionData.getAsConstNamedValueList() );
 
         uno::Reference< embed::XTransactedObject > xTransact( xResult, uno::UNO_QUERY );
         if ( xTransact.is() )
@@ -156,7 +148,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     }
 
     // the subelement was opened successfully, remember the storage to let it be locked
-    m_xOwnStorage = xOwnStor;
+    m_xOwnStorage = std::move(xOwnStor);
 
     return xResult;
 }
@@ -172,7 +164,9 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
     aListPath.erase( aListPath.begin() );
 
     rtl::Reference< OStorage > xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
-                : rtl::Reference< OStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
+                : m_xWeakOwnStorage.get();
+    if (!xOwnStor)
+        throw uno::RuntimeException(u"no own storage"_ustr);
 
     if ( aListPath.empty() )
     {
@@ -198,8 +192,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& 
         aElement->RemoveStreamHierarchically( aListPath );
     }
 
-    if ( xOwnStor.is() )
-        xOwnStor->commit();
+    xOwnStor->commit();
 
     TestForClosing();
 }
@@ -208,7 +201,7 @@ void OHierarchyElement_Impl::Commit()
 {
     ::rtl::Reference< OHierarchyElement_Impl > xKeepAlive( this );
     ::rtl::Reference< OHierarchyElement_Impl > aParent;
-    uno::Reference< embed::XStorage > xOwnStor;
+    rtl::Reference<OStorage> xOwnStor;
 
     {
         std::unique_lock aGuard( m_aMutex );
@@ -218,8 +211,7 @@ void OHierarchyElement_Impl::Commit()
 
     if ( xOwnStor.is() )
     {
-        uno::Reference< embed::XTransactedObject > xTransact( xOwnStor, uno::UNO_QUERY_THROW );
-        xTransact->commit();
+        xOwnStor->commit();
         if ( aParent.is() )
             aParent->Commit();
     }

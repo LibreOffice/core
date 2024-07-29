@@ -54,8 +54,6 @@ public:
         ConfigurationController& rController,
         const rtl::Reference<::sd::DrawController>& rxController);
 
-    rtl::Reference<::sd::DrawController> mxControllerManager;
-
     /** The Broadcaster class implements storing and calling of listeners.
     */
     std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
@@ -502,14 +500,13 @@ void ConfigurationController::ThrowIfDisposed () const
 ConfigurationController::Implementation::Implementation (
     ConfigurationController& rController,
     const rtl::Reference<::sd::DrawController>& rxController)
-    : mxControllerManager(rxController, UNO_QUERY_THROW),
-      mpBroadcaster(std::make_shared<ConfigurationControllerBroadcaster>(&rController)),
+    : mpBroadcaster(std::make_shared<ConfigurationControllerBroadcaster>(&rController)),
       mxRequestedConfiguration(new Configuration(&rController, true)),
-      mpResourceFactoryContainer(std::make_shared<ResourceFactoryManager>(mxControllerManager)),
+      mpResourceFactoryContainer(std::make_shared<ResourceFactoryManager>(rxController)),
       mpResourceManager(
           std::make_shared<ConfigurationControllerResourceManager>(mpResourceFactoryContainer,mpBroadcaster)),
       mpConfigurationUpdater(
-          std::make_shared<ConfigurationUpdater>(mpBroadcaster, mpResourceManager,mxControllerManager)),
+          std::make_shared<ConfigurationUpdater>(mpBroadcaster, mpResourceManager,rxController)),
       mpQueueProcessor(new ChangeRequestQueueProcessor(mpConfigurationUpdater)),
       mnLockCount(0)
 {

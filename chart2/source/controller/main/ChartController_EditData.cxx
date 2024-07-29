@@ -34,8 +34,7 @@ namespace chart
 
 void ChartController::executeDispatch_EditData()
 {
-    rtl::Reference<::chart::ChartModel> xChartDoc( getChartModel(), uno::UNO_QUERY );
-    if (xChartDoc.is())
+    if (rtl::Reference<::chart::ChartModel> xChartDoc = getChartModel())
     {
         SolarMutexGuard aSolarGuard;
         UndoLiveUpdateGuardWithData aUndoGuard(

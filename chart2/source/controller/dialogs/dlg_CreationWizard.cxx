@@ -49,7 +49,7 @@ namespace chart
 CreationWizard::CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
                                uno::Reference<uno::XComponentContext> xContext)
     : vcl::RoadmapWizardMachine(pParent)
-    , m_xChartModel(xChartModel,uno::UNO_QUERY)
+    , m_xChartModel(xChartModel)
     , m_xComponentContext(std::move(xContext))
     , m_pTemplateProvider(nullptr)
     , m_aTimerTriggeredControllerLock(xChartModel)
