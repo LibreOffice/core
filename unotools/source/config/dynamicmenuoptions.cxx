@@ -95,7 +95,7 @@ struct SvtDynMenu
                 {
                     entry = rItem;
                 }
-                lResult[nStep] = entry;
+                lResult[nStep] = std::move(entry);
                 ++nStep;
             }
         }

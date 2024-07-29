@@ -141,7 +141,7 @@ void SvtFilePicker::prepareExecute()
             INetURLObject aPath;
             INetURLObject givenPath( m_aDisplayDirectory );
             if (!givenPath.HasError())
-                aPath = givenPath;
+                aPath = std::move(givenPath);
             else
             {
                 aPath = INetURLObject( SvtPathOptions().GetWorkPath() );

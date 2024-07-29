@@ -916,16 +916,16 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pTableStyle->getBand2H().getTextColor() = ::oox::drawingml::Color(); //band2HTextColor
     pTableStyle->getBand2V().getTextColor() = ::oox::drawingml::Color(); //band2VTextColor
 
-    pTableStyle->getBackgroundFillProperties() = pTblBgFillProperties;
-    pTableStyle->getWholeTbl().getFillProperties() = pWholeTblFillProperties;
-    pTableStyle->getFirstRow().getFillProperties() = pFirstRowFillProperties;
-    pTableStyle->getFirstCol().getFillProperties() = pFirstColFillProperties;
-    pTableStyle->getLastRow().getFillProperties() = pLastRowFillProperties;
-    pTableStyle->getLastCol().getFillProperties() = pLastColFillProperties;
-    pTableStyle->getBand1H().getFillProperties() = pBand1HFillProperties;
-    pTableStyle->getBand1V().getFillProperties() = pBand1VFillProperties;
-    pTableStyle->getBand2H().getFillProperties() = pBand2HFillProperties;
-    pTableStyle->getBand2V().getFillProperties() = pBand2VFillProperties;
+    pTableStyle->getBackgroundFillProperties() = std::move(pTblBgFillProperties);
+    pTableStyle->getWholeTbl().getFillProperties() = std::move(pWholeTblFillProperties);
+    pTableStyle->getFirstRow().getFillProperties() = std::move(pFirstRowFillProperties);
+    pTableStyle->getFirstCol().getFillProperties() = std::move(pFirstColFillProperties);
+    pTableStyle->getLastRow().getFillProperties() = std::move(pLastRowFillProperties);
+    pTableStyle->getLastCol().getFillProperties() = std::move(pLastColFillProperties);
+    pTableStyle->getBand1H().getFillProperties() = std::move(pBand1HFillProperties);
+    pTableStyle->getBand1V().getFillProperties() = std::move(pBand1VFillProperties);
+    pTableStyle->getBand2H().getFillProperties() = std::move(pBand2HFillProperties);
+    pTableStyle->getBand2V().getFillProperties() = std::move(pBand2VFillProperties);
 
     insertBorderLine(pTableStyle->getWholeTbl(), XML_left, pWholeTblLeftBorder);
     insertBorderLine(pTableStyle->getWholeTbl(), XML_right, pWholeTblRightBorder);

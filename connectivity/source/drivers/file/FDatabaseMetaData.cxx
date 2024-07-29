@@ -84,7 +84,7 @@ namespace
             {
                 ::ucbhelper::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 if ( aFolderOrDoc.isDocument() )
-                    aContent1 = aFolderOrDoc;
+                    aContent1 = std::move(aFolderOrDoc);
                 else
                 {
                     aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::EncodeMechanism::WasEncoded );

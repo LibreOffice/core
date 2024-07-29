@@ -4047,7 +4047,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             {
                 if(bRichtextSupported)
                 {
-                    aFlavor = aFlavorRichtext;
+                    aFlavor = std::move(aFlavorRichtext);
                 }
                 try
                 {

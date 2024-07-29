@@ -710,7 +710,7 @@ void CustomAnimationList::update()
                     aSelected.push_back(pEffect);
                     if (nFirstSelOld == -1)
                     {
-                        pFirstSelEffect = pEffect;
+                        pFirstSelEffect = std::move(pEffect);
                         nFirstSelOld = weld::GetAbsPos(*mxTreeView, rEntry);
                     }
                     if (!xLastSelectedEntry)

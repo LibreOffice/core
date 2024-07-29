@@ -897,7 +897,7 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
                                 aElementType = cppu::UnoType<Any>::get();
                                 break;
                             }
-                            aElementType = aType;
+                            aElementType = std::move(aType);
                             bNeedsInit = false;
                         }
                         else if( aElementType != aType )
