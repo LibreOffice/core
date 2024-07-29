@@ -68,7 +68,7 @@ namespace sdr::properties
             assert(!"EmptyProperties::ClearObjectItemDirect() should never be called");
         }
 
-        void EmptyProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
+        void EmptyProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             assert(!"EmptyProperties::SetObjectItemSet() should never be called");
         }

@@ -270,7 +270,7 @@ namespace sdr::properties
             return *moItemSet;
         }
 
-        void AttributeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
+        void AttributeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // own modifications
             SdrObject& rObj = GetSdrObject();

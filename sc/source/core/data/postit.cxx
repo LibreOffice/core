@@ -113,7 +113,7 @@ void ScCaptionUtil::SetExtraItems( SdrCaptionObj& rCaption, const SfxItemSet& rE
     aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
     aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
 
-    rCaption.SetMergedItemSet( aItemSet );
+    rCaption.SetMergedItemSet( aItemSet, /*bClearAllItems*/false, /*bAdjustTextFrameWidthAndHeight*/false );
 }
 
 /** Helper for creation and manipulation of caption drawing objects independent
@@ -662,7 +662,8 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             maNoteData.mxCaption->NbcSetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true, /*bAdjustTextFrameWidthAndHeight*/false);
 
         if (xInitData->moItemSet)
-            maNoteData.mxCaption->SetMergedItemSet(*xInitData->moItemSet);
+            maNoteData.mxCaption->SetMergedItemSet(*xInitData->moItemSet,
+                    /*bClearAllItems*/false, /*bAdjustTextFrameWidthAndHeight*/false);
     }
     else
     {

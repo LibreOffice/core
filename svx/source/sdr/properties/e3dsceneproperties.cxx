@@ -102,7 +102,7 @@ namespace sdr::properties
             return E3dProperties::GetMergedItemSet();
         }
 
-        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
+        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems, bool bAdjustTextFrameWidthAndHeight)
         {
             // Set SDRATTR_3DOBJ_ range at contained objects.
             const SdrObjList* pSub(static_cast<const E3dScene&>(GetSdrObject()).GetSubList());
@@ -127,14 +127,14 @@ namespace sdr::properties
                         if(dynamic_cast<const E3dCompoundObject* >(pObj.get()))
                         {
                             // set merged ItemSet at contained 3d object.
-                            pObj->SetMergedItemSet(*xNewSet, bClearAllItems);
+                            pObj->SetMergedItemSet(*xNewSet, bClearAllItems, bAdjustTextFrameWidthAndHeight);
                         }
                     }
                 }
             }
 
             // call parent. This will set items on local object, too.
-            E3dProperties::SetMergedItemSet(rSet, bClearAllItems);
+            E3dProperties::SetMergedItemSet(rSet, bClearAllItems, bAdjustTextFrameWidthAndHeight);
         }
 
         void E3dSceneProperties::SetMergedItem(const SfxPoolItem& rItem)

@@ -81,7 +81,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
-        void TextProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void TextProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
@@ -141,7 +141,7 @@ namespace sdr::properties
                         std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
 
-                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
+                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText, bAdjustTextFrameWidthAndHeight);
                     }
                 }
             }
@@ -157,7 +157,7 @@ namespace sdr::properties
                 }
 
             // call parent
-            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
+            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich, bAdjustTextFrameWidthAndHeight);
         }
 
         void TextProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)

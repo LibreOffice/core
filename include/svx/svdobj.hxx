@@ -602,7 +602,9 @@ public:
     const SfxItemSet& GetMergedItemSet() const;
     void SetMergedItem(const SfxPoolItem& rItem);
     void ClearMergedItem(const sal_uInt16 nWhich = 0);
-    void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    //              text layout right now.
+    void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false, bool bAdjustTextFrameWidthAndHeight = true);
     const SfxPoolItem& GetMergedItem(const sal_uInt16 nWhich) const;
     template<class T>
     const T&           GetMergedItem( TypedWhichId<T> nWhich ) const

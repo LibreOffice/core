@@ -42,12 +42,12 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new RectangleProperties(*this, rObj));
         }
 
-        void RectangleProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void RectangleProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight)
         {
             SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());
 
             // call parent
-            TextProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
+            TextProperties::ItemSetChanged(aChangedItems, nDeletedWhich, bAdjustTextFrameWidthAndHeight);
 
             // local changes
             rObj.SetXPolyDirty();

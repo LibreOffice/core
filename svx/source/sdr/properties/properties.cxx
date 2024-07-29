@@ -56,7 +56,7 @@ namespace sdr::properties
             return GetObjectItemSet();
         }
 
-        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
+        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems, bool bAdjustTextFrameWidthAndHeight)
         {
             // clear items if requested
             if(bClearAllItems)
@@ -65,7 +65,7 @@ namespace sdr::properties
             }
 
             // default implementation falls back to SetObjectItemSet()
-            SetObjectItemSet(rSet);
+            SetObjectItemSet(rSet, bAdjustTextFrameWidthAndHeight);
         }
 
         void BaseProperties::SetMergedItem(const SfxPoolItem& rItem)

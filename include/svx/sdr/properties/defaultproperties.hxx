@@ -57,7 +57,9 @@ namespace sdr::properties
 
             // Internally react on ItemSet changes. The given span contains changed items.
             // If nDeletedWhich is not 0, it indicates a deleted item.
-            SAL_DLLPRIVATE virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich);
+            // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+            //              text layout right now.
+            SAL_DLLPRIVATE virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight = true);
 
             // check if SfxItemSet exists
             bool HasSfxItemSet() const { return bool(moItemSet); }
@@ -94,7 +96,7 @@ namespace sdr::properties
             SAL_DLLPRIVATE virtual void ClearObjectItemDirect(const sal_uInt16 nWhich) override;
 
             // set complete item set
-            SAL_DLLPRIVATE virtual void SetObjectItemSet(const SfxItemSet& rSet) override;
+            SAL_DLLPRIVATE virtual void SetObjectItemSet(const SfxItemSet& rSet, bool bAdjustTextFrameWidthAndHeight = true) override;
 
             // set a new StyleSheet and broadcast
             SAL_DLLPRIVATE virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,

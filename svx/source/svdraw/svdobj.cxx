@@ -2019,9 +2019,9 @@ void SdrObject::SetObjectItemSet(const SfxItemSet& rSet)
     GetProperties().SetObjectItemSet(rSet);
 }
 
-void SdrObject::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
+void SdrObject::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems, bool bAdjustTextFrameWidthAndHeight)
 {
-    GetProperties().SetMergedItemSet(rSet, bClearAllItems);
+    GetProperties().SetMergedItemSet(rSet, bClearAllItems, bAdjustTextFrameWidthAndHeight);
 }
 
 const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const

@@ -183,7 +183,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
             // deliberately do not run superclass ForceDefaultAttributes, we don't want any default attributes
         }
 
-        void CellProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void CellProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
@@ -252,7 +252,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
             }
 
             // call parent
-            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
+            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich, bAdjustTextFrameWidthAndHeight);
 
             if( mxCell.is() )
                 mxCell->notifyModified();

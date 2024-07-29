@@ -51,7 +51,7 @@ namespace sdr::properties
             virtual const SfxItemSet& GetMergedItemSet() const override;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) override;
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false, bool bAdjustTextFrameWidthAndHeight = true) override;
 
             // Set a single item, iterate over hierarchies if necessary.
             virtual void SetMergedItem(const SfxPoolItem& rItem) override;

@@ -60,12 +60,12 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new E3dProperties(*this, rObj));
         }
 
-        void E3dProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void E3dProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight)
         {
             E3dObject& rObj = static_cast<E3dObject&>(GetSdrObject());
 
             // call parent
-            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
+            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich, bAdjustTextFrameWidthAndHeight);
 
             // local changes
             rObj.StructureChanged();

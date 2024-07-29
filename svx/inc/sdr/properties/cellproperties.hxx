@@ -65,8 +65,8 @@ public:
 
     void ForceDefaultAttributes() override;
 
-    void ItemSetChanged(std::span<const SfxPoolItem* const> aChangedItems,
-                        sal_uInt16 nDeletedWhich) override;
+    void ItemSetChanged(std::span<const SfxPoolItem* const> aChangedItems, sal_uInt16 nDeletedWhich,
+                        bool bAdjustTextFrameWidthAndHeight = true) override;
 
     void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 

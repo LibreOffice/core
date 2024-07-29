@@ -57,7 +57,7 @@ namespace sdr::properties
             virtual void ClearObjectItemDirect(const sal_uInt16 nWhich) override;
 
             // set complete item set
-            virtual void SetObjectItemSet(const SfxItemSet& rSet) override;
+            virtual void SetObjectItemSet(const SfxItemSet& rSet, bool bAdjustTextFrameWidthAndHeight = true) override;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,

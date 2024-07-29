@@ -97,7 +97,7 @@ namespace sdr::properties
             assert(!"PageProperties::ClearObjectItemDirect() should never be called");
         }
 
-        void PageProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
+        void PageProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // This can be called e.g. when positioning the slide using dialog in Notes view
         }
