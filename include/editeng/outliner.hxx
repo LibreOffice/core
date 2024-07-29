@@ -221,6 +221,7 @@ public:
 
     void        ShowCursor( bool bGotoCursor = true, bool bActivate = false );
     void        HideCursor( bool bDeactivate = false );
+    bool IsCursorVisible() const;
 
     Outliner*   GetOutliner() const { return pOwner; }
 

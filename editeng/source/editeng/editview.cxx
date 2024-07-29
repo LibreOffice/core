@@ -566,6 +566,8 @@ void EditView::HideCursor(bool bDeactivate)
     }
 }
 
+bool EditView::IsCursorVisible() const { return pImpEditView->GetCursor()->IsVisible(); }
+
 Pair EditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck )
 {
     return pImpEditView->Scroll( ndX, ndY, nRangeCheck );
