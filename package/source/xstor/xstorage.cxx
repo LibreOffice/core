@@ -5388,10 +5388,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
     else
     {
         // there are still storages in between
-        if ( !m_rHierarchyHolder.is() )
-            m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
+        if (!m_pHierarchyHolder)
+            m_pHierarchyHolder.reset(new OHierarchyHolder_Impl(this));
 
-        xResult = m_rHierarchyHolder->GetStreamHierarchically(
+        xResult = m_pHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
                                                 aListPath,
                                                 nOpenMode );
@@ -5427,10 +5427,10 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
     std::vector<OUString> aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
-    if ( !m_rHierarchyHolder.is() )
-        m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
+    if (!m_pHierarchyHolder)
+        m_pHierarchyHolder.reset(new OHierarchyHolder_Impl(this));
 
-    m_rHierarchyHolder->RemoveStreamHierarchically( aListPath );
+    m_pHierarchyHolder->RemoveStreamHierarchically(aListPath);
 }
 
 // XHierarchicalStorageAccess2
@@ -5475,10 +5475,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
     else
     {
         // there are still storages in between
-        if ( !m_rHierarchyHolder.is() )
-            m_rHierarchyHolder = new OHierarchyHolder_Impl( rtl::Reference< OStorage >( this ) );
+        if (!m_pHierarchyHolder)
+            m_pHierarchyHolder.reset(new OHierarchyHolder_Impl(this));
 
-        xResult = m_rHierarchyHolder->GetStreamHierarchically(
+        xResult = m_pHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
                                                 aListPath,
                                                 nOpenMode,

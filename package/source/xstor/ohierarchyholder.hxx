@@ -61,7 +61,7 @@ public:
     : m_xOwnStorage(std::move( xStorage ))
     {}
 
-    explicit OHierarchyElement_Impl( unotools::WeakReference< OStorage > xWeakStorage )
+    explicit OHierarchyElement_Impl( unotools::WeakReference< OStorage >&& xWeakStorage )
     : m_xWeakOwnStorage(std::move( xWeakStorage ))
     {}
 
@@ -92,12 +92,12 @@ public:
 
 };
 
-class OHierarchyHolder_Impl : public ::cppu::OWeakObject
+class OHierarchyHolder_Impl
 {
     ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
-    explicit OHierarchyHolder_Impl( const rtl::Reference< OStorage >& xOwnStorage )
-    : m_xChild( new OHierarchyElement_Impl( unotools::WeakReference< OStorage >( xOwnStorage ) ) )
+    explicit OHierarchyHolder_Impl(unotools::WeakReference<OStorage>&& xOwnStorage)
+    : m_xChild( new OHierarchyElement_Impl( std::move(xOwnStorage) ) )
     {}
 
     static std::vector<OUString> GetListPathFromString( std::u16string_view aPath );

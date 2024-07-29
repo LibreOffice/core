@@ -286,7 +286,7 @@ class OStorage final : public css::lang::XTypeProvider
     bool m_bReadOnlyWrap;
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
     ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
-    ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
+    std::unique_ptr<OHierarchyHolder_Impl> m_pHierarchyHolder;
 
     SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr );
 
