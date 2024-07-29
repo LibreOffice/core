@@ -68,7 +68,7 @@ class Desktop(object):
         while bElementexists:
             try:
                 bElementexists = xElementContainer.hasByName(sElementName)
-            except:
+            except Exception:
                 bElementexists = xElementContainer.hasByHierarchicalName(
                     sElementName)
             if bElementexists:

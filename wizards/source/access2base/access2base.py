@@ -447,7 +447,8 @@ class acConstants(object, metaclass = _Singleton):
     vbLf = chr(10)
 
     def _NewLine():
-        if _opsys == 'Windows': return chr(13) + chr(10)
+        if _opsys == 'Windows':
+            return chr(13) + chr(10)
         return chr(10)
 
     vbNewLine = _NewLine()
@@ -607,7 +608,8 @@ class _A2B(object, metaclass = _Singleton):
         :param args: list of arguments to be passed to the script
         :return: the value returned by the script execution
         """
-        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if COMPONENTCONTEXT is None:
+            A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         Script = cls.xScript(script, module)
         try:
             Returned = Script.invoke((args), (), ())[0]
@@ -615,7 +617,8 @@ class _A2B(object, metaclass = _Singleton):
             raise TypeError("Access2Base error: method '" + script + "' in Basic module '" + module + "' call error. Check its arguments.")
         else:
             if Returned is None:
-                if cls.VerifyNoError(): return None
+                if cls.VerifyNoError():
+                    return None
             return Returned
 
     @classmethod
@@ -632,7 +635,8 @@ class _A2B(object, metaclass = _Singleton):
         :param args: the arguments of the method, if any
         :return: the value returned by the execution of the Basic routine
         """
-        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if COMPONENTCONTEXT is None:
+            A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         # Intercept special call to Application.Events()
         if basic == Application.basicmodule and script == 'Events':
             Script = cls.xScript('PythonEventsWrapper', _WRAPPERMODULE)
@@ -667,7 +671,8 @@ class _A2B(object, metaclass = _Singleton):
             else:                               # UNO object
                 return Returned[0]
         elif Returned[0] is None:
-            if cls.VerifyNoError(): return None
+            if cls.VerifyNoError():
+                return None
         else: # Should not happen
             return Returned[0]
 
@@ -756,7 +761,8 @@ class Application(object, metaclass = _Singleton):
     @classmethod
     def OpenConnection(cls, thisdatabasedocument = acConstants.Missing):
         global THISDATABASEDOCUMENT
-        if COMPONENTCONTEXT is None: A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
+        if COMPONENTCONTEXT is None:
+            A2BConnect()     #   Connection from inside LibreOffice is done at first API invocation
         if DESKTOP is not None:
             THISDATABASEDOCUMENT = DESKTOP.getCurrentComponent()
             return _A2B.invokeMethod('OpenConnection', 'Application', THISDATABASEDOCUMENT)
@@ -844,7 +850,8 @@ class DoCmd(object, metaclass = _Singleton):
     @classmethod
     def OutputTo(cls, objecttype, objectname = '', outputformat = '', outputfile = '', autostart = False, templatefile = ''
         , encoding = acConstants.acUTF8Encoding, quality = acConstants.acExportQualityPrint):
-        if objecttype == acConstants.acOutputForm: encoding = 0
+        if objecttype == acConstants.acOutputForm:
+            encoding = 0
         return cls.W(_vbMethod, cls.basicmodule, 'OutputTo', objecttype, objectname, outputformat
                            , outputfile, autostart, templatefile, encoding, quality)
     @classmethod
@@ -896,19 +903,23 @@ class Basic(object, metaclass = _Singleton):
 
     @classmethod
     def DateAdd(cls, add, count, datearg):
-        if isinstance(datearg, datetime.datetime): datearg = datearg.isoformat()
+        if isinstance(datearg, datetime.datetime):
+            datearg = datearg.isoformat()
         dateadd = cls.M('PyDateAdd', _WRAPPERMODULE, add, count, datearg)
         return datetime.datetime.strptime(dateadd, acConstants.FromIsoFormat)
 
     @classmethod
     def DateDiff(cls, add, date1, date2, weekstart = 1, yearstart = 1):
-        if isinstance(date1, datetime.datetime): date1 = date1.isoformat()
-        if isinstance(date2, datetime.datetime): date2 = date2.isoformat()
+        if isinstance(date1, datetime.datetime):
+            date1 = date1.isoformat()
+        if isinstance(date2, datetime.datetime):
+            date2 = date2.isoformat()
         return cls.M('PyDateDiff', _WRAPPERMODULE, add, date1, date2, weekstart, yearstart)
 
     @classmethod
     def DatePart(cls, add, datearg, weekstart = 1, yearstart = 1):
-        if isinstance(datearg, datetime.datetime): datearg = datearg.isoformat()
+        if isinstance(datearg, datetime.datetime):
+            datearg = datearg.isoformat()
         return cls.M('PyDatePart', _WRAPPERMODULE, add, datearg, weekstart, yearstart)
 
     @classmethod
@@ -1011,7 +1022,7 @@ class _BasicObject(object):
         elif name in self.classProperties:
             if self.internal:       # internal = True forces property setting even if property is read-only
                 pass
-            elif self.classProperties[name] == True: # True == Editable
+            elif self.classProperties[name]: # True == Editable
                 self.W(_vbLet, self.objectreference, name, value)
             else:
                 raise AttributeError("type object '" + self.objecttype + "' has no editable attribute '" + name + "'")
@@ -1024,7 +1035,8 @@ class _BasicObject(object):
 
     def __repr__(self):
         repr = "Basic object (type='" + self.objecttype + "', index=" + str(self.objectreference)
-        if len(self.name) > 0: repr += ", name='" + self.name + "'"
+        if len(self.name) > 0:
+            repr += ", name='" + self.name + "'"
         return repr + ")"
 
     def _Reset(self, propertyname, basicreturn = None):
@@ -1223,7 +1235,8 @@ class _Database(_BasicObject):
         return self.W(_vbMethod, self.objectreference, 'OpenSQL', SQL, option)
     def OutputTo(self, objecttype, objectname = '', outputformat = '', outputfile = '', autostart = False, templatefile = ''
         , encoding = acConstants.acUTF8Encoding, quality = acConstants.acExportQualityPrint):
-        if objecttype == acConstants.acOutputForm: encoding = 0
+        if objecttype == acConstants.acOutputForm:
+            encoding = 0
         return self.W(_vbMethod, self.objectreference, 'OutputTo', objecttype, objectname, outputformat, outputfile
                       , autostart, templatefile, encoding, quality)
     def QueryDefs(self, index = acConstants.Missing):
@@ -1337,7 +1350,7 @@ class _Module(_BasicObject):
         Returned = self.W(_vbMethod, self.objectreference, 'Find', target, startline, startcolumn, endline
                       , endcolumn, wholeword, matchcase, patternsearch)
         if isinstance(Returned, tuple):
-            if Returned[0] == True and len(Returned) == 5:
+            if Returned[0] and len(Returned) == 5:
                 self.startline = Returned[1]
                 self.startcolumn = Returned[2]
                 self.endline = Returned[3]

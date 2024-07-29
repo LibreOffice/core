@@ -9,7 +9,6 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict
 
 from tempfile import TemporaryDirectory
 import os.path
@@ -24,8 +23,7 @@ class GpgEncryptTest(UITestCase):
         # TODO: Maybe deduplicate with sw/qa/uitest/writer_tests8/save_with_password_test_policy.py
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "testfile.odt")
-            with self.ui_test.create_doc_in_start_center("writer") as document:
-                MainWindow = self.xUITest.getTopFocusWindow()
+            with self.ui_test.create_doc_in_start_center("writer"):
                 with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="") as xSaveDialog:
                     xFileName = xSaveDialog.getChild("file_name")
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

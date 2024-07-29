@@ -81,7 +81,8 @@ def _SF_Dictionary__ImportFromJson(jsonstr: str):  # used by Dictionary.ImportFr
             item = None
         elif isinstance(value, list):  # check every member of the list is not a (sub)dict
             for i in range(len(value)):
-                if isinstance(value[i], dict): value[i] = None
+                if isinstance(value[i], dict):
+                    value[i] = None
         result.append((key, item))
     return result
 

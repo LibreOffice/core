@@ -32,7 +32,7 @@ class ImporterTestCase(unittest.TestCase):
                            "com.sun.star.test.bridge.CppTestObject",self.ctx)
 
       def testStandard( self ):
-          self.assertTrue( IllegalArgumentException != None, "none-test" )
+          self.assertTrue( IllegalArgumentException is not None, "none-test" )
           self.assertRaises( IllegalArgumentException, self.tobj.raiseException, 1,"foo",self.tobj)
                  
           self.assertTrue( TWO == uno.Enum( "test.testtools.bridgetest.TestEnum","TWO"), "enum" )
@@ -49,10 +49,10 @@ class ImporterTestCase(unittest.TestCase):
       def testDynamicComponentRegistration( self ):
           ctx = uno.getComponentContext()
           self.assertTrue(
-              not ("com.sun.star.connection.Acceptor" in ctx.ServiceManager.getAvailableServiceNames()),
+              "com.sun.star.connection.Acceptor" not in ctx.ServiceManager.getAvailableServiceNames(),
               "precondition for dynamic component registration test is not fulfilled" )
           self.assertTrue(
-              not ("com.sun.star.connection.Connector" in ctx.ServiceManager.getAvailableServiceNames()),
+              "com.sun.star.connection.Connector" not in ctx.ServiceManager.getAvailableServiceNames(),
               "precondition for dynamic component registration test is not fulfilled" )
           unohelper.addComponentsToContext(
               ctx , ctx, ("acceptor.uno","connector.uno"), "com.sun.star.loader.SharedLibrary" )

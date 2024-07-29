@@ -39,7 +39,7 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
         if callable( self.oProcToCall ):
             try:
                 self.oProcToCall()
-            except:
+            except Exception:
                 self.oProcToCall(oItemEvent)
 
     def disposing(self, Event):

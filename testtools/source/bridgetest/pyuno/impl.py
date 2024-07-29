@@ -169,8 +169,8 @@ class TestHelperCase( unittest.TestCase ):
             try:
                   uno.setCurrentContext(
                         unohelper.CurrentContext( oldContext,{"My42":42}) )
-                  self.assertTrue( 42 == uno.getCurrentContext().getValueByName( "My42" ) )
-                  self.assertTrue( None == uno.getCurrentContext().getValueByName( "My43" ) )
+                  self.assertTrue( uno.getCurrentContext().getValueByName( "My42" ) == 42 )
+                  self.assertTrue( uno.getCurrentContext().getValueByName( "My43" ) is None )
             finally:
                   uno.setCurrentContext( oldContext )
           
