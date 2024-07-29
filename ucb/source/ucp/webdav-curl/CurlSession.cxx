@@ -526,7 +526,7 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
         {
             continue;
         }
-        auto const nColon(line.find(':'));
+        const std::string_view::size_type nColon(line.find(':'));
         if (nColon == std::string_view::npos)
         {
             {
@@ -542,13 +542,12 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
         // case insensitive; must be ASCII
         auto const name(::rtl::OStringToOUString(OString(line.substr(0, nColon)).toAsciiLowerCase(),
                                                  RTL_TEXTENCODING_ASCII_US));
-        sal_Int32 nStart(nColon + 1);
-        while (nStart < static_cast<sal_Int32>(line.size())
-               && (line[nStart] == ' ' || line[nStart] == '\t'))
+        std::string_view::size_type nStart(nColon + 1);
+        while (nStart < line.size() && (line[nStart] == ' ' || line[nStart] == '\t'))
         {
             ++nStart;
         }
-        sal_Int32 nEnd(line.size());
+        std::string_view::size_type nEnd(line.size());
         while (nStart < nEnd && (line[nEnd - 1] == ' ' || line[nEnd - 1] == '\t'))
         {
             --nEnd;
