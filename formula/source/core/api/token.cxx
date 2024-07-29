@@ -418,8 +418,6 @@ bool FormulaTokenArray::AddFormulaToken(
                 sal_Int32 nValue = rToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocDBArea )
                     Add( new formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
-                else if ( eOpCode == ocTableRef )
-                    bError = true;  /* TODO: implementation */
                 else if ( eOpCode == ocSpaces )
                     Add( new formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
                 else

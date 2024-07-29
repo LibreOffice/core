@@ -189,6 +189,18 @@ constants FormulaMapGroupSpecialOffset
     const long WHITESPACE = 13;
 
 
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to an item of a database range used in
+        formulas.
+
+        <p>The FormulaToken::Data member shall contain a struct of type
+        `TableRefToken`.</p>
+
+        @since LibreOffice 25.2
+     */
+    const long TABLE_REF = 14;
+
+
 };
 
 

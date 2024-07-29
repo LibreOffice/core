@@ -3476,6 +3476,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	TableFilterField3 \
 	TableOperationMode \
 	TablePageBreakData \
+	TableRefToken \
 	TableValidationVisibility \
 	ValidationAlertStyle \
 	ValidationType \

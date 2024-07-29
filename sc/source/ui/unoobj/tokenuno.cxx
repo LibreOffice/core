@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/sheet/NameToken.hpp>
+#include <com/sun/star/sheet/TableRefToken.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svl/itemprop.hxx>
@@ -143,6 +144,14 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
         SetCompilerFlags( aCompiler );
 
         std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString( aFormula );
+        if (pCode->HasOpCode(ocTableRef))
+        {
+            FormulaError nErr = pCode->GetCodeError();
+            aCompiler.EnableJumpCommandReorder(true);
+            aCompiler.CompileTokenArray();  // needed for corresponding inner reference
+            pCode->DelRPN();                // can be discarded
+            pCode->SetCodeError(nErr);      // reset to parsing error, if any
+        }
         ScTokenConversion::ConvertToTokenSequence( rDoc, aRet, *pCode );
     }
 
@@ -442,10 +451,39 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     break;
                 case svIndex:
                     {
-                        sheet::NameToken aNameToken;
-                        aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
-                        aNameToken.Sheet = rToken.GetSheet();
-                        rAPI.Data <<= aNameToken;
+                        const ScTableRefToken* pTR;
+                        if (rToken.GetOpCode() == ocTableRef && (pTR = dynamic_cast<const ScTableRefToken*>(&rToken)))
+                        {
+                            sheet::TableRefToken aTableRefToken;
+                            aTableRefToken.Index = static_cast<sal_Int32>( pTR->GetIndex());
+                            aTableRefToken.Item = static_cast<sal_Int16>( pTR->GetItem());
+                            const FormulaToken* pRef = pTR->GetAreaRefRPN();
+                            assert(pRef && "something forgot to create RPN for ocTableRef inner reference");
+                            if (pRef)
+                            {
+                                switch (pRef->GetType())
+                                {
+                                    case svSingleRef:
+                                        lcl_SingleRefToApi( aTableRefToken.Reference.Reference1, *pRef->GetSingleRef());
+                                        aTableRefToken.Reference.Reference2 = aTableRefToken.Reference.Reference1;
+                                    break;
+                                    case svDoubleRef:
+                                        lcl_SingleRefToApi( aTableRefToken.Reference.Reference1, *pRef->GetSingleRef());
+                                        lcl_SingleRefToApi( aTableRefToken.Reference.Reference2, *pRef->GetSingleRef2());
+                                    break;
+                                    default:
+                                        ;   // nothing
+                                }
+                            }
+                            rAPI.Data <<= aTableRefToken;
+                        }
+                        else
+                        {
+                            sheet::NameToken aNameToken;
+                            aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
+                            aNameToken.Sheet = rToken.GetSheet();
+                            rAPI.Data <<= aNameToken;
+                        }
                     }
                     break;
                 case svMatrix:

@@ -51,6 +51,7 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/NameToken.hpp>
+#include <com/sun/star/sheet/TableRefToken.hpp>
 #include <utility>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -1195,8 +1196,36 @@ bool ScTokenArray::AddFormulaToken(
                         }
                         else if (eOpCode == ocDBArea)
                             AddDBRange(aTokenData.Index);
-                        else if (eOpCode == ocTableRef)
-                            bError = true;  /* TODO: implementation */
+                        else
+                            bError = true;
+                    }
+                    else if ( aType.equals( cppu::UnoType<sheet::TableRefToken>::get() ) )
+                    {
+                        if (eOpCode == ocTableRef)
+                        {
+                            sheet::TableRefToken aTokenData;
+                            rToken.Data >>= aTokenData;
+                            ScTableRefToken* pToken = new ScTableRefToken( aTokenData.Index,
+                                    static_cast<ScTableRefToken::Item>(aTokenData.Item));
+                            if (Add(pToken))    // else pToken is deleted
+                            {
+                                if (aTokenData.Reference.Reference1 == aTokenData.Reference.Reference2)
+                                {
+                                    ScSingleRefData aRefData;
+                                    lcl_SingleRefToCalc( aRefData, aTokenData.Reference.Reference1 );
+                                    pToken->SetAreaRefRPN( new ScSingleRefToken( *mxSheetLimits, aRefData));
+                                }
+                                else
+                                {
+                                    ScComplexRefData aRefData;
+                                    lcl_SingleRefToCalc( aRefData.Ref1, aTokenData.Reference.Reference1 );
+                                    lcl_SingleRefToCalc( aRefData.Ref2, aTokenData.Reference.Reference2 );
+                                    pToken->SetAreaRefRPN( new ScDoubleRefToken( *mxSheetLimits, aRefData));
+                                }
+                            }
+                            else
+                                bError = true;
+                        }
                         else
                             bError = true;
                     }

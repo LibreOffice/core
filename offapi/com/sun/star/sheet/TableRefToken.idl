@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** contains the information regarding table structured reference tokens
+
+    @see DatabaseRange
+    @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::TABLE_REF
+
+    @since LibreOffice 25.2
+ */
+struct TableRefToken
+{
+    /** The index of the database range. This index can be obtained from
+        the database range using its DatabaseRange::TokenIndex property.
+     */
+    long                Index;
+
+
+    /** The item specifier, type of the table reference within the
+        database range.
+     */
+    short               Item;
+
+
+    /** The corresponding cell range reference.
+     */
+    ComplexReference    Reference;
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

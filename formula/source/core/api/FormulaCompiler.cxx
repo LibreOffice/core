@@ -529,10 +529,10 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::SPACES            , ocSpaces }         ,
             { FormulaMapGroupSpecialOffset::MAT_REF           , ocMatRef }         ,
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
-            /* TODO: { FormulaMapGroupSpecialOffset::TABLE_REF         , ocTableRef }       , */
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
             { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     ,
-            { FormulaMapGroupSpecialOffset::WHITESPACE        , ocWhitespace }
+            { FormulaMapGroupSpecialOffset::WHITESPACE        , ocWhitespace }     ,
+            { FormulaMapGroupSpecialOffset::TABLE_REF         , ocTableRef }
         };
         const size_t nCount = SAL_N_ELEMENTS(aMap);
         // Preallocate vector elements.
