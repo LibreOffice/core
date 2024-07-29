@@ -72,7 +72,7 @@ namespace sdr::properties
         }
 
         void PageProperties::SetStyleSheet(SfxStyleSheet* /*pStyleSheet*/, bool /*bDontRemoveHardAttr*/,
-                bool /*bBroadcast*/)
+                bool /*bBroadcast*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // override to legally ignore the StyleSheet here
         }

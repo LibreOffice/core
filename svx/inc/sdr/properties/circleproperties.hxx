@@ -48,7 +48,7 @@ namespace sdr::properties
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast) override;
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true) override;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created

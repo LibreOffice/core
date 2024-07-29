@@ -80,7 +80,7 @@ namespace sdr::properties
 
             // set a new StyleSheet
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast) override;
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true) override;
 
             // get the local StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const override;

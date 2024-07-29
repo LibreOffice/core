@@ -74,7 +74,7 @@ namespace sdr::properties
         }
 
         void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/,
-                bool /*bBroadcast*/)
+                bool /*bBroadcast*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             assert(!"EmptyProperties::SetStyleSheet() should never be called");
         }

@@ -78,10 +78,10 @@ namespace sdr::properties
         }
 
         void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast)
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
+            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight);
 
             // local changes
             SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());

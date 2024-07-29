@@ -219,7 +219,7 @@ namespace sdr::properties
         }
 
         void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/,
-                bool /*bBroadcast*/)
+                bool /*bBroadcast*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // no StyleSheet in DefaultProperties
         }

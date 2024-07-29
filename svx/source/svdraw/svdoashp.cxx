@@ -2882,11 +2882,11 @@ rtl::Reference<SdrObject> SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bo
     return pRetval;
 }
 
-void SdrObjCustomShape::InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast )
+void SdrObjCustomShape::InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight )
 {
     // #i40944#
     InvalidateRenderGeometry();
-    SdrObject::InternalSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr, bBroadcast );
+    SdrObject::InternalSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight );
 }
 
 void SdrObjCustomShape::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)

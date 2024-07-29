@@ -2282,14 +2282,14 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
     SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect0);
 }
 
-void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
+void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bAdjustTextFrameWidthAndHeight)
 {
-    InternalSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, false);
+    InternalSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, false, bAdjustTextFrameWidthAndHeight);
 }
 
-void SdrObject::InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast)
+void SdrObject::InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
 {
-    GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
+    GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight);
 }
 
 // Broadcasting while setting attributes is managed by the AttrObj.

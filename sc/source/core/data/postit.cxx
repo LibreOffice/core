@@ -659,7 +659,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     if (!xInitData->maStyleName.isEmpty())
     {
         if (auto pStyleSheet = mrDoc.GetStyleSheetPool()->Find(xInitData->maStyleName, SfxStyleFamily::Frame))
-            maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+            maNoteData.mxCaption->NbcSetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true, /*bAdjustTextFrameWidthAndHeight*/false);
 
         if (xInitData->moItemSet)
             maNoteData.mxCaption->SetMergedItemSet(*xInitData->moItemSet);
@@ -667,7 +667,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     else
     {
         if (auto pStyleSheet = mrDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame))
-            maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+            maNoteData.mxCaption->NbcSetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true, /*bAdjustTextFrameWidthAndHeight*/false);
 
         // copy all items and reset shadow items
         if (xInitData->moItemSet)

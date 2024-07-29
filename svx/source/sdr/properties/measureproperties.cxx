@@ -84,10 +84,10 @@ namespace sdr::properties
         }
 
         void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast)
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
+            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight);
 
             // local changes
             // get access to dimension line object

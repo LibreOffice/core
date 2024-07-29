@@ -243,10 +243,10 @@ namespace sdr::properties
         }
 
         void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast)
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
+            AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight);
 
             // #i101556# StyleSheet has changed -> new version
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
@@ -349,12 +349,12 @@ namespace sdr::properties
 
                         std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
                         rOutliner.Clear();
-                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText);
+                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText, bAdjustTextFrameWidthAndHeight);
                     }
                 }
             }
 
-            if(rObj.IsTextFrame() && !rObj.getSdrModelFromSdrObject().isLocked())
+            if(rObj.IsTextFrame() && !rObj.getSdrModelFromSdrObject().isLocked() && bAdjustTextFrameWidthAndHeight)
                 rObj.NbcAdjustTextFrameWidthAndHeight();
         }
 

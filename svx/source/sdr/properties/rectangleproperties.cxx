@@ -55,10 +55,10 @@ namespace sdr::properties
 
         // set a new StyleSheet and broadcast
         void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast)
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
         {
             // call parent (always first thing to do, may create the SfxItemSet)
-            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast);
+            TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bBroadcast, bAdjustTextFrameWidthAndHeight);
 
             // local changes
             SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());

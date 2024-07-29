@@ -619,7 +619,9 @@ public:
     // if bDontRemoveHardAttr is false, set all attributes, which were set in the style sheet, to their default value
     // if true, all hard attributes keep their values
     void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
-    void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    //              text layout right now.
+    void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bAdjustTextFrameWidthAndHeight = true);
     SfxStyleSheet* GetStyleSheet() const;
 
     virtual bool HasTextEdit() const;
@@ -944,7 +946,10 @@ protected:
 
     const SfxItemSet* getBackgroundFillSet() const;
 
-    virtual void InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast);
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    //              text layout right now.
+    virtual void InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet,
+                    bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true);
 
 private:
     struct Impl;

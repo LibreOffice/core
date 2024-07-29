@@ -220,7 +220,7 @@ namespace sdr::properties
         }
 
         void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
-                bool bBroadcast)
+                bool bBroadcast, bool bAdjustTextFrameWidthAndHeight)
         {
             const SdrObjList* pSub(static_cast<const E3dScene&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
@@ -231,7 +231,7 @@ namespace sdr::properties
                 if(bBroadcast)
                     pObj->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
                 else
-                    pObj->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                    pObj->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr, bAdjustTextFrameWidthAndHeight);
             }
         }
 

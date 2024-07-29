@@ -128,7 +128,7 @@ protected:
 
     Size m_aSuggestedTextFrameSize;
 
-    virtual void InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast ) override;
+    virtual void InternalSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true ) override;
 
 public:
     bool UseNoFillStyle() const;
