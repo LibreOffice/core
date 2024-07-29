@@ -1225,6 +1225,8 @@ void OutlinerView::HideCursor(bool bDeactivate)
     pEditView->HideCursor(bDeactivate);
 }
 
+bool OutlinerView::IsCursorVisible() const { return pEditView->IsCursorVisible(); }
+
 void OutlinerView::SetWindow( vcl::Window* pWin )
 {
     pEditView->SetWindow( pWin );

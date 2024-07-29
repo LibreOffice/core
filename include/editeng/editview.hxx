@@ -207,6 +207,7 @@ public:
     tools::Rectangle       GetEditCursor() const;
     void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true, bool bActivate = false );
     void            HideCursor( bool bDeactivate = false );
+    bool IsCursorVisible() const;
 
     void            SetSelectionMode( EESelectionMode eMode );
 
