@@ -562,9 +562,12 @@ void ContentNode::SetChar(sal_Int32 nPos, sal_Unicode c)
     maString = maString.replaceAt(nPos, 1, rtl::OUStringChar(c));
 }
 
-void ContentNode::Insert(std::u16string_view rStr, sal_Int32 nPos)
+void ContentNode::Insert(const OUString& rStr, sal_Int32 nPos)
 {
-    maString = maString.replaceAt(nPos, 0, rStr);
+    if (nPos == 0 && maString.getLength() == 0)
+        maString = rStr; // avoid allocation
+    else
+        maString = maString.replaceAt(nPos, 0, rStr);
 }
 
 void ContentNode::Append(std::u16string_view rStr)

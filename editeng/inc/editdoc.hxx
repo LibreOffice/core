@@ -171,7 +171,7 @@ public:
     EditPaM         Clear();
     EditPaM         RemoveText();
     void            RemoveChars( EditPaM aPaM, sal_Int32 nChars );
-    EditPaM         InsertText( EditPaM aPaM, std::u16string_view rStr );
+    EditPaM         InsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM         InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );

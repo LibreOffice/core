@@ -2867,7 +2867,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                         nEnd2 = aLine.getLength();    // not dereference!
 
                     if ( nEnd2 > nStart2 )
-                        aPaM = maEditDoc.InsertText( aPaM, aLine.subView( nStart2, nEnd2-nStart2 ) );
+                        aPaM = maEditDoc.InsertText( aPaM, aLine.copy( nStart2, nEnd2-nStart2 ) );
                     if ( nEnd2 < aLine.getLength() )
                     {
                         aPaM = maEditDoc.InsertFeature( aPaM, aTabItem );

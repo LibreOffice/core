@@ -163,7 +163,7 @@ public:
     void UnExpandPositions(sal_Int32& rStartPos, sal_Int32& rEndPos);
 
     void SetChar(sal_Int32 nPos, sal_Unicode c);
-    void Insert(std::u16string_view rStr, sal_Int32 nPos);
+    void Insert(const OUString& rStr, sal_Int32 nPos);
     void Append(std::u16string_view rStr);
     void Erase(sal_Int32 nPos);
     void Erase(sal_Int32 nPos, sal_Int32 nCount);
