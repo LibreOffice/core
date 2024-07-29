@@ -3460,6 +3460,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     SolarMutexGuard aGuard;
 
     OUString sThemeName;
+    OUString sBackgroundThemeName;
 
     if (DrawViewShell* pViewShell = GetViewShell())
     {
@@ -3474,6 +3475,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
                 mpDoc->SetOnlineSpell(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
                 sThemeName = rValue.Value.get<OUString>();
+            else if (rValue.Name == ".uno:InvertBackground" && rValue.Value.has<OUString>())
+                sBackgroundThemeName = rValue.Value.get<OUString>();
         }
 
         // Disable comments if requested
@@ -3524,6 +3527,14 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
             { "NewTheme", uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+    }
+    if (!sBackgroundThemeName.isEmpty())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(sBackgroundThemeName) }
+        }));
+        comphelper::dispatchCommand(".uno:InvertBackground", aPropertyValues);
     }
 }
 

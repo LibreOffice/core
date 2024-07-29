@@ -1316,6 +1316,7 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     SC_MOD()->SetAppOptions(aAppOptions);
 
     OUString sThemeName;
+    OUString sBackgroundThemeName;
 
     for (const beans::PropertyValue& rValue : rArguments)
     {
@@ -1327,6 +1328,8 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
         }
         else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
             sThemeName = rValue.Value.get<OUString>();
+        else if (rValue.Name == ".uno:InvertBackground" && rValue.Value.has<OUString>())
+            sBackgroundThemeName = rValue.Value.get<OUString>();
     }
 
     // show us the text exactly
@@ -1352,6 +1355,14 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
             { "NewTheme", uno::Any(sThemeName) }
         }));
         comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+    }
+    if (!sBackgroundThemeName.isEmpty())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(sBackgroundThemeName) }
+        }));
+        comphelper::dispatchCommand(".uno:InvertBackground", aPropertyValues);
     }
 }
 
