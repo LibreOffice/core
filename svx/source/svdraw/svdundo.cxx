@@ -983,38 +983,38 @@ OUString SdrUndoSort::GetComment() const
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
     : SdrUndoObj(rNewObj)
-    , bNewTextAvailable(false)
-    , bEmptyPresObj(false)
+    , m_bNewTextAvailable(false)
+    , m_bEmptyPresObj(false)
     , mnText(nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
-        pOldText = *pText->GetOutlinerParaObject();
+        m_pOldText = *pText->GetOutlinerParaObject();
 
-    bEmptyPresObj = rNewObj.IsEmptyPresObj();
+    m_bEmptyPresObj = rNewObj.IsEmptyPresObj();
 }
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
 {
-    pOldText.reset();
-    pNewText.reset();
+    m_pOldText.reset();
+    m_pNewText.reset();
 }
 
 bool SdrUndoObjSetText::IsDifferent() const
 {
-    if (!pOldText || !pNewText)
-        return pOldText || pNewText;
-    return *pOldText != *pNewText;
+    if (!m_pOldText || !m_pNewText)
+        return m_pOldText || m_pNewText;
+    return *m_pOldText != *m_pNewText;
 }
 
 void SdrUndoObjSetText::AfterSetText()
 {
-    if (!bNewTextAvailable)
+    if (!m_bNewTextAvailable)
     {
         SdrText* pText = static_cast< SdrTextObj*>( mxObj.get() )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
-            pNewText = *pText->GetOutlinerParaObject();
-        bNewTextAvailable=true;
+            m_pNewText = *pText->GetOutlinerParaObject();
+        m_bNewTextAvailable=true;
     }
 }
 
@@ -1033,7 +1033,7 @@ void SdrUndoObjSetText::Undo()
     ImpShowPageOfThisObject();
 
     // save old text for Redo
-    if(!bNewTextAvailable)
+    if(!m_bNewTextAvailable)
     {
         AfterSetText();
     }
@@ -1042,10 +1042,10 @@ void SdrUndoObjSetText::Undo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        pTarget->NbcSetOutlinerParaObjectForText(pOldText, pText);
+        pTarget->NbcSetOutlinerParaObjectForText(m_pOldText, pText);
     }
 
-    pTarget->SetEmptyPresObj(bEmptyPresObj);
+    pTarget->SetEmptyPresObj(m_bEmptyPresObj);
     pTarget->ActionChanged();
 
     // #i124389# if it's a table, also need to relayout TextFrame
@@ -1075,7 +1075,7 @@ void SdrUndoObjSetText::Redo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        pTarget->NbcSetOutlinerParaObjectForText( pNewText, pText );
+        pTarget->NbcSetOutlinerParaObjectForText( m_pNewText, pText );
     }
 
     pTarget->ActionChanged();
@@ -1108,7 +1108,7 @@ OUString SdrUndoObjSetText::GetSdrRepeatComment() const
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 {
     const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
-    if (!(bNewTextAvailable && rMarkList.GetMarkCount() != 0))
+    if (!(m_bNewTextAvailable && rMarkList.GetMarkCount() != 0))
         return;
 
     const SdrMarkList& rML=rView.GetMarkedObjectList();
@@ -1130,7 +1130,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             if( bUndo )
                 rView.AddUndo(std::make_unique<SdrUndoObjSetText>(*pTextObj,0));
 
-            pTextObj->SetOutlinerParaObject(pNewText);
+            pTextObj->SetOutlinerParaObject(m_pNewText);
         }
     }
 
@@ -1142,7 +1142,7 @@ bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
     bool bOk = false;
     const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
-    if (bNewTextAvailable && rMarkList.GetMarkCount() != 0) {
+    if (m_bNewTextAvailable && rMarkList.GetMarkCount() != 0) {
         bOk=true;
     }
     return bOk;

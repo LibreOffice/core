@@ -421,11 +421,11 @@ public:
 class SVXCORE_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
     std::optional<OutlinerParaObject>
-                                pOldText;
+                                m_pOldText;
     std::optional<OutlinerParaObject>
-                                pNewText;
-    bool                        bNewTextAvailable;
-    bool                        bEmptyPresObj;
+                                m_pNewText;
+    bool                        m_bNewTextAvailable;
+    bool                        m_bEmptyPresObj;
     sal_Int32                   mnText;
 
 public:
