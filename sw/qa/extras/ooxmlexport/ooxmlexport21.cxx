@@ -658,7 +658,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     // given a compat12 VML document with wrap-through blue rect that doesn't mention allowInCell
 
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
-    CPPUNIT_ASSERT_EQUAL(isExported(), getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nRectBottom
