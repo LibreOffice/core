@@ -285,17 +285,17 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     ImplInsertByName( aName, aElement );
 }
 
-static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool const * pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static bool getByNameFromPool( std::u16string_view rSearchName, SfxItemPool const * pPool, SfxItemType eItemType, uno::Any& rAny )
 {
     if (pPool)
     {
         ItemSurrogates aSurrogates;
-        pPool->GetItemSurrogates(aSurrogates, nWhich);
+        pPool->GetItemSurrogatesForItem(aSurrogates, eItemType);
         for (const SfxPoolItem* p : aSurrogates)
         {
             const NameOrIndex *pItem = static_cast<const NameOrIndex*>(p);
 
-            if( pItem && pItem->GetName() == rSearchName )
+            if( pItem->GetName() == rSearchName )
             {
                 pItem->QueryValue( rAny );
                 return true;
@@ -319,10 +319,10 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     {
         do
         {
-            if (getByNameFromPool(aName, mpModelPool, XATTR_LINESTART, aAny))
+            if (getByNameFromPool(aName, mpModelPool, SfxItemType::XLineStartItemType, aAny)) // XATTR_LINESTART
                 break;
 
-            if (getByNameFromPool(aName, mpModelPool, XATTR_LINEEND, aAny))
+            if (getByNameFromPool(aName, mpModelPool, SfxItemType::XLineEndItemType, aAny)) // XATTR_LINEEND
                 break;
 
             throw container::NoSuchElementException();
@@ -333,15 +333,15 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     return aAny;
 }
 
-static void createNamesForPool( SfxItemPool const * pPool, sal_uInt16 nWhich, std::set< OUString >& rNameSet )
+static void createNamesForPool( SfxItemPool const * pPool, SfxItemType eItemType, std::set< OUString >& rNameSet )
 {
     ItemSurrogates aSurrogates;
-    pPool->GetItemSurrogates(aSurrogates, nWhich);
+    pPool->GetItemSurrogatesForItem(aSurrogates, eItemType);
     for (const SfxPoolItem* p : aSurrogates)
     {
         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(p);
 
-        if( pItem == nullptr || pItem->GetName().isEmpty() )
+        if( pItem->GetName().isEmpty() )
             continue;
 
         OUString aName = SvxUnogetApiNameForItem(XATTR_LINEEND, pItem->GetName());
@@ -356,10 +356,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     std::set< OUString > aNameSet;
 
     // search model pool for line starts
-    createNamesForPool( mpModelPool, XATTR_LINESTART, aNameSet );
+    createNamesForPool( mpModelPool, SfxItemType::XLineStartItemType, aNameSet ); // XATTR_LINESTART
 
     // search model pool for line ends
-    createNamesForPool( mpModelPool, XATTR_LINEEND, aNameSet );
+    createNamesForPool( mpModelPool, SfxItemType::XLineEndItemType, aNameSet ); // XATTR_LINEEND
 
     return comphelper::containerToSequence(aNameSet);
 }
@@ -379,7 +379,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     if (mpModelPool)
     {
         ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        mpModelPool->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
             pItem = static_cast<const NameOrIndex*>(p);
@@ -392,7 +392,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     if (mpModelPool)
     {
         ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+        mpModelPool->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
         for (const SfxPoolItem* p : aSurrogates)
         {
             pItem = static_cast<const NameOrIndex*>(p);
@@ -419,7 +419,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     if (mpModelPool)
     {
         ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        mpModelPool->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
             pItem = static_cast<const NameOrIndex*>(p);
@@ -431,7 +431,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     if (mpModelPool)
     {
         ItemSurrogates aSurrogates;
-        mpModelPool->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+        mpModelPool->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
         for (const SfxPoolItem* p : aSurrogates)
         {
             pItem = static_cast<const NameOrIndex*>(p);

@@ -1255,12 +1255,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
     if (!aUniqueName.isEmpty())
     {
         ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+            if( pItem->GetName() == pLineStartItem->GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
@@ -1276,12 +1276,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 
         if( !bForceNew )
         {
-            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
             for (const SfxPoolItem* p : aSurrogates)
             {
-                auto pItem = dynamic_cast<const XLineEndItem*>(p);
+                auto pItem = static_cast<const XLineEndItem*>(p);
 
-                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                if( pItem->GetName() == pLineStartItem->GetName() )
                 {
                     // if there is already an item with the same name and the same
                     // value it's ok to set it
@@ -1301,12 +1301,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
     if( !aUniqueName.isEmpty() && pPool2)
     {
         ItemSurrogates aSurrogates;
-        pPool2->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+            if( pItem->GetName() == pLineStartItem->GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
@@ -1322,12 +1322,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 
         if( !bForceNew )
         {
-            pPool2->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
             for (const SfxPoolItem* p : aSurrogates)
             {
-                auto pItem = dynamic_cast<const XLineEndItem*>(p);
+                auto pItem = static_cast<const XLineEndItem*>(p);
 
-                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                if( pItem->GetName() == pLineStartItem->GetName() )
                 {
                     // if there is already an item with the same name and the same
                     // value it's ok to set it
@@ -1353,12 +1353,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
         const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
         ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if (pItem && !pItem->GetName().isEmpty())
+            if (!pItem->GetName().isEmpty())
             {
                 if (!bForceNew && pItem->GetLineStartValue() == pLineStartItem->GetLineStartValue())
                 {
@@ -1376,12 +1376,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
             }
         }
 
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineEndItem*>(p);
+            auto pItem = static_cast<const XLineEndItem*>(p);
 
-            if (pItem && !pItem->GetName().isEmpty())
+            if (!pItem->GetName().isEmpty())
             {
                 if (!bForceNew && pItem->GetLineEndValue() == pLineStartItem->GetLineStartValue())
                 {
@@ -1500,12 +1500,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
     if (!aUniqueName.isEmpty())
     {
         ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+            if( pItem->GetName() == pLineEndItem->GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
@@ -1521,12 +1521,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
 
         if( !bForceNew )
         {
-            rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
             for (const SfxPoolItem* p : aSurrogates)
             {
-                auto pItem = dynamic_cast<const XLineEndItem*>(p);
+                auto pItem = static_cast<const XLineEndItem*>(p);
 
-                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                if( pItem->GetName() == pLineEndItem->GetName() )
                 {
                     // if there is already an item with the same name and the same
                     // value it's ok to set it
@@ -1546,12 +1546,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
     if( !aUniqueName.isEmpty() && pPool2)
     {
         ItemSurrogates aSurrogates;
-        pPool2->GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+            if( pItem->GetName() == pLineEndItem->GetName() )
             {
                 // if there is already an item with the same name and the same
                 // value it's ok to set it
@@ -1567,12 +1567,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
 
         if( !bForceNew )
         {
-            pPool2->GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+            pPool2->GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
             for (const SfxPoolItem* p : aSurrogates)
             {
-                auto pItem = dynamic_cast<const XLineEndItem*>(p);
+                auto pItem = static_cast<const XLineEndItem*>(p);
 
-                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                if( pItem->GetName() == pLineEndItem->GetName() )
                 {
                     // if there is already an item with the same name and the same
                     // value it's ok to set it
@@ -1598,12 +1598,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
         const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
         ItemSurrogates aSurrogates;
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINESTART);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineStartItemType); // XATTR_LINESTART
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineStartItem*>(p);
+            auto pItem = static_cast<const XLineStartItem*>(p);
 
-            if (pItem && !pItem->GetName().isEmpty())
+            if (!pItem->GetName().isEmpty())
             {
                 if (!bForceNew && pItem->GetLineStartValue() == pLineEndItem->GetLineEndValue())
                 {
@@ -1621,12 +1621,12 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel& rModel
             }
         }
 
-        rPool1.GetItemSurrogates(aSurrogates, XATTR_LINEEND);
+        rPool1.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XLineEndItemType); // XATTR_LINEEND
         for (const SfxPoolItem* p : aSurrogates)
         {
-            auto pItem = dynamic_cast<const XLineEndItem*>(p);
+            auto pItem = static_cast<const XLineEndItem*>(p);
 
-            if (pItem && !pItem->GetName().isEmpty())
+            if (!pItem->GetName().isEmpty())
             {
                 if (!bForceNew && pItem->GetLineEndValue() == pLineEndItem->GetLineEndValue())
                 {

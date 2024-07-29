@@ -882,19 +882,31 @@ void SfxItemPool::iterateItemSurrogates(
     }
 }
 
-void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const
+void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, SfxItemType eItemType) const
 {
-    assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
+    rTarget.clear();
     const registeredNameOrIndex& rRegistered(GetMasterPool()->maRegisteredNameOrIndex);
-    registeredNameOrIndex::const_iterator aHit(rRegistered.find(rItem.ItemType()));
+    registeredNameOrIndex::const_iterator aHit(rRegistered.find(eItemType));
     if (aHit != rRegistered.end())
     {
-        rTarget.clear();
         rTarget.reserve(aHit->second.size());
         for (const auto& entry : aHit->second)
             rTarget.push_back(entry.first);
     }
-        // rTarget = ItemSurrogates(aHit->second.begin(), aHit->second.end());
+}
+
+void SfxItemPool::GetItemSurrogatesForItem(ItemSurrogates& rTarget, const SfxPoolItem& rItem) const
+{
+    assert(rItem.isNameOrIndex() && "ITEM: only Items derived from NameOrIndex supported for this mechanism (!)");
+    rTarget.clear();
+    const registeredNameOrIndex& rRegistered(GetMasterPool()->maRegisteredNameOrIndex);
+    registeredNameOrIndex::const_iterator aHit(rRegistered.find(rItem.ItemType()));
+    if (aHit != rRegistered.end())
+    {
+        rTarget.reserve(aHit->second.size());
+        for (const auto& entry : aHit->second)
+            rTarget.push_back(entry.first);
+    }
 }
 
 void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const
