@@ -511,7 +511,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.docx")
 {
     // given an in-table, slightly rotated image vertically aligned -1cm (above) the top page margin
-    // (which is actually forced to layoutInCell, so that becomes 1cm above the paragraph instead)
+    // (which is actually forced to layoutInCell, so that becomes 1cm above the cell margin instead)
+
+    // This document is particularly tricky. The image is in cell A1 with no special cell spacing
+    // (no top/bottom margins), but Cell A2 has a custom top margin of 2cm,
+    // so that effectively drops A1's print area down as well!
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     const sal_Int32 nCellTop
@@ -538,7 +542,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
 {
     // given an in-table, group-shape vertically aligned -1.35 cm (above) the top page margin
-    // (which is actually forced to layoutInCell, so that turns into 1.35cm above the paragraph)
+    // (which is actually forced to layoutInCell, so that turns into 1.35cm above the cell margin)
+
+    // This unit test is virtually the same idea as the previous one, with the main benefit being
+    // that it causes an NS_ooxml::LN_Shape exception.
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     const sal_Int32 nShapeTop
@@ -553,10 +560,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
+    // given a compat12 VML document with wrap-through blue rect that doesn't mention allowInCell
+
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 
-    // Given a table with a rectangle anchored in it (wrap-through) that appears above the table...
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nRectBottom
         = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "bottom"_ostr).toInt32();

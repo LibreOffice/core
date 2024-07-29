@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -28,11 +29,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/GraphicImport.cxx.
-class Test : public UnoApiTest
+class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -346,6 +347,22 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
     // to leave the cell, leading to incorrect layout.
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bFollowingTextFlow);
     CPPUNIT_ASSERT(!bFollowingTextFlow);
+
+    // dump the layout
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    const OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
+    auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
+
+    // The entire blue, wrapthrough shape should be above the table that it is layoutInCell'd to.
+    const sal_Int32 nShapeBottom
+        = getXPath(pXmlDoc, "//tab/row/cell[2]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "bottom"_ostr)
+              .toInt32();
+    sal_Int32 nTableTop = getXPath(pXmlDoc, "//tab/row/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The entire table must be below the rectangle
+    CPPUNIT_ASSERT(nTableTop > nShapeBottom);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)

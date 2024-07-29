@@ -235,6 +235,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
         // This was hidden (<w:vanish/>)
         assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish"_ostr,
                     "val"_ostr, u"false"_ustr);
+
+    // pre-emptive unit test - tdf#162211
+    // given a compat12 file with wrap-through DML shape anchored in cell as layoutInCell
+    auto xShape = getShapeByName(u"Kép 1");
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
+    // the vertical offset has to be applied against the cell borders, not anchor paragraph (FRAME)
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
+
+    // the shape is "from page top", which for layoutInCell is to be applied from cell top
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nRectTop
+        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds"_ostr, "top"_ostr)
+              .toInt32();
+    sal_Int32 nTableTop = getXPath(pDump, "//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
+    CPPUNIT_ASSERT(nRectTop > nTableTop); // higher numbers are farther down the document
+    // The shape's top should be ~ 1/4 of the way down the cell, which is above the anchor para top
+    sal_Int32 nPara5Top = getXPath(pDump, "//cell/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    CPPUNIT_ASSERT(nPara5Top > nRectTop);
+
+    // The image must not go past the end of the table (and proves we have the right shape)
+    sal_Int32 nTableRight = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nRectRight
+        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds"_ostr,
+                   "right"_ostr)
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL(nTableRight, nRectRight);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119800)
