@@ -87,7 +87,7 @@ const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
 
     <p>This class replaces the former ViewShell class.</p>
 */
-class SAL_DLLPUBLIC_RTTI ViewShell
+class SD_DLLPUBLIC ViewShell
     : public SfxShell
 {
 public:
@@ -143,17 +143,17 @@ public:
 
     ::sd::View* GetView() const { return mpView; }
     inline SdrView* GetDrawView() const;
-    SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
+    DrawDocShell* GetDocSh() const;
 
     SdDrawDocument*  GetDoc() const;
 
-    SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
+    SfxViewFrame* GetViewFrame() const;
 
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
     */
     ::sd::Window* GetActiveWindow() const { return mpActiveWindow;}
-    SD_DLLPUBLIC weld::Window* GetFrameWeld() const;
+    weld::Window* GetFrameWeld() const;
 
     /** Set the active window.  When the shell is displayed in the center
         pane then the window of the ViewShellBase is also set to the given
@@ -333,7 +333,7 @@ public:
     //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
     // Exported for unit test
-    SD_DLLPUBLIC ViewShellBase& GetViewShellBase() const;
+    ViewShellBase& GetViewShellBase() const;
 
     /** Return <TRUE/> when the called view shell is the main sub shell of
         its ViewShellBase object, i.e. is display in the center pane.  This
@@ -355,7 +355,7 @@ public:
 
     /** Return the type of the shell.
     */
-    SD_DLLPUBLIC ShellType GetShellType() const; //Export for unit test
+    ShellType GetShellType() const;
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view

@@ -66,7 +66,7 @@ class ViewOverlayManager;
     overview over several slides or a textual
     overview over the text in an Impress document (OutlineViewShell).
 */
-class SAL_DLLPUBLIC_RTTI DrawViewShell
+class SD_DLLPUBLIC DrawViewShell
     : public ViewShell,
       public SfxListener,
       public utl::ConfigurationListener
@@ -223,7 +223,7 @@ public:
     void            ExecGoToLastPage (SfxRequest& rReq);
     void            GetStateGoToLastPage (SfxItemSet& rSet);
 
-    SD_DLLPUBLIC void ExecChar(SfxRequest& rReq);
+    void ExecChar(SfxRequest& rReq);
 
     void            ExecuteAnnotation (SfxRequest const & rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
@@ -246,7 +246,7 @@ public:
 
     void            ResetActualPage();
     void            ResetActualLayer();
-    SD_DLLPUBLIC bool SwitchPage(sal_uInt16 nPage, bool bAllowChangeFocus = true);
+    bool SwitchPage(sal_uInt16 nPage, bool bAllowChangeFocus = true);
     bool            IsSwitchPageAllowed() const;
 
     /**
@@ -347,7 +347,7 @@ public:
 
     /** Return a pointer to the tab control for layers.
     */
-    SD_DLLPUBLIC LayerTabBar* GetLayerTabControl(); // export for unit test
+    LayerTabBar* GetLayerTabControl();
 
     /** Renames the given slide using an SvxNameDialog
 
