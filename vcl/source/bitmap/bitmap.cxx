@@ -1211,7 +1211,7 @@ bool Bitmap::ImplConvertDown8BPP(Color const * pExtColor)
     const MapMode aMap(maPrefMapMode);
     const Size aSize(maPrefSize);
 
-    *this = aNewBmp;
+    *this = std::move(aNewBmp);
 
     maPrefMapMode = aMap;
     maPrefSize = aSize;

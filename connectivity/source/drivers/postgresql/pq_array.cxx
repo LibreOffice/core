@@ -96,7 +96,7 @@ css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
         std::vector< Any > row( 2 );
         row[0] <<= static_cast<sal_Int32>( i + index );
         row[1] = m_data[i+index-1];
-        ret[i] = row;
+        ret[i] = std::move(row);
     }
 
     return new SequenceResultSet(

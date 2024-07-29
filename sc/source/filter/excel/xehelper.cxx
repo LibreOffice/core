@@ -794,7 +794,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 }
 
                 // font color
-                aNewData.maComplexColor = aComplexColor;
+                aNewData.maComplexColor = std::move(aComplexColor);
                 Color aNewColor = aNewData.maComplexColor.getFinalColor();
 
                 if (!aFontData.maComplexColor.getFinalColor().IsRGBEqual(aNewColor))

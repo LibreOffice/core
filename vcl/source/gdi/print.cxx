@@ -982,7 +982,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     {
         ImplUpdateJobSetupPaper( aJobSetup );
         mbNewJobSetup = true;
-        maJobSetup = aJobSetup;
+        maJobSetup = std::move(aJobSetup);
         ImplUpdatePageData();
         ImplUpdateFontList();
         return true;

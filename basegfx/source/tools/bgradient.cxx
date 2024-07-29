@@ -560,7 +560,7 @@ void BColorStops::removeSpaceAtStart(double fOffset)
         }
     }
 
-    *this = aNewStops;
+    *this = std::move(aNewStops);
 }
 
 // try to detect if an empty/no-color-change area exists
@@ -730,7 +730,7 @@ void BColorStops::doApplySteps(sal_uInt16 nStepCount)
     }
 
     // apply the change to color stops
-    *this = aNewColorStops;
+    *this = std::move(aNewColorStops);
 }
 
 void BColorStops::tryToApplyBColorModifierStack(const BColorModifierStack& rBColorModifierStack)

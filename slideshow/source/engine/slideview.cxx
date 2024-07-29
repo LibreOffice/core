@@ -630,7 +630,7 @@ private:
 
         if( aNewClip != maClip )
         {
-            maClip = aNewClip;
+            maClip = std::move(aNewClip);
 
             if(mpOutputCanvas )
                 mpOutputCanvas->setClip(

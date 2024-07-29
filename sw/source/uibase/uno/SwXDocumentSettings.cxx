@@ -455,7 +455,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     if( pNewPrinter->IsKnown() )
                     {
                         // set printer only once; in _postSetValues
-                        mpPrinter = pNewPrinter;
+                        mpPrinter = std::move(pNewPrinter);
                     }
                     else
                     {

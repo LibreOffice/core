@@ -229,7 +229,7 @@ namespace svgio::svgreader
                 drawinglayer::primitive2d::Primitive2DContainer aNewTarget2;
 
                 addTextPrimitives(*this, aNewTarget2, std::move(aNewTarget));
-                aNewTarget = aNewTarget2;
+                aNewTarget = std::move(aNewTarget2);
             }
 
             if(!aNewTarget.empty())

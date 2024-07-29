@@ -1329,7 +1329,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                 {
                     aListStyleData.bCreateNewList = false;
                     aListStyleData.sListId = pCNd->GetListId();
-                    aMyNumRuleMap[pRule] = aListStyleData;
+                    aMyNumRuleMap[pRule] = std::move(aListStyleData);
                 }
 
                 bFirst = false;

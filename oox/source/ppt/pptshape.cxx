@@ -437,7 +437,7 @@ void PPTShape::addShape(
                 }
                 else
                 {
-                    aMasterTextListStyle = aSlideStyle;
+                    aMasterTextListStyle = std::move(aSlideStyle);
                 }
             }
 

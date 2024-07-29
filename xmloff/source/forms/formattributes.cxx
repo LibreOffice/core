@@ -393,7 +393,7 @@ namespace xmloff
         aAssignment.aPropertyType = _rType;
 
         // redundance, the accessor is stored in aAssignment.sAttributeName, too
-        m_aKnownProperties[nAttributeToken] = aAssignment;
+        m_aKnownProperties[nAttributeToken] = std::move(aAssignment);
         return m_aKnownProperties[nAttributeToken];
     }
 

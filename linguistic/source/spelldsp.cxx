@@ -796,7 +796,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
         {
             auto pTmpEntry = std::make_shared<LangSvcEntries_Spell>( rSvcImplNames );
             pTmpEntry->aSvcRefs = Sequence< Reference < XSpellChecker > >( nLen );
-            m_aSvcMap[ nLanguage ] = pTmpEntry;
+            m_aSvcMap[ nLanguage ] = std::move(pTmpEntry);
         }
     }
 }

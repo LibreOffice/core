@@ -409,7 +409,7 @@ void EquidistantTickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInf
 {
     ExplicitIncrementData aShiftedIncrement( m_rIncrement );
     aShiftedIncrement.BaseValue = m_rIncrement.BaseValue-m_rIncrement.Distance/2.0;
-    EquidistantTickFactory( m_rScale, aShiftedIncrement ).getAllTicks(rAllTickInfos);
+    EquidistantTickFactory( m_rScale, std::move(aShiftedIncrement) ).getAllTicks(rAllTickInfos);
 }
 
 EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< double > >& rTicks

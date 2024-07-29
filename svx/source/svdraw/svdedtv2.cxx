@@ -755,7 +755,7 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
             }
             else
             {
-                aRetval = aCandidate;
+                aRetval = std::move(aCandidate);
             }
         }
 

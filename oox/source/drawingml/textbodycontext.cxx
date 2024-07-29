@@ -76,14 +76,14 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         {
             TextRunPtr pRun = std::make_shared<TextRun>();
             mrParagraph.addRun( pRun );
-            return new RegularTextRunContext( *this, pRun );
+            return new RegularTextRunContext( *this, std::move(pRun) );
         }
         case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
         {
             TextRunPtr pRun = std::make_shared<TextRun>();
             pRun->setLineBreak();
             mrParagraph.addRun( pRun );
-            return new RegularTextRunContext( *this, pRun );
+            return new RegularTextRunContext( *this, std::move(pRun) );
         }
         case A_TOKEN( fld ):    // "CT_TextField" Text Field.
         {

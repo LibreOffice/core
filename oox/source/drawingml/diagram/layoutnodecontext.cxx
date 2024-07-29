@@ -260,7 +260,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         // CT_Choose
         LayoutAtomPtr pAtom = std::make_shared<ChooseAtom>(mpNode->getLayoutNode());
         LayoutAtom::connect(mpNode, pAtom);
-        return new ChooseContext( *this, rAttribs, pAtom );
+        return new ChooseContext( *this, rAttribs, std::move(pAtom) );
     }
     case DGM_TOKEN( forEach ):
     {

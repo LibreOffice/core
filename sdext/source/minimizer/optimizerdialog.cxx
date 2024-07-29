@@ -579,7 +579,7 @@ bool OptimizerDialog::onFinish()
             if ( aIter == rSettings.end() )
                 rSettings.push_back( aNewSettings );
             else
-                *aIter = aNewSettings;
+                *aIter = std::move(aNewSettings);
         }
     }
     if ( bSuccessfullyExecuted )

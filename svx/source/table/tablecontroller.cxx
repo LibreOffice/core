@@ -962,7 +962,8 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
         rModel, false) );
 
     // Even Cancel Button is returning positive(101) value,
-    xDlg->StartExecuteAsync([xDlg, this, xBoxItem, xBoxInfoItem](int nResult){
+    xDlg->StartExecuteAsync([xDlg, this, xBoxItem=std::move(xBoxItem),
+                             xBoxInfoItem=std::move(xBoxInfoItem)](int nResult){
         if (nResult == RET_OK)
         {
             SfxItemSet aNewSet(*(xDlg->GetOutputItemSet()));

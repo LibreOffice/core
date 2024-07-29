@@ -126,7 +126,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
         AdaptiveSubdivide(aPolyPoly);
         aPolyPoly.Optimize(nOptimizeFlags);
-        *this = aPolyPoly;
+        *this = std::move(aPolyPoly);
     }
     else
     {

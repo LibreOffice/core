@@ -496,7 +496,7 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPo
     if (!rPara.bFixedAngle) {
         // TODO: Implementation missing.
     }
-    rPoly=aPol;
+    rPoly = std::move(aPol);
 }
 
 void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)

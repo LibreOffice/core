@@ -1129,7 +1129,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     {
         OSL_FAIL("LimitChartIfAll: Ref==0");
     }
-    rRangeList = aNew;
+    rRangeList = std::move(aNew);
 }
 
 static void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )

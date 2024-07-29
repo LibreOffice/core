@@ -1768,7 +1768,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         {
             if (GraphicConverter::Import(*xStm, aGraphic) == ERRCODE_NONE)
             {
-                rGraphic = aGraphic;
+                rGraphic = std::move(aGraphic);
                 bRet = true;
             }
         }

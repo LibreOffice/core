@@ -684,7 +684,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
 
         basegfx::B2DPolyPolygon aDashed;
         basegfx::utils::applyLineDashing(aGeometry, aPattern, &aDashed);
-        aGeometry = aDashed;
+        aGeometry = std::move(aDashed);
     }
 
     // determine line color
