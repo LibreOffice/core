@@ -375,7 +375,10 @@ namespace sdr::contact
         {
             if (comphelper::IsFuzzing())
                 return true;
-            return officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get();
+            // tdf#161765: Let the user choose which animation settings to use: OS's / LO's
+            // New options: "System"/"No"/"Yes".
+            // Do respect OS's animation setting if the user has selected the option "System"
+            return MiscSettings::IsAnimatedTextAllowed();
         }
 
         // check if graphic animation is allowed.
@@ -383,9 +386,11 @@ namespace sdr::contact
         {
             if (comphelper::IsFuzzing())
                 return true;
-
-            // Related tdf#156630 respect system animation setting
-            return officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() && !MiscSettings::GetUseReducedAnimation();
+            // tdf#161765: Let the user choose which animation settings to use: OS's / LO's and
+            // don't override here LO's animation settings with OS's all-or-nothing animation setting,
+            // but do respect OS's animation setting if the user has selected the option "System".
+            // New options: "System"/"No"/"Yes"
+            return MiscSettings::IsAnimatedGraphicAllowed();
         }
 
         // print?

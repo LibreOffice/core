@@ -68,10 +68,15 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xAccessibilityTool(m_xBuilder->weld_check_button(u"acctool"_ustr))
     , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button(u"textselinreadonly"_ustr))
     , m_xTextSelectionInReadonlyImg(m_xBuilder->weld_widget(u"locktextselinreadonly"_ustr))
-    , m_xAnimatedGraphics(m_xBuilder->weld_check_button(u"animatedgraphics"_ustr))
-    , m_xAnimatedGraphicsImg(m_xBuilder->weld_widget(u"lockanimatedgraphics"_ustr))
-    , m_xAnimatedTexts(m_xBuilder->weld_check_button(u"animatedtext"_ustr))
+    , m_xAnimatedGraphics(m_xBuilder->weld_combo_box(u"animatedgraphicenabled"_ustr))
+    , m_xAnimatedGraphicsImg(m_xBuilder->weld_widget(u"lockanimatedgraphic"_ustr))
+    , m_xAnimatedGraphicsLabel(m_xBuilder->weld_label(u"animatedgraphiclabel"_ustr))
+    , m_xAnimatedOthers(m_xBuilder->weld_combo_box(u"animatedothersenabled"_ustr))
+    , m_xAnimatedOthersImg(m_xBuilder->weld_widget(u"lockanimatedothers"_ustr))
+    , m_xAnimatedOthersLabel(m_xBuilder->weld_label(u"animatedotherslabel"_ustr))
+    , m_xAnimatedTexts(m_xBuilder->weld_combo_box(u"animatedtextenabled"_ustr))
     , m_xAnimatedTextsImg(m_xBuilder->weld_widget(u"lockanimatedtext"_ustr))
+    , m_xAnimatedTextsLabel(m_xBuilder->weld_label(u"animatedtextlabel"_ustr))
     , m_xHighContrast(m_xBuilder->weld_combo_box(u"highcontrast"_ustr))
     , m_xHighContrastImg(m_xBuilder->weld_widget(u"lockhighcontrast"_ustr))
     , m_xHighContrastLabel(m_xBuilder->weld_label(u"label13"_ustr))
@@ -112,7 +117,9 @@ std::unique_ptr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create(weld::Contain
 OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label13"_ustr };
+    OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label13"_ustr,
+                          u"animationframelabel"_ustr, u"animatedgraphiclabel"_ustr, u"animatedtextlabel"_ustr,
+                          u"animatedotherslabel"_ustr, u"label11"_ustr };
 
     for (const auto& label : labels)
     {
@@ -120,8 +127,8 @@ OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { u"acctool"_ustr,      u"textselinreadonly"_ustr, u"animatedgraphics"_ustr,
-                               u"animatedtext"_ustr, u"autofontcolor"_ustr,     u"systempagepreviewcolor"_ustr };
+    OUString checkButton[] = { u"acctool"_ustr,      u"textselinreadonly"_ustr,
+                               u"autofontcolor"_ustr,     u"systempagepreviewcolor"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -137,10 +144,12 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
     if ( !officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
         officecfg::Office::Common::Accessibility::IsForPagePreviews::set(m_xPagePreviews->get_active(), batch);
-    if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::set(m_xAnimatedGraphics->get_active(), batch);
-    if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
-        officecfg::Office::Common::Accessibility::IsAllowAnimatedText::set(m_xAnimatedTexts->get_active(), batch);
+    if ( !officecfg::Office::Common::Accessibility::AllowAnimatedGraphic::isReadOnly() )
+        officecfg::Office::Common::Accessibility::AllowAnimatedGraphic::set(m_xAnimatedGraphics->get_active(), batch);
+    if ( !officecfg::Office::Common::Accessibility::AllowAnimatedOthers::isReadOnly() )
+        officecfg::Office::Common::Accessibility::AllowAnimatedOthers::set(m_xAnimatedOthers->get_active(), batch);
+    if ( !officecfg::Office::Common::Accessibility::AllowAnimatedText::isReadOnly() )
+        officecfg::Office::Common::Accessibility::AllowAnimatedText::set(m_xAnimatedTexts->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
         officecfg::Office::Common::Accessibility::IsAutomaticFontColor::set(m_xAutomaticFontColor->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
@@ -310,17 +319,27 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
         m_xPagePreviewsImg->set_visible(true);
     }
 
-    m_xAnimatedGraphics->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() );
-    if (officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly())
+    m_xAnimatedGraphics->set_active( officecfg::Office::Common::Accessibility::AllowAnimatedGraphic::get() );
+    if (officecfg::Office::Common::Accessibility::AllowAnimatedGraphic::isReadOnly())
     {
         m_xAnimatedGraphics->set_sensitive(false);
+        m_xAnimatedGraphicsLabel->set_sensitive(false);
         m_xAnimatedGraphicsImg->set_visible(true);
     }
 
-    m_xAnimatedTexts->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get() );
-    if (officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly())
+    m_xAnimatedOthers->set_active( officecfg::Office::Common::Accessibility::AllowAnimatedOthers::get() );
+    if (officecfg::Office::Common::Accessibility::AllowAnimatedOthers::isReadOnly())
+    {
+        m_xAnimatedOthers->set_sensitive(false);
+        m_xAnimatedOthersLabel->set_sensitive(false);
+        m_xAnimatedOthersImg->set_visible(true);
+    }
+
+    m_xAnimatedTexts->set_active( officecfg::Office::Common::Accessibility::AllowAnimatedText::get() );
+    if (officecfg::Office::Common::Accessibility::AllowAnimatedText::isReadOnly())
     {
         m_xAnimatedTexts->set_sensitive(false);
+        m_xAnimatedTextsLabel->set_sensitive(false);
         m_xAnimatedTextsImg->set_visible(true);
     }
 

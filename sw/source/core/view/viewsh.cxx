@@ -2706,7 +2706,10 @@ void SwViewShell::ApplyAccessibilityOptions()
     else
     {
         mpAccOptions->SetAlwaysAutoColor(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
-        mpAccOptions->SetStopAnimatedGraphics(! officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get());
+        // tdf#161765: Let user choose which animation settings to use: OS's / LO's
+        // New options: "System"/"No"/"Yes".
+        // Do respect OS's animation setting if the user has selected the option "System"
+        mpAccOptions->SetStopAnimatedGraphics(! MiscSettings::IsAnimatedGraphicAllowed());
 
         // Form view
         // Always set this option, not only if document is read-only:

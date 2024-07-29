@@ -35,10 +35,11 @@ ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, 
     OverlayObject(rColor),
     mbToggle(true)
 {
-    // tdf#155414 include system "reduce animation" preferences
-    // Allow the system's "reduce animation" preferences to disable the
-    // Calc animated border when copying a selection of cells.
-    mbAllowsAnimation = (officecfg::Office::Common::VCL::AnimationsEnabled::get() && !MiscSettings::GetUseReducedAnimation());
+    // tdf#115688: Let the user choose in the accessability option page ("Tools" --> "Options" --> "Accessibility --> "Allow other animations") if the "marching ants" animation is allowed.
+    // tdf#161765: Don't override LO's animation settings with OS's all-or-nothing animation setting,
+    // but do respect OS's animation setting if the user has selected the option "System".
+    // New options: "System"/"No"/"Yes"
+    mbAllowsAnimation = MiscSettings::IsAnimatedOthersAllowed();
     maRange = rRange;
 }
 

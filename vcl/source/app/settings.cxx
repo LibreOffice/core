@@ -2900,6 +2900,82 @@ bool MiscSettings::GetUseReducedAnimation()
     return pDefWindow->ImplGetFrame()->GetUseReducedAnimation();
 }
 
+// tdf#115688: Let the user choose in the accessability option page ("Tools" --> "Options" --> "Accessibility --> "Allow other animations") if the "marching ants" animation is allowed.
+// tdf#161765: Let the user choose which animation settings to use: OS's / LO's
+// New options: "System"/"No"/"Yes".
+// Do respect OS's animation setting if the user has selected the option "System"
+bool MiscSettings::IsAnimatedOthersAllowed()
+{
+    sal_Int16 nAllowAnimatedOthers = officecfg::Office::Common::Accessibility::AllowAnimatedOthers::get();
+    bool bIsAllowed = false;  // false is the default value, if someone sets the enum to other values than the allowed ones.
+    switch (nAllowAnimatedOthers)
+    {
+        case 0:  // "System": Use OS's setting
+            bIsAllowed = ! MiscSettings::GetUseReducedAnimation();
+            break;
+        case 1:  // "No": Disallow animation
+            bIsAllowed = false;
+            break;
+        case 2:  // "Yes": Allow animation
+            bIsAllowed = true;
+            break;
+        default:
+            SAL_WARN( "accessibility", "Invalid value of AllowAnimatedOthers: 0x" << std::hex << nAllowAnimatedOthers << std::dec);
+            break;
+    }
+    return bIsAllowed;
+}
+
+// tdf#161765: Let the user choose which animation settings to use: OS's / LO's
+// New options: "System"/"No"/"Yes".
+// Do respect OS's animation setting if the user has selected the option "System"
+bool MiscSettings::IsAnimatedGraphicAllowed()
+{
+    sal_Int16 nAllowAnimatedGraphic = officecfg::Office::Common::Accessibility::AllowAnimatedGraphic::get();
+    bool bIsAllowed = false;  // false is the default value, if someone sets the enum to other values than the allowed ones.
+    switch (nAllowAnimatedGraphic)
+    {
+        case 0:  // "System": Use OS's setting
+            bIsAllowed = ! MiscSettings::GetUseReducedAnimation();
+            break;
+        case 1:  // "No": Disallow animation
+            bIsAllowed = false;
+            break;
+        case 2:  // "Yes": Allow animation
+            bIsAllowed = true;
+            break;
+        default:
+            SAL_WARN( "accessibility", "Invalid value of officecfg::Office::Common::Accessibility::AllowAnimatedGraphic: 0x" << std::hex << nAllowAnimatedGraphic << std::dec);
+            break;
+    }
+    return bIsAllowed;
+}
+
+// tdf#161765: Let the user choose which animation settings to use: OS's / LO's
+// New options: "System"/"No"/"Yes".
+// Do respect OS's animation setting if the user has selected the option "System"
+bool MiscSettings::IsAnimatedTextAllowed()
+{
+    sal_Int16 nAllowAnimatedText = officecfg::Office::Common::Accessibility::AllowAnimatedText::get();
+    bool bIsAllowed = false;  // false is the default value, if someone sets the enum to other values than the allowed ones.
+    switch (nAllowAnimatedText)
+    {
+        case 0:  // "System": Use OS's setting
+            bIsAllowed = ! MiscSettings::GetUseReducedAnimation();
+            break;
+        case 1:  // "No": Disallow animation
+            bIsAllowed = false;
+            break;
+        case 2:  // "Yes": Allow animation
+            bIsAllowed = true;
+            break;
+        default:
+            SAL_WARN( "accessibility", "Invalid value of officecfg::Office::Common::Accessibility::AllowAnimatedText: 0x" << std::hex << nAllowAnimatedText << std::dec);
+            break;
+    }
+    return bIsAllowed;
+}
+
 HelpSettings::HelpSettings()
     : mxData(std::make_shared<ImplHelpData>())
 {

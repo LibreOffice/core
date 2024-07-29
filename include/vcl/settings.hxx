@@ -679,6 +679,9 @@ public:
     static int                      GetAppColorMode();
     // return true if system preferences are set to use reduced animation
     static bool                     GetUseReducedAnimation();
+    static bool                     IsAnimatedGraphicAllowed();
+    static bool                     IsAnimatedOthersAllowed();
+    static bool                     IsAnimatedTextAllowed();
     bool                            operator ==( const MiscSettings& rSet ) const;
     bool                            operator !=( const MiscSettings& rSet ) const;
 };

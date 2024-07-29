@@ -679,13 +679,9 @@
       </prop>
       <prop oor:name="AnimationsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Defines if the user interface animations (like "walking ant"
-          animation when copying a cell in Calc) is enabled or disabled.
-          Disabling animations makes a lot of sense on remote connections
-          (VNC), where animations increase the (always limited) amount of
-          bandwidth needed.
-          </desc>
-          <label>Defines if the user interface animations are disabled.</label>
+          <deprecated>Not used anymore</deprecated>
+          <desc>__Obsolete__:  Please use the setting "Allow other animations" found in Menu: Tools --> Options --> Accessibility.</desc>
+          <label>__Obsolete__:  Please use the setting "Allow other animations" found in Menu: Tools --> Options --> Accessibility.</label>
         </info>
         <value>true</value>
       </prop>
@@ -6034,7 +6030,8 @@
         </constraints>
         <value>4</value>
       </prop>
-      <prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="AllowAnimatedGraphic" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Accessibility Options -->
         <info>
           <desc>Indicates whether to allow the graphical animation in all SO/OO
           applications (i.e. animated GIFs and objects in Impress during
@@ -6042,13 +6039,94 @@
           Insert-Image, Animation Tool in Impress.)</desc>
           <label>Allow animated images</label>
         </info>
-        <value>true</value>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Use the OS setting for allowing animations.</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>No</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Yes</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
       </prop>
-      <prop oor:name="IsAllowAnimatedText" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="AllowAnimatedText" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Accessibility Options -->
         <info>
           <desc>Indicates whether to allow all textual animation like blinking
           and scrolling in all SO/OO applications.</desc>
           <label>Allow animated text</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Use the OS setting for allowing animations.</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>No</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Yes</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
+      <prop oor:name="AllowAnimatedOthers" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Accessibility Options -->
+        <info>
+          <desc>Indicates whether to allow certain others animations 
+          (like "marching ants" animation when copying a cell in Calc)
+          in all SO/OO applications. 
+          Disabling animations makes a lot of sense on remote connections
+          (VNC), where animations increase the (always limited) amount of
+          bandwidth needed.</desc>
+          <label>Allow other animations</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Use the OS setting for allowing animations.</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>No</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Yes</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
+      <prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <deprecated>Not used anymore</deprecated>
+          <desc>__Obsolete__:  Please use the setting "Allow animated images" found in Menu: Tools --> Options --> Accessibility.</desc>
+          <label>__Obsolete__:  Please use the setting "Allow animated images" found in Menu: Tools --> Options --> Accessibility.</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="IsAllowAnimatedText" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <deprecated>Not used anymore</deprecated>
+          <desc>__Obsolete__:  Please use the setting "Allow animated text" found in Menu: Tools --> Options --> Accessibility.</desc>
+          <label>__Obsolete__:  Please use the setting "Allow animated text" found in Menu: Tools --> Options --> Accessibility.</label>
         </info>
         <value>true</value>
       </prop>

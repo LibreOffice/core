@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore1">
@@ -27,145 +27,234 @@
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkFrame" id="frame1">
+      <object class="GtkFrame" id="animationsframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=4 -->
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkBox" id="animationsbox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
-            <property name="row-spacing">6</property>
+            <property name="spacing">8</property>
             <child>
-              <object class="GtkCheckButton" id="acctool">
-                <property name="label" translatable="yes" context="optaccessibilitypage|acctool">Support _assistive technology tools (program restart required)</property>
+              <!-- n-columns=3 n-rows=1 -->
+              <object class="GtkGrid" id="animatedgraphicgrid">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="acctool-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|acctool">Allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices. The Java Runtime Environment must be installed on your computer before you can enable assistive support.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="textselinreadonly">
-                <property name="label" translatable="yes" context="optaccessibilitypage|textselinreadonly">Use te_xt selection cursor in read-only text documents</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="textselinreadonly-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|textselinreadonly">Displays cursor in read-only documents.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="animatedgraphics">
-                <property name="label" translatable="yes" context="optaccessibilitypage|animatedgraphics">Allow animated _images</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="animatedgraphics-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedgraphics">Previews animated graphics, such as GIF images.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="animatedtext">
-                <property name="label" translatable="yes" context="optaccessibilitypage|animatedtext">Allow animated _text</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="animatedtext-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedtext">Previews animated text, such as blinking and scrolling.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="locktextselinreadonly">
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="animatedgraphiclabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedgraphiclabel">Allow animated images: </property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">animatedgraphicenabled</property>
+                    <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedgraphiclabel-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedgraphiclabel">Controls if previewing the animation of animated images (e.g. animated GIFs) is enabled. Select from “System”, “No” and “Yes”.
+“System” previews the animation of animated images according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockanimatedgraphic">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="animatedgraphicenabled">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">System</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">No</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">Yes</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedgraphicenabled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedgraphicenabled">Controls if previewing the animation of animated images (e.g. animated GIFs) is enabled. Select from “System”, “No” and “Yes”.
+“System” previews the animation of animated images according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="lockanimatedgraphics">
+              <!-- n-columns=3 n-rows=1 -->
+              <object class="GtkGrid" id="animatedtextgrid">
+                <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="lockanimatedtext">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="animatedtextlabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedtextlabel">Allow animated text:       </property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">animatedtextenabled</property>
+                    <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedtextlabel-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedtextlabel">Controls if previewing the animation of animated text (such as blinking and scrolling) is enabled. Select from “System”, “No” and “Yes”.
+“System” previews the animation of animated text according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="animatedtextenabled">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">System</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">No</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">Yes</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedtextenabled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedtextenabled">Controls if previewing the animation of animated text (such as blinking and scrolling) is enabled. Select from “System”, “No” and “Yes”.
+“System” previews the animation of animated text according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="lockanimatedtext">
+              <!-- n-columns=3 n-rows=1 -->
+              <object class="GtkGrid" id="animatedothersgrid">
+                <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
+                <property name="hexpand">True</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="animatedotherslabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedotherslabel" comments="This option allows e.g. 'running ants' animation in Calc">Allow other animations:  </property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">animatedothersenabled</property>
+                    <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedotherslabel-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedotherslabel">Controls if certain other animations (e.g. 'marching ants' animation when copying a cell in calc) are enabled. Select from “System”, “No” and “Yes”.
+“System” allows showing these certain other animations according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockanimatedothers">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="animatedothersenabled">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">System</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">No</item>
+                      <item translatable="yes" context="optaccessibilitypage|animationsenabled">Yes</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="animatedothersenabled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|animatedothersenabled">Controls if certain other animations (e.g. 'marching ants' animation when copying a cell in calc) are enabled. Select from “System”, “No” and “Yes”.
+“System” allows showing these certain other animations according to system settings.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="animationframelabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optaccessibilitypage|label1">Miscellaneous Options</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|animationframelabel">Animations</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -207,9 +296,27 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">highcontrast</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label13-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|label13">Controls if high contrast mode is used. Select from “Automatic”, “Disable” and “Enable”. “Automatic” uses high contrast according to system settings.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockhighcontrast">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -232,19 +339,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockhighcontrast">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -339,7 +433,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optaccessibilitypage|label2">Options for High Contrast Appearance</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|label2">High Contrast</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -350,6 +444,104 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="frame1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=2 n-rows=2 -->
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="orientation">vertical</property>
+            <property name="row-spacing">6</property>
+            <child>
+              <object class="GtkCheckButton" id="acctool">
+                <property name="label" translatable="yes" context="optaccessibilitypage|acctool">Support _assistive technology tools (program restart required)</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="acctool-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|acctool">Allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices. The Java Runtime Environment must be installed on your computer before you can enable assistive support.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="textselinreadonly">
+                <property name="label" translatable="yes" context="optaccessibilitypage|textselinreadonly">Use te_xt selection cursor in read-only text documents</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="textselinreadonly-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|textselinreadonly">Displays cursor in read-only documents.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locktextselinreadonly">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockacctool">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|label1">Miscellaneous</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child>
@@ -462,7 +654,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child internal-child="accessible">
