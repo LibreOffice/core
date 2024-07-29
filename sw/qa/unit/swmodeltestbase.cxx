@@ -170,46 +170,6 @@ xmlDocUniquePtr SwModelTestBase::parseLayoutDump(const uno::Reference<lang::XCom
     return pXmlDoc;
 }
 
-OUString SwModelTestBase::parseDump(const OString& aXPath, const OString& aAttribute)
-{
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc.get());
-    xmlXPathObjectPtr pXmlXpathObj
-        = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
-    CPPUNIT_ASSERT_MESSAGE("xpath evaluation failed", pXmlXpathObj);
-    xmlChar* pXpathStrResult;
-    if (pXmlXpathObj->type == XPATH_NODESET)
-    {
-        xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-        int nNodes = xmlXPathNodeSetGetLength(pXmlNodes);
-        OString aMessage("xpath ('" + aXPath + "') should match exactly 1 node");
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), 1, nNodes);
-        CPPUNIT_ASSERT(pXmlNodes);
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        if (aAttribute.getLength())
-            pXpathStrResult = xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()));
-        else
-            pXpathStrResult = xmlNodeGetContent(pXmlNode);
-    }
-    else
-    {
-        // the xpath expression evaluated to a value, not a node
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("attr name should not be supplied when xpath evals to a value",
-                                     sal_Int32(0), aAttribute.getLength());
-        pXpathStrResult = xmlXPathCastToString(pXmlXpathObj);
-        CPPUNIT_ASSERT_MESSAGE("xpath result cannot be cast to string", pXpathStrResult);
-    }
-
-    OUString aRet(reinterpret_cast<char*>(pXpathStrResult), xmlStrlen(pXpathStrResult),
-                  RTL_TEXTENCODING_UTF8);
-    xmlFree(pXpathStrResult);
-    xmlFree(pXmlXpathObj);
-    xmlFree(pXmlXpathCtx);
-
-    return aRet;
-}
-
 bool SwModelTestBase::hasProperty(const uno::Reference<uno::XInterface>& obj,
                                   const OUString& name) const
 {

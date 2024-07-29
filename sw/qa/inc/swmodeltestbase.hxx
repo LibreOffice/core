@@ -139,13 +139,6 @@ protected:
     /// Similar to parseExport(), but this gives the xmlDocPtr of the layout dump.
     xmlDocUniquePtr parseLayoutDump(const css::uno::Reference< css::lang::XComponent >& xComponent = nullptr);
 
-    /**
-     * Extract a value from the layout dump using an XPath expression and an attribute name.
-     *
-     * If the attribute is omitted, the text of the node is returned.
-     */
-    OUString parseDump(const OString& aXPath, const OString& aAttribute = OString());
-
     template< typename T >
     T getProperty( const css::uno::Any& obj, const OUString& name ) const
     {

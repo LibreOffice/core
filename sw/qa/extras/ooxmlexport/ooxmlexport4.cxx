@@ -215,7 +215,8 @@ DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
 DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
 {
     // this has 2 pages in Word
-    CPPUNIT_ASSERT_EQUAL(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"_ustr, parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice, "table-row-data-displayed-twice.docx")
@@ -1179,17 +1180,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90697_continuousBreaksComplex2,"tdf92724_continu
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollowStyle.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(u"header"_ustr,  parseDump("/root/page[2]/header/txt/text()"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"header"_ustr,  getXPathContent(pXmlDoc, "/root/page[2]/header/txt/text()"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
 {
-// First page headers always link to last used first header, never to a follow header
-    CPPUNIT_ASSERT_EQUAL(u"First Header"_ustr, parseDump("/root/page[1]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Follow Header"_ustr, parseDump("/root/page[2]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Follow Header"_ustr, parseDump("/root/page[3]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"First Header"_ustr, parseDump("/root/page[4]/header/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Last Header"_ustr, parseDump("/root/page[5]/header/txt/text()"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"First Header"_ustr, getXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Follow Header"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Follow Header"_ustr, getXPathContent(pXmlDoc, "/root/page[3]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"First Header"_ustr, getXPathContent(pXmlDoc, "/root/page[4]/header/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Last Header"_ustr, getXPathContent(pXmlDoc, "/root/page[5]/header/txt/text()"_ostr));
 }
 
 #if HAVE_MORE_FONTS

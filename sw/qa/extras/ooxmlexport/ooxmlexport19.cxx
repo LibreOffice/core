@@ -153,16 +153,20 @@ DECLARE_OOXMLEXPORT_TEST(testHidemarkb, "tdf99616_hidemarkb.docx")
 DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
 {
     // The image should be inside a cell, so the text in the following cell should be below it.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     int imageTop
-        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
-                    "top"_ostr)
+        = getXPath(pXmlDoc,
+                   "/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
+                   "top"_ostr)
               .toInt32();
     int imageHeight
-        = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
-                    "height"_ostr)
+        = getXPath(pXmlDoc,
+                   "/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds"_ostr,
+                   "height"_ostr)
               .toInt32();
     int textNextRowTop
-        = parseDump("/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds"_ostr, "top"_ostr)
+        = getXPath(pXmlDoc, "/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds"_ostr,
+                   "top"_ostr)
               .toInt32();
     CPPUNIT_ASSERT(textNextRowTop >= imageTop + imageHeight);
 }
@@ -1116,8 +1120,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf156372, "tdf156372.doc")
 {
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nHeight
-        = parseDump("//page[1]/header/tab/row[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//page[1]/header/tab/row[1]/infos/bounds"_ostr, "height"_ostr)
+              .toInt32();
     // Without a fix in place, this would fail with
     // - Expected: 847
     // - Actual  : 1327

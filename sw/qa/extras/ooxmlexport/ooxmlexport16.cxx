@@ -593,37 +593,38 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142404_tabOverSpacingC15)
     // The original 3-page ODT saved as DOCX would fit on one page in MS Word 2010, but 3 in Word 2013.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("too big for two pages", 3, getPages());
     // The tab goes over the paragraph margin
-    CPPUNIT_ASSERT_EQUAL(u"A left tab positioned at"_ustr, parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
-    sal_Int32 nTextLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "width"_ostr).toInt32();
-    CPPUNIT_ASSERT_EQUAL(u"*"_ustr, parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "portion"_ostr));
-    sal_Int32 nTabLen = parseDump("//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"A left tab positioned at"_ustr, getXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nTextLen = getXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "width"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"*"_ustr, getXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nTabLen = getXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("Large left tab", nTextLen < nTabLen);
     // Not 1 line high (Word 2010 DOCX), or 3 lines high (LO DOCX) or 5 lines high (ODT), but 4 lines high
-    sal_Int32 nHeight = parseDump("//page[1]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nHeight = getXPath(pXmlDoc, "//page[1]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_MESSAGE("4 lines high", 1100 < nHeight);
     CPPUNIT_ASSERT_MESSAGE("4 lines high", nHeight < 1300);
 
-    CPPUNIT_ASSERT_EQUAL(u"TabOverflow does what?"_ustr, parseDump("//page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"TabOverflow does what?"_ustr, getXPath(pXmlDoc, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
     // Not 1 line high (Word 2010 DOCX), or 4 lines high (prev LO DOCX) or 8 lines high (ODT).
     // but two lines high. (3 in Word 2016 because it pulls down "what?" to the second line - weird)
-    nHeight = parseDump("//page[1]/body/txt[7]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    nHeight = getXPath(pXmlDoc, "//page[1]/body/txt[7]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2 lines high (but 3 in Word)", 242*2.5, nHeight, 242);
 
-    CPPUNIT_ASSERT_EQUAL(u"A centered tab positioned at"_ustr, parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
-    sal_Int32 nLineWidth = parseDump("//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"A centered tab positioned at"_ustr, getXPath(pXmlDoc, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nLineWidth = getXPath(pXmlDoc, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout[1]/SwFixPortion[1]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Big tab: full paragraph area used", 737, nLineWidth, 100);
 
     // Pages 2/3 are TabOverMargin - in this particular case tabs should not go over margin.
-    CPPUNIT_ASSERT_EQUAL(u"A right tab positioned at"_ustr, parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
-    sal_Int32 nParaWidth = parseDump("//page[2]/body/txt[6]/infos/prtBounds"_ostr, "width"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(u"A right tab positioned at"_ustr, getXPath(pXmlDoc, "//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    sal_Int32 nParaWidth = getXPath(pXmlDoc, "//page[2]/body/txt[6]/infos/prtBounds"_ostr, "width"_ostr).toInt32();
     // the clearest non-first-line visual example is this second tab in the right-tab paragraph.
-    nLineWidth = parseDump("//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[4]"_ostr, "width"_ostr).toInt32();
+    nLineWidth = getXPath(pXmlDoc, "//page[2]/body/txt[6]/SwParaPortion/SwLineLayout[4]"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Full paragraph area used", nLineWidth, nParaWidth);
 
-    CPPUNIT_ASSERT_EQUAL(u"TabOverflow does what?"_ustr, parseDump("//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"TabOverflow does what?"_ustr, getXPath(pXmlDoc, "//page[3]/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr, "portion"_ostr));
     // Not 1 line high (Word 2010 DOCX and ODT), or 4 lines high (prev LO DOCX),
     // but 8 lines high.
-    nHeight = parseDump("//page[3]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    nHeight = getXPath(pXmlDoc, "//page[3]/body/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("8 lines high", 242*8, nHeight, 121);
 }
 

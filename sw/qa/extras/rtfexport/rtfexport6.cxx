@@ -133,11 +133,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893_2)
 {
     auto verify = [this]() {
         // Ensure that header text exists on each page (especially on second page)
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr, parseDump("/root/page[1]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr, parseDump("/root/page[2]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr, parseDump("/root/page[3]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr, parseDump("/root/page[4]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr, parseDump("/root/page[5]/header/txt/text()"_ostr));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[2]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[3]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[4]/header/txt/text()"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[5]/header/txt/text()"_ostr));
         CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
     };
     createSwDoc("fdo49893-2.rtf");
@@ -1034,9 +1040,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118047)
                              getProperty<sal_Int32>(getParagraph(1), u"ParaBottomMargin"_ustr));
 
         // Same for header, it should not derive props from "Normal" style
-        CPPUNIT_ASSERT_EQUAL(u"Header"_ustr, parseDump("/root/page[1]/header/txt/text()"_ostr));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        CPPUNIT_ASSERT_EQUAL(u"Header"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr));
         sal_Int32 nHeight
-            = parseDump("/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
+            = getXPath(pXmlDoc, "/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
         CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
     };
     createSwDoc("tdf118047.rtf");

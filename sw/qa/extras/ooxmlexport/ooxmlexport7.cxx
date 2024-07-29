@@ -1082,57 +1082,58 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 {
     int followCount=0;
     int precedeCount=0;
-    if( !parseDump("/root/page/body/txt/anchored/fly[1]/txt"_ostr,"follow"_ostr).isEmpty() )
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[1]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[2]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[2]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[3]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[3]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[4]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[4]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[5]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[5]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[6]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[6]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[7]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[7]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[8]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[8]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[9]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[9]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[10]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[10]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[11]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[11]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[12]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[12]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[13]/txt"_ostr,"follow"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt"_ostr,"follow"_ostr) )
         followCount++;
-    if( !parseDump("/root/page/body/txt/anchored/fly[13]/txt"_ostr,"precede"_ostr).isEmpty() )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt"_ostr,"precede"_ostr) )
         precedeCount++;
     //there should be 4 chains/13 linked textboxes (set of 5, set of 3, set of 3, set of 2)
     //that means 9 NEXT links and 9 PREV links.

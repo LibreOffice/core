@@ -360,8 +360,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44176)
         // given a document with an empty first header, and a non-empty follow header,
         // ensure that the body text space is equal on the first and follow page
         // (since in this case the default margins are large enough to fully include the header)
-        const OUString sBodyHeight = parseDump("//page[1]/body/infos"_ostr, "height"_ostr);
-        CPPUNIT_ASSERT_EQUAL(sBodyHeight, parseDump("//page[2]/body/infos"_ostr, "height"_ostr));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        const OUString sBodyHeight
+            = getXPath(pXmlDoc, "//page[1]/body/infos/bounds"_ostr, "height"_ostr);
+        CPPUNIT_ASSERT_EQUAL(sBodyHeight,
+                             getXPath(pXmlDoc, "//page[2]/body/infos/bounds"_ostr, "height"_ostr));
     };
     createSwDoc("fdo44176.rtf");
     verify();

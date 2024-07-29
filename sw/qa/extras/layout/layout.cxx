@@ -2176,7 +2176,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
     createSwDoc("tdf116486.docx");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    OUString aTop = parseDump(
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aTop = getXPath(
+        pXmlDoc,
         "/root/page/body/txt/SwParaPortion/SwLineLayout[1]/child::*[@type='PortionType::Fly']"_ostr,
         "height"_ostr);
     CPPUNIT_ASSERT_EQUAL(u"4006"_ustr, aTop);

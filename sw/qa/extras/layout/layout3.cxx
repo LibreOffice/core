@@ -1151,8 +1151,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf118719)
 
     // Without the accompanying fix in place, this test would have failed, as the height of the
     // first page was 15840 twips, instead of the much smaller 276.
-    sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nOther
+        = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nLast = getXPath(pXmlDoc, "/root/page[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_GREATER(nOther, nLast);
 }
 
@@ -2068,22 +2070,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf134548)
 
     // Second paragraph has two non zero width tabs in beginning of line
     {
-        OUString sNodeType = parseDump(
-            "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[1]"_ostr, "type"_ostr);
+        OUString sNodeType = getXPath(
+            pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[1]"_ostr,
+            "type"_ostr);
         CPPUNIT_ASSERT_EQUAL(u"PortionType::TabLeft"_ustr, sNodeType);
         sal_Int32 nWidth
-            = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[1]"_ostr,
-                        "width"_ostr)
+            = getXPath(pXmlDoc,
+                       "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[1]"_ostr,
+                       "width"_ostr)
                   .toInt32();
         CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
     }
     {
-        OUString sNodeType = parseDump(
-            "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[2]"_ostr, "type"_ostr);
+        OUString sNodeType = getXPath(
+            pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[2]"_ostr,
+            "type"_ostr);
         CPPUNIT_ASSERT_EQUAL(u"PortionType::TabLeft"_ustr, sNodeType);
         sal_Int32 nWidth
-            = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[2]"_ostr,
-                        "width"_ostr)
+            = getXPath(pXmlDoc,
+                       "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFixPortion[2]"_ostr,
+                       "width"_ostr)
                   .toInt32();
         CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
     }

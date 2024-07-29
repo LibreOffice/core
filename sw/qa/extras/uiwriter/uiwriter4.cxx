@@ -507,8 +507,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
     pWrtShell->InsertPageBreak();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nSingleParaPageHeight
-        = parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
 
     // Insert a 2nd paragraph at the end of the first page, so the page height grows at least twice...
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -517,15 +518,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
     const uno::Reference<text::XTextRange> xInsertPos = getRun(getParagraph(1), 1);
     xParagraphAppend->finishParagraphInsert(uno::Sequence<beans::PropertyValue>(), xInsertPos);
     calcLayout();
-    CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32()
+    pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32()
                    >= 2 * nSingleParaPageHeight);
 
     // ... and then delete the 2nd paragraph, which shrinks the page to the previous size.
     uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
     xParagraph->dispose();
     calcLayout();
-    CPPUNIT_ASSERT_EQUAL(nSingleParaPageHeight,
-                         parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32());
+    pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(
+        nSingleParaPageHeight,
+        getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
@@ -920,8 +924,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96961)
     calcLayout();
 
     // Assert that the height of the last page is larger than the height of other pages.
-    sal_Int32 nOther = parseDump("/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nLast = parseDump("/root/page[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nOther
+        = getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nLast = getXPath(pXmlDoc, "/root/page[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT(nLast > nOther);
 }
 
@@ -1932,7 +1938,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107025)
     if (!nWidth1)
         return;
 
-    CPPUNIT_ASSERT(!parseDump("(//SwLinePortion)[2]"_ostr, "width"_ostr).isEmpty());
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, "(//SwLinePortion)[2]"_ostr, "width"_ostr).isEmpty());
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]"_ostr, "width"_ostr).toInt32();
     sal_Int32 nRatio = nWidth2 / nWidth1;
 
@@ -2285,9 +2291,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf58604)
     // Allow linebreak character follows hanging punctuation immediately instead of
     // breaking at the start of the next line.
     createSwDoc("tdf58604.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(
         OUString("PortionType::Break"),
-        parseDump("(/root/page/body/txt/SwParaPortion/SwLineLayout[1]/child::*)[last()]", "type"));
+        getXPath(pXmlDoc, "(/root/page/body/txt/SwParaPortion/SwLineLayout[1]/child::*)[last()]",
+                 "type"));
 #endif
 }
 

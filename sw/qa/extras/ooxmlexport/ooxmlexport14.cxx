@@ -564,7 +564,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Ensure that width of first tab is close to zero (previous value was ~1000 twips)
-    int nWidth = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr, "width"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    int nWidth = getXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabLeft']"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_LESS(150, nWidth);
 }
 
@@ -574,26 +575,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81567)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    int nFrameWidth = parseDump("/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    int nFrameWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(2371, nFrameWidth);
 
-    int nFrameHeight = parseDump("/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+    int nFrameHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(3520, nFrameHeight);
 
-    int nFrameTop = parseDump("/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+    int nFrameTop = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(1518, nFrameTop);
 
-    int nImageWidth = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
+    int nImageWidth = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(2370, nImageWidth);
 
-    int nImageHeight = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+    int nImageHeight = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(1605, nImageHeight);
 
     // Check the image is at the top of the frame
     // Without the fix in place, this test would have failed with:
     // - Expected: 1638
     // - Actual  : 2236
-    int nImageTop = parseDump("/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+    int nImageTop = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(1638, nImageTop);
 }
 
@@ -744,7 +746,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
     // First paragraph does not have tab before
     // (same applies to all paragraphs in doc, but let's assume they are
     // behaving same way)
-    OUString sNodeType = parseDump("(/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*)[1]"_ostr, "type"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString sNodeType = getXPath(pXmlDoc, "(/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*)[1]"_ostr, "type"_ostr);
     CPPUNIT_ASSERT_EQUAL(u"PortionType::Text"_ustr, sNodeType);
 
     // tdf148380: creation-date field in header.xml was unsupported on export

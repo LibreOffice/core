@@ -106,11 +106,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148956_directEndFormatting, "tdf148956_directEnd
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
 {
-    parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     //Without the fix in place, it would have failed with
     //- Expected: 2.
     //- Actual  : 4.
-    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,"expand"_ostr));
+    //
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,getXPath(pXmlDoc, "/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr,"expand"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
@@ -789,8 +790,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153128)
 {
     loadAndReload("tdf153128.docx");
     calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFirstLineHeight
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr, "height"_ostr)
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr, "height"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_GREATER(sal_Int32(0), nFirstLineHeight);
 
@@ -864,8 +866,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155736, "tdf155736_PageNumbers_footer.docx")
     //Without the fix in place, it would have failed with
     //- Expected: Page * of *
     //- Actual  : Page of
-    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, parseDump("/root/page[1]/footer/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, getXPathContent(pXmlDoc, "/root/page[1]/footer/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Page * of *"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()"_ostr));
 }
 
 // The following zOrder tests are checking the shapes "stacking height".

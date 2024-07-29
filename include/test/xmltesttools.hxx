@@ -104,6 +104,10 @@ protected:
      * Assert that rXPath exists, has exactly 1 result set nodes and does *not* have an attribute named rAttribute.
      */
     void          assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute);
+    /**
+     * Same as the assertXPathNoAttribute(), but don't assert: return the bool instead.
+     */
+    bool          hasXPathAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute);
     // Assert that the node name of the single node returned by an XPath is as specified,
     // e.g. to check order of elements, where getXPathPosition is unapplicable
     void assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rExpectedName);

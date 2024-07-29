@@ -479,30 +479,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
 
     // Sanity check - always good to test when dealing with page styles and breaks.
     CPPUNIT_ASSERT_EQUAL(5, getPages());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Page Style should be explicitly mentioned - otherwise it would be a "follow" style
     uno::Reference<beans::XPropertySet> xPara(getParagraph(2, u"2"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("First Page header"),
-    //                      parseDump("/root/page[2]/header/txt"));
+    //                      getXPathContent(pXmlDoc, "/root/page[2]/header/txt"));
 
     // Page Style is converted into a page break instead. Still shows "first" header.
     xPara.set(getParagraph(3, u"3"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
     // CPPUNIT_ASSERT_EQUAL(OUString("Default page style - first page style"),
-    //                      parseDump("/root/page[3]/header/txt"));
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[3]/footer/txt"_ostr));
+    //                      getXPathContent(pXmlDoc, "/root/page[3]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
 
     // Page Style is converted into a page break instead. Shows the "normal" header.
     xPara.set(getParagraph(5, u"4"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue(u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Default page style"_ustr,
-                         parseDump("/root/page[4]/header/txt"_ostr));
+                         getXPathContent(pXmlDoc, "/root/page[4]/header/txt"_ostr));
 
     // Page Style is retained (with wrong header) in order to preserve page re-numbering.
     xPara.set(getParagraph(7, u"1"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue(u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[5]/footer/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getXPathContent(pXmlDoc, "/root/page[5]/footer/txt"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136929_framesOfParagraph)
@@ -510,7 +511,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136929_framesOfParagraph)
     loadAndReload("tdf136929_framesOfParagraph.odt");
     // Before this fix, the image was placed in the footer instead of in the text body - messing everything up.
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 5, getPages() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", u"* | *"_ustr, parseDump("/root/page[4]/footer/txt"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", u"* | *"_ustr, getXPathContent(pXmlDoc, "/root/page[4]/footer/txt"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.docx")

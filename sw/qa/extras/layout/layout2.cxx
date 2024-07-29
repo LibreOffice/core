@@ -2456,20 +2456,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
     createSwDoc("tdf150200.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2479,20 +2482,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200_DOCX)
     createSwDoc("tdf150200.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2502,20 +2508,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438)
     createSwDoc("tdf150438.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }
@@ -2525,20 +2534,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438_DOCX)
     createSwDoc("tdf150438.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine
-        = parseDump("/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = parseDump("/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = parseDump("/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine = getXPathContent(
+        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }

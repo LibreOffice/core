@@ -303,7 +303,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1428
     // - Actual  : 387
-    OUString aTop = parseDump("//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aTop = getXPath(pXmlDoc, "//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr);
     CPPUNIT_ASSERT_EQUAL(u"1428"_ustr, aTop);
 }
 
@@ -452,9 +453,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 
     // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
     // text.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString aShapeTextLeft
-        = parseDump("/root/page/header/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr);
-    OUString aBodyTextLeft = parseDump("/root/page/body/txt/infos/bounds"_ostr, "left"_ostr);
+        = getXPath(pXmlDoc, "/root/page/header/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr);
+    OUString aBodyTextLeft
+        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "left"_ostr);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1701
     // - Actual  : 1815
@@ -468,9 +471,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
     createSwDoc("tdf120548.docx");
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
-    CPPUNIT_ASSERT_EQUAL(
-        u"00ff0000"_ustr,
-        parseDump("//SwFieldPortion[@type='PortionType::Number']/SwFont"_ostr, "color"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"00ff0000"_ustr,
+                         getXPath(pXmlDoc,
+                                  "//SwFieldPortion[@type='PortionType::Number']/SwFont"_ostr,
+                                  "color"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test120551)
@@ -634,7 +639,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
                             getShape(1)->getSize().Width, getShape(1)->getSize().Height);
     CPPUNIT_ASSERT_MESSAGE("The textframe must be off-page!", !aPageRect.Contains(aShapeRect));
 
-    //OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
+    //OUString aTop = getXPath(pXmlDoc, "//anchored/fly[1]/infos/bounds", "top");
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(30624), aTop.toInt32() );
 }
 
@@ -688,8 +693,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104167)
 CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
     createSwDoc("tdf113946.docx");
-    OUString aTop
-        = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aTop = getXPath(
+        pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
     // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'

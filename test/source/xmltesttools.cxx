@@ -124,12 +124,7 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OSt
                 xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
             xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-            xmlNodePtr pXmlChild = pXmlNode->children;
-            OUString s;
-            while (pXmlChild && pXmlChild->type != XML_TEXT_NODE)
-                pXmlChild = pXmlChild->next;
-            if (pXmlChild && pXmlChild->type == XML_TEXT_NODE)
-                s = convert(pXmlChild->content);
+            OUString s = convert(xmlNodeGetContent(pXmlNode));
             xmlXPathFreeObject(pXmlObj);
             return s;
         }
@@ -257,15 +252,22 @@ void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OSt
 
 void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
 {
+    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
+                                 !hasXPathAttribute(pXmlDoc, rXPath, rAttribute));
+}
+
+bool XmlTestTools::hasXPathAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                                     const OString& rAttribute)
+{
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
-                                 !xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    bool bFound(xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
     xmlXPathFreeObject(pXmlObj);
+    return bFound;
 }
 
 int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::string_view rChildName)

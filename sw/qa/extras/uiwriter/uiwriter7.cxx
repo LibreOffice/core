@@ -2412,10 +2412,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf34957)
     // table with "keep with next" always started on a new page if the table was large,
     // regardless of whether it was already kept with the previous paragraph,
     // or whether the following paragraph actually fit on the same page (MAB 3.6 - 5.0)
-    CPPUNIT_ASSERT_EQUAL(u"Row 1"_ustr,
-                         parseDump("/root/page[2]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Row 1"_ustr,
-                         parseDump("/root/page[4]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(
+        u"Row 1"_ustr,
+        getXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Row 1"_ustr,
+        getXPathContent(pXmlDoc, "/root/page[4]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89954)

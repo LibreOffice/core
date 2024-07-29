@@ -54,13 +54,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
     // Load a document that has an image anchored in the header.
     // It also has a table which has the wrap around the image.
     createSwDoc("table-fly-overlap.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     SwTwips nFlyTop
-        = parseDump("//header/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//header/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     SwTwips nFlyHeight
-        = parseDump("//header/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//header/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
     SwTwips nFlyBottom = nFlyTop + nFlyHeight;
-    SwTwips nTableFrameTop = parseDump("//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
-    SwTwips nTablePrintTop = parseDump("//tab/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nTableFrameTop = getXPath(pXmlDoc, "//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nTablePrintTop = getXPath(pXmlDoc, "//tab/infos/prtBounds"_ostr, "top"_ostr).toInt32();
     SwTwips nTableTop = nTableFrameTop + nTablePrintTop;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater or equal than: 3579
@@ -75,8 +76,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
     // Load a document that has two paragraphs in the header.
     // The second paragraph should have its bottom spacing applied.
     createSwDoc("tdf128195.docx");
-    sal_Int32 nTxtHeight = parseDump("//header/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nTxtBottom = parseDump("//header/txt[2]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTxtHeight
+        = getXPath(pXmlDoc, "//header/txt[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nTxtBottom
+        = getXPath(pXmlDoc, "//header/txt[2]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2269), nTxtHeight);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3529), nTxtBottom);
 }
@@ -129,12 +133,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlapSpacing)
 {
     // Load a document that has an image on the right of a table.  The table wraps around the image.
     createSwDoc("table-fly-overlap-spacing.docx");
-    SwTwips nFlyTop = parseDump("//body/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    SwTwips nFlyTop
+        = getXPath(pXmlDoc, "//body/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
     SwTwips nFlyHeight
-        = parseDump("//body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
     SwTwips nFlyBottom = nFlyTop + nFlyHeight;
-    SwTwips nTableFrameTop = parseDump("//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
-    SwTwips nTablePrintTop = parseDump("//tab/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nTableFrameTop = getXPath(pXmlDoc, "//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nTablePrintTop = getXPath(pXmlDoc, "//tab/infos/prtBounds"_ostr, "top"_ostr).toInt32();
     SwTwips nTableTop = nTableFrameTop + nTablePrintTop;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater or equal than: 3993

@@ -164,7 +164,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
         // The anchor and align properties are sufficient to define a frame
         xmlDocUniquePtr pLayout = parseLayoutDump();
         assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr, u"1st page"_ustr);
+        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr,
+                           u"First page textbox 1st page"_ustr);
         assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, u"2nd page"_ustr);
 
         CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -423,11 +424,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
         // Sanity check - always good to test when dealing with page styles and breaks.
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
-                             parseDump("/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"First Left"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
+                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"First Left"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
         if (!bIsExported)
-            CPPUNIT_ASSERT_EQUAL(u"First Right"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+            CPPUNIT_ASSERT_EQUAL(u"First Right"_ustr,
+                                 getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
     };
     createSwDoc("tdf160976_headerFooter.odt");
     verify();
@@ -443,10 +447,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter2)
         // Sanity check - always good to test when dealing with page styles and breaks.
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
-                             parseDump("/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
     };
     createSwDoc("tdf160976_headerFooter2.odt");
     verify();
@@ -461,9 +468,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
         // Sanity check - always good to test when dealing with page styles and breaks.
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
-        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr, parseDump("/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[2]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr, parseDump("/root/page[3]/footer/txt"_ostr));
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
+        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
+                             getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
     };
     createSwDoc("tdf160976_headerFooter3.odt");
     verify();

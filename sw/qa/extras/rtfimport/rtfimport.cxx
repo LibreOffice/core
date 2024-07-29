@@ -409,9 +409,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
     createSwDoc("tdf112211-2.rtf");
     // Spacing between the bullet and the actual text was too large.
     // This is now around 269, large old value was 629.
-    int nWidth = parseDump("/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
-                           "child::*[@type='PortionType::TabLeft']"_ostr,
-                           "width"_ostr)
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    int nWidth = getXPath(pXmlDoc,
+                          "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
+                          "child::*[@type='PortionType::TabLeft']"_ostr,
+                          "width"_ostr)
                      .toInt32();
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }
@@ -457,8 +459,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52052)
 {
     createSwDoc("fdo52052.rtf");
     // Make sure the textframe containing the text "third" appears on the 3rd page.
-    CPPUNIT_ASSERT_EQUAL(u"third"_ustr,
-                         parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(
+        u"third"_ustr,
+        getXPathContent(pXmlDoc, "/root/page[3]/body/txt/anchored/fly/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInk)

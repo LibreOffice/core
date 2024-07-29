@@ -19,8 +19,8 @@ See below for more details on writing the UNO code see below.
 === Direct XPath assertions on the layout dump
 
 In most cases you want to assert the document model, but sometimes asserting
-the layout is easier. If you want to do so, the `parseDump()` method can be
-used to parse the layout dump of the currently loaded document. If you want
+the layout is easier. If you want to do so, check the methods in
+test/source/xmltesttools.cxx. If you want
 to have a look at the XML document that can be asserted, start soffice with the
 `SW_DEBUG=1` environment variable, load a document, press F12, and have a look
 at the `layout.xml` file in the current directory. Once you find the needed

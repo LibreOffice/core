@@ -831,11 +831,12 @@ DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
 DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    sal_Int32 nTabStop = parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[3]"_ostr, "width"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTabStop = getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[3]"_ostr, "width"_ostr).toInt32();
     // Without the fix, the text was unseen, with a tabstop width of 64057. It should be 3057
     CPPUNIT_ASSERT(nTabStop < 4000);
     CPPUNIT_ASSERT(3000 < nTabStop);
-    CPPUNIT_ASSERT_EQUAL(u"Pečiatka zamestnávateľa"_ustr, parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]"_ostr, "portion"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"Pečiatka zamestnávateľa"_ustr, getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]"_ostr, "portion"_ostr));
 
     // tdf#149547: __XXX___invalid CharacterStyles should not be imported/exported
     CPPUNIT_ASSERT(!getStyles(u"CharacterStyles"_ustr)->hasByName(u"__XXX___invalid"_ustr));

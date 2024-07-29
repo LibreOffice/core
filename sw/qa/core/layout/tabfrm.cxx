@@ -36,9 +36,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTablePrintAreaLeft)
 {
     // Given a document with a header containing an image, and also with an overlapping table:
     createSwDoc("table-print-area-left.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // When laying out that document & parsing the left margin of the table:
-    SwTwips nTablePrintLeft = parseDump("//tab/infos/prtBounds"_ostr, "left"_ostr).toInt32();
+    SwTwips nTablePrintLeft
+        = getXPath(pXmlDoc, "//tab/infos/prtBounds"_ostr, "left"_ostr).toInt32();
 
     // Then make sure it has ~no left margin:
     // Without the accompanying fix in place, this test would have failed with:

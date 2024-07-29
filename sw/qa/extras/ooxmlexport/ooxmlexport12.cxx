@@ -1809,10 +1809,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
     // and it has got only a single repeating header line
     assertXPath(pDump, "/root/page[2]/body/tab"_ostr, 1);
     assertXPath(pDump, "/root/page[2]/body/tab/row"_ostr, 47);
-    CPPUNIT_ASSERT_EQUAL(u"Repeating Table Header"_ustr,
-                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
-                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Repeating Table Header"_ustr,
+        getXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Text"_ustr,
+        getXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-table-header.docx")
@@ -1826,10 +1828,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
     // instead of showing only a part of it on page 2
     assertXPath(pDump, "/root/page[1]/body/tab"_ostr, 1);
     assertXPath(pDump, "/root/page[1]/body/tab/row"_ostr, 11);
-    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr,
-                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr,
-                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Test1"_ustr,
+        getXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Test2"_ustr,
+        getXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
@@ -2186,10 +2190,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 {
     loadAndReload("tdf124678_no_leading_paragraph.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
-                                 parseDump("/root/page[1]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"_ostr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", u"HEADER"_ustr,
-                                 parseDump("/root/page[2]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"_ostr));
 }
 
 // The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
@@ -2201,10 +2206,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case2)
 {
     loadAndReload("tdf124678_with_leading_paragraph.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
-                                 parseDump("/root/page[1]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"_ostr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", u"HEADER"_ustr,
-                                 parseDump("/root/page[2]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"_ostr));
 }
 
 static bool lcl_nearEqual(const sal_Int32 nNumber1, const sal_Int32 nNumber2,
@@ -2348,14 +2354,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
 
     CPPUNIT_ASSERT_EQUAL(u"f1    f2      f3        f4          f5            f6            "
                          "  f7                f8"_ustr,
-                         parseDump("/root/page[1]/header/txt/anchored/fly"_ostr));
+                         getXPathContent(pDump, "/root/page[1]/header/txt/anchored/fly"_ostr));
     CPPUNIT_ASSERT_EQUAL(u"                f8              f7            f6          f5    "
                          "    f4      f3    f2f1"_ustr,
-                         parseDump("/root/page[1]/footer/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr, parseDump("/root/page[2]/header/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr, parseDump("/root/page[2]/footer/txt/anchored/fly"_ostr));
+                         getXPathContent(pDump, "/root/page[1]/footer/txt/anchored/fly"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr,
+                         getXPathContent(pDump, "/root/page[2]/header/txt/anchored/fly"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr,
+                         getXPathContent(pDump, "/root/page[2]/footer/txt/anchored/fly"_ostr));
     CPPUNIT_ASSERT_EQUAL(u"  aaaa   bbbb    cccc     dddd      eeee"_ustr,
-                         parseDump("/root/page[3]/header/txt/anchored/fly"_ostr));
+                         getXPathContent(pDump, "/root/page[3]/header/txt/anchored/fly"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,

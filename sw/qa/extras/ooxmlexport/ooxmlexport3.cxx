@@ -952,7 +952,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
     loadAndReload("tdf101589_dontSplitTable.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     //single row tables need to prevent split by setting row to no split
-    CPPUNIT_ASSERT_EQUAL( u"Row 1"_ustr, parseDump("/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]"_ostr) );
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL( u"Row 1"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]"_ostr) );
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);

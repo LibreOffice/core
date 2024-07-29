@@ -707,7 +707,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
 {
     // This was 0, left margin inside a shape+text wasn't imported from DOCX.
     // 360000 EMU, but layout uses twips.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds"_ostr, "left"_ostr).toInt32());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/prtBounds"_ostr, "left"_ostr).toInt32());
 
 }
 

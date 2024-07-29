@@ -369,14 +369,15 @@ CPPUNIT_TEST_FIXTURE(Test, testN766477)
 CPPUNIT_TEST_FIXTURE(Test, testTdf130804)
 {
     createSwDoc("tdf130804.docx");
-    OUString flyHeight = parseDump("/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr);
-    OUString txtHeight = parseDump("/root/page/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString flyHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr);
+    OUString txtHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr);
 
     //Without the fix in place, txtHeight would have been flyHeight + 55
     CPPUNIT_ASSERT_EQUAL(flyHeight, txtHeight);
 
     // Also check the bookmark portion is ignored in the next paragraph
-    OUString aTop = parseDump("/root/page/body/txt[2]/infos/prtBounds"_ostr, "top"_ostr);
+    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/prtBounds"_ostr, "top"_ostr);
     CPPUNIT_ASSERT_EQUAL(u"240"_ustr, aTop);
 }
 
@@ -798,7 +799,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105127)
 CPPUNIT_TEST_FIXTURE(Test, testTdf105143)
 {
     createSwDoc("tdf105143.docx");
-    OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
     // This was 6272, i.e. the shape was moved up (incorrect position) to be
     // inside the page rectangle.
     CPPUNIT_ASSERT_EQUAL(u"6731"_ustr, aTop);
@@ -1032,7 +1034,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75573)
     lcl_countTextFrames( mxComponent, 1 );
 
     // the frame should be on page 1
-    CPPUNIT_ASSERT_EQUAL( u"lorem ipsum"_ustr, parseDump("/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()"_ostr) );
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL( u"lorem ipsum"_ustr, getXPathContent(pXmlDoc, "/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()"_ostr) );
 
     // the "Proprietary" style should set the vertical and horizontal anchors to the page
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -1235,7 +1238,8 @@ CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumnsCompat)
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 {
     createSwDoc("floating-table-section-columns.docx");
-    OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds"_ostr, "width"_ostr);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString tableWidth = getXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds"_ostr, "width"_ostr);
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
@@ -1513,8 +1517,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122717)
 CPPUNIT_TEST_FIXTURE(Test, testTdf98882)
 {
     createSwDoc("tdf98882.docx");
-    sal_Int32 nFlyHeight = parseDump("//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nContentHeight = parseDump("//notxt/infos/bounds"_ostr, "height"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFlyHeight = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nContentHeight = getXPath(pXmlDoc, "//notxt/infos/bounds"_ostr, "height"_ostr).toInt32();
     // The content height was 600, not 360, so the frame and the content height did not match.
     CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
 }

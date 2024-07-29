@@ -600,7 +600,8 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 {
     // cp#1000043: MSO seems to ignore large twips values, we didn't, which resulted in different
     // layout of broken documents (text not visible in this specific document).
-    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString width = getXPath(pXmlDoc,  "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
@@ -608,7 +609,8 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
 {
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
-    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString width = getXPath(pXmlDoc,  "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds"_ostr, "width"_ostr );
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
@@ -617,13 +619,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx")
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
     // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
     // instead of 4, therefore compare height of cells 4 and 5 rather than 3 and 4.)
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 5 ), xTableColumns->getCount());
-    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds"_ostr, "height"_ostr );
-    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[5]/infos/bounds"_ostr, "height"_ostr );
+    OUString height3 = getXPath(pXmlDoc, "/root/page/body/tab/row[1]/cell[4]/infos/bounds"_ostr, "height"_ostr );
+    OUString height4 = getXPath(pXmlDoc, "/root/page/body/tab/row[1]/cell[5]/infos/bounds"_ostr, "height"_ostr );
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
 
@@ -659,9 +662,10 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableColumns> xTableColumns = xTextTable->getColumns();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 3 ), xTableColumns->getCount());
-    OUString textA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/txt/text()"_ostr );
-    OUString leftA3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds"_ostr, "left"_ostr );
-    OUString leftB2 = parseDump("/root/page/body/tab/row[2]/cell[2]/infos/bounds"_ostr, "left"_ostr );
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString textA3 = getXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[3]/txt/text()"_ostr );
+    OUString leftA3 = getXPath(pXmlDoc, "/root/page/body/tab/row[1]/cell[3]/infos/bounds"_ostr, "left"_ostr );
+    OUString leftB2 = getXPath(pXmlDoc, "/root/page/body/tab/row[2]/cell[2]/infos/bounds"_ostr, "left"_ostr );
     CPPUNIT_ASSERT_EQUAL( u"A3"_ustr, textA3 );
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }

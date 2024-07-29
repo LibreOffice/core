@@ -720,7 +720,8 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
     CPPUNIT_ASSERT_EQUAL(u"1.1"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 
     // The paragraph marker's red font color was inherited by the number portion, this was ff0000.
-    CPPUNIT_ASSERT_EQUAL(u"ffffffff"_ustr, parseDump("//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "color"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(u"ffffffff"_ustr, getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "color"_ostr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
@@ -741,10 +742,11 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxRightEdge, "textbox-right-edge.docx")
     // I'm fairly sure this is not specific to DOCX, but the doc model created
     // by the ODF import doesn't trigger this bug, so let's test this here
     // instead of uiwriter.
-    int nShapeLeft = parseDump("//anchored/SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
-    int nShapeWidth = parseDump("//anchored/SwAnchoredDrawObject/bounds"_ostr, "width"_ostr).toInt32();
-    int nTextboxLeft = parseDump("//anchored/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
-    int nTextboxWidth = parseDump("//anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    int nShapeLeft = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
+    int nShapeWidth = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "width"_ostr).toInt32();
+    int nTextboxLeft = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
+    int nTextboxWidth = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
     // This is a rectangle, make sure the right edge of the textbox is still
     // inside the draw shape.
     CPPUNIT_ASSERT(nShapeLeft + nShapeWidth >= nTextboxLeft + nTextboxWidth);

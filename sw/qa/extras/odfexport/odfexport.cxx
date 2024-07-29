@@ -1331,7 +1331,8 @@ DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, u"RelativeWidthRelation"_ustr));
 
     // This was 2601, 20% height was relative from margin, not page.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3168), parseDump("/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3168), getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32());
 }
 
 DECLARE_ODFEXPORT_TEST(testRelhPageTdf80282, "relh-page-tdf80282.odt")
@@ -1339,8 +1340,9 @@ DECLARE_ODFEXPORT_TEST(testRelhPageTdf80282, "relh-page-tdf80282.odt")
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xTextFrame = getShape(1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Height", sal_Int32(8391), parseDump("//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Width",  sal_Int32(5953), parseDump("//anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "height"_ostr, u"8391"_ustr);
+    assertXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "width"_ostr, u"5953"_ustr);
 }
 
 DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
@@ -1354,7 +1356,8 @@ DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, u"RelativeHeightRelation"_ustr));
 
     // This was 3762, 40% width was relative from margin, not page.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4896), parseDump("/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4896), getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32());
 }
 
 DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
@@ -1750,15 +1753,16 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
 DECLARE_ODFEXPORT_TEST(testTdf136645, "tdf136645.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Without the fix in place, this would have failed with
     //- Expected: 2640
     //- Actual  : 3000
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2640), parseDump("/root/page/body/section/column[1]/body/infos/bounds"_ostr, "width"_ostr).toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2640), getXPath(pXmlDoc, "/root/page/body/section/column[1]/body/infos/bounds"_ostr, "width"_ostr).toInt32());
 
     //- Expected: 6000
     //- Actual  : 6360
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6000), parseDump("/root/page/body/section/column[2]/body/infos/bounds"_ostr, "width"_ostr).toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6000), getXPath(pXmlDoc, "/root/page/body/section/column[2]/body/infos/bounds"_ostr, "width"_ostr).toInt32());
 }
 
 DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
@@ -1862,7 +1866,8 @@ DECLARE_ODFEXPORT_TEST(testTdf135338_firstLeftPageFooter, "tdf135338_firstLeftPa
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     // The first page is a left page only style, but it should still show the first page footer
     // instead of the left footer text "EVEN/LEFT (Left page only)"
-    CPPUNIT_ASSERT_EQUAL(u"First (Left page only)"_ustr,  parseDump("/root/page[2]/footer/txt/text()"_ostr));
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()"_ostr, u"First (Left page only)"_ustr);
 }
 
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")

@@ -698,8 +698,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82177_tblBorders, "tdf82177_tblBorders.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCellBorder.docx")
 {
     //inconsistent in Word even. 2016 positions on last row, 2003 positions on first cell.
-    sal_Int32 nRowLeft = parseDump("/root/page/body/tab[4]/row[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nTextLeft  = parseDump("/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nRowLeft = getXPath(pXmlDoc, "/root/page/body/tab[4]/row[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nTextLeft  = getXPath(pXmlDoc, "/root/page/body/tab[4]/row[1]/cell[1]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
     CPPUNIT_ASSERT( nRowLeft < nTextLeft );
 }
 
@@ -726,8 +727,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116985, "tdf116985.docx")
     // Body frame width is 10800, 40% is the requested relative width, with 144
     // spacing to text on the left/right side.  So ideal width would be 4032,
     // was 3431. Allow one pixel tolerance, though.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth
-        = parseDump("/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "width"_ostr).toInt32();
     CPPUNIT_ASSERT(nWidth > 4000);
 }
 

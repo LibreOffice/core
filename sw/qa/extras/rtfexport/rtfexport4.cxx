@@ -1006,41 +1006,51 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103956)
         // suitable width. Currently there is no good support for autofit for RTF docs, so ensure
         // that table cells are somehow visible. Width for it is not clear, so here we will check
         // table & cell widths are more than default minimal value of 41.
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         CPPUNIT_ASSERT_MESSAGE(
             "Table #1 is too narrow!",
-            82 < parseDump("/root/page/body/tab[1]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #1 cell#1 is too narrow!",
-            41 < parseDump("/root/page/body/tab[1]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+            82 < getXPath(pXmlDoc, "/root/page/body/tab[1]/row/infos/bounds"_ostr, "width"_ostr)
                      .toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #1 cell#2 is too narrow!",
-            41 < parseDump("/root/page/body/tab[1]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
-                     .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #1 cell#1 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[1]/row/cell[1]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #1 cell#2 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[1]/row/cell[2]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
 
         CPPUNIT_ASSERT_MESSAGE(
             "Table #2 is too narrow!",
-            82 < parseDump("/root/page/body/tab[2]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #2 cell#1 is too narrow!",
-            41 < parseDump("/root/page/body/tab[2]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+            82 < getXPath(pXmlDoc, "/root/page/body/tab[2]/row/infos/bounds"_ostr, "width"_ostr)
                      .toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #2 cell#2 is too narrow!",
-            41 < parseDump("/root/page/body/tab[2]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
-                     .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #2 cell#1 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[2]/row/cell[1]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #2 cell#2 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[2]/row/cell[2]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
 
         CPPUNIT_ASSERT_MESSAGE(
             "Table #3 is too narrow!",
-            82 < parseDump("/root/page/body/tab[3]/row/infos/bounds"_ostr, "width"_ostr).toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #3 cell#1 is too narrow!",
-            41 < parseDump("/root/page/body/tab[3]/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
+            82 < getXPath(pXmlDoc, "/root/page/body/tab[3]/row/infos/bounds"_ostr, "width"_ostr)
                      .toInt32());
-        CPPUNIT_ASSERT_MESSAGE(
-            "Table #3 cell#2 is too narrow!",
-            41 < parseDump("/root/page/body/tab[3]/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
-                     .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #3 cell#1 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[3]/row/cell[1]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
+        CPPUNIT_ASSERT_MESSAGE("Table #3 cell#2 is too narrow!",
+                               41 < getXPath(pXmlDoc,
+                                             "/root/page/body/tab[3]/row/cell[2]/infos/bounds"_ostr,
+                                             "width"_ostr)
+                                        .toInt32());
     };
     createSwDoc("tdf103956.rtf");
     verify();
