@@ -295,13 +295,13 @@ public:
 
     /**
      Resets currently opened layout of the original template,
-     and creates the layout of the document with N mails inside
+     and returns the layout dump of the document with N mails inside
      (result run with text::MailMergeType::SHELL)
     */
-    void dumpMMLayout()
+    xmlDocUniquePtr parseMMLayoutDump()
     {
-        mpXmlBuffer = xmlBufferPtr();
         dumpLayout(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
+        return parseLayoutDump();
     }
 
     // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).

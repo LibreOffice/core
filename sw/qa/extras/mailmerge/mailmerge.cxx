@@ -244,27 +244,23 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
 {
     executeMailMerge();
 
-    dumpMMLayout();
-    xmlDocUniquePtr pLayout(
-        xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)),
-                       xmlBufferLength(mpXmlBuffer)));
-
+    xmlDocUniquePtr pXmlDoc = parseMMLayoutDump();
     // check that conditions on sections and bookmarks are evaluated the same
-    assertXPath(pLayout, "/root/page"_ostr, 7);
-    assertXPath(pLayout, "/root/page[1]/body/section"_ostr, 1);
-    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend . "_ustr);
-    assertXPath(pLayout, "/root/page[3]/body/section"_ostr, 1);
-    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
-    assertXPath(pLayout, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war schön . "_ustr);
-    assertXPath(pLayout, "/root/page[5]/body/section"_ostr, 1);
-    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
-    assertXPath(pLayout, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war erlebnisreich . "_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section"_ostr, 3);
-    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
-    assertXPath(pLayout, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend schön erlebnisreich . "_ustr);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 7);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend . "_ustr);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war schön . "_ustr);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
+    assertXPath(pXmlDoc, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war erlebnisreich . "_ustr);
+    assertXPath(pXmlDoc, "/root/page[7]/body/section"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
+    assertXPath(pXmlDoc, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend schön erlebnisreich . "_ustr);
 }
 
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)

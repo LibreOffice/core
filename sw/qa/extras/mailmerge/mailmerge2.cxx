@@ -29,10 +29,6 @@ DECLARE_SHELL_MAILMERGE_TEST(tdf125522_shell, "tdf125522.odt", "10-testing-addre
     // prepare unit test and run
     executeMailMerge();
 
-    // reset currently opened layout of the original template,
-    // and create the layout of the document with 10 mails inside
-    dumpMMLayout();
-
     // there should be no any text frame in output
     CPPUNIT_ASSERT(mxSwTextDocument);
 
@@ -52,15 +48,11 @@ DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addr
     // prepare unit test and run
     executeMailMerge();
 
-    // reset currently opened layout of the original template,
-    // and create the layout of the document with 10 mails inside
-    dumpMMLayout();
-
     // check: each page (one page is one sub doc) has different paragraphs and header paragraphs.
     // All header paragraphs should have numbering.
+    xmlDocUniquePtr pXmlDoc = parseMMLayoutDump();
 
     // check first page
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
     assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
     assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
@@ -281,13 +273,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
     // prepare unit test and run
     executeMailMerge();
 
-    // reset currently opened layout of the original template,
-    // and create the layout of the document with 10 mails inside
-    dumpMMLayout();
-
     // check several pages page
     OUString aExpected(u"Text: Foo "_ustr);
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseMMLayoutDump();
     assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[2]"_ostr, aExpected);
     assertXPathContent(pXmlDoc, "/root/page[3]/body/txt[2]"_ostr, aExpected);
     assertXPathContent(pXmlDoc, "/root/page[5]/body/txt[2]"_ostr, aExpected);
