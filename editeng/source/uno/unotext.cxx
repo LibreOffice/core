@@ -625,9 +625,9 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
         {
             std::optional<SfxItemSet> oAttribs;
             if( nPara != -1 )
-                oAttribs.emplace(pForwarder->GetParaAttribs( nPara ).CloneAsValue());
+                oAttribs.emplace(pForwarder->GetParaAttribs( nPara ));
             else
-                oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ).CloneAsValue());
+                oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ));
 
             //  Replace Dontcare with Default, so that one always has a mirror
             oAttribs->ClearInvalidItems();
@@ -922,9 +922,9 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
     {
         std::optional<SfxItemSet> oAttribs;
         if( nPara != -1 )
-            oAttribs.emplace(pForwarder->GetParaAttribs( nPara ).CloneAsValue());
+            oAttribs.emplace(pForwarder->GetParaAttribs( nPara ));
         else
-            oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ).CloneAsValue() );
+            oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ));
 
         oAttribs->ClearInvalidItems();
 
