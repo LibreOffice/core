@@ -210,6 +210,9 @@ struct TransitionEffect
 
 } // namespace sd::impl
 
+namespace sd
+{
+
 // Local Helper Functions
 namespace
 {
@@ -341,52 +344,19 @@ void lcl_FillSoundListBox(
 }
 
 /// Returns an offset into the list of transition presets
-size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
+sd::TransitionPresetPtr getPreset(const sd::impl::TransitionEffect &rEffect)
 {
-    const sd::TransitionPresetList& rPresetList =
-        sd::TransitionPreset::getTransitionPresetList();
+    const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
 
-    size_t nIdx = 0;
-    for( const auto& aIt: rPresetList )
+    for (const auto& pPreset: rPresetList)
     {
-        if( rEffect.operator==( *aIt ))
-            break;
-        nIdx++;
+        if (rEffect.operator==(*pPreset))
+            return pPreset;
     }
-    return nIdx;
+    return sd::TransitionPresetPtr();
 }
 
 } // anonymous namespace
-
-namespace sd
-{
-
-class TransitionPane : public ValueSet
-{
-public:
-    explicit TransitionPane(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-        : ValueSet(std::move(pScrolledWindow))
-    {
-    }
-
-    void Recalculate()
-    {
-        GetScrollBar()->set_vpolicy(VclPolicyType::AUTOMATIC);
-        RecalculateItemSizes();
-    }
-
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
-    {
-        Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
-        pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-        ValueSet::SetDrawingArea(pDrawingArea);
-        SetOutputSizePixel(aSize);
-
-        SetStyle(GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL);
-        EnableFullItemMode( false );
-        SetColCount(3);
-    }
-};
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
@@ -395,6 +365,8 @@ SlideTransitionPane::SlideTransitionPane(
         PanelLayout( pParent, u"SlideTransitionsPanel"_ustr, u"modules/simpress/ui/slidetransitionspanel.ui"_ustr ),
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
+        mxTransitionsIconView(m_xBuilder->weld_icon_view("transitions_icons")),
+        mxTransitionsScrollWindow(m_xBuilder->weld_scrolled_window("transitions_icons_scrolled_window")),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
@@ -408,8 +380,6 @@ css::ui::LayoutSize SlideTransitionPane::GetHeightForWidth(const sal_Int32 /*nWi
     sal_Int32 nMinimumHeight = get_preferred_size().Height();
     return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
-
-constexpr sal_uInt16 nNoneId = std::numeric_limits<sal_uInt16>::max();
 
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
@@ -432,21 +402,11 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxMF_ADVANCE_AUTO_AFTER->set_width_chars(nWidthChars);
     mxCBX_duration->set_width_chars(nWidthChars);
 
-    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window(u"transitions_iconswin"_ustr, true)));
-    mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, u"transitions_icons"_ustr, *mxVS_TRANSITION_ICONS));
-
     if( pDoc )
         mxModel = pDoc->getUnoModel();
     // TODO: get correct view
     if( mxModel.is())
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
-
-    // dummy list box of slide transitions for startup.
-    mxVS_TRANSITION_ICONS->InsertItem(
-        nNoneId, Image( StockImage::Yes, u"sd/cmd/transition-none.png"_ustr ),
-        SdResId( STR_SLIDETRANSITION_NONE ),
-        VALUESET_APPEND, /* show legend */ true );
-    mxVS_TRANSITION_ICONS->Recalculate();
 
     // set defaults
     mxCB_AUTO_PREVIEW->set_active(true);      // automatic preview on
@@ -458,7 +418,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxPB_APPLY_TO_ALL->connect_clicked( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
     mxPB_PLAY->connect_clicked( LINK( this, SlideTransitionPane, PlayButtonClicked ));
 
-    mxVS_TRANSITION_ICONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
+    mxTransitionsIconView->connect_item_activated(LINK(this, SlideTransitionPane, TransitionSelected));
 
     mxLB_VARIANT->connect_changed( LINK( this, SlideTransitionPane, VariantListBoxSelected ));
     mxCBX_duration->connect_value_changed(LINK( this, SlideTransitionPane, DurationModifiedHdl));
@@ -481,8 +441,8 @@ SlideTransitionPane::~SlideTransitionPane()
 {
     maLateInitTimer.Stop();
     removeListener();
-    mxVS_TRANSITION_ICONSWin.reset();
-    mxVS_TRANSITION_ICONS.reset();
+    mxTransitionsScrollWindow.reset();
+    mxTransitionsIconView.reset();
     mxLB_VARIANT.reset();
     mxCBX_duration.reset();
     mxFT_SOUND.reset();
@@ -562,16 +522,16 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbEffectAmbiguous )
     {
         SAL_WARN( "sd.transitions", "Unusual, ambiguous transition effect" );
-        mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
+        mxTransitionsIconView->select(0);
     }
     else
     {
-        // ToDo: That 0 is "no transition" is documented nowhere except in the
+         // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
         if( aEffect.mnType == 0 )
-            mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
+            mxTransitionsIconView->select(0);
         else
-            updateVariants( getPresetOffset( aEffect ) );
+            updateVariants(getPreset(aEffect));
     }
 
     if( aEffect.mbDurationAmbiguous )
@@ -654,7 +614,8 @@ void SlideTransitionPane::updateControls()
 
 void SlideTransitionPane::updateControlState()
 {
-    mxVS_TRANSITION_ICONSWin->set_sensitive( mbHasSelection );
+    if (mxTransitionsScrollWindow)
+        mxTransitionsScrollWindow->set_sensitive(mbHasSelection);
     mxLB_VARIANT->set_sensitive( mbHasSelection && mxLB_VARIANT->get_count() > 0 );
     mxCBX_duration->set_sensitive( mbHasSelection );
     mxLB_SOUND->set_sensitive( mbHasSelection );
@@ -754,34 +715,34 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     impl::TransitionEffect aResult;
     aResult.setAllAmbiguous();
 
-    bool bNoneSelected = mxVS_TRANSITION_ICONS->IsNoSelection() || mxVS_TRANSITION_ICONS->GetSelectedItemId() == nNoneId;
+    OUString sSelectedId = mxTransitionsIconView->get_selected_id();
+    auto* pTransitionEntry = weld::fromId<TransitionEntry*>(sSelectedId);
+    if (!pTransitionEntry)
+        return aResult;
 
-    // check first (aResult might be overwritten)
-    if(  mxVS_TRANSITION_ICONSWin->get_sensitive() &&
-        !bNoneSelected &&
-         mxVS_TRANSITION_ICONS->GetSelectedItemId() > 0 )
+    const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
+
+    if (pTransitionEntry->mpPreset)
     {
-        const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
-        auto aSelected = rPresetList.begin();
-        std::advance( aSelected, mxVS_TRANSITION_ICONS->GetSelectedItemId() - 1);
+        auto pSelectedPreset = pTransitionEntry->mpPreset;
 
         if (mxLB_VARIANT->get_active() == -1)
         {
             // Transition with just one effect.
-            aResult = impl::TransitionEffect( **aSelected );
+            aResult = impl::TransitionEffect(*pSelectedPreset);
             aResult.setAllAmbiguous();
         }
         else
         {
             int nVariant = 0;
             bool bFound = false;
-            for( const auto& aIter: rPresetList )
+            for(const auto& rPreset: rPresetList)
             {
-                if( aIter->getSetId() == (*aSelected)->getSetId() )
+                if (rPreset->getSetId() == pSelectedPreset->getSetId() )
                 {
                     if( mxLB_VARIANT->get_active() == nVariant)
                     {
-                        aResult = impl::TransitionEffect( *aIter );
+                        aResult = impl::TransitionEffect(*rPreset);
                         aResult.setAllAmbiguous();
                         bFound = true;
                         break;
@@ -799,7 +760,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
         aResult.mbEffectAmbiguous = false;
     }
-    else if (bNoneSelected)
+    else
     {
         aResult.mbEffectAmbiguous = false;
     }
@@ -995,53 +956,45 @@ IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, weld::Button&, void)
     playCurrentEffect();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, weld::IconView&, bool)
 {
-    updateVariants( mxVS_TRANSITION_ICONS->GetSelectedItemId() - 1 );
+    OUString sSelectedId = mxTransitionsIconView->get_selected_id();
+    auto* pTransitionEntry = weld::fromId<TransitionEntry*>(sSelectedId);
+    updateVariants(pTransitionEntry->mpPreset);
     applyToSelectedPages();
+    return true;
 }
 
 /// we use an integer offset into the list of transition presets
-void SlideTransitionPane::updateVariants( size_t nPresetOffset )
+void SlideTransitionPane::updateVariants(TransitionPresetPtr const& pPreset)
 {
-    const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
     mxLB_VARIANT->clear();
-    mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
+    mxLB_VARIANT->set_sensitive(false);
+    mxLB_VARIANT->set_active(0);
 
-    if( nPresetOffset >= rPresetList.size() )
+    if (!pPreset)
     {
-        mxLB_VARIANT->set_sensitive( false );
+        mxTransitionsIconView->select(0);
     }
     else
     {
-        auto pFound = rPresetList.begin();
-        std::advance( pFound, nPresetOffset );
-
-        // Fill in the variant listbox
-        size_t nFirstItem = 0, nItem = 1;
-        for( const auto& aIt: rPresetList )
+        auto iterator = maTranstionMap.find(pPreset->getSetId());
+        if (iterator != maTranstionMap.end())
         {
-            if( aIt->getSetId() == (*pFound)->getSetId() )
+            auto& pTransitionEntry = iterator->second;
+            if (!pTransitionEntry->mnVariants.empty())
             {
-                if (!nFirstItem)
-                    nFirstItem = nItem;
-                if( !aIt->getVariantLabel().isEmpty() )
+                for (OUString const& rCurrentVariant : pTransitionEntry->mnVariants)
                 {
-                    mxLB_VARIANT->append_text( aIt->getVariantLabel() );
-                    if( *pFound == aIt )
-                        mxLB_VARIANT->set_active( mxLB_VARIANT->get_count()-1 );
+                    mxLB_VARIANT->append_text(rCurrentVariant);
+                    if (pPreset->getVariantLabel() == rCurrentVariant)
+                        mxLB_VARIANT->set_active(mxLB_VARIANT->get_count() - 1);
                 }
+                mxLB_VARIANT->set_sensitive(true);
             }
-            nItem++;
+
+            mxTransitionsIconView->select(pTransitionEntry->mnIndex);
         }
-
-        if( mxLB_VARIANT->get_count() == 0 )
-            mxLB_VARIANT->set_sensitive( false );
-        else
-            mxLB_VARIANT->set_sensitive(true);
-
-        // item has the id of the first transition from this set.
-        mxVS_TRANSITION_ICONS->SelectItem( nFirstItem );
     }
 }
 
@@ -1102,47 +1055,51 @@ IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, weld::Toggleable&, void
 
 IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
+    mxTransitionsIconView->freeze();
 
-    size_t nPresetOffset = 0;
-    for( const TransitionPresetPtr& pPreset: rPresetList )
     {
-        const OUString sLabel( pPreset->getSetLabel() );
-        if( !sLabel.isEmpty() )
+        auto pTransition = std::make_unique<TransitionEntry>();
+        const OUString aId = weld::toId(pTransition.get());
+        pTransition->msIcon = u"sd/cmd/transition-none.png"_ustr;
+        pTransition->msLabel = SdResId(STR_SLIDETRANSITION_NONE);
+        pTransition->mnIndex = 0;
+        mxTransitionsIconView->append(aId, pTransition->msLabel, pTransition->msIcon);
+        maTranstionMap.emplace(u"None"_ustr, std::move(pTransition));
+    }
+
+    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
+    size_t nIndex = 1;
+    for (TransitionPresetPtr const& pPreset: rPresetList)
+    {
+        const OUString aLabel = pPreset->getSetLabel();
+        if (!aLabel.isEmpty())
         {
-            if( m_aNumVariants.find( pPreset->getSetId() ) == m_aNumVariants.end() )
+            auto aIterator = maTranstionMap.find(pPreset->getSetId());
+            if (aIterator == maTranstionMap.end())
             {
-                OUString sImageName("sd/cmd/transition-" + pPreset->getSetId() + ".png");
-                BitmapEx aIcon( sImageName );
-                if ( aIcon.IsEmpty() ) // need a fallback
-                    sImageName = "sd/cmd/transition-none.png";
+                auto pTransition = std::make_unique<TransitionEntry>();
+                const OUString aId = weld::toId(pTransition.get());
 
-                mxVS_TRANSITION_ICONS->InsertItem(
-                    nPresetOffset + 1, Image(StockImage::Yes, sImageName), sLabel,
-                    VALUESET_APPEND, /* show legend */ true );
+                pTransition->msIcon = u"sd/cmd/transition-"_ustr + pPreset->getSetId() + u".png"_ustr;
+                pTransition->msLabel = aLabel;
+                pTransition->mpPreset = pPreset;
+                if (!pPreset->getVariantLabel().isEmpty())
+                    pTransition->mnVariants.push_back(pPreset->getVariantLabel());
+                pTransition->mnIndex = nIndex;
+                nIndex++;
 
-                m_aNumVariants[ pPreset->getSetId() ] = 1;
+                mxTransitionsIconView->append(aId, pTransition->msLabel, pTransition->msIcon);
+                maTranstionMap.emplace(pPreset->getSetId(), std::move(pTransition));
             }
             else
             {
-                m_aNumVariants[ pPreset->getSetId() ]++;
+                auto& pTransition = aIterator->second;
+                pTransition->mnVariants.push_back(pPreset->getVariantLabel());
             }
         }
-        nPresetOffset++;
     }
-    mxVS_TRANSITION_ICONS->Recalculate();
-
-    SAL_INFO( "sd.transitions", "Item transition offsets in ValueSet:");
-    for( size_t i = 0; i < mxVS_TRANSITION_ICONS->GetItemCount(); ++i )
-        SAL_INFO( "sd.transitions", i << ":" << mxVS_TRANSITION_ICONS->GetItemId( i ) );
-
-    nPresetOffset = 0;
-    SAL_INFO( "sd.transitions", "Transition presets by offsets:");
-    for( const auto& aIter: rPresetList )
-    {
-        SAL_INFO( "sd.transitions", nPresetOffset++ << " " <<
-                  aIter->getPresetId() << ": " << aIter->getSetId() );
-    }
+    mxTransitionsIconView->set_size_request(0, 0);
+    mxTransitionsIconView->thaw();
 
     updateSoundList();
     updateControls();
