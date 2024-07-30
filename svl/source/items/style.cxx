@@ -570,6 +570,36 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r ) :
     *this += r;
 }
 
+namespace
+{
+
+struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
+{
+    explicit StyleSheetDisposerFunctor(SfxStyleSheetBasePool* pool, bool bBroadcast = true)
+            : mPool(pool), mbBroadcast(bBroadcast) {}
+
+    void
+    Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override
+    {
+        cppu::OWeakObject* weakObject = styleSheet.get();
+        css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
+        if( xComp.is() ) try
+        {
+            xComp->dispose();
+        }
+        catch( css::uno::Exception& )
+        {
+        }
+        if (mbBroadcast)
+            mPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetErased, *styleSheet));
+    }
+
+    SfxStyleSheetBasePool* mPool;
+    bool mbBroadcast;
+};
+
+}
+
 SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 {
 #ifdef DBG_UTIL
@@ -577,7 +607,11 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 #endif
 
     Broadcast( SfxHint(SfxHintId::Dying) );
-    Clear();
+
+    // Do not broadcast during destruction, otherwise things like sdr::properties::AttributeProperties may try to
+    // call back into this pool.
+    StyleSheetDisposerFunctor cleanup(this, false);
+    pImpl->mxIndexedStyleSheets->Clear(cleanup);
 }
 
 std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
@@ -737,34 +771,6 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 #endif
     StoreStyleSheet(rtl::Reference< SfxStyleSheetBase >( p ) );
     Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *p ) );
-}
-
-namespace
-{
-
-struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
-{
-    explicit StyleSheetDisposerFunctor(SfxStyleSheetBasePool* pool)
-            : mPool(pool) {}
-
-    void
-    Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override
-    {
-        cppu::OWeakObject* weakObject = styleSheet.get();
-        css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
-        if( xComp.is() ) try
-        {
-            xComp->dispose();
-        }
-        catch( css::uno::Exception& )
-        {
-        }
-        mPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetErased, *styleSheet));
-    }
-
-    SfxStyleSheetBasePool* mPool;
-};
-
 }
 
 void SfxStyleSheetBasePool::Clear()
