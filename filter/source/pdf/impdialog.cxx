@@ -80,7 +80,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbIsExportPlaceholders( false ),
     mbAddStream( false ),
     mnFormsType( 0 ),
-    mbExportFormFields( true ),
+    mbExportFormFields( false ),
     mbAllowDuplicateFieldNames( false ),
     mbExportBookmarks( true ),
     mbExportHiddenSlides ( false ),
@@ -213,7 +213,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbIsExportPlaceholders = maConfigItem.ReadBool( "ExportPlaceholders", false );
     mbAddStream = maConfigItem.ReadBool( "IsAddStream", false );
 
-    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", true );
+    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", false );
     mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;

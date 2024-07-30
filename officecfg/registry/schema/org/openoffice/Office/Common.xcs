@@ -4670,7 +4670,7 @@
               <desc>Specifies whether form fields are exported as widgets or
               only their fixed print representation is exported.</desc>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="FormsType" oor:type="xs:int" oor:nillable="false">
             <info>

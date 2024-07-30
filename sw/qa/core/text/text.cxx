@@ -180,6 +180,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)
 {
+    SwExportFormFieldsGuard g;
     createSwDoc("tdf159336.odt");
     save("writer_pdf_Export");
 
@@ -1002,6 +1003,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1049,6 +1051,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a content control, in placeholder mode:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1077,6 +1080,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a checkbox content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1107,6 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a dropdown content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1137,6 +1142,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     createSwDoc("tdf153040.docx");
 
     save("writer_pdf_Export");
@@ -1161,6 +1167,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a date content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1194,6 +1201,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a custom 24pt font size and a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1226,6 +1234,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a combo box content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1257,6 +1266,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1293,6 +1303,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a text-type placeholder field:
     createSwDoc("placeholder.fodt");
 

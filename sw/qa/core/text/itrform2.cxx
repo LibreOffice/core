@@ -204,6 +204,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a checked checkbox content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -240,6 +241,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a custom orange font color and a content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -272,6 +274,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a dropdown: custom default text and 3 items:
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -336,6 +339,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
 
     // When exporting to PDF, exporting notes in master (and not as widgets):
     uno::Sequence<beans::PropertyValue> aFilterData = {
+        comphelper::makePropertyValue(u"ExportFormFields"_ustr, true),
         comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
         comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),
     };

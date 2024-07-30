@@ -77,6 +77,10 @@
     void TestName::verify()
 
 class SwXTextDocument;
+namespace comphelper
+{
+class ConfigurationChanges;
+}
 namespace vcl
 {
 namespace pdf
@@ -84,6 +88,16 @@ namespace pdf
 class PDFiumDocument;
 }
 }
+
+/// Temporarily enables the ExportFormFields setting.
+class SWQAHELPER_DLLPUBLIC SwExportFormFieldsGuard
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> m_pBatch;
+    bool m_bValue;
+public:
+    SwExportFormFieldsGuard();
+    ~SwExportFormFieldsGuard();
+};
 
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
 class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
