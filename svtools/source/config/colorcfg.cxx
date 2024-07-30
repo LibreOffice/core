@@ -255,11 +255,15 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
 
 void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
 {
-    const bool bOnlyChangingCurrentColorScheme = rProperties.getLength() == 1 && rProperties[0] == "CurrentColorScheme";
     const OUString sOldLoadedScheme = m_sLoadedScheme;
 
-    //loading via notification always uses the default setting
+    ColorConfigValue aOldConfigValues[ColorConfigEntryCount];
+    std::copy( m_aConfigValues, m_aConfigValues + ColorConfigEntryCount, aOldConfigValues );
+
+    // loading via notification always uses the default setting
     Load(OUString());
+
+    const bool bNoColorSchemeChange = sOldLoadedScheme == m_sLoadedScheme;
 
     // If the name of the scheme hasn't changed, then there is no change to the
     // global color scheme name, but Kit deliberately only changed the then
@@ -267,13 +271,42 @@ void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
     // of documents with the original 'light' color scheme and the last changed
     // color scheme 'dark'. Kit then tries to set the color scheme again to the
     // last changed color scheme 'dark' to try and update a 'light' document
-    // that had opted out of the last change to 'dark'. So tag such an apparent
-    // null change attempt with 'OnlyCurrentDocumentColorScheme' to allow it to
-    // go through, but identify what that change is for, so the other color
-    // config listeners for whom it doesn't matter, can ignore it as an
-    // optimization.
-    const bool bOnlyCurrentDocumentColorScheme = bOnlyChangingCurrentColorScheme && sOldLoadedScheme == m_sLoadedScheme &&
-                                                 comphelper::LibreOfficeKit::isActive();
+    // that had opted out of the last change to 'dark'...
+    const bool bEmptyColorSchemeNotify =
+        rProperties.getLength() == 1
+        && rProperties[0] == "CurrentColorScheme"
+        && bNoColorSchemeChange;
+
+    // ...We can get into a similar situation with inverted backgrounds, for
+    // similar reasons, so even if we are only changing the current color scheme
+    // we need to make sure that something actually changed...
+    bool bNoConfigChange = true;
+    for (int i = 0; i < ColorConfigEntryCount; ++i) {
+        if (aOldConfigValues[i] != m_aConfigValues[i]) {
+            bNoConfigChange = false;
+            break;
+        }
+    }
+
+    // ...and if something from a different color scheme changes, our config
+    // values wouldn't change anyway, so we need to make sure that if something
+    // changed it was this color scheme...
+    const OUString sCurrentSchemePropertyPrefix = "ColorSchemes/org.openoffice.Office.UI:ColorScheme['" + m_sLoadedScheme + "']/";
+    bool bOnlyCurrentSchemeChanges = true;
+    for (int i = 0; i < rProperties.getLength(); ++i) {
+        if (!rProperties[i].startsWith(sCurrentSchemePropertyPrefix)) {
+            bOnlyCurrentSchemeChanges = false;
+            break;
+        }
+    }
+
+    bool bEmptyCurrentSchemeNotify = bNoColorSchemeChange && bNoConfigChange && bOnlyCurrentSchemeChanges;
+
+    // ...We can tag apparent null change attempts with
+    // 'OnlyCurrentDocumentColorScheme' to allow them to go through, but
+    // identify what that change is for, so the other color config listeners for
+    // whom it doesn't matter, can ignore it as an optimization.
+    const bool bOnlyCurrentDocumentColorScheme = (bEmptyColorSchemeNotify || bEmptyCurrentSchemeNotify) && comphelper::LibreOfficeKit::isActive();
     NotifyListeners(bOnlyCurrentDocumentColorScheme ? ConfigurationHints::OnlyCurrentDocumentColorScheme : ConfigurationHints::NONE);
 }
 
