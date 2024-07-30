@@ -408,7 +408,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             bool bExportNotesPages = false;
             bool bExportOnlyNotesPages = false;
             bool bUseTransitionEffects = true;
-            bool bExportFormFields = true;
+            bool bExportFormFields = false;
             sal_Int32 nFormsFormat = 0;
             bool bAllowDuplicateFieldNames = false;
             bool bHideViewerToolbar = false;

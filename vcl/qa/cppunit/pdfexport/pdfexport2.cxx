@@ -803,6 +803,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormFontName)
 {
     // Import the bugdoc and export as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"form-font-name.odt");
 
     // Parse the export result with pdfium.
@@ -2772,8 +2776,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
 {
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        { "ExportFormFields", uno::Any(true) },
+    }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     vcl::filter::PDFDocument aDocument;
@@ -3698,8 +3704,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
 {
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        { "ExportFormFields", uno::Any(true) },
+    }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     vcl::filter::PDFDocument aDocument;
@@ -4586,6 +4594,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportResourceItemReference)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
 {
     // Import the bugdoc and export as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
     load(u"content-control-rtl.docx", aDocument);
 

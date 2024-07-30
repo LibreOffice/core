@@ -23,6 +23,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -43,7 +44,8 @@ public:
     }
 
     void saveAsPDF(std::u16string_view rFile);
-    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
+              bool bUseExportFormFields = false);
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -54,8 +56,16 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
+                         bool bUseExportFormFields)
 {
+    if (bUseExportFormFields)
+    {
+        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+            { "ExportFormFields", uno::Any(bUseExportFormFields) },
+        }));
+        aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    }
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -340,6 +350,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
 {
     // Import the bugdoc and export as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"tdf127217.odt");
 
     // Parse the export result with pdfium.
@@ -577,6 +591,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
 {
     // Import the bugdoc and export as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"tdf148706.odt");
 
     // Parse the export result with pdfium.
@@ -857,7 +875,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf105972.fodt", aDocument);
+    load(u"tdf105972.fodt", aDocument, /*bUseExportFormFields=*/true);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -921,7 +939,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf148442.odt", aDocument);
+    load(u"tdf148442.odt", aDocument, /*bUseExportFormFields=*/true);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -990,7 +1008,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf118244_radioButtonGroup.odt", aDocument);
+    load(u"tdf118244_radioButtonGroup.odt", aDocument, /*bUseExportFormFields=*/true);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
