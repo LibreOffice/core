@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCollator)
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColor)
+CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColorInsertRow)
 {
     m_pDoc->InsertTab(0, u"Table1"_ustr);
 
@@ -146,6 +146,47 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColor)
     // Failed if row 3 is not blue all the way through
     pItem = nullptr;
     m_pDoc->GetPattern(ScAddress(1000, 3, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColorInsertColumn)
+{
+    m_pDoc->InsertTab(0, u"Table1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+
+    // Set Values to B1, C2, D5
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 1.0); // B1
+    m_pDoc->SetValue(ScAddress(2, 1, 0), 2.0); // C2
+    m_pDoc->SetValue(ScAddress(3, 4, 0), 3.0); // D5
+
+    // Add patterns
+    ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
+    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    m_pDoc->ApplyPatternAreaTab(3, 0, 3, m_pDoc->MaxRow(), 0, aCellBlueColor);
+
+    // Insert a new column at column 3
+    ScRange aColumnOne(2, 0, 0, 2, m_pDoc->MaxRow(), 0);
+    aMark.SetMarkArea(aColumnOne);
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    rFunc.InsertCells(aColumnOne, &aMark, INS_INSCOLS_BEFORE, true, true);
+
+    // Check patterns
+    const SfxPoolItem* pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(4, 1000, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
+    // Undo the new column
+    m_pDoc->GetUndoManager()->Undo();
+
+    // Check patterns
+    // Failed if column 3 is not blue all the way through
+    pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(3, 1000, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
     CPPUNIT_ASSERT(pItem);
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
 
