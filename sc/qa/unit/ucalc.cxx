@@ -111,6 +111,64 @@ CPPUNIT_TEST_FIXTURE(Test, testCollator)
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColor)
+{
+    m_pDoc->InsertTab(0, u"Table1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+
+    // Set Values to B1, C2, D5
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 1.0); // B1
+    m_pDoc->SetValue(ScAddress(2, 1, 0), 2.0); // C2
+    m_pDoc->SetValue(ScAddress(3, 4, 0), 3.0); // D5
+
+    // Add patterns
+    ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
+    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    m_pDoc->ApplyPatternAreaTab(0, 3, m_pDoc->MaxCol(), 3, 0, aCellBlueColor);
+
+    // Insert a new row at row 3
+    ScRange aRowOne(0, 2, 0, m_pDoc->MaxCol(), 2, 0);
+    aMark.SetMarkArea(aRowOne);
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true);
+
+    // Check patterns
+    const SfxPoolItem* pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(1000, 4, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
+    // Undo the new row
+    m_pDoc->GetUndoManager()->Undo();
+
+    // Check patterns
+    // Failed if row 3 is not blue all the way through
+    pItem = nullptr;
+    m_pDoc->GetPattern(ScAddress(1000, 3, 0))->GetItemSet().HasItem(ATTR_BACKGROUND, &pItem);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMergedHyperlink)
+{
+    m_pDoc->InsertTab(0, u"Table1"_ustr);
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
+
+    ScFieldEditEngine& pEE = m_pDoc->GetEditEngine();
+    pEE.SetTextCurrentDefaults(u"https://libreoffice.org/"_ustr);
+    m_pDoc->SetEditText(ScAddress(1, 0, 0), pEE.CreateTextObject()); // B1
+
+    m_pDoc->DoMergeContents(0, 0, 1, 0, 0); // A1:B1
+
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, m_pDoc->GetCellType(ScAddress(0, 0, 0))); // A1
+    const EditTextObject* pEditObj = m_pDoc->GetEditText(ScAddress(0, 0, 0)); // A1
+    CPPUNIT_ASSERT(pEditObj);
+    CPPUNIT_ASSERT_EQUAL(u"https://libreoffice.org/"_ustr, pEditObj->GetText(0));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
 {
     m_pDoc->InsertTab(0, u"foo"_ustr);
