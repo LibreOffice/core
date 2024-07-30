@@ -2060,6 +2060,26 @@ void JSTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int col)
     sendUpdate();
 }
 
+void JSTreeView::set_sensitive(int pos, bool bSensitive, int col)
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, 0);
+
+    while (pEntry && pos--)
+        pEntry = m_xTreeView->Next(pEntry);
+
+    if (pEntry)
+    {
+        SalInstanceTreeView::set_sensitive(pEntry, bSensitive, col);
+        sendUpdate();
+    }
+}
+
+void JSTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
+{
+    SalInstanceTreeView::set_sensitive(rIter, bSensitive, col);
+    sendUpdate();
+}
+
 void JSTreeView::select(int pos)
 {
     assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
