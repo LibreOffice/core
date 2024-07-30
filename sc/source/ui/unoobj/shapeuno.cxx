@@ -211,6 +211,29 @@ static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<u
     return xRet;
 }
 
+/**
+ * If there are lots of shapes, the cost of allocating the XPropertySetInfo structures adds up.
+ * But we have a static set of properties, and most of the underlying types have one static
+ * set per class. So we can cache the combination of them, which dramatically reduces the number
+ * of these we need to allocate.
+ */
+static uno::Reference<beans::XPropertySetInfo> getPropertySetInfoFromCache(const uno::Reference<beans::XPropertySetInfo>& rxPropSetInfo)
+{
+    static std::mutex gCacheMutex;
+    static std::unordered_map<uno::Reference<beans::XPropertySetInfo>, uno::Reference<beans::XPropertySetInfo>> gCacheMap;
+
+    std::unique_lock l(gCacheMutex);
+    // prevent memory leaks, possibly we could use an LRU map here.
+    if (gCacheMap.size() > 100)
+        gCacheMap.clear();
+    auto it = gCacheMap.find(rxPropSetInfo);
+    if (it != gCacheMap.end())
+        return it->second;
+    uno::Reference<beans::XPropertySetInfo> xCombined = new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), rxPropSetInfo->getProperties() );
+    gCacheMap.emplace(rxPropSetInfo, xCombined);
+    return xCombined;
+}
+
 //  XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo()
@@ -225,8 +248,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
         if (pShapePropertySet)
         {
             uno::Reference<beans::XPropertySetInfo> xAggInfo(pShapePropertySet->getPropertySetInfo());
-            const uno::Sequence<beans::Property> aPropSeq(xAggInfo->getProperties());
-            mxPropSetInfo.set(new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq ));
+            mxPropSetInfo = getPropertySetInfoFromCache(xAggInfo);
         }
     }
     return mxPropSetInfo;
