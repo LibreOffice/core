@@ -1707,6 +1707,18 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
     return eState;
 }
 
+bool SvTreeListBox::GetCheckButtonEnabled(SvTreeListEntry* pEntry) const
+{
+    if (pEntry && (nTreeFlags & SvTreeFlags::CHKBTN))
+    {
+        SvLBoxButton* pItem
+            = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+        if (pItem)
+            return pItem->isEnable();
+    }
+    return false;
+}
+
 void SvTreeListBox::CheckButtonHdl()
 {
     if ( pCheckButtonData )

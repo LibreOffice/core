@@ -161,6 +161,7 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                 rJsonWriter.put("state", false);
             else if (eCheckState == SvButtonState::Checked)
                 rJsonWriter.put("state", true);
+            rJsonWriter.put("enabled", pTabListBox->GetCheckButtonEnabled(pEntry));
         }
 
         if (pTabListBox->IsSelected(pEntry))
