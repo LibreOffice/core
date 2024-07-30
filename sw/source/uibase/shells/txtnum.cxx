@@ -260,11 +260,19 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
     case FN_SVX_SET_BULLET:
     case FN_SVX_SET_OUTLINE:
         {
-            const SfxUInt16Item* pIndexItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_INDEX );
-            if (!pIndexItem) // tdf#161653
-                pIndexItem = rReq.GetArg<SfxUInt16Item>(nSlot);
-            const SfxStringItem* pCharItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_CHAR );
-            const SfxStringItem* pFontItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_FONT );
+            const SfxUInt16Item* pIndexItem = nullptr;
+            const SfxStringItem* pCharItem = nullptr;
+            const SfxStringItem* pFontItem = nullptr;
+
+            // tdf#162264 check if rReq.GetArgs() is a nullptr
+            if ( rReq.GetArgs() )
+            {
+                pIndexItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_INDEX );
+                if (!pIndexItem) // tdf#161653
+                    pIndexItem = rReq.GetArg<SfxUInt16Item>(nSlot);
+                pCharItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_CHAR );
+                pFontItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_FONT );
+            }
 
             if ( pIndexItem != nullptr || ( pCharItem != nullptr && pFontItem != nullptr ) )
             {
