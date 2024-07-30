@@ -814,6 +814,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormFontName)
 {
     // Import the bugdoc and export as PDF.
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"form-font-name.odt");
 
     // Parse the export result with pdfium.
@@ -2836,8 +2840,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
 
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        { "ExportFormFields", uno::Any(true) },
+    }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"PDF_export_with_formcontrol.fodt");
 
@@ -3790,8 +3796,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
 
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        { "ExportFormFields", uno::Any(true) },
+    }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
 
     saveAsPDF(u"formcontrol.fodt");
@@ -4691,6 +4699,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
 {
     // Import the bugdoc and export as PDF.
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"content-control-rtl.docx");
 
     // Parse the export result.
