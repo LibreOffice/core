@@ -676,7 +676,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             svtools::ColorConfigValue aValue;
-            aValue.bIsVisible = true;
 
             if(aNewTheme == "Dark")
                 aValue.nColor = aDefDarkColor;
