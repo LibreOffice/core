@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,6 +17,16 @@
     <property name="can-focus">False</property>
     <property name="icon-name">sd/res/playblue_16.png</property>
   </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="SlideTransitionsPanel">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -31,44 +41,32 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkBox" id="box4">
+          <object class="GtkScrolledWindow" id="transitions_icons_scrolled_window">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkScrolledWindow" id="transitions_iconswin">
+              <object class="GtkIconView" id="transitions_icons">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="margin">6</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="transitions_icons">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="transitions_icons-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|transitions_icons">Select the slide transition you want to use for the selected slides.</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
+                <property name="text-column">1</property>
+                <property name="item-width">55</property>
+                <property name="tooltip-column">1</property>
+                <property name="activate-on-single-click">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="transitions_icons-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|transitions_icons">Select the slide transition you want to use for the selected slides.</property>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
           <packing>
