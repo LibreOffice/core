@@ -845,6 +845,8 @@ void SAL_CALL OResultSet::updateRow(  )
 
     try
     {
+        /* tdf#148367 this block is commented out, because SQLBulkOperations fails
+                      with Access ODBC 64-bit drivers on Windows
         bool bPositionByBookmark = functions().has(ODBC3SQLFunctionId::BulkOperations);
         if ( bPositionByBookmark )
         {
@@ -866,7 +868,7 @@ void SAL_CALL OResultSet::updateRow(  )
             // (neither the contents of aBookmark FWIW)
             assert(nRealLen == aBookmark.getLength());
         }
-        else
+        else */
         {
             nRet = functions().SetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE);
             fillNeededData(nRet);
