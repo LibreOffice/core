@@ -44,6 +44,8 @@ interface XTest {
     boolean isStructLong([in] StructLong value);
     StructString getStructString();
     boolean isStructString([in] StructString value);
+    Template<any, StructString> getTemplate();
+    boolean isTemplate([in] Template<any, StructString> value);
     any getAnyVoid();
     boolean isAnyVoid([in] any value);
     any getAnyBoolean();

@@ -110,6 +110,16 @@ Module.uno_init.then(function() {
         v.m4.delete();
     }
     {
+        let v = test.getTemplate();
+        console.log(v);
+        console.assert(v.m1.m === 'foo');
+        console.assert(v.m2 === -123456);
+        console.assert(v.m3.get() === -123456);
+        console.assert(v.m4.m === 'barr');
+        console.assert(test.isTemplate(v));
+        v.m3.delete();
+    }
+    {
         let v = test.getAnyVoid();
         console.log(v);
         console.assert(v.get() === undefined);
