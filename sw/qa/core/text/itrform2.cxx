@@ -200,6 +200,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a checked checkbox content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -236,6 +237,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a custom orange font color and a content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -268,6 +270,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a dropdown: custom default text and 3 items:
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);

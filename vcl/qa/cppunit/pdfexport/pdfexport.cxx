@@ -24,6 +24,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
@@ -44,8 +45,7 @@ public:
     }
 
     void saveAsPDF(std::u16string_view rFile);
-    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-              bool bUseTaggedPDF = true);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -56,13 +56,9 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-                         bool bUseTaggedPDF)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
 {
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(bUseTaggedPDF) } }));
-    aMediaDescriptor["FilterData"] <<= aFilterData;
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -311,7 +307,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"tdf127217.odt");
 
     // Parse the export result with pdfium.
@@ -549,7 +549,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
 {
     // Import the bugdoc and export as PDF.
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     saveAsPDF(u"tdf148706.odt");
 
     // Parse the export result with pdfium.
@@ -840,8 +844,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     vcl::filter::PDFDocument aDocument;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     // Loading fails with tagged PDF enabled
-    load(u"tdf105972.fodt", aDocument, false);
+    load(u"tdf105972.fodt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -905,8 +913,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
     vcl::filter::PDFDocument aDocument;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     // Loading fails with tagged PDF enabled
-    load(u"tdf148442.odt", aDocument, false);
+    load(u"tdf148442.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -975,8 +987,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     // Loading fails with tagged PDF enabled
-    load(u"tdf118244_radioButtonGroup.odt", aDocument, false);
+    load(u"tdf118244_radioButtonGroup.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
