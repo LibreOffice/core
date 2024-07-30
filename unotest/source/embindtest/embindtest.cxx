@@ -116,14 +116,53 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     org::libreoffice::embindtest::Struct SAL_CALL getStruct() override
     {
-        return { -123456, 100.5, u"hä"_ustr, css::uno::Any(true) };
+        return { true,
+                 -12,
+                 -1234,
+                 54321,
+                 -123456,
+                 3456789012,
+                 -123456789,
+                 9876543210,
+                 -10.25,
+                 100.5,
+                 u'Ö',
+                 u"hä"_ustr,
+                 cppu::UnoType<sal_Int32>::get(),
+                 css::uno::Any(sal_Int32(-123456)),
+                 { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                 org::libreoffice::embindtest::Enum_E_2,
+                 { -123456 },
+                 { { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr } },
+                 static_cast<OWeakObject*>(this) };
     }
 
     sal_Bool SAL_CALL isStruct(org::libreoffice::embindtest::Struct const& value) override
     {
         return value
-               == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
-                                                        css::uno::Any(true) };
+               == org::libreoffice::embindtest::Struct{ true,
+                                                        -12,
+                                                        -1234,
+                                                        54321,
+                                                        -123456,
+                                                        3456789012,
+                                                        -123456789,
+                                                        9876543210,
+                                                        -10.25,
+                                                        100.5,
+                                                        u'Ö',
+                                                        u"hä"_ustr,
+                                                        cppu::UnoType<sal_Int32>::get(),
+                                                        css::uno::Any(sal_Int32(-123456)),
+                                                        { u"foo"_ustr, u"barr"_ustr,
+                                                          u"bazzz"_ustr },
+                                                        org::libreoffice::embindtest::Enum_E_2,
+                                                        { -123456 },
+                                                        { { u"foo"_ustr },
+                                                          -123456,
+                                                          css::uno::Any(sal_Int32(-123456)),
+                                                          { u"barr"_ustr } },
+                                                        static_cast<OWeakObject*>(this) };
     }
 
     org::libreoffice::embindtest::StructLong SAL_CALL getStructLong() override
@@ -314,16 +353,56 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     css::uno::Any SAL_CALL getAnyStruct() override
     {
-        return css::uno::Any(org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
-                                                                   css::uno::Any(true) });
+        return css::uno::Any(org::libreoffice::embindtest::Struct{
+            true,
+            -12,
+            -1234,
+            54321,
+            -123456,
+            3456789012,
+            -123456789,
+            9876543210,
+            -10.25,
+            100.5,
+            u'Ö',
+            u"hä"_ustr,
+            cppu::UnoType<sal_Int32>::get(),
+            css::uno::Any(sal_Int32(-123456)),
+            { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+            org::libreoffice::embindtest::Enum_E_2,
+            { -123456 },
+            { { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr } },
+            static_cast<OWeakObject*>(this) });
     }
 
     sal_Bool SAL_CALL isAnyStruct(css::uno::Any const& value) override
     {
         return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
                && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
-                      == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
-                                                               css::uno::Any(true) };
+                      == org::libreoffice::embindtest::Struct{
+                             true,
+                             -12,
+                             -1234,
+                             54321,
+                             -123456,
+                             3456789012,
+                             -123456789,
+                             9876543210,
+                             -10.25,
+                             100.5,
+                             u'Ö',
+                             u"hä"_ustr,
+                             cppu::UnoType<sal_Int32>::get(),
+                             css::uno::Any(sal_Int32(-123456)),
+                             { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                             org::libreoffice::embindtest::Enum_E_2,
+                             { -123456 },
+                             { { u"foo"_ustr },
+                               -123456,
+                               css::uno::Any(sal_Int32(-123456)),
+                               { u"barr"_ustr } },
+                             static_cast<OWeakObject*>(this)
+                         };
     }
 
     css::uno::Any SAL_CALL getAnyException() override
@@ -540,9 +619,72 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     css::uno::Sequence<org::libreoffice::embindtest::Struct> SAL_CALL getSequenceStruct() override
     {
-        return { { -123456, -100.5, u"foo"_ustr, css::uno::Any() },
-                 { 1, 1.25, u"barr"_ustr, css::uno::Any(true) },
-                 { 123456, 100.75, u"bazzz"_ustr, css::uno::Any(u"buzzz"_ustr) } };
+        return {
+            { true,
+              -12,
+              -1234,
+              1,
+              -123456,
+              1,
+              -123456789,
+              1,
+              -10.25,
+              -100.5,
+              'a',
+              u"hä"_ustr,
+              cppu::UnoType<sal_Int32>::get(),
+              css::uno::Any(sal_Int32(-123456)),
+              {},
+              org::libreoffice::embindtest::Enum_E_2,
+              { -123456 },
+              { { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr } },
+              static_cast<OWeakObject*>(this) },
+            { true,
+              1,
+              1,
+              10,
+              1,
+              10,
+              1,
+              10,
+              1.5,
+              1.25,
+              'B',
+              u"barr"_ustr,
+              cppu::UnoType<void>::get(),
+              css::uno::Any(),
+              { u"foo"_ustr, u"barr"_ustr },
+              org::libreoffice::embindtest::Enum_E3,
+              { 1 },
+              { { u"baz"_ustr }, 1, css::uno::Any(), { u"foo"_ustr } },
+              nullptr },
+            { false,
+              12,
+              1234,
+              54321,
+              123456,
+              3456789012,
+              123456789,
+              9876543210,
+              10.75,
+              100.75,
+              u'Ö',
+              u"bazzz"_ustr,
+              cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get(),
+              css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                  org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                  org::libreoffice::embindtest::Enum_E_10 }),
+              { u"baz"_ustr },
+              org::libreoffice::embindtest::Enum_E_10,
+              { 123456 },
+              { { u"barr"_ustr },
+                123456,
+                css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                    org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                    org::libreoffice::embindtest::Enum_E_10 }),
+                { u"bazz"_ustr } },
+              static_cast<OWeakObject*>(this) }
+        };
     }
 
     sal_Bool SAL_CALL
@@ -550,9 +692,76 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     {
         return value
                == css::uno::Sequence<org::libreoffice::embindtest::Struct>{
-                      { -123456, -100.5, u"foo"_ustr, css::uno::Any() },
-                      { 1, 1.25, u"barr"_ustr, css::uno::Any(true) },
-                      { 123456, 100.75, u"bazzz"_ustr, css::uno::Any(u"buzzz"_ustr) }
+                      { true,
+                        -12,
+                        -1234,
+                        1,
+                        -123456,
+                        1,
+                        -123456789,
+                        1,
+                        -10.25,
+                        -100.5,
+                        'a',
+                        u"hä"_ustr,
+                        cppu::UnoType<sal_Int32>::get(),
+                        css::uno::Any(sal_Int32(-123456)),
+                        {},
+                        org::libreoffice::embindtest::Enum_E_2,
+                        { -123456 },
+                        { { u"foo"_ustr },
+                          -123456,
+                          css::uno::Any(sal_Int32(-123456)),
+                          { u"barr"_ustr } },
+                        static_cast<OWeakObject*>(this) },
+                      { true,
+                        1,
+                        1,
+                        10,
+                        1,
+                        10,
+                        1,
+                        10,
+                        1.5,
+                        1.25,
+                        'B',
+                        u"barr"_ustr,
+                        cppu::UnoType<void>::get(),
+                        css::uno::Any(),
+                        { u"foo"_ustr, u"barr"_ustr },
+                        org::libreoffice::embindtest::Enum_E3,
+                        { 1 },
+                        { { u"baz"_ustr }, 1, css::uno::Any(), { u"foo"_ustr } },
+                        nullptr },
+                      { false,
+                        12,
+                        1234,
+                        54321,
+                        123456,
+                        3456789012,
+                        123456789,
+                        9876543210,
+                        10.75,
+                        100.75,
+                        u'Ö',
+                        u"bazzz"_ustr,
+                        cppu::UnoType<
+                            css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get(),
+                        css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                            org::libreoffice::embindtest::Enum_E_2,
+                            org::libreoffice::embindtest::Enum_E3,
+                            org::libreoffice::embindtest::Enum_E_10 }),
+                        { u"baz"_ustr },
+                        org::libreoffice::embindtest::Enum_E_10,
+                        { 123456 },
+                        { { u"barr"_ustr },
+                          123456,
+                          css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                              org::libreoffice::embindtest::Enum_E_2,
+                              org::libreoffice::embindtest::Enum_E3,
+                              org::libreoffice::embindtest::Enum_E_10 }),
+                          { u"bazz"_ustr } },
+                        static_cast<OWeakObject*>(this) }
                   };
     }
 
@@ -592,7 +801,26 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         value14 = css::uno::Any(sal_Int32(-123456));
         value15 = { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
         value16 = org::libreoffice::embindtest::Enum_E_2;
-        value17 = { -123456, 100.5, u"hä"_ustr, css::uno::Any(true) };
+        value17
+            = { true,
+                -12,
+                -1234,
+                54321,
+                -123456,
+                3456789012,
+                -123456789,
+                9876543210,
+                -10.25,
+                100.5,
+                u'Ö',
+                u"hä"_ustr,
+                cppu::UnoType<sal_Int32>::get(),
+                css::uno::Any(sal_Int32(-123456)),
+                { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                org::libreoffice::embindtest::Enum_E_2,
+                { -123456 },
+                { { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr } },
+                static_cast<OWeakObject*>(this) };
         value18 = this;
     }
 
@@ -782,8 +1010,29 @@ private:
         {
             auto const val = ifcCpp->getStruct();
             assert((val
-                    == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
-                                                             css::uno::Any(true) }));
+                    == org::libreoffice::embindtest::Struct{
+                           true,
+                           -12,
+                           -1234,
+                           54321,
+                           -123456,
+                           3456789012,
+                           -123456789,
+                           9876543210,
+                           -10.25,
+                           100.5,
+                           u'Ö',
+                           u"hä"_ustr,
+                           cppu::UnoType<sal_Int32>::get(),
+                           css::uno::Any(sal_Int32(-123456)),
+                           { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                           org::libreoffice::embindtest::Enum_E_2,
+                           { -123456 },
+                           { { u"foo"_ustr },
+                             -123456,
+                             css::uno::Any(sal_Int32(-123456)),
+                             { u"barr"_ustr } },
+                           ifcCpp }));
             auto const ok = ifcCpp->isStruct(val);
             assert(ok == css::uno::Any(true));
         }
@@ -857,8 +1106,29 @@ private:
                     == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr }));
             assert(value16 == org::libreoffice::embindtest::Enum_E_2);
             assert((value17
-                    == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr,
-                                                             css::uno::Any(true) }));
+                    == org::libreoffice::embindtest::Struct{
+                           true,
+                           -12,
+                           -1234,
+                           54321,
+                           -123456,
+                           3456789012,
+                           -123456789,
+                           9876543210,
+                           -10.25,
+                           100.5,
+                           u'Ö',
+                           u"hä"_ustr,
+                           cppu::UnoType<sal_Int32>::get(),
+                           css::uno::Any(sal_Int32(-123456)),
+                           { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                           org::libreoffice::embindtest::Enum_E_2,
+                           { -123456 },
+                           { { u"foo"_ustr },
+                             -123456,
+                             css::uno::Any(sal_Int32(-123456)),
+                             { u"barr"_ustr } },
+                           ifcCpp }));
             assert(value18 == ifcCpp);
         }
         try
