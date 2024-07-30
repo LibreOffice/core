@@ -564,7 +564,7 @@ public:
     // Logic Rect: for the Rect for instance without regard to rotation angle, shear, ...
     virtual const tools::Rectangle& GetLogicRect() const;
     virtual void SetLogicRect(const tools::Rectangle& rRect);
-    // @param bAdaptTextMinSize pass false if you know it it safe to avoid the cost of doing
+    // @param bAdaptTextMinSize pass false if you know it is safe to avoid the cost of doing
     //              text layout right now.
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true);
 
