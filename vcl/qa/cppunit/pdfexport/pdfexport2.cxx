@@ -5388,6 +5388,47 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157390)
     }
 }
 
+// tdf#162194 - Verifies soft hyphens inside ligatures are rendered correctly.
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162194SoftHyphen)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf162194-soft-hyphen.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(4, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(4, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"Waffle"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u"AAA Waf"_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u"fle"_ustr, aText.at(3).trim());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

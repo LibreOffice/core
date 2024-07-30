@@ -324,8 +324,15 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
          ( nPorEnd == rInf.GetIdx() && rInf.GetLineStart() != rInf.GetIdx() ) )
     {
         aInf.SetLen( nPorEnd - rInf.GetIdx() );
+        if (auto stClampedContext = aInf.GetLayoutContext(); stClampedContext.has_value())
+        {
+            stClampedContext->m_nEnd = nPorEnd.get();
+            aInf.SetLayoutContext(stClampedContext);
+        }
+
         pHyphPor->SetAscent( GetAscent() );
         SetLen( aInf.GetLen() );
+        SetLayoutContext(aInf.GetLayoutContext());
         CalcTextSize( aInf );
 
         Insert( pHyphPor.release() );
