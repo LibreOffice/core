@@ -203,7 +203,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
     // corresponding for hdbc.
     if (bUseWChar && _pConnection->functions().has(ODBC3SQLFunctionId::GetDiagRecW))
     {
-        SQLWCHAR szSqlState[5];
+        SQLWCHAR szSqlState[6];
         SQLWCHAR szErrorMessage[SQL_MAX_MESSAGE_LENGTH];
         szErrorMessage[0] = '\0';
         SQLSMALLINT cchErrorMsg = 0;
@@ -212,12 +212,15 @@ void OTools::ThrowException(const OConnection* _pConnection,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage, std::size(szErrorMessage) - 1, &cchErrorMsg);
-        errorMessage = toUString(szErrorMessage, cchErrorMsg);
-        sqlState = toUString(szSqlState, std::size(szSqlState));
+        if (SQL_SUCCEEDED(n))
+        {
+            errorMessage = toUString(szErrorMessage, cchErrorMsg);
+            sqlState = toUString(szSqlState, 5);
+        }
     }
     else
     {
-        SQLCHAR szSqlState[5];
+        SQLCHAR szSqlState[6];
         SQLCHAR szErrorMessage[SQL_MAX_MESSAGE_LENGTH];
         szErrorMessage[0] = '\0';
         SQLSMALLINT pcbErrorMsg = 0;
@@ -226,9 +229,12 @@ void OTools::ThrowException(const OConnection* _pConnection,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
-        rtl_TextEncoding _nTextEncoding = osl_getThreadTextEncoding();
-        errorMessage = toUString(szErrorMessage, pcbErrorMsg, _nTextEncoding);
-        sqlState = toUString(szSqlState, std::size(szSqlState), _nTextEncoding);
+        if (SQL_SUCCEEDED(n))
+        {
+            rtl_TextEncoding _nTextEncoding = osl_getThreadTextEncoding();
+            errorMessage = toUString(szErrorMessage, pcbErrorMsg, _nTextEncoding);
+            sqlState = toUString(szSqlState, 5, _nTextEncoding);
+        }
     }
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
