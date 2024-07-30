@@ -110,7 +110,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  u"ExportOnlyNotesPages"_ustr, false );
         aCfgItem.ReadBool(  u"UseTransitionEffects"_ustr, true );
         aCfgItem.ReadBool(  u"IsSkipEmptyPages"_ustr, false );
-        aCfgItem.ReadBool(  u"ExportFormFields"_ustr, true );
+        aCfgItem.ReadBool(  u"ExportFormFields"_ustr, false );
         aCfgItem.ReadInt32( u"FormsType"_ustr, 0 );
         aCfgItem.ReadBool(  u"HideViewerToolbar"_ustr, false );
         aCfgItem.ReadBool(  u"HideViewerMenubar"_ustr, false );
