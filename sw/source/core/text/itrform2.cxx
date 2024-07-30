@@ -1462,6 +1462,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
                 case CH_TXT_ATR_FIELDSTART:
                 case CH_TXT_ATR_FIELDSEP:
                 case CH_TXT_ATR_FIELDEND:
+                case CHAR_SOFTHYPHEN:
                     bAtEnd = true;
                     break;
 
