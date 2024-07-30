@@ -4448,6 +4448,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
     Struct \
     StructLong \
     StructString \
+    Template \
     XAttributes \
     XTest \
 ))

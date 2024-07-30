@@ -30,6 +30,7 @@
 #include <org/libreoffice/embindtest/Struct.hpp>
 #include <org/libreoffice/embindtest/StructLong.hpp>
 #include <org/libreoffice/embindtest/StructString.hpp>
+#include <org/libreoffice/embindtest/Template.hpp>
 #include <org/libreoffice/embindtest/Test.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
@@ -144,6 +145,24 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     isStructString(org::libreoffice::embindtest::StructString const& value) override
     {
         return value.m == u"hä";
+    }
+
+    org::libreoffice::embindtest::Template<css::uno::Any,
+                                           org::libreoffice::embindtest::StructString>
+        SAL_CALL getTemplate() override
+    {
+        return { { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr } };
+    }
+
+    sal_Bool SAL_CALL
+    isTemplate(org::libreoffice::embindtest::Template<
+               css::uno::Any, org::libreoffice::embindtest::StructString> const& value) override
+    {
+        return value
+               == org::libreoffice::embindtest::Template<
+                      css::uno::Any, org::libreoffice::embindtest::StructString>{
+                      { u"foo"_ustr }, -123456, css::uno::Any(sal_Int32(-123456)), { u"barr"_ustr }
+                  };
     }
 
     css::uno::Any SAL_CALL getAnyVoid() override { return {}; }

@@ -262,7 +262,100 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
     }
 }
 
-OUString cppName(OUString const& name) { return "::" + name.replaceAll(u".", u"::"); }
+OUString cppName(OUString const& name)
+{
+    sal_Int32 k;
+    std::vector<OString> args;
+    OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k, &args)));
+    OUStringBuffer buf;
+    for (sal_Int32 i = 0; i != k; ++i)
+    {
+        buf.append("::com::sun::star::uno::Sequence<");
+    }
+    if (n == "boolean")
+    {
+        buf.append("::sal_Bool");
+    }
+    else if (n == "byte")
+    {
+        buf.append("::sal_Int8");
+    }
+    else if (n == "short")
+    {
+        buf.append("::sal_Int16");
+    }
+    else if (n == "unsigned short")
+    {
+        buf.append("::sal_uInt16");
+    }
+    else if (n == "long")
+    {
+        buf.append("::sal_Int32");
+    }
+    else if (n == "unsigned long")
+    {
+        buf.append("::sal_uInt32");
+    }
+    else if (n == "hyper")
+    {
+        buf.append("::sal_Int64");
+    }
+    else if (n == "unsigned hyper")
+    {
+        buf.append("::sal_uInt64");
+    }
+    else if (n == "float")
+    {
+        buf.append("float");
+    }
+    else if (n == "double")
+    {
+        buf.append("double");
+    }
+    else if (n == "char")
+    {
+        buf.append("::sal_Unicode");
+    }
+    else if (n == "string")
+    {
+        buf.append("::rtl::OUString");
+    }
+    else if (n == "type")
+    {
+        buf.append("::com::sun::star::uno::Type");
+    }
+    else if (n == "any")
+    {
+        buf.append("::com::sun::star::uno::Any");
+    }
+    else
+    {
+        buf.append("::" + n.replaceAll(u".", u"::"));
+    }
+    if (!args.empty())
+    {
+        buf.append('<');
+        bool first = true;
+        for (auto const& i : args)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                buf.append(", ");
+            }
+            buf.append(cppName(b2u(i)));
+        }
+        buf.append('>');
+    }
+    for (sal_Int32 i = 0; i != k; ++i)
+    {
+        buf.append('>');
+    }
+    return buf.makeStringAndClear();
+}
 
 OUString resolveOuterTypedefs(rtl::Reference<TypeManager> const& manager, OUString const& name)
 {
@@ -447,6 +540,16 @@ void dumpStructMembers(std::ostream& out, rtl::Reference<TypeManager> const& man
                           static_cast<unoidl::PlainStructTypeEntity*>(ent.get()));
     }
     for (auto const& mem : struc->getDirectMembers())
+    {
+        out << "\n        .field(\"" << mem.name << "\", &" << cppName(name) << "::" << mem.name
+            << ")";
+    }
+}
+
+void dumpInstantiationMembers(std::ostream& out, OUString const& name,
+                              rtl::Reference<unoidl::PolymorphicStructTypeTemplateEntity> poly)
+{
+    for (auto const& mem : poly->getMembers())
     {
         out << "\n        .field(\"" << mem.name << "\", &" << cppName(name) << "::" << mem.name
             << ")";
@@ -845,13 +948,32 @@ void dumpRegisterFunctionEpilog(std::ostream& out, unsigned long long& counter)
     }
 }
 
-void recordSequenceTypes(rtl::Reference<TypeManager> const& manager, OUString const& type,
-                         std::set<OUString>& sequences)
+void recordGenericTypes(rtl::Reference<TypeManager> const& manager, OUString const& type,
+                        std::set<OUString>& sequences, std::set<OUString>& instantiations)
 {
     auto const res = resolveAllTypedefs(manager, type);
-    if (manager->getSort(res) == codemaker::UnoType::Sort::Sequence)
+    switch (manager->getSort(res))
     {
-        sequences.insert(res);
+        case codemaker::UnoType::Sort::Sequence:
+            if (sequences.insert(res).second)
+            {
+                assert(res.startsWith("[]"));
+                recordGenericTypes(manager, res.copy(2), sequences, instantiations);
+            }
+            break;
+        case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+            if (instantiations.insert(res).second)
+            {
+                std::vector<OString> args;
+                codemaker::UnoType::decompose(u2b(res), nullptr, &args);
+                for (auto const& i : args)
+                {
+                    recordGenericTypes(manager, b2u(i), sequences, instantiations);
+                }
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -995,6 +1117,7 @@ SAL_IMPLEMENT_MAIN()
             dumpRegisterFunctionEpilog(cppOut, n);
         }
         std::set<OUString> sequences;
+        std::set<OUString> instantiations;
         for (auto const& str : structs)
         {
             auto const ent = mgr->getManager()->findEntity(str);
@@ -1010,7 +1133,7 @@ SAL_IMPLEMENT_MAIN()
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& mem : strEnt->getDirectMembers())
             {
-                recordSequenceTypes(mgr, mem.type, sequences);
+                recordGenericTypes(mgr, mem.type, sequences, instantiations);
             }
         }
         for (auto const& exc : exceptions)
@@ -1028,7 +1151,7 @@ SAL_IMPLEMENT_MAIN()
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& mem : excEnt->getDirectMembers())
             {
-                recordSequenceTypes(mgr, mem.type, sequences);
+                recordGenericTypes(mgr, mem.type, sequences, instantiations);
             }
         }
         std::set<OUString> inOutParams;
@@ -1097,20 +1220,48 @@ SAL_IMPLEMENT_MAIN()
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& attr : ifcEnt->getDirectAttributes())
             {
-                recordSequenceTypes(mgr, attr.type, sequences);
+                recordGenericTypes(mgr, attr.type, sequences, instantiations);
             }
             for (auto const& meth : ifcEnt->getDirectMethods())
             {
                 for (auto const& param : meth.parameters)
                 {
-                    recordSequenceTypes(mgr, param.type, sequences);
+                    recordGenericTypes(mgr, param.type, sequences, instantiations);
                     if (param.direction
                         != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
                     {
                         recordInOutParameterType(mgr, param.type, inOutParams);
                     }
                 }
-                recordSequenceTypes(mgr, meth.returnType, sequences);
+                recordGenericTypes(mgr, meth.returnType, sequences, instantiations);
+            }
+        }
+        for (auto const& ins : instantiations)
+        {
+            std::vector<OString> templArgs;
+            auto const templ = b2u(codemaker::UnoType::decompose(u2b(ins), nullptr, &templArgs));
+            auto const ent = mgr->getManager()->findEntity(templ);
+            assert(ent.is());
+            assert(ent->getSort() == unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE);
+            rtl::Reference const polEnt(
+                static_cast<unoidl::PolymorphicStructTypeTemplateEntity*>(ent.get()));
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::value_object<" << cppName(ins) << ">(\"uno_Type_"
+                   << jsName(ins) << "\")";
+            dumpInstantiationMembers(cppOut, ins, polEnt);
+            cppOut << ";\n";
+            cppOut << "    ::unoembindhelpers::registerUnoType<" << cppName(ins) << ">();\n";
+            dumpRegisterFunctionEpilog(cppOut, n);
+            for (auto const& arg : templArgs)
+            {
+                recordGenericTypes(mgr, b2u(arg), sequences, instantiations);
+            }
+            for (auto const& mem : polEnt->getMembers())
+            {
+                if (!mem.parameterized)
+                {
+                    recordGenericTypes(mgr, mem.type, sequences, instantiations);
+                }
             }
         }
         for (auto const& srv : services)
