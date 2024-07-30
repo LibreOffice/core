@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <annotationmark.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -141,6 +142,7 @@ public:
     static OUString FormatTime(tools::Time& rTime);
 
 private:
+    SwDoc* mpDoc;
     SwPostItMgr* mpPostItMgr;
 
     std::unordered_map<sal_uInt32, std::unique_ptr<Thread>> mpThreadsMap;
@@ -174,6 +176,8 @@ private:
     void deleteComment(sal_uInt32 nId);
     void setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotationWin);
     static void editComment(SwPostItField* pPostItField, Comment* pComment);
+    static OUString getReferenceText(SwTextNode* pTextNode, sw::mark::AnnotationMark* pMark);
+    void setReferenceText(sal_uInt32 nRootId);
 
     void populateAuthorComboBox();
 };

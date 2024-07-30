@@ -26,6 +26,8 @@
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 #include <txtfld.hxx>
+#include <IDocumentDeviceAccess.hxx>
+#include <MarkManager.hxx>
 #include <ndtxt.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
@@ -49,6 +51,7 @@
 #include <cmdid.h>
 
 #include "CommentsPanel.hxx"
+#include <annotationmark.hxx>
 #include <pam.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -72,6 +75,17 @@ Comment::Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel)
     mxTextView->connect_focus_out(LINK(this, Comment, OnFocusOut));
     mxResolve->connect_toggled(LINK(this, Comment, ResolveClicked));
     mxReply->connect_clicked(LINK(this, Comment, ReplyClicked));
+}
+
+OUString CommentsPanel::getReferenceText(SwTextNode* pTextNode, sw::mark::AnnotationMark* pMark)
+{
+    if (!pMark)
+        return OUString();
+    const SwPosition& rStart = pMark->GetMarkStart();
+    const SwPosition& rEnd = pMark->GetMarkEnd();
+    OUString sReferenceText = pTextNode->GetText().copy(
+        rStart.GetContentIndex(), rEnd.GetContentIndex() - rStart.GetContentIndex() - 1);
+    return sReferenceText;
 }
 
 Comment::~Comment() {}
@@ -135,6 +149,7 @@ std::unique_ptr<PanelLayout> CommentsPanel::Create(weld::Widget* pParent)
 
 CommentsPanel::CommentsPanel(weld::Widget* pParent)
     : PanelLayout(pParent, "CommentsPanel", "modules/swriter/ui/commentspanel.ui")
+    , mpDoc(nullptr)
     , mpPostItMgr(nullptr)
     , mxFilterAuthor(m_xBuilder->weld_combo_box("filter_author"))
     , mxFilterDate(new SvtCalendarBox(m_xBuilder->weld_menu_button("filter_date"), true))
@@ -157,6 +172,7 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
         return;
     SwWrtShell& rSh = pView->GetWrtShell();
     mpPostItMgr = rSh.GetPostItMgr();
+    mpDoc = rSh.GetDoc();
     populateComments();
 
     StartListening(*mpPostItMgr);
@@ -411,6 +427,7 @@ void CommentsPanel::populateComments()
             mpCommentsMap[nId] = std::move(pComment);
         }
         mpThreadsMap[nRootId] = std::move(pThread);
+        setReferenceText(nRootId);
     }
     populateAuthorComboBox();
 }
@@ -452,6 +469,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                       pThread->mnComments++);
         mpThreadsMap[nRootId] = std::move(pThread);
+        setReferenceText(nRootId);
         pComment->InitControls(pNote->GetPostItField());
         mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
@@ -520,6 +538,21 @@ void CommentsPanel::editComment(SwPostItField* pPostItField, Comment* pComment)
     OUString sText = pPostItField->GetText();
     pComment->SetCommentText(sText);
     pComment->mxTextView->set_text(sText);
+}
+
+void CommentsPanel::setReferenceText(sal_uInt32 nRootId)
+{
+    Thread* pThread = mpThreadsMap[nRootId].get();
+    Comment* pRootComment = mpCommentsMap[nRootId].get();
+    sw::annotation::SwAnnotationWin* pRootNote = getAnnotationWin(pRootComment);
+    SwFormatField* pField = pRootNote->GetFormatField();
+    const SwPosition pAnchor = getAnchorPosition(pField);
+    SwNodeIndex aIdx(pAnchor.nNode);
+    SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+    sw::mark::MarkManager& rMarkManager = mpDoc->GetMarkManager();
+    sw::mark::AnnotationMark* pMark = rMarkManager.getAnnotationMarkFor(pAnchor);
+    OUString sText = getReferenceText(pTextNode, pMark);
+    pThread->mxText->set_label(sText);
 }
 
 void CommentsPanel::EditComment(Comment* pComment)

@@ -449,6 +449,9 @@ private:
 public:
     sal_Int32 getReferenceCount() const;
 
+    //MarkManager
+    SW_DLLPUBLIC ::sw::mark::MarkManager& GetMarkManager();
+
     // IDocumentSettingAccess
     SW_DLLPUBLIC IDocumentSettingAccess const & getIDocumentSettingAccess() const; //The IDocumentSettingAccess interface
     SW_DLLPUBLIC IDocumentSettingAccess & getIDocumentSettingAccess();

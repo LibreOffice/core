@@ -1937,6 +1937,11 @@ namespace
     }
 }
 
+MarkManager& SwDoc::GetMarkManager()
+{
+    return *mpMarkManager;
+}
+
 // IDocumentMarkAccess for SwDoc
 IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
