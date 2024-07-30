@@ -143,7 +143,7 @@ namespace sdr::properties
 
             // Set a new StyleSheet. Registers as listener at the StyleSheet to get knowledge
             // of StyleSheet changes.
-            // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+            // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
             //              text layout right now.
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
                 bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true) = 0;
