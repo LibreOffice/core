@@ -621,7 +621,7 @@ public:
     // if bDontRemoveHardAttr is false, set all attributes, which were set in the style sheet, to their default value
     // if true, all hard attributes keep their values
     void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
-    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
     //              text layout right now.
     void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr, bool bAdjustTextFrameWidthAndHeight = true);
     SfxStyleSheet* GetStyleSheet() const;
