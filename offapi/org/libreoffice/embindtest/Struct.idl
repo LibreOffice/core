@@ -10,10 +10,25 @@
 module org { module libreoffice { module embindtest {
 
 struct Struct {
-    long m1;
-    double m2;
-    string m3;
-    any m4;
+    boolean m1;
+    byte m2;
+    short m3;
+    unsigned short m4;
+    long m5;
+    unsigned long m6;
+    hyper m7;
+    unsigned hyper m8;
+    float m9;
+    double m10;
+    char m11;
+    string m12;
+    type m13;
+    any m14;
+    sequence<string> m15;
+    Enum m16;
+    StructLong m17;
+    Template<any, StructString> m18;
+    com::sun::star::uno::XInterface m19;
 };
 
 }; }; };
