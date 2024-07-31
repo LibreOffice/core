@@ -243,7 +243,7 @@ void SwASCWriter::WriteTable(SwTableNode* pTableNd, SwTextNode* pNd)
             Out( aASCNodeFnTab, *pNd, *this );
 
             Point aPrevBoxPoint;
-            SwTableBox* pTableBox = pNd->GetTableBox();
+            const SwTableBox* pTableBox = pNd->GetTableBox();
             if (pTableBox)
                 aPrevBoxPoint = pTableBox->GetCoordinates();
             m_pCurrentPam->Move(fnMoveForward, GoInNode);
