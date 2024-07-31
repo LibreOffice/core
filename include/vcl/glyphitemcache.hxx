@@ -69,7 +69,6 @@ public:
     {
     }
 
-private:
     struct CachedGlyphsKey
     {
         OUString text;
@@ -91,6 +90,8 @@ private:
                         tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };
+
+private:
     struct CachedGlyphsHash
     {
         size_t operator()(const CachedGlyphsKey& key) const { return key.hashValue; }
