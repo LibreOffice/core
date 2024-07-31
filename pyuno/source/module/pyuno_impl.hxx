@@ -222,6 +222,7 @@ struct RuntimeCargo
     css::uno::Reference< css::beans::XIntrospection > xIntrospection;
     PyRef dictUnoModule;
     osl::Module testModule;
+    osl::Module unoTestModule;
     bool valid;
     ExceptionClassMap exceptionMap;
     ClassSet interfaceSet;

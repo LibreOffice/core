@@ -383,6 +383,65 @@ static PyObject* deinitTestEnvironment(
     return Py_None;
 }
 
+static PyObject* initTestEnvironmentGPG(
+    SAL_UNUSED_PARAMETER PyObject*, PyObject* args)
+{
+    // this tries to set up certificate stores for unit tests
+    // which is only possible indirectly because pyuno is URE
+    // so load "unotest" library and invoke a function there to do the work
+    Runtime const runtime;
+    osl::Module & rModule(runtime.getImpl()->cargo->unoTestModule);
+    assert(!rModule.is());
+    try
+    {
+        char *const testlib = getenv("UNOTEST_LIB");
+        if (!testlib) { abort(); }
+#ifdef _WIN32
+        OString const libname = OString(testlib, strlen(testlib))
+            .replaceAll(OString('/'), OString('\\'));
+#else
+        OString const libname(testlib, strlen(testlib));
+#endif
+
+        rModule.load(OStringToOUString(libname, osl_getThreadTextEncoding()),
+                                SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+        if (!rModule.is()) { abort(); }
+        oslGenericFunction const pFunc(rModule.getFunctionSymbol("test_init_gpg"));
+        if (!pFunc) { abort(); }
+        char * pTestDirURL;
+        if (!PyArg_ParseTuple(args, "s", &pTestDirURL)) { abort(); }
+        OUString const testDirURL(OUString::createFromAscii(pTestDirURL));
+        reinterpret_cast<void (SAL_CALL *)(OUString const&)>(pFunc)(testDirURL);
+    }
+    catch (const css::uno::Exception &)
+    {
+        abort();
+    }
+    return Py_None;
+}
+
+static PyObject* deinitTestEnvironmentGPG(
+    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
+{
+    Runtime const runtime;
+    osl::Module & rModule(runtime.getImpl()->cargo->unoTestModule);
+    if (rModule.is())
+    {
+        try
+        {
+            oslGenericFunction const pFunc(
+                    rModule.getFunctionSymbol("test_deinit_gpg"));
+            if (!pFunc) { abort(); }
+            reinterpret_cast<void (SAL_CALL *)()>(pFunc)();
+        }
+        catch (const css::uno::Exception &)
+        {
+            abort();
+        }
+    }
+    return Py_None;
+}
+
 PyObject * extractOneStringArg( PyObject *args, char const *funcName )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
@@ -852,6 +911,8 @@ struct PyMethodDef PyUNOModule_methods [] =
 {
     {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, nullptr},
     {"private_deinitTestEnvironment", deinitTestEnvironment, METH_VARARGS, nullptr},
+    {"private_initTestEnvironmentGPG", initTestEnvironmentGPG, METH_VARARGS, nullptr},
+    {"private_deinitTestEnvironmentGPG", deinitTestEnvironmentGPG, METH_VARARGS, nullptr},
     {"getComponentContext", getComponentContext, METH_VARARGS, nullptr},
 #if defined __clang__
 #pragma clang diagnostic push

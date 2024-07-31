@@ -57,7 +57,7 @@ void SigningTest2::setUp()
     UnoApiXmlTest::setUp();
 
     MacrosTest::setUpX509(m_directories, u"xmlsecurity_signing2"_ustr);
-    MacrosTest::setUpGpg(m_directories, u"xmlsecurity_signing2"_ustr);
+    MacrosTest::setUpGpg(m_directories, std::u16string_view(u"xmlsecurity_signing2"));
 
     // Initialize crypto after setting up the environment variables.
     mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);

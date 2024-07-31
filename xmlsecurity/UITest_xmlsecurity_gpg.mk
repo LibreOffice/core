@@ -17,4 +17,7 @@ $(eval $(call gb_UITest_set_defs,xmlsecurity_gpg, \
     TDOC="$(SRCDIR)/xmlsecurity/qa/uitest/data" \
 ))
 
+# oneprocess prevents setting GNUPGHOME
+$(eval $(call gb_UITest_avoid_oneprocess,xmlsecurity_gpg))
+
 # vim: set noet sw=4 ts=4:

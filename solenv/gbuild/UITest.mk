@@ -41,15 +41,15 @@ gb_UITest_COMMAND = $(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) $(gb_Cppun
 
 gb_TEST_ENV_VARS += LIBO_LANG=C
 
-# GNUPGHOME is needed for tests using the LibreOffice GPG features.
-gb_TEST_ENV_VARS += GNUPGHOME="$(SRCDIR)/test/signing-keys"
-
 .PHONY : $(call gb_UITest_get_clean_target,%)
 $(call gb_UITest_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $@ $@.log)
 
 ifneq ($(DISABLE_PYTHON),TRUE)
+
+# dlopening unotest requires this
+gb_UITest_PRECOMMAND = $(gb_PythonTest_PRECOMMAND)
 
 # qadevOOo/qa/registrymodifications.xcu is copied to user profile directory to ensure en_US locale;
 # this might be overwritten later when gb_UITest_use_config is set
@@ -73,6 +73,7 @@ else
 		$(DEFS) \
 		$(if $(filter WNT,$(OS)),SAL_LOG_FILE="$(dir $(call gb_UITest_get_target,$*))/soffice.out.log") \
 		TEST_LIB=$(call gb_Library_get_target,test) \
+		UNOTEST_LIB=$(call gb_Library_get_target,unotest) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(INSTROOT)/$(LIBO_ETC_FOLDER)/fundamental) \
 		PYTHONPATH="$(PYPATH)" \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*)))" \

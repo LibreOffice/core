@@ -145,27 +145,61 @@ void MacrosTest::setUpX509(const test::Directories& rDirectories, const OUString
 #endif
 }
 
-void MacrosTest::setUpGpg(const test::Directories& rDirectories, const OUString& rTestName)
+#if HAVE_GPGCONF_SOCKETDIR
+// mutable global should be tolerable in test lib
+static OString g_gpgconfCommandPrefix;
+#endif
+
+extern "C" {
+
+SAL_DLLPUBLIC_EXPORT
+void test_init_gpg(OUString const& rTargetDir)
 {
-    OUString aSourceDir = rDirectories.getURLFromSrc(u"/test/signing-keys/");
-    OUString aTargetDir
-        = rDirectories.getURLFromWorkdir(Concat2View("CppunitTest/" + rTestName + ".test.user"));
+    const char* pSrcRoot = getenv("SRC_ROOT");
+    if (!pSrcRoot)
+    {
+        abort();
+    }
+    OUString const srcRootPath(OUString(pSrcRoot, strlen(pSrcRoot), osl_getThreadTextEncoding()));
+    OUString const sourcePath(srcRootPath + "/test/signing-keys/");
+    OUString aSourceDir;
+    osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(sourcePath, aSourceDir);
+    if (osl::FileBase::E_None != e)
+    {
+        abort();
+    }
 
     OUString aTargetPath;
-    osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
+    osl::FileBase::getSystemPathFromFileURL(rTargetDir, aTargetPath);
+
+    auto const rc = osl::Directory::create(rTargetDir);
+    if (osl::FileBase::E_None != rc && osl::FileBase::E_EXIST != rc)
+    {
+        SAL_WARN("test", "creating target dir failed, aborting");
+        abort();
+    }
 
     // Make gpg use our own defined setup & keys
-    osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
-    osl::File::copy(aSourceDir + "random_seed", aTargetDir + "/random_seed");
-    osl::File::copy(aSourceDir + "secring.gpg", aTargetDir + "/secring.gpg");
-    osl::File::copy(aSourceDir + "trustdb.gpg", aTargetDir + "/trustdb.gpg");
+    if (osl::FileBase::E_None
+            != osl::File::copy(aSourceDir + "pubring.gpg", rTargetDir + "/pubring.gpg")
+        || osl::FileBase::E_None
+               != osl::File::copy(aSourceDir + "random_seed", rTargetDir + "/random_seed")
+        || osl::FileBase::E_None
+               != osl::File::copy(aSourceDir + "secring.gpg", rTargetDir + "/secring.gpg")
+        || osl::FileBase::E_None
+               != osl::File::copy(aSourceDir + "trustdb.gpg", rTargetDir + "/trustdb.gpg"))
+    {
+        SAL_WARN("test", "copying files failed, aborting");
+        abort();
+    }
 
+    // note: this doesn't work for UITest because "os.environ" is a copy :(
     OUString gpgHomeVar(u"GNUPGHOME"_ustr);
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
 
 #if HAVE_GPGCONF_SOCKETDIR
     auto const ldPath = std::getenv("LIBO_LD_PATH");
-    m_gpgconfCommandPrefix
+    g_gpgconfCommandPrefix
         = ldPath == nullptr ? OString() : OString::Concat("LD_LIBRARY_PATH=") + ldPath + " ";
     OString path;
     bool ok = aTargetPath.convertToString(&path, osl_getThreadTextEncoding(),
@@ -173,31 +207,52 @@ void MacrosTest::setUpGpg(const test::Directories& rDirectories, const OUString&
                                               | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
     // if conversion fails, at least provide a best-effort conversion in the message here, for
     // context
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTargetPath, RTL_TEXTENCODING_UTF8).getStr(), ok);
-    m_gpgconfCommandPrefix += "GNUPGHOME=" + path + " " GPGME_GPGCONF;
+    if (!ok)
+    {
+        SAL_WARN("test", "converting path failed, aborting: " << aTargetPath);
+        abort();
+    }
+    g_gpgconfCommandPrefix += "GNUPGHOME=" + path + " " GPGME_GPGCONF;
     // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
     // behavior will conform to POSIX (and the relevant env var to set is named LD_LIBRARY_PATH), and
     // (b) gpgconf --create-socketdir should return zero:
-    OString cmd = m_gpgconfCommandPrefix + " --create-socketdir";
+    OString cmd = g_gpgconfCommandPrefix + " --create-socketdir";
     int res = std::system(cmd.getStr());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
+    if (res != 0)
+    {
+        SAL_WARN("test", "invoking gpgconf failed, aborting: " << cmd);
+        abort();
+    }
 #else
-    (void)this;
+    (void)rTargetDir;
 #endif
 }
 
-void MacrosTest::tearDownGpg()
+SAL_DLLPUBLIC_EXPORT void test_deinit_gpg()
 {
 #if HAVE_GPGCONF_SOCKETDIR
     // HAVE_GPGCONF_SOCKETDIR is only defined in configure.ac for Linux for now, so (a) std::system
     // behavior will conform to POSIX, and (b) gpgconf --remove-socketdir should return zero:
-    OString cmd = m_gpgconfCommandPrefix + " --remove-socketdir";
+    CPPUNIT_ASSERT(!g_gpgconfCommandPrefix.isEmpty());
+    OString cmd = g_gpgconfCommandPrefix + " --remove-socketdir";
     int res = std::system(cmd.getStr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(cmd.getStr(), 0, res);
-#else
-    (void)this;
+    g_gpgconfCommandPrefix.clear();
 #endif
 }
+
+} // extern "C"
+
+void MacrosTest::setUpGpg(const test::Directories& rDirectories,
+                          std::u16string_view const rTestName)
+{
+    OUString aTargetDir = rDirectories.getURLFromWorkdir(
+        Concat2View("CppunitTest/" + OUString(rTestName.data(), rTestName.size()) + ".test.user"));
+
+    return test_init_gpg(aTargetDir);
+}
+
+void MacrosTest::tearDownGpg() { return test_deinit_gpg(); }
 
 namespace
 {

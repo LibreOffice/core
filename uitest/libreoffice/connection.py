@@ -24,7 +24,7 @@ except ImportError:
 
 def signal_handler(signal_num, frame):
     signal_name = signal.Signals(signal_num).name
-    print(f'Signal handler called with signal {signal_name} ({signal_num})', flush=True)
+    #print(f'Signal handler called with signal {signal_name} ({signal_num})', flush=True)
 
 class OfficeConnection:
     def __init__(self, args):

@@ -98,8 +98,8 @@ public:
 
     // note: there is no tearDownX509
     void setUpX509(const test::Directories& rDirectories, const OUString& rTestName);
-    void setUpGpg(const test::Directories& rDirectories, const OUString& rTestName);
-    void tearDownGpg();
+    static void setUpGpg(const test::Directories& rDirectories, std::u16string_view rTestName);
+    static void tearDownGpg();
 
     static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
                         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
@@ -113,9 +113,6 @@ protected:
 
 private:
     std::unique_ptr<BasicDLL> mpDll;
-#if HAVE_GPGCONF_SOCKETDIR
-    OString m_gpgconfCommandPrefix;
-#endif
 };
 }
 

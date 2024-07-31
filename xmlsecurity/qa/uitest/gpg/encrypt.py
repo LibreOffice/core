@@ -9,8 +9,11 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+import pyuno
 
 from tempfile import TemporaryDirectory
+from urllib.parse import urljoin, urlparse
+from urllib.request import url2pathname
 import os.path
 
 
@@ -19,6 +22,23 @@ import os.path
 # Requires the environment variable GNUPGHOME to be set correctly.
 # See solenv/gbuild/UITest.mk
 class GpgEncryptTest(UITestCase):
+
+    # should this be setUp() or setUpClass()?
+    # as setUp(), any test's change to the files should be overwritten before
+    # the next test, which could be an advantage.
+    def setUp(self):
+        testdir = os.getenv("TestUserDir")
+        certdir = urljoin(testdir, "signing-keys")
+        # this sets GNUPGHOME so do it before starting soffice
+        pyuno.private_initTestEnvironmentGPG(certdir)
+        # ugly: set var here again because "os.environ" is a copy :(
+        os.environ["GNUPGHOME"] = url2pathname(urlparse(certdir).path)
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
+        pyuno.private_deinitTestEnvironmentGPG()
+
     def test_gpg_encrypt(self):
         # TODO: Maybe deduplicate with sw/qa/uitest/writer_tests8/save_with_password_test_policy.py
         with TemporaryDirectory() as tempdir:
