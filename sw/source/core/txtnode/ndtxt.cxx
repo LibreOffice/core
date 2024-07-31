@@ -5545,12 +5545,15 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
     {
         static_cast<const sw::AutoFormatUsedHint&>(rHint).CheckNode(this);
-        return;
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         TriggerNodeUpdate(*pLegacyHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)
+    {
+        CallSwClientNotify(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwAttr)
     {

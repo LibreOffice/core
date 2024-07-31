@@ -609,6 +609,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyInsertUndo)
     CPPUNIT_ASSERT(!rFlyFormats.empty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)
+{
+    createSwDoc("tdf160843.odt");
+    auto pWrtShell = getSwDocShell()->GetWrtShell();
+    sal_uInt16 nPhys = 0;
+    sal_uInt16 nVirt = 0;
+
+    pWrtShell->GotoPage(1, false);
+    pWrtShell->GetPageNum(nPhys, nVirt, true, false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nPhys);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nVirt);
+
+    pWrtShell->GotoPage(3, false);
+    pWrtShell->GetPageNum(nPhys, nVirt, true, false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), nPhys);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nVirt);
+
+    pWrtShell->GotoPage(5, false);
+    pWrtShell->GetPageNum(nPhys, nVirt, true, false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(5), nPhys);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nVirt);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

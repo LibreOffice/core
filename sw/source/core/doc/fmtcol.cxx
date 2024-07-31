@@ -133,7 +133,12 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         CallSwClientNotify(rHint);
         return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)
+    {
+        CallSwClientNotify(rHint);
+        return;
+    }
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(GetDoc()->IsInDtor())
