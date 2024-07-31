@@ -28,6 +28,7 @@
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
 #include <funcdesc.hxx>
+#include <compiler.hxx>
 
 #include <dwfunctr.hxx>
 
@@ -220,16 +221,20 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
-        SvtSysLocale aSysLocale;
-        const CharClass& rCharClass = aSysLocale.GetCharClass();
-        const OUString aSearchStr(rCharClass.uppercase(rSearchString));
+        // Use the corresponding CharClass for uppercase() depending on whether
+        // English function names are used, or localized names.
+        const CharClass* pCharClass = (ScGlobal::GetStarCalcFunctionList()->IsEnglishFunctionNames()
+                ? ScCompiler::GetCharClassEnglish()
+                : ScCompiler::GetCharClassLocalized());
+
+        const OUString aSearchStr(pCharClass->uppercase(rSearchString));
 
         // First add the functions that start with the search string
         const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
             if (rSearchString.isEmpty()
-                || (rCharClass.uppercase(pDesc->getFunctionName()).startsWith(aSearchStr)))
+                || (pCharClass->uppercase(pDesc->getFunctionName()).startsWith(aSearchStr)))
                 xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
             pDesc = pFuncMgr->Next();
         }
@@ -241,7 +246,7 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
             pDesc = pFuncMgr->First( nCategory );
             while ( pDesc )
             {
-                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) > 0)
+                if (pCharClass->uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) > 0)
                     xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
                 pDesc = pFuncMgr->Next();
             }
