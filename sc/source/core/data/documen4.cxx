@@ -747,9 +747,10 @@ const SfxPoolItem* ScDocument::GetEffItem(
     if ( pPattern )
     {
         const SfxItemSet& rSet = pPattern->GetItemSet();
-        if ( rSet.GetItemState( ATTR_CONDITIONAL ) == SfxItemState::SET )
+        const ScCondFormatItem* pConditionalItem = nullptr;
+        if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pConditionalItem ) == SfxItemState::SET )
         {
-            const ScCondFormatIndexes& rIndex = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+            const ScCondFormatIndexes& rIndex = pConditionalItem->GetCondFormatData();
             ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
             if (!rIndex.empty() && pCondFormList)
             {

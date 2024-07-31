@@ -255,9 +255,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
         case SID_FONTWORK_ALIGNMENT:
         {
-            if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT ) == SfxItemState::SET )
+            const SfxInt32Item* pAlignItem = nullptr;
+            if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT, true, &pAlignItem ) == SfxItemState::SET )
             {
-                sal_Int32 nValue = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_ALIGNMENT)->GetValue();
+                sal_Int32 nValue = pAlignItem->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
                 {
                     drawing::TextFitToSizeType eFTS = drawing::TextFitToSizeType_NONE;
@@ -280,9 +281,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
         case SID_FONTWORK_CHARACTER_SPACING:
         {
-            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
+            const SfxInt32Item* pSpacingItem = nullptr;
+            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING, true, &pSpacingItem ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_CHARACTER_SPACING)->GetValue();
+                sal_Int32 nCharSpacing = pSpacingItem->GetValue();
                 pObj->SetMergedItem( SvxCharScaleWidthItem( static_cast<sal_uInt16>(nCharSpacing), EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
@@ -471,9 +473,10 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
 
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG :
         {
-            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
+            const SfxInt32Item* pSpacingItem = nullptr;
+            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING, true, &pSpacingItem ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_CHARACTER_SPACING)->GetValue();
+                sal_Int32 nCharSpacing = pSpacingItem->GetValue();
                 FontworkCharacterSpacingDialog aDlg(rReq.GetFrameWeld(), nCharSpacing);
                 sal_uInt16 nRet = aDlg.run();
                 if (nRet != RET_CANCEL)

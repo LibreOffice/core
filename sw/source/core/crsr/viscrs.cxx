@@ -333,10 +333,11 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
                 SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>
                      aSet(m_pCursorShell->GetSfxViewShell()->GetPool());
                 pShell->GetCurAttr(aSet);
-                if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
+                const SwFormatINetFormat* pItem = nullptr;
+                if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true, &pItem ))
                 {
                     sHyperlink = buildHyperlinkJSON(m_pCursorShell->GetSelText(),
-                                                    aSet.GetItem(RES_TXTATR_INETFMT)->GetValue());
+                                                    pItem->GetValue());
                 }
             }
         }

@@ -198,9 +198,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
     case SID_EXTRUSION_DIRECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DIRECTION ) == SfxItemState::SET )
+        const SfxInt32Item* pExtrusionItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DIRECTION, true, &pExtrusionItem ) == SfxItemState::SET )
         {
-            sal_Int32 nSkew = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_DIRECTION)->GetValue();
+            sal_Int32 nSkew = pExtrusionItem->GetValue();
 
             Position3D  aViewPoint( 3472, -3472, 25000 );
             double      fOriginX = 0.50;
@@ -282,9 +283,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     break;
     case SID_EXTRUSION_PROJECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_PROJECTION ) == SfxItemState::SET )
+        const SfxInt32Item* pExtrusionItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_PROJECTION, true, &pExtrusionItem ) == SfxItemState::SET )
         {
-            sal_Int32 nProjection = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_PROJECTION)->GetValue();
+            sal_Int32 nProjection = pExtrusionItem->GetValue();
             ProjectionMode eProjectionMode = nProjection == 1 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = "ProjectionMode";
@@ -295,9 +297,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     break;
     case SID_EXTRUSION_DEPTH:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET)
+        const SvxDoubleItem* pExtrusionItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH, true, &pExtrusionItem ) == SfxItemState::SET)
         {
-            double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
+            double fDepth = pExtrusionItem->GetValue();
             EnhancedCustomShapeParameterPair aDepthPropPair;
             aDepthPropPair.First.Value <<= fDepth;
             aDepthPropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
@@ -338,9 +341,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     break;
     case SID_EXTRUSION_SURFACE:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE ) == SfxItemState::SET)
+        const SfxInt32Item* pExtrusionItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE, true, &pExtrusionItem ) == SfxItemState::SET)
         {
-            sal_Int32 nSurface = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_SURFACE)->GetValue();
+            sal_Int32 nSurface = pExtrusionItem->GetValue();
 
             // Set ShadeMode only when changing from or to wireframe, otherwise keep existing value.
             ShadeMode eOldShadeMode(ShadeMode_FLAT);
@@ -443,9 +447,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     break;
     case SID_EXTRUSION_LIGHTING_INTENSITY:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SfxItemState::SET)
+        const SfxInt32Item* pLightItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY, true, &pLightItem ) == SfxItemState::SET)
         {
-            sal_Int32 nLevel = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_INTENSITY)->GetValue();
+            sal_Int32 nLevel = pLightItem->GetValue();
 
             double fBrightness; // c3DAmbientIntensity in MS Office
             double fLevel1; // c3DKeyIntensity in MS Office
@@ -494,9 +499,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     break;
     case SID_EXTRUSION_LIGHTING_DIRECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_DIRECTION ) == SfxItemState::SET)
+        const SfxInt32Item* pLightDirectionItem = nullptr;
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_DIRECTION, true, &pLightDirectionItem ) == SfxItemState::SET)
         {
-            sal_Int32 nDirection = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_DIRECTION)->GetValue();
+            sal_Int32 nDirection = pLightDirectionItem->GetValue();
 
             if((nDirection >= 0) && (nDirection < 9))
             {
@@ -635,12 +641,15 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
         break;
 
         case SID_EXTRUSION_DEPTH_DIALOG:
+        {
+            const SvxDoubleItem* pDepthItem = nullptr;
+            const SfxUInt16Item* pMetricItem = nullptr;
             if( rReq.GetArgs() &&
-                (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET) &&
-                (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SfxItemState::SET))
+                (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH, true, &pDepthItem ) == SfxItemState::SET) &&
+                (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC, true, &pMetricItem ) == SfxItemState::SET))
             {
-                double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
-                FieldUnit eUnit = static_cast<FieldUnit>(rReq.GetArgs()->GetItem<SfxUInt16Item>(SID_ATTR_METRIC)->GetValue());
+                double fDepth = pDepthItem->GetValue();
+                FieldUnit eUnit = static_cast<FieldUnit>(pMetricItem->GetValue());
 
                 ExtrusionDepthDialog aDlg(rReq.GetFrameWeld(), fDepth, eUnit);
                 sal_uInt16 nRet = aDlg.run();
@@ -654,6 +663,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                 }
             }
             break;
+        }
     }
 
     if( nSID != SID_EXTRUSION_TOGGLE )

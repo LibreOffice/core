@@ -349,27 +349,28 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
             {
                 if ( aCurSet.GetItemState( nWhich ) == SfxItemState::DEFAULT )
                 {
+                    const SfxPoolItem* pItem = nullptr;
                     if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
                         const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
                         aCurSet.Put( rItem );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SfxItemState::SET )
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich, true, &pItem ) == SfxItemState::SET )
                     {
-                        const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nWhich );
-                        aCurSet.Put( rItem );
+                        aCurSet.Put( *pItem );
                     }
                 }
                 else if ( aCurSet.GetItemState( nWhich ) == SfxItemState::SET )
                 {
                     const SfxPoolItem* pItem = nullptr;
+                    const SfxPoolItem* pTmpItem = nullptr;
                     if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
                         pItem = &pNode->GetContentAttribs().GetItem( nWhich );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SfxItemState::SET )
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich, true, &pTmpItem ) == SfxItemState::SET )
                     {
-                        pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
+                        pItem = pTmpItem;
                     }
                     // pItem can only be NULL when nOnlyHardAttrib...
                     if ( !pItem || ( *pItem != aCurSet.Get( nWhich ) ) )

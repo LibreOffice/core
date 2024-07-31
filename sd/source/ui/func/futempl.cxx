@@ -406,9 +406,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             // EE_PARA_NUMBULLET item is only valid in first outline template
                             if( (ePO >= PresentationObjects::Outline_2) && (ePO <= PresentationObjects::Outline_9) )
                             {
-                                if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
+                                const SvxNumBulletItem* pBulletItem = nullptr;
+                                if (aTempSet.GetItemState(EE_PARA_NUMBULLET, true, &pBulletItem) == SfxItemState::SET)
                                 {
-                                    SvxNumRule aRule(aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
+                                    SvxNumRule aRule(pBulletItem->GetNumRule());
 
                                     OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
                                     SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SfxStyleFamily::Pseudo);
@@ -433,63 +434,57 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         sdr::properties::CleanupFillProperties( rAttr );
 
                         // check for unique names of named items for xml
-                        if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SfxItemState::SET )
+                        const SfxPoolItem* pOldItem = nullptr;
+                        if( rAttr.GetItemState( XATTR_FILLBITMAP, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillBitmapItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINEDASH ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_LINEDASH, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEDASH );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineDashItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINESTART ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_LINESTART, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINESTART );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineStartItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINEEND ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_LINEEND, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEEND );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XLineEndItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLGRADIENT ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_FILLGRADIENT, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLGRADIENT );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillGradientItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLFLOATTRANSPARENCE );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillFloatTransparenceItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {
                                 rAttr.Put( std::move(pNewItem) );
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLHATCH ) == SfxItemState::SET )
+                        if( rAttr.GetItemState( XATTR_FILLHATCH, true, &pOldItem ) == SfxItemState::SET )
                         {
-                            const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLHATCH );
                             std::unique_ptr<SfxPoolItem> pNewItem = static_cast<const XFillHatchItem*>(pOldItem)->checkForUniqueItem( *mpDoc );
                             if( pNewItem )
                             {

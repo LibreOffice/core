@@ -646,9 +646,10 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
     switch( pMap->nWID )
     {
     case EE_FEATURE_FIELD:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
+    {
+        const SvxFieldItem* pItem = nullptr;
+        if ( rSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
         {
-            const SvxFieldItem* pItem = rSet.GetItem<SvxFieldItem>( EE_FEATURE_FIELD );
             const SvxFieldData* pData = pItem->GetField();
             uno::Reference< text::XTextRange > xAnchor( this );
 
@@ -664,7 +665,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
             rAny <<= xField;
         }
         break;
-
+    }
     case WID_PORTIONTYPE:
         if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {

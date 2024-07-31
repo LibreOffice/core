@@ -350,14 +350,15 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         sal_uInt16 nWhich = aIter.FirstWhich();
         while (nWhich)
         {
+            const SfxPoolItem* pItem = nullptr;
             if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich, /*bIsCharStyle=*/true)
                 && !pCleanedSet->HasItem(nWhich)
                 && !(pFormat && pFormat->HasItem(nWhich))
-                && rStyleAttrs.GetItemState(nWhich) > SfxItemState::DEFAULT)
+                && rStyleAttrs.GetItemState(nWhich, true, &pItem) > SfxItemState::DEFAULT)
             {
                 // Copy from parent sets only allowed items which will not overwrite
                 // values explicitly defined in current set (pCleanedSet) or in pFormat
-                if (const SfxPoolItem* pItem = rStyleAttrs.GetItem(nWhich, true))
+                if (pItem)
                     pCleanedSet->Put(*pItem);
             }
             nWhich = aIter.NextWhich();

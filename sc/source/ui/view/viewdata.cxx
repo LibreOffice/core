@@ -1158,10 +1158,11 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
         if (eMarkType == SC_MARK_NONE)
             eMarkType = SC_MARK_SIMPLE;
         const ScPatternAttr* pMarkPattern = mrDoc.GetPattern(GetCurX(), GetCurY(), GetTabNo());
-        if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
+        const ScMergeAttr* pMergeItem = nullptr;
+        if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false, &pMergeItem) == SfxItemState::SET)
         {
-            SCROW nRow = pMarkPattern->GetItem(ATTR_MERGE).GetRowMerge();
-            SCCOL nCol = pMarkPattern->GetItem(ATTR_MERGE).GetColMerge();
+            SCROW nRow = pMergeItem->GetRowMerge();
+            SCCOL nCol = pMergeItem->GetColMerge();
             if ( nRow < 1 || nCol < 1 )
             {
                 // This kind of cells do exist. Not sure if that is intended or a bug.

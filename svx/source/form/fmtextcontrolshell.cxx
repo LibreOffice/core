@@ -639,11 +639,10 @@ namespace svx
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();
             for ( WhichId nWhich = pPool->GetFirstWhich(); nWhich <= pPool->GetLastWhich(); ++nWhich )
             {
-                if ( rModifiedItems.GetItemState( nWhich ) == SfxItemState::SET )
+                const SfxPoolItem* pModifiedItem = nullptr;
+                if ( rModifiedItems.GetItemState( nWhich, true, &pModifiedItem ) == SfxItemState::SET )
                 {
                     SfxSlotId nSlotForItemSet = pPool->GetSlotId( nWhich );
-                    const SfxPoolItem* pModifiedItem = rModifiedItems.GetItem( nWhich );
-
 
                     SfxSlotId nSlotForDispatcher = nSlotForItemSet;
                     switch ( nSlotForDispatcher )

@@ -306,17 +306,14 @@ OUString TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState* pState )
         return OUString();
 
     OUString aLink, aTarget;
-    if ( pSet->GetItemState( EE_FEATURE_FIELD ) == SfxItemState::SET )
+    const SvxFieldItem* pItem = nullptr;
+    if ( pSet->GetItemState( EE_FEATURE_FIELD, true, &pItem ) == SfxItemState::SET )
     {
-        const SvxFieldItem* pItem = pSet->GetItem<SvxFieldItem>( EE_FEATURE_FIELD );
-        if(pItem)
+        const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pItem->GetField() );
+        if(pURL)
         {
-            const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pItem->GetField() );
-            if(pURL)
-            {
-                aLink = pURL->GetURL();
-                aTarget = pURL->GetTargetFrame();
-            }
+            aLink = pURL->GetURL();
+            aTarget = pURL->GetTargetFrame();
         }
     }
 

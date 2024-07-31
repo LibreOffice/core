@@ -279,9 +279,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         for (SCSIZE i = 0; i < nCount; ++i)
         {
             const ScPatternAttr* pPattern = GetPattern(nColCurr, nRowCurr);
+            const ScMergeFlagAttr* pMergeFlagItem = nullptr;
             bool bOverlapped
-                = pPattern->GetItemSet().GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET
-                  && pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped();
+                = pPattern->GetItemSet().GetItemState(ATTR_MERGE_FLAG, false, &pMergeFlagItem) == SfxItemState::SET
+                  && pMergeFlagItem->IsOverlapped();
 
             if (bOverlapped)
                 bHasOverlappedCells = true;

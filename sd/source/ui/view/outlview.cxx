@@ -707,11 +707,12 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     pOutliner->SetStyleSheet( nPara, pStyleSheet );
 
     // restore the old bullet item but not if the style changed
+    const SvxNumBulletItem* pBulletItem = nullptr;
     if ( pOutliner->GetPrevDepth() != -1 && nDepth != -1 &&
-         aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SfxItemState::SET )
+         aOldAttrs.GetItemState( EE_PARA_NUMBULLET, true, &pBulletItem ) == SfxItemState::SET )
     {
         SfxItemSet aAttrs( pOutliner->GetParaAttribs( nPara ) );
-        aAttrs.Put( *aOldAttrs.GetItem( EE_PARA_NUMBULLET ) );
+        aAttrs.Put( *pBulletItem );
         pOutliner->SetParaAttribs( nPara, aAttrs );
     }
 }

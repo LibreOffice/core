@@ -304,11 +304,11 @@ namespace
         for (const auto & rPair : rPropertyMap.getPropertyEntries())
         {
             const SfxItemPropertyMapEntry* pProp = rPair.second;
-            if ( SfxItemState::SET == _rItemSet.GetItemState(pProp->nWID) && xInfo->hasPropertyByName(pProp->aName) )
+            const SfxPoolItem* pItem = nullptr;
+            if ( SfxItemState::SET == _rItemSet.GetItemState(pProp->nWID, true, &pItem) && xInfo->hasPropertyByName(pProp->aName) )
             {
                 if ( ( pProp->nFlags & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
                 {
-                    const SfxPoolItem* pItem = _rItemSet.GetItem(pProp->nWID);
                     if ( pItem )
                     {
                         uno::Any aValue;

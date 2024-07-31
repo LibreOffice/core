@@ -1237,12 +1237,13 @@ OString ScPostIt::NoteRangeToJsonString(const ScDocument& rDoc, const ScAddress&
     SCROW nY(rPos.Row());
     OString aStartCellAddress(OString::number(nX) + " " + OString::number(nY));
     const ScPatternAttr* pMarkPattern = rDoc.GetPattern(nX, nY, rPos.Tab());
-    if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
+    const ScMergeAttr* pMergeItem = nullptr;
+    if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false, &pMergeItem) == SfxItemState::SET)
     {
-        SCCOL nCol = pMarkPattern->GetItem(ATTR_MERGE).GetColMerge();
+        SCCOL nCol = pMergeItem->GetColMerge();
         if (nCol > 1)
             nX += nCol - 1;
-        SCROW nRow = pMarkPattern->GetItem(ATTR_MERGE).GetRowMerge();
+        SCROW nRow = pMergeItem->GetRowMerge();
         if (nRow > 1)
             nY += nRow - 1;
     }

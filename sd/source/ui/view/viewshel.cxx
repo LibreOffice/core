@@ -1020,9 +1020,9 @@ const SvxNumBulletItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, TypedW
 
     aNewAttr.Put(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
 
-    if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
+    const SvxNumBulletItem* pBulletItem = nullptr;
+    if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET, true, &pBulletItem) == SfxItemState::SET )
     {
-        const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
         const SvxNumRule& rRule = pBulletItem->GetNumRule();
         SvxNumRule aNewRule( rRule );
         aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );

@@ -267,9 +267,10 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleS
 
 bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState )
 {
-    if( rSet.GetItemState( nWhich ) == SfxItemState::SET )
+    const SfxPoolItem* pItem = nullptr;
+    if( rSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET )
     {
-        const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
+        const SvXMLAttrContainerItem& rAttr = *static_cast<const SvXMLAttrContainerItem*>( pItem );
 
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )
@@ -314,9 +315,10 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet )
 
 bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich )
 {
-    if( rSet.GetItemState( nWhich ) == SfxItemState::SET )
+    const SfxPoolItem* pItem = nullptr;
+    if( rSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET )
     {
-        const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
+        const SvXMLAttrContainerItem& rAttr = *static_cast<const SvXMLAttrContainerItem*>( pItem );
 
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )

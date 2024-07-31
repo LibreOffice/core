@@ -420,12 +420,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         }
     }
 
-    eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_SOURCE );
-
-    if ( eState == SfxItemState::SET )
+    if ( const SfxBoolItem* pBoolItem = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_SOURCE ))
     {
-        const SfxBoolItem* pBoolItem =
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
         if ( pBoolItem )
             m_xCbSourceFormat->set_active(pBoolItem->GetValue());
         else
@@ -520,9 +516,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     {
         SetCategory(nCatLbSelPos );
     }
-    eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_ADD_AUTO );
-    if(SfxItemState::SET == eState)
-         pAutoEntryAttr = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
+    pAutoEntryAttr = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
     // backwards compatibility, but only if the format passed is of
     // LanguageType no_NO.
