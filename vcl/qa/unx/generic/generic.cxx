@@ -10,6 +10,10 @@
 #include <test/unoapi_test.hxx>
 
 #include <vcl/font.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/wintypes.hxx>
+#include <vcl/window.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 #include <font/FontSelectPattern.hxx>
 #include <unx/fontmanager.hxx>
@@ -52,6 +56,32 @@ CPPUNIT_TEST_FIXTURE(Test, testFontFallbackSerif)
     // - Actual  : Noto Kufi Arabic
     // i.e. we got a sans fallback for a serif pattern, which is clearly poor.
     CPPUNIT_ASSERT(aPattern.maSearchName.endsWith(u"Serif"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontFallbackCaching)
+{
+    // Given a vcl-level text layout, created for the serif Verdana:
+    ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
+    VclPtr<OutputDevice> pOutDev = pWindow->GetOutDev();
+    vcl::Font aFont;
+    aFont.SetFamilyName("Verdana");
+    aFont.SetFamily(FAMILY_ROMAN);
+    pOutDev->SetFont(aFont);
+    OUString aText = u"1-1-2017"_ustr;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nLength = aText.getLength();
+    tools::Long nLogicWidth = 0;
+    SalLayoutGlyphsCache::CachedGlyphsKey aKey1(pOutDev, aText, nIndex, nLength, nLogicWidth);
+
+    // When creating a layout for the sans Verdana:
+    aFont.SetFamily(FAMILY_SWISS);
+    pOutDev->SetFont(aFont);
+    SalLayoutGlyphsCache::CachedGlyphsKey aKey2(pOutDev, aText, nIndex, nLength, nLogicWidth);
+
+    // Then make sure these two layouts don't match:
+    // Without the accompanying fix in place, this test would have failed, the Noto Serif layout was
+    // reused for the Noto Sans layout if those were selected as fallbacks.
+    CPPUNIT_ASSERT(aKey1 != aKey2);
 }
 }
 
