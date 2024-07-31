@@ -1083,13 +1083,6 @@ void newReplaceStrAt(rtl_tString** ppThis, rtl_tString* pStr, sal_Int32 nIndex, 
         nCount = pStr->length - nIndex;
     }
 
-    /* Assign of Str? */
-    if (!nCount && (!pNewSubStr || !pNewSubStr->length))
-    {
-        assign(ppThis, pStr);
-        return;
-    }
-
     const auto* pNewSubStrBuf = pNewSubStr ? pNewSubStr->buffer : nullptr;
     const sal_Int32 nNewSubStrLength = pNewSubStr ? pNewSubStr->length : 0;
     newReplaceStrAt(ppThis, pStr, nIndex, nCount, pNewSubStrBuf, nNewSubStrLength);
