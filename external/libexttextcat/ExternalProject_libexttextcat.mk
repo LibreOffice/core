@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,libexttextcat,build):
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(ENABLE_WERROR),--enable-werror,--disable-werror) \
 			$(gb_CONFIGURE_PLATFORMS) \
-		CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_DEBUGINFO_FLAGS) $(call gb_ExternalProject_get_build_flags,libexttextcat) \
+		CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(call gb_ExternalProject_get_build_flags,libexttextcat) \
 			$(if $(COM_IS_CLANG),-Qunused-arguments)" \
 		LDFLAGS="$(call gb_ExternalProject_get_link_flags,libexttextcat)" \
 		&& $(MAKE) \
