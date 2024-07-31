@@ -77,7 +77,7 @@ def getLogTarget():
             if len( userInstallation ) > 0:
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
                 ret = open( systemPath , "a" )
-        except:
+        except Exception:
             print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delegating log to stdout\n")
     return ret
 
@@ -110,7 +110,7 @@ class Logger(LogLevel):
                     msg +
                     "\n" )
                 self.target.flush()
-            except:
+            except Exception:
                 print("Error during writing to stdout: " +lastException2String() + "\n")
 
 log = Logger( getLogTarget() )
@@ -424,7 +424,7 @@ class ProviderContext:
 
         try:
             code = ast.parse( src )
-        except:
+        except Exception:
             log.isDebugLevel() and log.debug( "pythonscript: getFuncsByUrl: exception while parsing: " + lastException2String())
             raise
 
@@ -532,7 +532,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 ret = not self.provCtx.sfa.isReadOnly( self.uri )
 
             log.debug( "ScriptBrowseNode.getPropertyValue called for " + name + ", returning " + str(ret) )
-        except:
+        except Exception:
             log.error( "ScriptBrowseNode.getPropertyValue error " + lastException2String())
             raise
 
@@ -600,7 +600,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 #                log.debug("Save is not implemented yet")
 #                text = self.editor.getControl("EditorTextField").getText()
 #                log.debug("Would save: " + text)
-        except:
+        except Exception:
             # TODO: add an error box here!
             log.error( lastException2String() )
 
@@ -641,7 +641,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
                     self.provCtx, self.uri, self.name, i ))
             ret = tuple( scriptNodeList )
             log.debug( "returning " +str(len(ret)) + " ScriptChildNodes on " + self.uri )
-        except:
+        except Exception:
             text = lastException2String()
             log.error( "Error while evaluating " + self.uri + ":" + text )
             raise
@@ -650,7 +650,7 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
     def hasChildNodes(self):
         try:
             return len(self.getChildNodes()) > 0
-        except:
+        except Exception:
             return False
 
     def getType( self):
@@ -1059,7 +1059,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
 
             log.debug( "got func " + str( func ) )
             return PythonScript( func, mod, funcArgs )
-        except:
+        except Exception:
             text = lastException2String()
             log.error( text )
             raise ScriptFrameworkErrorException( text, self, scriptUri, LANGUAGENAME, 0 )
@@ -1091,7 +1091,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             ret = self.provCtx.isUrlInPackage( uri )
             log.debug( "hasByName " + uri + " " +str( ret ) )
             return ret
-        except:
+        except Exception:
             text = lastException2String()
             log.debug( "Error in hasByName:" +  text )
             return False
