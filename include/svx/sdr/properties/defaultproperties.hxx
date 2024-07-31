@@ -57,7 +57,7 @@ namespace sdr::properties
 
             // Internally react on ItemSet changes. The given span contains changed items.
             // If nDeletedWhich is not 0, it indicates a deleted item.
-            // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+            // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
             //              text layout right now.
             SAL_DLLPRIVATE virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight = true);
 

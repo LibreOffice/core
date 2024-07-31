@@ -111,12 +111,12 @@ namespace sdr::properties
 
             // Sets all items which are on state SfxItemState::SET in rSet at the local ItemSet.
             // Uses AllowItemChange(), ItemChange(), PostItemChange() and ItemSetChanged() calls.
-            // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+            // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
             //              text layout right now.
             virtual void SetObjectItemSet(const SfxItemSet& rSet, bool bAdjustTextFrameWidthAndHeight = true) = 0;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+            // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
             //              text layout right now.
             virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false,
                             bool bAdjustTextFrameWidthAndHeight = true);

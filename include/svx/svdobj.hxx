@@ -602,7 +602,7 @@ public:
     const SfxItemSet& GetMergedItemSet() const;
     void SetMergedItem(const SfxPoolItem& rItem);
     void ClearMergedItem(const sal_uInt16 nWhich = 0);
-    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
     //              text layout right now.
     void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false, bool bAdjustTextFrameWidthAndHeight = true);
     const SfxPoolItem& GetMergedItem(const sal_uInt16 nWhich) const;
@@ -950,7 +950,7 @@ protected:
 
     const SfxItemSet* getBackgroundFillSet() const;
 
-    // @param bAdjustTextFrameWidthAndHeight pass false if you know it it safe to avoid the cost of doing
+    // @param bAdjustTextFrameWidthAndHeight pass false if you know it is safe to avoid the cost of doing
     //              text layout right now.
     virtual void InternalSetStyleSheet(SfxStyleSheet* pNewStyleSheet,
                     bool bDontRemoveHardAttr, bool bBroadcast, bool bAdjustTextFrameWidthAndHeight = true);
