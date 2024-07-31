@@ -87,8 +87,9 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
         aFileName += " - " + utl::ConfigManager::getProductName();
     m_xDialog->set_title(aTitle + " - " + aFileName);
 
-    aMessage += url.HasError()
+    auto aUrl = url.HasError()
         ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+    aMessage += m_xFTPassword->escape_ui_str(aUrl);
     m_xFTPassword->set_label(aMessage);
 
     if (bIsSimplePasswordRequest)
