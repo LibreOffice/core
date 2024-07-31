@@ -5282,7 +5282,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157390)
 // tdf#162205 - Verifies bidi portions on vertical left-to-right pages are rendered correctly
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162205Ltr)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf162205-ltr.fodt");
 
     auto pPdfDocument = parsePDFExport();
@@ -5338,7 +5337,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162205Ltr)
 // tdf#162205 - Verifies bidi portions on vertical left-to-right pages are rendered correctly
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162205Rtl)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf162205-rtl.fodt");
 
     auto pPdfDocument = parsePDFExport();
@@ -5394,7 +5392,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162205Rtl)
 // tdf#162194 - Verifies soft hyphens inside ligatures are rendered correctly.
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162194SoftHyphen)
 {
-    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     saveAsPDF(u"tdf162194-soft-hyphen.fodt");
 
     auto pPdfDocument = parsePDFExport();

@@ -44,8 +44,7 @@ public:
     }
 
     void saveAsPDF(std::u16string_view rFile);
-    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-              bool bUseExportFormFields = false);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -56,16 +55,8 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
-                         bool bUseExportFormFields)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
 {
-    if (bUseExportFormFields)
-    {
-        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "ExportFormFields", uno::Any(bUseExportFormFields) },
-        }));
-        aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    }
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -874,8 +865,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf105972.fodt", aDocument, /*bUseExportFormFields=*/true);
+    load(u"tdf105972.fodt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -938,8 +933,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf148442.odt", aDocument, /*bUseExportFormFields=*/true);
+    load(u"tdf148442.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -1007,8 +1007,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf118244_radioButtonGroup.odt", aDocument, /*bUseExportFormFields=*/true);
+    load(u"tdf118244_radioButtonGroup.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
