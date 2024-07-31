@@ -327,9 +327,8 @@ FilePermission::FilePermission(
     // correct win drive letters
     if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
     {
-        constexpr OUStringLiteral s_colon = u":";
         // common case in API is a ':' (sal), so convert '|' to ':'
-        m_url = m_url.replaceAt( 9, 1, s_colon );
+        m_url = m_url.replaceAt(9, 1, u":");
     }
 #endif
 }

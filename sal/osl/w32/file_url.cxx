@@ -424,7 +424,7 @@ DWORD IsValidFilePath(const OUString& path, DWORD dwFlags, OUString* corrected)
             // Correct path by merging consecutive slashes:
             if (o3tl::starts_with(*oComponent, u"\\") && corrected != nullptr) {
                 sal_Int32 i = oComponent->data() - lastCorrected.getStr();
-                *corrected = lastCorrected.replaceAt(i, 1, {});
+                *corrected = lastCorrected.replaceAt(i, 1, std::u16string_view{});
                     //TODO: handle out-of-memory
                 lastCorrected = *corrected;
                 oComponent = lastCorrected.subView(i);
