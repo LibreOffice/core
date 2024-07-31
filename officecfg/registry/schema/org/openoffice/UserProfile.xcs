@@ -188,6 +188,18 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="signingkeydisplayname" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Cached signing key display name.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="encryptionkeydisplayname" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Cached encryption key display name.</desc>
+        </info>
+        <value/>
+      </prop>
     </group>
     <group oor:name="WinUserInfo">
       <info>

@@ -53,7 +53,7 @@ COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _
 
 COMPHELPER_DLLPUBLIC css::uno::Reference<css::security::XCertificate> FindCertInContext(
     const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
-    const OUString& rContentPart);
+    const OUString& rSHA1Thumbprint);
 }
 
 #endif

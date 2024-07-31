@@ -312,7 +312,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
 
     css::uno::Reference<css::security::XCertificate> FindCertInContext(
         const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
-        const OUString& rContentPart)
+        const OUString& rSHA1Thumbprint)
     {
         if (!xSecurityContext.is())
             return {};
@@ -325,13 +325,13 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
         auto aCertsIter = asNonConstRange(xCertificates);
 
         auto pxCert
-            = std::find_if(aCertsIter.begin(), aCertsIter.end(),
-                           [&rContentPart](auto& xCert)
-                           {
-                               return comphelper::xmlsec::GetContentPart(
-                                          xCert->getSubjectName(), xCert->getCertificateKind())
-                                      == rContentPart;
-                           });
+                = std::find_if(aCertsIter.begin(), aCertsIter.end(),
+                               [&rSHA1Thumbprint](auto& xCert)
+                               {
+                                   return rSHA1Thumbprint
+                                           == GetHexString(xCert->getSHA1Thumbprint(), "");
+                               });
+
         if (pxCert == aCertsIter.end())
             return {};
 

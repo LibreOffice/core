@@ -65,7 +65,9 @@ constexpr o3tl::enumarray<UserOptToken, OUString> vOptionNames = {
     u"apartment"_ustr,                 // UserOptToken::Apartment
     u"signingkey"_ustr,                // UserOptToken::SigningKey
     u"encryptionkey"_ustr,             // UserOptToken::EncryptionKey
-    u"encrypttoself"_ustr              // UserOptToken::EncryptToSelf
+    u"encrypttoself"_ustr,             // UserOptToken::EncryptToSelf
+    u"signingkeydisplayname"_ustr,     // UserOptToken::SigningKeyDisplayName
+    u"encryptionkeydisplayname"_ustr,  // UserOptToken::EncryptionKeyDisplayName
 };
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
@@ -306,6 +308,8 @@ OUString SvtUserOptions::GetFax            () const { return GetToken(UserOptTok
 OUString SvtUserOptions::GetEmail          () const { return GetToken(UserOptToken::Email); }
 OUString SvtUserOptions::GetSigningKey     () const { return GetToken(UserOptToken::SigningKey); }
 OUString SvtUserOptions::GetEncryptionKey  () const { return GetToken(UserOptToken::EncryptionKey); }
+OUString SvtUserOptions::GetSigningKeyDisplayName () const { return GetToken(UserOptToken::SigningKeyDisplayName); }
+OUString SvtUserOptions::GetEncryptionKeyDisplayName () const { return GetToken(UserOptToken::EncryptionKeyDisplayName); }
 
 bool SvtUserOptions::IsTokenReadonly (UserOptToken nToken) const
 {

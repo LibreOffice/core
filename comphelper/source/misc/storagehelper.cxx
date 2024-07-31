@@ -55,6 +55,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -485,16 +486,15 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
             ctx->setArmor(false);
         }
 
-        uno::Sequence < sal_Int8 > aKeyID;
+        OString aKeyID;
         if (cert.is())
-            aKeyID = cert->getSHA1Thumbprint();
-
-        std::vector<GpgME::Key> keys
         {
-            ctx->key(
-                reinterpret_cast<const char*>(aKeyID.getConstArray()),
-                err, false)
-        };
+            aKeyID
+                = OUStringToOString(comphelper::xmlsec::GetHexString(cert->getSHA1Thumbprint(), ""),
+                                    RTL_TEXTENCODING_UTF8);
+        }
+
+        std::vector<GpgME::Key> keys{ ctx->key(aKeyID.getStr(), err, false) };
 
         // ctx is setup now, let's encrypt the lot!
         GpgME::Data plain(
@@ -549,9 +549,11 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
 
         SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
 
-        uno::Sequence< beans::NamedValue > aGpgEncryptionEntry{
-            { u"KeyId"_ustr, uno::Any(aKeyID) },
-            { u"KeyPacket"_ustr, uno::Any(aKeyID) },
+        uno::Sequence<sal_Int8> aKeyIdSequence
+            = comphelper::arrayToSequence<sal_Int8>(aKeyID.getStr(), aKeyID.getLength() + 1);
+        uno::Sequence<beans::NamedValue> aGpgEncryptionEntry{
+            { u"KeyId"_ustr, uno::Any(aKeyIdSequence) },
+            { u"KeyPacket"_ustr, uno::Any(aKeyIdSequence) },
             { u"CipherValue"_ustr, uno::Any(aCipherValue) }
         };
 

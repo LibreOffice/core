@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sfx2/res/deleterow.png</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">sfx2/res/deleterow.png</property>
+  </object>
   <object class="GtkBox" id="OptUserPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -1086,7 +1096,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=3 n-rows=3 -->
+          <!-- n-columns=5 n-rows=3 -->
           <object class="GtkGrid" id="grid14">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -1123,44 +1133,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="encryptionkey">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <items>
-                  <item translatable="yes" context="optuserpage|liststore1">No key</item>
-                </items>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="encryptionkey-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | encryptionkey">Select your OpenPGP key from the drop-down list for encrypting ODF documents.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="signingkey">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <items>
-                  <item translatable="yes" context="optuserpage|liststore1">No key</item>
-                </items>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="signingkey-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended tip | signingkey">Select your key from the drop-down list for signing ODF documents.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="encrypttoself">
                 <property name="label" translatable="yes" context="optuserpage|encrypttoself">When _encrypting documents, always encrypt to self</property>
                 <property name="visible">True</property>
@@ -1177,7 +1149,7 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
-                <property name="width">2</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -1218,6 +1190,87 @@
                 <property name="left-attach">0</property>
                 <property name="top-attach">2</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="signingkey">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="editable">False</property>
+                <property name="placeholder-text" translatable="yes" context="optuserpage|signingkey">No key</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="encryptionkey">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="editable">False</property>
+                <property name="placeholder-text" translatable="yes" context="optuserpage|encryptionkey">No key</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="picksigningkey">
+                <property name="label" translatable="yes" context="optuserpage|picksigningkey">Select...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="pickencryptionkey">
+                <property name="label" translatable="yes" context="optuserpage|pickencryptionkey">Select...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="removesigningkey">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="optuserpage|removesigningkey">Clear Signing Key</property>
+                <property name="image">image1</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="removeencryptionkey">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="optuserpage|removeencryptionkey">Clear Encryption Key</property>
+                <property name="image">image2</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>

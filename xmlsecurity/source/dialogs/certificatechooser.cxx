@@ -248,9 +248,8 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             m_xCertLB->set_id(nRow, sId);
 
 #if HAVE_FEATURE_GPGME
-            // only GPG has preferred keys
-            if ( !sIssuer.isEmpty() && !msPreferredKey.isEmpty() ) {
-                if ( sIssuer == msPreferredKey )
+            if ( !msPreferredKey.isEmpty() ) {
+                if ( xmlsec::GetHexString(xCert->getSHA1Thumbprint(), "") == msPreferredKey )
                 {
                     if ( meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign )
                     {

@@ -8,6 +8,7 @@
 #
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 import pyuno
 
@@ -23,20 +24,19 @@ import os.path
 # See solenv/gbuild/UITest.mk
 class GpgEncryptTest(UITestCase):
 
-    # should this be setUp() or setUpClass()?
-    # as setUp(), any test's change to the files should be overwritten before
-    # the next test, which could be an advantage.
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         testdir = os.getenv("TestUserDir")
         certdir = urljoin(testdir, "signing-keys")
         # this sets GNUPGHOME so do it before starting soffice
         pyuno.private_initTestEnvironmentGPG(certdir)
         # ugly: set var here again because "os.environ" is a copy :(
         os.environ["GNUPGHOME"] = url2pathname(urlparse(certdir).path)
-        super().setUp()
+        super().setUpClass()
 
-    def tearDown(self):
-        super().tearDown()
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
         pyuno.private_deinitTestEnvironmentGPG()
 
     def test_gpg_encrypt(self):
@@ -72,4 +72,27 @@ class GpgEncryptTest(UITestCase):
                     self.assertTrue(os.path.isfile(xFilePath))
 
 
+    def test_gpg_sign_default(self):
+        with self.ui_test.set_config('/org.openoffice.UserProfile/Data/signingkey', r"93F7584031D9B74A57BB89DFC468A04FCA526A9F"):
+            with TemporaryDirectory() as tempdir:
+                xFilePath = os.path.join(tempdir, "testfile.odt")
+                with self.ui_test.create_doc_in_start_center("writer") as document:
+                    with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="") as xSaveDialog:
+                        xFileName = xSaveDialog.getChild("file_name")
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+
+                        gpgsign = xSaveDialog.getChild("gpgsign")
+                        # make sure the checkbox is enabled when there's a matching signing key
+                        self.assertEqual('true', get_state_as_dict(gpgsign)['Enabled'])
+                        gpgsign.executeAction("CLICK",tuple())
+
+                        xOpen = xSaveDialog.getChild("open")
+                        self.assertFalse(os.path.isfile(xFilePath))
+                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="") as xSignOnConsecutiveSaveDialog:
+                            xSignOnConsecutiveSaveDialog.getChild("no").executeAction("CLICK", tuple())
+
+                        # confirm signing was sucessful
+                        self.assertTrue(self.ui_test.get_component().getPropertyValue("HasValidSignatures"))
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

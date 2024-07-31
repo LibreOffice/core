@@ -15,6 +15,7 @@
 #include <com/sun/star/security/KeyUsage.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <svl/sigstruct.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <context.h>
 #include <data.h>
@@ -184,8 +185,9 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSHA1Thumbprint()
 {
     // This is mapped to the fingerprint for gpg
     const char* keyId = m_pKey.primaryFingerprint();
-    return comphelper::arrayToSequence<sal_Int8>(
-        keyId, strlen(keyId)+1);
+
+    // get hex fingerprint as byte array
+    return comphelper::containerToSequence<sal_Int8>(svl::crypto::DecodeHexString(keyId));
 }
 
 Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()

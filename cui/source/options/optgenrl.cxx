@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -27,6 +28,7 @@
 #endif
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <comphelper/xmlsechelper.hxx>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -219,12 +221,16 @@ SvxGeneralTabPage::SvxGeneralTabPage(weld::Container* pPage, weld::DialogControl
     , m_xUseDataCB(m_xBuilder->weld_check_button(u"usefordocprop"_ustr))
     , m_xUseDataImg(m_xBuilder->weld_widget(u"lockusefordocprop"_ustr))
     , m_xCryptoFrame(m_xBuilder->weld_widget( u"cryptography"_ustr))
-    , m_xSigningKeyLB(m_xBuilder->weld_combo_box(u"signingkey"_ustr))
+    , m_xSigningKeyLB(m_xBuilder->weld_entry(u"signingkey"_ustr))
     , m_xSigningKeyFT(m_xBuilder->weld_label(u"signingkeylabel"_ustr))
     , m_xSigningKeyImg(m_xBuilder->weld_widget(u"locksigningkey"_ustr))
-    , m_xEncryptionKeyLB(m_xBuilder->weld_combo_box(u"encryptionkey"_ustr))
+    , m_xSigningKeyButton(m_xBuilder->weld_button(u"picksigningkey"_ustr))
+    , m_xRemoveSigningKeyButton(m_xBuilder->weld_button(u"removesigningkey"_ustr))
+    , m_xEncryptionKeyLB(m_xBuilder->weld_entry(u"encryptionkey"_ustr))
     , m_xEncryptionKeyFT(m_xBuilder->weld_label(u"encryptionkeylabel"_ustr))
     , m_xEncryptionKeyImg(m_xBuilder->weld_widget(u"lockencryptionkey"_ustr))
+    , m_xEncryptionKeyButton(m_xBuilder->weld_button(u"pickencryptionkey"_ustr))
+    , m_xRemoveEncryptionKeyButton(m_xBuilder->weld_button(u"removeencryptionkey"_ustr))
     , m_xEncryptToSelfCB(m_xBuilder->weld_check_button(u"encrypttoself"_ustr))
     , m_xEncryptToSelfImg(m_xBuilder->weld_widget(u"lockencrypttoself"_ustr))
 {
@@ -301,68 +307,89 @@ void SvxGeneralTabPage::InitCryptography()
 {
 #if HAVE_FEATURE_GPGME
     m_xCryptoFrame->show();
+    m_xSigningKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, ChooseKeyButtonHdl));
+    m_xEncryptionKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, ChooseKeyButtonHdl));
 
-    try
-    {
-        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
-            = xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
-                  ->createSecurityContext("");
-        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContextGPG
-            = xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
-                  ->createSecurityContext("");
-        if (xSecurityContextGPG.is())
-        {
-            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSecurityContextGPG->getSecurityEnvironment();
-            uno::Sequence<uno::Reference<security::XCertificate>> xCertificates = xSE->getPersonalCertificates();
-
-            if (xCertificates.hasElements())
-            {
-                for (auto& xCert : asNonConstRange(xCertificates))
-                {
-                    const auto aIssuer = comphelper::xmlsec::GetContentPart(
-                        xCert->getSubjectName(), xCert->getCertificateKind());
-                    m_xSigningKeyLB->append_text(aIssuer);
-                    m_xEncryptionKeyLB->append_text(aIssuer);
-                }
-            }
-        }
-
-        if (xSecurityContext.is())
-        {
-            uno::Reference<xml::crypto::XSecurityEnvironment> xSE = xSecurityContext->getSecurityEnvironment();
-            uno::Sequence<uno::Reference<security::XCertificate>> xCertificates
-                = xSE->getPersonalCertificates();
-
-            if (xCertificates.hasElements())
-            {
-                for (auto& xCert : asNonConstRange(xCertificates))
-                {
-                    const auto aIssuer
-                        = comphelper::xmlsec::GetContentPart(xCert->getSubjectName(),
-                                                             xCert->getCertificateKind());
-                    m_xSigningKeyLB->append_text(aIssuer);
-                }
-            }
-        }
-
-        if (xSecurityContext.is() || xSecurityContextGPG.is())
-        {
-            //tdf#115015: wrap checkbox text and listboxes if necessary
-            int nPrefWidth(m_xEncryptToSelfCB->get_preferred_size().Width());
-            int nMaxWidth = m_xEncryptToSelfCB->get_approximate_digit_width() * 40;
-            if (nPrefWidth > nMaxWidth)
-            {
-                 m_xSigningKeyLB->set_size_request(nMaxWidth, -1);
-                 m_xEncryptionKeyLB->set_size_request(nMaxWidth, -1);
-                 m_xEncryptToSelfCB->set_label_wrap(true);
-                 m_xEncryptToSelfCB->set_size_request(nMaxWidth, -1);
-            }
-        }
-    }
-    catch ( uno::Exception const & )
-    {}
+    m_xRemoveSigningKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, RemoveKeyButtonHdl));
+    m_xRemoveEncryptionKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, RemoveKeyButtonHdl));
 #endif
 
+}
+
+IMPL_LINK(SvxGeneralTabPage, ChooseKeyButtonHdl, weld::Button&, rButton, void)
+{
+    try
+    {
+        uno::Reference<security::XDocumentDigitalSignatures> xD(
+            security::DocumentDigitalSignatures::createDefault(
+                comphelper::getProcessComponentContext()));
+        xD->setParentWindow(GetDialogController()->getDialog()->GetXWindow());
+
+        OUString aDescription;
+
+        uno::Reference<security::XCertificate> xCertificate;
+        if (m_xSigningKeyButton.get() == &rButton)
+        {
+            xCertificate = xD->selectSigningCertificate(aDescription);
+        }
+        else if (m_xEncryptionKeyButton.get() == &rButton)
+        {
+            auto xCerts = xD->chooseEncryptionCertificate();
+            if(xCerts.hasElements())
+                xCertificate = xCerts[0];
+        }
+
+        if(!xCertificate.is())
+            return;
+
+        OUString aKeyThumbprint
+            = comphelper::xmlsec::GetHexString(xCertificate->getSHA1Thumbprint(), "");
+        OUString aIssuer = comphelper::xmlsec::GetContentPart(xCertificate->getIssuerName(),
+                                                              xCertificate->getCertificateKind());
+        OUString aSubject = comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(),
+                                                               xCertificate->getCertificateKind());
+        OUString aKeyDisplayName;
+        switch (xCertificate->getCertificateKind())
+        {
+            case security::CertificateKind::CertificateKind_X509:
+                aKeyDisplayName = u"(X.509) "_ustr + aIssuer + u" "_ustr + aSubject;
+                break;
+            case security::CertificateKind::CertificateKind_OPENPGP:
+                aKeyDisplayName = u"(OpenPGP) "_ustr + aIssuer;
+                break;
+            default:
+                break;
+        }
+
+        if (m_xSigningKeyButton.get() == &rButton)
+        {
+            msCurrentSigningKey = aKeyThumbprint;
+            m_xSigningKeyLB->set_text(aKeyDisplayName);
+        }
+        else if (m_xEncryptionKeyButton.get() == &rButton)
+        {
+            msCurrentEncryptionKey = aKeyThumbprint;
+            m_xEncryptionKeyLB->set_text(aKeyDisplayName);
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
+    }
+}
+
+IMPL_LINK(SvxGeneralTabPage, RemoveKeyButtonHdl, weld::Button&, rButton, void)
+{
+        if (m_xRemoveSigningKeyButton.get() == &rButton)
+        {
+            msCurrentSigningKey.clear();
+            m_xSigningKeyLB->set_text(u""_ustr);
+        }
+        else if (m_xRemoveEncryptionKeyButton.get() == &rButton)
+        {
+            msCurrentEncryptionKey.clear();
+            m_xEncryptionKeyLB->set_text(u""_ustr);
+        }
 }
 
 void SvxGeneralTabPage::SetLinks ()
@@ -497,13 +524,10 @@ bool SvxGeneralTabPage::GetData_Impl()
     }
 
 #if HAVE_FEATURE_GPGME
-    OUString aSK = m_xSigningKeyLB->get_active() == 0 ? OUString() //i.e. no key
-                       : m_xSigningKeyLB->get_active_text();
-    OUString aEK = m_xEncryptionKeyLB->get_active() == 0 ? OUString()
-                       : m_xEncryptionKeyLB->get_active_text();
-
-    aUserOpt.SetToken( UserOptToken::SigningKey, aSK );
-    aUserOpt.SetToken( UserOptToken::EncryptionKey, aEK );
+    aUserOpt.SetToken( UserOptToken::SigningKey, msCurrentSigningKey );
+    aUserOpt.SetToken( UserOptToken::SigningKeyDisplayName, m_xSigningKeyLB->get_text() );
+    aUserOpt.SetToken( UserOptToken::EncryptionKey, msCurrentEncryptionKey );
+    aUserOpt.SetToken( UserOptToken::EncryptionKeyDisplayName, m_xEncryptionKeyLB->get_text() );
     aUserOpt.SetBoolValue( UserOptToken::EncryptToSelf, m_xEncryptToSelfCB->get_active() );
 
     bModified |= m_xSigningKeyLB->get_value_changed_from_saved() ||
@@ -550,12 +574,12 @@ void SvxGeneralTabPage::SetData_Impl()
 
 #if HAVE_FEATURE_GPGME
     bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::SigningKey);
-    m_xSigningKeyLB->set_sensitive(bEnable);
+    m_xSigningKeyButton->set_sensitive(bEnable);
     m_xSigningKeyFT->set_sensitive(bEnable);
     m_xSigningKeyImg->set_visible(!bEnable);
 
     bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::EncryptionKey);
-    m_xEncryptionKeyLB->set_sensitive(bEnable);
+    m_xEncryptionKeyButton->set_sensitive(bEnable);
     m_xEncryptionKeyFT->set_sensitive(bEnable);
     m_xEncryptionKeyImg->set_visible(!bEnable);
 
@@ -563,13 +587,11 @@ void SvxGeneralTabPage::SetData_Impl()
     m_xEncryptToSelfCB->set_sensitive(bEnable);
     m_xEncryptToSelfImg->set_visible(!bEnable);
 
-    OUString aSK = aUserOpt.GetToken(UserOptToken::SigningKey);
-    aSK.isEmpty() ? m_xSigningKeyLB->set_active( 0 ) //i.e. 'No Key'
-                  : m_xSigningKeyLB->set_active_text( aSK );
+    msCurrentSigningKey = aUserOpt.GetToken(UserOptToken::SigningKey);
+    m_xSigningKeyLB->set_text(aUserOpt.GetToken(UserOptToken::SigningKeyDisplayName));
 
-    OUString aEK = aUserOpt.GetToken(UserOptToken::EncryptionKey);
-    aEK.isEmpty() ? m_xEncryptionKeyLB->set_active( 0 ) //i.e. 'No Key'
-                  : m_xEncryptionKeyLB->set_active_text( aEK );
+    msCurrentEncryptionKey = aUserOpt.GetToken(UserOptToken::EncryptionKey);
+    m_xEncryptionKeyLB->set_text(aUserOpt.GetToken(UserOptToken::EncryptionKeyDisplayName));
 
     m_xEncryptToSelfCB->set_active( aUserOpt.GetEncryptToSelf() );
 #endif
