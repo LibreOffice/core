@@ -42,8 +42,13 @@ public:
     {
     }
 
+    explicit ImplB2DPolyPolygon(ImplB2DPolyPolygon&& rSource) noexcept
+        : maPolygons(std::move(rSource.maPolygons))
+    {
+    }
+
     explicit ImplB2DPolyPolygon(const ImplB2DPolyPolygon& rSource)
-    :   maPolygons(rSource.maPolygons)
+        : maPolygons(rSource.maPolygons)
     {
     }
 
