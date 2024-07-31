@@ -2208,15 +2208,19 @@ bool XSecondaryFillColorItem::GetPresentation
 SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; }
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
-                                   const basegfx::BGradient& rTheGradient) :
-    NameOrIndex(XATTR_FILLGRADIENT, nIndex, SfxItemType::XFillGradientItemType),
+                                   const basegfx::BGradient& rTheGradient,
+                                   TypedWhichId<XFillGradientItem> nWhich,
+                                   SfxItemType eItemType) :
+    NameOrIndex(nWhich, nIndex, eItemType),
     m_aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
-                                   const basegfx::BGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
-    : NameOrIndex(nWhich, rName, SfxItemType::XFillGradientItemType)
+                                   const basegfx::BGradient& rTheGradient,
+                                   TypedWhichId<XFillGradientItem> nWhich,
+                                   SfxItemType eItemType)
+    : NameOrIndex(nWhich, rName, eItemType)
     , m_aGradient(rTheGradient)
 {
 }
@@ -2227,8 +2231,10 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 {
 }
 
-XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient )
-:   NameOrIndex( XATTR_FILLGRADIENT, -1, SfxItemType::XFillGradientItemType ),
+XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient,
+                                    TypedWhichId<XFillGradientItem> nWhich,
+                                    SfxItemType eItemType )
+:   NameOrIndex( nWhich, -1, eItemType ),
     m_aGradient(rTheGradient)
 {
 }
@@ -2502,36 +2508,32 @@ boost::property_tree::ptree XFillGradientItem::dumpAsJSON() const
 SfxPoolItem* XFillFloatTransparenceItem::CreateDefault() { return new XFillFloatTransparenceItem; }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
+    XFillGradientItem(XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType),
     bEnabled( false )
 {
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable ) :
-    XFillGradientItem   ( rName, rGradient ),
+    XFillGradientItem   ( rName, rGradient, XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType ),
     bEnabled            ( bEnable )
 {
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem ) :
     XFillGradientItem   ( rItem ),
     bEnabled            ( rItem.bEnabled )
 {
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const basegfx::BGradient& rTheGradient, bool bEnable )
-:   XFillGradientItem   ( -1, rTheGradient ),
+:   XFillGradientItem   ( -1, rTheGradient, XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType ),
     bEnabled            ( bEnable )
 {
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return ( NameOrIndex::operator==(rItem) ) &&
-           ( GetGradientValue() == static_cast<const XFillGradientItem&>(rItem).GetGradientValue() ) &&
+    return ( XFillGradientItem::operator==(rItem) ) &&
            ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
 }
 

@@ -1425,8 +1425,20 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
         return false;
     }
 
+    SfxItemType eItemType;
+    switch (nWID)
+    {
+        case XATTR_FILLBITMAP: eItemType = SfxItemType::XFillBitmapItemType; break;
+        case XATTR_FILLGRADIENT: eItemType = SfxItemType::XFillGradientItemType; break;
+        case XATTR_FILLHATCH: eItemType = SfxItemType::XFillHatchItemType; break;
+        case XATTR_FILLFLOATTRANSPARENCE: eItemType = SfxItemType::XFillFloatTransparenceItemType; break;
+        case XATTR_LINEEND: eItemType = SfxItemType::XLineEndItemType; break;
+        case XATTR_LINESTART: eItemType = SfxItemType::XLineStartItemType; break;
+        case XATTR_LINEDASH: eItemType = SfxItemType::XLineDashItemType; break;
+        default: assert(false); abort();
+    }
     ItemSurrogates aSurrogates;
-    rSet.GetPool()->GetItemSurrogates(aSurrogates, nWID);
+    rSet.GetPool()->GetItemSurrogatesForItem(aSurrogates, eItemType);
     for (const SfxPoolItem* p : aSurrogates)
     {
         const NameOrIndex* pItem = static_cast<const NameOrIndex*>(p);

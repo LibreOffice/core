@@ -486,6 +486,7 @@ enum class SfxItemType : sal_uInt16 {
     XFillBmpTileOffsetXItemType,
     XFillBmpTileOffsetYItemType,
     XFillColorItemType,
+    XFillFloatTransparenceItemType,
     XFillGradientItemType,
     XFillHatchItemType,
     XFillStyleItemType,
