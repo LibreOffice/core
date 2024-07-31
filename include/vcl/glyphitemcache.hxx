@@ -72,8 +72,7 @@ public:
     {
     }
 
-private:
-    struct SAL_DLLPRIVATE CachedGlyphsKey
+    struct CachedGlyphsKey
     {
         OUString text;
         sal_Int32 index;
@@ -94,6 +93,8 @@ private:
                         tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };
+
+private:
     struct CachedGlyphsHash
     {
         size_t operator()(const CachedGlyphsKey& key) const { return key.hashValue; }

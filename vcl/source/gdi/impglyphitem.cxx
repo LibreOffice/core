@@ -548,9 +548,14 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     o3tl::hash_combine(hashValue, artificialBold);
     o3tl::hash_combine(hashValue, layoutMode);
     o3tl::hash_combine(hashValue, digitLanguage.get());
+
+    // In case the font name is the same, but the font family differs, then the font metric won't
+    // contain that custom font family, so explicitly include the font family from the output device
+    // font.
+    o3tl::hash_combine(hashValue, outputDevice->GetFont().GetFamilyType());
 }
 
-inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
+bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
            && logicWidth == other.logicWidth && mapMode == other.mapMode && rtl == other.rtl
