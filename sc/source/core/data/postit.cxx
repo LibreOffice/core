@@ -490,8 +490,9 @@ void ScPostIt::SetAuthor( const OUString& rAuthor )
 
 void ScPostIt::AutoStamp()
 {
-    maNoteData.maDate = ScGlobal::getLocaleData().getDate( Date( Date::SYSTEM ) ) + " " +
-        ScGlobal::getLocaleData().getTime(DateTime(DateTime::SYSTEM), false);
+    DateTime aNow(DateTime::SYSTEM);
+    auto const & rLocaleData = ScGlobal::getLocaleData();
+    maNoteData.maDate = rLocaleData.getDate( aNow ) + " " + rLocaleData.getTime(aNow, false);
     const OUString aAuthor = SvtUserOptions().GetFullName();
     maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
 }
