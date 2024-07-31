@@ -2900,7 +2900,7 @@ bool MiscSettings::GetUseReducedAnimation()
     return pDefWindow->ImplGetFrame()->GetUseReducedAnimation();
 }
 
-// tdf#115688: Let the user choose in the accessability option page ("Tools" --> "Options" --> "Accessibility --> "Allow other animations") if the "marching ants" animation is allowed.
+// tdf#115688: Let the user choose in the accessibility option page ("Tools" --> "Options" --> "Accessibility --> "Allow other animations") if the "marching ants" animation is allowed.
 // tdf#161765: Let the user choose which animation settings to use: OS's / LO's
 // New options: "System"/"No"/"Yes".
 // Do respect OS's animation setting if the user has selected the option "System"
