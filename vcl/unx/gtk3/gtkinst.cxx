@@ -51,6 +51,7 @@
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #include "a11y/atkwrapper.hxx"
 #endif
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -18704,6 +18705,24 @@ public:
             if (m_pAccessible)
                 g_object_ref(m_pAccessible);
         }
+
+#if ATK_CHECK_VERSION(2, 34, 0)
+        // if set, take over accessible ID from the XAccessible to the GtkWidget
+        // (While e.g. accessible name and description can be handled on demand by overriding
+        // AtkObjectClass::get_name and AtkObjectClass::get_description, s. atk_object_wrapper_class_init),
+        // there's no such function to override for the accessible ID)
+        if (m_pAccessible && m_xAccessible.is())
+        {
+            css::uno::Reference<css::accessibility::XAccessibleContext2> xContext(
+                m_xAccessible->getAccessibleContext(), UNO_QUERY);
+            if (xContext.is())
+            {
+                const OUString sId = xContext->getAccessibleId();
+                atk_object_set_accessible_id(
+                    m_pAccessible, OUStringToOString(sId, RTL_TEXTENCODING_UTF8).getStr());
+            }
+        }
+#endif
         return m_pAccessible;
     }
 #endif
@@ -18855,6 +18874,21 @@ public:
         AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         const char* pStr = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return OUString();
+#endif
+    }
+
+    virtual OUString get_accessible_id() const override
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if ATK_CHECK_VERSION(2, 34, 0)
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return OUString();
+#endif
 #else
         return OUString();
 #endif
