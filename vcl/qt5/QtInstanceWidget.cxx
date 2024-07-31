@@ -117,6 +117,16 @@ OUString QtInstanceWidget::get_accessible_description() const
     return toOUString(m_pWidget->accessibleDescription());
 }
 
+OUString QtInstanceWidget::get_accessible_id() const
+{
+    assert(m_pWidget);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    return toOUString(m_pWidget->accessibleIdentifier());
+#else
+    return OUString();
+#endif
+}
+
 void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*) {}
 
 void QtInstanceWidget::set_tooltip_text(const OUString&) {}

@@ -3857,6 +3857,21 @@ public:
 #endif
     }
 
+    virtual OUString get_accessible_id() const override
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+#if ATK_CHECK_VERSION(2, 34, 0)
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_accessible_id(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        return OUString();
+#endif
+#else
+        return OUString();
+#endif
+    }
+
     virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override
     {
         GtkWidget* pGtkLabel = pLabel ? dynamic_cast<GtkInstanceWidget&>(*pLabel).getWidget() : nullptr;

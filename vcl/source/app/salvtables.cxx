@@ -492,6 +492,8 @@ OUString SalInstanceWidget::get_accessible_description() const
     return m_xWidget->GetAccessibleDescription();
 }
 
+OUString SalInstanceWidget::get_accessible_id() const { return m_xWidget->get_id(); }
+
 void SalInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
 {
     if (vcl::Window* pOldLabel = m_xWidget->GetAccessibleRelationLabeledBy())

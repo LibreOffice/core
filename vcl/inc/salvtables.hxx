@@ -314,6 +314,8 @@ public:
 
     virtual OUString get_accessible_description() const override;
 
+    virtual OUString get_accessible_id() const override;
+
     virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override;
 
     virtual void set_tooltip_text(const OUString& rTip) override;
