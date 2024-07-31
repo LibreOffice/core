@@ -101,7 +101,6 @@ extra_files_PRESENTATIONS := \
     presnt/Growing_Liberty/Thumbnails/thumbnail.png \
     presnt/Inspiration/Thumbnails/thumbnail.png \
     presnt/Lights/Thumbnails/thumbnail.png \
-    presnt/Metropolis/Pictures/10000201000003AF000002126A94207C4902B60B.png  \
     presnt/Metropolis/Pictures/100021B200008D2E00004F60B312A649B9EEC188.svg  \
     presnt/Metropolis/Thumbnails/thumbnail.png \
     presnt/Midnightblue/Thumbnails/thumbnail.png \
