@@ -83,6 +83,12 @@ public:
     {
         return m_pDrawingArea->get_accessible_description();
     }
+    OUString GetAccessibleId() const
+    {
+        if (m_pDrawingArea)
+            return m_pDrawingArea->get_accessible_id();
+        return OUString();
+    }
     void CaptureMouse() { m_pDrawingArea->grab_add(); }
     bool IsMouseCaptured() const { return m_pDrawingArea->has_grab(); }
     Point GetPointerPosPixel() const { return m_pDrawingArea->get_pointer_position(); }

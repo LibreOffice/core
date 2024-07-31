@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -503,7 +503,7 @@ public:
 
 typedef cppu::WeakImplHelper<css::lang::XServiceInfo, css::accessibility::XAccessible,
                              css::accessibility::XAccessibleComponent,
-                             css::accessibility::XAccessibleContext,
+                             css::accessibility::XAccessibleContext2,
                              css::accessibility::XAccessibleEventBroadcaster>
     WeldEditAccessibleBaseClass;
 
@@ -750,6 +750,16 @@ public:
         }
 
         return aRet;
+    }
+
+    virtual OUString SAL_CALL getAccessibleId() override
+    {
+        SolarMutexGuard aGuard;
+
+        if (m_pController)
+            return m_pController->GetAccessibleId();
+
+        return OUString();
     }
 
     virtual OUString SAL_CALL getAccessibleName() override
