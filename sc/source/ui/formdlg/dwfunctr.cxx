@@ -30,6 +30,7 @@
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
 #include <funcdesc.hxx>
+#include <compiler.hxx>
 
 #include <dwfunctr.hxx>
 
@@ -258,18 +259,22 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
-        SvtSysLocale aSysLocale;
-        const CharClass& rCharClass = aSysLocale.GetCharClass();
-        const OUString aSearchStr(rCharClass.uppercase(rSearchString));
-        const ScFuncDesc* pDesc = pFuncMgr->First(nCategory);
+        // Use the corresponding CharClass for uppercase() depending on whether
+        // English function names are used, or localized names.
+        const CharClass* pCharClass = (ScGlobal::GetStarCalcFunctionList()->IsEnglishFunctionNames()
+                ? ScCompiler::GetCharClassEnglish()
+                : ScCompiler::GetCharClassLocalized());
 
+        const OUString aSearchStr(pCharClass->uppercase(rSearchString));
+
+        const ScFuncDesc* pDesc = pFuncMgr->First(nCategory);
         while (pDesc)
         {
             OUString aCategory = pDesc->getCategory()->getName();
             OUString aFunction = pDesc->getFunctionName();
             OUString aFuncDescId = weld::toId(pDesc);
 
-            if (!bFilter || (rCharClass.uppercase(aFunction).startsWith(aSearchStr)))
+            if (!bFilter || (pCharClass->uppercase(aFunction).startsWith(aSearchStr)))
             {
                 weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
                 xFuncList->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
@@ -289,7 +294,7 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
                 OUString aFunction = pDesc->getFunctionName();
                 OUString aFuncDescId = weld::toId(pDesc);
 
-                if (rCharClass.uppercase(aFunction).indexOf(aSearchStr) > 0)
+                if (pCharClass->uppercase(aFunction).indexOf(aSearchStr) > 0)
                 {
                     weld::TreeIter* pCategory = FillCategoriesMap(aCategory, bCollapse);
                     xFuncList->insert(pCategory, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
