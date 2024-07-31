@@ -2793,7 +2793,7 @@ std::shared_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfi
                 }
             }
             std::reverse(pCurNode->Children.begin(), pCurNode->Children.end());
-            aHashMap[pCur] = pCurNode;
+            aHashMap[pCur] = std::move(pCurNode);
         }
         aTokenVector.push_back(pCur);
     }

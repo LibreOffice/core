@@ -1068,7 +1068,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
             } while (GetNext());
             nCol = nFoundCol;
             nRow = nFoundRow;
-            maCurPos = aPosSave;
+            maCurPos = std::move(aPosSave);
         }
     }
     return (nFoundCol <= rDoc.MaxCol()) && (nFoundRow <= rDoc.MaxRow());

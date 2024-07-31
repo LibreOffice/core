@@ -475,12 +475,16 @@ void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
 
     ScXAccVector aNewParas;
     ScXAccVector aOldParas;
-    ScAccNotes aNewMarks;
-    mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
-    maMarks = aNewMarks;
-    ScAccNotes aNewNotes;
-    mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
-    maNotes = aNewNotes;
+    {
+        ScAccNotes aNewMarks;
+        mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
+        maMarks = std::move(aNewMarks);
+    }
+    {
+        ScAccNotes aNewNotes;
+        mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
+        maNotes = std::move(aNewNotes);
+    }
 
     std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
     std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mpAccDoc));

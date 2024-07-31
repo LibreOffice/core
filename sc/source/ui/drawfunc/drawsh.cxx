@@ -355,7 +355,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 aCombSet.Put( aNewGeoAttr );
                                 pDlg->SetInputSet( &aCombSet );
 
-                                pDlg->StartExecuteAsync([pDlg, pRequest, pView, this](
+                                pDlg->StartExecuteAsync([pDlg, pRequest=std::move(pRequest), pView, this](
                                                             sal_Int32 nResult){
                                     if (nResult == RET_OK)
                                     {

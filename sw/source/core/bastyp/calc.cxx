@@ -282,7 +282,7 @@ SwCalc::SwCalc( SwDoc& rD )
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
-    m_aVarTable.insert( { sNTypeTab[ 25 ], SwCalcExp( nVal, nullptr ) } );
+    m_aVarTable.insert( { sNTypeTab[ 25 ], SwCalcExp( std::move(nVal), nullptr ) } );
 
 } // SwCalc::SwCalc
 

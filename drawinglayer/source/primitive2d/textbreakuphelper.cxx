@@ -268,7 +268,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            mxResult = aTempResult;
+            mxResult = std::move(aTempResult);
         }
 
         Primitive2DContainer TextBreakupHelper::extractResult(BreakupUnit aBreakupUnit)

@@ -699,7 +699,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                                 aRes.aDocumentIdentifier = aCurDocId;
                                 aRes.xFlatParagraph = xFlatPara;
                                 aRes.aText = aCurTxt;
-                                aRes.aLocale = aCurLocale;
+                                aRes.aLocale = std::move(aCurLocale);
                                 aRes.nStartOfSentencePosition = nStartPos;
                                 aRes.nBehindEndOfSentencePosition = nSuggestedEnd;
                             }

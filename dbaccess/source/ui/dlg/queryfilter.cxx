@@ -667,11 +667,11 @@ void DlgFilterCrit::BuildWherePart()
         PropertyValue aValue;
         if ( getCondition(*m_xLB_WHEREFIELD1,*m_xLB_WHERECOMP1,*m_xET_WHEREVALUE1,aValue) )
         {
-            aHaving = { { aValue } };
+            aHaving = { { std::move(aValue) } };
         }
         else
         {
-            aFilter = { { aValue} };
+            aFilter = { { std::move(aValue) } };
         }
     }
 

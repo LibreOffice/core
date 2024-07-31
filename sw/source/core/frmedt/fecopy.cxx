@@ -1264,7 +1264,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                     {
                         if( GraphicType::Bitmap != aGrf.GetType() )
                         {
-                            rGrf = aGrf;
+                            rGrf = std::move(aGrf);
                             bConvert = false;
                         }
                         else if( GetWin() )
@@ -1291,7 +1291,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                     }
                     else if( GraphicType::Bitmap == aGrf.GetType() )
                     {
-                        rGrf = aGrf;
+                        rGrf = std::move(aGrf);
                         bConvert = false;
                     }
                     else
@@ -1311,7 +1311,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         }
                         else
                         {
-                            rGrf = aGrf;
+                            rGrf = std::move(aGrf);
                             bConvert = false;
                         }
                     }

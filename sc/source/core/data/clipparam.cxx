@@ -183,7 +183,7 @@ void ScClipParam::transpose(const ScDocument& rSrcDoc, bool bIncludeFiltered,
                                          nRowOrigin + nRow2, rRange1.aStart.Tab()));
         }
     }
-    maRanges = aNewRanges;
+    maRanges = std::move(aNewRanges);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

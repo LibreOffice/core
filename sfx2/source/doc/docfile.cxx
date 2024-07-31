@@ -4773,7 +4773,7 @@ void SfxMedium::AddToCheckEditableWorkerList()
 
             if (newEntry != nullptr)
             {
-                g_newReadOnlyDocs[this] = newEntry;
+                g_newReadOnlyDocs[this] = std::move(newEntry);
             }
         }
     }

@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
     std::shared_ptr<SwContentControlListItem> aItem = std::make_shared<SwContentControlListItem>();
     SwAbstractDialogFactory& rFact = swui::GetFactory();
     m_xListItemDialog = rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), *aItem);
-    m_xListItemDialog->StartExecuteAsync([this, aItem](sal_Int32 nResult) {
+    m_xListItemDialog->StartExecuteAsync([ this, aItem = std::move(aItem) ](sal_Int32 nResult) {
         if (nResult == RET_OK)
         {
             if (aItem->m_aDisplayText.isEmpty() && aItem->m_aValue.isEmpty())

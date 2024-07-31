@@ -1544,7 +1544,7 @@ namespace emfio
                     UpdateLineStyle();
 
                     if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
-                        mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                        mpGDIMetaFile->AddAction( new MetaPolygonAction( std::move(rPolygon) ) );
                     else {
                         SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
                                               Color(),

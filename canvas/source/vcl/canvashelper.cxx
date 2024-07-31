@@ -351,7 +351,7 @@ namespace vclcanvas
                     //                                        aDashArray ) );
                 }
 
-                aPolyPoly = aDashedPolyPoly;
+                aPolyPoly = std::move(aDashedPolyPoly);
             }
 
             ::basegfx::B2DSize aLinePixelSize(strokeAttributes.StrokeWidth,
@@ -364,7 +364,7 @@ namespace vclcanvas
                 // simple hairline poly-polygon
                 setupOutDevState( viewState, renderState, LINE_COLOR );
 
-                aStrokedPolyPoly = aPolyPoly;
+                aStrokedPolyPoly = std::move(aPolyPoly);
             }
             else
             {

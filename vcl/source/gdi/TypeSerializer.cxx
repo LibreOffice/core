@@ -204,7 +204,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
             mrStream.Seek(nInitialStreamPosition);
             mrStream.SetError(ERRCODE_IO_WRONGFORMAT);
         }
-        rGraphic = aGraphic;
+        rGraphic = std::move(aGraphic);
     }
     else
     {

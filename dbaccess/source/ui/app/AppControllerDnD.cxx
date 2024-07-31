@@ -363,7 +363,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
             {
                 if ( _pErrorInfo )
                 {
-                    *_pErrorInfo = aError;
+                    *_pErrorInfo = std::move(aError);
                 }
                 else
                 {

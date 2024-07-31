@@ -70,8 +70,8 @@ const double gnVerticalBorder (5);
                 rpPresenterController,
                 rpTheme,
                 rxParentWindow,
-                pFont,
-                pMouseOverFont,
+                std::move(pFont),
+                std::move(pMouseOverFont),
                 sText,
                 sAction));
         pButton->SetCanvas(rxParentCanvas, rxParentWindow);

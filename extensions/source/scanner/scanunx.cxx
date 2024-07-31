@@ -295,7 +295,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
             );
     pHolder->m_bBusy = true;
 
-    ScannerThread* pThread = new ScannerThread( pHolder, listener, this );
+    ScannerThread* pThread = new ScannerThread( std::move(pHolder), listener, this );
     pThread->create();
 }
 

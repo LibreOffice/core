@@ -862,7 +862,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                                       new RTFValue(aPathAttributes), RTFOverwrite::NO_APPEND);
                 }
             } while (nCharIndex >= 0);
-            rShape.getWrapPolygonSprms() = aPolygonSprms;
+            rShape.getWrapPolygonSprms() = std::move(aPolygonSprms);
         }
         else if (rProperty.first == "fRelFlipV")
             obRelFlipV = rProperty.second.toInt32() == 1;

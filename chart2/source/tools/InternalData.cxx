@@ -328,8 +328,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
                 m_aData[ std::slice( nCol - 1, m_nRowCount, m_nColumnCount ) ] );
 
     m_nColumnCount = nNewColumnCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
+    m_aData = std::move(aNewData);
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
@@ -386,8 +385,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     }
 
     m_nRowCount = nNewRowCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
+    m_aData = std::move(aNewData);
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))

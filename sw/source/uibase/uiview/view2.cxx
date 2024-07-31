@@ -2805,7 +2805,7 @@ tools::Long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, co
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed.reset(new SfxMedium(rFileName, StreamMode::READ, pFilter, nullptr));
+            pMed.reset(new SfxMedium(rFileName, StreamMode::READ, std::move(pFilter), nullptr));
     }
     else
     {

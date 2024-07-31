@@ -1656,7 +1656,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                                      eCharset, true, eStyle);
                 if (!aNewURI.HasError())
                 {
-                    rTheAbsURIRef = aNewURI;
+                    rTheAbsURIRef = std::move(aNewURI);
                     rWasAbsolute = true;
                     return true;
                 }

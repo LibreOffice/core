@@ -1382,7 +1382,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             if( bSuccess )
             {
                 it->second->m_aTypes            = rTypes;
-                it->second->m_aNativeTypes      = aNativeTypes;
+                it->second->m_aNativeTypes      = std::move(aNativeTypes);
                 it->second->m_nLastTimestamp    = time( nullptr );
                 it->second->m_bHaveUTF16        = bHaveUTF16;
                 it->second->m_aUTF8Type         = aUTF8Type;
