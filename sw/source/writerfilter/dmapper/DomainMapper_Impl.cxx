@@ -2984,7 +2984,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
             }
             if( !bKeepLastParagraphProperties )
-                rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
+                rAppendContext.pLastParagraphProperties = std::move(pToBeSavedProperties);
         }
         catch(const lang::IllegalArgumentException&)
         {
@@ -4068,7 +4068,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 
         // Try scanning for custom footnote labels
         if (!sFootnoteCharStyleName.isEmpty())
-            StartCustomFootnote(pTopContext);
+            StartCustomFootnote(std::move(pTopContext));
         else
             EndCustomFootnote();
     }

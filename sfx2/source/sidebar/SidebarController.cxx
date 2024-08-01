@@ -733,7 +733,7 @@ void SidebarController::CreateDeck(std::u16string_view rDeckId, const Context& r
                         mpParentWindow,
                         [this]() { return this->RequestCloseDeck(); });
     }
-    xDeckDescriptor->mpDeck = aDeck;
+    xDeckDescriptor->mpDeck = std::move(aDeck);
     CreatePanels(rDeckId, rContext);
 }
 

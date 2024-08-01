@@ -1333,7 +1333,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             {
                 INetURLObject aTmp( aOldURL );
                 if ( aTmp.removeSegment() )
-                    aLocation = aTmp;
+                    aLocation = std::move(aTmp);
             }
 
             if ( aLocation.HasError() )

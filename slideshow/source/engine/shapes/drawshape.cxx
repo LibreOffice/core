@@ -1152,7 +1152,7 @@ namespace slideshow::internal
 
             if( pSubset )
             {
-                o_rSubset = pSubset;
+                o_rSubset = std::move(pSubset);
 
                 // reusing existing subset
             }

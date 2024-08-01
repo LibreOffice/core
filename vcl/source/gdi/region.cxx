@@ -1024,7 +1024,7 @@ void vcl::Region::Intersect( const vcl::Region& rRegion )
         // when we have less rectangles, turn around the call
         vcl::Region aTempRegion = rRegion;
         aTempRegion.Intersect( *this );
-        *this = aTempRegion;
+        *this = std::move(aTempRegion);
     }
     else
     {

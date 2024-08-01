@@ -1151,7 +1151,7 @@ static void TrackFontMappingUse( const vcl::Font& originalFont, const SalLayout*
             return;
         }
     }
-    fontMappingUseData->push_back( { originalName, usedFontNames, 1 } );
+    fontMappingUseData->push_back( { originalName, std::move(usedFontNames), 1 } );
 }
 
 void OutputDevice::StartTrackingFontMappingUse()

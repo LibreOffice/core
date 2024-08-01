@@ -226,11 +226,11 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         StarBASICRef xLibSearchBasic;
         if( aLocation == "application" )
         {
-            xLibSearchBasic = xAppStandardBasic;
+            xLibSearchBasic = std::move(xAppStandardBasic);
         }
         else if( aLocation == "document" )
         {
-            xLibSearchBasic = xDocStandardBasic;
+            xLibSearchBasic = std::move(xDocStandardBasic);
         }
         else
         {

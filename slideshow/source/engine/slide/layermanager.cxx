@@ -523,7 +523,7 @@ namespace slideshow::internal
                 LayerSharedPtr pLayer = rShape.second.lock();
                 if( pLayer != pCurrLayer )
                 {
-                    pCurrLayer = pLayer;
+                    pCurrLayer = std::move(pLayer);
                     bIsCurrLayerUpdating = pCurrLayer->isUpdatePending();
 
                     if( bIsCurrLayerUpdating )

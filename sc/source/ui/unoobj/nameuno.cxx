@@ -1084,9 +1084,9 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
             xNewList->Remove( nIndex );
 
             if (bColumn)
-                rDoc.GetColNameRangesRef() = xNewList;
+                rDoc.GetColNameRangesRef() = std::move(xNewList);
             else
-                rDoc.GetRowNameRangesRef() = xNewList;
+                rDoc.GetRowNameRangesRef() = std::move(xNewList);
 
             rDoc.CompileColRowNameFormula();
             pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );

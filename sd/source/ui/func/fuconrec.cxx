@@ -849,7 +849,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         case SID_LINE_SQUARE_ARROW:
         {
             // square start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), std::move(aSquare)));
             rAttr.Put(XLineStartWidthItem(nWidth));
         }
         break;

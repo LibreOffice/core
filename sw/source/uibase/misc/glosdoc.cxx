@@ -388,7 +388,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
         aInvalidPaths.erase(std::unique(aInvalidPaths.begin(), aInvalidPaths.end()), aInvalidPaths.end());
         if (bPathChanged || (m_aInvalidPaths != aInvalidPaths))
         {
-            m_aInvalidPaths = aInvalidPaths;
+            m_aInvalidPaths = std::move(aInvalidPaths);
             // wrong path, that means AutoText directory doesn't exist
 
             ErrorHandler::HandleError( ErrCodeMsg(

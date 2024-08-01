@@ -1506,10 +1506,10 @@ static void lcl_Rotate(sal_Int32 nAngle, Point center, awt::Point& pt)
     pt.Y = center.Y() + y * nCos + x * nSin;
 }
 
-static void lcl_FlipHFlipV(tools::Polygon aPoly, sal_Int32 nAngle, bool& rFlipH, bool& rFlipV)
+static void lcl_FlipHFlipV(const tools::Polygon& rPoly, sal_Int32 nAngle, bool& rFlipH, bool& rFlipV)
 {
-    Point aStart = aPoly[0];
-    Point aEnd = aPoly[aPoly.GetSize() - 1];
+    Point aStart = rPoly[0];
+    Point aEnd = rPoly[rPoly.GetSize() - 1];
 
     if (aStart.X() > aEnd.X() && aStart.Y() > aEnd.Y())
     {
@@ -1576,12 +1576,12 @@ static void lcl_FlipHFlipV(tools::Polygon aPoly, sal_Int32 nAngle, bool& rFlipH,
     }
 }
 
-static sal_Int32 lcl_GetAngle(tools::Polygon aPoly)
+static sal_Int32 lcl_GetAngle(const tools::Polygon& rPoly)
 {
     sal_Int32 nAngle;
-    Point aStartPoint = aPoly[0];
-    Point aEndPoint = aPoly[aPoly.GetSize() - 1];
-    if (aStartPoint.X() == aPoly[1].X())
+    Point aStartPoint = rPoly[0];
+    Point aEndPoint = rPoly[rPoly.GetSize() - 1];
+    if (aStartPoint.X() == rPoly[1].X())
     {
         if ((aStartPoint.X() < aEndPoint.X() && aStartPoint.Y() > aEndPoint.Y())
             || (aStartPoint.X() > aEndPoint.X() && aStartPoint.Y() < aEndPoint.Y()))
@@ -1593,7 +1593,7 @@ static sal_Int32 lcl_GetAngle(tools::Polygon aPoly)
     }
     else
     {
-        if (aStartPoint.X() > aPoly[1].X())
+        if (aStartPoint.X() > rPoly[1].X())
             nAngle = 180;
         else
             nAngle = 0;
@@ -1603,7 +1603,7 @@ static sal_Int32 lcl_GetAngle(tools::Polygon aPoly)
 }
 
 // Adjust value decide the position, where the connector should turn.
-static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::Polygon aPoly,
+static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, const tools::Polygon& rPoly,
                                         ConnectorType eConnectorType,
                                         std::vector<std::pair<sal_Int32, sal_Int32>>& rAvList)
 {
@@ -1615,22 +1615,22 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     {
         if (bIsOOXMLCurve)
         {
-            nAdjCount = (aPoly.GetSize() - 4) / 3;
+            nAdjCount = (rPoly.GetSize() - 4) / 3;
         }
-        else if (aPoly.GetSize() == 4)
+        else if (rPoly.GetSize() == 4)
         {
-            if ((aPoly[0].X() == aPoly[1].X() && aPoly[2].X() == aPoly[3].X())
-                || (aPoly[0].Y() == aPoly[1].Y() && aPoly[2].Y() == aPoly[3].Y()))
+            if ((rPoly[0].X() == rPoly[1].X() && rPoly[2].X() == rPoly[3].X())
+                || (rPoly[0].Y() == rPoly[1].Y() && rPoly[2].Y() == rPoly[3].Y()))
             {
                 nAdjCount = 1; // curvedConnector3, control vectors parallel
             }
             else
                 nAdjCount = 0; // curvedConnector2, control vectors orthogonal
         }
-        else if (aPoly.GetSize() > 4)
+        else if (rPoly.GetSize() > 4)
         {
-            if ((aPoly[2].X() == aPoly[3].X() && aPoly[3].X() == aPoly[4].X())
-                || (aPoly[2].Y() == aPoly[3].Y() && aPoly[3].Y() == aPoly[4].Y()))
+            if ((rPoly[2].X() == rPoly[3].X() && rPoly[3].X() == rPoly[4].X())
+                || (rPoly[2].Y() == rPoly[3].Y() && rPoly[3].Y() == rPoly[4].Y()))
             {
                 nAdjCount = 3; // curvedConnector5
             }
@@ -1640,7 +1640,7 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     }
     else
     {
-        switch (aPoly.GetSize())
+        switch (rPoly.GetSize())
         {
             case 3:
                 nAdjCount = 0; // bentConnector2
@@ -1660,19 +1660,19 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     if (nAdjCount)
     {
         sal_Int32 nAdjustValue;
-        Point aStart = aPoly[0];
-        Point aEnd = aPoly[aPoly.GetSize() - 1];
+        Point aStart = rPoly[0];
+        Point aEnd = rPoly[rPoly.GetSize() - 1];
 
         for (sal_Int32 i = 1; i <= nAdjCount; ++i)
         {
-            Point aPt = aPoly[i];
+            Point aPt = rPoly[i];
 
             if (aEnd.Y() == aStart.Y())
                 aEnd.setY(aStart.Y() + 1);
             if (aEnd.X() == aStart.X())
                 aEnd.setX(aStart.X() + 1);
 
-            bool bVertical = aPoly[1].X() - aStart.X() != 0 ? true : false;
+            bool bVertical = rPoly[1].X() - aStart.X() != 0 ? true : false;
             // vertical and horizon alternate
             if (i % 2 == 1)
                 bVertical = !bVertical;
@@ -1681,18 +1681,18 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
             {
                 if (bIsOOXMLCurve)
                 {
-                    aPt = aPoly[3 *  i];
+                    aPt = rPoly[3 *  i];
                 }
                 else
                 {
                     awt::Size aSize = xShape->getSize();
                     awt::Point aShapePosition = xShape->getPosition();
-                    tools::Rectangle aBoundRect = aPoly.GetBoundRect();
+                    tools::Rectangle aBoundRect = rPoly.GetBoundRect();
 
                     if (bVertical)
                     {
                         if ((aBoundRect.GetSize().Height() - aSize.Height) == 1)
-                            aPt.setY(aPoly[i + 1].Y());
+                            aPt.setY(rPoly[i + 1].Y());
                         else if (aStart.Y() > aPt.Y())
                             aPt.setY(aShapePosition.Y);
                         else
@@ -1701,7 +1701,7 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
                     else
                     {
                         if ((aBoundRect.GetSize().Width() - aSize.Width) == 1)
-                            aPt.setX(aPoly[i + 1].X());
+                            aPt.setX(rPoly[i + 1].X());
                         else if (aStart.X() > aPt.X())
                             aPt.setX(aShapePosition.X);
                         else

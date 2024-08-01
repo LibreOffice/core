@@ -493,7 +493,7 @@ sal_Int32 MigrationImpl::findPreferredMigrationProcess(const migrations_availabl
     {
         install_info aInstallInfo = findInstallation(availableMigration.supported_versions);
         if (!aInstallInfo.productname.isEmpty() ) {
-            m_aInfo = aInstallInfo;
+            m_aInfo = std::move(aInstallInfo);
             nIndex  = i;
             break;
         }

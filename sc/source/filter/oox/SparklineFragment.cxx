@@ -238,7 +238,7 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
             {
                 if (getCurrentElement() == XM_TOKEN(sqref))
                 {
-                    rLastSparkline.m_aTargetRange = aRange;
+                    rLastSparkline.m_aTargetRange = std::move(aRange);
 
                     // Need to set the current sheet index to the range as
                     // it is assumed that the address string refers to
