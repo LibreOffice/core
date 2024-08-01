@@ -1292,6 +1292,11 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         if (bUseStandardTheme)
         {
             VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
+
+            WindowBorderStyle nStyle = pVclPeer->GetBorderStyle();
+            nStyle |= WindowBorderStyle::NONATIVEBORDER;
+            pVclPeer->SetBorderStyle(nStyle);
+
             AllSettings aAllSettings = pVclPeer->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             aStyleSettings.SetStandardStyles();
