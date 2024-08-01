@@ -2660,6 +2660,9 @@ void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal
     id = handle0.get_child("id").get_value<int>();
     x = handle0.get_child("point").get_child("x").get_value<int>();
     y = handle0.get_child("point").get_child("y").get_value<int>();
+
+    CPPUNIT_ASSERT(aTree.get_child("OrdNum").get_value<int>() >= 0);
+    CPPUNIT_ASSERT(aTree.get_child("ObjectRectangles").size() >= 1);
 }
 
 }

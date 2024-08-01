@@ -952,7 +952,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             aExtraInfo.append("{\"id\":\""
                 + OString::number(reinterpret_cast<sal_IntPtr>(pO))
                 + "\",\"type\":"
-                + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier())));
+                + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier()))
+                + ",\"OrdNum\":" + OString::number(pO->GetOrdNum())
+                );
 
             if (mpMarkedObj && !pOtherShell)
             {
@@ -1218,6 +1220,15 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     SdrMediaObj* mediaObj = dynamic_cast<SdrMediaObj*>(mpMarkedObj);
                     if (mediaObj)
                         aExtraInfo.append(", \"url\": \"" + mediaObj->getTempURL().toUtf8() + "\"");
+                }
+
+                SdrPage *pPage = pPageView ? pPageView->GetPage(): nullptr;
+                if (pPage)
+                {
+                    // Send all objects' rectangles along with the selected object's information.
+                    // Other rectangles can be used for aligning the selected object referencing the others.
+                    OString objectRectangles = SdrObjList::GetObjectRectangles(*pPage);
+                    aExtraInfo.append(", \"ObjectRectangles\": "_ostr + objectRectangles);
                 }
 
                 aExtraInfo.append(handleArrayStr
