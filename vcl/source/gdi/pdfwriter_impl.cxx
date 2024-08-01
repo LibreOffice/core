@@ -9669,7 +9669,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     }
 
     rEmit.m_nFormObject = createObject();
-    rEmit.m_aPixelSize = rGraphic.GetPrefSize();
+    rEmit.m_aPixelSize = rGraphic.GetSizePixel();
 }
 
 void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic )
