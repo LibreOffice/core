@@ -228,13 +228,11 @@ public:
     virtual OUString
     queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard) override;
 
-    virtual css::uno::Reference<
-                css::ucb::XContentIdentifier > SAL_CALL
-    queryContentIdentifier() override;
+    virtual css::uno::Reference<css::ucb::XContentIdentifier>
+    queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard) override;
 
-    virtual css::uno::Reference<
-                css::ucb::XContent > SAL_CALL
-    queryContent() override;
+    virtual css::uno::Reference<css::ucb::XContent>
+    queryContentImpl(std::unique_lock<std::mutex>& rGuard) override;
 
 
     // XResultSet inherited

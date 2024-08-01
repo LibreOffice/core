@@ -1222,24 +1222,19 @@ OUString CachedContentResultSet
     XCONTENTACCESS_queryXXX( queryContentIdentifierString, ContentIdentifierString, OUString )
 }
 
-
 // virtual
-Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
-    ::queryContentIdentifier()
+Reference<XContentIdentifier> CachedContentResultSet
+    ::queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard)
 {
-    std::unique_lock rGuard(m_aMutex);
     XCONTENTACCESS_queryXXX( queryContentIdentifier, ContentIdentifier, Reference< XContentIdentifier > )
 }
 
-
 // virtual
-Reference< XContent > SAL_CALL CachedContentResultSet
-    ::queryContent()
+Reference<XContent> CachedContentResultSet
+    ::queryContentImpl(std::unique_lock<std::mutex>& rGuard)
 {
-    std::unique_lock rGuard(m_aMutex);
     XCONTENTACCESS_queryXXX( queryContent, Content, Reference< XContent > )
 }
-
 
 // XResultSet methods. ( inherited )
 

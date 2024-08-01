@@ -651,6 +651,7 @@ OUString SAL_CALL ContentResultSetWrapper::queryContentIdentifierString()
     std::unique_lock aGuard(m_aMutex);
     return queryContentIdentifierStringImpl(aGuard);
 }
+
 // virtual
 OUString ContentResultSetWrapper::queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard)
 {
@@ -664,13 +665,18 @@ OUString ContentResultSetWrapper::queryContentIdentifierStringImpl(std::unique_l
     return m_xContentAccessOrigin->queryContentIdentifierString();
 }
 
-
 // virtual
 Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentIdentifier()
 {
     std::unique_lock aGuard(m_aMutex);
-    impl_EnsureNotDisposed(aGuard);
-    impl_init_xContentAccessOrigin(aGuard);
+    return queryContentIdentifierImpl(aGuard);
+}
+
+// virtual
+Reference<XContentIdentifier> ContentResultSetWrapper::queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard)
+{
+    impl_EnsureNotDisposed(rGuard);
+    impl_init_xContentAccessOrigin(rGuard);
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -679,13 +685,17 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentId
     return m_xContentAccessOrigin->queryContentIdentifier();
 }
 
-
 // virtual
 Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
 {
     std::unique_lock aGuard(m_aMutex);
-    impl_EnsureNotDisposed(aGuard);
-    impl_init_xContentAccessOrigin(aGuard);
+    return queryContentImpl(aGuard);
+}
+
+Reference<XContent> ContentResultSetWrapper::queryContentImpl(std::unique_lock<std::mutex>& rGuard)
+{
+    impl_EnsureNotDisposed(rGuard);
+    impl_init_xContentAccessOrigin(rGuard);
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -693,7 +703,6 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
     }
     return m_xContentAccessOrigin->queryContent();
 }
-
 
 // XResultSet methods.
 

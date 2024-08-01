@@ -227,10 +227,14 @@ public:
     queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
-    queryContentIdentifier() override;
+    queryContentIdentifier() override final;
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
-    queryContent() override;
+    queryContent() override final;
+    virtual css::uno::Reference<css::ucb::XContent>
+    queryContentImpl(std::unique_lock<std::mutex>& rGuard);
 
 
     // XResultSet
