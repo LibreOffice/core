@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -149,6 +149,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="entry-list-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|entry-list">Available database ranges</property>
                               </object>
                             </child>
                           </object>
@@ -373,6 +378,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ContainsTotalsRow-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ContainsTotalsRow">The database range has a row for totals.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
