@@ -657,12 +657,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDataEntries)
     m_pDoc->SetString(ScAddress(0,7,0), "Charlie");
     m_pDoc->SetString(ScAddress(0,10,0), "Andy");
 
-    std::vector<ScTypedStrData> aEntries;
+    ScTypedCaseStrSet aEntries;
     m_pDoc->GetDataEntries(0, 0, 0, aEntries); // Try at the very top.
 
     // Entries are supposed to be sorted in ascending order, and are all unique.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
-    std::vector<ScTypedStrData>::const_iterator it = aEntries.begin();
+    auto it = aEntries.begin();
     CPPUNIT_ASSERT_EQUAL(OUString("Andy"), it->GetString());
     ++it;
     CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), it->GetString());

@@ -806,7 +806,7 @@ bool ScValidationData::HasSelectionList() const
 }
 
 bool ScValidationData::GetSelectionFromFormula(
-    std::vector<ScTypedStrData>* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
+    ScTypedCaseStrSet* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
     const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
@@ -987,7 +987,7 @@ bool ScValidationData::GetSelectionFromFormula(
             if( pEntry )
             {
                 assert(pStrings);
-                pStrings->push_back(*pEntry);
+                pStrings->insert(*pEntry);
                 n++;
             }
         }
@@ -998,7 +998,7 @@ bool ScValidationData::GetSelectionFromFormula(
     return bOk || rCell.isEmpty();
 }
 
-bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, const ScAddress& rPos) const
+bool ScValidationData::FillSelectionList(ScTypedCaseStrSet& rStrColl, const ScAddress& rPos) const
 {
     bool bOk = false;
 
@@ -1015,8 +1015,8 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
             double fValue;
             OUString aStr(pString);
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue);
-            rStrColl.emplace_back(
-                    aStr, fValue, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard);
+            rStrColl.insert( {
+                    aStr, fValue, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard } );
         }
         bOk = aIt.Ok();
 

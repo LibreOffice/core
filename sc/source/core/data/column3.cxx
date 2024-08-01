@@ -2905,7 +2905,7 @@ public:
 
 // GetDataEntries - Strings from continuous Section around nRow
 bool ScColumn::GetDataEntries(
-    SCROW nStartRow, std::set<ScTypedStrData>& rStrings) const
+    SCROW nStartRow, ScTypedCaseStrSet& rStrings) const
 {
     // Start at the specified row position, and collect all string values
     // going upward and downward directions in parallel. The start position
