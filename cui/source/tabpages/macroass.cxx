@@ -387,11 +387,13 @@ std::unique_ptr<SfxTabPage> SfxMacroTabPage::Create(weld::Container* pPage, weld
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Widget* pParent,
-    const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet,u"cui/ui/eventassigndialog.ui"_ustr,
-                                   u"EventAssignDialog"_ustr)
+    const Reference< XFrame >& rxDocumentFrame, std::unique_ptr<const SfxItemSet> xSet)
+    : SfxSingleTabDialogController(pParent, nullptr, u"cui/ui/eventassigndialog.ui"_ustr,
+                                   u"EventAssignDialog"_ustr),
+      mxItemSet(std::move(xSet))
 {
-    std::unique_ptr<SfxMacroTabPage> xPage = CreateSfxMacroTabPage(get_content_area(), this, rSet);
+    SetInputSet(mxItemSet.get());
+    std::unique_ptr<SfxMacroTabPage> xPage = CreateSfxMacroTabPage(get_content_area(), this, *mxItemSet);
     xPage->SetFrame(rxDocumentFrame);
     SetTabPage(std::move(xPage));
     GetTabPage()->LaunchFillGroup();

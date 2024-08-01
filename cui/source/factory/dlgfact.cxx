@@ -1212,10 +1212,10 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(weld::Widget* pParent,
-                                                                              const SfxItemSet& rAttr,
+                                                                              std::unique_ptr<const SfxItemSet> xAttr,
                                                                               const Reference< XFrame >& rDocumentFrame)
 {
-    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, rDocumentFrame, rAttr));
+    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, rDocumentFrame, std::move(xAttr)));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Window* pParent,

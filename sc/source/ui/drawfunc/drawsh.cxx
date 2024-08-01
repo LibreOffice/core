@@ -426,19 +426,19 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     }
 
     // create empty itemset for macro-dlg
-    SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG> aItemSet(SfxGetpApp()->GetPool() );
-    aItemSet.Put ( aItem );
+    auto xItemSet = std::make_unique<SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>>( SfxGetpApp()->GetPool() );
+    xItemSet->Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
     aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SvMacroItemId::OnClick );
-    aItemSet.Put( aNamesItem );
+    xItemSet->Put( aNamesItem );
 
     css::uno::Reference < css::frame::XFrame > xFrame;
     if (GetViewShell())
         xFrame = GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( pWin, aItemSet, xFrame ));
+    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( pWin, std::move(xItemSet), xFrame ));
     pMacroDlg->StartExecuteAsync(
         [this, pMacroDlg, pObj, pInfo] (sal_Int32 nResult) mutable -> void
         {

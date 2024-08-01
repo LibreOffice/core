@@ -633,7 +633,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
     }
     else if (rItemIdent == "macro")
     {
-        SfxItemSetFixed<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG> aSet( m_pShell->GetAttrPool() );
+        auto xSet = std::make_unique<SfxItemSetFixed<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>>( m_pShell->GetAttrPool() );
 
         SvxMacro aStart(OUString(), OUString(), STARBASIC);
         SvxMacro aEnd(OUString(), OUString(), STARBASIC);
@@ -645,11 +645,11 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
         if( aEnd.HasMacro() )
             aItem.SetMacro( SvMacroItemId::SwEndInsGlossary, aEnd );
 
-        aSet.Put( aItem );
-        aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
+        xSet->Put( aItem );
+        xSet->Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), aSet,
+        VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), std::move(xSet),
             m_pShell->GetView().GetViewFrame().GetFrame().GetFrameInterface() ));
         if (pMacroDlg)
             pMacroDlg->StartExecuteAsync(

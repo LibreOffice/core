@@ -444,7 +444,7 @@ public:
                                                              const SfxItemSet& rAttr,
                                                              const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog(weld::Widget* pParent,
-                                                                 const SfxItemSet& rAttr,
+                                                                 std::unique_ptr<const SfxItemSet> xAttr,
                                                                  const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId, sal_uInt16 nPageId, const OUString& rParameter) override;
