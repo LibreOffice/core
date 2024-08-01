@@ -11,6 +11,9 @@
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += SAL_USE_VCLPLUGIN=gtk3
 # force running with the X11 Gdk backend also when running on Wayland
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += GDK_BACKEND=x11
+# set env var for at-spi-bus-launcher to use dbus-daemon also if dbus-broker is default;
+# the latter doesn't work in the session created by xvfb-run and dbus-launch
+$(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += ATSPI_DBUS_IMPLEMENTATION=dbus-daemon
 ifeq (,$(VCL_GTK3_TESTS_NO_XVFB))
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : \
 	ICECREAM_RUN += $(XVFB_RUN) --auto-servernum $(DBUS_LAUNCH) --exit-with-session
