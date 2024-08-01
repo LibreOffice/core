@@ -126,7 +126,7 @@ public:
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
         @param rStrings  (out-param) The string list to fill with list validation entries.
         @return  true = rStrings has been filled with at least one entry. */
-    SC_DLLPUBLIC bool FillSelectionList(std::vector<ScTypedStrData>& rStrings, const ScAddress& rPos) const;
+    SC_DLLPUBLIC bool FillSelectionList(ScTypedCaseStrSet& rStrings, const ScAddress& rPos) const;
 
     //  with string: during input, with cell: for detective / RC_FORCED
     bool IsDataValid(
@@ -181,7 +181,7 @@ private:
         @param rMatch    (out-param) the index of the first item that matched, -1 if nothing matched.
         @return  true = Cell range found, rRange is valid, or an error entry stuffed into the list if pCell==NULL. */
     bool GetSelectionFromFormula(
-        std::vector<ScTypedStrData>* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
+        ScTypedCaseStrSet* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
         const ScTokenArray& rTokArr, int& rMatch) const;
 
     /** Tests, if pCell is equal to what the passed token array represents. */

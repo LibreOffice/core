@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf151484)
         const ScValidationData* pData = pDoc->GetValidationEntry(1);
         CPPUNIT_ASSERT(pData);
 
-        std::vector<ScTypedStrData> aList;
+        ScTypedCaseStrSet aList;
         pData->FillSelectionList(aList, ScAddress(0, 1, 0));
 
         // Without the fix in place, this test would have failed with
@@ -209,9 +209,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf151484)
         // - Actual  : 1
         // - Failed on filter: MS Excel 97
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(4), aList.size());
-        for (size_t j = 0; j < 4; ++j)
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), double(j + 1),
-                                         aList[j].GetValue());
+        auto it = aList.begin();
+        for (size_t j = 0; j < 4; ++j, ++it)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), double(j + 1), it->GetValue());
     }
 }
 

@@ -1627,7 +1627,7 @@ void ScDocument::GetFilterEntriesArea(
  */
 void ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab,
-    std::vector<ScTypedStrData>& rStrings, bool bValidation )
+    ScTypedCaseStrSet& rStrings, bool bValidation )
 {
     if( bValidation )
     {
@@ -1639,24 +1639,14 @@ void ScDocument::GetDataEntries(
         {
             const ScValidationData* pData = GetValidationEntry( nValidation );
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
-            {
-                if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
-                    sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
-
                 return;
-            }
         }
     }
 
     if (!HasTable(nTab))
         return;
 
-    std::set<ScTypedStrData> aStrings;
-    if (maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings))
-    {
-        rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
-        sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
-    }
+    (void) maTabs[nTab]->GetDataEntries(nCol, nRow, rStrings);
 }
 
 /**

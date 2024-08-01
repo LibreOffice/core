@@ -336,10 +336,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
     CPPUNIT_ASSERT(pData);
 
     // Excel can't open corrupt file if the list is longer than 255 characters
-    std::vector<ScTypedStrData> aList;
+    ScTypedCaseStrSet aList;
     pData->FillSelectionList(aList, ScAddress(0, 1, 1));
     CPPUNIT_ASSERT_EQUAL(size_t(18), aList.size());
-    CPPUNIT_ASSERT_EQUAL(u"18 Missis"_ustr, aList[17].GetString());
+    auto it = aList.begin();
+    std::advance(it, 17);
+    CPPUNIT_ASSERT_EQUAL(u"9 Mississippi"_ustr, it->GetString());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
