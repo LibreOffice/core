@@ -127,6 +127,10 @@ static OUString isKnownVectorFormat(const Graphic& rGraphic, std::u16string_view
     if (!pData || pData->getBinaryDataContainer().getSize() == 0)
         return {};
 
+    if (FORMAT_EMF.equalsIgnoreAsciiCase(rFilter)
+        && (pData->getType() == VectorGraphicDataType::Emf || rGraphic.GetGfxLink().IsEMF()))
+        return FORMAT_EMF;
+
     // Does the filter name match the original format?
     switch (pData->getType())
     {
@@ -135,13 +139,10 @@ static OUString isKnownVectorFormat(const Graphic& rGraphic, std::u16string_view
         case VectorGraphicDataType::Wmf:
             return match(rFilter, FORMAT_WMF, false);
         case VectorGraphicDataType::Emf:
-            return match(rFilter, FORMAT_EMF, false);
+            break;
         case VectorGraphicDataType::Pdf:
             return match(rFilter, FORMAT_PDF, false);
     }
-
-    if (rGraphic.GetGfxLink().IsEMF())
-        return match(rFilter, FORMAT_EMF, false);
 
     return {};
 }
