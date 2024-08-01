@@ -988,6 +988,81 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     OString pass(OUStringToOString( m_aSignPassword, RTL_TEXTENCODING_UTF8 ));
 
+    // Add the signing certificate as a signed attribute.
+    ESSCertIDv2* aCertIDs[2];
+    ESSCertIDv2 aCertID;
+    // Write ESSCertIDv2.hashAlgorithm.
+    aCertID.hashAlgorithm.algorithm.data = nullptr;
+    aCertID.hashAlgorithm.parameters.data = nullptr;
+    SECOID_SetAlgorithmID(nullptr, &aCertID.hashAlgorithm, SEC_OID_SHA256, nullptr);
+    comphelper::ScopeGuard aAlgoGuard(
+        [&aCertID] () { SECOID_DestroyAlgorithmID(&aCertID.hashAlgorithm, false); } );
+    // Write ESSCertIDv2.certHash.
+    SECItem aCertHashItem;
+    auto pDerEncoded = reinterpret_cast<const unsigned char *>(aDerEncoded.getArray());
+    std::vector<unsigned char> aCertHashResult = comphelper::Hash::calculateHash(pDerEncoded, aDerEncoded.getLength(), comphelper::HashType::SHA256);
+    aCertHashItem.type = siBuffer;
+    aCertHashItem.data = aCertHashResult.data();
+    aCertHashItem.len = aCertHashResult.size();
+    aCertID.certHash = aCertHashItem;
+    // Write ESSCertIDv2.issuerSerial.
+    IssuerSerial aSerial;
+    GeneralName aName;
+    aName.name = cert->issuer;
+    aSerial.issuer.names = aName;
+    aSerial.serialNumber = cert->serialNumber;
+    aCertID.issuerSerial = aSerial;
+    // Write SigningCertificateV2.certs.
+    aCertIDs[0] = &aCertID;
+    aCertIDs[1] = nullptr;
+    SigningCertificateV2 aCertificate;
+    aCertificate.certs = &aCertIDs[0];
+    SECItem* pEncodedCertificate = SEC_ASN1EncodeItem(nullptr, nullptr, &aCertificate, SigningCertificateV2Template);
+    if (!pEncodedCertificate)
+    {
+        SAL_WARN("svl.crypto", "SEC_ASN1EncodeItem() failed");
+        return false;
+    }
+
+    NSSCMSAttribute aAttribute;
+    SECItem aAttributeValues[2];
+    SECItem* pAttributeValues[2];
+    pAttributeValues[0] = aAttributeValues;
+    pAttributeValues[1] = nullptr;
+    aAttributeValues[0] = *pEncodedCertificate;
+    aAttributeValues[1].type = siBuffer;
+    aAttributeValues[1].data = nullptr;
+    aAttributeValues[1].len = 0;
+    aAttribute.values = pAttributeValues;
+
+    SECOidData aOidData;
+    aOidData.oid.data = nullptr;
+    /*
+     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
+     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+     *   smime(16) id-aa(2) 47 }
+     */
+    if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
+    {
+        SAL_WARN("svl.crypto", "my_SEC_StringToOID() failed");
+        return false;
+    }
+    comphelper::ScopeGuard aGuard(
+        [&aOidData] () { SECITEM_FreeItem(&aOidData.oid, false); } );
+    aOidData.offset = SEC_OID_UNKNOWN;
+    aOidData.desc = "id-aa-signingCertificateV2";
+    aOidData.mechanism = CKM_SHA_1;
+    aOidData.supportedExtension = UNSUPPORTED_CERT_EXTENSION;
+    aAttribute.typeTag = &aOidData;
+    aAttribute.type = aOidData.oid;
+    aAttribute.encoded = PR_TRUE;
+
+    if (my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
+    {
+        SAL_WARN("svl.crypto", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
+        return false;
+    }
+
     TimeStampReq src;
     OStringBuffer response_buffer;
     TimeStampResp response;
@@ -999,6 +1074,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     valuesp[1] = nullptr;
     SECOidData typetag;
 
+    //NOTE: All signed/authenticated attributes are to be added before the following hash computation
     if( !m_aSignTSA.isEmpty() )
     {
         // Create another CMS message with the same contents as cms_msg, because it doesn't seem
@@ -1012,6 +1088,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         {
             return false;
         }
+
+        PORT_Memcpy(ts_cms_signer, cms_signer, sizeof(NSSCMSSignerInfo));
 
         SECItem ts_cms_output;
         ts_cms_output.data = nullptr;
@@ -1231,81 +1309,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             SAL_WARN("svl.crypto", "NSS_CMSSignerInfo_AddUnauthAttr failed");
             return false;
         }
-    }
-
-    // Add the signing certificate as a signed attribute.
-    ESSCertIDv2* aCertIDs[2];
-    ESSCertIDv2 aCertID;
-    // Write ESSCertIDv2.hashAlgorithm.
-    aCertID.hashAlgorithm.algorithm.data = nullptr;
-    aCertID.hashAlgorithm.parameters.data = nullptr;
-    SECOID_SetAlgorithmID(nullptr, &aCertID.hashAlgorithm, SEC_OID_SHA256, nullptr);
-    comphelper::ScopeGuard aAlgoGuard(
-        [&aCertID] () { SECOID_DestroyAlgorithmID(&aCertID.hashAlgorithm, false); } );
-    // Write ESSCertIDv2.certHash.
-    SECItem aCertHashItem;
-    auto pDerEncoded = reinterpret_cast<const unsigned char *>(aDerEncoded.getArray());
-    std::vector<unsigned char> aCertHashResult = comphelper::Hash::calculateHash(pDerEncoded, aDerEncoded.getLength(), comphelper::HashType::SHA256);
-    aCertHashItem.type = siBuffer;
-    aCertHashItem.data = aCertHashResult.data();
-    aCertHashItem.len = aCertHashResult.size();
-    aCertID.certHash = aCertHashItem;
-    // Write ESSCertIDv2.issuerSerial.
-    IssuerSerial aSerial;
-    GeneralName aName;
-    aName.name = cert->issuer;
-    aSerial.issuer.names = aName;
-    aSerial.serialNumber = cert->serialNumber;
-    aCertID.issuerSerial = aSerial;
-    // Write SigningCertificateV2.certs.
-    aCertIDs[0] = &aCertID;
-    aCertIDs[1] = nullptr;
-    SigningCertificateV2 aCertificate;
-    aCertificate.certs = &aCertIDs[0];
-    SECItem* pEncodedCertificate = SEC_ASN1EncodeItem(nullptr, nullptr, &aCertificate, SigningCertificateV2Template);
-    if (!pEncodedCertificate)
-    {
-        SAL_WARN("svl.crypto", "SEC_ASN1EncodeItem() failed");
-        return false;
-    }
-
-    NSSCMSAttribute aAttribute;
-    SECItem aAttributeValues[2];
-    SECItem* pAttributeValues[2];
-    pAttributeValues[0] = aAttributeValues;
-    pAttributeValues[1] = nullptr;
-    aAttributeValues[0] = *pEncodedCertificate;
-    aAttributeValues[1].type = siBuffer;
-    aAttributeValues[1].data = nullptr;
-    aAttributeValues[1].len = 0;
-    aAttribute.values = pAttributeValues;
-
-    SECOidData aOidData;
-    aOidData.oid.data = nullptr;
-    /*
-     * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
-     * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
-     *   smime(16) id-aa(2) 47 }
-     */
-    if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "my_SEC_StringToOID() failed");
-        return false;
-    }
-    comphelper::ScopeGuard aGuard(
-        [&aOidData] () { SECITEM_FreeItem(&aOidData.oid, false); } );
-    aOidData.offset = SEC_OID_UNKNOWN;
-    aOidData.desc = "id-aa-signingCertificateV2";
-    aOidData.mechanism = CKM_SHA_1;
-    aOidData.supportedExtension = UNSUPPORTED_CERT_EXTENSION;
-    aAttribute.typeTag = &aOidData;
-    aAttribute.type = aOidData.oid;
-    aAttribute.encoded = PR_TRUE;
-
-    if (my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
-        return false;
     }
 
     SECItem cms_output;
