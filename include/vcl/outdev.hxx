@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <comphelper/flagguard.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -267,8 +266,6 @@ private:
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
 
-    bool mbNoFontScaling = false; // Used only by D2DWriteTextOutRenderer
-
 protected:
     mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
@@ -350,8 +347,6 @@ public:
     css::uno::Reference< css::rendering::XCanvas > GetCanvas() const;
     /// request XSpriteCanvas render interface
     css::uno::Reference< css::rendering::XSpriteCanvas > GetSpriteCanvas() const;
-
-    auto ScopedNoFontScaling() { return comphelper::FlagRestorationGuard(mbNoFontScaling, true); }
 
 protected:
 

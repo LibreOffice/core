@@ -22,7 +22,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <comphelper/flagguard.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
@@ -121,9 +120,6 @@ public:
 
     virtual SalLayoutGlyphs GetGlyphs() const;
 
-    auto ScopedFontScaling(bool v) { return comphelper::FlagRestorationGuard(mbScaleFont, v); }
-    bool ScaleFont() const { return mbScaleFont; }
-
 protected:
     // used by layout engines
     SalLayout();
@@ -131,8 +127,6 @@ protected:
 private:
     SalLayout(const SalLayout&) = delete;
     SalLayout& operator=(const SalLayout&) = delete;
-
-    bool mbScaleFont = true; // Used only by D2DWriteTextOutRenderer
 
 protected:
     int             mnMinCharPos;

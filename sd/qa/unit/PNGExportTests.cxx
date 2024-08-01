@@ -941,4 +941,65 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
+{
+    // The top X in the SVG, having no skew, used a fast rendering path, and was output much wider
+    // than the bottom one, which has a skew. Test the rendered pixels inside the known boundaries.
+
+    loadFromFile(u"svg/tdf162259.svg");
+
+    auto xGraphicExporter = drawing::GraphicExportFilter::create(getComponentContext());
+    CPPUNIT_ASSERT(xGraphicExporter);
+
+    auto xSupplier = mxComponent.queryThrow<css::drawing::XDrawPagesSupplier>();
+    auto xPage = xSupplier->getDrawPages()->getByIndex(0).queryThrow<css::lang::XComponent>();
+    xGraphicExporter->setSourceDocument(xPage);
+
+    // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(101)),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(151)),
+    };
+
+    css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
+    };
+
+    xGraphicExporter->filter(aDescriptor);
+    BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+
+    tools::Rectangle topX(12, 21, 37, 60);
+    int topNonWhites = 0;
+    tools::Rectangle bottomX(13, 83, 37, 126);
+    int bottomNonWhites = 0;
+
+    // Check that there is nothing outside the X recrangles
+    for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
+    {
+        for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
+        {
+            if (topX.Contains(Point{ x, y }))
+            {
+                if (bmp.GetPixelColor(x, y) != COL_WHITE)
+                    ++topNonWhites;
+            }
+            else if (bottomX.Contains(Point{ x, y }))
+            {
+                if (bmp.GetPixelColor(x, y) != COL_WHITE)
+                    ++bottomNonWhites;
+            }
+            else
+            {
+                OString msg("Pixel: "_ostr + OString::number(x) + "," + OString::number(y));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_WHITE, bmp.GetPixelColor(x, y));
+            }
+        }
+    }
+
+    CPPUNIT_ASSERT_GREATER(350, topNonWhites); // 399 in my testing
+    CPPUNIT_ASSERT_GREATER(350, bottomNonWhites); // 362 in my testing
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();

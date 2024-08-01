@@ -36,6 +36,8 @@ class WinFontInstance : public LogicalFontInstance
 public:
     ~WinFontInstance() override;
 
+    float getHScale() const;
+
     void SetGraphics(WinSalGraphics*);
     WinSalGraphics* GetGraphics() const { return m_pGraphics; }
 
