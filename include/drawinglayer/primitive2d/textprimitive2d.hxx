@@ -122,12 +122,6 @@ private:
     /// font color
     basegfx::BColor maFontColor;
 
-    // Whether to fill a given width with the text
-    bool mbFilled;
-
-    // the width to fill
-    tools::Long mnWidthToFill;
-
     /// The fill color of the text
     Color maTextFillColor;
 
@@ -146,8 +140,7 @@ public:
                                  std::vector<double>&& rDXArray,
                                  std::vector<sal_Bool>&& rKashidaArray,
                                  attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
-                                 const basegfx::BColor& rFontColor, bool bFilled = false,
-                                 tools::Long nWidthToFill = 0,
+                                 const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -167,8 +160,6 @@ public:
     const css::lang::Locale& getLocale() const { return maLocale; }
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
-    bool isFilled() const { return mbFilled; }
-    tools::Long getWidthToFill() const { return mnWidthToFill; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

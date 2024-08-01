@@ -4182,6 +4182,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                             {
                                 if ( rTextPortion.GetExtraValue() && ( rTextPortion.GetExtraValue() != ' ' ) )
                                 {
+                                    // calculate expanded text
                                     SeekCursor(rParaPortion.GetNode(), nIndex+1, aTmpFont, &rOutDev);
                                     aTmpFont.SetTransparent( false );
                                     aTmpFont.SetEscapement( 0 );
@@ -4196,11 +4197,10 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     else if ( nChars == 2 )
                                         nChars = 3; // looks better
 
+                                    // create expanded text
                                     OUStringBuffer aBuf(nChars);
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
-                                    aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength(), {} );
-                                    rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
 
                                     if ( bStripOnly )
                                     {
@@ -4212,12 +4212,21 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                         // StripPortions() data callback
-                                        GetEditEnginePtr()->DrawingTab( aTmpPos,
-                                            rTextPortion.GetSize().Width(),
-                                            OUString(rTextPortion.GetExtraValue()),
-                                            aTmpFont, nParaPortion, rTextPortion.GetRightToLeftLevel(),
+                                        GetEditEnginePtr()->DrawingText(
+                                            aTmpPos, aText, 0, aText.getLength(), {}, {},
+                                            aTmpFont, nParaPortion, 0,
+                                            nullptr,
+                                            nullptr,
                                             bEndOfLine, bEndOfParagraph,
-                                            aOverlineColor, aTextLineColor);
+                                            nullptr,
+                                            aOverlineColor,
+                                            aTextLineColor);
+                                    }
+                                    else
+                                    {
+                                        // direct paint needed
+                                        aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength(), {} );
+                                        rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
                                     }
                                 }
                                 else if ( bStripOnly )

@@ -57,14 +57,6 @@ public:
                               const Color& rOverlineColor,
                               const Color& rTextLineColor) override;
 
-    virtual void DrawingTab(
-        const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
-        const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
-        bool bEndOfLine,
-        bool bEndOfParagraph,
-        const Color& rOverlineColor,
-        const Color& rTextLineColor) override;
-
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle ) override;
     virtual void        ParaAttribsChanged( sal_Int32 nPara ) override;
     virtual bool        SpellNextDocument() override;

@@ -338,7 +338,17 @@ namespace drawinglayer::primitive2d
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, std::move(rDXArray), std::move(rKashidaArray), rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
+        :   TextSimplePortionPrimitive2D(
+                rNewTransform,
+                rText,
+                nTextPosition,
+                nTextLength,
+                std::move(rDXArray),
+                std::move(rKashidaArray),
+                rFontAttribute,
+                rLocale,
+                rFontColor,
+                rFillColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

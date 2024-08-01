@@ -1590,14 +1590,6 @@ void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int3
 {
 }
 
-void EditEngine::DrawingTab( const Point& /*rStartPos*/, tools::Long /*nWidth*/,
-                             const OUString& /*rChar*/, const SvxFont& /*rFont*/,
-                             sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
-                             bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
-                             const Color& /*rTextLineColor*/)
-{
-}
-
 void EditEngine::PaintingFirstLine(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&)
 {
 }

@@ -1659,20 +1659,8 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
     if(aDrawPortionHdl.IsSet())
     {
         DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, pDXArray, pKashidaArray, pWrongSpellVector,
-            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, false, 0, bEndOfLine, bEndOfParagraph, bEndOfBullet);
-
-        aDrawPortionHdl.Call( &aInfo );
-    }
-}
-
-void Outliner::DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar, const SvxFont& rFont,
-    sal_Int32 nPara, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
-    const Color& rOverlineColor, const Color& rTextLineColor)
-{
-    if(aDrawPortionHdl.IsSet())
-    {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, {}, {}, nullptr,
-            nullptr, nullptr, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
+            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft,
+            bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
     }

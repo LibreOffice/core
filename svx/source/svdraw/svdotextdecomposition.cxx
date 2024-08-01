@@ -211,7 +211,8 @@ namespace
                                   nullptr, /* no spelling in subportion, handled outside */
                                   nullptr, /* no field in subportion, handled outside */
                                   m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
-                                  m_rInfo.mnBiDiLevel, false, 0, false, false, false);
+                                  m_rInfo.mnBiDiLevel,
+                                  false, false, false);
 
             m_rHandler.impCreateTextPortionPrimitive(aInfo);
 
@@ -590,8 +591,6 @@ namespace
                 rFontAttribute,
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,
-                rInfo.mbFilled,
-                rInfo.mnWidthToFill,
                 aTextFillColor);
         }
 

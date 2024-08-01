@@ -510,12 +510,6 @@ public:
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
-    virtual void DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
-                             const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                             bool bEndOfLine,
-                             bool bEndOfParagraph,
-                             const Color& rOverlineColor,
-                             const Color& rTextLineColor);
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();
     /** @return true, when click was consumed. false otherwise. */

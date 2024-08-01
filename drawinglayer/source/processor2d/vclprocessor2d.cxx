@@ -336,37 +336,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 mpOutputDevice->SetLayoutMode(nLTRLayoutMode);
             }
 
-            OUString aText(rTextCandidate.getText());
-            sal_Int32 nPos = rTextCandidate.getTextPosition();
-            sal_Int32 nLen = rTextCandidate.getTextLength();
-
-            // this contraption is used in editeng, with format paragraph used to
-            // set a tab with a tab-fill character
-            if (rTextCandidate.isFilled())
-            {
-                tools::Long nWidthToFill = rTextCandidate.getWidthToFill();
-
-                tools::Long nWidth = basegfx::fround<tools::Long>(
-                    mpOutputDevice->GetTextArray(rTextCandidate.getText(), &aDXArray, 0, 1).nWidth);
-                sal_Int32 nChars = 2;
-                if (nWidth)
-                    nChars = nWidthToFill / nWidth;
-
-                OUStringBuffer aFilled(nChars);
-                comphelper::string::padToLength(aFilled, nChars, aText[0]);
-                aText = aFilled.makeStringAndClear();
-                nPos = 0;
-                nLen = nChars;
-
-                if (!aDXArray.empty())
-                {
-                    sal_Int32 nDX = aDXArray[0];
-                    aDXArray.resize(nLen);
-                    for (sal_Int32 i = 1; i < nLen; ++i)
-                        aDXArray.set(i, aDXArray[i - 1] + nDX);
-                }
-            }
-
             Point aStartPoint;
             bool bChangeMapMode(false);
             if (!bScaleFont)
@@ -468,14 +437,18 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 if (!aDXArray.empty())
                 {
                     const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
-                        mpOutputDevice, aText, nPos, nLen);
-                    mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
-                                                  rTextCandidate.getKashidaArray(), nPos, nLen,
-                                                  SalLayoutFlags::NONE, pGlyphs);
+                        mpOutputDevice, rTextCandidate.getText(), rTextCandidate.getTextPosition(),
+                        rTextCandidate.getTextLength());
+                    mpOutputDevice->DrawTextArray(
+                        aStartPoint, rTextCandidate.getText(), aDXArray,
+                        rTextCandidate.getKashidaArray(), rTextCandidate.getTextPosition(),
+                        rTextCandidate.getTextLength(), SalLayoutFlags::NONE, pGlyphs);
                 }
                 else
                 {
-                    mpOutputDevice->DrawText(aStartPoint, aText, nPos, nLen);
+                    mpOutputDevice->DrawText(aStartPoint, rTextCandidate.getText(),
+                                             rTextCandidate.getTextPosition(),
+                                             rTextCandidate.getTextLength());
                 }
             }
 

@@ -418,9 +418,6 @@ public:
 
     sal_uInt8           mnBiDiLevel;
 
-    bool                mbFilled;
-    tools::Long                mnWidthToFill;
-
     bool                mbEndOfLine : 1;
     bool                mbEndOfParagraph : 1;
     bool                mbEndOfBullet : 1;
@@ -442,8 +439,6 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor,
         sal_uInt8 nBiDiLevel,
-        bool bFilled,
-        tools::Long nWidthToFill,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet)
@@ -461,8 +456,6 @@ public:
         maOverlineColor(rOverlineColor),
         maTextLineColor(rTextLineColor),
         mnBiDiLevel(nBiDiLevel),
-        mbFilled( bFilled ),
-        mnWidthToFill( nWidthToFill ),
         mbEndOfLine(bEndOfLine),
         mbEndOfParagraph(bEndOfParagraph),
         mbEndOfBullet(bEndOfBullet)
@@ -843,13 +836,6 @@ public:
                               const css::lang::Locale* pLocale,
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
-
-    SAL_DLLPRIVATE void DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
-                             const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                             bool bEndOfLine,
-                             bool bEndOfParagraph,
-                             const Color& rOverlineColor,
-                             const Color& rTextLineColor);
 
     Size            CalcTextSize();
 
