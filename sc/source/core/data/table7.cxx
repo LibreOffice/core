@@ -527,8 +527,7 @@ OString ScTable::dumpColumnRowSizes(bool bColumns)
     // instead just operate on the specialized object.
     typedef ScCompressedArray<SCCOL, sal_uInt16> ColWidthsType;
     auto dumpColWidths = [this](const ColWidthsType& rWidths) -> OString {
-        OString aOutput;
-        OString aSegment;
+        OStringBuffer aOutput;
         SCCOL nStartCol = 0;
         const SCCOL nMaxCol = std::min(rWidths.GetLastPos(), GetDoc().MaxCol());
         size_t nDummy = 0;
@@ -539,12 +538,11 @@ OString ScTable::dumpColumnRowSizes(bool bColumns)
             // The last span nEndCol is always MAXCOL+1 for some reason, and we don't want that.
             if (nEndCol > nMaxCol)
                 nEndCol = nMaxCol;
-            aSegment = OString::number(nWidth) + ":" + OString::number(nEndCol) + " ";
-            aOutput += aSegment;
+            aOutput.append(OString::number(nWidth) + ":" + OString::number(nEndCol) + " ");
             nStartCol = nEndCol + 1;
         }
 
-        return aOutput;
+        return aOutput.makeStringAndClear();
     };
 
     if (bColumns)
