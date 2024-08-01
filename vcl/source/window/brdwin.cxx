@@ -428,7 +428,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
             // control this border belongs to
             ControlType aCtrlType = ControlType::Generic;
             ControlPart aCtrlPart = ControlPart::Entire;
-            if (pCtrl)
+            if (pCtrl && !(pCtrl->GetBorderStyle() & WindowBorderStyle::NONATIVEBORDER))
             {
                 switch( pCtrl->GetType() )
                 {

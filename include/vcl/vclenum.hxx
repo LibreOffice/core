@@ -111,11 +111,14 @@ enum class WindowBorderStyle : sal_Int16
     MENU              = 0x0010,
     NWF               = 0x0020,
     NOBORDER          = 0x1000,
-    REMOVEBORDER      = 0x2000
+    REMOVEBORDER      = 0x2000,
+    // Never use native border, used to ensure consistency of form controls
+    // inside documents across platforms and in pdf/print output
+    NONATIVEBORDER    = 0x4000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x3033> {};
+    template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x7033> {};
 }
 
 enum class TimeFormat
