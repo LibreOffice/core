@@ -397,6 +397,25 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                           / (aResultFontSize.Width() ? aResultFontSize.Width()
                                                      : aResultFontSize.Height());
 
+#ifdef _WIN32
+                    if (aResultFontSize.Width()
+                        && aResultFontSize.Width() != aResultFontSize.Height())
+                    {
+                        // See getVclFontFromFontAttribute in drawinglayer/source/primitive2d/textlayoutdevice.cxx
+                        vcl::Font aUnscaledTest(aFont);
+                        aUnscaledTest.SetFontSize({ 0, aResultFontSize.Height() });
+                        const FontMetric aUnscaledFontMetric(
+                            Application::GetDefaultDevice()->GetFontMetric(aUnscaledTest));
+                        if (aUnscaledFontMetric.GetAverageFontWidth() > 0)
+                        {
+                            double nExistingXScale = static_cast<double>(aResultFontSize.Width())
+                                                     / aUnscaledFontMetric.GetAverageFontWidth();
+                            nFontScalingFixX
+                                = aFontScaling.getX() / aFontScaling.getY() / nExistingXScale;
+                        }
+                    }
+#endif
+
                     if (!rtl_math_approxEqual(nFontScalingFixY, 1.0)
                         || !rtl_math_approxEqual(nFontScalingFixX, 1.0))
                     {
@@ -431,25 +450,21 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             mpOutputDevice->SetFont(aFont);
             mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
+            if (!aDXArray.empty())
             {
-                // For D2DWriteTextOutRenderer, we must pass a flag to not use font scaling
-                auto guard = mpOutputDevice->ScopedNoFontScaling();
-                if (!aDXArray.empty())
-                {
-                    const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
-                        mpOutputDevice, rTextCandidate.getText(), rTextCandidate.getTextPosition(),
-                        rTextCandidate.getTextLength());
-                    mpOutputDevice->DrawTextArray(
-                        aStartPoint, rTextCandidate.getText(), aDXArray,
-                        rTextCandidate.getKashidaArray(), rTextCandidate.getTextPosition(),
-                        rTextCandidate.getTextLength(), SalLayoutFlags::NONE, pGlyphs);
-                }
-                else
-                {
-                    mpOutputDevice->DrawText(aStartPoint, rTextCandidate.getText(),
-                                             rTextCandidate.getTextPosition(),
-                                             rTextCandidate.getTextLength());
-                }
+                const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+                    mpOutputDevice, rTextCandidate.getText(), rTextCandidate.getTextPosition(),
+                    rTextCandidate.getTextLength());
+                mpOutputDevice->DrawTextArray(
+                    aStartPoint, rTextCandidate.getText(), aDXArray,
+                    rTextCandidate.getKashidaArray(), rTextCandidate.getTextPosition(),
+                    rTextCandidate.getTextLength(), SalLayoutFlags::NONE, pGlyphs);
+            }
+            else
+            {
+                mpOutputDevice->DrawText(aStartPoint, rTextCandidate.getText(),
+                                         rTextCandidate.getTextPosition(),
+                                         rTextCandidate.getTextLength());
             }
 
             // Restore previous layout mode

@@ -99,7 +99,7 @@ HRESULT checkResult(HRESULT hr, const char* location)
 class WinFontTransformGuard
 {
 public:
-    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
+    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float hscale,
                           const GenericSalLayout& rLayout, const D2D1_POINT_2F& rBaseline,
                           bool bIsVertical);
     ~WinFontTransformGuard();
@@ -247,17 +247,18 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     {
         mpRT->BeginDraw();
 
+        const float hscale = rWinFont.getHScale();
         int nStart = 0;
         basegfx::B2DPoint aPos;
         const GlyphItem* pGlyph;
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { static_cast<UINT16>(pGlyph->glyphId()) };
-            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->newWidth()) };
+            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->newWidth()) / hscale };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
-            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()),
+            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()) / hscale,
                                        static_cast<FLOAT>(aPos.getY() - bounds.Top()) };
-            WinFontTransformGuard aTransformGuard(mpRT, rLayout, baseline, pGlyph->IsVertical());
+            WinFontTransformGuard aTransformGuard(mpRT, hscale, rLayout, baseline, pGlyph->IsVertical());
             DWRITE_GLYPH_RUN glyphs = {
                 pFontFace,
                 lfEmHeight,
@@ -305,22 +306,12 @@ IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFace(const WinFontInstance& r
     return pFontFace;
 }
 
-WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
+WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float hscale,
                                              const GenericSalLayout& rLayout,
                                              const D2D1_POINT_2F& rBaseline,
                                              bool bIsVertical)
     : mpRenderTarget(pRenderTarget)
 {
-    const float hscale = [&rLayout]
-    {
-        if (!rLayout.ScaleFont())
-            return 1.0;
-        const auto& rPattern = rLayout.GetFont().GetFontSelectPattern();
-        if (!rPattern.mnHeight || !rPattern.mnWidth)
-            return 1.0;
-        return rPattern.mnWidth * rLayout.GetFont().GetAverageWidthFactor() / rPattern.mnHeight;
-    }();
-
     Degree10 angle = rLayout.GetOrientation();
     if (bIsVertical)
         angle += 900_deg10;

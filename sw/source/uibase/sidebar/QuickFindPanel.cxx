@@ -10,6 +10,8 @@
 
 #include "QuickFindPanel.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+#include <comphelper/scopeguard.hxx>
 #include <svl/srchitem.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
