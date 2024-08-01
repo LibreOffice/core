@@ -60,6 +60,7 @@ private:
 
     std::unique_ptr<weld::Label>    m_xFTSign;
     std::unique_ptr<weld::Label>    m_xFTEncrypt;
+    std::unique_ptr<weld::Label>    m_xFTLoadedCerts;
     std::unique_ptr<weld::TreeView> m_xCertLB;
     std::unique_ptr<weld::Button>   m_xViewBtn;
     std::unique_ptr<weld::Button>   m_xOKBtn;

@@ -20,13 +20,16 @@
 #include <config_gpgme.h>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>  // tdf#161909 - maybe not needed
 
 #include <unotools/datetime.hxx>
 #include <unotools/charclass.hxx>
@@ -45,6 +48,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     , meAction(eAction)
     , m_xFTSign(m_xBuilder->weld_label(u"sign"_ustr))
     , m_xFTEncrypt(m_xBuilder->weld_label(u"encrypt"_ustr))
+    , m_xFTLoadedCerts(m_xBuilder->weld_label(u"loaded-certs"_ustr))
     , m_xCertLB(m_xBuilder->weld_tree_view(u"signatures"_ustr))
     , m_xViewBtn(m_xBuilder->weld_button(u"viewcert"_ustr))
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
@@ -176,6 +180,8 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
     }
 
+    bool has_x509 = false;
+    bool has_openpgp_gpg = false;
     ::std::optional<int> oSelectRow;
     uno::Sequence<uno::Reference< security::XCertificate>> xCerts;
     for (auto& secContext : mxSecurityContexts)
@@ -185,6 +191,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         auto secEnvironment = secContext->getSecurityEnvironment();
         if (!secEnvironment.is())
             continue;
+
+        uno::Reference<lang::XServiceInfo> secContextServiceInfo(secContext, uno::UNO_QUERY);
+        OUString secContextType = secContextServiceInfo->getImplementationName();
+        if (secContextType == "com.sun.star.xml.crypto.XMLSecurityContext") has_x509 = true;
+        else if (secContextType == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl") has_openpgp_gpg = true;
 
         try
         {
@@ -264,6 +275,31 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 #endif
         }
     }
+
+    std::vector<OUString> seqLoadedCertsLabels;
+    if (has_openpgp_gpg)
+        seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_OPENPGP_GPG));
+    if (has_x509)
+    {
+#ifdef _WIN32
+        seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_X509_MSCRYPT));
+#else  // _WIN32
+        // Should be the last one for optimal formatting, because of the appended path.
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        OUString nssPath = xml::crypto::NSSInitializer::create(xContext)->getNSSPath();
+        seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_X509_NSS_NEWLINE) + nssPath);
+#endif // _WIN32
+    }
+    OUString loadedCertsLabel = XsResId(STR_LOADED_CERTS_BASE
+                                        );
+    for (size_t label_i=0; label_i<seqLoadedCertsLabels.size(); label_i++)
+    {
+        if (label_i > 0)
+            loadedCertsLabel += ", ";
+        loadedCertsLabel += seqLoadedCertsLabels[label_i];
+    }
+    m_xFTLoadedCerts->set_label(loadedCertsLabel);
+    m_xFTLoadedCerts->set_visible(true);
 
     m_xCertLB->thaw();
     m_xCertLB->unselect_all();

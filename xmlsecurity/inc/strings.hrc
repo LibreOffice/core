@@ -63,6 +63,11 @@
 #define STR_SELECTSIGN                              NC_("selectcertificatedialog|str_selectsign", "Select")
 #define STR_ENCRYPT                                 NC_("selectcertificatedialog|str_encrypt", "Encrypt")
 
+#define STR_LOADED_CERTS_BASE                       NC_("selectcertificatedialog|str_loaded_certs_base", "Certificates are loaded from:\n")
+#define STR_LOADED_CERTS_OPENPGP_GPG                NC_("selectcertificatedialog|str_loaded_certs_openpgp_gpg", "GPG/GnuPG (OpenPGP)")
+#define STR_LOADED_CERTS_X509_MSCRYPT               NC_("selectcertificatedialog|str_loaded_certs_x509_mscrypt", "Windows Certificate Manager / CertMgr (X.509)")
+#define STR_LOADED_CERTS_X509_NSS_NEWLINE           NC_("selectcertificatedialog|str_loaded_certs_x509_nss", "NSS Certificate DB in the Mozilla Profile (X.509) at:\n")
+
 #define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
 #define STR_RELOAD_FILE_WARNING                     NC_("STR_RELOAD_FILE_WARNING", "Reload the file to apply the new macro security level")
 #define STR_TRUST_UNTRUSTED_PUBKEY                   NC_("STR_TRUST_UNTRUSTED_PUBKEY", "Security warning: the following OpenPGP public key is untrusted:\n\n%{data}\n\nEncrypting with an untrusted public key increases the risk of a \"man-in-the-middle\" attack. A successful \"man-in-the-middle\" attack gives malicious third parties the ability to decrypt your document.\n\nDo you really want to encrypt your document with this untrusted public key?")
