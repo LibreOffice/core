@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="150" viewBox="0 0 100 150">
+ <g>
+  <text style="font-size:5.9px;font-family:Liberation Serif"
+        transform="scale(6,10)"
+        x="2" y="6">
+   <tspan>X</tspan>
+  </text>
+  <text style="font-size:5.9px;font-family:Liberation Serif"
+        transform="scale(6,10) skewY(5)"
+        x="2" y="12">
+   <tspan>X</tspan>
+  </text>
+ </g>
+</svg>
