@@ -422,10 +422,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if ( const SfxBoolItem* pBoolItem = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_SOURCE ))
     {
-        if ( pBoolItem )
-            m_xCbSourceFormat->set_active(pBoolItem->GetValue());
-        else
-            m_xCbSourceFormat->set_active( false );
+        m_xCbSourceFormat->set_active(pBoolItem->GetValue());
         m_xCbSourceFormat->set_sensitive(true);
         m_xCbSourceFormat->show();
     }
