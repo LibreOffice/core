@@ -673,21 +673,21 @@ void IMapWindow::DoMacroAssign()
     if ( !pSdrObj )
         return;
 
-    SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>
-        aSet(*pIMapPool);
+    auto xSet = std::make_unique<SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>>
+        (*pIMapPool);
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
     aNamesItem.AddEvent( u"MouseOver"_ustr, u""_ustr, SvMacroItemId::OnMouseOver );
     aNamesItem.AddEvent( u"MouseOut"_ustr, u""_ustr, SvMacroItemId::OnMouseOut );
-    aSet.Put( aNamesItem );
+    xSet->Put( aNamesItem );
 
     SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
     IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
     aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
-    aSet.Put( aMacroItem );
+    xSet->Put( aMacroItem );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(GetDrawingArea(), aSet, mxDocumentFrame));
+    VclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(GetDrawingArea(), std::move(xSet), mxDocumentFrame));
 
     pMacroDlg->StartExecuteAsync(
         [this, pMacroDlg, pIMapObj] (sal_Int32 nResult)->void

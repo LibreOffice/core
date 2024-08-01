@@ -418,7 +418,7 @@ public:
                                                                         sal_uInt32 nResId )=0;
     virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr,
                                                                 const css::uno::Reference<css::frame::XFrame>& rFrame) = 0;
-    virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Widget* pParent, const SfxItemSet& rAttr,
+    virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Widget* pParent, std::unique_ptr<const SfxItemSet> xAttr,
                                                                     const css::uno::Reference< css::frame::XFrame >& rFrame) = 0;
     virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet, bool bPrevNext = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override = 0;
