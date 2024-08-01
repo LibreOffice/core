@@ -591,8 +591,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
 
     maPageStr = mxNumPagesText->get_label();
 
-    Printer::updatePrinters();
-
     mxPrinters->append_text(maPrintToFileText);
     // fill printer listbox
     std::vector< OUString > rQueues( Printer::GetPrinterQueues() );
