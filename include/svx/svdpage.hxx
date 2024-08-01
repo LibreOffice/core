@@ -94,6 +94,7 @@ public:
     virtual SdrObject* getSdrObjectFromSdrObjList() const;
 
     void CopyObjects(const SdrObjList& rSrcList);
+    static OString GetObjectRectangles(const SdrObjList& rSrcList);
 
     // tdf#116879 clean up everything (without Undo), plus broadcasting
     // changes. Split to this call and a private one (impClearSdrObjList)

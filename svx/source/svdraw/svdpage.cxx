@@ -134,6 +134,25 @@ SdrObject* SdrObjList::getSdrObjectFromSdrObjList() const
     return nullptr;
 }
 
+OString SdrObjList::GetObjectRectangles(const SdrObjList& rSrcList)
+{
+    OString result = "["_ostr;
+
+    for (const rtl::Reference<SdrObject>& item: rSrcList)
+    {
+        if (item->IsPrintable() && item->IsVisible())
+        {
+            tools::Rectangle rectangle = item->GetCurrentBoundRect();
+            OString ordNum(std::to_string(item->GetOrdNum()));
+            result += "["_ostr + rectangle.toString() + ", "_ostr + ordNum + "]"_ostr;
+        }
+    }
+
+    result = result.replaceAll("]["_ostr, "],["_ostr);
+
+    return result + "]"_ostr;
+}
+
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 {
     CloneList aCloneList;
