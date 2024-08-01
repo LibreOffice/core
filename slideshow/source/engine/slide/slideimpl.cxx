@@ -165,7 +165,8 @@ public:
                      const uno::Reference<drawing::XDrawPagesSupplier>& rxDrawPagesSupplier,
                      const uno::Reference<animations::XAnimationNode>& rxRootNode,
                      const SlideShowContext& rContext,
-                     const std::shared_ptr<LayerManager>& pLayerManager);
+                     const std::shared_ptr<LayerManager>& pLayerManager,
+                     bool bSkipAnimations);
 
     void renderNextLayer(unsigned char* pBuffer);
 
@@ -225,6 +226,7 @@ private:
     OUString msLastPlaceholder;
 
     bool mbIsBitmapLayer;
+    bool mbSkipAnimations = false;
     OString msLastJsonMessage;
 };
 
@@ -234,8 +236,10 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
                                    const uno::Reference<drawing::XDrawPagesSupplier>& rxDrawPagesSupplier,
                                    const uno::Reference<animations::XAnimationNode>& rxRootNode,
                                    const SlideShowContext& rContext,
-                                   const std::shared_ptr<LayerManager>& pLayerManager) :
-    maDeviceSize(rViewSize),
+                                   const std::shared_ptr<LayerManager>& pLayerManager,
+                                   bool bSkipAnimations)
+
+  : maDeviceSize(rViewSize),
     maSlideSize(rSlideSize),
     //mbRenderBackground(bRenderBackground),
     //mbRenderMasterPageObjects(bRenderMasterPageObjects),
@@ -255,7 +259,8 @@ LOKSlideRenderer::LOKSlideRenderer(const Size& rViewSize, const Size& rSlideSize
     mbIsPageNumberVisible(true),
     mbIsDateTimeVisible(true),
     mbIsFooterVisible(true),
-    mbIsBitmapLayer(false)
+    mbIsBitmapLayer(false),
+    mbSkipAnimations(bSkipAnimations)
 {
     uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mxDrawPage, uno::UNO_QUERY );
     if( xMasterPageTarget.is() )
@@ -752,6 +757,9 @@ void LOKSlideRenderer::renderLayerBitmapImpl(VirtualDevice& rDevice)
 
 void LOKSlideRenderer::collectAnimatedShapes()
 {
+    if (mbSkipAnimations)
+        return;
+
     if (!mxRootNode.is())
         return;
 
@@ -1411,7 +1419,8 @@ Size SlideImpl::createLOKSlideRenderer(int nViewWidth, int nViewHeight,
                                                            bRenderBackground,
                                                            bRenderMasterPageObjects,
                                                            mxDrawPage, mxDrawPagesSupplier,
-                                                           mxRootNode, maContext, mpLayerManager);
+                                                           mxRootNode, maContext, mpLayerManager,
+                                                           true);
         if (mpLOKRenderer)
         {
             return mpLOKRenderer->getDeviceSize();
