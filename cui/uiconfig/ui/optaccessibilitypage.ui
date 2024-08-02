@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.40.0  -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore1">
@@ -39,7 +39,7 @@
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">8</property>
+            <property name="spacing">3</property>
             <child>
               <!-- n-columns=3 n-rows=1 -->
               <object class="GtkGrid" id="animatedgraphicgrid">
@@ -50,7 +50,7 @@
                   <object class="GtkLabel" id="animatedgraphiclabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedgraphiclabel">Allow animated images: </property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedgraphiclabel">Allow animated images:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">animatedgraphicenabled</property>
                     <property name="xalign">0</property>
@@ -132,7 +132,7 @@
                   <object class="GtkLabel" id="animatedtextlabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedtextlabel">Allow animated text:       </property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedtextlabel">Allow animated text:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">animatedtextenabled</property>
                     <property name="xalign">0</property>
@@ -189,7 +189,7 @@
                   <object class="GtkLabel" id="animatedotherslabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedotherslabel" comments="This option allows e.g. 'running ants' animation in Calc">Allow other animations:  </property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedotherslabel" comments="This option allows e.g. 'running ants' animation in Calc">Allow other animations:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">animatedothersenabled</property>
                     <property name="xalign">0</property>
@@ -280,7 +280,7 @@
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="spacing">3</property>
             <child>
               <!-- n-columns=3 n-rows=1 -->
               <object class="GtkGrid" id="highcontrastbox">
@@ -548,6 +548,7 @@
       <object class="GtkFrame" id="frame3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-top">3</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="label-xalign">0</property>
@@ -662,5 +663,21 @@
         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|OptAccessibilityPage">Sets options that make the office suite programs more accessible for users with reduced sight, limited dexterity or other disabilities.</property>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupLabel">
+    <widgets>
+      <widget name="animatedgraphiclabel"/>
+      <widget name="animatedtextlabel"/>
+      <widget name="animatedotherslabel"/>
+      <widget name="label13"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="animatedgraphicenabled"/>
+      <widget name="animatedtextenabled"/>
+      <widget name="animatedothersenabled"/>
+      <widget name="highcontrast"/>
+    </widgets>
   </object>
 </interface>
