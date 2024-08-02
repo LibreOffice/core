@@ -1296,18 +1296,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
 
-                        if (m_pImpl->m_nWrap == text::WrapTextMode_THROUGH
-                            && m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable()
-                            && m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
-                            && m_pImpl->m_nVertRelation == text::RelOrientation::FRAME)
-                        {
-                            // wrapThrough paragraph-positioned shape is not constrained by the cell
-                            m_pImpl->m_bLayoutInCell = false;
-                            // TODO: But we should not go in this direction. MSO in compat15
-                            // ignores layoutInCell, always treating it as TRUE, not false,
-                            // which is the opposite of what is happening here.
-                        }
-
                         if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
                             && (m_pImpl->m_nHoriOrient == text::HoriOrientation::LEFT
                                 || m_pImpl->m_nHoriOrient == text::HoriOrientation::RIGHT

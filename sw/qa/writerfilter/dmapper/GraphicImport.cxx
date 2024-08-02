@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
     // Without the accompanying fix in place, this test would have failed, the shape was not allowed
     // to leave the cell, leading to incorrect layout.
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bFollowingTextFlow);
-    CPPUNIT_ASSERT(!bFollowingTextFlow);
+    CPPUNIT_ASSERT(bFollowingTextFlow);
 
     // dump the layout
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
