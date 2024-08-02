@@ -365,6 +365,11 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
             pEntry = new ScCondFormatEntry(ScConditionMode::Direct, msFormula, OUString(),
                                            *mpDocument, maPosition, mxStyles->get_active_text());
         }
+        else
+        {
+            DBG_ASSERT(false, "Invalid conidtion type selected.");
+            return;
+        }
 
         ScRangeList aRange;
         ScRefFlags nFlags
