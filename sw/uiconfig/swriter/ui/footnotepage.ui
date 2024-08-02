@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -9,12 +9,16 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <!-- n-columns=2 n-rows=2 -->
+  <!-- n-columns=2 n-rows=3 -->
   <object class="GtkGrid" id="FootnotePage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <property name="margin-start">6</property>
+    <property name="margin-end">6</property>
+    <property name="margin-top">6</property>
+    <property name="margin-bottom">6</property>
     <property name="border-width">6</property>
-    <property name="row-spacing">12</property>
+    <property name="row-spacing">6</property>
     <property name="column-spacing">24</property>
     <child>
       <object class="GtkFrame" id="frame1">
@@ -29,13 +33,13 @@
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label6">Numbering</property>
+                <property name="label" translatable="yes" context="footnotepage|label6">Numbering:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -47,7 +51,7 @@
               <object class="GtkLabel" id="offset">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|offset">Start at</property>
+                <property name="label" translatable="yes" context="footnotepage|offset">Start at:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -59,7 +63,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label8">Before</property>
+                <property name="label" translatable="yes" context="footnotepage|label8">Before:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -71,7 +75,7 @@
               <object class="GtkLabel" id="pos">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|pos">Position</property>
+                <property name="label" translatable="yes" context="footnotepage|pos">Position:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">pospagecb</property>
                 <property name="xalign">0</property>
@@ -89,7 +93,7 @@
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label7">Counting</property>
+                <property name="label" translatable="yes" context="footnotepage|label7">Counting:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -101,7 +105,7 @@
               <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label11">After</property>
+                <property name="label" translatable="yes" context="footnotepage|label11">After:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -261,13 +265,14 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
-        <property name="height">2</property>
+        <property name="height">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame" id="frame3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="valign">start</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
@@ -277,14 +282,13 @@
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
-            <property name="hexpand">True</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="label17">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label17">End of footnote</property>
+                <property name="label" translatable="yes" context="footnotepage|label17">End of footnote:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -296,7 +300,7 @@
               <object class="GtkLabel" id="label18">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label18">Start of next page</property>
+                <property name="label" translatable="yes" context="footnotepage|label18">Start of next page:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -357,29 +361,30 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame" id="frame4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="valign">start</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=4 -->
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label4">Paragraph</property>
+                <property name="label" translatable="yes" context="footnotepage|label4">Paragraph:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -391,7 +396,7 @@
               <object class="GtkLabel" id="pagestyleft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|pagestyleft">Page</property>
+                <property name="label" translatable="yes" context="footnotepage|pagestyleft">Page:</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -403,7 +408,6 @@
               <object class="GtkComboBoxText" id="parastylelb">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="parastylelb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|parastylelb">Select the paragraph style for the footnote text. Only special styles can be selected.</property>
@@ -419,7 +423,6 @@
               <object class="GtkComboBoxText" id="pagestylelb">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pagestylelb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|pagestylelb">Select the page style that you want to use for footnotes.</property>
@@ -431,69 +434,13 @@
                 <property name="top-attach">1</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkComboBoxText" id="charanchorstylelb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="charanchorstylelb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|charanchorstylelb">Select the character style that you want to use for footnote anchors in the text area of your document.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="charstylelb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="charstylelb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|charstylelb">Select the character style that you want to use for the footnote numbers in the footnote area.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label15">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label15">Text area</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label16">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="footnotepage|label16">Footnote area</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
           </object>
         </child>
         <child type="label">
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="footnotepage|label12">Styles</property>
+            <property name="label" translatable="yes" context="footnotepage|label12">Text style</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -505,11 +452,113 @@
         <property name="top-attach">0</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkFrame" id="frame2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="valign">start</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=2 n-rows=2 -->
+          <object class="GtkGrid" id="grid2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="label15">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="xpad">0</property>
+                <property name="label" translatable="yes" context="footnotepage|label4">Anchor in text:</property>
+                <property name="width-chars">11</property>
+                <property name="max-width-chars">15</property>
+                <property name="track-visited-links">False</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label16">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="footnotepage|pagestyleft">Anchor in footnote:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="charanchorstylelb">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="charanchorstylelb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|parastylelb">Select the paragraph style for the footnote text. Only special styles can be selected.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="charstylelb">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="charstylelb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|pagestylelb">Select the page style that you want to use for footnotes.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label10">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="footnotepage|label12">Numbering char style</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="FootnotePage-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|FootnotePage">Specifies the formatting for footnotes.</property>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupControls">
+    <widgets>
+      <widget name="contfromed"/>
+      <widget name="conted"/>
+      <widget name="parastylelb"/>
+      <widget name="pagestylelb"/>
+      <widget name="charanchorstylelb"/>
+      <widget name="charstylelb"/>
+    </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
