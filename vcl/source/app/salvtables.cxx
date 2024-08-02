@@ -5986,6 +5986,10 @@ SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanc
     : SalInstanceWidget(pTextView, pBuilder, bTakeOwnership)
     , m_xTextView(pTextView)
 {
+    // tdf#150397 don't select text when receiving keyboard focus,
+    // GtkInstanceTextView also doesn't do it
+    m_xTextView->DisableSelectionOnFocus();
+
     m_xTextView->SetModifyHdl(LINK(this, SalInstanceTextView, ChangeHdl));
     ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
     m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
