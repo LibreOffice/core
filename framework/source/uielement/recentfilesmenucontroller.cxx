@@ -51,6 +51,7 @@ using namespace com::sun::star::util;
 namespace {
 
 constexpr OUString CMD_CLEAR_LIST = u".uno:ClearRecentFileList"_ustr;
+constexpr OUString CMD_TOGGLE_CURRENTMODULE = u".uno:ToggleCurrentModule"_ustr;
 constexpr OUString CMD_OPEN_AS_TEMPLATE = u".uno:OpenTemplate"_ustr;
 constexpr OUString CMD_OPEN_REMOTE = u".uno:OpenRemote"_ustr;
 
@@ -295,6 +296,12 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         rPopupMenu->setCommand(sal_uInt16(nCount + 1), CMD_CLEAR_LIST);
         rPopupMenu->setHelpText(sal_uInt16(nCount + 1), FwkResId(STR_CLEAR_RECENT_FILES_HELP));
 
+        // Toggle current module only
+        rPopupMenu->insertItem(sal_uInt16(nCount + 2), FwkResId(STR_TOGGLE_CURRENT_MODULE), 0, -1);
+        rPopupMenu->checkItem(sal_uInt16(nCount + 2), bShowCurrentModuleOnly);
+        rPopupMenu->setCommand(sal_uInt16(nCount + 2), CMD_TOGGLE_CURRENTMODULE);
+        rPopupMenu->setHelpText(sal_uInt16(nCount + 2), FwkResId(STR_TOGGLE_CURRENT_MODULE_HELP));
+
         // Open remote menu entry
         if ( m_bShowToolbarEntries )
         {
@@ -387,6 +394,13 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
         dispatchCommand(
             u"vnd.org.libreoffice.recentdocs:ClearRecentFileList"_ustr,
             css::uno::Sequence< css::beans::PropertyValue >() );
+    }
+    if ( aCommand == CMD_TOGGLE_CURRENTMODULE )
+    {
+        bool bIsExclusive = officecfg::Office::Common::History::ShowCurrentModuleOnly::get();
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::History::ShowCurrentModuleOnly::set(!bIsExclusive, batch);
+        batch->commit();
     }
     else if ( aCommand == CMD_OPEN_REMOTE )
     {
