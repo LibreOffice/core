@@ -271,7 +271,7 @@ namespace svxform
             }
 
             // the font (only if we use the document's ref devices for rendering control text, otherwise, the
-            // default font of VCL controls is assumed to be fine)
+            // default font from application or standard style is assumed to be fine)
             if  (   useDocumentReferenceDevice( _eDocType )
                 &&  xPSI->hasPropertyByName( FM_PROP_FONT )
                 )
