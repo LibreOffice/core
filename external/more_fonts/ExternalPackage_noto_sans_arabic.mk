@@ -10,8 +10,8 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto_sans_arabic,font_noto_sans_arabic))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_sans_arabic,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	NotoSansArabic/full/ttf/NotoSansArabic-Bold.ttf \
-	NotoSansArabic/full/ttf/NotoSansArabic-Regular.ttf \
+	NotoSansArabic/hinted/ttf/NotoSansArabic-Bold.ttf \
+	NotoSansArabic/hinted/ttf/NotoSansArabic-Regular.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
