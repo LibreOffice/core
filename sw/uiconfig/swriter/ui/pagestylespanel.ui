@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore4">
@@ -49,6 +49,9 @@
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">numberbox</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="numberbox"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -63,6 +66,9 @@
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">bgselect</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="bgselect"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -74,6 +80,14 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
+            <accessibility>
+              <relation type="labelled-by" target="numberslabel"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="numberbox-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|numberbox|extended_tip">Select the page numbering format that you want to use for the current page style.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -88,6 +102,9 @@
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">layoutbox</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="layoutbox"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -105,6 +122,14 @@
               <item translatable="yes" context="pagestylespanel|liststorePageLayout">Only right</item>
               <item translatable="yes" context="pagestylespanel|liststorePageLayout">Only left</item>
             </items>
+            <accessibility>
+              <relation type="labelled-by" target="layoutlabel"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="layoutbox-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|layoutbox|extended_tip">Specify whether the current style should show odd pages, even pages, or both odd and even pages.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -119,6 +144,9 @@
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">columnbox</property>
             <property name="xalign">1</property>
+            <accessibility>
+              <relation type="label-for" target="columnbox"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -137,6 +165,14 @@
               <item translatable="yes" context="pagestylespanel|columnbox">Left</item>
               <item translatable="yes" context="pagestylespanel|columnbox">Right</item>
             </items>
+            <accessibility>
+              <relation type="labelled-by" target="columnlabel"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="columnbox-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|columnbox|extended_tip">Select the number of columns and the column layout for a page style. </property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -163,6 +199,7 @@
             <child internal-child="accessible">
               <object class="AtkObject" id="lbhatching-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="pagestylespanel|hatching|accessible_name">Background Hatching</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|lbhatching|extended_tip">Fills the page background with a hatching pattern.</property>
               </object>
             </child>
           </object>
@@ -188,6 +225,12 @@
             <child>
               <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="lbbitmap-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="pagestylepanel|lbbitmap|accessible_name">Background Image</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|lbbitmap|extended_tip">Select an image to use as a background.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -209,7 +252,8 @@
             </child>
             <child internal-child="accessible">
               <object class="AtkObject" id="lbcolor-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="pagestylespanel|background_color|accessible_name">Background Color</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="pagestylespanel|background_color|accessible_name">Color</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|lbcolor|extended_tip">Use the color picker to select a color.</property>
               </object>
             </child>
           </object>
@@ -233,7 +277,8 @@
             </child>
             <child internal-child="accessible">
               <object class="AtkObject" id="lbgradient-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="pagestylespanel|second_gradient_color">Second gradient color</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="pagestylespanel|second_gradient_color|accessible_name">Second gradient color</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|lbgradient|extended_tip">Use the color picker to select a second gradient color.</property>
               </object>
             </child>
           </object>
@@ -247,6 +292,14 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
+            <accessibility>
+              <relation type="labelled-by" target="backgroundlabel"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="bgselect-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pagestylespanel|bgselect|extended_tip">Select a style for background of the document.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>

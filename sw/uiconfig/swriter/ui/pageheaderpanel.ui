@@ -7,7 +7,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=2 n-rows=4 -->
+      <!-- n-columns=2 n-rows=5 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -25,7 +25,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
@@ -36,10 +36,13 @@
             <property name="label" translatable="yes" context="pageheaderpanel|spacing">Spacing:</property>
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">spacingpreset</property>
+            <accessibility>
+              <relation type="label-for" target="spacingpreset"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -50,10 +53,30 @@
             <property name="label" translatable="yes" context="pageheaderpanel|samecontent">Same Content:</property>
             <property name="use-underline">True</property>
             <property name="mnemonic-widget">samecontentLB</property>
+            <accessibility>
+              <relation type="label-for" target="samecontentLB"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="headermargin">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes" context="pageheaderpanel|margins">Margins:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">spacingpreset</property>
+            <accessibility>
+              <relation type="label-for" target="headermarginpreset"/>
+            </accessibility>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -62,19 +85,13 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <accessibility>
-              <relation type="labelled-by" target="headertoggle"/>
+              <relation type="labelled-by" target="headermargin"/>
             </accessibility>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="spacingpreset">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="headermarginpreset-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pageheaderpanel|headermarginpreset|extended_tip">Select a margin preset for the header.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -82,10 +99,18 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="samecontentLB">
+          <object class="GtkComboBoxText" id="spacingpreset">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
+            <accessibility>
+              <relation type="labelled-by" target="spacing"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="spacingpreset-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pageheaderpanel|spacingpreset|extended_tip">Enter the amount of space that you want to maintain between the bottom edge of the header and the top edge of the document text.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -93,27 +118,46 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="headertoggle">
-            <property name="label" translatable="yes" context="pageheaderpanel|headertoggle">Margins:</property>
+          <object class="GtkComboBoxText" id="samecontentLB">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="halign">end</property>
-            <property name="use-underline">True</property>
-            <property name="draw-indicator">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
             <accessibility>
-              <relation type="label-for" target="headermarginpreset"/>
+              <relation type="labelled-by" target="samecontent"/>
             </accessibility>
             <child internal-child="accessible">
-              <object class="AtkObject" id="headertoggle-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="PageHeaderPanel|headertoggle-atkobject">Enable header</property>
+              <object class="AtkObject" id="samecontentLB-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pageheaderpanel|samecontentLB|extended_tip">Choose which pages in the document or section show the same header content.</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="headertoggle">
+            <property name="label" translatable="yes" context="pageheaderpanel|headertoggle">Enable Header</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="halign">start</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="headertoggle-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="pageheaderpanel|headertoggle|extended_tip">Check the box to enable headers.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
             <property name="top-attach">0</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
