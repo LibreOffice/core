@@ -975,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     tools::Rectangle bottomX(13, 83, 37, 126);
     int bottomNonWhites = 0;
 
-    // Check that there is nothing outside the X recrangles
+    // Check that there is nothing outside the X rectangles
     for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
     {
         for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
