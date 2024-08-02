@@ -1116,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
     xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
     CPPUNIT_ASSERT(!bIsContentEmpty);
 
-    // Header has an anchoed object: IsContentEmpty is false.
+    // Header has an anchored object: IsContentEmpty is false.
     pWrtShell->SelAll();
     pWrtShell->DelRight();
     SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
