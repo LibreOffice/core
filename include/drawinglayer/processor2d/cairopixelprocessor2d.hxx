@@ -39,6 +39,7 @@ class PolyPolygonRGBAGradientPrimitive2D;
 class FillGraphicPrimitive2D;
 class PolyPolygonRGBAPrimitive2D;
 class BitmapAlphaPrimitive2D;
+class TextSimplePortionPrimitive2D;
 }
 
 namespace basegfx
@@ -57,6 +58,10 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 
     // cairo specific data
     cairo_t* mpRT;
+
+    // get text render config settings
+    bool mbRenderSimpleTextDirect;
+    bool mbRenderDecoratedTextDirect;
 
     // helpers for direct paints
     void paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -99,6 +104,12 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
                           double fTransparency = 0.0);
     void processBitmapAlphaPrimitive2D(
         const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D);
+    void processTextSimplePortionPrimitive2D(
+        const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+    void processTextDecoratedPortionPrimitive2D(
+        const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+    void renderTextSimpleOrDecoratedPortionPrimitive2D(
+        const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

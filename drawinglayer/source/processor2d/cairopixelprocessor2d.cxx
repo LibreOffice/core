@@ -39,12 +39,17 @@
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <vcl/vcllayout.hxx>
 #include <unordered_map>
 #include <dlfcn.h>
 
@@ -285,7 +290,7 @@ void checkAndDoPixelSnap(cairo_t* pRT,
 
     // with the comments above at CairoPathHelper we cannot do PixelSnap
     // at path construction time, so it needs to be done *after* the path
-    // data is added to the cairo context. ADvantage is that all general
+    // data is added to the cairo context. Advantage is that all general
     // path data can be buffered, though, but needs view-dependent manipulation
     // here after being added.
     // For now, just snap all points - no real need to identify hor/ver lines
@@ -807,6 +812,10 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
     , mpRT(nullptr)
+    , mbRenderSimpleTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
+    , mbRenderDecoratedTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
 {
     if (pTarget)
     {
@@ -2793,6 +2802,141 @@ void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
                      rBitmapAlphaPrimitive2D.getTransparency());
 }
 
+void CairoPixelProcessor2D::processTextSimplePortionPrimitive2D(
+    const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
+{
+    if (SAL_LIKELY(mbRenderSimpleTextDirect))
+    {
+        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
+    }
+    else
+    {
+        process(rCandidate);
+    }
+}
+
+void CairoPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
+    const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
+{
+    if (SAL_LIKELY(mbRenderDecoratedTextDirect))
+    {
+        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
+    }
+    else
+    {
+        process(rCandidate);
+    }
+}
+
+void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
+    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
+{
+    // decompose matrix to have global position and scale of text
+    const basegfx::B2DHomMatrix aGlobalFontTransform(
+        getViewInformation2D().getObjectToViewTransformation() * rTextCandidate.getTextTransform());
+    basegfx::B2DVector aGlobalFontScaling, aGlobalFontTranslate;
+    double fGlobalFontRotate, fGlobalFontShearX;
+    aGlobalFontTransform.decompose(aGlobalFontScaling, aGlobalFontTranslate, fGlobalFontRotate,
+                                   fGlobalFontShearX);
+
+    // decompose primitive-local matrix to get local font scaling
+    double fLocalFontRotate, fLocalFontShearX;
+    basegfx::B2DVector aLocalFontSize, aLocalFontTranslate;
+    rTextCandidate.getTextTransform().decompose(aLocalFontSize, aLocalFontTranslate,
+                                                fLocalFontRotate, fLocalFontShearX);
+
+    // Get the VCL font from existing processor tooling. Do not use
+    // rotation, for Cairo we can transform the whole text render and
+    // thus handle the xext in it's local coordinate system untransformed
+    vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
+        rTextCandidate.getFontAttribute(), aGlobalFontScaling.getX(), aGlobalFontScaling.getY(),
+        0.0, rTextCandidate.getLocale()));
+
+    if (aFont.GetFontSize().Height() <= 0)
+    {
+        // Don't draw fonts without height, error. use decompose as fallback
+        process(rTextCandidate);
+        return;
+    }
+
+    // set FillColor Attribute at Font
+    Color aFillColor(
+        maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
+    aFont.SetTransparent(rTextCandidate.getTextFillColor().IsTransparent());
+    if (rTextCandidate.getTextFillColor().IsTransparent())
+        aFillColor.SetAlpha(rTextCandidate.getTextFillColor().GetAlpha());
+    aFont.SetFillColor(aFillColor);
+
+    // create integer DXArray. As mentioned above we can act in the
+    // Text's local coordinate system without transformation at all
+    const ::std::vector<double>& rDXArray(rTextCandidate.getDXArray());
+    KernArray aDXArray;
+
+    if (!rDXArray.empty())
+    {
+        aDXArray.reserve(rDXArray.size());
+        for (auto const& elem : rDXArray)
+            aDXArray.push_back(basegfx::fround(elem));
+    }
+
+    // set parameters and paint text snippet
+    const basegfx::BColor aRGBFontColor(
+        maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+
+    // create a TextLayouter to access encapsulated VCL Text/Font related tooling
+    primitive2d::TextLayouterDevice aTextLayouter;
+    aTextLayouter.setFontAttribute(rTextCandidate.getFontAttribute(), aLocalFontSize.getX(),
+                                   aLocalFontSize.getY(), rTextCandidate.getLocale());
+    aTextLayouter.setTextColor(aRGBFontColor);
+
+    if (rTextCandidate.getFontAttribute().getRTL())
+    {
+        vcl::text::ComplexTextLayoutFlags nRTLLayoutMode(
+            aTextLayouter.getLayoutMode() & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+        nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                          | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+        aTextLayouter.setLayoutMode(nRTLLayoutMode);
+    }
+    else
+    {
+        // tdf#101686: This is LTR text, but the output device may have RTL state.
+        vcl::text::ComplexTextLayoutFlags nLTRLayoutMode(aTextLayouter.getLayoutMode());
+        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        aTextLayouter.setLayoutMode(nLTRLayoutMode);
+    }
+
+    // create SalLayout. No need for a position, as mentioned text can work
+    // without transformations, so start point is always 0,0
+    std::unique_ptr<SalLayout> pSalLayout(aTextLayouter.getSalLayout(
+        rTextCandidate.getText(), rTextCandidate.getTextPosition(), rTextCandidate.getTextLength(),
+        basegfx::B2DPoint(0.0, 0.0), aDXArray, rTextCandidate.getKashidaArray()));
+
+    if (!pSalLayout)
+    {
+        // got no layout, error. use decompose as fallback
+        process(rTextCandidate);
+        return;
+    }
+
+    // draw using Cairo, use existing tooling (this tunnels to
+    // CairoTextRender::ImplDrawTextLayout)
+    cairo_save(mpRT);
+    const basegfx::B2DHomMatrix aObjTransformWithoutScale(
+        basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fLocalFontShearX, fLocalFontRotate,
+                                                                aLocalFontTranslate));
+    const basegfx::B2DHomMatrix aFullTextTransform(
+        getViewInformation2D().getObjectToViewTransformation() * aObjTransformWithoutScale);
+
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, aFullTextTransform.a(), aFullTextTransform.b(),
+                      aFullTextTransform.c(), aFullTextTransform.d(), aFullTextTransform.e(),
+                      aFullTextTransform.f());
+    cairo_set_matrix(mpRT, &aMatrix);
+    pSalLayout->drawSalLayout(mpRT, aRGBFontColor, getViewInformation2D().getUseAntiAliasing());
+    cairo_restore(mpRT);
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -2919,6 +3063,18 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processBitmapAlphaPrimitive2D(
                 static_cast<const primitive2d::BitmapAlphaPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
+        {
+            processTextSimplePortionPrimitive2D(
+                static_cast<const primitive2d::TextSimplePortionPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D:
+        {
+            processTextDecoratedPortionPrimitive2D(
+                static_cast<const primitive2d::TextSimplePortionPrimitive2D&>(rCandidate));
             break;
         }
 

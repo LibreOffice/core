@@ -78,6 +78,7 @@ public:
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
+    virtual void DrawSalLayout(const GenericSalLayout& rLayout, void* pSurface, const basegfx::BColor& rTextColor, bool bAntiAliased) const override;
 
     virtual bool            ShouldDownscaleIconsAtSurface(double* pScaleOut) const override;
 

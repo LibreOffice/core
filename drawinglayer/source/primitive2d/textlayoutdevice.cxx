@@ -38,6 +38,8 @@
 #include <vcl/metric.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vcllayout.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -190,6 +192,21 @@ void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontA
     {
         mnFontScalingFixX = mnFontScalingFixY = 1.0;
     }
+}
+
+void TextLayouterDevice::setLayoutMode(vcl::text::ComplexTextLayoutFlags nTextLayoutMode)
+{
+    mrDevice.SetLayoutMode(nTextLayoutMode);
+}
+
+vcl::text::ComplexTextLayoutFlags TextLayouterDevice::getLayoutMode() const
+{
+    return mrDevice.GetLayoutMode();
+}
+
+void TextLayouterDevice::setTextColor(const basegfx::BColor& rColor)
+{
+    mrDevice.SetTextColor(Color(rColor));
 }
 
 double TextLayouterDevice::getOverlineOffset() const
@@ -346,6 +363,21 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     }
 
     return aRetval;
+}
+
+std::unique_ptr<SalLayout> TextLayouterDevice::getSalLayout(const OUString& rText,
+                                                            sal_uInt32 nIndex, sal_uInt32 nLength,
+                                                            const basegfx::B2DPoint& rStartPoint,
+                                                            const KernArray& rDXArray,
+                                                            std::span<const sal_Bool> pKashidaAry)
+{
+    const SalLayoutGlyphs* pGlyphs(
+        SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&mrDevice, rText, nIndex, nLength));
+    const Point aStartPoint(basegfx::fround<tools::Long>(rStartPoint.getX()),
+                            basegfx::fround<tools::Long>(rStartPoint.getY()));
+    KernArraySpan aKernArraySpan(rDXArray);
+    return mrDevice.ImplLayout(rText, nIndex, nLength, aStartPoint, 0, aKernArraySpan, pKashidaAry,
+                               SalLayoutFlags::NONE, nullptr, pGlyphs);
 }
 
 // helper methods for vcl font handling

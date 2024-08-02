@@ -240,10 +240,6 @@ static CairoFontsCache::CacheId makeCacheId(const GenericSalLayout& rLayout)
 
 void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
-    const LogicalFontInstance& rInstance = rLayout.GetFont();
-
-    const bool bSubpixelPositioning = rLayout.GetSubpixelPositioning();
-
     /*
      * It might be ideal to cache surface and cairo context between calls and
      * only destroy it when the drawable changes, but to do that we need to at
@@ -257,6 +253,15 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         return;
     }
     comphelper::ScopeGuard releaseContext([this, cr]() { releaseCairoContext(cr); });
+
+    // void CairoCommon::clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, m_aClipRegion); }
+    ImplDrawTextLayout(cr, mnTextColor, rLayout, &mrCairoCommon, rGraphics.getAntiAlias());
+}
+
+void CairoTextRender::ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, const GenericSalLayout& rLayout, CairoCommon* pCairoCommon, bool bAntiAlias)
+{
+    const LogicalFontInstance& rInstance = rLayout.GetFont();
+    const bool bSubpixelPositioning = rLayout.GetSubpixelPositioning();
 
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
@@ -342,13 +347,14 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     }
 #endif
 
-    clipRegion(cr);
+    if (nullptr != pCairoCommon)
+        pCairoCommon->clipRegion(cr);
 
     cairo_set_source_rgba(cr,
-        mnTextColor.GetRed()/255.0,
-        mnTextColor.GetGreen()/255.0,
-        mnTextColor.GetBlue()/255.0,
-        mnTextColor.GetAlpha()/255.0);
+        rTextColor.GetRed()/255.0,
+        rTextColor.GetGreen()/255.0,
+        rTextColor.GetBlue()/255.0,
+        rTextColor.GetAlpha()/255.0);
 
     int nRatio = nWidth * 10 / nHeight;
 
@@ -381,9 +387,9 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         ApplyFont(temp_cr, aId, nHeight, nHeight, 0, rLayout);
 
         cairo_set_source_rgb(temp_cr,
-            mnTextColor.GetRed()/255.0,
-            mnTextColor.GetGreen()/255.0,
-            mnTextColor.GetBlue()/255.0);
+            rTextColor.GetRed()/255.0,
+            rTextColor.GetGreen()/255.0,
+            rTextColor.GetBlue()/255.0);
 
         cairo_show_glyphs(temp_cr, &glyph, 1);
         cairo_destroy(temp_cr);
@@ -417,7 +423,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 #endif
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+    const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !bAntiAlias;
     static bool bAllowDefaultHinting = getenv("SAL_ALLOW_DEFAULT_HINTING") != nullptr;
 
     const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
@@ -503,11 +509,6 @@ cairo_t* CairoTextRender::getCairoContext()
     // Note that cairo_set_antialias (bAntiAlias property) doesn't affect cairo
     // text rendering.  That's affected by cairo_font_options_set_antialias instead.
     return mrCairoCommon.getCairoContext(/*bXorModeAllowed*/false, /*bAntiAlias*/true);
-}
-
-void CairoTextRender::clipRegion(cairo_t* cr)
-{
-    mrCairoCommon.clipRegion(cr);
 }
 
 void CairoTextRender::releaseCairoContext(cairo_t* cr)

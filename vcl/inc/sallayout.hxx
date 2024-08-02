@@ -136,6 +136,8 @@ public:
 
     const SalLayoutGlyphsImpl& GlyphsImpl() const { return m_GlyphItems; }
 
+    virtual void drawSalLayout(void* /*pSurface*/, const basegfx::BColor& /*rTextColor*/, bool /*bAntiAliased*/) const override;
+
 private:
     // for glyph+font+script fallback
     SAL_DLLPRIVATE void MoveGlyph(int nStart, double nNewXPos);

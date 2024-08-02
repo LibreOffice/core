@@ -32,6 +32,7 @@
 class LogicalFontInstance;
 namespace vcl::text { class ImplLayoutArgs; }
 namespace vcl::font { class PhysicalFontFace; }
+namespace basegfx { class BColor; }
 class SalGraphics;
 class GlyphItem;
 
@@ -119,6 +120,8 @@ public:
     static tools::Rectangle BoundRect2Rectangle(basegfx::B2DRectangle&);
 
     virtual SalLayoutGlyphs GetGlyphs() const;
+
+    virtual void drawSalLayout(void* /*pSurface*/, const basegfx::BColor& /*rTextColor*/, bool /*bAntiAliased*/) const {}
 
 protected:
     // used by layout engines

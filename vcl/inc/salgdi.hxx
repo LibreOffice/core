@@ -162,6 +162,7 @@ public:
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) = 0;
     virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;
+    virtual void DrawSalLayout(const GenericSalLayout&, void*, const basegfx::BColor&, bool ) const {}
 
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;
 

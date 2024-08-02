@@ -69,6 +69,16 @@ void SvpSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     m_aTextRenderImpl.DrawTextLayout(rLayout, *this);
 }
 
+void SvpSalGraphics::DrawSalLayout(const GenericSalLayout& rLayout, void* pSurface, const basegfx::BColor& rTextColor, bool bAntiAliased) const
+{
+    CairoTextRender::ImplDrawTextLayout(
+        static_cast<cairo_t*>(pSurface),
+        Color(rTextColor),
+        rLayout,
+        nullptr,
+        bAntiAliased);
+}
+
 void SvpSalGraphics::SetTextColor( Color nColor )
 {
     m_aTextRenderImpl.SetTextColor(nColor);

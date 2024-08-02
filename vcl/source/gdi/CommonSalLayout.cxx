@@ -1029,4 +1029,9 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const
     return rNextGlyph->IsSafeToInsertKashida();
 }
 
+void GenericSalLayout::drawSalLayout(void* pSurface, const basegfx::BColor& rTextColor, bool bAntiAliased) const
+{
+    Application::GetDefaultDevice()->GetGraphics()->DrawSalLayout(*this, pSurface, rTextColor, bAntiAliased);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

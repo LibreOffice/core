@@ -34,10 +34,13 @@ private:
 protected:
     cairo_t*                getCairoContext();
     void                    releaseCairoContext(cairo_t* cr);
-    void                    clipRegion(cairo_t* cr);
 
 public:
-    virtual void            DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
+    // helper to call DrawTextLayout with already setup cairo_t context,
+    // so no CairoCommon is needed.
+    static void ImplDrawTextLayout(cairo_t* cr, const Color& rTextColor, const GenericSalLayout& rLayout, CairoCommon* pCairoCommon, bool bAntiAlias);
+
+    virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
     CairoTextRender(CairoCommon& rCairoCommon);
     virtual ~CairoTextRender();
 };
