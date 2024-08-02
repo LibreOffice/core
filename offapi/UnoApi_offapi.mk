@@ -1898,6 +1898,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XToolkitRobot \
 	XTopWindow \
 	XTopWindow2 \
+	XTopWindow3 \
 	XTopWindowListener \
 	XUnitConversion \
 	XUnoControlContainer \
