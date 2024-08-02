@@ -167,7 +167,7 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
     // Execute dispatch asynchronously
     ExecuteInfo* pExecuteInfo = new ExecuteInfo;
     pExecuteInfo->xDispatch     = xDispatch;
-    pExecuteInfo->aTargetURL    = aTargetURL;
+    pExecuteInfo->aTargetURL    = std::move(aTargetURL);
     // Add key modifier to argument list
     pExecuteInfo->aArgs = { comphelper::makePropertyValue(u"KeyModifier"_ustr, KeyModifier) };
 

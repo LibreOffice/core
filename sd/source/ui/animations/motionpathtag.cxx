@@ -527,12 +527,12 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                     if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
                     {
-                        pDragMethod = new PathDragMove( mrView, xTag, aDragPoly );
+                        pDragMethod = new PathDragMove( mrView, xTag, std::move(aDragPoly) );
                         pHdl->SetPos( aMDPos );
                     }
                     else if( pHdl->GetKind() == SdrHdlKind::Poly )
                     {
-                        pDragMethod = new PathDragObjOwn( mrView, aDragPoly );
+                        pDragMethod = new PathDragObjOwn( mrView, std::move(aDragPoly) );
                     }
                     else
                     {

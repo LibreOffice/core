@@ -231,7 +231,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
     {
         if ( _pErrorInfo )
         {
-            *_pErrorInfo = aSQLError;
+            *_pErrorInfo = std::move(aSQLError);
         }
         else
         {

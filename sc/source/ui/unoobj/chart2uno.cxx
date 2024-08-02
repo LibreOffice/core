@@ -2770,7 +2770,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
 
         ScRefTokenHelper::getTokenFromRange(m_pDocument, pToken, rRange);
         sal_uInt32 nOrigPos = (*m_oRangeIndices)[i];
-        m_aTokens[nOrigPos] = pToken;
+        m_aTokens[nOrigPos] = std::move(pToken);
     }
 
     RefChanged();

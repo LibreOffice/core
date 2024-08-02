@@ -8760,7 +8760,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             aValues.realloc(aValues.getLength() + 1);
                             propertyVal.Name = "Title";
                             propertyVal.Value <<= rResult;
-                            aValues.getArray()[aValues.getLength() - 1] = propertyVal;
+                            aValues.getArray()[aValues.getLength() - 1] = std::move(propertyVal);
                         }
                         xFieldProperties->setPropertyValue(u"Fields"_ustr,
                                 uno::Any(aValues));

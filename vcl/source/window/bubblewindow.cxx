@@ -72,7 +72,7 @@ void BubbleWindow::Resize()
     vcl::Region aTriRegion( maTriPoly );
 
     aRegion.Union( aTriRegion);
-    maBounds = aRegion;
+    maBounds = std::move(aRegion);
 
     SetWindowRegionPixel( maBounds );
 }

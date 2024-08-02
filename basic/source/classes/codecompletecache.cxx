@@ -146,7 +146,7 @@ void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUS
     {
         CodeCompleteVarTypes aTypes = aVarScopes[ sProcName ];
         aTypes.emplace( sVarName, sVarType );
-        aVarScopes[ sProcName ] = aTypes;
+        aVarScopes[ sProcName ] = std::move(aTypes);
     }
 }
 

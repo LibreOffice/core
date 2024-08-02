@@ -282,7 +282,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
                 basegfx::B2DPolygon aSector;
                 aSector.append(aRange.getCenter());
                 aSector.append(aCircPolygon);
-                aCircPolygon = aSector;
+                aCircPolygon = std::move(aSector);
             }
 
             // close

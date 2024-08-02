@@ -1294,7 +1294,7 @@ void Printer::SetPaper( Paper ePaper )
     {
         ImplUpdateJobSetupPaper( aJobSetup );
         mbNewJobSetup = true;
-        maJobSetup = aJobSetup;
+        maJobSetup = std::move(aJobSetup);
         ImplUpdatePageData();
         ImplUpdateFontList();
     }
