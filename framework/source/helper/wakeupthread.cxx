@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <osl/thread.hxx>
 #include <salhelper/thread.hxx>
+#include <comphelper/lok.hxx>
 #include <condition_variable>
 #include <chrono>
 #include <vector>
@@ -62,10 +63,11 @@ public:
 
     void execute() override
     {
+        bool bLOK = comphelper::LibreOfficeKit::isActive();
         while (true)
         {
             std::unique_lock g(getMutex());
-            condition.wait_for(g, 25ms, [this] { return terminate; });
+            condition.wait_for(g, bLOK ? 200ms : 25ms, [this] { return terminate; });
             if (terminate || updatables.empty())
                 break;
 
