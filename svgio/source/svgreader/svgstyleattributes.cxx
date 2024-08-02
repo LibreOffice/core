@@ -610,7 +610,7 @@ namespace svgio::svgreader
 
             double fFillOpacity(getFillOpacity().solve(mrOwner));
 
-            if(!basegfx::fTools::more(fFillOpacity, 0.0))
+            if (fFillOpacity <= 0.0 || basegfx::fTools::equalZero(fFillOpacity))
                 return;
 
             drawinglayer::primitive2d::Primitive2DContainer aNewFill;
@@ -680,13 +680,13 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer aNewStroke;
             const double fStrokeOpacity(getStrokeOpacity().solve(mrOwner));
 
-            if(!basegfx::fTools::more(fStrokeOpacity, 0.0))
+            if (fStrokeOpacity <= 0.0 || basegfx::fTools::equalZero(fStrokeOpacity))
                 return;
 
             // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
             const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
-            if (!basegfx::fTools::more(fStrokeWidth, 0.0))
+            if (fStrokeWidth <= 0.0 || basegfx::fTools::equalZero(fStrokeWidth))
                 return;
 
             if (fStrokeWidth > std::numeric_limits<sal_Int32>::max())

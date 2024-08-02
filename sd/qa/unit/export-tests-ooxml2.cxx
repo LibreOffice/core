@@ -1039,7 +1039,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
             = model::gradient::getColorStopsFromUno(aFillGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-        CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
         CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(aColorStops[1].getStopColor()));

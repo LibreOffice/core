@@ -224,7 +224,7 @@ namespace drawinglayer::processor3d
             mfLightPlaneScalar = maLightNormal.scalar(maShadowPlaneNormal);
 
             // use only when scalar is > 0.0, so the light is in front of the object
-            if(!basegfx::fTools::more(mfLightPlaneScalar, 0.0))
+            if(mfLightPlaneScalar <= 0.0 || basegfx::fTools::equalZero(mfLightPlaneScalar))
                 return;
 
             // prepare buffered WorldToEye and EyeToView

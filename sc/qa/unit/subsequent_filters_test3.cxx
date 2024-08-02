@@ -1681,7 +1681,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
         const basegfx::BColorStops& rColorStops(rGradientItem.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
-        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops[0].getStopOffset());
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops[1].getStopColor()));
@@ -1695,7 +1695,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
         const basegfx::BColorStops& rColorStops2(rGradientItem2.GetGradientValue().GetColorStops());
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops2.size());
-        CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[0].getStopOffset(), 0.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, rColorStops2[0].getStopOffset());
         CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops2[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[1].getStopOffset(), 1.0));
         CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops2[1].getStopColor()));

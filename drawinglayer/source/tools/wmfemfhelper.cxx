@@ -1179,7 +1179,7 @@ namespace wmfemfhelper
                 fTextWidth = rDXArray.back();
             }
 
-            if(basegfx::fTools::more(fTextWidth, 0.0))
+            if (fTextWidth > 0.0 && !basegfx::fTools::equalZero(fTextWidth))
             {
                 // build text range
                 const basegfx::B2DRange aTextRange(

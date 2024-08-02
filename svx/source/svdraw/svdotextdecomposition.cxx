@@ -1455,7 +1455,6 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 // timing generators
 #define ENDLESS_LOOP    (0xffffffff)
 #define ENDLESS_TIME    (double(0xffffffff))
-#define PIXEL_DPI       (96.0)
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
 {
@@ -1639,12 +1638,12 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
         fAnimationDelay = 50.0;
     }
 
-    if(basegfx::fTools::less(fSingleStepWidth, 0.0))
+    if (fSingleStepWidth < 0.0)
     {
-        // data is in pixels, convert to logic. Imply PIXEL_DPI dpi.
+        // data is in pixels, convert to logic. Imply 96 dpi.
         // It makes no sense to keep the view-transformation centered
         // definitions, so get rid of them here.
-        fSingleStepWidth = (-fSingleStepWidth * (2540.0 / PIXEL_DPI));
+        fSingleStepWidth = o3tl::convert(-fSingleStepWidth, o3tl::Length::px, o3tl::Length::mm100);
     }
 
     if(basegfx::fTools::equalZero(fSingleStepWidth))

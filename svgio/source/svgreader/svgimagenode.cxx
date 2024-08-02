@@ -271,12 +271,12 @@ namespace svgio::svgreader
                 // calculate centered unit size
                 const double fAspectRatio = static_cast<double>(aBitmapEx.GetSizePixel().Width()) / static_cast<double>(aBitmapEx.GetSizePixel().Height());
 
-                if(basegfx::fTools::equal(fAspectRatio, 0.0))
+                if (basegfx::fTools::equalZero(fAspectRatio))
                 {
                     // use unit range
                     aViewBox = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
                 }
-                else if(basegfx::fTools::more(fAspectRatio, 0.0))
+                else if (fAspectRatio > 0.0)
                 {
                     // width bigger height
                     const double fHalfHeight((1.0 / fAspectRatio) * 0.5);

@@ -147,7 +147,7 @@ namespace svgio::svgreader
                         nIndex,
                         nLength));
 
-                if(basegfx::fTools::more(fSnippetWidth, 0.0))
+                if (fSnippetWidth > 0.0 && !basegfx::fTools::equalZero(fSnippetWidth))
                 {
                     const OUString aText(getSource().getText());
                     const std::u16string_view aTrimmedChars(o3tl::trim(aText.subView(nIndex, nLength)));

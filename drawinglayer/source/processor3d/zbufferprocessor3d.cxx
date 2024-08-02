@@ -119,14 +119,14 @@ private:
                 mrProcessor.getGeoTexSvx()->modifyBColor(aTexCoor, rColor, fOpacity);
             }
 
-            if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx())
+            if (fOpacity > 0.0 && !basegfx::fTools::equalZero(fOpacity) && mrProcessor.getTransparenceGeoTexSvx())
             {
                 // calc opacity. Object has a 2nd texture, a transparence texture
                 mrProcessor.getTransparenceGeoTexSvx()->modifyOpacity(aTexCoor, fOpacity);
             }
         }
 
-        if(basegfx::fTools::more(fOpacity, 0.0))
+        if (fOpacity > 0.0 && !basegfx::fTools::equalZero(fOpacity))
         {
             if(mrProcessor.getGeoTexSvx())
             {

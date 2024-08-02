@@ -701,7 +701,7 @@ namespace basegfx::utils
                         }
                     }
 
-                    if(fTools::more(fParamTestOnCurr, 0.0) && fTools::less(fParamTestOnCurr, 1.0))
+                    if(fParamTestOnCurr > 0.0 && fTools::less(fParamTestOnCurr, 1.0))
                     {
                         return true;
                     }

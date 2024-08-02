@@ -540,7 +540,7 @@ namespace basegfx::utils
                     fLength = getLength(rCandidate);
                 }
 
-                if(fTools::less(fDistance, 0.0))
+                if (fDistance < 0.0)
                 {
                     // handle fDistance < 0.0
                     if(rCandidate.isClosed())
@@ -681,7 +681,7 @@ namespace basegfx::utils
                 }
 
                 // test and correct fFrom
-                if(fTools::less(fFrom, 0.0))
+                if (fFrom < 0.0)
                 {
                     fFrom = 0.0;
                 }
@@ -1820,7 +1820,7 @@ namespace basegfx::utils
 
             // truncate fStart, fEnd to a range of [0.0 .. 2PI[ where 2PI
             // falls back to 0.0 to ensure a unique definition
-            if(fTools::less(fStart, 0.0))
+            if(fStart < 0.0)
             {
                 fStart = 0.0;
             }
@@ -1830,7 +1830,7 @@ namespace basegfx::utils
                 fStart = 0.0;
             }
 
-            if(fTools::less(fEnd, 0.0))
+            if(fEnd < 0.0)
             {
                 fEnd = 0.0;
             }

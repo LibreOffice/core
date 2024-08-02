@@ -631,7 +631,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
     basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(Color(0x5f497a), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[1].getStopColor()));

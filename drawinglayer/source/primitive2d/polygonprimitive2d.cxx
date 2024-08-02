@@ -46,7 +46,7 @@ void implGrowHairline(basegfx::B2DRange& rRange,
             rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
         const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
-        if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+        if (fDiscreteHalfLineWidth > 0.0)
         {
             rRange.grow(fDiscreteHalfLineWidth);
         }
@@ -282,7 +282,7 @@ PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
         const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
-        if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+        if (fDiscreteHalfLineWidth > 0.0)
         {
             aRetval.grow(fDiscreteHalfLineWidth);
         }
@@ -583,7 +583,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
         const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
-        if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
+        if (fDiscreteHalfLineWidth > 0.0)
         {
             aHairlineRange.grow(fDiscreteHalfLineWidth);
         }

@@ -839,7 +839,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     const basegfx::BColorStops& rColorStops(aGradient.GetColorStops());
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(rColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(rColorStops[1].getStopColor()));

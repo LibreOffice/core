@@ -662,7 +662,7 @@ namespace drawinglayer::primitive2d
                     else
                     {
                         // dependent of transparency used create the needed bitmap primitive
-                        if(basegfx::fTools::equal(fTransparency, 0.0))
+                        if (basegfx::fTools::equalZero(fTransparency))
                         {
                             rContainer.append(
                                 new BitmapPrimitive2D(

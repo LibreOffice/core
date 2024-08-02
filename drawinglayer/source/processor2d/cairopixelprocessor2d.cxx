@@ -2035,7 +2035,7 @@ bool CairoPixelProcessor2D::processFillGradientPrimitive2D_isCompletelyBordered(
 
     // check if completely 'bordered out'. This can be the case for all
     // types of gradients
-    if (basegfx::fTools::less(fBorder, 1.0) && basegfx::fTools::moreOrEqual(fBorder, 0.0))
+    if (basegfx::fTools::less(fBorder, 1.0) && fBorder >= 0.0)
     {
         // no, we have visible content besides border
         return false;

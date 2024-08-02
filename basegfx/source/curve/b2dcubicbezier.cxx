@@ -790,23 +790,8 @@ namespace basegfx
     {
         B2DCubicBezier aRetval;
 
-        if(fTools::more(fStart, 1.0))
-        {
-            fStart = 1.0;
-        }
-        else if(fTools::less(fStart, 0.0))
-        {
-            fStart = 0.0;
-        }
-
-        if(fTools::more(fEnd, 1.0))
-        {
-            fEnd = 1.0;
-        }
-        else if(fTools::less(fEnd, 0.0))
-        {
-            fEnd = 0.0;
-        }
+        fStart = std::clamp(fStart, 0.0, 1.0);
+        fEnd = std::clamp(fEnd, 0.0, 1.0);
 
         if(fEnd <= fStart)
         {

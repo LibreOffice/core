@@ -1160,8 +1160,8 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     }
 
     // check for basegfx::B2DLineJoin::NONE to react accordingly
-    const bool bNoJoin(
-        (basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(fLineWidth, 0.0)));
+    const bool bNoJoin(basegfx::B2DLineJoin::NONE == eLineJoin && fLineWidth > 0.0
+                       && !basegfx::fTools::equalZero(fLineWidth));
 
     if (pSystemDependentData_CairoPath)
     {

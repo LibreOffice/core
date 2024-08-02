@@ -777,7 +777,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(Color(0xc0504d), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(Color(0xd99594), Color(aColorStops[1].getStopColor()));
@@ -791,7 +791,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(aColorStops[1].getStopColor()));

@@ -1262,7 +1262,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.39000000000000001));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[1].getStopColor()));
@@ -1525,7 +1525,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientAxial)
         = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[1].getStopColor()));

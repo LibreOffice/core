@@ -639,7 +639,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
     const basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(Color(0x404040), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.070000000000000007));
     CPPUNIT_ASSERT_EQUAL(Color(0x404040), Color(aColorStops[1].getStopColor()));
@@ -683,7 +683,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
 
     // MCGR: Use the whole completely imported transparency gradient to check for correctness
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aColorStops[0].getStopOffset());
     CPPUNIT_ASSERT_EQUAL(Color(0x4d4d4d), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(Color(0x333333), Color(aColorStops[1].getStopColor()));

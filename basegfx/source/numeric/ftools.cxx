@@ -105,9 +105,7 @@ namespace basegfx
             return 0.0;
         }
 
-        const bool bNegative(fTools::less(v, 0.0));
-
-        if(bNegative)
+        if(v < 0.0)
         {
             if(fTools::moreOrEqual(v, -fRange))
             {

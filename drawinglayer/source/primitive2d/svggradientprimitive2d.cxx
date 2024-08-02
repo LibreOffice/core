@@ -79,7 +79,7 @@ namespace drawinglayer::primitive2d
             const SvgGradientEntry& rSingleEntry(rEntries[nCount - 1]);
             const double fOpacity(rSingleEntry.getOpacity());
 
-            if (basegfx::fTools::lessOrEqual(fOpacity, 0.0))
+            if (fOpacity <= 0.0 || basegfx::fTools::equalZero(fOpacity))
             {
                 // completely opaque, done
                 return nullptr;

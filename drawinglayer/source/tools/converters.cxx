@@ -322,7 +322,7 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
         const double fWidth(aRange.getWidth());
         const double fHeight(aRange.getHeight());
 
-        if (!(basegfx::fTools::more(fWidth, 0.0) && basegfx::fTools::more(fHeight, 0.0)))
+        if (fWidth <= 0.0 || fHeight <= 0.0 || basegfx::fTools::equalZero(fWidth) || basegfx::fTools::equalZero(fHeight))
             return BitmapEx();
 
         if (0 == DPI_X)

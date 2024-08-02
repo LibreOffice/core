@@ -71,7 +71,7 @@ namespace
     {
         rOuterPolyPolygon = rPolygon;
 
-        if(!basegfx::fTools::more(fOffset, 0.0))
+        if (fOffset <= 0.0 || basegfx::fTools::equalZero(fOffset))
             return;
 
         if(bCharacterMode)

@@ -1484,8 +1484,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95970)
     CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column1,  1095.3035265135941));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column2,  5523.4525711162969));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column3,  672.04166666666663));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column1,  0.0));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column2,  0.0));
+    CPPUNIT_ASSERT_EQUAL(0.0, aTransform.Line3.Column1);
+    CPPUNIT_ASSERT_EQUAL(0.0, aTransform.Line3.Column2);
     CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column3,  1.0));
 }
 

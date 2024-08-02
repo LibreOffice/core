@@ -1034,7 +1034,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                 const Color& rMatColor
                     = pNext->GetProperties().GetItem(XATTR_FILLCOLOR).GetColorValue();
                 Color aOldMatColor(rMatColor);
-                if (basegfx::fTools::more(fDiffusion, 0.0)
+                if (fDiffusion > 0.0 && !basegfx::fTools::equalZero(fDiffusion)
                     && !basegfx::fTools::equal(fDiffusion, 1.0))
                 {
                     // Occurs e.g. with MS surface preset 'Metal'.
