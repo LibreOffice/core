@@ -3137,6 +3137,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf157829RTL)
                 u"English עברית"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf162314)
+{
+    // Regression test for bidi portion line breaking where the portion layout ends with underflow,
+    // but the bidi portion should not be truncated.
+    createSwDoc("tdf162314.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+                u"Aa aa aaaa ﷽ "_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]"_ostr, "portion"_ostr,
+                u"aaaa"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
