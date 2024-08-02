@@ -186,7 +186,7 @@ public:
     SwContentFrame* FindContentFrame(const SwRootFrame& rLayout) const
     {
         SwContentFrame* pContentFrame = nullptr;
-        const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::FindContentFrameHint(pContentFrame, rLayout));
+        CallSwClientNotify(sw::FindContentFrameHint(pContentFrame, rLayout));
         return pContentFrame;
     }
     void CollectTextTOXMarksForLayout(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout) const
