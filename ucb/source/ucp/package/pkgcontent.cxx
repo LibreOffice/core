@@ -1585,7 +1585,7 @@ void Content::insert(
     if ( bNewId )
     {
         m_xIdentifier = new ::ucbhelper::ContentIdentifier( aNewURL );
-        m_aUri = aNewUri;
+        m_aUri = std::move(aNewUri);
     }
 
     if ( !storeData( xStream ) )

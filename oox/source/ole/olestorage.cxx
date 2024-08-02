@@ -318,7 +318,7 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             if( xSubStorage )
                 xSubStorage->copyStorageToStorage( *xTempStorage );
             // return the temp storage to caller
-            xSubStorage = xTempStorage;
+            xSubStorage = std::move(xTempStorage);
         }
         catch(const Exception& )
         {

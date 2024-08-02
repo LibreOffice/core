@@ -369,7 +369,8 @@ void loadDiagram( ShapePtr const & pShape,
         if (!rLayoutPath.isEmpty())
         {
             rtl::Reference< core::FragmentHandler > xRefLayout(
-                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath,
+                                                      std::move(pLayout) ));
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefLayout),

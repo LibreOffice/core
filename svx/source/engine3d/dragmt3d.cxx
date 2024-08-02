@@ -703,7 +703,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 aNewTrans *= rCandidate.maInvDisplayTransform;
 
                 // ...and apply
-                rCandidate.maTransform = aNewTrans;
+                rCandidate.maTransform = std::move(aNewTrans);
 
                 if(mbMoveFull)
                 {

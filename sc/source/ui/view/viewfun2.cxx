@@ -1253,7 +1253,8 @@ void ScViewFunc::MergeCells( bool bApi, bool bDoContents, bool bCenter,
 
     bool bEmptyMergedCells = officecfg::Office::Calc::Compatibility::MergeCells::EmptyMergedCells::get();
 
-    auto doMerge = [this, pDocSh, aMergeOption, bApi, nStartCol, nStartRow, aMarkRange]
+    auto doMerge = [this, pDocSh, aMergeOption=std::move(aMergeOption),
+                    bApi, nStartCol, nStartRow, aMarkRange]
         (bool bNowDoContents, bool bNowEmptyMergedCells)
     {
         if (pDocSh->GetDocFunc().MergeCells(aMergeOption, bNowDoContents, true/*bRecord*/,

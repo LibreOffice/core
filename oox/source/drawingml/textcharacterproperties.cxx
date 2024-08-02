@@ -132,7 +132,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
             //            then this is contoured text in LO.
             if (nLineTransparency < aColor.getTransparency()
                 || (bContoured = aColor.getColor(rFilter.getGraphicHelper()) == COL_WHITE))
-                aColor = aLineColor;
+                aColor = std::move(aLineColor);
         }
         rPropMap.setProperty(PROP_CharColor, aColor.getColor(rFilter.getGraphicHelper()));
 

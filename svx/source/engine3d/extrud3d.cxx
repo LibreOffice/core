@@ -176,7 +176,7 @@ rtl::Reference<SdrAttrObj> E3dExtrudeObj::GetBreakObj()
 
     if(aFrontSide.count())
     {
-        aBackSide = aFrontSide;
+        aBackSide = std::move(aFrontSide);
 
         if(GetExtrudeDepth())
         {

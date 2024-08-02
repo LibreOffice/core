@@ -1364,7 +1364,7 @@ SwPasteContext::~SwPasteContext()
             return;
 
         // Invoke the listeners.
-        uno::Sequence<beans::PropertyValue> aEvent{ aPropertyValue };
+        uno::Sequence<beans::PropertyValue> aEvent{ std::move(aPropertyValue) };
         m_rWrtShell.GetPasteListeners().notifyEach( &css::text::XPasteListener::notifyPasteEvent, aEvent );
     }
     catch (const uno::Exception& rException)

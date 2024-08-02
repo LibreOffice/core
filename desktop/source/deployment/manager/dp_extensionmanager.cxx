@@ -264,7 +264,7 @@ void ExtensionManager::addExtensionsToMap(
         {
             std::vector<Reference<css::deployment::XPackage> > vec(3);
             vec[index] = xExtension;
-            mapExt[id] = vec;
+            mapExt[id] = std::move(vec);
         }
         else
         {

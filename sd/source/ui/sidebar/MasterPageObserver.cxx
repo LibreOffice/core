@@ -144,7 +144,7 @@ void MasterPageObserver::Implementation::RegisterDocument (
     }
 
     bool bAlreadyExists = maUsedMasterPages.find(&rDocument) != maUsedMasterPages.end();
-    maUsedMasterPages[&rDocument] = aMasterPageSet;
+    maUsedMasterPages[&rDocument] = std::move(aMasterPageSet);
 
     if (!bAlreadyExists)
         StartListening (rDocument);
@@ -280,7 +280,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     }
 
     // Store the new list of master pages.
-    aOldMasterPagesDescriptor->second = aCurrentMasterPages;
+    aOldMasterPagesDescriptor->second = std::move(aCurrentMasterPages);
 }
 
 void MasterPageObserver::Implementation::SendEvent (

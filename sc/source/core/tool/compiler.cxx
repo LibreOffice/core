@@ -5083,7 +5083,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         if( ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, aTokenSeq ) )
         {
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
-            std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aTokenArray ));
+            std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( std::move(aTokenArray) ));
             // coverity[escape : FALSE] - ownership of pNew is retained by caller, so pArr remains valid
             pArr = pNew.get();
             maArrIterator = FormulaTokenArrayPlainIterator(*pArr);

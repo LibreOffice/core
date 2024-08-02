@@ -250,7 +250,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
                 *pEnd = aRet.startOffset[ 0 ];
                 *pStart = aRet.endOffset[ 0 ];
                 if( pRes )
-                    *pRes = aRet;
+                    *pRes = std::move(aRet);
             }
         }
     }

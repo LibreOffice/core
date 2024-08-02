@@ -453,7 +453,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
         std::unique_ptr<vcl::pdf::PDFiumSignature> pSignature = pPdfDocument->getSignature(i);
         std::vector<std::pair<size_t, size_t>> aByteRanges;
         GetByteRangesFromPDF(pSignature, aByteRanges);
-        aSignatures[i] = Signature{ std::move(pSignature), aByteRanges };
+        aSignatures[i] = Signature{ std::move(pSignature), std::move(aByteRanges) };
     }
 
     std::set<unsigned int> aSignatureEOFs;

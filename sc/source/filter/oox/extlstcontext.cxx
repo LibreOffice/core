@@ -80,7 +80,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
             xRule->importCfvo( rAttribs );
             xRule->getModel().mbIsLower = mbFirstEntry;
             mbFirstEntry = false;
-            mpRule = xRule;
+            mpRule = std::move(xRule);
             break;
         }
         default:

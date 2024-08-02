@@ -99,7 +99,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                     bMaybeFile = rMaybeFileHdl.Call(&aFilePath);
                 }
                 if (!bMaybeFile)
-                    aAbsURIRef = aNonFileURIRef;
+                    aAbsURIRef = std::move(aNonFileURIRef);
             }
         }
     }

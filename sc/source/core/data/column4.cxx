@@ -389,7 +389,7 @@ void ScColumn::duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnB
         {
             auto pNewSparkline = std::make_shared<sc::Sparkline>(aCurrentPosition.Col(), aCurrentPosition.Row(), pDuplicatedGroup);
             pNewSparkline->setInputRange(pSparkline->getInputRange());
-            aSparklines[i] = new sc::SparklineCell(pNewSparkline);
+            aSparklines[i] = new sc::SparklineCell(std::move(pNewSparkline));
             aCurrentPosition.IncRow();
         }
 

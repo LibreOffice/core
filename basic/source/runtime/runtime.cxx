@@ -1816,7 +1816,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
             if( refObjVal.is() )
             {
-                refVal = refObjVal;
+                refVal = std::move(refObjVal);
             }
             else if( !(eValType & SbxARRAY) )
             {

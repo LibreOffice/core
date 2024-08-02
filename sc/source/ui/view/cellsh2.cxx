@@ -814,7 +814,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             auto xDoc = o3tl::make_shared<ScDocument>();
             xDoc->InsertTab(0, u"test"_ustr);
             ScDocument& rDoc = GetViewData().GetDocument();
-            ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
+            ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), std::move(xDoc), &rDoc);
             if (aDialog.run() == RET_OK)
             {
                 aDialog.import(rDoc);

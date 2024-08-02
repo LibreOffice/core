@@ -76,7 +76,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
         {
             tools::SvRef<SvMetaType> xT(new SvMetaType() );
             xT->SetRef( GetType() );
-            aType = xT;
+            aType = std::move(xT);
             bOk = aType->ReadMethodArgs( rBase, rInStm );
         }
         if( bOk )
