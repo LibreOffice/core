@@ -1297,6 +1297,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             nStyle |= WindowBorderStyle::NONATIVEBORDER;
             pVclPeer->SetBorderStyle(nStyle);
 
+            // KEEP IN SYNC WITH ControlCharacterDialog::translatePropertiesToItems
             AllSettings aAllSettings = pVclPeer->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
             aStyleSettings.SetStandardStyles();

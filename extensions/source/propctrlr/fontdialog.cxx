@@ -221,7 +221,17 @@ namespace pcr
             OFontPropertyExtractor aPropExtractor(_rxModel);
 
             // some items, which may be in default state, have to be filled with non-void information
-            vcl::Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
+            StyleSettings aStyleSettings
+                = Application::GetDefaultDevice()->GetSettings().GetStyleSettings();
+
+            // if PROPERTY_STANDARD_THEME is set, use style settings independent of platform (theme)
+            // KEEP IN SYNC WITH UnoControl::createPeer
+            bool bStandardTheme = false;
+            css::uno::Any aAnyStandardTheme = _rxModel->getPropertyValue(PROPERTY_STANDARD_THEME);
+            if ((aAnyStandardTheme >>= bStandardTheme) && bStandardTheme)
+                aStyleSettings.SetStandardStyles();
+
+            const vcl::Font aDefaultVCLFont = aStyleSettings.GetAppFont();
             css::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
 
             // get the current properties
