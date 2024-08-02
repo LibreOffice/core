@@ -22,6 +22,7 @@
 #include <memory>
 #include "fupoor.hxx"
 #include <vcl/weld.hxx>
+#include <stlsheet.hxx>
 
 class SfxItemSet;
 class SdBackgroundObjUndoAction;
@@ -41,7 +42,7 @@ class FuPage final
     virtual void Activate() override;
     virtual void Deactivate() override;
 
-    const SfxItemSet* ExecuteDialog(weld::Window* pParent, const SfxRequest& rReq);
+    void ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq);
 
 protected:
     virtual ~FuPage() override;
@@ -54,10 +55,9 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq );
 
+    void ApplyItemSet( SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> aNewAttr, SfxItemSet& tempSet, std::shared_ptr<SfxItemSet> aMergedAttr);
     void ApplyItemSet( const SfxItemSet* pArgs );
 
-    SfxRequest&                 mrReq;
-    const SfxItemSet*           mpArgs;
     std::unique_ptr<SdBackgroundObjUndoAction>
                                 mpBackgroundObjUndoAction;
     Size                        maSize;
