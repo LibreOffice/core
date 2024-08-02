@@ -1921,11 +1921,63 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
     return bRet;
 }
 
+// Determines if any part of the bidi portion fits on the current line
+namespace
+{
+enum class BidiTruncationType
+{
+    None,
+    Truncate,
+    Underflow
+};
+
+BidiTruncationType lcl_BidiPortionNeedsTruncation(SwMultiPortion& rMulti,
+                                                  SwTextFormatInfo& rExternalInf,
+                                                  SwTextFormatInfo& rLocalInf,
+                                                  TextFrameIndex const nStartIdx)
+{
+    if (!rLocalInf.IsUnderflow())
+    {
+        // Some amount of text fits in the bidi portion without triggering underflow,
+        // so the portion should not be truncated.
+        return BidiTruncationType::None;
+    }
+
+    auto nCurrLen = rMulti.GetLen();
+
+    css::i18n::LineBreakHyphenationOptions aHyphOptions;
+    css::i18n::LineBreakUserOptions aUserOptions;
+    css::lang::Locale aLocale;
+    auto aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
+        rExternalInf.GetText(), sal_Int32(nStartIdx + nCurrLen), aLocale,
+        sal_Int32(rExternalInf.GetLineStart()), aHyphOptions, aUserOptions);
+
+    if (aResult.breakIndex < sal_Int32(nStartIdx))
+    {
+        // The bidi portion doesn't fit on the line, and the first break opportunity
+        // is before the bidi portion. Underflow to the preceding text.
+        return BidiTruncationType::Underflow;
+    }
+
+    if (aResult.breakIndex > sal_Int32(nStartIdx)
+        && aResult.breakIndex <= sal_Int32(nStartIdx + nCurrLen))
+    {
+        // The bidi portion fits on this line, but ended with underflow.
+        return BidiTruncationType::None;
+    }
+
+    // The bidi portion doesn't fit on the line, but a break position exists between the bidi
+    // portion and the preceding text. Truncating is sufficient.
+    return BidiTruncationType::Truncate;
+}
+}
+
 // If a multi portion completely has to go to the
 // next line, this function is called to truncate
 // the rest of the remaining multi portion
 static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& rInf,
-                                     TextFrameIndex const nStartIdx)
+                                     TextFrameIndex const nStartIdx,
+                                     BidiTruncationType nBidiTruncType = BidiTruncationType::None)
 {
     rMulti.GetRoot().Truncate();
     rMulti.GetRoot().SetLen(TextFrameIndex(0));
@@ -1945,17 +1997,7 @@ static void lcl_TruncateMultiPortion(SwMultiPortion& rMulti, SwTextFormatInfo& r
     {
         // The truncated portion is a bidi portion. Bidi portions contain ordinary text, and may
         // potentially underflow in the case that none of the text fits on the current line.
-
-        // Check if the start of the bidi portion is a valid break. In that case, truncating
-        // the multi portion is sufficient.
-        css::i18n::LineBreakHyphenationOptions aHyphOptions;
-        css::i18n::LineBreakUserOptions aUserOptions;
-        css::lang::Locale aLocale;
-        auto aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
-            rInf.GetText(), sal_Int32(nStartIdx), aLocale, sal_Int32(rInf.GetLineStart()),
-            aHyphOptions, aUserOptions);
-
-        if (aResult.breakIndex != sal_Int32{ nStartIdx })
+        if (nBidiTruncType == BidiTruncationType::Underflow)
         {
             // The start of the bidi portion is not a valid break. Instead, a break should be
             // inserted into a previous text portion on this line.
@@ -2399,9 +2441,10 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         // a new SwBidiPortion, this would cause a memory leak
         else if( rMulti.IsBidi() && ! m_pMulti )
         {
-            if (aInf.IsUnderflow() || !rMulti.GetLen())
+            auto nTruncType = lcl_BidiPortionNeedsTruncation(rMulti, rInf, aInf, nStartIdx);
+            if (nTruncType != BidiTruncationType::None)
             {
-                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx);
+                lcl_TruncateMultiPortion(rMulti, rInf, nStartIdx, nTruncType);
             }
 
             // If there is a HolePortion at the end of the bidi portion,
