@@ -721,8 +721,13 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
         // Otherwise Qt will continue handling ToolTip events from the "parent" window.
         const QtFrame* pPopupFrame = GetQtInstance()->activePopup();
         if (!rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &rFrame))
-            QToolTip::showText(QCursor::pos(), toQString(rFrame.m_aTooltipText), &rWidget,
-                               rFrame.m_aTooltipArea);
+        {
+            // tdf#162297 Use a dummy style to ensure the tooltip is wrapped
+            QString sTooltipText("<font font-weight=normal>");
+            sTooltipText += toQString(rFrame.m_aTooltipText);
+            sTooltipText += "</font>";
+            QToolTip::showText(QCursor::pos(), sTooltipText, &rWidget, rFrame.m_aTooltipArea);
+        }
         else
         {
             QToolTip::hideText();
