@@ -3791,41 +3791,20 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 namespace
 {
 // Determines if the XText content is empty (no text, no shapes, no tables)
-bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<text::XTextDocument> const& xTextDocument)
+bool isContentEmpty(uno::Reference<text::XText> const& xText)
 {
     if (!xText.is())
         return true; // no XText means it's empty
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
-    auto xDrawPage = xDrawPageSupplier->getDrawPage();
-    if (xDrawPage && xDrawPage->hasElements())
+    uno::Reference<beans::XPropertySet> xTextProperties(xText, uno::UNO_QUERY);
+    if (!xTextProperties.is())
     {
-        for (sal_Int32 i = 0, nCount = xDrawPage->getCount(); i < nCount; ++i)
-        {
-            uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
-            if (xShape.is())
-            {
-                uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
-                if (xAnchor.is() && xAnchor->getText() == xText)
-                    return false;
-            }
-        }
+        return true;
     }
 
-    uno::Reference<container::XEnumerationAccess> xEnumAccess(xText->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
-    while (xEnum->hasMoreElements())
-    {
-        auto xObject = xEnum->nextElement();
-        uno::Reference<text::XTextTable> const xTextTable(xObject, uno::UNO_QUERY);
-        if (xTextTable.is())
-            return false;
-
-        uno::Reference<text::XTextRange> const xParagraph(xObject, uno::UNO_QUERY);
-        if (xParagraph.is() && !xParagraph->getString().isEmpty())
-            return false;
-    }
-    return true;
+    bool bContentEmpty{};
+    xTextProperties->getPropertyValue("IsContentEmpty") >>= bContentEmpty;
+    return bContentEmpty;
 }
 
 } // end anonymous namespace
@@ -3969,7 +3948,7 @@ void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, P
     if (!xPageStyle.is())
         return;
 
-    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend, GetTextDocument());
+    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend);
 
     if (eType == PageType::FIRST && bEmpty)
     {

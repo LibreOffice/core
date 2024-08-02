@@ -1032,6 +1032,53 @@ SwXText::getPropertyValue(
             }
         }
         break;
+        case FN_UNO_IS_CONTENT_EMPTY:
+        {
+            const SwStartNode* pStartNode = GetStartNode();
+            SwNodeOffset nStartIndex = pStartNode->GetIndex();
+            SwNodeOffset nEndIndex = pStartNode->EndOfSectionIndex();
+            if (nEndIndex - nStartIndex > SwNodeOffset(2))
+            {
+                // More than 1 node between the start and end one: not empty.
+                aRet <<= false;
+                return aRet;
+            }
+
+            if (nEndIndex - nStartIndex == SwNodeOffset(2))
+            {
+                SwPaM aPaM(*pStartNode);
+                aPaM.Move(fnMoveForward, GoInNode);
+                SwTextNode* pTextNode = aPaM.Start()->GetNode().GetTextNode();
+                if (pTextNode && !pTextNode->GetText().isEmpty())
+                {
+                    // 1 node, but that text node has text: not empty.
+                    aRet <<= false;
+                    return aRet;
+                }
+            }
+
+            sw::FrameFormats<sw::SpzFrameFormat*>& rFormats = *GetDoc()->GetSpzFrameFormats();
+            for(sw::SpzFrameFormat* pFormat: rFormats)
+            {
+                const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+                const SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+                if (!pAnchorNode)
+                {
+                    continue;
+                }
+
+                SwNodeOffset nAnchorIndex = pAnchorNode->GetIndex();
+                if (nAnchorIndex > nStartIndex && nAnchorIndex < nEndIndex)
+                {
+                    // This fly or draw format has an anchor in the node section: not empty.
+                    aRet <<= false;
+                    return aRet;
+                }
+            }
+            // Otherwise empty.
+            aRet <<= true;
+        }
+        break;
     }
     return aRet;
 }

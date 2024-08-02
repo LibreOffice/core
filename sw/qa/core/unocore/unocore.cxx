@@ -32,6 +32,7 @@
 #include <textcontentcontrol.hxx>
 #include <frmmgr.hxx>
 #include <fmtcntnt.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -1083,6 +1084,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testWrapTextAtFlyStart)
     // Then make sure that WrapTextAtFlyStart is true when asking back:
     xFrame->getPropertyValue(u"WrapTextAtFlyStart"_ustr) >>= bWrapTextAtFlyStart;
     CPPUNIT_ASSERT(bWrapTextAtFlyStart);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
+{
+    // Empty header: IsContentEmpty is true.
+    createSwDoc();
+    uno::Sequence<beans::PropertyValue> aInsertArgs
+        = { comphelper::makePropertyValue(u"PageStyle"_ustr, SwResId(STR_POOLPAGE_STANDARD)) };
+    dispatchCommand(mxComponent, u".uno:InsertPageHeader"_ustr, aInsertArgs);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xHeaderText(xPageStyle->getPropertyValue("HeaderText"),
+                                                    uno::UNO_QUERY);
+    bool bIsContentEmpty = false;
+    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    CPPUNIT_ASSERT(bIsContentEmpty);
+
+    // Header has 1 paragraph with text: IsContentEmpty is false.
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("text");
+    bIsContentEmpty = true;
+    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    CPPUNIT_ASSERT(!bIsContentEmpty);
+
+    // Header has 2 paragraphs: IsContentEmpty is false.
+    pWrtShell->SelAll();
+    pWrtShell->DelRight();
+    pWrtShell->SplitNode();
+    bIsContentEmpty = true;
+    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    CPPUNIT_ASSERT(!bIsContentEmpty);
+
+    // Header has an anchoed object: IsContentEmpty is false.
+    pWrtShell->SelAll();
+    pWrtShell->DelRight();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    bIsContentEmpty = true;
+    xHeaderText->getPropertyValue("IsContentEmpty") >>= bIsContentEmpty;
+    CPPUNIT_ASSERT(!bIsContentEmpty);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

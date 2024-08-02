@@ -1369,6 +1369,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMa
                 static SfxItemPropertyMapEntry const aTextMap[] =
                 {
                     REDLINE_NODE_PROPERTIES
+                    { UNO_NAME_IS_CONTENT_EMPTY, FN_UNO_IS_CONTENT_EMPTY, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                 };
                 m_aMapEntriesArr[nPropertyId] = aTextMap;
             }
