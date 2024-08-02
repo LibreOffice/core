@@ -209,6 +209,20 @@ void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
     pWindow->SetScreenNumber( _display );
 }
 
+sal_Bool VCLXTopWindow::getFullScreen() {
+    SolarMutexGuard g;
+    if (auto const win = VCLXContainer::GetAsDynamic<WorkWindow>()) {
+        return win->IsFullScreenMode();
+    }
+    return false;
+}
+
+void VCLXTopWindow::setFullScreen(sal_Bool value) {
+    SolarMutexGuard g;
+    if (auto const win = VCLXContainer::GetAsDynamic<WorkWindow>()) {
+        return win->ShowFullScreenMode(value);
+    }
+}
 
 
 

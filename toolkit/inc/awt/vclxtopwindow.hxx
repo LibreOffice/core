@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/awt/XTopWindow2.hpp>
+#include <com/sun/star/awt/XTopWindow3.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -31,7 +31,7 @@ namespace com::sun::star::awt { class XMenuBar; }
 
 
 class VCLXTopWindow: public cppu::ImplInheritanceHelper<
-                        VCLXContainer, css::awt::XTopWindow2, css::awt::XSystemDependentWindowPeer >
+                        VCLXContainer, css::awt::XTopWindow3, css::awt::XSystemDependentWindowPeer >
 {
 public:
     VCLXTopWindow();
@@ -54,6 +54,10 @@ public:
     virtual void SAL_CALL setIsMinimized( sal_Bool _isminimized ) override;
     virtual ::sal_Int32 SAL_CALL getDisplay() override;
     virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) override;
+
+    // XTopWindow3
+    virtual sal_Bool SAL_CALL getFullScreen() override;
+    virtual void SAL_CALL setFullScreen(sal_Bool value) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
