@@ -2976,10 +2976,7 @@ OUString SwFrameFormat::GetDescription() const
 void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFrameFormat"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
-
     const char* pWhich = nullptr;
     switch (Which())
     {
@@ -2992,17 +2989,15 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     if (pWhich)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
-
     if (m_pOtherTextBoxFormats)
     {
         (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("OtherTextBoxFormat"), "%p", m_pOtherTextBoxFormats.get());
     }
 
-    GetAttrSet().dumpAsXml(pWriter);
+    SwFormat::dumpAsXml(pWriter);
 
     if (const SdrObject* pSdrObject = FindSdrObject())
         pSdrObject->dumpAsXml(pWriter);
-
     (void)xmlTextWriterEndElement(pWriter);
 }
 

@@ -129,7 +129,7 @@ public:
     ::sw::ListLevelIndents AreListLevelIndentsApplicable() const;
     bool AreListLevelIndentsApplicableImpl(sal_uInt16 nWhich) const;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual void FormatDropNotify(const SwFormatDrop& rDrop) override
     {
         if(HasWriterListeners() && !IsModifyLocked())

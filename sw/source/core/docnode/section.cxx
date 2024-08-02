@@ -986,9 +986,7 @@ bool SwSectionFormat::supportsFullDrawingLayerFillAttributeSet() const
 void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
-    GetAttrSet().dumpAsXml(pWriter);
+    SwFormat::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 

@@ -281,6 +281,8 @@ public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;
     void RemoveAllUnos();
     bool IsUsed() const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
 };
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX

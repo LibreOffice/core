@@ -334,7 +334,7 @@ public:
     virtual bool IsInContent() const override;
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 };
 

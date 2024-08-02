@@ -757,6 +757,22 @@ bool SwFormat::IsUsed() const
     return isUsed;
 }
 
+void SwFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
+                                      BAD_CAST(m_aFormatName.toUtf8().getStr()));
+    if (SwFormat* pDerivedFrom = DerivedFrom())
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("derived-from"),
+                                          BAD_CAST(pDerivedFrom->GetName().toUtf8().getStr()));
+    }
+    m_aSet.dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwFormatsBase::~SwFormatsBase()
 {}
 

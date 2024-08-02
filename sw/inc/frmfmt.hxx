@@ -184,7 +184,7 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false ) override;
     void MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat);
