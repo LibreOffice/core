@@ -843,6 +843,7 @@ void PrintDialog::readFromSettings()
 void PrintDialog::setPaperSizes()
 {
     mxPaperSizeBox->clear();
+    mxPaperSizeBox->set_active(-1);
 
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     mePaper = aPrt->GetPaper();
