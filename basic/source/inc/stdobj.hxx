@@ -30,8 +30,6 @@ class SbiStdObject final : public SbxObject
     std::optional<SbStdFactory> pStdFactory;
 
     virtual ~SbiStdObject() override;
-    using SbxVariable::GetInfo;
-    static SbxInfo* GetInfo(short);
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 public:

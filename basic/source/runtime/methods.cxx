@@ -2541,15 +2541,14 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
                             rPar.Get(0)->PutString(u""_ustr);
                         }
 
-                        SbAttributes nFlags = SbAttributes::NONE;
+                        sal_Int16 nFlags = SbAttributes::NORMAL;
                         if ( nParCount > 2 )
                         {
-                            rRTLData.nDirFlags = nFlags
-                                = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
+                            rRTLData.nDirFlags = nFlags = rPar.Get(2)->GetInteger();
                         }
                         else
                         {
-                            rRTLData.nDirFlags = SbAttributes::NONE;
+                            rRTLData.nDirFlags = SbAttributes::NORMAL;
                         }
                         // Read directory
                         bool bIncludeFolders = bool(nFlags & SbAttributes::DIRECTORY);
@@ -2657,15 +2656,14 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
 
                 OUString aDirURL = implSetupWildcard(aFileParam, rRTLData);
 
-                SbAttributes nFlags = SbAttributes::NONE;
+                sal_Int16 nFlags = SbAttributes::NORMAL;
                 if ( nParCount > 2 )
                 {
-                    rRTLData.nDirFlags = nFlags
-                        = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
+                    rRTLData.nDirFlags = nFlags = rPar.Get(2)->GetInteger();
                 }
                 else
                 {
-                    rRTLData.nDirFlags = SbAttributes::NONE;
+                    rRTLData.nDirFlags = SbAttributes::NORMAL;
                 }
 
                 // Read directory
@@ -2766,7 +2764,7 @@ void SbRtl_GetAttr(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() == 2)
     {
-        sal_Int16 nFlags = 0;
+        sal_Int16 nFlags = SbAttributes::NORMAL;
 
         // In Windows, we want to use Windows API to get the file attributes
         // for VBA interoperability.
@@ -2816,15 +2814,15 @@ void SbRtl_GetAttr(StarBASIC *, SbxArray & rPar, bool)
                     bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
                     {
-                        nFlags |= sal_uInt16(SbAttributes::READONLY);
+                        nFlags |= SbAttributes::READONLY;
                     }
                     if( bHidden )
                     {
-                        nFlags |= sal_uInt16(SbAttributes::HIDDEN);
+                        nFlags |= SbAttributes::HIDDEN;
                     }
                     if( bDirectory )
                     {
-                        nFlags |= sal_uInt16(SbAttributes::DIRECTORY);
+                        nFlags |= SbAttributes::DIRECTORY;
                     }
                 }
                 catch(const Exception & )
@@ -2846,11 +2844,11 @@ void SbRtl_GetAttr(StarBASIC *, SbxArray & rPar, bool)
             bool bDirectory = isFolder( aType );
             if( bReadOnly )
             {
-                nFlags |= sal_uInt16(SbAttributes::READONLY);
+                nFlags |= SbAttributes::READONLY;
             }
             if( bDirectory )
             {
-                nFlags |= sal_uInt16(SbAttributes::DIRECTORY);
+                nFlags |= SbAttributes::DIRECTORY;
             }
         }
         rPar.Get(0)->PutInteger(nFlags);
@@ -4227,28 +4225,13 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     }
 
     // tdf#151012 - initialize optional parameters with their default values (number of buttons)
-    WinBits nType = static_cast<WinBits>(GetOptionalIntegerParamOrDefault(rPar, 2, 0)); // MB_OK
-    WinBits nStyle = nType;
-    nStyle &= 15; // delete bits 4-16
-    if (nStyle > 5)
-        nStyle = 0;
-
-    enum BasicResponse
-    {
-        Ok = 1,
-        Cancel = 2,
-        Abort = 3,
-        Retry = 4,
-        Ignore = 5,
-        Yes = 6,
-        No = 7
-    };
+    sal_Int16 nType = GetOptionalIntegerParamOrDefault(rPar, 2, SbMB::OK);
 
     OUString aMsg = rPar.Get(1)->GetOUString();
     // tdf#151012 - initialize optional parameters with their default values (title of dialog box)
     OUString aTitle = GetOptionalOUStringParamOrDefault(rPar, 3, Application::GetDisplayName());
 
-    WinBits nDialogType = nType & (16+32+64);
+    sal_Int16 nDialogType = nType & (SbMB::ICONSTOP | SbMB::ICONQUESTION | SbMB::ICONINFORMATION);
 
     SolarMutexGuard aSolarGuard;
     weld::Widget* pParent = Application::GetDefDialogParent();
@@ -4257,16 +4240,16 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 
     switch (nDialogType)
     {
-        case 16:
+        case SbMB::ICONSTOP:
             eType = VclMessageType::Error;
             break;
-        case 32:
+        case SbMB::ICONQUESTION:
             eType = VclMessageType::Question;
             break;
-        case 48:
+        case SbMB::ICONEXCLAMATION:
             eType = VclMessageType::Warning;
             break;
-        case 64:
+        case SbMB::ICONINFORMATION:
             eType = VclMessageType::Info;
             break;
     }
@@ -4274,64 +4257,64 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                 eType, VclButtonsType::NONE, aMsg, GetpApp()));
 
-    switch (nStyle)
+    switch (nType & 0x0F) // delete bits 4-16
     {
-        case 0: // MB_OK
+        case SbMB::OK:
         default:
-            xBox->add_button(GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
+            xBox->add_button(GetStandardText(StandardButtonType::OK), SbMBID::OK);
             break;
-        case 1: // MB_OKCANCEL
-            xBox->add_button(GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+        case SbMB::OKCANCEL:
+            xBox->add_button(GetStandardText(StandardButtonType::OK), SbMBID::OK);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
 
-            if (nType & 256 || nType & 512)
-                xBox->set_default_response(BasicResponse::Cancel);
+            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
+                xBox->set_default_response(SbMBID::CANCEL);
             else
-                xBox->set_default_response(BasicResponse::Ok);
-
-            break;
-        case 2: // MB_ABORTRETRYIGNORE
-            xBox->add_button(GetStandardText(StandardButtonType::Abort), BasicResponse::Abort);
-            xBox->add_button(GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
-            xBox->add_button(GetStandardText(StandardButtonType::Ignore), BasicResponse::Ignore);
-
-            if (nType & 256)
-                xBox->set_default_response(BasicResponse::Retry);
-            else if (nType & 512)
-                xBox->set_default_response(BasicResponse::Ignore);
-            else
-                xBox->set_default_response(BasicResponse::Cancel);
+                xBox->set_default_response(SbMBID::OK);
 
             break;
-        case 3: // MB_YESNOCANCEL
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
-            xBox->add_button(GetStandardText(StandardButtonType::No), BasicResponse::No);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+        case SbMB::ABORTRETRYIGNORE:
+            xBox->add_button(GetStandardText(StandardButtonType::Abort), SbMBID::ABORT);
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), SbMBID::RETRY);
+            xBox->add_button(GetStandardText(StandardButtonType::Ignore), SbMBID::IGNORE);
 
-            if (nType & 256 || nType & 512)
-                xBox->set_default_response(BasicResponse::Cancel);
+            if (nType & SbMB::DEFBUTTON2)
+                xBox->set_default_response(SbMBID::RETRY);
+            else if (nType & SbMB::DEFBUTTON3)
+                xBox->set_default_response(SbMBID::IGNORE);
             else
-                xBox->set_default_response(BasicResponse::Yes);
+                xBox->set_default_response(SbMBID::CANCEL);
 
             break;
-        case 4: // MB_YESNO
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
-            xBox->add_button(GetStandardText(StandardButtonType::No), BasicResponse::No);
+        case SbMB::YESNOCANCEL:
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), SbMBID::YES);
+            xBox->add_button(GetStandardText(StandardButtonType::No), SbMBID::NO);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
 
-            if (nType & 256 || nType & 512)
-                xBox->set_default_response(BasicResponse::No);
+            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
+                xBox->set_default_response(SbMBID::CANCEL);
             else
-                xBox->set_default_response(BasicResponse::Yes);
+                xBox->set_default_response(SbMBID::YES);
 
             break;
-        case 5: // MB_RETRYCANCEL
-            xBox->add_button(GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+        case SbMB::YESNO:
+            xBox->add_button(GetStandardText(StandardButtonType::Yes), SbMBID::YES);
+            xBox->add_button(GetStandardText(StandardButtonType::No), SbMBID::NO);
 
-            if (nType & 256 || nType & 512)
-                xBox->set_default_response(BasicResponse::Cancel);
+            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
+                xBox->set_default_response(SbMBID::NO);
             else
-                xBox->set_default_response(BasicResponse::Retry);
+                xBox->set_default_response(SbMBID::YES);
+
+            break;
+        case SbMB::RETRYCANCEL:
+            xBox->add_button(GetStandardText(StandardButtonType::Retry), SbMBID::RETRY);
+            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
+
+            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
+                xBox->set_default_response(SbMBID::CANCEL);
+            else
+                xBox->set_default_response(SbMBID::RETRY);
 
             break;
     }
@@ -4347,7 +4330,7 @@ void SbRtl_SetAttr(StarBASIC *, SbxArray & rPar, bool)
     if (rPar.Count() == 3)
     {
         OUString aStr = rPar.Get(1)->GetOUString();
-        SbAttributes nFlags = static_cast<SbAttributes>(rPar.Get(2)->GetInteger());
+        sal_Int16 nFlags = rPar.Get(2)->GetInteger();
 
         if( hasUno() )
         {
@@ -4358,7 +4341,7 @@ void SbRtl_SetAttr(StarBASIC *, SbxArray & rPar, bool)
                 {
                     bool bReadOnly = bool(nFlags & SbAttributes::READONLY);
                     xSFI->setReadOnly( aStr, bReadOnly );
-                    bool bHidden   = bool(nFlags & SbAttributes::HIDDEN);
+                    bool bHidden = bool(nFlags & SbAttributes::HIDDEN);
                     xSFI->setHidden( aStr, bHidden );
                 }
                 catch(const Exception & )

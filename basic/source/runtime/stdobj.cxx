@@ -35,25 +35,31 @@
 // allow us space for a flag to denylist some functions in vba mode
 
 #define ARGSMASK_   0x003F  // 63 Arguments
-#define COMPTMASK_  0x00C0  // COMPATIBILITY mask
+
 #define COMPATONLY_ 0x0080  // procedure is visible in vba mode only
 #define NORMONLY_   0x0040  // procedure is visible in normal mode only
+#define COMPTMASK_  (COMPATONLY_ | NORMONLY_)  // COMPATIBILITY mask
 
-#define RWMASK_     0x0F00  // mask for R/W-bits
-#define TYPEMASK_   0xF000  // mask for the entry's type
-
+#define READ_       0x0100  // parameter allows read
+#define WRITE_      0x0200  // parameter allows write
 #define OPT_        0x0400  // parameter is optional
 #define CONST_      0x0800  // property is const
-#define METHOD_     0x3000
+#define RWMASK_     (READ_ | WRITE_ | OPT_ | CONST_) // mask for R/W-bits
+
+#define FUNC_TYPE_  0x1000  // functional type
+#define SUB_TYPE_   0x2000  // sub type
+#define METHOD_     (FUNC_TYPE_ | SUB_TYPE_)
 #define PROPERTY_   0x4000
 #define OBJECT_     0x8000
+#define TYPEMASK_   (METHOD_ | PROPERTY_ | OBJECT_) // mask for the entry's type
+
                             // combination of bits above:
-#define FUNCTION_   0x1100
-#define LFUNCTION_  0x1300  // mask for function which also works as Lvalue
-#define SUB_        0x2100
-#define ROPROP_     0x4100  // mask Read Only-Property
-#define RWPROP_     0x4300  // mask Read/Write-Property
-#define CPROP_      0x4900  // mask for constant
+#define FUNCTION_   (FUNC_TYPE_ | READ_)
+#define LFUNCTION_  (FUNC_TYPE_ | READ_ | WRITE_) // mask for function which also works as Lvalue (statement)
+#define SUB_        (SUB_TYPE_)
+#define ROPROP_     (PROPERTY_ | READ_) // mask Read Only-Property
+#define RWPROP_     (PROPERTY_ | READ_ | WRITE_) // mask Read/Write-Property
+#define CPROP_      (PROPERTY_ | READ_ | CONST_) // mask for constant
 
 namespace {
 
@@ -82,20 +88,9 @@ template <int N> constexpr bool MethodsTableValid(const Method (&rMethods)[N])
 {
     int nCurMethArgs = 0;
     int nArgsChecked = 0;
-    bool bFinished = false;
     for (const auto& m : rMethods)
     {
-        assert(!bFinished); // no entries after end-of-table entry
-        if (bFinished)
-            return false;
-        if (m.nArgs == -1) // end-of-table entry
-        {
-            assert(nCurMethArgs == nArgsChecked); // last method had correct # of arguments
-            if (nCurMethArgs != nArgsChecked)
-                return false;
-            bFinished = true;
-        }
-        else if (m.pFunc) // main (function/sub/etc) entry
+        if (m.pFunc) // main (function/sub/etc) entry
         {
             assert(nCurMethArgs == nArgsChecked); // previous method had correct # of arguments
             if (nCurMethArgs != nArgsChecked)
@@ -106,11 +101,12 @@ template <int N> constexpr bool MethodsTableValid(const Method (&rMethods)[N])
         else // subordinate (argument) entry
             ++nArgsChecked;
     }
-    assert(bFinished); // its last entry was end-of-table entry
-    return bFinished;
+    assert(nCurMethArgs == nArgsChecked); // last method had correct # of arguments
+    return nCurMethArgs == nArgsChecked;
 }
 
-}
+template <bool N> void ConstBool(StarBASIC*, SbxArray& par, bool) { par.Get(0)->PutBool(N); }
+template <sal_Int16 N> void ConstInt(StarBASIC*, SbxArray& par, bool) { par.Get(0)->PutInteger(N); }
 
 constexpr Method aMethods[] = {
 
@@ -127,13 +123,14 @@ constexpr Method aMethods[] = {
 { u"Atn",                           SbxDOUBLE,   1 | FUNCTION_,        SbRtl_Atn                  },
     arg(u"number", SbxDOUBLE),
 
-{ u"ATTR_ARCHIVE",                  SbxINTEGER,      CPROP_,           SbRtl_ATTR_ARCHIVE         },
-{ u"ATTR_DIRECTORY",                SbxINTEGER,      CPROP_,           SbRtl_ATTR_DIRECTORY       },
-{ u"ATTR_HIDDEN",                   SbxINTEGER,      CPROP_,           SbRtl_ATTR_HIDDEN          },
-{ u"ATTR_NORMAL",                   SbxINTEGER,      CPROP_,           SbRtl_ATTR_NORMAL          },
-{ u"ATTR_READONLY",                 SbxINTEGER,      CPROP_,           SbRtl_ATTR_READONLY        },
-{ u"ATTR_SYSTEM",                   SbxINTEGER,      CPROP_,           SbRtl_ATTR_SYSTEM          },
-{ u"ATTR_VOLUME",                   SbxINTEGER,      CPROP_,           SbRtl_ATTR_VOLUME          },
+// Related to: Dir, GetAttr, SetAttr
+{ u"ATTR_ARCHIVE",                  SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::ARCHIVE>    },
+{ u"ATTR_DIRECTORY",                SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::DIRECTORY>  },
+{ u"ATTR_HIDDEN",                   SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::HIDDEN>     },
+{ u"ATTR_NORMAL",                   SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::NORMAL>     },
+{ u"ATTR_READONLY",                 SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::READONLY>   },
+{ u"ATTR_SYSTEM",                   SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::SYSTEM>     },
+{ u"ATTR_VOLUME",                   SbxINTEGER,      CPROP_,   ConstInt<SbAttributes::VOLUME>     },
 
 { u"Beep",                          SbxNULL,         FUNCTION_,        SbRtl_Beep                 },
 { u"Blue",                          SbxINTEGER,  1 | FUNCTION_ | NORMONLY_, SbRtl_Blue            },
@@ -186,9 +183,11 @@ constexpr Method aMethods[] = {
 { u"CDbl",                          SbxDOUBLE,   1 | FUNCTION_,        SbRtl_CDbl                 },
     arg(u"expression", SbxVARIANT),
 
-{ u"CF_BITMAP",                     SbxINTEGER,      CPROP_,           SbRtl_CF_BITMAP            },
-{ u"CF_METAFILEPICT",               SbxINTEGER,      CPROP_,           SbRtl_CF_METAFILEPICT      },
-{ u"CF_TEXT",                       SbxINTEGER,      CPROP_,           SbRtl_CF_TEXT              },
+// FIXME: CF_* are for what??? They duplicate WinAPI clipboard constants, but why?
+{ u"CF_BITMAP",                     SbxINTEGER,      CPROP_,           ConstInt<1>                },
+{ u"CF_METAFILEPICT",               SbxINTEGER,      CPROP_,           ConstInt<2>                },
+{ u"CF_TEXT",                       SbxINTEGER,      CPROP_,           ConstInt<3>                },
+
 { u"ChDir",                         SbxNULL,     1 | FUNCTION_,        SbRtl_ChDir                },
     arg(u"string", SbxSTRING),
 
@@ -208,8 +207,11 @@ constexpr Method aMethods[] = {
 { u"CInt",                          SbxINTEGER,  1 | FUNCTION_,        SbRtl_CInt                 },
     arg(u"expression", SbxVARIANT),
 
-{ u"CLEAR_ALLTABS",                 SbxINTEGER,       CPROP_,          SbRtl_CLEAR_ALLTABS        },
-{ u"CLEAR_TAB",                     SbxINTEGER,       CPROP_,          SbRtl_CLEAR_TAB            },
+// FIXME: what for are these???
+{ u"SET_TAB",                       SbxINTEGER,      CPROP_,           ConstInt<0>                },
+{ u"CLEAR_TAB",                     SbxINTEGER,      CPROP_,           ConstInt<1>                },
+{ u"CLEAR_ALLTABS",                 SbxINTEGER,      CPROP_,           ConstInt<2>                },
+
 { u"CLng",                          SbxLONG,     1 | FUNCTION_,        SbRtl_CLng                 },
     arg(u"expression", SbxVARIANT),
 
@@ -358,7 +360,9 @@ constexpr Method aMethods[] = {
 { u"Exp",                           SbxDOUBLE,   1 | FUNCTION_,        SbRtl_Exp                  },
     arg(u"number", SbxDOUBLE),
 
-{ u"False",                         SbxBOOL,         CPROP_,           SbRtl_False                },
+{ u"False",                         SbxBOOL,         CPROP_,           ConstBool<false>           },
+{ u"True",                          SbxBOOL,         CPROP_,           ConstBool<true>            },
+
 { u"FileAttr",                      SbxINTEGER,  2 | FUNCTION_,        SbRtl_FileAttr             },
     arg(u"Channel",    SbxINTEGER),
     arg(u"Attributes", SbxINTEGER),
@@ -411,9 +415,11 @@ constexpr Method aMethods[] = {
 { u"Frac",                          SbxDOUBLE,   1 | FUNCTION_,        SbRtl_Frac                 },
     arg(u"number", SbxDOUBLE),
 
-{ u"FRAMEANCHORCHAR",               SbxINTEGER,      CPROP_,           SbRtl_FRAMEANCHORCHAR      },
-{ u"FRAMEANCHORPAGE",               SbxINTEGER,      CPROP_,           SbRtl_FRAMEANCHORPAGE      },
-{ u"FRAMEANCHORPARA",               SbxINTEGER,      CPROP_,           SbRtl_FRAMEANCHORPARA      },
+// FIXME: what for are these???
+{ u"FRAMEANCHORPAGE",               SbxINTEGER,      CPROP_,           ConstInt<1>                },
+{ u"FRAMEANCHORCHAR",               SbxINTEGER,      CPROP_,           ConstInt<15>               },
+{ u"FRAMEANCHORPARA",               SbxINTEGER,      CPROP_,           ConstInt<14>               },
+
 { u"FreeFile",                      SbxINTEGER,      FUNCTION_,        SbRtl_FreeFile             },
 { u"FreeLibrary",                   SbxNULL,     1 | FUNCTION_,        SbRtl_FreeLibrary          },
     arg(u"Modulename", SbxSTRING),
@@ -456,13 +462,14 @@ constexpr Method aMethods[] = {
 { u"Hour",                          SbxINTEGER,  1 | FUNCTION_,        SbRtl_Hour                 },
     arg(u"Date", SbxDATE),
 
-{ u"IDABORT",                       SbxINTEGER,      CPROP_,           SbRtl_IDABORT              },
-{ u"IDCANCEL",                      SbxINTEGER,      CPROP_,           SbRtl_IDCANCEL             },
-{ u"IDIGNORE",                      SbxINTEGER,      CPROP_,           SbRtl_IDIGNORE             },
-{ u"IDNO",                          SbxINTEGER,      CPROP_,           SbRtl_IDNO                 },
-{ u"IDOK",                          SbxINTEGER,      CPROP_,           SbRtl_IDOK                 },
-{ u"IDRETRY",                       SbxINTEGER,      CPROP_,           SbRtl_IDRETRY              },
-{ u"IDYES",                         SbxINTEGER,      CPROP_,           SbRtl_IDYES                },
+// Related to: MsgBox (return value)
+{ u"IDABORT",                       SbxINTEGER,      CPROP_,       ConstInt<SbMBID::ABORT>        },
+{ u"IDCANCEL",                      SbxINTEGER,      CPROP_,       ConstInt<SbMBID::CANCEL>       },
+{ u"IDIGNORE",                      SbxINTEGER,      CPROP_,       ConstInt<SbMBID::IGNORE>       },
+{ u"IDNO",                          SbxINTEGER,      CPROP_,       ConstInt<SbMBID::NO>           },
+{ u"IDOK",                          SbxINTEGER,      CPROP_,       ConstInt<SbMBID::OK>           },
+{ u"IDRETRY",                       SbxINTEGER,      CPROP_,       ConstInt<SbMBID::RETRY>        },
+{ u"IDYES",                         SbxINTEGER,      CPROP_,       ConstInt<SbMBID::YES>          },
 
 { u"Iif",                           SbxVARIANT,   3 | FUNCTION_,       SbRtl_Iif                  },
     arg(u"Bool",     SbxBOOL),
@@ -575,21 +582,22 @@ constexpr Method aMethods[] = {
 { u"LTrim",                         SbxSTRING,    1 | FUNCTION_,       SbRtl_LTrim                },
     arg(u"string", SbxSTRING),
 
-{ u"MB_ABORTRETRYIGNORE",           SbxINTEGER,       CPROP_,          SbRtl_MB_ABORTRETRYIGNORE  },
-{ u"MB_APPLMODAL",                  SbxINTEGER,       CPROP_,          SbRtl_MB_APPLMODAL         },
-{ u"MB_DEFBUTTON1",                 SbxINTEGER,       CPROP_,          SbRtl_MB_DEFBUTTON1        },
-{ u"MB_DEFBUTTON2",                 SbxINTEGER,       CPROP_,          SbRtl_MB_DEFBUTTON2        },
-{ u"MB_DEFBUTTON3",                 SbxINTEGER,       CPROP_,          SbRtl_MB_DEFBUTTON3        },
-{ u"MB_ICONEXCLAMATION",            SbxINTEGER,       CPROP_,          SbRtl_MB_ICONEXCLAMATION   },
-{ u"MB_ICONINFORMATION",            SbxINTEGER,       CPROP_,          SbRtl_MB_ICONINFORMATION   },
-{ u"MB_ICONQUESTION",               SbxINTEGER,       CPROP_,          SbRtl_MB_ICONQUESTION      },
-{ u"MB_ICONSTOP",                   SbxINTEGER,       CPROP_,          SbRtl_MB_ICONSTOP          },
-{ u"MB_OK",                         SbxINTEGER,       CPROP_,          SbRtl_MB_OK                },
-{ u"MB_OKCANCEL",                   SbxINTEGER,       CPROP_,          SbRtl_MB_OKCANCEL          },
-{ u"MB_RETRYCANCEL",                SbxINTEGER,       CPROP_,          SbRtl_MB_RETRYCANCEL       },
-{ u"MB_SYSTEMMODAL",                SbxINTEGER,       CPROP_,          SbRtl_MB_SYSTEMMODAL       },
-{ u"MB_YESNO",                      SbxINTEGER,       CPROP_,          SbRtl_MB_YESNO             },
-{ u"MB_YESNOCANCEL",                SbxINTEGER,       CPROP_,          SbRtl_MB_YESNOCANCEL       },
+// Related to: MsgBox (Buttons argument)
+{ u"MB_ABORTRETRYIGNORE",           SbxINTEGER,       CPROP_,    ConstInt<SbMB::ABORTRETRYIGNORE> },
+{ u"MB_APPLMODAL",                  SbxINTEGER,       CPROP_,    ConstInt<SbMB::APPLMODAL>        },
+{ u"MB_DEFBUTTON1",                 SbxINTEGER,       CPROP_,    ConstInt<SbMB::DEFBUTTON1>       },
+{ u"MB_DEFBUTTON2",                 SbxINTEGER,       CPROP_,    ConstInt<SbMB::DEFBUTTON2>       },
+{ u"MB_DEFBUTTON3",                 SbxINTEGER,       CPROP_,    ConstInt<SbMB::DEFBUTTON3>       },
+{ u"MB_ICONEXCLAMATION",            SbxINTEGER,       CPROP_,    ConstInt<SbMB::ICONEXCLAMATION>  },
+{ u"MB_ICONINFORMATION",            SbxINTEGER,       CPROP_,    ConstInt<SbMB::ICONINFORMATION>  },
+{ u"MB_ICONQUESTION",               SbxINTEGER,       CPROP_,    ConstInt<SbMB::ICONQUESTION>     },
+{ u"MB_ICONSTOP",                   SbxINTEGER,       CPROP_,    ConstInt<SbMB::ICONSTOP>         },
+{ u"MB_OK",                         SbxINTEGER,       CPROP_,    ConstInt<SbMB::OK>               },
+{ u"MB_OKCANCEL",                   SbxINTEGER,       CPROP_,    ConstInt<SbMB::OKCANCEL>         },
+{ u"MB_RETRYCANCEL",                SbxINTEGER,       CPROP_,    ConstInt<SbMB::RETRYCANCEL>      },
+{ u"MB_SYSTEMMODAL",                SbxINTEGER,       CPROP_,    ConstInt<SbMB::SYSTEMMODAL>      },
+{ u"MB_YESNO",                      SbxINTEGER,       CPROP_,    ConstInt<SbMB::YESNO>            },
+{ u"MB_YESNOCANCEL",                SbxINTEGER,       CPROP_,    ConstInt<SbMB::YESNOCANCEL>      },
 
 { u"Me",                            SbxOBJECT,    0 | FUNCTION_ | COMPATONLY_, SbRtl_Me           },
 { u"Mid",                           SbxSTRING,    3 | LFUNCTION_,      SbRtl_Mid                  },
@@ -745,9 +753,11 @@ constexpr Method aMethods[] = {
     arg(u"PathName",   SbxSTRING),
     arg(u"Attributes", SbxINTEGER),
 
-{ u"SET_OFF",                       SbxINTEGER,       CPROP_,          SbRtl_SET_OFF              },
-{ u"SET_ON",                        SbxINTEGER,       CPROP_,          SbRtl_SET_ON               },
-{ u"SET_TAB",                       SbxINTEGER,       CPROP_,          SbRtl_SET_TAB              },
+// FIXME: what for are these???
+{ u"SET_OFF",                       SbxINTEGER,       CPROP_,          ConstInt<0>                },
+{ u"SET_ON",                        SbxINTEGER,       CPROP_,          ConstInt<1>                },
+{ u"TOGGLE",                        SbxINTEGER,       CPROP_,          ConstInt<2>                },
+
 { u"Sgn",                           SbxINTEGER,   1 | FUNCTION_,       SbRtl_Sgn                  },
     arg(u"number", SbxDOUBLE),
 
@@ -823,53 +833,52 @@ constexpr Method aMethods[] = {
 { u"TimeValue",                     SbxDATE,      1 | FUNCTION_,       SbRtl_TimeValue            },
     arg(u"String", SbxSTRING),
 
-{ u"TOGGLE",                        SbxINTEGER,       CPROP_,          SbRtl_TOGGLE               },
 { u"Trim",                          SbxSTRING,    1 | FUNCTION_,       SbRtl_Trim                 },
     arg(u"String", SbxSTRING),
 
-{ u"True",                          SbxBOOL,          CPROP_,          SbRtl_True                 },
 { u"TwipsPerPixelX",                SbxLONG,          FUNCTION_,       SbRtl_TwipsPerPixelX       },
 { u"TwipsPerPixelY",                SbxLONG,          FUNCTION_,       SbRtl_TwipsPerPixelY       },
 
-{ u"TYP_AUTHORFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_AUTHORFLD        },
-{ u"TYP_CHAPTERFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_CHAPTERFLD       },
-{ u"TYP_CONDTXTFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_CONDTXTFLD       },
-{ u"TYP_DATEFLD",                   SbxINTEGER,       CPROP_,          SbRtl_TYP_DATEFLD          },
-{ u"TYP_DBFLD",                     SbxINTEGER,       CPROP_,          SbRtl_TYP_DBFLD            },
-{ u"TYP_DBNAMEFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_DBNAMEFLD        },
-{ u"TYP_DBNEXTSETFLD",              SbxINTEGER,       CPROP_,          SbRtl_TYP_DBNEXTSETFLD     },
-{ u"TYP_DBNUMSETFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_DBNUMSETFLD      },
-{ u"TYP_DBSETNUMBERFLD",            SbxINTEGER,       CPROP_,          SbRtl_TYP_DBSETNUMBERFLD   },
-{ u"TYP_DDEFLD",                    SbxINTEGER,       CPROP_,          SbRtl_TYP_DDEFLD           },
-{ u"TYP_DOCINFOFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_DOCINFOFLD       },
-{ u"TYP_DOCSTATFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_DOCSTATFLD       },
-{ u"TYP_EXTUSERFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_EXTUSERFLD       },
-{ u"TYP_FILENAMEFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_FILENAMEFLD      },
-{ u"TYP_FIXDATEFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_FIXDATEFLD       },
-{ u"TYP_FIXTIMEFLD",                SbxINTEGER,       CPROP_,          SbRtl_TYP_FIXTIMEFLD       },
-{ u"TYP_FORMELFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_FORMELFLD        },
-{ u"TYP_GETFLD",                    SbxINTEGER,       CPROP_,          SbRtl_TYP_GETFLD           },
-{ u"TYP_GETREFFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_GETREFFLD        },
-{ u"TYP_GETREFPAGEFLD",             SbxINTEGER,       CPROP_,          SbRtl_TYP_GETREFPAGEFLD    },
-{ u"TYP_HIDDENPARAFLD",             SbxINTEGER,       CPROP_,          SbRtl_TYP_HIDDENPARAFLD    },
-{ u"TYP_HIDDENTXTFLD",              SbxINTEGER,       CPROP_,          SbRtl_TYP_HIDDENTXTFLD     },
-{ u"TYP_INPUTFLD",                  SbxINTEGER,       CPROP_,          SbRtl_TYP_INPUTFLD         },
-{ u"TYP_INTERNETFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_INTERNETFLD      },
-{ u"TYP_JUMPEDITFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_JUMPEDITFLD      },
-{ u"TYP_MACROFLD",                  SbxINTEGER,       CPROP_,          SbRtl_TYP_MACROFLD         },
-{ u"TYP_NEXTPAGEFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_NEXTPAGEFLD      },
-{ u"TYP_PAGENUMBERFLD",             SbxINTEGER,       CPROP_,          SbRtl_TYP_PAGENUMBERFLD    },
-{ u"TYP_POSTITFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_POSTITFLD        },
-{ u"TYP_PREVPAGEFLD",               SbxINTEGER,       CPROP_,          SbRtl_TYP_PREVPAGEFLD      },
-{ u"TYP_SEQFLD",                    SbxINTEGER,       CPROP_,          SbRtl_TYP_SEQFLD           },
-{ u"TYP_SETFLD",                    SbxINTEGER,       CPROP_,          SbRtl_TYP_SETFLD           },
-{ u"TYP_SETINPFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_SETINPFLD        },
-{ u"TYP_SETREFFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_SETREFFLD        },
-{ u"TYP_SETREFPAGEFLD",             SbxINTEGER,       CPROP_,          SbRtl_TYP_SETREFPAGEFLD    },
-{ u"TYP_TEMPLNAMEFLD",              SbxINTEGER,       CPROP_,          SbRtl_TYP_TEMPLNAMEFLD     },
-{ u"TYP_TIMEFLD",                   SbxINTEGER,       CPROP_,          SbRtl_TYP_TIMEFLD          },
-{ u"TYP_USERFLD",                   SbxINTEGER,       CPROP_,          SbRtl_TYP_USERFLD          },
-{ u"TYP_USRINPFLD",                 SbxINTEGER,       CPROP_,          SbRtl_TYP_USRINPFLD        },
+// Related to: SwFieldTypesEnum in sw/inc/fldbas.hxx, .uno:InsertField (Type param), .uno:InsertDBField (Type param)
+{ u"TYP_AUTHORFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::AUTHOR>             },
+{ u"TYP_CHAPTERFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::CHAPTER>            },
+{ u"TYP_CONDTXTFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::CONDITIONALTEXT>    },
+{ u"TYP_DATEFLD",                   SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATE>               },
+{ u"TYP_DBFLD",                     SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATABASE>           },
+{ u"TYP_DBNAMEFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATABASENAME>       },
+{ u"TYP_DBNEXTSETFLD",              SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATABASENEXTSET>    },
+{ u"TYP_DBNUMSETFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATABASENUMBERSET>  },
+{ u"TYP_DBSETNUMBERFLD",            SbxINTEGER,       CPROP_, ConstInt<SbTYP::DATABASESETNUMBER>  },
+{ u"TYP_DDEFLD",                    SbxINTEGER,       CPROP_, ConstInt<SbTYP::DDE>                },
+{ u"TYP_DOCINFOFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::DOCUMENTINFO>       },
+{ u"TYP_DOCSTATFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::DOCUMENTSTATISTICS> },
+{ u"TYP_EXTUSERFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::EXTENDEDUSER>       },
+{ u"TYP_FILENAMEFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::FILENAME>           },
+{ u"TYP_FIXDATEFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::FIXEDDATE>          },
+{ u"TYP_FIXTIMEFLD",                SbxINTEGER,       CPROP_, ConstInt<SbTYP::FIXEDTIME>          },
+{ u"TYP_FORMELFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::FORMEL>             },
+{ u"TYP_GETFLD",                    SbxINTEGER,       CPROP_, ConstInt<SbTYP::GET>                },
+{ u"TYP_GETREFFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::GETREF>             },
+{ u"TYP_GETREFPAGEFLD",             SbxINTEGER,       CPROP_, ConstInt<SbTYP::GETREFPAGE>         },
+{ u"TYP_HIDDENPARAFLD",             SbxINTEGER,       CPROP_, ConstInt<SbTYP::HIDDENPARAGRAPH>    },
+{ u"TYP_HIDDENTXTFLD",              SbxINTEGER,       CPROP_, ConstInt<SbTYP::HIDDENTEXT>         },
+{ u"TYP_INPUTFLD",                  SbxINTEGER,       CPROP_, ConstInt<SbTYP::INPUT>              },
+{ u"TYP_INTERNETFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::INTERNET>           },
+{ u"TYP_JUMPEDITFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::JUMPEDIT>           },
+{ u"TYP_MACROFLD",                  SbxINTEGER,       CPROP_, ConstInt<SbTYP::MACRO>              },
+{ u"TYP_NEXTPAGEFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::NEXTPAGE>           },
+{ u"TYP_PAGENUMBERFLD",             SbxINTEGER,       CPROP_, ConstInt<SbTYP::PAGENUMBER>         },
+{ u"TYP_POSTITFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::POSTIT>             },
+{ u"TYP_PREVPAGEFLD",               SbxINTEGER,       CPROP_, ConstInt<SbTYP::PREVIOUSPAGE>       },
+{ u"TYP_SEQFLD",                    SbxINTEGER,       CPROP_, ConstInt<SbTYP::SEQUENCE>           },
+{ u"TYP_SETFLD",                    SbxINTEGER,       CPROP_, ConstInt<SbTYP::SET>                },
+{ u"TYP_SETINPFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::SETINPUT>           },
+{ u"TYP_SETREFFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::SETREF>             },
+{ u"TYP_SETREFPAGEFLD",             SbxINTEGER,       CPROP_, ConstInt<SbTYP::SETREFPAGE>         },
+{ u"TYP_TEMPLNAMEFLD",              SbxINTEGER,       CPROP_, ConstInt<SbTYP::TEMPLATENAME>       },
+{ u"TYP_TIMEFLD",                   SbxINTEGER,       CPROP_, ConstInt<SbTYP::TIME>               },
+{ u"TYP_USERFLD",                   SbxINTEGER,       CPROP_, ConstInt<SbTYP::USER>               },
+{ u"TYP_USRINPFLD",                 SbxINTEGER,       CPROP_, ConstInt<SbTYP::USERINPUT>          },
 
 { u"TypeLen",                       SbxINTEGER,   1 | FUNCTION_,       SbRtl_TypeLen              },
     arg(u"Var", SbxVARIANT),
@@ -892,15 +901,16 @@ constexpr Method aMethods[] = {
 { u"VarType",                       SbxINTEGER,   1 | FUNCTION_,       SbRtl_VarType              },
     arg(u"Varname", SbxVARIANT),
 
-{ u"V_EMPTY",                       SbxINTEGER,       CPROP_,          SbRtl_V_EMPTY              },
-{ u"V_NULL",                        SbxINTEGER,       CPROP_,          SbRtl_V_NULL               },
-{ u"V_INTEGER",                     SbxINTEGER,       CPROP_,          SbRtl_V_INTEGER            },
-{ u"V_LONG",                        SbxINTEGER,       CPROP_,          SbRtl_V_LONG               },
-{ u"V_SINGLE",                      SbxINTEGER,       CPROP_,          SbRtl_V_SINGLE             },
-{ u"V_DOUBLE",                      SbxINTEGER,       CPROP_,          SbRtl_V_DOUBLE             },
-{ u"V_CURRENCY",                    SbxINTEGER,       CPROP_,          SbRtl_V_CURRENCY           },
-{ u"V_DATE",                        SbxINTEGER,       CPROP_,          SbRtl_V_DATE               },
-{ u"V_STRING",                      SbxINTEGER,       CPROP_,          SbRtl_V_STRING             },
+// Related to: VarType
+{ u"V_EMPTY",                       SbxINTEGER,       CPROP_,          ConstInt<SbxEMPTY>         },
+{ u"V_NULL",                        SbxINTEGER,       CPROP_,          ConstInt<SbxNULL>          },
+{ u"V_INTEGER",                     SbxINTEGER,       CPROP_,          ConstInt<SbxINTEGER>       },
+{ u"V_LONG",                        SbxINTEGER,       CPROP_,          ConstInt<SbxLONG>          },
+{ u"V_SINGLE",                      SbxINTEGER,       CPROP_,          ConstInt<SbxSINGLE>        },
+{ u"V_DOUBLE",                      SbxINTEGER,       CPROP_,          ConstInt<SbxDOUBLE>        },
+{ u"V_CURRENCY",                    SbxINTEGER,       CPROP_,          ConstInt<SbxCURRENCY>      },
+{ u"V_DATE",                        SbxINTEGER,       CPROP_,          ConstInt<SbxDATE>          },
+{ u"V_STRING",                      SbxINTEGER,       CPROP_,          ConstInt<SbxSTRING>        },
 
 { u"Wait",                          SbxNULL,      1 | FUNCTION_,       SbRtl_Wait                 },
     arg(u"Milliseconds", SbxLONG),
@@ -921,10 +931,32 @@ constexpr Method aMethods[] = {
 
 { u"Year",                          SbxINTEGER,   1 | FUNCTION_,       SbRtl_Year                 },
     arg(u"Date", SbxDATE),
-
-{ {}, SbxNULL, -1, nullptr }};  // end of the table
+};  // end of the table
 
 static_assert(MethodsTableValid(aMethods));
+
+// building the info-structure for single elements
+// if nIdx = 0, don't create anything (Std-Props!)
+
+SbxInfo* GetMethodInfo(std::size_t nIdx)
+{
+    if (!nIdx)
+        return nullptr;
+    assert(nIdx <= std::size(aMethods));
+    const Method* p = &aMethods[nIdx - 1];
+    SbxInfo* pInfo_ = new SbxInfo;
+    short nPar = p->nArgs & ARGSMASK_;
+    for (short i = 0; i < nPar; i++)
+    {
+        p++;
+        SbxFlagBits nFlags_ = static_cast<SbxFlagBits>((p->nArgs >> 8) & 0x03);
+        if (p->nArgs & OPT_)
+            nFlags_ |= SbxFlagBits::Optional;
+        pInfo_->AddParam(OUString(p->sName), p->eType, nFlags_);
+    }
+    return pInfo_;
+}
+}
 
 SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 {
@@ -962,7 +994,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
     {
         // else search one
         sal_uInt16 nHash_ = SbxVariable::MakeHashCode( rName );
-        const Method* p = aMethods;
+        auto p = std::begin(aMethods);
         bool bFound = false;
         short nIndex = 0;
         sal_uInt16 nSrchMask = TYPEMASK_;
@@ -973,8 +1005,9 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
             case SbxClassType::Object:   nSrchMask = OBJECT_; break;
             default: break;
         }
-        while( p->nArgs != -1 )
+        while (p != std::end(aMethods))
         {
+            assert(p < std::end(aMethods));
             if( ( p->nArgs & nSrchMask )
              && ( p->nHash == nHash_ )
                 && (rName.equalsIgnoreAsciiCase(p->sName)))
@@ -1043,14 +1076,15 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     SbxVariable* pVar = pHint->GetVar();
     SbxArray* pPar_ = pVar->GetParameters();
-    const sal_uInt16 nCallId = static_cast<sal_uInt16>(pVar->GetUserData());
+    const std::size_t nCallId = pVar->GetUserData();
     if( nCallId )
     {
         const SfxHintId t = pHint->GetId();
         if( t == SfxHintId::BasicInfoWanted )
-            pVar->SetInfo( GetInfo( static_cast<short>(pVar->GetUserData()) ) );
+            pVar->SetInfo(GetMethodInfo(nCallId));
         else
         {
+            assert(nCallId <= std::size(aMethods));
             bool bWrite = false;
             if( t == SfxHintId::BasicDataChanged )
                 bWrite = true;
@@ -1069,29 +1103,6 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
     }
     SbxObject::Notify( rBC, rHint );
-}
-
-// building the info-structure for single elements
-// if nIdx = 0, don't create anything (Std-Props!)
-
-SbxInfo* SbiStdObject::GetInfo( short nIdx )
-{
-    if( !nIdx )
-        return nullptr;
-    const Method* p = &aMethods[ --nIdx ];
-    SbxInfo* pInfo_ = new SbxInfo;
-    short nPar = p->nArgs & ARGSMASK_;
-    for( short i = 0; i < nPar; i++ )
-    {
-        p++;
-        SbxFlagBits nFlags_ = static_cast<SbxFlagBits>(( p->nArgs >> 8 ) & 0x03);
-        if( p->nArgs & OPT_ )
-        {
-            nFlags_ |= SbxFlagBits::Optional;
-        }
-        pInfo_->AddParam(OUString(p->sName), p->eType, nFlags_);
-    }
-    return pInfo_;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

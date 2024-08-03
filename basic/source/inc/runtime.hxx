@@ -89,16 +89,92 @@ struct SbiForStack {                // for/next stack:
 
 #define MAXRECURSION 500 //to prevent dead-recursions
 
-enum class SbAttributes {
-    NONE          = 0x0000,
-    READONLY      = 0x0001,
-    HIDDEN        = 0x0002,
-    DIRECTORY     = 0x0010
-};
-
-namespace o3tl
+// Related to: Dir, GetAttr, SetAttr
+namespace SbAttributes
 {
-    template<> struct typed_flags<SbAttributes> : is_typed_flags<SbAttributes, 0x13> {};
+constexpr sal_Int16 NORMAL    = 0x0000;
+constexpr sal_Int16 READONLY  = 0x0001;
+constexpr sal_Int16 HIDDEN    = 0x0002;
+constexpr sal_Int16 SYSTEM    = 0x0004;
+constexpr sal_Int16 VOLUME    = 0x0008;
+constexpr sal_Int16 DIRECTORY = 0x0010;
+constexpr sal_Int16 ARCHIVE   = 0x0020;
+}
+
+// Related to: MsgBox (Buttons argument)
+namespace SbMB
+{
+constexpr sal_Int16 OK = 0;
+constexpr sal_Int16 OKCANCEL = 1;
+constexpr sal_Int16 ABORTRETRYIGNORE = 2;
+constexpr sal_Int16 YESNOCANCEL = 3;
+constexpr sal_Int16 YESNO = 4;
+constexpr sal_Int16 RETRYCANCEL = 5;
+constexpr sal_Int16 ICONSTOP = 16;
+constexpr sal_Int16 ICONQUESTION = 32;
+constexpr sal_Int16 ICONEXCLAMATION = 48;
+constexpr sal_Int16 ICONINFORMATION = 64;
+constexpr sal_Int16 DEFBUTTON1 = 0;
+constexpr sal_Int16 DEFBUTTON2 = 256;
+constexpr sal_Int16 DEFBUTTON3 = 512;
+constexpr sal_Int16 APPLMODAL = 0;
+constexpr sal_Int16 SYSTEMMODAL = 4096;
+}
+
+// Related to: MsgBox (return value)
+namespace SbMBID
+{
+constexpr sal_Int16 OK = 1;
+constexpr sal_Int16 CANCEL = 2;
+constexpr sal_Int16 ABORT = 3;
+constexpr sal_Int16 RETRY = 4;
+constexpr sal_Int16 IGNORE = 5;
+constexpr sal_Int16 YES = 6;
+constexpr sal_Int16 NO = 7;
+}
+
+// Related to: SwFieldTypesEnum in sw/inc/fldbas.hxx
+namespace SbTYP
+{
+constexpr sal_Int16 DATE = 0;
+constexpr sal_Int16 TIME = 1;
+constexpr sal_Int16 FILENAME = 2;
+constexpr sal_Int16 DATABASENAME = 3;
+constexpr sal_Int16 CHAPTER = 4;
+constexpr sal_Int16 PAGENUMBER = 5;
+constexpr sal_Int16 DOCUMENTSTATISTICS = 6;
+constexpr sal_Int16 AUTHOR = 7;
+constexpr sal_Int16 SET = 8;
+constexpr sal_Int16 GET = 9;
+constexpr sal_Int16 FORMEL = 10;
+constexpr sal_Int16 HIDDENTEXT = 11;
+constexpr sal_Int16 SETREF = 12;
+constexpr sal_Int16 GETREF = 13;
+constexpr sal_Int16 DDE = 14;
+constexpr sal_Int16 MACRO = 15;
+constexpr sal_Int16 INPUT = 16;
+constexpr sal_Int16 HIDDENPARAGRAPH = 17;
+constexpr sal_Int16 DOCUMENTINFO = 18;
+constexpr sal_Int16 DATABASE = 19;
+constexpr sal_Int16 USER = 20;
+constexpr sal_Int16 POSTIT = 21;
+constexpr sal_Int16 TEMPLATENAME = 22;
+constexpr sal_Int16 SEQUENCE = 23;
+constexpr sal_Int16 DATABASENEXTSET = 24;
+constexpr sal_Int16 DATABASENUMBERSET = 25;
+constexpr sal_Int16 DATABASESETNUMBER = 26;
+constexpr sal_Int16 CONDITIONALTEXT = 27;
+constexpr sal_Int16 NEXTPAGE = 28;
+constexpr sal_Int16 PREVIOUSPAGE = 29;
+constexpr sal_Int16 EXTENDEDUSER = 30;
+constexpr sal_Int16 FIXEDDATE = 31;
+constexpr sal_Int16 FIXEDTIME = 32;
+constexpr sal_Int16 SETINPUT = 33;
+constexpr sal_Int16 USERINPUT = 34;
+constexpr sal_Int16 SETREFPAGE = 35;
+constexpr sal_Int16 GETREFPAGE = 36;
+constexpr sal_Int16 INTERNET = 37;
+constexpr sal_Int16 JUMPEDIT = 38;
 }
 
 class SbiRTLData
@@ -106,7 +182,7 @@ class SbiRTLData
 public:
 
     std::unique_ptr<osl::Directory> pDir;
-    SbAttributes nDirFlags;
+    sal_Int16 nDirFlags;
     short   nCurDirPos;
 
     OUString sFullNameToBeChecked;

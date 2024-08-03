@@ -28,111 +28,11 @@ typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, bool bWrite );
 extern void SbRtl_Date(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Err(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Erl(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_False(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Empty(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Nothing(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Null(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_True(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_ATTR_NORMAL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_READONLY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_HIDDEN(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_SYSTEM(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_VOLUME(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_DIRECTORY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_ATTR_ARCHIVE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_V_EMPTY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_NULL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_INTEGER(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_LONG(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_SINGLE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_DOUBLE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_CURRENCY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_DATE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_V_STRING(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_MB_OK(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_OKCANCEL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_ABORTRETRYIGNORE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_YESNOCANCEL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_YESNO(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_RETRYCANCEL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_ICONSTOP(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_ICONQUESTION(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_ICONEXCLAMATION(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_ICONINFORMATION(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_DEFBUTTON1(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_DEFBUTTON2(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_DEFBUTTON3(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_APPLMODAL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_MB_SYSTEMMODAL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_IDOK(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDCANCEL(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDABORT(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDRETRY(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDIGNORE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDYES(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_IDNO(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_CF_TEXT(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_CF_BITMAP(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_CF_METAFILEPICT(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
 extern void SbRtl_PI(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_SET_OFF(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_SET_ON(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TOGGLE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_TYP_AUTHORFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_CHAPTERFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_CONDTXTFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DATEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DBFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DBNAMEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DBNEXTSETFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DBNUMSETFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DBSETNUMBERFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DDEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DOCINFOFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_DOCSTATFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_EXTUSERFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_FILENAMEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_FIXDATEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_FIXTIMEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_FORMELFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_GETFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_GETREFFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_HIDDENPARAFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_HIDDENTXTFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_INPUTFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_MACROFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_NEXTPAGEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_PAGENUMBERFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_POSTITFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_PREVPAGEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_SEQFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_SETFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_SETINPFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_SETREFFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_TEMPLNAMEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_TIMEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_USERFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_USRINPFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_SETREFPAGEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_GETREFPAGEFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_INTERNETFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_TYP_JUMPEDITFLD(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_FRAMEANCHORPAGE(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_FRAMEANCHORPARA(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_FRAMEANCHORCHAR(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-
-extern void SbRtl_CLEAR_ALLTABS(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_CLEAR_TAB(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_SET_TAB(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
 // Methods
 
