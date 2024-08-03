@@ -963,8 +963,8 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             }
             continue;
         }
-        ::sw::mark::IBookmark *const pBookmark(
-                const_cast<::sw::mark::IBookmark *>(it->GetBookmark()));
+        ::sw::mark::Bookmark *const pBookmark(
+                const_cast<::sw::mark::Bookmark *>(it->GetBookmark()));
         if (pBookmark)
         {
             SwSbxValue const aValue(aCalc.Calculate(pBookmark->GetHideCondition()));

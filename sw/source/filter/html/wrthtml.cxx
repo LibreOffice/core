@@ -1286,7 +1286,7 @@ void SwHTMLWriter::OutBookmarks()
         // The area of bookmarks is first ignored, because it's not read.
 
         // first the SWG specific data:
-        if ( dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && !pBookmark->GetName().isEmpty() )
+        if ( dynamic_cast< const ::sw::mark::Bookmark* >(pBookmark) && !pBookmark->GetName().isEmpty() )
         {
             OutAnchor( pBookmark->GetName() );
         }

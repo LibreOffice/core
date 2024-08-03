@@ -85,7 +85,7 @@ namespace
         *GetCursor(),
         rName,
         eMark, sw::mark::InsertMode::New);
-    ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
+    ::sw::mark::Bookmark* pBookmark = dynamic_cast< ::sw::mark::Bookmark* >(pMark);
     if(pBookmark)
     {
         pBookmark->SetKeyCode(rCode);
@@ -108,7 +108,7 @@ namespace
         *GetCursor(),
         rName,
         IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
-    ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
+    ::sw::mark::Bookmark* pBookmark = dynamic_cast< ::sw::mark::Bookmark* >(pMark);
     if (pBookmark)
     {
         pBookmark->SetKeyCode(rCode);

@@ -472,7 +472,7 @@ bool SwTextFrame::FormatEmpty()
          pIndex; pIndex = pIndex->GetNext())
     {
         sw::mark::IMark const*const pMark = pIndex->GetMark();
-        if (dynamic_cast<const sw::mark::IBookmark*>(pMark) != nullptr)
+        if (dynamic_cast<const sw::mark::Bookmark*>(pMark) != nullptr)
         {   // need bookmark portions!
             return false;
         }

@@ -36,7 +36,7 @@ class Point;
 class MultiSelection;
 enum class SwFontScript;
 namespace sw { struct MergedPara; }
-namespace sw::mark { class IBookmark; }
+namespace sw::mark { class Bookmark; }
 
 #define SPACING_PRECISION_FACTOR 100
 
@@ -189,10 +189,10 @@ public:
             GetBookmarks(TextFrameIndex const nPos);
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
-            std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
+            std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> * pBookmarks);
     static void selectHiddenTextProperty(const SwTextNode& rNode,
             MultiSelection &rHiddenMulti,
-            std::vector<std::pair<sw::mark::IBookmark const*, MarkKind>> * pBookmarks);
+            std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> * pBookmarks);
     static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
 
     // "high" level operations, nPos refers to string position

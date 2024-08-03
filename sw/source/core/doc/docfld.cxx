@@ -112,7 +112,7 @@ SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
     }
 }
 
-SetGetExpField::SetGetExpField(::sw::mark::IBookmark const& rBookmark,
+SetGetExpField::SetGetExpField(::sw::mark::Bookmark const& rBookmark,
                                SwPosition const*const pPos,
                                sal_uInt16 const nPageNumber)
     : m_nPageNumber(nPageNumber)
@@ -922,7 +922,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         auto const& rIDMA(*rDoc.getIDocumentMarkAccess());
         for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
         {
-            auto const pBookmark(dynamic_cast<::sw::mark::IBookmark const*>(*it));
+            auto const pBookmark(dynamic_cast<::sw::mark::Bookmark const*>(*it));
             assert(pBookmark);
             if (!pBookmark->GetHideCondition().isEmpty())
             {

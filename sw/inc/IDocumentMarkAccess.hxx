@@ -286,20 +286,20 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t findFirstMarkNotStartsBefore(const SwPosition& rPos) const =0;
 
-        // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
+        // interface Bookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
         /** check if the selection would delete a BOOKMARK */
         virtual bool isBookmarkDeleted(SwPaM const& rPaM, bool isReplace) const =0;
 
-        /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.
+        /** returns a STL-like random access iterator to the begin of the sequence the Bookmarks.
         */
         virtual const_iterator_t getBookmarksBegin() const =0;
 
-        /** returns a STL-like random access iterator to the end of the sequence of IBookmarks.
+        /** returns a STL-like random access iterator to the end of the sequence of Bookmarks.
         */
         virtual const_iterator_t getBookmarksEnd() const =0;
 
-        /** returns the number of IBookmarks.
+        /** returns the number of Bookmarks.
         */
         virtual sal_Int32 getBookmarksCount() const =0;
 

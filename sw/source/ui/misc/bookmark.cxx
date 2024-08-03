@@ -498,7 +498,7 @@ std::unique_ptr<weld::TreeIter> BookmarkTable::get_selected() const
 
 void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::IMark* const pMark)
 {
-    sw::mark::IBookmark* pBookmark = dynamic_cast<sw::mark::IBookmark*>(pMark);
+    sw::mark::Bookmark* pBookmark = dynamic_cast<sw::mark::Bookmark*>(pMark);
     assert(pBookmark);
 
     OUString sBookmarkNodeText;

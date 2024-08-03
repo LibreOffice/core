@@ -622,7 +622,7 @@ SwHistoryBookmark::SwHistoryBookmark(
     , m_bHadOtherPos(rBkmk.IsExpanded())
     , m_eBkmkType(IDocumentMarkAccess::GetType(rBkmk))
 {
-    const ::sw::mark::IBookmark* const pBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(&rBkmk);
+    const ::sw::mark::Bookmark* const pBookmark = dynamic_cast< const ::sw::mark::Bookmark* >(&rBkmk);
     if(!pBookmark)
         return;
 
@@ -630,13 +630,7 @@ SwHistoryBookmark::SwHistoryBookmark(
     m_aShortName = pBookmark->GetShortName();
     m_bHidden = pBookmark->IsHidden();
     m_aHideCondition = pBookmark->GetHideCondition();
-
-    ::sfx2::Metadatable const*const pMetadatable(
-            dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
-    if (pMetadatable)
-    {
-        m_pMetadataUndo = pMetadatable->CreateUndo();
-    }
+    m_pMetadataUndo = pBookmark->CreateUndo();
 }
 
 void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
@@ -686,8 +680,8 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     {
         pMarkAccess->deleteMark( pMark );
     }
-    ::sw::mark::IBookmark* const pBookmark =
-        dynamic_cast<::sw::mark::IBookmark*>(
+    ::sw::mark::Bookmark* const pBookmark =
+        dynamic_cast<::sw::mark::Bookmark*>(
             pMarkAccess->makeMark(*oPam, m_aName, m_eBkmkType, sw::mark::InsertMode::New));
     if ( pBookmark == nullptr )
         return;
@@ -698,15 +692,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     pBookmark->SetHideCondition(m_aHideCondition);
 
     if (m_pMetadataUndo)
-    {
-        ::sfx2::Metadatable * const pMeta(
-            dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
-        OSL_ENSURE(pMeta, "metadata undo, but not metadatable?");
-        if (pMeta)
-        {
-            pMeta->RestoreMetadata(m_pMetadataUndo);
-        }
-    }
+        pBookmark->RestoreMetadata(m_pMetadataUndo);
 }
 
 bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)

@@ -324,10 +324,10 @@ namespace sw
             rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, sRequestedName);
 
             // copying additional attributes for bookmarks or fieldmarks
-            ::sw::mark::IBookmark* const pNewBookmark =
-                dynamic_cast< ::sw::mark::IBookmark* const >(pNewMark);
-            const ::sw::mark::IBookmark* const pOldBookmark =
-                dynamic_cast< const ::sw::mark::IBookmark* >(pMark);
+            ::sw::mark::Bookmark* const pNewBookmark =
+                dynamic_cast< ::sw::mark::Bookmark* const >(pNewMark);
+            const ::sw::mark::Bookmark* const pOldBookmark =
+                dynamic_cast< const ::sw::mark::Bookmark* >(pMark);
             if (pNewBookmark && pOldBookmark)
             {
                 pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());

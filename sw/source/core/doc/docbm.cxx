@@ -1913,20 +1913,14 @@ SaveBookmark::SaveBookmark(
     , m_bHidden(false)
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
 {
-    const IBookmark* const pBookmark = dynamic_cast< const IBookmark* >(&rBkmk);
+    const Bookmark* const pBookmark = dynamic_cast< const Bookmark* >(&rBkmk);
     if(pBookmark)
     {
         m_aShortName = pBookmark->GetShortName();
         m_aCode = pBookmark->GetKeyCode();
         m_bHidden = pBookmark->IsHidden();
         m_aHideCondition = pBookmark->GetHideCondition();
-
-        ::sfx2::Metadatable const*const pMetadatable(
-                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
-        if (pMetadatable)
-        {
-            m_pMetadataUndo = pMetadatable->CreateUndo();
-        }
+        m_pMetadataUndo = pBookmark->CreateUndo();
     }
     m_nNode1 = rBkmk.GetMarkPos().GetNodeIndex();
     m_nContent1 = rBkmk.GetMarkPos().GetContentIndex();
@@ -1995,7 +1989,7 @@ void SaveBookmark::SetInDoc(
         && !CheckNodesRange(aPam.GetPoint()->GetNode(), aPam.GetMark()->GetNode(), true))
         return;
 
-    ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(
+    ::sw::mark::Bookmark* const pBookmark = dynamic_cast<::sw::mark::Bookmark*>(
         pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName,
             m_eOrigBkmType, sw::mark::InsertMode::CopyText));
     if(!pBookmark)
@@ -2007,15 +2001,7 @@ void SaveBookmark::SetInDoc(
     pBookmark->SetHideCondition(m_aHideCondition);
 
     if (m_pMetadataUndo)
-    {
-        ::sfx2::Metadatable * const pMeta(
-            dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
-        assert(pMeta && "metadata undo, but not metadatable?");
-        if (pMeta)
-        {
-            pMeta->RestoreMetadata(m_pMetadataUndo);
-        }
-    }
+        pBookmark->RestoreMetadata(m_pMetadataUndo);
 }
 
 // DelBookmarks
