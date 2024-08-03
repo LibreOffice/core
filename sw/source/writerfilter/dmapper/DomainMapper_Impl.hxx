@@ -61,6 +61,7 @@ class SwXTextSection;
 class SwXTextField;
 class SwXTextFrame;
 class SwXTextEmbeddedObject;
+class SwXText;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -553,7 +554,7 @@ private:
 
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedCharacterStyleNo;
-    css::uno::Reference<css::text::XText> m_xBodyText;
+    rtl::Reference<SwXText> m_xBodyText;
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::vector<AnchoredContext> m_vAnchoredStack;
@@ -725,7 +726,7 @@ public:
     css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
     css::uno::Reference<css::container::XNameContainer> const& GetParagraphStyles();
     OUString GetUnusedCharacterStyleName();
-    css::uno::Reference<css::text::XText> const & GetBodyText();
+    rtl::Reference<SwXText> const & GetBodyText();
     const rtl::Reference<SwXTextDocument>& GetTextDocument() const
     {
         return m_xTextDocument;

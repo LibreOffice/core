@@ -46,7 +46,7 @@ class SwPaM;
 class SwXTextCursor;
 class SwXParagraph;
 
-class SAL_DLLPUBLIC_RTTI SwXText
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXText
     : public css::lang::XTypeProvider
     , public css::beans::XPropertySet
     , public css::text::XTextAppendAndConvert

@@ -68,6 +68,7 @@
 #include <unosection.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
+#include <unotext.hxx>
 #include <utility>
 
 #include <frozen/bits/defines.h>
@@ -1166,7 +1167,7 @@ static uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFir
     uno::Reference< beans::XPropertySet > xRangeProperties;
     if ( bIsFirstSection && rDM_Impl.GetBodyText().is() )
     {
-        uno::Reference< container::XEnumerationAccess > xEnumAccess( rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XEnumerationAccess > xEnumAccess( dynamic_cast<container::XEnumerationAccess*>(rDM_Impl.GetBodyText().get()), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
         xRangeProperties.set( xEnum->nextElement(), uno::UNO_QUERY_THROW );
         if ( rDM_Impl.GetIsDummyParaAddedForTableInSection() && xEnum->hasMoreElements() )

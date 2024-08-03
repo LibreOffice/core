@@ -37,7 +37,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::container::XEnumerationAccess
 > SwXBodyText_Base;
 
-class SwXBodyText final
+class SW_DLLPUBLIC SwXBodyText final
     : public SwXBodyText_Base
     , public SwXText
 {

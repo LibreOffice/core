@@ -148,6 +148,7 @@
 #include <unocontentcontrol.hxx>
 #include <unofootnote.hxx>
 #include <unoport.hxx>
+#include <unotextbodyhf.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -405,13 +406,11 @@ DomainMapper_Impl::DomainMapper_Impl(
         throw uno::Exception(u"failed to find body text of the insert position"_ustr, nullptr);
     }
 
-    uno::Reference< text::XTextAppend > xBodyTextAppend( m_xBodyText, uno::UNO_QUERY );
-    m_aTextAppendStack.push(TextAppendContext(xBodyTextAppend,
+    m_aTextAppendStack.push(TextAppendContext(m_xBodyText,
                 m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(m_xInsertTextRange)));
 
     //todo: does it makes sense to set the body text as static text interface?
-    uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
-    m_pTableHandler = new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this);
+    m_pTableHandler = new DomainMapperTableHandler(m_xBodyText, *this);
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
@@ -528,14 +527,18 @@ OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
     return sPageStyleName;
 }
 
-uno::Reference< text::XText > const & DomainMapper_Impl::GetBodyText()
+rtl::Reference< SwXText > const & DomainMapper_Impl::GetBodyText()
 {
     if(!m_xBodyText.is())
     {
         if (m_xInsertTextRange.is())
-            m_xBodyText = m_xInsertTextRange->getText();
+        {
+            uno::Reference<css::text::XText> xText = m_xInsertTextRange->getText();
+            assert(!xText || dynamic_cast<SwXText*>(xText.get()));
+            m_xBodyText = dynamic_cast<SwXText*>(m_xInsertTextRange->getText().get());
+        }
         else if (m_xTextDocument.is())
-            m_xBodyText = m_xTextDocument->getText();
+            m_xBodyText = m_xTextDocument->getBodyText();
     }
     return m_xBodyText;
 }
