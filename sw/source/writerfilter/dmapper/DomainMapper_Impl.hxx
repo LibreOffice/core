@@ -62,6 +62,7 @@ class SwXTextField;
 class SwXTextFrame;
 class SwXTextEmbeddedObject;
 class SwXText;
+class SwXStyleFamily;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -546,11 +547,11 @@ private:
     rtl::Reference<SwXTextDocument> m_xTextDocument;
     rtl::Reference<SwXDocumentSettings> m_xDocumentSettings;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-    css::uno::Reference<css::container::XNameContainer> m_xPageStyles1;
+    rtl::Reference<SwXStyleFamily> m_xPageStyles;
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
-    css::uno::Reference<css::container::XNameContainer> m_xCharacterStyles;
-    css::uno::Reference<css::container::XNameContainer> m_xParagraphStyles;
+    rtl::Reference<SwXStyleFamily> m_xCharacterStyles;
+    rtl::Reference<SwXStyleFamily> m_xParagraphStyles;
 
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedCharacterStyleNo;
@@ -721,10 +722,10 @@ public:
         return m_pLastSectionContext.get( );
     }
 
-    css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
+    rtl::Reference<SwXStyleFamily> const & GetPageStyles();
     OUString GetUnusedPageStyleName();
-    css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
-    css::uno::Reference<css::container::XNameContainer> const& GetParagraphStyles();
+    rtl::Reference<SwXStyleFamily> const & GetCharacterStyles();
+    rtl::Reference<SwXStyleFamily> const& GetParagraphStyles();
     OUString GetUnusedCharacterStyleName();
     rtl::Reference<SwXText> const & GetBodyText();
     const rtl::Reference<SwXTextDocument>& GetTextDocument() const

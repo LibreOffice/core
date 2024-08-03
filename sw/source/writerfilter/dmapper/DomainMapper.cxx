@@ -93,6 +93,7 @@
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotxdoc.hxx>
+#include <unostyle.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -5085,7 +5086,7 @@ void DomainMapper::commentProps(const OUString& sId, const CommentProperties& rP
     m_pImpl->commentProps(sId, rProps);
 }
 
-css::uno::Reference<css::container::XNameContainer> const & DomainMapper::GetCharacterStyles()
+rtl::Reference<SwXStyleFamily> const & DomainMapper::GetCharacterStyles()
 {
     return m_pImpl->GetCharacterStyles();
 }

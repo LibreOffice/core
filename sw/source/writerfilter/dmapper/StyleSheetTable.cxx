@@ -54,6 +54,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
+#include <unostyle.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -2145,7 +2146,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         return sListLabel;
 
     //create a new one otherwise
-    const uno::Reference< container::XNameContainer >& xCharStyles = m_pImpl->m_rDMapper.GetCharacterStyles();
+    const rtl::Reference< SwXStyleFamily >& xCharStyles = m_pImpl->m_rDMapper.GetCharacterStyles();
     sListLabel = m_pImpl->m_rDMapper.GetUnusedCharacterStyleName();
     if (!m_pImpl->m_xTextDocument)
         throw uno::RuntimeException();

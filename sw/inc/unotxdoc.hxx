@@ -538,6 +538,7 @@ public:
     rtl::Reference<SwXFootnote> createEndnote();
     rtl::Reference<SwXTextEmbeddedObject> createTextEmbeddedObject();
     rtl::Reference<SvXMLEmbeddedObjectHelper> createEmbeddedObjectResolver();
+    rtl::Reference< SwXStyleFamilies > getSwStyleFamilies();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

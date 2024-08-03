@@ -1251,6 +1251,11 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames()
 
 Reference< XNameAccess >  SwXTextDocument::getStyleFamilies()
 {
+    return getSwStyleFamilies();
+}
+
+rtl::Reference< SwXStyleFamilies >  SwXTextDocument::getSwStyleFamilies()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXStyleFamilies.is())

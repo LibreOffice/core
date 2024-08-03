@@ -48,6 +48,8 @@ class SwXStyle;
 class SwXTextCellStyle;
 class SwXPageStyle;
 class SwXFrameStyle;
+class StyleFamilyEntry;
+class SwXStyleFamily;
 
 class SwXStyleFamilies final : public cppu::WeakImplHelper
 <
@@ -60,7 +62,7 @@ class SwXStyleFamilies final : public cppu::WeakImplHelper
 {
     SwDocShell*         m_pDocShell;
 
-    std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vFamilies;
+    std::map<SfxStyleFamily, rtl::Reference<SwXStyleFamily>> m_vFamilies;
 
     virtual ~SwXStyleFamilies() override;
 public:
@@ -87,6 +89,12 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetPageStyles();
+    SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetCharacterStyles();
+    SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetParagraphStyles();
+    rtl::Reference<SwXStyleFamily> GetStylesByName(const OUString& rName);
+    rtl::Reference<SwXStyleFamily> GetStylesByIndex(sal_Int32 nIndex);
 
     static css::uno::Reference<css::style::XStyle> CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc);
     static rtl::Reference<SwXStyle> CreateStyleCharOrParaOrPseudo(SfxStyleFamily eFamily, SwDoc& rDoc);
@@ -388,6 +396,61 @@ class SwXTextCellStyle final : public cppu::WeakImplHelper
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     static rtl::Reference<SwXTextCellStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
+};
+
+class SW_DLLPUBLIC SwXStyleFamily final : public cppu::WeakImplHelper
+<
+    css::container::XNameContainer,
+    css::lang::XServiceInfo,
+    css::container::XIndexAccess,
+    css::beans::XPropertySet
+>
+, public SfxListener
+{
+    const StyleFamilyEntry& m_rEntry;
+    SfxStyleSheetBasePool* m_pBasePool;
+    SwDocShell* m_pDocShell;
+
+    SwXStyle* FindStyle(std::u16string_view rStyleName) const;
+    sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32);
+    static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily);
+public:
+    SwXStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily);
+
+    //XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+
+    //XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
+
+    //XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
+
+    //XNameContainer
+    virtual void SAL_CALL insertByName(const OUString& Name, const css::uno::Any& Element) override;
+    virtual void SAL_CALL replaceByName(const OUString& Name, const css::uno::Any& Element) override;
+    virtual void SAL_CALL removeByName(const OUString& Name) override;
+
+    //XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual void SAL_CALL setPropertyValue( const OUString&, const css::uno::Any&) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString&, const css::uno::Reference<css::beans::XPropertyChangeListener>&) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString&, const css::uno::Reference<css::beans::XPropertyChangeListener>&) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString&, const css::uno::Reference<css::beans::XVetoableChangeListener>&) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString&, const css::uno::Reference<css::beans::XVetoableChangeListener>&) override;
+
+    //SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

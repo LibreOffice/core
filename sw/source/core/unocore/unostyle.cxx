@@ -586,108 +586,91 @@ static rtl::Reference<SwXTextCellStyle> CreateStyleCell(SwDocShell* pDocShell, c
     return SwXTextCellStyle::CreateXTextCellStyle(pDocShell, sStyleName);
 }
 
-namespace {
-
-class XStyleFamily : public cppu::WeakImplHelper
-<
-    container::XNameContainer,
-    lang::XServiceInfo,
-    container::XIndexAccess,
-    beans::XPropertySet
->
-, public SfxListener
+sal_Int32 SwXStyleFamily::GetCountOrName(OUString* pString, sal_Int32 nIndex)
 {
-    const StyleFamilyEntry& m_rEntry;
-    SfxStyleSheetBasePool* m_pBasePool;
-    SwDocShell* m_pDocShell;
-
-    SwXStyle* FindStyle(std::u16string_view rStyleName) const;
-    sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
-        { return m_rEntry.getCountOrName(*m_pDocShell->GetDoc(), pString, nIndex); };
-    static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily)
-    {
-        auto& entries = lcl_GetStyleFamilyEntries();
-        const auto pEntry = std::find_if(entries.begin(), entries.end(),
-                [eFamily] (const StyleFamilyEntry& e) { return e.family() == eFamily; });
-        assert(pEntry != entries.end());
-        return *pEntry;
-    }
-public:
-    XStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily)
-        : m_rEntry(InitEntry(eFamily))
-        , m_pBasePool(pDocShell->GetStyleSheetPool())
-        , m_pDocShell(pDocShell)
-    {
-        if (m_pBasePool) //tdf#124142 html docs can have no styles
-            StartListening(*m_pBasePool);
-    }
-
-    //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override
-    {
-        SolarMutexGuard aGuard;
-        return GetCountOrName(nullptr);
-    };
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
-
-    //XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
-        { return cppu::UnoType<style::XStyle>::get(); };
-    virtual sal_Bool SAL_CALL hasElements(  ) override
-    {
-        if(!m_pBasePool)
-            throw uno::RuntimeException();
-        return true;
-    }
-
-    //XNameAccess
-    virtual uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
-
-    //XNameContainer
-    virtual void SAL_CALL insertByName(const OUString& Name, const uno::Any& Element) override;
-    virtual void SAL_CALL replaceByName(const OUString& Name, const uno::Any& Element) override;
-    virtual void SAL_CALL removeByName(const OUString& Name) override;
-
-    //XPropertySet
-    virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override
-        { return {}; };
-    virtual void SAL_CALL setPropertyValue( const OUString&, const uno::Any&) override
-        { SAL_WARN("sw.uno", "###unexpected!"); };
-    virtual uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&) override
-        { SAL_WARN("sw.uno", "###unexpected!"); };
-    virtual void SAL_CALL removePropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&) override
-        { SAL_WARN("sw.uno", "###unexpected!"); };
-    virtual void SAL_CALL addVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&) override
-        { SAL_WARN("sw.uno", "###unexpected!"); };
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&) override
-        { SAL_WARN("sw.uno", "###unexpected!"); };
-
-    //SfxListener
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override
-    {
-        if(rHint.GetId() == SfxHintId::Dying)
-        {
-            m_pBasePool = nullptr;
-            m_pDocShell = nullptr;
-            EndListening(rBC);
-        }
-    }
-
-    //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
-        { return {u"XStyleFamily"_ustr}; };
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
-        { return cppu::supportsService(this, rServiceName); };
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return { u"com.sun.star.style.StyleFamily"_ustr }; }
+    return m_rEntry.getCountOrName(*m_pDocShell->GetDoc(), pString, nIndex);
 };
+
+/*static*/ const StyleFamilyEntry& SwXStyleFamily::InitEntry(SfxStyleFamily eFamily)
+{
+    auto& entries = lcl_GetStyleFamilyEntries();
+    const auto pEntry = std::find_if(entries.begin(), entries.end(),
+            [eFamily] (const StyleFamilyEntry& e) { return e.family() == eFamily; });
+    assert(pEntry != entries.end());
+    return *pEntry;
 }
 
+SwXStyleFamily::SwXStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily)
+    : m_rEntry(InitEntry(eFamily))
+    , m_pBasePool(pDocShell->GetStyleSheetPool())
+    , m_pDocShell(pDocShell)
+{
+    if (m_pBasePool) //tdf#124142 html docs can have no styles
+        StartListening(*m_pBasePool);
+}
+
+//XIndexAccess
+sal_Int32 SAL_CALL SwXStyleFamily::getCount()
+{
+    SolarMutexGuard aGuard;
+    return GetCountOrName(nullptr);
+};
+
+    //XElementAccess
+uno::Type SAL_CALL SwXStyleFamily::getElementType()
+{
+    return cppu::UnoType<style::XStyle>::get();
+};
+
+sal_Bool SAL_CALL SwXStyleFamily::hasElements()
+{
+    if(!m_pBasePool)
+        throw uno::RuntimeException();
+    return true;
+}
+
+//XPropertySet
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo()
+{ return {}; };
+
+void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any&)
+{ SAL_WARN("sw.uno", "###unexpected!"); };
+
+void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&)
+{ SAL_WARN("sw.uno", "###unexpected!"); };
+
+void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&)
+{ SAL_WARN("sw.uno", "###unexpected!"); };
+
+void SAL_CALL SwXStyleFamily::addVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&)
+{ SAL_WARN("sw.uno", "###unexpected!"); };
+
+void SAL_CALL SwXStyleFamily::removeVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&)
+{ SAL_WARN("sw.uno", "###unexpected!"); };
+
+//SfxListener
+void SwXStyleFamily::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+{
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pBasePool = nullptr;
+        m_pDocShell = nullptr;
+        EndListening(rBC);
+    }
+}
+
+//XServiceInfo
+OUString SAL_CALL SwXStyleFamily::getImplementationName()
+{ return {u"XStyleFamily"_ustr}; };
+
+sal_Bool SAL_CALL SwXStyleFamily::supportsService(const OUString& rServiceName)
+{ return cppu::supportsService(this, rServiceName); };
+
+uno::Sequence< OUString > SAL_CALL SwXStyleFamily::getSupportedServiceNames()
+{ return { u"com.sun.star.style.StyleFamily"_ustr }; }
+
 OUString SwXStyleFamilies::getImplementationName()
-    { return {u"SwXStyleFamilies"_ustr}; }
+{ return {u"SwXStyleFamilies"_ustr}; }
 
 sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
 {
@@ -707,6 +690,11 @@ SwXStyleFamilies::~SwXStyleFamilies()
 
 uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
 {
+    return uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByName(Name).get())));
+}
+
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByName(const OUString& Name)
+{
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
@@ -715,7 +703,22 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
         [&Name] (const StyleFamilyEntry& e) { return e.name() == Name; });
     if(pEntry == entries.end())
         throw container::NoSuchElementException();
-    return getByIndex(pEntry - entries.begin());
+    return GetStylesByIndex(pEntry - entries.begin());
+}
+
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetPageStyles()
+{
+    return GetStylesByName(u"PageStyles"_ustr);
+}
+
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetCharacterStyles()
+{
+    return GetStylesByName(u"CharacterStyles"_ustr);
+}
+
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetParagraphStyles()
+{
+    return GetStylesByName(u"ParagraphStyles"_ustr);
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
@@ -741,6 +744,11 @@ sal_Int32 SwXStyleFamilies::getCount()
 
 uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 {
+    return uno::Any(uno::Reference(static_cast<css::container::XNameContainer*>(GetStylesByIndex(nIndex).get())));
+}
+
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByIndex(sal_Int32 nIndex)
+{
     auto& entries(lcl_GetStyleFamilyEntries());
     SolarMutexGuard aGuard;
     if(nIndex < 0 || o3tl::make_unsigned(nIndex) >= entries.size())
@@ -751,8 +759,8 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     assert(eFamily != SfxStyleFamily::All);
     auto& rxFamily = m_vFamilies[eFamily];
     if(!rxFamily.is())
-        rxFamily = new XStyleFamily(m_pDocShell, eFamily);
-    return uno::Any(rxFamily);
+        rxFamily = new SwXStyleFamily(m_pDocShell, eFamily);
+    return rxFamily;
 }
 
 uno::Type SwXStyleFamilies::getElementType()
@@ -888,7 +896,7 @@ rtl::Reference<SwXTextCellStyle> SwXStyleFamilies::CreateStyleCell(SwDoc& rDoc)
 uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyleCondParagraph(SwDoc& rDoc)
     { return new SwXStyle(&rDoc, SfxStyleFamily::Para, true); };
 
-uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
+uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0)
@@ -907,7 +915,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     return getByName(sStyleName);
 }
 
-uno::Any XStyleFamily::getByName(const OUString& rName)
+uno::Any SwXStyleFamily::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     OUString sStyleName;
@@ -944,7 +952,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     return uno::Any(xStyle);
 }
 
-uno::Sequence<OUString> XStyleFamily::getElementNames()
+uno::Sequence<OUString> SwXStyleFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -960,7 +968,7 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     return comphelper::containerToSequence(vRet);
 }
 
-sal_Bool XStyleFamily::hasByName(const OUString& rName)
+sal_Bool SwXStyleFamily::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -971,7 +979,7 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName)
     return nullptr != pBase;
 }
 
-void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
+void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1026,7 +1034,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     }
 }
 
-void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement)
+void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1087,7 +1095,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     }
 }
 
-void XStyleFamily::removeByName(const OUString& rName)
+void SwXStyleFamily::removeByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1111,7 +1119,7 @@ void XStyleFamily::removeByName(const OUString& rName)
         m_pBasePool->Remove(pBase);
 }
 
-uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName )
+uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName )
 {
     if(sPropertyName != "DisplayName")
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, getXWeak() );
@@ -1120,7 +1128,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
 }
 
 
-SwXStyle* XStyleFamily::FindStyle(std::u16string_view rStyleName) const
+SwXStyle* SwXStyleFamily::FindStyle(std::u16string_view rStyleName) const
 {
     SwXStyle* pFoundStyle = nullptr;
     m_pBasePool->ForAllListeners(

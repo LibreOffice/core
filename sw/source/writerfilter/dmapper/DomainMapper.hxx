@@ -32,6 +32,7 @@
 #include <memory>
 
 class SwXTextDocument;
+class SwXStyleFamily;
 namespace com::sun::star{
     namespace beans{
         struct PropertyValue;
@@ -142,7 +143,7 @@ public:
 
     virtual void commentProps(const OUString& sId, const CommentProperties& rProps) override;
 
-    css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
+    rtl::Reference<SwXStyleFamily> const & GetCharacterStyles();
     OUString GetUnusedCharacterStyleName();
     bool IsNewDoc() const;
 

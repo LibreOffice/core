@@ -145,6 +145,7 @@
 #include <unolinebreak.hxx>
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
+#include <unostyle.hxx>
 #include <unocontentcontrol.hxx>
 #include <unofootnote.hxx>
 #include <unoport.hxx>
@@ -453,11 +454,13 @@ writerfilter::ooxml::OOXMLDocument* DomainMapper_Impl::getDocumentReference() co
     return m_pOOXMLDocument;
 }
 
-uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetPageStyles()
+rtl::Reference< SwXStyleFamily > const &  DomainMapper_Impl::GetPageStyles()
 {
-    if(!m_xPageStyles1.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName(u"PageStyles"_ustr) >>= m_xPageStyles1;
-    return m_xPageStyles1;
+    if(!m_xPageStyles.is() && m_xTextDocument)
+    {
+        m_xPageStyles = m_xTextDocument->getSwStyleFamilies()->GetPageStyles();
+    }
+    return m_xPageStyles;
 }
 
 OUString DomainMapper_Impl::GetUnusedPageStyleName()
@@ -487,17 +490,21 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
     return sPageStyleName;
 }
 
-uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetCharacterStyles()
+rtl::Reference< SwXStyleFamily > const &  DomainMapper_Impl::GetCharacterStyles()
 {
     if(!m_xCharacterStyles.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName(u"CharacterStyles"_ustr) >>= m_xCharacterStyles;
+    {
+        m_xCharacterStyles = m_xTextDocument->getSwStyleFamilies()->GetCharacterStyles();
+    }
     return m_xCharacterStyles;
 }
 
-uno::Reference<container::XNameContainer> const& DomainMapper_Impl::GetParagraphStyles()
+rtl::Reference<SwXStyleFamily> const& DomainMapper_Impl::GetParagraphStyles()
 {
     if (!m_xParagraphStyles.is() && m_xTextDocument)
-        m_xTextDocument->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr) >>= m_xParagraphStyles;
+    {
+        m_xParagraphStyles = m_xTextDocument->getSwStyleFamilies()->GetParagraphStyles();
+    }
     return m_xParagraphStyles;
 }
 

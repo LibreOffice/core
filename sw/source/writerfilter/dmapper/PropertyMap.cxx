@@ -68,6 +68,7 @@
 #include <unosection.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
+#include <unostyle.hxx>
 #include <unotext.hxx>
 #include <utility>
 
@@ -484,7 +485,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
 
 rtl::Reference<SwXPageStyle> SectionPropertyMap::GetPageStyle(DomainMapper_Impl& rDM_Impl)
 {
-    const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
+    const rtl::Reference< SwXStyleFamily >& xPageStyles = rDM_Impl.GetPageStyles();
     rtl::Reference<SwXPageStyle> xReturnPageStyle;
     try
     {
