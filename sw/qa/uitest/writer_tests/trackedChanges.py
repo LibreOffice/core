@@ -279,7 +279,9 @@ class trackedchanges(UITestCase):
             self.assertEqual(3, len(tables))
 
             # goto to the start of the document to reject from the first tracked table row change
-            self.xUITest.executeCommand(".uno:GoToStartOfDoc")
+            self.xUITest.executeCommand(".uno:GoToStartOfDoc")  # start of cell
+            self.xUITest.executeCommand(".uno:GoToStartOfDoc")  # start of table
+            self.xUITest.executeCommand(".uno:GoToStartOfDoc")  # start of document
 
             # Reject
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
@@ -290,9 +292,6 @@ class trackedchanges(UITestCase):
                 self.assertEqual(4, len(changesList.getChildren()))
 
                 changesList.getChild(0).executeAction("SELECT", tuple())
-
-                # jump to the parent to allow rejecting the table change
-                changesList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
                 # Without the fix in place, it would have crashed here
                 for i in (3, 2, 1, 0):

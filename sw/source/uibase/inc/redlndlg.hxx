@@ -85,6 +85,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
     SvxTPView* m_pTPView;
     SvxRedlinTable* m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
 
+    bool m_bInitialSelect = true;
+
     DECL_DLLPRIVATE_LINK(SortByComboBoxChangedHdl, SvxTPView*, void);
 
     DECL_DLLPRIVATE_LINK( AcceptHdl,     SvxTPView*, void );

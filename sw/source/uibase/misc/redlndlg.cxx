@@ -266,13 +266,41 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
     std::optional<SwWait> oWait;
-    if (SwView *pView = GetActiveView())
+    SwView* pView = GetActiveView();
+    if (pView)
         oWait.emplace(*pView->GetDocShell(), false);
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     m_aUsedSeqNo.clear();
 
     // tdf#162018 keep the selected entry selected
     const SwRedlineData* pSelectedEntryRedlineData = lcl_get_selected_redlinedata(rTreeView);
+
+    // tdf#162337 tracked change selection when the Manage Changes dialog is initially opened
+    if (pView && m_bInitialSelect)
+    {
+        m_bInitialSelect = false;
+        SwWrtShell* pSh = pView->GetWrtShellPtr();
+        if (pSh)
+        {
+            const SwRangeRedline* pCurrRedline = pSh->GetCurrRedline();
+            if (pCurrRedline)
+            {
+                // Select current redline
+                SwRedlineTable::size_type nPos
+                    = pSh->FindRedlineOfData(pCurrRedline->GetRedlineData());
+                pSh->GotoRedline(nPos, true);
+                pSh->SetInSelect();
+            }
+            else
+            {
+                // Select the next redline if there is one
+                pSh->AssureStdMode();
+                pCurrRedline = pSh->SelNextRedline();
+            }
+            if (pCurrRedline)
+                pSelectedEntryRedlineData = &pCurrRedline->GetRedlineData();
+        }
+    }
 
     rTreeView.freeze();
     if (nStart)
@@ -885,21 +913,6 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     weld::TreeView& rTreeView = m_pTable->GetWidget();
 
     SwRedlineDataParent* pRedlineParent;
-    const SwRangeRedline* pCurrRedline;
-    if (!nStart && !rTreeView.get_selected(nullptr))
-    {
-        pCurrRedline = pSh->GetCurrRedline();
-        if( !pCurrRedline )
-        {
-            pSh->SwCursorShell::Push();
-            pCurrRedline = pSh->SelNextRedline();
-            if( nullptr == pCurrRedline )
-                pCurrRedline = pSh->SelPrevRedline();
-            pSh->SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
-        }
-    }
-    else
-        pCurrRedline = nullptr;
 
     rTreeView.freeze();
     if (m_pTable->IsSorted())
@@ -1053,15 +1066,6 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         rTreeView.set_text(*xParent, sAuthor, 1);
         rTreeView.set_text(*xParent, sDateEntry, 2);
         rTreeView.set_text(*xParent, sComment, 3);
-
-        if (pCurrRedline == &rRedln)
-        {
-            rTreeView.thaw();
-            rTreeView.set_cursor(*xParent);
-            rTreeView.select(*xParent);
-            rTreeView.scroll_to_row(*xParent);
-            rTreeView.freeze();
-        }
 
         pRedlineParent->xTLBParent = std::move(xParent);
 
