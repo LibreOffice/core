@@ -324,6 +324,13 @@ namespace
         }
     };
 
+    struct CompareIMarkStartsAfterReverse
+    {
+        bool operator()(const sw::mark::IMark* pMark, SwPosition const& rPos)
+        {
+            return pMark->GetMarkStart() > rPos;
+        }
+    };
 
     IMark* lcl_getMarkAfter(const MarkManager::container_t& rMarks, const SwPosition& rPos,
                             bool bLoop)
@@ -1475,27 +1482,44 @@ namespace sw::mark
 
     IFieldmark* MarkManager::getInnerFieldmarkFor(const SwPosition& rPos) const
     {
-        auto itFieldmark = find_if(
-            m_vFieldmarks.begin(),
-            m_vFieldmarks.end(),
-            [&rPos] (const ::sw::mark::MarkBase *const pMark) { return pMark->IsCoveringPosition(rPos); } );
-        if (itFieldmark == m_vFieldmarks.end())
+        // find the first mark starting on or before the position in reverse order
+        // (as we are reverse searching, this is the one closest to the position)
+        // m_vFieldmarks should be ordered by mark start, so we can bisect with lower_bound
+        auto itEnd = m_vFieldmarks.rend();
+        auto itStart = lower_bound(
+            m_vFieldmarks.rbegin(),
+            itEnd,
+            rPos,
+            CompareIMarkStartsAfterReverse());
+        // now continue a linear search for the first (still in reverse order) ending behind the position
+        auto itCurrent = find_if(
+            itStart,
+            itEnd,
+            [&rPos](const sw::mark::MarkBase* const pMark) { return rPos < pMark->GetMarkEnd(); });
+        // if we reached the end (in reverse order) there is no match
+        if(itCurrent == itEnd)
             return nullptr;
-        auto pFieldmark(*itFieldmark);
-
-        // See if any fieldmarks after the first hit are closer to rPos.
-        ++itFieldmark;
-        for ( ; itFieldmark != m_vFieldmarks.end()
-                && (**itFieldmark).GetMarkStart() <= rPos; ++itFieldmark)
-        {   // find the innermost fieldmark
-            if (rPos < (**itFieldmark).GetMarkEnd()
-                && (pFieldmark->GetMarkStart() < (**itFieldmark).GetMarkStart()
-                    || (**itFieldmark).GetMarkEnd() < pFieldmark->GetMarkEnd()))
+        // we found our first candidate covering the position ...
+        auto pMark = *itCurrent;
+        const auto aMarkStart = pMark->GetMarkStart();
+        auto aMarkEnd = pMark->GetMarkEnd();
+        // ... however we still need to check if there is a smaller/'more inner' one with the same start position
+        for(++itCurrent; itCurrent != itEnd; ++itCurrent)
+        {
+            if((*itCurrent)->GetMarkStart() < aMarkStart)
+                // any following mark (in reverse order) will have an earlier
+                // start and thus can not be more 'inner' than our previous
+                // match, so we are done.
+                break;
+            auto aCurrentMarkEnd = (*itCurrent)->GetMarkEnd();
+            if(rPos < aCurrentMarkEnd && aCurrentMarkEnd <= aMarkEnd)
             {
-                pFieldmark = *itFieldmark;
+                // both covering the position and more inner/smaller => use this one instead
+                pMark = *itCurrent;
+                aMarkEnd = aCurrentMarkEnd;
             }
         }
-        return dynamic_cast<IFieldmark*>(pFieldmark);
+        return dynamic_cast<IFieldmark*>(pMark);
     }
 
     IMark* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
