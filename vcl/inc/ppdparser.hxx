@@ -172,7 +172,7 @@ private:
     static void initPPDFiles(PPDCache &rPPDCache);
     static OUString getPPDFile( const OUString& rFile );
 
-    OUString        matchPaperImpl(int nWidth, int nHeight, psp::orientation* pOrientation) const;
+    OUString        matchPaperImpl(int nWidth, int nHeight, bool bSwapped, psp::orientation* pOrientation = nullptr) const;
 
 public:
     ~PPDParser();
