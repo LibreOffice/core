@@ -1412,7 +1412,7 @@ bool PPDParser::getPaperDimension(
     return true;
 }
 
-OUString PPDParser::matchPaperImpl(int nWidth, int nHeight, psp::orientation* pOrientation) const
+OUString PPDParser::matchPaperImpl(int nWidth, int nHeight, bool bSwapped, psp::orientation* pOrientation) const
 {
     if( ! m_pPaperDimensions )
         return OUString();
@@ -1443,10 +1443,16 @@ OUString PPDParser::matchPaperImpl(int nWidth, int nHeight, psp::orientation* pO
         }
     }
 
+    if (nPDim == -1 && !bSwapped)
+    {
+        // swap portrait/landscape and try again
+        return matchPaperImpl(nHeight, nWidth, true, pOrientation);
+    }
+
     if (nPDim == -1)
         return OUString();
 
-    if (pOrientation)
+    if (bSwapped && pOrientation)
     {
         switch (*pOrientation)
         {
@@ -1464,7 +1470,7 @@ OUString PPDParser::matchPaperImpl(int nWidth, int nHeight, psp::orientation* pO
 
 OUString PPDParser::matchPaper(int nWidth, int nHeight, psp::orientation* pOrientation) const
 {
-    return matchPaperImpl(nHeight, nWidth, pOrientation);
+    return matchPaperImpl(nHeight, nWidth, false, pOrientation);
 }
 
 OUString PPDParser::getDefaultInputSlot() const
