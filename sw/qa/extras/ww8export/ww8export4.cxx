@@ -413,6 +413,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135709)
     xPropertySet->getPropertyValue("Surround") >>= eValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrap should be PARALLEL", text::WrapTextMode_PARALLEL, eValue);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
+{
+    // Uses same test doc as testTdf135709
+    createSwDoc("tdf135709.odt");
+    saveAndReload("MS Word 97");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
+
+    // Set the anchor of the image to AT PARAGRAPH, without the fix in place this
+    // results in the picture moving to the first column
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFramesSupplier->getTextFrames()->getByName("Frame1") , uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("AnchorType",
+                                       uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nFlyLeftAfter = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
+
+    // Without the fix in place this fails with
+    // Expected: 4771
+    // Actual:   1418
+    // i.e. the picture has moved from the second column to the first column
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(nFlyLeft), static_cast<double>(nFlyLeftAfter), 2.0);
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
