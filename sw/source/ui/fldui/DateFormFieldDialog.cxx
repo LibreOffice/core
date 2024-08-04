@@ -17,8 +17,8 @@
 
 namespace sw
 {
-DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent,
-                                         sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc)
+DateFormFieldDialog::DateFormFieldDialog(weld::Widget* pParent, sw::mark::DateFieldmark* pDateField,
+                                         SwDoc& rDoc)
     : GenericDialogController(pParent, u"modules/swriter/ui/dateformfielddialog.ui"_ustr,
                               u"DateFormFieldDialog"_ustr)
     , m_pDateField(pDateField)

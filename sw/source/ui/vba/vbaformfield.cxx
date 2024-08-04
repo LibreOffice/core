@@ -75,11 +75,11 @@ uno::Any SwVbaFormField::Previous()
                                                                        /*bLoop=*/false);
 
     // DateFields are a LO specialty, and do not exist natively in MS documents. Ignore if added...
-    auto pDateField = dynamic_cast<sw::mark::IDateFieldmark*>(pFieldMark);
+    auto pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);
     while (pDateField)
     {
         pFieldMark = pMarkAccess->getFieldmarkBefore(pDateField->GetMarkPos(), /*bLoop=*/false);
-        pDateField = dynamic_cast<sw::mark::IDateFieldmark*>(pFieldMark);
+        pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);
     }
 
     if (!pFieldMark)
@@ -103,11 +103,11 @@ uno::Any SwVbaFormField::Next()
                                                                       /*bLoop=*/false);
 
     // DateFields are a LO specialty, and do not exist natively in MS documents. Ignore if added...
-    auto pDateField = dynamic_cast<sw::mark::IDateFieldmark*>(pFieldMark);
+    auto pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);
     while (pDateField)
     {
         pFieldMark = pMarkAccess->getFieldmarkAfter(pDateField->GetMarkPos(), /*bLoop=*/false);
-        pDateField = dynamic_cast<sw::mark::IDateFieldmark*>(pFieldMark);
+        pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);
     }
 
     if (!pFieldMark)

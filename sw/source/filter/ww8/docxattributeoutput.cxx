@@ -2886,7 +2886,7 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     }
     else if ( rInfos.eType == ww::eFORMDATE )
     {
-        const sw::mark::IDateFieldmark& rFieldmark = dynamic_cast<const sw::mark::IDateFieldmark&>(*rInfos.pFieldmark);
+        const sw::mark::DateFieldmark& rFieldmark = dynamic_cast<const sw::mark::DateFieldmark&>(*rInfos.pFieldmark);
         FieldMarkParamsHelper params(rFieldmark);
 
         OUString sFullDate;

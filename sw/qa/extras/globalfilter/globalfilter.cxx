@@ -1995,7 +1995,7 @@ void Test::testDateFormField()
             int nIndex = 0;
             for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
             {
-                ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
+                ::sw::mark::DateFieldmark* pFieldmark = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
                 CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDATE, pFieldmark->GetFieldname());
 
@@ -2174,7 +2174,7 @@ void Test::testDateFormFieldCharacterFormatting()
 
             // Check that we have the field at the right place
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), pMarkAccess->getAllMarksCount());
-            ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+            ::sw::mark::DateFieldmark* pFieldmark = dynamic_cast<::sw::mark::DateFieldmark*>(*pMarkAccess->getAllMarksBegin());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDATE, pFieldmark->GetFieldname());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().GetContentIndex());

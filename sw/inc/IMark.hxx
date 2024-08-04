@@ -108,25 +108,6 @@ namespace sw::mark
             IFieldmark &operator =(IFieldmark const&) = delete;
     };
 
-    class SW_DLLPUBLIC IDateFieldmark
-        : virtual public IFieldmark
-    {
-        protected:
-            IDateFieldmark() = default;
-
-        public:
-            virtual OUString GetContent() const override = 0;
-            virtual void ReplaceContent(const OUString& sNewContent) override = 0;
-
-            virtual std::pair<bool, double> GetCurrentDate() const = 0;
-            virtual void SetCurrentDate(double fDate) = 0;
-            virtual OUString GetDateInStandardDateFormat(double fDate) const = 0;
-
-    private:
-            IDateFieldmark(IDateFieldmark const &) = delete;
-            IDateFieldmark &operator =(IDateFieldmark const&) = delete;
-    };
-
     OUString ExpandFieldmark(IFieldmark* pBM);
 
     class SW_DLLPUBLIC MarkBase
@@ -406,9 +387,8 @@ namespace sw::mark
     /// as a fieldmark; as it cannot contain paragraph breaks, must be
     /// well-formed XML element, and does not have field separator, it
     /// should be a nesting text attribute similar to SwTextMeta.
-    class DateFieldmark final
-        : virtual public IDateFieldmark
-        , public FieldmarkWithDropDownButton
+    class SW_DLLPUBLIC DateFieldmark final
+        : public FieldmarkWithDropDownButton
     {
     public:
         DateFieldmark(const SwPaM& rPaM);
@@ -425,9 +405,9 @@ namespace sw::mark
         OUString GetContent() const override;
         void ReplaceContent(const OUString& sNewContent) override;
 
-        std::pair<bool, double> GetCurrentDate() const override;
-        void SetCurrentDate(double fDate) override;
-        OUString GetDateInStandardDateFormat(double fDate) const override;
+        std::pair<bool, double> GetCurrentDate() const;
+        void SetCurrentDate(double fDate);
+        OUString GetDateInStandardDateFormat(double fDate) const;
 
     private:
         OUString GetDateInCurrentDateFormat(double fDate) const;

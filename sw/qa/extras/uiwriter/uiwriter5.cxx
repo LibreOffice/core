@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
+    ::sw::mark::DateFieldmark* pFieldmark = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
@@ -1585,7 +1585,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
+    ::sw::mark::DateFieldmark* pFieldmark = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
@@ -1639,7 +1639,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
     // Check whether the fieldmark is created
     auto aIter = pMarkAccess->getAllMarksBegin();
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
-    ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
+    ::sw::mark::DateFieldmark* pFieldmark = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 

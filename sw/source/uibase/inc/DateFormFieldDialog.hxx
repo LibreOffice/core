@@ -17,7 +17,7 @@ class SvNumberFormatter;
 class SwDoc;
 namespace sw::mark
 {
-class IDateFieldmark;
+class DateFieldmark;
 }
 
 /// Dialog to specify the properties of date form field
@@ -26,7 +26,7 @@ namespace sw
 class DateFormFieldDialog final : public weld::GenericDialogController
 {
 private:
-    sw::mark::IDateFieldmark* m_pDateField;
+    sw::mark::DateFieldmark* m_pDateField;
     SvNumberFormatter* m_pNumberFormatter;
 
     std::unique_ptr<SwNumFormatTreeView> m_xFormatLB;
@@ -34,7 +34,7 @@ private:
     void InitControls();
 
 public:
-    DateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc);
+    DateFormFieldDialog(weld::Widget* pParent, sw::mark::DateFieldmark* pDateField, SwDoc& rDoc);
     virtual ~DateFormFieldDialog() override;
 
     void Apply();
