@@ -32,6 +32,7 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
+import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
@@ -47,6 +48,9 @@ import javax.xml.transform.Source;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import javax.xml.XMLConstants;
 
 /**
  * Xslt implementation of {@code org.openoffice.xmerge.DocumentSerializer}
@@ -64,6 +68,32 @@ public final class DocumentSerializerImpl
     private final GenericOfficeDocument sxwDoc;
 
     private final PluginFactoryImpl pluginFactory;
+
+    private static DocumentBuilderFactory makeFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        String[] featuresToDisable = {
+            "http://xml.org/sax/features/external-general-entities",
+            "http://xml.org/sax/features/external-parameter-entities",
+            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+        };
+
+        for (String feature : featuresToDisable) {
+            try {
+                factory.setFeature(feature, false);
+            } catch (ParserConfigurationException e) {
+                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+            }
+        }
+
+        try {
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        return factory;
+    }
 
     /**
      * Constructor.
@@ -97,8 +127,7 @@ public final class DocumentSerializerImpl
         Node offnode = domDoc.getDocumentElement();
         if (!(offnode.getNodeName()).equals("office:document")) {
             try {
-                DocumentBuilderFactory builderFactory = DocumentBuilderFactory
-                        .newInstance();
+                DocumentBuilderFactory builderFactory = makeFactory();
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 DOMImplementation domImpl = builder.getDOMImplementation();
                 DocumentType docType = domImpl.createDocumentType(
@@ -231,7 +260,7 @@ public final class DocumentSerializerImpl
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
 
-            DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dFactory = makeFactory();
             dFactory.setNamespaceAware(true);
 
             DocumentBuilder dBuilder = dFactory.newDocumentBuilder();

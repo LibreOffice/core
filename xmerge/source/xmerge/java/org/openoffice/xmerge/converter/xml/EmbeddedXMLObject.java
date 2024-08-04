@@ -193,7 +193,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         try {
             if (builder == null) {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
+                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
                 factory.setValidating(false);
                 builder = factory.newDocumentBuilder();
             }

@@ -1020,6 +1020,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             {
                 inputStream = getInputRepository().createInputStream("meta.xml");
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document document = dBuilder.parse(new InputSource(inputStream));
 

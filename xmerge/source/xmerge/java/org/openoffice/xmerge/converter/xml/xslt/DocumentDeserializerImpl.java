@@ -25,6 +25,7 @@ import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -33,6 +34,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.XMLConstants;
 
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
@@ -56,6 +58,32 @@ public final class DocumentDeserializerImpl
     /** A {@code ConvertData} object assigned to this object. */
     private final ConvertData cd;
     private final PluginFactoryImpl pluginFactory;
+
+    private static DocumentBuilderFactory makeFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        String[] featuresToDisable = {
+            "http://xml.org/sax/features/external-general-entities",
+            "http://xml.org/sax/features/external-parameter-entities",
+            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+        };
+
+        for (String feature : featuresToDisable) {
+            try {
+                factory.setFeature(feature, false);
+            } catch (ParserConfigurationException e) {
+                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+            }
+        }
+
+        try {
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        return factory;
+    }
 
     /**
      * Constructor that assigns the given {@code ConvertData} to this object.
@@ -93,7 +121,7 @@ public final class DocumentDeserializerImpl
                 domDoc = docOut.getContentDOM();
                 baos = transform(domDoc);
                 sxwDoc.initContentDOM();
-                DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilderFactory dFactory = makeFactory();
                 dFactory.setNamespaceAware(true);
                 DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
                 sxwDoc.setContentDOM(dBuilder.parse(new ByteArrayInputStream(baos.toByteArray())));
@@ -135,7 +163,7 @@ public final class DocumentDeserializerImpl
        ConverterInfo ci = pluginFactory.getConverterInfo();
        ByteArrayOutputStream baos= new ByteArrayOutputStream();
        try{
-          DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+          DocumentBuilderFactory dFactory = makeFactory();
           dFactory.setNamespaceAware(true);
           DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
 

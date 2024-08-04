@@ -35,6 +35,7 @@ import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.XMLConstants;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
@@ -58,9 +59,34 @@ import org.openoffice.xmerge.util.Debug;
 public abstract class OfficeDocument
     implements org.openoffice.xmerge.Document, OfficeConstants {
 
+    private static DocumentBuilderFactory makeFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        String[] featuresToDisable = {
+            "http://xml.org/sax/features/external-general-entities",
+            "http://xml.org/sax/features/external-parameter-entities",
+            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+        };
+
+        for (String feature : featuresToDisable) {
+            try {
+                factory.setFeature(feature, false);
+            } catch (ParserConfigurationException e) {
+                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+            }
+        }
+
+        try {
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        return factory;
+    }
+
     /** Factory for {@code DocumentBuilder} objects. */
-    private static DocumentBuilderFactory factory =
-       DocumentBuilderFactory.newInstance();
+    private static DocumentBuilderFactory factory = makeFactory();
 
     /** DOM {@code Document} of content.xml. */
     private Document contentDoc = null;
@@ -642,7 +668,7 @@ public abstract class OfficeDocument
             write(os);
         } else {
         try {
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory builderFactory = makeFactory();
         DocumentBuilder builder= builderFactory.newDocumentBuilder();
         DOMImplementation domImpl = builder.getDOMImplementation();
         domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);

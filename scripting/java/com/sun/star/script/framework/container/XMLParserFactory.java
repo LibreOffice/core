@@ -18,6 +18,8 @@
 
 package com.sun.star.script.framework.container;
 
+import com.sun.star.script.framework.log.LogUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +31,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.XMLConstants;
 
 import org.w3c.dom.Document;
 
@@ -60,6 +63,26 @@ public class XMLParserFactory {
 
         public DefaultParser() {
             factory = DocumentBuilderFactory.newInstance();
+
+            String[] featuresToDisable = {
+                "http://xml.org/sax/features/external-general-entities",
+                "http://xml.org/sax/features/external-parameter-entities",
+                "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+            };
+
+            for (String feature : featuresToDisable) {
+                try {
+                    factory.setFeature(feature, false);
+                } catch (ParserConfigurationException e) {
+                    LogUtils.DEBUG(LogUtils.getTrace(e));
+                }
+            }
+
+            try {
+                factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            } catch (ParserConfigurationException e) {
+                LogUtils.DEBUG(LogUtils.getTrace(e));
+            }
         }
 
         public Document parse(InputStream inputStream) throws IOException {

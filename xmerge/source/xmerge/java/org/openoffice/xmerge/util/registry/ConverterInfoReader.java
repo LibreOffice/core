@@ -21,9 +21,11 @@ package org.openoffice.xmerge.util.registry;
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
+import org.openoffice.xmerge.util.Debug;
 import org.xml.sax.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
+import javax.xml.XMLConstants;
 import java.net.URL;
 import java.net.JarURLConnection;
 
@@ -48,6 +50,32 @@ public class ConverterInfoReader {
     private final String   jarfilename;
     private final Document document;
     private final ArrayList<ConverterInfo> converterInfoList;
+
+    private static DocumentBuilderFactory makeFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        String[] featuresToDisable = {
+            "http://xml.org/sax/features/external-general-entities",
+            "http://xml.org/sax/features/external-parameter-entities",
+            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+        };
+
+        for (String feature : featuresToDisable) {
+            try {
+                factory.setFeature(feature, false);
+            } catch (ParserConfigurationException e) {
+                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+            }
+        }
+
+        try {
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        return factory;
+    }
 
     /**
      * Constructor.
@@ -92,7 +120,7 @@ public class ConverterInfoReader {
 
         // Get the DOM builder and build the document.
 
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory builderFactory = makeFactory();
 
         //DTD validation
 

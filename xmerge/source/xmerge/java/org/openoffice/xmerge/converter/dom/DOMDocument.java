@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.XMLConstants;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
@@ -43,9 +44,34 @@ import org.openoffice.xmerge.util.Debug;
 public class DOMDocument
     implements org.openoffice.xmerge.Document {
 
+    private static DocumentBuilderFactory makeFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        String[] featuresToDisable = {
+            "http://xml.org/sax/features/external-general-entities",
+            "http://xml.org/sax/features/external-parameter-entities",
+            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
+        };
+
+        for (String feature : featuresToDisable) {
+            try {
+                factory.setFeature(feature, false);
+            } catch (ParserConfigurationException e) {
+                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+            }
+        }
+
+        try {
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        return factory;
+    }
+
     /** Factory for {@code DocumentBuilder} objects. */
-    private static DocumentBuilderFactory factory =
-       DocumentBuilderFactory.newInstance();
+    private static DocumentBuilderFactory factory = makeFactory();
 
     /** DOM {@code Document} of content.xml. */
     private Document contentDoc = null;
