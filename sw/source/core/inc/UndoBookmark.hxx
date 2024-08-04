@@ -41,7 +41,7 @@ class SwUndoBookmark : public SwUndo
     const std::unique_ptr<SwHistoryBookmark> m_pHistoryBookmark;
 
 protected:
-    SwUndoBookmark(SwUndoId nUndoId, const ::sw::mark::IMark&);
+    SwUndoBookmark(SwUndoId nUndoId, const ::sw::mark::MarkBase&);
 
     void SetInDoc(SwDoc*);
     void ResetInDoc(SwDoc&);
@@ -67,7 +67,7 @@ public:
 class SwUndoInsBookmark final : public SwUndoBookmark
 {
 public:
-    SwUndoInsBookmark(const ::sw::mark::IMark&);
+    SwUndoInsBookmark(const ::sw::mark::MarkBase&);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
@@ -76,7 +76,7 @@ public:
 class SwUndoDeleteBookmark final : public SwUndoBookmark
 {
 public:
-    SwUndoDeleteBookmark(const ::sw::mark::IMark&);
+    SwUndoDeleteBookmark(const ::sw::mark::MarkBase&);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
     virtual void RedoImpl(::sw::UndoRedoContext&) override;

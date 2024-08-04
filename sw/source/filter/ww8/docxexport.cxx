@@ -108,7 +108,7 @@ using namespace ::oox;
 
 using oox::vml::VMLExport;
 
-using sw::mark::IMark;
+using sw::mark::MarkBase;
 
 AttributeOutputBase& DocxExport::AttrOutput() const
 {
@@ -167,7 +167,7 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     IMarkVector aMarks;
     if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
-        for ( IMark* pMark : aMarks )
+        for ( MarkBase* pMark : aMarks )
         {
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
@@ -205,7 +205,7 @@ void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 n
     IMarkVector aMarks;
     if (GetAnnotationMarks(rAttrs, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
-        for ( IMark* pMark : aMarks )
+        for ( MarkBase* pMark : aMarks )
         {
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();

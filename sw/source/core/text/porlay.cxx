@@ -971,7 +971,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
     {
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
-                const_cast<sw::mark::IMark*>(static_cast<const sw::mark::IMark*>(pBookmark)));
+                const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
         uno::Reference<frame::XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
 
@@ -2898,7 +2898,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
 
     for (const SwContentIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
     {
-        const sw::mark::IMark* pMark = pIndex->GetMark();
+        const sw::mark::MarkBase* pMark = pIndex->GetMark();
         const sw::mark::Bookmark* pBookmark = dynamic_cast<const sw::mark::Bookmark*>(pMark);
         if (pBookmarks && pBookmark)
         {

@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertBookmark)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rIDMA.getBookmarksCount());
     for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
     {
-        sw::mark::IMark* pMark = *it;
+        sw::mark::MarkBase* pMark = *it;
         CPPUNIT_ASSERT_EQUAL(aExpectedBookmarkName, pMark->GetName());
         SwPaM aPam(pMark->GetMarkStart(), pMark->GetMarkEnd());
         OUString aActualResult = aPam.GetText();

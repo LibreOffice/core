@@ -1804,7 +1804,7 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
                 SwPaM aPam( rStartPos.GetNode(), rStartPos.GetContentIndex(),
                                 rStartPos.GetNode(), rStartPos.GetContentIndex() + nLen);
-                ::sw::mark::IMark* pMark = rDMA.makeAnnotationBookmark(
+                ::sw::mark::MarkBase* pMark = rDMA.makeAnnotationBookmark(
                     aPam,
                     (**iter).GetName(),
                     IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);

@@ -224,7 +224,7 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     auto aBookmarks = rJsonWriter.startArray("bookmarks");
     for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
     {
-        sw::mark::IMark* pMark = *it;
+        sw::mark::MarkBase* pMark = *it;
         if (!pMark->GetName().startsWith(aNamePrefix))
         {
             continue;
@@ -255,7 +255,7 @@ void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
-    sw::mark::IMark* pBookmark = rIDMA.getOneInnermostBookmarkFor(rCursor);
+    sw::mark::MarkBase* pBookmark = rIDMA.getOneInnermostBookmarkFor(rCursor);
     auto aBookmark = rJsonWriter.startNode("bookmark");
     if (!pBookmark)
     {

@@ -33,9 +33,9 @@ class BookmarkTable
 
 public:
     BookmarkTable(std::unique_ptr<weld::TreeView> xControl);
-    void InsertBookmark(SwWrtShell& rSh, sw::mark::IMark* pMark);
+    void InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* pMark);
     bool SelectByName(const OUString& sName);
-    sw::mark::IMark* GetBookmarkByName(const OUString& sName);
+    sw::mark::MarkBase* GetBookmarkByName(const OUString& sName);
     OUString GetNameProposal() const;
 
     void unselect_all() { m_xControl->unselect_all(); }
@@ -90,7 +90,7 @@ public:
 class SwInsertBookmarkDlg final : public SfxDialogController
 {
     SwWrtShell& m_rSh;
-    std::vector<std::pair<sw::mark::IMark*, OUString>> m_aTableBookmarks;
+    std::vector<std::pair<sw::mark::MarkBase*, OUString>> m_aTableBookmarks;
     sal_Int32 m_nLastBookmarksCount;
     bool m_bSorted;
     bool m_bAreProtected;

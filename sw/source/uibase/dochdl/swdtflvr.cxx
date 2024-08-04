@@ -883,7 +883,7 @@ void SwTransferable::DeleteSelection()
 static void DeleteDDEMarks(SwDoc & rDest)
 {
     IDocumentMarkAccess *const pMarkAccess = rDest.getIDocumentMarkAccess();
-    std::vector< ::sw::mark::IMark* > vDdeMarks;
+    std::vector< ::sw::mark::MarkBase* > vDdeMarks;
     // find all DDE-Bookmarks
     for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
@@ -1636,7 +1636,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 pDispatch->Execute(FN_START_OF_DOCUMENT, SfxCallMode::SYNCHRON);
 
             // store cursor position in row mode
-            ::sw::mark::IMark* pMark = (!bRowMode || nSelectedRowsOrCols == 0) ? nullptr : rSh.SetBookmark(
+            ::sw::mark::MarkBase* pMark = (!bRowMode || nSelectedRowsOrCols == 0) ? nullptr : rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
@@ -3997,7 +3997,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         {
             bool bTableCol(SelectionType::TableCol & nSelection);
 
-            ::sw::mark::IMark* pMarkMoveFrom = bMove
+            ::sw::mark::MarkBase* pMarkMoveFrom = bMove
                     ? rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
@@ -4070,7 +4070,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             bool bPasteIntoTable = rSh.GetCursor()->GetPointNode().GetTableBox() != nullptr;
 
             // store cursor
-            ::sw::mark::IMark* pMark = rSh.SetBookmark(
+            ::sw::mark::MarkBase* pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
@@ -4442,7 +4442,7 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         rSh.DoUndo( false );
         bool bIsModified = rSh.IsModified();
 
-        ::sw::mark::IMark* pMark = rSh.SetBookmark(
+        ::sw::mark::MarkBase* pMark = rSh.SetBookmark(
             vcl::KeyCode(),
             OUString(),
             IDocumentMarkAccess::MarkType::DDE_BOOKMARK);
@@ -4509,7 +4509,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
     {
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
-        ::sw::mark::IMark* const pMark = *ppMark;
+        ::sw::mark::MarkBase* const pMark = *ppMark;
         ::sfx2::SvLinkSource* p = m_xRefObj.get();
         SwServerObject& rServerObject = dynamic_cast<SwServerObject&>(*p);
 
@@ -4529,7 +4529,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
         pMarkAccess->deleteMark(ppMark, false);
 
         // recreate as Bookmark
-        ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
+        ::sw::mark::MarkBase* const pNewMark = pMarkAccess->makeMark(
             aPaM,
             sMarkName,
             IDocumentMarkAccess::MarkType::BOOKMARK,

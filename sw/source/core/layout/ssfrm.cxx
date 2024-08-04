@@ -463,7 +463,7 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
         assert(std::find_if(
             rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksBegin(),
             rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd(),
-            [this](::sw::mark::IMark const*const pMark) {
+            [this](::sw::mark::MarkBase const*const pMark) {
                 return pMark->GetMarkStart().GetNode() == *m_pMergedPara->pFirstNode
                     && pMark->GetMarkEnd().GetNode() != *m_pMergedPara->pFirstNode;
             }) == rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd());

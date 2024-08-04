@@ -1044,7 +1044,7 @@ FIELD_INSERT:
         rSh.StartAction();
 
         IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-        std::vector<sw::mark::IMark*> aRemovals;
+        std::vector<sw::mark::MarkBase*> aRemovals;
         for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
         {
             auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);

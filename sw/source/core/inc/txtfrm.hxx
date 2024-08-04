@@ -31,7 +31,7 @@
 
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 class SwCharRange;
 class SwTextNode;
 class SwTextAttrEnd;
@@ -146,7 +146,7 @@ OUString GetExpandTextMerged(SwRootFrame const* pLayout,
         SwTextNode const& rNode, bool bWithNumber,
         bool bWithSpacesForLevel, ExpandMode i_mode);
 
-bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark);
+bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::MarkBase const& rMark);
 bool IsMarkHintHidden(SwRootFrame const& rLayout,
         SwTextNode const& rNode, SwTextAttrEnd const& rHint);
 

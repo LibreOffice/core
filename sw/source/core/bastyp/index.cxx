@@ -219,7 +219,7 @@ SwContentIndex& SwContentIndex::Assign( const SwContentNode* pArr, sal_Int32 nId
     return *this;
 }
 
-void SwContentIndex::SetMark(const sw::mark::IMark* pMark)
+void SwContentIndex::SetMark(const sw::mark::MarkBase* pMark)
 {
     m_pMark = pMark;
 }

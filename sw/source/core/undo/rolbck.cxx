@@ -603,7 +603,7 @@ void SwHistoryTextFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwHistoryBookmark::SwHistoryBookmark(
-    const ::sw::mark::IMark& rBkmk,
+    const ::sw::mark::MarkBase& rBkmk,
     bool bSavePos,
     bool bSaveOtherPos)
     : SwHistoryHint(HSTRY_BOOKMARK)
@@ -640,7 +640,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     std::optional<SwPaM> oPam;
-    ::sw::mark::IMark* pMark = nullptr;
+    ::sw::mark::MarkBase* pMark = nullptr;
 
     // now the situation is that m_bSavePos and m_bSaveOtherPos don't determine
     // whether the mark was deleted
@@ -695,7 +695,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
         pBookmark->RestoreMetadata(m_pMetadataUndo);
 }
 
-bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
+bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::MarkBase& rBkmk)
 {
     return m_nNode == rBkmk.GetMarkPos().GetNodeIndex()
         && m_nContent == rBkmk.GetMarkPos().GetContentIndex()
@@ -1122,7 +1122,7 @@ void SwHistory::AddColl(SwFormatColl *const pColl, SwNodeOffset const nNodeIdx,
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::AddIMark(const ::sw::mark::IMark& rBkmk,
+void SwHistory::AddIMark(const ::sw::mark::MarkBase& rBkmk,
         bool const bSavePos, bool const bSaveOtherPos)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );

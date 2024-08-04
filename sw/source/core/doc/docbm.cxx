@@ -88,10 +88,10 @@ auto IDocumentMarkAccess::iterator::operator=(iterator && rOther) noexcept -> it
 }
 
 // ARGH why does it *need* to return const& ?
-::sw::mark::IMark* /*const&*/
+::sw::mark::MarkBase* /*const&*/
 IDocumentMarkAccess::iterator::operator*() const
 {
-    return static_cast<sw::mark::IMark*>(**m_pIter);
+    return **m_pIter;
 }
 
 auto IDocumentMarkAccess::iterator::operator++() -> iterator&
@@ -163,7 +163,7 @@ auto IDocumentMarkAccess::iterator::operator-(iterator const& rOther) const -> d
 
 auto IDocumentMarkAccess::iterator::operator[](difference_type const n) const -> value_type
 {
-    return static_cast<sw::mark::IMark*>((*m_pIter)[n]);
+    return (*m_pIter)[n];
 }
 
 bool IDocumentMarkAccess::iterator::operator<(iterator const& rOther) const
@@ -302,11 +302,11 @@ namespace
     struct CompareIMarkStartsBefore
     {
         bool operator()(SwPosition const& rPos,
-                        const sw::mark::IMark* pMark)
+                        const sw::mark::MarkBase* pMark)
         {
             return rPos < pMark->GetMarkStart();
         }
-        bool operator()(const sw::mark::IMark* pMark,
+        bool operator()(const sw::mark::MarkBase* pMark,
                         SwPosition const& rPos)
         {
             return pMark->GetMarkStart() < rPos;
@@ -318,7 +318,7 @@ namespace
     struct CompareIMarkStartsAfter
     {
         bool operator()(SwPosition const& rPos,
-                        const sw::mark::IMark* pMark)
+                        const sw::mark::MarkBase* pMark)
         {
             return pMark->GetMarkStart() > rPos;
         }
@@ -326,13 +326,13 @@ namespace
 
     struct CompareIMarkStartsAfterReverse
     {
-        bool operator()(const sw::mark::IMark* pMark, SwPosition const& rPos)
+        bool operator()(const sw::mark::MarkBase* pMark, SwPosition const& rPos)
         {
             return pMark->GetMarkStart() > rPos;
         }
     };
 
-    IMark* lcl_getMarkAfter(const MarkManager::container_t& rMarks, const SwPosition& rPos,
+    MarkBase* lcl_getMarkAfter(const MarkManager::container_t& rMarks, const SwPosition& rPos,
                             bool bLoop)
     {
         auto const pMarkAfter = upper_bound(
@@ -350,7 +350,7 @@ namespace
         return *pMarkAfter;
     };
 
-    IMark* lcl_getMarkBefore(const MarkManager::container_t& rMarks, const SwPosition& rPos,
+    MarkBase* lcl_getMarkBefore(const MarkManager::container_t& rMarks, const SwPosition& rPos,
                              bool bLoop)
     {
         // candidates from which to choose the mark before
@@ -488,7 +488,7 @@ namespace
              ppMark != rMarks.end();
              ++ppMark)
         {
-            IMark* pMark = *ppMark;
+            MarkBase* pMark = *ppMark;
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             SAL_INFO("sw.core",
@@ -506,7 +506,7 @@ namespace
     };
 }
 
-IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
+IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const MarkBase& rBkmk)
 {
     const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
     // not using dynamic_cast<> here for performance
@@ -572,7 +572,7 @@ namespace sw::mark
         , m_pLastActiveFieldmark(nullptr)
     { }
 
-    ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
+    ::sw::mark::MarkBase* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType,
         sw::mark::InsertMode const eMode,
@@ -755,7 +755,7 @@ namespace sw::mark
         bool bUndoIsEnabled = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
         m_rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
-        sw::mark::IMark* pMark = nullptr;
+        sw::mark::MarkBase* pMark = nullptr;
         if(rType == ODF_FORMDATE)
         {
             pMark = makeMark(rPaM, rName,
@@ -796,7 +796,7 @@ namespace sw::mark
         bool bEnableSetModified = m_rDoc.getIDocumentState().IsEnableSetModified();
         m_rDoc.getIDocumentState().SetEnableSetModified(false);
 
-        sw::mark::IMark* pMark = nullptr;
+        sw::mark::MarkBase* pMark = nullptr;
         if(rType == ODF_FORMCHECKBOX)
         {
             pMark = makeMark( rPaM, rName,
@@ -833,7 +833,7 @@ namespace sw::mark
         return pFieldMark;
     }
 
-    ::sw::mark::IMark* MarkManager::getMarkForTextNode(
+    ::sw::mark::MarkBase* MarkManager::getMarkForTextNode(
         const SwTextNode& rTextNode,
         const IDocumentMarkAccess::MarkType eType )
     {
@@ -845,7 +845,7 @@ namespace sw::mark
         return makeMark(aPaM, OUString(), eType, sw::mark::InsertMode::New);
     }
 
-    sw::mark::IMark* MarkManager::makeAnnotationMark(
+    sw::mark::MarkBase* MarkManager::makeAnnotationMark(
         const SwPaM& rPaM,
         const OUString& rName )
     {
@@ -854,13 +854,13 @@ namespace sw::mark
     }
 
     void MarkManager::repositionMark(
-        ::sw::mark::IMark* const io_pMark,
+        ::sw::mark::MarkBase* const io_pMark,
         const SwPaM& rPaM)
     {
         assert(&io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::repositionMark(..)>"
             " - Mark is not in my doc.");
-        MarkBase* const pMarkBase = dynamic_cast< MarkBase* >(io_pMark);
+        MarkBase* const pMarkBase = io_pMark;
         if (!pMarkBase)
             return;
 
@@ -881,7 +881,7 @@ namespace sw::mark
     }
 
     bool MarkManager::renameMark(
-        ::sw::mark::IMark* io_pMark,
+        ::sw::mark::MarkBase* io_pMark,
         const OUString& rNewName )
     {
         assert(&io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
@@ -891,20 +891,17 @@ namespace sw::mark
             return true;
         if (lcl_FindMarkByName(rNewName, m_vAllMarks.begin(), m_vAllMarks.end()) != m_vAllMarks.end())
             return false;
-        if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
-        {
-            const OUString sOldName(pMarkBase->GetName());
-            pMarkBase->SetName(rNewName);
+        const OUString sOldName(io_pMark->GetName());
+        io_pMark->SetName(rNewName);
 
-            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
+        if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
+        {
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-                {
-                    m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                            std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, m_rDoc));
-                }
-                m_rDoc.getIDocumentState().SetModified();
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                        std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, m_rDoc));
             }
+            m_rDoc.getIDocumentState().SetModified();
         }
         return true;
     }
@@ -1279,7 +1276,7 @@ namespace sw::mark
         std::unique_ptr<ILazyDeleter> ret;
         if (ppMark.get() == m_vAllMarks.end())
             return ret;
-        IMark* pMark = *ppMark;
+        MarkBase* pMark = *ppMark;
 
         switch(IDocumentMarkAccess::GetType(*pMark))
         {
@@ -1374,7 +1371,7 @@ namespace sw::mark
         return ret;
     }
 
-    void MarkManager::deleteMark(const IMark* const pMark)
+    void MarkManager::deleteMark(const MarkBase* const pMark)
     {
         assert(&pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::deleteMark(..)>"
@@ -1522,7 +1519,7 @@ namespace sw::mark
         return dynamic_cast<Fieldmark*>(pMark);
     }
 
-    IMark* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
+    MarkBase* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
     {
         auto it = std::find_if(m_vBookmarks.begin(), m_vBookmarks.end(),
                                [&rPos](const sw::mark::MarkBase* pMark)
@@ -1531,7 +1528,7 @@ namespace sw::mark
         {
             return nullptr;
         }
-        sw::mark::IMark* pBookmark = *it;
+        sw::mark::MarkBase* pBookmark = *it;
 
         // See if any bookmarks after the first hit are closer to rPos.
         ++it;
@@ -1707,7 +1704,7 @@ namespace sw::mark
         for (auto aI = m_vFieldmarks.begin(),
             aEnd = m_vFieldmarks.end(); aI != aEnd; ++aI)
         {
-            ::sw::mark::IMark* pI = *aI;
+            ::sw::mark::MarkBase* pI = *aI;
             const SwPosition &rStart = pI->GetMarkPos();
             if (!rPaM.ContainsPosition(rStart))
                 continue;
@@ -1752,7 +1749,7 @@ namespace sw::mark
         return IDocumentMarkAccess::iterator(ret);
     }
 
-    IMark* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
+    MarkBase* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
     {
         auto const pAnnotationMark = find_if(
             m_vAnnotationMarks.begin(),
@@ -1774,7 +1771,7 @@ namespace sw::mark
     }
 
     // create helper bookmark for annotations on tracked deletions
-    ::sw::mark::IMark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
+    ::sw::mark::MarkBase* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType,
         sw::mark::InsertMode const eMode,
@@ -1930,7 +1927,7 @@ const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
 SaveBookmark::SaveBookmark(
-    const IMark& rBkmk,
+    const MarkBase& rBkmk,
     const SwNode& rMvPos,
     std::optional<sal_Int32> oContentIdx)
     : m_aName(rBkmk.GetName())

@@ -718,7 +718,7 @@ void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         });
 
     IDocumentMarkAccess* pMarkAccess = rWrtSh.GetDoc()->getIDocumentMarkAccess();
-    std::vector<sw::mark::IMark*> aRemovals;
+    std::vector<sw::mark::MarkBase*> aRemovals;
     for (auto it = pMarkAccess->getBookmarksBegin(); it != pMarkAccess->getBookmarksEnd(); ++it)
     {
         auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(*it);

@@ -155,7 +155,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         std::pair<OUString, FlyCntType> frame;
         OUString tableName;
         SwUnoTableCursor const* pTableCursor(nullptr);
-        ::sw::mark::IMark const* pMark(nullptr);
+        ::sw::mark::MarkBase const* pMark(nullptr);
         SwUnoCursorHelper::GetSelectableFromAny(xInterface, *pDoc,
                 pPaM, frame, tableName, pTableCursor, pMark, sdrObjects);
         if (pPaM)

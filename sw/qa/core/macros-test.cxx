@@ -190,7 +190,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     aPaM.SetMark();
     aPaM.Move(fnMoveForward, GoInDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
-    sw::mark::IMark *pMark =
+    sw::mark::MarkBase *pMark =
         rIDMA.makeMark(aPaM, u"test"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);
@@ -225,7 +225,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     aPaM.SetMark();
     aPaM.Move(fnMoveBackward, GoInContent);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
-    sw::mark::IMark *pMark =
+    sw::mark::MarkBase *pMark =
         rIDMA.makeMark(aPaM, u"test"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);

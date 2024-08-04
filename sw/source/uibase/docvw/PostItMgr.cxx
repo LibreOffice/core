@@ -574,7 +574,7 @@ bool SwPostItMgr::CalcRects()
                 // update layout information
                 const SwTextAnnotationField* pTextAnnotationField =
                     dynamic_cast< const SwTextAnnotationField* >( pItem->GetFormatField().GetTextField() );
-                const ::sw::mark::IMark* pAnnotationMark =
+                const ::sw::mark::MarkBase* pAnnotationMark =
                     pTextAnnotationField != nullptr ? pTextAnnotationField->GetAnnotationMark() : nullptr;
                 if ( pAnnotationMark != nullptr )
                 {

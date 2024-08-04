@@ -33,7 +33,7 @@ class SwEditWin;
 class SwFrame;
 class IDocumentRedlineAccess;
 namespace sw::annotation { class SwAnnotationWin; }
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 
 struct SwPosition;
 
@@ -84,7 +84,7 @@ namespace SwPostItHelper
     SwLayoutStatus getLayoutInfos(
         SwLayoutInfo& o_rInfo,
         const SwPosition& rAnchorPos,
-        const sw::mark::IMark* pAnnotationMark = nullptr );
+        const sw::mark::MarkBase* pAnnotationMark = nullptr );
 
     tools::Long getLayoutHeight( const SwRootFrame* pRoot );
     void setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode );

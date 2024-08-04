@@ -193,7 +193,7 @@ namespace
         return bFound;
     }
 
-    bool lcl_IsUiVisibleBookmark(const ::sw::mark::IMark* pMark)
+    bool lcl_IsUiVisibleBookmark(const ::sw::mark::MarkBase* pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
@@ -3244,7 +3244,7 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                         static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos();
                 const SwTextNode* pTextNode =
                         pWrtShell->GetNodes().GetOutLineNds()[nPos]->GetTextNode();
-                sw::mark::IMark const * const pMark =
+                sw::mark::MarkBase const * const pMark =
                         pWrtShell->getIDocumentMarkAccess()->getMarkForTextNode(
                             *pTextNode, IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                 // REFERENCESUBTYPE_OUTLINE is changed to REFERENCESUBTYPE::BOOKMARK in
@@ -7259,7 +7259,7 @@ void SwContentTree::BringPostItFieldsToAttention(std::vector<const SwTextAttr*>&
         assert(dynamic_cast<const SwTextAnnotationField*>(pTextField));
         const SwTextAnnotationField* pTextAnnotationField =
                 static_cast<const SwTextAnnotationField*>(pTextField);
-        const ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField->GetAnnotationMark();
+        const ::sw::mark::MarkBase* pAnnotationMark = pTextAnnotationField->GetAnnotationMark();
         const SwPosition aMarkStart = pAnnotationMark ? pAnnotationMark->GetMarkStart()
                                                 : SwPosition(rTextNode, p->GetStart());
         const SwPosition aMarkEnd = pAnnotationMark ? pAnnotationMark->GetMarkEnd()

@@ -588,7 +588,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 ppMark != pMarkAccess->getBookmarksEnd();
                 ++ppMark)
             {
-                const ::sw::mark::IMark* pBkmk = *ppMark;
+                const ::sw::mark::MarkBase* pBkmk = *ppMark;
                 if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
                 {
                     bool isSubstring = MatchSubstring(pBkmk->GetName(), filterString);
@@ -1108,7 +1108,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 pSh->getIDocumentOutlineNodesAccess()->getOutlineNodes( maOutlineNodes );
                 if ( nOutlIdx < maOutlineNodes.size() )
                 {
-                    ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
+                    ::sw::mark::MarkBase const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
                         *(maOutlineNodes[nOutlIdx]),
                         IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                     aName = pMark->GetName();
@@ -1128,7 +1128,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 pSh->getIDocumentListItemsAccess()->getNumItems(maNumItems);
                 if ( nNumItemIdx < maNumItems.size() )
                 {
-                    ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
+                    ::sw::mark::MarkBase const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
                         *(maNumItems[nNumItemIdx]->GetTextNode()),
                         IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK);
                     aName = pMark->GetName();

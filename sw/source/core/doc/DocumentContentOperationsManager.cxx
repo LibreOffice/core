@@ -245,12 +245,12 @@ namespace sw
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
         SwPosition const*const pCpyStt = &rCpyPam;
 
-        std::vector< const ::sw::mark::IMark* > vMarksToCopy;
+        std::vector< const ::sw::mark::MarkBase* > vMarksToCopy;
         for ( IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getAllMarksBegin();
               ppMark != pSrcMarkAccess->getAllMarksEnd();
               ++ppMark )
         {
-            const ::sw::mark::IMark* const pMark = *ppMark;
+            const ::sw::mark::MarkBase* const pMark = *ppMark;
 
             const SwPosition& rMarkStart = pMark->GetMarkStart();
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
@@ -286,7 +286,7 @@ namespace sw
         // We have to count the "non-copied" nodes...
         SwNodeOffset nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
-        for(const sw::mark::IMark* const pMark : vMarksToCopy)
+        for(const sw::mark::MarkBase* const pMark : vMarksToCopy)
         {
             SwPaM aTmpPam(*pCpyStt);
             lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetMarkPos().GetNodeIndex(), nDelCount);
@@ -303,12 +303,12 @@ namespace sw
             {
                 assert(&rSrcDoc == &rDestDoc);
                 // Ensure the name can be given to NewMark, since this is ultimately a move
-                auto pSoonToBeDeletedMark = const_cast<sw::mark::IMark*>(pMark);
+                auto pSoonToBeDeletedMark = const_cast<sw::mark::MarkBase*>(pMark);
                 rDestDoc.getIDocumentMarkAccess()->renameMark(pSoonToBeDeletedMark,
                                                               sRequestedName + "COPY_IS_MOVE");
             }
 
-            ::sw::mark::IMark* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
+            ::sw::mark::MarkBase* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 sRequestedName,
                 IDocumentMarkAccess::GetType(*pMark),
@@ -4677,7 +4677,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk =
+                const ::sw::mark::MarkBase* pBkmk =
                     m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
                         OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
@@ -4779,7 +4779,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk =
+                const ::sw::mark::MarkBase* pBkmk =
                     m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
                         OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);

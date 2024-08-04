@@ -1437,7 +1437,7 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 
 void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* /*pRedlineData*/ )
 {
-    std::vector< const ::sw::mark::IMark* > aArr;
+    std::vector< const ::sw::mark::MarkBase* > aArr;
     sal_Int32 nContent;
     const sal_Int32 nCurrentEnd = nCurrentPos + nLen;
     if( !GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
@@ -1445,9 +1445,9 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
 
     SwNodeOffset nNd = rNd.GetIndex();
     sal_uLong nSttCP = Fc2Cp( Strm().Tell() );
-    for(const ::sw::mark::IMark* p : aArr)
+    for(const ::sw::mark::MarkBase* p : aArr)
     {
-        const ::sw::mark::IMark& rBkmk = *p;
+        const ::sw::mark::MarkBase& rBkmk = *p;
         if(dynamic_cast< const ::sw::mark::Fieldmark *>(&rBkmk))
             continue;
 
@@ -1484,7 +1484,7 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
     IMarkVector aMarks;
     if (GetAnnotationMarks(rAttrs, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
-        for (const sw::mark::IMark* pMark : aMarks)
+        for (const sw::mark::MarkBase* pMark : aMarks)
         {
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             if (nStart == nCurrentPos)

@@ -38,7 +38,7 @@
 
 using namespace css;
 
-typedef std::multimap<SwNodeOffset, const ::sw::mark::IMark*> SwBookmarkNodeTable;
+typedef std::multimap<SwNodeOffset, const ::sw::mark::MarkBase*> SwBookmarkNodeTable;
 
 struct Writer_Impl
 {
@@ -51,7 +51,7 @@ struct Writer_Impl
     Writer_Impl();
 
     void RemoveFontList();
-    void InsertBkmk( const ::sw::mark::IMark& rBkmk );
+    void InsertBkmk( const ::sw::mark::MarkBase& rBkmk );
 };
 
 Writer_Impl::Writer_Impl()
@@ -64,7 +64,7 @@ void Writer_Impl::RemoveFontList()
     aFontRemoveLst.clear();
 }
 
-void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
+void Writer_Impl::InsertBkmk(const ::sw::mark::MarkBase& rBkmk)
 {
     SwNodeOffset nNd = rBkmk.GetMarkPos().GetNodeIndex();
 
@@ -409,7 +409,7 @@ void Writer::CreateBookmarkTable()
 
 // search all Bookmarks in the range and return it in the Array
 bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
-    sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
+    sal_Int32 nEnd, std::vector< const ::sw::mark::MarkBase* >& rArr)
 {
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
@@ -427,7 +427,7 @@ bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
         {
             for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
             {
-                const ::sw::mark::IMark& rBkmk = *(it->second);
+                const ::sw::mark::MarkBase& rBkmk = *(it->second);
                 sal_Int32 nContent;
                 if( rBkmk.GetMarkPos().GetNode() == rNd &&
                     (nContent = rBkmk.GetMarkPos().GetContentIndex() ) >= nStt &&

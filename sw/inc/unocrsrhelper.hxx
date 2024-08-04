@@ -40,7 +40,7 @@ struct SwSortOptions;
 class SwDoc;
 class SwRootFrame;
 
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 
 namespace com::sun::star{
     namespace beans{
@@ -235,7 +235,7 @@ namespace SwUnoCursorHelper
         SwDoc & rTargetDoc,
         std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
         OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
-        ::sw::mark::IMark const*& o_rpMark,
+        ::sw::mark::MarkBase const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
 
     css::uno::Reference<css::text::XFlatParagraphIterator>

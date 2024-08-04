@@ -1270,7 +1270,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
 void SwHTMLWriter::OutBookmarks()
 {
     // fetch current bookmark
-    const ::sw::mark::IMark* pBookmark = nullptr;
+    const ::sw::mark::MarkBase* pBookmark = nullptr;
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
     if(m_nBkmkTabPos != -1)
         pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];

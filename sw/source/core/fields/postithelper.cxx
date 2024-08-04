@@ -43,7 +43,7 @@ class Point;
 namespace
 {
 /// Checks if pAnnotationMark covers exactly rAnchorPos (the comment anchor).
-bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
+bool AnnotationMarkCoversCommentAnchor(const sw::mark::MarkBase* pAnnotationMark,
                                        const SwPosition& rAnchorPos)
 {
     if (!pAnnotationMark)
@@ -86,7 +86,7 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
  * Finds the first draw object of rTextFrame which has the same anchor position as the start of
  * rAnnotationMark.
  */
-SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::IMark& rAnnotationMark,
+SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::MarkBase& rAnnotationMark,
                                                     const SwTextFrame& rTextFrame)
 {
     const SwSortedObjs* pAnchored = rTextFrame.GetDrawObjs();
@@ -128,7 +128,7 @@ SwSidebarItem::~SwSidebarItem() {}
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     SwLayoutInfo& o_rInfo,
     const SwPosition& rAnchorPos,
-    const sw::mark::IMark* pAnnotationMark )
+    const sw::mark::MarkBase* pAnnotationMark )
 {
     SwLayoutStatus aRet = INVISIBLE;
     SwTextNode* pTextNode = rAnchorPos.GetNode().GetTextNode();

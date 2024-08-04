@@ -688,7 +688,7 @@ std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
             SwDoc& rDoc = const_cast<SwDoc&>( pTextNd->GetDoc() );
             // tdf#123313: this *must not* create a bookmark, its Undo would
             // be screwed! create it as preparatory step, in ctor!
-            ::sw::mark::IMark const * const pMark = rDoc.getIDocumentMarkAccess()->getMarkForTextNode(
+            ::sw::mark::MarkBase const * const pMark = rDoc.getIDocumentMarkAccess()->getMarkForTextNode(
                                 *pTextNd,
                                 IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
             aText = "#" + pMark->GetName();

@@ -103,7 +103,7 @@ private:
                 std::u16string_view aText, ::sw::DeleteAndInsertMode eMode);
     void    Invalidate();
     void    GetStartPaM(std::optional<SwPaM>& roPaM);
-    void    SetMark(::sw::mark::IMark& rMark);
+    void    SetMark(::sw::mark::MarkBase& rMark);
     void    InvalidateImpl();
 
     virtual ~SwXTextRange() override;
@@ -211,7 +211,7 @@ private:
     SwDoc& m_rDoc;
     css::uno::Reference<css::text::XText> m_xParentText;
     const SwFrameFormat* m_pTableOrSectionFormat;
-    const ::sw::mark::IMark* m_pMark;
+    const ::sw::mark::MarkBase* m_pMark;
     struct MySvtListener : public SvtListener
     {
         SwXTextRange& mrTextRange;

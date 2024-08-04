@@ -36,7 +36,7 @@
 #include <utility>
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
-            const ::sw::mark::IMark& rBkmk )
+            const ::sw::mark::MarkBase& rBkmk )
     : SwUndo( nUndoId, &rBkmk.GetMarkPos().GetDoc() )
     , m_pHistoryBookmark(new SwHistoryBookmark(rBkmk, true, rBkmk.IsExpanded()))
 {
@@ -75,7 +75,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
+SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::MarkBase& rBkmk )
     : SwUndoBookmark( SwUndoId::INSBOOKMARK, rBkmk )
 {
 }
@@ -90,7 +90,7 @@ void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     SetInDoc( &rContext.GetDoc() );
 }
 
-SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::IMark& rBkmk )
+SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::MarkBase& rBkmk )
     : SwUndoBookmark( SwUndoId::DELBOOKMARK, rBkmk )
 {
 }

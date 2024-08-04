@@ -43,13 +43,13 @@ struct SwPosition;
 
 namespace sw::mark
 {
-    class IMark;
+    class MarkBase;
 
     class SaveBookmark
     {
     public:
             SaveBookmark(
-                const ::sw::mark::IMark& rBkmk,
+                const ::sw::mark::MarkBase& rBkmk,
                 const SwNode& rMvPos,
                 std::optional<sal_Int32> oContentIdx);
             void SetInDoc(SwDoc* pDoc,

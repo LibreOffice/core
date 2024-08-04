@@ -30,7 +30,7 @@ class SwContentIndexReg;
 struct SwPosition;
 class SwRangeRedline;
 
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 
 /// Marks a character position inside a document model content node (SwContentNode)
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwContentIndex
@@ -48,7 +48,7 @@ private:
     SwRangeRedline * m_pRangeRedline = nullptr;
 
     /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwContentIndexReg.
-    const sw::mark::IMark* m_pMark;
+    const sw::mark::MarkBase* m_pMark;
 
     SwContentIndex& ChgValue( const SwContentIndex& rIdx, sal_Int32 nNewValue );
     void Init(sal_Int32 const nIdx);
@@ -103,8 +103,8 @@ public:
     const SwContentNode* GetContentNode() const { return m_pContentNode; }
     const SwContentIndex* GetNext() const { return m_pNext; }
 
-    const sw::mark::IMark* GetMark() const { return m_pMark; }
-    void SetMark(const sw::mark::IMark* pMark);
+    const sw::mark::MarkBase* GetMark() const { return m_pMark; }
+    void SetMark(const sw::mark::MarkBase* pMark);
 
     SwRangeRedline* GetRedline() const { return m_pRangeRedline; }
     void SetRedline(SwRangeRedline* pRangeRedline) { m_pRangeRedline = pRangeRedline; }

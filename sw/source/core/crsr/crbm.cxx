@@ -35,7 +35,7 @@ namespace
             , m_aSaveState(*m_pCursor)
         { }
 
-        void SetCursorToMark(::sw::mark::IMark const * const pMark)
+        void SetCursorToMark(::sw::mark::MarkBase const * const pMark)
         {
             *(m_pCursor->GetPoint()) = pMark->GetMarkStart();
             if(pMark->IsExpanded())
@@ -62,26 +62,26 @@ namespace
         SwCursorSaveState m_aSaveState;
     };
 
-    bool lcl_ReverseMarkOrderingByEnd(const ::sw::mark::IMark* pFirst,
-                                      const ::sw::mark::IMark* pSecond)
+    bool lcl_ReverseMarkOrderingByEnd(const ::sw::mark::MarkBase* pFirst,
+                                      const ::sw::mark::MarkBase* pSecond)
     {
         return pFirst->GetMarkEnd() > pSecond->GetMarkEnd();
     }
 
-    bool lcl_IsInvisibleBookmark(const ::sw::mark::IMark* pMark)
+    bool lcl_IsInvisibleBookmark(const ::sw::mark::MarkBase* pMark)
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }
 }
 
 // at CurrentCursor.SPoint
-::sw::mark::IMark* SwCursorShell::SetBookmark(
+::sw::mark::MarkBase* SwCursorShell::SetBookmark(
     const vcl::KeyCode& rCode,
     const OUString& rName,
     IDocumentMarkAccess::MarkType eMark)
 {
     StartAction();
-    ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
+    ::sw::mark::MarkBase* pMark = getIDocumentMarkAccess()->makeMark(
         *GetCursor(),
         rName,
         eMark, sw::mark::InsertMode::New);
@@ -97,14 +97,14 @@ namespace
 // set CurrentCursor.SPoint
 
 // at CurrentCursor.SPoint
-::sw::mark::IMark* SwCursorShell::SetBookmark2(
+::sw::mark::MarkBase* SwCursorShell::SetBookmark2(
     const vcl::KeyCode& rCode,
     const OUString& rName,
     bool bHide,
     const OUString& rCondition)
 {
     StartAction();
-    ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
+    ::sw::mark::MarkBase* pMark = getIDocumentMarkAccess()->makeMark(
         *GetCursor(),
         rName,
         IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
@@ -122,7 +122,7 @@ namespace
 
 namespace sw {
 
-bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
+bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::MarkBase const& rMark)
 {
     if (!rLayout.HasMergedParas())
     {
@@ -165,7 +165,7 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
 } // namespace sw
 
 // set CurrentCursor.SPoint
-bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
+bool SwCursorShell::GotoMark(const ::sw::mark::MarkBase* const pMark, bool bAtStart)
 {
     if (sw::IsMarkHidden(*GetLayout(), *pMark))
     {
@@ -184,7 +184,7 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart
     return true;
 }
 
-bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
+bool SwCursorShell::GotoMark(const ::sw::mark::MarkBase* const pMark)
 {
     if (sw::IsMarkHidden(*GetLayout(), *pMark))
     {
@@ -203,7 +203,7 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
 bool SwCursorShell::GoNextBookmark()
 {
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
-    std::vector<::sw::mark::IMark*> vCandidates;
+    std::vector<::sw::mark::MarkBase*> vCandidates;
     remove_copy_if(
         pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),
         pMarkAccess->getBookmarksEnd(),
@@ -238,7 +238,7 @@ bool SwCursorShell::GoPrevBookmark()
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     // candidates from which to choose the mark before
     // no need to consider marks starting after rPos
-    std::vector<::sw::mark::IMark*> vCandidates;
+    std::vector<::sw::mark::MarkBase*> vCandidates;
     remove_copy_if(
         pMarkAccess->getBookmarksBegin(),
         pMarkAccess->findFirstBookmarkStartsAfter(*GetCursor()->GetPoint()),

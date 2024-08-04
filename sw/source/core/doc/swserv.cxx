@@ -261,7 +261,7 @@ void SwServerObject::SetNoServer()
     }
 }
 
-void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
+void SwServerObject::SetDdeBookmark( ::sw::mark::MarkBase& rBookmark)
 {
     ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(&rBookmark);
     if(pDdeBookmark)

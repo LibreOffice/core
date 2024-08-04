@@ -2915,7 +2915,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                             (*ppBkmk)->GetMarkStart() == *aAttrPam.GetPoint() )
                             break; // do not generate duplicates on this position
                         aAttrPam.DeleteMark();
-                        const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
+                        const ::sw::mark::MarkBase* const pNewMark = pMarkAccess->makeMark(
                             aAttrPam,
                             sName,
                             IDocumentMarkAccess::MarkType::BOOKMARK,

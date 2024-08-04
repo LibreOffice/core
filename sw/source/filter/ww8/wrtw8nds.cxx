@@ -2020,7 +2020,7 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
     const sal_Int32 nMarks = pMarkAccess->getAllMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
     {
-        IMark* pMark = pMarkAccess->getAllMarksBegin()[i];
+        MarkBase* pMark = pMarkAccess->getAllMarksBegin()[i];
 
         switch (IDocumentMarkAccess::GetType( *pMark ))
         {
@@ -2068,7 +2068,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
     const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
     {
-        IMark* pMark = pMarkAccess->getAnnotationMarksBegin()[i];
+        MarkBase* pMark = pMarkAccess->getAnnotationMarksBegin()[i];
 
         // Only keep the bookmarks starting or ending in this node
         if ( pMark->GetMarkStart().GetNode() == rNd ||
@@ -2110,7 +2110,7 @@ namespace {
 class CompareMarksEnd
 {
 public:
-    bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
+    bool operator() ( const MarkBase * pOneB, const MarkBase * pTwoB ) const
     {
         const sal_Int32 nOEnd = pOneB->GetMarkEnd().GetContentIndex();
         const sal_Int32 nTEnd = pTwoB->GetMarkEnd().GetContentIndex();
@@ -2127,7 +2127,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCu
 
     if ( !m_rSortedBookmarksStart.empty() )
     {
-        IMark* pMarkStart = m_rSortedBookmarksStart.front();
+        MarkBase* pMarkStart = m_rSortedBookmarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().GetContentIndex();
         if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
@@ -2138,7 +2138,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCu
 
     if ( !m_rSortedBookmarksEnd.empty() )
     {
-        IMark* pMarkEnd = m_rSortedBookmarksEnd[0];
+        MarkBase* pMarkEnd = m_rSortedBookmarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().GetContentIndex();
         if( !bNextPositionOnly || nNext > nCurrentPos )
         {
@@ -2159,7 +2159,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
 
     if ( !m_rSortedAnnotationMarksStart.empty() )
     {
-        IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
+        MarkBase* pMarkStart = m_rSortedAnnotationMarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().GetContentIndex();
         if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
@@ -2170,7 +2170,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
 
     if ( !m_rSortedAnnotationMarksEnd.empty() )
     {
-        IMark* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
+        MarkBase* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().GetContentIndex();
         if( !bNextPositionOnly || nNext > nCurrentPos )
         {
@@ -2189,7 +2189,7 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sa
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
-        for ( IMark* pMark : aMarksStart )
+        for ( MarkBase* pMark : aMarksStart )
         {
             // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
@@ -2223,7 +2223,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nC
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
-        for ( IMark* pMark : aMarksStart )
+        for ( MarkBase* pMark : aMarksStart )
         {
             // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();

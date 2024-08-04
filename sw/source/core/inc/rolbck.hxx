@@ -246,11 +246,11 @@ public:
 class SwHistoryBookmark final : public SwHistoryHint
 {
     public:
-        SwHistoryBookmark(const ::sw::mark::IMark& rBkmk,
+        SwHistoryBookmark(const ::sw::mark::MarkBase& rBkmk,
                         bool bSavePos, bool bSaveOtherPos);
         virtual void SetInDoc(SwDoc * pDoc, bool) override;
 
-        bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
+        bool IsEqualBookmark(const ::sw::mark::MarkBase& rBkmk);
         const OUString& GetName() const { return m_aName;}
 
     private:
@@ -372,7 +372,7 @@ public:
               SwNodeOffset nNodeIdx );
     void AddTextAttr(SwTextAttr* pTextHt, SwNodeOffset nNodeIdx, bool bNewAttr);
     void AddColl(SwFormatColl*, SwNodeOffset nNodeIdx, SwNodeType nWhichNd);
-    void AddIMark(const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos);
+    void AddIMark(const ::sw::mark::MarkBase&, bool bSavePos, bool bSaveOtherPos);
     void AddChangeFlyAnchor(sw::SpzFrameFormat& rFormat);
     void AddDeleteFly( SwFrameFormat&, sal_uInt16& rSetPos );
     void AddFootnote( const SwTextFootnote& );

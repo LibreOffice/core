@@ -45,7 +45,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextContent
 > SwXBookmark_Base;
 
-/// UNO API wrapper around an internal sw::mark::IMark.
+/// UNO API wrapper around an internal sw::mark::MarkBase.
 class SAL_DLLPUBLIC_RTTI SwXBookmark
     : public SwXBookmark_Base
 {
@@ -67,13 +67,13 @@ protected:
     virtual void attachToRange(
             const css::uno::Reference< css::text::XTextRange > & xTextRange);
 
-    ::sw::mark::IMark* GetBookmark() const;
+    ::sw::mark::MarkBase* GetBookmark() const;
 
     IDocumentMarkAccess* GetIDocumentMarkAccess();
 
     SwDoc * GetDoc();
 
-    void registerInMark( SwXBookmark& rXMark, ::sw::mark::IMark* const pMarkBase );
+    void registerInMark( SwXBookmark& rXMark, ::sw::mark::MarkBase* const pMarkBase );
 
     virtual ~SwXBookmark() override;
 
@@ -85,10 +85,10 @@ protected:
 public:
 
     static rtl::Reference<SwXBookmark>
-        CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark * pBookmark);
+        CreateXBookmark(SwDoc & rDoc, ::sw::mark::MarkBase * pBookmark);
 
     /// @return IMark for this, but only if it lives in pDoc
-    static ::sw::mark::IMark const* GetBookmarkInDoc(SwDoc const*const pDoc,
+    static ::sw::mark::MarkBase const* GetBookmarkInDoc(SwDoc const*const pDoc,
             const css::uno::Reference<css::uno::XInterface> & xUT);
 
     // MetadatableMixin
@@ -195,7 +195,7 @@ class SwXFieldmark final
 
 public:
     static rtl::Reference<SwXBookmark>
-        CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark * pMark,
+        CreateXFieldmark(SwDoc & rDoc, ::sw::mark::MarkBase * pMark,
                 bool isReplacementObject = false);
 
     virtual void attachToRange(

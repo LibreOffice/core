@@ -1501,12 +1501,12 @@ void SwTextNode::Update(
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
             // A text node already knows its marks via its SwContentIndexes.
-            o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
+            o3tl::sorted_vector<const sw::mark::MarkBase*> aSeenMarks;
             const SwContentIndex* next;
             for (const SwContentIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
                 next = pIndex->GetNext();
-                const sw::mark::IMark* pMark = pIndex->GetMark();
+                const sw::mark::MarkBase* pMark = pIndex->GetMark();
                 if (!pMark)
                     continue;
                 // filter out ones that cannot match to reduce the max size of aSeenMarks

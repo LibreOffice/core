@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 
-bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
+bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::MarkBase* const pMark)
 {
     addCurrentPosition();
     (this->*m_fnKillSel)( nullptr, false );
@@ -269,7 +269,7 @@ void SwWrtShell::GotoMark( const OUString& rName )
     MoveBookMark( BOOKMARK_INDEX, *ppMark );
 }
 
-void SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
+void SwWrtShell::GotoMark( const ::sw::mark::MarkBase* const pMark )
 {
     MoveBookMark( BOOKMARK_INDEX, pMark );
 }

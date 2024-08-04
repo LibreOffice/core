@@ -1474,9 +1474,9 @@ void SwDocTest::testMarkMove()
         SwTextNode& rParaNode2 = dynamic_cast<SwTextNode&>(aIdx.GetNode());
         rParaNode2.JoinNext();
     }
-    ::sw::mark::IMark* pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
-    ::sw::mark::IMark* pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
-    ::sw::mark::IMark* pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
+    ::sw::mark::MarkBase* pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
+    ::sw::mark::MarkBase* pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
+    ::sw::mark::MarkBase* pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().GetContentIndex());

@@ -26,7 +26,7 @@ class SwBaseLink;
 class SwTableNode;
 struct SwPosition;
 class SwPaM;
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 
 class SwServerObject final : public ::sfx2::SvLinkSource
 {
@@ -34,13 +34,13 @@ class SwServerObject final : public ::sfx2::SvLinkSource
 
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } m_eType;
     union {
-        ::sw::mark::IMark* pBkmk;
+        ::sw::mark::MarkBase* pBkmk;
         SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
     } m_CNTNT_TYPE;
 
 public:
-    SwServerObject( ::sw::mark::IMark& rBookmark )
+    SwServerObject( ::sw::mark::MarkBase& rBookmark )
         : m_eType( BOOKMARK_SERVER )
     {
         m_CNTNT_TYPE.pBkmk = &rBookmark;
@@ -67,7 +67,7 @@ public:
     bool IsLinkInServer( const SwBaseLink* ) const;
 
     void SetNoServer();
-    void SetDdeBookmark( ::sw::mark::IMark& rBookmark);
+    void SetDdeBookmark( ::sw::mark::MarkBase& rBookmark);
 };
 
 #endif // INCLUDED_SW_INC_SWSERV_HXX

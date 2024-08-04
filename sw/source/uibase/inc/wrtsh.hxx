@@ -421,8 +421,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     virtual void DrawSelChanged( ) override;
 
     // jump to bookmark and set the "selections-flags" correctly again
-    SW_DLLPUBLIC void GotoMark( const ::sw::mark::IMark* const pMark );
-    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect );
+    SW_DLLPUBLIC void GotoMark( const ::sw::mark::MarkBase* const pMark );
+    bool GotoMark( const ::sw::mark::MarkBase* const pMark, bool bSelect );
     SW_DLLPUBLIC void GotoMark( const OUString& rName );
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
@@ -649,7 +649,7 @@ private:
         BOOKMARK_PREV
     };
 
-    bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=nullptr);
+    bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::MarkBase* const pMark=nullptr);
 };
 
 inline void SwWrtShell::ResetCursorStack()

@@ -141,7 +141,7 @@ namespace
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
     /// Inserts pBkmk to rBkmArr in case it starts or ends at rOwnNode
-    void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
+    void lcl_FillBookmark(sw::mark::MarkBase* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         bool const isExpanded = pBkmk->IsExpanded();
         const SwPosition& rStartPos = pBkmk->GetMarkStart();
@@ -201,11 +201,11 @@ namespace
         SwTextNode* pTextNode = rUnoCursor.GetPoint()->GetNode().GetTextNode();
         assert(pTextNode);
         // A text node already knows its marks via its SwContentIndexes.
-        o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
+        o3tl::sorted_vector<const sw::mark::MarkBase*> aSeenMarks;
         for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
         {
             // Need a non-cost mark here, as we'll create a UNO wrapper around it.
-            sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
+            sw::mark::MarkBase* pBkmk = const_cast<sw::mark::MarkBase*>(pIndex->GetMark());
             if (!pBkmk)
                 continue;
             IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);
@@ -894,7 +894,7 @@ lcl_ExportHints(
                             break;
 
                         const SwTextAnnotationField* pTextAnnotationField = dynamic_cast<const SwTextAnnotationField*>( pAttr );
-                        ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : nullptr;
+                        ::sw::mark::MarkBase* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : nullptr;
                         if ( pAnnotationMark != nullptr )
                         {
                             pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION_END );

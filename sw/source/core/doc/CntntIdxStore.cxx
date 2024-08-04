@@ -184,7 +184,7 @@ namespace
             void RestoreUnoCursors(updater_t const & rUpdater);
             void SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent);
             void RestoreShellCursors(updater_t const & rUpdater);
-            static const SwPosition& GetRightMarkPos(::sw::mark::IMark const * pMark, bool bOther)
+            static const SwPosition& GetRightMarkPos(::sw::mark::MarkBase const * pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             static void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
@@ -227,7 +227,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 n
         ppBkmk != ppBkmkEnd;
         ++ppBkmk)
     {
-        const ::sw::mark::IMark* pBkmk = *ppBkmk;
+        const ::sw::mark::MarkBase* pBkmk = *ppBkmk;
         bool bMarkPosEqual = false;
         if(pBkmk->GetMarkPos().GetNodeIndex() == nNode
             && pBkmk->GetMarkPos().GetContentIndex() <= nContent)

@@ -2718,7 +2718,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 ++ppMark)
             {
                 //get the name
-                const ::sw::mark::IMark* pBkmk = *ppMark;
+                const ::sw::mark::MarkBase* pBkmk = *ppMark;
                 mrSh.SwCursorShell::ClearMark();
                 const OUString& sBkName = pBkmk->GetName();
 

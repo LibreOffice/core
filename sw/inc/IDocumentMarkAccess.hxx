@@ -55,7 +55,7 @@ class IDocumentMarkAccess
         };
 
         /** wrapper iterator: wraps iterator of implementation while hiding
-            MarkBase class; only IMark instances can be retrieved directly.
+            MarkBase class; only MarkBase instances can be retrieved directly.
          */
         class SW_DLLPUBLIC iterator
         {
@@ -67,9 +67,9 @@ class IDocumentMarkAccess
                 std::vector<::sw::mark::MarkBase*>::const_iterator const& get() const;
 
                 typedef std::ptrdiff_t difference_type;
-                typedef ::sw::mark::IMark* value_type;
-                typedef ::sw::mark::IMark* const* pointer;
-                typedef ::sw::mark::IMark* const& reference;
+                typedef ::sw::mark::MarkBase* value_type;
+                typedef ::sw::mark::MarkBase* const* pointer;
+                typedef ::sw::mark::MarkBase* const& reference;
                 typedef std::random_access_iterator_tag iterator_category;
 
                 iterator();
@@ -84,9 +84,9 @@ class IDocumentMarkAccess
                 // possible because we have to return a temp value;
                 // let's try value_type instead, perhaps it's sufficient,
                 // for a const_iterator...
-                ::sw::mark::IMark* /*const&*/ operator*() const;
+                ::sw::mark::MarkBase* /*const&*/ operator*() const;
                 // nope can't do that :(
-                //::sw::mark::IMark* /* const* */ operator->() const;
+                //::sw::mark::MarkBase* /* const* */ operator->() const;
                 iterator& operator++();
                 iterator operator++(int);
                 bool operator==(iterator const& rOther) const;
@@ -129,7 +129,7 @@ class IDocumentMarkAccess
            @returns
            a pointer to the new mark (name might have changed).
         */
-        virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
+        virtual ::sw::mark::MarkBase* makeMark(const SwPaM& rPaM,
             const OUString& rProposedName,
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
@@ -142,7 +142,7 @@ class IDocumentMarkAccess
             const OUString& rName,
             const OUString& rType) = 0;
 
-        virtual sw::mark::IMark* makeAnnotationMark(
+        virtual sw::mark::MarkBase* makeAnnotationMark(
             const SwPaM& rPaM,
             const OUString& rName ) = 0;
 
@@ -158,7 +158,7 @@ class IDocumentMarkAccess
            @returns
            a pointer to the new mark (name might have changed).
         */
-        virtual ::sw::mark::IMark* getMarkForTextNode(const SwTextNode& rTextNode,
+        virtual ::sw::mark::MarkBase* getMarkForTextNode(const SwTextNode& rTextNode,
             MarkType eMark) =0;
 
         /** Moves an existing mark to a new selection and performs needed updates.
@@ -169,7 +169,7 @@ class IDocumentMarkAccess
             [in] new selection to be marked
         */
 
-        virtual void repositionMark(::sw::mark::IMark* io_pMark,
+        virtual void repositionMark(::sw::mark::MarkBase* io_pMark,
             const SwPaM& rPaM) =0;
 
         /** Renames an existing Mark, if possible.
@@ -181,7 +181,7 @@ class IDocumentMarkAccess
 
             @returns false, if renaming failed (because the name is already in use)
         */
-        virtual bool renameMark(::sw::mark::IMark* io_pMark,
+        virtual bool renameMark(::sw::mark::MarkBase* io_pMark,
                 const OUString& rNewName) =0;
 
         /** Corrects marks (absolute)
@@ -247,7 +247,7 @@ class IDocumentMarkAccess
             @param ppMark
             [in] the name of the mark to be deleted.
         */
-        virtual void deleteMark(const ::sw::mark::IMark* const pMark) =0;
+        virtual void deleteMark(const ::sw::mark::MarkBase* const pMark) =0;
 
         /** Clear (deletes) all marks.
         */
@@ -321,7 +321,7 @@ class IDocumentMarkAccess
         virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
 
         /// Get the innermost bookmark that contains rPos.
-        virtual sw::mark::IMark* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
+        virtual sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
 
         // Fieldmarks
         /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.
@@ -355,10 +355,10 @@ class IDocumentMarkAccess
         virtual const_iterator_t getAnnotationMarksEnd() const = 0;
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
         virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
-        virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
+        virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
-        virtual ::sw::mark::IMark* makeAnnotationBookmark(const SwPaM& rPaM,
+        virtual ::sw::mark::MarkBase* makeAnnotationBookmark(const SwPaM& rPaM,
             const OUString& rProposedName,
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
@@ -373,7 +373,7 @@ class IDocumentMarkAccess
 
         /** Returns the MarkType used to create the mark
         */
-        static SW_DLLPUBLIC MarkType GetType(const ::sw::mark::IMark& rMark);
+        static SW_DLLPUBLIC MarkType GetType(const ::sw::mark::MarkBase& rMark);
 
         static SW_DLLPUBLIC OUString GetCrossRefHeadingBookmarkNamePrefix();
         static SW_DLLPUBLIC bool IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM );

@@ -1124,7 +1124,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
         bool bSavePos = false;
         bool bSaveOtherPos = false;
         bool bDelete = false;
-        const ::sw::mark::IMark *const pBkmk = pMarkAccess->getAllMarksBegin()[n];
+        const ::sw::mark::MarkBase *const pBkmk = pMarkAccess->getAllMarksBegin()[n];
         auto const type(IDocumentMarkAccess::GetType(*pBkmk));
 
         if( DelContentType::CheckNoCntnt & nDelContentType )

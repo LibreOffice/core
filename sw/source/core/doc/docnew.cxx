@@ -1135,18 +1135,18 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 --aNodeIndex;
                 SwPaM aPaM(aNodeIndex);
                 // Collect the marks starting or ending at this text node.
-                o3tl::sorted_vector<sw::mark::IMark*> aSeenMarks;
+                o3tl::sorted_vector<sw::mark::MarkBase*> aSeenMarks;
                 IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
                 for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
                 {
-                    sw::mark::IMark* pMark = const_cast<sw::mark::IMark*>(pIndex->GetMark());
+                    sw::mark::MarkBase* pMark = const_cast<sw::mark::MarkBase*>(pIndex->GetMark());
                     if (!pMark)
                         continue;
                     if (!aSeenMarks.insert(pMark).second)
                         continue;
                 }
                 // And move them back.
-                for (sw::mark::IMark* pMark : aSeenMarks)
+                for (sw::mark::MarkBase* pMark : aSeenMarks)
                     pMarkAccess->repositionMark(pMark, aPaM);
             }
 

@@ -51,51 +51,23 @@ namespace sw::mark
         CopyText,
     };
 
-    class SW_DLLPUBLIC IMark
-        : virtual public sw::BroadcastingModify // inherited as interface
-    {
-        protected:
-            IMark() = default;
-
-        public:
-            //getters
-            virtual const SwPosition& GetMarkPos() const =0;
-            // GetOtherMarkPos() is only guaranteed to return a valid
-            // reference if IsExpanded() returned true
-            virtual const SwPosition& GetOtherMarkPos() const =0;
-            virtual const SwPosition& GetMarkStart() const =0;
-            virtual const SwPosition& GetMarkEnd() const =0;
-            virtual const OUString& GetName() const =0;
-            virtual bool IsExpanded() const =0;
-            virtual bool IsCoveringPosition(const SwPosition& rPos) const =0;
-
-            //setters
-            // not available in IMark
-            // inside core, you can cast to MarkBase and use its setters,
-            // make sure to update the sorting in Markmanager in this case
-
-            virtual OUString ToString( ) const =0;
-            virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
-        private:
-            IMark(IMark const &) = delete;
-            IMark &operator =(IMark const&) = delete;
-    };
-
     class SW_DLLPUBLIC MarkBase
-        : virtual public IMark
+        : virtual public sw::BroadcastingModify // inherited as interface
     {
     public:
         //getters
-        SwPosition& GetMarkPos() const override
+        SwPosition& GetMarkPos() const
             { return const_cast<SwPosition&>(*m_oPos1); }
-        const OUString& GetName() const override
+        const OUString& GetName() const
             { return m_aName; }
-        SwPosition& GetOtherMarkPos() const override
+        // GetOtherMarkPos() is only guaranteed to return a valid
+        // reference if IsExpanded() returned true
+        virtual SwPosition& GetOtherMarkPos() const
         {
             OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
             return const_cast<SwPosition&>(*m_oPos2);
         }
-        SwPosition& GetMarkStart() const override
+        virtual SwPosition& GetMarkStart() const
         {
             if( !IsExpanded() ) return GetMarkPos( );
             if ( GetMarkPos( ) < GetOtherMarkPos( ) )
@@ -103,7 +75,7 @@ namespace sw::mark
             else
                 return GetOtherMarkPos( );
         }
-        SwPosition& GetMarkEnd() const override
+        virtual SwPosition& GetMarkEnd() const
         {
             if( !IsExpanded() ) return GetMarkPos();
             if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
@@ -112,8 +84,8 @@ namespace sw::mark
                 return GetOtherMarkPos( );
         }
 
-        bool IsCoveringPosition(const SwPosition& rPos) const override;
-        bool IsExpanded() const override
+        bool IsCoveringPosition(const SwPosition& rPos) const;
+        virtual bool IsExpanded() const
             { return m_oPos2.has_value(); }
 
         void SetName(const OUString& rName)
@@ -125,8 +97,8 @@ namespace sw::mark
 
         virtual auto InvalidateFrames() -> void;
 
-        OUString ToString( ) const override;
-        void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+        virtual OUString ToString( ) const;
+        virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
         void Swap()
         {

@@ -102,8 +102,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
 
     m_xBookmarksBox->selected_foreach([this, &nSelectedRows](weld::TreeIter& rEntry) {
         // remove from model
-        sw::mark::IMark* pBookmark
-            = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry));
+        sw::mark::MarkBase* pBookmark
+            = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
         OUString sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved), false);
@@ -158,8 +158,8 @@ void SwInsertBookmarkDlg::SelectionChanged()
     int nSelectedRows = 0;
     m_xBookmarksBox->selected_foreach(
         [this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry) {
-            sw::mark::IMark* pBookmark
-                = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry));
+            sw::mark::MarkBase* pBookmark
+                = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
             const OUString& sEntryName = pBookmark->GetName();
             if (!sEditBoxText.isEmpty())
                 sEditBoxText.append(";");
@@ -205,8 +205,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
     if (!xSelected)
         return;
 
-    sw::mark::IMark* pBookmark
-        = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
+    sw::mark::MarkBase* pBookmark
+        = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(*xSelected));
     uno::Reference<frame::XModel> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xNameAccess = xBkms->getBookmarks();
@@ -253,8 +253,8 @@ IMPL_LINK(SwInsertBookmarkDlg, ChangeHideHdl, weld::Toggleable&, rBox, void)
 
 IMPL_LINK(SwInsertBookmarkDlg, EditingHdl, weld::TreeIter const&, rIter, bool)
 {
-    sw::mark::IMark const* const pBookmark(
-        weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rIter)));
+    sw::mark::MarkBase const* const pBookmark(
+        weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rIter)));
     assert(pBookmark);
     return pBookmark->IsExpanded()
            && pBookmark->GetMarkPos().GetNode() == pBookmark->GetOtherMarkPos().GetNode()
@@ -263,8 +263,8 @@ IMPL_LINK(SwInsertBookmarkDlg, EditingHdl, weld::TreeIter const&, rIter, bool)
 
 IMPL_LINK(SwInsertBookmarkDlg, EditedHdl, weld::TreeView::iter_string const&, rIterString, bool)
 {
-    sw::mark::IMark const* const pBookmark(
-        weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rIterString.first)));
+    sw::mark::MarkBase const* const pBookmark(
+        weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rIterString.first)));
     assert(pBookmark);
     bool bRet(false);
     if (pBookmark->GetMarkPos() != pBookmark->GetOtherMarkPos())
@@ -300,8 +300,8 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
     if (!xSelected)
         return;
 
-    sw::mark::IMark* pBookmark
-        = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
+    sw::mark::MarkBase* pBookmark
+        = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(*xSelected));
 
     m_rSh.EnterStdMode();
     m_rSh.GotoMark(pBookmark);
@@ -324,7 +324,7 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
     if (pMarkAccess->getBookmarksCount() != m_nLastBookmarksCount)
         return true;
 
-    std::vector<std::pair<sw::mark::IMark*, OUString>>::const_iterator aListIter
+    std::vector<std::pair<sw::mark::MarkBase*, OUString>>::const_iterator aListIter
         = m_aTableBookmarks.begin();
     for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
@@ -496,7 +496,7 @@ std::unique_ptr<weld::TreeIter> BookmarkTable::get_selected() const
     return xIter;
 }
 
-void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::IMark* const pMark)
+void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pMark)
 {
     sw::mark::Bookmark* pBookmark = dynamic_cast<sw::mark::Bookmark*>(pMark);
     assert(pBookmark);
@@ -544,7 +544,8 @@ std::unique_ptr<weld::TreeIter> BookmarkTable::GetRowByBookmarkName(const OUStri
 {
     std::unique_ptr<weld::TreeIter> xRet;
     m_xControl->all_foreach([this, &sName, &xRet](weld::TreeIter& rEntry) {
-        sw::mark::IMark* pBookmark = weld::fromId<sw::mark::IMark*>(m_xControl->get_id(rEntry));
+        sw::mark::MarkBase* pBookmark
+            = weld::fromId<sw::mark::MarkBase*>(m_xControl->get_id(rEntry));
         if (pBookmark->GetName() == sName)
         {
             xRet = m_xControl->make_iterator(&rEntry);
@@ -555,13 +556,13 @@ std::unique_ptr<weld::TreeIter> BookmarkTable::GetRowByBookmarkName(const OUStri
     return xRet;
 }
 
-sw::mark::IMark* BookmarkTable::GetBookmarkByName(const OUString& sName)
+sw::mark::MarkBase* BookmarkTable::GetBookmarkByName(const OUString& sName)
 {
     auto xEntry = GetRowByBookmarkName(sName);
     if (!xEntry)
         return nullptr;
 
-    return weld::fromId<sw::mark::IMark*>(m_xControl->get_id(*xEntry));
+    return weld::fromId<sw::mark::MarkBase*>(m_xControl->get_id(*xEntry));
 }
 
 bool BookmarkTable::SelectByName(const OUString& sName)
@@ -579,7 +580,7 @@ OUString BookmarkTable::GetNameProposal() const
     sal_Int32 nHighestBookmarkId = 0;
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
-        sw::mark::IMark* pBookmark = weld::fromId<sw::mark::IMark*>(m_xControl->get_id(i));
+        sw::mark::MarkBase* pBookmark = weld::fromId<sw::mark::MarkBase*>(m_xControl->get_id(i));
         const OUString& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
         if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultBookmarkName)

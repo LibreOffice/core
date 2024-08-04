@@ -588,17 +588,17 @@ public:
     void GoNextPrevCursorSetSearchLabel(const bool bNext);
 
     // at CurrentCursor.SPoint
-    SW_DLLPUBLIC ::sw::mark::IMark* SetBookmark(
+    SW_DLLPUBLIC ::sw::mark::MarkBase* SetBookmark(
         const vcl::KeyCode&,
         const OUString& rName,
         IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::MarkType::BOOKMARK);
-    SW_DLLPUBLIC ::sw::mark::IMark* SetBookmark2(
+    SW_DLLPUBLIC ::sw::mark::MarkBase* SetBookmark2(
         const vcl::KeyCode&,
         const OUString& rName,
         bool bHide,
         const OUString& rCondition);
-    SW_DLLPUBLIC bool GotoMark( const ::sw::mark::IMark* const pMark );    // sets CurrentCursor.SPoint
-    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart );
+    SW_DLLPUBLIC bool GotoMark( const ::sw::mark::MarkBase* const pMark );    // sets CurrentCursor.SPoint
+    bool GotoMark( const ::sw::mark::MarkBase* const pMark, bool bAtStart );
     bool GoNextBookmark(); // true, if there was one
     bool GoPrevBookmark();
 

@@ -115,7 +115,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
         OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
-        ::sw::mark::IMark const*& o_rpMark,
+        ::sw::mark::MarkBase const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects)
 {
     uno::Reference<drawing::XShapes> const xShapes(xIfc, UNO_QUERY);
@@ -249,7 +249,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    ::sw::mark::IMark const*const pMark =
+    ::sw::mark::MarkBase const*const pMark =
             SwXBookmark::GetBookmarkInDoc(& rTargetDoc, xIfc);
     if (pMark)
     {

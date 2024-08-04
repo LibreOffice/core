@@ -1176,7 +1176,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         if(aIntersect.HasArea())
         {
             SwPosition const aPosition(m_pFrame->MapViewToModelPos(GetIdx()));
-            const ::sw::mark::IMark* pFieldmark =
+            const ::sw::mark::MarkBase* pFieldmark =
                 m_pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);
             bool bIsStartMark = (TextFrameIndex(1) == GetLen()
                     && CH_TXT_ATR_FIELDSTART == GetText()[sal_Int32(GetIdx())]);

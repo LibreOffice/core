@@ -48,7 +48,7 @@ public:
     std::mutex m_Mutex; // just for OInterfaceContainerHelper3
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SwDoc* m_pDoc;
-    ::sw::mark::IMark* m_pRegisteredBookmark;
+    ::sw::mark::MarkBase* m_pRegisteredBookmark;
     OUString m_sMarkName;
     bool m_bHidden;
     OUString m_HideCondition;
@@ -61,7 +61,7 @@ public:
         // DO NOT registerInMark here! (because SetXBookmark would delete rThis)
     }
 
-    void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
+    void registerInMark(SwXBookmark & rThis, ::sw::mark::MarkBase *const pBkmk);
 protected:
     virtual void Notify(const SfxHint&) override;
 
@@ -85,19 +85,14 @@ void SwXBookmark::Impl::Notify(const SfxHint& rHint)
 }
 
 void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
-        ::sw::mark::IMark* const pBkmk)
+        ::sw::mark::MarkBase* const pBkmk)
 {
     const rtl::Reference<SwXBookmark> xBookmark(&rThis);
     if (pBkmk)
     {
         EndListeningAll();
         StartListening(pBkmk->GetNotifier());
-        ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(pBkmk));
-        OSL_ENSURE(pMarkBase, "registerInMark: no MarkBase?");
-        if (pMarkBase)
-        {
-            pMarkBase->SetXBookmark(xBookmark);
-        }
+        pBkmk->SetXBookmark(xBookmark);
         assert(m_pDoc == nullptr || m_pDoc == &pBkmk->GetMarkPos().GetDoc());
         m_pDoc = &pBkmk->GetMarkPos().GetDoc();
     }
@@ -120,12 +115,12 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
 }
 
 void SwXBookmark::registerInMark(SwXBookmark & rThis,
-        ::sw::mark::IMark *const pBkmk)
+        ::sw::mark::MarkBase *const pBkmk)
 {
     m_pImpl->registerInMark( rThis, pBkmk );
 }
 
-::sw::mark::IMark* SwXBookmark::GetBookmark() const
+::sw::mark::MarkBase* SwXBookmark::GetBookmark() const
 {
     return m_pImpl->m_pRegisteredBookmark;
 }
@@ -156,15 +151,14 @@ SwXBookmark::~SwXBookmark()
 
 rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
     SwDoc & rDoc,
-    ::sw::mark::IMark *const pBookmark)
+    ::sw::mark::MarkBase *const pBookmark)
 {
     // #i105557#: do not iterate over the registered clients: race condition
-    ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(pBookmark));
-    OSL_ENSURE(!pBookmark || pMarkBase, "CreateXBookmark: no MarkBase?");
+    OSL_ENSURE(pBookmark, "CreateXBookmark: no MarkBase?");
     rtl::Reference<SwXBookmark> xBookmark;
-    if (pMarkBase)
+    if (pBookmark)
     {
-        xBookmark = pMarkBase->GetXBookmark();
+        xBookmark = pBookmark->GetXBookmark();
     }
     if (!xBookmark.is())
     {
@@ -176,12 +170,12 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
         SwXBookmark *const pXBookmark =
             pBookmark ? new SwXBookmark(&rDoc) : new SwXBookmark;
         xBookmark.set(pXBookmark);
-        pXBookmark->m_pImpl->registerInMark(*pXBookmark, pMarkBase);
+        pXBookmark->m_pImpl->registerInMark(*pXBookmark, pBookmark);
     }
     return xBookmark;
 }
 
-::sw::mark::IMark const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
+::sw::mark::MarkBase const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
         const uno::Reference<uno::XInterface> & xUT)
 {
     SwXBookmark *const pXBkm = dynamic_cast<SwXBookmark*>(xUT.get());
@@ -671,17 +665,14 @@ uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
 }
 
 rtl::Reference<SwXBookmark>
-SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
+SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::MarkBase *const pMark,
         bool const isReplacementObject)
 {
     // #i105557#: do not iterate over the registered clients: race condition
-    ::sw::mark::MarkBase *const pMarkBase(
-        dynamic_cast< ::sw::mark::MarkBase * >(pMark));
-    assert(!pMark || pMarkBase);
     rtl::Reference<SwXBookmark> xMark;
-    if (pMarkBase)
+    if (pMark)
     {
-        xMark = pMarkBase->GetXBookmark();
+        xMark = pMark->GetXBookmark();
     }
     if (!xMark.is())
     {
@@ -699,7 +690,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
 
         xMark = pXBkmk.get();
-        pXBkmk->registerInMark(*pXBkmk, pMarkBase);
+        pXBkmk->registerInMark(*pXBkmk, pMark);
     }
     return xMark;
 }

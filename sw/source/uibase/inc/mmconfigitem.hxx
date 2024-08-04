@@ -41,11 +41,11 @@ namespace com::sun::star{
 
 class SwMailMergeConfigItem_Impl;
 class SwView;
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 
 struct SwDocMergeInfo
 {
-    sw::mark::IMark* startPageInTarget;
+    sw::mark::MarkBase* startPageInTarget;
     sal_Int32    nDBRow;
 };
 

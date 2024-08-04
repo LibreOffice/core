@@ -83,7 +83,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
     const SwContentNode* GetContentNode() const { return nContent.GetContentNode(); }
     sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
-    void SetMark(const sw::mark::IMark* pMark) { nContent.SetMark(pMark); }
+    void SetMark(const sw::mark::MarkBase* pMark) { nContent.SetMark(pMark); }
     void SetRedline(SwRangeRedline* pRangeRedline) { nContent.SetRedline(pRangeRedline); }
 
     /// These all set both nNode and nContent

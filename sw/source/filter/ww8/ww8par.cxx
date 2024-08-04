@@ -1618,7 +1618,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 sal_uInt16 nBkmNo;
                 if( IsFootnoteEdnBkmField(rFormatField, nBkmNo) )
                 {
-                    ::sw::mark::IMark const * const pMark = m_rDoc.getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
+                    ::sw::mark::MarkBase const * const pMark = m_rDoc.getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 

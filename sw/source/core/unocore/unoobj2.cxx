@@ -681,7 +681,7 @@ void SwXTextRange::InvalidateImpl()
     moSvtListener->EndListeningAll();
 }
 
-void SwXTextRange::SetMark(::sw::mark::IMark& rMark)
+void SwXTextRange::SetMark(::sw::mark::MarkBase& rMark)
 {
     moSvtListener->EndListeningAll();
     m_pTableOrSectionFormat = nullptr;
@@ -937,7 +937,7 @@ SwXTextRange::getStart()
     SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
-    ::sw::mark::IMark const * const pBkmk = m_pMark;
+    ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if (!m_xParentText.is())
     {
         getText();
@@ -974,7 +974,7 @@ SwXTextRange::getEnd()
     SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
-    ::sw::mark::IMark const * const pBkmk = m_pMark;
+    ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if (!m_xParentText.is())
     {
         getText();
@@ -1065,7 +1065,7 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode)
             }
         }
     }
-    ::sw::mark::IMark const * const pBkmk = m_pMark;
+    ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if(pBkmk)
     {
         *rToFill.GetPoint() = pBkmk->GetMarkPos();
@@ -1112,7 +1112,7 @@ sal_Int16 SwXTextRange::compareRegionStarts(SwXTextRange& rhs)
 
 void SwXTextRange::GetStartPaM(std::optional<SwPaM>& roPaM)
 {
-    ::sw::mark::IMark const * const pBkmk = m_pMark;
+    ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if (!m_xParentText.is())
     {
         getText();

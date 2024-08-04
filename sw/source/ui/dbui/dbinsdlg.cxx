@@ -1221,7 +1221,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             bool bSetCursor = true;
             const size_t nCols = aColArr.size();
-            ::sw::mark::IMark* pMark = nullptr;
+            ::sw::mark::MarkBase* pMark = nullptr;
             for( sal_Int32 i = 0 ; ; ++i )
             {
                 bool bBreak = false;

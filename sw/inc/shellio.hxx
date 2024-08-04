@@ -48,7 +48,7 @@ class SwPaM;
 class SwTextBlocks;
 struct SwPosition;
 struct Writer_Impl;
-namespace sw::mark { class IMark; }
+namespace sw::mark { class MarkBase; }
 namespace com::sun::star::embed { class XStorage; }
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
@@ -458,7 +458,7 @@ public:
     // Search all Bookmarks in the range and return it in the Array.
     bool GetBookmarks( const SwContentNode& rNd,
                         sal_Int32 nStt, sal_Int32 nEnd,
-                        std::vector< const ::sw::mark::IMark* >& rArr );
+                        std::vector< const ::sw::mark::MarkBase* >& rArr );
 
     // Create new PaM at position.
     static std::shared_ptr<SwUnoCursor> NewUnoCursor(SwDoc & rDoc,

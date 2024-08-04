@@ -584,7 +584,7 @@ public:
     std::stack< MSWordSaveData > m_aSaveData;
 
     /// Used to split the runs according to the bookmarks start and ends
-    typedef std::vector< ::sw::mark::IMark* > IMarkVector;
+    typedef std::vector< ::sw::mark::MarkBase* > IMarkVector;
     IMarkVector m_rSortedBookmarksStart;
     IMarkVector m_rSortedBookmarksEnd;
     IMarkVector m_rSortedAnnotationMarksStart;

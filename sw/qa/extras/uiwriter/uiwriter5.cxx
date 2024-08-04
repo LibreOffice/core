@@ -1313,7 +1313,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
     // Get the annotation mark doc model start.
     auto it = pDoc->getIDocumentMarkAccess()->getAnnotationMarksBegin();
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAnnotationMarksEnd());
-    const sw::mark::IMark* pMark = *it;
+    const sw::mark::MarkBase* pMark = *it;
     const SwPosition& rAnnotationMarkStart = pMark->GetMarkPos();
 
     // Without the accompanying fix in place, this test would have failed with:
