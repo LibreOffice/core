@@ -18,7 +18,7 @@
 namespace sw
 {
 DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Widget* pParent,
-                                                 mark::IFieldmark* pDropDownField)
+                                                 mark::Fieldmark* pDropDownField)
     : GenericDialogController(pParent, u"modules/swriter/ui/dropdownformfielddialog.ui"_ustr,
                               u"DropDownFormFieldDialog"_ustr)
     , m_pDropDownField(pDropDownField)
@@ -102,7 +102,7 @@ void DropDownFormFieldDialog::InitControls()
 {
     if (m_pDropDownField != nullptr)
     {
-        const mark::IFieldmark::parameter_map_t* const pParameters
+        const mark::Fieldmark::parameter_map_t* const pParameters
             = m_pDropDownField->GetParameters();
 
         auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
@@ -173,7 +173,7 @@ void DropDownFormFieldDialog::Apply()
     if (!(m_pDropDownField != nullptr && m_bListHasChanged))
         return;
 
-    mark::IFieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
+    mark::Fieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
 
     css::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
     auto vListEntriesRange = asNonConstRange(vListEntries);

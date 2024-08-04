@@ -331,7 +331,7 @@ void RtfExport::OutputField(const SwField* pField, ww::eField eFieldType, const 
     m_pAttrOutput->WriteField_Impl(pField, eFieldType, rFieldCmd, nMode);
 }
 
-void RtfExport::WriteFormData(const ::sw::mark::IFieldmark& rFieldmark)
+void RtfExport::WriteFormData(const ::sw::mark::Fieldmark& rFieldmark)
 {
     sal_Int32 nType;
     if (rFieldmark.GetFieldname() == ODF_FORMDROPDOWN)
@@ -389,7 +389,7 @@ void RtfExport::WriteFormData(const ::sw::mark::IFieldmark& rFieldmark)
     m_pAttrOutput->RunText().append("}}"); // close FORMFIELD destination
 }
 
-void RtfExport::WriteHyperlinkData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
+void RtfExport::WriteHyperlinkData(const ::sw::mark::Fieldmark& /*rFieldmark*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << __func__);
 }

@@ -716,7 +716,7 @@ namespace sw
                 {
                     SwPosition const end(*rPos.GetNode().GetTextNode(),
                                          nIndex - 1);
-                    sw::mark::IFieldmark *const pFieldMark(
+                    sw::mark::Fieldmark *const pFieldMark(
                         rPos.GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(end));
                     SAL_WARN_IF(!pFieldMark, "sw.ww8", "expected a field mark");
                     if (pFieldMark && pFieldMark->GetMarkPos().GetNodeIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1

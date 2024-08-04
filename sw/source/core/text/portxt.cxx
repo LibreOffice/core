@@ -906,7 +906,7 @@ void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 {
     SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
 
-    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(aPosition);
+    Fieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(aPosition);
 
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX,
         "Where is my form field bookmark???");
@@ -922,7 +922,7 @@ void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
 bool SwFieldFormCheckboxPortion::Format( SwTextFormatInfo & rInf )
 {
     SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
-    IFieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(aPosition);
+    Fieldmark const*const pBM = rInf.GetTextFrame()->GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(aPosition);
     OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX, "Where is my form field bookmark???");
     if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {

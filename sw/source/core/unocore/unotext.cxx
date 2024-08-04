@@ -1956,7 +1956,7 @@ void SwXText::ConvertCell(
 
     // tdf#149649 delete any fieldmarks overlapping the cell
     IDocumentMarkAccess & rIDMA(*m_pDoc->getIDocumentMarkAccess());
-    while (sw::mark::IFieldmark *const pMark = rIDMA.getInnerFieldmarkFor(*aStartCellPam.Start()))
+    while (sw::mark::Fieldmark *const pMark = rIDMA.getInnerFieldmarkFor(*aStartCellPam.Start()))
     {
         if (pMark->GetMarkEnd() <= *aEndCellPam.End())
         {
@@ -1984,7 +1984,7 @@ void SwXText::ConvertCell(
             }
         }
     }
-    while (sw::mark::IFieldmark *const pMark = rIDMA.getInnerFieldmarkFor(*aEndCellPam.End()))
+    while (sw::mark::Fieldmark *const pMark = rIDMA.getInnerFieldmarkFor(*aEndCellPam.End()))
     {
         if (*aStartCellPam.Start() <= pMark->GetMarkStart())
         {

@@ -1320,7 +1320,7 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
     if (!pMarkAccess)
         return;
 
-    const sw::mark::IFieldmark* pMark = pMarkAccess->getFieldmarkAt(rPos);
+    const sw::mark::Fieldmark* pMark = pMarkAccess->getFieldmarkAt(rPos);
     if (!pMark)
         return;
 

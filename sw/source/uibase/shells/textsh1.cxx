@@ -2009,7 +2009,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     case SID_FM_CTL_PROPERTIES:
     {
         SwPosition aPos(*GetShell().GetCursor()->GetPoint());
-        sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
+        sw::mark::Fieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
         if ( !pFieldBM )
         {
             aPos.AdjustContent(-1);
@@ -3156,7 +3156,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                 // Enable it if we have a valid object other than what form shell knows
                 SwPosition aPos(*GetShell().GetCursor()->GetPoint());
-                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
+                sw::mark::Fieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
                 if ( !pFieldBM && aPos.GetContentIndex() > 0)
                 {
                     aPos.AdjustContent(-1);

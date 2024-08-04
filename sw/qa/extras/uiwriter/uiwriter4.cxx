@@ -1480,7 +1480,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf95699)
     pWrtShell->Copy(aClipboard);
     pMarkAccess = aClipboard.getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
-    ::sw::mark::IFieldmark* pFieldMark
+    ::sw::mark::Fieldmark* pFieldMark
         = pMarkAccess->getFieldmarkAfter(SwPosition(aClipboard.GetNodes().GetEndOfExtras()), false);
     CPPUNIT_ASSERT_EQUAL(u"vnd.oasis.opendocument.field.FORMCHECKBOX"_ustr,
                          pFieldMark->GetFieldname());

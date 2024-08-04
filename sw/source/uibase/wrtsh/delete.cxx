@@ -245,7 +245,7 @@ bool SwWrtShell::DelLeft()
         // If we are just to the right to a fieldmark, then remove it completely
         const SwPosition* pCurPos = GetCursor()->GetPoint();
         SwPosition aPrevChar(*pCurPos->GetContentNode(), pCurPos->GetContentIndex() - 1);
-        sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkAt(aPrevChar);
+        sw::mark::Fieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkAt(aPrevChar);
         if (pFm && pFm->GetMarkEnd() == *pCurPos)
         {
             mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -378,7 +378,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
 
         {
             // If we are just ahead of a fieldmark, then remove it completely
-            sw::mark::IFieldmark *const pFm = getIDocumentMarkAccess()->getFieldmarkAt(*GetCursor()->GetPoint());
+            sw::mark::Fieldmark *const pFm = getIDocumentMarkAccess()->getFieldmarkAt(*GetCursor()->GetPoint());
             if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())
             {
                 mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);

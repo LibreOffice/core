@@ -25,9 +25,9 @@ using namespace ::com::sun::star;
 // @param rIndex serves multiple purposes
 //        [in] -1 to indicate searching using the provided name, SAL_MAX_INT32 for totals
 //        [out] rIndex indicates the found index, or the total number of fieldmarks
-static sw::mark::IFieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& rIndex,
-                                              const uno::Reference<frame::XModel>& xModel,
-                                              uno::Sequence<OUString>* pElementNames = nullptr)
+static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& rIndex,
+                                             const uno::Reference<frame::XModel>& xModel,
+                                             uno::Sequence<OUString>* pElementNames = nullptr)
 
 {
     SwDoc* pDoc = word::getDocShell(xModel)->GetDoc();
@@ -53,10 +53,10 @@ static sw::mark::IFieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32&
                     && (*aIter)->GetName().equalsIgnoreAsciiCase(OUString::fromUtf8(rName)))
                 {
                     rIndex = nCounter;
-                    return dynamic_cast<sw::mark::IFieldmark*>(*aIter);
+                    return dynamic_cast<sw::mark::Fieldmark*>(*aIter);
                 }
                 else if (rIndex == nCounter)
-                    return dynamic_cast<sw::mark::IFieldmark*>(*aIter);
+                    return dynamic_cast<sw::mark::Fieldmark*>(*aIter);
 
                 ++nCounter;
                 if (pElementNames)
@@ -106,7 +106,7 @@ private:
     uno::Reference<XHelperInterface> mxParent;
     uno::Reference<uno::XComponentContext> mxContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
-    sw::mark::IFieldmark* m_pCache;
+    sw::mark::Fieldmark* m_pCache;
 
 public:
     /// @throws css::uno::RuntimeException
@@ -199,7 +199,7 @@ void SwVbaFormFields::setShaded(sal_Bool /*bSet*/)
 // uno::Reference<ooo::vba::word::XFormField> SwVbaFormFields::Add(const uno::Any& Range,
 //                                                                 sal_Int32 Type)
 // {
-//     sw::mark::IFieldmark* pFieldmark = nullptr;
+//     sw::mark::Fieldmark* pFieldmark = nullptr;
 //     switch (Type)
 //     {
 //         case ooo::vba::word::WdFieldType::wdFieldFormCheckBox:

@@ -296,7 +296,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
         NoEmptyTextField = [](SwPosition* sp, const IDocumentMarkAccess* pMarksAccess)
     {
         // Legacy text/combo/checkbox: never return read-only when inside these form fields.
-        sw::mark::IFieldmark* pA = pMarksAccess->getInnerFieldmarkFor(*sp);
+        sw::mark::Fieldmark* pA = pMarksAccess->getInnerFieldmarkFor(*sp);
         if (pA != nullptr)
         {
             bool fm = IDocumentMarkAccess::GetType(*pA) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK;

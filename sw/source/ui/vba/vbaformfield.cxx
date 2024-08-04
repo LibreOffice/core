@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>& rParent,
                                const uno::Reference<uno::XComponentContext>& rContext,
                                const uno::Reference<text::XTextDocument>& xTextDocument,
-                               sw::mark::IFieldmark& rFormField)
+                               sw::mark::Fieldmark& rFormField)
     : SwVbaFormField_BASE(rParent, rContext)
     , m_xTextDocument(xTextDocument)
     , m_rFormField(rFormField)
@@ -71,8 +71,8 @@ uno::Any SwVbaFormField::Previous()
     if (!pMarkAccess)
         return uno::Any();
 
-    sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkBefore(m_rFormField.GetMarkPos(),
-                                                                       /*bLoop=*/false);
+    sw::mark::Fieldmark* pFieldMark = pMarkAccess->getFieldmarkBefore(m_rFormField.GetMarkPos(),
+                                                                      /*bLoop=*/false);
 
     // DateFields are a LO specialty, and do not exist natively in MS documents. Ignore if added...
     auto pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);
@@ -99,8 +99,8 @@ uno::Any SwVbaFormField::Next()
     if (!pMarkAccess)
         return uno::Any();
 
-    sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(m_rFormField.GetMarkPos(),
-                                                                      /*bLoop=*/false);
+    sw::mark::Fieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(m_rFormField.GetMarkPos(),
+                                                                     /*bLoop=*/false);
 
     // DateFields are a LO specialty, and do not exist natively in MS documents. Ignore if added...
     auto pDateField = dynamic_cast<sw::mark::DateFieldmark*>(pFieldMark);

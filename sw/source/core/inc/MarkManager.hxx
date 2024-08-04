@@ -44,11 +44,11 @@ namespace sw::mark {
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
 
-            virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
+            virtual sw::mark::Fieldmark* makeFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
                 const OUString& rType,
                 SwPosition const* pSepPos = nullptr) override;
-            virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
+            virtual sw::mark::Fieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
                 const OUString& rName,
                 const OUString& rType) override;
 
@@ -96,16 +96,16 @@ namespace sw::mark {
             virtual const_iterator_t getFieldmarksBegin() const override;
             virtual const_iterator_t getFieldmarksEnd() const override;
             virtual sal_Int32 getFieldmarksCount() const override;
-            virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
-            virtual sw::mark::IFieldmark* getInnerFieldmarkFor(const SwPosition& rPos) const override;
-            virtual sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const override;
-            virtual sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const override;
+            virtual ::sw::mark::Fieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
+            virtual sw::mark::Fieldmark* getInnerFieldmarkFor(const SwPosition& rPos) const override;
+            virtual sw::mark::Fieldmark* getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const override;
+            virtual sw::mark::Fieldmark* getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const override;
 
-            virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const override;
-            virtual std::vector<::sw::mark::IFieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const override;
+            virtual ::sw::mark::Fieldmark* getDropDownFor(const SwPosition &rPos) const override;
+            virtual std::vector<::sw::mark::Fieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const override;
 
             virtual void deleteFieldmarkAt(const SwPosition& rPos) override;
-            virtual ::sw::mark::IFieldmark* changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) override;
+            virtual ::sw::mark::Fieldmark* changeFormFieldmarkType(::sw::mark::Fieldmark* pFieldmark, const OUString& rNewType) override;
 
             virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) override;
             virtual void ClearFieldActivation() override;

@@ -554,7 +554,7 @@ bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPa
                rPaM.End()->GetContentIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
 }
 
-void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark)
+void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::Fieldmark const& rMark)
 {
     if (GetType(rMark) != MarkType::TEXT_FIELDMARK)
     {
@@ -744,7 +744,7 @@ namespace sw::mark
         return pMark.release();
     }
 
-    ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark(
+    ::sw::mark::Fieldmark* MarkManager::makeFieldBookmark(
         const SwPaM& rPaM,
         const OUString& rName,
         const OUString& rType,
@@ -770,7 +770,7 @@ namespace sw::mark
                              sw::mark::InsertMode::New,
                              pSepPos);
         }
-        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        sw::mark::Fieldmark* pFieldMark = dynamic_cast<sw::mark::Fieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
 
@@ -784,7 +784,7 @@ namespace sw::mark
         return pFieldMark;
     }
 
-    ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark(
+    ::sw::mark::Fieldmark* MarkManager::makeNoTextFieldBookmark(
         const SwPaM& rPaM,
         const OUString& rName,
         const OUString& rType)
@@ -816,7 +816,7 @@ namespace sw::mark
                     sw::mark::InsertMode::New);
         }
 
-        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        sw::mark::Fieldmark* pFieldMark = dynamic_cast<sw::mark::Fieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
 
@@ -1464,7 +1464,7 @@ namespace sw::mark
             CompareIMarkStartsAfter());
     }
 
-    IFieldmark* MarkManager::getFieldmarkAt(const SwPosition& rPos) const
+    Fieldmark* MarkManager::getFieldmarkAt(const SwPosition& rPos) const
     {
         auto const pFieldmark = find_if(
             m_vFieldmarks.begin(),
@@ -1477,10 +1477,10 @@ namespace sw::mark
                 } );
         return (pFieldmark == m_vFieldmarks.end())
             ? nullptr
-            : dynamic_cast<IFieldmark*>(*pFieldmark);
+            : dynamic_cast<Fieldmark*>(*pFieldmark);
     }
 
-    IFieldmark* MarkManager::getInnerFieldmarkFor(const SwPosition& rPos) const
+    Fieldmark* MarkManager::getInnerFieldmarkFor(const SwPosition& rPos) const
     {
         // find the first mark starting on or before the position in reverse order
         // (as we are reverse searching, this is the one closest to the position)
@@ -1519,7 +1519,7 @@ namespace sw::mark
                 aMarkEnd = aCurrentMarkEnd;
             }
         }
-        return dynamic_cast<IFieldmark*>(pMark);
+        return dynamic_cast<Fieldmark*>(pMark);
     }
 
     IMark* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
@@ -1551,13 +1551,13 @@ namespace sw::mark
 
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
     {
-        auto const pFieldmark = dynamic_cast<Fieldmark*>(getFieldmarkAt(rPos));
+        Fieldmark* const pFieldmark = getFieldmarkAt(rPos);
         assert(pFieldmark); // currently all callers require it to be there
 
         deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark), false);
     }
 
-    ::sw::mark::IFieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
+    ::sw::mark::Fieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::Fieldmark* pFieldmark, const OUString& rNewType)
     {
         bool bActualChange = false;
         if(rNewType == ODF_FORMDROPDOWN)
@@ -1617,7 +1617,7 @@ namespace sw::mark
 
         SwEditWin& rEditWin = pSwView->GetEditWin();
         SwPosition aPos(*rCursorShell.GetCursor()->GetPoint());
-        IFieldmark* pFieldBM = getInnerFieldmarkFor(aPos);
+        Fieldmark* pFieldBM = getInnerFieldmarkFor(aPos);
         FieldmarkWithDropDownButton* pNewActiveFieldmark = nullptr;
         if ((!pFieldBM || (pFieldBM->GetFieldname() != ODF_FORMDROPDOWN && pFieldBM->GetFieldname() != ODF_FORMDATE))
             && aPos.GetContentIndex() > 0 )
@@ -1679,7 +1679,7 @@ namespace sw::mark
             bool bDropDownFieldExist = false;
             for (auto aIter = m_vFieldmarks.begin(); aIter != m_vFieldmarks.end(); ++aIter)
             {
-                IFieldmark *pMark = dynamic_cast<IFieldmark*>(*aIter);
+                Fieldmark *pMark = dynamic_cast<Fieldmark*>(*aIter);
                 if (pMark && pMark->GetFieldname() == ODF_FORMDROPDOWN)
                 {
                     bDropDownFieldExist = true;
@@ -1692,17 +1692,17 @@ namespace sw::mark
         }
     }
 
-    IFieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
+    Fieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
     {
-        IFieldmark *pMark = getFieldmarkAt(rPos);
+        Fieldmark *pMark = getFieldmarkAt(rPos);
         if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
             return nullptr;
         return pMark;
     }
 
-    std::vector<IFieldmark*> MarkManager::getNoTextFieldmarksIn(const SwPaM &rPaM) const
+    std::vector<Fieldmark*> MarkManager::getNoTextFieldmarksIn(const SwPaM &rPaM) const
     {
-        std::vector<IFieldmark*> aRet;
+        std::vector<Fieldmark*> aRet;
 
         for (auto aI = m_vFieldmarks.begin(),
             aEnd = m_vFieldmarks.end(); aI != aEnd; ++aI)
@@ -1712,7 +1712,7 @@ namespace sw::mark
             if (!rPaM.ContainsPosition(rStart))
                 continue;
 
-            IFieldmark *pMark = dynamic_cast<IFieldmark*>(pI);
+            Fieldmark *pMark = dynamic_cast<Fieldmark*>(pI);
             if (!pMark || (pMark->GetFieldname() != ODF_FORMDROPDOWN
                             && pMark->GetFieldname() != ODF_FORMCHECKBOX))
             {
@@ -1725,11 +1725,11 @@ namespace sw::mark
         return aRet;
     }
 
-    IFieldmark* MarkManager::getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const
-        { return dynamic_cast<IFieldmark*>(lcl_getMarkAfter(m_vFieldmarks, rPos, bLoop)); }
+    Fieldmark* MarkManager::getFieldmarkAfter(const SwPosition& rPos, bool bLoop) const
+        { return dynamic_cast<Fieldmark*>(lcl_getMarkAfter(m_vFieldmarks, rPos, bLoop)); }
 
-    IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const
-        { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos, bLoop)); }
+    Fieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const
+        { return dynamic_cast<Fieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos, bLoop)); }
 
     IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksBegin() const
     {

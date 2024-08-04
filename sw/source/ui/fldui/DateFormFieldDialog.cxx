@@ -47,7 +47,7 @@ void DateFormFieldDialog::Apply()
 
     // Try to find out the current date value and replace the content
     // with the right formatted date string
-    sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+    sw::mark::Fieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
     const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
 
     // Get date value first
@@ -74,7 +74,7 @@ void DateFormFieldDialog::InitControls()
     if (m_pDateField == nullptr)
         return;
 
-    sw::mark::IFieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
+    sw::mark::Fieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
 
     OUString sFormatString;
     auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);

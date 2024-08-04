@@ -229,7 +229,7 @@ SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface
 // uno::Reference<ooo::vba::word::XContentControl> SwVbaContentControls::Add(const uno::Any& Range,
 //                                                                 sal_Int32 Type)
 // {
-//     sw::mark::IFieldmark* pFieldmark = nullptr;
+//     sw::mark::Fieldmark* pFieldmark = nullptr;
 //     switch (Type)
 //     {
 //         case ooo::vba::word::WdFieldType::wdFieldFormCheckBox:

@@ -19,13 +19,13 @@ typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XTextInput> SwVbaFormFi
 class SwVbaFormFieldTextInput : public SwVbaFormFieldTextInput_BASE
 {
 private:
-    sw::mark::IFieldmark& m_rTextInput;
+    sw::mark::Fieldmark& m_rTextInput;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaFormFieldTextInput(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                             const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                            sw::mark::IFieldmark& rFormField);
+                            sw::mark::Fieldmark& rFormField);
     ~SwVbaFormFieldTextInput() override;
 
     // XTextInput

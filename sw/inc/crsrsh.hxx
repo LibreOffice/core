@@ -108,7 +108,7 @@ struct SwContentAtPos
         const SfxPoolItem* pAttr;
         const SwRangeRedline* pRedl;
         SwContentNode * pNode;
-        const sw::mark::IFieldmark* pFieldmark;
+        const sw::mark::Fieldmark* pFieldmark;
     } aFnd;
     IsAttrAtPos eContentAtPos;
     int nDist;
@@ -603,10 +603,10 @@ public:
     bool GoPrevBookmark();
 
     bool IsFormProtected();
-    ::sw::mark::IFieldmark* GetCurrentFieldmark();
-    sw::mark::IFieldmark* GetFieldmarkAfter();
-    sw::mark::IFieldmark* GetFieldmarkBefore();
-    bool GotoFieldmark(const ::sw::mark::IFieldmark* const pMark);
+    ::sw::mark::Fieldmark* GetCurrentFieldmark();
+    sw::mark::Fieldmark* GetFieldmarkAfter();
+    sw::mark::Fieldmark* GetFieldmarkBefore();
+    bool GotoFieldmark(const ::sw::mark::Fieldmark* const pMark);
 
     // update Cursr, i.e. reset it into content should only be called when the
     // cursor was set to a random position e.g. when deleting frames

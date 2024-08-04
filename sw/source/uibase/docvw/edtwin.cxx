@@ -1914,7 +1914,7 @@ KEYINPUT_CHECKTABLE:
                     bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
                     if(!bMod1)
                     {
-                        ::sw::mark::IFieldmark* pMark = rSh.GetCurrentFieldmark();
+                        ::sw::mark::Fieldmark* pMark = rSh.GetCurrentFieldmark();
                         if (auto pDropDown = dynamic_cast<FieldmarkWithDropDownButton*>(pMark))
                         {
                             pDropDown->LaunchPopup();
@@ -3606,7 +3606,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) &&
                                 aContentAtPos.aFnd.pFieldmark != nullptr)
                         {
-                            IFieldmark *pFieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
+                            Fieldmark *pFieldBM = const_cast< Fieldmark* > ( aContentAtPos.aFnd.pFieldmark );
                             if ( pFieldBM->GetFieldname( ) == ODF_FORMDROPDOWN || pFieldBM->GetFieldname( ) == ODF_FORMDATE )
                             {
                                 ResetMouseButtonDownFlags();
@@ -5097,7 +5097,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 OSL_ENSURE( aContentAtPos.aFnd.pFieldmark != nullptr, "where is my field ptr???");
                                 if ( aContentAtPos.aFnd.pFieldmark != nullptr)
                                 {
-                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
+                                    Fieldmark *fieldBM = const_cast< Fieldmark* > ( aContentAtPos.aFnd.pFieldmark );
                                     if ( fieldBM->GetFieldname( ) == ODF_FORMCHECKBOX )
                                     {
                                         CheckboxFieldmark& rCheckboxFm = dynamic_cast<CheckboxFieldmark&>(*fieldBM);

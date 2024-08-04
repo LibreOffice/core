@@ -107,8 +107,8 @@ public:
                      FieldFlags nMode = FieldFlags::All) override;
 
     /// Write the data of the form field
-    void WriteFormData(const ::sw::mark::IFieldmark& rFieldmark) override;
-    void WriteHyperlinkData(const ::sw::mark::IFieldmark& rFieldmark) override;
+    void WriteFormData(const ::sw::mark::Fieldmark& rFieldmark) override;
+    void WriteHyperlinkData(const ::sw::mark::Fieldmark& rFieldmark) override;
 
     void DoComboBox(const OUString& rName, const OUString& rHelp, const OUString& ToolTip,
                     const OUString& rSelected,

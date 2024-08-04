@@ -78,7 +78,7 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     auto aFields = rJsonWriter.startArray("fields");
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+        auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
         assert(pFieldmark);
         if (pFieldmark->GetFieldname() != aType)
         {
@@ -130,7 +130,7 @@ void GetTextFormField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     IDocumentMarkAccess& rIDMA = *pDocShell->GetDoc()->getIDocumentMarkAccess();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
-    sw::mark::IFieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
+    sw::mark::Fieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
     auto typeNode = rJsonWriter.startNode("field");
     if (!pFieldmark)
     {

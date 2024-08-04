@@ -545,7 +545,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode().GetNode(), m_aFieldStack.back().GetPtContent(), aEndPos.GetNode(), aEndPos.GetContentIndex());
 
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
-            IFieldmark *pFieldmark = SanityCheck(aFieldPam) ? pMarksAccess->makeFieldBookmark(
+            Fieldmark *pFieldmark = SanityCheck(aFieldPam) ? pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
                         aFieldPam.Start() /*same pos as start!*/ ) : nullptr;
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
@@ -553,7 +553,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 // adapt redline positions to inserted field mark start
                 // dummy char (assume not necessary for end dummy char)
                 m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
-                const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                const Fieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
             }
         }
@@ -671,7 +671,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                     IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
 
-                    IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
+                    Fieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFieldPam,
                                 m_aFieldStack.back().GetBookmarkName(),
                                 ODF_UNHANDLED,
@@ -681,7 +681,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         // adapt redline positions to inserted field mark start
                         // dummy char (assume not necessary for end dummy char)
                         m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
-                        const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                        const Fieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                         pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
                         OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );
                         pFieldmark->GetParameters()->insert(

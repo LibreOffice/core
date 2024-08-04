@@ -134,11 +134,11 @@ class IDocumentMarkAccess
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
 
-        virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
+        virtual sw::mark::Fieldmark* makeFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
             const OUString& rType,
             SwPosition const* pSepPos = nullptr) = 0;
-        virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
+        virtual sw::mark::Fieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
             const OUString& rType) = 0;
 
@@ -332,20 +332,20 @@ class IDocumentMarkAccess
         */
         virtual const_iterator_t getFieldmarksEnd() const =0;
 
-        /// returns the number of IFieldmarks.
+        /// returns the number of Fieldmarks.
         virtual sal_Int32 getFieldmarksCount() const = 0;
 
         /// get Fieldmark for CH_TXT_ATR_FIELDSTART/CH_TXT_ATR_FIELDEND at rPos
-        virtual ::sw::mark::IFieldmark* getFieldmarkAt(const SwPosition& rPos) const =0;
-        virtual sw::mark::IFieldmark* getInnerFieldmarkFor(const SwPosition& pos) const = 0;
-        virtual sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos, bool bLoop) const =0;
-        virtual sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& pos, bool bLoop) const =0;
+        virtual ::sw::mark::Fieldmark* getFieldmarkAt(const SwPosition& rPos) const =0;
+        virtual sw::mark::Fieldmark* getInnerFieldmarkFor(const SwPosition& pos) const = 0;
+        virtual sw::mark::Fieldmark* getFieldmarkBefore(const SwPosition& pos, bool bLoop) const =0;
+        virtual sw::mark::Fieldmark* getFieldmarkAfter(const SwPosition& pos, bool bLoop) const =0;
 
-        virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition& pos) const=0;
-        virtual std::vector<::sw::mark::IFieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const=0;
+        virtual ::sw::mark::Fieldmark* getDropDownFor(const SwPosition& pos) const=0;
+        virtual std::vector<::sw::mark::Fieldmark*> getNoTextFieldmarksIn(const SwPaM &rPaM) const=0;
 
         virtual void deleteFieldmarkAt(const SwPosition& rPos) = 0;
-        virtual ::sw::mark::IFieldmark* changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType) = 0;
+        virtual ::sw::mark::Fieldmark* changeFormFieldmarkType(::sw::mark::Fieldmark* pFieldmark, const OUString& rNewType) = 0;
 
         virtual void NotifyCursorUpdate(const SwCursorShell& rCursorShell) = 0;
         virtual void ClearFieldActivation() = 0;
@@ -377,7 +377,7 @@ class IDocumentMarkAccess
 
         static SW_DLLPUBLIC OUString GetCrossRefHeadingBookmarkNamePrefix();
         static SW_DLLPUBLIC bool IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM );
-        static void DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark);
+        static void DeleteFieldmarkCommand(::sw::mark::Fieldmark const& rMark);
 
     protected:
         virtual ~IDocumentMarkAccess() {};

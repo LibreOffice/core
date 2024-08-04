@@ -325,12 +325,12 @@ void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, cons
     m_pAttrOutput->WriteField_Impl( pField, eFieldType, rFieldCmd, nMode );
 }
 
-void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
+void DocxExport::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
 {
     m_pAttrOutput->WriteFormData_Impl( rFieldmark );
 }
 
-void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+void DocxExport::WriteHyperlinkData( const ::sw::mark::Fieldmark& /*rFieldmark*/ )
 {
     SAL_INFO("sw.ww8", "TODO DocxExport::WriteHyperlinkData().");
 }

@@ -1434,7 +1434,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc().getIDocumentMarkAccess( );
-        sw::mark::IFieldmark const*const pMark(pMarksAccess->getInnerFieldmarkFor(*GetPoint()));
+        sw::mark::Fieldmark const*const pMark(pMarksAccess->getInnerFieldmarkFor(*GetPoint()));
         if (pMark && (IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
                       || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
         {
@@ -1782,7 +1782,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                 && pNode->GetText()[GetPoint()->GetContentIndex()] == CH_TXT_ATR_FIELDSTART)
             {
                 IDocumentMarkAccess const& rIDMA(*GetDoc().getIDocumentMarkAccess());
-                sw::mark::IFieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
+                sw::mark::Fieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
                 assert(pMark);
                 *GetPoint() = sw::mark::FindFieldSep(*pMark);
             }
@@ -1840,7 +1840,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                 && pNode->GetText()[GetPoint()->GetContentIndex()] == CH_TXT_ATR_FIELDEND)
             {
                 IDocumentMarkAccess const& rIDMA(*GetDoc().getIDocumentMarkAccess());
-                sw::mark::IFieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
+                sw::mark::Fieldmark const*const pMark(rIDMA.getFieldmarkAt(*GetPoint()));
                 assert(pMark);
                 *GetPoint() = sw::mark::FindFieldSep(*pMark);
             }

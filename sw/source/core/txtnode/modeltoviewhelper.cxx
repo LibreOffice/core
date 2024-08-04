@@ -110,11 +110,11 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
     {
         // hide fieldmark commands
         IDocumentMarkAccess const& rIDMA(*rNode.GetDoc().getIDocumentMarkAccess());
-        ::std::deque<::std::pair<sw::mark::IFieldmark const*, bool>> startedFields;
+        ::std::deque<::std::pair<sw::mark::Fieldmark const*, bool>> startedFields;
         SwPaM cursor(rNode, 0);
         while (true)
         {
-            sw::mark::IFieldmark const* pFieldMark(nullptr);
+            sw::mark::Fieldmark const* pFieldMark(nullptr);
             while (true) // loop to skip NonTextFieldmarks, those are handled later
             {
                 pFieldMark = rIDMA.getInnerFieldmarkFor(*cursor.GetPoint());
@@ -319,10 +319,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             //now get the dropdown formfields, get their position in the node and what the text they expand
             //to is
             SwPaM aPaM(rNode, 0, rNode, rNode.Len());
-            std::vector<sw::mark::IFieldmark*> aNoTextFieldmarks =
+            std::vector<sw::mark::Fieldmark*> aNoTextFieldmarks =
                 rNode.GetDoc().getIDocumentMarkAccess()->getNoTextFieldmarksIn(aPaM);
 
-            for (sw::mark::IFieldmark *const pMark : aNoTextFieldmarks)
+            for (sw::mark::Fieldmark *const pMark : aNoTextFieldmarks)
             {
                 const sal_Int32 nDummyCharPos = pMark->GetMarkStart().GetContentIndex();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))

@@ -80,7 +80,7 @@ namespace com::sun::star{
 }
 
 
-namespace sw::mark { class IFieldmark; class DateFieldmark; }
+namespace sw::mark { class Fieldmark; class DateFieldmark; }
 
 typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
 
@@ -507,7 +507,7 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Widget* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
-    virtual VclPtr<AbstractDropDownFormFieldDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
+    virtual VclPtr<AbstractDropDownFormFieldDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::Fieldmark* pDropDownField) = 0;
 
     virtual VclPtr<AbstractDateFormFieldDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::DateFieldmark* pDateField, SwDoc& rDoc) = 0;
 

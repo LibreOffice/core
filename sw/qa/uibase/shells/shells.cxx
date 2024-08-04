@@ -345,7 +345,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
     pCursor->SttEndDoc(/*bSttDoc=*/true);
-    sw::mark::IFieldmark* pFieldmark
+    sw::mark::Fieldmark* pFieldmark
         = pDoc->getIDocumentMarkAccess()->getFieldmarkAt(*pCursor->GetPoint());
     CPPUNIT_ASSERT(pFieldmark);
     // Without the accompanying fix in place, this test would have failed with:

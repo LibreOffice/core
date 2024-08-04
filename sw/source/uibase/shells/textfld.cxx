@@ -875,7 +875,7 @@ FIELD_INSERT:
                     *aFieldPam.GetMark() = *pCursorPos->GetPoint();
 
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
+                    sw::mark::Fieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                         aFieldPam, OUString(), aFieldType, aFieldPam.Start());
                     if (pFieldmark && !aFieldCode.isEmpty())
                     {
@@ -934,11 +934,11 @@ FIELD_INSERT:
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                 SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
                                 pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
-                sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE,
+                sw::mark::Fieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE,
                             aFieldPam.Start());
 
                 // Use a default date format and language
-                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();
+                sw::mark::Fieldmark::parameter_map_t* pParameters = pFieldBM->GetParameters();
                 SvNumberFormatter* pFormatter = rSh.GetDoc()->GetNumberFormatter();
                 sal_uInt32 nStandardFormat = pFormatter->GetStandardFormat(SvNumFormatType::DATE);
                 const SvNumberformat* pFormat = pFormatter->GetEntry(nStandardFormat);
@@ -982,7 +982,7 @@ FIELD_INSERT:
         sal_Int32 nFieldIndex = 0;
         for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
         {
-            auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+            auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
             assert(pFieldmark);
             if (pFieldmark->GetFieldname() != aFieldType)
             {
@@ -1047,7 +1047,7 @@ FIELD_INSERT:
         std::vector<sw::mark::IMark*> aRemovals;
         for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
         {
-            auto pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+            auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
             assert(pFieldmark);
             if (pFieldmark->GetFieldname() != aFieldType)
             {
@@ -1466,7 +1466,7 @@ FIELD_INSERT:
 
         IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
         SwPosition& rCursor = *rSh.GetCursor()->GetPoint();
-        sw::mark::IFieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
+        sw::mark::Fieldmark* pFieldmark = rIDMA.getInnerFieldmarkFor(rCursor);
         if (!pFieldmark)
         {
             break;
@@ -1701,7 +1701,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 // Check whether we are in a text form field
                 SwPosition aCursorPos(*rSh.GetCursor()->GetPoint());
-                sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aCursorPos);
+                sw::mark::Fieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getInnerFieldmarkFor(aCursorPos);
                 if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMTEXT)
                     && aCursorPos.GetContentIndex() > 0)
                 {

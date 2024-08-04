@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 namespace sw::mark
 {
 
-    SwPosition FindFieldSep(IFieldmark const& rMark)
+    SwPosition FindFieldSep(Fieldmark const& rMark)
     {
         SwPosition const& rStartPos(rMark.GetMarkStart());
         SwPosition const& rEndPos(rMark.GetMarkEnd());
@@ -840,7 +840,7 @@ namespace sw::mark
     void DropDownFieldmark::AddContent(const OUString& rText, sal_Int32* pIndex)
     {
         uno::Sequence<OUString> aSeq;
-        sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
 
         // no duplicates: if it already exists, modify the given index to point to it
@@ -896,7 +896,7 @@ namespace sw::mark
             return;
 
         uno::Sequence<OUString> aSeq;
-        sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
         const sal_Int32 nLen = aSeq.getLength();
 
@@ -942,7 +942,7 @@ namespace sw::mark
      */
     void DropDownFieldmark::DelContent(sal_Int32 nDelIndex)
     {
-        sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         uno::Sequence<OUString> aSeq;
         if (nDelIndex < 0)
         {
@@ -1161,7 +1161,7 @@ namespace sw::mark
         if(aResult.first)
             return aResult;
 
-        const sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        const sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         bool bFoundValidDate = false;
         double dCurrentDate = 0;
         OUString sDateFormat;
@@ -1206,7 +1206,7 @@ namespace sw::mark
         ReplaceContent(GetDateInCurrentDateFormat(fDate));
 
         // Also save the current date in a standard format
-        sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= GetDateInStandardDateFormat(fDate);
     }
 
@@ -1239,7 +1239,7 @@ namespace sw::mark
         bool bFoundValidDate = false;
         double dCurrentDate = 0;
 
-        const sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        const sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         auto pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
         OUString sCurrentDate;
         if (pResult != pParameters->end())
@@ -1274,7 +1274,7 @@ namespace sw::mark
     {
         // Get current date format and language
         OUString sDateFormat;
-        const sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+        const sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
         if (pResult != pParameters->end())
         {
@@ -1320,7 +1320,7 @@ namespace sw::mark
         // Current date became invalid
         if(GetDateInCurrentDateFormat(aResult.second) != GetContent())
         {
-            sw::mark::IFieldmark::parameter_map_t* pParameters = GetParameters();
+            sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
             (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
         }
     }

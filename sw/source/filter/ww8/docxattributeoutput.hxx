@@ -60,7 +60,7 @@ namespace oox::drawingml { class DrawingML; }
 struct FieldInfos
 {
     std::shared_ptr<const SwField> pField;
-    const ::sw::mark::IFieldmark* pFieldmark;
+    const ::sw::mark::Fieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
     bool        bSep;
@@ -436,7 +436,7 @@ public:
     void WriteField_Impl(const SwField* pField, ww::eField eType,
             const OUString& rFieldCmd, FieldFlags nMode,
             OUString const* pBookmarkName = nullptr);
-    void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
+    void WriteFormData_Impl( const ::sw::mark::Fieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds, const SwRedlineData* pRedlineData = nullptr );
     void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );

@@ -265,9 +265,9 @@ public:
 
 class FieldMarkParamsHelper
 {
-    const sw::mark::IFieldmark& mrFieldmark;
+    const sw::mark::Fieldmark& mrFieldmark;
     public:
-    explicit FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
+    explicit FieldMarkParamsHelper( const sw::mark::Fieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
     OUString const & getName() const { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const OUString& rKey, T& rResult )
@@ -275,7 +275,7 @@ class FieldMarkParamsHelper
         bool bResult = false;
         if ( mrFieldmark.GetParameters() )
         {
-            sw::mark::IFieldmark::parameter_map_t::const_iterator it = mrFieldmark.GetParameters()->find( rKey );
+            sw::mark::Fieldmark::parameter_map_t::const_iterator it = mrFieldmark.GetParameters()->find( rKey );
             if ( it != mrFieldmark.GetParameters()->end() )
                 bResult = ( it->second >>= rResult );
         }
@@ -2461,7 +2461,7 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
 
 void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 {
-    const ::sw::mark::IFieldmark& rFieldmark = *rInfos.pFieldmark;
+    const ::sw::mark::Fieldmark& rFieldmark = *rInfos.pFieldmark;
     FieldMarkParamsHelper params( rFieldmark );
 
     OUString sEntryMacro;
@@ -8567,7 +8567,7 @@ void DocxAttributeOutput::WriteField_Impl(const SwField *const pField,
     }
 }
 
-void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark )
+void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::Fieldmark& rFieldmark )
 {
     if ( !m_Fields.empty() )
         m_Fields.begin()->pFieldmark = &rFieldmark;

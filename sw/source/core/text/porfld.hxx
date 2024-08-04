@@ -222,12 +222,12 @@ public:
     virtual SwTwips GetViewWidth(const SwTextSizeInfo& rInf) const override;
 };
 
-namespace sw::mark { class IFieldmark; }
+namespace sw::mark { class Fieldmark; }
 
 class SwFieldFormDropDownPortion : public SwFieldPortion
 {
 public:
-    explicit SwFieldFormDropDownPortion(sw::mark::IFieldmark *pFieldMark, const OUString &rExpand)
+    explicit SwFieldFormDropDownPortion(sw::mark::Fieldmark *pFieldMark, const OUString &rExpand)
         : SwFieldPortion(rExpand)
         , m_pFieldMark(pFieldMark)
     {
@@ -238,13 +238,13 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
 private:
-    sw::mark::IFieldmark* m_pFieldMark;
+    sw::mark::Fieldmark* m_pFieldMark;
 };
 
 class SwFieldFormDatePortion : public SwFieldPortion
 {
 public:
-    explicit SwFieldFormDatePortion(sw::mark::IFieldmark *pFieldMark, bool bStart)
+    explicit SwFieldFormDatePortion(sw::mark::Fieldmark *pFieldMark, bool bStart)
         : SwFieldPortion(u""_ustr)
         , m_pFieldMark(pFieldMark)
         , m_bStart(bStart)
@@ -256,7 +256,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
 private:
-    sw::mark::IFieldmark* m_pFieldMark;
+    sw::mark::Fieldmark* m_pFieldMark;
     bool m_bStart;
 };
 

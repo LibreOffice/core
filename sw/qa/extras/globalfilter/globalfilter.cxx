@@ -858,7 +858,7 @@ auto verifyNestedFieldmark(OUString const& rTestName,
         node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
             sal_Int32(1), innerPos.GetContentIndex());
-    ::sw::mark::IFieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
+    ::sw::mark::Fieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
     CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
     OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
@@ -874,7 +874,7 @@ auto verifyNestedFieldmark(OUString const& rTestName,
         node2.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
             sal_Int32(0), outerPos.GetContentIndex());
-    ::sw::mark::IFieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
+    ::sw::mark::Fieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
     CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pOuter);
     OUString const outerString(SwPaM(pOuter->GetMarkPos(), pOuter->GetOtherMarkPos()).GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
@@ -1814,7 +1814,7 @@ void Test::testTextFormField()
         // Check whether all fieldmarks are text form fields
         for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
         {
-            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+            ::sw::mark::Fieldmark* pFieldmark = dynamic_cast<::sw::mark::Fieldmark*>(*aIter);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMTEXT, pFieldmark->GetFieldname());
         }
@@ -1866,7 +1866,7 @@ void Test::testCheckBoxFormField()
         int nIndex = 0;
         for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
         {
-            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+            ::sw::mark::Fieldmark* pFieldmark = dynamic_cast<::sw::mark::Fieldmark*>(*aIter);
 
             if(rFilterName == "Office Open XML Text") // OOXML import also generates bookmarks
             {
@@ -1918,7 +1918,7 @@ void Test::testDropDownFormField()
         int nIndex = 0;
         for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
         {
-            ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
+            ::sw::mark::Fieldmark* pFieldmark = dynamic_cast<::sw::mark::Fieldmark*>(*aIter);
 
             if(!pFieldmark)
                 continue;
@@ -1927,7 +1927,7 @@ void Test::testDropDownFormField()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
 
             // Check drop down field's parameters.
-            const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+            const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             css::uno::Sequence<OUString> vListEntries;
             sal_Int32 nSelection = -1;
             auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
@@ -2000,7 +2000,7 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDATE, pFieldmark->GetFieldname());
 
                 // Check date form field's parameters.
-                const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+                const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
                 OUString sDateFormat;
                 auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
                 if (pResult != pParameters->end())

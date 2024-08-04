@@ -73,7 +73,7 @@ class SwNode;
 
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
-namespace sw::mark { class IFieldmark; }
+namespace sw::mark { class Fieldmark; }
 namespace weld { class Scrollbar; }
 
 const tools::Long nLeftOfst = -370;

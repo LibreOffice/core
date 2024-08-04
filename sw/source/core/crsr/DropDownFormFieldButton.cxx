@@ -25,9 +25,9 @@
 
 void DropDownFormFieldButton::InitDropdown()
 {
-    const sw::mark::IFieldmark::parameter_map_t* const pParameters = m_rFieldmark.GetParameters();
+    const sw::mark::Fieldmark::parameter_map_t* const pParameters = m_rFieldmark.GetParameters();
 
-    sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries
+    sw::mark::Fieldmark::parameter_map_t::const_iterator pListEntries
         = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
     css::uno::Sequence<OUString> vListEntries;
     if (pListEntries != pParameters->end())
@@ -43,7 +43,7 @@ void DropDownFormFieldButton::InitDropdown()
     }
 
     // Select the current one
-    sw::mark::IFieldmark::parameter_map_t::const_iterator pResult
+    sw::mark::Fieldmark::parameter_map_t::const_iterator pResult
         = pParameters->find(ODF_FORMDROPDOWN_RESULT);
     if (pResult != pParameters->end())
     {

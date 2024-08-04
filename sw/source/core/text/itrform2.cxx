@@ -1180,7 +1180,7 @@ void SwContentControlPortion::Paint(const SwTextPaintInfo& rInf) const
 }
 
 namespace sw::mark {
-    OUString ExpandFieldmark(IFieldmark* pBM)
+    OUString ExpandFieldmark(Fieldmark* pBM)
     {
         if (pBM->GetFieldname() == ODF_FORMCHECKBOX)
         {
@@ -1192,13 +1192,13 @@ namespace sw::mark {
                     : u"\u2610"_ustr;
         }
         assert(pBM->GetFieldname() == ODF_FORMDROPDOWN);
-        const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
+        const Fieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
+        const Fieldmark::parameter_map_t::const_iterator pResult = pParameters->find(ODF_FORMDROPDOWN_RESULT);
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
 
-        const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+        const Fieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if (pListEntries != pParameters->end())
         {
             uno::Sequence< OUString > vListEntries;
@@ -1318,7 +1318,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             auto const ch(rInf.GetChar(rInf.GetIdx()));
             SwTextFrame const*const pFrame(rInf.GetTextFrame());
             SwPosition aPosition(pFrame->MapViewToModelPos(rInf.GetIdx()));
-            sw::mark::IFieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);
+            sw::mark::Fieldmark *pBM = pFrame->GetDoc().getIDocumentMarkAccess()->getInnerFieldmarkFor(aPosition);
             if(pBM != nullptr && pBM->GetFieldname( ) == ODF_FORMDATE)
             {
                 if (ch == CH_TXT_ATR_FIELDSTART)

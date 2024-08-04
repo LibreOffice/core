@@ -128,7 +128,7 @@ class SwMSConvertControls;
 class WW8_WrPc;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
-namespace sw::mark { class IFieldmark; }
+namespace sw::mark { class Fieldmark; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
 
 typedef std::map<const css::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
@@ -800,8 +800,8 @@ public:
             const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) = 0;
 
     /// Write the data of the form field
-    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
+    virtual void WriteFormData( const ::sw::mark::Fieldmark& rFieldmark ) = 0;
+    virtual void WriteHyperlinkData( const ::sw::mark::Fieldmark& rFieldmark ) = 0;
 
     virtual void DoComboBox(const OUString &rName,
                     const OUString &rHelp,
@@ -1192,8 +1192,8 @@ public:
     void GetCurrentItems(ww::bytes &rItems) const;
 
     /// Write the data of the form field
-    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) override;
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) override;
+    virtual void WriteFormData( const ::sw::mark::Fieldmark& rFieldmark ) override;
+    virtual void WriteHyperlinkData( const ::sw::mark::Fieldmark& rFieldmark ) override;
 
     /// Fields.
     WW8_WrPlcField* CurrentFieldPlc() const;

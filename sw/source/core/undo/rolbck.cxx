@@ -702,7 +702,7 @@ bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
         && m_aName == rBkmk.GetName();
 }
 
-SwHistoryNoTextFieldmark::SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark)
+SwHistoryNoTextFieldmark::SwHistoryNoTextFieldmark(const ::sw::mark::Fieldmark& rFieldMark)
     : SwHistoryHint(HSTRY_NOTEXTFIELDMARK)
     , m_sType(rFieldMark.GetFieldname())
     , m_nNode(rFieldMark.GetMarkStart().GetNodeIndex())
@@ -746,7 +746,7 @@ void SwHistoryNoTextFieldmark::ResetInDoc(SwDoc& rDoc)
     }
 }
 
-SwHistoryTextFieldmark::SwHistoryTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark)
+SwHistoryTextFieldmark::SwHistoryTextFieldmark(const ::sw::mark::Fieldmark& rFieldMark)
     : SwHistoryHint(HSTRY_TEXTFIELDMARK)
     , m_sName(rFieldMark.GetName())
     , m_sType(rFieldMark.GetFieldname())
@@ -1134,12 +1134,12 @@ void SwHistory::AddIMark(const ::sw::mark::IMark& rBkmk,
         case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
         case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
             assert(bSavePos && bSaveOtherPos); // must be deleted completely!
-            pHt.reset(new SwHistoryTextFieldmark(dynamic_cast<sw::mark::IFieldmark const&>(rBkmk)));
+            pHt.reset(new SwHistoryTextFieldmark(dynamic_cast<sw::mark::Fieldmark const&>(rBkmk)));
             break;
         case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
         case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
             assert(bSavePos && bSaveOtherPos); // must be deleted completely!
-            pHt.reset(new SwHistoryNoTextFieldmark(dynamic_cast<sw::mark::IFieldmark const&>(rBkmk)));
+            pHt.reset(new SwHistoryNoTextFieldmark(dynamic_cast<sw::mark::Fieldmark const&>(rBkmk)));
             break;
         default:
             pHt.reset(new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos));

@@ -414,7 +414,7 @@ lcl_ExportFieldMark(
     const sal_Unicode Char = pTextNode->GetText()[start];
     if (CH_TXT_ATR_FIELDSTART == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark = nullptr;
+        ::sw::mark::Fieldmark* pFieldmark = nullptr;
         pFieldmark = rDoc.getIDocumentMarkAccess()->
             getFieldmarkAt(*pUnoCursor->GetMark());
         pPortion = new SwXTextPortion(
@@ -433,7 +433,7 @@ lcl_ExportFieldMark(
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark = nullptr;
+        ::sw::mark::Fieldmark* pFieldmark = nullptr;
         pFieldmark = rDoc.getIDocumentMarkAccess()->
             getFieldmarkAt(*pUnoCursor->GetMark());
         pPortion = new SwXTextPortion(
@@ -446,7 +446,7 @@ lcl_ExportFieldMark(
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
-        ::sw::mark::IFieldmark* pFieldmark =
+        ::sw::mark::Fieldmark* pFieldmark =
             rDoc.getIDocumentMarkAccess()->getFieldmarkAt(*pUnoCursor->GetMark());
         pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_START_END);

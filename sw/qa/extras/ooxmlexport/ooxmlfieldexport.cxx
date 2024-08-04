@@ -852,12 +852,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
-    ::sw::mark::IFieldmark* pFieldmark
-          = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
+    ::sw::mark::Fieldmark* pFieldmark
+          = dynamic_cast<::sw::mark::Fieldmark*>(*pMarkAccess->getAllMarksBegin());
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
 
-    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+    const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
     auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
     CPPUNIT_ASSERT(bool(pListEntries != pParameters->end()));
     css::uno::Sequence<OUString> vListEntries;

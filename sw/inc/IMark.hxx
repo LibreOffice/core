@@ -81,35 +81,6 @@ namespace sw::mark
             IMark &operator =(IMark const&) = delete;
     };
 
-    class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") IFieldmark
-        : virtual public IMark
-    {
-        protected:
-            IFieldmark() = default;
-
-        public:
-            typedef std::map< OUString, css::uno::Any> parameter_map_t;
-            //getters
-            virtual OUString GetFieldname() const =0;
-            virtual OUString GetFieldHelptext() const =0;
-            virtual parameter_map_t* GetParameters() =0;
-            virtual const parameter_map_t* GetParameters() const =0;
-
-            //setters
-            virtual void SetFieldname(const OUString& rFieldname) =0;
-            virtual void SetFieldHelptext(const OUString& rFieldHelptext) =0;
-            virtual void Invalidate() = 0;
-
-            virtual OUString GetContent() const { return OUString(); }
-            virtual void ReplaceContent(const OUString& /*sNewContent*/) {}
-
-        private:
-            IFieldmark(IFieldmark const &) = delete;
-            IFieldmark &operator =(IFieldmark const&) = delete;
-    };
-
-    OUString ExpandFieldmark(IFieldmark* pBM);
-
     class SW_DLLPUBLIC MarkBase
         : virtual public IMark
     {
@@ -265,41 +236,44 @@ namespace sw::mark
     };
 
     class SW_DLLPUBLIC Fieldmark
-        : virtual public IFieldmark
-        , public MarkBase
+        : public MarkBase
     {
     public:
+        typedef std::map< OUString, css::uno::Any> parameter_map_t;
+
         Fieldmark(const SwPaM& rPaM);
 
-        OUString GetFieldname() const override
-            { return m_aFieldname; }
-        OUString GetFieldHelptext() const override
-            { return m_aFieldHelptext; }
+        virtual OUString GetContent() const { return OUString(); }
+        virtual void ReplaceContent(const OUString& /*sNewContent*/) {}
 
-        IFieldmark::parameter_map_t* GetParameters() override
+        OUString GetFieldname() const { return m_aFieldname; }
+        OUString GetFieldHelptext() const { return m_aFieldHelptext; }
+
+        parameter_map_t* GetParameters() { return &m_vParams; }
+
+        const parameter_map_t* GetParameters() const
             { return &m_vParams; }
 
-        const IFieldmark::parameter_map_t* GetParameters() const override
-            { return &m_vParams; }
-
-        void SetFieldname(const OUString& aFieldname) override
+        void SetFieldname(const OUString& aFieldname)
             { m_aFieldname = aFieldname; }
-        void SetFieldHelptext(const OUString& aFieldHelptext) override
+        void SetFieldHelptext(const OUString& aFieldHelptext)
             { m_aFieldHelptext = aFieldHelptext; }
 
         virtual void ReleaseDoc(SwDoc&) = 0;
 
         void SetMarkStartPos( const SwPosition& rNewStartPos );
 
-        void Invalidate() override;
+        void Invalidate();
         OUString ToString() const override;
         void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     private:
         OUString m_aFieldname;
         OUString m_aFieldHelptext;
-        IFieldmark::parameter_map_t m_vParams;
+        parameter_map_t m_vParams;
     };
+
+    OUString ExpandFieldmark(Fieldmark* pBM);
 
     class TextFieldmark final
         : public Fieldmark

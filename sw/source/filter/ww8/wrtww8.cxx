@@ -1448,7 +1448,7 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
     for(const ::sw::mark::IMark* p : aArr)
     {
         const ::sw::mark::IMark& rBkmk = *p;
-        if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
+        if(dynamic_cast< const ::sw::mark::Fieldmark *>(&rBkmk))
             continue;
 
         const SwPosition* pPos = &rBkmk.GetMarkPos();
@@ -4193,9 +4193,9 @@ void WW8SHDLong::Write( WW8Export& rExport )
     rExport.InsUInt16( 0 ); // ipat
 }
 
-void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
+void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
 {
-    const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
+    const ::sw::mark::Fieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::CheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::CheckboxFieldmark* >( pFieldmark );
 
     if ( ! ( rFieldmark.GetFieldname() == ODF_FORMTEXT ||
@@ -4250,7 +4250,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_RESULT);
+        ::sw::mark::Fieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_RESULT);
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -4267,7 +4267,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     OUString ffentrymcr;
     OUString ffexitmcr;
 
-    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter
+    ::sw::mark::Fieldmark::parameter_map_t::const_iterator pParameter
         = rFieldmark.GetParameters()->find(u"Type"_ustr);
     if (type == 0) // iTypeText
     {
@@ -4361,8 +4361,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if (type==2)
     {
         aFieldHeader.bits |= 0x8000; // ffhaslistbox
-        const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+        const ::sw::mark::Fieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
+        ::sw::mark::Fieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if(pListEntries != pParameters->end())
         {
             uno::Sequence< OUString > vListEntries;
@@ -4435,7 +4435,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     }
 }
 
-void WW8Export::WriteHyperlinkData( const sw::mark::IFieldmark& /*rFieldmark*/ )
+void WW8Export::WriteHyperlinkData( const sw::mark::Fieldmark& /*rFieldmark*/ )
 {
     //@TODO implement me !!!
 }

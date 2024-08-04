@@ -283,26 +283,26 @@ bool SwCursorShell::IsFormProtected()
     return getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM);
 }
 
-::sw::mark::IFieldmark* SwCursorShell::GetCurrentFieldmark()
+::sw::mark::Fieldmark* SwCursorShell::GetCurrentFieldmark()
 {
     // TODO: Refactor
     SwPosition pos(*GetCursor()->Start());
     return getIDocumentMarkAccess()->getInnerFieldmarkFor(pos);
 }
 
-sw::mark::IFieldmark* SwCursorShell::GetFieldmarkAfter()
+sw::mark::Fieldmark* SwCursorShell::GetFieldmarkAfter()
 {
     SwPosition pos(*GetCursor()->GetPoint());
     return getIDocumentMarkAccess()->getFieldmarkAfter(pos, /*bLoop*/true);
 }
 
-sw::mark::IFieldmark* SwCursorShell::GetFieldmarkBefore()
+sw::mark::Fieldmark* SwCursorShell::GetFieldmarkBefore()
 {
     SwPosition pos(*GetCursor()->GetPoint());
     return getIDocumentMarkAccess()->getFieldmarkBefore(pos, /*bLoop*/true);
 }
 
-bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
+bool SwCursorShell::GotoFieldmark(::sw::mark::Fieldmark const * const pMark)
 {
     if(pMark==nullptr) return false;
 

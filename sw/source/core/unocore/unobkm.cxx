@@ -508,7 +508,7 @@ SwXBookmark::removeVetoableChangeListener(
 void SwXFieldmarkParameters::insertByName(const OUString& aName, const uno::Any& aElement)
 {
     SolarMutexGuard aGuard;
-    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Fieldmark::parameter_map_t* pParameters = getCoreParameters();
     if(pParameters->find(aName) != pParameters->end())
         throw container::ElementExistException();
     (*pParameters)[aName] = aElement;
@@ -524,8 +524,8 @@ void SwXFieldmarkParameters::removeByName(const OUString& aName)
 void SwXFieldmarkParameters::replaceByName(const OUString& aName, const uno::Any& aElement)
 {
     SolarMutexGuard aGuard;
-    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
-    IFieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
+    Fieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Fieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
     if(pEntry == pParameters->end())
         throw container::NoSuchElementException();
     pEntry->second = aElement;
@@ -534,8 +534,8 @@ void SwXFieldmarkParameters::replaceByName(const OUString& aName, const uno::Any
 uno::Any SwXFieldmarkParameters::getByName(const OUString& aName)
 {
     SolarMutexGuard aGuard;
-    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
-    IFieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
+    Fieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Fieldmark::parameter_map_t::iterator pEntry = pParameters->find(aName);
     if(pEntry == pParameters->end())
         throw container::NoSuchElementException();
     return pEntry->second;
@@ -544,14 +544,14 @@ uno::Any SwXFieldmarkParameters::getByName(const OUString& aName)
 uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
 {
     SolarMutexGuard aGuard;
-    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Fieldmark::parameter_map_t* pParameters = getCoreParameters();
     return comphelper::mapKeysToSequence(*pParameters);
 }
 
 sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
 {
     SolarMutexGuard aGuard;
-    IFieldmark::parameter_map_t* pParameters = getCoreParameters();
+    Fieldmark::parameter_map_t* pParameters = getCoreParameters();
     return (pParameters->find(aName) != pParameters->end());
 }
 
@@ -572,7 +572,7 @@ void SwXFieldmarkParameters::Notify(const SfxHint& rHint)
         m_pFieldmark = nullptr;
 }
 
-IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
+Fieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 {
     if(!m_pFieldmark)
         throw uno::RuntimeException();
@@ -620,7 +620,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
 OUString SwXFieldmark::getFieldType()
 {
     SolarMutexGuard aGuard;
-    const IFieldmark *pBkm = dynamic_cast<const IFieldmark*>(GetBookmark());
+    const Fieldmark *pBkm = dynamic_cast<const Fieldmark*>(GetBookmark());
     if(!pBkm)
         throw uno::RuntimeException();
     return pBkm->GetFieldname();
@@ -629,7 +629,7 @@ OUString SwXFieldmark::getFieldType()
 void SwXFieldmark::setFieldType(const OUString & fieldType)
 {
     SolarMutexGuard aGuard;
-    IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
+    Fieldmark *pBkm = dynamic_cast<Fieldmark*>(GetBookmark());
     if(!pBkm)
         throw uno::RuntimeException();
 
@@ -640,7 +640,7 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
     // note: this must not change between point-fieldmarks and range-fieldmarks
     if(fieldType == ODF_FORMDROPDOWN || fieldType == ODF_FORMCHECKBOX || fieldType == ODF_FORMDATE)
     {
-        ::sw::mark::IFieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeFormFieldmarkType(pBkm, fieldType);
+        ::sw::mark::Fieldmark* pNewFieldmark = GetIDocumentMarkAccess()->changeFormFieldmarkType(pBkm, fieldType);
         if (pNewFieldmark)
         {
             registerInMark(*this, pNewFieldmark);
@@ -664,7 +664,7 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
 uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
 {
     SolarMutexGuard aGuard;
-    IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
+    Fieldmark *pBkm = dynamic_cast<Fieldmark*>(GetBookmark());
     if(!pBkm)
         throw uno::RuntimeException();
     return uno::Reference<container::XNameContainer>(new SwXFieldmarkParameters(pBkm));
@@ -803,7 +803,7 @@ uno::Reference<text::XTextRange> SAL_CALL SwXFieldmark::getAnchor()
 }
 
 rtl::Reference<SwXTextRange>
-SwXFieldmark::GetCommand(IFieldmark const& rMark)
+SwXFieldmark::GetCommand(Fieldmark const& rMark)
 {
     SwPosition const sepPos(sw::mark::FindFieldSep(rMark));
     SwPosition start(rMark.GetMarkStart());
@@ -812,7 +812,7 @@ SwXFieldmark::GetCommand(IFieldmark const& rMark)
 }
 
 rtl::Reference<SwXTextRange>
-SwXFieldmark::GetResult(IFieldmark const& rMark)
+SwXFieldmark::GetResult(Fieldmark const& rMark)
 {
     SwPosition sepPos(sw::mark::FindFieldSep(rMark));
     sepPos.AdjustContent(1);
@@ -826,7 +826,7 @@ SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
 {
     SolarMutexGuard g;
 
-    IFieldmark const*const pMark(dynamic_cast<IFieldmark*>(GetBookmark()));
+    Fieldmark const*const pMark(dynamic_cast<Fieldmark*>(GetBookmark()));
     if (!pMark)
     {
         throw lang::DisposedException();
@@ -849,7 +849,7 @@ SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
         OUString const type(getFieldType());
         if (type == ODF_FORMCHECKBOX || type == ODF_FORMDROPDOWN)
         {
-            return sw::mark::ExpandFieldmark(const_cast<IFieldmark *>(pMark));
+            return sw::mark::ExpandFieldmark(const_cast<Fieldmark *>(pMark));
         }
         else
         {

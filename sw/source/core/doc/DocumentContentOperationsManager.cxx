@@ -335,16 +335,16 @@ namespace sw
                 pNewBookmark->Hide(pOldBookmark->IsHidden());
                 pNewBookmark->SetHideCondition(pOldBookmark->GetHideCondition());
             }
-            ::sw::mark::IFieldmark* const pNewFieldmark =
-                dynamic_cast< ::sw::mark::IFieldmark* const >(pNewMark);
-            const ::sw::mark::IFieldmark* const pOldFieldmark =
-                dynamic_cast< const ::sw::mark::IFieldmark* >(pMark);
+            ::sw::mark::Fieldmark* const pNewFieldmark =
+                dynamic_cast< ::sw::mark::Fieldmark* const >(pNewMark);
+            const ::sw::mark::Fieldmark* const pOldFieldmark =
+                dynamic_cast< const ::sw::mark::Fieldmark* >(pMark);
             if (pNewFieldmark && pOldFieldmark)
             {
                 pNewFieldmark->SetFieldname(pOldFieldmark->GetFieldname());
                 pNewFieldmark->SetFieldHelptext(pOldFieldmark->GetFieldHelptext());
-                ::sw::mark::IFieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
-                const ::sw::mark::IFieldmark::parameter_map_t* pOldParams = pOldFieldmark->GetParameters();
+                ::sw::mark::Fieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
+                const ::sw::mark::Fieldmark::parameter_map_t* pOldParams = pOldFieldmark->GetParameters();
                 for (const auto& rEntry : *pOldParams )
                 {
                     pNewParams->insert( rEntry );
@@ -546,7 +546,7 @@ namespace sw
         SwNodes const& rNodes(rPam.GetPoint()->GetNodes());
         IDocumentMarkAccess const& rIDMA(*rPam.GetDoc().getIDocumentMarkAccess());
 
-        std::stack<std::tuple<sw::mark::IFieldmark const*, bool, SwNodeOffset, sal_Int32>> startedFields;
+        std::stack<std::tuple<sw::mark::Fieldmark const*, bool, SwNodeOffset, sal_Int32>> startedFields;
 
         for (SwNodeOffset n = nStartNode; n <= nEndNode; ++n)
         {
@@ -644,7 +644,7 @@ namespace sw
         }
         while (!startedFields.empty())
         {
-            if (const sw::mark::IFieldmark* pMark = std::get<0>(startedFields.top()))
+            if (const sw::mark::Fieldmark* pMark = std::get<0>(startedFields.top()))
             {
                 SwPosition const& rStart(pMark->GetMarkStart());
                 std::pair<SwNodeOffset, sal_Int32> const pos(
@@ -2289,7 +2289,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         // (note: deleteMarks() doesn't help here, in case of partially
         // selected fieldmarks; let's delete these as re-inserting their chars
         // elsewhere looks difficult)
-        ::std::set<::sw::mark::IFieldmark*> fieldmarks;
+        ::std::set<::sw::mark::Fieldmark*> fieldmarks;
         for (SwNodeIndex i = aRg.aStart; i <= aRg.aEnd; ++i)
         {
             if (SwTextNode *const pTextNode = i.GetNode().GetTextNode())

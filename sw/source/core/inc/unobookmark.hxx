@@ -147,11 +147,11 @@ class SwXFieldmarkParameters final
     , public SvtListener
 {
     private:
-        ::sw::mark::IFieldmark* m_pFieldmark;
+        ::sw::mark::Fieldmark* m_pFieldmark;
         /// @throws css::uno::RuntimeException
-        ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters();
+        ::sw::mark::Fieldmark::parameter_map_t* getCoreParameters();
     public:
-        SwXFieldmarkParameters(::sw::mark::IFieldmark* const pFieldmark)
+        SwXFieldmarkParameters(::sw::mark::Fieldmark* const pFieldmark)
             : m_pFieldmark(pFieldmark)
         {
             StartListening(pFieldmark->GetNotifier());
@@ -178,7 +178,7 @@ typedef cppu::ImplInheritanceHelper< SwXBookmark,
         css::text::XTextField
     > SwXFieldmark_Base;
 
-/// UNO wrapper around an sw::mark::IFieldmark.
+/// UNO wrapper around an sw::mark::Fieldmark.
 class SwXFieldmark final
     : public SwXFieldmark_Base
 {
@@ -187,9 +187,9 @@ class SwXFieldmark final
     bool m_isFieldmarkSeparatorAtStart = false;
 
     rtl::Reference<SwXTextRange>
-        GetCommand(::sw::mark::IFieldmark const& rMark);
+        GetCommand(::sw::mark::Fieldmark const& rMark);
     rtl::Reference<SwXTextRange>
-        GetResult(::sw::mark::IFieldmark const& rMark);
+        GetResult(::sw::mark::Fieldmark const& rMark);
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 

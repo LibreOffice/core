@@ -183,8 +183,8 @@ public:
             const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) override;
 
     /// Write the data of the form field
-    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) override;
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) override;
+    virtual void WriteFormData( const ::sw::mark::Fieldmark& rFieldmark ) override;
+    virtual void WriteHyperlinkData( const ::sw::mark::Fieldmark& rFieldmark ) override;
 
     virtual void DoComboBox(const OUString &rName,
                     const OUString &rHelp,

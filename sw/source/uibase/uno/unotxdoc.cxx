@@ -3441,7 +3441,7 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 
     sal_Int32 nSelection = aIter->second.toInt32();
     SwPosition aPos(*m_pDocShell->GetWrtShell()->GetCursor()->GetPoint());
-    sw::mark::IFieldmark* pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
+    sw::mark::Fieldmark* pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getInnerFieldmarkFor(aPos);
     if ( !pFieldBM )
     {
         aPos.AdjustContent(-1);

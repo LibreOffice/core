@@ -561,7 +561,7 @@ class WW8FieldEntry
         OUString msBookmarkName;
         OUString msMarkType;
         OUString msMarkCode;
-        ::sw::mark::IFieldmark::parameter_map_t maParams;
+        ::sw::mark::Fieldmark::parameter_map_t maParams;
 
     public:
         sw::hack::Position maStartPos;
@@ -580,7 +580,7 @@ class WW8FieldEntry
         void SetBookmarkName(const OUString& bookmarkName);
         void SetBookmarkType(const OUString& bookmarkType);
         void SetBookmarkCode(const OUString& bookmarkCode);
-        ::sw::mark::IFieldmark::parameter_map_t& getParameters() { return maParams;}
+        ::sw::mark::Fieldmark::parameter_map_t& getParameters() { return maParams;}
 };
 
 //    mini marker for some flags

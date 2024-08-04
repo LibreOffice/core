@@ -21,14 +21,14 @@ class SwVbaFormField : public SwVbaFormField_BASE
 {
 private:
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
-    sw::mark::IFieldmark& m_rFormField;
+    sw::mark::Fieldmark& m_rFormField;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaFormField(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                    const css::uno::Reference<css::uno::XComponentContext>& rContext,
                    const uno::Reference<text::XTextDocument>& xTextDocument,
-                   sw::mark::IFieldmark& rFormField);
+                   sw::mark::Fieldmark& rFormField);
     ~SwVbaFormField() override;
 
     // XFormField Methods

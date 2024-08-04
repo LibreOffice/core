@@ -1144,7 +1144,7 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFieldDialog>(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
-VclPtr<AbstractDropDownFormFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Widget *pParent, sw::mark::IFieldmark* pDropDownField)
+VclPtr<AbstractDropDownFormFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Widget *pParent, sw::mark::Fieldmark* pDropDownField)
 {
     return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
 }

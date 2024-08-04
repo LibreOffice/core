@@ -906,7 +906,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
         }
     };
     std::map<std::pair<SwPosition, sal_uInt32>,
-             std::pair<SwTextContentControl*, sw::mark::IFieldmark*>, FormControlSort>  aFormMap;
+             std::pair<SwTextContentControl*, sw::mark::Fieldmark*>, FormControlSort>  aFormMap;
 
     // add all of the eligible modern Content Controls into a sorted map
     SwContentControlManager& rManager = GetDoc()->GetContentControlManager();
@@ -927,7 +927,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
         // use SAL_MAX_UINT32 as zero's tabIndex so that automatic sorting is correct.
         sal_uInt32 nTabIndex = pCC && pCC->GetTabIndex() ? pCC->GetTabIndex() : SAL_MAX_UINT32;
 
-        const std::pair<SwTextContentControl*, sw::mark::IFieldmark*> pFormControl(pTCC, nullptr);
+        const std::pair<SwTextContentControl*, sw::mark::Fieldmark*> pFormControl(pTCC, nullptr);
         aFormMap[std::make_pair(nPos, nTabIndex)] = pFormControl;
     }
 
@@ -942,11 +942,11 @@ void SwCursorShell::GotoFormControl(bool bNext)
     IDocumentMarkAccess* pMarkAccess = GetDoc()->getIDocumentMarkAccess();
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        auto pFieldMark = dynamic_cast<sw::mark::IFieldmark*>(*it);
+        auto pFieldMark = dynamic_cast<sw::mark::Fieldmark*>(*it);
         assert(pFieldMark);
         // legacy form fields do not have (functional) tabIndexes - use lowest priority for them
         aFormMap[std::make_pair((*it)->GetMarkStart(), SAL_MAX_UINT32)] =
-            std::pair<SwTextContentControl*, sw::mark::IFieldmark*>(nullptr, pFieldMark);
+            std::pair<SwTextContentControl*, sw::mark::Fieldmark*>(nullptr, pFieldMark);
     }
 
     if (aFormMap.begin() == aFormMap.end())
@@ -955,7 +955,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
     // Identify the current location in the document, and the current tab index priority
 
     // A content control could contain a Fieldmark, so check for legacy fieldmarks first
-    sw::mark::IFieldmark* pFieldMark = GetCurrentFieldmark();
+    sw::mark::Fieldmark* pFieldMark = GetCurrentFieldmark();
     SwTextContentControl* pTCC = !pFieldMark ? CursorInsideContentControl() : nullptr;
 
     auto pCC = pTCC ? pTCC->GetContentControl().GetContentControl() : nullptr;
@@ -1646,7 +1646,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             if( !bRet && IsAttrAtPos::FormControl & rContentAtPos.eContentAtPos )
             {
                 IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
-                sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getInnerFieldmarkFor(aPos);
+                sw::mark::Fieldmark* pFieldBookmark = pMarksAccess->getInnerFieldmarkFor(aPos);
                 if (bCursorFoundExact && pFieldBookmark)
                 {
                     rContentAtPos.eContentAtPos = IsAttrAtPos::FormControl;

@@ -31,7 +31,7 @@ class SwHistoryTextFieldmark;
 namespace sw::mark
 {
 class IMark;
-class IFieldmark;
+class Fieldmark;
 }
 
 class SwDoc;
@@ -105,7 +105,7 @@ private:
     const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
 
 public:
-    SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    SwUndoInsNoTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
@@ -118,7 +118,7 @@ private:
     const std::unique_ptr<SwHistoryNoTextFieldmark> m_pHistoryNoTextFieldmark;
 
 public:
-    SwUndoDelNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    SwUndoDelNoTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark);
     ~SwUndoDelNoTextFieldmark();
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
@@ -132,7 +132,7 @@ private:
     const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;
 
 public:
-    SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    SwUndoInsTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
@@ -145,7 +145,7 @@ private:
     const std::unique_ptr<SwHistoryTextFieldmark> m_pHistoryTextFieldmark;
 
 public:
-    SwUndoDelTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark);
+    SwUndoDelTextFieldmark(const ::sw::mark::Fieldmark& rFieldmark);
     ~SwUndoDelTextFieldmark();
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;

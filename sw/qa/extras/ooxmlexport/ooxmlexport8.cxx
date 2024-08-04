@@ -1006,12 +1006,12 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
-        ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        ::sw::mark::Fieldmark* pFieldmark = dynamic_cast<::sw::mark::Fieldmark*>(*pMarkAccess->getAllMarksBegin());
 
         CPPUNIT_ASSERT(pFieldmark);
         CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
-        const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+        const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
         OUString sDateFormat;
         auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
         if (pResult != pParameters->end())

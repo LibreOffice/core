@@ -120,7 +120,7 @@ using namespace sw::types;
 using namespace sw::mark;
 using namespace ::oox::vml;
 
-static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
+static OUString lcl_getFieldCode( const Fieldmark* pFieldmark )
 {
     assert(pFieldmark);
 
@@ -141,7 +141,7 @@ static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
     return pFieldmark->GetFieldname();
 }
 
-static ww::eField lcl_getFieldId(const IFieldmark*const pFieldmark)
+static ww::eField lcl_getFieldId(const Fieldmark*const pFieldmark)
 {
     assert(pFieldmark);
 
@@ -2572,7 +2572,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
                     SwPosition aPosition( rNode, nCurrentPos );
-                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
+                    ::sw::mark::Fieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
                     assert(pFieldmark);
 
                     // Date field is exported as content control, not as a simple field
@@ -2598,7 +2598,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         OUString sCode = lcl_getFieldCode( pFieldmark );
                         if (pFieldmark->GetFieldname() == ODF_UNHANDLED )
                         {
-                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                            Fieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                             if ( it != pFieldmark->GetParameters()->end() )
                             {
                                 OUString sFieldId;
@@ -2625,7 +2625,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     SwPosition aPosition(rNode, nCurrentPos);
                     // the innermost field is the correct one
-                    sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getInnerFieldmarkFor(aPosition);
+                    sw::mark::Fieldmark const*const pFieldmark = pMarkAccess->getInnerFieldmarkFor(aPosition);
                     assert(pFieldmark);
                     // DateFieldmark / ODF_FORMDATE is not a field...
                     if (pFieldmark->GetFieldname() != ODF_FORMDATE)
@@ -2640,7 +2640,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         if (pFieldmark->GetFieldname() == ODF_UNHANDLED)
                         {
                             // Check for the presence of a linked OLE object
-                            IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
+                            Fieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
                             if ( it != pFieldmark->GetParameters()->end() )
                             {
                                 OUString sOleId;
@@ -2655,7 +2655,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 else if ( ch == CH_TXT_ATR_FIELDEND )
                 {
                     SwPosition aPosition( rNode, nCurrentPos );
-                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
+                    ::sw::mark::Fieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
 
                     assert(pFieldmark);
 
@@ -2673,7 +2673,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                             if (pFieldmark->GetFieldname() == ODF_UNHANDLED)
                             {
-                                IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
+                                Fieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                                 if ( it != pFieldmark->GetParameters()->end() )
                                 {
                                     OUString sFieldId;
@@ -2695,7 +2695,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
                 {
                     SwPosition aPosition( rNode, nCurrentPos );
-                    ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
+                    ::sw::mark::Fieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
                     assert(pFieldmark);
 
                     bool const isDropdownOrCheckbox(pFieldmark->GetFieldname() == ODF_FORMDROPDOWN ||

@@ -70,7 +70,7 @@ private:
     /// next redline
     SwRedlineTable::size_type m_RedlineIndex;
     /// next fieldmark
-    std::pair<sw::mark::IFieldmark const*, std::optional<SwPosition>> m_Fieldmark;
+    std::pair<sw::mark::Fieldmark const*, std::optional<SwPosition>> m_Fieldmark;
     std::optional<SwPosition> m_oNextFieldmarkHide;
     /// previous paragraph break - because m_pStartPos/EndPos are non-owning
     std::optional<std::pair<SwPosition, SwPosition>> m_oParagraphBreak;
@@ -150,7 +150,7 @@ public:
             if (nPos != -1)
             {
                 m_oNextFieldmarkHide.emplace(*pTextNode, nPos);
-                sw::mark::IFieldmark const*const pFieldmark(
+                sw::mark::Fieldmark const*const pFieldmark(
                         m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
                             ? m_rIDMA.getFieldmarkAt(*m_oNextFieldmarkHide)
                             : m_rIDMA.getInnerFieldmarkFor(*m_oNextFieldmarkHide));
