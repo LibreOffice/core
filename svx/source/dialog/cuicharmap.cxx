@@ -33,6 +33,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -483,35 +484,39 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
     if (!m_xSearchText->get_text().isEmpty())
     {
         m_xSearchSet->ClearPreviousData();
-        OUString aKeyword = m_xSearchText->get_text();
+        OUString aKeyword = m_xSearchText->get_text().trim().toAsciiLowerCase();
+        OUString hex_code;
+        if (std::u16string_view rest; aKeyword.startsWith("u+", &rest))
+            if (auto n = o3tl::toInt32(rest, 16))
+                hex_code = OUString::number(n, 16); // this removes leading zeroes
 
         toggleSearchView(true);
 
         FontCharMapRef xFontCharMap = m_xSearchSet->GetFontCharMap();
 
-        sal_UCS4 sChar = xFontCharMap->GetFirstChar();
-        while(sChar != xFontCharMap->GetLastChar())
+        for (sal_UCS4 ucs4 = xFontCharMap->GetFirstChar();; ucs4 = xFontCharMap->GetNextChar(ucs4))
         {
+            bool bAdded = false;
             UErrorCode errorCode = U_ZERO_ERROR;
             char buffer[100];
-            u_charName(sChar, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+            u_charName(ucs4, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
             if (U_SUCCESS(errorCode))
             {
                 OUString sName = OUString::createFromAscii(buffer);
-                if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
-                    m_xSearchSet->AppendCharToList(sChar);
+                if (!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword) >= 0)
+                {
+                    m_xSearchSet->AppendCharToList(ucs4);
+                    bAdded = true;
+                }
             }
-            sChar = xFontCharMap->GetNextChar(sChar);
-        }
-        //for last char
-        UErrorCode errorCode = U_ZERO_ERROR;
-        char buffer[100];
-        u_charName(sChar, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
-        if (U_SUCCESS(errorCode))
-        {
-            OUString sName = OUString::createFromAscii(buffer);
-            if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
-                m_xSearchSet->AppendCharToList(sChar);
+            if (!bAdded && !hex_code.isEmpty())
+            {
+                OUString actual_number = OUString::number(ucs4, 16);
+                if (actual_number.startsWith(hex_code))
+                    m_xSearchSet->AppendCharToList(ucs4);
+            }
+            if (ucs4 == xFontCharMap->GetLastChar())
+                break;
         }
 
         m_xSearchSet->UpdateScrollRange();
