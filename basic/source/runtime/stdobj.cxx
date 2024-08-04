@@ -463,13 +463,13 @@ constexpr Method aMethods[] = {
     arg(u"Date", SbxDATE),
 
 // Related to: MsgBox (return value)
-{ u"IDABORT",                       SbxINTEGER,      CPROP_,       ConstInt<SbMBID::ABORT>        },
-{ u"IDCANCEL",                      SbxINTEGER,      CPROP_,       ConstInt<SbMBID::CANCEL>       },
-{ u"IDIGNORE",                      SbxINTEGER,      CPROP_,       ConstInt<SbMBID::IGNORE>       },
-{ u"IDNO",                          SbxINTEGER,      CPROP_,       ConstInt<SbMBID::NO>           },
-{ u"IDOK",                          SbxINTEGER,      CPROP_,       ConstInt<SbMBID::OK>           },
-{ u"IDRETRY",                       SbxINTEGER,      CPROP_,       ConstInt<SbMBID::RETRY>        },
-{ u"IDYES",                         SbxINTEGER,      CPROP_,       ConstInt<SbMBID::YES>          },
+{ u"IDABORT",                       SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::ABORT>  },
+{ u"IDCANCEL",                      SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::CANCEL> },
+{ u"IDIGNORE",                      SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::IGNORE> },
+{ u"IDNO",                          SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::NO>     },
+{ u"IDOK",                          SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::OK>     },
+{ u"IDRETRY",                       SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::RETRY>  },
+{ u"IDYES",                         SbxINTEGER,      CPROP_,     ConstInt<SbMB::Response::YES>    },
 
 { u"Iif",                           SbxVARIANT,   3 | FUNCTION_,       SbRtl_Iif                  },
     arg(u"Bool",     SbxBOOL),

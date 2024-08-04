@@ -4257,67 +4257,46 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                 eType, VclButtonsType::NONE, aMsg, GetpApp()));
 
+    std::vector<std::pair<StandardButtonType, sal_Int16>> buttons;
     switch (nType & 0x0F) // delete bits 4-16
     {
         case SbMB::OK:
         default:
-            xBox->add_button(GetStandardText(StandardButtonType::OK), SbMBID::OK);
+            buttons.emplace_back(StandardButtonType::OK, SbMB::Response::OK);
             break;
         case SbMB::OKCANCEL:
-            xBox->add_button(GetStandardText(StandardButtonType::OK), SbMBID::OK);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
-
-            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
-                xBox->set_default_response(SbMBID::CANCEL);
-            else
-                xBox->set_default_response(SbMBID::OK);
-
+            buttons.emplace_back(StandardButtonType::OK, SbMB::Response::OK);
+            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
             break;
         case SbMB::ABORTRETRYIGNORE:
-            xBox->add_button(GetStandardText(StandardButtonType::Abort), SbMBID::ABORT);
-            xBox->add_button(GetStandardText(StandardButtonType::Retry), SbMBID::RETRY);
-            xBox->add_button(GetStandardText(StandardButtonType::Ignore), SbMBID::IGNORE);
-
-            if (nType & SbMB::DEFBUTTON2)
-                xBox->set_default_response(SbMBID::RETRY);
-            else if (nType & SbMB::DEFBUTTON3)
-                xBox->set_default_response(SbMBID::IGNORE);
-            else
-                xBox->set_default_response(SbMBID::CANCEL);
-
+            buttons.emplace_back(StandardButtonType::Abort, SbMB::Response::ABORT);
+            buttons.emplace_back(StandardButtonType::Retry, SbMB::Response::RETRY);
+            buttons.emplace_back(StandardButtonType::Ignore, SbMB::Response::IGNORE);
             break;
         case SbMB::YESNOCANCEL:
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), SbMBID::YES);
-            xBox->add_button(GetStandardText(StandardButtonType::No), SbMBID::NO);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
-
-            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
-                xBox->set_default_response(SbMBID::CANCEL);
-            else
-                xBox->set_default_response(SbMBID::YES);
-
+            buttons.emplace_back(StandardButtonType::Yes, SbMB::Response::YES);
+            buttons.emplace_back(StandardButtonType::No, SbMB::Response::NO);
+            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
             break;
         case SbMB::YESNO:
-            xBox->add_button(GetStandardText(StandardButtonType::Yes), SbMBID::YES);
-            xBox->add_button(GetStandardText(StandardButtonType::No), SbMBID::NO);
-
-            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
-                xBox->set_default_response(SbMBID::NO);
-            else
-                xBox->set_default_response(SbMBID::YES);
-
+            buttons.emplace_back(StandardButtonType::Yes, SbMB::Response::YES);
+            buttons.emplace_back(StandardButtonType::No, SbMB::Response::NO);
             break;
         case SbMB::RETRYCANCEL:
-            xBox->add_button(GetStandardText(StandardButtonType::Retry), SbMBID::RETRY);
-            xBox->add_button(GetStandardText(StandardButtonType::Cancel), SbMBID::CANCEL);
-
-            if (nType & SbMB::DEFBUTTON2 || nType & SbMB::DEFBUTTON3)
-                xBox->set_default_response(SbMBID::CANCEL);
-            else
-                xBox->set_default_response(SbMBID::RETRY);
-
+            buttons.emplace_back(StandardButtonType::Retry, SbMB::Response::RETRY);
+            buttons.emplace_back(StandardButtonType::Cancel, SbMB::Response::CANCEL);
             break;
     }
+
+    for (auto [buttonType, buttonResponse] : buttons)
+        xBox->add_button(GetStandardText(buttonType), buttonResponse);
+
+    std::size_t default_button = 0;
+    if (nType & SbMB::DEFBUTTON2)
+        default_button = 1;
+    else if (nType & SbMB::DEFBUTTON3)
+        default_button = 2;
+    xBox->set_default_response(buttons[std::min(default_button, buttons.size() - 1)].second);
 
     xBox->set_title(aTitle);
     sal_Int16 nRet = xBox->run();

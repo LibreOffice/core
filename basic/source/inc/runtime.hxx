@@ -119,10 +119,9 @@ constexpr sal_Int16 DEFBUTTON2 = 256;
 constexpr sal_Int16 DEFBUTTON3 = 512;
 constexpr sal_Int16 APPLMODAL = 0;
 constexpr sal_Int16 SYSTEMMODAL = 4096;
-}
 
 // Related to: MsgBox (return value)
-namespace SbMBID
+namespace Response
 {
 constexpr sal_Int16 OK = 1;
 constexpr sal_Int16 CANCEL = 2;
@@ -131,6 +130,7 @@ constexpr sal_Int16 RETRY = 4;
 constexpr sal_Int16 IGNORE = 5;
 constexpr sal_Int16 YES = 6;
 constexpr sal_Int16 NO = 7;
+}
 }
 
 // Related to: SwFieldTypesEnum in sw/inc/fldbas.hxx
