@@ -26,7 +26,7 @@ SwVbaFormFieldDropDown::SwVbaFormFieldDropDown(
     const uno::Reference<ooo::vba::XHelperInterface>& rParent,
     const uno::Reference<uno::XComponentContext>& rContext, ::sw::mark::IFieldmark& rFormField)
     : SwVbaFormFieldDropDown_BASE(rParent, rContext)
-    , m_pDropDown(dynamic_cast<sw::mark::IDropdownFieldmark*>(&rFormField))
+    , m_pDropDown(dynamic_cast<sw::mark::DropDownFieldmark*>(&rFormField))
 {
 }
 

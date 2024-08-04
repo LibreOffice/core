@@ -14,7 +14,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static uno::Sequence<OUString> lcl_getListEntries(sw::mark::IDropdownFieldmark& rDropDown)
+static uno::Sequence<OUString> lcl_getListEntries(sw::mark::DropDownFieldmark& rDropDown)
 {
     uno::Sequence<OUString> aSeq;
     (*rDropDown.GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
@@ -53,13 +53,13 @@ class ListEntryCollectionHelper
 private:
     uno::Reference<XHelperInterface> mxParent;
     uno::Reference<uno::XComponentContext> mxContext;
-    sw::mark::IDropdownFieldmark& m_rDropDown;
+    sw::mark::DropDownFieldmark& m_rDropDown;
 
 public:
     /// @throws css::uno::RuntimeException
     ListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                               uno::Reference<uno::XComponentContext> xContext,
-                              sw::mark::IDropdownFieldmark& rFormField)
+                              sw::mark::DropDownFieldmark& rFormField)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
         , m_rDropDown(rFormField)
@@ -91,8 +91,7 @@ public:
 
 SwVbaFormFieldDropDownListEntries::SwVbaFormFieldDropDownListEntries(
     const uno::Reference<XHelperInterface>& xParent,
-    const uno::Reference<uno::XComponentContext>& xContext,
-    sw::mark::IDropdownFieldmark& rFormField)
+    const uno::Reference<uno::XComponentContext>& xContext, sw::mark::DropDownFieldmark& rFormField)
     : SwVbaFormFieldDropDownListEntries_BASE(
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(

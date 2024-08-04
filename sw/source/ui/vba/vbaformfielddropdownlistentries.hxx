@@ -21,14 +21,14 @@ typedef CollTestImplHelper<ooo::vba::word::XListEntries> SwVbaFormFieldDropDownL
 class SwVbaFormFieldDropDownListEntries : public SwVbaFormFieldDropDownListEntries_BASE
 {
 private:
-    sw::mark::IDropdownFieldmark& m_rDropDown;
+    sw::mark::DropDownFieldmark& m_rDropDown;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaFormFieldDropDownListEntries(
         const css::uno::Reference<ov::XHelperInterface>& xParent,
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
-        sw::mark::IDropdownFieldmark& m_rDropDown);
+        sw::mark::DropDownFieldmark& m_rDropDown);
 
     // XListEntries
     css::uno::Reference<ooo::vba::word::XListEntry>

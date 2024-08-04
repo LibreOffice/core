@@ -108,25 +108,6 @@ namespace sw::mark
             IFieldmark &operator =(IFieldmark const&) = delete;
     };
 
-    class SW_DLLPUBLIC IDropdownFieldmark
-        : virtual public IFieldmark
-    {
-        protected:
-            IDropdownFieldmark() = default;
-
-        public:
-            virtual OUString GetContent(sal_Int32* pIndex) const = 0;
-            virtual OUString GetContent() const override = 0;
-            virtual void AddContent(const OUString& rText, sal_Int32* pIndex = nullptr) = 0;
-            virtual void DelContent(sal_Int32 nDelIndex = -1) = 0;
-            virtual void ReplaceContent(const OUString* pText, sal_Int32* pIndex) = 0;
-            virtual void ReplaceContent(const OUString& sNewContent) override = 0;
-
-    private:
-            IDropdownFieldmark(IDropdownFieldmark const &) = delete;
-            IDropdownFieldmark &operator =(IDropdownFieldmark const&) = delete;
-    };
-
     class SW_DLLPUBLIC IDateFieldmark
         : virtual public IFieldmark
     {
@@ -378,7 +359,7 @@ namespace sw::mark
     };
 
     /// Fieldmark with a drop down button (e.g. this button opens the date picker for a date field)
-    class FieldmarkWithDropDownButton
+    class SW_DLLPUBLIC FieldmarkWithDropDownButton
         : public NonTextFieldmark
     {
     public:
@@ -394,9 +375,8 @@ namespace sw::mark
     };
 
     /// Fieldmark representing a drop-down form field.
-    class DropDownFieldmark final
-        : virtual public IDropdownFieldmark
-        , public FieldmarkWithDropDownButton
+    class SW_DLLPUBLIC DropDownFieldmark final
+        : public FieldmarkWithDropDownButton
     {
     public:
         DropDownFieldmark(const SwPaM& rPaM, const OUString& rName);
@@ -404,11 +384,11 @@ namespace sw::mark
 
         void ShowButton(SwEditWin* pEditWin) override;
         void RemoveButton() override;
-        OUString GetContent(sal_Int32* pIndex) const override;
+        OUString GetContent(sal_Int32* pIndex) const;
         OUString GetContent() const override;
-        void AddContent(const OUString& rText, sal_Int32* pIndex = nullptr) override;
-        void DelContent(sal_Int32 nDelIndex = -1) override;
-        void ReplaceContent(const OUString* pText, sal_Int32* pIndex) override;
+        void AddContent(const OUString& rText, sal_Int32* pIndex = nullptr);
+        void DelContent(sal_Int32 nDelIndex = -1);
+        void ReplaceContent(const OUString* pText, sal_Int32* pIndex);
         void ReplaceContent(const OUString& sNewContent) override;
 
         // This method should be called only by the portion so we can now the portion's painting area

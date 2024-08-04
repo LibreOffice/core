@@ -20,7 +20,7 @@ typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XListEntry>
 class SwVbaFormFieldDropDownListEntry : public SwVbaFormFieldDropDownListEntry_BASE
 {
 private:
-    sw::mark::IDropdownFieldmark& m_rDropDown;
+    sw::mark::DropDownFieldmark& m_rDropDown;
     // All LO and internal UNO functions are 0-based. Convert to 1-based when sending to VBA
     const sal_Int32 m_nZIndex;
 
@@ -29,7 +29,7 @@ public:
     SwVbaFormFieldDropDownListEntry(
         const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
         const css::uno::Reference<css::uno::XComponentContext>& rContext,
-        sw::mark::IDropdownFieldmark& rFormField, sal_Int32 nZIndex);
+        sw::mark::DropDownFieldmark& rFormField, sal_Int32 nZIndex);
     ~SwVbaFormFieldDropDownListEntry() override;
 
     // XListEntry
