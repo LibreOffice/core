@@ -300,7 +300,7 @@ public:
         IDocumentMarkAccess* marks = shell->GetDoc()->getIDocumentMarkAccess();
         // Unfortunately, the pages are marked using UNO bookmarks, which have internals names, so they cannot be referred to by their names.
         // Assume that there are no other UNO bookmarks than the ones used by mail merge, and that they are in the sorted order.
-        IDocumentMarkAccess::const_iterator_t mark;
+        IDocumentMarkAccess::const_iterator mark;
         int pos = 0;
         for (mark = marks->getAllMarksBegin(); mark != marks->getAllMarksEnd() && pos < document;
              ++mark)

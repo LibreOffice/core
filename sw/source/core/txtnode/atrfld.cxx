@@ -790,7 +790,7 @@ SwTextAnnotationField::~SwTextAnnotationField()
     SwDoc& rDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
 
     IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
+    auto pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
     return pMark != pMarksAccess->getAnnotationMarksEnd()
            ? *pMark
            : nullptr;

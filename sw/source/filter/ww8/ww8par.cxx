@@ -1582,7 +1582,7 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
         && !static_cast<const SwGetRefField*>(pField)->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
-        IDocumentMarkAccess::const_iterator_t ppBkmk =
+        auto ppBkmk =
             pMarkAccess->findMark( static_cast<const SwGetRefField*>(pField)->GetSetRefName() );
         if(ppBkmk != pMarkAccess->getAllMarksEnd())
         {
@@ -5421,7 +5421,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
         if ( pMarkAccess )
         {
-            IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( u"_PictureBullets"_ustr );
+            auto ppBkmk = pMarkAccess->findBookmark( u"_PictureBullets"_ustr );
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                        IDocumentMarkAccess::GetType(**ppBkmk) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {

@@ -885,7 +885,7 @@ static void DeleteDDEMarks(SwDoc & rDest)
     IDocumentMarkAccess *const pMarkAccess = rDest.getIDocumentMarkAccess();
     std::vector< ::sw::mark::MarkBase* > vDdeMarks;
     // find all DDE-Bookmarks
-    for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+    for (auto ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)
     {
@@ -4503,7 +4503,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
                                          m_pDocShell->GetTitle(SFX_TITLE_FULLNAME), m_sName);
 
     IDocumentMarkAccess* const pMarkAccess = m_pDocShell->GetDoc()->getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(m_sName);
+    auto ppMark = pMarkAccess->findMark(m_sName);
     if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::MarkType::BOOKMARK)
     {

@@ -1330,7 +1330,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
     case REF_BOOKMARK:
         {
-            IDocumentMarkAccess::const_iterator_t ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
+            auto ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
             if (ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd()
                 && (!pLayout || !pLayout->IsHideRedlines()
                     || !sw::IsMarkHidden(*pLayout, **ppMark)))

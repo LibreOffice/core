@@ -1508,8 +1508,7 @@ sal_Int32 SwXBookmarks::getCount()
 
     sal_Int32 count(0);
     IDocumentMarkAccess* const pMarkAccess = GetDoc().getIDocumentMarkAccess();
-    for (IDocumentMarkAccess::const_iterator_t ppMark =
-            pMarkAccess->getBookmarksBegin();
+    for (auto ppMark = pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK ==
@@ -1530,8 +1529,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
         throw IndexOutOfBoundsException();
 
     sal_Int32 count(0);
-    for (IDocumentMarkAccess::const_iterator_t ppMark =
-            pMarkAccess->getBookmarksBegin();
+    for (auto ppMark = pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK ==
@@ -1557,7 +1555,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
 
     auto& rDoc = GetDoc();
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
+    auto ppBkmk = pMarkAccess->findBookmark(rName);
     if(ppBkmk == pMarkAccess->getBookmarksEnd())
         throw NoSuchElementException();
 
@@ -1574,7 +1572,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames()
 
     std::vector< OUString > ret;
     IDocumentMarkAccess* const pMarkAccess = GetDoc().getIDocumentMarkAccess();
-    for (IDocumentMarkAccess::const_iterator_t ppMark =
+    for (auto ppMark =
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
@@ -1605,7 +1603,7 @@ sal_Bool SwXBookmarks::hasElements()
     SolarMutexGuard aGuard;
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc().getIDocumentMarkAccess();
-    for (IDocumentMarkAccess::const_iterator_t ppMark =
+    for (auto ppMark =
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {

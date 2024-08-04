@@ -83,10 +83,10 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
     IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
+    auto ppBookmarkStart = pMarkAccess->getBookmarksBegin();
     sal_uInt32 nPopupId = 1;
     std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
-    for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
+    for(auto ppBookmark = ppBookmarkStart;
         ppBookmark != pMarkAccess->getBookmarksEnd();
         ++ppBookmark)
     {

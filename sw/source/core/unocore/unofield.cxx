@@ -2082,7 +2082,7 @@ SwXTextField::getAnchor()
     {
         const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
         IDocumentMarkAccess* pMarkAccess = m_pImpl->m_pDoc->getIDocumentMarkAccess();
-        for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin(); ppMark != pMarkAccess->getAnnotationMarksEnd(); ++ppMark)
+        for (auto ppMark = pMarkAccess->getAnnotationMarksBegin(); ppMark != pMarkAccess->getAnnotationMarksEnd(); ++ppMark)
         {
             if ((*ppMark)->GetName() == pPostItField->GetName())
             {

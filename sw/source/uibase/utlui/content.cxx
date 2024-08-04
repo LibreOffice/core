@@ -636,7 +636,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         {
             tools::Long nYPos = 0;
             IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
-            for(IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+            for(auto ppBookmark = pMarkAccess->getBookmarksBegin();
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ++ppBookmark)
             {
@@ -4544,7 +4544,7 @@ void SwContentTree::UpdateTracking()
     {
         SwPaM* pCursor = m_pActiveShell->GetCursor();
         IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
-        IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+        auto ppBookmark = pMarkAccess->getBookmarksBegin();
         if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd()
             && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
         {
@@ -4813,7 +4813,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
     {
         SwPaM* pCursor = m_pActiveShell->GetCursor();
         IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
-        IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+        auto ppBookmark = pMarkAccess->getBookmarksBegin();
         if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd())
         {
             OUString sBookmarkName;
@@ -7059,7 +7059,7 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
     IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
     for (const auto& rName : rNames)
     {
-        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
+        auto ppBkmk = pMarkAccess->findBookmark(rName);
         if (ppBkmk == pMarkAccess->getBookmarksEnd())
             continue;
         SwPosition aMarkStart = (*ppBkmk)->GetMarkStart();

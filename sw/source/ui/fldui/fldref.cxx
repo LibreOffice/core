@@ -584,7 +584,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         {
             // get all text marks
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+            for(auto ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
                 ++ppMark)
             {

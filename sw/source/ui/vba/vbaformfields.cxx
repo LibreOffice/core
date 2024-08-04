@@ -40,7 +40,7 @@ static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& 
 
     sal_Int32 nCounter = 0;
     std::vector<OUString> vElementNames;
-    IDocumentMarkAccess::iterator aIter = pMarkAccess->getFieldmarksBegin();
+    auto aIter = pMarkAccess->getFieldmarksBegin();
     while (aIter != pMarkAccess->getFieldmarksEnd())
     {
         switch (IDocumentMarkAccess::GetType(**aIter))

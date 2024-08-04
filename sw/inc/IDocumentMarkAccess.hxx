@@ -54,58 +54,8 @@ class IDocumentMarkAccess
             NAVIGATOR_REMINDER
         };
 
-        /** wrapper iterator: wraps iterator of implementation while hiding
-            MarkBase class; only MarkBase instances can be retrieved directly.
-         */
-        class SW_DLLPUBLIC iterator
-        {
-            private:
-                std::optional<std::vector<::sw::mark::MarkBase*>::const_iterator> m_pIter;
-
-            public:
-                // MarkManager implementation needs to get the real iterator
-                std::vector<::sw::mark::MarkBase*>::const_iterator const& get() const;
-
-                typedef std::ptrdiff_t difference_type;
-                typedef ::sw::mark::MarkBase* value_type;
-                typedef ::sw::mark::MarkBase* const* pointer;
-                typedef ::sw::mark::MarkBase* const& reference;
-                typedef std::random_access_iterator_tag iterator_category;
-
-                iterator();
-                iterator(std::vector<::sw::mark::MarkBase*>::const_iterator const& rIter);
-                iterator(iterator const& rOther);
-                iterator& operator=(iterator const& rOther);
-                iterator(iterator && rOther) noexcept;
-                iterator& operator=(iterator && rOther) noexcept;
-
-                // FIXME unfortunately there's a requirement on input iterator
-                // and forward iterator to return reference, which isn't
-                // possible because we have to return a temp value;
-                // let's try value_type instead, perhaps it's sufficient,
-                // for a const_iterator...
-                ::sw::mark::MarkBase* /*const&*/ operator*() const;
-                // nope can't do that :(
-                //::sw::mark::MarkBase* /* const* */ operator->() const;
-                iterator& operator++();
-                iterator operator++(int);
-                bool operator==(iterator const& rOther) const;
-                bool operator!=(iterator const& rOther) const;
-                iterator& operator--();
-                iterator operator--(int);
-                iterator& operator+=(difference_type);
-                iterator operator+(difference_type) const;
-                iterator& operator-=(difference_type);
-                iterator operator-(difference_type) const;
-                difference_type operator-(iterator const&) const;
-                value_type operator[](difference_type) const;
-                bool operator<(iterator const& rOther) const;
-                bool operator>(iterator const& rOther) const;
-                bool operator<=(iterator const& rOther) const;
-                bool operator>=(iterator const& rOther) const;
-        };
-
-        typedef iterator const_iterator_t;
+        typedef std::vector<::sw::mark::MarkBase*>::const_iterator const_iterator;
+        typedef std::vector<::sw::mark::MarkBase*>::iterator iterator;
 
         /// To avoid recursive calls of deleteMark, the removal of dummy
         /// characters of fieldmarks has to be delayed; this is the baseclass
@@ -240,7 +190,7 @@ class IDocumentMarkAccess
                  remove fieldmark chars.
         */
         virtual std::unique_ptr<ILazyDeleter>
-            deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark, bool isMoveNodes) =0;
+            deleteMark(const IDocumentMarkAccess::const_iterator& ppMark, bool isMoveNodes) =0;
 
         /** Deletes a mark.
 
@@ -257,11 +207,11 @@ class IDocumentMarkAccess
 
         /** returns a STL-like random access iterator to the begin of the sequence of marks.
         */
-        virtual const_iterator_t getAllMarksBegin() const =0;
+        virtual const_iterator getAllMarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of marks.
         */
-        virtual const_iterator_t getAllMarksEnd() const =0;
+        virtual const_iterator getAllMarksEnd() const =0;
 
         /** returns the number of marks.
 
@@ -277,14 +227,14 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
         */
-        virtual const_iterator_t findMark(const OUString& rMark) const =0;
+        virtual const_iterator findMark(const OUString& rMark) const =0;
 
         /** Find the first Mark that does not start before.
 
             @returns
             an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
         */
-        virtual const_iterator_t findFirstMarkNotStartsBefore(const SwPosition& rPos) const =0;
+        virtual const_iterator findFirstMarkNotStartsBefore(const SwPosition& rPos) const =0;
 
         // interface Bookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
@@ -293,11 +243,11 @@ class IDocumentMarkAccess
 
         /** returns a STL-like random access iterator to the begin of the sequence the Bookmarks.
         */
-        virtual const_iterator_t getBookmarksBegin() const =0;
+        virtual const_iterator getBookmarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of Bookmarks.
         */
-        virtual const_iterator_t getBookmarksEnd() const =0;
+        virtual const_iterator getBookmarksEnd() const =0;
 
         /** returns the number of Bookmarks.
         */
@@ -311,14 +261,14 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found.
         */
-        virtual const_iterator_t findBookmark(const OUString& rMark) const =0;
+        virtual const_iterator findBookmark(const OUString& rMark) const =0;
 
         /** Finds the first mark that is starting after.
 
             @returns
             an iterator pointing to the mark, or pointing to getBookmarksEnd() if nothing was found.
         */
-        virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
+        virtual const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
 
         /// Get the innermost bookmark that contains rPos.
         virtual sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
@@ -326,11 +276,11 @@ class IDocumentMarkAccess
         // Fieldmarks
         /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.
         */
-        virtual const_iterator_t getFieldmarksBegin() const =0;
+        virtual const_iterator getFieldmarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of fieldmarks.
         */
-        virtual const_iterator_t getFieldmarksEnd() const =0;
+        virtual const_iterator getFieldmarksEnd() const =0;
 
         /// returns the number of Fieldmarks.
         virtual sal_Int32 getFieldmarksCount() const = 0;
@@ -351,10 +301,10 @@ class IDocumentMarkAccess
         virtual void ClearFieldActivation() = 0;
 
         // Annotation Marks
-        virtual const_iterator_t getAnnotationMarksBegin() const = 0;
-        virtual const_iterator_t getAnnotationMarksEnd() const = 0;
+        virtual const_iterator getAnnotationMarksBegin() const = 0;
+        virtual const_iterator getAnnotationMarksEnd() const = 0;
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
-        virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
+        virtual const_iterator findAnnotationMark( const OUString& rName ) const = 0;
         virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
@@ -362,14 +312,14 @@ class IDocumentMarkAccess
             const OUString& rProposedName,
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
-        virtual const_iterator_t findAnnotationBookmark( const OUString& rName ) const = 0;
+        virtual const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
         /** Finds the first mark that is starting after.
 
             @returns
             an iterator pointing to the mark, or pointing to getAnnotationMarksEnd() if nothing was found.
         */
-        virtual const_iterator_t findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
+        virtual const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
 
         /** Returns the MarkType used to create the mark
         */

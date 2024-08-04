@@ -1430,7 +1430,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
     {
         // second step: when we didn't find a bookmark, check if there is one set already
         IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
-        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+        for(auto ppMark = pMarkAccess->getAllMarksBegin();
             ppMark != pMarkAccess->getAllMarksEnd();
             ++ppMark)
         {
@@ -1494,7 +1494,7 @@ void SwHTMLParser::StripTrailingPara()
 
             // now we have to move maybe existing bookmarks
             IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+            for(auto ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
             {

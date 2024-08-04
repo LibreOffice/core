@@ -203,7 +203,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     // delete
     rIDCO.DeleteAndJoin(aPaM);
 
-    for (IDocumentMarkAccess::const_iterator_t i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
+    for (auto i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
     {
         // problem was that the nContent was pointing at deleted node
         CPPUNIT_ASSERT_EQUAL((*i)->GetMarkStart().GetContentNode(),

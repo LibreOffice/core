@@ -54,7 +54,7 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 void SwUndoBookmark::ResetInDoc( SwDoc& rDoc )
 {
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    for ( IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
+    for ( auto ppBkmk = pMarkAccess->getAllMarksBegin();
           ppBkmk != pMarkAccess->getAllMarksEnd();
           ++ppBkmk )
     {
@@ -135,7 +135,7 @@ SwRewriter SwUndoRenameBookmark::GetRewriter() const
 void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext const & rContext, const OUString& sFrom, const OUString& sTo)
 {
     IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(sFrom);
+    auto ppBkmk = pMarkAccess->findMark(sFrom);
     if (ppBkmk != pMarkAccess->getAllMarksEnd())
     {
         pMarkAccess->renameMark( *ppBkmk, sTo );

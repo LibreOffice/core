@@ -72,29 +72,29 @@ namespace sw::mark {
 
             // deleters
             virtual std::unique_ptr<ILazyDeleter>
-                deleteMark(const const_iterator_t& ppMark, bool isMoveNodes) override;
+                deleteMark(const const_iterator& ppMark, bool isMoveNodes) override;
             virtual void deleteMark(const ::sw::mark::MarkBase* const pMark) override;
             virtual void clearAllMarks() override;
 
             // marks
-            virtual const_iterator_t getAllMarksBegin() const override;
-            virtual const_iterator_t getAllMarksEnd() const override;
+            virtual const_iterator getAllMarksBegin() const override;
+            virtual const_iterator getAllMarksEnd() const override;
             virtual sal_Int32 getAllMarksCount() const override;
-            virtual const_iterator_t findMark(const OUString& rName) const override;
-            virtual const_iterator_t findFirstMarkNotStartsBefore(const SwPosition& rPos) const override;
+            virtual const_iterator findMark(const OUString& rName) const override;
+            virtual const_iterator findFirstMarkNotStartsBefore(const SwPosition& rPos) const override;
 
             // bookmarks
             virtual bool isBookmarkDeleted(SwPaM const& rPaM, bool isReplace) const override;
-            virtual const_iterator_t getBookmarksBegin() const override;
-            virtual const_iterator_t getBookmarksEnd() const override;
+            virtual const_iterator getBookmarksBegin() const override;
+            virtual const_iterator getBookmarksEnd() const override;
             virtual sal_Int32 getBookmarksCount() const override;
-            virtual const_iterator_t findBookmark(const OUString& rName) const override;
-            virtual const_iterator_t findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
+            virtual const_iterator findBookmark(const OUString& rName) const override;
+            virtual const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
             virtual ::sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const override;
 
             // Fieldmarks
-            virtual const_iterator_t getFieldmarksBegin() const override;
-            virtual const_iterator_t getFieldmarksEnd() const override;
+            virtual const_iterator getFieldmarksBegin() const override;
+            virtual const_iterator getFieldmarksEnd() const override;
             virtual sal_Int32 getFieldmarksCount() const override;
             virtual ::sw::mark::Fieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
             virtual sw::mark::Fieldmark* getInnerFieldmarkFor(const SwPosition& rPos) const override;
@@ -114,12 +114,12 @@ namespace sw::mark {
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
             // Annotation Marks
-            virtual const_iterator_t getAnnotationMarksBegin() const override;
-            virtual const_iterator_t getAnnotationMarksEnd() const override;
+            virtual const_iterator getAnnotationMarksBegin() const override;
+            virtual const_iterator getAnnotationMarksEnd() const override;
             virtual sal_Int32 getAnnotationMarksCount() const override;
-            virtual const_iterator_t findAnnotationMark( const OUString& rName ) const override;
+            virtual const_iterator findAnnotationMark( const OUString& rName ) const override;
             virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPos) const override;
-            virtual const_iterator_t findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
+            virtual const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
 
             virtual void assureSortedMarkContainers() const override;
 
@@ -130,7 +130,7 @@ namespace sw::mark {
                 const OUString& rName, IDocumentMarkAccess::MarkType eMark,
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
-            virtual const_iterator_t findAnnotationBookmark( const OUString& rName ) const override;
+            virtual const_iterator findAnnotationBookmark( const OUString& rName ) const override;
             virtual void restoreAnnotationMarks(bool bDelete = true) override;
 
         private:

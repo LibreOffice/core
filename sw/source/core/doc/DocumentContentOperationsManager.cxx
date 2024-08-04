@@ -246,7 +246,7 @@ namespace sw
         SwPosition const*const pCpyStt = &rCpyPam;
 
         std::vector< const ::sw::mark::MarkBase* > vMarksToCopy;
-        for ( IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getAllMarksBegin();
+        for ( auto ppMark = pSrcMarkAccess->getAllMarksBegin();
               ppMark != pSrcMarkAccess->getAllMarksEnd();
               ++ppMark )
         {

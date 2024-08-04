@@ -79,7 +79,7 @@ namespace
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
-        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getAllMarksBegin();
+        for(auto ppMark = rMarkAccess.getAllMarksBegin();
             ppMark != rMarkAccess.getAllMarksEnd();
             ++ppMark)
         {

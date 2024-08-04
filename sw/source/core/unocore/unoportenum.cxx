@@ -265,12 +265,12 @@ namespace
         // no need to consider annotation marks starting after aEndOfPara
         SwContentNode& rPtNd = *rUnoCursor.GetPoint()->GetNode().GetContentNode();
         SwPosition aEndOfPara( rPtNd, rPtNd.Len() );
-        const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
+        const auto pCandidatesEnd =
             pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
 
         // search for all annotation marks that have its start position in this paragraph
         const SwNode& rOwnNode = rUnoCursor.GetPoint()->GetNode();
-        for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin();
+        for( auto ppMark = pMarkAccess->getAnnotationMarksBegin();
              ppMark != pCandidatesEnd;
              ++ppMark )
         {

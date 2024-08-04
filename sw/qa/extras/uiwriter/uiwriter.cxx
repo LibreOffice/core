@@ -1538,7 +1538,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
+    auto ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
 
     pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);
@@ -1987,7 +1987,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
-    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
+    auto ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
     //Modification 4
     pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);

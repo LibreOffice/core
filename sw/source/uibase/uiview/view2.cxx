@@ -2242,7 +2242,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 const sal_Int32 nIdx = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 if(nIdx < pMarkAccess->getBookmarksCount())
                 {
-                    const IDocumentMarkAccess::const_iterator_t ppBookmark = rSh.getIDocumentMarkAccess()->getBookmarksBegin() + nIdx;
+                    const auto ppBookmark = rSh.getIDocumentMarkAccess()->getBookmarksBegin() + nIdx;
                     rSh.EnterStdMode();
                     rSh.GotoMark( *ppBookmark );
                 }
@@ -2616,7 +2616,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
             while( -1 != ( nLastPos = sMark.indexOf( cMarkSeparator, nPos + 1 )) )
                 nPos = nLastPos;
 
-        IDocumentMarkAccess::const_iterator_t ppMark;
+        IDocumentMarkAccess::const_iterator ppMark;
         IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
         if( -1 != nPos )
             sCmp = sMark.copy(nPos + 1).replaceAll(" ", "");

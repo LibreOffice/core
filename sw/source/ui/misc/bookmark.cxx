@@ -326,7 +326,7 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
 
     std::vector<std::pair<sw::mark::MarkBase*, OUString>>::const_iterator aListIter
         = m_aTableBookmarks.begin();
-    for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+    for (auto ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
@@ -349,7 +349,7 @@ void SwInsertBookmarkDlg::PopulateTable()
     m_xBookmarksBox->clear();
 
     IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
-    for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+    for (auto ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))

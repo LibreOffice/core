@@ -54,136 +54,6 @@ constexpr OUString S_ANNOTATION_BOOKMARK = u"____"_ustr;
 
 using namespace ::sw::mark;
 
-std::vector<::sw::mark::MarkBase*>::const_iterator const&
-IDocumentMarkAccess::iterator::get() const
-{
-    return *m_pIter;
-}
-
-IDocumentMarkAccess::iterator::iterator(std::vector<::sw::mark::MarkBase*>::const_iterator const& rIter)
-    : m_pIter(rIter)
-{
-}
-
-IDocumentMarkAccess::iterator::iterator(iterator const& rOther)
-    : m_pIter(rOther.m_pIter)
-{
-}
-
-auto IDocumentMarkAccess::iterator::operator=(iterator const& rOther) -> iterator&
-{
-    m_pIter = rOther.m_pIter;
-    return *this;
-}
-
-IDocumentMarkAccess::iterator::iterator(iterator && rOther) noexcept
-    : m_pIter(std::move(rOther.m_pIter))
-{
-}
-
-auto IDocumentMarkAccess::iterator::operator=(iterator && rOther) noexcept -> iterator&
-{
-    m_pIter = std::move(rOther.m_pIter);
-    return *this;
-}
-
-// ARGH why does it *need* to return const& ?
-::sw::mark::MarkBase* /*const&*/
-IDocumentMarkAccess::iterator::operator*() const
-{
-    return **m_pIter;
-}
-
-auto IDocumentMarkAccess::iterator::operator++() -> iterator&
-{
-    ++(*m_pIter);
-    return *this;
-}
-auto IDocumentMarkAccess::iterator::operator++(int) -> iterator
-{
-    iterator tmp(*this);
-    ++(*m_pIter);
-    return tmp;
-}
-
-bool IDocumentMarkAccess::iterator::operator==(iterator const& rOther) const
-{
-    return *m_pIter == *rOther.m_pIter;
-}
-
-bool IDocumentMarkAccess::iterator::operator!=(iterator const& rOther) const
-{
-    return *m_pIter != *rOther.m_pIter;
-}
-
-IDocumentMarkAccess::iterator::iterator()
-    : m_pIter(std::in_place)
-{
-}
-
-auto IDocumentMarkAccess::iterator::operator--() -> iterator&
-{
-    --(*m_pIter);
-    return *this;
-}
-
-auto IDocumentMarkAccess::iterator::operator--(int) -> iterator
-{
-    iterator tmp(*this);
-    --(*m_pIter);
-    return tmp;
-}
-
-auto IDocumentMarkAccess::iterator::operator+=(difference_type const n) -> iterator&
-{
-    (*m_pIter) += n;
-    return *this;
-}
-
-auto IDocumentMarkAccess::iterator::operator+(difference_type const n) const -> iterator
-{
-    return iterator(*m_pIter + n);
-}
-
-auto IDocumentMarkAccess::iterator::operator-=(difference_type const n) -> iterator&
-{
-    (*m_pIter) -= n;
-    return *this;
-}
-
-auto IDocumentMarkAccess::iterator::operator-(difference_type const n) const -> iterator
-{
-    return iterator(*m_pIter - n);
-}
-
-auto IDocumentMarkAccess::iterator::operator-(iterator const& rOther) const -> difference_type
-{
-    return *m_pIter - *rOther.m_pIter;
-}
-
-auto IDocumentMarkAccess::iterator::operator[](difference_type const n) const -> value_type
-{
-    return (*m_pIter)[n];
-}
-
-bool IDocumentMarkAccess::iterator::operator<(iterator const& rOther) const
-{
-    return *m_pIter < *rOther.m_pIter;
-}
-bool IDocumentMarkAccess::iterator::operator>(iterator const& rOther) const
-{
-    return *m_pIter > *rOther.m_pIter;
-}
-bool IDocumentMarkAccess::iterator::operator<=(iterator const& rOther) const
-{
-    return *m_pIter <= *rOther.m_pIter;
-}
-bool IDocumentMarkAccess::iterator::operator>=(iterator const& rOther) const
-{
-    return *m_pIter >= *rOther.m_pIter;
-}
-
-
 namespace
 {
     bool lcl_GreaterThan( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
@@ -1104,7 +974,7 @@ namespace sw::mark
             std::optional<sal_Int32> oEndContentIdx,
             bool const isReplace)
     {
-        std::vector<const_iterator_t> vMarksToDelete;
+        std::vector<const_iterator> vMarksToDelete;
         bool bIsSortingNeeded = false;
 
         // boolean indicating, if at least one mark has been moved while collecting marks for deletion
@@ -1207,7 +1077,7 @@ namespace sw::mark
             // for the shared_ptr<> (the entry in m_vAllMarks) again
             // reverse iteration, since erasing an entry invalidates iterators
             // behind it (the iterators in vMarksToDelete are sorted)
-            for ( std::vector< const_iterator_t >::reverse_iterator pppMark = vMarksToDelete.rbegin();
+            for ( std::vector< const_iterator >::reverse_iterator pppMark = vMarksToDelete.rbegin();
                   pppMark != vMarksToDelete.rend();
                   ++pppMark )
             {
@@ -1271,10 +1141,10 @@ namespace sw::mark
     }
 
     std::unique_ptr<IDocumentMarkAccess::ILazyDeleter>
-        MarkManager::deleteMark(const const_iterator_t& ppMark, bool const isMoveNodes)
+        MarkManager::deleteMark(const const_iterator& ppMark, bool const isMoveNodes)
     {
         std::unique_ptr<ILazyDeleter> ret;
-        if (ppMark.get() == m_vAllMarks.end())
+        if (ppMark == m_vAllMarks.end())
             return ret;
         MarkBase* pMark = *ppMark;
 
@@ -1282,7 +1152,7 @@ namespace sw::mark
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark.get());
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
                         Bookmark* pBookmark = dynamic_cast<Bookmark*>(*ppBookmark);
@@ -1302,7 +1172,7 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark.get());
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
                         m_vBookmarks.erase(ppBookmark);
@@ -1320,7 +1190,7 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
                 {
-                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark.get());
+                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                     if ( ppFieldmark != m_vFieldmarks.end() )
                     {
                         if(m_pLastActiveFieldmark == *ppFieldmark)
@@ -1339,7 +1209,7 @@ namespace sw::mark
 
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 {
-                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark.get());
+                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark);
                     assert(ppAnnotationMark != m_vAnnotationMarks.end() &&
                         "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
                     m_vAnnotationMarks.erase(ppAnnotationMark);
@@ -1355,7 +1225,7 @@ namespace sw::mark
         //Effective STL Item 27, get a non-const iterator aI at the same
         //position as const iterator ppMark was
         auto aI = m_vAllMarks.begin();
-        std::advance(aI, std::distance<container_t::const_iterator>(aI, ppMark.get()));
+        std::advance(aI, std::distance<container_t::const_iterator>(aI, ppMark));
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
         if (pDdeBookmark)
         {
@@ -1386,7 +1256,7 @@ namespace sw::mark
         for ( ; it != endIt; ++it)
             if (*it == pMark)
             {
-                deleteMark(iterator(it), false);
+                deleteMark(it, false);
                 break;
             }
     }
@@ -1402,20 +1272,18 @@ namespace sw::mark
         m_vAllMarks.clear();
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findMark(const OUString& rName) const
+    IDocumentMarkAccess::const_iterator MarkManager::findMark(const OUString& rName) const
     {
-        auto const ret = lcl_FindMarkByName(rName, m_vAllMarks.begin(), m_vAllMarks.end());
-        return IDocumentMarkAccess::iterator(ret);
+        return lcl_FindMarkByName(rName, m_vAllMarks.begin(), m_vAllMarks.end());
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findBookmark(const OUString& rName) const
+    IDocumentMarkAccess::const_iterator MarkManager::findBookmark(const OUString& rName) const
     {
-        auto const ret = lcl_FindMarkByName(rName, m_vBookmarks.begin(), m_vBookmarks.end());
-        return IDocumentMarkAccess::iterator(ret);
+        return lcl_FindMarkByName(rName, m_vBookmarks.begin(), m_vBookmarks.end());
     }
 
     // find the first Mark that does not start before
-    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstMarkNotStartsBefore(const SwPosition& rPos) const
+    IDocumentMarkAccess::const_iterator MarkManager::findFirstMarkNotStartsBefore(const SwPosition& rPos) const
     {
         return std::lower_bound(
                 m_vAllMarks.begin(),
@@ -1424,35 +1292,35 @@ namespace sw::mark
                 CompareIMarkStartsBefore());
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getAllMarksBegin() const
+    IDocumentMarkAccess::const_iterator MarkManager::getAllMarksBegin() const
         { return m_vAllMarks.begin(); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getAllMarksEnd() const
+    IDocumentMarkAccess::const_iterator MarkManager::getAllMarksEnd() const
         { return m_vAllMarks.end(); }
 
     sal_Int32 MarkManager::getAllMarksCount() const
         { return m_vAllMarks.size(); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getBookmarksBegin() const
+    IDocumentMarkAccess::const_iterator MarkManager::getBookmarksBegin() const
         { return m_vBookmarks.begin(); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getBookmarksEnd() const
+    IDocumentMarkAccess::const_iterator MarkManager::getBookmarksEnd() const
         { return m_vBookmarks.end(); }
 
     sal_Int32 MarkManager::getBookmarksCount() const
         { return m_vBookmarks.size(); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getFieldmarksBegin() const
+    IDocumentMarkAccess::const_iterator MarkManager::getFieldmarksBegin() const
         { return m_vFieldmarks.begin(); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getFieldmarksEnd() const
+    IDocumentMarkAccess::const_iterator MarkManager::getFieldmarksEnd() const
         { return m_vFieldmarks.end(); }
 
     sal_Int32 MarkManager::getFieldmarksCount() const { return m_vFieldmarks.size(); }
 
 
     // finds the first that is starting after
-    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
+    IDocumentMarkAccess::const_iterator MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
     {
         return std::upper_bound(
             m_vBookmarks.begin(),
@@ -1728,12 +1596,12 @@ namespace sw::mark
     Fieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const
         { return dynamic_cast<Fieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos, bLoop)); }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksBegin() const
+    IDocumentMarkAccess::const_iterator MarkManager::getAnnotationMarksBegin() const
     {
         return m_vAnnotationMarks.begin();
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::getAnnotationMarksEnd() const
+    IDocumentMarkAccess::const_iterator MarkManager::getAnnotationMarksEnd() const
     {
         return m_vAnnotationMarks.end();
     }
@@ -1743,10 +1611,9 @@ namespace sw::mark
         return m_vAnnotationMarks.size();
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findAnnotationMark( const OUString& rName ) const
+    IDocumentMarkAccess::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
     {
-        auto const ret = lcl_FindMarkByName( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
-        return IDocumentMarkAccess::iterator(ret);
+        return lcl_FindMarkByName( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
     }
 
     MarkBase* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
@@ -1761,7 +1628,7 @@ namespace sw::mark
     }
 
     // finds the first that is starting after
-    IDocumentMarkAccess::const_iterator_t MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
+    IDocumentMarkAccess::const_iterator MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
     {
         return std::upper_bound(
             m_vAnnotationMarks.begin(),
@@ -1782,7 +1649,7 @@ namespace sw::mark
     }
 
     // find helper bookmark of annotations on tracked deletions
-    IDocumentMarkAccess::const_iterator_t MarkManager::findAnnotationBookmark(const OUString& rName) const
+    IDocumentMarkAccess::const_iterator MarkManager::findAnnotationBookmark(const OUString& rName) const
     {
         OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
         return findBookmark(sAnnotationBookmarkName);
@@ -1801,7 +1668,7 @@ namespace sw::mark
                   (nPos = rBookmarkName.indexOf(S_ANNOTATION_BOOKMARK)) > -1 )
             {
                 ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
-                IDocumentMarkAccess::const_iterator_t pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
+                IDocumentMarkAccess::const_iterator pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
                 if ( pMark != getAnnotationMarksEnd() )
                 {
                     const SwPaM aPam((**iter).GetMarkStart(), (**pMark).GetMarkEnd());

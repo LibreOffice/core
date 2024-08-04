@@ -198,7 +198,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                             if( !bDeleted )
                             {
                                 IDocumentMarkAccess& rDMA(*pTextNode->GetDoc().getIDocumentMarkAccess());
-                                IDocumentMarkAccess::const_iterator_t pAnnotationBookmark =
+                                auto pAnnotationBookmark =
                                     rDMA.findAnnotationBookmark(pAnnotationMark->GetName());
                                 // tdf#140980 only really deleted, if there is no helper bookmark
                                 // in ChangesInMargin mode

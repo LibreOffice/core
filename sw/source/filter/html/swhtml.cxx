@@ -2910,7 +2910,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     {
                         const OUString sName( static_cast<SfxStringItem*>(pAttr->m_pItem.get())->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
-                        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
+                        auto ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
                             (*ppBkmk)->GetMarkStart() == *aAttrPam.GetPoint() )
                             break; // do not generate duplicates on this position

@@ -1795,8 +1795,7 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
         SwPosition const& rStartPos((**iter).GetMarkStart());
         if ( *pStt <= rStartPos && rStartPos < *pEnd )
         {
-            IDocumentMarkAccess::const_iterator_t pOldMark =
-                    rDMA.findAnnotationBookmark((**iter).GetName());
+            auto pOldMark = rDMA.findAnnotationBookmark((**iter).GetName());
             if ( pOldMark == rDMA.getBookmarksEnd() )
             {
                 // at start of redlines use a 1-character length bookmark range

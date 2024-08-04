@@ -147,7 +147,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, weld::ComboBox& rSubRegions,
     rSubRegions.clear();
     lcl_FillList( rSh, rSubRegions, pAvailNames, nullptr );
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+    for( auto ppMark = pMarkAccess->getBookmarksBegin();
         ppMark != pMarkAccess->getBookmarksEnd();
         ++ppMark)
     {

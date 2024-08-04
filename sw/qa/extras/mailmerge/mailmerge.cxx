@@ -202,7 +202,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     // There is just one mark...
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pIDMA->getAllMarksCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pIDMA->getBookmarksCount());
-    IDocumentMarkAccess::const_iterator_t mark = pIDMA->getAllMarksBegin();
+    auto mark = pIDMA->getAllMarksBegin();
     // and it's a TEXT_FIELDMARK
     CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK),
                             sal_Int32(IDocumentMarkAccess::GetType( **mark )) );

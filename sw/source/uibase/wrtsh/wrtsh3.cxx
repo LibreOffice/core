@@ -263,7 +263,7 @@ void SwWrtShell::DrawSelChanged( )
 
 void SwWrtShell::GotoMark( const OUString& rName )
 {
-    IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
+    auto ppMark = getIDocumentMarkAccess()->findMark( rName );
     if (ppMark == getIDocumentMarkAccess()->getAllMarksEnd())
         return;
     MoveBookMark( BOOKMARK_INDEX, *ppMark );
