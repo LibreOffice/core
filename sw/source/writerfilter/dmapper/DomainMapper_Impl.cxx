@@ -156,7 +156,7 @@ using namespace oox;
 namespace writerfilter::dmapper{
 
 //line numbering for header/footer
-static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContainer>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
+static void lcl_linenumberingHeaderFooter( const rtl::Reference<SwXStyleFamily>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
 {
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
@@ -169,12 +169,10 @@ static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XName
     {
         if( xStyles->hasByName( rname ) )
         {
-            uno::Reference< style::XStyle > xStyle;
-            xStyles->getByName( rname ) >>= xStyle;
+            rtl::Reference< SwXBaseStyle > xStyle = xStyles->getStyleByName( rname );
             if( !xStyle.is() )
                 return;
-            uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY );
-            xPropertySet->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::Any( nListId >= 0 ) );
+            xStyle->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::Any( nListId >= 0 ) );
         }
     }
 }
@@ -7358,11 +7356,11 @@ void DomainMapper_Impl::handleToc
         uno::Reference<container::XIndexAccess> xChapterNumberingRules;
         if (m_xTextDocument)
             xChapterNumberingRules = m_xTextDocument->getChapterNumberingRules();
-        uno::Reference<container::XNameContainer> xStyles;
+        rtl::Reference<SwXStyleFamily> xStyles;
         if (m_xTextDocument)
         {
-            auto xStyleFamilies = m_xTextDocument->getStyleFamilies();
-            xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xStyles;
+            rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+            xStyles = xStyleFamilies->GetParagraphStyles();
         }
 
         uno::Reference< container::XIndexReplace> xLevelFormats;
@@ -7398,10 +7396,10 @@ void DomainMapper_Impl::handleToc
                 {
                     OUString style;
                     xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
-                    uno::Reference<beans::XPropertySet> xStyle;
-                    if (xStyles->getByName(style) >>= xStyle)
+                    rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(style);
+                    if (xStyle)
                     {
-                        if (uno::Reference<beans::XPropertyState> xPropState{ xStyle,
+                        if (uno::Reference<beans::XPropertyState> xPropState{ static_cast<cppu::OWeakObject*>(xStyle.get()),
                                                                               uno::UNO_QUERY })
                         {
                             if (xPropState->getPropertyState(u"ParaTabStops"_ustr)
@@ -9576,9 +9574,8 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
         {}
     }
     m_bLineNumberingSet = true;
-    uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
-    uno::Reference<container::XNameContainer> xStyles;
-    xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
+    rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+    rtl::Reference<SwXStyleFamily> xStyles = xStyleFamilies->GetParagraphStyles();
     lcl_linenumberingHeaderFooter( xStyles, u"Header"_ustr, this );
     lcl_linenumberingHeaderFooter( xStyles, u"Footer"_ustr, this );
 }
@@ -9916,10 +9913,9 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         auto const pList(GetListTable()->GetList(nListId));
         assert(pList);
         const OUString aListName = pList->GetStyleName();
-        const uno::Reference< container::XNameAccess > xStyleFamilies = m_xTextDocument->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xNumberingStyles;
-        xStyleFamilies->getByName(u"NumberingStyles"_ustr) >>= xNumberingStyles;
-        const uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
+        const rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
+        const rtl::Reference<SwXBaseStyle> xStyle = xNumberingStyles->getStyleByName(aListName);
         const uno::Reference<container::XIndexAccess> xNumberingRules(xStyle->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
         if (xNumberingRules.is())
         {

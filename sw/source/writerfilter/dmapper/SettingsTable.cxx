@@ -45,6 +45,7 @@
 #include "util.hxx"
 #include <SwXDocumentSettings.hxx>
 #include <unotxdoc.hxx>
+#include <unostyle.hxx>
 
 using namespace com::sun::star;
 
@@ -707,42 +708,36 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     if (!(m_pImpl->m_bAutoHyphenation || m_pImpl->m_bNoHyphenateCaps || m_pImpl->m_bWidowControl))
         return;
 
-    uno::Reference<container::XNameAccess> xStyleFamilies = xDoc->getStyleFamilies();
-    uno::Reference<container::XNameContainer> xParagraphStyles = xStyleFamilies->getByName(u"ParagraphStyles"_ustr).get< uno::Reference<container::XNameContainer> >();
-    uno::Reference<style::XStyle> xDefault = xParagraphStyles->getByName(u"Standard"_ustr).get< uno::Reference<style::XStyle> >();
-    uno::Reference<beans::XPropertyState> xPropertyState(xDefault, uno::UNO_QUERY);
+    rtl::Reference<SwXStyleFamilies> xStyleFamilies = xDoc->getSwStyleFamilies();
+    rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
+    rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Standard"_ustr);
+    uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xDefault.get()), uno::UNO_QUERY);
     if (m_pImpl->m_bAutoHyphenation && lcl_isDefault(xPropertyState, u"ParaIsHyphenation"_ustr))
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any(true));
+        xDefault->setPropertyValue(u"ParaIsHyphenation"_ustr, uno::Any(true));
     }
     if (m_pImpl->m_bNoHyphenateCaps)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"ParaHyphenationNoCaps"_ustr, uno::Any(true));
+        xDefault->setPropertyValue(u"ParaHyphenationNoCaps"_ustr, uno::Any(true));
     }
     if (m_pImpl->m_nHyphenationZone)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(GetHyphenationZone()));
+        xDefault->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(GetHyphenationZone()));
     }
     if (m_pImpl->m_nConsecutiveHyphenLimit)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any(GetConsecutiveHyphenLimit()));
+        xDefault->setPropertyValue(u"ParaHyphenationMaxHyphens"_ustr, uno::Any(GetConsecutiveHyphenLimit()));
     }
     if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, u"ParaWidows"_ustr) && lcl_isDefault(xPropertyState, u"ParaOrphans"_ustr))
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
         uno::Any aAny(static_cast<sal_Int8>(2));
-        xPropertySet->setPropertyValue(u"ParaWidows"_ustr, aAny);
-        xPropertySet->setPropertyValue(u"ParaOrphans"_ustr, aAny);
+        xDefault->setPropertyValue(u"ParaWidows"_ustr, aAny);
+        xDefault->setPropertyValue(u"ParaOrphans"_ustr, aAny);
     }
     if ( GetHyphenationKeep() )
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue(u"ParaHyphenationKeep"_ustr, uno::Any(true));
-        xPropertySet->setPropertyValue(u"ParaHyphenationKeepType"_ustr, uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+        xDefault->setPropertyValue(u"ParaHyphenationKeep"_ustr, uno::Any(true));
+        xDefault->setPropertyValue(u"ParaHyphenationKeepType"_ustr, uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
     }
 }
 

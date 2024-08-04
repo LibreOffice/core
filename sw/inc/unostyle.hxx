@@ -70,7 +70,7 @@ public:
     SwXStyleFamilies(SwDocShell& rDocShell);
 
     //XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
+    SW_DLLPUBLIC virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
 
@@ -94,7 +94,8 @@ public:
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetPageStyles();
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetCharacterStyles();
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetParagraphStyles();
-    rtl::Reference<SwXStyleFamily> GetStylesByName(const OUString& rName);
+    SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetNumberingStyles();
+    SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetStylesByName(const OUString& rName);
     rtl::Reference<SwXStyleFamily> GetStylesByIndex(sal_Int32 nIndex);
 
     static css::uno::Reference<css::style::XStyle> CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc);

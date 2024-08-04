@@ -1228,13 +1228,13 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
         //and for RTL locales, LTR default paragraph style should present a left aligned footnote separator
         try
         {
-            uno::Reference<container::XNameAccess> xStyleFamilies = rDM_Impl.GetTextDocument()->getStyleFamilies();
-            uno::Reference<container::XNameAccess> xParagraphStyles;
+            rtl::Reference<SwXStyleFamilies> xStyleFamilies = rDM_Impl.GetTextDocument()->getSwStyleFamilies();
+            rtl::Reference<SwXStyleFamily> xParagraphStyles;
             if ( xStyleFamilies.is() )
-                xStyleFamilies->getByName(u"ParagraphStyles"_ustr) >>= xParagraphStyles;
-            uno::Reference<beans::XPropertySet> xStandard;
+                xParagraphStyles = xStyleFamilies->GetParagraphStyles();
+            rtl::Reference<SwXBaseStyle> xStandard;
             if ( xParagraphStyles.is() )
-                xParagraphStyles->getByName(u"Standard"_ustr) >>= xStandard;
+                xStandard = xParagraphStyles->getStyleByName(u"Standard"_ustr) ;
             if ( xStandard.is() )
             {
                 sal_Int16 aWritingMode(0);

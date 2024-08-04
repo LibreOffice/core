@@ -46,6 +46,7 @@
 #include <comphelper/string.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
+#include <unostyle.hxx>
 #include <regex>
 #include <utility>
 
@@ -479,18 +480,16 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
     return aAbstract;
 }
 
-static uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
+static rtl::Reference< SwXStyleFamily > lcl_getUnoNumberingStyles(
        rtl::Reference<SwXTextDocument> const& xTextDoc)
 {
-    uno::Reference< container::XNameContainer > xStyles;
+    rtl::Reference< SwXStyleFamily > xStyles;
     if (!xTextDoc)
         return xStyles;
 
     try
     {
-        uno::Any oFamily = xTextDoc->getStyleFamilies( )->getByName(u"NumberingStyles"_ustr);
-
-        oFamily >>= xStyles;
+        xStyles = xTextDoc->getSwStyleFamilies( )->GetNumberingStyles();
     }
     catch ( const uno::Exception & )
     {
@@ -536,7 +535,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         rtl::Reference<SwXTextDocument> const& xTextDoc, sal_Int16 nOutline)
 {
     // Get the UNO Numbering styles
-    uno::Reference< container::XNameContainer > xStyles = lcl_getUnoNumberingStyles( xTextDoc );
+    rtl::Reference< SwXStyleFamily > xStyles = lcl_getUnoNumberingStyles( xTextDoc );
 
     // Do the whole thing
     if( !(!m_xNumRules.is() && xTextDoc.is() && xStyles.is( )) )
@@ -558,14 +557,13 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             }
             else
             {
-                xStyles->insertByName(
+                xStyles->insertStyleByName(
                     aStyleName,
-                    css::uno::Any(uno::Reference<css::style::XStyle>(xTextDoc->createNumberingStyle())));
+                    xTextDoc->createNumberingStyle());
             }
         }
 
-        uno::Any oStyle = xStyles->getByName(GetStyleName());
-        uno::Reference< beans::XPropertySet > xStyle( oStyle, uno::UNO_QUERY_THROW );
+        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(GetStyleName());
 
         // Get the default OOo Numbering style rules
         uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );

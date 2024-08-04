@@ -909,9 +909,8 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
         return;
     try
     {
-        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
-        uno::Reference<container::XNameContainer> xParaStyles;
-        xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
+        rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
 
         if ( !xParaStyles.is() )
             return;
@@ -924,17 +923,15 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
                 if (pStyleSheetProperties->props().GetListId() > -1)
                 {
-                    uno::Reference< style::XStyle > xStyle;
-                    xParaStyles->getByName(ConvertStyleName(pEntry->m_sStyleName).first) >>= xStyle;
+                    rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(ConvertStyleName(pEntry->m_sStyleName).first);
 
                     if ( !xStyle.is() )
                         break;
 
-                    uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
                     const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->props().GetListId() );
                     if ( !sNumberingStyleName.isEmpty()
                          || !pStyleSheetProperties->props().GetListId() )
-                        xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::Any(sNumberingStyleName) );
+                        xStyle->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::Any(sNumberingStyleName) );
 
                     // Word 2010+ (not Word 2003, and Word 2007 is completely broken)
                     // does something rather strange. It does not allow two paragraph styles
@@ -963,9 +960,8 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
         return;
     try
     {
-        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
-        uno::Reference<container::XNameContainer> xParaStyles;
-        xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xParaStyles;
+        rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
 
         if (!xParaStyles.is())
             return;
@@ -979,18 +975,16 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             if (!pParent || !pParent->m_bAssignedAsChapterNumbering)
                 continue;
 
-            uno::Reference< style::XStyle > xStyle;
-            xParaStyles->getByName(pEntry->m_sConvertedStyleName) >>= xStyle;
+            rtl::Reference< SwXBaseStyle > xStyle = xParaStyles->getStyleByName(pEntry->m_sConvertedStyleName);
             if (!xStyle.is())
                 continue;
 
-            uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
             const sal_Int16 nListId = pEntry->m_pProperties->props().GetListId();
             const OUString& sParentNumberingStyleName
                 = m_pImpl->m_rDMapper.GetListStyleName(pParent->m_pProperties->props().GetListId());
             if (nListId == -1 && !sParentNumberingStyleName.isEmpty())
             {
-                xPropertySet->setPropertyValue(getPropertyName(PROP_NUMBERING_STYLE_NAME),
+                xStyle->setPropertyValue(getPropertyName(PROP_NUMBERING_STYLE_NAME),
                                                uno::Any(sParentNumberingStyleName));
             }
 
@@ -1004,7 +998,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
             // convert MS level to LO equivalent outline level
             ++nOutlineLevel;
 
-            xPropertySet->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), uno::Any(nOutlineLevel));
+            xStyle->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), uno::Any(nOutlineLevel));
         }
     }
     catch( const uno::Exception& )
@@ -1123,19 +1117,16 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
         return;
     try
     {
-        uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
-        uno::Reference<container::XNameContainer> xCharStyles;
-        uno::Reference<container::XNameContainer> xParaStyles;
-        uno::Reference<container::XNameContainer> xNumberingStyles;
+        rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
+        rtl::Reference<SwXStyleFamily> xCharStyles = xStyleFamilies->GetCharacterStyles();
+        rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
+        rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
 
-        xStyleFamilies->getByName(getPropertyName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
-        xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
-        xStyleFamilies->getByName(u"NumberingStyles"_ustr) >>= xNumberingStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
-            std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
-            std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingFollow;
-            std::vector<std::pair<OUString, uno::Reference<style::XStyle>>> aMissingLink;
+            std::vector< ::std::pair<OUString, rtl::Reference<SwXBaseStyle>> > aMissingParent;
+            std::vector< ::std::pair<OUString, rtl::Reference<SwXBaseStyle>> > aMissingFollow;
+            std::vector<std::pair<OUString, rtl::Reference<SwXBaseStyle>>> aMissingLink;
             std::vector<beans::PropertyValue> aTableStylesVec;
             for (auto& pEntry : rEntries)
             {
@@ -1148,8 +1139,8 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     bool bCharStyle = pEntry->m_nStyleTypeCode == STYLE_TYPE_CHAR;
                     bool bListStyle = pEntry->m_nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
-                    uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
-                    uno::Reference< style::XStyle > xStyle;
+                    rtl::Reference< SwXStyleFamily > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
+                    rtl::Reference< SwXBaseStyle > xStyle;
                     const OUString sConvertedStyleName(ConvertStyleName(pEntry->m_sStyleName).first);
 
                     if(xStyles->hasByName( sConvertedStyleName ))
@@ -1159,7 +1150,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         {
                             continue;
                         }
-                        xStyles->getByName( sConvertedStyleName ) >>= xStyle;
+                        xStyle = xStyles->getStyleByName( sConvertedStyleName );
 
                         {
                             StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
@@ -1186,16 +1177,15 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
                         if (bListStyle)
                         {
-                            xStyles->insertByName( sConvertedStyleName, uno::Any( xStyle ) );
-                            xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
+                            xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
+                            xStyle = xStyles->getStyleByName(sConvertedStyleName);
 
                             StyleSheetPropertyMap* pPropertyMap = pEntry->m_pProperties.get();
                             if (pPropertyMap && pPropertyMap->props().GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
-                                uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
                                 uno::Reference<container::XIndexReplace> xNumberingRules;
-                                xPropertySet->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
+                                xStyle->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
                                 uno::Reference<container::XIndexAccess> xIndexAccess(xNumberingRules, uno::UNO_QUERY_THROW);
                                 for (sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i)
                                 {
@@ -1204,7 +1194,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                             u"NumberingType"_ustr, style::NumberingType::NUMBER_NONE)
                                     };
                                     xNumberingRules->replaceByIndex(i, uno::Any(aLvlProps));
-                                    xPropertySet->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xNumberingRules));
+                                    xStyle->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xNumberingRules));
                                 }
                             }
                         }
@@ -1314,7 +1304,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             }
                         }
 
-                        uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
+                        uno::Reference< beans::XPropertyState >xState( static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY_THROW );
                         if( sConvertedStyleName == "Contents Heading" ||
                             sConvertedStyleName == "User Index Heading" ||
                             sConvertedStyleName == "Index Heading" )
@@ -1364,19 +1354,18 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
 
                         try
                         {
-                            uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
+                            uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY_THROW);
                             try
                             {
                                 xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                             }
                             catch ( const uno::Exception& )
                             {
-                                uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
                                 for ( const beans::PropertyValue& rValue : aSortedPropVals.getProperties() )
                                 {
                                     try
                                     {
-                                       xPropertySet->setPropertyValue( rValue.Name, rValue.Value );
+                                       xStyle->setPropertyValue( rValue.Name, rValue.Value );
                                     }
                                     catch ( const uno::Exception& )
                                     {
@@ -1424,7 +1413,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         if( !sParentStyle.isEmpty() && !xStyles->hasByName( sParentStyle ) )
                             aMissingParent.emplace_back( sParentStyle, xStyle );
 
-                        xStyles->insertByName( sConvertedStyleName, uno::Any( xStyle) );
+                        xStyles->insertStyleByName( sConvertedStyleName, static_cast<SwXStyle*>(xStyle.get()) );
 
                         if (!m_pImpl->m_bIsNewDoc && bParaStyle)
                         {
@@ -1435,15 +1424,14 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     }
 
                     beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
-                    uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
                     if (aGrabBag.hasElements())
                     {
-                        xPropertySet->setPropertyValue(u"StyleInteropGrabBag"_ustr, uno::Any(aGrabBag));
+                        xStyle->setPropertyValue(u"StyleInteropGrabBag"_ustr, uno::Any(aGrabBag));
                     }
 
                     // Only paragraph styles support automatic updates.
                     if (pEntry->m_bAutoRedefine && bParaStyle)
-                        xPropertySet->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any(true));
+                        xStyle->setPropertyValue(u"IsAutoUpdate"_ustr, uno::Any(true));
                 }
                 else if(pEntry->m_nStyleTypeCode == STYLE_TYPE_TABLE)
                 {
@@ -1467,8 +1455,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             {
                 try
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(iter.second, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue( u"FollowStyle"_ustr, uno::Any(iter.first) );
+                    iter.second->setPropertyValue( u"FollowStyle"_ustr, uno::Any(iter.first) );
                 }
                 catch( uno::Exception & ) {}
             }
@@ -1478,9 +1465,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             {
                 try
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(rLinked.second,
-                                                                     uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"LinkStyle"_ustr, uno::Any(rLinked.first));
+                    rLinked.second->setPropertyValue(u"LinkStyle"_ustr, uno::Any(rLinked.first));
                 }
                 catch (uno::Exception&)
                 {
@@ -2089,12 +2074,10 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             SetDefaultParaProps(PROP_PARA_WIDOWS, aTwo);
             SetDefaultParaProps(PROP_PARA_ORPHANS, aTwo);
 
-            uno::Reference<container::XNameAccess> xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
-            uno::Reference<container::XNameAccess> xParagraphStyles;
-            xStyleFamilies->getByName(u"ParagraphStyles"_ustr) >>= xParagraphStyles;
-            uno::Reference<beans::XPropertySet> xDefault;
+            rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
+            rtl::Reference<SwXStyleFamily> xParagraphStyles = xStyleFamilies->GetParagraphStyles();
             // This is the built-in default style that every style inherits from
-            xParagraphStyles->getByName(u"Paragraph style"_ustr) >>= xDefault;
+            rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Paragraph style"_ustr);
 
             const uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
             for( const auto& rPropValue : aPropValues )
@@ -2182,9 +2165,8 @@ void StyleSheetTable::MarkParagraphStyleAsUsed(const OUString& rName)
 
 void StyleSheetTable::RemoveUnusedParagraphStyles()
 {
-    uno::Reference< container::XNameAccess > xStyleFamilies = m_pImpl->m_xTextDocument->getStyleFamilies();
-    uno::Reference<container::XNameContainer> xParaStyles;
-    xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xParaStyles;
+    rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_pImpl->m_xTextDocument->getSwStyleFamilies();
+    rtl::Reference<SwXStyleFamily> xParaStyles = xStyleFamilies->GetParagraphStyles();
     for (const auto& rName : m_pImpl->m_aInsertedParagraphStyles)
     {
         if (m_pImpl->m_aUsedParagraphStyles.contains(rName))

@@ -721,6 +721,11 @@ rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetParagraphStyles()
     return GetStylesByName(u"ParagraphStyles"_ustr);
 }
 
+rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetNumberingStyles()
+{
+    return GetStylesByName(u"NumberingStyles"_ustr);
+}
+
 uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
 {
     auto& entries(lcl_GetStyleFamilyEntries());
