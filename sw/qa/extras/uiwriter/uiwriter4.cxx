@@ -1501,8 +1501,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
     // verify that the checkboxes start off in the unchecked state
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        sw::mark::ICheckboxFieldmark* pCheckBox
-            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
     }
 
@@ -1521,8 +1520,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
 
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        sw::mark::ICheckboxFieldmark* pCheckBox
-            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
         // verify that the legacy checkbox became checked by the first loop.
         CPPUNIT_ASSERT(pCheckBox->IsChecked());
 
@@ -1556,8 +1554,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
     // Tab and toggle 4 times, verifying beforehand that the state was unchecked
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        sw::mark::ICheckboxFieldmark* pCheckBox
-            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
         pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
@@ -1569,8 +1566,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
     // meaning that looping is working, and no other controls are reacting to the tab key.
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        sw::mark::ICheckboxFieldmark* pCheckBox
-            = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(*it);
+        sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
 
         CPPUNIT_ASSERT(pCheckBox->IsChecked());
         pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off

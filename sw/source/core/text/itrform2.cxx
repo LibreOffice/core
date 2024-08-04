@@ -1184,8 +1184,8 @@ namespace sw::mark {
     {
         if (pBM->GetFieldname() == ODF_FORMCHECKBOX)
         {
-            ::sw::mark::ICheckboxFieldmark const*const pCheckboxFm(
-                    dynamic_cast<ICheckboxFieldmark const*>(pBM));
+            ::sw::mark::CheckboxFieldmark const*const pCheckboxFm(
+                    dynamic_cast<CheckboxFieldmark const*>(pBM));
             assert(pCheckboxFm);
             return pCheckboxFm->IsChecked()
                     ? u"\u2612"_ustr

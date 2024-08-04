@@ -1876,7 +1876,7 @@ void Test::testCheckBoxFormField()
 
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMCHECKBOX, pFieldmark->GetFieldname());
-            ::sw::mark::ICheckboxFieldmark* pCheckBox = dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
+            ::sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast< ::sw::mark::CheckboxFieldmark* >(pFieldmark);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pCheckBox);
 
             // The first one is unchecked, the other one is checked

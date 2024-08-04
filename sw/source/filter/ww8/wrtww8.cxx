@@ -4196,7 +4196,7 @@ void WW8SHDLong::Write( WW8Export& rExport )
 void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
-    const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
+    const ::sw::mark::CheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::CheckboxFieldmark* >( pFieldmark );
 
     if ( ! ( rFieldmark.GetFieldname() == ODF_FORMTEXT ||
                 rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||

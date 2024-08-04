@@ -182,7 +182,7 @@ typedef cppu::ImplInheritanceHelper< SwXBookmark,
 class SwXFieldmark final
     : public SwXFieldmark_Base
 {
-    ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
+    ::sw::mark::CheckboxFieldmark* getCheckboxFieldmark();
     bool const m_bReplacementObject;
     bool m_isFieldmarkSeparatorAtStart = false;
 

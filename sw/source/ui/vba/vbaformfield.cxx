@@ -216,7 +216,7 @@ OUString SwVbaFormField::getResult() { return m_rFormField.GetContent(); }
 
 void SwVbaFormField::setResult(const OUString& rSet)
 {
-    if (dynamic_cast<sw::mark::ICheckboxFieldmark*>(&m_rFormField))
+    if (dynamic_cast<sw::mark::CheckboxFieldmark*>(&m_rFormField))
         m_rFormField.ReplaceContent(u"false"_ustr);
     else
         m_rFormField.ReplaceContent(rSet);

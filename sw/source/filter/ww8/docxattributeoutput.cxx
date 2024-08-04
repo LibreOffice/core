@@ -2500,7 +2500,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         const OUString sName = params.getName();
         bool bChecked = false;
 
-        const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
+        const sw::mark::CheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::CheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )
             bChecked = true;
 

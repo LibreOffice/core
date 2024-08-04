@@ -108,20 +108,6 @@ namespace sw::mark
             IFieldmark &operator =(IFieldmark const&) = delete;
     };
 
-    class SW_DLLPUBLIC ICheckboxFieldmark
-        : virtual public IFieldmark
-    {
-        protected:
-            ICheckboxFieldmark() = default;
-
-        public:
-            virtual bool IsChecked() const =0;
-            virtual void SetChecked(bool checked) =0;
-        private:
-            ICheckboxFieldmark(ICheckboxFieldmark const &) = delete;
-            ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
-    };
-
     class SW_DLLPUBLIC IDropdownFieldmark
         : virtual public IFieldmark
     {
@@ -156,8 +142,8 @@ namespace sw::mark
             virtual OUString GetDateInStandardDateFormat(double fDate) const = 0;
 
     private:
-            IDateFieldmark(ICheckboxFieldmark const &) = delete;
-            IDateFieldmark &operator =(ICheckboxFieldmark const&) = delete;
+            IDateFieldmark(IDateFieldmark const &) = delete;
+            IDateFieldmark &operator =(IDateFieldmark const&) = delete;
     };
 
     OUString ExpandFieldmark(IFieldmark* pBM);
@@ -316,7 +302,7 @@ namespace sw::mark
         OUString m_sHideCondition;
     };
 
-    class Fieldmark
+    class SW_DLLPUBLIC Fieldmark
         : virtual public IFieldmark
         , public MarkBase
     {
@@ -370,7 +356,7 @@ namespace sw::mark
     };
 
     // Non text fieldmarks have no content between the start and end marks.
-    class NonTextFieldmark
+    class SW_DLLPUBLIC NonTextFieldmark
         : public Fieldmark
     {
     public:
@@ -380,14 +366,13 @@ namespace sw::mark
     };
 
     /// Fieldmark representing a checkbox form field.
-    class CheckboxFieldmark final
-        : virtual public ICheckboxFieldmark
-        , public NonTextFieldmark
+    class SW_DLLPUBLIC CheckboxFieldmark final
+        : public NonTextFieldmark
     {
     public:
         CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName);
-        bool IsChecked() const override;
-        void SetChecked(bool checked) override;
+        bool IsChecked() const;
+        void SetChecked(bool checked);
         OUString GetContent() const override;
         void ReplaceContent(const OUString& sNewContent) override;
     };

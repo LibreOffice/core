@@ -25,7 +25,7 @@ SwVbaFormFieldCheckBox::SwVbaFormFieldCheckBox(
     const uno::Reference<ooo::vba::XHelperInterface>& rParent,
     const uno::Reference<uno::XComponentContext>& rContext, sw::mark::IFieldmark& rFormField)
     : SwVbaFormFieldCheckBox_BASE(rParent, rContext)
-    , m_pCheckBox(dynamic_cast<sw::mark::ICheckboxFieldmark*>(&rFormField))
+    , m_pCheckBox(dynamic_cast<sw::mark::CheckboxFieldmark*>(&rFormField))
 {
 }
 

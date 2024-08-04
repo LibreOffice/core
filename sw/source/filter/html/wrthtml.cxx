@@ -1327,8 +1327,8 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
     if (pMark->GetFieldname() != ODF_FORMCHECKBOX)
         return;
 
-    const sw::mark::ICheckboxFieldmark* pCheckBox =
-        dynamic_cast<const sw::mark::ICheckboxFieldmark*>(pMark);
+    const sw::mark::CheckboxFieldmark* pCheckBox =
+        dynamic_cast<const sw::mark::CheckboxFieldmark*>(pMark);
 
     if (!pCheckBox)
         return;

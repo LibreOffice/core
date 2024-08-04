@@ -19,7 +19,7 @@ typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XCheckBox> SwVbaFormFie
 class SwVbaFormFieldCheckBox : public SwVbaFormFieldCheckBox_BASE
 {
 private:
-    sw::mark::ICheckboxFieldmark* m_pCheckBox;
+    sw::mark::CheckboxFieldmark* m_pCheckBox;
 
 public:
     /// @throws css::uno::RuntimeException

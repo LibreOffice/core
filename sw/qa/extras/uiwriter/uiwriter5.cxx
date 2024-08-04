@@ -803,8 +803,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(ODF_FORMCHECKBOX, pFieldmark->GetFieldname());
     // The checkbox is not checked by default
-    ::sw::mark::ICheckboxFieldmark* pCheckBox
-        = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(pFieldmark);
+    ::sw::mark::CheckboxFieldmark* pCheckBox
+        = dynamic_cast<::sw::mark::CheckboxFieldmark*>(pFieldmark);
     CPPUNIT_ASSERT(pCheckBox);
     CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 

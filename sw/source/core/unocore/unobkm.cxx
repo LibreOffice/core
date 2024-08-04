@@ -704,13 +704,13 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
     return xMark;
 }
 
-::sw::mark::ICheckboxFieldmark*
+::sw::mark::CheckboxFieldmark*
 SwXFieldmark::getCheckboxFieldmark()
 {
-    ::sw::mark::ICheckboxFieldmark* pCheckboxFm = nullptr;
+    ::sw::mark::CheckboxFieldmark* pCheckboxFm = nullptr;
     if ( getFieldType() == ODF_FORMCHECKBOX )
     {
-        pCheckboxFm = dynamic_cast< ::sw::mark::ICheckboxFieldmark* >( GetBookmark());
+        pCheckboxFm = dynamic_cast< ::sw::mark::CheckboxFieldmark* >( GetBookmark());
         assert( GetBookmark() == nullptr || pCheckboxFm != nullptr );
             // unclear to me whether GetBookmark() can be null here
     }
@@ -728,7 +728,7 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
     SolarMutexGuard g;
     if ( PropertyName == "Checked" )
     {
-        ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
+        ::sw::mark::CheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         bool bChecked( false );
         if ( !(pCheckboxFm && ( rValue >>= bChecked )) )
             throw uno::RuntimeException();
@@ -754,7 +754,7 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard g;
     if ( rPropertyName == "Checked" )
     {
-        ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
+        ::sw::mark::CheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         if ( !pCheckboxFm )
             throw uno::RuntimeException();
 
