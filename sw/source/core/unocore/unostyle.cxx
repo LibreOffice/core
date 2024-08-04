@@ -917,6 +917,19 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
 
 uno::Any SwXStyleFamily::getByName(const OUString& rName)
 {
+    return uno::Any(uno::Reference<style::XStyle>(getStyleByName(rName)));
+}
+
+rtl::Reference<SwXPageStyle> SwXStyleFamily::getPageStyleByName(const OUString& rName)
+{
+    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXPageStyle> xPageStyle = dynamic_cast<SwXPageStyle*>(xStyle.get());
+    assert(bool(xStyle) == bool(xPageStyle));
+    return xPageStyle;
+}
+
+rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rName)
+{
     SolarMutexGuard aGuard;
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
@@ -925,7 +938,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rName);
-    uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
+    rtl::Reference<SwXBaseStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
         switch (m_rEntry.family())
         {
@@ -949,7 +962,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
             default:
                 assert(false);
         }
-    return uno::Any(xStyle);
+    return xStyle;
 }
 
 uno::Sequence<OUString> SwXStyleFamily::getElementNames()
@@ -977,6 +990,19 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName)
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     return nullptr != pBase;
+}
+
+void SwXStyleFamily::insertStyleByName(const OUString& rName, const rtl::Reference<SwXStyle>& pNewStyle)
+{
+    SolarMutexGuard aGuard;
+    if(!m_pBasePool)
+        throw uno::RuntimeException();
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
+    if (pBase)
+        throw container::ElementExistException();
+    insertStyleByNameImpl(pNewStyle, sStyleName);
 }
 
 void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
@@ -1019,19 +1045,27 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
     {
         uno::Reference<lang::XUnoTunnel> xStyleTunnel = rElement.get<uno::Reference<lang::XUnoTunnel>>();
         SwXStyle* pNewStyle = comphelper::getFromUnoTunnel<SwXStyle>(xStyleTunnel);
-        if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_rEntry.family())
+        if (!pNewStyle)
             throw lang::IllegalArgumentException();
 
-        SfxStyleSearchBits nMask = SfxStyleSearchBits::All;
-        if(m_rEntry.family() == SfxStyleFamily::Para && !pNewStyle->IsConditional())
-            nMask &= ~SfxStyleSearchBits::SwCondColl;
-        auto pStyle = &m_pBasePool->Make(sStyleName, m_rEntry.family(), nMask);
-        pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
-        pNewStyle->SetStyleName(sStyleName);
-        pStyle->SetParent(pNewStyle->GetParentStyleName());
-        // after all, we still need to apply the properties of the descriptor
-        pNewStyle->ApplyDescriptorProperties();
+        insertStyleByNameImpl(pNewStyle, sStyleName);
     }
+}
+
+void SwXStyleFamily::insertStyleByNameImpl(const rtl::Reference<SwXStyle>& pNewStyle, const OUString& sStyleName)
+{
+    if (!pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_rEntry.family())
+        throw lang::IllegalArgumentException();
+
+    SfxStyleSearchBits nMask = SfxStyleSearchBits::All;
+    if(m_rEntry.family() == SfxStyleFamily::Para && !pNewStyle->IsConditional())
+        nMask &= ~SfxStyleSearchBits::SwCondColl;
+    auto pStyle = &m_pBasePool->Make(sStyleName, m_rEntry.family(), nMask);
+    pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
+    pNewStyle->SetStyleName(sStyleName);
+    pStyle->SetParent(pNewStyle->GetParentStyleName());
+    // after all, we still need to apply the properties of the descriptor
+    pNewStyle->ApplyDescriptorProperties();
 }
 
 void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement)

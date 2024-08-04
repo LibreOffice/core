@@ -2164,7 +2164,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
                 TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
         }
-        xCharStyles->insertByName( sListLabel, uno::Any( uno::Reference<style::XStyle>(xStyle) ) );
+        xCharStyles->insertStyleByName( sListLabel, xStyle );
         m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, std::vector(rCharProperties) );
     }
     catch( const uno::Exception& )

@@ -496,14 +496,11 @@ rtl::Reference<SwXPageStyle> SectionPropertyMap::GetPageStyle(DomainMapper_Impl&
             m_sPageStyleName = rDM_Impl.GetUnusedPageStyleName();
 
             m_aPageStyle = rDM_Impl.GetTextDocument()->createPageStyle();
-            xPageStyles->insertByName(m_sPageStyleName, uno::Any(uno::Reference<style::XStyle>(m_aPageStyle)));
+            xPageStyles->insertStyleByName(m_sPageStyleName, m_aPageStyle);
         }
         else if (!m_aPageStyle.is() && xPageStyles.is())
         {
-            uno::Reference<style::XStyle> xTmpStyle;
-            xPageStyles->getByName(m_sPageStyleName) >>= xTmpStyle;
-            m_aPageStyle = dynamic_cast<SwXPageStyle*>(xTmpStyle.get());
-            assert(bool(xTmpStyle) == bool(m_aPageStyle) && "expect null or a SwXPageStyle here");
+            m_aPageStyle = xPageStyles->getPageStyleByName(m_sPageStyleName);
         }
         xReturnPageStyle = m_aPageStyle;
     }
@@ -1200,8 +1197,8 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     }
     else if (rDM_Impl.m_bCopyStandardPageStyleFill) // complex fill: graphics/gradients/patterns
     {
-        uno::Reference<beans::XPropertySet> xDefaultPageStyle(
-                    rDM_Impl.GetPageStyles()->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXBaseStyle> xDefaultPageStyle =
+                    rDM_Impl.GetPageStyles()->getStyleByName(u"Standard"_ustr);
         for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
         {
             try
@@ -1510,7 +1507,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     }
     evenOddStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
 
-    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(uno::Reference<style::XStyle>(evenOddStyle)));
+    rDM_Impl.GetPageStyles()->insertStyleByName(evenOddStyleName, evenOddStyle);
 
     if (rDM_Impl.IsNewDoc())
     {
@@ -1698,7 +1695,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     OUString aPageDescName;
                     if ((xPropertySet->getPropertyValue(u"PageDescName"_ustr) >>= aPageDescName) && !aPageDescName.isEmpty())
                     {
-                        uno::Reference<beans::XPropertySet> xPageStyle(rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
+                        rtl::Reference<SwXBaseStyle> xPageStyle(rDM_Impl.GetPageStyles()->getStyleByName(aPageDescName));
                         xPageStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
                         m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
                     }

@@ -36,6 +36,7 @@
 
 #include "coreframestyle.hxx"
 #include "istyleaccess.hxx"
+#include "unobasestyle.hxx"
 #include <memory>
 #include <map>
 
@@ -235,10 +236,9 @@ public:
 typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
 /// A text table style is a UNO API wrapper for a SwTableAutoFormat
-class SwXTextTableStyle final : public cppu::WeakImplHelper
+class SwXTextTableStyle final : public cppu::ImplInheritanceHelper
 <
-    css::style::XStyle,
-    css::beans::XPropertySet,
+    SwXBaseStyle,
     css::container::XNameContainer,
     css::lang::XServiceInfo
 >
@@ -328,10 +328,9 @@ public:
 };
 
 /// A text cell style is a UNO API wrapper for a SwBoxAutoFormat core class
-class SwXTextCellStyle final : public cppu::WeakImplHelper
+class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
 <
-    css::style::XStyle,
-    css::beans::XPropertySet,
+    SwXBaseStyle,
     css::beans::XPropertyState,
     css::lang::XServiceInfo
 >
@@ -451,6 +450,12 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);
+    rtl::Reference<SwXPageStyle> getPageStyleByName(const OUString& rName);
+    void insertStyleByName(const OUString& Name, const rtl::Reference<SwXStyle>& Element);
+private:
+    void insertStyleByNameImpl(const rtl::Reference<SwXStyle>& Element, const OUString& sStyleName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

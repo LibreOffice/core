@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <cppuhelper/implbase.hxx>
 #include "coreframestyle.hxx"
+#include "unobasestyle.hxx"
 
 class StyleFamilyEntry;
 class SwStyleBase_Impl;
@@ -35,10 +36,9 @@ class SvxSetItem;
 struct SfxItemPropertyMapEntry;
 
 class SAL_DLLPUBLIC_RTTI SwXStyle
-    : public cppu::WeakImplHelper<css::style::XStyle, css::beans::XPropertySet,
-                                  css::beans::XMultiPropertySet, css::lang::XServiceInfo,
-                                  css::lang::XUnoTunnel, css::beans::XPropertyState,
-                                  css::beans::XMultiPropertyStates>,
+    : public cppu::ImplInheritanceHelper<
+          SwXBaseStyle, css::beans::XMultiPropertySet, css::lang::XServiceInfo,
+          css::lang::XUnoTunnel, css::beans::XPropertyState, css::beans::XMultiPropertyStates>,
       public SfxListener,
       public SvtListener
 {

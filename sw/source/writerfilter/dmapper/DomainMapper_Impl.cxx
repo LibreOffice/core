@@ -3091,7 +3091,7 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
         sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
         bool bCharStyleHidden = false;
 
-        uno::Reference<beans::XPropertySet> xCharStylePropertySet = GetCharacterStyles()->getByName(sCharStyleName).get<uno::Reference<beans::XPropertySet>>();
+        rtl::Reference<SwXBaseStyle> xCharStylePropertySet = GetCharacterStyles()->getStyleByName(sCharStyleName);
         xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fCharStyleBold;
         xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fCharStyleBoldComplex;
         xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eCharStylePosture;
@@ -3106,8 +3106,8 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
             nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
             nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
         {
-            uno::Reference<beans::XPropertySet> const xParaStylePropertySet =
-                GetParagraphStyles()->getByName(m_StreamStateStack.top().sCurrentParaStyleName).get<uno::Reference<beans::XPropertySet>>();
+            rtl::Reference<SwXBaseStyle> const xParaStylePropertySet =
+                GetParagraphStyles()->getStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
             float fParaStyleBold = css::awt::FontWeight::NORMAL;
             float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
             css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
