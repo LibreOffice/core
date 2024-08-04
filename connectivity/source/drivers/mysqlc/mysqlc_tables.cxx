@@ -151,7 +151,14 @@ void connectivity::mysqlc::Tables::dropObject(sal_Int32 nPosition, const OUStrin
     OUString sType;
     xTable->getPropertyValue(u"Type"_ustr) >>= sType;
 
-    m_xMetaData->getConnection()->createStatement()->execute("DROP " + sType + " " + sName);
+    OUString sCatalog, sSchema, sTable;
+    ::dbtools::qualifiedNameComponents(m_xMetaData, sName, sCatalog, sSchema, sTable,
+                                       ::dbtools::EComposeRule::InDataManipulation);
+
+    OUString sComposedName(::dbtools::composeTableName(
+        m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InDataManipulation));
+
+    m_xMetaData->getConnection()->createStatement()->execute("DROP " + sType + " " + sComposedName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
