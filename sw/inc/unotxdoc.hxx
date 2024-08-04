@@ -119,6 +119,7 @@ class SwXPageStyle;
 class SwXContentControl;
 class SwXTextEmbeddedObject;
 class SvXMLEmbeddedObjectHelper;
+class SwXFieldmark;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -523,7 +524,7 @@ public:
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();
     rtl::Reference<SwXTextDefaults> createTextDefaults();
     rtl::Reference<SwXBookmark> createBookmark();
-    rtl::Reference<SwXBookmark> createFieldmark();
+    rtl::Reference<SwXFieldmark> createFieldmark();
     rtl::Reference<SwXTextSection> createTextSection();
     rtl::Reference<SwXTextField> createFieldAnnotation();
     rtl::Reference<SwXLineBreak> createLineBreak();

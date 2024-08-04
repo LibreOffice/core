@@ -472,15 +472,13 @@ void SdtHelper::createDateContentControl()
         return;
     }
 
-    rtl::Reference<SwXBookmark> xFieldmark = m_rDM_Impl.GetTextDocument()->createFieldmark();
-    uno::Reference<text::XFormField> xFormField(static_cast<cppu::OWeakObject*>(xFieldmark.get()),
-                                                uno::UNO_QUERY);
-    if (!xFormField)
+    rtl::Reference<SwXFieldmark> xFieldmark = m_rDM_Impl.GetTextDocument()->createFieldmark();
+    if (!xFieldmark)
         return;
 
     xFieldmark->attach(uno::Reference<text::XTextRange>(xCrsr, uno::UNO_QUERY_THROW));
-    xFormField->setFieldType(ODF_FORMDATE);
-    uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+    xFieldmark->setFieldType(ODF_FORMDATE);
+    uno::Reference<container::XNameContainer> xNameCont = xFieldmark->getParameters();
     if (xNameCont.is())
     {
         OUString sDateFormat = m_sDateFormat.makeStringAndClear();

@@ -1646,7 +1646,7 @@ rtl::Reference< SwXBookmark > SwXTextDocument::createBookmark()
     return SwXBookmark::CreateXBookmark(GetDocOrThrow(), nullptr);
 }
 
-rtl::Reference< SwXBookmark > SwXTextDocument::createFieldmark()
+rtl::Reference< SwXFieldmark > SwXTextDocument::createFieldmark()
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();

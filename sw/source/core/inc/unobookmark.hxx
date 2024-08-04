@@ -179,7 +179,7 @@ typedef cppu::ImplInheritanceHelper< SwXBookmark,
     > SwXFieldmark_Base;
 
 /// UNO wrapper around an sw::mark::Fieldmark.
-class SwXFieldmark final
+class SW_DLLPUBLIC SwXFieldmark final
     : public SwXFieldmark_Base
 {
     ::sw::mark::CheckboxFieldmark* getCheckboxFieldmark();
@@ -193,8 +193,12 @@ class SwXFieldmark final
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 
+    // workaround MSVC compiler
+    SwXFieldmark(const SwXFieldmark&) = delete;
+    SwXFieldmark(SwXFieldmark&&) = delete;
+
 public:
-    static rtl::Reference<SwXBookmark>
+    static rtl::Reference<SwXFieldmark>
         CreateXFieldmark(SwDoc & rDoc, ::sw::mark::MarkBase * pMark,
                 bool isReplacementObject = false);
 

@@ -1377,13 +1377,13 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             if( pEntry->m_sStyleName.equalsIgnoreAsciiCase("footnote reference")
                                 || pEntry->m_sStyleName.equalsIgnoreAsciiCase("endnote reference") )
                             {
-                                uno::Reference< style::XStyle > xCopyStyle;
+                                rtl::Reference< SwXBaseStyle > xCopyStyle;
                                 if( pEntry->m_sStyleName.equalsIgnoreAsciiCase("footnote reference") )
-                                    xStyles->getByName( u"Footnote anchor"_ustr ) >>= xCopyStyle;
+                                    xCopyStyle = xStyles->getStyleByName( u"Footnote anchor"_ustr );
                                 else
-                                    xStyles->getByName( u"Endnote anchor"_ustr ) >>= xCopyStyle;
+                                    xCopyStyle = xStyles->getStyleByName( u"Endnote anchor"_ustr );
 
-                                xMultiPropertySet.set( xCopyStyle, uno::UNO_QUERY_THROW);
+                                xMultiPropertySet.set( static_cast<cppu::OWeakObject*>(xCopyStyle.get()), uno::UNO_QUERY_THROW);
                                 xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                             }
                         }

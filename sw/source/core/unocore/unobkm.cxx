@@ -664,15 +664,17 @@ uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
     return uno::Reference<container::XNameContainer>(new SwXFieldmarkParameters(pBkm));
 }
 
-rtl::Reference<SwXBookmark>
+rtl::Reference<SwXFieldmark>
 SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::MarkBase *const pMark,
         bool const isReplacementObject)
 {
     // #i105557#: do not iterate over the registered clients: race condition
-    rtl::Reference<SwXBookmark> xMark;
+    rtl::Reference<SwXFieldmark> xMark;
     if (pMark)
     {
-        xMark = pMark->GetXBookmark();
+        rtl::Reference<SwXBookmark> xTmp = pMark->GetXBookmark();
+        assert(!xTmp || dynamic_cast<SwXFieldmark*>(xTmp.get()));
+        xMark = static_cast<SwXFieldmark*>(xTmp.get());
     }
     if (!xMark.is())
     {
