@@ -1625,6 +1625,34 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     return xTmp;
 }
 
+rtl::Reference<SwXTextField> SwXTextDocument::createTextField(
+    std::u16string_view rServiceName)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
+    assert(nType != SwServiceType::Invalid);
+    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    rtl::Reference<SwXTextField> xTextField = dynamic_cast<SwXTextField*>(xTmp.get());
+    assert(xTextField);
+    return xTextField;
+}
+
+rtl::Reference<SwXFieldmark> SwXTextDocument::createFieldmark(
+    std::u16string_view rServiceName)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
+    assert(nType != SwServiceType::Invalid);
+    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    rtl::Reference<SwXFieldmark> xTextField = dynamic_cast<SwXFieldmark*>(xTmp.get());
+    assert(xTextField);
+    return xTextField;
+}
+
 rtl::Reference< SwXDocumentSettings > SwXTextDocument::createDocumentSettings()
 {
     SolarMutexGuard aGuard;

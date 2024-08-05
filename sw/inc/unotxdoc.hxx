@@ -521,6 +521,8 @@ public:
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
+    rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);
+    rtl::Reference<SwXFieldmark> createFieldmark(std::u16string_view sServiceName);
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();
     rtl::Reference<SwXTextDefaults> createTextDefaults();
     rtl::Reference<SwXBookmark> createBookmark();

@@ -133,7 +133,7 @@ public:
 
     // XNamed
     virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName(const OUString& rName) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setName(const OUString& rName) override;
 
     // XTextContent
     virtual void SAL_CALL attach(

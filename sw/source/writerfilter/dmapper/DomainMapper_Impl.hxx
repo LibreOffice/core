@@ -975,20 +975,17 @@ public:
     void handleRubyEQField( const FieldContextPtr& pContext);
     void handleFieldSet
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > const & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+        rtl::Reference< SwXTextField > const & xFieldInterface);
     void handleFieldAsk
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+        rtl::Reference< SwXTextField > & xFieldInterface);
     OUString convertFieldFormula(const OUString& input);
     void handleFieldFormula
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > const & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+        rtl::Reference< SwXTextField > const & xFieldInterface);
     static void handleAuthor
         (std::u16string_view rFirstParam,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
@@ -996,7 +993,7 @@ public:
     void handleDocProperty
         (const FieldContextPtr& pContext,
         OUString const& rFirstParam,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface);
+        rtl::Reference< SwXTextField > & xFieldInterface);
     void handleToc
         (const FieldContextPtr& pContext,
         const OUString & sTOCServiceName);

@@ -6524,8 +6524,7 @@ static const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 
 void DomainMapper_Impl::handleFieldSet
     (const FieldContextPtr& pContext,
-     uno::Reference< uno::XInterface > const & xFieldInterface,
-     uno::Reference< beans::XPropertySet > const& xFieldProperties)
+     rtl::Reference< SwXTextField > const & xFieldInterface)
 {
     OUString sVariable, sHint;
 
@@ -6550,23 +6549,20 @@ void DomainMapper_Impl::handleFieldSet
     xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
 
     // attach the master to the field
-    uno::Reference< text::XDependentTextField > xDependentField
-        ( xFieldInterface, uno::UNO_QUERY_THROW );
-    xDependentField->attachTextFieldMaster( xMaster );
+    xFieldInterface->attachTextFieldMaster( xMaster );
 
     uno::Any aAnyHint(sHint);
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_HINT), aAnyHint);
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), aAnyHint);
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
+    xFieldInterface->setPropertyValue(getPropertyName(PROP_HINT), aAnyHint);
+    xFieldInterface->setPropertyValue(getPropertyName(PROP_CONTENT), aAnyHint);
+    xFieldInterface->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
 
     // Mimic MS Word behavior (hide the SET)
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::Any(false));
+    xFieldInterface->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::Any(false));
 }
 
 void DomainMapper_Impl::handleFieldAsk
     (const FieldContextPtr& pContext,
-     uno::Reference< uno::XInterface > & xFieldInterface,
-     uno::Reference< beans::XPropertySet > const& xFieldProperties)
+     rtl::Reference< SwXTextField > & xFieldInterface)
 {
     //doesn the command contain a variable name?
     OUString sVariable, sHint;
@@ -6583,20 +6579,18 @@ void DomainMapper_Impl::handleFieldAsk
         xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
 
         // attach the master to the field
-        uno::Reference< text::XDependentTextField > xDependentField
-            ( xFieldInterface, uno::UNO_QUERY_THROW );
-        xDependentField->attachTextFieldMaster( xMaster );
+        xFieldInterface->attachTextFieldMaster( xMaster );
 
         // set input flag at the field
-        xFieldProperties->setPropertyValue(
+        xFieldInterface->setPropertyValue(
             getPropertyName(PROP_IS_INPUT), uno::Any( true ));
         // set the prompt
-        xFieldProperties->setPropertyValue(
+        xFieldInterface->setPropertyValue(
             getPropertyName(PROP_HINT),
             uno::Any( sHint ));
-        xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
+        xFieldInterface->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
         // The ASK has no field value to display
-        xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::Any(false));
+        xFieldInterface->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::Any(false));
     }
     else
     {
@@ -6806,8 +6800,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
 
 void DomainMapper_Impl::handleAutoNum
     (const FieldContextPtr& pContext,
-    uno::Reference< uno::XInterface > const & xFieldInterface,
-    uno::Reference< beans::XPropertySet > const& xFieldProperties)
+    rtl::Reference< SwXTextField > const & xFieldInterface)
 {
     //create a sequence field master "AutoNr"
     uno::Reference< beans::XPropertySet > xMaster =
@@ -6819,13 +6812,11 @@ void DomainMapper_Impl::handleAutoNum
         uno::Any(text::SetVariableType::SEQUENCE));
 
     //apply the numbering type
-    xFieldProperties->setPropertyValue(
+    xFieldInterface->setPropertyValue(
         getPropertyName(PROP_NUMBERING_TYPE),
         uno::Any( lcl_ParseNumberingType(pContext->GetCommand()) ));
         // attach the master to the field
-    uno::Reference< text::XDependentTextField > xDependentField
-        ( xFieldInterface, uno::UNO_QUERY_THROW );
-    xDependentField->attachTextFieldMaster( xMaster );
+    xFieldInterface->attachTextFieldMaster( xMaster );
 }
 
 void DomainMapper_Impl::handleAuthor
@@ -6848,10 +6839,10 @@ void DomainMapper_Impl::handleAuthor
     }
 }
 
-    void DomainMapper_Impl::handleDocProperty
-        (const FieldContextPtr& pContext,
-        OUString const& rFirstParam,
-        uno::Reference< uno::XInterface > & xFieldInterface)
+void DomainMapper_Impl::handleDocProperty
+    (const FieldContextPtr& pContext,
+    OUString const& rFirstParam,
+    rtl::Reference< SwXTextField > & xFieldInterface)
 {
     //some docproperties should be imported as document statistic fields, some as DocInfo fields
     //others should be user fields
@@ -6922,26 +6913,25 @@ void DomainMapper_Impl::handleAuthor
         sServiceName += sFieldServiceName;
     }
     if (m_xTextDocument)
-        xFieldInterface = m_xTextDocument->createInstance(sServiceName);
-    uno::Reference<beans::XPropertySet> xFieldProperties( xFieldInterface, uno::UNO_QUERY_THROW);
+        xFieldInterface = m_xTextDocument->createTextField(sServiceName);
     if( bIsCustomField )
     {
-        xFieldProperties->setPropertyValue(
+        xFieldInterface->setPropertyValue(
             getPropertyName(PROP_NAME), uno::Any(rFirstParam));
-        pContext->SetCustomField( xFieldProperties );
+        pContext->SetCustomField( xFieldInterface );
     }
     else
     {
         if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
-            xFieldProperties->setPropertyValue(
+            xFieldInterface->setPropertyValue(
                 getPropertyName(PROP_NUMBERING_TYPE),
                 uno::Any( style::NumberingType::ARABIC ));
         else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
         {
-            xFieldProperties->setPropertyValue(
+            xFieldInterface->setPropertyValue(
                 getPropertyName(PROP_IS_DATE),
                     uno::Any( true ));
-            SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+            SetNumberFormat( pContext->GetCommand(), xFieldInterface );
         }
     }
 }
@@ -7716,7 +7706,6 @@ void DomainMapper_Impl::CloseFieldCommand()
         {
             pContext->SetFieldId(aIt->second.eFieldId);
             bool bCreateEnhancedField = false;
-            uno::Reference< beans::XPropertySet > xFieldProperties;
             bool bCreateField = true;
             switch (aIt->second.eFieldId)
             {
@@ -7771,7 +7760,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 bCreateField = false;
             }
 
-            uno::Reference< uno::XInterface > xFieldInterface;
+            rtl::Reference< SwXTextField > xFieldInterface;
+            rtl::Reference< SwXFieldmark > xFieldmark;
             if( bCreateField || bCreateEnhancedField )
             {
                 //add the service prefix
@@ -7783,10 +7773,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                         aEnhancedFieldConversionMap.find(sType);
                     if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                         sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
+                    if (m_xTextDocument)
+                        xFieldmark = m_xTextDocument->createFieldmark(sServiceName);
                 }
                 else
                 {
                     sServiceName += "TextField." + OUString::createFromAscii(aIt->second.cFieldServiceName );
+                    if (m_xTextDocument)
+                        xFieldInterface = m_xTextDocument->createTextField(sServiceName);
                 }
 
 #ifdef DBG_UTIL
@@ -7795,51 +7789,46 @@ void DomainMapper_Impl::CloseFieldCommand()
                 TagLogger::getInstance().endElement();
 #endif
 
-                if (m_xTextDocument)
-                {
-                    xFieldInterface = m_xTextDocument->createInstance(sServiceName);
-                    xFieldProperties.set( xFieldInterface, uno::UNO_QUERY_THROW);
-                }
             }
             switch( aIt->second.eFieldId )
             {
                 case FIELD_ADDRESSBLOCK: break;
                 case FIELD_ADVANCE     : break;
                 case FIELD_ASK         :
-                    handleFieldAsk(pContext, xFieldInterface, xFieldProperties);
+                    handleFieldAsk(pContext, xFieldInterface);
                 break;
                 case FIELD_AUTONUM    :
                 case FIELD_AUTONUMLGL :
                 case FIELD_AUTONUMOUT :
-                    handleAutoNum(pContext, xFieldInterface, xFieldProperties);
+                    handleAutoNum(pContext, xFieldInterface);
                 break;
                 case FIELD_AUTHOR       :
                 case FIELD_USERNAME     :
                 case FIELD_USERINITIALS :
                     handleAuthor(sFirstParam,
-                        xFieldProperties,
+                        xFieldInterface,
                         aIt->second.eFieldId);
                 break;
                 case FIELD_DATE:
-                if (xFieldProperties.is())
+                if (xFieldInterface.is())
                 {
                     // Get field fixed property from the context handler
                     if (pContext->IsFieldLocked())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED),
                             uno::Any( true ));
                         pContext->m_bSetDateValue = true;
                     }
                     else
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED),
                             uno::Any( false ));
 
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                         getPropertyName(PROP_IS_DATE),
                         uno::Any( true ));
-                    SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    SetNumberFormat( pContext->GetCommand(), xFieldInterface );
                 }
                 break;
                 case FIELD_COMMENTS     :
@@ -7853,7 +7842,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // with the param ( e.g. each COMMENT with a param will
                     // overwrite the Comments document property
                     // #TODO implement the above too
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                         getPropertyName( PROP_IS_FIXED ), uno::Any( false ));
                         //PROP_CURRENT_PRESENTATION is set later anyway
                 }
@@ -7864,12 +7853,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     if (pContext->IsFieldLocked())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED), uno::Any( true ));
                     }
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                         getPropertyName( PROP_IS_DATE ), uno::Any( true ));
-                    SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    SetNumberFormat( pContext->GetCommand(), xFieldInterface );
                 }
                 break;
                 case FIELD_DOCPROPERTY :
@@ -7883,15 +7872,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                         //create a user field and type
                         uno::Reference<beans::XPropertySet> xMaster = FindOrCreateFieldMaster(
                             "com.sun.star.text.FieldMaster.User", sFirstParam);
-                        uno::Reference<text::XDependentTextField> xDependentField(
-                            xFieldInterface, uno::UNO_QUERY_THROW);
-                        xDependentField->attachTextFieldMaster(xMaster);
+                        xFieldInterface->attachTextFieldMaster(xMaster);
                         pContext->m_bSetUserFieldContent = true;
                     }
                 }
                 break;
                 case FIELD_EDITTIME     :
-                    //it's a numbering type, no number format! SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    //it's a numbering type, no number format! SetNumberFormat( pContext->GetCommand(), xFieldInterface );
                 break;
                 case FIELD_EQ:
                 {
@@ -7900,11 +7887,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     msfilter::util::EquationResult aResult(msfilter::util::ParseCombinedChars(aCommand));
                     if (!aResult.sType.isEmpty() && m_xTextDocument)
                     {
-                        xFieldInterface = m_xTextDocument->createInstance("com.sun.star.text.TextField." + aResult.sType);
-                        xFieldProperties =
-                            uno::Reference< beans::XPropertySet >( xFieldInterface,
-                                uno::UNO_QUERY_THROW);
-                        xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::Any(aResult.sResult));
+                        xFieldInterface = m_xTextDocument->createTextField(Concat2View("com.sun.star.text.TextField." + aResult.sType));
+                        xFieldInterface->setPropertyValue(getPropertyName(PROP_CONTENT), uno::Any(aResult.sResult));
                     }
                     else
                     {
@@ -7943,15 +7927,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 break;
                 case FIELD_FILLIN       :
-                    if (xFieldProperties.is())
-                        xFieldProperties->setPropertyValue(
+                    if (xFieldInterface.is())
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_HINT), uno::Any( pContext->GetCommand().getToken(1, '\"')));
                 break;
                 case FIELD_FILENAME:
                 {
                     sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf("\\p");
-                    if (xFieldProperties.is())
-                        xFieldProperties->setPropertyValue(
+                    if (xFieldInterface.is())
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_FILE_FORMAT),
                                 uno::Any( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME_AND_EXT ));
                 }
@@ -7960,7 +7944,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_FORMULA :
                     if (bCreateField)
                     {
-                        handleFieldFormula(pContext, xFieldProperties);
+                        handleFieldFormula(pContext, xFieldInterface);
                     }
                 break;
                 case FIELD_FORMCHECKBOX :
@@ -7977,24 +7961,22 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                                                     m_xTextDocument, pFFDataHandler));
                             pContext->setFormControlHelper(pFormControlHelper);
-                            uno::Reference< text::XFormField > xFormField( xFieldInterface, uno::UNO_QUERY );
-                            uno::Reference< container::XNamed > xNamed( xFormField, uno::UNO_QUERY );
-                            if ( xNamed.is() )
+                            if ( xFieldmark )
                             {
                                 if ( pFFDataHandler && !pFFDataHandler->getName().isEmpty() )
-                                    xNamed->setName(  pFFDataHandler->getName() );
-                                pContext->SetFormField( xFormField );
+                                    xFieldmark->setName(  pFFDataHandler->getName() );
+                                pContext->SetFormField( xFieldmark );
                             }
                             InsertFieldmark(m_aTextAppendStack,
-                                xFormField, pContext->GetStartRange(),
+                                xFieldmark, pContext->GetStartRange(),
                                 pContext->GetFieldId());
                         }
                         else
                         {
                             if ( aIt->second.eFieldId == FIELD_FORMDROPDOWN )
-                                lcl_handleDropdownField( xFieldProperties, pContext->getFFDataHandler() );
+                                lcl_handleDropdownField( xFieldInterface, pContext->getFFDataHandler() );
                             else
-                                lcl_handleTextField( xFieldProperties, pContext->getFFDataHandler() );
+                                lcl_handleTextField( xFieldInterface, pContext->getFFDataHandler() );
                         }
                     }
                     break;
@@ -8101,7 +8083,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         break;
                     }
 
-                    if (xFieldProperties.is())
+                    if (xFieldInterface.is())
                     {
                         // Following code assumes that last argument in field is false value
                         // before it - true value and everything before them is a condition
@@ -8113,11 +8095,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                             sCondition += vArguments[i++];
                         }
 
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             u"TrueContent"_ustr, uno::Any(vArguments[vArguments.size() - 2]));
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             u"FalseContent"_ustr, uno::Any(vArguments[vArguments.size() - 1]));
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             u"Condition"_ustr, uno::Any(sCondition));
                     }
                 }
@@ -8128,19 +8110,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     if (!sFirstParam.isEmpty())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName( PROP_IS_FIXED ), uno::Any( true ));
                         //PROP_CURRENT_PRESENTATION is set later anyway
                     }
                 }
                 break;
                 case FIELD_LASTSAVEDBY :
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                         getPropertyName(PROP_IS_FIXED), uno::Any(true));
                     break;
                 case FIELD_MACROBUTTON:
                 {
-                    if (xFieldProperties.is())
+                    if (xFieldInterface.is())
                     {
                         sal_Int32 nIndex = sizeof(" MACROBUTTON ");
                         OUString sCommand = pContext->GetCommand();
@@ -8149,14 +8131,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (sCommand.getLength() >= nIndex)
                         {
                             OUString sMacro = sCommand.getToken(0, ' ', nIndex);
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                     getPropertyName(PROP_MACRO_NAME), uno::Any( sMacro ));
                         }
 
                         //extract quick help text
                         if (sCommand.getLength() > nIndex + 1)
                         {
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_HINT),
                                 uno::Any( sCommand.copy( nIndex )));
                         }
@@ -8170,11 +8152,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Reference< beans::XPropertySet > xMaster =
                         FindOrCreateFieldMaster("com.sun.star.text.FieldMaster.Database", sFirstParam);
 
-//                    xFieldProperties->setPropertyValue(
+//                    xFieldInterface->setPropertyValue(
 //                             "FieldCode",
 //                             uno::makeAny( pContext->GetCommand().copy( nIndex + 1 )));
-                    uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                    xDependentField->attachTextFieldMaster( xMaster );
+                    if (!xFieldInterface)
+                        throw uno::Exception();
+                    xFieldInterface->attachTextFieldMaster( xMaster );
                 }
                 break;
                 case FIELD_MERGEREC     : break;
@@ -8182,12 +8165,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_NEXT         : break;
                 case FIELD_NEXTIF       : break;
                 case FIELD_PAGE        :
-                    if (xFieldProperties.is())
+                    if (xFieldInterface.is())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_NUMBERING_TYPE),
                                 uno::Any( lcl_ParseNumberingType(pContext->GetCommand()) ));
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_SUB_TYPE),
                                 uno::Any( text::PageNumberType_CURRENT ));
                     }
@@ -8196,7 +8179,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_PAGEREF:
                 case FIELD_REF:
                 case FIELD_STYLEREF:
-                if (xFieldProperties.is() && !IsInTOC())
+                if (xFieldInterface.is() && !IsInTOC())
                 {
                     bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
                     bool bStyleRef = aIt->second.eFieldId == FIELD_STYLEREF;
@@ -8210,7 +8193,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         if (bStyleRef)
                         {
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                                 uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
 
@@ -8234,7 +8217,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 uno::Any aStyleDisplayName;
                                 aStyleDisplayName <<= ConvertTOCStyleName(styleName);
 
-                                xFieldProperties->setPropertyValue(
+                                xFieldInterface->setPropertyValue(
                                     getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
                             }
 
@@ -8250,16 +8233,16 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 //suppress-nondelimiter
                                 nFlags |= REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL;
                             }
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                     getPropertyName( PROP_REFERENCE_FIELD_FLAGS ), uno::Any(nFlags) );
                         }
                         else
                         {
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                                 uno::Any( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
 
-                            xFieldProperties->setPropertyValue(
+                            xFieldInterface->setPropertyValue(
                                 getPropertyName(PROP_SOURCE_NAME),
                                 uno::Any(sFirstParam));
                         }
@@ -8286,17 +8269,16 @@ void DomainMapper_Impl::CloseFieldCommand()
                             //number-full-context
                             nFieldPart = text::ReferenceFieldPart::NUMBER_FULL_CONTEXT;
                         }
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::Any( nFieldPart ));
                     }
                     else if( m_xTextDocument )
                     {
-                        xFieldInterface = m_xTextDocument->createInstance(u"com.sun.star.text.TextField.GetExpression"_ustr);
-                        xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface = m_xTextDocument->createTextField(u"com.sun.star.text.TextField.GetExpression");
+                        xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_CONTENT),
                             uno::Any(sFirstParam));
-                        xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
+                        xFieldInterface->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
                     }
                 }
                 break;
@@ -8321,13 +8303,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Any(text::SetVariableType::SEQUENCE));
 
                     // apply the numbering type
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                         getPropertyName(PROP_NUMBERING_TYPE),
                         uno::Any( lcl_ParseNumberingType(pContext->GetCommand()) ));
 
                     // attach the master to the field
-                    uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                    xDependentField->attachTextFieldMaster( xMaster );
+                    xFieldInterface->attachTextFieldMaster( xMaster );
 
                     OUString sFormula = OUString::Concat(sSeqName) + "+1";
                     OUString sValue;
@@ -8341,7 +8322,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     // TODO \s isn't handled, but the spec isn't easy to understand without
                     // an example for this one.
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_CONTENT),
                             uno::Any(sFormula));
 
@@ -8349,20 +8330,20 @@ void DomainMapper_Impl::CloseFieldCommand()
                     sal_Int16 nNumberingType = lcl_ParseNumberingType(pContext->GetCommand());
                     if (nNumberingType == style::NumberingType::PAGE_DESCRIPTOR)
                         nNumberingType = style::NumberingType::ARABIC;
-                    xFieldProperties->setPropertyValue(
+                    xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_NUMBERING_TYPE),
                             uno::Any(nNumberingType));
                 }
                 break;
                 case FIELD_SET          :
-                    handleFieldSet(pContext, xFieldInterface, xFieldProperties);
+                    handleFieldSet(pContext, xFieldInterface);
                 break;
                 case FIELD_SKIPIF       : break;
                 case FIELD_SUBJECT      :
                 {
                     if (!sFirstParam.isEmpty())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName( PROP_IS_FIXED ), uno::Any( true ));
                         //PROP_CURRENT_PRESENTATION is set later anyway
                     }
@@ -8429,19 +8410,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     if (pContext->IsFieldLocked())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED),
                             uno::Any( true ));
                         pContext->m_bSetDateValue = true;
                     }
-                    SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    SetNumberFormat( pContext->GetCommand(), xFieldInterface );
                 }
                 break;
                 case FIELD_TITLE        :
                 {
                     if (!sFirstParam.isEmpty())
                     {
-                        xFieldProperties->setPropertyValue(
+                        xFieldInterface->setPropertyValue(
                                 getPropertyName( PROP_IS_FIXED ), uno::Any( true ));
                         //PROP_CURRENT_PRESENTATION is set later anyway
                     }
@@ -8510,22 +8491,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if( !m_xTextDocument )
                         break;
 
-                    xFieldInterface = m_xTextDocument->createInstance(
+                    xFieldInterface = m_xTextDocument->createTextField(
                               OUString::createFromAscii(aIt->second.cFieldServiceName));
-                    uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
-                              uno::UNO_QUERY_THROW);
                     OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText including the index e.g. CITATION Kra06 \l 1033
                     if( !sCmd.isEmpty()){
                         uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
                             { "Identifier", uno::Any(sCmd) }
                         }));
-                        xTC->setPropertyValue(u"Fields"_ustr, uno::Any(aValues));
+                        xFieldInterface->setPropertyValue(u"Fields"_ustr, uno::Any(aValues));
                     }
-                    uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
 
                     uno::Sequence<beans::PropertyValue> aValues
                         = m_aFieldStack.back()->getProperties()->GetPropertyValues();
-                    appendTextContent(xToInsert, aValues);
+                    appendTextContent(xFieldInterface, aValues);
                     pContext->m_bSetCitation = true;
                 }
                 break;
@@ -8568,8 +8546,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case  FIELD_NUMCHARS:
                 case  FIELD_NUMWORDS:
                 case  FIELD_NUMPAGES:
-                if (xFieldProperties.is())
-                    xFieldProperties->setPropertyValue(
+                if (xFieldInterface.is())
+                    xFieldInterface->setPropertyValue(
                         getPropertyName(PROP_NUMBERING_TYPE),
                         uno::Any( lcl_ParseNumberingType(pContext->GetCommand()) ));
                 break;
@@ -8577,7 +8555,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
             if (!bCreateEnhancedField)
             {
-                pContext->SetTextField( uno::Reference<text::XTextField>(xFieldInterface, uno::UNO_QUERY) );
+                pContext->SetTextField( xFieldInterface );
             }
         }
         else
