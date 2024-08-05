@@ -1493,7 +1493,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string
 
-      @since LibreOffice 24.2
+      @since LibreOffice 25.2
     */
     bool startsWith(std::u16string_view sv, std::u16string_view * rest) const {
         assert(rest);
@@ -1704,7 +1704,7 @@ public:
     }
     /**
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 24.2
+     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
@@ -1781,7 +1781,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       end of this string
 
-      @since LibreOffice 24.2
+      @since LibreOffice 25.2
     */
     bool endsWith(std::u16string_view sv, std::u16string_view * rest) const {
         assert(rest);
@@ -2012,7 +2012,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     /**
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 24.2
+     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
@@ -2035,7 +2035,7 @@ public:
     }
     /**
      This function accepts an ASCII string literal as its argument.
-     @since LibreOffice 24.2
+     @since LibreOffice 25.2
     */
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type

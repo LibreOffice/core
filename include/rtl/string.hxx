@@ -1105,7 +1105,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       start of this string
 
-      @since LibreOffice 24.2
+      @since LibreOffice 25.2
     */
     bool startsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
@@ -1275,7 +1275,7 @@ public:
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
       "a"--"z")
 
-      @since LibreOffice 24.2
+      @since LibreOffice 25.2
     */
     bool startsWithIgnoreAsciiCase(std::string_view str, std::string_view * rest)
         const
@@ -1434,7 +1434,7 @@ public:
       @return true if and only if the given str appears as a substring at the
       end of this string
 
-      @since LibreOffice 24.2
+      @since LibreOffice 25.2
     */
     bool endsWith(std::string_view str, std::string_view * rest) const {
         assert(rest);
