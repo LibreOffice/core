@@ -73,6 +73,7 @@
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
 #include <frameformats.hxx>
+#include <annotationmark.hxx>
 #include <formatflysplit.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>

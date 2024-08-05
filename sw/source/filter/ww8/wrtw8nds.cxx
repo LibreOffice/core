@@ -110,6 +110,7 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <formatflysplit.hxx>
+#include <annotationmark.hxx>
 
 #include <cstdio>
 
@@ -2068,7 +2069,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
     const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
     {
-        MarkBase* pMark = pMarkAccess->getAnnotationMarksBegin()[i];
+        AnnotationMark* pMark = pMarkAccess->getAnnotationMarksBegin()[i];
 
         // Only keep the bookmarks starting or ending in this node
         if ( pMark->GetMarkStart().GetNode() == rNd ||

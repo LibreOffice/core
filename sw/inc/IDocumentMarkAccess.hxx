@@ -30,6 +30,7 @@ class SwTextNode;
 class SwCursorShell;
 
 namespace sw::mark {
+    class AnnotationMark;
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
     class MarkBase;
     class Fieldmark;
@@ -302,11 +303,11 @@ class IDocumentMarkAccess
         virtual void ClearFieldActivation() = 0;
 
         // Annotation Marks
-        virtual const_iterator getAnnotationMarksBegin() const = 0;
-        virtual const_iterator getAnnotationMarksEnd() const = 0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksBegin() const = 0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksEnd() const = 0;
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
-        virtual const_iterator findAnnotationMark( const OUString& rName ) const = 0;
-        virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findAnnotationMark( const OUString& rName ) const = 0;
+        virtual sw::mark::AnnotationMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
         virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
@@ -320,7 +321,7 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the mark, or pointing to getAnnotationMarksEnd() if nothing was found.
         */
-        virtual const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
 
         /** Returns the MarkType used to create the mark
         */

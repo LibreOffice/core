@@ -22,7 +22,7 @@
 
 #include "txtfld.hxx"
 
-namespace sw::mark { class MarkBase; }
+namespace sw::mark { class AnnotationMark; }
 
 class SwTextAnnotationField final : public SwTextField
 {
@@ -34,7 +34,7 @@ public:
 
     virtual ~SwTextAnnotationField() override;
 
-    ::sw::mark::MarkBase* GetAnnotationMark() const;
+    ::sw::mark::AnnotationMark* GetAnnotationMark() const;
 };
 
 #endif

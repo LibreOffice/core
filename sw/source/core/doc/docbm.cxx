@@ -113,6 +113,32 @@ namespace
         return bCRFirst; // cross-ref sorts *before*
     }
 
+    // specialise to avoid loplugin:faileddyncast
+    template<>
+    bool lcl_MarkOrderingByStart(const AnnotationMark *const pFirst,
+                                 const AnnotationMark *const pSecond)
+    {
+        SwPosition const& rFirstStart(pFirst->GetMarkStart());
+        SwPosition const& rSecondStart(pSecond->GetMarkStart());
+        if (rFirstStart.GetNode() != rSecondStart.GetNode())
+        {
+            return rFirstStart.GetNode() < rSecondStart.GetNode();
+        }
+        const sal_Int32 nFirstContent = rFirstStart.GetContentIndex();
+        const sal_Int32 nSecondContent = rSecondStart.GetContentIndex();
+        if (nFirstContent != 0 || nSecondContent != 0)
+        {
+            return nFirstContent < nSecondContent;
+        }
+        SwContentNode const*const pFirstNode(rFirstStart.nContent.GetContentNode());
+        SwContentNode const*const pSecondNode(rSecondStart.nContent.GetContentNode());
+        if ((pFirstNode != nullptr) != (pSecondNode != nullptr))
+        {   // consistency with SwPosition::operator<
+            return pSecondNode != nullptr;
+        }
+        return false; // equal
+    }
+
     template<class MarkT>
     bool lcl_MarkOrderingByEnd(const MarkT *const pFirst,
                                const MarkT *const pSecond)
@@ -613,7 +639,7 @@ namespace sw::mark
                 lcl_InsertMarkSorted(m_vFieldmarks, static_cast<Fieldmark*>(pMark.get()));
                 break;
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
-                lcl_InsertMarkSorted( m_vAnnotationMarks, pMark.get() );
+                lcl_InsertMarkSorted( m_vAnnotationMarks, static_cast<AnnotationMark*>(pMark.get()) );
                 break;
             case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
             case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
@@ -1242,7 +1268,7 @@ namespace sw::mark
 
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 {
-                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark);
+                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, static_cast<AnnotationMark*>(*ppMark));
                     assert(ppAnnotationMark != m_vAnnotationMarks.end() &&
                         "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
                     m_vAnnotationMarks.erase(ppAnnotationMark);
@@ -1629,12 +1655,12 @@ namespace sw::mark
     Fieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos, bool bLoop) const
         { return lcl_getMarkBefore(m_vFieldmarks, rPos, bLoop); }
 
-    IDocumentMarkAccess::const_iterator MarkManager::getAnnotationMarksBegin() const
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::getAnnotationMarksBegin() const
     {
         return m_vAnnotationMarks.begin();
     }
 
-    IDocumentMarkAccess::const_iterator MarkManager::getAnnotationMarksEnd() const
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::getAnnotationMarksEnd() const
     {
         return m_vAnnotationMarks.end();
     }
@@ -1644,30 +1670,30 @@ namespace sw::mark
         return m_vAnnotationMarks.size();
     }
 
-    IDocumentMarkAccess::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
     {
-        return lcl_FindMarkByName<MarkBase>( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
+        return lcl_FindMarkByName<AnnotationMark>( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
     }
 
-    MarkBase* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
+    AnnotationMark* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
     {
         auto const pAnnotationMark = find_if(
             m_vAnnotationMarks.begin(),
             m_vAnnotationMarks.end(),
-            [&rPos] (const ::sw::mark::MarkBase *const pMark) { return pMark->IsCoveringPosition(rPos); } );
+            [&rPos] (const ::sw::mark::AnnotationMark *const pMark) { return pMark->IsCoveringPosition(rPos); } );
         if (pAnnotationMark == m_vAnnotationMarks.end())
             return nullptr;
         return *pAnnotationMark;
     }
 
     // finds the first that is starting after
-    IDocumentMarkAccess::const_iterator MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
     {
         return std::upper_bound(
             m_vAnnotationMarks.begin(),
             m_vAnnotationMarks.end(),
             rPos,
-            CompareIMarkStartsAfter<MarkBase>());
+            CompareIMarkStartsAfter<AnnotationMark>());
     }
 
     // create helper bookmark for annotations on tracked deletions
@@ -1701,7 +1727,7 @@ namespace sw::mark
                   (nPos = rBookmarkName.indexOf(S_ANNOTATION_BOOKMARK)) > -1 )
             {
                 ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
-                IDocumentMarkAccess::const_iterator pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
+                auto pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
                 if ( pMark != getAnnotationMarksEnd() )
                 {
                     const SwPaM aPam((**iter).GetMarkStart(), (**pMark).GetMarkEnd());

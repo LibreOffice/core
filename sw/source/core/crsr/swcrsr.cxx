@@ -58,6 +58,7 @@
 #include <editsh.hxx>
 
 #include <viewopt.hxx>
+#include <annotationmark.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -1494,7 +1495,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
                 {
                     SetMark();
                     GetMark()->Assign(*pStartNode, nStartIndex);
-                    if (sw::mark::MarkBase* pAnnotationMark = pMarksAccess->getAnnotationMarkFor(*GetPoint()))
+                    if (sw::mark::AnnotationMark* pAnnotationMark = pMarksAccess->getAnnotationMarkFor(*GetPoint()))
                     {
                         // An annotation mark covers the selected word. Check
                         // if it covers only the word: in that case we select

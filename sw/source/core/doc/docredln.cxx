@@ -64,6 +64,7 @@
 
 #include <flowfrm.hxx>
 #include <txtfrm.hxx>
+#include <annotationmark.hxx>
 
 using namespace com::sun::star;
 

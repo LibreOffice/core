@@ -31,6 +31,7 @@ class SfxViewShell;
 namespace sw::mark {
     typedef std::unordered_map<OUString, sal_Int32> MarkBasenameMapUniqueOffset_t;
 
+    class AnnotationMark;
     class FieldmarkWithDropDownButton;
 
     class MarkManager final
@@ -114,12 +115,12 @@ namespace sw::mark {
             void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
             // Annotation Marks
-            virtual const_iterator getAnnotationMarksBegin() const override;
-            virtual const_iterator getAnnotationMarksEnd() const override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksBegin() const override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksEnd() const override;
             virtual sal_Int32 getAnnotationMarksCount() const override;
-            virtual const_iterator findAnnotationMark( const OUString& rName ) const override;
-            virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPos) const override;
-            virtual const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findAnnotationMark( const OUString& rName ) const override;
+            virtual sw::mark::AnnotationMark* getAnnotationMarkFor(const SwPosition& rPos) const override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
 
             virtual void assureSortedMarkContainers() const override;
 
@@ -155,7 +156,7 @@ namespace sw::mark {
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
             // container for annotation marks
-            container_t m_vAnnotationMarks;
+            std::vector<sw::mark::AnnotationMark*> m_vAnnotationMarks;
 
             SwDoc& m_rDoc;
 

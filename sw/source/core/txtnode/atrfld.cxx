@@ -782,7 +782,7 @@ SwTextAnnotationField::~SwTextAnnotationField()
 {
 }
 
-::sw::mark::MarkBase* SwTextAnnotationField::GetAnnotationMark() const
+::sw::mark::AnnotationMark* SwTextAnnotationField::GetAnnotationMark() const
 {
     auto pPostItField = dynamic_cast<const SwPostItField*>(GetFormatField().GetField());
     assert(pPostItField);

@@ -85,6 +85,7 @@
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
 #include <fmtmeta.hxx>
+#include <annotationmark.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

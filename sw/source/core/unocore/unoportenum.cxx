@@ -274,11 +274,8 @@ namespace
              ppMark != pCandidatesEnd;
              ++ppMark )
         {
-            ::sw::mark::AnnotationMark* const pAnnotationMark =
-                dynamic_cast< ::sw::mark::AnnotationMark* >(*ppMark);
-
-            if (!pAnnotationMark)
-                continue;
+            ::sw::mark::AnnotationMark* const pAnnotationMark = *ppMark;
+            assert(pAnnotationMark);
 
             const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
             if (rStartPos.GetNode() != rOwnNode)
