@@ -1084,9 +1084,11 @@ void SwTextFrame::ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew )
         MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );
 }
 
-static bool isFirstVisibleFrameInBody(const SwTextFrame* pFrame)
+static bool isFirstVisibleFrameInPageBody(const SwTextFrame* pFrame)
 {
     const SwFrame* pBodyFrame = pFrame->FindBodyFrame();
+    while (pBodyFrame && !pBodyFrame->IsPageBodyFrame())
+        pBodyFrame = pBodyFrame->GetUpper()->FindBodyFrame();
     if (!pBodyFrame)
         return false;
     for (const SwFrame* pCur = pFrame;;)
@@ -1096,7 +1098,7 @@ static bool isFirstVisibleFrameInBody(const SwTextFrame* pFrame)
                 return false;
         pCur = pCur->GetUpper();
         assert(pCur); // We found pBodyFrame, right?
-        if (pCur->IsBodyFrame())
+        if (pCur == pBodyFrame)
             return true;
     }
 }
@@ -1184,7 +1186,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         if (FindColFrame())
             bLoneAsCharAnchoredObj = false;
         // tdf#160526: only no split if there is no preceding frames on same page
-        else if (!isFirstVisibleFrameInBody(this))
+        else if (!isFirstVisibleFrameInPageBody(this))
             bLoneAsCharAnchoredObj = false;
         else
             nNew = 0;
@@ -1204,8 +1206,10 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         else if (!bEmptyWithSplitFly)
         {
             // Do not split immediately in the beginning of page (unless there is an at-para or
-            // at-char or at-page fly, which pushes the rest down)
-            if (isFirstVisibleFrameInBody(this) && !hasFly(this) && pBodyFrame && !hasAtPageFly(pBodyFrame))
+            // at-char or at-page fly, which pushes the rest down); tdf#136040: still try split text
+            // frame if we have columns.
+            if (pBodyFrame && !FindColFrame() && isFirstVisibleFrameInPageBody(this)
+                && !hasFly(this) && !hasAtPageFly(pBodyFrame))
                 nNew = 0;
         }
     }
