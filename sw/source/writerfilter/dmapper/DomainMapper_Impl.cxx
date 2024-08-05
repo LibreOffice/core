@@ -7023,8 +7023,8 @@ OUString DomainMapper_Impl::extractTocTitle()
     return OUString();
 }
 
-css::uno::Reference<css::beans::XPropertySet>
-DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
+rtl::Reference<SwXSection>
+DomainMapper_Impl::StartIndexSectionChecked(std::u16string_view sServiceName)
 {
     if (m_StreamStateStack.top().bParaChanged)
     {
@@ -7233,7 +7233,7 @@ void DomainMapper_Impl::handleToc
 
     const OUString aTocTitle = extractTocTitle();
 
-    uno::Reference<beans::XPropertySet> xTOC;
+    rtl::Reference<SwXSection> xTOC;
 
     if (m_xTextDocument && ! m_aTextAppendStack.empty())
     {
@@ -7264,7 +7264,7 @@ void DomainMapper_Impl::handleToc
             m_xTOCMarkerCursor = xText->createTextCursor();
 
             // create header of the TOC with the TOC title inside
-            createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, u"com.sun.star.text.IndexHeaderSection"_ustr, true);
+            createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, u"com.sun.star.text.IndexHeaderSection", true);
         }
     }
 
@@ -7443,54 +7443,49 @@ void DomainMapper_Impl::handleToc
     }
 }
 
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::createSectionForRange(
+rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
     uno::Reference< css::text::XTextRange > xStart,
     uno::Reference< css::text::XTextRange > xEnd,
-    const OUString & sObjectType,
+    std::u16string_view sObjectType,
     bool stepLeft)
 {
     if (!xStart.is())
-        return uno::Reference<beans::XPropertySet>();
+        return {};
     if (!xEnd.is())
-        return uno::Reference<beans::XPropertySet>();
+        return {};
 
-    uno::Reference< beans::XPropertySet > xRet;
     if (m_aTextAppendStack.empty())
-        return xRet;
+        return {};
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is())
+    if(!xTextAppend)
+        return {};
+    rtl::Reference< SwXSection > xSection;
+    try
     {
-        try
-        {
-            uno::Reference< text::XParagraphCursor > xCursor(
-                xTextAppend->createTextCursorByRange( xStart ), uno::UNO_QUERY_THROW);
-            //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
-            xCursor->gotoStartOfParagraph( false );
-            xCursor->gotoRange( xEnd, true );
-            //the paragraph after this new section is already inserted
-            if (stepLeft)
-                xCursor->goLeft(1, true);
-            uno::Reference< text::XTextContent > xSection( m_xTextDocument->createInstance(sObjectType), uno::UNO_QUERY_THROW );
-            try
-            {
-                xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
-            }
-            catch(const uno::Exception&)
-            {
-            }
-            xRet.set(xSection, uno::UNO_QUERY );
-        }
-        catch(const uno::Exception&)
-        {
-        }
+        uno::Reference< text::XParagraphCursor > xCursor(
+            xTextAppend->createTextCursorByRange( xStart ), uno::UNO_QUERY );
+        if(!xCursor)
+            return {};
+        //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
+        xCursor->gotoStartOfParagraph( false );
+        xCursor->gotoRange( xEnd, true );
+        //the paragraph after this new section is already inserted
+        if (stepLeft)
+            xCursor->goLeft(1, true);
+        xSection = m_xTextDocument->createSection(sObjectType);
+        if (!xSection)
+            return {};
+        xSection->attach( xCursor );
     }
-
-    return xRet;
+    catch(const uno::Exception&)
+    {
+    }
+    return xSection;
 }
 
 void DomainMapper_Impl::handleBibliography
     (const FieldContextPtr& pContext,
-    const OUString & sTOCServiceName)
+    std::u16string_view sTOCServiceName)
 {
     if (m_aTextAppendStack.empty())
     {
@@ -7510,8 +7505,7 @@ void DomainMapper_Impl::handleBibliography
     pContext->SetTOC( xTOC );
     m_StreamStateStack.top().bParaHadField = false;
 
-    uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
-    appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
+    appendTextContent(xTOC, uno::Sequence< beans::PropertyValue >() );
 }
 
 void DomainMapper_Impl::handleIndex
@@ -7553,8 +7547,7 @@ void DomainMapper_Impl::handleIndex
     pContext->SetTOC( xTOC );
     m_StreamStateStack.top().bParaHadField = false;
 
-    uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
-    appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
+    appendTextContent(xTOC, uno::Sequence< beans::PropertyValue >() );
 
     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
     {
@@ -8871,8 +8864,7 @@ void DomainMapper_Impl::PopFieldContext()
         {
             try
             {
-                uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
-                if( xToInsert.is() )
+                if( pContext->GetTOC().is() )
                 {
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
@@ -8913,7 +8905,7 @@ void DomainMapper_Impl::PopFieldContext()
                 }
                 else
                 {
-                    xToInsert.set(pContext->GetTC(), uno::UNO_QUERY);
+                    uno::Reference< text::XTextContent > xToInsert(pContext->GetTC(), uno::UNO_QUERY);
                     if (!xToInsert.is() && !IsInTOC() && !m_bStartIndex && !m_bStartBibliography)
                         xToInsert = pContext->GetTextField();
                     if (xToInsert.is() && !IsInTOC() && !m_bStartIndex && !m_bStartBibliography)

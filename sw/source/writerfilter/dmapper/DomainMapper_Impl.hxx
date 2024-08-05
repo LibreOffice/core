@@ -53,6 +53,7 @@
 #include "FFDataHandler.hxx"
 #include "SmartTagHandler.hxx"
 #include "FormControlHelper.hxx"
+#include <unoidx.hxx>
 #include <unobookmark.hxx>
 #include <map>
 
@@ -312,7 +313,7 @@ private:
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
     rtl::Reference<SwXFieldmark> m_xFormField;
-    css::uno::Reference<css::beans::XPropertySet> m_xTOC;
+    rtl::Reference<SwXSection> m_xTOC;
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
 
@@ -362,8 +363,8 @@ public:
     const rtl::Reference<SwXFieldmark>& GetFormField() const { return m_xFormField;}
     void SetFormField(rtl::Reference<SwXFieldmark> const& xFormField) { m_xFormField = xFormField;}
 
-    void SetTOC(css::uno::Reference<css::beans::XPropertySet> const& xTOC) { m_xTOC = xTOC; }
-    const css::uno::Reference<css::beans::XPropertySet>& GetTOC() const { return m_xTOC; }
+    void SetTOC(rtl::Reference<SwXSection> const& xTOC) { m_xTOC = xTOC; }
+    const rtl::Reference<SwXSection>& GetTOC() const { return m_xTOC; }
 
     void SetTC(css::uno::Reference<css::beans::XPropertySet> const& xTC) { m_xTC = xTC; }
     const css::uno::Reference<css::beans::XPropertySet>& GetTC() const { return m_xTC; }
@@ -1012,7 +1013,7 @@ public:
 
     void handleBibliography
         (const FieldContextPtr& pContext,
-        const OUString & sTOCServiceName);
+        std::u16string_view sTOCServiceName);
     /// The field command has to be closed (cFieldSep appeared).
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
@@ -1027,7 +1028,10 @@ public:
 
     /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
     OUString extractTocTitle();
-    css::uno::Reference<css::beans::XPropertySet> createSectionForRange(css::uno::Reference< css::text::XTextRange > xStart, css::uno::Reference< css::text::XTextRange > xEnd, const OUString & sObjectType, bool stepLeft);
+    rtl::Reference<SwXSection> createSectionForRange(
+            css::uno::Reference< css::text::XTextRange > xStart,
+            css::uno::Reference< css::text::XTextRange > xEnd,
+            std::u16string_view sObjectType, bool stepLeft);
 
     void SetBookmarkName( const OUString& rBookmarkName );
     void StartOrEndBookmark( const OUString& rId );
@@ -1275,7 +1279,7 @@ public:
 private:
     void PushPageHeaderFooter(PagePartType ePagePartType, PageType eType);
     // Start a new index section; if needed, finish current paragraph
-    css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
+    rtl::Reference<SwXSection> StartIndexSectionChecked(std::u16string_view sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// SAXException was seen so document will be abandoned
     bool m_bSaxError;

@@ -32,6 +32,8 @@
 
 #include <toxe.hxx>
 #include <unobaseclass.hxx>
+#include "unosection.hxx"
+#include <swdllapi.h>
 
 class SwDoc;
 class SwTOXBaseSection;
@@ -39,15 +41,12 @@ class SwTOXMark;
 class SwTOXType;
 
 typedef ::cppu::ImplInheritanceHelper
-<   ::sfx2::MetadatableMixin
-,   css::lang::XServiceInfo
-,   css::beans::XPropertySet
-,   css::container::XNamed
+<   SwXSection
 ,   css::util::XRefreshable
 ,   css::text::XDocumentIndex
 > SwXDocumentIndex_Base;
 
-class SwXDocumentIndex final
+class SW_DLLPUBLIC SwXDocumentIndex final
     : public SwXDocumentIndex_Base
 {
 

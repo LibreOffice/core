@@ -120,6 +120,7 @@ class SwXContentControl;
 class SwXTextEmbeddedObject;
 class SvXMLEmbeddedObjectHelper;
 class SwXFieldmark;
+class SwXSection;
 class SwXFieldMaster;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
@@ -530,6 +531,8 @@ public:
     rtl::Reference<SwXFieldMaster> createFieldMaster(std::u16string_view sServiceName);
     rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);
     rtl::Reference<SwXFieldmark> createFieldmark(std::u16string_view sServiceName);
+    /// returns either SwXDocumentIndex or SwXTextSection
+    rtl::Reference<SwXSection> createSection(std::u16string_view rObjectType);
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();
     rtl::Reference<SwXTextDefaults> createTextDefaults();
     rtl::Reference<SwXBookmark> createBookmark();

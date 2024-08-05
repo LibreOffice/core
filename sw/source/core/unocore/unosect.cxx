@@ -216,6 +216,8 @@ SwXTextSection::CreateXTextSection(
     return xSection;
 }
 
+SwXSection::~SwXSection() {}
+
 SwXTextSection::SwXTextSection(
         SwSectionFormat *const pFormat, const bool bIndexHeader)
     : m_pImpl( new SwXTextSection::Impl(*this, pFormat, bIndexHeader) )

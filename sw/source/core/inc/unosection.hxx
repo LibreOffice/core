@@ -39,9 +39,23 @@ typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   css::lang::XServiceInfo
 ,   css::beans::XPropertySet
+,   css::container::XNamed
+,   css::text::XTextContent
+> SwXSection_Base;
+
+/// Base class for SwXTextSection and SwXDocumentIndex
+class SW_DLLPUBLIC SwXSection
+    : public SwXSection_Base
+{
+public:
+    ~SwXSection();
+};
+
+
+typedef ::cppu::ImplInheritanceHelper
+<   SwXSection
 ,   css::beans::XPropertyState
 ,   css::beans::XMultiPropertySet
-,   css::container::XNamed
 ,   css::text::XTextSection
 > SwXTextSection_Base;
 
