@@ -54,6 +54,8 @@ constexpr OUString S_ANNOTATION_BOOKMARK = u"____"_ustr;
 
 using namespace ::sw::mark;
 
+static bool IsAnnotationMark(const sw::mark::MarkBase& rBkmk);
+
 namespace
 {
     bool lcl_GreaterThan( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
@@ -102,13 +104,13 @@ namespace
         {   // consistency with SwPosition::operator<
             return pSecondNode != nullptr;
         }
-        auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(pFirst));
-        auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(pSecond));
-        if ((pCRFirst == nullptr) == (pCRSecond == nullptr))
+        bool const bCRFirst (IsCrossRefBookmark(*pFirst));
+        bool const bCRSecond(IsCrossRefBookmark(*pSecond));
+        if (bCRFirst == bCRSecond)
         {
             return false; // equal
         }
-        return pCRFirst != nullptr; // cross-ref sorts *before*
+        return bCRFirst; // cross-ref sorts *before*
     }
 
     template<class MarkT>
@@ -261,7 +263,7 @@ namespace
         const bool bChangedOPos,
         MarkBase* io_pMark )
     {
-        if ( IDocumentMarkAccess::GetType(*io_pMark) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
+        if ( IsAnnotationMark(*io_pMark) )
         {
             // annotation marks are allowed to span a table cell range.
             // but trigger sorting to be save
@@ -383,6 +385,28 @@ namespace
 #endif
         assert(std::is_sorted(rMarks.begin(), rMarks.end(), lcl_MarkOrderingByStart<MarkT>));
     };
+}
+
+static bool IsNavigatorReminder(const MarkBase& rBkmk)
+{
+    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    // not using dynamic_cast<> here for performance
+    return (*pMarkTypeInfo == typeid(NavigatorReminder));
+}
+
+static bool IsCrossRefBookmark(const sw::mark::MarkBase& rBkmk)
+{
+    // not using dynamic_cast<> here for performance
+    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    return (*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+        || (*pMarkTypeInfo == typeid(CrossRefNumItemBookmark));
+}
+
+static bool IsAnnotationMark(const sw::mark::MarkBase& rBkmk)
+{
+    // not using dynamic_cast<> here for performance
+    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    return (*pMarkTypeInfo == typeid(AnnotationMark));
 }
 
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const MarkBase& rBkmk)
@@ -893,7 +917,7 @@ namespace sw::mark
         assert(pMark);
         // navigator marks should not be moved
         // TODO: Check if this might make them invalid
-        if (IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER)
+        if (IsNavigatorReminder(*pMark))
         {
             return false;
         }
