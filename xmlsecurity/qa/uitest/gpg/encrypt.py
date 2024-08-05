@@ -93,6 +93,6 @@ class GpgEncryptTest(UITestCase):
                         with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="") as xSignOnConsecutiveSaveDialog:
                             xSignOnConsecutiveSaveDialog.getChild("no").executeAction("CLICK", tuple())
 
-                        # confirm signing was sucessful
+                        # confirm signing was successful
                         self.assertTrue(self.ui_test.get_component().getPropertyValue("HasValidSignatures"))
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
