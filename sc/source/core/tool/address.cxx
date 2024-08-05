@@ -733,6 +733,9 @@ static const sal_Unicode* lcl_r1c1_get_row(
         if( isRelative )
             return nullptr;
         n = rDetails.nRow;
+
+        if (n < 0 || n >= rSheetLimits.GetMaxRowCount())
+            return nullptr;
     }
     else if( isRelative )
     {
@@ -740,15 +743,23 @@ static const sal_Unicode* lcl_r1c1_get_row(
             return nullptr;
         n += rDetails.nRow;
         pEnd++;
+
+        if (n < 0 || n >= rSheetLimits.GetMaxRowCount())
+            return nullptr;
     }
     else
     {
         *nFlags |= ScRefFlags::ROW_ABS;
+
+        if (n <= 0)
+            return nullptr;
+
         n--;
+
+        if (n >= rSheetLimits.GetMaxRowCount())
+            return nullptr;
     }
 
-    if( n < 0 || n >= rSheetLimits.GetMaxRowCount() )
-        return nullptr;
     pAddr->SetRow( static_cast<SCROW>( n ) );
     *nFlags |= ScRefFlags::ROW_VALID;
 
