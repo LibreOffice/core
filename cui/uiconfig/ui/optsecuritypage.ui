@@ -695,7 +695,7 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optsecuritypage|label10">Certificate Manager</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label10">GPG Certificate Manager</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -270,7 +270,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="start_certmanager">
-                    <property name="label" translatable="yes" context="digitalsignaturesdialog|start_certmanager">Start Certificate Manager...</property>
+                    <property name="label" translatable="yes" context="digitalsignaturesdialog|start_certmanager">GPG Certificate Manager</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
