@@ -2847,7 +2847,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
 
     // Get the VCL font from existing processor tooling. Do not use
     // rotation, for Cairo we can transform the whole text render and
-    // thus handle the xext in its local coordinate system untransformed
+    // thus handle the text in its local coordinate system untransformed
     vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
         rTextCandidate.getFontAttribute(), aGlobalFontScaling.getX(), aGlobalFontScaling.getY(),
         0.0, rTextCandidate.getLocale()));
