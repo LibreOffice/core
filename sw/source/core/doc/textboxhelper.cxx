@@ -196,6 +196,10 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
                  xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION), pObject);
     syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
                  xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT), pObject);
+    // tdf#162075 shape word wrap to frame width type on shape creation.
+    bool bTextWordwrap = xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WORDWRAP).get<bool>();
+    syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE,
+                 uno::Any(bTextWordwrap ? text::SizeType::FIX : text::SizeType::MIN), pObject);
     syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0,
                  xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST), pObject);
     text::WritingMode eMode;
@@ -691,6 +695,16 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         sal_Int16 eMode2;
         if (rValue >>= eMode2)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(eMode2), pObj);
+    }
+    else if (rPropertyName == u"TextWordWrap")
+    {
+        // tdf#81567 shape word wrap to frame width type on shape update.
+        bool bTextWordwrap{};
+        if (rValue >>= bTextWordwrap)
+        {
+            syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE,
+                         uno::Any(bTextWordwrap ? text::SizeType::FIX : text::SizeType::MIN), pObj);
+        }
     }
     else
         SAL_INFO("sw.core", "SwTextBoxHelper::syncProperty: unhandled property: "
