@@ -23,9 +23,13 @@
 #include <svl/style.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 #include "coreframestyle.hxx"
 #include "unobasestyle.hxx"
 
@@ -34,6 +38,9 @@ class SwStyleBase_Impl;
 class SwStyleProperties_Impl;
 class SvxSetItem;
 struct SfxItemPropertyMapEntry;
+class SwDoc;
+class SfxItemPropertySet;
+class SwDocShell;
 
 class SAL_DLLPUBLIC_RTTI SwXStyle
     : public cppu::ImplInheritanceHelper<
