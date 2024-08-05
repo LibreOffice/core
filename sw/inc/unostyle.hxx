@@ -52,7 +52,7 @@ class SwXFrameStyle;
 class StyleFamilyEntry;
 class SwXStyleFamily;
 
-class SwXStyleFamilies final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXStyleFamilies final : public cppu::WeakImplHelper
 <
     css::container::XIndexAccess,
     css::container::XNameAccess,
