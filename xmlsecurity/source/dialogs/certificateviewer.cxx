@@ -92,6 +92,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
     , m_xIssuedByFT(mxBuilder->weld_label(u"issued_by_value"_ustr))
     , m_xValidFromDateFT(mxBuilder->weld_label(u"valid_from_value"_ustr))
     , m_xValidToDateFT(mxBuilder->weld_label(u"valid_to_value"_ustr))
+    , m_xKeyTypeFT(mxBuilder->weld_label(u"key_type_value"_ustr))
     , m_xKeyImg(mxBuilder->weld_image(u"keyimage"_ustr))
     , m_xHintCorrespPrivKeyFT(mxBuilder->weld_label(u"privatekey"_ustr))
 {
@@ -131,6 +132,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
 
     m_xValidFromDateFT->set_label(sValidFromDate);
     m_xValidToDateFT->set_label(sValidToDate);
+    m_xKeyTypeFT->set_label(xmlsec::GetCertificateKind(xCert->getCertificateKind()));
 
     // Check if we have the private key...
     bool bHasPrivateKey = false;

@@ -82,6 +82,7 @@ private:
     std::unique_ptr<weld::Label> m_xIssuedByFT;
     std::unique_ptr<weld::Label> m_xValidFromDateFT;
     std::unique_ptr<weld::Label> m_xValidToDateFT;
+    std::unique_ptr<weld::Label> m_xKeyTypeFT;
     std::unique_ptr<weld::Image> m_xKeyImg;
     std::unique_ptr<weld::Label> m_xHintCorrespPrivKeyFT;
 
