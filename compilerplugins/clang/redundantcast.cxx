@@ -897,7 +897,7 @@ bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
                 << t2 << t1 << expr->getSourceRange();
             return true;
         }
-        if (qt1->getAsCXXRecordDecl() && qt2->getAsCXXRecordDecl()->isDerivedFrom(qt1->getAsCXXRecordDecl()))
+        if (qt1->getAsCXXRecordDecl() && qt2->getAsCXXRecordDecl() && qt2->getAsCXXRecordDecl()->isDerivedFrom(qt1->getAsCXXRecordDecl()))
         {
             report(
                 DiagnosticsEngine::Warning,
