@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	$(if $(filter SOLARIS,$(OS)),external/libxml2/libxml2-global-symbols.patch) \
 	external/libxml2/libxml2-vc10.patch \
 	external/libxml2/libxml2-XMLCALL-redefine.patch.0 \
+	external/libxml2/0001-ofz-70675-XML_ERR_FATAL-not-ending-parse.patch.0 \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
 	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
 		external/libxml2/libxml2-icu-sym.patch.0, \

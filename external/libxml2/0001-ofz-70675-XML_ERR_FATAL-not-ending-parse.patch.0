@@ -1,0 +1,35 @@
+From 2dad1410684110073bd19c2af27187dcc9c05270 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 5 Aug 2024 11:04:36 +0100
+Subject: [PATCH] ofz#70675 XML_ERR_FATAL not ending parse
+
+if there was 100 earlier non-fatal errors,
+
+an issue since:
+
+commit f19a95108a32b40eaa3b16b41d7a687896e61ce5
+CommitDate: Mon Dec 11 22:13:05 2023 +0100
+
+    parser: Report malloc failures
+
+    Fix many places where malloc failures aren't reported.
+---
+ parserInternals.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/parserInternals.c b/parserInternals.c
+index 7700de39..4c6c27e0 100644
+--- parserInternals.c
++++ parserInternals.c
+@@ -330,7 +330,7 @@ xmlCtxtVErr(xmlParserCtxtPtr ctxt, xmlNodePtr node, xmlErrorDomain domain,
+             return;
+         ctxt->nbWarnings += 1;
+     } else {
+-        if (ctxt->nbErrors >= XML_MAX_ERRORS)
++        if (ctxt->nbErrors >= XML_MAX_ERRORS && level != XML_ERR_FATAL)
+             return;
+         ctxt->nbErrors += 1;
+     }
+-- 
+2.45.1
+
