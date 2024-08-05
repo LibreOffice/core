@@ -57,7 +57,10 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_aCursorConfig(*this),
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
     m_aFmtAidsAutoComplConfig(*this),
-    m_bApplyCharUnit(false)
+    m_bApplyCharUnit(false),
+    m_bUseDefaultZoom(true),
+    m_nDefaultZoomValue(100),
+    m_eDefaultZoomType(SvxZoomType::PERCENT)
 {
     if (comphelper::IsFuzzing())
     {
@@ -87,6 +90,8 @@ SwMasterUsrPref::~SwMasterUsrPref()
 
 const auto g_UpdateLinkIndex = 17;
 const auto g_DefaultAnchor = 25;
+const auto g_ZoomType = 27;
+const auto g_ZoomValue = 28;
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {
@@ -117,12 +122,17 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/ShowOutlineContentVisibilityButton", // 22
         "Display/TreatSubOutlineLevelsAsContent",     // 23
         "Display/ShowChangesInMargin",          // 24
-        "Display/DefaultAnchor"                 // 25
+        "Display/DefaultAnchor",                // 25
+        "Zoom/DefaultZoom",                     // 26
+        "Zoom/ZoomType",                        // 27
+        "Zoom/ZoomValue"                        //28
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
     static_assert(std::strcmp("Update/Link", aPropNames[g_UpdateLinkIndex]) == 0);
     static_assert(std::strcmp("Display/DefaultAnchor", aPropNames[g_DefaultAnchor]) == 0);
+    static_assert(std::strcmp("Zoom/ZoomType", aPropNames[g_ZoomType]) == 0);
+    static_assert(std::strcmp("Zoom/ZoomValue", aPropNames[g_ZoomValue]) == 0);
 #endif
     const int nCount = m_bWeb ? 12 : SAL_N_ELEMENTS(aPropNames);
     Sequence<OUString> aNames(nCount);
@@ -190,8 +200,13 @@ void SwContentViewConfig::ImplCommit()
             case 23: bVal = m_rParent.IsTreatSubOutlineLevelsAsContent(); break;// "Display/TreatSubOutlineLevelsAsContent"
             case 24: bVal = m_rParent.IsShowChangesInMargin(); break;// "Display/ShowChangesInMargin"
             case 25: pValues[nProp] <<= m_rParent.GetDefaultAnchor(); break;// "Display/DefaultAnchor"
+                //TODO: Save zoom preferred, zoom type, zoom value
+            case 26: bVal = m_rParent.IsDefaultZoom(); break;// "Zoom/DefaultZoom"
+            case 27:pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomType()); break; // "Zoom/ZoomType"
+            case 28: pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomValue()); break; // "Zoom/ZoomValue"
         }
-        if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor))
+        if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor) &&
+            (nProp != g_ZoomType) && (nProp != g_ZoomValue))
             pValues[nProp] <<= bVal;
     }
     PutProperties(aNames, aValues);
@@ -209,7 +224,7 @@ void SwContentViewConfig::Load()
     {
         if(pValues[nProp].hasValue())
         {
-            bool bSet = ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor))
+            bool bSet = ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor) && (nProp != g_ZoomType)&& (nProp != g_ZoomValue))
                         && *o3tl::doAccess<bool>(pValues[nProp]);
             switch(nProp)
             {
@@ -251,6 +266,21 @@ void SwContentViewConfig::Load()
                     m_rParent.SetDefaultAnchor(nSet);
                 }
                 break; // "Display/DefaultAnchor"
+                case 26:  m_rParent.SetDefaultZoom(bSet); break; // "Zoom/DefaultZoom"
+                case 27:
+                {
+                    sal_Int32 nSet = 0;
+                    pValues[nProp] >>= nSet;
+                    m_rParent.SetDefaultZoomType(static_cast<SvxZoomType>(nSet), true);
+                }
+                break; //"Zoom/ZoomType", // 27
+                case 28:
+                {
+                    sal_Int32 nSet = 0;
+                    pValues[nProp] >>= nSet;
+                    m_rParent.SetDefaultZoomValue(static_cast<sal_uInt16>(nSet), true);
+                }
+                break; //"Zoom/ZoomValue"
             }
         }
     }

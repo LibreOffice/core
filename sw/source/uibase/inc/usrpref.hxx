@@ -168,6 +168,12 @@ class SwMasterUsrPref : public SwViewOption
     SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
 
     bool m_bApplyCharUnit; // apply_char_unit
+
+    // Scale
+    bool              m_bUseDefaultZoom;
+    sal_uInt16        m_nDefaultZoomValue;  // percent.
+    SvxZoomType       m_eDefaultZoomType;
+
 public:
     SwMasterUsrPref(bool bWeb);
     ~SwMasterUsrPref();
@@ -260,6 +266,28 @@ public:
         if (!noModify) {
             m_aLayoutConfig.SetModified();
         }
+    }
+
+    bool IsDefaultZoom() const { return m_bUseDefaultZoom;}
+    void SetDefaultZoom( bool bSet, bool bNoModify = false )
+    {
+        m_bUseDefaultZoom = bSet;
+        if(!bNoModify)
+            m_aContentConfig.SetModified();
+    }
+    sal_uInt16 GetDefaultZoomValue() const { return m_nDefaultZoomValue; }
+    void SetDefaultZoomValue ( sal_uInt16 nValue, bool bNoModify = false )
+    {
+        m_nDefaultZoomValue = nValue;
+        if(!bNoModify)
+          m_aContentConfig.SetModified();
+    }
+    SvxZoomType GetDefaultZoomType() const { return m_eDefaultZoomType;}
+    void SetDefaultZoomType( SvxZoomType eType, bool bNoModify = false )
+    {
+        m_eDefaultZoomType = eType;
+        if(!bNoModify)
+            m_aContentConfig.SetModified();
     }
 
     sal_Int32   GetDefTabInMm100() const { return m_nDefTabInMm100;}
