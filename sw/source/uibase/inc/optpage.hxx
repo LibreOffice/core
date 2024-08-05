@@ -75,8 +75,20 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
     std::unique_ptr<weld::Widget> m_xFieldHiddenParaImg;
 
+    std::unique_ptr<weld::Frame> m_xZoomFrame;
+    std::unique_ptr<weld::RadioButton> m_xZoomLatestRB;
+    std::unique_ptr<weld::RadioButton> m_xZoomPreferredRB;
+    std::unique_ptr<weld::RadioButton> m_xZoomOptimalRB;
+    std::unique_ptr<weld::RadioButton> m_xZoomWidthAndHeightRB;
+    std::unique_ptr<weld::RadioButton> m_xZoomWidthRB;
+    std::unique_ptr<weld::RadioButton> m_xZoom100RB;
+    std::unique_ptr<weld::RadioButton> m_xZoomCustomRB;
+    std::unique_ptr<weld::MetricSpinButton> m_xZoomValue;
+
     DECL_LINK(VertRulerHdl, weld::Toggleable&, void);
     DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, void);
+    DECL_LINK(ZoomHdl, weld::Toggleable&, void);
+    DECL_LINK(ZoomLatestHdl, weld::Toggleable&, void);
 public:
     SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;

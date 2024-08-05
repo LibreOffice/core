@@ -106,12 +106,16 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         aRet(GetPool());
 
     aRet.Put( SwDocDisplayItem( aViewOpt ) );
-    aRet.Put( SwElemItem( aViewOpt ) );
+    SwElemItem aElemItem( aViewOpt );
     if( bTextDialog )
     {
         aRet.Put( SwShadowCursorItem( aViewOpt ));
         aRet.Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
+        aElemItem.SetDefaultZoom(pPref->IsDefaultZoom());
+        aElemItem.SetDefaultZoomType(pPref->GetDefaultZoomType());
+        aElemItem.SetDefaultZoomValue(pPref->GetDefaultZoomValue());
     }
+    aRet.Put( aElemItem );
 
     if( pAppView )
     {
@@ -261,6 +265,12 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( const SwElemItem* pElemItem = rSet.GetItemIfSet( FN_PARAM_ELEM, false ) )
     {
         pElemItem->FillViewOptions( aViewOpt );
+        if (bTextDialog)
+        {
+            pPref->SetDefaultZoom(pElemItem->IsDefaultZoom());
+            pPref->SetDefaultZoomType(pElemItem->GetDefaultZoomType());
+            pPref->SetDefaultZoomValue(pElemItem->GetDefaultZoomValue());
+        }
 
         // Outline-folding options
         if (SwWrtShell* pWrtShell = GetActiveWrtShell())
