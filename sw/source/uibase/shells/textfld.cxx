@@ -1110,13 +1110,13 @@ FIELD_INSERT:
                 const bool bIsSinglePage = rDesc.GetFollow() != &rDesc;
                 const size_t nMirrorPagesNeeded = rDesc.IsFirstShared() ? 2 : 3;
                 const OUString sBookmarkName = OUString::Concat("PageNumWizard_")
-                    + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName();
+                    + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName()
+                    + OUString::number(rSh.GetVirtPageNum());
                 IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
 
                 // Allow wizard to be re-run: delete previously wizard-inserted page number.
                 // Try before creating non-shared header: avoid copying ODD bookmark onto EVEN page.
-                auto ppMark = rIDMA.findMark(
-                    sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
+                auto ppMark = rIDMA.findMark(sBookmarkName);
                 if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                 {
                     SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
@@ -1307,7 +1307,7 @@ FIELD_INSERT:
 
                 // Allow wizard to be re-run: delete previously wizard-inserted page number.
                 // Now that the cursor may have moved to a different page, try delete again.
-                ppMark = rIDMA.findMark(sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
+                ppMark = rIDMA.findMark(sBookmarkName);
                 if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                 {
                     SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
@@ -1373,7 +1373,7 @@ FIELD_INSERT:
                 assert(aNewBookmarkPaM.GetPointContentNode() && "only SetContent on content node");
                 aNewBookmarkPaM.Start()->SetContent(nStartContentIndex);
                 rIDMA.makeMark(aNewBookmarkPaM,
-                               sBookmarkName + OUString::number(rSh.GetVirtPageNum()),
+                               sBookmarkName,
                                IDocumentMarkAccess::MarkType::BOOKMARK,
                                sw::mark::InsertMode::New);
 
@@ -1382,7 +1382,7 @@ FIELD_INSERT:
                     && rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true))
                 {
                     assert(nEvenPage && "what? no even page and yet we got here?");
-                    ppMark = rIDMA.findMark(sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
+                    ppMark = rIDMA.findMark(sBookmarkName);
                     if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
                     {
                         SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
@@ -1427,7 +1427,7 @@ FIELD_INSERT:
                     aNewEvenBookmarkPaM.SetMark();
                     aNewEvenBookmarkPaM.Start()->SetContent(nStartContentIndex);
                     rIDMA.makeMark(aNewEvenBookmarkPaM,
-                                   sBookmarkName + OUString::number(rSh.GetVirtPageNum()),
+                                   sBookmarkName,
                                    IDocumentMarkAccess::MarkType::BOOKMARK,
                                    sw::mark::InsertMode::New);
                 }
