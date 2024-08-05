@@ -387,7 +387,8 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
 }
 
 void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
-        uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
+        uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray,
+        bool bIgnoreTableRefNoInnerReference )
 {
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());
     formula::FormulaToken** pTokens = rTokenArray.GetArray();
@@ -458,7 +459,9 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                             aTableRefToken.Index = static_cast<sal_Int32>( pTR->GetIndex());
                             aTableRefToken.Item = static_cast<sal_Int16>( pTR->GetItem());
                             const FormulaToken* pRef = pTR->GetAreaRefRPN();
-                            assert(pRef && "something forgot to create RPN for ocTableRef inner reference");
+                            assert((pRef || bIgnoreTableRefNoInnerReference)
+                                    && "something forgot to create RPN for ocTableRef inner reference");
+                            (void)bIgnoreTableRefNoInnerReference;
                             if (pRef)
                             {
                                 switch (pRef->GetType())

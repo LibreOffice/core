@@ -299,8 +299,11 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
     }
 
     ScTokenArray* pTokenArray = pScRangeData->GetCode();
+    /* TODO: conversion to FormulaToken sequence would be completely
+     * unnecessary if getFormulaParser().extractCellRangeList() could operate
+     * on ScTokenArray instead. */
     Sequence< FormulaToken > aFTokenSeq;
-    ScTokenConversion::ConvertToTokenSequence( getScDocument(), aFTokenSeq, *pTokenArray );
+    ScTokenConversion::ConvertToTokenSequence( getScDocument(), aFTokenSeq, *pTokenArray, true);
     // set built-in names (print ranges, repeated titles, filter ranges)
     if( isGlobalName() )
         return;
@@ -358,8 +361,11 @@ bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
 {
     ScRangeData* pScRangeData = maScRangeData.first;
     ScTokenArray* pTokenArray = pScRangeData->GetCode();
+    /* TODO: conversion to FormulaToken sequence would be completely
+     * unnecessary if getFormulaParser().extractCellRange() could operate
+     * on ScTokenArray instead. */
     Sequence< FormulaToken > aFTokenSeq;
-    ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
+    ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray, true);
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq );
 }
 

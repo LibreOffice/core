@@ -44,7 +44,8 @@ public:
     static SC_DLLPUBLIC void ConvertToTokenSequence(
                         const ScDocument& rDoc,
                         css::uno::Sequence< css::sheet::FormulaToken >& rSequence,
-                        const ScTokenArray& rTokenArray );
+                        const ScTokenArray& rTokenArray,
+                        bool bIgnoreTableRefNoInnerReference = false );
 };
 
 class ScFormulaParserObj final : public ::cppu::WeakImplHelper<
