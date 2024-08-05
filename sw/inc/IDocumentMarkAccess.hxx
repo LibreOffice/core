@@ -231,12 +231,12 @@ class IDocumentMarkAccess
         */
         virtual const_iterator findMark(const OUString& rMark) const =0;
 
-        /** Find the first Mark that does not start before.
+        /** Find the first Bookmark that does not start before.
 
             @returns
             an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
         */
-        virtual const_iterator findFirstMarkNotStartsBefore(const SwPosition& rPos) const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findFirstBookmarkNotStartsBefore(const SwPosition& rPos) const =0;
 
         // interface Bookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 

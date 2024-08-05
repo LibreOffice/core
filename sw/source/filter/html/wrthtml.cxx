@@ -1270,31 +1270,27 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
 void SwHTMLWriter::OutBookmarks()
 {
     // fetch current bookmark
-    const ::sw::mark::MarkBase* pBookmark = nullptr;
     IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
-    if(m_nBkmkTabPos != -1)
-        pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
 
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
     SwNodeOffset nNode = m_pCurrentPam->GetPoint()->GetNodeIndex();
     while (m_nBkmkTabPos != -1)
     {
+        const ::sw::mark::Bookmark* pBookmark = pMarkAccess->getBookmarksBegin()[m_nBkmkTabPos];
         assert(pBookmark);
         if (pBookmark->GetMarkPos().GetNodeIndex() != nNode)
             break;
         // The area of bookmarks is first ignored, because it's not read.
 
         // first the SWG specific data:
-        if ( dynamic_cast< const ::sw::mark::Bookmark* >(pBookmark) && !pBookmark->GetName().isEmpty() )
-        {
+        if ( !pBookmark->GetName().isEmpty() )
             OutAnchor( pBookmark->GetName() );
-        }
 
-        if( ++m_nBkmkTabPos >= pMarkAccess->getAllMarksCount() )
+        if( ++m_nBkmkTabPos >= pMarkAccess->getBookmarksCount() )
             m_nBkmkTabPos = -1;
         else
-            pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
+            pBookmark = pMarkAccess->getBookmarksBegin()[m_nBkmkTabPos];
     }
 
     decltype(m_aOutlineMarkPoss)::size_type nPos;

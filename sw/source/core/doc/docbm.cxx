@@ -1341,14 +1341,14 @@ namespace sw::mark
         return lcl_FindMarkByName<sw::mark::Bookmark>(rName, m_vBookmarks.begin(), m_vBookmarks.end());
     }
 
-    // find the first Mark that does not start before
-    IDocumentMarkAccess::const_iterator MarkManager::findFirstMarkNotStartsBefore(const SwPosition& rPos) const
+    // find the first Bookmark that does not start before
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findFirstBookmarkNotStartsBefore(const SwPosition& rPos) const
     {
         return std::lower_bound(
-                m_vAllMarks.begin(),
-                m_vAllMarks.end(),
+                m_vBookmarks.begin(),
+                m_vBookmarks.end(),
                 rPos,
-                CompareIMarkStartsBefore<MarkBase>());
+                CompareIMarkStartsBefore<Bookmark>());
     }
 
     IDocumentMarkAccess::const_iterator MarkManager::getAllMarksBegin() const
