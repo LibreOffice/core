@@ -346,7 +346,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
 {
-    SdrObjList* pObjList;
+    SdrObjList* m_pObjList;
     rtl::Reference<SdrObject> mxNewObj;
 
 public:

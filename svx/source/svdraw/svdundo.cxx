@@ -841,7 +841,7 @@ SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1)
     : SdrUndoObj(rOldObj1)
     , mxNewObj(&rNewObj1)
 {
-    pObjList=mxObj->getParentSdrObjListFromSdrObject();
+    m_pObjList=mxObj->getParentSdrObjListFromSdrObject();
 }
 
 SdrUndoReplaceObj::~SdrUndoReplaceObj()
@@ -857,13 +857,13 @@ void SdrUndoReplaceObj::Undo()
     DBG_ASSERT(mxNewObj->IsInserted(),"SdrUndoReplaceObj::Undo(): New object is not inserted!");
 
     ImplUnmarkObject( mxNewObj.get() );
-    pObjList->ReplaceObject(mxObj.get(), mxNewObj->GetOrdNum());
+    m_pObjList->ReplaceObject(mxObj.get(), mxNewObj->GetOrdNum());
 }
 
 void SdrUndoReplaceObj::Redo()
 {
     ImplUnmarkObject( mxObj.get() );
-    pObjList->ReplaceObject(mxNewObj.get(), mxObj->GetOrdNum());
+    m_pObjList->ReplaceObject(mxNewObj.get(), mxObj->GetOrdNum());
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
