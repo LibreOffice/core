@@ -1372,7 +1372,7 @@ FIELD_INSERT:
                 aNewBookmarkPaM.SetMark();
                 assert(aNewBookmarkPaM.GetPointContentNode() && "only SetContent on content node");
                 aNewBookmarkPaM.Start()->SetContent(nStartContentIndex);
-                rIDMA.makeMark(aNewBookmarkPaM,
+                sw::mark::MarkBase* pNewMark = rIDMA.makeMark(aNewBookmarkPaM,
                                sBookmarkName,
                                IDocumentMarkAccess::MarkType::BOOKMARK,
                                sw::mark::InsertMode::New);
@@ -1382,10 +1382,9 @@ FIELD_INSERT:
                     && rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true))
                 {
                     assert(nEvenPage && "what? no even page and yet we got here?");
-                    ppMark = rIDMA.findMark(sBookmarkName);
-                    if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
+                    if (pNewMark)
                     {
-                        SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
+                        SwPaM aDeleteOldPageNum(pNewMark->GetMarkStart(), pNewMark->GetMarkEnd());
                         rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
                     }
 
