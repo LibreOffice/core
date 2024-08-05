@@ -412,7 +412,7 @@ bool ORTFImportExport::Write()
                 sColumnName = m_xResultSetMetaData->getColumnName(i);
             else
             {
-                sColumnName = aNames[i];
+                sColumnName = aNames[i - 1];
                 Reference<XPropertySet> xColumn;
                 xColumns->getByName(sColumnName) >>= xColumn;
                 xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
