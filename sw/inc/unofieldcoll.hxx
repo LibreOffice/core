@@ -61,8 +61,9 @@ public:
             const OUString& rName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames() override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& rName) override;
+    SW_DLLPUBLIC virtual sal_Bool SAL_CALL hasByName(const OUString& rName) override;
 
+    SW_DLLPUBLIC rtl::Reference<SwXFieldMaster> getFieldMasterByName(const OUString& rName);
 };
 
 typedef ::cppu::WeakImplHelper

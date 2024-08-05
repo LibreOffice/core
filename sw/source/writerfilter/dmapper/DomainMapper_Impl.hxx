@@ -63,6 +63,7 @@ class SwXTextFrame;
 class SwXTextEmbeddedObject;
 class SwXText;
 class SwXStyleFamily;
+class SwXFieldMaster;
 namespace com::sun::star{
         namespace awt{
             struct Size;
@@ -682,7 +683,7 @@ private:
 
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     /// @throws css::uno::Exception
-    css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
+    rtl::Reference<SwXFieldMaster> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
     rtl::Reference<SwXDocumentSettings> const & GetDocumentSettings();
 
     SmartTagHandler m_aSmartTagHandler;

@@ -46,6 +46,8 @@
 #include <SwXDocumentSettings.hxx>
 #include <unotxdoc.hxx>
 #include <unostyle.hxx>
+#include <unofield.hxx>
+#include <unofieldcoll.hxx>
 
 using namespace com::sun::star;
 
@@ -667,20 +669,20 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     // Create or overwrite DocVars based on found in settings
     if (m_pImpl->m_aDocVars.size())
     {
-        uno::Reference< container::XNameAccess > xFieldMasterAccess = xDoc->getTextFieldMasters();
+        rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = xDoc->getSwXTextFieldMasters();
         for (const auto& docVar : m_pImpl->m_aDocVars)
         {
-            uno::Reference< beans::XPropertySet > xMaster;
+            rtl::Reference< SwXFieldMaster > xMaster;
             OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + docVar.first);
 
             // Find or create Field Master
             if (xFieldMasterAccess->hasByName(sFieldMasterService))
             {
-                xMaster.set(xFieldMasterAccess->getByName(sFieldMasterService), uno::UNO_QUERY_THROW);
+                xMaster = xFieldMasterAccess->getFieldMasterByName(sFieldMasterService);
             }
             else
             {
-                xMaster.set(xDoc->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY_THROW);
+                xMaster = xDoc->createFieldMaster(u"com.sun.star.text.FieldMaster.User");
                 xMaster->setPropertyValue(getPropertyName(PROP_NAME), uno::Any(docVar.first));
                 uno::Reference<text::XDependentTextField> xField(
                     xDoc->createInstance(u"com.sun.star.text.TextField.User"_ustr),

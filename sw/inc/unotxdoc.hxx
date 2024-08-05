@@ -120,6 +120,7 @@ class SwXContentControl;
 class SwXTextEmbeddedObject;
 class SvXMLEmbeddedObjectHelper;
 class SwXFieldmark;
+class SwXFieldMaster;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -521,6 +522,8 @@ public:
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
+    rtl::Reference<SwXTextFieldMasters> getSwXTextFieldMasters();
+    rtl::Reference<SwXFieldMaster> createFieldMaster(std::u16string_view sServiceName);
     rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);
     rtl::Reference<SwXFieldmark> createFieldmark(std::u16string_view sServiceName);
     rtl::Reference<SwXDocumentSettings> createDocumentSettings();

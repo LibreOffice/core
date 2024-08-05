@@ -2743,6 +2743,11 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
 {
+    return uno::Any(uno::Reference<beans::XPropertySet>(getFieldMasterByName(rName)));
+}
+
+rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const OUString& rName)
+{
     SolarMutexGuard aGuard;
 
     OUString sName(rName), sTypeName;
@@ -2760,9 +2765,9 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             "SwXTextFieldMasters::getByName(" + rName + ")",
             css::uno::Reference<css::uno::XInterface>());
 
-    uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(&rDoc, pType));
-    return uno::Any(xRet);
+    rtl::Reference<SwXFieldMaster> const xRet =
+            SwXFieldMaster::CreateXFieldMaster(&rDoc, pType);
+    return xRet;
 }
 
 bool SwXTextFieldMasters::getInstanceName(

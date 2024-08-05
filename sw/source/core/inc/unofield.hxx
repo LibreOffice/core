@@ -41,7 +41,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XComponent
 > SwXFieldMaster_Base;
 
-class SwXFieldMaster final
+class SW_DLLPUBLIC SwXFieldMaster final
     : public SwXFieldMaster_Base
 {
 

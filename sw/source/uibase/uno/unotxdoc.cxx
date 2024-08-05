@@ -1174,6 +1174,11 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields()
 
 Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters()
 {
+    return getSwXTextFieldMasters();
+}
+
+rtl::Reference< SwXTextFieldMasters >  SwXTextDocument::getSwXTextFieldMasters()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXTextFieldMasters.is())
@@ -1649,6 +1654,20 @@ rtl::Reference<SwXFieldmark> SwXTextDocument::createFieldmark(
     assert(nType != SwServiceType::Invalid);
     uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
     rtl::Reference<SwXFieldmark> xTextField = dynamic_cast<SwXFieldmark*>(xTmp.get());
+    assert(xTextField);
+    return xTextField;
+}
+
+rtl::Reference<SwXFieldMaster> SwXTextDocument::createFieldMaster(
+    std::u16string_view rServiceName)
+{
+    SolarMutexGuard aGuard;
+    ThrowIfInvalid();
+
+    const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
+    assert(nType != SwServiceType::Invalid);
+    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    rtl::Reference<SwXFieldMaster> xTextField = dynamic_cast<SwXFieldMaster*>(xTmp.get());
     assert(xTextField);
     return xTextField;
 }

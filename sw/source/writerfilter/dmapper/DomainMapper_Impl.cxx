@@ -142,6 +142,7 @@
 #include <unobookmark.hxx>
 #include <unosection.hxx>
 #include <unofield.hxx>
+#include <unofieldcoll.hxx>
 #include <unolinebreak.hxx>
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
@@ -6082,13 +6083,13 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
     }
 }
 
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
+rtl::Reference<SwXFieldMaster> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
 {
     // query master, create if not available
     if (!m_xTextDocument)
         throw uno::RuntimeException();
-    uno::Reference< container::XNameAccess > xFieldMasterAccess = m_xTextDocument->getTextFieldMasters();
-    uno::Reference< beans::XPropertySet > xMaster;
+    rtl::Reference< SwXTextFieldMasters > xFieldMasterAccess = m_xTextDocument->getSwXTextFieldMasters();
+    rtl::Reference< SwXFieldMaster > xMaster;
     OUString sFieldMasterService( OUString::createFromAscii(pFieldMasterService) );
     OUStringBuffer aFieldMasterName;
     OUString sDatabaseDataSourceName = GetSettingsTable()->GetCurrentDatabaseDataSource();
@@ -6104,12 +6105,12 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
     if(xFieldMasterAccess->hasByName(sFieldMasterName))
     {
         //get the master
-        xMaster.set(xFieldMasterAccess->getByName(sFieldMasterName), uno::UNO_QUERY_THROW);
+        xMaster = xFieldMasterAccess->getFieldMasterByName(sFieldMasterName);
     }
     else if( m_xTextDocument )
     {
         //create the master
-        xMaster.set( m_xTextDocument->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
+        xMaster = m_xTextDocument->createFieldMaster(sFieldMasterService);
         if ( !bIsMergeField || sDatabaseDataSourceName.isEmpty() )
         {
             //set the master's name
@@ -6541,9 +6542,8 @@ void DomainMapper_Impl::handleFieldSet
     }
 
     // determine field master name
-    uno::Reference< beans::XPropertySet > xMaster =
-        FindOrCreateFieldMaster
-        ("com.sun.star.text.FieldMaster.SetExpression", sVariable);
+    rtl::Reference<SwXFieldMaster> xMaster = FindOrCreateFieldMaster(
+        "com.sun.star.text.FieldMaster.SetExpression", sVariable);
 
     // a set field is a string
     xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
@@ -6572,9 +6572,8 @@ void DomainMapper_Impl::handleFieldAsk
     if(!sVariable.isEmpty())
     {
         // determine field master name
-        uno::Reference< beans::XPropertySet > xMaster =
-            FindOrCreateFieldMaster
-            ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
+        rtl::Reference<SwXFieldMaster> xMaster = FindOrCreateFieldMaster(
+                "com.sun.star.text.FieldMaster.SetExpression", sVariable );
         // An ASK field is always a string of characters
         xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::Any(text::SetVariableType::STRING));
 
@@ -6803,9 +6802,8 @@ void DomainMapper_Impl::handleAutoNum
     rtl::Reference< SwXTextField > const & xFieldInterface)
 {
     //create a sequence field master "AutoNr"
-    uno::Reference< beans::XPropertySet > xMaster =
-    FindOrCreateFieldMaster
-        ("com.sun.star.text.FieldMaster.SetExpression",
+    rtl::Reference<SwXFieldMaster> xMaster = FindOrCreateFieldMaster(
+        "com.sun.star.text.FieldMaster.SetExpression",
         u"AutoNr"_ustr);
 
     xMaster->setPropertyValue( getPropertyName(PROP_SUB_TYPE),
@@ -7870,7 +7868,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if (bCreateField)
                     {
                         //create a user field and type
-                        uno::Reference<beans::XPropertySet> xMaster = FindOrCreateFieldMaster(
+                        rtl::Reference<SwXFieldMaster> xMaster = FindOrCreateFieldMaster(
                             "com.sun.star.text.FieldMaster.User", sFirstParam);
                         xFieldInterface->attachTextFieldMaster(xMaster);
                         pContext->m_bSetUserFieldContent = true;
@@ -8149,7 +8147,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {
                     //todo: create a database field and fieldmaster pointing to a column, only
                     //create a user field and type
-                    uno::Reference< beans::XPropertySet > xMaster =
+                    rtl::Reference<SwXFieldMaster> xMaster =
                         FindOrCreateFieldMaster("com.sun.star.text.FieldMaster.Database", sFirstParam);
 
 //                    xFieldInterface->setPropertyValue(
@@ -8294,7 +8292,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     sSeqName = o3tl::trim(sSeqName);
 
                     // create a sequence field master using the sequence name
-                    uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
+                    rtl::Reference<SwXFieldMaster> xMaster = FindOrCreateFieldMaster(
                                 "com.sun.star.text.FieldMaster.SetExpression",
                                 OUString(sSeqName));
 
