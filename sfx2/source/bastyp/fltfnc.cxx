@@ -525,8 +525,10 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
         if ( pInstallFilter )
         {
             if ( IsFilterInstalled_Impl( pInstallFilter ) )
+            {
                 // Maybe the filter was installed afterwards.
-                pFilter = pInstallFilter;
+                pFilter = std::move(pInstallFilter);
+            }
         }
         else
         {

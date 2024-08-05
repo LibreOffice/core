@@ -374,7 +374,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog(pWin ? pWin->GetFrameWeld() : nullptr, &aNewAttr, pView));
 
-                                pDlg->StartExecuteAsync([pDlg, pRequest, pView, this](
+                                pDlg->StartExecuteAsync([pDlg, pRequest=std::move(pRequest), pView, this](
                                                             sal_Int32 nResult){
                                     if (nResult == RET_OK)
                                     {

@@ -1022,7 +1022,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
         // Step back conditions are the same as above
         nCol = nFoundCol;
         nRow = nFoundRow;
-        maCurPos = aPosSave;
+        maCurPos = std::move(aPosSave);
         return true;
     }
     if ( (maParam.eSearchType != utl::SearchParam::SearchType::Normal) &&

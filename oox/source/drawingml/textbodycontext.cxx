@@ -114,7 +114,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
             rtl::Reference<HyperLinkContext> pContext(new HyperLinkContext(
                 *this, rAttribs, pRun->getTextCharacterProperties().maHyperlinkPropertyMap));
             // but create text run context because HyperLinkContext can't process internal w:r, w:t, etc
-            return new RegularTextRunContext(*this, pRun);
+            return new RegularTextRunContext(*this, std::move(pRun));
         }
         default:
             SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));

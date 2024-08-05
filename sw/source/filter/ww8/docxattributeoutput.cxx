@@ -7483,7 +7483,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
             oox::getRelationship(Relationship::FONT),
             Concat2View("fonts/font" + OUString::number( m_nextFontId ) + ".odttf") ), RTL_TEXTENCODING_UTF8 );
         ref.fontKey = fontKeyStr;
-        m_FontFilesMap[ fontUrl ] = ref;
+        m_FontFilesMap[ fontUrl ] = std::move(ref);
         ++m_nextFontId;
     }
     m_pSerializer->singleElementNS( XML_w, tag,

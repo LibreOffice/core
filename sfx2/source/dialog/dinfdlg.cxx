@@ -931,7 +931,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
             VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
             m_xPasswordDialog = pFact->CreatePasswordToOpenModifyDialog(GetFrameWeld(), maxPwdLen, false);
             m_xPasswordDialog->AllowEmpty(); // needed to remove password
-            m_xPasswordDialog->StartExecuteAsync([this, pFilter, &rMedSet, pShell](sal_Int32 nResult)
+            m_xPasswordDialog->StartExecuteAsync([this, pFilter=std::move(pFilter), &rMedSet, pShell](sal_Int32 nResult)
             {
                 if (nResult == RET_OK)
                 {

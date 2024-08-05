@@ -1394,7 +1394,7 @@ void SmXMLOperatorContext_Impl::TCharacters(const OUString& rChars)
         bToken
             = starmathdatabase::Identify_SmXMLOperatorContext_Impl(aToken.cMathChar, bIsStretchy);
     if (bToken.eType != TERROR)
-        aToken = bToken;
+        aToken = std::move(bToken);
 }
 
 void SmXMLOperatorContext_Impl::endFastElement(sal_Int32)

@@ -338,7 +338,8 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
         }
     }
 
-    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
+    return EntryDescriptor(std::move(aDocument), eLocation, aLibName,
+                           aLibSubName, aName, aMethodName, eType);
 }
 
 SbxItemType SbTreeListBox::ConvertType (EntryType eType)

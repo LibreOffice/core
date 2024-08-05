@@ -905,11 +905,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pTableStyle->getFirstCol().getTextBoldStyle() = bFirstColTextBoldStyle;
     pTableStyle->getLastCol().getTextBoldStyle() = bLastColTextBoldStyle;
 
-    pTableStyle->getWholeTbl().getTextColor() = wholeTblTextColor;
-    pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;
-    pTableStyle->getFirstCol().getTextColor() = firstColTextColor;
-    pTableStyle->getLastRow().getTextColor() = lastRowTextColor;
-    pTableStyle->getLastCol().getTextColor() = lastColTextColor;
+    pTableStyle->getWholeTbl().getTextColor() = std::move(wholeTblTextColor);
+    pTableStyle->getFirstRow().getTextColor() = std::move(firstRowTextColor);
+    pTableStyle->getFirstCol().getTextColor() = std::move(firstColTextColor);
+    pTableStyle->getLastRow().getTextColor() = std::move(lastRowTextColor);
+    pTableStyle->getLastCol().getTextColor() = std::move(lastColTextColor);
 
     pTableStyle->getBand1H().getTextColor() = ::oox::drawingml::Color(); //band1HTextColor
     pTableStyle->getBand1V().getTextColor() = ::oox::drawingml::Color(); //band1VTextColor

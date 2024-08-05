@@ -1039,14 +1039,14 @@ bool ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         {
             aRepeatColRange->aStart.SetTab(nDestPos);
             aRepeatColRange->aEnd.SetTab(nDestPos);
-            maTabs[nDestPos]->SetRepeatColRange(aRepeatColRange);
+            maTabs[nDestPos]->SetRepeatColRange(std::move(aRepeatColRange));
         }
 
         if (auto aRepeatRowRange = rSrcDoc.maTabs[nSrcPos]->GetRepeatRowRange())
         {
             aRepeatRowRange->aStart.SetTab(nDestPos);
             aRepeatRowRange->aEnd.SetTab(nDestPos);
-            maTabs[nDestPos]->SetRepeatRowRange(aRepeatRowRange);
+            maTabs[nDestPos]->SetRepeatRowRange(std::move(aRepeatRowRange));
         }
 
         if (rSrcDoc.IsPrintEntireSheet(nSrcPos))

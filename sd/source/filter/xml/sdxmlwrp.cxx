@@ -240,7 +240,7 @@ ErrCodeMsg ReadThroughComponent(
         {
             xml::sax::SAXException aTmp;
             if ( aSaxEx.WrappedException >>= aTmp )
-                aSaxEx = aTmp;
+                aSaxEx = std::move(aTmp);
             else
                 bTryChild = false;
         }

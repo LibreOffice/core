@@ -606,8 +606,8 @@ TextEditHighContrastOverlaySelection::createOverlayObjectPrimitive2DSequence()
                 basegfx::utils::createPolygonFromRect(aClipPolyPolygon.getB2DRange())),
             aRGBColor));
         aRetval.append(mrTextEditOverlayObject.getTextPrimitives());
-        aRetval.append(
-            new drawinglayer::primitive2d::MaskPrimitive2D(aClipPolyPolygon, std::move(aRetval)));
+        aRetval.append(new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aClipPolyPolygon),
+                                                                      std::move(aRetval)));
     }
 
     return aRetval;

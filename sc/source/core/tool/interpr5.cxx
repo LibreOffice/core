@@ -1448,11 +1448,11 @@ void ScInterpreter::ScAmpersand()
     {
         OUString sStr;
         bool bFlag;
-        ScMatrixRef pMat = pMat1;
+        ScMatrixRef pMat = std::move(pMat1);
         if (!pMat)
         {
             sStr = sStr1;
-            pMat = pMat2;
+            pMat = std::move(pMat2);
             bFlag = true;           // double - Matrix
         }
         else

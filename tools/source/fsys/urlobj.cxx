@@ -1717,7 +1717,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
         if (bIgnoreFragment)
             aNewURI.clearFragment();
-        rTheAbsURIRef = aNewURI;
+        rTheAbsURIRef = std::move(aNewURI);
         return true;
     }
 

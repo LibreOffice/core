@@ -196,7 +196,7 @@ void ChartLineStyleWrapper::updateData()
     XLineDashItem aDashItem;
     aDashItem.PutValue(aLineDash, MID_LINEDASH);
 
-    aEvent.FeatureURL = aUrl;
+    aEvent.FeatureURL = std::move(aUrl);
     aDashItem.QueryValue(aEvent.State);
     mpControl->statusChanged(aEvent);
 }

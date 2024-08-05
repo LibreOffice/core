@@ -172,11 +172,11 @@ namespace drawinglayer::processor3d
 
             if(bTransparence)
             {
-                mpTransparenceGeoTexSvx = pOldTex;
+                mpTransparenceGeoTexSvx = std::move(pOldTex);
             }
             else
             {
-                mpGeoTexSvx = pOldTex;
+                mpGeoTexSvx = std::move(pOldTex);
             }
         }
 

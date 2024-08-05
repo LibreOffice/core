@@ -2157,7 +2157,7 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
 
     if (bTextBox)
     {
-        m_aRunText = aRunText;
+        m_aRunText = std::move(aRunText);
         m_aRunText->append(m_rExport.getStream());
         m_rExport.resetStream();
     }

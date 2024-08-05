@@ -174,7 +174,7 @@ void Test::test() {
     css::awt::AsyncCallback::create(
         connection_.getComponentContext())->addCallback(
             new Callback(
-                disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
+                disp, std::move(url), css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
             css::uno::Any());
     // Wait for result.condition or connection_ going stale:

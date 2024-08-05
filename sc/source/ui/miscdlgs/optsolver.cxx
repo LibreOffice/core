@@ -353,7 +353,7 @@ void ScOptSolverDlg::ReadConditions()
             m_aConditions.resize( nVecPos + 1 );
 
         if ( nVecPos < static_cast<tools::Long>(m_aConditions.size()) )
-            m_aConditions[nVecPos] = aRowEntry;
+            m_aConditions[nVecPos] = std::move(aRowEntry);
 
         // remove default entries at the end
         size_t nSize = m_aConditions.size();

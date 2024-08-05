@@ -462,7 +462,7 @@ namespace cmis
     {
         if ( nullptr == m_pObjectType.get( ) && m_bTransient )
         {
-            std::string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
+            const std::string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
             // The type to create needs to be fetched from the possible children types
             // defined in the parent folder. Then, we'll pick up the first one we find matching
             // cmis:folder or cmis:document (depending what we need to create).
