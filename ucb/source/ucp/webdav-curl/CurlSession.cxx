@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 namespace
 {
 void lock_cb(CURL*, curl_lock_data, curl_lock_access, void*);
-void unlock_cb(CURL*, curl_lock_data, curl_lock_access, void*);
+void unlock_cb(CURL*, curl_lock_data, void*);
 
 /// globals container
 struct Init
@@ -126,8 +126,7 @@ void lock_cb(CURL* /*handle*/, curl_lock_data const data, curl_lock_access /*acc
     }
 }
 
-void unlock_cb(CURL* /*handle*/, curl_lock_data const data, curl_lock_access /*access*/,
-               void* /*userptr*/)
+void unlock_cb(CURL* /*handle*/, curl_lock_data const data, void* /*userptr*/)
 {
     assert(0 <= data && data < CURL_LOCK_DATA_LAST);
     g_Init.ShareLock[data].unlock();
