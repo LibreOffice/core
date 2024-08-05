@@ -556,7 +556,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
     bool bSortMarks = false;
     for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
     {
-        auto pMark = dynamic_cast<sw::mark::Bookmark*>(*it);
+        sw::mark::Bookmark* pMark = *it;
         assert(pMark);
         if (!pMark->GetName().startsWith(aBookmarkNamePrefix))
         {
@@ -637,7 +637,7 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
     IDocumentMarkAccess& rIDMA = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
     SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();
-    auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(rIDMA.getOneInnermostBookmarkFor(rCursor));
+    sw::mark::Bookmark* pBookmark = rIDMA.getOneInnermostBookmarkFor(rCursor);
     if (!pBookmark || !pBookmark->GetName().startsWith(aBookmarkNamePrefix))
     {
         return;
@@ -721,7 +721,7 @@ void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
     std::vector<sw::mark::MarkBase*> aRemovals;
     for (auto it = pMarkAccess->getBookmarksBegin(); it != pMarkAccess->getBookmarksEnd(); ++it)
     {
-        auto pBookmark = dynamic_cast<sw::mark::Bookmark*>(*it);
+        sw::mark::Bookmark* pBookmark = *it;
         assert(pBookmark);
 
         if (!aBookmarkNamePrefix.isEmpty())

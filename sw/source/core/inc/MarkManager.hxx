@@ -85,12 +85,12 @@ namespace sw::mark {
 
             // bookmarks
             virtual bool isBookmarkDeleted(SwPaM const& rPaM, bool isReplace) const override;
-            virtual const_iterator getBookmarksBegin() const override;
-            virtual const_iterator getBookmarksEnd() const override;
+            virtual std::vector<sw::mark::Bookmark*>::const_iterator getBookmarksBegin() const override;
+            virtual std::vector<sw::mark::Bookmark*>::const_iterator getBookmarksEnd() const override;
             virtual sal_Int32 getBookmarksCount() const override;
-            virtual const_iterator findBookmark(const OUString& rName) const override;
-            virtual const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
-            virtual ::sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const override;
+            virtual std::vector<sw::mark::Bookmark*>::const_iterator findBookmark(const OUString& rName) const override;
+            virtual std::vector<sw::mark::Bookmark*>::const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const override;
+            virtual ::sw::mark::Bookmark* getOneInnermostBookmarkFor(const SwPosition& rPos) const override;
 
             // Fieldmarks
             virtual std::vector<Fieldmark*>::const_iterator getFieldmarksBegin() const override;
@@ -126,11 +126,11 @@ namespace sw::mark {
             typedef std::vector<sw::mark::MarkBase*> container_t;
 
             // helper bookmark to store annotation range of redlines
-            virtual ::sw::mark::MarkBase* makeAnnotationBookmark(const SwPaM& rPaM,
+            virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
                 const OUString& rName, IDocumentMarkAccess::MarkType eMark,
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
-            virtual const_iterator findAnnotationBookmark( const OUString& rName ) const override;
+            virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const override;
             virtual void restoreAnnotationMarks(bool bDelete = true) override;
 
         private:
@@ -148,7 +148,7 @@ namespace sw::mark {
             container_t m_vAllMarks;
 
             // additional container for bookmarks
-            container_t m_vBookmarks;
+            std::vector<sw::mark::Bookmark*> m_vBookmarks;
             // additional container for fieldmarks
             std::vector<sw::mark::Fieldmark*> m_vFieldmarks;
 

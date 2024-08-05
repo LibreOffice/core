@@ -244,11 +244,11 @@ class IDocumentMarkAccess
 
         /** returns a STL-like random access iterator to the begin of the sequence the Bookmarks.
         */
-        virtual const_iterator getBookmarksBegin() const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator getBookmarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of Bookmarks.
         */
-        virtual const_iterator getBookmarksEnd() const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator getBookmarksEnd() const =0;
 
         /** returns the number of Bookmarks.
         */
@@ -262,17 +262,17 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found.
         */
-        virtual const_iterator findBookmark(const OUString& rMark) const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findBookmark(const OUString& rMark) const =0;
 
         /** Finds the first mark that is starting after.
 
             @returns
             an iterator pointing to the mark, or pointing to getBookmarksEnd() if nothing was found.
         */
-        virtual const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findFirstBookmarkStartsAfter(const SwPosition& rPos) const =0;
 
         /// Get the innermost bookmark that contains rPos.
-        virtual sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
+        virtual sw::mark::Bookmark* getOneInnermostBookmarkFor(const SwPosition& rPos) const = 0;
 
         // Fieldmarks
         /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.
@@ -309,11 +309,11 @@ class IDocumentMarkAccess
         virtual sw::mark::MarkBase* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
-        virtual ::sw::mark::MarkBase* makeAnnotationBookmark(const SwPaM& rPaM,
+        virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
             const OUString& rProposedName,
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
-        virtual const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
         /** Finds the first mark that is starting after.
 

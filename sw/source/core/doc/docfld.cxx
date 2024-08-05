@@ -922,7 +922,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         auto const& rIDMA(*rDoc.getIDocumentMarkAccess());
         for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
         {
-            auto const pBookmark(dynamic_cast<::sw::mark::Bookmark const*>(*it));
+            ::sw::mark::Bookmark const* const pBookmark(*it);
             assert(pBookmark);
             if (!pBookmark->GetHideCondition().isEmpty())
             {

@@ -174,15 +174,14 @@ namespace
         rFoundPos = rOtherPosition;
     }
 
+    template<class MarkT>
     struct CompareIMarkStartsBefore
     {
-        bool operator()(SwPosition const& rPos,
-                        const sw::mark::MarkBase* pMark)
+        bool operator()(SwPosition const& rPos, const  MarkT* pMark)
         {
             return rPos < pMark->GetMarkStart();
         }
-        bool operator()(const sw::mark::MarkBase* pMark,
-                        SwPosition const& rPos)
+        bool operator()(const  MarkT* pMark, SwPosition const& rPos)
         {
             return pMark->GetMarkStart() < rPos;
         }
@@ -193,8 +192,7 @@ namespace
     template<class MarkT>
     struct CompareIMarkStartsAfter
     {
-        bool operator()(SwPosition const& rPos,
-                        const MarkT* pMark)
+        bool operator()(SwPosition const& rPos, const MarkT* pMark)
         {
             return pMark->GetMarkStart() > rPos;
         }
@@ -323,15 +321,16 @@ namespace
         return rMarks.end();
     };
 
-    MarkManager::container_t::const_iterator lcl_FindMarkAtPos(
-        MarkManager::container_t& rMarks,
+    template<class MarkT>
+    typename std::vector<MarkT*>::const_iterator lcl_FindMarkAtPos(
+        std::vector<MarkT*>& rMarks,
         const SwPosition& rPos,
         const IDocumentMarkAccess::MarkType eType)
     {
         for (auto ppCurrentMark = lower_bound(
                 rMarks.begin(), rMarks.end(),
                 rPos,
-                CompareIMarkStartsBefore());
+                CompareIMarkStartsBefore<MarkT>());
             ppCurrentMark != rMarks.end();
             ++ppCurrentMark)
         {
@@ -341,7 +340,7 @@ namespace
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
-                return MarkManager::container_t::const_iterator(std::move(ppCurrentMark));
+                return ppCurrentMark;
             }
         }
         // reached a mark starting on a later start pos or the end of the
@@ -349,15 +348,16 @@ namespace
         return rMarks.end();
     };
 
-    MarkManager::container_t::const_iterator lcl_FindMarkByName(
+    template<class MarkT>
+    typename std::vector<MarkT*>::const_iterator lcl_FindMarkByName(
         const OUString& rName,
-        const MarkManager::container_t::const_iterator& ppMarksBegin,
-        const MarkManager::container_t::const_iterator& ppMarksEnd)
+        const typename std::vector<MarkT*>::const_iterator& ppMarksBegin,
+        const typename std::vector<MarkT*>::const_iterator& ppMarksEnd)
     {
         return find_if(
             ppMarksBegin,
             ppMarksEnd,
-            [&rName] (::sw::mark::MarkBase const*const pMark) { return pMark->GetName() == rName; } );
+            [&rName] (MarkT const*const pMark) { return pMark->GetName() == rName; } );
     }
 
     template<class MarkT>
@@ -604,7 +604,7 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
-                lcl_InsertMarkSorted(m_vBookmarks, pMark.get());
+                lcl_InsertMarkSorted(m_vBookmarks, static_cast<Bookmark*>(pMark.get()));
                 break;
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
@@ -792,7 +792,7 @@ namespace sw::mark
             " - Mark is not in my doc.");
         if ( io_pMark->GetName() == rNewName )
             return true;
-        if (lcl_FindMarkByName(rNewName, m_vAllMarks.begin(), m_vAllMarks.end()) != m_vAllMarks.end())
+        if (lcl_FindMarkByName<MarkBase>(rNewName, m_vAllMarks.begin(), m_vAllMarks.end()) != m_vAllMarks.end())
             return false;
         const OUString sOldName(io_pMark->GetName());
         io_pMark->SetName(rNewName);
@@ -1185,10 +1185,10 @@ namespace sw::mark
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(*ppMark));
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
-                        Bookmark* pBookmark = dynamic_cast<Bookmark*>(*ppBookmark);
+                        Bookmark* pBookmark = *ppBookmark;
 
                         if(pBookmark)
                             pBookmark->sendLOKDeleteCallback();
@@ -1205,7 +1205,7 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(*ppMark));
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
                         m_vBookmarks.erase(ppBookmark);
@@ -1285,7 +1285,7 @@ namespace sw::mark
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
-                CompareIMarkStartsBefore());
+                CompareIMarkStartsBefore<MarkBase>());
         for ( ; it != endIt; ++it)
             if (*it == pMark)
             {
@@ -1307,12 +1307,12 @@ namespace sw::mark
 
     IDocumentMarkAccess::const_iterator MarkManager::findMark(const OUString& rName) const
     {
-        return lcl_FindMarkByName(rName, m_vAllMarks.begin(), m_vAllMarks.end());
+        return lcl_FindMarkByName<MarkBase>(rName, m_vAllMarks.begin(), m_vAllMarks.end());
     }
 
-    IDocumentMarkAccess::const_iterator MarkManager::findBookmark(const OUString& rName) const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findBookmark(const OUString& rName) const
     {
-        return lcl_FindMarkByName(rName, m_vBookmarks.begin(), m_vBookmarks.end());
+        return lcl_FindMarkByName<sw::mark::Bookmark>(rName, m_vBookmarks.begin(), m_vBookmarks.end());
     }
 
     // find the first Mark that does not start before
@@ -1322,7 +1322,7 @@ namespace sw::mark
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 rPos,
-                CompareIMarkStartsBefore());
+                CompareIMarkStartsBefore<MarkBase>());
     }
 
     IDocumentMarkAccess::const_iterator MarkManager::getAllMarksBegin() const
@@ -1334,10 +1334,10 @@ namespace sw::mark
     sal_Int32 MarkManager::getAllMarksCount() const
         { return m_vAllMarks.size(); }
 
-    IDocumentMarkAccess::const_iterator MarkManager::getBookmarksBegin() const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::getBookmarksBegin() const
         { return m_vBookmarks.begin(); }
 
-    IDocumentMarkAccess::const_iterator MarkManager::getBookmarksEnd() const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::getBookmarksEnd() const
         { return m_vBookmarks.end(); }
 
     sal_Int32 MarkManager::getBookmarksCount() const
@@ -1353,13 +1353,13 @@ namespace sw::mark
 
 
     // finds the first that is starting after
-    IDocumentMarkAccess::const_iterator MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findFirstBookmarkStartsAfter(const SwPosition& rPos) const
     {
         return std::upper_bound(
             m_vBookmarks.begin(),
             m_vBookmarks.end(),
             rPos,
-            CompareIMarkStartsAfter<MarkBase>());
+            CompareIMarkStartsAfter<sw::mark::Bookmark>());
     }
 
     Fieldmark* MarkManager::getFieldmarkAt(const SwPosition& rPos) const
@@ -1420,16 +1420,16 @@ namespace sw::mark
         return pMark;
     }
 
-    MarkBase* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
+    sw::mark::Bookmark* MarkManager::getOneInnermostBookmarkFor(const SwPosition& rPos) const
     {
         auto it = std::find_if(m_vBookmarks.begin(), m_vBookmarks.end(),
-                               [&rPos](const sw::mark::MarkBase* pMark)
+                               [&rPos](const sw::mark::Bookmark* pMark)
                                { return pMark->IsCoveringPosition(rPos); });
         if (it == m_vBookmarks.end())
         {
             return nullptr;
         }
-        sw::mark::MarkBase* pBookmark = *it;
+        sw::mark::Bookmark* pBookmark = *it;
 
         // See if any bookmarks after the first hit are closer to rPos.
         ++it;
@@ -1646,7 +1646,7 @@ namespace sw::mark
 
     IDocumentMarkAccess::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
     {
-        return lcl_FindMarkByName( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
+        return lcl_FindMarkByName<MarkBase>( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
     }
 
     MarkBase* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
@@ -1671,18 +1671,18 @@ namespace sw::mark
     }
 
     // create helper bookmark for annotations on tracked deletions
-    ::sw::mark::MarkBase* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
+    ::sw::mark::Bookmark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType,
         sw::mark::InsertMode const eMode,
         SwPosition const*const pSepPos)
     {
         OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
-        return makeMark( rPaM, sAnnotationBookmarkName, eType, eMode, pSepPos);
+        return static_cast<sw::mark::Bookmark*>(makeMark( rPaM, sAnnotationBookmarkName, eType, eMode, pSepPos));
     }
 
     // find helper bookmark of annotations on tracked deletions
-    IDocumentMarkAccess::const_iterator MarkManager::findAnnotationBookmark(const OUString& rName) const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findAnnotationBookmark(const OUString& rName) const
     {
         OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
         return findBookmark(sAnnotationBookmarkName);
@@ -1733,7 +1733,7 @@ namespace sw::mark
             return newName;
         }
 
-        if (lcl_FindMarkByName(rName, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
+        if (lcl_FindMarkByName<MarkBase>(rName, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
         {
             return rName;
         }
@@ -1751,7 +1751,7 @@ namespace sw::mark
         {
             sTmp = aPrefix + OUString::number(nCnt);
             nCnt++;
-            if (lcl_FindMarkByName(sTmp, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
+            if (lcl_FindMarkByName<MarkBase>(sTmp, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
             {
                 break;
             }
