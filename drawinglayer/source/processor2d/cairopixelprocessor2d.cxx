@@ -2859,14 +2859,6 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         return;
     }
 
-    // set FillColor Attribute at Font
-    Color aFillColor(
-        maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
-    aFont.SetTransparent(rTextCandidate.getTextFillColor().IsTransparent());
-    if (rTextCandidate.getTextFillColor().IsTransparent())
-        aFillColor.SetAlpha(rTextCandidate.getTextFillColor().GetAlpha());
-    aFont.SetFillColor(aFillColor);
-
     // create integer DXArray. As mentioned above we can act in the
     // Text's local coordinate system without transformation at all
     const ::std::vector<double>& rDXArray(rTextCandidate.getDXArray());
@@ -2933,6 +2925,19 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                       aFullTextTransform.c(), aFullTextTransform.d(), aFullTextTransform.e(),
                       aFullTextTransform.f());
     cairo_set_matrix(mpRT, &aMatrix);
+
+    if (!rTextCandidate.getTextFillColor().IsTransparent())
+    {
+        // TextFillColor is set -> text background is filled, paint it
+        const basegfx::BColor aFillColor(
+            maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
+        cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
+                             aFillColor.getBlue());
+        cairo_rectangle(mpRT, 0.0, -aTextLayouter.getFontAscent(), pSalLayout->GetTextWidth(),
+                        aTextLayouter.getTextHeight());
+        cairo_fill(mpRT);
+    }
+
     pSalLayout->drawSalLayout(mpRT, aRGBFontColor, getViewInformation2D().getUseAntiAliasing());
     cairo_restore(mpRT);
 }
