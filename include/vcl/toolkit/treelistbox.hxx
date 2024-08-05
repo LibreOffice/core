@@ -215,6 +215,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
     bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
     bool mbSelectingByHover; // true during "Select" if it was due to hover
+    bool mbIsTextColumEnabled; // true if the property name text-column is enabled
     sal_Int8        mnClicksToToggle; // 0 == Click on a row not toggle its checkbox.
                                       // 1 == Every click on row toggle its checkbox.
                                       // 2 == First click select, second click toggle.
@@ -666,6 +667,10 @@ public:
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
     bool            GetHoverSelection() const { return mbHoverSelection; }
+
+    // to get enable or disable the text-column
+    void           SetTextColumnEnabled(bool bEnable) { mbIsTextColumEnabled = bEnable; }
+    bool           IsTextColumnEnabled() const { return mbIsTextColumEnabled; }
 
     // only true during Select if the Select is due to a Hover
     bool            IsSelectDueToHover() const { return mbSelectingByHover; }

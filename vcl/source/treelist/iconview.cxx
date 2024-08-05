@@ -341,6 +341,7 @@ void IconView::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     SvTreeListBox::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "iconview");
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
+    rJsonWriter.put("textWithIconEnabled", IsTextColumnEnabled());
     auto aNode = rJsonWriter.startArray("entries");
     DumpEntryAndSiblings(rJsonWriter, First());
 }
