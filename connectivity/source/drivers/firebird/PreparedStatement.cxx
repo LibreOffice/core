@@ -259,7 +259,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         break;
     case DataType::NUMERIC:
     case DataType::DECIMAL:
-        return setObjectWithInfo(nParameterIndex, Any{ sInput }, sdbcType, columnType.getScale());
+        return setObjectWithInfo(nParameterIndex, Any{ sInput }, sdbcType, 0);
         break;
     case DataType::BOOLEAN:
     {
@@ -395,8 +395,8 @@ sal_Int64 toNumericWithoutDecimalPlace(const Any& x, sal_Int32 scale)
         buffer.remove(dotPos, 1);
         if (scale < 0)
         {
-            assert(buffer.getLength() >= -scale);
-            buffer.truncate(buffer.getLength() + scale);
+            const sal_Int32 n = std::min(buffer.getLength(), -scale);
+            buffer.truncate(buffer.getLength() - n);
             scale = 0;
         }
     }
@@ -535,8 +535,7 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
             return setValue(nIndex, static_cast<sal_Int64>(nValue), columnType.getType());
         case DataType::NUMERIC:
         case DataType::DECIMAL:
-            // take decimal places into account, later on they are removed in makeNumericString
-            return setObjectWithInfo(nIndex, Any{ nValue }, sdbcType, columnType.getScale());
+            return setObjectWithInfo(nIndex, Any{ nValue }, sdbcType, 0);
         // TODO: SQL_D_FLOAT?
     }
     setValue<double>(nIndex, nValue, SQL_DOUBLE);
@@ -830,23 +829,26 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     checkParameterIndex(parameterIndex);
     setParameterNull(parameterIndex, false);
 
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (parameterIndex - 1);
-    int dType = (pVar->sqltype & ~1); // drop null flag
+    ColumnTypeInfo columnType{ m_pInSqlda, parameterIndex };
+    int dType = columnType.getType() & ~1; // drop null flag
 
     if(sqlType == DataType::DECIMAL || sqlType == DataType::NUMERIC)
     {
         switch(dType)
         {
             case SQL_SHORT:
-                return setValue(parameterIndex,
-                                static_cast<sal_Int16>(toNumericWithoutDecimalPlace(x, scale)),
-                                dType);
+                return setValue(
+                    parameterIndex,
+                    static_cast<sal_Int16>(toNumericWithoutDecimalPlace(x, columnType.getScale())),
+                    dType);
             case SQL_LONG:
-                return setValue(parameterIndex,
-                                static_cast<sal_Int32>(toNumericWithoutDecimalPlace(x, scale)),
-                                dType);
+                return setValue(
+                    parameterIndex,
+                    static_cast<sal_Int32>(toNumericWithoutDecimalPlace(x, columnType.getScale())),
+                    dType);
             case SQL_INT64:
-                return setValue(parameterIndex, toNumericWithoutDecimalPlace(x, scale), dType);
+                return setValue(parameterIndex,
+                                toNumericWithoutDecimalPlace(x, columnType.getScale()), dType);
             case SQL_DOUBLE:
                 return setValue(parameterIndex, toDouble(x), dType);
             default:
