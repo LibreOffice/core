@@ -632,6 +632,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testVirtPageNumReset)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nVirt);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxWordWrap)
+{
+    // Given a document with a shape in the header that extends horizontally when there is enough
+    // content:
+    createSwDoc("text-box-word-wrap.docx");
+
+    // When checking the layout size of the shape:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    auto nFlyHeight
+        = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+
+    // Then make sure it has a small height, hosting just one line:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 773
+    // - Actual  : 5183
+    // i.e. the shape had new lines for each character instead of 1 line.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(1000), nFlyHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
