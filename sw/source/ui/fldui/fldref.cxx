@@ -790,12 +790,14 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     m_xSelectionLB->set_visible( !bShowSelectionToolTipLB );
     if ( bShowSelectionToolTipLB )
     {
-        bool bEnable = m_xSelectionToolTipLB->n_children() != 0;
-        m_xSelection->set_sensitive( bEnable );
+        bool bHasChildren = m_xSelectionToolTipLB->n_children() != 0;
+        m_xSelection->set_sensitive(bHasChildren);
 
         int nEntry = m_xSelectionToolTipLB->get_selected_index();
         if (nEntry != -1)
             m_xSelectionToolTipLB->scroll_to_row(nEntry);
+        else if (bHasChildren)
+            m_xSelectionToolTipLB->select(0);
 
         if (IsFieldEdit() && nEntry == -1)
         {
