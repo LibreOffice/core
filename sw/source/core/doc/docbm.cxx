@@ -1366,8 +1366,8 @@ namespace sw::mark
             return nullptr;
         // we found our first candidate covering the position ...
         auto pMark = *itCurrent;
-        const auto aMarkStart = pMark->GetMarkStart();
-        auto aMarkEnd = pMark->GetMarkEnd();
+        const SwPosition aMarkStart = pMark->GetMarkStart();
+        SwPosition aMarkEnd = pMark->GetMarkEnd();
         // ... however we still need to check if there is a smaller/'more inner' one with the same start position
         for(++itCurrent; itCurrent != itEnd; ++itCurrent)
         {
@@ -1376,12 +1376,12 @@ namespace sw::mark
                 // start and thus can not be more 'inner' than our previous
                 // match, so we are done.
                 break;
-            auto aCurrentMarkEnd = (*itCurrent)->GetMarkEnd();
-            if(rPos < aCurrentMarkEnd && aCurrentMarkEnd <= aMarkEnd)
+            const SwPosition& rCurrentMarkEnd = (*itCurrent)->GetMarkEnd();
+            if(rPos < rCurrentMarkEnd && rCurrentMarkEnd <= aMarkEnd)
             {
                 // both covering the position and more inner/smaller => use this one instead
                 pMark = *itCurrent;
-                aMarkEnd = aCurrentMarkEnd;
+                aMarkEnd = rCurrentMarkEnd;
             }
         }
         return dynamic_cast<Fieldmark*>(pMark);
