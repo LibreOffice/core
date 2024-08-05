@@ -1608,14 +1608,15 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
 
                 if (aPoly.count() > 1) // otherwise skip it, count should be 2
                 {
-                    if (aDrawingPoints.count() == 0)
+                    const auto ptCount = aDrawingPoints.count();
+                    if (ptCount == 0)
                     {
                         aDrawingPoints.append(aPoly);
                         pFirstPolyPoly = pPolyPoly;
                         continue;
                     }
                     basegfx::B2DPoint aLast
-                        = aDrawingPoints.getB2DPoint(aDrawingPoints.count() - 1);
+                        = aDrawingPoints.getB2DPoint(ptCount - 1);
                     if (aPoly.getB2DPoint(0).equal(aLast))
                     {
                         aDrawingPoints.append(aPoly, 1);
