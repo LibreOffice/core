@@ -903,11 +903,16 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
             aUsrPref.SetZoomType( SvxZoomType::PERCENT );
             aUsrPref.SetZoom( 100 );
         }
-        if (rDocSh.IsPreview())
+        else if (rDocSh.IsPreview())
         {
             aUsrPref.SetZoomType( SvxZoomType::WHOLEPAGE );
             aUsrPref.SetViewLayoutBookMode( false );
             aUsrPref.SetViewLayoutColumns( 1 );
+        }
+        else if (!pUsrPref->IsDefaultZoom())
+        {
+            aUsrPref.SetZoomType(pUsrPref->GetDefaultZoomType());
+            aUsrPref.SetZoom(pUsrPref->GetDefaultZoomValue());
         }
         m_pWrtShell.reset(new SwWrtShell(rDoc, m_pEditWin, *this, &aUsrPref));
         // creating an SwView from a SwPagePreview needs to
@@ -1576,7 +1581,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                                         ( pVOpt->GetViewLayoutColumns() != nViewLayoutColumns || pVOpt->IsViewLayoutBookMode() != bViewLayoutBookMode );
 
     const bool bSetViewSettings = bGotZoomType && bGotZoomFactor &&
-                                  ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom );
+                                  ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) &&
+                                   SW_MOD()->GetUsrPref(pVOpt->getBrowseMode())->IsDefaultZoom();
 
     // In case we have a 'fixed' view layout of 2 or more columns,
     // we have to apply the view options *before* starting the action.

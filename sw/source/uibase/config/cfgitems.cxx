@@ -104,6 +104,9 @@ SwElemItem::SwElemItem() :
     m_bShowChangesInMargin =
     m_bFieldHiddenText =
     m_bShowHiddenPara  = false;
+    m_bDefaultZoom = true;
+    m_eDefaultZoomType = SvxZoomType::PERCENT;
+    m_nDefaultZoomValue = 100;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
@@ -149,7 +152,10 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 m_bTreatSubOutlineLevelsAsContent == rItem.m_bTreatSubOutlineLevelsAsContent &&
                 m_bShowChangesInMargin  == rItem.m_bShowChangesInMargin &&
                 m_bFieldHiddenText == rItem.m_bFieldHiddenText &&
-                m_bShowHiddenPara  == rItem.m_bShowHiddenPara);
+                m_bShowHiddenPara  == rItem.m_bShowHiddenPara &&
+                m_bDefaultZoom == rItem.m_bDefaultZoom &&
+                m_eDefaultZoomType == rItem.m_eDefaultZoomType &&
+                m_nDefaultZoomValue == rItem.m_nDefaultZoomValue );
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -169,6 +175,12 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowChangesInMargin( m_bShowChangesInMargin );
     rVOpt.SetShowHiddenField(m_bFieldHiddenText );
     rVOpt.SetShowHiddenPara(m_bShowHiddenPara );
+    if (!m_bDefaultZoom)
+    {
+        rVOpt.SetZoomType(m_eDefaultZoomType);
+        if (m_eDefaultZoomType == SvxZoomType::PERCENT)
+            rVOpt.SetZoom(m_nDefaultZoomValue);
+    }
 }
 
 // CTOR for empty Item

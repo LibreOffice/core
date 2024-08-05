@@ -122,6 +122,15 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xFieldHiddenImg(m_xBuilder->weld_widget(u"lockhiddentextfield"_ustr))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button(u"hiddenparafield"_ustr))
     , m_xFieldHiddenParaImg(m_xBuilder->weld_widget(u"lockhiddenparafield"_ustr))
+    , m_xZoomFrame(m_xBuilder->weld_frame(u"zoomframe"_ustr))
+    , m_xZoomLatestRB(m_xBuilder->weld_radio_button(u"zoomlatest"_ustr))
+    , m_xZoomPreferredRB(m_xBuilder->weld_radio_button(u"zoompreferred"_ustr))
+    , m_xZoomOptimalRB(m_xBuilder->weld_radio_button(u"zoomoptimal"_ustr))
+    , m_xZoomWidthAndHeightRB(m_xBuilder->weld_radio_button(u"zoomfitwandh"_ustr))
+    , m_xZoomWidthRB(m_xBuilder->weld_radio_button(u"zoomfitw"_ustr))
+    , m_xZoom100RB(m_xBuilder->weld_radio_button(u"zoom100pc"_ustr))
+    , m_xZoomCustomRB(m_xBuilder->weld_radio_button(u"zoomcustom"_ustr))
+    , m_xZoomValue(m_xBuilder->weld_metric_spin_button(u"zoomvalue"_ustr, FieldUnit::PERCENT))
 {
     m_xShowOutlineContentVisibilityButton->connect_toggled(LINK(this, SwContentOptPage, ShowOutlineContentVisibilityButtonHdl));
 
@@ -133,6 +142,29 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
         m_xSettingsLabel->hide();
         m_xMetricLabel->hide();
         m_xMetricLB->hide();
+
+        Link<weld::Toggleable&, void> aZoomLatestLink = LINK(this, SwContentOptPage, ZoomLatestHdl);
+        m_xZoomLatestRB->connect_toggled(aZoomLatestLink);
+        m_xZoomPreferredRB->connect_toggled(aZoomLatestLink);
+        Link<weld::Toggleable&, void> aZoomLink = LINK(this, SwContentOptPage, ZoomHdl);
+        m_xZoomOptimalRB->connect_toggled(aZoomLink);
+        m_xZoomWidthAndHeightRB->connect_toggled(aZoomLink);
+        m_xZoomWidthRB->connect_toggled(aZoomLink);
+        m_xZoom100RB->connect_toggled(aZoomLink);
+        m_xZoomCustomRB->connect_toggled(aZoomLink);
+        m_xZoomValue->set_range(MINZOOM, MAXZOOM, FieldUnit::PERCENT);
+    }
+    else
+    {
+        m_xZoomFrame->hide();
+        m_xZoomLatestRB->hide();
+        m_xZoomPreferredRB->hide();
+        m_xZoomOptimalRB->hide();
+        m_xZoomWidthAndHeightRB->hide();
+        m_xZoomWidthRB->hide();
+        m_xZoom100RB->hide();
+        m_xZoomCustomRB->hide();
+        m_xZoomValue->hide();
     }
 
     if(!SvtCJKOptions::IsVerticalTextEnabled() )
@@ -285,6 +317,26 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
         m_xFieldHiddenParaCB->set_sensitive(!bReadOnly);
         m_xFieldHiddenParaImg->set_visible(bReadOnly);
+
+        if (!bWebOptionsPage)
+        {
+            m_xZoomLatestRB->set_active(pElemAttr->IsDefaultZoom());
+            m_xZoomPreferredRB->set_active(!pElemAttr->IsDefaultZoom());
+            switch (pElemAttr->GetDefaultZoomType())
+            {
+                case SvxZoomType::OPTIMAL:   m_xZoomOptimalRB->set_active(true); break;
+                case SvxZoomType::WHOLEPAGE: m_xZoomWidthAndHeightRB->set_active(true); break;
+                case SvxZoomType::PAGEWIDTH: m_xZoomWidthRB->set_active(true); break;
+                case SvxZoomType::PERCENT:
+                    m_xZoom100RB->set_active(pElemAttr->GetDefaultZoomValue() == 100);
+                    m_xZoomCustomRB->set_active(pElemAttr->GetDefaultZoomValue() != 100);
+                    break;
+                default:
+                    break;
+            }
+            m_xZoomValue->set_value(pElemAttr->GetDefaultZoomValue(), FieldUnit::PERCENT);
+            ZoomLatestHdl(*m_xZoomLatestRB);
+        }
     }
 
     bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::HorizontalRulerUnit::isReadOnly() :
@@ -366,6 +418,25 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.m_bFieldHiddenText      = m_xFieldHiddenCB->get_active();
     aElem.m_bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
 
+    if (m_xZoomLatestRB->is_visible())
+    {
+        aElem.SetDefaultZoom(m_xZoomLatestRB->get_active());
+        if (m_xZoomOptimalRB->get_active())
+            aElem.SetDefaultZoomType(SvxZoomType::OPTIMAL);
+        else if (m_xZoomWidthAndHeightRB->get_active())
+            aElem.SetDefaultZoomType(SvxZoomType::WHOLEPAGE);
+        else if (m_xZoomWidthRB->get_active())
+            aElem.SetDefaultZoomType(SvxZoomType::PAGEWIDTH);
+        else if (m_xZoom100RB->get_active())
+        {
+            aElem.SetDefaultZoomType(SvxZoomType::PERCENT);
+            aElem.SetDefaultZoomValue(100);
+        }
+        else
+            aElem.SetDefaultZoomType(SvxZoomType::PERCENT);
+    }
+    aElem.SetDefaultZoomValue(m_xZoomValue->get_value(FieldUnit::PERCENT));
+
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = nullptr != rSet->Put(aElem);
@@ -406,6 +477,30 @@ IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::Toggleable&, rBox, void)
 IMPL_LINK(SwContentOptPage, ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, rBox, void)
 {
     m_xTreatSubOutlineLevelsAsContent->set_sensitive(rBox.get_active());
+}
+
+IMPL_LINK_NOARG(SwContentOptPage, ZoomLatestHdl, weld::Toggleable&, void)
+{
+    bool bZoomPreferred = m_xZoomPreferredRB->get_active();
+    m_xZoomOptimalRB->set_sensitive(bZoomPreferred);
+    m_xZoomWidthAndHeightRB->set_sensitive(bZoomPreferred);
+    m_xZoomWidthRB->set_sensitive(bZoomPreferred);
+    m_xZoom100RB->set_sensitive(bZoomPreferred);
+    m_xZoomCustomRB->set_sensitive(bZoomPreferred);
+    m_xZoomValue->set_sensitive(bZoomPreferred);
+    ZoomHdl(*m_xZoomOptimalRB);
+}
+IMPL_LINK_NOARG(SwContentOptPage, ZoomHdl, weld::Toggleable&, void)
+{
+    if (m_xZoomCustomRB->get_active() && m_xZoomCustomRB->get_sensitive())
+    {
+        m_xZoomValue->set_sensitive(true);
+        m_xZoomValue->grab_focus();
+    }
+    else
+    {
+       m_xZoomValue->set_sensitive(false);
+    }
 }
 
 // TabPage Printer additional settings

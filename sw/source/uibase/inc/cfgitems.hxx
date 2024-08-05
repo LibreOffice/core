@@ -24,6 +24,7 @@
 #include <printdata.hxx>
 
 #include <cmdid.h>
+#include <sfx2/zoomitem.hxx>
 
 class SwModule;
 #ifdef DBG_UTIL
@@ -83,6 +84,9 @@ class SW_DLLPUBLIC SwElemItem final : public SfxPoolItem
     bool m_bShowChangesInMargin :1;
     bool m_bFieldHiddenText   :1;
     bool m_bShowHiddenPara    :1;
+    bool m_bDefaultZoom       :1;
+    SvxZoomType m_eDefaultZoomType;
+    sal_uInt16  m_nDefaultZoomValue;
 
     friend class SwContentOptPage;
 
@@ -94,6 +98,15 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
     void                    FillViewOptions( SwViewOption& rVOpt) const;
+
+    bool IsDefaultZoom() const {return m_bDefaultZoom; }
+    void SetDefaultZoom(bool bSet) { m_bDefaultZoom = bSet; }
+
+    SvxZoomType GetDefaultZoomType() const { return m_eDefaultZoomType; }
+    void SetDefaultZoomType(SvxZoomType eType) { m_eDefaultZoomType = eType; }
+
+    sal_uInt16  GetDefaultZoomValue() const { return m_nDefaultZoomValue;}
+    void SetDefaultZoomValue(sal_Int16 nValue){ m_nDefaultZoomValue = nValue; }
 
 };
 

@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 
 class optionsDialog(UITestCase):
 
@@ -46,6 +47,35 @@ class optionsDialog(UITestCase):
                 # Without the fix in place, this test would have crashed here
                 xApplyBtn.executeAction("CLICK", tuple())
                 xApplyBtn.executeAction("CLICK", tuple())
+
+
+    def test_tdf132274Text(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+                xPages = xDialog.getChild("pages")
+                xWriterEntry = xPages.getChild('3')
+                xWriterEntry.executeAction("EXPAND", tuple())
+                xContentEntry = xWriterEntry.getChild('1')
+                xContentEntry.executeAction("SELECT", tuple())
+                xOptimal = xDialog.getChild("zoomoptimal")
+                self.assertEqual(get_state_as_dict(xOptimal)['Visible'], "true")
+                xApplyBtn = xDialog.getChild("apply")
+
+    def test_tdf132274Web(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+                xPages = xDialog.getChild("pages")
+                xWriterWebEntry = xPages.getChild('4')
+                xWriterWebEntry.executeAction("EXPAND", tuple())
+                xContentWebEntry = xWriterWebEntry.getChild('1')
+                xContentWebEntry.executeAction("SELECT", tuple())
+                try:
+                    xOptimalWeb = xDialog.getChild("zoomoptimal")
+                    raise RuntimeError("Zoom controls visible in Web dialog")
+                except Exception:
+                    xApplyBtn = xDialog.getChild("apply")
 
 
 

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkBox" id="ViewOptionsPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -459,6 +464,105 @@
                 <property name="position">3</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkFrame" id="outlineframe">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <!-- n-columns=2 n-rows=2 -->
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="outlinecontentvisibilitybutton">
+                        <property name="label" translatable="yes" context="viewoptionspage|outlinecontentvisibilitybutton">_Show outline-folding buttons</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outlinecontentvisibilitybutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="viewoptionspage|extended_tip|outlinecontentvisibilitybutton">Displays outline folding buttons on the left of the outline headings.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="suboutlinelevelsascontent">
+                        <property name="label" translatable="yes" context="viewoptionspage|suboutlinelevelscontent">Include sub _levels</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="suboutlinelevelsascontent-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="viewoptionspage|extended_tip|suboutlinelevelsascontent">Displays the folding buttons of the outline sub levels.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="lockoutlinecontentvisibility">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="locksuboutlinelevels">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="outlinelabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="viewoptionspage|outlinelabel">Outline Folding</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -766,42 +870,68 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="outlineframe">
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkFrame" id="zoomframe">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=2 -->
+                  <!-- n-columns=2 n-rows=7 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
-                    <property name="row-spacing">6</property>
+                    <property name="margin-bottom">43</property>
+                    <property name="row-spacing">7</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="outlinecontentvisibilitybutton">
-                        <property name="label" translatable="yes" context="viewoptionspage|outlinecontentvisibilitybutton">_Show outline-folding buttons</property>
+                      <object class="GtkRadioButton" id="zoomlatest">
+                        <property name="label" translatable="yes" context="zoomdialog|zoomlatest">Use latest setting</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
+                        <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="outlinecontentvisibilitybutton-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="viewoptionspage|extended_tip|outlinecontentvisibilitybutton">Displays outline folding buttons on the left of the outline headings.</property>
+                          <object class="AtkObject" id="zoomlatest-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomlatest">Uses the zoom setting that has been applied manually.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
+                        <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="suboutlinelevelsascontent">
-                        <property name="label" translatable="yes" context="viewoptionspage|suboutlinelevelscontent">Include sub _levels</property>
+                      <object class="GtkRadioButton" id="zoompreferred">
+                        <property name="label" translatable="yes" context="zoomdialog|zoompreferred">Use preferred values</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">zoomlatest</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoompreferred-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoompreferred">Applies preferred zoom settings to documents.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="zoomoptimal">
+                        <property name="label" translatable="yes" context="zoomdialog|zoomoptimal">Optimal</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -809,49 +939,148 @@
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="suboutlinelevelsascontent-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="viewoptionspage|extended_tip|suboutlinelevelsascontent">Displays the folding buttons of the outline sub levels.</property>
+                          <object class="AtkObject" id="zoomoptimal-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomoptimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="zoomfitwandh">
+                        <property name="label" translatable="yes" context="zoomdialog|zoomfitwandh">Fit width and height</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">zoomoptimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoomfitwandh-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomfitwandh">Displays the entire page on your screen.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="zoomfitw">
+                        <property name="label" translatable="yes" context="zoomdialog|zoomfitw">Fit width</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">zoomoptimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoomfitw-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomfitw">Displays the complete width of the document page. The top and bottom edges of the page may not be visible.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="zoom100pc">
+                        <property name="label" translatable="yes" context="zoomdialog|zomm100pc">100%</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">zoomoptimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zomm100pc-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zomm100pc">Displays the document at its actual size.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="zoomcustom">
+                        <property name="label" translatable="yes" context="zoomdialog|zoomcustom">Custom: </property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">zoomoptimal</property>
+                        <accessibility>
+                          <relation type="label-for" target="zoomvalue"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoomcustom-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomcustom">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="zoomvalue">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="adjustment">adjustment2</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="zoomcustom"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="zoomvalue-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|zoomvalue">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">6</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="lockoutlinecontentvisibility">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                     <child>
-                      <object class="GtkImage" id="locksuboutlinelevels">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="outlinelabel">
+                  <object class="GtkLabel" id="zoomlabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="viewoptionspage|outlinelabel">Outline Folding</property>
+                    <property name="label" translatable="yes" context="viewoptionspage|outlinelabel">Zoom</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -861,7 +1090,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

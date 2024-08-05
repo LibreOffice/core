@@ -901,6 +901,59 @@
           <value>1</value>
         </prop>
       </group>
+      <group oor:name="Zoom">
+          <info>
+              <desc>Contains zoom settings of the document view.</desc>
+          </info>
+          <prop oor:name="DefaultZoom" oor:type="xs:boolean" oor:nillable="false">
+              <!-- UIHints: Tools - Options - Text document  Contents - [Section] ´Zoom-->
+              <info>
+                  <desc>Determines whether zoom settings previously selected are applied to new/loaded document view or predefined zoom values are applied</desc>
+              </info>
+              <value>true</value>
+          </prop>
+          <prop oor:name="ZoomType" oor:type="xs:int" oor:nillable="false">
+              <!-- UIHints: Tools - Options - Text document  Contents - [Section] ´Zoom-->
+              <info>
+                  <desc>Contains predefined zoom type</desc>
+              </info>
+              <constraints>
+                  <enumeration oor:value="0">
+                      <info>
+                          <desc>PERCENT</desc>
+                      </info>
+                  </enumeration>
+                  <enumeration oor:value="1">
+                      <info>
+                          <desc>OPTIMAL</desc>
+                      </info>
+                  </enumeration>
+                  <enumeration oor:value="2">
+                      <info>
+                          <desc>WHOLEPAGE</desc>
+                      </info>
+                  </enumeration>
+                  <enumeration oor:value="3">
+                      <info>
+                          <desc>PAGEWIDTH</desc>
+                      </info>
+                  </enumeration>
+                  <enumeration oor:value="4">
+                      <info>
+                          <desc>PAGEWIDTH_NOBORDER</desc>
+                      </info>
+                  </enumeration>
+              </constraints>
+              <value>0</value>
+          </prop>
+          <prop oor:name="ZoomValue" oor:type="xs:int" oor:nillable="false">
+              <!-- UIHints: Tools - Options - Text document  Contents - [Section] ´Zoom-->
+              <info>
+                  <desc>Contains predefined zoom value in percent.</desc>
+              </info>
+              <value>100</value>
+          </prop>
+      </group>
       <group oor:name="NonprintingCharacter">
         <info>
           <desc>Contains settings for the visibility of various non-printing characters.</desc>
