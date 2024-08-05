@@ -78,7 +78,7 @@ void GetTextFormFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     auto aFields = rJsonWriter.startArray("fields");
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
+        sw::mark::Fieldmark* pFieldmark = *it;
         assert(pFieldmark);
         if (pFieldmark->GetFieldname() != aType)
         {

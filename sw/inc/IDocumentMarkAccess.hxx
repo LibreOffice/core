@@ -32,6 +32,7 @@ class SwCursorShell;
 namespace sw::mark {
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
     class MarkBase;
+    class Fieldmark;
 }
 
 /** Provides access to the marks of a document.
@@ -276,11 +277,11 @@ class IDocumentMarkAccess
         // Fieldmarks
         /** returns a STL-like random access iterator to the begin of the sequence of fieldmarks.
         */
-        virtual const_iterator getFieldmarksBegin() const =0;
+        virtual std::vector<sw::mark::Fieldmark*>::const_iterator getFieldmarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of fieldmarks.
         */
-        virtual const_iterator getFieldmarksEnd() const =0;
+        virtual std::vector<sw::mark::Fieldmark*>::const_iterator getFieldmarksEnd() const =0;
 
         /// returns the number of Fieldmarks.
         virtual sal_Int32 getFieldmarksCount() const = 0;

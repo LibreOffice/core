@@ -163,8 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, test148518)
 
         CPPUNIT_ASSERT(pDoc->getIDocumentMarkAccess()->getFieldmarksBegin()
                        != pDoc->getIDocumentMarkAccess()->getFieldmarksEnd());
-        ::sw::mark::Fieldmark* pFieldmark = dynamic_cast<::sw::mark::Fieldmark*>(
-            *pDoc->getIDocumentMarkAccess()->getFieldmarksBegin());
+        ::sw::mark::Fieldmark* pFieldmark = *pDoc->getIDocumentMarkAccess()->getFieldmarksBegin();
         uno::Sequence<OUString> entries;
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] >>= entries;
         uno::Sequence<OUString> const expected{ u"x"_ustr, u"v"_ustr, u"d"_ustr };

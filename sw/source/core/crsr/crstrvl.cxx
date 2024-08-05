@@ -942,7 +942,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
     IDocumentMarkAccess* pMarkAccess = GetDoc()->getIDocumentMarkAccess();
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
-        auto pFieldMark = dynamic_cast<sw::mark::Fieldmark*>(*it);
+        sw::mark::Fieldmark* pFieldMark = *it;
         assert(pFieldMark);
         // legacy form fields do not have (functional) tabIndexes - use lowest priority for them
         aFormMap[std::make_pair((*it)->GetMarkStart(), SAL_MAX_UINT32)] =

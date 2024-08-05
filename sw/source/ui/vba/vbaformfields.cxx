@@ -53,10 +53,10 @@ static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& 
                     && (*aIter)->GetName().equalsIgnoreAsciiCase(OUString::fromUtf8(rName)))
                 {
                     rIndex = nCounter;
-                    return dynamic_cast<sw::mark::Fieldmark*>(*aIter);
+                    return *aIter;
                 }
                 else if (rIndex == nCounter)
-                    return dynamic_cast<sw::mark::Fieldmark*>(*aIter);
+                    return *aIter;
 
                 ++nCounter;
                 if (pElementNames)

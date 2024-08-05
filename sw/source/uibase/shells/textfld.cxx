@@ -982,7 +982,7 @@ FIELD_INSERT:
         sal_Int32 nFieldIndex = 0;
         for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
         {
-            auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
+            sw::mark::Fieldmark* pFieldmark = *it;
             assert(pFieldmark);
             if (pFieldmark->GetFieldname() != aFieldType)
             {
@@ -1047,7 +1047,7 @@ FIELD_INSERT:
         std::vector<sw::mark::MarkBase*> aRemovals;
         for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
         {
-            auto pFieldmark = dynamic_cast<sw::mark::Fieldmark*>(*it);
+            sw::mark::Fieldmark* pFieldmark = *it;
             assert(pFieldmark);
             if (pFieldmark->GetFieldname() != aFieldType)
             {

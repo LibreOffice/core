@@ -2306,8 +2306,7 @@ IsCursorInFieldmarkHidden(SwPaM const& rCursor, sw::FieldmarkMode const eMode)
         }
         if (*rCursor.GetPoint() < (**iter).GetMarkEnd())
         {
-            SwPosition const sepPos(sw::mark::FindFieldSep(
-                        dynamic_cast<sw::mark::Fieldmark&>(**iter)));
+            SwPosition const sepPos(sw::mark::FindFieldSep(**iter));
             if (eMode == sw::FieldmarkMode::ShowResult)
             {
                 if (*rCursor.GetPoint() <= sepPos

@@ -93,8 +93,8 @@ namespace sw::mark {
             virtual ::sw::mark::MarkBase* getOneInnermostBookmarkFor(const SwPosition& rPos) const override;
 
             // Fieldmarks
-            virtual const_iterator getFieldmarksBegin() const override;
-            virtual const_iterator getFieldmarksEnd() const override;
+            virtual std::vector<Fieldmark*>::const_iterator getFieldmarksBegin() const override;
+            virtual std::vector<Fieldmark*>::const_iterator getFieldmarksEnd() const override;
             virtual sal_Int32 getFieldmarksCount() const override;
             virtual ::sw::mark::Fieldmark* getFieldmarkAt(const SwPosition& rPos) const override;
             virtual sw::mark::Fieldmark* getInnerFieldmarkFor(const SwPosition& rPos) const override;
@@ -150,7 +150,7 @@ namespace sw::mark {
             // additional container for bookmarks
             container_t m_vBookmarks;
             // additional container for fieldmarks
-            container_t m_vFieldmarks;
+            std::vector<sw::mark::Fieldmark*> m_vFieldmarks;
 
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
