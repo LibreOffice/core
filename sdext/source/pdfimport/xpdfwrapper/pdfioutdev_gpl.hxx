@@ -227,6 +227,7 @@ namespace pdfi
         //----- path clipping
         virtual void clip(GfxState *state) override;
         virtual void eoClip(GfxState *state) override;
+        virtual void clipToStrokePath(GfxState *state) override;
 
         //----- text drawing
 #if POPPLER_CHECK_VERSION(0, 82, 0)

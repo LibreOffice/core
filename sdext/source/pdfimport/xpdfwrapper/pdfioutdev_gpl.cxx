@@ -962,6 +962,17 @@ void PDFOutDev::eoClip(GfxState *state)
     printf( "\n" );
 }
 
+void PDFOutDev::clipToStrokePath(GfxState *state)
+{
+    if (m_bSkipImages)
+        return;
+    assert(state);
+
+    printf( "clipToStrokePath" );
+    printPath( state->getPath() );
+    printf( "\n" );
+}
+
 /** Output one glyph
 
 
