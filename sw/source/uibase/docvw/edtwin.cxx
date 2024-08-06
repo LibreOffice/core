@@ -1699,6 +1699,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        End };
 
     SwKeyState eKeyState = bIsViewReadOnly ? SwKeyState::CheckDocReadOnlyKeys : SwKeyState::CheckKey;
+
+    // tdf#112932 Pressing enter in read-ony Table of Content doesnt jump to heading
+    if (!bIsViewReadOnly
+        && ((rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN
+            || (rKeyCode.GetModifier() | rKeyCode.GetCode()) == (KEY_MOD1 | KEY_RETURN)))
+    {
+        const SwTOXBase* pTOXBase = rSh.GetCurTOX();
+        if (pTOXBase && SwEditShell::IsTOXBaseReadonly(*pTOXBase))
+            eKeyState = SwKeyState::CheckDocReadOnlyKeys;
+    }
+
     SwKeyState eNextKeyState = SwKeyState::End;
     sal_uInt8 nDir = 0;
 
@@ -2350,6 +2361,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     break;
                     case KEY_RETURN:
+                    case KEY_RETURN | KEY_MOD1:
                     {
                         const SelectionType nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & SelectionType::Frame)
