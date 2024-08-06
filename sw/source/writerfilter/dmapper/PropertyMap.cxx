@@ -1050,11 +1050,22 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
     xStyle->getPropertyValue(sHeaderIsOn) >>= bHasHeader;
     xStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
 
-    xStyle->setPropertyValue(sHeaderIsOn, uno::Any(bPreviousHasHeader || bHasHeader));
-    xStyle->setPropertyValue(sFooterIsOn, uno::Any(bPreviousHasFooter || bHasFooter));
-    xStyle->setPropertyValue(sHeaderIsShared, uno::Any(false));
-    xStyle->setPropertyValue(sFooterIsShared, uno::Any(false));
-    xStyle->setPropertyValue(sFirstIsShared, uno::Any(false));
+    // Set all properties at once before the copy, to avoid needless SwPageDesc copying.
+    uno::Sequence<OUString> aNames = {
+        sHeaderIsOn,
+        sFooterIsOn,
+        sHeaderIsShared,
+        sFooterIsShared,
+        sFirstIsShared,
+    };
+    uno::Sequence<uno::Any> aValues = {
+        uno::Any(bPreviousHasHeader || bHasHeader),
+        uno::Any(bPreviousHasFooter || bHasFooter),
+        uno::Any(false),
+        uno::Any(false),
+        uno::Any(false),
+    };
+    xStyle->setPropertyValues(aNames, aValues);
 
     if (bPreviousHasHeader && bCopyHeader)
     {
@@ -1076,12 +1087,22 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_FIRST);
     }
 
-    xStyle->setPropertyValue(sHeaderIsOn, uno::Any(bPreviousHasHeader || bHasHeader));
-    xStyle->setPropertyValue(sFooterIsOn, uno::Any(bPreviousHasFooter || bHasFooter));
-
-    xStyle->setPropertyValue(sHeaderIsShared, uno::Any(!bEvenAndOdd));
-    xStyle->setPropertyValue(sFooterIsShared, uno::Any(!bEvenAndOdd));
-    xStyle->setPropertyValue(sFirstIsShared, uno::Any(!bTitlePage));
+    // Set all properties at once after the copy, to avoid needless SwPageDesc copying.
+    aNames = {
+        sHeaderIsOn,
+        sFooterIsOn,
+        sHeaderIsShared,
+        sFooterIsShared,
+        sFirstIsShared,
+    };
+    aValues = {
+        uno::Any(bPreviousHasHeader || bHasHeader),
+        uno::Any(bPreviousHasFooter || bHasFooter),
+        uno::Any(!bEvenAndOdd),
+        uno::Any(!bEvenAndOdd),
+        uno::Any(!bTitlePage),
+    };
+    xStyle->setPropertyValues(aNames, aValues);
 }
 
 } // end anonymous namespace
