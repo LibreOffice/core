@@ -418,6 +418,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
                 "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
+{
+    // This must not crash on save; without the fix, it would fail with
+    // "Assertion failed: vector subscript out of range"
+    loadAndSave("too_many_styles.odt");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
