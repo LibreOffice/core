@@ -1308,7 +1308,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>&
         if (bExternal)
         {
             ScTokenRef pCorner(
-                new ScExternalSingleRefToken(nFileId, aExtTabName, aData));
+                new ScExternalSingleRefToken(nFileId, std::move(aExtTabName), aData));
             ScRefTokenHelper::join(pDoc, rRefTokens, pCorner, ScAddress());
         }
         else

@@ -621,7 +621,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
         {
             ExecuteInfo* pExecuteInfo = new ExecuteInfo;
             pExecuteInfo->xDispatch = xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0);
-            pExecuteInfo->aTargetURL = aTargetURL;
+            pExecuteInfo->aTargetURL = std::move(aTargetURL);
             Application::PostUserEvent( LINK(nullptr, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
         }
     }

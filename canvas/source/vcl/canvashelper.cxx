@@ -876,7 +876,7 @@ namespace vclcanvas
                 // display bitmap - return cache object, to retain
                 // that information.
                 return uno::Reference< rendering::XCachedPrimitive >(
-                    new CachedBitmap( pGrfObj,
+                    new CachedBitmap( std::move(pGrfObj),
                                       aPt,
                                       aSz,
                                       aGrfAttr,

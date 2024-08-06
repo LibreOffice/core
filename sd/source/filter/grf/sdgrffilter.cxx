@@ -181,11 +181,11 @@ bool SdGRFFilter::Import()
     return bRet;
 }
 
-void SdGRFFilter::InsertSdrGrafObj(Graphic pGraphic, SdPage* pPage)
+void SdGRFFilter::InsertSdrGrafObj(const Graphic& rGraphic, SdPage* pPage)
 {
     Point aPos;
     Size aPagSize(pPage->GetSize());
-    Size aGrfSize(OutputDevice::LogicToLogic(pGraphic.GetPrefSize(), pGraphic.GetPrefMapMode(),
+    Size aGrfSize(OutputDevice::LogicToLogic(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(),
                                              MapMode(MapUnit::Map100thMM)));
 
     aPagSize.AdjustWidth(-(pPage->GetLeftBorder() + pPage->GetRightBorder()));
@@ -215,7 +215,7 @@ void SdGRFFilter::InsertSdrGrafObj(Graphic pGraphic, SdPage* pPage)
     aPos.setX(((aPagSize.Width() - aGrfSize.Width()) >> 1) + pPage->GetLeftBorder());
     aPos.setY(((aPagSize.Height() - aGrfSize.Height()) >> 1) + pPage->GetUpperBorder());
 
-    pPage->InsertObject(new SdrGrafObj(pPage->getSdrModelFromSdrPage(), pGraphic,
+    pPage->InsertObject(new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
                                        ::tools::Rectangle(aPos, aGrfSize)));
 }
 

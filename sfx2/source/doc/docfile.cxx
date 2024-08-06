@@ -506,10 +506,10 @@ ErrCodeMsg const & SfxMedium::GetLastStorageCreationState() const
     return pImpl->nLastStorageError;
 }
 
-void SfxMedium::SetError(ErrCodeMsg nError)
+void SfxMedium::SetError(const ErrCodeMsg& rError)
 {
-    if (pImpl->m_eError == ERRCODE_NONE || (pImpl->m_eError.IsWarning() && nError.IsError()))
-        pImpl->m_eError = nError;
+    if (pImpl->m_eError == ERRCODE_NONE || (pImpl->m_eError.IsWarning() && rError.IsError()))
+        pImpl->m_eError = rError;
 }
 
 void SfxMedium::SetWarningError(const ErrCodeMsg& nWarningError)

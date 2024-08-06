@@ -3479,7 +3479,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                 mapCurShape->maId = aElementId + "_" + OUString::number(nEntryCount++);
                             }
 
-                            mapCurShape->maShapePolyPoly = aShapePolyPoly;
+                            mapCurShape->maShapePolyPoly = std::move(aShapePolyPoly);
                             mapCurShape->maShapeFillColor = aFill.getFillColor();
                             mapCurShape->maShapeFillColor.SetAlpha( 255 - basegfx::fround<sal_uInt8>( 255.0 * aFill.getTransparency() ) );
 

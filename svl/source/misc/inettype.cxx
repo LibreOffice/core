@@ -432,7 +432,7 @@ bool INetContentTypes::parse(
         rType = t;
         rSubType = s;
         if (pParameters != nullptr) {
-            *pParameters = p;
+            *pParameters = std::move(p);
         }
         return true;
     } else {

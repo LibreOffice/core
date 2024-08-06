@@ -1294,7 +1294,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         m_aProps.aTitle = aNewTitle;
 
-        aChanges.getArray()[ nChanged ] = aEvent;
+        aChanges.getArray()[ nChanged ] = std::move(aEvent);
         nChanged++;
     }
 

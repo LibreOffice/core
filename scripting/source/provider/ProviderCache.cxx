@@ -159,7 +159,7 @@ ProviderCache::populateCache()
                     serviceName = *pName;
                     ProviderDetails details;
                     details.factory = factory;
-                    m_hProviderDetailsCache[ serviceName ] = details;
+                    m_hProviderDetailsCache[ serviceName ] = std::move(details);
                 }
             }
         }

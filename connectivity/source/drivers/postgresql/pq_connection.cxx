@@ -192,7 +192,7 @@ Reference< XStatement > Connection::createStatement()
     ::rtl::ByteSequence id( 16 );
     rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
-    stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
+    stmt->queryAdapter()->addReference( new ClosableReference( std::move(id), this ) );
     return stmt;
 }
 

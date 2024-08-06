@@ -156,7 +156,7 @@ css::accessibility::TextSegment
             if (oIndices && mrPortionData.IsValidCorePosition(oIndices->first) && mrPortionData.IsValidCorePosition(oIndices->second))
             {
                 if (nIndexInPortion == nTextMarkupIndex)
-                    oElement = oIndices;
+                    oElement = std::move(oIndices);
 
                 nIndexInPortion++;
             }

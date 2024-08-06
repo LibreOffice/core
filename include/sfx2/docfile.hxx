@@ -149,7 +149,7 @@ public:
     ErrCodeMsg const &  GetWarningError() const;
     ErrCodeMsg const &  GetLastStorageCreationState() const;
 
-    void                SetError(ErrCodeMsg nError);
+    void                SetError(const ErrCodeMsg& rError);
     void                SetWarningError(const ErrCodeMsg& nWarningError);
 
     void                CloseInStream();

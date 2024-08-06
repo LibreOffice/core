@@ -64,7 +64,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
         nRet = m_nNextId++;
         // create new style
         RefCountedHashedStyle& rNew = m_aIdToStyle[ nRet ];
-        rNew.style = aSearchStyle;
+        rNew.style = std::move(aSearchStyle);
         rNew.RefCount           = 1;
         rNew.style.IsSubStyle         = bSubStyle;
         // fill the style hash to find the id

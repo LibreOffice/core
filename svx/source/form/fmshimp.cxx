@@ -3530,7 +3530,7 @@ void FmXFormShell::viewDeactivated_Lock(FmFormView& _rCurrentView, bool _bDeacti
                 Application::RemoveUserEvent( aAction.nEventId );
             }
         }
-        m_aLoadingPages = aNewEvents;
+        m_aLoadingPages = std::move(aNewEvents);
 
         // remove callbacks at the page
         pPage->GetImpl().SetFormsCreationHdl( Link<FmFormPageImpl&,void>() );

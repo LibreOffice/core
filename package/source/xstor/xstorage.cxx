@@ -4099,7 +4099,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
                                         uno::Any( aEncryptionMap.getAsConstNamedValueList() ) );
 
         m_pImpl->m_bHasCommonEncryptionData = true;
-        m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
+        m_pImpl->m_aCommonEncryptionData = std::move(aEncryptionMap);
     }
     catch( const uno::Exception& )
     {

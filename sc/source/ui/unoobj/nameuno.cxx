@@ -1057,9 +1057,9 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
     xNewList->Join( ScRangePair( aLabelRange, aDataRange ) );
 
     if (bColumn)
-        rDoc.GetColNameRangesRef() = xNewList;
+        rDoc.GetColNameRangesRef() = std::move(xNewList);
     else
-        rDoc.GetRowNameRangesRef() = xNewList;
+        rDoc.GetRowNameRangesRef() = std::move(xNewList);
 
     rDoc.CompileColRowNameFormula();
     pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid );

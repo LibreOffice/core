@@ -1239,11 +1239,11 @@ void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEve
     if ( m_nFormActionNestingLevel )
     {
         OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccurred: can handle one error per transaction only!" );
-        m_aCurrentError = aInfo;
+        m_aCurrentError = std::move(aInfo);
     }
     else
     {
-        m_aCurrentError = aInfo;
+        m_aCurrentError = std::move(aInfo);
         m_aAsyncDisplayError.Call();
     }
 }

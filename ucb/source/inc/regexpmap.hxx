@@ -308,7 +308,7 @@ void RegexpMap< Val >::add(OUString const & rKey, Val const & rValue)
         {
             return;
         }
-        m_pDefault.reset( new Entry< Val >(aRegexp, rValue) );
+        m_pDefault.reset( new Entry< Val >(std::move(aRegexp), rValue) );
     }
     else
     {
@@ -322,7 +322,7 @@ void RegexpMap< Val >::add(OUString const & rKey, Val const & rValue)
             }
         }
 
-        rTheList.push_back(Entry< Val >(aRegexp, rValue));
+        rTheList.push_back(Entry< Val >(std::move(aRegexp), rValue));
     }
 }
 

@@ -230,7 +230,8 @@ namespace
         propertyType->setOpenChoice( bOpenChoice );
         propertyType->setType( type );
 
-        libcmis::PropertyPtr property( new libcmis::Property( propertyType, std::move(values) ) );
+        libcmis::PropertyPtr property( new libcmis::Property( std::move(propertyType),
+                                                              std::move(values) ) );
 
         return property;
     }

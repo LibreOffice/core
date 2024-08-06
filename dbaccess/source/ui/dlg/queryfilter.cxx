@@ -687,7 +687,7 @@ void DlgFilterCrit::BuildWherePart()
         sal_Int32 nAndPos = _rValues[nPos].getLength();
         auto pValues = _rValues.getArray();
         pValues[nPos].realloc( _rValues[nPos].getLength() + 1);
-        pValues[nPos].getArray()[nAndPos] = aValue;
+        pValues[nPos].getArray()[nAndPos] = std::move(aValue);
     }
 
     if( m_xLB_WHEREFIELD3->get_active() != 0 )
