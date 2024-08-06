@@ -1,35 +1,47 @@
-From 2dad1410684110073bd19c2af27187dcc9c05270 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
-Date: Mon, 5 Aug 2024 11:04:36 +0100
-Subject: [PATCH] ofz#70675 XML_ERR_FATAL not ending parse
+From 3ef06fcb9ae55295a9df29b564ea9302809e12a7 Mon Sep 17 00:00:00 2001
+From: Nick Wellnhofer <wellnhofer@aevum.de>
+Date: Mon, 5 Aug 2024 14:58:37 +0200
+Subject: [PATCH] parser: Fix error handling after reaching limit
 
-if there was 100 earlier non-fatal errors,
+Mark document as non-wellformed and stop parser even if error limit was
+reached.
 
-an issue since:
+Regressed in abd74186.
 
-commit f19a95108a32b40eaa3b16b41d7a687896e61ce5
-CommitDate: Mon Dec 11 22:13:05 2023 +0100
-
-    parser: Report malloc failures
-
-    Fix many places where malloc failures aren't reported.
+parser: Report at least one fatal error
 ---
- parserInternals.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ parserInternals.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/parserInternals.c b/parserInternals.c
-index 7700de39..4c6c27e0 100644
+index 7700de39..eb13be7e 100644
 --- parserInternals.c
 +++ parserInternals.c
-@@ -330,7 +330,7 @@ xmlCtxtVErr(xmlParserCtxtPtr ctxt, xmlNodePtr node, xmlErrorDomain domain,
-             return;
+@@ -327,11 +327,13 @@ xmlCtxtVErr(xmlParserCtxtPtr ctxt, xmlNodePtr node, xmlErrorDomain domain,
+ 
+     if (level == XML_ERR_WARNING) {
+         if (ctxt->nbWarnings >= XML_MAX_ERRORS)
+-            return;
++            goto done;
          ctxt->nbWarnings += 1;
      } else {
 -        if (ctxt->nbErrors >= XML_MAX_ERRORS)
-+        if (ctxt->nbErrors >= XML_MAX_ERRORS && level != XML_ERR_FATAL)
-             return;
+-            return;
++        /* Report at least one fatal error. */
++        if ((ctxt->nbErrors >= XML_MAX_ERRORS) &&
++            ((level < XML_ERR_FATAL) || (ctxt->wellFormed == 0)))
++            goto done;
          ctxt->nbErrors += 1;
      }
+ 
+@@ -382,6 +384,7 @@ xmlCtxtVErr(xmlParserCtxtPtr ctxt, xmlNodePtr node, xmlErrorDomain domain,
+         return;
+     }
+ 
++done:
+     if (level >= XML_ERR_ERROR)
+         ctxt->errNo = code;
+     if (level == XML_ERR_FATAL) {
 -- 
 2.45.1
 
