@@ -578,8 +578,17 @@ void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
     if ( nRepeatPos == -1 || nRepeatPos > aString.getLength() )
         return;
 
-    tools::Long nCharWidth = GetFmtTextWidth(OUString(nRepeatChar));
+    // Measuring a string containing a single copy of the repeat char is inaccurate.
+    // To increase accuracy, start with a representative sample of a padding sequence.
+    constexpr sal_Int32 nSampleSize = 20;
+    OUStringBuffer aFill(nSampleSize);
+    comphelper::string::padToLength(aFill, nSampleSize, nRepeatChar);
 
+    tools::Long nSampleWidth = GetFmtTextWidth(aFill.makeStringAndClear());
+    double nAvgCharWidth = static_cast<double>(nSampleWidth) / static_cast<double>(nSampleSize);
+
+    // Intentionally truncate to round toward zero
+    auto nCharWidth = static_cast<tools::Long>(nAvgCharWidth);
     if ( nCharWidth < 1 || (bPixelToLogic && nCharWidth < pOutput->mpRefDevice->PixelToLogic(Size(1,0)).Width()) )
         return;
 
@@ -595,8 +604,9 @@ void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
     if ( nSpaceToFill <= nCharWidth )
         return;
 
-    sal_Int32 nCharsToInsert = nSpaceToFill / nCharWidth;
-    OUStringBuffer aFill(nCharsToInsert);
+    // Intentionally truncate to round toward zero
+    auto nCharsToInsert = static_cast<sal_Int32>(static_cast<double>(nSpaceToFill) / nAvgCharWidth);
+    aFill.ensureCapacity(nCharsToInsert);
     comphelper::string::padToLength(aFill, nCharsToInsert, nRepeatChar);
     aString = aString.replaceAt( nRepeatPos, 0, aFill );
     TextChanged();

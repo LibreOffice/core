@@ -5155,6 +5155,56 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)
     CPPUNIT_ASSERT_EQUAL(u"This is a test document."_ustr, xParagraph->getString());
 }
 
+// tdf#160786 - Tests that Calc format code with repeat char is measured correctly
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160786)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf160786.fods");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(5, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(5, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, aText.at(3).trim());
+
+    // The currency line is padded with an unknown number of 'f' characters. It doesn't matter how
+    // many are used, as long as the cell is padded to the expected width. Just verify that this
+    // text object is the expected one.
+    CPPUNIT_ASSERT(o3tl::trim(aText.at(4)).starts_with(u"$"));
+
+    // The currency cell must not overlap the adjacent cell
+    CPPUNIT_ASSERT_GREATEREQUAL(aRect.at(3).getMaxX(), aRect.at(4).getMinX());
+
+    // The currency cell must be padded to occupy its space reasonably well.
+    // As a heuristic, ensure the free space is no more than the width of "A"
+    CPPUNIT_ASSERT_LESS(aRect.at(3).getMaxX() + aRect.at(3).getWidth(), aRect.at(4).getMinX());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
