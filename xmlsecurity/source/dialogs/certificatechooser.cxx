@@ -197,6 +197,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
                 if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
                     xCerts = secEnvironment->getPersonalCertificates();
                 else
+                    // Currently (master 2024-07) all X.509 implementations (nss+mscrypt) give an empty list.
                     xCerts = secEnvironment->getAllCertificates();
 
                 for (sal_Int32 nCert = xCerts.getLength(); nCert;)
