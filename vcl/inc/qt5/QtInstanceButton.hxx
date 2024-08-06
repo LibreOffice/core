@@ -11,9 +11,10 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <QtCore/QObject>
 #include <QtWidgets/QPushButton>
 
-class QtInstanceButton : public QtInstanceWidget, public virtual weld::Button
+class QtInstanceButton : public QObject, public QtInstanceWidget, public virtual weld::Button
 {
     QPushButton* m_pButton;
 
@@ -27,6 +28,9 @@ public:
     virtual OUString get_label() const override;
     virtual void set_font(const vcl::Font& rFont) override;
     virtual void set_custom_button(VirtualDevice* pDevice) override;
+
+private slots:
+    void buttonClicked();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
