@@ -9,7 +9,7 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, string, os.path, codecs
+import sys, os.path, codecs
 
 CFGFILE             = os.environ["SRCDIR"] + "/filter/source/config/tools/merge/FCFGMerge.cfg"
 
@@ -210,7 +210,6 @@ class Properties(dict):
 def readprops(buff):
     name,value = None,''
     props = {}
-    continued = 0
 
     while 1:
         line = buff.readline()
