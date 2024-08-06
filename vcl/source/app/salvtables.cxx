@@ -674,6 +674,11 @@ OUString SalInstanceWidget::strip_mnemonic(const OUString& rLabel) const
     return rLabel.replaceFirst("~", "");
 }
 
+OUString SalInstanceWidget::escape_ui_str(const OUString& rLabel) const
+{
+    return rLabel.replaceAll("~", "~~");
+}
+
 VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 {
     // create with (annoying) separate alpha layer that LibreOffice itself uses

@@ -4461,6 +4461,11 @@ public:
         return rLabel.replaceFirst("_", "");
     }
 
+    virtual OUString escape_ui_str(const OUString &rLabel) const override
+    {
+        return rLabel.replaceAll("_", "__");
+    }
+
     virtual VclPtr<VirtualDevice> create_virtual_device() const override
     {
         // create with no separate alpha layer like everything sane does

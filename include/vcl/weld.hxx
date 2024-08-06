@@ -333,6 +333,13 @@ public:
 
     virtual OUString strip_mnemonic(const OUString& rLabel) const = 0;
 
+    /* Escapes string contents which are interpreted by the UI.
+
+       Should be overwritten by each VCL implementation to account for the
+       string contents which are interpreted by it's ui.
+    */
+    virtual OUString escape_ui_str(const OUString& rLabel) const = 0;
+
     virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
 
     //do something transient to attract the attention of the user to the widget
