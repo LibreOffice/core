@@ -50,6 +50,9 @@ public:
                           const std::function<void(sal_Int32)>& func) override;
     virtual void response(int nResponse) override;
 
+private:
+    virtual QPushButton* buttonForResponseCode(int nResponse);
+
 private slots:
     void dialogFinished(int nResult);
 };
