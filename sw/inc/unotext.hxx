@@ -135,7 +135,7 @@ public:
     SW_DLLPUBLIC virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
     virtual OUString SAL_CALL getString() override;
-    virtual void SAL_CALL setString(const OUString& rString) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setString(const OUString& rString) override;
 
     // XSimpleText
     virtual void SAL_CALL insertString(
@@ -220,7 +220,7 @@ public:
                 rTableProperties) override;
 
     // XTextCopy
-    virtual void SAL_CALL copyText(
+    SW_DLLPUBLIC virtual void SAL_CALL copyText(
             const css::uno::Reference< css::text::XTextCopy >& xSource ) override;
 
     // XTextRangeCompare

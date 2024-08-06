@@ -522,6 +522,8 @@ public:
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
+    rtl::Reference<SwXFootnotes> getSwXFootnotes();
+    rtl::Reference<SwXFootnotes> getSwXEndnotes();
     rtl::Reference<SwXTextFieldMasters> getSwXTextFieldMasters();
     rtl::Reference<SwXFieldMaster> createFieldMaster(std::u16string_view sServiceName);
     rtl::Reference<SwXTextField> createTextField(std::u16string_view sServiceName);

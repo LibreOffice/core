@@ -463,7 +463,7 @@ public:
     SwXFootnotes(bool bEnd, SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
+    SW_DLLPUBLIC virtual sal_Int32 SAL_CALL getCount() override;
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XElementAccess
@@ -474,6 +474,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SW_DLLPUBLIC rtl::Reference<SwXFootnote> getFootnoteByIndex(sal_Int32 nIndex) ;
 
     static rtl::Reference<SwXFootnote> GetObject( SwDoc& rDoc, const SwFormatFootnote& rFormat );
 };

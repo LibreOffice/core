@@ -956,8 +956,8 @@ public:
     sal_Int32 GetEndnoteCount() const { return m_nEndnotes; }
     void IncrementEndnoteCount() { ++m_nEndnotes; }
     bool CopyTemporaryNotes(
-        css::uno::Reference< css::text::XFootnote > xNoteSrc,
-        css::uno::Reference< css::text::XFootnote > xNoteDest );
+        rtl::Reference< SwXFootnote > xNoteSrc,
+        rtl::Reference< SwXFootnote > xNoteDest );
     void RemoveTemporaryFootOrEndnotes();
 
     void PushAnnotation();

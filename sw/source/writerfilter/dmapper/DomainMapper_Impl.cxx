@@ -4370,24 +4370,24 @@ static void lcl_PasteRedlines(
 }
 
 bool DomainMapper_Impl::CopyTemporaryNotes(
-        uno::Reference< text::XFootnote > xNoteSrc,
-        uno::Reference< text::XFootnote > xNoteDest )
+        rtl::Reference< SwXFootnote > xNoteSrc,
+        rtl::Reference< SwXFootnote > xNoteDest )
 {
     if (!m_bSaxError && xNoteSrc != xNoteDest)
     {
-        uno::Reference< text::XText > xSrc( xNoteSrc, uno::UNO_QUERY_THROW );
-        uno::Reference< text::XText > xDest( xNoteDest, uno::UNO_QUERY_THROW );
-        uno::Reference< text::XTextCopy > xTxt, xTxt2;
-        xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
-        xTxt2.set( xDest, uno::UNO_QUERY_THROW );
-        xTxt2->copyText( xTxt );
+//        uno::Reference< text::XText > xSrc( xNoteSrc, uno::UNO_QUERY_THROW );
+//        uno::Reference< text::XText > xDest( xNoteDest, uno::UNO_QUERY_THROW );
+//        uno::Reference< text::XTextCopy > xTxt, xTxt2;
+//        xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
+//        xTxt2.set( xDest, uno::UNO_QUERY_THROW );
+        xNoteDest->copyText( xNoteSrc );
 
         // copy its redlines
         std::vector<sal_Int32> redPos, redLen;
         sal_Int32 redIdx;
         enum StoredRedlines eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
-        lcl_CopyRedlines(xSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
-        lcl_PasteRedlines(xDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+        lcl_CopyRedlines(xNoteSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+        lcl_PasteRedlines(xNoteDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
 
         // remove processed redlines
         for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
@@ -4402,40 +4402,36 @@ bool DomainMapper_Impl::CopyTemporaryNotes(
 void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
 {
     rtl::Reference< SwXTextDocument> xTextDoc( GetTextDocument() );
-    uno::Reference< text::XFootnote > xNote;
+    rtl::Reference< SwXFootnote > xNote;
     if  (GetFootnoteCount() > 0)
     {
-        auto xFootnotes = xTextDoc->getFootnotes();
+        rtl::Reference<SwXFootnotes> xFootnotes = xTextDoc->getSwXFootnotes();
         if ( m_nFirstFootnoteIndex > 0 )
         {
-            uno::Reference< text::XFootnote > xFirstNote;
-            xFootnotes->getByIndex(0) >>= xFirstNote;
-            uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
-            xText->setString(u""_ustr);
-            xFootnotes->getByIndex(m_nFirstFootnoteIndex) >>= xNote;
+            rtl::Reference< SwXFootnote > xFirstNote = xFootnotes->getFootnoteByIndex(0);
+            xFirstNote->setString(u""_ustr);
+            xNote = xFootnotes->getFootnoteByIndex(m_nFirstFootnoteIndex);
             CopyTemporaryNotes(xNote, xFirstNote);
         }
         for (sal_Int32 i = GetFootnoteCount(); i > 0; --i)
         {
-            xFootnotes->getByIndex(i) >>= xNote;
+            xNote = xFootnotes->getFootnoteByIndex(i);
             xNote->getAnchor()->setString(u""_ustr);
         }
     }
     if  (GetEndnoteCount() > 0)
     {
-        auto xEndnotes = xTextDoc->getEndnotes();
+        rtl::Reference<SwXFootnotes> xEndnotes = xTextDoc->getSwXEndnotes();
         if ( m_nFirstEndnoteIndex > 0 )
         {
-            uno::Reference< text::XFootnote > xFirstNote;
-            xEndnotes->getByIndex(0) >>= xFirstNote;
-            uno::Reference< text::XText > xText( xFirstNote, uno::UNO_QUERY_THROW );
-            xText->setString(u""_ustr);
-            xEndnotes->getByIndex(m_nFirstEndnoteIndex) >>= xNote;
+            rtl::Reference< SwXFootnote > xFirstNote = xEndnotes->getFootnoteByIndex(0);
+            xFirstNote->setString(u""_ustr);
+            xNote = xEndnotes->getFootnoteByIndex(m_nFirstEndnoteIndex);
             CopyTemporaryNotes(xNote, xFirstNote);
         }
         for (sal_Int32 i = GetEndnoteCount(); i > 0; --i)
         {
-            xEndnotes->getByIndex(i) >>= xNote;
+            xNote = xEndnotes->getFootnoteByIndex(i);
             xNote->getAnchor()->setString(u""_ustr);
         }
     }
@@ -4473,13 +4469,13 @@ void DomainMapper_Impl::PopFootOrEndnote()
     if ( m_xTextDocument && IsInFootOrEndnote() && ( ( IsInFootnote() && GetFootnoteCount() > -1 ) ||
          ( !IsInFootnote() && GetEndnoteCount() > -1 ) ) )
     {
-        uno::Reference< text::XFootnote > xNoteFirst, xNoteLast;
-        auto xFootnotes = m_xTextDocument->getFootnotes();
-        auto xEndnotes = m_xTextDocument->getEndnotes();
+        rtl::Reference< SwXFootnote > xNoteFirst, xNoteLast;
+        rtl::Reference<SwXFootnotes> xFootnotes = m_xTextDocument->getSwXFootnotes();
+        rtl::Reference<SwXFootnotes> xEndnotes = m_xTextDocument->getSwXEndnotes();
         if ( ( ( IsInFootnote() && xFootnotes->getCount() > 1 &&
-                       ( xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xNoteLast ) ) ||
+                       ( xNoteLast = xFootnotes->getFootnoteByIndex(xFootnotes->getCount()-1) ) ) ||
                ( !IsInFootnote() && xEndnotes->getCount() > 1 &&
-                       ( xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xNoteLast ) )
+                       ( xNoteLast = xEndnotes->getFootnoteByIndex(xEndnotes->getCount()-1) ) )
              ) && xNoteLast->getLabel().isEmpty() )
         {
             // copy content of the next temporary footnote
@@ -4493,7 +4489,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
                         m_bSaxError = true;
                     else
                     {
-                        xFootnotes->getByIndex(m_aFootnoteIds.front()) >>= xNoteFirst;
+                        xNoteFirst = xFootnotes->getFootnoteByIndex(m_aFootnoteIds.front());
                         m_aFootnoteIds.pop_front();
                     }
                 }
@@ -4505,7 +4501,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
                         m_bSaxError = true;
                     else
                     {
-                        xEndnotes->getByIndex(m_aEndnoteIds.front()) >>= xNoteFirst;
+                        xNoteFirst = xEndnotes->getFootnoteByIndex(m_aEndnoteIds.front());
                         m_aEndnoteIds.pop_front();
                     }
                 }

@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
+#include <unofootnote.hxx>
 #include <memory>
 #include <optional>
 #include <map>
@@ -142,7 +143,7 @@ private:
 
     // marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     // depending on sprmCSymbol
-    css::uno::Reference< css::text::XFootnote > m_xFootnote;
+    rtl::Reference< SwXFootnote >               m_xFootnote;
     OUString m_sFootnoteCharStyleName;
     std::map< PropertyIds, PropValue >          m_vMap;
     std::vector< RedlineParamsPtr >             m_aRedlines;
@@ -174,10 +175,10 @@ public:
     bool isSet( PropertyIds eId ) const;
     bool isDocDefault( PropertyIds eId ) const;
 
-    const css::uno::Reference< css::text::XFootnote >& GetFootnote() const { return m_xFootnote; }
+    const rtl::Reference< SwXFootnote >& GetFootnote() const { return m_xFootnote; }
     const OUString& GetFootnoteStyle() const { return m_sFootnoteCharStyleName; }
 
-    void SetFootnote(const css::uno::Reference< css::text::XFootnote >& xFootnote, const OUString& sStyleName)
+    void SetFootnote(const rtl::Reference< SwXFootnote >& xFootnote, const OUString& sStyleName)
     {
         m_xFootnote = xFootnote;
         m_sFootnoteCharStyleName = sStyleName;

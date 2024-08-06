@@ -1704,15 +1704,19 @@ sal_Int32 SwXFootnotes::getCount()
 
 uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 {
+    return uno::Any(uno::Reference< XFootnote >(getFootnoteByIndex(nIndex)));
+}
+
+rtl::Reference<SwXFootnote> SwXFootnotes::getFootnoteByIndex(sal_Int32 nIndex)
+{
     SolarMutexGuard aGuard;
-    uno::Any aRet;
+    rtl::Reference<SwXFootnote> xRef;
     sal_Int32 nCount = 0;
 
     auto& rDoc = GetDoc();
     auto& rIdxs = rDoc.GetFootnoteIdxs();
     const size_t nFootnoteCnt = rIdxs.size();
     SwTextFootnote* pTextFootnote;
-    uno::Reference< XFootnote >  xRef;
     for( size_t n = 0; n < nFootnoteCnt; ++n )
     {
         pTextFootnote = rIdxs[n];
@@ -1724,7 +1728,6 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
         {
             xRef = SwXFootnote::CreateXFootnote(rDoc,
                     &const_cast<SwFormatFootnote&>(rFootnote));
-            aRet <<= xRef;
             break;
         }
         nCount++;
@@ -1732,7 +1735,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
     if(!xRef.is())
         throw IndexOutOfBoundsException();
 
-    return aRet;
+    return xRef;
 }
 
 uno::Type SAL_CALL SwXFootnotes::getElementType()

@@ -620,6 +620,11 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules()
 
 Reference< XIndexAccess >  SwXTextDocument::getFootnotes()
 {
+    return getSwXFootnotes();
+}
+
+rtl::Reference< SwXFootnotes >  SwXTextDocument::getSwXFootnotes()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXFootnotes.is())
@@ -642,6 +647,11 @@ Reference< XPropertySet >  SAL_CALL
 }
 
 Reference< XIndexAccess >  SwXTextDocument::getEndnotes()
+{
+    return getSwXEndnotes();
+}
+
+rtl::Reference< SwXFootnotes >  SwXTextDocument::getSwXEndnotes()
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
