@@ -7575,11 +7575,10 @@ void DomainMapper_Impl::handleIndex
 }
 
 static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
-        uno::Reference<text::XFormField> const& xFormField,
+        rtl::Reference<SwXFieldmark> const& xFormField,
         uno::Reference<text::XTextRange> const& xStartRange,
         std::optional<FieldId> const oFieldId) -> void
 {
-    uno::Reference<text::XTextContent> const xTextContent(xFormField, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
     uno::Reference<text::XTextCursor> const xCursor =
         xTextAppend->createTextCursorByRange(xStartRange);
@@ -7599,7 +7598,7 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     {
         xCursor->gotoEnd(true);
     }
-    xTextAppend->insertTextContent(xCursor, xTextContent, true);
+    xTextAppend->insertTextContent(xCursor, static_cast<SwXBookmark*>(xFormField.get()), true);
     if (oFieldId
         && (oFieldId == FIELD_FORMCHECKBOX || oFieldId == FIELD_FORMDROPDOWN))
     {
@@ -7610,7 +7609,7 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     // FAIL: AppendTextNode() ignores the content index!
     // plan B: insert a spurious paragraph break now and join
     //         it in PopFieldContext()!
-    xCursor->gotoRange(xTextContent->getAnchor()->getEnd(), false);
+    xCursor->gotoRange(xFormField->getAnchor()->getEnd(), false);
     xCursor->goLeft(1, false); // skip CH_TXT_ATR_FIELDEND
     xTextAppend->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
     xCursor->goLeft(1, false); // back to previous paragraph
@@ -7956,7 +7955,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                                                     m_xTextDocument, pFFDataHandler));
                             pContext->setFormControlHelper(pFormControlHelper);
-                            if ( xFieldmark )
+                            if ( xFieldmark.is() )
                             {
                                 if ( pFFDataHandler && !pFFDataHandler->getName().isEmpty() )
                                     xFieldmark->setName(  pFFDataHandler->getName() );
@@ -8564,7 +8563,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             {
                 rtl::Reference<SwXBookmark> xFieldInterface = m_xTextDocument->createFieldmark();
 
-                uno::Reference<text::XFormField> const xFormField(static_cast<cppu::OWeakObject*>(xFieldInterface.get()), uno::UNO_QUERY);
+                rtl::Reference<SwXFieldmark> xFormField = dynamic_cast<SwXFieldmark*>(xFieldInterface.get());
                 InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
                         pContext->GetFieldId());
                 xFormField->setFieldType(ODF_UNHANDLED);
@@ -8946,10 +8945,10 @@ void DomainMapper_Impl::PopFieldContext()
                             // input, so it makes sense to do the same (tdf#152200)
                             if (xCrsr.is())
                             {
-                                uno::Reference< text::XFormField > xFormField(pContext->GetFormField());
+                                rtl::Reference< SwXFieldmark > xFormField(pContext->GetFormField());
                                 if (pFormControlHelper->hasFFDataHandler())
                                 {
-                                    xToInsert.set(xFormField, uno::UNO_QUERY);
+                                    xToInsert = static_cast<SwXBookmark*>(xFormField.get());
                                     if (xFormField.is() && xToInsert.is())
                                     {
                                         PopFieldmark(m_aTextAppendStack, xCrsr,
@@ -8965,7 +8964,7 @@ void DomainMapper_Impl::PopFieldContext()
                                 {
                                     PopFieldmark(m_aTextAppendStack, xCrsr,
                                         pContext->GetFieldId());
-                                    uno::Reference<lang::XComponent>(xFormField, uno::UNO_QUERY_THROW)->dispose(); // presumably invalid?
+                                    xFormField->dispose(); // presumably invalid?
                                 }
                             }
                         }

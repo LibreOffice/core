@@ -43,6 +43,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
 #include <unotxdoc.hxx>
+#include <unobookmark.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -189,7 +190,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
     return true;
 }
 
-void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFormField)
+void FormControlHelper::processField(rtl::Reference<SwXFieldmark> const& xFormField)
 {
     // Set field type first before adding parameters.
     if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
@@ -206,8 +207,7 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
     }
 
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
-    uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
-    if ( !(m_pFFData && xNamed.is() && xNameCont.is()) )
+    if ( !(m_pFFData && xNameCont.is()) )
         return;
 
     OUString sTmp = m_pFFData->getEntryMacro();
@@ -231,7 +231,7 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
         try
         {
             if ( !sTmp.isEmpty() )
-                xNamed->setName( sTmp );
+                xFormField->setName( sTmp );
         }
         catch ( uno::Exception& )
         {
@@ -258,11 +258,9 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
     }
     else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
         uno::Any aAny;
         aAny <<= m_pFFData->getCheckboxChecked();
-        if ( xPropSet.is() )
-            xPropSet->setPropertyValue(u"Checked"_ustr, aAny);
+        xFormField->setPropertyValue(u"Checked"_ustr, aAny);
     }
     else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
     {

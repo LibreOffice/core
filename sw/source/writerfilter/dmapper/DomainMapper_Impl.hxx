@@ -53,6 +53,7 @@
 #include "FFDataHandler.hxx"
 #include "SmartTagHandler.hxx"
 #include "FormControlHelper.hxx"
+#include <unobookmark.hxx>
 #include <map>
 
 class SwXTextDocument;
@@ -303,7 +304,7 @@ public:
 private:
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
-    css::uno::Reference<css::text::XFormField> m_xFormField;
+    rtl::Reference<SwXFieldmark> m_xFormField;
     css::uno::Reference<css::beans::XPropertySet> m_xTOC;
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
@@ -351,8 +352,8 @@ public:
     void SetCustomField(css::uno::Reference<css::beans::XPropertySet> const& xCustomField) { m_xCustomField = xCustomField; }
     const css::uno::Reference<css::text::XTextField>& GetTextField() const { return m_xTextField;}
     void SetTextField(css::uno::Reference<css::text::XTextField> const& xTextField);
-    const css::uno::Reference<css::text::XFormField>& GetFormField() const { return m_xFormField;}
-    void SetFormField(css::uno::Reference<css::text::XFormField> const& xFormField) { m_xFormField = xFormField;}
+    const rtl::Reference<SwXFieldmark>& GetFormField() const { return m_xFormField;}
+    void SetFormField(rtl::Reference<SwXFieldmark> const& xFormField) { m_xFormField = xFormField;}
 
     void SetTOC(css::uno::Reference<css::beans::XPropertySet> const& xTOC) { m_xTOC = xTOC; }
     const css::uno::Reference<css::beans::XPropertySet>& GetTOC() const { return m_xTOC; }

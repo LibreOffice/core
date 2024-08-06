@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 
 class SwXTextDocument;
+class SwXFieldmark;
 
 namespace writerfilter::dmapper
 {
@@ -38,7 +39,7 @@ public:
     ~FormControlHelper() override;
 
     void insertControl(css::uno::Reference<css::text::XTextRange> const& xTextRange);
-    void processField(css::uno::Reference<css::text::XFormField> const& xFormField);
+    void processField(rtl::Reference<SwXFieldmark> const& xFormField);
     bool hasFFDataHandler() const { return (m_pFFData != nullptr); }
 
 private:
