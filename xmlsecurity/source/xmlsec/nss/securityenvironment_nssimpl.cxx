@@ -52,6 +52,7 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 
 namespace csss = ::com::sun::star::security;
 using namespace ::com::sun::star::security;
@@ -99,8 +100,12 @@ static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*ar
         task::InteractionHandler::createWithParent(xContext, nullptr) );
 
     task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
+    OUString passwordLabel = xml::crypto::NSSInitializer::create(xContext)->getNSSPath();
+    if (!passwordLabel.isEmpty())
+        passwordLabel = ": " + passwordLabel;
+    passwordLabel = OUString::createFromAscii(PK11_GetTokenName(pSlot)) + passwordLabel;
     rtl::Reference<::comphelper::DocPasswordRequest> pPasswordRequest = new ::comphelper::DocPasswordRequest(
-        ::comphelper::DocPasswordRequestType::Standard, eMode, OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
+        ::comphelper::DocPasswordRequestType::Standard, eMode, passwordLabel);
 
     xInteractionHandler->handle( pPasswordRequest );
 
