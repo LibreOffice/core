@@ -118,7 +118,7 @@ public:
 
     virtual void set_accessible_relation_labeled_by(weld::Widget*) override;
 
-    virtual void set_tooltip_text(const OUString&) override;
+    virtual void set_tooltip_text(const OUString& rTip) override;
 
     virtual OUString get_tooltip_text() const override;
 

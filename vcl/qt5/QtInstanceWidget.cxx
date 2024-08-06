@@ -184,9 +184,17 @@ OUString QtInstanceWidget::get_accessible_id() const
 
 void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*) {}
 
-void QtInstanceWidget::set_tooltip_text(const OUString&) {}
+void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
+{
+    assert(m_pWidget);
+    m_pWidget->setToolTip(toQString(rTip));
+}
 
-OUString QtInstanceWidget::get_tooltip_text() const { return OUString(); }
+OUString QtInstanceWidget::get_tooltip_text() const
+{
+    assert(m_pWidget);
+    return toOUString(m_pWidget->toolTip());
+}
 
 void QtInstanceWidget::set_cursor_data(void*) {}
 
