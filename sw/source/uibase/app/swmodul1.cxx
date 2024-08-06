@@ -54,6 +54,7 @@
 #include <doc.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <tools/color.hxx>
 #include <tools/json_writer.hxx>
@@ -428,14 +429,19 @@ void SwModule::ClearRedlineAuthors()
 
 static Color lcl_GetAuthorColor(std::size_t nPos)
 {
-    static const Color aColArr[] =
+    switch (nPos % 9)
     {
-        COL_AUTHOR1_DARK, COL_AUTHOR2_DARK, COL_AUTHOR3_DARK,
-        COL_AUTHOR4_DARK, COL_AUTHOR5_DARK, COL_AUTHOR6_DARK,
-        COL_AUTHOR7_DARK, COL_AUTHOR8_DARK, COL_AUTHOR9_DARK
-    };
-
-    return aColArr[nPos % SAL_N_ELEMENTS(aColArr)];
+        case 0: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR1).nColor;
+        case 1: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR2).nColor;
+        case 2: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR3).nColor;
+        case 3: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR4).nColor;
+        case 4: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR5).nColor;
+        case 5: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR6).nColor;
+        case 6: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR7).nColor;
+        case 7: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR8).nColor;
+        case 8: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR9).nColor;
+        default: return COL_AUTO; // silence -Wreturn-type
+    }
 }
 
 /// Returns a JSON representation of a redline author.

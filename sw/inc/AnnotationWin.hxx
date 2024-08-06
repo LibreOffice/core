@@ -94,6 +94,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void SetPosAndSize();
         void TranslateTopPosition(const tools::Long aAmount);
         void CheckMetaText();
+        void UpdateColors();
 
         Point const & GetAnchorPos() { return mAnchorRect.Pos(); }
         const SwRect& GetAnchorRect() const { return mAnchorRect; }

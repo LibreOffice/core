@@ -2250,45 +2250,51 @@ Color SwPostItMgr::GetColorDark(std::size_t aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        static const Color aArrayNormal[] = {
-            COL_AUTHOR1_NORMAL,     COL_AUTHOR2_NORMAL,     COL_AUTHOR3_NORMAL,
-            COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
-            COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
-
-        return aArrayNormal[ aAuthorIndex % SAL_N_ELEMENTS( aArrayNormal )];
+        svtools::ColorConfig aColorConfig;
+        switch (aAuthorIndex % 9)
+        {
+            case 0:
+                return aColorConfig.GetColorValue(svtools::AUTHOR1).nColor;
+            case 1:
+                return aColorConfig.GetColorValue(svtools::AUTHOR2).nColor;
+            case 2:
+                return aColorConfig.GetColorValue(svtools::AUTHOR3).nColor;
+            case 3:
+                return aColorConfig.GetColorValue(svtools::AUTHOR4).nColor;
+            case 4:
+                return aColorConfig.GetColorValue(svtools::AUTHOR5).nColor;
+            case 5:
+                return aColorConfig.GetColorValue(svtools::AUTHOR6).nColor;
+            case 6:
+                return aColorConfig.GetColorValue(svtools::AUTHOR7).nColor;
+            case 7:
+                return aColorConfig.GetColorValue(svtools::AUTHOR8).nColor;
+            case 8:
+                return aColorConfig.GetColorValue(svtools::AUTHOR9).nColor;
+        }
     }
-    else
-        return COL_WHITE;
+
+    return COL_WHITE;
 }
 
 Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
 {
-    if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        static const Color aArrayLight[] = {
-            COL_AUTHOR1_LIGHT,      COL_AUTHOR2_LIGHT,      COL_AUTHOR3_LIGHT,
-            COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
-            COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
-
-        return aArrayLight[ aAuthorIndex % SAL_N_ELEMENTS( aArrayLight )];
-    }
+    Color aColor = GetColorDark(aAuthorIndex);
+    if (MiscSettings::GetUseDarkMode())
+        aColor.IncreaseLuminance(30);
     else
-        return COL_WHITE;
+        aColor.DecreaseLuminance(30);
+    return aColor;
 }
 
 Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
 {
-    if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        static const Color aArrayAnchor[] = {
-            COL_AUTHOR1_DARK,       COL_AUTHOR2_DARK,       COL_AUTHOR3_DARK,
-            COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
-            COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
-
-        return aArrayAnchor[  aAuthorIndex % SAL_N_ELEMENTS( aArrayAnchor )];
-    }
+    Color aColor = GetColorDark(aAuthorIndex);
+    if (aColor.IsDark())
+        aColor.IncreaseLuminance(80);
     else
-        return COL_WHITE;
+        aColor.DecreaseLuminance(80);
+    return aColor;
 }
 
 void SwPostItMgr::SetActiveSidebarWin( SwAnnotationWin* p)
@@ -2388,7 +2394,16 @@ void SwPostItMgr::CheckMetaText()
     for (auto const& postItField : mvPostItFields)
         if ( postItField->mpPostIt )
             postItField->mpPostIt->CheckMetaText();
+}
 
+void SwPostItMgr::UpdateColors()
+{
+    for (auto const& postItField : mvPostItFields)
+        if ( postItField->mpPostIt )
+        {
+            postItField->mpPostIt->UpdateColors();
+            postItField->mpPostIt->Invalidate();
+        }
 }
 
 sal_uInt16 SwPostItMgr::Replace(SvxSearchItem const * pItem)

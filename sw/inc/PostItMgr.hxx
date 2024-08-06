@@ -224,6 +224,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
         const OUString&     GetAnswerText() const { return maAnswerText; }
         void CheckMetaText();
+        void UpdateColors();
 
         sal_uInt16 Replace(SvxSearchItem const * pItem);
         sal_uInt16 SearchReplace(const SwFormatField &pField, const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);

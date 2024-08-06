@@ -27,6 +27,7 @@
 #include <svx/sdooitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdasitm.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -79,11 +80,28 @@ Color getColorLight(sal_uInt16 aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        constexpr const auto constArrayLight
-            = std::to_array<Color>({ COL_AUTHOR1_LIGHT, COL_AUTHOR2_LIGHT, COL_AUTHOR3_LIGHT,
-                                     COL_AUTHOR4_LIGHT, COL_AUTHOR5_LIGHT, COL_AUTHOR6_LIGHT,
-                                     COL_AUTHOR7_LIGHT, COL_AUTHOR8_LIGHT, COL_AUTHOR9_LIGHT });
-        return constArrayLight[aAuthorIndex % constArrayLight.size()];
+        svtools::ColorConfig aColorConfig;
+        switch (aAuthorIndex % 9)
+        {
+            case 0:
+                return aColorConfig.GetColorValue(svtools::AUTHOR1).nColor;
+            case 1:
+                return aColorConfig.GetColorValue(svtools::AUTHOR2).nColor;
+            case 2:
+                return aColorConfig.GetColorValue(svtools::AUTHOR3).nColor;
+            case 3:
+                return aColorConfig.GetColorValue(svtools::AUTHOR4).nColor;
+            case 4:
+                return aColorConfig.GetColorValue(svtools::AUTHOR5).nColor;
+            case 5:
+                return aColorConfig.GetColorValue(svtools::AUTHOR6).nColor;
+            case 6:
+                return aColorConfig.GetColorValue(svtools::AUTHOR7).nColor;
+            case 7:
+                return aColorConfig.GetColorValue(svtools::AUTHOR8).nColor;
+            case 8:
+                return aColorConfig.GetColorValue(svtools::AUTHOR9).nColor;
+        }
     }
 
     return COL_WHITE;

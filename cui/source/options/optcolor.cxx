@@ -54,6 +54,7 @@ enum Group
     Group_Html,
     Group_Calc,
     Group_Draw,
+    Group_Comment,
     Group_Basic,
     Group_Sql,
 
@@ -76,8 +77,9 @@ const vGroupInfo[] =
     { Group_Html, u"html"_ustr },
     { Group_Calc, u"calc"_ustr },
     { Group_Draw, u"draw"_ustr },
+    { Group_Comment, u"comment"_ustr },
     { Group_Basic, u"basic"_ustr },
-    { Group_Sql, u"sql"_ustr }
+    { Group_Sql, u"sql"_ustr },
 };
 
 // color config entry data (see ColorConfigWindow_Impl::Entry below)
@@ -149,6 +151,16 @@ const vEntryInfo[] =
     { Group_Calc,    IDS(protectedcells), std::u16string_view(u"/CalcProtectedBackground") },
 
     { Group_Draw,    IDS(drawgrid), std::u16string_view(u"/DrawGrid") },
+
+    { Group_Comment, IDS(author1), std::u16string_view(u"/Author1") },
+    { Group_Comment, IDS(author2), std::u16string_view(u"/Author2") },
+    { Group_Comment, IDS(author3), std::u16string_view(u"/Author3") },
+    { Group_Comment, IDS(author4), std::u16string_view(u"/Author4") },
+    { Group_Comment, IDS(author5), std::u16string_view(u"/Author5") },
+    { Group_Comment, IDS(author6), std::u16string_view(u"/Author6") },
+    { Group_Comment, IDS(author7), std::u16string_view(u"/Author7") },
+    { Group_Comment, IDS(author8), std::u16string_view(u"/Author8") },
+    { Group_Comment, IDS(author9), std::u16string_view(u"/Author9") },
 
     { Group_Basic,   IDS(basiceditor), std::u16string_view(u"/BASICEditor") },
     { Group_Basic,   IDS(basicid), std::u16string_view(u"/BASICIdentifier") },

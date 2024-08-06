@@ -528,6 +528,96 @@
           </info>
         </prop>
       </group>
+      <group oor:name="Author1">
+        <info>
+          <desc>Specifies the settings used for the comments of author #1.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #1.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author2">
+        <info>
+          <desc>Specifies the settings used for the comments of author #2.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #2.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author3">
+        <info>
+          <desc>Specifies the settings used for the comments of author #3.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #3.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author4">
+        <info>
+          <desc>Specifies the settings used for the comments of author #4.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #4.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author5">
+        <info>
+          <desc>Specifies the settings used for the comments of author #5.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #5.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author6">
+        <info>
+          <desc>Specifies the settings used for the comments of author #6.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #6.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author7">
+        <info>
+          <desc>Specifies the settings used for the comments of author #7.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #7.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author8">
+        <info>
+          <desc>Specifies the settings used for the comments of author #8.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #8.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="Author9">
+        <info>
+          <desc>Specifies the settings used for the comments of author #9.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for author #9.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="BASICEditor">
         <info>
           <desc>Specifies the settings of the BASIC code editor.</desc>

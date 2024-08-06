@@ -1505,6 +1505,346 @@
       </packing>
     </child>
     <child>
+      <object class="GtkFrame" id="frmComments">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <!-- n-columns=2 n-rows=9 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">12</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="author1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author1">Author 1</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author1_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author1_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author2">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author2">Author 2</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author2_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author2_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author3">Author 3</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author3_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author3_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author4">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author4">Author 4</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author4_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author4_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author5">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author5">Author 5</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author5_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author5_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author6">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author6">Author 6</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author6_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author6_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author7">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author7">Author 7</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author7_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author7_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author8">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author8">Author 8</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author8_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author8_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="author9">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|author9">Author 9</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">author9_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="author9_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="lbComment">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="colorconfigwin|comments">Comments</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkFrame" id="frmBasic">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -1800,7 +2140,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <child>
@@ -2066,7 +2406,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child>
@@ -2233,7 +2573,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="position">7</property>
       </packing>
     </child>
   </object>

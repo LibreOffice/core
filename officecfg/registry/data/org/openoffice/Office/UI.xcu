@@ -382,6 +382,51 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="Author1">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author2">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author3">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author4">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author5">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author6">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author7">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author8">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="Author9">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="BASICEditor">
           <prop oor:name="Color" oor:type="xs:int">
             <value xsi:nil="true"/>

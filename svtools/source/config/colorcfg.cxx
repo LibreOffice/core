@@ -151,6 +151,15 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/CalcText") ,false },
         { std::u16string_view(u"/CalcProtectedBackground") ,false },
         { std::u16string_view(u"/DrawGrid")        ,true },
+        { std::u16string_view(u"/Author1"), false },
+        { std::u16string_view(u"/Author2"), false },
+        { std::u16string_view(u"/Author3"), false },
+        { std::u16string_view(u"/Author4"), false },
+        { std::u16string_view(u"/Author5"), false },
+        { std::u16string_view(u"/Author6"), false },
+        { std::u16string_view(u"/Author7"), false },
+        { std::u16string_view(u"/Author8"), false },
+        { std::u16string_view(u"/Author9"), false },
         { std::u16string_view(u"/BASICEditor"),  false },
         { std::u16string_view(u"/BASICIdentifier"),  false },
         { std::u16string_view(u"/BASICComment")   ,  false },
@@ -432,6 +441,15 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_BLACK,        Color(0xEEEEEE) }, // CALCTEXT
         { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // CALCPROTECTEDBACKGROUND
         { COL_GRAY7,        COL_GRAY7       }, // DRAWGRID
+        { Color(0xFFFF9E),  Color(0x80804f) }, // AUTHOR1
+        { Color(0xD8E8FF),  Color(0x6c7480) }, // AUTHOR2
+        { Color(0xDAF8C1),  Color(0x708063) }, // AUTHOR3
+        { Color(0xE4D2F5),  Color(0x776d80) }, // AUTHOR4
+        { Color(0xFECDD0),  Color(0x806768) }, // AUTHOR5
+        { Color(0xD2F6F6),  Color(0x6c8080) }, // AUTHOR6
+        { Color(0xEDFCA3),  Color(0x788052) }, // AUTHOR7
+        { Color(0xD3DEE8),  Color(0x747a80) }, // AUTHOR8
+        { Color(0xFFE2B9),  Color(0x80715d) }, // AUTHOR9
         { COL_WHITE,        Color(0x1C1C1C) }, // BASICEDITOR
         { COL_GREEN,        Color(0xDDE8CB) }, // BASICIDENTIFIER
         { COL_GRAY,         Color(0xEEEEEE) }, // BASICCOMMENT

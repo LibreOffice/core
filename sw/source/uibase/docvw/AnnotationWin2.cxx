@@ -76,6 +76,7 @@
 #include <SwRewriter.hxx>
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -176,7 +177,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     pDev->SetFillColor(mColorDark);
     pDev->SetLineColor();
 
-    pDev->SetTextColor(mColorAnchor);
+    pDev->SetTextColor(mColorDark.IsDark() ? COL_WHITE : COL_BLACK);
     vcl::Font aFont = maLabelFont;
     aFont.SetFontHeight(aFont.GetFontHeight() * 20);
     pDev->SetFont(aFont);
@@ -451,26 +452,24 @@ void SwAnnotationWin::CheckMetaText()
     {
         mxMetadataDate->set_label(sMeta);
     }
+    UpdateColors();
+}
 
+void SwAnnotationWin::UpdateColors()
+{
     std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
     SetColor( SwPostItMgr::GetColorDark(aIndex),
               SwPostItMgr::GetColorLight(aIndex),
               SwPostItMgr::GetColorAnchor(aIndex));
-}
-
-static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, const Color& aBack)
-{
-    return Color(sal_uInt8(aFront.GetRed()   * aTransparency / 255.0 + aBack.GetRed()   * (1 - aTransparency / 255.0)),
-                 sal_uInt8(aFront.GetGreen() * aTransparency / 255.0 + aBack.GetGreen() * (1 - aTransparency / 255.0)),
-                 sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
+    // draw comments either black or white depending on the document background
+    // TODO: make editeng depend on the actual note background
+    mpOutlinerView->SetBackgroundColor(svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 }
 
 void SwAnnotationWin::SetMenuButtonColors()
 {
     if (!mxMenuButton)
         return;
-
-    mxMenuButton->set_background(mColorDark);
 
     SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
     if (!pWrtShell)
@@ -484,13 +483,13 @@ void SwAnnotationWin::SetMenuButtonColors()
     xVirDev->SetOutputSizePixel(aSize);
 
     Gradient aGradient(css::awt::GradientStyle_LINEAR,
-                             ColorFromAlphaColor(15, mColorAnchor, mColorDark),
-                             ColorFromAlphaColor(80, mColorAnchor, mColorDark));
+                       mColorLight,
+                       mColorDark);
     xVirDev->DrawGradient(aRect, aGradient);
 
     //draw rect around button
     xVirDev->SetFillColor();
-    xVirDev->SetLineColor(ColorFromAlphaColor(90, mColorAnchor, mColorDark));
+    xVirDev->SetLineColor(mColorDark.IsDark() ? mColorLight : mColorDark);
     xVirDev->DrawRect(aRect);
 
     tools::Rectangle aSymbolRect(aRect);
@@ -498,14 +497,15 @@ void SwAnnotationWin::SetMenuButtonColors()
     const tools::Long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
     aSymbolRect.AdjustLeft(nBorderDistanceLeftAndRight );
     aSymbolRect.AdjustRight( -nBorderDistanceLeftAndRight );
-    // 40% distance to the top button border
-    const tools::Long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
+    // 30% distance to the top button border
+    const tools::Long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 300) + 500) / 1000;
     aSymbolRect.AdjustTop(nBorderDistanceTop );
-    // 15% distance to the bottom button border
-    const tools::Long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
+    // 25% distance to the bottom button border
+    const tools::Long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 250) + 500) / 1000;
     aSymbolRect.AdjustBottom( -nBorderDistanceBottom );
+
     DecorationView aDecoView(xVirDev.get());
-    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, COL_BLACK,
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, mColorDark.IsDark() ? COL_WHITE : COL_BLACK,
                          DrawSymbolFlags::NONE);
     mxMenuButton->set_image(xVirDev);
     mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height() + 4);
@@ -901,11 +901,12 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
     m_xContainer->set_background(mColorDark);
     SetMenuButtonColors();
 
-    mxMetadataAuthor->set_font_color(aColorAnchor);
+    Color aColor(mColorDark.IsDark() ? COL_WHITE : COL_BLACK);
+    mxMetadataAuthor->set_font_color(aColor);
 
-    mxMetadataDate->set_font_color(aColorAnchor);
+    mxMetadataDate->set_font_color(aColor);
 
-    mxMetadataResolved->set_font_color(aColorAnchor);
+    mxMetadataResolved->set_font_color(aColor);
 
     mxVScrollbar->customize_scrollbars(mColorLight,
                                        mColorAnchor,

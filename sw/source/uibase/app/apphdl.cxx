@@ -46,6 +46,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
+#include <PostItMgr.hxx>
 
 #include <view.hxx>
 #include <pview.hxx>
@@ -996,6 +997,13 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
                             aViewColors.m_aDocColor.AsRGBHexString().toUtf8());
+                    }
+
+                    if (!bKit)
+                    {
+                        SwPostItMgr* pPostItManager = pSwView->GetPostItMgr();
+                        if (pPostItManager)
+                            pPostItManager->UpdateColors();
                     }
 
                     // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
