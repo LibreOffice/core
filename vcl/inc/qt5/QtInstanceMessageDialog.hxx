@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "QtInstanceButton.hxx"
 #include "QtInstanceDialog.hxx"
 #include <QtWidgets/QMessageBox>
 
@@ -43,6 +44,7 @@ public:
     virtual void add_button(const OUString& rText, int nResponse,
                             const OUString& rHelpId = {}) override;
     virtual void set_default_response(int nResponse) override;
+    QtInstanceButton* weld_widget_for_response(int nResponse) override;
     virtual int run() override;
     virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& func) override;
