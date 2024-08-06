@@ -14,6 +14,8 @@ QtInstanceButton::QtInstanceButton(QPushButton* pButton)
     , m_pButton(pButton)
 {
     assert(m_pButton);
+
+    connect(m_pButton, &QPushButton::clicked, this, &QtInstanceButton::buttonClicked);
 }
 
 void QtInstanceButton::set_label(const OUString& rText)
@@ -52,5 +54,7 @@ void QtInstanceButton::set_custom_button(VirtualDevice* /*pDevice*/)
 {
     assert(false && "Not implemented yet");
 }
+
+void QtInstanceButton::buttonClicked() { signal_clicked(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
