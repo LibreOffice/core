@@ -67,6 +67,14 @@ void QtInstanceMessageDialog::set_default_response(int nResponse)
         m_pMessageDialog->setDefaultButton(pButton);
 }
 
+QtInstanceButton* QtInstanceMessageDialog::weld_widget_for_response(int nResponse)
+{
+    if (QPushButton* pButton = buttonForResponseCode(nResponse))
+        return new QtInstanceButton(pButton);
+
+    return nullptr;
+}
+
 int QtInstanceMessageDialog::run()
 {
     m_pMessageDialog->exec();
