@@ -28,7 +28,7 @@ public:
 
     QWidget* getQWidget() const { return m_pWidget; }
 
-    virtual void set_sensitive(bool) override;
+    virtual void set_sensitive(bool bSensitive) override;
 
     virtual bool get_sensitive() const override;
 

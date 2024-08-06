@@ -15,9 +15,17 @@ QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     assert(pWidget);
 }
 
-void QtInstanceWidget::set_sensitive(bool) {}
+void QtInstanceWidget::set_sensitive(bool bSensitive)
+{
+    assert(m_pWidget);
+    m_pWidget->setEnabled(bSensitive);
+}
 
-bool QtInstanceWidget::get_sensitive() const { return true; }
+bool QtInstanceWidget::get_sensitive() const
+{
+    assert(m_pWidget);
+    return m_pWidget->isEnabled();
+}
 
 bool QtInstanceWidget::get_visible() const { return true; }
 
