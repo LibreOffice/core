@@ -130,7 +130,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXNumberingRules : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXNumberingRules : public cppu::WeakImplHelper
 <
     css::container::XIndexReplace,
     css::beans::XPropertySet,
@@ -202,6 +202,8 @@ public:
     void    Invalidate()    {m_pDocShell = nullptr;}
     const OUString&   GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 
+    SW_DLLPUBLIC css::uno::Any getPropertyByIndex(sal_Int32 nIndex, const OUString& rPropName);
+
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
             const SwNumFormat& rFormat, OUString const& rCharFormatName,
             OUString const* pHeadingStyleName, OUString const & referer);
@@ -215,6 +217,11 @@ public:
             SwDocShell *const pDocShell,
             css::uno::Sequence<css::beans::PropertyValue> const& rProperties);
 
+private:
+    css::uno::Any GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex, const OUString& rPropName) const;
+    static css::uno::Any GetPropertyForNumFormat(
+            const SwNumFormat& rFormat, OUString const& rCharFormatName,
+            OUString const* pHeadingStyleName, OUString const & referer, OUString const & rPropName);
 };
 
 class SwXChapterNumbering final : public SwXNumberingRules

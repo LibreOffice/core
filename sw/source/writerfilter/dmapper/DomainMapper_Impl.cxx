@@ -151,6 +151,7 @@
 #include <unofootnote.hxx>
 #include <unoport.hxx>
 #include <unotextbodyhf.hxx>
+#include <unosett.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -9888,15 +9889,11 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         const rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
         rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
         const rtl::Reference<SwXBaseStyle> xStyle = xNumberingStyles->getStyleByName(aListName);
-        const uno::Reference<container::XIndexAccess> xNumberingRules(xStyle->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
+        const rtl::Reference<SwXNumberingRules> xNumberingRules =
+            dynamic_cast<SwXNumberingRules*>(xStyle->getPropertyValue(u"NumberingRules"_ustr).get<uno::Reference<uno::XInterface>>().get());
         if (xNumberingRules.is())
         {
-            uno::Sequence<beans::PropertyValue> aProps;
-            xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-            auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
-                [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });
-            if (pProp != std::cend(aProps))
-                pProp->Value >>= nRet;
+            xNumberingRules->getPropertyByIndex(nNumberingLevel, aProp) >>= nRet;
         }
     }
     catch( const uno::Exception& )

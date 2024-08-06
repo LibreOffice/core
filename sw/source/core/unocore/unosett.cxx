@@ -1151,6 +1151,31 @@ sal_Int32 SwXNumberingRules::getCount()
     return MAXLEVEL;
 }
 
+uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString& rPropName)
+{
+    SolarMutexGuard aGuard;
+    if(nIndex < 0 || MAXLEVEL <= nIndex)
+        throw lang::IndexOutOfBoundsException();
+
+    uno::Any aVal;
+    const SwNumRule* pRule = m_pNumRule;
+    if(!pRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty())
+        pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
+    if(pRule)
+    {
+        aVal = GetNumberingRuleByIndex( *pRule, nIndex, rPropName);
+
+    }
+    else if(m_pDocShell)
+    {
+        aVal = GetNumberingRuleByIndex(
+                *m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex, rPropName);
+    }
+    else
+        throw uno::RuntimeException();
+    return aVal;
+}
+
 uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -1263,6 +1288,69 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     }
     return GetPropertiesForNumFormat(
         rFormat, CharStyleName, m_pDocShell ? & aUString : nullptr, referer);
+
+}
+
+uno::Any SwXNumberingRules::GetNumberingRuleByIndex(
+                const SwNumRule& rNumRule, sal_Int32 nIndex, const OUString& rPropName) const
+{
+    SolarMutexGuard aGuard;
+    OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
+
+    const SwNumFormat& rFormat = rNumRule.Get( o3tl::narrowing<sal_uInt16>(nIndex) );
+
+    SwCharFormat* pCharFormat = rFormat.GetCharFormat();
+    OUString CharStyleName;
+    if (pCharFormat)
+        CharStyleName = pCharFormat->GetName();
+
+    // Whether or not a style is present: the array entry overwrites this string
+    if (!m_sNewCharStyleNames[nIndex].isEmpty() &&
+        !SwXNumberingRules::isInvalidStyle(m_sNewCharStyleNames[nIndex]))
+    {
+        CharStyleName = m_sNewCharStyleNames[nIndex];
+    }
+
+    OUString aUString;
+    if (m_pDocShell) // -> Chapter Numbering
+    {
+        // template name
+        OUString sValue(SwResId(STR_POOLCOLL_HEADLINE_ARY[nIndex]));
+        const SwTextFormatColls* pColls = m_pDocShell->GetDoc()->GetTextFormatColls();
+        const size_t nCount = pColls->size();
+        for(size_t i = 0; i < nCount; ++i)
+        {
+            SwTextFormatColl &rTextColl = *pColls->operator[](i);
+            if(rTextColl.IsDefault())
+                continue;
+
+            const sal_Int16 nOutLevel = rTextColl.IsAssignedToListLevelOfOutlineStyle()
+                                        ? static_cast<sal_Int16>(rTextColl.GetAssignedOutlineStyleLevel())
+                                        : MAXLEVEL;
+            if ( nOutLevel == nIndex )
+            {
+                sValue = rTextColl.GetName();
+                break; // the style for the level in question has been found
+            }
+            else if( sValue==rTextColl.GetName() )
+            {
+                // if the default for the level is existing, but its
+                // level is different, then it cannot be the default.
+                sValue.clear();
+            }
+        }
+        SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
+    }
+
+    OUString referer;
+    if (m_pDoc != nullptr) {
+        auto const sh = m_pDoc->GetPersist();
+        if (sh != nullptr && sh->HasName()) {
+            referer = sh->GetMedium()->GetName();
+        }
+    }
+    return GetPropertyForNumFormat(
+        rFormat, CharStyleName, m_pDocShell ? & aUString : nullptr, referer, rPropName);
 
 }
 
@@ -1431,6 +1519,181 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     }
 
     return ::comphelper::containerToSequence(aPropertyValues);
+}
+
+uno::Any SwXNumberingRules::GetPropertyForNumFormat(
+        const SwNumFormat& rFormat, OUString const& rCharFormatName,
+        OUString const*const pHeadingStyleName, OUString const & referer, OUString const & rPropName)
+{
+    bool bChapterNum = pHeadingStyleName != nullptr;
+
+
+    //adjust
+    if (rPropName == u"Adjust"_ustr)
+    {
+        SvxAdjust eAdj = rFormat.GetNumAdjust();
+        return uno::Any(sal_Int16(aSvxToUnoAdjust[eAdj]));
+    }
+    if (rPropName == u"ParentNumbering"_ustr)
+        return uno::Any(sal_Int16(rFormat.GetIncludeUpperLevels()));
+    if (rPropName == u"Prefix"_ustr)
+        return uno::Any(rFormat.GetPrefix());
+    if (rPropName == u"Suffix"_ustr)
+        return uno::Any(rFormat.GetSuffix());
+    if (rPropName == u"ListFormat"_ustr)
+    {
+        if (rFormat.HasListFormat())
+            return uno::Any(rFormat.GetListFormat());
+        else
+            return uno::Any();
+    }
+    if (rPropName == UNO_NAME_LEVEL_IS_LEGAL)
+        return uno::Any(rFormat.GetIsLegal());
+    if (rPropName == u"CharStyleName"_ustr)
+    {
+        OUString aUString;
+        SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
+        return uno::Any(aUString);
+    }
+    if (rPropName == u"StartWith"_ustr)
+        return uno::Any(sal_Int16(rFormat.GetStart()));
+    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        //leftmargin
+        if (rPropName == UNO_NAME_LEFT_MARGIN)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetAbsLSpace())));
+
+        //chartextoffset
+        if (rPropName == UNO_NAME_SYMBOL_TEXT_DISTANCE)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetCharTextDistance())));
+
+        //firstlineoffset
+        if (rPropName == UNO_NAME_FIRST_LINE_OFFSET)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineOffset())));
+    }
+
+    // PositionAndSpaceMode
+    if (rPropName == UNO_NAME_POSITION_AND_SPACE_MODE)
+    {
+        sal_Int16 nINT16 = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
+        if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
+        }
+        return uno::Any(nINT16);
+    }
+
+    if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        // LabelFollowedBy
+        if (rPropName == UNO_NAME_LABEL_FOLLOWED_BY)
+        {
+            sal_Int16 nINT16 = LabelFollow::LISTTAB;
+            if ( rFormat.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
+            {
+                nINT16 = LabelFollow::SPACE;
+            }
+            else if ( rFormat.GetLabelFollowedBy() == SvxNumberFormat::NOTHING )
+            {
+                nINT16 = LabelFollow::NOTHING;
+            }
+            else if ( rFormat.GetLabelFollowedBy() == SvxNumberFormat::NEWLINE )
+            {
+                nINT16 = LabelFollow::NEWLINE;
+            }
+            return uno::Any(nINT16);
+        }
+
+        // ListtabStopPosition
+        if (rPropName == UNO_NAME_LISTTAB_STOP_POSITION)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetListtabPos())));
+
+        // FirstLineIndent
+        if (rPropName == UNO_NAME_FIRST_LINE_INDENT)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetFirstLineIndent())));
+
+        // IndentAt
+        if (rPropName == UNO_NAME_INDENT_AT)
+            return uno::Any(sal_Int32(convertTwipToMm100(rFormat.GetIndentAt())));
+    }
+
+    //numberingtype
+    if (rPropName == u"NumberingType"_ustr)
+        return uno::Any(sal_Int16(rFormat.GetNumberingType()));
+
+    if(!bChapterNum)
+    {
+        if(SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
+        {
+            //BulletId
+            if (rPropName == u"BulletId"_ustr)
+                return uno::Any(sal_Int16(rFormat.GetBulletChar()));
+
+            //BulletChar
+            if (rPropName == u"BulletChar"_ustr)
+            {
+                sal_UCS4 cBullet = rFormat.GetBulletChar();
+                return uno::Any(OUString(&cBullet, 1));
+            }
+
+            //BulletFontName
+            if (rPropName == u"BulletFontName"_ustr)
+            {
+                std::optional<vcl::Font> pFont = rFormat.GetBulletFont();
+                return uno::Any(pFont ? pFont->GetStyleName() : OUString());
+            }
+
+            //BulletFont
+            if (rPropName == UNO_NAME_BULLET_FONT)
+            {
+                if (std::optional<vcl::Font> pFont = rFormat.GetBulletFont())
+                {
+                    awt::FontDescriptor aDesc;
+                    SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
+                    return uno::Any(aDesc);
+                }
+            }
+        }
+        if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
+        {
+            //GraphicBitmap
+            if (rPropName == UNO_NAME_GRAPHIC_BITMAP)
+            {
+                const SvxBrushItem* pBrush = rFormat.GetBrush();
+                const Graphic* pGraphic = pBrush ? pBrush->GetGraphic(referer) : nullptr;
+                if (pGraphic)
+                {
+                    return uno::Any(uno::Reference<awt::XBitmap>(pGraphic->GetXGraphic(), uno::UNO_QUERY));
+                }
+            }
+
+            if (rPropName == UNO_NAME_GRAPHIC_SIZE)
+            {
+                Size aSize = rFormat.GetGraphicSize();
+                // #i101131#
+                // adjust conversion due to type mismatch between <Size> and <awt::Size>
+                return uno::Any(awt::Size(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height())));
+            }
+
+            if (rPropName == UNO_NAME_VERT_ORIENT)
+            {
+                const SwFormatVertOrient* pOrient = rFormat.GetGraphicOrientation();
+                if(pOrient)
+                {
+                    uno::Any any;
+                    pOrient->QueryValue(any);
+                    return any;
+                }
+            }
+        }
+    }
+    else
+    {
+        if (rPropName == UNO_NAME_HEADING_STYLE_NAME)
+            return uno::Any(*pHeadingStyleName);
+    }
+
+    throw UnknownPropertyException(rPropName);
 }
 
 void SwXNumberingRules::SetNumberingRuleByIndex(
