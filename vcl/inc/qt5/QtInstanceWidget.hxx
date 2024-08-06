@@ -36,7 +36,7 @@ public:
 
     virtual bool is_visible() const override;
 
-    virtual void set_can_focus(bool) override;
+    virtual void set_can_focus(bool bCanFocus) override;
 
     virtual void grab_focus() override;
 

@@ -42,11 +42,26 @@ bool QtInstanceWidget::is_visible() const
     return m_pWidget->isVisibleTo(pTopLevel) && pTopLevel->isVisible();
 }
 
-void QtInstanceWidget::set_can_focus(bool) {}
+void QtInstanceWidget::set_can_focus(bool bCanFocus)
+{
+    assert(m_pWidget);
+    if (bCanFocus)
+        m_pWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    else
+        m_pWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+}
 
-void QtInstanceWidget::grab_focus() {}
+void QtInstanceWidget::grab_focus()
+{
+    assert(m_pWidget);
+    m_pWidget->setFocus();
+}
 
-bool QtInstanceWidget::has_focus() const { return true; }
+bool QtInstanceWidget::has_focus() const
+{
+    assert(m_pWidget);
+    return m_pWidget->hasFocus();
+}
 
 bool QtInstanceWidget::is_active() const { return true; }
 
