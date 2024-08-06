@@ -65,7 +65,20 @@ bool QtInstanceWidget::has_focus() const
 
 bool QtInstanceWidget::is_active() const { return has_focus(); }
 
-bool QtInstanceWidget::has_child_focus() const { return true; }
+bool QtInstanceWidget::has_child_focus() const
+{
+    QWidget* pFocusWidget = QApplication::focusWidget();
+    if (!pFocusWidget)
+        return false;
+
+    QWidget* pParent = pFocusWidget->parentWidget();
+    while (pParent)
+    {
+        if (pParent == m_pWidget)
+            return true;
+    }
+    return false;
+}
 
 void QtInstanceWidget::show() {}
 
