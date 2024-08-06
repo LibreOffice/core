@@ -9,6 +9,8 @@
 
 #include <QtInstanceWidget.hxx>
 
+#include <vcl/transfer.hxx>
+
 QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     : m_pWidget(pWidget)
 {
@@ -237,7 +239,7 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> QtInstanceWidget::get_d
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 QtInstanceWidget::get_clipboard() const
 {
-    return css::uno::Reference<css::datatransfer::clipboard::XClipboard>();
+    return GetSystemClipboard();
 }
 
 void QtInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>&) {}
