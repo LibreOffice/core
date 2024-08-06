@@ -193,51 +193,23 @@ void DrawViewShell::SelectionHasChanged()
 
     try
     {
-        Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
-        if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
+        if (pOleObj)
+        {
+            if (const auto& xObj = pOleObj->GetObjRef())
+                rBase.SetVerbs(xObj->getSupportedVerbs());
+        }
+        else if (auto* pIPClient = rBase.GetIPClient();
+                 pIPClient && pIPClient->IsObjectInPlaceActive())
         {
             // as appropriate take ole-objects into account and deactivate
 
             // this means we recently deselected an inplace active ole object so
             // we need to deselect it now
-            if (!pOleObj)
-            {
-                //#i47279# disable frame until after object has completed unload
-                LockUI aUILock(GetViewFrame());
-                pIPClient->DeactivateObject();
-                //HMHmpDrView->ShowMarkHdl();
-            }
-            else
-            {
-                const uno::Reference < embed::XEmbeddedObject >& xObj = pOleObj->GetObjRef();
-                if ( xObj.is() )
-                {
-                    rBase.SetVerbs( xObj->getSupportedVerbs() );
-                }
-                else
-                {
-                    rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
-                }
-            }
-        }
-        else
-        {
-            if ( pOleObj )
-            {
-                const uno::Reference < embed::XEmbeddedObject >& xObj = pOleObj->GetObjRef();
-                if ( xObj.is() )
-                {
-                    rBase.SetVerbs( xObj->getSupportedVerbs() );
-                }
-                else
-                {
-                    rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
-                }
-            }
-            else
-            {
-                rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
-            }
+
+            //#i47279# disable frame until after object has completed unload
+            LockUI aUILock(GetViewFrame());
+            pIPClient->DeactivateObject();
+            //HMHmpDrView->ShowMarkHdl();
         }
     }
     catch( css::uno::Exception& )
