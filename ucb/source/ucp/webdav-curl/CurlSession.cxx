@@ -538,6 +538,7 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
             SAL_WARN("ucb.ucp.webdav.curl", "invalid header field (empty name)");
             continue;
         }
+        assert(nColon != std::string_view::npos);
         // case insensitive; must be ASCII
         auto const name(::rtl::OStringToOUString(OString(line.substr(0, nColon)).toAsciiLowerCase(),
                                                  RTL_TEXTENCODING_ASCII_US));
