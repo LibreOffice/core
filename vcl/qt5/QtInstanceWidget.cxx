@@ -80,9 +80,17 @@ bool QtInstanceWidget::has_child_focus() const
     return false;
 }
 
-void QtInstanceWidget::show() {}
+void QtInstanceWidget::show()
+{
+    assert(m_pWidget);
+    m_pWidget->show();
+}
 
-void QtInstanceWidget::hide() {}
+void QtInstanceWidget::hide()
+{
+    assert(m_pWidget);
+    m_pWidget->hide();
+}
 
 void QtInstanceWidget::set_size_request(int, int) {}
 
