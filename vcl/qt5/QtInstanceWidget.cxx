@@ -63,7 +63,7 @@ bool QtInstanceWidget::has_focus() const
     return m_pWidget->hasFocus();
 }
 
-bool QtInstanceWidget::is_active() const { return true; }
+bool QtInstanceWidget::is_active() const { return has_focus(); }
 
 bool QtInstanceWidget::has_child_focus() const { return true; }
 
