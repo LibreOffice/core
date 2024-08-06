@@ -47,18 +47,22 @@ public class DOMDocument
     private static DocumentBuilderFactory makeFactory() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-        String[] featuresToDisable = {
-            "http://xml.org/sax/features/external-general-entities",
-            "http://xml.org/sax/features/external-parameter-entities",
-            "http://apache.org/xml/features/nonvalidating/load-external-dtd"
-        };
+        try {
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
 
-        for (String feature : featuresToDisable) {
-            try {
-                factory.setFeature(feature, false);
-            } catch (ParserConfigurationException e) {
-                Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
-            }
+        try {
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
+        }
+
+        try {
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } catch (ParserConfigurationException e) {
+            Debug.log(Debug.ERROR, "Exception when calling setFeature: ", e);
         }
 
         try {
