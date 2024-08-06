@@ -841,6 +841,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
+{
+    // This must not crash on save; without the fix, it would fail with
+    // "Assertion failed: vector subscript out of range"
+    loadAndSave("too_many_styles.odt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
