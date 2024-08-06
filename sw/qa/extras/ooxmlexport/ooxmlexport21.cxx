@@ -320,6 +320,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
+{
+    // This must not crash on save; without the fix, it would fail with
+    // "Assertion failed: vector subscript out of range"
+    loadAndSave("too_many_styles.odt");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
