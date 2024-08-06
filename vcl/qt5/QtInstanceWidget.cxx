@@ -27,9 +27,20 @@ bool QtInstanceWidget::get_sensitive() const
     return m_pWidget->isEnabled();
 }
 
-bool QtInstanceWidget::get_visible() const { return true; }
+bool QtInstanceWidget::get_visible() const
+{
+    assert(m_pWidget);
+    return m_pWidget->isVisible();
+}
 
-bool QtInstanceWidget::is_visible() const { return true; }
+bool QtInstanceWidget::is_visible() const
+{
+    assert(m_pWidget);
+
+    QWidget* pTopLevel = m_pWidget->topLevelWidget();
+    assert(pTopLevel);
+    return m_pWidget->isVisibleTo(pTopLevel) && pTopLevel->isVisible();
+}
 
 void QtInstanceWidget::set_can_focus(bool) {}
 
