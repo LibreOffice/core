@@ -411,21 +411,20 @@ public:
             else
                 aText = "Click any rect to zoom!!!!";
 
-            std::vector<OUString> aFontNames;
+            std::vector<OUString> aFontNames =
+            {
+                u"Times"_ustr,
+                u"Liberation Sans"_ustr,
+                u"Arial"_ustr,
+                u"Linux Biolinum G"_ustr,
+                u"Linux Libertine Display G"_ustr
+            };
 
             static Color const nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
             };
-
-            // a few fonts to start with
-            const char *pNames[] = {
-                "Times", "Liberation Sans", "Arial", "Linux Biolinum G", "Linux Libertine Display G"
-              };
-
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
-                aFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
             if (bClip && !bRotate)
             {
