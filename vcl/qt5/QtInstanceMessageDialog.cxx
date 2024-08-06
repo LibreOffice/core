@@ -62,17 +62,9 @@ void QtInstanceMessageDialog::set_default_response(int nResponse)
 {
     assert(m_pMessageDialog);
 
-    const QList<QAbstractButton*> aButtons = m_pMessageDialog->buttons();
-    for (QAbstractButton* pAbstractButton : aButtons)
-    {
-        if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
-        {
-            QPushButton* pButton = dynamic_cast<QPushButton*>(pAbstractButton);
-            assert(pButton);
-            m_pMessageDialog->setDefaultButton(pButton);
-            return;
-        }
-    }
+    QPushButton* pButton = buttonForResponseCode(nResponse);
+    if (pButton)
+        m_pMessageDialog->setDefaultButton(pButton);
 }
 
 int QtInstanceMessageDialog::run()
@@ -142,6 +134,23 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
 
     xRunAsyncDialogController.reset();
     xRunAsyncDialog.reset();
+}
+
+QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
+{
+    assert(m_pMessageDialog);
+
+    const QList<QAbstractButton*> aButtons = m_pMessageDialog->buttons();
+    for (QAbstractButton* pAbstractButton : aButtons)
+    {
+        if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
+        {
+            QPushButton* pButton = dynamic_cast<QPushButton*>(pAbstractButton);
+            assert(pButton);
+            return pButton;
+        }
+    }
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
