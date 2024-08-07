@@ -965,6 +965,10 @@ Try:
 		vReturnArray(1) = VarType(vReturn)
 	End If
 
+	&apos;	Tests with non-modal dialogs and sleeping (time.sleep) Python processes show
+	&apos;	a more fluid reactivity when next statement is present, at a minimal cost.
+	Wait 0
+
 	_PythonDispatcher = vReturnArray
 		
 Finally:
