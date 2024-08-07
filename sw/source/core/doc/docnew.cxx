@@ -234,6 +234,7 @@ SwDoc::SwDoc()
     mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), "Graphikformatvorlage" ) ),
     mpFrameFormatTable( new sw::FrameFormats<SwFrameFormat*>() ),
     mpCharFormatTable( new SwCharFormats ),
+    mpCharFormatDeletionTable( new SwCharFormats ),
     mpSpzFrameFormatTable( new sw::FrameFormats<sw::SpzFrameFormat*>() ),
     mpSectionFormatTable( new SwSectionFormats ),
     mpTableFrameFormatTable( new sw::TableFrameFormats() ),
@@ -592,6 +593,10 @@ SwDoc::~SwDoc()
     mpStyleAccess.reset();
 
     mpCharFormatTable.reset();
+    // tdf#140061 keep SwCharFormat instances alive while SwDoc is alive
+    if (mpCharFormatDeletionTable)
+        mpCharFormatDeletionTable->DeleteAndDestroyAll(/*keepDefault*/false);
+    mpCharFormatDeletionTable.reset();
     mpSectionFormatTable.reset();
     mpTableFrameFormatTable.reset();
     mpDfltTextFormatColl.reset();
@@ -746,6 +751,7 @@ void SwDoc::ClearDoc()
     mpTextFormatCollTable->DeleteAndDestroy(1, mpTextFormatCollTable->size());
     mpGrfFormatCollTable->DeleteAndDestroy(1, mpGrfFormatCollTable->size());
     mpCharFormatTable->DeleteAndDestroyAll(/*keepDefault*/true);
+    mpCharFormatDeletionTable->DeleteAndDestroyAll(/*keepDefault*/false);
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {

@@ -691,7 +691,8 @@ void SwDoc::DelCharFormat(size_t nFormat, bool bBroadcast)
             std::make_unique<SwUndoCharFormatDelete>(pDel, *this));
     }
 
-    delete (*mpCharFormatTable)[nFormat];
+    // tdf#140061 keep SwCharFormat instances alive while SwDoc is alive
+    mpCharFormatDeletionTable->insert(pDel);
     mpCharFormatTable->erase(mpCharFormatTable->begin() + nFormat);
 
     getIDocumentState().SetModified();
