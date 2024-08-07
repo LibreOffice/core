@@ -751,7 +751,8 @@ namespace drawinglayer::primitive2d
             const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
             const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
-            return attribute::SdrEffectsTextAttribute(aShadow, aText, aGlow, nSoftEdgeRadius);
+            return attribute::SdrEffectsTextAttribute(aShadow, std::move(aText),
+                                                      aGlow, nSoftEdgeRadius);
         }
 
         attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(

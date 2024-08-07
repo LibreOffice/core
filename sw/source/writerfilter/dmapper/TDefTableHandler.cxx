@@ -446,7 +446,7 @@ void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Prop
         default:;
     }
     if (!m_aInteropGrabBagName.isEmpty())
-        m_aInteropGrabBag = aSavedGrabBag;
+        m_aInteropGrabBag = std::move(aSavedGrabBag);
 }
 
 

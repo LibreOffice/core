@@ -2704,7 +2704,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             pObj = new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
                 SdrObjKind::Polygon,
-                aNewB2DPolyPolygon);
+                std::move(aNewB2DPolyPolygon));
         }
 
         if(bNoStroke)

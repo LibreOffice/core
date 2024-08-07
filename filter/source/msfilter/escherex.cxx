@@ -4213,10 +4213,10 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         beans::PropertyValue aChunkProp, aFilterProp;
                         aChunkProp.Name = "msOG";
                         aChunkProp.Value <<= aGIFSeq;
-                        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProp };
+                        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ std::move(aChunkProp) };
                         aFilterProp.Name = "AdditionalChunks";
                         aFilterProp.Value <<= aAdditionalChunkSequence;
-                        uno::Sequence<beans::PropertyValue> aFilterData{ aFilterProp };
+                        uno::Sequence<beans::PropertyValue> aFilterData{ std::move(aFilterProp) };
                         nErrCode = rFilter.ExportGraphic( aGraphic, u"", aStream,
                                                           rFilter.GetExportFormatNumberForShortName( u"PNG" ), &aFilterData );
                     }

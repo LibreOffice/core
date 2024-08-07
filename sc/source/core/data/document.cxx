@@ -6564,7 +6564,7 @@ bool ScDocument::GetSparklineGroupInRange(ScRange const& rRange, std::shared_ptr
         }
     }
 
-    rGroup = pFoundGroup;
+    rGroup = std::move(pFoundGroup);
     return true;
 }
 

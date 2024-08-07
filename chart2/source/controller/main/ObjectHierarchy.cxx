@@ -160,7 +160,7 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
             tChildContainer aSubContainer;
             createDiagramTree( aSubContainer, xChartDocument, xDiagram );
             if( !aSubContainer.empty() )
-                m_aChildMap[ aDiaOID ] = aSubContainer;
+                m_aChildMap[ aDiaOID ] = std::move(aSubContainer);
         }
 
         if( !m_bOrderingForElementSelector )

@@ -193,7 +193,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
         }
     }
 
-    rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), aArrow ) );
+    rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), std::move(aArrow) ) );
     rAttr.Put( XLineEndWidthItem( nWidth ) );
 }
 

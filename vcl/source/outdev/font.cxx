@@ -240,7 +240,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
     if (!xFontCharMap.is())
         rxFontCharMap = FontCharMapRef(new FontCharMap());
     else
-        rxFontCharMap = xFontCharMap;
+        rxFontCharMap = std::move(xFontCharMap);
 
     return !rxFontCharMap->IsDefaultMap();
 }
