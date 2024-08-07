@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1126,6 +1127,45 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128460)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
+{
+    // Given a document with an embedded chart
+    loadFromFile(u"tdf131288.docx");
+
+    // Edit the document and save **twice**
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+    xText->insertString(xCursor, u"test"_ustr, false);
+    save(u"Office Open XML Text"_ustr);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(
+        xNameAccess->getByName(u"word/embeddings/Microsoft_Excel-munkalap11.xlsx"_ustr),
+        uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(9041), pStream->remainingSize());
+
+    xText->insertString(xCursor, u"more testing"_ustr, false);
+
+    // Save again
+    save(u"Office Open XML Text"_ustr);
+
+    xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+        comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    xInputStream.set(
+        xNameAccess->getByName(u"word/embeddings/Microsoft_Excel-munkalap11.xlsx"_ustr),
+        uno::UNO_QUERY);
+    pStream = utl::UcbStreamHelper::CreateStream(xInputStream, true);
+
+    // Without the fix we get a zero length(empty) word/embeddings/Microsoft_Excel-munkalap11.xlsx
+    // With the fix in place word/embeddings/Microsoft_Excel-munkalap11.xlsx contains data
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(9041), pStream->remainingSize());
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
