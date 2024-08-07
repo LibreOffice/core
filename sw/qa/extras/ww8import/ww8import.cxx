@@ -312,6 +312,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127048)
     CPPUNIT_ASSERT_EQUAL(false, pShell->GetMacroCallsSeenWhileLoading());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf134902)
+{
+    createSwDoc("tdf134902.docx");
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    uno::Reference<drawing::XShape> xShape;
+    uno::Reference< beans::XPropertySet > XPropSet;
+    for (int i = 3; i<= getShapes(); i++)
+    {
+        xShape = getShape(i);
+        XPropSet.set( xShape, uno::UNO_QUERY_THROW );
+        try
+        {
+            bool isVisible = true;
+            XPropSet->getPropertyValue(u"Visible"_ustr) >>= isVisible;
+            CPPUNIT_ASSERT(!isVisible);
+        }
+        catch (beans::UnknownPropertyException &)
+        { /* ignore */ }
+    }
+
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 } // end of anonymous namespace
