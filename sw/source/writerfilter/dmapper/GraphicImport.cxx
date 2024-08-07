@@ -1283,24 +1283,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
 
-                        if (m_pImpl->m_nWrap == text::WrapTextMode_THROUGH && m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME)
+                        if (m_pImpl->m_nWrap == text::WrapTextMode_THROUGH
+                            && m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable()
+                            && m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
+                            && m_pImpl->m_nVertRelation == text::RelOrientation::FRAME)
                         {
-                            if (m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable()
-                                && (m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_FRAME
-                                    || m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA))
-                            {
-                                // Impossible to be page-oriented when layout in cell.
-                                // Since we are turning LayoutInCell off (to simplify layout),
-                                // we need to set the orientation to the paragraph,
-                                // as MSO effectively does when it forces layoutInCell.
-                                // Probably also needs to happen with TEXT_LINE,
-                                // but MSO is really weird with vertical relation to "line"
-                                m_pImpl->m_nVertRelation = text::RelOrientation::FRAME;
-                            }
-
-                            // text::RelOrientation::FRAME is OOXML's "column", which behaves as if
-                            // layout-in-cell would be always off.
+                            // wrapThrough paragraph-positioned shape is not constrained by the cell
                             m_pImpl->m_bLayoutInCell = false;
+                            // TODO: But we should not go in this direction. MSO in compat15
+                            // ignores layoutInCell, always treating it as TRUE, not false,
+                            // which is the opposite of what is happening here.
                         }
 
                         if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
@@ -1349,7 +1341,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         if (m_pImpl->m_bLayoutInCell && bTextBox && m_pImpl->m_rDomainMapper.IsInTable()
                             && m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_FRAME)
+                        {
+                            // This claim is a bit of a stretch, but should be OK for horizontal.
+                            // For layoutInCell, MSO does apply PAGE_FRAME and PAGE_PRINT_AREA
+                            // horiontal adjustments onto the cell's frame and print area.
+                            // Note that FRAME cannot be subsituted for vertical (only first para).
                             m_pImpl->m_nHoriRelation = text::RelOrientation::FRAME;
+                        }
+
                         if(m_pImpl->m_rDomainMapper.IsInTable())
                             xShapeProps->setPropertyValue(getPropertyName(PROP_FOLLOW_TEXT_FLOW),
                                 uno::Any(m_pImpl->m_bLayoutInCell));
