@@ -1145,9 +1145,9 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
                 for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
                 {
-                    sw::mark::MarkBase* pMark = const_cast<sw::mark::MarkBase*>(pIndex->GetMark());
-                    if (!pMark)
+                    if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
                         continue;
+                    sw::mark::MarkBase* pMark = static_cast<sw::mark::MarkBase*>(pIndex->GetOwner());
                     if (!aSeenMarks.insert(pMark).second)
                         continue;
                 }

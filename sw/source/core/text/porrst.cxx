@@ -471,7 +471,9 @@ bool SwTextFrame::FormatEmpty()
     for (SwContentIndex const* pIndex = GetTextNodeFirst()->GetFirstIndex();
          pIndex; pIndex = pIndex->GetNext())
     {
-        sw::mark::MarkBase const*const pMark = pIndex->GetMark();
+        if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
+            continue;
+        auto const pMark = static_cast<sw::mark::MarkBase const*>(pIndex->GetOwner());
         if (dynamic_cast<const sw::mark::Bookmark*>(pMark) != nullptr)
         {   // need bookmark portions!
             return false;

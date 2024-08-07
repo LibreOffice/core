@@ -2898,7 +2898,9 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
 
     for (const SwContentIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
     {
-        const sw::mark::MarkBase* pMark = pIndex->GetMark();
+        if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
+            continue;
+        auto const pMark = static_cast<sw::mark::MarkBase const*>(pIndex->GetOwner());
         const sw::mark::Bookmark* pBookmark = dynamic_cast<const sw::mark::Bookmark*>(pMark);
         if (pBookmarks && pBookmark)
         {

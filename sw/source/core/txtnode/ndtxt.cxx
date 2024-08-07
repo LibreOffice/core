@@ -1450,9 +1450,12 @@ void SwTextNode::Update(
         const SwContentIndex* pContentNodeIndex = GetFirstIndex();
         while (pContentNodeIndex)
         {
-            SwRangeRedline* pRedl = pContentNodeIndex->GetRedline();
-            if (pRedl && (pRedl->HasMark() || this == &pRedl->GetPoint()->GetNode()))
-                vMyRedlines.insert(pRedl);
+            if (pContentNodeIndex->GetOwner() && pContentNodeIndex->GetOwner()->GetOwnerType() == SwContentIndexOwnerType::Redline)
+            {
+                auto pRedl = static_cast<SwRangeRedline*>(pContentNodeIndex->GetOwner());
+                if (pRedl && (pRedl->HasMark() || this == &pRedl->GetPoint()->GetNode()))
+                    vMyRedlines.insert(pRedl);
+            }
             pContentNodeIndex = pContentNodeIndex->GetNext();
         }
         for (SwRangeRedline* pRedl : vMyRedlines)
@@ -1497,9 +1500,9 @@ void SwTextNode::Update(
             for (const SwContentIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
                 next = pIndex->GetNext();
-                const sw::mark::MarkBase* pMark = pIndex->GetMark();
-                if (!pMark)
+                if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
                     continue;
+                auto const pMark = static_cast<sw::mark::MarkBase const*>(pIndex->GetOwner());
                 // filter out ones that cannot match to reduce the max size of aSeenMarks
                 const SwPosition* pMarkPos1 = &pMark->GetMarkPos();
                 const SwPosition* pMarkPos2 = pMark->IsExpanded() ? &pMark->GetOtherMarkPos() : nullptr;

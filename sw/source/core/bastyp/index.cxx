@@ -24,12 +24,13 @@
 
 #include <crossrefbookmark.hxx>
 
+ISwContentIndexOwner::~ISwContentIndexOwner() {}
+
 SwContentIndex::SwContentIndex(const SwContentNode * pContentNode, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pContentNode( const_cast<SwContentNode*>(pContentNode) )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
-    , m_pMark( nullptr )
 {
     Init(m_nIndex);
 }
@@ -38,7 +39,6 @@ SwContentIndex::SwContentIndex( const SwContentIndex& rIdx, short nDiff )
     : m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
-    , m_pMark( nullptr )
 {
     ChgValue( rIdx, rIdx.m_nIndex + nDiff );
 }
@@ -48,7 +48,6 @@ SwContentIndex::SwContentIndex( const SwContentIndex& rIdx )
     , m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
-    , m_pMark( nullptr )
 {
     ChgValue( rIdx, rIdx.m_nIndex );
 }
@@ -219,11 +218,6 @@ SwContentIndex& SwContentIndex::Assign( const SwContentNode* pArr, sal_Int32 nId
     return *this;
 }
 
-void SwContentIndex::SetMark(const sw::mark::MarkBase* pMark)
-{
-    m_pMark = pMark;
-}
-
 SwContentIndexReg::SwContentIndexReg()
     : m_pFirst( nullptr ), m_pLast( nullptr )
 {
@@ -270,11 +264,11 @@ void SwContentIndexReg::Update(
         while( pStt )
         {
             // HACK: avoid updating position of cross-ref bookmarks
-            if (!pStt->m_pMark || nullptr == dynamic_cast<
-                    ::sw::mark::CrossRefBookmark const*>(pStt->m_pMark))
-            {
+            if (pStt->m_pOwner && pStt->m_pOwner->GetOwnerType() == SwContentIndexOwnerType::Mark
+                && dynamic_cast< ::sw::mark::CrossRefBookmark const*>(pStt->m_pOwner))
+                ; // do nothing
+            else
                 pStt->m_nIndex = pStt->m_nIndex + nDiff;
-            }
             pStt = pStt->m_pNext;
         }
     }

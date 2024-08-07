@@ -161,7 +161,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SAL_DLLPUBLIC_RTTI SwRangeRedline final : public SwPaM
+class SAL_DLLPUBLIC_RTTI SwRangeRedline final : public SwPaM, public ISwContentIndexOwner
 {
     SwRedlineData* m_pRedlineData;
     std::optional<SwNodeIndex> m_oContentSect;
@@ -187,11 +187,13 @@ public:
         SwPaM( rPos ), m_pRedlineData( pData ),
         m_nId( s_nLastId++ ), m_bDelLastPara( bDelLP ), m_bIsVisible( true )
     {
-        GetBound().SetRedline(this);
-        GetBound(false).SetRedline(this);
+        GetBound().SetOwner(this);
+        GetBound(false).SetOwner(this);
     }
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
+
+    virtual SwContentIndexOwnerType GetOwnerType() const override final { return SwContentIndexOwnerType::Redline; }
 
     sal_uInt32 GetId() const { return m_nId; }
     const SwNodeIndex* GetContentIdx() const { return m_oContentSect ? &*m_oContentSect : nullptr; }

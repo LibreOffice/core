@@ -52,9 +52,12 @@ namespace sw::mark
     };
 
     class SW_DLLPUBLIC MarkBase
-        : virtual public sw::BroadcastingModify // inherited as interface
+        : public ISwContentIndexOwner,
+          virtual public sw::BroadcastingModify // inherited as interface
     {
     public:
+        virtual SwContentIndexOwnerType GetOwnerType() const override final { return SwContentIndexOwnerType::Mark; }
+
         //getters
         SwPosition& GetMarkPos() const
             { return const_cast<SwPosition&>(*m_oPos1); }

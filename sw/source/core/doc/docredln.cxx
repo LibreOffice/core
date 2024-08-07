@@ -1408,8 +1408,8 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 n
     ,
     m_nId( s_nLastId++ )
 {
-    GetBound().SetRedline(this);
-    GetBound(false).SetRedline(this);
+    GetBound().SetOwner(this);
+    GetBound(false).SetOwner(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1432,8 +1432,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     m_pRedlineData( new SwRedlineData( rData )),
     m_nId( s_nLastId++ )
 {
-    GetBound().SetRedline(this);
-    GetBound(false).SetRedline(this);
+    GetBound().SetOwner(this);
+    GetBound(false).SetOwner(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1456,8 +1456,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
     m_pRedlineData( new SwRedlineData( rData )),
     m_nId( s_nLastId++ )
 {
-    GetBound().SetRedline(this);
-    GetBound(false).SetRedline(this);
+    GetBound().SetOwner(this);
+    GetBound(false).SetOwner(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1468,8 +1468,8 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     m_pRedlineData( new SwRedlineData( *rCpy.m_pRedlineData )),
     m_nId( s_nLastId++ )
 {
-    GetBound().SetRedline(this);
-    GetBound(false).SetRedline(this);
+    GetBound().SetOwner(this);
+    GetBound(false).SetOwner(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;

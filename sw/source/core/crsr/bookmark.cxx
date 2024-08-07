@@ -275,7 +275,7 @@ namespace sw::mark
         : m_oPos1(*aPaM.GetPoint())
         , m_aName(std::move(aName))
     {
-        m_oPos1->SetMark(this);
+        m_oPos1->SetOwner(this);
         lcl_FixPosition(*m_oPos1);
         if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
         {
@@ -298,13 +298,13 @@ namespace sw::mark
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         m_oPos1.emplace(rNewPos);
-        m_oPos1->SetMark(this);
+        m_oPos1->SetOwner(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
         m_oPos2.emplace(rNewPos);
-        m_oPos2->SetMark(this);
+        m_oPos2->SetOwner(this);
     }
 
     OUString MarkBase::ToString( ) const

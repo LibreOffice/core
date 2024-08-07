@@ -83,8 +83,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
     const SwContentNode* GetContentNode() const { return nContent.GetContentNode(); }
     sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
-    void SetMark(const sw::mark::MarkBase* pMark) { nContent.SetMark(pMark); }
-    void SetRedline(SwRangeRedline* pRangeRedline) { nContent.SetRedline(pRangeRedline); }
+    void SetOwner(ISwContentIndexOwner* pOwner) { nContent.SetOwner(pOwner); }
 
     /// These all set both nNode and nContent
     void Assign( const SwNode& rNd, SwNodeOffset nDelta, sal_Int32 nContentOffset = 0 );

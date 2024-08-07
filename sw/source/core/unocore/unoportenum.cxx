@@ -204,8 +204,10 @@ namespace
         o3tl::sorted_vector<const sw::mark::MarkBase*> aSeenMarks;
         for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
         {
+            if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
+                continue;
             // Need a non-cost mark here, as we'll create a UNO wrapper around it.
-            sw::mark::MarkBase* pBkmk = const_cast<sw::mark::MarkBase*>(pIndex->GetMark());
+            sw::mark::MarkBase* pBkmk = static_cast<sw::mark::MarkBase*>(pIndex->GetOwner());
             if (!pBkmk)
                 continue;
             IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);

@@ -32,6 +32,17 @@ class SwRangeRedline;
 
 namespace sw::mark { class MarkBase; }
 
+/// enum to allow us to cast without dynamic_cast (for performance)
+enum class SwContentIndexOwnerType { Redline, Mark };
+
+/// Pure abstract class for a pointer to something that "owns" a SwContentIndex
+class ISwContentIndexOwner
+{
+public:
+    virtual ~ISwContentIndexOwner();
+    virtual SwContentIndexOwnerType GetOwnerType() const = 0;
+};
+
 /// Marks a character position inside a document model content node (SwContentNode)
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwContentIndex
 {
@@ -44,11 +55,11 @@ private:
     SwContentIndex * m_pNext;
     SwContentIndex * m_pPrev;
 
-    /// points to the SwRangeRedline (if any) that contains this SwContentIndex, via SwPosition and SwPaM
-    SwRangeRedline * m_pRangeRedline = nullptr;
-
-    /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwContentIndexReg.
-    const sw::mark::MarkBase* m_pMark;
+    /// This is either
+    /// (*) nullptr
+    /// (*) the SwRangeRedline (if any) that contains this SwContentIndex, via SwPosition and SwPaM
+    /// (*) the sw::mark::MarkBase that owns this position to allow fast lookup of marks of an SwContentIndexReg.
+    ISwContentIndexOwner * m_pOwner = nullptr;
 
     SwContentIndex& ChgValue( const SwContentIndex& rIdx, sal_Int32 nNewValue );
     void Init(sal_Int32 const nIdx);
@@ -103,11 +114,12 @@ public:
     const SwContentNode* GetContentNode() const { return m_pContentNode; }
     const SwContentIndex* GetNext() const { return m_pNext; }
 
-    const sw::mark::MarkBase* GetMark() const { return m_pMark; }
-    void SetMark(const sw::mark::MarkBase* pMark);
-
-    SwRangeRedline* GetRedline() const { return m_pRangeRedline; }
-    void SetRedline(SwRangeRedline* pRangeRedline) { m_pRangeRedline = pRangeRedline; }
+    ISwContentIndexOwner* GetOwner() const { return m_pOwner; }
+    void SetOwner(ISwContentIndexOwner* pOwner)
+    {
+        assert(m_pOwner == nullptr && "there can be only one owner");
+        m_pOwner = pOwner;
+    }
 };
 
 SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwContentIndex& index);
