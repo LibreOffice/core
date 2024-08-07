@@ -65,8 +65,19 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     tools::extendApplicationEnvironment();
 
 #if defined EMSCRIPTEN
-    //TODO, see "Experimental (AKA currently broken) WASM exception + SjLj build" in
-    // static/README.wasm.md:
+    //HACK: Qt5 QWasmEventDispatcher::processEvents
+    // (qtbase/src/plugins/platforms/wasm/qwasmeventdispatcher.cpp) calls
+    // emscripten_set_main_loop_arg with simulateInfiniteLoop == true, and as we use
+    // -fwasm-exceptions (cf. solenv/gbuild/platform/EMSCRIPTEN_INTEL_GCC.mk), aDesktop allocated on
+    // the stack would run into the issue warned about at
+    // <https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop>
+    // "Note: Currently, using the new Wasm exception handling and simulate_infinite_loop == true at
+    // the same time does not work yet in C++ projects that have objects with destructors on the
+    // stack at the time of the call."  (Also see the mailing list thread at
+    // <https://groups.google.com/g/emscripten-discuss/c/xpWDVwyJu-M> "Implementation of
+    // -fexceptions and -fwasm-exceptions" for why such automatic variables are destroyed with
+    // -fwasm-exceptions but not with -fexceptions.)  So deliberately leak the Desktop instance
+    // here:
     new desktop::Desktop();
 #else
     desktop::Desktop aDesktop;
