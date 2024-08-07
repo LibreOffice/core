@@ -40,6 +40,7 @@
 #include <unoprnms.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <IDocumentFieldsAccess.hxx>
 
 namespace
 {
@@ -1730,6 +1731,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122452)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Redlines should be Hidden", true, pWrtShell->GetLayout()->IsHideRedlines());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159027)
+{
+    loadAndReload("tdf159027.odt");
+    SwDoc* pDoc = getSwDoc();
+    pDoc->getIDocumentFieldsAccess().UpdateFields(true);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCellD9(xTextTable->getCellByName(u"D9"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"70"_ustr, xCellD9->getString());
+    uno::Reference<text::XTextRange> xCellE9(xTextTable->getCellByName(u"E9"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, xCellE9->getString());
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
