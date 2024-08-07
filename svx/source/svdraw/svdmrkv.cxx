@@ -1223,7 +1223,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 }
 
                 SdrPage *pPage = pPageView ? pPageView->GetPage(): nullptr;
-                if (pPage)
+
+                if (pPage && getSdrModelFromSdrView().IsImpress())
                 {
                     // Send all objects' rectangles along with the selected object's information.
                     // Other rectangles can be used for aligning the selected object referencing the others.
