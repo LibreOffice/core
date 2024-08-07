@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
     auto xShape = getShapeByName(u"Kép 1");
     CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
     // the vertical offset has to be applied against the cell borders, not anchor paragraph (FRAME)
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
     // the shape is "from page top", which for layoutInCell is to be applied from cell top

@@ -556,7 +556,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
     // CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
 
     const auto& xShape = getShapeByName(u"Group 1");
-    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
     CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
@@ -569,24 +569,89 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellC, "tdf160077_layoutInCellC.d
     // This test anchors the image on paragraph 5 - proving vertical cannot change to FRAME.
 
     xmlDocUniquePtr pDump = parseLayoutDump();
-    const sal_Int32 nCellTop
-        = getXPath(pDump, "//row[1]/cell[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
     const sal_Int32 nPara1Top
         = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nPara1Bottom
+        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
     const sal_Int32 nImageTop
         = getXPath(pDump, "//row[1]/cell[2]/txt[5]/anchored/SwAnchoredDrawObject/bounds"_ostr,
                    "top"_ostr)
               .toInt32();
     // The image's top should be positioned at the start of the cell's text area (i.e. para1 top)
-    // Before the revert, the image was positioned at the top of para 5.
-    CPPUNIT_ASSERT_LESS(nPara1Top, nImageTop); // Image not lower than para 1
+    // Before the fix, the image was positioned at the top of the cell.
+    CPPUNIT_ASSERT_LESS(nPara1Bottom, nImageTop); // Image shouldn't start lower than para 1
     // The image must be limited to the top of the cell, not the page
-    CPPUNIT_ASSERT_GREATER(nCellTop, nImageTop); // Image is lower (greater) than top of cell
+    CPPUNIT_ASSERT_GREATEREQUAL(nPara1Top, nImageTop); // Image shouldn't start higher than para 1
 
-    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
     // LayoutInCell must be enforced, to keep the image inside the cell boundaries
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.docx")
+{
+    // given a table with two layoutInCell images, and cell A1 has 1/2 inch border padding (margin)
+    // - A1 contains an image, vertically aligned to the bottom of the page (aka cell)
+    // - B1 contains an image, vertically aligned to the bottom of the page margin (aka cell margin)
+
+    // In Microsoft's layoutInCell implementation, vertical "page" is identical to "margin",
+    // and everything (including bottom) actually is oriented to the top of the margin.
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // Cell A1
+    sal_Int32 nShapeTop
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    sal_Int32 nShapeBottom
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "bottom"_ostr)
+              .toInt32();
+    // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
+    sal_Int32 nPara1Top
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // use paragraph 5 to prove the image is not at the bottom.
+    CPPUNIT_ASSERT_EQUAL(OUString("Below logo"),
+                         getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"_ostr));
+    sal_Int32 nPara5Top
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
+    CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
+
+    // In the file it is specified as "page" (PAGE_FRAME), but implemented as if it were "margin"
+    // so on import we intentionally changed it to match the closest setting to the implementation.
+    const auto& xShape = getShapeByName(u"logo");
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
+
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
+
+    // Cell B1
+    nShapeTop
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    nShapeBottom
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "bottom"_ostr)
+              .toInt32();
+    // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
+    nPara1Top
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // use paragraph 5 to prove the image is not at the bottom.
+    CPPUNIT_ASSERT_EQUAL(OUString("Below image"),
+                         getXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]"_ostr));
+    nPara5Top
+        = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
+    CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
+
+    const auto& xShape2 = getShapeByName(u"logoInverted");
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape2, u"VertOrientRelation"_ustr));
+
+    CPPUNIT_ASSERT(getProperty<bool>(xShape2, u"IsFollowingTextFlow"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")

@@ -830,6 +830,19 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                 rValue.getAny( ) >>= xShape;
                 if ( xShape.is( ) )
                 {
+                    if (m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable())
+                    {
+                        // Microsoft is buggy and inconsistent in how they handle layoutInCell.
+                        // Map wrongly-implemented settings to the closest implemented setting
+
+                        // "page" is implemented as if it was "margin" - to cell spacing, not edge
+                        if (m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_FRAME)
+                            m_pImpl->m_nVertRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                        // only "from top" and "top" are appropriate. Others are implemented as Top
+                        if (m_pImpl->m_nVertOrient != text::VertOrientation::NONE)
+                            m_pImpl->m_nVertOrient = text::VertOrientation::TOP;
+                    }
+
                     // Is it a graphic image
                     bool bUseShape = true;
                     try
