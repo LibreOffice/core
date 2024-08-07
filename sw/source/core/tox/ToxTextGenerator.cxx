@@ -165,15 +165,14 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
     return retval;
 }
 
-// Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
-// which page description is used, no appropriate one is found.
-void
+std::optional<std::pair<SwTextNode *, SvxTabStopItem>>
 ToxTextGenerator::GenerateText(SwDoc* pDoc,
         std::unordered_map<OUString, int> & rMarkURLs,
         const std::vector<std::unique_ptr<SwTOXSortTabBase>> &entries,
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
         SwRootFrame const*const pLayout)
 {
+    std::optional<std::pair<SwTextNode *, SvxTabStopItem>> oRet;
     // pTOXNd is only set at the first mark
     SwTextNode* pTOXNd = const_cast<SwTextNode*>(entries.at(indexOfEntryToProcess)->pTOXNd);
     // FIXME this operates directly on the node text
@@ -188,7 +187,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
         sal_uInt16 nLvl = rBase.GetLevel();
         OSL_ENSURE( nLvl < mToxForm.GetFormMax(), "invalid FORM_LEVEL");
 
-        SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
+        oRet.emplace(pTOXNd, SvxTabStopItem(0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP));
         // create an enumerator
         // #i21237#
         SwFormTokens aPattern = mToxForm.GetPattern(nLvl);
@@ -228,9 +227,9 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
 
             case TOKEN_TAB_STOP: {
                 ToxTabStopTokenHandler::HandledTabStopToken htst =
-                        mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd, pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+                    mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd);
                 rText += htst.text;
-                aTStops.Insert(htst.tabStop);
+                oRet->second.Insert(htst.tabStop);
                 break;
             }
 
@@ -304,10 +303,9 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                 }
             }
         }
-
-        pTOXNd->SetAttr( aTStops );
     }
     mLinkProcessor->InsertLinkAttributes(*pTOXNd);
+    return oRet;
 }
 
 /*static*/ std::shared_ptr<SfxItemSet>

@@ -26,6 +26,7 @@
 #include "fmtautofmt.hxx"
 
 #include <memory>
+#include <optional>
 #include <vector>
 #include <unordered_map>
 
@@ -67,7 +68,7 @@ public:
      * This method will process the entries in @p entries, starting at @p indexOfEntryToProcess and
      * process @p numberOfEntriesToProcess entries.
      */
-    void
+    std::optional<std::pair<SwTextNode *, SvxTabStopItem>>
     GenerateText(SwDoc *doc,
         std::unordered_map<OUString, int> & rMarkURLs,
         const std::vector<std::unique_ptr<SwTOXSortTabBase>>& entries,
