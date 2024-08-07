@@ -1069,6 +1069,13 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // Sort the List of all TOC Marks and TOC Sections
     std::vector<SwTextFormatColl*> aCollArr( GetTOXForm().GetFormMax(), nullptr );
     std::unordered_map<OUString, int> markURLs;
+    std::vector<std::pair<SwTextNode *, SvxTabStopItem>> tabStops;
+    std::shared_ptr<sw::ToxTabStopTokenHandler> const pTabStopTokenHandler =
+        std::make_shared<sw::DefaultToxTabStopTokenHandler>(
+            pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
+            rDoc.GetDocumentSettingManager().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT)
+                ? sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT
+                : sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
     for( size_t nCnt = 0; nCnt < m_aSortArr.size(); ++nCnt )
     {
@@ -1083,7 +1090,6 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             aCollArr[ nLvl ] = pColl;
         }
 
-        // Generate: Set dynamic TabStops
         SwTextNode* pTOXNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode() , pColl );
         m_aSortArr[ nCnt ]->pTOXNd = pTOXNd;
 
@@ -1114,14 +1120,13 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // to method <GenerateText(..)>.
         ::SetProgressState( 0, rDoc.GetDocShell() );
 
-        std::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
-                std::make_shared<sw::DefaultToxTabStopTokenHandler>(
-                        pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
-                        rDoc.GetDocumentSettingManager().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
-                                sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
-                                sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
-        sw::ToxTextGenerator ttgn(GetTOXForm(), std::move(tabStopTokenHandler));
-        ttgn.GenerateText(GetFormat()->GetDoc(), markURLs, m_aSortArr, nCnt, nRange, pLayout);
+        sw::ToxTextGenerator ttgn(GetTOXForm(), pTabStopTokenHandler);
+        std::optional<std::pair<SwTextNode *, SvxTabStopItem>> const oTabStops =
+            ttgn.GenerateText(GetFormat()->GetDoc(), markURLs, m_aSortArr, nCnt, nRange, pLayout);
+        if (oTabStops)
+        {
+            tabStops.emplace_back(*oTabStops);
+        }
         nCnt += nRange - 1;
     }
 
@@ -1158,6 +1163,28 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     for ( const auto& rpLayout : aAllLayouts )
     {
         SwFrame::CheckPageDescs( static_cast<SwPageFrame*>(rpLayout->Lower()) );
+    }
+    // delay setting tab stops until the layout frames exist, in case the ToX
+    // is in columns or other non-body environment; best way is to check uppers
+    // (what if columns have different widths? no idea what to do about that...)
+    for (auto & it : tabStops)
+    {
+        std::vector<SvxTabStop> tabs;
+        for (size_t i = 0; i < it.second.Count(); ++i)
+        {
+            tabs.emplace_back(it.second.At(i));
+        }
+        it.second.Remove(0, it.second.Count());
+        for (SvxTabStop & rTab : tabs)
+        {
+            if (rTab.GetAdjustment() == SvxTabAdjust::Right)
+            {
+                assert(rTab.GetTabPos() == 0);
+                rTab.GetTabPos() = pTabStopTokenHandler->CalcEndStop(*it.first, pLayout);
+            }
+            it.second.Insert(rTab);
+        }
+        it.first->SetAttr(it.second);
     }
 
     SetProtect( SwTOXBase::IsProtected() );

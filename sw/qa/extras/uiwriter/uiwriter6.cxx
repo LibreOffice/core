@@ -2205,7 +2205,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116403)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
     // This was still 17000, refreshing ToX didn't take borders spacings and widths into account
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page borders must be considered for right-aligned tabstop",
-                                 static_cast<sal_Int32>(17000 - 2 * 500 - 2 * 1),
+                                 static_cast<sal_Int32>(17000 - 2 * 500 - 2 * 1 - 1),
                                  aTabs[0].Position);
 }
 
