@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <sfx2/viewsh.hxx>
@@ -130,21 +131,26 @@ SdrObject* SdrObjList::getSdrObjectFromSdrObjList() const
 
 OString SdrObjList::GetObjectRectangles(const SdrObjList& rSrcList)
 {
-    OStringBuffer aBuffer("[");
+    tools::JsonWriter jsWriter;
 
-    for (const rtl::Reference<SdrObject>& item: rSrcList)
     {
-        if (item->IsPrintable() && item->IsVisible())
+        auto array = jsWriter.startAnonArray();
+
+        for (const rtl::Reference<SdrObject>& item: rSrcList)
         {
-            tools::Rectangle rectangle = item->GetCurrentBoundRect();
-            aBuffer.append("["_ostr + rectangle.toString() + ", "_ostr + OString::number(item->GetOrdNum()) + "]"_ostr);
+            if (item->IsPrintable() && item->IsVisible())
+            {
+                tools::Rectangle rectangle = item->GetCurrentBoundRect();
+                OStringBuffer value(OString::number(item->GetOrdNum()));
+                value = rectangle.toString() + ", "_ostr + value;
+
+                auto subArray = jsWriter.startAnonArray();
+                jsWriter.putRaw(value.makeStringAndClear());
+            }
         }
     }
 
-    OString aResult = aBuffer.makeStringAndClear();
-    aResult = aResult.replaceAll("]["_ostr, "],["_ostr);
-
-    return aResult + "]"_ostr;
+    return jsWriter.finishAndGetAsOString();
 }
 
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)

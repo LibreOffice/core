@@ -1228,7 +1228,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 {
                     // Send all objects' rectangles along with the selected object's information.
                     // Other rectangles can be used for aligning the selected object referencing the others.
-                    OString objectRectangles = SdrObjList::GetObjectRectangles(*pPage);
+                    // Replace curly braces with empty string in order to merge it with the resulting string.
+                    OString objectRectangles = SdrObjList::GetObjectRectangles(*pPage).replaceAll("{"_ostr, ""_ostr).replaceAll("}"_ostr, ""_ostr);
                     aExtraInfo.append(", \"ObjectRectangles\": "_ostr + objectRectangles);
                 }
 
