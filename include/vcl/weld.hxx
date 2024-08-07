@@ -336,7 +336,7 @@ public:
     /* Escapes string contents which are interpreted by the UI.
 
        Should be overwritten by each VCL implementation to account for the
-       string contents which are interpreted by it's ui.
+       string contents which are interpreted by its ui.
     */
     virtual OUString escape_ui_str(const OUString& rLabel) const = 0;
 

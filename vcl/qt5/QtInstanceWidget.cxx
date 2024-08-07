@@ -229,7 +229,11 @@ void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUS
 
 OUString QtInstanceWidget::strip_mnemonic(const OUString&) const { return OUString(); }
 
-OUString QtInstanceWidget::escape_ui_str(const OUString&) const { return OUString(); }
+OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
+{
+    // preserve literal '&'
+    return rLabel.replaceAll("&", "&&");
+}
 
 VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const { return nullptr; }
 
