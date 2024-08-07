@@ -143,6 +143,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher.reset(new ImpMasterPageListWatcher(*this));
 
+    this->SetImpress(true);
+
     InitLayoutVector();
     InitObjectVector();
     SetObjectShell(pDrDocSh);       // for VCDrawModel

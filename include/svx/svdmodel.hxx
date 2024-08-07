@@ -269,12 +269,15 @@ private:
 
     // used to disable unique name checking during page move
     bool mbMakePageObjectsNamesUnique = true;
+    bool m_bIsImpress = false;
 
 public:
     SVX_DLLPRIVATE virtual bool IsCreatingDataObj() const { return false; }
     bool     IsTransportContainer() const { return m_bTransportContainer; }
     bool     AreControlsThemed() { return m_bThemedControls; }
     bool     IsPasteResize() const        { return m_bPasteResize; }
+    bool     IsImpress() const { return m_bIsImpress; }
+    void     SetImpress(bool bIsImpress) { m_bIsImpress = bIsImpress; };
     void     SetPasteResize(bool bOn) { m_bPasteResize=bOn; }
     // If a custom Pool is put here, the class will call methods
     // on it (Put(), Remove()). On disposal of SdrModel the pool
