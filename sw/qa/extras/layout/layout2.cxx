@@ -1756,16 +1756,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
     // Parse the layout
     auto pLayout = parseLayoutDump();
     // Get the position of the shape
-    const auto nTextBoxShapeLeft = getXPath(pLayout,
-                                            "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/"
-                                            "anchored/SwAnchoredDrawObject/bounds"_ostr,
-                                            "left"_ostr)
-                                       .toInt64();
-    const auto nTextBoxShapeTop = getXPath(pLayout,
-                                           "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/"
-                                           "anchored/SwAnchoredDrawObject/bounds"_ostr,
-                                           "top"_ostr)
-                                      .toInt64();
+    const auto nCellLeft
+        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds"_ostr,
+                   "left"_ostr)
+              .toInt64();
+    const auto nCellTop
+        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds"_ostr,
+                   "top"_ostr)
+              .toInt64();
     // Get the position of the textframe too.
     const auto nTextBoxFrameLeft
         = getXPath(
@@ -1781,8 +1779,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
               .toInt64();
 
     // Without the fix in place these were less than they supposed to.
-    CPPUNIT_ASSERT_GREATEREQUAL(nTextBoxShapeLeft, nTextBoxFrameLeft);
-    CPPUNIT_ASSERT_GREATEREQUAL(nTextBoxShapeTop, nTextBoxFrameTop);
+    CPPUNIT_ASSERT_GREATEREQUAL(nCellLeft, nTextBoxFrameLeft);
+    CPPUNIT_ASSERT_GREATEREQUAL(nCellTop, nTextBoxFrameTop);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)

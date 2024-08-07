@@ -16,6 +16,7 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <unocoll.hxx>
@@ -1440,9 +1441,6 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             tools::Rectangle aRect
                 = getRelativeTextRectangle(pObj ? pObj : pShape->FindRealSdrObject());
 
-            // X Offset of the shape spacing
-            auto nLeftSpace = pShape->GetLRSpace().GetLeft();
-
             // Set the same position as the (child) shape has
             SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
             if (bIsGroupObj && aNewHOri.GetHoriOrient() != text::HoriOrientation::NONE)
@@ -1482,6 +1480,14 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             if (pShape->GetFollowTextFlow().GetValue() && pShape->GetAnchor().GetAnchorNode()
                 && pShape->GetAnchor().GetAnchorNode()->FindTableNode())
             {
+                // WARNING: It is highly likely that everything here is simplistic and incomplete.
+
+                // Microsoft allows WrapThrough shapes to be placed outside of the cell
+                // despite having specified layoutInCell.
+                // (Re-using existing, appropriately-named, compat flag to identify MSO formats.)
+                const bool bMSOLayout = pFormat->getIDocumentSettingAccess().get(
+                    DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+
                 // Table position
                 Point nTableOffset;
                 // Floating table
@@ -1505,12 +1511,25 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                     }
                 }
 
-                // Add the table positions to the textbox.
-                aNewHOri.SetPos(aNewHOri.GetPos() + nTableOffset.getX() + nLeftSpace);
+                // stay within the cell limits (since following text flow)
+                // unless this is based on a Microsoft layout which has a through-wrap exception.
+                bool bWrapThrough = false;
+                getShapeWrapThrough(pShape, bWrapThrough);
+                sal_Int32 nPos = aNewHOri.GetPos();
+                if (nPos < 0 && (!bMSOLayout || !bWrapThrough))
+                    nPos = 0;
+                // Add the table positions to the textbox
+                aNewHOri.SetPos(nPos + nTableOffset.getX());
+
                 if (pShape->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
                     || pShape->GetVertOrient().GetRelationOrient()
                            == text::RelOrientation::PAGE_PRINT_AREA)
-                    aNewVOri.SetPos(aNewVOri.GetPos() + nTableOffset.getY());
+                {
+                    nPos = aNewVOri.GetPos();
+                    if (nPos < 0 && (!bMSOLayout || !bWrapThrough))
+                        nPos = 0;
+                    aNewVOri.SetPos(nPos + nTableOffset.getY());
+                }
             }
 
             pFormat->SetFormatAttr(aNewHOri);
