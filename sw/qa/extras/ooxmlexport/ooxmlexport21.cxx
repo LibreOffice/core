@@ -517,19 +517,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
     // (no top/bottom margins), but Cell A2 has a custom top margin of 2cm,
     // so that effectively drops A1's print area down as well!
 
-    // xmlDocUniquePtr pDump = parseLayoutDump();
-    // const sal_Int32 nCellTop
-    //     = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
-    // const sal_Int32 nParaTop
-    //     = getXPath(pDump, "//row[1]/cell[1]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
-    // const sal_Int32 nImageTop
-    //     = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
-    //                 "top"_ostr)
-    //             .toInt32();
-    // // The image is approximately half-way between cell top and the start of the text
-    // // correct ImageTop: 3588, while incorrect value was 1117. Cell top is 3051, ParaTop is 4195
-    // const sal_Int32 nHalfway = nCellTop + (nParaTop - nCellTop) / 2;
-    // CPPUNIT_ASSERT_DOUBLES_EQUAL(nHalfway, nImageTop, 50); // +/- 4.4%
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    const sal_Int32 nCellTop
+        = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nImageTop
+        = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // The image should be 1 cm above the 2cm cell margin (thus 1cm below the top of the cell)
+    // 1cm is 567 twips. The numbers are not exactly what I would have expected, but close.
+    // correct ImageTop: ~ 3588, while incorrect value was 1117. Cell top is 3051, ParaTop is 4195
+    const SwTwips n1cm = o3tl::convert(tools::Long(1), o3tl::Length::cm, o3tl::Length::twip);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nCellTop + n1cm, nImageTop, 50); // +/- 4.4%
 
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
@@ -545,15 +544,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
     // This unit test is virtually the same idea as the previous one, with the main benefit being
     // that it causes an NS_ooxml::LN_Shape exception.
 
-    // xmlDocUniquePtr pDump = parseLayoutDump();
-    // const sal_Int32 nShapeTop
-    //     = getXPath(pDump,
-    //                 "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
-    //                 "top"_ostr)
-    //             .toInt32();
-    // // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
-    // // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
-    // CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    const sal_Int32 nShapeTop
+        = getXPath(pDump,
+                   "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
+    // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
 
     const auto& xShape = getShapeByName(u"Group 1");
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,

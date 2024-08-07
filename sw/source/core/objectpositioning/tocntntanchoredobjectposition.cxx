@@ -40,6 +40,7 @@
 #include <environmentofanchoredobject.hxx>
 #include <frmatr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <rowfrm.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
 #include <flyfrms.hxx>
@@ -607,6 +608,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     nVertOffsetToFrameAnchorPos += aRectFnSet.YDiff(
                                                 aRectFnSet.GetTop(aPgPrtRect),
                                                 nTopOfOrient );
+
+                    if (bMSOLayoutInCell && rPageAlignLayFrame.IsCellFrame())
+                    {
+                        // Cell upper/lower comes from the max margin of the entire row of cells
+                        const auto pRow = const_cast<SwLayoutFrame&>(rPageAlignLayFrame).FindRowFrame();
+                        assert(pRow);
+                        nVertOffsetToFrameAnchorPos += pRow->GetTopMarginForLowers();
+                    }
                 }
                 else if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
                 {
