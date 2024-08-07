@@ -69,6 +69,13 @@ With "-opensource -confirm-license" you agree to the open source license.
     ./configure -opensource -confirm-license -xplatform wasm-emscripten -feature-thread -prefix <whatever> QMAKE_CFLAGS+=-sSUPPORT_LONGJMP=wasm QMAKE_CXXFLAGS+=-sSUPPORT_LONGJMP=wasm
     make -j<CORES> module-qtbase
 
+Do not include `-fwasm-exceptions` in the above `QMAKE_CXXFLAGS`, see
+<https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop> "Note:
+Currently, using the new Wasm exception handling and simulate_infinite_loop == true at the same time
+does not work yet in C++ projects that have objects with destructors on the stack at the time of the
+call."  (Also see the EMSCRIPTEN-specific HACK in soffice_main, desktop/source/app/sofficemain.cxx,
+for what we need to do to work around that.)
+
 Optionally you can add the configure flag "-compile-examples". But then you also have to
 patch at least mkspecs/wasm-emscripten/qmake.conf with EXIT_RUNTIME=0, otherwise they will
 fail to run. In addition, building with examples will break with some of them, but at that
