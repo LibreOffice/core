@@ -33,6 +33,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <cmdid.h>
+#include <strings.hrc>
+#include <swtypes.hxx>
 
 using namespace ::com::sun::star;
 
@@ -180,6 +182,7 @@ void PageStylesPanel::Update()
             mxBgBitmapLB->hide();
             mxBgGradientLB->hide();
             mxBgHatchingLB->hide();
+            mxBgColorLB->set_accessible_name(SwResId(STR_BACKGROUND_COLOR));
             mxBgColorLB->show();
             const Color aColor = GetColorSetOrDefault();
             mxBgColorLB->SelectEntry(aColor);
@@ -189,6 +192,7 @@ void PageStylesPanel::Update()
         {
             mxBgBitmapLB->hide();
             mxBgHatchingLB->hide();
+            mxBgColorLB->set_accessible_name(SwResId(STR_GRADIENT_COLOR_1));
             mxBgColorLB->show();
             mxBgGradientLB->show();
 
@@ -220,6 +224,10 @@ void PageStylesPanel::Update()
             mxBgColorLB->hide();
             mxBgGradientLB->hide();
             mxBgHatchingLB->hide();
+
+            const OUString sAccName = (eXFS == BITMAP) ? SwResId(STR_BACKGROUND_BITMAP)
+                                                       : SwResId(STR_BACKGROUND_PATTERN);
+            mxBgBitmapLB->set_accessible_name(sAccName);
             mxBgBitmapLB->show();
             mxBgBitmapLB->clear();
             OUString aBitmapName;

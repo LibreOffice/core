@@ -86,6 +86,7 @@ public:
     void hide() { m_xButton->hide(); }
     void set_visible(bool bShow) { m_xButton->set_visible(bShow); }
     void set_help_id(const OUString& rHelpId) { m_xButton->set_help_id(rHelpId); }
+    void set_accessible_name(const OUString& rName) { m_xButton->set_accessible_name(rName); };
     void connect_focus_in(const Link<weld::Widget&, void>& rLink)
     {
         m_xButton->connect_focus_in(rLink);

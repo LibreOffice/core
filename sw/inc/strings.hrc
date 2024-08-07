@@ -1504,6 +1504,11 @@
 #define STR_TABLE_PANEL_ALIGN_CENTER            NC_("sidebartableedit|aligncenterlabel", "Center")
 #define STR_TABLE_PANEL_ALIGN_MANUAL            NC_("sidebartableedit|alignmanuallabel", "Manual")
 
+#define STR_BACKGROUND_COLOR NC_("STR_BACKGROUND_COLOR", "Background color")
+#define STR_GRADIENT_COLOR_1 NC_("STR_GRADIENT_COLOR_1", "First gradient color")
+#define STR_BACKGROUND_BITMAP NC_("STR_BACKGROUND_BITMAP", "Background bitmap")
+#define STR_BACKGROUND_PATTERN NC_("STR_BACKGROUND_PATTERN", "Background pattern")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
