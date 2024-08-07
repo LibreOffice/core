@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 
@@ -136,21 +137,26 @@ SdrObject* SdrObjList::getSdrObjectFromSdrObjList() const
 
 OString SdrObjList::GetObjectRectangles(const SdrObjList& rSrcList)
 {
-    OString result = "["_ostr;
+    tools::JsonWriter jsWriter;
 
-    for (const rtl::Reference<SdrObject>& item: rSrcList)
     {
-        if (item->IsPrintable() && item->IsVisible())
+        auto array = jsWriter.startAnonArray();
+
+        for (const rtl::Reference<SdrObject>& item: rSrcList)
         {
-            tools::Rectangle rectangle = item->GetCurrentBoundRect();
-            OString ordNum(std::to_string(item->GetOrdNum()));
-            result += "["_ostr + rectangle.toString() + ", "_ostr + ordNum + "]"_ostr;
+            if (item->IsPrintable() && item->IsVisible())
+            {
+                tools::Rectangle rectangle = item->GetCurrentBoundRect();
+                OString value(std::to_string(item->GetOrdNum()));
+                value = rectangle.toString() + ", "_ostr + value;
+
+                auto subArray = jsWriter.startAnonArray();
+                jsWriter.putRaw(value);
+            }
         }
     }
 
-    result = result.replaceAll("]["_ostr, "],["_ostr);
-
-    return result + "]"_ostr;
+    return jsWriter.finishAndGetAsOString();
 }
 
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
