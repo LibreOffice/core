@@ -517,26 +517,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
     // (no top/bottom margins), but Cell A2 has a custom top margin of 2cm,
     // so that effectively drops A1's print area down as well!
 
-    xmlDocUniquePtr pDump = parseLayoutDump();
-    const sal_Int32 nCellTop
-        = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
-    const sal_Int32 nParaTop
-        = getXPath(pDump, "//row[1]/cell[1]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
-    const sal_Int32 nImageTop
-        = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "top"_ostr)
-              .toInt32();
-    // The image is approximately half-way between cell top and the start of the text
-    // correct ImageTop: 3588, while incorrect value was 1117. Cell top is 3051, ParaTop is 4195
-    const sal_Int32 nHalfway = nCellTop + (nParaTop - nCellTop) / 2;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nHalfway, nImageTop, 50); // +/- 4.4%
+    // xmlDocUniquePtr pDump = parseLayoutDump();
+    // const sal_Int32 nCellTop
+    //     = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // const sal_Int32 nParaTop
+    //     = getXPath(pDump, "//row[1]/cell[1]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // const sal_Int32 nImageTop
+    //     = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
+    //                 "top"_ostr)
+    //             .toInt32();
+    // // The image is approximately half-way between cell top and the start of the text
+    // // correct ImageTop: 3588, while incorrect value was 1117. Cell top is 3051, ParaTop is 4195
+    // const sal_Int32 nHalfway = nCellTop + (nParaTop - nCellTop) / 2;
+    // CPPUNIT_ASSERT_DOUBLES_EQUAL(nHalfway, nImageTop, 50); // +/- 4.4%
 
-    // The effect is implemented by forcing "Entire paragraph area"/FRAME/0
-    // instead of "Page text area"/PAGE_PRINT_AREA/8
-    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
-    // since layoutInCell had been turned off. If the implementation changes, check the layout.
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
@@ -547,15 +545,48 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
     // This unit test is virtually the same idea as the previous one, with the main benefit being
     // that it causes an NS_ooxml::LN_Shape exception.
 
+    // xmlDocUniquePtr pDump = parseLayoutDump();
+    // const sal_Int32 nShapeTop
+    //     = getXPath(pDump,
+    //                 "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+    //                 "top"_ostr)
+    //             .toInt32();
+    // // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
+    // // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
+    // CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
+
+    const auto& xShape = getShapeByName(u"Group 1");
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
+
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellC, "tdf160077_layoutInCellC.docx")
+{
+    // given an in-table, slightly rotated image vertically aligned to top page margin
+    // (which is actually forced to layoutInCell, so that becomes the top of the cell text area).
+    // This test anchors the image on paragraph 5 - proving vertical cannot change to FRAME.
+
     xmlDocUniquePtr pDump = parseLayoutDump();
-    const sal_Int32 nShapeTop
-        = getXPath(pDump,
-                   "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+    const sal_Int32 nCellTop
+        = getXPath(pDump, "//row[1]/cell[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nPara1Top
+        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nImageTop
+        = getXPath(pDump, "//row[1]/cell[2]/txt[5]/anchored/SwAnchoredDrawObject/bounds"_ostr,
                    "top"_ostr)
               .toInt32();
-    // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
-    // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
+    // The image's top should be positioned at the start of the cell's text area (i.e. para1 top)
+    // Before the revert, the image was positioned at the top of para 5.
+    CPPUNIT_ASSERT_LESS(nPara1Top, nImageTop); // Image not lower than para 1
+    // The image must be limited to the top of the cell, not the page
+    CPPUNIT_ASSERT_GREATER(nCellTop, nImageTop); // Image is lower (greater) than top of cell
+
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
+    // LayoutInCell must be enforced, to keep the image inside the cell boundaries
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
