@@ -55,6 +55,8 @@ BitmapEx VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
                                       sal_Int8 nBitsPerPixel,
                                       bool bReversColors = false, bool bReverseAlpha = false);
 
+void VCL_DLLPUBLIC fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx);
+
 BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 
 #if ENABLE_CAIRO_CANVAS

@@ -287,6 +287,36 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
         return BitmapEx(aBmp);
 }
 
+void fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx)
+{
+    Bitmap aBitmap = rBitmapEx.GetBitmap();
+    AlphaMask aAlphaMask = rBitmapEx.GetAlphaMask();
+    BitmapScopedReadAccess aReadAccessBitmap(aBitmap);
+    BitmapScopedReadAccess aReadAccessAlpha(aAlphaMask);
+
+    assert(!aReadAccessAlpha || aReadAccessBitmap->Height() == aReadAccessAlpha->Height());
+    assert(!aReadAccessAlpha || aReadAccessBitmap->Width() == aReadAccessAlpha->Width());
+
+    sal_uInt8* p = pData;
+
+    for (tools::Long y = 0; y < aReadAccessBitmap->Height(); ++y)
+    {
+        Scanline dataBitmap = aReadAccessBitmap->GetScanline(y);
+        Scanline dataAlpha = aReadAccessAlpha ? aReadAccessAlpha->GetScanline(y) : nullptr;
+
+        for (tools::Long x = 0; x < aReadAccessBitmap->Width(); ++x)
+        {
+            BitmapColor aColor = aReadAccessBitmap->GetPixelFromData(dataBitmap, x);
+            sal_uInt8 aAlpha = dataAlpha ? aReadAccessAlpha->GetPixelFromData(dataAlpha, x).GetBlue() : 255;
+            *p++ = aColor.GetBlue();
+            *p++ = aColor.GetGreen();
+            *p++ = aColor.GetRed();
+            *p++ = aAlpha;
+        }
+    }
+}
+
+
 #if ENABLE_CAIRO_CANVAS
 BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
 {
