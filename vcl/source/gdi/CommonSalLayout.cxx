@@ -650,12 +650,14 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 }
 
                 // if needed request glyph fallback by updating LayoutArgs
+                auto nOrigCharPos = stClusterMapper.RemapGlyph(nCharPos, nGlyphIndex);
                 if (!nGlyphIndex)
                 {
                     // Only request fallback for grapheme clusters that are drawn
-                    if (nCharPos >= rArgs.mnDrawMinCharPos && nCharPos < rArgs.mnDrawEndCharPos)
+                    if (nOrigCharPos >= rArgs.mnDrawMinCharPos
+                        && nOrigCharPos < rArgs.mnDrawEndCharPos)
                     {
-                        aFallbackRuns.AddPos(nCharPos, bRightToLeft);
+                        aFallbackRuns.AddPos(nOrigCharPos, bRightToLeft);
                         if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                             continue;
                     }
@@ -724,8 +726,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
                 basegfx::B2DPoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset, nYOffset,
-                                    stClusterMapper.RemapGlyph(nCharPos, nGlyphIndex));
+                                    nAdvance, nXOffset, nYOffset, nOrigCharPos);
 
                 if (aGI.origCharPos() >= rArgs.mnDrawMinCharPos
                     && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
