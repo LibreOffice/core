@@ -248,6 +248,7 @@ class SwDoc final
 
     std::unique_ptr<sw::FrameFormats<SwFrameFormat*>>    mpFrameFormatTable;    //< Format table
     std::unique_ptr<SwCharFormats>     mpCharFormatTable;
+    std::unique_ptr<SwCharFormats>     mpCharFormatDeletionTable;
     std::unique_ptr<sw::FrameFormats<sw::SpzFrameFormat*>>    mpSpzFrameFormatTable;
     std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
     std::unique_ptr<sw::TableFrameFormats>    mpTableFrameFormatTable; //< For tables
