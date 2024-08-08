@@ -1358,7 +1358,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // This claim is a bit of a stretch, but should be OK for horizontal.
                             // For layoutInCell, MSO does apply PAGE_FRAME and PAGE_PRINT_AREA
                             // horizontal adjustments onto the cell's frame and print area.
-                            // Note that FRAME cannot be subsituted for vertical (only first para).
+                            // Note that FRAME cannot be substituted for vertical (only first para).
                             m_pImpl->m_nHoriRelation = text::RelOrientation::FRAME;
                         }
 
