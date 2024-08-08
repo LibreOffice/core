@@ -65,6 +65,7 @@ class SdGenericDrawPage;
 namespace sd {
 class DrawDocShell;
 class DrawViewShell;
+class SlideshowLayerRenderer;
 }
 
 extern OUString getPageApiName( SdPage const * pPage );
@@ -95,6 +96,8 @@ private:
     ::sd::DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
     bool mbDisposed;
+
+    std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
@@ -298,13 +301,13 @@ public:
     /// @see vcl::ITiledRenderable::getPresentationInfo().
     SD_DLLPUBLIC OString getPresentationInfo() const override;
     /// @see vcl::ITiledRenderable::createSlideRenderer().
-    bool createSlideRenderer(
+    SD_DLLPUBLIC bool createSlideRenderer(
         sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage) override;
     /// @see vcl::ITiledRenderable::postSlideshowCleanup().
-    void postSlideshowCleanup() override;
+    SD_DLLPUBLIC void postSlideshowCleanup() override;
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
-    bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
+    SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
 
     rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 

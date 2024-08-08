@@ -146,6 +146,7 @@
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <optsitem.hxx>
+#include <SlideshowLayerRenderer.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/pdf/PDFNote.hxx>
@@ -4440,49 +4441,99 @@ OString SdXImpressDocument::getPresentationInfo() const
     return aJsonWriter.finishAndGetAsOString();
 }
 
+namespace
+{
+// use VCL slideshow renderer or not - leave the old one in for now, so it is possible to compare output
+constexpr const bool bVCLSlideShowRenderer = true;
+}
+
 bool SdXImpressDocument::createSlideRenderer(
     sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
     bool bRenderBackground, bool bRenderMasterPage)
 {
-    DrawViewShell* pViewSh = GetViewShell();
-    if (!pViewSh)
-        return false;
-
-    uno::Reference<presentation::XSlideShow> xSlideShow = pViewSh->getXSlideShowInstance();
-    if (!xSlideShow.is())
-        return false;
-
-    bool bSuccess = false;
-    try
+    if (bVCLSlideShowRenderer)
     {
-        rtl::Reference<SdXImpressDocument> xDrawPages(mpDoc->getUnoModel());
-        uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(), uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber), uno::UNO_QUERY_THROW);
-        uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xSlide, uno::UNO_QUERY_THROW);
-        uno::Reference<animations::XAnimationNode> xAnimNode = xAnimNodeSupplier->getAnimationNode();
+        SdPage* pPage = mpDoc->GetSdPage(sal_uInt16(nSlideNumber), PageKind::Standard);
+        if (!pPage)
+            return false;
 
-        bSuccess = xSlideShow->createLOKSlideRenderer(nViewWidth, nViewHeight,
-                                                 bRenderMasterPage, bRenderBackground,
-                                                 xSlide, xDrawPages, xAnimNode);
+        mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(pPage));
+        Size aDesiredSize(nViewWidth, nViewHeight);
+        Size aCalculatedSize = mpSlideshowLayerRenderer->calculateAndSetSizePixel(aDesiredSize);
+        nViewWidth = aCalculatedSize.Width();
+        nViewHeight = aCalculatedSize.Height();
+        return true;
     }
-    catch (uno::Exception&)
+    else
     {
-        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createLOKSlideRenderer: failed" );
+        DrawViewShell* pViewSh = GetViewShell();
+        if (!pViewSh)
+            return false;
+
+        uno::Reference<presentation::XSlideShow> xSlideShow = pViewSh->getXSlideShowInstance();
+        if (!xSlideShow.is())
+            return false;
+
+        bool bSuccess = false;
+        try
+        {
+            rtl::Reference<SdXImpressDocument> xDrawPages(mpDoc->getUnoModel());
+            uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(), uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber), uno::UNO_QUERY_THROW);
+            uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xSlide, uno::UNO_QUERY_THROW);
+            uno::Reference<animations::XAnimationNode> xAnimNode = xAnimNodeSupplier->getAnimationNode();
+
+            bSuccess = xSlideShow->createLOKSlideRenderer(nViewWidth, nViewHeight,
+                    bRenderMasterPage, bRenderBackground,
+                    xSlide, xDrawPages, xAnimNode);
+        }
+        catch (uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createLOKSlideRenderer: failed" );
+        }
+        return bSuccess;
     }
-    return bSuccess;
 }
 
 void SdXImpressDocument::postSlideshowCleanup()
 {
+    if (bVCLSlideShowRenderer)
+    {
+        mpSlideshowLayerRenderer.reset();
+    }
+    else
+    {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return;
 
     pViewSh->destroyXSlideShowInstance();
 }
+}
 
 bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg)
 {
+    if (bVCLSlideShowRenderer)
+    {
+        bool bDone = true;
+
+        if (!mpSlideshowLayerRenderer)
+            return bDone;
+
+        OString sMsg;
+        bool bOK = mpSlideshowLayerRenderer->render(pBuffer, sMsg);
+
+        if (bOK)
+        {
+            rJsonMsg = OUString::fromUtf8(sMsg);
+            bIsBitmapLayer = true;
+            bDone = false;
+        }
+
+        return bDone;
+    }
+    else
+    {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return true;
@@ -4497,6 +4548,7 @@ bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsB
     bIsBitmapLayer = bBitmapLayer;
 
     return bDone;
+}
 }
 
 SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const
