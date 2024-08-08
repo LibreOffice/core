@@ -90,6 +90,8 @@ class SwAccessibleParagraph :
     // XAccessibleComponent
     bool m_bLastHasSelection;
 
+    const SwTextFrame* GetTextFrame() const;
+
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
 

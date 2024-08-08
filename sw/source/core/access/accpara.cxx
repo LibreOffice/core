@@ -113,6 +113,11 @@ namespace com::sun::star::text {
 constexpr OUString sServiceName = u"com.sun.star.text.AccessibleParagraphView"_ustr;
 constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
+const SwTextFrame* SwAccessibleParagraph::GetTextFrame() const
+{
+    return static_cast<const SwTextFrame*>(GetFrame());
+}
+
 OUString const & SwAccessibleParagraph::GetString()
 {
     return GetPortionData().GetAccessibleString();
@@ -133,7 +138,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
 
     if( pCaret != nullptr )
     {
-        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pTextFrame = GetTextFrame();
         assert(pTextFrame);
 
         // check whether the point points into 'our' node
@@ -206,7 +211,7 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
 
 bool SwAccessibleParagraph::IsHeading() const
 {
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     const SwTextNode *pTextNd = pFrame->GetTextNodeForParaProps();
     return pTextNd->IsOutline();
 }
@@ -228,7 +233,7 @@ void SwAccessibleParagraph::GetStates( sal_Int64& rStateSet )
 
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     assert(pFrame);
     if (pCaret != nullptr &&
         sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->GetNodeIndex()) &&
@@ -435,7 +440,7 @@ bool SwAccessibleParagraph::HasCursor()
 void SwAccessibleParagraph::UpdatePortionData()
 {
     // obtain the text frame
-    const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    const SwTextFrame* pFrame = GetTextFrame();
     OSL_ENSURE( pFrame != nullptr, "The text frame has vanished!" );
     if (!pFrame)
         ClearPortionData();
@@ -492,7 +497,7 @@ rtl::Reference<SwXTextPortion> SwAccessibleParagraph::CreateUnoPortion(
             : GetPortionData().GetCoreViewPosition(nEndIndex);
 
     // create UNO cursor
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     SwPosition aStartPos(pFrame->MapViewToModelPos(nStart));
     auto pUnoCursor(const_cast<SwDoc&>(pFrame->GetDoc()).CreateUnoCursor(aStartPos));
     pUnoCursor->SetMark();
@@ -565,7 +570,7 @@ bool SwAccessibleParagraph::GetWordBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     const TextFrameIndex nCorePos = GetPortionData().GetCoreViewPosition(nPos);
     lang::Locale aLocale = g_pBreakIt->GetLocale(pFrame->GetLangOfChar(nCorePos, 0, true));
 
@@ -632,7 +637,7 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     const TextFrameIndex nCorePos = GetPortionData().GetCoreViewPosition(nPos);
     lang::Locale aLocale = g_pBreakIt->GetLocale(pFrame->GetLangOfChar(nCorePos, 0, true));
 
@@ -778,7 +783,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     // get cursor shell
     SwCursorShell *pCursorSh = GetCursorShell();
     SwPaM *pCursor = GetCursor( false ); // #i27301# - consider new method signature
-    const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    const SwTextFrame* pTextFrame = GetTextFrame();
 
     if (pCursorSh != nullptr &&
         ( pCursor == nullptr ||
@@ -1054,7 +1059,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
     if( pCursorShell != nullptr )
     {
         // create pam for selection
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         TextFrameIndex const nFrameIndex(GetPortionData().GetCoreViewPosition(nIndex));
         SwPosition aStartPos(pFrame->MapViewToModelPos(nFrameIndex));
         SwPaM aPaM( aStartPos );
@@ -1103,7 +1108,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     aMoveState.m_bRealHeight = true;
     aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
 
     /*  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
@@ -1173,7 +1178,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
     if (nFieldIndex >= 0)
     {
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         sw::MergedAttrIter iter(*pFrame);
         while (SwTextAttr const*const pHt = iter.NextAttr())
         {
@@ -1454,7 +1459,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         const bool bOnlyCharAttrs )
 {
     // retrieve default attributes
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
     std::optional<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
@@ -1645,7 +1650,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // create PaM for character at position <nIndex>
     std::optional<SwPaM> pPaM;
     const TextFrameIndex nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     SwPosition const aModelPos(pFrame->MapViewToModelPos(nCorePos));
     SwTextNode *const pTextNode(aModelPos.GetNode().GetTextNode());
     {
@@ -1761,7 +1766,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         const uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rSupplementalAttrSeq )
 {
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
     SfxItemSetFixed<
                 RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
@@ -1896,7 +1901,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
     // and the end is excluded by InWrongWord(),
     // so it ought to work to just pick the wrong-list/node that contains
     // the character following the given nIndex
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
     TextFrameIndex const nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
     std::pair<SwTextNode*, sal_Int32> pos(pFrame->MapViewToModel(nCorePos));
     if (pos.first->Len() == pos.second
@@ -2036,7 +2041,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     aMoveState.m_bRealHeight = true;
     aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextFrame* const pFrame = GetTextFrame();
 
     /**  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
@@ -2118,7 +2123,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     // ask core for position
     OSL_ENSURE( GetFrame() != nullptr, "The text frame has vanished!" );
     OSL_ENSURE( GetFrame()->IsTextFrame(), "The text frame has mutated!" );
-    const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    const SwTextFrame* pFrame = GetTextFrame();
     // construct SwPosition (where GetModelPositionForViewPoint() will put the result into)
     SwTextNode* pNode = const_cast<SwTextNode*>(pFrame->GetTextNodeFirst());
     SwPosition aPos(*pNode, 0);
@@ -2211,7 +2216,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     if( pCursorShell != nullptr )
     {
         // create pam for selection
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         TextFrameIndex const nStart(GetPortionData().GetCoreViewPosition(nStartIndex));
         TextFrameIndex const nEnd(GetPortionData().GetCoreViewPosition(nEndIndex));
         SwPaM aPaM(pFrame->MapViewToModelPos(nStart));
@@ -2600,7 +2605,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
     // edit only if the range is editable
     if( bSuccess )
     {
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         // create SwPosition for nStartIndex
         SwPosition aStartPos(pFrame->MapViewToModelPos(nStart));
 
@@ -2808,7 +2813,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     sal_Int32 nCount = 0;
     // #i77108# - provide hyperlinks also in editable documents.
 
-    const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    const SwTextFrame* pTextFrame = GetTextFrame();
     SwHyperlinkIter_Impl aIter(*pTextFrame);
     while( aIter.next() )
         nCount++;
@@ -2823,7 +2828,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     ThrowIfDisposed();
 
-    const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    const SwTextFrame* pTextFrame = GetTextFrame();
     SwHyperlinkIter_Impl aHIter(*pTextFrame);
     SwTextNode const* pNode(nullptr);
     const SwTextAttr* pHt = aHIter.next(&pNode);
@@ -2879,7 +2884,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     sal_Int32 nRet = -1;
     // #i77108#
     {
-        const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
+        const SwTextFrame* pTextFrame = GetTextFrame();
         SwHyperlinkIter_Impl aHIter(*pTextFrame);
 
         const TextFrameIndex nIdx = GetPortionData().GetCoreViewPosition(nCharIndex);
@@ -2921,7 +2926,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
         break;
         default:
         {
-            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            const SwTextFrame* const pFrame = GetTextFrame();
             pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
@@ -2944,7 +2949,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
     if( pCursor != nullptr )
     {
         // get SwPosition for my node
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
         SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
@@ -3018,7 +3023,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
         bool bRet = false;
 
         // get SwPosition for my node
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
         SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
@@ -3117,7 +3122,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
     {
         // create pam for selection
         pCursorShell->StartAction();
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         SwPaM* aPaM = pCursorShell->CreateCursor();
         aPaM->SetMark();
         *aPaM->GetPoint() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(startOffset));
@@ -3148,7 +3153,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
         break;
         default:
         {
-            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            const SwTextFrame* const pFrame = GetTextFrame();
             pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
@@ -3183,7 +3188,7 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
         break;
         default:
         {
-            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            const SwTextFrame* const pFrame = GetTextFrame();
             pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
@@ -3324,7 +3329,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     if( pCursor != nullptr )
     {
         // get SwPosition for my node
-        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        const SwTextFrame* const pFrame = GetTextFrame();
         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
         SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
