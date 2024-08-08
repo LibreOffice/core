@@ -56,6 +56,7 @@ class SvxItemPropertySet;
 namespace sd {
 class DrawDocShell;
 class DrawViewShell;
+class SlideshowLayerRenderer;
 }
 
 extern OUString getPageApiName( SdPage const * pPage );
@@ -86,6 +87,8 @@ private:
     ::sd::DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
     bool mbDisposed;
+
+    std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
