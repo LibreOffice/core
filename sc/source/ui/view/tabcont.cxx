@@ -240,6 +240,8 @@ void ScTabControl::AddTabClick()
     rDoc.CreateValidTabName(aName);
     SCTAB nTabCount = rDoc.GetTableCount();
     pViewData->GetViewShell()->InsertTable(aName, nTabCount);
+    if (!pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode())
+        pViewData->GetViewShell()->SetActive();
 }
 
 void ScTabControl::Select()

@@ -880,7 +880,10 @@ void ScTabViewShell::ExecuteInsertTable(SfxRequest& rReq)
         }
 
         if (bOk)
+        {
+            rViewData.GetViewShell()->SetActive();
             rReq.Done( *pReqArgs );
+        }
         //! else set error
     }
     else                                // dialog
@@ -996,6 +999,7 @@ void ScTabViewShell::DoInsertTableFromDialog(SfxRequest& rReq, const VclPtr<Abst
             }
         }
     }
+    rViewData.GetViewShell()->SetActive();
 }
 
 void ScTabViewShell::DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScMoveTableDlg>& pDlg )
@@ -1166,6 +1170,8 @@ bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr
 
     if ( bDone )
     {
+        if (nSlot == FID_TAB_APPEND)
+            rViewData.GetViewShell()->SetActive();
         xReq->AppendItem( SfxStringItem( nSlot, aName ) );
         xReq->Done();
     }
