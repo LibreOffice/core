@@ -500,6 +500,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     /// This is the URL of the outer <object> data if it's not OLE2 or an image.
     OUString m_aEmbedURL;
 
+    std::unique_ptr<SfxItemSet> m_pTargetCharAttrs;
+
     void DeleteFormImpl();
 
     void DocumentDetected();

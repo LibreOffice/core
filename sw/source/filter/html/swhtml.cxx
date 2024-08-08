@@ -578,6 +578,13 @@ SvParserState SwHTMLParser::CallParser()
         aInsertionRangePam.Move( fnMoveBackward );
         m_xDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
 
+        if (SwAttrSet const*const pAttrs = pPos->GetNode().GetTextNode()->GetpSwAttrSet())
+        {
+            m_pTargetCharAttrs.reset(new SfxItemSet(*pAttrs->GetPool(),
+                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>));
+            m_pTargetCharAttrs->Put(*pAttrs);
+        }
+
         m_xDoc->SetTextFormatColl( *m_pPam,
                 m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
     }
@@ -4811,6 +4818,13 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
     // set the style
     m_xDoc->SetTextFormatColl( *m_pPam, pCollToSet );
+
+    if (m_pTargetCharAttrs)
+    {
+        std::unique_ptr<SfxItemSet> const pCharSet(new SfxItemSet(*m_pTargetCharAttrs));
+        pCharSet->Differentiate(pCollToSet->GetAttrSet());
+        m_xDoc->getIDocumentContentOperations().InsertItemSet(*m_pPam, *pCharSet);
+    }
 
     // if applicable correct the paragraph indent
     const SvxFirstLineIndentItem & rFirstLine = pCollToSet->GetFirstLineIndent();

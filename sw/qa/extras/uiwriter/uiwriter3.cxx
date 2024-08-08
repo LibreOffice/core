@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -38,6 +39,54 @@ public:
     {
     }
 };
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPaste)
+{
+    {
+        createSwDoc();
+
+        SwDoc* const pDoc = getSwDoc();
+        SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        pWrtShell->Insert(u"AAA"_ustr);
+        pWrtShell->SplitNode();
+        pWrtShell->Insert(u"BBB"_ustr);
+        pWrtShell->SplitNode();
+        pWrtShell->Insert(u"CCC"_ustr);
+
+        dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+        dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    }
+
+    createSwDoc("placeholder-bold.fodt");
+
+    // select placeholder field
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // Paste special as HTML
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
+
+    dispatchCommand(mxComponent, u".uno:ClipboardFormatItems"_ustr, aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(int(4), getParagraphs());
+
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(1), 1, u"Test "_ustr), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::BOLD,
+        getProperty<float>(getRun(getParagraph(1), 2, u"AAA"_ustr), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(2), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(3), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(4), 1, u" test"_ustr), u"CharWeight"_ustr));
+}
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
 {
