@@ -262,6 +262,7 @@ public:
     void testTdf113877NoMerge();
     void testTdf113877_default_style();
     void testTdf113877_Standard_style();
+    void testPlaceholderHTMLPaste();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -408,6 +409,7 @@ public:
     CPPUNIT_TEST(testTdf113877NoMerge);
     CPPUNIT_TEST(testTdf113877_default_style);
     CPPUNIT_TEST(testTdf113877_Standard_style);
+    CPPUNIT_TEST(testPlaceholderHTMLPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5166,6 +5168,51 @@ void SwUiWriterTest::testTdf113877_blank_bold_off()
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
+}
+
+void SwUiWriterTest::testPlaceholderHTMLPaste()
+{
+    {
+        SwDoc* const pDoc = createDoc();
+        SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        pWrtShell->Insert("AAA");
+        pWrtShell->SplitNode();
+        pWrtShell->Insert("BBB");
+        pWrtShell->SplitNode();
+        pWrtShell->Insert("CCC");
+
+        lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    }
+
+    SwDoc* const pDoc = createDoc("placeholder-bold.fodt");
+
+    // select placeholder field
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // Paste special as HTML
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
+
+    lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(int(4), getParagraphs());
+
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(1), 1, "Test "), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::BOLD,
+        getProperty<float>(getRun(getParagraph(1), 2, "AAA"), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(2), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(3), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(4), 1, " test"), "CharWeight"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

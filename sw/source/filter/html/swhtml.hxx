@@ -485,6 +485,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SfxViewFrame* m_pTempViewFrame;
 
+    std::unique_ptr<SfxItemSet> m_pTargetCharAttrs;
+
     void DeleteFormImpl();
 
     void DocumentDetected();
