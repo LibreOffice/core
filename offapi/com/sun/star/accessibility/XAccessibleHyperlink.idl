@@ -62,7 +62,7 @@ interface XAccessibleHyperlink :
     any getAccessibleActionAnchor ([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Returns an object that represents the link anchor, as appropriate
+    /** Returns an object that represents the link target, as appropriate
         for that link.
 
         <p>For an HTML link for example, this method would return the URL of
