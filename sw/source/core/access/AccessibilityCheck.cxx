@@ -774,7 +774,7 @@ public:
                 }
             }
         }
-        else if (pTextNode->HasSwAttrSet())
+        if (pTextNode->HasSwAttrSet())
         {
             // Paragraph doesn't have hints but the entire paragraph might have char attributes
             auto& aSwAttrSet = pTextNode->GetSwAttrSet();
