@@ -2800,9 +2800,9 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     rTextRect=tools::Rectangle(aTextPos,aTextSiz);
 }
 
-void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
+void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight)
 {
-    SdrTextObj::NbcSetOutlinerParaObject( std::move(pTextObject) );
+    SdrTextObj::NbcSetOutlinerParaObject( std::move(pTextObject), bAdjustTextFrameWidthAndHeight );
     SetBoundRectDirty();
     SetBoundAndSnapRectsDirty(true);
     InvalidateRenderGeometry();

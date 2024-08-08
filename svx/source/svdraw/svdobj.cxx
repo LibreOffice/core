@@ -1853,7 +1853,7 @@ void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObj
     }
 }
 
-void SdrObject::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> /*pTextObject*/)
+void SdrObject::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> /*pTextObject*/, bool /*bAdjustTextFrameWidthAndHeight = true*/)
 {
 }
 

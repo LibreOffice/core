@@ -2166,6 +2166,31 @@ Reference< XShape > const & Shape::createAndInsert(
             rFilterBase.getMediaDescriptor()[utl::MediaDescriptor::PROP_DOCUMENTSERVICE] >>= sDocumentService;
             if (sDocumentService != u"com.sun.star.text.TextDocument")
                 mpTextBody->getTextProperties().readjustTextDistances(mxShape);
+
+            // tdf#156857: ooxml files can have shape size with spAutoFit=true and the first priority of
+            // shape size is the fix size even if TextAutoGrowHeight is true.
+            bool bAutoHeight = false;
+            Reference< XPropertySetInfo > xSetInfo(xSet->getPropertySetInfo());
+            const OUString& rPropName = PropertyMap::getPropertyName(PROP_TextAutoGrowHeight);
+            if (xSetInfo.is() && xSetInfo->hasPropertyByName(rPropName))
+            {
+                uno::Any aTextAutoGrowHeight = xSet->getPropertyValue(u"TextAutoGrowHeight"_ustr);
+                aTextAutoGrowHeight >>= bAutoHeight;
+            }
+
+            SdrObject* pShape = SdrObject::getSdrObjectFromXShape(mxShape);
+            if (pShape && bAutoHeight && bIsCustomShape)
+            {
+                tools::Rectangle aOrigSize(aShapeRectHmm.X, aShapeRectHmm.Y,
+                    aShapeRectHmm.X + aShapeRectHmm.Width, aShapeRectHmm.Y + aShapeRectHmm.Height);
+                tools::Rectangle aAdaptSize = pShape->GetLogicRect();
+                // a little tolerance same as in \svx\source\svdraw\svdoashp.cxx:AdjustTextFrameWidthAndHeight
+                if (std::abs(aOrigSize.GetHeight() - aAdaptSize.GetHeight()) > 1)
+                {
+                    aAdaptSize.setHeight(aOrigSize.GetHeight());
+                    pShape->NbcSetLogicRect(aAdaptSize, false);
+                }
+            }
         }
     }
     return mxShape;

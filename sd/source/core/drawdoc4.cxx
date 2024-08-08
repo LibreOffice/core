@@ -896,7 +896,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
                     // taking text from the outliner
                     // use non-broadcasting version to avoid O(n^2)
-                    pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
+                    pObj->NbcSetOutlinerParaObject( std::move(pOPO), false );
                 }
             }
         }

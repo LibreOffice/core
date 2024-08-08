@@ -633,7 +633,7 @@ public:
     // keep text in outliner's format
     // SetOutlinerParaObject: transfer ownership of *pTextObject!
     void SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
-    virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
+    virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight = true);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual void NbcReformatText();
 

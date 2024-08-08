@@ -1321,9 +1321,9 @@ OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
         return nullptr;
 }
 
-void SdrTextObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
+void SdrTextObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight)
 {
-    NbcSetOutlinerParaObjectForText( std::move(pTextObject), getActiveText() );
+    NbcSetOutlinerParaObjectForText( std::move(pTextObject), getActiveText(), bAdjustTextFrameWidthAndHeight );
 }
 
 namespace

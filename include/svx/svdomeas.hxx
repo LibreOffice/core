@@ -138,7 +138,7 @@ public:
     SAL_DLLPRIVATE virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
     SAL_DLLPRIVATE virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
     SAL_DLLPRIVATE virtual EEAnchorMode GetOutlinerViewAnchorMode() const override;
-    SAL_DLLPRIVATE virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject) override;
+    SAL_DLLPRIVATE virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight = true) override;
     SAL_DLLPRIVATE virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 
     SAL_DLLPRIVATE virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,

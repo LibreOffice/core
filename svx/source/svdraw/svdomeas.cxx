@@ -1279,9 +1279,9 @@ OutlinerParaObject* SdrMeasureObj::GetOutlinerParaObject() const
     return SdrTextObj::GetOutlinerParaObject();
 }
 
-void SdrMeasureObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
+void SdrMeasureObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight)
 {
-    SdrTextObj::NbcSetOutlinerParaObject(std::move(pTextObject));
+    SdrTextObj::NbcSetOutlinerParaObject(std::move(pTextObject), bAdjustTextFrameWidthAndHeight);
     if(SdrTextObj::GetOutlinerParaObject())
         SetTextDirty(); // recalculate text
 }

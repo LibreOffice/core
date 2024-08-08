@@ -1869,7 +1869,7 @@ OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
 }
 
 
-void SdrTableObj::NbcSetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject)
+void SdrTableObj::NbcSetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight )
 {
     CellRef xCell( getActiveCell() );
     if( !xCell.is() )
@@ -1885,7 +1885,8 @@ void SdrTableObj::NbcSetOutlinerParaObject( std::optional<OutlinerParaObject> pT
 
     xCell->SetOutlinerParaObject( std::move(pTextObject) );
     SetTextSizeDirty();
-    NbcAdjustTextFrameWidthAndHeight();
+    if (bAdjustTextFrameWidthAndHeight)
+        NbcAdjustTextFrameWidthAndHeight();
 }
 
 

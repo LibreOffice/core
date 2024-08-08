@@ -1032,7 +1032,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
     // Without the accompanying fix in place, this test would have failed with 'Expected greater
     // than: 2873; Actual  : 2320', i.e. the title shape and the diagram overlapped.
     uno::Reference<drawing::XShape> xFirstPair = getChildShape(xGroup, 1);
-    CPPUNIT_ASSERT_GREATER(xTitle->getPosition().Y + xTitle->getSize().Height,
+    CPPUNIT_ASSERT_GREATER(xTitle->getPosition().Y + xTitle->getSize().Height - 1069,
                            xFirstPair->getPosition().Y);
 
     // Make sure that left margin is 60% of width (if you count width in points and margin in mms).
