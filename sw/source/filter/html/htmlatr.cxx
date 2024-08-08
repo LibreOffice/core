@@ -1489,8 +1489,8 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
         }
 
         std::sort(items.begin(), items.end(), SortEnds(m_aStartLst));
-
-        for (HTMLStartEndPos* pTest : items)
+        // Iterate over a temporary copy of items, because InsertItem_ may modify the vector
+        for (HTMLStartEndPos* pTest : std::vector(items))
         {
             if( pTest->GetStart() < nStart )
             {
