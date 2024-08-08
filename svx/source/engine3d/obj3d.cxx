@@ -343,7 +343,7 @@ const basegfx::B3DHomMatrix& E3dObject::GetFullTransform() const
             aNewFullTransformation = pParent->GetFullTransform() * aNewFullTransformation;
         }
 
-        const_cast< E3dObject* >(this)->maFullTransform = aNewFullTransformation;
+        const_cast< E3dObject* >(this)->maFullTransform = std::move(aNewFullTransformation);
         const_cast< E3dObject* >(this)->mbTfHasChanged = false;
     }
 

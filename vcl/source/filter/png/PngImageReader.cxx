@@ -870,7 +870,7 @@ bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFla
     if (reader(rInputStream, aGraphic, nImportFlags, pAccess, pAlphaAccess))
     {
         if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
-            rGraphic = aGraphic;
+            rGraphic = std::move(aGraphic);
         return true;
     }
     return false;

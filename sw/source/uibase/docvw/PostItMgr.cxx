@@ -1738,7 +1738,7 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, *xDlgAttr, SwCharDlgMode::Ann));
     pDlg->StartExecuteAsync(
-        [this, pDlg, xDlgAttr, pOrigActiveWin] (sal_Int32 nResult)->void
+        [this, pDlg, xDlgAttr=std::move(xDlgAttr), pOrigActiveWin] (sal_Int32 nResult)->void
         {
             if (nResult == RET_OK)
             {

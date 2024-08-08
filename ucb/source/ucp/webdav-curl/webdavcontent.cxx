@@ -2106,7 +2106,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         m_aEscapedTitle     = EncodeSegment(aNewTitle);
 
-        aChanges.getArray()[ nChanged ] = aEvent;
+        aChanges.getArray()[ nChanged ] = std::move(aEvent);
         nChanged++;
     }
 

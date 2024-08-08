@@ -3138,7 +3138,8 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
             pFilter = SfxFilterMatcher( GetFactory().GetFactoryName() ).GetFilter4FilterName( OUString() );
 
         SfxMedium *pMed = new SfxMedium(
-            pSalvageItem->GetValue(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );
+            pSalvageItem->GetValue(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC,
+            std::move(pFilter) );
 
         const SfxStringItem* pPasswordItem = GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
         if ( pPasswordItem )

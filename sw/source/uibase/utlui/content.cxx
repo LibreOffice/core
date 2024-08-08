@@ -2585,7 +2585,7 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
                     }
                 }
             }
-            m_aRegionNodeExpandMap = aCurrentRegionNodeExpandMap;
+            m_aRegionNodeExpandMap = std::move(aCurrentRegionNodeExpandMap);
             return;
         }
         else // content entry

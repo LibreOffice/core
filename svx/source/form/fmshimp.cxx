@@ -1960,7 +1960,7 @@ bool FmXFormShell::setCurrentSelection_Lock( InterfaceBag&& _rSelection )
         }
     }
 
-    m_aCurrentSelection = _rSelection;
+    m_aCurrentSelection = std::move(_rSelection);
 
     // determine the form which all the selected objects belong to, if any
     Reference< XForm > xNewCurrentForm;

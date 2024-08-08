@@ -5845,14 +5845,14 @@ static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEn
     }
 }
 
-static std::vector<std::unique_ptr<SvxFieldItem>> lcl_GetEditEngineFields(std::shared_ptr<ScFieldEditEngine> pEditEngine)
+static std::vector<std::unique_ptr<SvxFieldItem>> lcl_GetEditEngineFields(const ScFieldEditEngine& rEditEngine)
 {
     std::vector<std::unique_ptr<SvxFieldItem>> vFieldVect;
 
-    sal_Int32 nPara = pEditEngine->GetParagraphCount();
+    sal_Int32 nPara = rEditEngine.GetParagraphCount();
     for (sal_Int32 nCurrPara = 0; nCurrPara < nPara; ++nCurrPara)
     {
-        for (EFieldInfo& rFieldInfo : pEditEngine->GetFieldInfo(nCurrPara))
+        for (EFieldInfo& rFieldInfo : rEditEngine.GetFieldInfo(nCurrPara))
         {
             vFieldVect.push_back(std::move(rFieldInfo.pFieldItem));
         }
@@ -5885,7 +5885,7 @@ std::vector<UrlData> ScGridWindow::GetEditUrls(const ScAddress& rSelectedCell)
 
     lcl_SetEngineTextKeepingDefaults(pEngine, rDoc, aCell, sURL);
 
-    std::vector<std::unique_ptr<SvxFieldItem>> vFieldItems = lcl_GetEditEngineFields(pEngine);
+    std::vector<std::unique_ptr<SvxFieldItem>> vFieldItems = lcl_GetEditEngineFields(*pEngine);
     for (auto& pFieldItem : vFieldItems)
     {
         UrlData aData;

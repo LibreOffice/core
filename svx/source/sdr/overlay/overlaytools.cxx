@@ -363,7 +363,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                 const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor());
                 const attribute::LineAttribute aLineAttribute(aHighContrastLineColor, getDiscreteUnit() * getDiscreteGrow());
 
-                aRetval = new PolygonStrokePrimitive2D(aInnerPolygon, aLineAttribute);
+                aRetval = new PolygonStrokePrimitive2D(std::move(aInnerPolygon), aLineAttribute);
             }
 
             return aRetval;

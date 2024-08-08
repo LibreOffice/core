@@ -1189,7 +1189,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 std::vector<OUString> lList = comphelper::sequenceToContainer<std::vector<OUString>>(lTmpList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
-                aChangePath.lUserPaths = lList;
+                aChangePath.lUserPaths = std::move(lList);
              }
              break;
 

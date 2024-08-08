@@ -114,7 +114,7 @@ public:
     void ActivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void DeactivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void RemoveOverridingMainShell();
-    void SetOverridingShell(std::shared_ptr<ViewShell> pViewShell);
+    void SetOverridingShell(const std::shared_ptr<ViewShell>& pViewShell);
     std::shared_ptr<ViewShell> GetOverridingShell();
     void MoveToTop (const SfxShell& rParentShell);
     SfxShell* GetShell (ShellId nId) const;
@@ -604,7 +604,7 @@ void ViewShellManager::Implementation::RemoveOverridingMainShell()
     mpOverridingShell.reset();
 }
 
-void ViewShellManager::Implementation::SetOverridingShell(std::shared_ptr<ViewShell> pViewShell)
+void ViewShellManager::Implementation::SetOverridingShell(const std::shared_ptr<ViewShell>& pViewShell)
 {
     mpOverridingShell = pViewShell;
 }

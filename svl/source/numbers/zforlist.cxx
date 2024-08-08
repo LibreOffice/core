@@ -3707,7 +3707,7 @@ OUString SvNFEngine::GenerateFormat(SvNFLanguageData& rCurrentLanguage,
             {
                 sTmpStr.append("-" + sString);
             }
-            sString = sTmpStr;
+            sString = std::move(sTmpStr);
         }
     }
     sString.insert( 0, sPosNatNumModifier );

@@ -201,7 +201,7 @@ void ImplLayoutRuns::PrepareFallbackRuns(ImplLayoutRuns* paRuns, ImplLayoutRuns*
         }
     }
 
-    *paRuns = aNewRuns;
+    *paRuns = std::move(aNewRuns);
     paRuns->ResetPos();
 
     paFallbackRuns->Clear();

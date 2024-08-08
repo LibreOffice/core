@@ -94,14 +94,14 @@ void ChartController::executeDispatch_InsertAxes()
 
     try
     {
-        auto aDialogInput = std::make_shared<InsertAxisOrGridDialogData>();
+        auto xDialogInput = std::make_shared<InsertAxisOrGridDialogData>();
         rtl::Reference< Diagram > xDiagram = getFirstDiagram();
-        AxisHelper::getAxisOrGridExistence( aDialogInput->aExistenceList, xDiagram );
-        AxisHelper::getAxisOrGridPossibilities( aDialogInput->aPossibilityList, xDiagram );
+        AxisHelper::getAxisOrGridExistence( xDialogInput->aExistenceList, xDiagram );
+        AxisHelper::getAxisOrGridPossibilities( xDialogInput->aPossibilityList, xDiagram );
 
         SolarMutexGuard aGuard;
-        auto aDlg = std::make_shared<SchAxisDlg>(GetChartFrame(), *aDialogInput);
-        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput=std::move(aDialogInput),
+        auto aDlg = std::make_shared<SchAxisDlg>(GetChartFrame(), *xDialogInput);
+        weld::DialogController::runAsync(aDlg, [this, aDlg, xDialogInput=std::move(xDialogInput),
                                                 xUndoGuard=std::move(xUndoGuard)](int nResult) {
             if ( nResult == RET_OK )
             {
@@ -112,7 +112,7 @@ void ChartController::executeDispatch_InsertAxes()
                 aDlg->getResult(aDialogOutput);
                 ReferenceSizeProvider aRefSizeProvider(impl_createReferenceSizeProvider());
                 bool bChanged = AxisHelper::changeVisibilityOfAxes( getFirstDiagram()
-                    , aDialogInput->aExistenceList, aDialogOutput.aExistenceList, m_xCC
+                    , xDialogInput->aExistenceList, aDialogOutput.aExistenceList, m_xCC
                     , &aRefSizeProvider );
                 if( bChanged )
                     xUndoGuard->commit();
@@ -281,19 +281,20 @@ void ChartController::executeDispatch_InsertTitles()
 
     try
     {
-        auto aDialogInput = std::make_shared<TitleDialogData>();
-        aDialogInput->readFromModel( getChartModel() );
+        auto xDialogInput = std::make_shared<TitleDialogData>();
+        xDialogInput->readFromModel( getChartModel() );
 
         SolarMutexGuard aGuard;
-        auto aDlg = std::make_shared<SchTitleDlg>(GetChartFrame(), *aDialogInput);
-        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, xUndoGuard=std::move(xUndoGuard)](int nResult){
+        auto aDlg = std::make_shared<SchTitleDlg>(GetChartFrame(), *xDialogInput);
+        weld::DialogController::runAsync(aDlg, [this, aDlg, xDialogInput=std::move(xDialogInput),
+                                                xUndoGuard=std::move(xUndoGuard)](int nResult){
             if ( nResult == RET_OK )
             {
                 // lock controllers till end of block
                 ControllerLockGuardUNO aCLGuard( getChartModel() );
                 TitleDialogData aDialogOutput( impl_createReferenceSizeProvider() );
                 aDlg->getResult( aDialogOutput );
-                bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, aDialogInput.get() );
+                bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, xDialogInput.get() );
                 if( bChanged )
                     xUndoGuard->commit();
             }
@@ -590,10 +591,10 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         try
         {
-            auto aItemConverter = std::make_shared<wrapper::AllSeriesStatisticsConverter>(
+            auto xItemConverter = std::make_shared<wrapper::AllSeriesStatisticsConverter>(
                 getChartModel(), m_pDrawModelWrapper->GetItemPool() );
-            SfxItemSet aItemSet = aItemConverter->CreateEmptyItemSet();
-            aItemConverter->FillItemSet( aItemSet );
+            SfxItemSet aItemSet = xItemConverter->CreateEmptyItemSet();
+            xItemConverter->FillItemSet( aItemSet );
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
@@ -605,15 +606,16 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, u"" ) );
 
-            weld::DialogController::runAsync(aDlg, [this, aDlg, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
+            weld::DialogController::runAsync(aDlg, [this, aDlg, xItemConverter=std::move(xItemConverter),
+                                                    xUndoGuard=std::move(xUndoGuard)](int nResult) {
                 if ( nResult == RET_OK )
                 {
-                    SfxItemSet aOutItemSet = aItemConverter->CreateEmptyItemSet();
+                    SfxItemSet aOutItemSet = xItemConverter->CreateEmptyItemSet();
                     aDlg->FillItemSet( aOutItemSet );
 
                     // lock controllers till end of block
                     ControllerLockGuardUNO aCLGuard( getChartModel() );
-                    bool bChanged = aItemConverter->ApplyItemSet( aOutItemSet );//model should be changed now
+                    bool bChanged = xItemConverter->ApplyItemSet( aOutItemSet );//model should be changed now
                     if( bChanged )
                         xUndoGuard->commit();
                 }
