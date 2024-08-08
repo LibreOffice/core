@@ -2828,7 +2828,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
     SwHyperlinkIter_Impl aHIter(*pTextFrame);
     SwTextNode const* pNode(nullptr);
-    SwTextAttr* pHt = const_cast<SwTextAttr*>(aHIter.next(&pNode));
+    const SwTextAttr* pHt = aHIter.next(&pNode);
     for (sal_Int32 nTIndex = 0; pHt && nTIndex <= nLinkIndex; ++nTIndex)
     {
         if( nTIndex == nLinkIndex )
@@ -2864,7 +2864,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         }
 
         // iterate next hyperlink
-        pHt = const_cast<SwTextAttr*>(aHIter.next(&pNode));
+        pHt = aHIter.next(&pNode);
     }
     if( !xRet.is() )
         throw lang::IndexOutOfBoundsException();
