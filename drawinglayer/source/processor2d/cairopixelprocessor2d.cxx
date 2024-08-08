@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -2786,6 +2787,80 @@ void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
                          rPolyPolygonRGBAPrimitive2D.getTransparency());
 }
 
+void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
+    const primitive2d::PolyPolygonAlphaGradientPrimitive2D& rPolyPolygonAlphaGradientPrimitive2D)
+{
+    const basegfx::B2DPolyPolygon& rPolyPolygon(
+        rPolyPolygonAlphaGradientPrimitive2D.getB2DPolyPolygon());
+    if (0 == rPolyPolygon.count())
+    {
+        // no geometry, done
+        return;
+    }
+
+    const basegfx::BColor& rColor(rPolyPolygonAlphaGradientPrimitive2D.getBColor());
+    const attribute::FillGradientAttribute& rAlphaGradient(
+        rPolyPolygonAlphaGradientPrimitive2D.getAlphaGradient());
+    if (rAlphaGradient.isDefault())
+    {
+        // default is a single ColorStop at 0.0 with black (0, 0, 0). The
+        // luminance is then 0.0, too -> not transparent at all
+        paintPolyPoylgonRGBA(rPolyPolygon, rColor);
+        return;
+    }
+
+    basegfx::BColor aSingleColor;
+    const basegfx::BColorStops& rAlphaStops(rAlphaGradient.getColorStops());
+    if (rAlphaStops.isSingleColor(aSingleColor))
+    {
+        // draw with alpha directly
+        paintPolyPoylgonRGBA(rPolyPolygon, rColor, aSingleColor.luminance());
+        return;
+    }
+
+    const css::awt::GradientStyle aStyle(rAlphaGradient.getStyle());
+    if (css::awt::GradientStyle_SQUARE == aStyle || css::awt::GradientStyle_RECT == aStyle)
+    {
+        // direct paint cannot be used for thse styles since they get 'stitched'
+        // by multiple parts, so *need* singhle alpha for multiple pieces, go
+        // with decompose/recursion
+        process(rPolyPolygonAlphaGradientPrimitive2D);
+        return;
+    }
+
+    // render as FillGradientPrimitive2D. The idea is to create BColorStops
+    // with the same number of entries, but all the same color, using the
+    // polygon's traget fill color, so we can directly paint gradients as
+    // RGBA in Cairo
+    basegfx::BColorStops aColorStops;
+
+    // create ColorStops at same stops but single color
+    aColorStops.reserve(rAlphaStops.size());
+    for (const auto& entry : rAlphaStops)
+        aColorStops.emplace_back(entry.getStopOffset(), rColor);
+
+    // create FillGradient using that single-color ColorStops
+    const attribute::FillGradientAttribute aFillGradient(
+        rAlphaGradient.getStyle(), rAlphaGradient.getBorder(), rAlphaGradient.getOffsetX(),
+        rAlphaGradient.getOffsetY(), rAlphaGradient.getAngle(), aColorStops,
+        rAlphaGradient.getSteps());
+
+    // create temporary FillGradientPrimitive2D, but do not forget
+    // to embed to MaskPrimitive2D to get the PolyPolygon form
+    const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
+    const primitive2d::Primitive2DContainer aContainerMaskedFillGradient{
+        rtl::Reference<primitive2d::MaskPrimitive2D>(new primitive2d::MaskPrimitive2D(
+            rPolyPolygon,
+            primitive2d::Primitive2DContainer{ rtl::Reference<primitive2d::FillGradientPrimitive2D>(
+                new primitive2d::FillGradientPrimitive2D(aRange, // OutputRange
+                                                         aRange, // DefinitionRange
+                                                         aFillGradient, &rAlphaGradient)) }))
+    };
+
+    // render this
+    process(aContainerMaskedFillGradient);
+}
+
 void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
     const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D)
 {
@@ -3068,6 +3143,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processBitmapAlphaPrimitive2D(
                 static_cast<const primitive2d::BitmapAlphaPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_POLYPOLYGONALPHAGRADIENTPRIMITIVE2D:
+        {
+            processPolyPolygonAlphaGradientPrimitive2D(
+                static_cast<const primitive2d::PolyPolygonAlphaGradientPrimitive2D&>(rCandidate));
             break;
         }
         case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:

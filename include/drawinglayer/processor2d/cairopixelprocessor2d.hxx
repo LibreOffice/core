@@ -38,6 +38,7 @@ class FillGradientPrimitive2D;
 class PolyPolygonRGBAGradientPrimitive2D;
 class FillGraphicPrimitive2D;
 class PolyPolygonRGBAPrimitive2D;
+class PolyPolygonAlphaGradientPrimitive2D;
 class BitmapAlphaPrimitive2D;
 class TextSimplePortionPrimitive2D;
 }
@@ -100,6 +101,9 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
     void processPolyPolygonRGBAPrimitive2D(
         const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D);
+    void processPolyPolygonAlphaGradientPrimitive2D(
+        const primitive2d::PolyPolygonAlphaGradientPrimitive2D&
+            rPolyPolygonAlphaGradientPrimitive2D);
     void paintBitmapAlpha(const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform,
                           double fTransparency = 0.0);
     void processBitmapAlphaPrimitive2D(

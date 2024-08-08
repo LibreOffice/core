@@ -239,6 +239,8 @@ OUString idToString(sal_uInt32 nId)
             return u"POLYPOLYGONRGBAPRIMITIVE2D"_ustr;
         case PRIMITIVE2D_ID_BITMAPALPHAPRIMITIVE2D:
             return u"BITMAPALPHAPRIMITIVE2D"_ustr;
+        case PRIMITIVE2D_ID_POLYPOLYGONALPHAGRADIENTPRIMITIVE2D:
+            return u"POLYPOLYGONALPHAGRADIENTPRIMITIVE2D"_ustr;
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

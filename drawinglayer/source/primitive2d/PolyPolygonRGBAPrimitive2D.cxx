@@ -58,10 +58,10 @@ Primitive2DReference PolyPolygonRGBAPrimitive2D::create2DDecomposition(
                                                                     getTransparency()) };
 }
 
-PolyPolygonRGBAPrimitive2D::PolyPolygonRGBAPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+PolyPolygonRGBAPrimitive2D::PolyPolygonRGBAPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                        const basegfx::BColor& rBColor,
                                                        double fTransparency)
-    : maPolyPolygon(std::move(aPolyPolygon))
+    : maPolyPolygon(rPolyPolygon)
     , maBColor(rBColor)
     , mfTransparency(std::max(0.0, std::min(1.0, fTransparency)))
 {
@@ -85,7 +85,7 @@ bool PolyPolygonRGBAPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) c
 basegfx::B2DRange PolyPolygonRGBAPrimitive2D::getB2DRange(
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    // return range
+    // return range - without decompose
     return basegfx::utils::getRange(getB2DPolyPolygon());
 }
 

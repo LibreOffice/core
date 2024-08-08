@@ -24,25 +24,26 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/numeric/ftools.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+// #include <basegfx/numeric/ftools.hxx>
 
 namespace drawinglayer::primitive2d
 {
-/** PolyPolygonRGBAPrimitive2D class
+/** PolyPolygonAlphaGradientPrimitive2D class
 
     This is a simple extension to PolyPolygonColorPrimitive2D
-    that allows to directly define an alpha value for the PolyPolygon
+    that allows to directly define an alpha gradient for the PolyPolygon
     to be represented, additionally to the color.
 
     It will be decomposed simply to PolyPolygonColorPrimitive2D,
-    maybe embedded to a UnifiedTransparencePrimitive2D if
+    maybe embedded to a FillGradientPrimitive2D if
     needed, so no changes have to be done to any primitive processor.
 
     OTOH e.g. SDPR implementations *may* use this directly if they
-    are capable to draw a filled PolyPolygon with transparency
+    are capable to draw a filled PolyPolygon with transparency gradient
     directly (e.g. CairoPixelProcessor2D)
  */
-class DRAWINGLAYER_DLLPUBLIC PolyPolygonRGBAPrimitive2D final
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonAlphaGradientPrimitive2D final
     : public BufferedDecompositionPrimitive2D
 {
 private:
@@ -52,8 +53,8 @@ private:
     /// the polygon fill color
     basegfx::BColor maBColor;
 
-    /// the transparency in range [0.0 .. 1.0]
-    double mfTransparency;
+    /// alphaGradient definition
+    attribute::FillGradientAttribute maAlphaGradient;
 
     /// create local decomposition
     virtual Primitive2DReference
@@ -61,14 +62,14 @@ private:
 
 public:
     /// constructor
-    PolyPolygonRGBAPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
-                               const basegfx::BColor& rBColor, double fTransparency = 0.0);
+    PolyPolygonAlphaGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                        const basegfx::BColor& rBColor,
+                                        const attribute::FillGradientAttribute& rAlphaGradient);
 
     /// data read access
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
     const basegfx::BColor& getBColor() const { return maBColor; }
-    double getTransparency() const { return mfTransparency; }
-    bool hasTransparency() const { return !basegfx::fTools::equalZero(mfTransparency); }
+    const attribute::FillGradientAttribute& getAlphaGradient() const { return maAlphaGradient; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

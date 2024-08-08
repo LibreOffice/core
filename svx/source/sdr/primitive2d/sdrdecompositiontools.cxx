@@ -29,6 +29,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -410,11 +411,11 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 // gets priority over gradient transparency (and none). Thus here only one
                 // option is used. Note that the implementation of FillGradientPrimitive2D
                 // and PolyPolygonGradientPrimitive2D do support both alphas being used
-                const bool bHasAlphaGradient(!bHasTransparency
+                const bool bHasCompatibleAlphaGradient(!bHasTransparency
                     && !rAlphaGradient.isDefault()
                     && rFillGradient.sameDefinitionThanAlpha(rAlphaGradient));
 
-                if(bHasTransparency || bHasAlphaGradient)
+                if(bHasTransparency || bHasCompatibleAlphaGradient)
                 {
                     // SDPR: check early if we have a gradient and an alpha
                     // gradient that 'fits' in its geometric definition
@@ -424,7 +425,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                         rPolyPolygon,
                         rDefinitionRange,
                         rFillGradient,
-                        bHasAlphaGradient ? &rAlphaGradient : nullptr,
+                        bHasCompatibleAlphaGradient ? &rAlphaGradient : nullptr,
                         bHasTransparency ? rFill.getTransparence() : 0.0);
                 }
 
@@ -476,7 +477,19 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                         rFill.getTransparence());
                 }
 
-                pNewFillPrimitive = new PolyPolygonColorPrimitive2D(
+                // SDPR: check early if we have alpha gradient and add directly
+                // This may be useful for some SDPRs like Cairo: It can render RGBA
+                // gradients quick and direct, so it can use polygon color as RGB
+                // (no real gradient steps) combined with the existing alpha steps
+                if (!rAlphaGradient.isDefault())
+                {
+                    return new PolyPolygonAlphaGradientPrimitive2D(
+                        rPolyPolygon,
+                        rFill.getColor(),
+                        rAlphaGradient);
+                }
+
+                return new PolyPolygonColorPrimitive2D(
                     rPolyPolygon,
                     rFill.getColor());
             }
@@ -487,7 +500,8 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 Primitive2DContainer aContent { pNewFillPrimitive };
                 return new UnifiedTransparencePrimitive2D(std::move(aContent), rFill.getTransparence());
             }
-            else if(!rAlphaGradient.isDefault())
+
+            if(!rAlphaGradient.isDefault())
             {
                 // create sequence with created fill primitive
                 Primitive2DContainer aContent { pNewFillPrimitive };
@@ -504,11 +518,9 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 // create TransparencePrimitive2D using alpha and content
                 return new TransparencePrimitive2D(std::move(aContent), std::move(aAlpha));
             }
-            else
-            {
-                // add to decomposition
-                return pNewFillPrimitive;
-            }
+
+            // add to decomposition
+            return pNewFillPrimitive;
         }
 
         Primitive2DReference createPolygonLinePrimitive(

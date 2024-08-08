@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -1225,6 +1226,18 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("transparence",
                                   std::lround(100 * rPolyPolygonRGBAPrimitive2D.getTransparency()));
                 writePolyPolygon(rWriter, rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon());
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_POLYPOLYGONALPHAGRADIENTPRIMITIVE2D:
+            {
+                const PolyPolygonAlphaGradientPrimitive2D& rPolyPolygonAlphaGradientPrimitive2D
+                    = dynamic_cast<const PolyPolygonAlphaGradientPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("polypolygonalphagradient");
+                rWriter.attribute("color", convertColorToString(
+                                               rPolyPolygonAlphaGradientPrimitive2D.getBColor()));
+                writePolyPolygon(rWriter, rPolyPolygonAlphaGradientPrimitive2D.getB2DPolyPolygon());
                 rWriter.endElement();
                 break;
             }
