@@ -474,8 +474,11 @@ namespace cppcanvas::internal
 
             // rewind metafile to previous position (this method must
             // not change the current metaaction)
-            while( nPos-- )
+            while (nPos)
+            {
+                --nPos;
                 rMtf.WindPrev();
+            }
 
             if( !pCurrAct )
             {
