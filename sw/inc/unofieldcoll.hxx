@@ -34,7 +34,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::lang::XServiceInfo
 > SwXTextFieldMasters_Base;
 
-class SwXTextFieldMasters final
+class SAL_DLLPUBLIC_RTTI SwXTextFieldMasters final
     : public SwXTextFieldMasters_Base
     , public SwUnoCollection
 {
