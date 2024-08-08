@@ -592,6 +592,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         if ( HasHints() )
         {
             MoveTextAttr_To_AttrSet();
+            pNode->MoveTextAttr_To_AttrSet();
         }
         // in case there are frames, the RegisterToNode has set the merge flag
         pNode->MakeFramesForAdjacentContentNode(*this);
@@ -636,6 +637,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
                 }
             }
             MoveTextAttr_To_AttrSet();
+            pNode->MoveTextAttr_To_AttrSet();
         }
 
         if( pList )
@@ -742,30 +744,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     {
         // We just created an empty next node: avoid unwanted superscript in the new node if it's
         // there.
-        for (size_t i = 0; i < m_pSwpHints->Count(); ++i)
-        {
-            SwTextAttr* pHt = m_pSwpHints->Get(i);
-            if (pHt->Which() != RES_TXTATR_AUTOFMT)
-            {
-                continue;
-            }
-
-            const sal_Int32* pEnd = pHt->GetEnd();
-            if (!pEnd || pHt->GetStart() != *pEnd)
-            {
-                continue;
-            }
-
-            const std::shared_ptr<SfxItemSet>& pSet = pHt->GetAutoFormat().GetStyleHandle();
-            if (!pSet || pSet->Count() != 1 || !pSet->HasItem(RES_CHRATR_ESCAPEMENT))
-            {
-                continue;
-            }
-
-            m_pSwpHints->DeleteAtPos(i);
-            SwTextAttr::Destroy(pHt);
-            --i;
-        }
+        ResetAttr(RES_CHRATR_ESCAPEMENT);
     }
 
 #ifndef NDEBUG
@@ -848,12 +827,23 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
         if (*pHtEndIdx < m_Text.getLength() || pHt->IsCharFormatAttr())
             break;
 
-        if( !pHt->IsDontMoveAttr() &&
-            SetAttr( pHt->GetAttr() ) )
+        if (!pHt->IsDontMoveAttr())
         {
-            m_pSwpHints->DeleteAtPos(i);
-            DestroyAttr( pHt );
-            --i;
+            bool isInserted(false);
+            if (pHt->Which() == RES_TXTATR_AUTOFMT)
+            {
+                isInserted = SetAttr(*pHt->GetAutoFormat().GetStyleHandle());
+            }
+            else
+            {
+                isInserted = SetAttr(pHt->GetAttr());
+            }
+            if (isInserted)
+            {
+                m_pSwpHints->DeleteAtPos(i);
+                DestroyAttr( pHt );
+                --i;
+            }
         }
     }
 
