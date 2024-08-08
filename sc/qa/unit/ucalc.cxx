@@ -918,12 +918,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
             { SUBTOTAL_FUNC_SELECTION_COUNT, 14.0 }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (const auto& rCheck : aChecks)
         {
             double fRes = 0.0;
-            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, ScAddress(), aMark, fRes);
+            bool bRes = m_pDoc->GetSelectionFunction(rCheck.meFunc, ScAddress(), aMark, fRes);
             CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+            CPPUNIT_ASSERT_EQUAL(rCheck.mfExpected, fRes);
         }
     }
 
@@ -946,12 +946,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
             { SUBTOTAL_FUNC_SELECTION_COUNT, 10.0 }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (const auto& rCheck : aChecks)
         {
             double fRes = 0.0;
-            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, ScAddress(), aMark, fRes);
+            bool bRes = m_pDoc->GetSelectionFunction(rCheck.meFunc, ScAddress(), aMark, fRes);
             CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+            CPPUNIT_ASSERT_EQUAL(rCheck.mfExpected, fRes);
         }
     }
 
@@ -973,12 +973,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
             { SUBTOTAL_FUNC_SELECTION_COUNT, 1.0 }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (const auto& rCheck : aChecks)
         {
             double fRes = 0.0;
-            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, aPos, aEmpty, fRes);
+            bool bRes = m_pDoc->GetSelectionFunction(rCheck.meFunc, aPos, aEmpty, fRes);
             CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+            CPPUNIT_ASSERT_EQUAL(rCheck.mfExpected, fRes);
         }
     }
 
@@ -992,12 +992,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
             { SUBTOTAL_FUNC_SELECTION_COUNT, 1.0 }
         };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        for (const auto& rCheck : aChecks)
         {
             double fRes = 0.0;
-            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, aPos, aEmpty, fRes);
+            bool bRes = m_pDoc->GetSelectionFunction(rCheck.meFunc, aPos, aEmpty, fRes);
             CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+            CPPUNIT_ASSERT_EQUAL(rCheck.mfExpected, fRes);
         }
     }
 
@@ -1201,7 +1201,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, std::size(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test mixed.");
@@ -1224,7 +1224,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, std::size(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test hole.");
@@ -1257,7 +1257,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, std::size(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test holy.");
@@ -1291,7 +1291,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, std::size(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test at end.");
@@ -1313,7 +1313,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
         };
 
         bool bRes = checkHorizontalIterator(
-            *m_pDoc, aData, aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, aChecks, std::size(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test in middle.");
@@ -1339,7 +1339,7 @@ CPPUNIT_TEST_FIXTURE(Test, testValueIterator)
 
     {
         const double aChecks[] = { 1.0, 2.0, 3.0 };
-        size_t const nCheckLen = SAL_N_ELEMENTS(aChecks);
+        size_t const nCheckLen = std::size(aChecks);
         ScValueIterator aIter(aContext, ScRange(1,2,0,3,2,0));
         bool bHas = false;
         size_t nCheckPos = 0;
@@ -1376,7 +1376,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalAttrIterator)
 
     {
         const int aChecks[][3] = { {1, 3, 1}, {1, 2, 2}, {4, 4, 2}, {2, 3, 3}, {1, 4, 4} };
-        const size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
+        const size_t nCheckLen = std::size(aChecks);
 
         ScHorizontalAttrIterator aIter(*m_pDoc, 0, 0, 0, 5, 5);
         SCCOL nCol1, nCol2;
@@ -1950,7 +1950,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     m_pDoc->SetValue (0, 0, 0, 101);
 
     std::unique_ptr<ScRangeName> pNames(new ScRangeName);
-    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + SAL_N_ELEMENTS(aNames));
+    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + std::size(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
     m_pDoc->SetRangeName(std::move(pNames));
 
@@ -1958,12 +1958,12 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     CPPUNIT_ASSERT(pNewRanges);
 
     // Make sure the index lookup does the right thing.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (const auto& rName : aNames)
     {
-        const ScRangeData* p = pNewRanges->findByIndex(aNames[i].mnIndex);
+        const ScRangeData* p = pNewRanges->findByIndex(rName.mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed.", p);
         OUString aName = p->GetName();
-        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(aNames[i].mpName));
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(rName.mpName));
     }
 
     // Test usage in formula expression.
@@ -1977,12 +1977,12 @@ CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
     std::unique_ptr<ScRangeName> pCopiedRanges(new ScRangeName(*pNewRanges));
     m_pDoc->SetRangeName(std::move(pCopiedRanges));
     // Make sure the index lookup still works.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    for (const auto& rName : aNames)
     {
-        const ScRangeData* p = m_pDoc->GetRangeName()->findByIndex(aNames[i].mnIndex);
+        const ScRangeData* p = m_pDoc->GetRangeName()->findByIndex(rName.mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
         OUString aName = p->GetName();
-        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].mpName));
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(rName.mpName));
     }
 
     // Test using another-sheet-local name, scope Sheet1.
@@ -2025,7 +2025,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertNameList)
     };
 
     std::unique_ptr<ScRangeName> pNames(new ScRangeName);
-    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + SAL_N_ELEMENTS(aNames));
+    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + std::size(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
     m_pDoc->SetRangeName(std::move(pNames));
 
@@ -2033,15 +2033,16 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertNameList)
     ScAddress aPos(1,1,0);
     rDocFunc.InsertNameList(aPos, true);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i, aPos.IncRow())
+    for (auto const& rName : aNames)
     {
         OUString aName = m_pDoc->GetString(aPos);
-        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aNames[i].mpName), aName);
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rName.mpName), aName);
         ScAddress aExprPos = aPos;
         aExprPos.IncCol();
         OUString aExpr = m_pDoc->GetString(aExprPos);
-        OUString aExpected = "=" + OUString::createFromAscii(aNames[i].mpExpr);
+        OUString aExpected = "=" + OUString::createFromAscii(rName.mpExpr);
         CPPUNIT_ASSERT_EQUAL(aExpected, aExpr);
+        aPos.IncRow();
     }
 
     m_pDoc->DeleteTab(0);
@@ -2070,16 +2071,16 @@ CPPUNIT_TEST_FIXTURE(Test, testCSV)
         { "+,123",     English,  false, 0.0 },
         { "-,123",     English,  false, 0.0 }
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); i++) {
-        OUString aStr(aTests[i].pStr, strlen (aTests[i].pStr), RTL_TEXTENCODING_UTF8);
+    for (const auto& rTest : aTests) {
+        OUString aStr(rTest.pStr, strlen (rTest.pStr), RTL_TEXTENCODING_UTF8);
         double nValue = 0.0;
         bool bResult = ScStringUtil::parseSimpleNumber
-                (aStr, aTests[i].eSep == English ? '.' : ',',
-                 aTests[i].eSep == English ? ',' : '.',
+                (aStr, rTest.eSep == English ? '.' : ',',
+                 rTest.eSep == English ? ',' : '.',
                  0,
                  nValue);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric detection failure", aTests[i].bResult, bResult);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric value failure", aTests[i].nValue, nValue);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric detection failure", rTest.bResult, bResult);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric value failure", rTest.nValue, nValue);
     }
 }
 
@@ -3553,8 +3554,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAutofilter)
         {  "0",  "2",  "B" }
     };
 
-    SCCOL nCols = SAL_N_ELEMENTS(aData[0]);
-    SCROW nRows = SAL_N_ELEMENTS(aData);
+    SCCOL nCols = std::size(aData[0]);
+    SCROW nRows = std::size(aData);
 
     // Populate cells.
     for (SCROW i = 0; i < nRows; ++i)
@@ -4391,14 +4392,14 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaPosition)
 
     {
         SCROW aRows[] = { 0, 1, 3 };
-        bool bRes = checkFormulaPositions(*m_pDoc, aPos.Tab(), aPos.Col(), aRows, SAL_N_ELEMENTS(aRows));
+        bool bRes = checkFormulaPositions(*m_pDoc, aPos.Tab(), aPos.Col(), aRows, std::size(aRows));
         CPPUNIT_ASSERT(bRes);
     }
 
     m_pDoc->InsertRow(0,0,0,0,1,5); // Insert 5 rows at A2.
     {
         SCROW aRows[] = { 0, 6, 8 };
-        bool bRes = checkFormulaPositions(*m_pDoc, aPos.Tab(), aPos.Col(), aRows, SAL_N_ELEMENTS(aRows));
+        bool bRes = checkFormulaPositions(*m_pDoc, aPos.Tab(), aPos.Col(), aRows, std::size(aRows));
         CPPUNIT_ASSERT(bRes);
     }
 
@@ -5643,10 +5644,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
         // Full range.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
+        for (const auto& rRow : aRows)
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
-            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+            CPPUNIT_ASSERT_EQUAL(rRow, pIter->getPos());
+            pIter->next();
         }
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
     }
@@ -5657,10 +5659,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
         aStart.SetRow(6);
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aStart, 16));
         SCROW aRows[] = { 6, 10, 11, 12, 13, 14, 15, 16 };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
+        for (const auto& rRow : aRows)
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
-            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+            CPPUNIT_ASSERT_EQUAL(rRow, pIter->getPos());
+            pIter->next();
         }
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
     }
@@ -5672,10 +5675,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
         // Full range again.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 2, 18 };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
+        for (const auto& rRow : aRows)
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
-            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+            CPPUNIT_ASSERT_EQUAL(rRow, pIter->getPos());
+            pIter->next();
         }
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
     }
@@ -5687,10 +5691,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
         // Full range again.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 17 };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
+        for (const auto& rRow : aRows)
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
-            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+            CPPUNIT_ASSERT_EQUAL(rRow, pIter->getPos());
+            pIter->next();
         }
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
     }
@@ -6258,12 +6263,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSetFormula)
         { 7 , 8 , "=[.A1]-[.$C2]+[.G$3]-[.$F$4]","=A1-$C2+G$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_ODFF        }
     };
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
+    for(const auto& rTest : aTest)
     {
-        m_pDoc->SetFormula(ScAddress(aTest[i].nCol, aTest[i].nRow, 0), OUString::createFromAscii(aTest[i].aFormula1), aTest[i].eGram);
-        OUString aBuffer = m_pDoc->GetFormula(aTest[i].nCol, aTest[i].nRow, 0);
+        m_pDoc->SetFormula(ScAddress(rTest.nCol, rTest.nRow, 0), OUString::createFromAscii(rTest.aFormula1), rTest.eGram);
+        OUString aBuffer = m_pDoc->GetFormula(rTest.nCol, rTest.nRow, 0);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula", OUString::createFromAscii(aTest[i].aFormula2), aBuffer);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to set formula", OUString::createFromAscii(rTest.aFormula2), aBuffer);
     }
 
     m_pDoc->DeleteTab(0);
