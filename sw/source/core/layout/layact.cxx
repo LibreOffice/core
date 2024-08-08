@@ -68,6 +68,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <vector>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/lok.hxx>
 
 void SwLayAction::CheckWaitCursor()
 {
@@ -547,7 +548,8 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         }
         m_pOptTab = nullptr;
 
-        // No Shortcut for Idle or CalcLayout
+        // No Shortcut for Idle or CalcLayout. The shortcut case means that in case the page is not
+        // inside the visible area, then the synchronous (not idle) layout skips the page.
         const bool bTakeShortcut = !IsIdle() && !IsComplete() && IsShortCut(pPage);
 
         m_pRoot->DeleteEmptySct();
@@ -1041,7 +1043,14 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
             return false;
     }
 
-    const SwRect &rVis = m_pImp->GetShell()->VisArea();
+    // Decide if prPage is visible, i.e. part of the visible area.
+    const SwRect &rVisArea = m_pImp->GetShell()->VisArea();
+    // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+    // visible area.
+    SwRect aLokVisArea(m_pImp->GetShell()->getLOKVisibleArea());
+    bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+    const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
+
     if ( (prPage->getFrameArea().Top() >= rVis.Bottom()) ||
          (prPage->getFrameArea().Left()>= rVis.Right()) )
     {
