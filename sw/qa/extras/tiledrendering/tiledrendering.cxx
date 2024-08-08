@@ -77,6 +77,7 @@
 #include <textcontentcontrol.hxx>
 #include <swmodule.hxx>
 #include <swdll.hxx>
+#include <pagefrm.hxx>
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
@@ -4545,6 +4546,43 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRulesBullet)
     CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage2->getFrameArea().SVRect()));
     SwFrame* pPage3 = pPage2->GetNext();
     CPPUNIT_ASSERT(!aView.m_aInvalidations.Overlaps(pPage3->getFrameArea().SVRect()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
+{
+    // Given a document with 3 pages, the first page is visible:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView;
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->InsertPageBreak();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+
+    // When all pages get invalidated:
+    pWrtShell->StartAllAction();
+    pPage1->InvalidateContent();
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    pPage2->InvalidateContent();
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    pPage3->InvalidateContent();
+    pWrtShell->EndAllAction();
+
+    // Then make sure only the first page gets a synchronous layout:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage2->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+
+    // And then processing all idle events:
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure all pages get an async layout:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(!pPage2->IsInvalidContent());
+    CPPUNIT_ASSERT(!pPage3->IsInvalidContent());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
