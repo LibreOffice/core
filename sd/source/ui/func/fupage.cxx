@@ -350,7 +350,8 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
         VclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(),
                                            aMergedAttr.get(), mpDocSh, mbDisplayBackgroundTabPage, bIsImpressDoc) );
         rtl::Reference<FuPage> xThis( this ); // avoid destruction within async processing
-        xDlg->StartExecuteAsync([xDlg, xThis, pStyleSheet, aNewAttr, aMergedAttr](sal_Int32 nResult) {
+        xDlg->StartExecuteAsync([xDlg, xThis, pStyleSheet, aNewAttr=std::move(aNewAttr),
+                                 aMergedAttr=std::move(aMergedAttr)](sal_Int32 nResult) {
             if (nResult == RET_OK && pStyleSheet) {
                 SfxItemSet tempSet(*xDlg->GetOutputItemSet());
                 xThis->ApplyItemSet(*pStyleSheet, aNewAttr, tempSet, aMergedAttr);
@@ -361,7 +362,8 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     }
 }
 
-void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> aNewAttr, SfxItemSet& tempSet, std::shared_ptr<SfxItemSet> aMergedAttr) {
+void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, const std::shared_ptr<SfxItemSet>& newAttr,
+                          SfxItemSet& tempSet, const std::shared_ptr<SfxItemSet>& mergedAttr) {
     styleSheet.AdjustToFontHeight(tempSet);
 
     if( mbDisplayBackgroundTabPage )
@@ -371,12 +373,12 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> 
         bool bChanges = false;
         for( sal_uInt16 i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
         {
-            if( aMergedAttr->GetItemState( i ) != SfxItemState::DEFAULT )
+            if( mergedAttr->GetItemState( i ) != SfxItemState::DEFAULT )
             {
                 if( tempSet.GetItemState( i ) == SfxItemState::DEFAULT )
-                    tempSet.Put( aMergedAttr->Get( i ) );
+                    tempSet.Put( mergedAttr->Get( i ) );
                 else {
-                    if( !SfxPoolItem::areSame(aMergedAttr->GetItem( i ), tempSet.GetItem( i ) ) ) {
+                    if( !SfxPoolItem::areSame(mergedAttr->GetItem( i ), tempSet.GetItem( i ) ) ) {
                         bChanges = true;
                     }
                 }
@@ -392,7 +394,7 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> 
         {
             if (tempSet.GetItemState(XATTR_FILLSTYLE) == SfxItemState::DEFAULT)
             {
-                const XFillStyleItem* pMergedFillStyleItem = aMergedAttr->GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
+                const XFillStyleItem* pMergedFillStyleItem = mergedAttr->GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
                 assert(pMergedFillStyleItem);
                 if (pMergedFillStyleItem->GetValue() == drawing::FillStyle_NONE)
                     mbPageBckgrdDeleted = true;
@@ -475,8 +477,8 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> 
             "MasterPage without StyleSheet detected (!)");
     }
 
-    aNewAttr->Put( tempSet );
-    ApplyItemSet( aNewAttr.get() );
+    newAttr->Put( tempSet );
+    ApplyItemSet( newAttr.get() );
 }
 
 void FuPage::ApplyItemSet( const SfxItemSet* pArgs )

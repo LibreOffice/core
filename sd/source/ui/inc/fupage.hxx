@@ -55,7 +55,8 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq );
 
-    void ApplyItemSet( SdStyleSheet& styleSheet, std::shared_ptr<SfxItemSet> aNewAttr, SfxItemSet& tempSet, std::shared_ptr<SfxItemSet> aMergedAttr);
+    void ApplyItemSet(SdStyleSheet& styleSheet, const std::shared_ptr<SfxItemSet>& newAttr,
+                      SfxItemSet& tempSet, const std::shared_ptr<SfxItemSet>& rMergedAttr);
     void ApplyItemSet( const SfxItemSet* pArgs );
 
     std::unique_ptr<SdBackgroundObjUndoAction>
