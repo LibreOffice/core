@@ -2827,46 +2827,40 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwHyperlinkIter_Impl aHIter(*pTextFrame);
     SwTextNode const* pNode(nullptr);
     const SwTextAttr* pHt = aHIter.next(&pNode);
-    for (sal_Int32 nTIndex = 0; pHt && nTIndex <= nLinkIndex; ++nTIndex)
-    {
-        if( nTIndex == nLinkIndex )
-        {   // found
-            uno::Reference<XAccessibleHyperlink> xRet;
-            if (!m_pHyperTextData)
-                m_pHyperTextData.reset( new SwAccessibleHyperTextData );
-            SwAccessibleHyperTextData::iterator aIter =
-                m_pHyperTextData ->find( pHt );
-            if (aIter != m_pHyperTextData->end())
-            {
-                xRet = (*aIter).second;
-            }
-            if (!xRet.is())
-            {
-                TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
-                TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd()));
-                const sal_Int32 nTmpHStt = GetPortionData().GetAccessiblePosition(
-                    max(aHIter.startIdx(), nHintStart));
-                const sal_Int32 nTmpHEnd = GetPortionData().GetAccessiblePosition(
-                    min(aHIter.endIdx(), nHintEnd));
-                xRet = new SwAccessibleHyperlink(*pHt,
-                    *this, nTmpHStt, nTmpHEnd );
-                if (aIter != m_pHyperTextData->end())
-                {
-                    (*aIter).second = xRet;
-                }
-                else
-                {
-                    m_pHyperTextData->emplace( pHt, xRet );
-                }
-            }
-            return xRet;
-        }
-
-        // iterate next hyperlink
+    for (sal_Int32 nTIndex = 0; pHt && nTIndex < nLinkIndex; ++nTIndex)
         pHt = aHIter.next(&pNode);
-    }
 
-    throw lang::IndexOutOfBoundsException();
+    if (!pHt)
+        throw lang::IndexOutOfBoundsException();
+
+    uno::Reference<XAccessibleHyperlink> xRet;
+    if (!m_pHyperTextData)
+        m_pHyperTextData.reset( new SwAccessibleHyperTextData );
+    SwAccessibleHyperTextData::iterator aIter = m_pHyperTextData->find(pHt);
+    if (aIter != m_pHyperTextData->end())
+    {
+        xRet = (*aIter).second;
+    }
+    if (!xRet.is())
+    {
+        TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
+        TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd()));
+        const sal_Int32 nTmpHStt = GetPortionData().GetAccessiblePosition(
+            max(aHIter.startIdx(), nHintStart));
+        const sal_Int32 nTmpHEnd = GetPortionData().GetAccessiblePosition(
+            min(aHIter.endIdx(), nHintEnd));
+        xRet = new SwAccessibleHyperlink(*pHt,
+                                         *this, nTmpHStt, nTmpHEnd );
+        if (aIter != m_pHyperTextData->end())
+        {
+            (*aIter).second = xRet;
+        }
+        else
+        {
+            m_pHyperTextData->emplace( pHt, xRet );
+        }
+    }
+    return xRet;
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
