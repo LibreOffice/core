@@ -179,7 +179,7 @@ public:
         SAL_CALL selectSigningCertificateWithType(const CertificateKind certificateKind,
                                                   OUString& rDescription) override;
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
-        SAL_CALL chooseEncryptionCertificate() override;
+        SAL_CALL chooseEncryptionCertificate(const CertificateKind certificateKind) override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
         css::uno::Sequence<::com::sun::star::beans::PropertyValue>& Properties) override;
 
@@ -749,11 +749,12 @@ DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKin
     return xCert;
 }
 
-css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSignatures::chooseEncryptionCertificate()
+css::uno::Sequence<Reference<css::security::XCertificate>>
+DocumentDigitalSignatures::chooseEncryptionCertificate(const CertificateKind certificateKind)
 {
     std::map<OUString, OUString> aProperties;
     uno::Sequence< Reference< css::security::XCertificate > > aCerts=
-        chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Encrypt );
+        chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Encrypt , certificateKind );
     if (aCerts.getLength() == 1 && !aCerts[0].is())
         // our error case contract is: empty sequence, so map that!
         return uno::Sequence< Reference< css::security::XCertificate > >();

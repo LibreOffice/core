@@ -461,7 +461,7 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
 
     // fire up certificate chooser dialog - user can multi-select!
     const uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
-        xSigner->chooseEncryptionCertificate();
+        xSigner->chooseEncryptionCertificate(css::security::CertificateKind_OPENPGP);
 
     if (!xSignCertificates.hasElements())
         return uno::Sequence< beans::NamedValue >(); // user cancelled

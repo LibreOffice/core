@@ -334,7 +334,7 @@ IMPL_LINK(SvxGeneralTabPage, ChooseKeyButtonHdl, weld::Button&, rButton, void)
         }
         else if (m_xEncryptionKeyButton.get() == &rButton)
         {
-            auto xCerts = xD->chooseEncryptionCertificate();
+            auto xCerts = xD->chooseEncryptionCertificate(css::security::CertificateKind_OPENPGP);
             if(xCerts.hasElements())
                 xCertificate = xCerts[0];
         }
