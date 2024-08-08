@@ -1561,5 +1561,28 @@ CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
     CPPUNIT_ASSERT_EQUAL(u"Empty document"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162398)
+{
+    createSwDoc("tdf162398.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    // Ctrl-A
+    pWrtShell->SelAll(); // Selects the whole document.
+
+    // Ctrl-C
+    rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
+    xTransferable->Copy();
+
+    pWrtShell->SttEndDoc(false); // Go to the end of the doc.
+
+    // Ctrl-V
+    TransferableDataHelper aDataHelper(
+        TransferableDataHelper::CreateFromSystemClipboard(&pWrtShell->GetView().GetEditWin()));
+
+    // Pasting as HTML must not crash
+    SwTransferable::PasteFormat(*pWrtShell, aDataHelper, SotClipboardFormatId::HTML);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
