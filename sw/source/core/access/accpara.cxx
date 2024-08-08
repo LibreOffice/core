@@ -2823,8 +2823,6 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     ThrowIfDisposed();
 
-    uno::Reference< XAccessibleHyperlink > xRet;
-
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
     SwHyperlinkIter_Impl aHIter(*pTextFrame);
     SwTextNode const* pNode(nullptr);
@@ -2833,6 +2831,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     {
         if( nTIndex == nLinkIndex )
         {   // found
+            uno::Reference<XAccessibleHyperlink> xRet;
             if (!m_pHyperTextData)
                 m_pHyperTextData.reset( new SwAccessibleHyperTextData );
             SwAccessibleHyperTextData::iterator aIter =
@@ -2860,16 +2859,14 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                     m_pHyperTextData->emplace( pHt, xRet );
                 }
             }
-            break;
+            return xRet;
         }
 
         // iterate next hyperlink
         pHt = aHIter.next(&pNode);
     }
-    if( !xRet.is() )
-        throw lang::IndexOutOfBoundsException();
 
-    return xRet;
+    throw lang::IndexOutOfBoundsException();
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
