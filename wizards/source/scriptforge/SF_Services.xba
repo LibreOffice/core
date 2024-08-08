@@ -105,6 +105,8 @@ Dim vService As Variant				&apos;	An individual service object
 Const cstThisSub = &quot;SF_Services.CreateScriptService&quot;
 Const cstSubArgs = &quot;Service, arg0[, arg1] ...&quot;
 
+	&apos;	Save Err, Erl, .. values before any On Error ... statement
+	SF_Exception._CaptureSystemError()
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	Set vScriptService = Nothing
 
