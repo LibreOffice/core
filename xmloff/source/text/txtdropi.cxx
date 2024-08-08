@@ -68,7 +68,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
 
         case XML_ELEMENT(STYLE, XML_DISTANCE):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nTmp, aIter.toView(), 0 ))
+                        nTmp, aIter.toView(), 0, SAL_MAX_UINT16 ))
             {
                 aFormat.Distance = static_cast<sal_uInt16>(nTmp);
             }
