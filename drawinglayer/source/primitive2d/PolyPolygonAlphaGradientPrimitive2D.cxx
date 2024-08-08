@@ -49,7 +49,7 @@ Primitive2DReference PolyPolygonAlphaGradientPrimitive2D::create2DDecomposition(
     basegfx::BColor aSingleColor;
     if (getAlphaGradient().getColorStops().isSingleColor(aSingleColor))
     {
-        // no real taransparence gradient, only unified alpha,
+        // no real transparence gradient, only unified alpha,
         // we can use PolyPolygonRGBAPrimitive2D
         return new PolyPolygonRGBAPrimitive2D(getB2DPolyPolygon(), getBColor(),
                                               aSingleColor.luminance());
