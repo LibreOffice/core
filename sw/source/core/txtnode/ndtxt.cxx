@@ -522,6 +522,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         if ( HasHints() )
         {
             MoveTextAttr_To_AttrSet();
+            pNode->MoveTextAttr_To_AttrSet();
         }
         pNode->MakeFrames( *this );
         lcl_ChangeFootnoteRef( *this );
@@ -560,6 +561,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
                 }
             }
             MoveTextAttr_To_AttrSet();
+            pNode->MoveTextAttr_To_AttrSet();
         }
 
         if( pList )
@@ -619,12 +621,23 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
         if (*pHtEndIdx < m_Text.getLength() || pHt->IsCharFormatAttr())
             break;
 
-        if( !pHt->IsDontMoveAttr() &&
-            SetAttr( pHt->GetAttr() ) )
+        if (!pHt->IsDontMoveAttr())
         {
-            m_pSwpHints->DeleteAtPos(i);
-            DestroyAttr( pHt );
-            --i;
+            bool isInserted(false);
+            if (pHt->Which() == RES_TXTATR_AUTOFMT)
+            {
+                isInserted = SetAttr(*pHt->GetAutoFormat().GetStyleHandle());
+            }
+            else
+            {
+                isInserted = SetAttr(pHt->GetAttr());
+            }
+            if (isInserted)
+            {
+                m_pSwpHints->DeleteAtPos(i);
+                DestroyAttr( pHt );
+                --i;
+            }
         }
     }
 
