@@ -2830,7 +2830,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
 
     // render as FillGradientPrimitive2D. The idea is to create BColorStops
     // with the same number of entries, but all the same color, using the
-    // polygon's traget fill color, so we can directly paint gradients as
+    // polygon's target fill color, so we can directly paint gradients as
     // RGBA in Cairo
     basegfx::BColorStops aColorStops;
 
