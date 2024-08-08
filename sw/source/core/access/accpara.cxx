@@ -2745,14 +2745,14 @@ class SwHyperlinkIter_Impl
 {
     SwTextFrame const& m_rFrame;
     sw::MergedAttrIter m_Iter;
-    TextFrameIndex m_nStt;
+    TextFrameIndex m_nStart;
     TextFrameIndex m_nEnd;
 
 public:
     explicit SwHyperlinkIter_Impl(const SwTextFrame & rTextFrame);
     const SwTextAttr *next(SwTextNode const** ppNode = nullptr);
 
-    TextFrameIndex startIdx() const { return m_nStt; }
+    TextFrameIndex startIdx() const { return m_nStart; }
     TextFrameIndex endIdx() const { return m_nEnd; }
 };
 
@@ -2761,7 +2761,7 @@ public:
 SwHyperlinkIter_Impl::SwHyperlinkIter_Impl(const SwTextFrame & rTextFrame)
     : m_rFrame(rTextFrame)
     , m_Iter(rTextFrame)
-    , m_nStt(rTextFrame.GetOffset())
+    , m_nStart(rTextFrame.GetOffset())
 {
     const SwTextFrame *const pFollFrame = rTextFrame.GetFollow();
     m_nEnd = pFollFrame ? pFollFrame->GetOffset() : TextFrameIndex(rTextFrame.GetText().getLength());
@@ -2780,11 +2780,11 @@ const SwTextAttr *SwHyperlinkIter_Impl::next(SwTextNode const** ppNode)
     {
         if (RES_TXTATR_INETFMT == pHt->Which())
         {
-            const TextFrameIndex nHtStt(m_rFrame.MapModelToView(pNode, pHt->GetStart()));
+            const TextFrameIndex nHtStart(m_rFrame.MapModelToView(pNode, pHt->GetStart()));
             const TextFrameIndex nHtEnd(m_rFrame.MapModelToView(pNode, pHt->GetAnyEnd()));
-            if (nHtEnd > nHtStt &&
-                ((nHtStt >= m_nStt && nHtStt < m_nEnd) ||
-                 (nHtEnd > m_nStt && nHtEnd <= m_nEnd)))
+            if (nHtEnd > nHtStart &&
+                ((nHtStart >= m_nStart && nHtStart < m_nEnd) ||
+                 (nHtEnd > m_nStart && nHtEnd <= m_nEnd)))
             {
                 pAttr = pHt;
                 if (ppNode)
