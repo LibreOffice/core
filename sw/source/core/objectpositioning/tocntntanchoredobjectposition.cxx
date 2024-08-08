@@ -609,7 +609,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                                 aRectFnSet.GetTop(aPgPrtRect),
                                                 nTopOfOrient );
 
-                    if (bMSOLayoutInCell && rPageAlignLayFrame.IsCellFrame())
+                    if (rPageAlignLayFrame.IsCellFrame())
                     {
                         // Cell upper/lower comes from the max margin of the entire row of cells
                         const auto pRow = const_cast<SwLayoutFrame&>(rPageAlignLayFrame).FindRowFrame();
