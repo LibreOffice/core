@@ -2821,7 +2821,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     const css::awt::GradientStyle aStyle(rAlphaGradient.getStyle());
     if (css::awt::GradientStyle_SQUARE == aStyle || css::awt::GradientStyle_RECT == aStyle)
     {
-        // direct paint cannot be used for thse styles since they get 'stitched'
+        // direct paint cannot be used for these styles since they get 'stitched'
         // by multiple parts, so *need* singhle alpha for multiple pieces, go
         // with decompose/recursion
         process(rPolyPolygonAlphaGradientPrimitive2D);
