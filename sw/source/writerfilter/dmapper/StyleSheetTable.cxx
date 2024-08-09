@@ -52,6 +52,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <unobasestyle.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
 #include <unostyle.hxx>
@@ -296,7 +297,7 @@ struct StyleSheetTable_Impl
     /// Appends the given key-value pair to the list of latent style properties of the current entry.
     void AppendLatentStyleProperty(const OUString& aName, Value const & rValue);
     /// Sets all properties of xStyle back to default.
-    static void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
+    static void SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>& xStyle);
     void ApplyClonedTOCStylesToXText(uno::Reference<text::XText> const& xText);
 };
 
@@ -359,18 +360,17 @@ void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Valu
     m_pCurrentEntry->m_aLatentStyles.push_back(aValue);
 }
 
-void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle)
+void StyleSheetTable_Impl::SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>& xStyle)
 {
     // See if the existing style has any non-default properties. If so, reset them back to default.
-    uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xStyle->getPropertySetInfo();
     const uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
     std::vector<OUString> aPropertyNames;
     aPropertyNames.reserve(aProperties.getLength());
     std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aPropertyNames),
         [](const beans::Property& rProp) { return rProp.Name; });
 
-    uno::Reference<beans::XPropertyState> xPropertyState(xStyle, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
     for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
     {

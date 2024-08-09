@@ -316,12 +316,12 @@ private:
     bool m_bEvenPageFooterLinkToPrevious = true;
     bool m_bFirstPageFooterLinkToPrevious = true;
 
-    void ApplyProperties_( const css::uno::Reference< css::beans::XPropertySet >& xStyle );
+    void ApplyProperties_( const rtl::Reference<SwXPageStyle>& xStyle );
 
     void DontBalanceTextColumns();
 
     /// Apply section-specific properties: only valid to use after PageStyle has been determined by InheritOrFinalizePageStyles
-    void ApplySectionProperties( const css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
+    void ApplySectionProperties( const rtl::Reference< SwXTextSection >& xSection, DomainMapper_Impl& rDM_Impl );
 
     /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
     void ApplyProtectionProperties( rtl::Reference<SwXTextSection>& xSection, DomainMapper_Impl& rDM_Impl );
@@ -338,7 +338,7 @@ private:
     bool HasHeader() const;
     bool HasFooter() const;
 
-    static void SetBorderDistance( const css::uno::Reference< css::beans::XPropertySet >& xStyle,
+    static void SetBorderDistance( const rtl::Reference<SwXPageStyle>& xStyle,
                                    PropertyIds eMarginId,
                                    PropertyIds eDistId,
                                    sal_Int32 nDistance,

@@ -713,7 +713,7 @@ table::ShadowFormat PropertyMap::getShadowFromBorder( const table::BorderLine2& 
     return aFormat;
 }
 
-void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XPropertySet >& xStyle,
+void SectionPropertyMap::SetBorderDistance( const rtl::Reference<SwXPageStyle>& xStyle,
                                             PropertyIds eMarginId,
                                             PropertyIds eDistId,
                                             sal_Int32 nDistance,
@@ -751,10 +751,9 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
     }
 
     // Change the margins with the border distance
-    uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );
     uno::Sequence<OUString> aProperties { sMarginName, sBorderDistanceName };
     uno::Sequence<uno::Any> aValues { uno::Any( nMargin ), uno::Any( nDistance ) };
-    xMultiSet->setPropertyValues( aProperties, aValues );
+    xStyle->setPropertyValues( aProperties, aValues );
 }
 
 void SectionPropertyMap::DontBalanceTextColumns()
@@ -770,7 +769,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
-void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::ApplySectionProperties( const rtl::Reference< SwXTextSection >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
     {
@@ -2038,10 +2037,10 @@ public:
 
 }
 
-void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropertySet >& xStyle )
+void SectionPropertyMap::ApplyProperties_( const rtl::Reference<SwXPageStyle>& xStyle )
 {
-    uno::Reference< beans::XMultiPropertySet > const xMultiSet( xStyle, uno::UNO_QUERY );
-
+    if ( !xStyle.is() )
+        return;
     std::vector< OUString > vNames;
     std::vector< uno::Any > vValues;
     {
@@ -2079,24 +2078,20 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
             vValues.push_back( v.Value );
         }
     }
-    if ( xMultiSet.is() )
+    try
     {
-        try
-        {
-            xMultiSet->setPropertyValues( comphelper::containerToSequence( vNames ), comphelper::containerToSequence( vValues ) );
-            return;
-        }
-        catch ( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
-        }
+        xStyle->setPropertyValues( comphelper::containerToSequence( vNames ), comphelper::containerToSequence( vValues ) );
+        return;
+    }
+    catch ( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
     }
     for ( size_t i = 0; i < vNames.size(); ++i )
     {
         try
         {
-            if ( xStyle.is() )
-                xStyle->setPropertyValue( vNames[i], vValues[i] );
+            xStyle->setPropertyValue( vNames[i], vValues[i] );
         }
         catch ( const uno::Exception& )
         {
