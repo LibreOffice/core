@@ -4173,9 +4173,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
 
         if (eType != StoredRedlines::NONE)
         {
-            m_aStoredRedlines[eType].emplace_back(xRange);
-            m_aStoredRedlines[eType].emplace_back(sType);
-            m_aStoredRedlines[eType].emplace_back(aRedlineProperties);
+            m_aStoredRedlines[eType].emplace_back(StoredRedline{xRange, sType, aRedlineProperties});
         }
     }
     catch( const uno::Exception & )
@@ -4299,16 +4297,15 @@ void DomainMapper_Impl::PushAnnotation()
 
 static void lcl_CopyRedlines(
                 uno::Reference< text::XText > const& xSrc,
-                std::deque<css::uno::Any>& rRedlines,
+                const std::deque<StoredRedline>& rRedlines,
                 std::vector<sal_Int32>& redPos,
                 std::vector<sal_Int32>& redLen,
                 sal_Int32& redIdx)
 {
     redIdx = -1;
-    for( size_t i = 0; i < rRedlines.size(); i+=3)
+    for( size_t i = 0; i < rRedlines.size(); i++)
     {
-        uno::Reference< text::XTextRange > xRange;
-        rRedlines[i] >>= xRange;
+        uno::Reference< text::XTextRange > xRange = rRedlines[i].mxRange;
 
         // is this a redline of the temporary footnote?
         uno::Reference<text::XTextCursor> xRangeCursor;
@@ -4342,27 +4339,23 @@ static void lcl_CopyRedlines(
 
 static void lcl_PasteRedlines(
                 uno::Reference< text::XText > const& xDest,
-                std::deque<css::uno::Any>& rRedlines,
+                const std::deque<StoredRedline>& rRedlines,
                 std::vector<sal_Int32>& redPos,
                 std::vector<sal_Int32>& redLen,
                 sal_Int32 redIdx)
 {
     // create redlines in the copied footnote
-    for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx); i+=3)
+    for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx); i++)
     {
-        OUString sType;
-        beans::PropertyValues aRedlineProperties( 3 );
         // skip failed createTextCursorByRange()
-        if (redPos[i/3] == -1)
+        if (redPos[i] == -1)
             continue;
-        rRedlines[i+1] >>= sType;
-        rRedlines[i+2] >>= aRedlineProperties;
         uno::Reference< text::XTextCursor > xCrsr = xDest->getText()->createTextCursor();
-        xCrsr->goRight(redPos[i/3], false);
-        xCrsr->goRight(redLen[i/3], true);
+        xCrsr->goRight(redPos[i], false);
+        xCrsr->goRight(redLen[i], true);
         uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
         try {
-            xRedline->makeRedline( sType, aRedlineProperties );
+            xRedline->makeRedline( rRedlines[i].msType, rRedlines[i].maRedlineProperties );
         }
         catch(const uno::Exception&)
         {
@@ -4392,7 +4385,7 @@ bool DomainMapper_Impl::CopyTemporaryNotes(
         lcl_PasteRedlines(xNoteDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
 
         // remove processed redlines
-        for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
+        for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx); i++)
             m_aStoredRedlines[eType].pop_front();
 
         return true;
@@ -9636,12 +9629,12 @@ void DomainMapper_Impl::ExecuteFrameConversion()
 
         m_bIsActualParagraphFramed = false;
 
-        if (redPos.size() == m_aStoredRedlines[StoredRedlines::FRAME].size()/3)
+        if (redPos.size() == m_aStoredRedlines[StoredRedlines::FRAME].size())
         {
             for( sal_Int32 i = m_aStoredRedlines[StoredRedlines::FRAME].size() - 1; i >= 0; --i)
             {
                 // keep redlines of floating tables to process them in CloseSectionGroup()
-                if ( redPos[i/3] != -1 )
+                if ( redPos[i] != -1 )
                 {
                     m_aStoredRedlines[StoredRedlines::FRAME].erase(m_aStoredRedlines[StoredRedlines::FRAME].begin() + i);
                 }

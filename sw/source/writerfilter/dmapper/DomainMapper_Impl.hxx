@@ -281,6 +281,13 @@ struct FieldParagraph
     bool m_bRemove = false;
 };
 
+struct StoredRedline
+{
+   css::uno::Reference<css::text::XTextRange> mxRange;
+   OUString msType;
+   css::beans::PropertyValues maRedlineProperties;
+};
+
 /// field stack element
 class FieldContext : public virtual SvRefBase
 {
@@ -1236,7 +1243,7 @@ public:
     /// Handle redline text portions in a frame, footnotes and redlines:
     /// store their data, and create them after frame creation or footnote/endnote copying
     bool m_bIsActualParagraphFramed;
-    std::deque<css::uno::Any> m_aStoredRedlines[StoredRedlines::NONE];
+    std::deque<StoredRedline> m_aStoredRedlines[StoredRedlines::NONE];
 
     bool IsParaWithInlineObject() const { return m_StreamStateStack.top().bParaWithInlineObject; }
 

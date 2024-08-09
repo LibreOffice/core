@@ -1669,11 +1669,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             bool bRecordChanges = m_rDMapper_Impl.GetSettingsTable()->GetRecordChanges();
             if (xTextAppendAndConvert.is() && !(bInFootnote && bRecordChanges))
             {
-                std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
+                const std::deque<StoredRedline>& rFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                 std::vector<sal_Int32> redPos, redLen;
                 std::vector<OUString> redCell;
                 std::vector<OUString> redTable;
-                BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
+                BeforeConvertToTextFrame(rFramedRedlines, redPos, redLen, redCell, redTable);
 
                 uno::Reference<text::XTextContent> xContent = xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
                 xFrameAnchor.set(xContent->getAnchor(), uno::UNO_QUERY);
@@ -1722,7 +1722,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                     }
                 }
 
-                AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
+                AfterConvertToTextFrame(m_rDMapper_Impl, rFramedRedlines, redPos, redLen, redCell, redTable);
             }
 
             if (xFrameAnchor.is() && eBreakType != style::BreakType_NONE)

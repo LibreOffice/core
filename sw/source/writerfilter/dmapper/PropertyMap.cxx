@@ -1397,14 +1397,13 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
     rAnchoredObjectAnchors.clear();
 }
 
-void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
+void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
     // convert redline ranges to cursor movement and character length
-    for( size_t i = 0; i < rFramedRedlines.size(); i+=3)
+    for( size_t i = 0; i < rFramedRedlines.size(); i++)
     {
         uno::Reference<text::XText> xCell;
-        uno::Reference< text::XTextRange > xRange;
-        rFramedRedlines[i] >>= xRange;
+        uno::Reference< text::XTextRange > xRange = rFramedRedlines[i].mxRange;
         uno::Reference< beans::XPropertySet > xRangeProperties;
         if ( xRange.is() )
         {
@@ -1457,28 +1456,24 @@ void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::v
     }
 }
 
-void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::Any>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
+void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
     rtl::Reference<SwXTextDocument> xTextDocument(rDM_Impl.GetTextDocument());
     uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
-    for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+    for( size_t i = 0; i < rFramedRedlines.size(); i++)
     {
-        OUString sType;
-        beans::PropertyValues aRedlineProperties( 3 );
         // skip failed createTextCursorByRange()
-        if (redPos[i/3] == -1)
+        if (redPos[i] == -1)
             continue;
-        aFramedRedlines[i+1] >>= sType;
-        aFramedRedlines[i+2] >>= aRedlineProperties;
-        uno::Reference<text::XTextTable> xTable(xTables->getByName(redTable[i/3]), uno::UNO_QUERY);
-        uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i/3]), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByName(redTable[i]), uno::UNO_QUERY);
+        uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i]), uno::UNO_QUERY);
         uno::Reference<text::XTextCursor> xCrsr = xCell->createTextCursor();
-        xCrsr->goRight(redPos[i/3], false);
-        xCrsr->goRight(redLen[i/3], true);
+        xCrsr->goRight(redPos[i], false);
+        xCrsr->goRight(redLen[i], true);
         uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
         try
         {
-            xRedline->makeRedline( sType, aRedlineProperties );
+            xRedline->makeRedline( rFramedRedlines[i].msType, rFramedRedlines[i].maRedlineProperties );
         }
         catch (const uno::Exception&)
         {

@@ -66,6 +66,7 @@ namespace writerfilter::dmapper {
 
 class  DomainMapper_Impl;
 struct AnchoredObjectInfo;
+struct StoredRedline;
 
 enum BorderPosition
 {
@@ -439,9 +440,9 @@ public:
     static void removeXTextContent(css::uno::Reference<css::text::XText> const& rxText);
 };
 
-void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
+void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
 
-void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::Any>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
+void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
 
 class ParagraphProperties : public SvRefBase
 {
