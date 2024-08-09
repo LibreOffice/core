@@ -579,13 +579,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
 
     // Then make sure the read-only content refuses to accept that inner fieldmark, so we still have
     // just one:
-    size_t nActual = 0;
     IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-    for (auto it = rIDMA.getFieldmarksBegin(); it != rIDMA.getFieldmarksEnd(); ++it)
-    {
-        ++nActual;
-    }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nActual);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rIDMA.getFieldmarksCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)

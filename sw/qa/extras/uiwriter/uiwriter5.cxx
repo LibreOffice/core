@@ -932,8 +932,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147006)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
-    CPPUNIT_ASSERT_EQUAL(std::iterator_traits<IDocumentMarkAccess::iterator>::difference_type(1),
-                         std::distance(rIDMA.getFieldmarksBegin(), rIDMA.getFieldmarksEnd()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getFieldmarksCount());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     // this crashed
