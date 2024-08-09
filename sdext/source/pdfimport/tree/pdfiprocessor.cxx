@@ -511,7 +511,7 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
     if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
         aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
-    getCurrentContext().Clip = aNewClip;
+    getCurrentContext().Clip = std::move(aNewClip);
 }
 
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,

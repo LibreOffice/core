@@ -685,7 +685,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
         aRet.HumanPresentableName = m_aName;
         aRet.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
     }
-    return { aRet };
+    return { std::move(aRet) };
 }
 
 sal_Bool SwMailTransferable::isDataFlavorSupported(

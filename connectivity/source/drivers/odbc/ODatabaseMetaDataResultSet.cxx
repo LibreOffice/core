@@ -825,7 +825,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo()
     aMap[SQL_GUID]              = DataType::VARBINARY;
 
 
-    m_aValueRange[2] = aMap;
+    m_aValueRange[2] = std::move(aMap);
 
     OTools::ThrowException(m_pConnection.get(),functions().GetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();

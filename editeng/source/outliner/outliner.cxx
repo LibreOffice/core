@@ -942,7 +942,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                 // since in EditEngine baseline ...
                 rOrigin.RotateAround(aTextPos, nOrientation);
 
-                vcl::Font aRotatedFont( aBulletFont );
+                vcl::Font aRotatedFont( std::move(aBulletFont) );
                 aRotatedFont.SetOrientation( nOrientation );
                 rOutDev.SetFont( aRotatedFont );
             }

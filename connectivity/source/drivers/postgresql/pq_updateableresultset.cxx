@@ -116,7 +116,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
                     OUString( val, strlen( val ), ConnectionSettings::encoding );
             }
         }
-        data[row] = aRow;
+        data[row] = std::move(aRow);
     }
 
     rtl::Reference<UpdateableResultSet> pRS =  new UpdateableResultSet(

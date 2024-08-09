@@ -327,7 +327,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
         // do the drop asynchronously
         // (85957 - UI actions within the drop are not allowed, but we want to open a popup menu)
-        m_pImpl->aDropData = aColumn;
+        m_pImpl->aDropData = std::move(aColumn);
         m_pImpl->aDropData[DataAccessDescriptorProperty::Connection] <<= xConnection;
         m_pImpl->aDropData[DataAccessDescriptorProperty::ColumnObject] <<= xField;
 

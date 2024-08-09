@@ -415,7 +415,7 @@ void ODBExport::exportDataSource()
         if ( bAutoIncrementEnabled && !(aAutoIncrement.first.isEmpty() && aAutoIncrement.second.isEmpty()) )
             m_oAutoIncrement = aAutoIncrement;
         if ( aDelimiter.bUsed )
-            m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
+            m_aDelimiter.reset(new TDelimiter(std::move(aDelimiter)));
 
         SvXMLElementExport aElem(*this, XML_NAMESPACE_DB, XML_DATA_SOURCE, true, true);
 
