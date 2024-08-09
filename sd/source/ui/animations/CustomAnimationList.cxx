@@ -298,7 +298,7 @@ Size CustomAnimationListEntryItem::GetSize(const vcl::RenderContext& rRenderCont
     if (width < (rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth))
         width = rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth;
 
-    Size aSize(width, rRenderContext.GetTextHeight());
+    Size aSize(width, rRenderContext.GetTextHeight() * 2);
     if (aSize.Height() < nItemMinHeight)
         aSize.setHeight(nItemMinHeight);
     return aSize;
@@ -351,26 +351,33 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
     Point aPos(rRect.TopLeft());
     int nItemHeight = rRect.GetHeight();
 
+    Size nImageSize = Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS).GetSizePixel();
+
     sal_Int16 nNodeType = mpEffect->getNodeType();
-    if (nNodeType == EffectNodeType::ON_CLICK )
+    if (nNodeType == EffectNodeType::ON_CLICK)
     {
-        rRenderContext.DrawImage(aPos, Image(StockImage::Yes, BMP_CUSTOMANIMATION_ON_CLICK));
+        Image aImage(Image(StockImage::Yes, BMP_CUSTOMANIMATION_ON_CLICK));
+        nImageSize = aImage.GetSizePixel();
+        aPos.AdjustY(nItemHeight / 4 - nImageSize.Height() / 2);
+        rRenderContext.DrawImage(aPos, aImage);
     }
     else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
     {
-        rRenderContext.DrawImage(aPos, Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS));
+        Image aImage(Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS));
+        nImageSize = aImage.GetSizePixel();
+        aPos.AdjustY(nItemHeight / 4 - nImageSize.Height() / 2);
+        rRenderContext.DrawImage(aPos, aImage);
     }
     else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
     {
         //FIXME With previous image not defined in CustomAnimation.src
     }
 
-    aPos.AdjustX(nIconWidth);
+    aPos = rRect.TopLeft();
+    aPos.AdjustX(nImageSize.Width() + 5);
 
     //TODO, full width of widget ?
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msDescription, rRect.GetWidth()));
-
-    aPos.AdjustY(nIconWidth);
 
     OUString sImage;
     switch (mpEffect->getPresetClass())
@@ -404,13 +411,19 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
     if (!sImage.isEmpty())
     {
         Image aImage(StockImage::Yes, sImage);
+        nImageSize = aImage.GetSizePixel();
         Point aImagePos(aPos);
-        aImagePos.AdjustY((nItemHeight/2 - aImage.GetSizePixel().Height()) >> 1 );
+        aImagePos.AdjustY(nItemHeight * 3 / 4 - nImageSize.Height() / 2);
         rRenderContext.DrawImage(aImagePos, aImage);
     }
+    else
+    {
+        Image aImage(StockImage::Yes, BMP_CUSTOMANIMATION_ENTRANCE_EFFECT);
+        nImageSize = aImage.GetSizePixel();
+    }
 
-    aPos.AdjustX(nIconWidth );
-    aPos.AdjustY((nItemHeight/2 - rRenderContext.GetTextHeight()) >> 1 );
+    aPos.AdjustX(nImageSize.Width() + 5);
+    aPos.AdjustY(nItemHeight / 2);
 
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msEffectName, rRect.GetWidth()));
     rRenderContext.Pop();
