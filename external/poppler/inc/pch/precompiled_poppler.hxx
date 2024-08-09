@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
-#include <Object.h>
+#include <Object.h> // Please include this header file to avoid error LNK2019.
 #include <algorithm>
 #include <annot_stamp_approved.h>
 #include <annot_stamp_as_is.h>
