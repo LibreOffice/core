@@ -128,7 +128,7 @@ namespace sw::mark {
 
             // helper bookmark to store annotation range of redlines
             virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
-                const OUString& rName, IDocumentMarkAccess::MarkType eMark,
+                const OUString& rName,
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
             virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const override;

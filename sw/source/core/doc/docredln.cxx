@@ -1804,11 +1804,10 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
                 SwPaM aPam( rStartPos.GetNode(), rStartPos.GetContentIndex(),
                                 rStartPos.GetNode(), rStartPos.GetContentIndex() + nLen);
-                ::sw::mark::MarkBase* pMark = rDMA.makeAnnotationBookmark(
+                ::sw::mark::Bookmark* pBookmark = rDMA.makeAnnotationBookmark(
                     aPam,
                     (**iter).GetName(),
-                    IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
-                ::sw::mark::Bookmark* pBookmark = dynamic_cast< ::sw::mark::Bookmark* >(pMark);
+                    sw::mark::InsertMode::New);
                 if (pBookmark)
                 {
                     pBookmark->SetKeyCode(vcl::KeyCode());

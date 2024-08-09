@@ -1699,12 +1699,11 @@ namespace sw::mark
     // create helper bookmark for annotations on tracked deletions
     ::sw::mark::Bookmark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
         const OUString& rName,
-        const IDocumentMarkAccess::MarkType eType,
         sw::mark::InsertMode const eMode,
         SwPosition const*const pSepPos)
     {
         OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
-        return static_cast<sw::mark::Bookmark*>(makeMark( rPaM, sAnnotationBookmarkName, eType, eMode, pSepPos));
+        return static_cast<sw::mark::Bookmark*>(makeMark( rPaM, sAnnotationBookmarkName, MarkType::BOOKMARK, eMode, pSepPos));
     }
 
     // find helper bookmark of annotations on tracked deletions

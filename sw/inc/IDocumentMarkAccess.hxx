@@ -312,7 +312,7 @@ class IDocumentMarkAccess
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
         virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
             const OUString& rProposedName,
-            MarkType eMark, ::sw::mark::InsertMode eMode,
+            ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
         virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
