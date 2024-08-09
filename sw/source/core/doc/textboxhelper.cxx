@@ -47,6 +47,7 @@
 #include <frmatr.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -365,7 +366,6 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
-    SdrObject* pRet = nullptr;
     sal_Int32 nCount = 0; // Current logical index.
     for (const rtl::Reference<SdrObject>& p : *pPage)
     {
@@ -373,16 +373,14 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
             continue;
         if (nCount == nIndex)
         {
-            pRet = p.get();
-            break;
+            if (!p)
+                throw lang::IllegalArgumentException();
+            return uno::Any(p->getUnoShape());
         }
         ++nCount;
     }
 
-    if (!pRet)
-        throw lang::IndexOutOfBoundsException();
-
-    return uno::Any(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
+    throw lang::IndexOutOfBoundsException();
 }
 
 sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
