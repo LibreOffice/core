@@ -342,24 +342,30 @@ namespace
                         const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pPortion =
                             static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(rPortion.get());
 
-                        pPortion->CreateDecorationGeometryContent(
-                            aContainer,
-                            pPortion->getTextTransform(),
-                            caseMappedText,
-                            pPortion->getTextPosition(),
-                            pPortion->getTextLength(),
-                            pPortion->getDXArray());
+                        // create and add decoration
+                        const drawinglayer::primitive2d::Primitive2DContainer& rDecorationGeometryContent(
+                            pPortion->getOrCreateDecorationGeometryContent(
+                                pPortion->getTextTransform(),
+                                caseMappedText,
+                                pPortion->getTextPosition(),
+                                pPortion->getTextLength(),
+                                pPortion->getDXArray()));
+
+                        aContainer.insert(aContainer.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
                     }
                 }
                 else
                 {
-                    pTCPP->CreateDecorationGeometryContent(
-                        aContainer,
-                        pTCPP->getTextTransform(),
-                        caseMappedText,
-                        rInfo.mnTextStart,
-                        rInfo.mnTextLen,
-                        aDXArray);
+                    // create and add decoration
+                    const drawinglayer::primitive2d::Primitive2DContainer& rDecorationGeometryContent(
+                        pTCPP->getOrCreateDecorationGeometryContent(
+                            pTCPP->getTextTransform(),
+                            caseMappedText,
+                            rInfo.mnTextStart,
+                            rInfo.mnTextLen,
+                            aDXArray));
+
+                    aContainer.insert(aContainer.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
                 }
             }
 

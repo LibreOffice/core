@@ -41,6 +41,8 @@ class PolyPolygonRGBAPrimitive2D;
 class PolyPolygonAlphaGradientPrimitive2D;
 class BitmapAlphaPrimitive2D;
 class TextSimplePortionPrimitive2D;
+class TextDecoratedPortionPrimitive2D;
+class TextLayouterDevice;
 }
 
 namespace basegfx
@@ -48,7 +50,13 @@ namespace basegfx
 class B2DPolyPolygon;
 }
 
+namespace basegfx::utils
+{
+class B2DHomMatrixBufferedOnDemandDecompose;
+}
+
 class BitmapEx;
+class SalLayout;
 
 namespace drawinglayer::processor2d
 {
@@ -108,12 +116,29 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
                           double fTransparency = 0.0);
     void processBitmapAlphaPrimitive2D(
         const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D);
+
     void processTextSimplePortionPrimitive2D(
         const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
     void processTextDecoratedPortionPrimitive2D(
-        const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+        const primitive2d::TextDecoratedPortionPrimitive2D& rCandidate);
+
+    // helpers for text rendering
     void renderTextSimpleOrDecoratedPortionPrimitive2D(
-        const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
+        const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
+        const primitive2d::TextDecoratedPortionPrimitive2D* pDecoratedCandidate);
+    void renderTextBackground(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
+                              const primitive2d::TextLayouterDevice& rTextLayouter,
+                              const basegfx::B2DHomMatrix& rTransform, double fTextWidth);
+    void renderSalLayout(const std::unique_ptr<SalLayout>& rSalLayout,
+                         const basegfx::BColor& rTextColor, const basegfx::B2DHomMatrix& rTransform,
+                         bool bAntiAliase);
+    void renderShadowTextDecoration(
+        const basegfx::BColor& rShadowColor, const basegfx::B2DHomMatrix& rShadowObjectTransform,
+        const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
+        const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans);
+    void
+    renderTextDecoration(const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
+                         const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

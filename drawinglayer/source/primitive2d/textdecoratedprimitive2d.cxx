@@ -52,13 +52,19 @@ namespace drawinglayer::primitive2d
                     getLocale(),
                     getFontColor()));
 
-            CreateDecorationGeometryContent(rTarget, rDecTrans, rText,
-                                            nTextPosition, nTextLength,
-                                            rDXArray);
+            // create and add decoration
+            const Primitive2DContainer& rDecorationGeometryContent(
+                getOrCreateDecorationGeometryContent(
+                    rDecTrans,
+                    rText,
+                    nTextPosition,
+                    nTextLength,
+                    rDXArray));
+
+            rTarget.insert(rTarget.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
         }
 
-        void TextDecoratedPortionPrimitive2D::CreateDecorationGeometryContent(
-            Primitive2DContainer& rTarget,
+        const Primitive2DContainer& TextDecoratedPortionPrimitive2D::getOrCreateDecorationGeometryContent(
             basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
             const OUString& rText,
             sal_Int32 nTextPosition,
@@ -71,7 +77,16 @@ namespace drawinglayer::primitive2d
             const bool bStrikeoutUsed(TEXT_STRIKEOUT_NONE != getTextStrikeout());
 
             if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed))
-                return;
+            {
+                // not used, return empty Primitive2DContainer
+                return maBufferedDecorationGeometry;
+            }
+
+            if (!maBufferedDecorationGeometry.empty())
+            {
+                // if not empty it is used -> append and return Primitive2DContainer
+                return maBufferedDecorationGeometry;
+            }
 
             // common preparations
             TextLayouterDevice aTextLayouter;
@@ -107,7 +122,7 @@ namespace drawinglayer::primitive2d
             if(bOverlineUsed)
             {
                 // create primitive geometry for overline
-                rTarget.push_back(
+                maBufferedDecorationGeometry.push_back(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -120,7 +135,7 @@ namespace drawinglayer::primitive2d
             if(bUnderlineUsed)
             {
                 // create primitive geometry for underline
-                rTarget.push_back(
+                maBufferedDecorationGeometry.push_back(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -130,60 +145,73 @@ namespace drawinglayer::primitive2d
                         getTextlineColor()));
             }
 
-            if(!bStrikeoutUsed)
-                return;
-
-            // create primitive geometry for strikeout
-            if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
+            if(bStrikeoutUsed)
             {
-                // strikeout with character
-                const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
+                // create primitive geometry for strikeout
+                if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
+                {
+                    // strikeout with character
+                    const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
 
-                rTarget.push_back(
-                    new TextCharacterStrikeoutPrimitive2D(
-                        rDecTrans.getB2DHomMatrix(),
-                        fTextWidth,
-                        getFontColor(),
-                        aStrikeoutChar,
-                        getFontAttribute(),
-                        getLocale()));
-            }
-            else
-            {
-                // strikeout with geometry
-                rTarget.push_back(
-                    new TextGeometryStrikeoutPrimitive2D(
-                        rDecTrans.getB2DHomMatrix(),
-                        fTextWidth,
-                        getFontColor(),
-                        aTextLayouter.getUnderlineHeight(),
-                        aTextLayouter.getStrikeoutOffset(),
-                        getTextStrikeout()));
+                    maBufferedDecorationGeometry.push_back(
+                        new TextCharacterStrikeoutPrimitive2D(
+                            rDecTrans.getB2DHomMatrix(),
+                            fTextWidth,
+                            getFontColor(),
+                            aStrikeoutChar,
+                            getFontAttribute(),
+                            getLocale()));
+                }
+                else
+                {
+                    // strikeout with geometry
+                    maBufferedDecorationGeometry.push_back(
+                        new TextGeometryStrikeoutPrimitive2D(
+                            rDecTrans.getB2DHomMatrix(),
+                            fTextWidth,
+                            getFontColor(),
+                            aTextLayouter.getUnderlineHeight(),
+                            aTextLayouter.getStrikeoutOffset(),
+                            getTextStrikeout()));
+                }
             }
 
             // TODO: Handle Font Emphasis Above/Below
+
+            // append local result and return
+            return maBufferedDecorationGeometry;
+        }
+
+        const Primitive2DContainer& TextDecoratedPortionPrimitive2D::getOrCreateBrokenUpText() const
+        {
+            if(!getWordLineMode())
+            {
+                // return empty Primitive2DContainer
+                return maBufferedBrokenUpText;
+            }
+
+            if (!maBufferedBrokenUpText.empty())
+            {
+                // if not empty it is used -> return Primitive2DContainer
+                return maBufferedBrokenUpText;
+            }
+
+            // support for single word mode; split to single word primitives
+            // using TextBreakupHelper
+            TextBreakupHelper aTextBreakupHelper(*this);
+            maBufferedBrokenUpText = aTextBreakupHelper.extractResult(BreakupUnit::Word);
+            return maBufferedBrokenUpText;
         }
 
         Primitive2DReference TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(getWordLineMode())
+            if (!getOrCreateBrokenUpText().empty())
             {
-                // support for single word mode; split to single word primitives
-                // using TextBreakupHelper
-                TextBreakupHelper aTextBreakupHelper(*this);
-                Primitive2DContainer aBroken(aTextBreakupHelper.extractResult(BreakupUnit::Word));
-
-                if(!aBroken.empty())
-                {
-                    // was indeed split to several words, use as result
-                    return new GroupPrimitive2D(std::move(aBroken));
-                }
-                else
-                {
-                    // no split, was already a single word. Continue to
-                    // decompose local entity
-                }
+                // if BrokenUpText/WordLineMode is used, go into recursion
+                Primitive2DContainer aContent(getOrCreateBrokenUpText());
+                return new GroupPrimitive2D(std::move(aContent));
             }
+
             basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
             Primitive2DContainer aRetval;
 
@@ -226,7 +254,12 @@ namespace drawinglayer::primitive2d
                     // shadow parameter values
                     static const double fFactor(1.0 / 24.0);
                     const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
-                    static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
+
+                    // see OutputDevice::ImplDrawSpecialText -> no longer simple fixed color
+                    const basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                    basegfx::BColor aShadowColor(aBlack);
+                    if (aBlack == getFontColor() || getFontColor().luminance() < (8.0 / 255.0))
+                        aShadowColor = COL_LIGHTGRAY.getBColor();
 
                     // prepare shadow transform matrix
                     const basegfx::B2DHomMatrix aShadowTransform(basegfx::utils::createTranslateB2DHomMatrix(
@@ -349,6 +382,8 @@ namespace drawinglayer::primitive2d
                 rLocale,
                 rFontColor,
                 rFillColor),
+            maBufferedBrokenUpText(),
+            maBufferedDecorationGeometry(),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

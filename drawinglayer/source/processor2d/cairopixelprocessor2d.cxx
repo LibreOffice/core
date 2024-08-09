@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -2857,7 +2858,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
                                                          aFillGradient, &rAlphaGradient)) }))
     };
 
-    // render this
+    // render this. Use container to not trigger decompose for temporary content
     process(aContainerMaskedFillGradient);
 }
 
@@ -2882,7 +2883,7 @@ void CairoPixelProcessor2D::processTextSimplePortionPrimitive2D(
 {
     if (SAL_LIKELY(mbRenderSimpleTextDirect))
     {
-        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
+        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate, nullptr);
     }
     else
     {
@@ -2891,11 +2892,19 @@ void CairoPixelProcessor2D::processTextSimplePortionPrimitive2D(
 }
 
 void CairoPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
-    const primitive2d::TextSimplePortionPrimitive2D& rCandidate)
+    const primitive2d::TextDecoratedPortionPrimitive2D& rCandidate)
 {
     if (SAL_LIKELY(mbRenderDecoratedTextDirect))
     {
-        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
+        if (!rCandidate.getOrCreateBrokenUpText().empty())
+        {
+            // if BrokenUpText/WordLineMode is used, go into recursion
+            // with single snippets
+            process(rCandidate.getOrCreateBrokenUpText());
+            return;
+        }
+
+        renderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate, &rCandidate);
     }
     else
     {
@@ -2903,57 +2912,95 @@ void CairoPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
     }
 }
 
-void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
-    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
+void CairoPixelProcessor2D::renderTextBackground(
+    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
+    const primitive2d::TextLayouterDevice& rTextLayouter, const basegfx::B2DHomMatrix& rTransform,
+    double fTextWidth)
 {
-    // decompose matrix to have global position and scale of text
-    const basegfx::B2DHomMatrix aGlobalFontTransform(
-        getViewInformation2D().getObjectToViewTransformation() * rTextCandidate.getTextTransform());
-    basegfx::B2DVector aGlobalFontScaling, aGlobalFontTranslate;
-    double fGlobalFontRotate, fGlobalFontShearX;
-    aGlobalFontTransform.decompose(aGlobalFontScaling, aGlobalFontTranslate, fGlobalFontRotate,
-                                   fGlobalFontShearX);
+    cairo_save(mpRT);
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, rTransform.a(), rTransform.b(), rTransform.c(), rTransform.d(),
+                      rTransform.e(), rTransform.f());
+    cairo_set_matrix(mpRT, &aMatrix);
+    const basegfx::BColor aFillColor(
+        maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
+    cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
+    cairo_rectangle(mpRT, 0.0, -rTextLayouter.getFontAscent(), fTextWidth,
+                    rTextLayouter.getTextHeight());
+    cairo_fill(mpRT);
+    cairo_restore(mpRT);
+}
 
-    // decompose primitive-local matrix to get local font scaling
-    double fLocalFontRotate, fLocalFontShearX;
-    basegfx::B2DVector aLocalFontSize, aLocalFontTranslate;
-    rTextCandidate.getTextTransform().decompose(aLocalFontSize, aLocalFontTranslate,
-                                                fLocalFontRotate, fLocalFontShearX);
+void CairoPixelProcessor2D::renderSalLayout(const std::unique_ptr<SalLayout>& rSalLayout,
+                                            const basegfx::BColor& rTextColor,
+                                            const basegfx::B2DHomMatrix& rTransform,
+                                            bool bAntiAliase)
+{
+    cairo_save(mpRT);
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, rTransform.a(), rTransform.b(), rTransform.c(), rTransform.d(),
+                      rTransform.e(), rTransform.f());
+    cairo_set_matrix(mpRT, &aMatrix);
+    rSalLayout->drawSalLayout(mpRT, rTextColor, bAntiAliase);
+    cairo_restore(mpRT);
+}
 
-    // Get the VCL font from existing processor tooling. Do not use
-    // rotation, for Cairo we can transform the whole text render and
-    // thus handle the text in its local coordinate system untransformed
-    vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
-        rTextCandidate.getFontAttribute(), aGlobalFontScaling.getX(), aGlobalFontScaling.getY(),
-        0.0, rTextCandidate.getLocale()));
+void CairoPixelProcessor2D::renderShadowTextDecoration(
+    const basegfx::BColor& rShadowColor, const basegfx::B2DHomMatrix& rShadowObjectTransform,
+    const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans)
+{
+    // modify ColorStack as needed
+    maBColorModifierStack.push(std::make_shared<basegfx::BColorModifier_replace>(rShadowColor));
 
-    if (aFont.GetFontSize().Height() <= 0)
+    // modify transformation as needed
+    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
+    aViewInformation2D.setObjectTransformation(rShadowObjectTransform);
+    updateViewInformation(aViewInformation2D);
+
+    // render same primitives as for non-shadow, but with mods set above
+    renderTextDecoration(rDecoratedCandidate, rDecTrans);
+
+    // restore mods
+    updateViewInformation(aLastViewInformation2D);
+    maBColorModifierStack.pop();
+}
+
+void CairoPixelProcessor2D::renderTextDecoration(
+    const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans)
+{
+    // get decorations from Primitive, guaranteed the same as
+    // a decomposition would create
+    const primitive2d::Primitive2DContainer& rDecorationGeometryContent(
+        rDecoratedCandidate.getOrCreateDecorationGeometryContent(
+            rDecTrans, rDecoratedCandidate.getText(), rDecoratedCandidate.getTextPosition(),
+            rDecoratedCandidate.getTextLength(), rDecoratedCandidate.getDXArray()));
+
+    if (rDecorationGeometryContent.empty())
     {
-        // Don't draw fonts without height, error. use decompose as fallback
-        process(rTextCandidate);
+        // no decoration, done
         return;
     }
 
-    // create integer DXArray. As mentioned above we can act in the
-    // Text's local coordinate system without transformation at all
-    const ::std::vector<double>& rDXArray(rTextCandidate.getDXArray());
-    KernArray aDXArray;
+    process(rDecorationGeometryContent);
+}
 
-    if (!rDXArray.empty())
-    {
-        aDXArray.reserve(rDXArray.size());
-        for (auto const& elem : rDXArray)
-            aDXArray.push_back(basegfx::fround(elem));
-    }
-
-    // set parameters and paint text snippet
-    const basegfx::BColor aRGBFontColor(
-        maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
+    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
+    const primitive2d::TextDecoratedPortionPrimitive2D* pDecoratedCandidate)
+{
+    // decompose primitive-local matrix to get local font scaling
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(
+        rTextCandidate.getTextTransform());
 
     // create a TextLayouter to access encapsulated VCL Text/Font related tooling
     primitive2d::TextLayouterDevice aTextLayouter;
-    aTextLayouter.setFontAttribute(rTextCandidate.getFontAttribute(), aLocalFontSize.getX(),
-                                   aLocalFontSize.getY(), rTextCandidate.getLocale());
+    aTextLayouter.setFontAttribute(rTextCandidate.getFontAttribute(), aDecTrans.getScale().getX(),
+                                   aDecTrans.getScale().getY(), rTextCandidate.getLocale());
+    const basegfx::BColor aRGBFontColor(
+        maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
     aTextLayouter.setTextColor(aRGBFontColor);
 
     if (rTextCandidate.getFontAttribute().getRTL())
@@ -2973,6 +3020,18 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         aTextLayouter.setLayoutMode(nLTRLayoutMode);
     }
 
+    // create integer DXArray. As mentioned above we can act in the
+    // Text's local coordinate system without transformation at all
+    const ::std::vector<double>& rDXArray(rTextCandidate.getDXArray());
+    KernArray aDXArray;
+
+    if (!rDXArray.empty())
+    {
+        aDXArray.reserve(rDXArray.size());
+        for (auto const& elem : rDXArray)
+            aDXArray.push_back(basegfx::fround(elem));
+    }
+
     // create SalLayout. No need for a position, as mentioned text can work
     // without transformations, so start point is always 0,0
     std::unique_ptr<SalLayout> pSalLayout(aTextLayouter.getSalLayout(
@@ -2986,35 +3045,97 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         return;
     }
 
-    // draw using Cairo, use existing tooling (this tunnels to
-    // CairoTextRender::ImplDrawTextLayout)
-    cairo_save(mpRT);
+    // prepare local transformations
     const basegfx::B2DHomMatrix aObjTransformWithoutScale(
-        basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fLocalFontShearX, fLocalFontRotate,
-                                                                aLocalFontTranslate));
+        basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+            aDecTrans.getShearX(), aDecTrans.getRotate(), aDecTrans.getTranslate()));
     const basegfx::B2DHomMatrix aFullTextTransform(
         getViewInformation2D().getObjectToViewTransformation() * aObjTransformWithoutScale);
 
-    cairo_matrix_t aMatrix;
-    cairo_matrix_init(&aMatrix, aFullTextTransform.a(), aFullTextTransform.b(),
-                      aFullTextTransform.c(), aFullTextTransform.d(), aFullTextTransform.e(),
-                      aFullTextTransform.f());
-    cairo_set_matrix(mpRT, &aMatrix);
-
     if (!rTextCandidate.getTextFillColor().IsTransparent())
     {
-        // TextFillColor is set -> text background is filled, paint it
-        const basegfx::BColor aFillColor(
-            maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
-        cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
-                             aFillColor.getBlue());
-        cairo_rectangle(mpRT, 0.0, -aTextLayouter.getFontAscent(), pSalLayout->GetTextWidth(),
-                        aTextLayouter.getTextHeight());
-        cairo_fill(mpRT);
+        // render TextBackground first -> casts no shadow itself, so do independent of
+        // text shadow being activated
+        renderTextBackground(rTextCandidate, aTextLayouter, aFullTextTransform,
+                             pSalLayout->GetTextWidth());
     }
 
-    pSalLayout->drawSalLayout(mpRT, aRGBFontColor, getViewInformation2D().getUseAntiAliasing());
-    cairo_restore(mpRT);
+    // basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(rTextCandidate.getTextTransform());
+    bool bHasTextRelief(false);
+    bool bHasShadow(false);
+    bool bHasOutline(false);
+    bool bHasTextDecoration(false);
+
+    if (nullptr != pDecoratedCandidate)
+    {
+        // outline AND shadow depend on NO TextRelief (see dialog)
+        bHasTextRelief = primitive2d::TEXT_RELIEF_NONE != pDecoratedCandidate->getTextRelief();
+        bHasShadow = !bHasTextRelief && pDecoratedCandidate->getShadow();
+        bHasOutline = !bHasTextRelief && pDecoratedCandidate->getFontAttribute().getOutline();
+
+        // check if TextDecoration is needed
+        bHasTextDecoration
+            = primitive2d::TEXT_LINE_NONE != pDecoratedCandidate->getFontOverline()
+              || primitive2d::TEXT_LINE_NONE != pDecoratedCandidate->getFontUnderline()
+              || primitive2d::TEXT_STRIKEOUT_NONE != pDecoratedCandidate->getTextStrikeout();
+    }
+
+    if (bHasShadow)
+    {
+        // Text shadow is constant, relative to font size, *not* rotated with
+        // text (always from top-left!)
+        static const double fFactor(1.0 / 24.0);
+        const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
+
+        // see OutputDevice::ImplDrawSpecialText -> no longer simple fixed color
+        const basegfx::BColor aBlack(0.0, 0.0, 0.0);
+        basegfx::BColor aShadowColor(aBlack);
+        if (aBlack == rTextCandidate.getFontColor()
+            || rTextCandidate.getFontColor().luminance() < (8.0 / 255.0))
+            aShadowColor = COL_LIGHTGRAY.getBColor();
+
+        // create shadow offset
+        const basegfx::B2DHomMatrix aShadowTransform(
+            basegfx::utils::createTranslateB2DHomMatrix(fTextShadowOffset, fTextShadowOffset));
+        const basegfx::B2DHomMatrix aShadowFullTextTransform(
+            // right to left: 1st the ObjTrans, then the shadow offset, last ObjToView. That way
+            // the shadow is always from top-left, independent of text rotation. Independent from
+            // thinking about if that is wanted (shadow direction *could* rotate with the text)
+            // this is what the office curently does -> do *not* change visualization (!)
+            getViewInformation2D().getObjectToViewTransformation() * aShadowTransform
+            * aObjTransformWithoutScale);
+
+        // render text as shadow
+        renderSalLayout(pSalLayout, aShadowColor, aShadowFullTextTransform,
+                        getViewInformation2D().getUseAntiAliasing());
+
+        if (bHasTextDecoration)
+        {
+            // this renders the same as renderTextDecoration, but encapsulated
+            // in temporary ColorStack & transformation modifications
+            const basegfx::B2DHomMatrix aTransform(getViewInformation2D().getObjectTransformation()
+                                                   * aShadowTransform);
+            renderShadowTextDecoration(aShadowColor, aTransform, *pDecoratedCandidate, aDecTrans);
+        }
+    }
+
+    if (bHasOutline)
+    {
+        // todo
+        renderSalLayout(pSalLayout, aRGBFontColor, aFullTextTransform,
+                        getViewInformation2D().getUseAntiAliasing());
+    }
+
+    // render text
+    renderSalLayout(pSalLayout, aRGBFontColor, aFullTextTransform,
+                    getViewInformation2D().getUseAntiAliasing());
+
+    if (bHasTextDecoration)
+    {
+        // render using same geometry/primitives that a decompose would
+        // create -> safe to get the same visualization for both
+        renderTextDecoration(*pDecoratedCandidate, aDecTrans);
+    }
 }
 
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
@@ -3160,7 +3281,7 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D:
         {
             processTextDecoratedPortionPrimitive2D(
-                static_cast<const primitive2d::TextSimplePortionPrimitive2D&>(rCandidate));
+                static_cast<const primitive2d::TextDecoratedPortionPrimitive2D&>(rCandidate));
             break;
         }
 

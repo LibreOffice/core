@@ -395,12 +395,18 @@ namespace sdr::properties
             // using existing functionality
             GetObjectItemSet(); // force ItemSet
             std::vector<const SfxPoolItem*> aChangedItems;
-            SfxItemIter aIter(*moItemSet);
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-            {
-                if(!IsInvalidItem(pItem))
-                    aChangedItems.push_back(pItem);
+
+            { // own scope to get SfxItemIter aIter destroyed ASAP - it maybe detected
+              // as reading source to the ItemSet when Items get changed below, but it
+              // is no longer active/needed
+                SfxItemIter aIter(*moItemSet);
+                for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                {
+                    if(!IsInvalidItem(pItem))
+                        aChangedItems.push_back(pItem);
+                }
             }
+
             ItemSetChanged(aChangedItems, 0);
 
             // now the standard TextProperties stuff
