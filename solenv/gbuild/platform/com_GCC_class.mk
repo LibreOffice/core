@@ -82,7 +82,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(6), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
-		-c $(3) \
+		$(if $(COMPILER_TEST),,-c) $(3) \
 		-o $(1) \
 		$(if $(COMPILER_TEST),,$(call gb_cxx_dep_generation_options,$(1),$(4))) \
 		$(INCLUDE) \
