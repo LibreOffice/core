@@ -1706,6 +1706,16 @@ namespace sw::mark
         return static_cast<sw::mark::Bookmark*>(makeMark( rPaM, sAnnotationBookmarkName, MarkType::BOOKMARK, eMode, pSepPos));
     }
 
+    // find the first AnnotationMark that does not start before
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const
+    {
+        return std::lower_bound(
+                m_vAnnotationMarks.begin(),
+                m_vAnnotationMarks.end(),
+                rPos,
+                CompareIMarkStartsBefore<AnnotationMark>());
+    }
+
     // find helper bookmark of annotations on tracked deletions
     std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findAnnotationBookmark(const OUString& rName) const
     {

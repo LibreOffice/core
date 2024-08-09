@@ -1790,10 +1790,13 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
     // tdf#115815 keep original start position of collapsed annotation ranges
     // as temporary bookmarks (removed after file saving and file loading)
     IDocumentMarkAccess& rDMA(*rDoc.getIDocumentMarkAccess());
-    for (auto iter = rDMA.getAnnotationMarksBegin();
-          iter != rDMA.getAnnotationMarksEnd(); )
+    for (auto iter = rDMA.findFirstAnnotationMarkNotStartsBefore(*pStt);
+          iter != rDMA.getAnnotationMarksEnd(); ++iter)
     {
         SwPosition const& rStartPos((**iter).GetMarkStart());
+        // vector is sorted by start pos, so we can exit early
+        if ( rStartPos > *pEnd )
+            break;
         if ( *pStt <= rStartPos && rStartPos < *pEnd )
         {
             auto pOldMark = rDMA.findAnnotationBookmark((**iter).GetName());
@@ -1815,7 +1818,6 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 }
             }
         }
-        ++iter;
     }
 }
 

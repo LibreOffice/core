@@ -131,6 +131,7 @@ namespace sw::mark {
                 const OUString& rName,
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const override;
             virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const override;
             virtual void restoreAnnotationMarks(bool bDelete = true) override;
 
