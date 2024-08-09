@@ -453,7 +453,7 @@ cppu::WeakImplHelper
 >
 SwSimpleIndexAccessBaseClass;
 
-class SwXFootnotes final : public SwSimpleIndexAccessBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXFootnotes final : public SwSimpleIndexAccessBaseClass,
                      public SwUnoCollection
 {
     const bool m_bEndnote;
