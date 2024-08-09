@@ -391,108 +391,91 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
 
-// No file pickers in a non-desktop (mobile app) build.
+    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
+    bool bShowError = !pName;
+
+    // No file pickers in a non-desktop (mobile app) build.
 
 #if HAVE_FEATURE_DESKTOP
     // when in HTML mode insert only as a link
     const sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
-    std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
-        ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
-        FileDialogFlags::Graphic, GetFrameWeld()));
-    pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
-    pFileDlg->SetContext( FileDialogHelper::WriterInsertImage );
 
-    uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();
-    uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
-    if(nHtmlMode & HTMLMODE_ON)
+    if (!pName && !Application::IsHeadlessModeEnabled())
     {
-        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(true));
-        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
-    }
+        std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
+            ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
+            FileDialogFlags::Graphic, GetFrameWeld()));
+        pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
+        pFileDlg->SetContext( FileDialogHelper::WriterInsertImage );
 
-    std::vector<OUString> aFormats;
-    const size_t nArrLen = pDoc->GetFrameFormats()->size();
-    for( size_t i = 0; i < nArrLen; ++i )
-    {
-        const SwFrameFormat* pFormat = (*pDoc->GetFrameFormats())[ i ];
-        if(pFormat->IsDefault() || pFormat->IsAuto())
-            continue;
-        aFormats.push_back(pFormat->GetName());
-    }
+        uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();
+        uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+        if(nHtmlMode & HTMLMODE_ON)
+        {
+            xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(true));
+            xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
+        }
 
-    // pool formats
+        std::vector<OUString> aFormats;
+        const size_t nArrLen = pDoc->GetFrameFormats()->size();
+        for( size_t i = 0; i < nArrLen; ++i )
+        {
+            const SwFrameFormat* pFormat = (*pDoc->GetFrameFormats())[ i ];
+            if(pFormat->IsDefault() || pFormat->IsAuto())
+                continue;
+            aFormats.push_back(pFormat->GetName());
+        }
 
-    const std::vector<OUString>& rFramePoolArr(
-            SwStyleNameMapper::GetFrameFormatUINameArray());
-    for(const auto & i : rFramePoolArr)
-    {
-        aFormats.push_back(i);
-    }
+        // pool formats
 
-    std::sort(aFormats.begin(), aFormats.end());
-    aFormats.erase(std::unique(aFormats.begin(), aFormats.end()), aFormats.end());
+        const std::vector<OUString>& rFramePoolArr(
+                SwStyleNameMapper::GetFrameFormatUINameArray());
+        for(const auto & i : rFramePoolArr)
+        {
+            aFormats.push_back(i);
+        }
 
-    Sequence<OUString> aListBoxEntries(aFormats.size());
-    OUString* pEntries = aListBoxEntries.getArray();
-    sal_Int16 nSelect = 0;
-    for( size_t i = 0; i < aFormats.size(); ++i )
-    {
-        pEntries[i] = aFormats[i];
-        if(pEntries[i] == sGraphicFormat)
-            nSelect = i;
-    }
-    try
-    {
-        Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
+        std::sort(aFormats.begin(), aFormats.end());
+        aFormats.erase(std::unique(aFormats.begin(), aFormats.end()), aFormats.end());
 
-        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
-            ListboxControlActions::ADD_ITEMS , aTemplates );
+        Sequence<OUString> aListBoxEntries(aFormats.size());
+        OUString* pEntries = aListBoxEntries.getArray();
+        sal_Int16 nSelect = 0;
+        for( size_t i = 0; i < aFormats.size(); ++i )
+        {
+            pEntries[i] = aFormats[i];
+            if(pEntries[i] == sGraphicFormat)
+                nSelect = i;
+        }
+        try
+        {
+            Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
 
-        Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
-        xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
-            ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
-    }
-    catch (const Exception&)
-    {
-        OSL_FAIL("control access failed");
-    }
-#endif
+            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                ListboxControlActions::ADD_ITEMS , aTemplates );
 
-    const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
-    bool bShowError = !pName;
+            Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
+            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
+        }
+        catch (const Exception&)
+        {
+            OSL_FAIL("control access failed");
+        }
 
-    bool bHaveName = pName != nullptr;
-#if HAVE_FEATURE_DESKTOP
-    if (!bHaveName && !Application::IsHeadlessModeEnabled())
-    {
         // execute file dialog, without capturing mouse (tdf#156033)
         vcl::Window* pWin = GetWindow();
         const bool bMouseCaptured = pWin && pWin->IsMouseCaptured();
         if (bMouseCaptured)
             pWin->ReleaseMouse();
-        bHaveName =  ERRCODE_NONE == pFileDlg->Execute();
+        bool bHaveName =  ERRCODE_NONE == pFileDlg->Execute();
         if (bMouseCaptured)
             pWin->CaptureMouse();
-    }
-#endif
-    if (bHaveName)
-    {
-
-        OUString aFileName, aFilterName;
-        if ( pName )
+        if (bHaveName)
         {
-            aFileName = pName->GetValue();
-            const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(FN_PARAM_FILTER);
-            if ( pFilter )
-                aFilterName = pFilter->GetValue();
-        }
-#if HAVE_FEATURE_DESKTOP
-        else
-        {
-            aFileName = pFileDlg->GetPath();
-            aFilterName = pFileDlg->GetCurrentFilter();
-            rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
-            rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
+            rReq.AppendItem(SfxStringItem(SID_INSERT_GRAPHIC, pFileDlg->GetPath()));
+            rReq.AppendItem(SfxStringItem(FN_PARAM_FILTER, pFileDlg->GetCurrentFilter()));
+            pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
 
             bool bAsLink = false;
             if(nHtmlMode & HTMLMODE_ON)
@@ -518,44 +501,31 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
-        const SfxBoolItem* pAsLink = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
-        const SfxStringItem* pStyle = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+    }
 #endif
-
+    if (pName)
+    {
+        OUString aFileName = pName->GetValue();
+        OUString aFilterName;
+        if (const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(FN_PARAM_FILTER))
+            aFilterName = pFilter->GetValue();
         bool bAsLink = false;
+        if (const SfxBoolItem* pAsLink = rReq.GetArg<SfxBoolItem>(FN_PARAM_1))
+            bAsLink = pAsLink->GetValue();
+        if (const SfxStringItem* pStyle = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+            pStyle && !pStyle->GetValue().isEmpty())
+            sGraphicFormat = pStyle->GetValue();
 
 #if HAVE_FEATURE_DESKTOP
         if( nHtmlMode & HTMLMODE_ON )
             bAsLink = true;
         else
         {
-            if ( rReq.GetArgs() )
-            {
-                if ( pAsLink )
-                    bAsLink = pAsLink->GetValue();
-                if ( pStyle && !pStyle->GetValue().isEmpty() )
-                    sGraphicFormat = pStyle->GetValue();
-            }
-            else
-            {
-                Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-                OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-                bAsLink = !aVal.hasValue() || *o3tl::doAccess<bool>(aVal);
-                Any aTemplateValue = xCtrlAcc->getValue(
-                    ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
-                    ListboxControlActions::GET_SELECTED_ITEM );
-                OUString sTmpl;
-                aTemplateValue >>= sTmpl;
-                if( !sTmpl.isEmpty() )
-                    sGraphicFormat = sTmpl;
-                rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
-                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
-            }
-
             // really store as link only?
-            if( bAsLink && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get() )
+            if (bAsLink && bShowError
+                && officecfg::Office::Common::Misc::ShowLinkWarningDialog::get())
             {
-                SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), pFileDlg->GetPath());
+                SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), aFileName);
                 if (aWarnDlg.run() != RET_OK)
                     bAsLink=false; // don't store as link
             }
