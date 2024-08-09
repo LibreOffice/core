@@ -100,7 +100,7 @@ bool Window::ImplIsAccessibleCandidate() const
 
 vcl::Window* Window::GetAccessibleParentWindow() const
 {
-    if (!mpWindowImpl || IsNativeFrame())
+    if (!mpWindowImpl || IsNativeFrame() || IsTopWindow())
         return nullptr;
 
     vcl::Window* pParent = mpWindowImpl->mpParent;
