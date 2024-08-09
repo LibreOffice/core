@@ -399,7 +399,7 @@ bool Application::Reschedule( bool i_bAllEvents )
     if (bAbort)
     {
         SAL_WARN("vcl.schedule", "Application::Reschedule(" << i_bAllEvents << ")");
-        std::abort();
+        return false;
     }
     return ImplYield(false, i_bAllEvents);
 }
