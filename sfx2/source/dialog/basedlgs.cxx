@@ -29,6 +29,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <workwin.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -231,6 +232,7 @@ SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent
     const OUString& rUIXMLDescription, const OUString& rID)
     : SfxOkDialogController(pParent, rUIXMLDescription, rID)
     , m_pInputSet(pSet)
+    , m_bHideHelpBtn(comphelper::LibreOfficeKit::isActive() && officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
     , m_xContainer(m_xDialog->weld_content_area())
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
@@ -242,6 +244,7 @@ SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent
     const OUString& rContainerId, const OUString& rUIXMLDescription, const OUString& rID)
     : SfxOkDialogController(pParent, rUIXMLDescription, rID)
     , m_pInputSet(pSet)
+    , m_bHideHelpBtn(comphelper::LibreOfficeKit::isActive() && officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
     , m_xContainer(m_xBuilder->weld_container(rContainerId))
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xHelpBtn(m_xBuilder->weld_button(u"help"_ustr))
@@ -274,7 +277,8 @@ void SfxSingleTabDialogController::SetTabPage(std::unique_ptr<SfxTabPage> xTabPa
     m_xSfxPage->SetUserData(sUserData);
     m_xSfxPage->Reset(GetInputItemSet());
 
-    m_xHelpBtn->set_visible(Help::IsContextHelpEnabled());
+    if (!m_bHideHelpBtn)
+        m_xHelpBtn->set_visible(Help::IsContextHelpEnabled());
 
     // Set TabPage text in the Dialog if there is any
     OUString sTitle(m_xSfxPage->GetPageTitle());
