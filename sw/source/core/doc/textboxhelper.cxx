@@ -47,7 +47,6 @@
 #include <frmatr.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -343,7 +342,8 @@ sal_Int32 SwTextBoxHelper::getCount(SdrPage const* pPage)
     sal_Int32 nRet = 0;
     for (const rtl::Reference<SdrObject>& p : *pPage)
     {
-        if (p && p->IsTextBox())
+        assert(p);
+        if (p->IsTextBox())
             continue;
         ++nRet;
     }
@@ -369,14 +369,11 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
     sal_Int32 nCount = 0; // Current logical index.
     for (const rtl::Reference<SdrObject>& p : *pPage)
     {
-        if (p && p->IsTextBox())
+        assert(p);
+        if (p->IsTextBox())
             continue;
         if (nCount == nIndex)
-        {
-            if (!p)
-                throw lang::IllegalArgumentException();
             return uno::Any(p->getUnoShape());
-        }
         ++nCount;
     }
 
@@ -390,7 +387,8 @@ sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
         sal_Int32 nOrder = 0; // Current logical order.
         for (const rtl::Reference<SdrObject>& p : *pPage)
         {
-            if (p && p->IsTextBox())
+            assert(p);
+            if (p->IsTextBox())
                 continue;
             if (p == pObject)
                 return nOrder;
