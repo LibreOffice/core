@@ -480,13 +480,9 @@ void OfaTreeOptionsDialog::InitWidgets()
     xBackPB = m_xBuilder->weld_button("revert");
     xTreeLB = m_xBuilder->weld_tree_view("pages");
     xTabBox = m_xBuilder->weld_container("box");
-    Size aSize(xTreeLB->get_approximate_digit_width() * 82, xTreeLB->get_height_rows(30));
-#if HAVE_FEATURE_GPGME
-    // tdf#115015: make enough space for crypto settings (approx. 14 text edits + padding)
-    aSize.setHeight((Edit::GetMinimumEditSize().Height() + 6) * 14);
-#endif
-    xTabBox->set_size_request(aSize.Width(), aSize.Height());
-    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 30, aSize.Height());
+
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35,
+                              xTreeLB->get_height_rows(30));
 }
 
 // Ctor() with Frame -----------------------------------------------------
