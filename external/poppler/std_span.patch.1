@@ -24,3 +24,15 @@ replace C++20 std::span with o3tl::span
  
  #include "CharTypes.h"
  #include "poppler_private_export.h"
+--- poppler/fofi/FoFiTrueType.h.orig	2025-01-09 14:58:33.689388042 +0100
++++ poppler/fofi/FoFiTrueType.h	2025-01-09 14:58:35.674394746 +0100
+@@ -35,7 +35,8 @@
+ #include <vector>
+ #include <unordered_map>
+ #include <string>
+-#include <span>
++#include <o3tl/span.hxx>
++namespace std { using o3tl::span; }
+ #include "FoFiBase.h"
+ #include "poppler_private_export.h"
+ 

@@ -24,6 +24,7 @@ namespace o3tl { using std::span; }
 
 #include <cassert>
 #include <cstddef>
+#include <array>
 #include <iterator>
 #include <type_traits>
 #include <vector>
@@ -59,6 +60,10 @@ public:
         // not terribly sure about this, might need to strengthen it
         assert(a != nullptr || len == 0);
     }
+
+    template<typename T2, std::size_t Size>
+    constexpr span(const std::array<T2, Size>& arr)
+        : data_(const_cast<T*>(arr.data())), size_(arr.size()) {}
 
     template<typename T2>
     constexpr span(const std::vector<T2>& vec)
