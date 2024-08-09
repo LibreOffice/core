@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,xmloff,\
     Package_dtd \
 ))
 
-$(eval $(call gb_Module_add_check_targets,xmloff,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
 	$(if $(MERGELIBS),, \
 		CppunitTest_xmloff_uxmloff) \
 ))

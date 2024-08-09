@@ -31,6 +31,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <time.h>
+#include <limits>
 #include <map>
 
 using namespace com::sun::star;

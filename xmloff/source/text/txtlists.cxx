@@ -22,6 +22,7 @@
 #include <comphelper/random.hxx>
 
 #include <o3tl/make_unique.hxx>
+#include <limits>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>

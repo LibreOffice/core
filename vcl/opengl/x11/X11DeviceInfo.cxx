@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <stdint.h>
 #include <sys/utsname.h>
 
 #include <desktop/crashreport.hxx>
