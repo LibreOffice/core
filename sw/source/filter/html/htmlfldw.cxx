@@ -441,6 +441,26 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
     return rWrt;
 }
 
+namespace
+{
+const SwViewOption* GetViewOptionFromDoc(SwDoc* pDoc)
+{
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    if (!pDocShell)
+    {
+        return nullptr;
+    }
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+    {
+        return nullptr;
+    }
+
+    return pWrtShell->GetViewOptions();
+}
+}
+
 SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
     const SwFormatField & rField = static_cast<const SwFormatField&>(rHt);
@@ -542,11 +562,11 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
     {
         const SwTextField *pTextField = rField.GetTextField();
         OSL_ENSURE( pTextField, "Where is the txt fld?" );
-        if (pTextField && rWrt.m_pDoc->GetDocShell() && rWrt.m_pDoc->GetDocShell()->GetView())
+        if (pTextField)
         {
+            const SwViewOption* pViewOptions = GetViewOptionFromDoc(rWrt.m_pDoc);
             // ReqIF-XHTML doesn't allow specifying a background color.
-            const SwViewOption* pViewOptions = rWrt.m_pDoc->GetDocShell()->GetView()->GetWrtShell().GetViewOptions();
-            bool bFieldShadings = pViewOptions->IsFieldShadings() && !rWrt.mbReqIF;
+            bool bFieldShadings = pViewOptions && pViewOptions->IsFieldShadings() && !rWrt.mbReqIF;
             if (bFieldShadings)
             {
                 // If there is a text portion background started already, that should have priority.

@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 #include <test/htmltesttools.hxx>
 
+#include <com/sun/star/text/XDependentTextField.hpp>
+
 #include <vcl/gdimtf.hxx>
 
 #include <docsh.hxx>
@@ -19,6 +21,7 @@
 #include <itabenum.hxx>
 #include <wrtsh.hxx>
 #include <cellatr.hxx>
+#include <swdtflvr.hxx>
 
 namespace
 {
@@ -239,6 +242,47 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
     // - Actual  : 3 (LEFT)
     // i.e. the table alignment was lost on import.
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, eHoriOrient);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
+{
+    // Given a document with a mail merge field:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFieldMaster(
+        xMSF->createInstance(u"com.sun.star.text.FieldMaster.Database"_ustr), uno::UNO_QUERY);
+    xFieldMaster->setPropertyValue(u"DataBaseName"_ustr, uno::Any(u"Address Book File"_ustr));
+    xFieldMaster->setPropertyValue(u"DataTableName"_ustr, uno::Any(u"address"_ustr));
+    xFieldMaster->setPropertyValue(u"DataColumnName"_ustr, uno::Any(u"FIRSTNAME"_ustr));
+    uno::Reference<text::XDependentTextField> xField(
+        xMSF->createInstance(u"com.sun.star.text.TextField.Database"_ustr), uno::UNO_QUERY);
+    xField->attachTextFieldMaster(xFieldMaster);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xFieldProps(xField, uno::UNO_QUERY);
+    xFieldProps->setPropertyValue(u"Content"_ustr, uno::Any(u"content"_ustr));
+    xText->insertTextContent(xCursor, xField, false);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SelAll();
+    rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
+    xTransferable->Cut();
+
+    // When copying that as HTML:
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = "text/html";
+    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    uno::Any aData = xTransferable->getTransferData(aFlavor);
+
+    // Then make sure the field value is part of the HTML produced from the clipboard document:
+    uno::Sequence<sal_Int8> aBytes;
+    aData >>= aBytes;
+    SvMemoryStream aMemory;
+    aMemory.WriteBytes(aBytes.getConstArray(), aBytes.getLength());
+    aMemory.Seek(0);
+    htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aMemory);
+    OUString aContent = getXPathContent(pHtmlDoc, "/html/body/p/text()"_ostr);
+    CPPUNIT_ASSERT_EQUAL(u"content"_ustr, aContent.trim());
 }
 }
 
