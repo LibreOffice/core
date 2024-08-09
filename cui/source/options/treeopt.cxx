@@ -475,13 +475,8 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
     , bNeedsRestart(false)
     , eRestartReason(svtools::RESTART_REASON_NONE)
 {
-    Size aSize(xTreeLB->get_approximate_digit_width() * 82, xTreeLB->get_height_rows(30));
-#if HAVE_FEATURE_GPGME
-    // tdf#115015: make enough space for crypto settings (approx. 14 text edits + padding)
-    aSize.setHeight((weld::GetMinimumEditHeight() + 6) * 14);
-#endif
-    xTabBox->set_size_request(aSize.Width(), aSize.Height());
-    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35, aSize.Height());
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35,
+                              xTreeLB->get_height_rows(30));
 
     // Init tree and handler
     xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
