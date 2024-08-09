@@ -55,7 +55,7 @@ const std::unordered_map<OString, OString> s_baseTypes{
     { "void"_ostr, "void"_ostr },
     { "type"_ostr, "System.Type"_ostr },
     { "any"_ostr, "com.sun.star.uno.Any"_ostr },
-    { "com.sun.star.uno.Exception"_ostr, "com.sun.star.uno.Exception"_ostr },
+    { "com.sun.star.uno.Exception"_ostr, "com.sun.star.uno.UnoException"_ostr },
     { "com.sun.star.uno.XInterface"_ostr, "com.sun.star.uno.IQueryInterface"_ostr },
 };
 
@@ -342,15 +342,15 @@ void NetProducer::producePlainStruct(std::string_view name,
 
             rtl::Reference<unoidl::PlainStructTypeEntity> ref(
                 dynamic_cast<unoidl::PlainStructTypeEntity*>(baseEntity.get()));
-            for (const auto& member : ref->getDirectMembers())
-                baseFields.emplace_back(member);
+            baseFields.insert(baseFields.begin(), ref->getDirectMembers().begin(),
+                              ref->getDirectMembers().end());
 
             baseTypeName = ref->getDirectBase();
         }
     }
 
     std::vector<unoidl::PlainStructTypeEntity::Member> allFields(entity->getDirectMembers());
-    allFields.insert(allFields.end(), baseFields.begin(), baseFields.end());
+    allFields.insert(allFields.begin(), baseFields.begin(), baseFields.end());
 
     file.beginLine().append("public ").append(getSafeIdentifier(typeName)).append("(");
     separatedForeach(
@@ -384,6 +384,7 @@ void NetProducer::producePlainStruct(std::string_view name,
             if (anno == "deprecated")
                 file.beginLine().append("[System.Obsolete]").endLine();
         file.beginLine()
+            .append("public ")
             .append(getNetName(member.type))
             .append(" ")
             .append(getSafeIdentifier(member.name))
@@ -475,6 +476,7 @@ void NetProducer::producePolyStruct(
             if (anno == "deprecated")
                 file.beginLine().append("[System.Obsolete]").endLine();
         file.beginLine()
+            .append("public ")
             .append(member.parameterized ? u2b(member.type) : getNetName(member.type))
             .append(" ")
             .append(getSafeIdentifier(member.name))
@@ -549,15 +551,15 @@ void NetProducer::produceException(std::string_view name,
 
             rtl::Reference<unoidl::ExceptionTypeEntity> ref(
                 dynamic_cast<unoidl::ExceptionTypeEntity*>(baseEntity.get()));
-            for (const auto& member : ref->getDirectMembers())
-                baseFields.emplace_back(member);
+            baseFields.insert(baseFields.begin(), ref->getDirectMembers().begin(),
+                              ref->getDirectMembers().end());
 
             baseTypeName = ref->getDirectBase();
         }
     }
 
     std::vector<unoidl::ExceptionTypeEntity::Member> allFields(entity->getDirectMembers());
-    allFields.insert(allFields.end(), baseFields.begin(), baseFields.end());
+    allFields.insert(allFields.begin(), baseFields.begin(), baseFields.end());
 
     file.beginLine().append("public ").append(getSafeIdentifier(typeName)).append("(");
     separatedForeach(
@@ -591,6 +593,7 @@ void NetProducer::produceException(std::string_view name,
             if (anno == "deprecated")
                 file.beginLine().append("[System.Obsolete]").endLine();
         file.beginLine()
+            .append("public ")
             .append(getNetName(member.type))
             .append(" ")
             .append(getSafeIdentifier(member.name))
@@ -732,7 +735,6 @@ void NetProducer::produceInterface(std::string_view name,
                 switch (p.direction)
                 {
                     case Dir::DIRECTION_IN:
-                        file.append("in ");
                         break;
                     case Dir::DIRECTION_OUT:
                         file.append("out ");
@@ -903,7 +905,7 @@ void NetProducer::produceService(
             file.beginLine()
                 .append("public static ")
                 .append(returnType)
-                .append(" create(in com.sun.star.uno.XComponentContext ctx)")
+                .append(" create(com.sun.star.uno.XComponentContext ctx)")
                 .endLine()
                 .beginBlock();
 
@@ -920,7 +922,7 @@ void NetProducer::produceService(
                 .append(" srv = (")
                 .append(returnType)
                 .append(")mcf.createInstanceWithContext(\"")
-                .append(returnType)
+                .append(name)
                 .append("\", ctx);")
                 .endLine()
                 .beginLine()
@@ -949,7 +951,7 @@ void NetProducer::produceService(
                 .beginLine()
                 .append(
                     "throw new com.sun.star.uno.DeploymentException(\"Could not create service ")
-                .append(returnType)
+                .append(name)
                 .append(" from given XComponentContext\", ctx);")
                 .endLine()
                 .endBlock();
@@ -968,7 +970,7 @@ void NetProducer::produceService(
                 .append(returnType)
                 .append(" ")
                 .append(getSafeIdentifier(ctor.name))
-                .append("(in com.sun.star.uno.XComponentContext ctx");
+                .append("(com.sun.star.uno.XComponentContext ctx");
             if (!ctor.parameters.empty())
                 file.append(", ");
             separatedForeach(
@@ -991,7 +993,7 @@ void NetProducer::produceService(
                 .append(" srv = (")
                 .append(returnType)
                 .append(")mcf.createInstanceWithArgumentsAndContext(\"")
-                .append(returnType)
+                .append(name)
                 .append("\", ");
             if (restParam)
             {
@@ -1006,7 +1008,7 @@ void NetProducer::produceService(
                 file.append("new com.sun.star.uno.Any[] { ");
                 separatedForeach(ctor.parameters, [&file]() { file.append(", "); },
                                  [&file](const auto& p) {
-                                     file.append("com.sun.star.uno.Any.with(")
+                                     file.append("new com.sun.star.uno.Any(")
                                          .append(getSafeIdentifier(p.name))
                                          .append(")");
                                  });
@@ -1018,7 +1020,7 @@ void NetProducer::produceService(
             {
                 file.beginLine()
                     .append("catch (")
-                    .append(e)
+                    .append(getNetName(e))
                     .append(")")
                     .endLine()
                     .beginBlock()
@@ -1035,7 +1037,7 @@ void NetProducer::produceService(
                 .beginLine()
                 .append(
                     "throw new com.sun.star.uno.DeploymentException(\"Could not create service ")
-                .append(returnType)
+                .append(name)
                 .append(" from given XComponentContext\", ctx);")
                 .endLine()
                 .endBlock();
@@ -1082,7 +1084,7 @@ void NetProducer::produceSingleton(
     file.beginLine()
         .append("public static ")
         .append(getNetName(entity->getBase()))
-        .append(" get(in com.sun.star.uno.XComponentContext ctx)")
+        .append(" get(com.sun.star.uno.XComponentContext ctx)")
         .endLine()
         .beginBlock();
 

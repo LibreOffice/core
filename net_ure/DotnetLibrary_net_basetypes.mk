@@ -11,9 +11,9 @@ $(eval $(call gb_DotnetLibrary_DotnetLibrary,net_basetypes,$(gb_DotnetLibrary_CS
 $(eval $(call gb_DotnetLibrary_add_sources,net_basetypes,\
 	net_ure/source/basetypes/Any \
 	net_ure/source/basetypes/BoundAttribute \
-	net_ure/source/basetypes/Exception \
 	net_ure/source/basetypes/IQueryInterface \
 	net_ure/source/basetypes/RaisesAttribute \
+	net_ure/source/basetypes/UnoException \
 	net_ure/source/basetypes/UnoGeneratedAttribute \
 ))
 

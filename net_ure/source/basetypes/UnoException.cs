@@ -10,16 +10,12 @@ using System;
 
 namespace com.sun.star.uno
 {
-    public class Exception : System.Exception
+    public class UnoException : Exception
     {
-        public new string Message { get; set; }
         public IQueryInterface Context { get; set; }
-        
-        public Exception() { }
-        public Exception(string Message, IQueryInterface Context)
-        {
-            this.Message = Message;
-            this.Context = Context;
-        }
+
+        public UnoException() { }
+        public UnoException(string Message, IQueryInterface Context)
+            : base(Message) => this.Context = Context;
     }
 }

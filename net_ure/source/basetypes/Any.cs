@@ -18,7 +18,8 @@ namespace com.sun.star.uno
         public Object Value { get; private set; }
 
         public Any(Type type, object value) => setValue(type, value);
-        public static Any with<T>(T value) => new Any(typeof(T), value);
+        public Any(object value) : this(value?.GetType() ?? typeof(void), value) { }
+        public static Any with<T>(object value) => new Any(typeof(T), value);
 
         public bool hasValue() => Type != typeof(void);
 
@@ -37,7 +38,8 @@ namespace com.sun.star.uno
             Type = type;
             Value = value;
         }
-        public void setValue<T>(T value) => setValue(typeof(T), value);
+        public void setValue(object value) => setValue(value.GetType(), value);
+        public void setValue<T>(object value) => setValue(typeof(T), value);
 
         public bool equals(Any other)
         {
