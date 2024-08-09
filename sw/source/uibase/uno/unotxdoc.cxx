@@ -1294,6 +1294,11 @@ uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
 
 Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
 {
+    return getSwDrawPage();
+}
+
+rtl::Reference< SwFmDrawPage >  SwXTextDocument::getSwDrawPage()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!m_xDrawPage.is())

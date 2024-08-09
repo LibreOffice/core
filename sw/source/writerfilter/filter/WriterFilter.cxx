@@ -45,6 +45,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <unodraw.hxx>
 #include <unotxdoc.hxx>
 #include <SwXDocumentSettings.hxx>
 
@@ -201,7 +202,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         uno::Reference<frame::XModel> xModel(static_cast<SfxBaseModel*>(m_xDstDoc.get()));
         pDocument->setModel(xModel);
 
-        uno::Reference<drawing::XDrawPage> xDrawPage(m_xDstDoc->getDrawPage(), uno::UNO_SET_THROW);
+        rtl::Reference<SwFmDrawPage> xDrawPage(m_xDstDoc->getSwDrawPage());
         pDocument->setDrawPage(xDrawPage);
 
         try

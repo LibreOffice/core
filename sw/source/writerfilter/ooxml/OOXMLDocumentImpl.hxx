@@ -44,7 +44,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     sal_Int32 mnXNoteId;
 
     css::uno::Reference<css::frame::XModel> mxModel;
-    css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
+    rtl::Reference<SwFmDrawPage> mxDrawPage;
     css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
     css::uno::Sequence < css::uno::Sequence< css::beans::NamedValue > > mxGlossaryDomList;
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
@@ -131,8 +131,8 @@ public:
 
     virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) override;
     virtual css::uno::Reference<css::frame::XModel> getModel() override;
-    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) override;
-    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() override;
+    virtual void setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage) override;
+    virtual rtl::Reference<SwFmDrawPage> getDrawPage() override;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) override;
     virtual void setXNoteId(const sal_Int32 nId) override;
     virtual sal_Int32 getXNoteId() const override;

@@ -29,6 +29,7 @@
 #include "rtfskipdestination.hxx"
 #include <unotxdoc.hxx>
 #include <unoframe.hxx>
+#include <unodraw.hxx>
 
 using namespace com::sun::star;
 
@@ -1115,7 +1116,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getDrawingObject().setPropertySet(xPropertySet);
             if (m_xDstDoc)
             {
-                uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
+                rtl::Reference<SwFmDrawPage> xShapes = m_xDstDoc->getSwDrawPage();
                 if (xShapes.is() && nKeyword != RTFKeyword::DPTXBX)
                 {
                     // set default VertOrient before inserting

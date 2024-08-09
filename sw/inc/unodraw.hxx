@@ -47,7 +47,7 @@ typedef cppu::ImplInheritanceHelper
     css::beans::XPropertySet>
         SwFmDrawPage_Base;
 
-class SwFmDrawPage final : public SwFmDrawPage_Base
+class SW_DLLPUBLIC SwFmDrawPage final : public SwFmDrawPage_Base
 {
     SwDoc*          m_pDoc;
     SdrPageView*        m_pPageView;

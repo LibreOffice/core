@@ -44,6 +44,7 @@
 #include <rtl/ref.hxx>
 #include <unotxdoc.hxx>
 #include <unobookmark.hxx>
+#include <unodraw.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -53,32 +54,32 @@ struct FormControlHelper::FormControlHelper_Impl : public virtual SvRefBase
 {
     FieldId m_eFieldId;
     awt::Size aSize;
-    uno::Reference<drawing::XDrawPage> rDrawPage;
+    rtl::Reference<SwFmDrawPage> mxDrawPage;
     uno::Reference<form::XForm> rForm;
     uno::Reference<form::XFormComponent> rFormComponent;
     rtl::Reference<SwXTextDocument> mxTextDocument;
 
-    uno::Reference<drawing::XDrawPage> const & getDrawPage();
+    rtl::Reference<SwFmDrawPage> const & getDrawPage();
     uno::Reference<form::XForm> const & getForm();
     uno::Reference<container::XIndexContainer> getFormComps();
 };
 
-uno::Reference<drawing::XDrawPage> const & FormControlHelper::FormControlHelper_Impl::getDrawPage()
+rtl::Reference<SwFmDrawPage> const & FormControlHelper::FormControlHelper_Impl::getDrawPage()
 {
-    if (! rDrawPage.is())
+    if (! mxDrawPage.is())
     {
         if (mxTextDocument)
-            rDrawPage = mxTextDocument->getDrawPage();
+            mxDrawPage = mxTextDocument->getSwDrawPage();
     }
 
-    return rDrawPage;
+    return mxDrawPage;
 }
 
 uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::getForm()
 {
     if (! rForm.is())
     {
-        uno::Reference<form::XFormsSupplier> xFormsSupplier(getDrawPage(), uno::UNO_QUERY);
+        rtl::Reference<SwFmDrawPage> xFormsSupplier(getDrawPage());
 
         if (xFormsSupplier.is())
         {

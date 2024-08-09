@@ -41,6 +41,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <unodraw.hxx>
 
 #include <iostream>
 #include <sfx2/objsh.hxx>
@@ -824,12 +825,12 @@ uno::Reference<frame::XModel> OOXMLDocumentImpl::getModel()
     return mxModel;
 }
 
-void OOXMLDocumentImpl::setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage)
+void OOXMLDocumentImpl::setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage)
 {
-    mxDrawPage.set(xDrawPage);
+    mxDrawPage = xDrawPage;
 }
 
-uno::Reference<drawing::XDrawPage> OOXMLDocumentImpl::getDrawPage()
+rtl::Reference<SwFmDrawPage> OOXMLDocumentImpl::getDrawPage()
 {
     return mxDrawPage;
 }

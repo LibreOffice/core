@@ -56,6 +56,7 @@
 #include "rtflookahead.hxx"
 #include "rtfcharsets.hxx"
 #include <unotxdoc.hxx>
+#include <unodraw.hxx>
 
 using namespace com::sun::star;
 
@@ -1016,7 +1017,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     {
         xShape.set(m_xDstDoc->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                    uno::UNO_QUERY);
-        uno::Reference<drawing::XShapes> xShapes = m_xDstDoc->getDrawPage();
+        rtl::Reference<SwFmDrawPage> xShapes = m_xDstDoc->getSwDrawPage();
         if (xShapes.is())
             xShapes->add(xShape);
     }

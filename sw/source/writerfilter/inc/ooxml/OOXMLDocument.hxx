@@ -33,6 +33,8 @@
 #include <oox/shape/ShapeContextHandler.hxx>
 #include <oox/drawingml/theme.hxx>
 
+class SwFmDrawPage;
+
 /**
    @file OOXMLDocument.hxx
 
@@ -207,8 +209,8 @@ public:
 
     virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) = 0;
     virtual css::uno::Reference<css::frame::XModel> getModel() = 0;
-    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) = 0;
-    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() = 0;
+    virtual void setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage) = 0;
+    virtual rtl::Reference<SwFmDrawPage> getDrawPage() = 0;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;

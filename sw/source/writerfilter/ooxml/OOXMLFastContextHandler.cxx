@@ -41,6 +41,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include "OOXMLPropertySet.hxx"
 #include <dmapper/GraphicHelpers.hxx>
+#include <unodraw.hxx>
 
 const sal_Unicode uCR = 0xd;
 const sal_Unicode uFtnEdnRef = 0x2;

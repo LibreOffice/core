@@ -152,6 +152,7 @@
 #include <unoport.hxx>
 #include <unotextbodyhf.hxx>
 #include <unosett.hxx>
+#include <unodraw.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -867,7 +868,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         if (xParagraph)
         {
             // move all anchored objects to the previous paragraph
-            auto xDrawPage = m_xTextDocument->getDrawPage();
+            rtl::Reference<SwFmDrawPage> xDrawPage = m_xTextDocument->getSwDrawPage();
             if (xDrawPage && xDrawPage->hasElements())
             {
                 // Cursor already spans two paragraphs
@@ -5012,7 +5013,7 @@ void DomainMapper_Impl::PopShapeContext()
     {
         try
         {
-            uno::Reference<drawing::XDrawPage> xDrawPage = m_xTextDocument->getDrawPage();
+            rtl::Reference<SwFmDrawPage> xDrawPage = m_xTextDocument->getSwDrawPage();
             if ( xDrawPage.is() )
                 xDrawPage->remove( xShape );
         }
