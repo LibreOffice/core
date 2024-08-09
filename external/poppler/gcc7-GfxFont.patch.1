@@ -41,7 +41,7 @@ index cc2ce038..b0d0d610 100644
 @@ -668,7 +668,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
          fontLoc.locType = gfxFontLocResident;
          fontLoc.fontType = fontType1;
-         fontLoc.path = *name;
+         fontLoc.path = name.value_or(std::string());
 -        return fontLoc;
 +        return std::move(fontLoc); // std::move only required to please g++-7
      }
