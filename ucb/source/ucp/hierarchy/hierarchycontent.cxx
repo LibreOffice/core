@@ -1246,7 +1246,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= m_aProps.getTitle();
 
-        aChanges.getArray()[ nChanged ] = aEvent;
+        aChanges.getArray()[ nChanged ] = std::move(aEvent);
         nChanged++;
     }
 

@@ -370,7 +370,7 @@ namespace cppcanvas::internal
                 aCalculatedNewState.pushFlags = rNewState.pushFlags;
 
                 // flush to stack
-                getState() = aCalculatedNewState;
+                getState() = std::move(aCalculatedNewState);
             }
             else
             {

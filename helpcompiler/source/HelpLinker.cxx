@@ -671,7 +671,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
             addFile = args[i];
             if (!addFileUnderPath.empty() && !addFile.empty())
-                additionalFiles[addFileUnderPath] = addFile;
+                additionalFiles[addFileUnderPath] = std::move(addFile);
         }
         else if (args[i].compare("-nolangroot") == 0)
             m_bUseLangRoot = false;

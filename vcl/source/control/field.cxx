@@ -323,7 +323,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
             aStr2.append(aStrFrac.getStr()+nDecPos+1);
         }
         else
-            aStr1 = aStrFrac;
+            aStr1 = std::move(aStrFrac);
     }
 
     // prune and round fraction

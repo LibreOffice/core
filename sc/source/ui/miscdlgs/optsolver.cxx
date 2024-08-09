@@ -1072,7 +1072,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         }
 
         aConstraints.realloc( nConstrPos + 1 );
-        aConstraints.getArray()[nConstrPos++] = aConstraint;
+        aConstraints.getArray()[nConstrPos++] = std::move(aConstraint);
     }
 
     // copy old document values
