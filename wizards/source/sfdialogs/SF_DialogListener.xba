@@ -31,10 +31,16 @@ Option Explicit
 &apos;&apos;&apos;					
 &apos;&apos;&apos;			The described events are processed thru UNO listeners
 &apos;&apos;&apos;
-&apos;&apos;&apos;			&quot;On&quot; events defined by code, prefix = _SFFOCUS_, _SFKEY_, _SFMOUSE_, _SFMOVE_, _SFITEM_, _SFADJUST_, _SFTEXT_
-&apos;&apos;&apos;			-----------
+&apos;&apos;&apos;			&quot;On&quot; events defined by code, prefix =	_SFACTION_, _SFADJUST_, _SFFOCUS_, _SFKEY_, _SFMOUSE_,
+&apos;&apos;&apos;			-----------								_SFMOVE_, _SFITEM_, _SFADJUST_, _SFTEXT_
 &apos;&apos;&apos;				All event types applicable on dialogs and control types &lt;&gt; TreeControl
 &apos;&apos;&apos;				The events MUST NOT be preset in the Basic IDE
+&apos;&apos;&apos;
+&apos;&apos;&apos;			Closure of non-modal dialogs, prefix = _SFNONMODAL_
+&apos;&apos;&apos;			--------------------
+&apos;&apos;&apos;				Before LibreOffice 24.2 the window Close button was inoperant
+&apos;&apos;&apos;				Now a com.sun.star.awt.XTopWindowListener listener is set on the dialog closure
+&apos;&apos;&apos;				by the dialog.Execute(Modal := False) method
 &apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
@@ -391,6 +397,59 @@ End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFTEXT_textChanged
 
 REM -----------------------------------------------------------------------------
 Public Sub _SFTEXT_disposing()
+End Sub
+
+REM ================================== PUBLIC METHODS (NON-MODAL DIALOGS CLOSURE)
+
+&apos;&apos;&apos;	Next events are watched by a com.sun.star.awt.XTopWindowListener set
+&apos;&apos;&apos;	when a non-modal dialog is executed.
+&apos;&apos;&apos;	The use of the window Close button triggers the clean termination
+&apos;&apos;&apos;	of the dialog.
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_disposing&apos;(Optional ByRef poEvent As Object)
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowOpened&apos;(Optional ByRef poEvent As Object)
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowClosing(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Identify and hide the closing dialog
+
+Dim oDialog As Object			&apos;	The dialog class instance
+
+	On Local Error GoTo Finally			&apos;	Never abort here
+
+	If Not IsNull(poEvent) Then
+		Set oDialog = CreateScriptService(&quot;SFDialogs.DialogEvent&quot;, poEvent)
+		If Not IsNull(oDialog) Then oDialog.Visible = False
+	End If
+
+Finally:
+	On Local Error GoTo 0
+	Exit Sub
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowClosed()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowMinimized()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowNormalized()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowActivated()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Sub _SFNONMODAL_windowDeactivated()
 End Sub
 
 REM ============================================================= PRIVATE METHODS

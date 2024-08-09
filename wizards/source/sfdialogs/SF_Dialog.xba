@@ -470,6 +470,7 @@ Check:
 	End If
 Try:
 	If Not IsNull(_DialogControl) Then
+		_DialogControl.setVisible(True)
 		_DialogControl.setFocus()
 		bActivate = True
 	End If
@@ -1931,6 +1932,10 @@ End Sub			&apos;	SFDialogs.SF_Dialog.EndExecute
 REM -----------------------------------------------------------------------------
 Public Function Execute(Optional ByVal Modal As Variant) As Long
 &apos;&apos;&apos;	Display the dialog and wait for its termination by the user
+&apos;&apos;&apos;	When the window Close button is clicked:
+&apos;&apos;&apos;		- a modal dialog is stopped as if a Cancel button was pressed
+&apos;&apos;&apos;		- a non-modal dialog is made hidden
+&apos;&apos;&apos;	Termination and disposal of the dialog instance are roles of user scripts
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Modal: False when non-modal dialog. Default = True
 &apos;&apos;&apos;	Returns:
@@ -1944,6 +1949,7 @@ Public Function Execute(Optional ByVal Modal As Variant) As Long
 &apos;&apos;&apos;			Select Case lReturn
 
 Dim lExecute As Long			&apos;	Return value
+Dim oListener As Object			&apos;	com.sun.star.awt.XTopWindowListener
 Const cstThisSub = &quot;SFDialogs.Dialog.Execute&quot;
 Const cstSubArgs = &quot;[Modal=True]&quot;
 
@@ -1976,6 +1982,9 @@ Try:
 		&apos;	To make visible an on-the-fly designed dialog when macro triggered from Python
 		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
 		_DialogControl.setVisible(True)
+		&apos;	Watch the window Close button
+		Set oListener = CreateUnoListener(&quot;_SFNONMODAL_&quot;, &quot;com.sun.star.awt.XTopWindowListener&quot;)
+		_DialogControl.addTopWindowListener(oListener)
 		lExecute = 0
 	End If
 
