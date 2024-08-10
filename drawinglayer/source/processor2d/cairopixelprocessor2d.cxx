@@ -3101,7 +3101,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
             // right to left: 1st the ObjTrans, then the shadow offset, last ObjToView. That way
             // the shadow is always from top-left, independent of text rotation. Independent from
             // thinking about if that is wanted (shadow direction *could* rotate with the text)
-            // this is what the office curently does -> do *not* change visualization (!)
+            // this is what the office currently does -> do *not* change visualization (!)
             getViewInformation2D().getObjectToViewTransformation() * aShadowTransform
             * aObjTransformWithoutScale);
 
