@@ -496,6 +496,8 @@ public:
 
     SAL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
     SAL_DLLPRIVATE    void              resetPrinterOptions( bool i_bFileOutput );
+
+    SAL_DLLPRIVATE    void              invalidatePageCache();
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

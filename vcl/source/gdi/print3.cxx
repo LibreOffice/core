@@ -857,6 +857,11 @@ void PrinterController::resetPrinterOptions( bool i_bFileOutput )
     mpImplData->mxPrinter->SetPrinterOptions( aOpt );
 }
 
+void PrinterController::invalidatePageCache()
+{
+    mpImplData->maPageCache.invalidate();
+}
+
 void PrinterController::setupPrinter( weld::Window* i_pParent )
 {
     bool bRet = false;
@@ -913,9 +918,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
         }
 
         if (bInvalidateCache)
-        {
-            mpImplData->maPageCache.invalidate();
-        }
+            invalidatePageCache();
     }
     else
     {
@@ -1061,7 +1064,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
         }
     }
     else
-        mpImplData->maPageCache.invalidate();
+        invalidatePageCache();
 
     o_rMtf.Clear();
 

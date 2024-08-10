@@ -854,8 +854,12 @@ void PrintDialog::setPaperSizes()
     }
     else
     {
+        int nExactMatch = -1;
+        int nSizeMatch = -1;
+        int nRotatedSizeMatch = -1;
         Size aSizeOfPaper = aPrt->GetSizeOfPaper();
         PaperInfo aPaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight());
+        PaperInfo aRotatedPaperInfo(aSizeOfPaper.getHeight(), aSizeOfPaper.getWidth());
         const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
         o3tl::Length eUnit = o3tl::Length::mm;
         int nDigits = 0;
@@ -887,10 +891,22 @@ void PrintDialog::setPaperSizes()
 
             mxPaperSizeBox->append_text(aPaperName);
 
-            if ( (ePaper != PAPER_USER && ePaper == mePaper) ||
-                 (ePaper == PAPER_USER && aInfo.sloppyEqual(aPaperInfo) ) )
-                 mxPaperSizeBox->set_active( nPaper );
+            if (ePaper != PAPER_USER && ePaper == mePaper)
+                nExactMatch = nPaper;
+
+            if (ePaper == PAPER_USER && aInfo.sloppyEqual(aPaperInfo))
+                nSizeMatch = nPaper;
+
+            if (ePaper == PAPER_USER && aInfo.sloppyEqual(aRotatedPaperInfo))
+                nRotatedSizeMatch = nPaper;
         }
+
+        if (nExactMatch != -1)
+            mxPaperSizeBox->set_active(nExactMatch);
+        else if (nSizeMatch != -1)
+            mxPaperSizeBox->set_active(nSizeMatch);
+        else if (nRotatedSizeMatch != -1)
+            mxPaperSizeBox->set_active(nRotatedSizeMatch);
 
         mxPaperSizeBox->set_sensitive( true );
     }
@@ -1977,12 +1993,16 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
             // set new printer
             maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
             maPController->resetPrinterOptions( false  );
+            // invalidate page cache and start fresh
+            maPController->invalidatePageCache();
+            maFirstPageSize = Size();
 
             updateOrientationBox();
 
             // update text fields
             mxOKButton->set_label(maPrintText);
             updatePrinterText();
+            updateNup(false);
             setPaperSizes();
             maUpdatePreviewIdle.Start();
         }
