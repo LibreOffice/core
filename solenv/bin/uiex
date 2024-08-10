@@ -31,7 +31,11 @@ with open(ofile, "a") as output:
             # l10ntools/source/localize.cxx will insert one entry for each stock per .po
             if entry.msgctxt == "stock":
                 continue
-            keyid = entry.msgctxt + '|' + entry.msgid
+            try:
+                keyid = entry.msgctxt + '|' + entry.msgid
+            except Exception:
+                print(f"There is a problem with the translatable string labeled \"{entry.msgid}\". Likely no context attribute has been specified.")
+                sys.exit(2)
             print('#. ' + polib.genKeyId(keyid), file=output)
             for i, occurrence in enumerate(entry.occurrences):
                 entry.occurrences[i] = os.path.relpath(occurrence[0], os.environ['SRCDIR']), occurrence[1]
