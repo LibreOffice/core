@@ -1801,6 +1801,12 @@ namespace sw::mark
         const_cast< MarkManager* >(this)->sortMarks();
     }
 
+    void MarkManager::sortMarks()
+    {
+        sort(m_vAllMarks.begin(), m_vAllMarks.end(), &lcl_MarkOrderingByStart<MarkBase>);
+        sortSubsetMarks();
+    }
+
     void MarkManager::sortSubsetMarks()
     {
         stable_sort(m_vBookmarks.begin(), m_vBookmarks.end(), &lcl_MarkOrderingByStart<MarkBase>);
@@ -1808,10 +1814,82 @@ namespace sw::mark
         sort(m_vAnnotationMarks.begin(), m_vAnnotationMarks.end(), &lcl_MarkOrderingByStart<MarkBase>);
     }
 
-    void MarkManager::sortMarks()
+    template<class MarkT>
+    static void lcl_assureSortedMarkContainers(typename std::vector<MarkT*>& rContainer,
+                    sal_Int32 nMinIndexModified)
     {
-        sort(m_vAllMarks.begin(), m_vAllMarks.end(), &lcl_MarkOrderingByStart<MarkBase>);
-        sortSubsetMarks();
+        // We know that the range nMinIndexModified.. has been modified, now we need to extend that range
+        // to find the total range of elements that need to be sorted.
+        // We know that the marks have been modified in fairly limited ways, see ContentIdxStoreImpl.
+        sal_Int32 nMin = nMinIndexModified;
+        while (nMin != 0)
+        {
+            nMin--;
+            if (rContainer[nMin]->GetMarkStart() < rContainer[nMinIndexModified]->GetMarkStart())
+                break;
+        }
+        sort(rContainer.begin() + nMin, rContainer.end(), &lcl_MarkOrderingByStart<MarkT>);
+    }
+
+    template<class MarkT>
+    static void lcl_assureSortedMarkSubContainers(typename std::vector<MarkT*>& rContainer,
+                    MarkT* pFound)
+    {
+        if (pFound)
+        {
+            auto it = std::find(rContainer.rbegin(), rContainer.rend(), pFound);
+            sal_Int32 nFirstModified = std::distance(rContainer.begin(), (it+1).base());
+            lcl_assureSortedMarkContainers<MarkT>(rContainer, nFirstModified);
+        }
+    }
+
+    /**
+     * called when we need to sort a sub-range of the container, elements starting
+     * at nMinIndexModified were modified. This is used from ContentIdxStoreImpl::RestoreBkmks,
+     * where we are only modifying a small range at the end of the container.
+     */
+    void MarkManager::assureSortedMarkContainers(sal_Int32 nMinIndexModified) const
+    {
+        // check if the modified range contains elements from the other sorted containers
+        Bookmark* pBookmark = nullptr;
+        Fieldmark* pFieldmark = nullptr;
+        AnnotationMark* pAnnotationMark = nullptr;
+        for (auto it = m_vAllMarks.begin() + nMinIndexModified; it != m_vAllMarks.end(); ++it)
+        {
+            switch(IDocumentMarkAccess::GetType(**it))
+            {
+                case IDocumentMarkAccess::MarkType::BOOKMARK:
+                case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+                case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+                    if (!pBookmark)
+                        pBookmark = static_cast<Bookmark*>(*it);
+                    break;
+                case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
+                case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
+                case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
+                case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
+                    if (!pFieldmark)
+                        pFieldmark = static_cast<Fieldmark*>(*it);
+                    break;
+
+                case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
+                    if (!pAnnotationMark)
+                        pAnnotationMark = static_cast<AnnotationMark*>(*it);
+                    break;
+
+                case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
+                case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
+                case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
+                    // no special marks container
+                    break;
+            }
+        }
+
+        auto pThis = const_cast<MarkManager*>(this);
+        lcl_assureSortedMarkContainers<MarkBase>(pThis->m_vAllMarks, nMinIndexModified);
+        lcl_assureSortedMarkSubContainers<Bookmark>(pThis->m_vBookmarks, pBookmark);
+        lcl_assureSortedMarkSubContainers<Fieldmark>(pThis->m_vFieldmarks, pFieldmark);
+        lcl_assureSortedMarkSubContainers<AnnotationMark>(pThis->m_vAnnotationMarks, pAnnotationMark);
     }
 
 template<class MarkT>
