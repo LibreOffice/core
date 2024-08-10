@@ -910,17 +910,34 @@ rtl::Reference< SwXTextCursor > SwXCell::createXTextCursor()
 rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
 {
     SwUnoInternalPaM aPam(*GetDoc());
-    if((!m_pStartNode && !IsValid()) || !::sw::XTextRangeToSwPaM(aPam, xTextPosition))
+    if(!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
+        throw uno::RuntimeException();
+    return createXTextCursorByRangeImpl(aPam);
+}
+
+rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(
+    const rtl::Reference< SwXTextCursor > & xTextPosition)
+{
+    SwUnoInternalPaM aPam(*GetDoc());
+    if(!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
+        throw uno::RuntimeException();
+    return createXTextCursorByRangeImpl(aPam);
+}
+
+rtl::Reference< SwXTextCursor > SwXCell::createXTextCursorByRangeImpl(
+        SwUnoInternalPaM& rPam)
+{
+    if(!m_pStartNode && !IsValid())
         throw uno::RuntimeException();
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
     // skip sections
-    SwStartNode* p1 = aPam.GetPointNode().StartOfSectionNode();
+    SwStartNode* p1 = rPam.GetPointNode().StartOfSectionNode();
     while(p1->IsSectionNode())
         p1 = p1->StartOfSectionNode();
     if( p1 != pSttNd )
         return nullptr;
     return new SwXTextCursor(*GetDoc(), this, CursorType::TableText,
-                *aPam.GetPoint(), aPam.GetMark());
+                *rPam.GetPoint(), rPam.GetMark());
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo()

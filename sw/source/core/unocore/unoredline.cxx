@@ -138,6 +138,15 @@ rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursorByRange(
     return xCursor;
 }
 
+rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursorByRange(
+    const rtl::Reference< SwXTextCursor > & aTextRange)
+{
+    rtl::Reference< SwXTextCursor > xCursor = createXTextCursor();
+    xCursor->gotoRange(aTextRange->getStart(), false);
+    xCursor->gotoRange(aTextRange->getEnd(), true);
+    return xCursor;
+}
+
 uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
 {
     SolarMutexGuard aGuard;
@@ -557,6 +566,12 @@ rtl::Reference< SwXTextCursor >  SwXRedline::createXTextCursor()
 
 rtl::Reference< SwXTextCursor > SwXRedline::createXTextCursorByRange(
     const uno::Reference< text::XTextRange > & /*aTextPosition*/)
+{
+    throw uno::RuntimeException();
+}
+
+rtl::Reference< SwXTextCursor > SwXRedline::createXTextCursorByRange(
+    const rtl::Reference< SwXTextCursor > & /*aTextPosition*/)
 {
     throw uno::RuntimeException();
 }

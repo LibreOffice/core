@@ -46,6 +46,7 @@ class SwTable;
 class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
+class SwUnoInternalPaM;
 class SfxItemPropertySet;
 
 typedef
@@ -110,6 +111,8 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
     //XPropertySet
@@ -139,6 +142,8 @@ public:
     SwFrameFormat* GetFrameFormat() const { return m_pTableFormat; }
     double GetForcedNumericalValue() const;
     css::uno::Any GetAny() const;
+private:
+    rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwUnoInternalPaM& rPam);
 };
 
 class SwXTextTableRow final

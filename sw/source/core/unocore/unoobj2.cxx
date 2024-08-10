@@ -1143,6 +1143,19 @@ void SwXTextRange::GetStartPaM(std::optional<SwPaM>& roPaM)
 
 namespace sw {
 
+static bool XTextRangeToSwPaMImpl( SwUnoInternalPaM & rToFill,
+        SwDoc* pDoc,
+        const SwPaM* pUnoCursor);
+
+bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
+        const rtl::Reference< SwXTextCursor > & xTextRange)
+{
+    assert(xTextRange);
+    SwDoc* pDoc = xTextRange->GetDoc();
+    const SwPaM* pUnoCursor = xTextRange->GetPaM();
+    return XTextRangeToSwPaMImpl(rToFill, pDoc, pUnoCursor);
+}
+
 bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         const uno::Reference<text::XTextRange> & xTextRange,
         ::sw::TextRangeMode const eMode)
@@ -1156,8 +1169,6 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     {
         return pPara->SelectPaM(rToFill);
     }
-
-    bool bRet = false;
 
     SwXHeadFootText* pHeadText
         = eMode == TextRangeMode::AllowTableNode ? dynamic_cast<SwXHeadFootText*>(xTextRange.get()) : nullptr;
@@ -1187,7 +1198,6 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     {
         pCursor = dynamic_cast<OTextCursorHelper*>(xTextRange.get());
     }
-
     SwDoc* pDoc = nullptr;
     const SwPaM* pUnoCursor = nullptr;
     if (pCursor)
@@ -1200,6 +1210,14 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         pDoc = &pPortion->GetCursor().GetDoc();
         pUnoCursor = &pPortion->GetCursor();
     }
+    return XTextRangeToSwPaMImpl(rToFill, pDoc, pUnoCursor);
+}
+
+static bool XTextRangeToSwPaMImpl( SwUnoInternalPaM & rToFill,
+        SwDoc* pDoc,
+        const SwPaM* pUnoCursor)
+{
+    bool bRet = false;
     if (pUnoCursor && pDoc == &rToFill.GetDoc())
     {
         OSL_ENSURE(!pUnoCursor->IsMultiSelection(),

@@ -45,6 +45,7 @@ class SwNodeRange;
 class SwPaM;
 class SwXTextCursor;
 class SwXParagraph;
+class SwXTextRange;
 
 class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXText
     : public css::lang::XTypeProvider
@@ -148,6 +149,8 @@ public:
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) = 0;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const rtl::Reference< SwXTextCursor >& aTextPosition ) = 0;
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() = 0;
 
@@ -246,6 +249,13 @@ public:
             const css::uno::Reference< css::text::XTextContent>& xPredecessor) override;
 
 private:
+    rtl::Reference< SwXTextCursor > getEndImpl(SolarMutexGuard& rGuard);
+    rtl::Reference< SwXTextRange > insertTextPortionImpl(
+            SolarMutexGuard& rGuard,
+            std::u16string_view rText,
+            const css::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties,
+            const rtl::Reference<SwXTextCursor>& xTextCursor);
+
     SfxItemPropertySet const&   m_rPropSet;
     const CursorType            m_eType;
     SwDoc *                     m_pDoc;

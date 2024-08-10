@@ -46,6 +46,7 @@
 class SwDoc;
 struct SwPosition;
 class SwUnoCursor;
+class SwXTextRange;
 class SfxItemPropertySet;
 
 typedef ::cppu::WeakImplHelper
@@ -224,6 +225,9 @@ public:
     virtual void SAL_CALL gotoRange(
             const css::uno::Reference< css::text::XTextRange >& xRange,
             sal_Bool bExpand) override;
+    void gotoRange(
+            const rtl::Reference< SwXTextCursor >& xRange,
+            bool bExpand);
 
     // XWordCursor
     virtual sal_Bool SAL_CALL isStartOfWord() override;
@@ -257,6 +261,11 @@ public:
     //XMarkingAccess
     virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType) override;
 
+private:
+    void gotoRangeImpl(
+            SwXTextRange* pRange,
+            OTextCursorHelper* pCursor,
+            bool bExpand);
 };
 
 #endif // INCLUDED_SW_INC_UNOTEXTCURSOR_HXX

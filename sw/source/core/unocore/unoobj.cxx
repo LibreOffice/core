@@ -1153,21 +1153,38 @@ SwXTextCursor::gotoRange(
     const uno::Reference< text::XTextRange > & xRange, sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
-
     if (!xRange.is())
     {
         throw uno::RuntimeException();
     }
-
-    SwUnoCursor & rOwnCursor( GetCursorOrThrow() );
-
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xRange.get());
     OTextCursorHelper* pCursor = dynamic_cast<OTextCursorHelper*>(xRange.get());
-
     if (!pRange && !pCursor)
     {
         throw uno::RuntimeException();
     }
+
+    gotoRangeImpl(pRange, pCursor, bExpand);
+}
+
+void
+SwXTextCursor::gotoRange(
+    const rtl::Reference< SwXTextCursor > & xRange, bool bExpand)
+{
+    assert(xRange);
+    gotoRangeImpl(nullptr, xRange.get(), bExpand);
+}
+
+void
+SwXTextCursor::gotoRangeImpl(
+    SwXTextRange* pRange,
+    OTextCursorHelper* pCursor,
+    bool bExpand)
+{
+    DBG_TESTSOLARMUTEX();
+    assert((pRange || pCursor) && "one of these parameters must be non-null");
+
+    SwUnoCursor & rOwnCursor( GetCursorOrThrow() );
 
     SwPaM aPam(GetDoc()->GetNodes());
     const SwPaM * pPam(nullptr);
@@ -1175,7 +1192,7 @@ SwXTextCursor::gotoRange(
     {
         pPam = pCursor->GetPaM();
     }
-    else if (pRange)
+    else
     {
         if (pRange->GetPositions(aPam))
         {

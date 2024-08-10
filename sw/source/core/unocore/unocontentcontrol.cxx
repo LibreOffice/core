@@ -71,6 +71,8 @@ public:
     virtual rtl::Reference<SwXTextCursor> createXTextCursor() override;
     virtual rtl::Reference<SwXTextCursor> createXTextCursorByRange(
         const ::css::uno::Reference<::css::text::XTextRange>& aTextPosition) override;
+    virtual rtl::Reference<SwXTextCursor>
+    createXTextCursorByRange(const rtl::Reference<SwXTextCursor>& aTextPosition) override;
 };
 }
 
@@ -124,6 +126,14 @@ uno::Sequence<sal_Int8> SAL_CALL SwXContentControlText::getImplementationId()
 
 rtl::Reference<SwXTextCursor> SwXContentControlText::createXTextCursorByRange(
     const uno::Reference<text::XTextRange>& xTextPosition)
+{
+    const rtl::Reference<SwXTextCursor> xCursor(createXTextCursor());
+    xCursor->gotoRange(xTextPosition, false);
+    return xCursor;
+}
+
+rtl::Reference<SwXTextCursor>
+SwXContentControlText::createXTextCursorByRange(const rtl::Reference<SwXTextCursor>& xTextPosition)
 {
     const rtl::Reference<SwXTextCursor> xCursor(createXTextCursor());
     xCursor->gotoRange(xTextPosition, false);

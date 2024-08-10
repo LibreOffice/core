@@ -44,6 +44,7 @@
 class SdrObject;
 class SwDoc;
 class SwFormat;
+class SwUnoInternalPaM;
 class SfxItemPropertySet;
 namespace com::sun::star::frame { class XModel; }
 
@@ -204,6 +205,8 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
+    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
+            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
 
     //XEnumerationAccess - was: XParagraphEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
@@ -232,6 +235,8 @@ public:
     //XPropertySet
     virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     using SwXFrame::setPropertyValue;
+private:
+    rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwUnoInternalPaM& rPam);
 };
 
 typedef cppu::ImplInheritanceHelper

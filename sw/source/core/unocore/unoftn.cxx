@@ -405,18 +405,35 @@ rtl::Reference< SwXTextCursor >
 SwXFootnote::createXTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
 {
-    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
-
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         throw uno::RuntimeException();
     }
+    return createXTextCursorByRangeImpl(aPam);
+}
+
+rtl::Reference< SwXTextCursor >
+SwXFootnote::createXTextCursorByRange(
+    const rtl::Reference< SwXTextCursor > & xTextPosition)
+{
+    SwUnoInternalPaM aPam(*GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
+    {
+        throw uno::RuntimeException();
+    }
+    return createXTextCursorByRangeImpl(aPam);
+}
+
+rtl::Reference< SwXTextCursor > SwXFootnote::createXTextCursorByRangeImpl(
+        SwUnoInternalPaM& rPam)
+{
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwNode const*const pFootnoteStartNode = &pTextFootnote->GetStartNode()->GetNode();
 
-    const SwNode* pStart = aPam.GetPointNode().FindFootnoteStartNode();
+    const SwNode* pStart = rPam.GetPointNode().FindFootnoteStartNode();
     if (pStart != pFootnoteStartNode)
     {
         throw uno::RuntimeException();
@@ -424,7 +441,7 @@ SwXFootnote::createXTextCursorByRange(
 
     const rtl::Reference< SwXTextCursor > xRet =
                 new SwXTextCursor(*GetDoc(), this, CursorType::Footnote,
-                    *aPam.GetPoint(), aPam.GetMark());
+                    *rPam.GetPoint(), rPam.GetMark());
     return xRet;
 }
 
