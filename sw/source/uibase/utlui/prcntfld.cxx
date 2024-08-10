@@ -46,6 +46,15 @@ void SwPercentField::SetRefValue(sal_Int64 nValue)
         set_value(nRealValue, m_eOldUnit);
 }
 
+static sal_Int64 UpscaleTwoDecimalPlaces(sal_Int64 nCurrentWidth, int nOldDigits)
+{
+    // tdf#145847 Typically nOldDigits is two so deriving percentage is direct division
+    // by m_nRefValue but it is one for points
+    for (int i = nOldDigits; i < 2; ++i)
+        nCurrentWidth *= 10;
+    return nCurrentWidth;
+}
+
 void SwPercentField::ShowPercent(bool bPercent)
 {
     if ((bPercent && m_pField->get_unit() == FieldUnit::PERCENT)
@@ -67,6 +76,8 @@ void SwPercentField::ShowPercent(bool bPercent)
 
         sal_Int64 nCurrentWidth
             = vcl::ConvertValue(m_nOldMin, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
+        nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
+
         // round to 0.5 percent
         int nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
 
@@ -76,6 +87,7 @@ void SwPercentField::ShowPercent(bool bPercent)
         {
             nCurrentWidth
                 = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
+            nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
             nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
             m_pField->set_value(nPercent, FieldUnit::NONE);
             m_nLastPercent = nPercent;
@@ -124,6 +136,7 @@ void SwPercentField::set_value(sal_Int64 nNewValue, FieldUnit eInUnit)
             sal_Int64 nValue = Convert(nNewValue, eInUnit, m_eOldUnit);
             nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
         }
+        nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
         nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
         m_pField->set_value(nPercent, FieldUnit::NONE);
     }
@@ -222,6 +235,7 @@ sal_Int64 SwPercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit
             nCurrentWidth = nValue;
         else
             nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, eInUnit, FieldUnit::TWIP);
+        nCurrentWidth = UpscaleTwoDecimalPlaces(nCurrentWidth, m_nOldDigits);
         // Round to 0.5 percent
         return m_nRefValue ? (((nCurrentWidth * 1000) / m_nRefValue + 5) / 10) : 0;
     }
