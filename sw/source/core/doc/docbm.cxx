@@ -211,6 +211,10 @@ namespace
         {
             return pMark->GetMarkStart() < rPos;
         }
+        bool operator()(const  MarkT* pMark, SwNode const& rPos)
+        {
+            return pMark->GetMarkStart().GetNode() < rPos;
+        }
     };
 
     // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
@@ -1686,16 +1690,6 @@ namespace sw::mark
         return *pAnnotationMark;
     }
 
-    // finds the first that is starting after
-    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findFirstAnnotationStartsAfter(const SwPosition& rPos) const
-    {
-        return std::upper_bound(
-            m_vAnnotationMarks.begin(),
-            m_vAnnotationMarks.end(),
-            rPos,
-            CompareIMarkStartsAfter<AnnotationMark>());
-    }
-
     // create helper bookmark for annotations on tracked deletions
     ::sw::mark::Bookmark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
         const OUString& rName,
@@ -1708,6 +1702,16 @@ namespace sw::mark
 
     // find the first AnnotationMark that does not start before
     std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const
+    {
+        return std::lower_bound(
+                m_vAnnotationMarks.begin(),
+                m_vAnnotationMarks.end(),
+                rPos,
+                CompareIMarkStartsBefore<AnnotationMark>());
+    }
+
+    // find the first AnnotationMark that does not start before
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findFirstAnnotationMarkNotStartsBefore(const SwNode& rPos) const
     {
         return std::lower_bound(
                 m_vAnnotationMarks.begin(),

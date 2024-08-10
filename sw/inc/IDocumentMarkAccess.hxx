@@ -327,14 +327,9 @@ class IDocumentMarkAccess
             an iterator pointing to the mark, or pointing to getAnnotationMarksEnd() if nothing was found.
         */
         virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const =0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwNode& rPos) const =0;
         virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
-        /** Finds the first mark that is starting after.
-
-            @returns
-            an iterator pointing to the mark, or pointing to getAnnotationMarksEnd() if nothing was found.
-        */
-        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const =0;
 
         /** Returns the MarkType used to create the mark
         */

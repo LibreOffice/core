@@ -264,22 +264,19 @@ namespace
             return;
         }
 
-        // no need to consider annotation marks starting after aEndOfPara
-        SwContentNode& rPtNd = *rUnoCursor.GetPoint()->GetNode().GetContentNode();
-        SwPosition aEndOfPara( rPtNd, rPtNd.Len() );
-        const auto pCandidatesEnd =
-            pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
-
         // search for all annotation marks that have its start position in this paragraph
         const SwNode& rOwnNode = rUnoCursor.GetPoint()->GetNode();
-        for( auto ppMark = pMarkAccess->getAnnotationMarksBegin();
+        const auto pCandidatesEnd = pMarkAccess->getAnnotationMarksEnd();
+        for( auto ppMark = pMarkAccess->findFirstAnnotationMarkNotStartsBefore(rOwnNode);
              ppMark != pCandidatesEnd;
              ++ppMark )
         {
             ::sw::mark::AnnotationMark* const pAnnotationMark = *ppMark;
             assert(pAnnotationMark);
-
             const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
+            // no need to consider annotation marks starting after
+            if (rStartPos.GetNode() > rOwnNode)
+                break;
             if (rStartPos.GetNode() != rOwnNode)
                 continue;
 

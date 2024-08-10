@@ -120,7 +120,6 @@ namespace sw::mark {
             virtual sal_Int32 getAnnotationMarksCount() const override;
             virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findAnnotationMark( const OUString& rName ) const override;
             virtual sw::mark::AnnotationMark* getAnnotationMarkFor(const SwPosition& rPos) const override;
-            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
 
             virtual void assureSortedMarkContainers() const override;
             virtual void assureSortedMarkContainers(sal_Int32 nMinIndexModified) const override;
@@ -133,6 +132,7 @@ namespace sw::mark {
                 sw::mark::InsertMode eMode,
                 SwPosition const* pSepPos = nullptr) override;
             virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const override;
+            virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwNode& rPos) const override;
             virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const override;
             virtual void restoreAnnotationMarks(bool bDelete = true) override;
 
