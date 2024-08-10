@@ -2466,11 +2466,10 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
     // at frame|character and has wrap through, but its attribute
     // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
     // #i84783# - use new method <IsObjectLayoutInTableCell()>
-    const bool bIsObjectLayoutInTableCell
-        = m_nInTable && IsObjectLayoutInTableCell(rRecord.nGroupShapeBooleanProperties);
-    if (!bIsObjectLayoutInTableCell && m_nInTable &&
+    if (m_nInTable &&
             (eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR) &&
-            rFSPA.nwr == 3)
+            rFSPA.nwr == 3 &&
+            !IsObjectLayoutInTableCell(rRecord.nGroupShapeBooleanProperties))
     {
         eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
     }
@@ -2496,19 +2495,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
     else
     {
         eVertOri = aVertOriTab[ nYAlign ];
-    }
-
-    if (bIsObjectLayoutInTableCell && eAnchor == RndStdIds::FLY_AT_CHAR)
-    {
-        // Microsoft is buggy and inconsistent in how they handle layoutInCell.
-        // Map wrongly-implemented settings to the closest implemented setting
-
-        // "page" is implemented as if it was "margin" - to cell spacing, not edge
-        if (eVertRel == text::RelOrientation::PAGE_FRAME)
-            eVertRel = text::RelOrientation::PAGE_PRINT_AREA;
-        // only "from top" and "top" are appropriate. Others are implemented as Top
-        if (eVertOri != text::VertOrientation::NONE)
-            eVertOri = text::VertOrientation::TOP;
     }
 
     // Below line in word is a positive value, while in writer its
