@@ -110,7 +110,7 @@
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
       <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
@@ -554,6 +554,24 @@
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
     </style:style>
+    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#f3980f"/>
+    </style:style>
+    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#781710"/>
+    </style:style>
+    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#f5b090"/>
+    </style:style>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#000000"/>
+    </style:style>
+    <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties svg:stroke-width="0.22cm" svg:stroke-color="#956134" svg:stroke-linecap="round" draw:stroke="solid" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="Mgr10" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties svg:stroke-width="0.16cm" svg:stroke-color="#956134" svg:stroke-linecap="round" draw:stroke="solid" draw:fill="none"/>
+    </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Pencil-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
     </style:style>
@@ -587,36 +605,28 @@
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:header/>
-            </text:span>
+            <presentation:header/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -629,9 +639,15 @@
     </style:handout-master>
     <style:master-page style:name="Pencil" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="25.34cm" svg:height="4cm" svg:x="1cm" svg:y="4cm">
-        <draw:image xlink:href="Pictures/1000020100000402000000A2F7F509AE74DE6C69.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/png"/>
-      </draw:frame>
+      <draw:path draw:style-name="Mgr9" draw:layer="layout" svg:width="17.181cm" svg:height="13.42cm" draw:transform="rotate (0.679980276576991) translate (1.091cm 7.79cm)" svg:viewBox="0 0 17182 13421" svg:d="M0 0c327 325 930 1027 1543 1308 746 342 1593 954 1987 1450 338 426 1497 1302 2166 1679 997 563 1687 1208 2140 1681 507 528 2073 1932 2321 2180 611 611 1379 901 1981 1457 382 352 785 681 1195 1002 504 395 1084 701 1527 1163 343 357 735 664 1130 961 349 263 795 360 1192 540"/>
+      <draw:g>
+        <draw:polygon draw:style-name="Mgr4" draw:layer="layout" svg:width="1.317cm" svg:height="2.195cm" draw:transform="rotate (-0.785398163397449) translate (24.8584779471393cm 4.55300938670506cm)" svg:viewBox="0 0 1318 2196" draw:points="0,0 0,2196 1318,2196 1318,0 1098,0 1098,1976 878,1976 878,0 439,0 439,1976 220,1976 220,0"/>
+        <draw:path draw:style-name="Mgr5" draw:layer="layout" svg:width="1.318cm" svg:height="0.658cm" draw:transform="skewX (0.00157079632679492) rotate (-0.785921762173047) translate (25.4802595023722cm 3.93177146066701cm)" svg:viewBox="0 0 1319 659" svg:d="M1 659l-1-475c0-32 8-64 24-92s39-51 67-67 60-24 92-25h952c32 0 64 8 92 24 27 17 51 40 67 67 16 28 24 60 24 92l1 476z"/>
+        <draw:g>
+          <draw:polygon draw:style-name="Mgr7" draw:layer="layout" svg:width="1.316cm" svg:height="0.831cm" draw:transform="rotate (-0.784350965846252) translate (23.1504817068191cm 6.26100562702532cm)" svg:viewBox="0 0 1317 832" draw:points="1317,1 658,832 0,0"/>
+          <draw:polygon draw:style-name="Mgr8" draw:text-style-name="P10" draw:layer="layout" svg:width="0.658cm" svg:height="0.412cm" draw:transform="skewX (-0.00244346095279208) rotate (-0.785398163397449) translate (23.0879070390531cm 6.78970820318116cm)" svg:viewBox="0 0 659 413" draw:points="659,0 329,413 0,0"/>
+        </draw:g>
+      </draw:g>
       <draw:frame presentation:style-name="Pencil-title" draw:layer="backgroundobjects" svg:width="21cm" svg:height="2.75cm" svg:x="1.5cm" svg:y="4.5cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -647,36 +663,28 @@
         <draw:frame presentation:style-name="Pencil-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Pencil-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -684,12 +692,15 @@
     </style:master-page>
     <style:master-page style:name="Pencil1" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="2.1cm" svg:height="2cm" svg:x="24.5cm" svg:y="0.25cm">
-        <draw:image xlink:href="Pictures/1000020100000088000000870A26C51C993940C3.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/png"/>
-      </draw:frame>
-      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="27cm" svg:height="0.5cm" svg:x="0.5cm" svg:y="14.5cm">
-        <draw:image xlink:href="Pictures/100002010000037D0000001C2F14EFE8274AD9FC.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/png"/>
-      </draw:frame>
+      <draw:path draw:style-name="Mgr10" draw:layer="layout" svg:width="19.682cm" svg:height="14.424cm" draw:transform="skewX (-0.199840199353351) rotate (0.58171823968971) translate (0.609cm 14.906cm)" svg:viewBox="0 0 19683 14425" svg:d="M0 0c175 233 1566 1307 1767 1406 202 99 2156 1411 2277 1558s2378 1657 2482 1805c104 147 2337 1700 2451 1807s2378 2073 2659 2343c280 269 2029 1371 2269 1566 241 195 1037 833 1369 1077s1312 823 1750 1250 838 711 1294 1033c456 323 910 387 1365 580"/>
+      <draw:g>
+        <draw:polygon draw:style-name="Mgr4" draw:layer="layout" svg:width="0.81cm" svg:height="1.35cm" draw:transform="rotate (-0.784525498771451) translate (25.6488498743203cm 0.536215832755757cm)" svg:viewBox="0 0 811 1351" draw:points="1,0 0,1350 810,1351 811,1 676,1 675,1216 540,1215 541,0 271,0 270,1215 135,1215 136,0"/>
+        <draw:path draw:style-name="Mgr5" draw:layer="layout" svg:width="0.81cm" svg:height="0.405cm" draw:transform="rotate (-0.786270828023446) translate (26.0320029291291cm 0.154868411568339cm)" svg:viewBox="0 0 811 406" svg:d="M0 406v-293c0-20 5-39 15-56s24-31 41-41 37-15 56-15l586-1c20 0 39 5 56 15s31 24 41 41 15 37 15 56l1 293z"/>
+        <draw:g>
+          <draw:polygon draw:style-name="Mgr7" draw:layer="layout" svg:width="0.808cm" svg:height="0.51cm" draw:transform="skewX (0.00191986217719374) rotate (-0.784525498771451) translate (24.5996816782471cm 1.58705002713713cm)" svg:viewBox="0 0 809 511" draw:points="809,1 406,511 0,0"/>
+          <draw:polygon draw:style-name="Mgr8" draw:layer="layout" svg:width="0.404cm" svg:height="0.253cm" draw:transform="skewX (-0.00401425727958707) rotate (-0.785398163397449) translate (24.561213489687cm 1.91207341308355cm)" svg:viewBox="0 0 405 254" draw:points="405,0 202,254 0,0"/>
+        </draw:g>
+      </draw:g>
       <draw:frame presentation:style-name="Pencil1-title" draw:layer="backgroundobjects" svg:width="23cm" svg:height="1.75cm" svg:x="1.5cm" svg:y="0.5cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -706,18 +717,14 @@
       <draw:frame presentation:style-name="Pencil1-backgroundobjects" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.75cm" svg:x="9.5cm" svg:y="15cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Pencil1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="0.75cm" svg:x="20cm" svg:y="15cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -730,36 +737,28 @@
         <draw:frame presentation:style-name="Pencil1-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Pencil1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>

@@ -105,9 +105,6 @@ extra_files_PRESENTATIONS := \
     presnt/Metropolis/Thumbnails/thumbnail.png \
     presnt/Midnightblue/Thumbnails/thumbnail.png \
     presnt/Nature_Illustration/Thumbnails/thumbnail.png \
-    presnt/Pencil/Pictures/1000020100000088000000870A26C51C993940C3.png  \
-    presnt/Pencil/Pictures/100002010000037D0000001C2F14EFE8274AD9FC.png  \
-    presnt/Pencil/Pictures/1000020100000402000000A2F7F509AE74DE6C69.png  \
     presnt/Pencil/Thumbnails/thumbnail.png \
     presnt/Piano/Pictures/100000000000035400000120266623530F1969D0.png  \
     presnt/Piano/Pictures/100002010000033A0000006EDD62437E1CC42053.png  \
