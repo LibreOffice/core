@@ -300,17 +300,23 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         gchar* aNativeCommand = GetCommandForItem(pSalMenuItem);
 
         // Force updating of native menu labels.
-        NativeSetItemText( nSection, nItemPos, aText );
-        NativeSetItemIcon( nSection, nItemPos, aImage );
-        NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
         {
+            NativeSetItemText( nSection, nItemPos, aText, false );
+            NativeSetItemIcon( nSection, nItemPos, aImage );
+            NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, false );
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
             NativeSetEnableItem( aNativeCommand, bEnabled );
 
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
+        }
+        else
+        {
+            NativeSetItemText( nSection, nItemPos, aText );
+            NativeSetItemIcon( nSection, nItemPos, aImage );
+            NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
         }
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
@@ -1234,7 +1240,7 @@ void GtkSalMenu::NativeSetEnableItem( gchar const * aCommand, gboolean bEnable )
         g_lo_action_group_set_action_enabled( pActionGroup, aCommand, bEnable );
 }
 
-void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText )
+void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText, bool bFireEvent )
 {
     SolarMutexGuard aGuard;
     // Escape all underscores so that they don't get interpreted as hotkeys
@@ -1247,7 +1253,7 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
     gchar* aLabel = g_lo_menu_get_label_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
     if ( aLabel == nullptr || g_strcmp0( aLabel, aConvertedText.getStr() ) != 0 )
-        g_lo_menu_set_label_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aConvertedText.getStr() );
+        g_lo_menu_set_label_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aConvertedText.getStr(), bFireEvent );
 
     if ( aLabel )
         g_free( aLabel );
@@ -1377,7 +1383,9 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
             g_free(pLabel);
         }
 
-        g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
+        // suppress event firing here, we will do so anyway in the g_lo_menu_set_action_and_target_value_to_item_in_section call,
+        // speeds up constructing menus
+        g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand, /*fire_event*/false );
 
         gchar* aItemCommand = g_strconcat("win.", aCommand, nullptr );
 

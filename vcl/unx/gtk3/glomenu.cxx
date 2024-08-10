@@ -266,7 +266,8 @@ void
 g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
                                         gint         section,
                                         gint         position,
-                                        const gchar *label)
+                                        const gchar *label,
+                                        bool fire_event)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
 
@@ -277,7 +278,8 @@ g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
     g_lo_menu_set_label (model, position, label);
 
     // Notify the update.
-    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
+    if (fire_event)
+        g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
 }
@@ -426,7 +428,8 @@ void
 g_lo_menu_set_command_to_item_in_section (GLOMenu     *menu,
                                           gint         section,
                                           gint         position,
-                                          const gchar *command)
+                                          const gchar *command,
+                                          bool fire_event)
 {
     g_return_if_fail (G_IS_LO_MENU (menu));
 
@@ -444,7 +447,8 @@ g_lo_menu_set_command_to_item_in_section (GLOMenu     *menu,
     g_lo_menu_set_attribute_value (model, position, G_LO_MENU_ATTRIBUTE_COMMAND, value);
 
     // Notify the update.
-    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
+    if (fire_event)
+        g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
 }

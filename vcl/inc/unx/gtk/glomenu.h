@@ -76,7 +76,8 @@ void        g_lo_menu_set_icon                                         (GLOMenu 
 void        g_lo_menu_set_label_to_item_in_section                      (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,
-                                                                         const gchar *label);
+                                                                         const gchar *label,
+                                                                         bool fire_event = true);
 
 void        g_lo_menu_set_icon_to_item_in_section                      (GLOMenu     *menu,
                                                                         gint         section,
@@ -101,7 +102,8 @@ void        g_lo_menu_set_action_and_target_value_to_item_in_section    (GLOMenu
 void        g_lo_menu_set_command_to_item_in_section                    (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,
-                                                                         const gchar *command);
+                                                                         const gchar *command,
+                                                                         bool fire_event = true);
 
 gchar *     g_lo_menu_get_command_from_item_in_section                  (GLOMenu     *menu,
                                                                          gint         section,

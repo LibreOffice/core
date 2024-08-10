@@ -94,7 +94,7 @@ public:
     void                        SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     bool                        IsItemVisible( unsigned nPos );
 
-    void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
+    void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText, bool bFireEvent = true );
     void                        NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage );
     bool                        NativeSetItemCommand( unsigned nSection,
                                                       unsigned nItemPos,
