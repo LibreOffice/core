@@ -59,8 +59,7 @@ namespace sw::mark
 
     SwPosition FindFieldSep(Fieldmark const& rMark)
     {
-        SwPosition const& rStartPos(rMark.GetMarkStart());
-        SwPosition const& rEndPos(rMark.GetMarkEnd());
+        auto [/*const SwPosition&*/ rStartPos, rEndPos] = rMark.GetMarkStartEnd();
         SwNodes const& rNodes(rStartPos.GetNodes());
         SwNodeOffset const nStartNode(rStartPos.GetNodeIndex());
         SwNodeOffset const nEndNode(rEndPos.GetNodeIndex());
@@ -292,7 +291,8 @@ namespace sw::mark
     // TextFieldmark::InitDoc/lcl_AssureFieldMarksSet.
     bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
     {
-        return GetMarkStart() <= rPos && rPos < GetMarkEnd();
+        auto [/*const SwPosition&*/ rStartPos, rEndPos] = GetMarkStartEnd();
+        return rStartPos <= rPos && rPos < rEndPos;
     }
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)

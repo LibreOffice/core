@@ -2001,9 +2001,10 @@ void SwXText::ConvertCell(
     }
     while (sw::mark::Fieldmark *const pMark = rIDMA.getInnerFieldmarkFor(*aEndCellPam.End()))
     {
-        if (*aStartCellPam.Start() <= pMark->GetMarkStart())
+        auto [rMarkStart, rMarkEnd] = pMark->GetMarkStartEnd();
+        if (*aStartCellPam.Start() <= rMarkStart)
         {
-            if (*aEndCellPam.End() < pMark->GetMarkEnd())
+            if (*aEndCellPam.End() < rMarkEnd)
             {
                 SAL_INFO("sw.uno", "deleting fieldmark overlapping table cell");
                 rIDMA.deleteMark(pMark);

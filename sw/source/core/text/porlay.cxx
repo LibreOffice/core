@@ -1033,8 +1033,7 @@ static void InitBookmarks(
                 // start of first[/end of last] extent, and the other one
                 // is outside this merged paragraph, is it deleted or not?
                 // assume "no" because the line break it contains isn't deleted.
-                SwPosition const& rStart(it.first->GetMarkStart());
-                SwPosition const& rEnd(it.first->GetMarkEnd());
+                auto [/*const SwPosition&*/ rStart, rEnd] = it.first->GetMarkStartEnd();
                 assert(&rStart.GetNode() == pNode);
                 while (iter != end)
                 {
@@ -2924,8 +2923,9 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
         {
             // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
 
-            const sal_Int32 nSt =  pBookmark->GetMarkStart().GetContentIndex();
-            const sal_Int32 nEnd = pBookmark->GetMarkEnd().GetContentIndex();
+            auto [/*const SwPosition&*/ rMarkStartPos, rMarkEndPos] = pBookmark->GetMarkStartEnd();
+            const sal_Int32 nSt =  rMarkStartPos.GetContentIndex();
+            const sal_Int32 nEnd = rMarkEndPos.GetContentIndex();
 
             if( nEnd > nSt )
             {

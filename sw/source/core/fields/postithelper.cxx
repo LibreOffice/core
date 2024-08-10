@@ -51,8 +51,7 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::MarkBase* pAnnotationMark
         return false;
     }
 
-    const SwPosition& rMarkStart = pAnnotationMark->GetMarkStart();
-    const SwPosition& rMarkEnd = pAnnotationMark->GetMarkEnd();
+    auto [/*const SwPosition&*/ rMarkStart, rMarkEnd] = pAnnotationMark->GetMarkStartEnd();
 
     if (rMarkStart != rAnchorPos)
     {

@@ -72,19 +72,36 @@ namespace sw::mark
         }
         virtual SwPosition& GetMarkStart() const
         {
-            if( !IsExpanded() ) return GetMarkPos( );
-            if ( GetMarkPos( ) < GetOtherMarkPos( ) )
-                return GetMarkPos();
+            SwPosition& rPos1 = GetMarkPos();
+            if( !IsExpanded() )
+                return rPos1;
+            SwPosition& rPos2 = GetOtherMarkPos();
+            if ( rPos1 < rPos2 )
+                return rPos1;
             else
-                return GetOtherMarkPos( );
+                return rPos2;
         }
         virtual SwPosition& GetMarkEnd() const
         {
-            if( !IsExpanded() ) return GetMarkPos();
-            if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
-                return GetMarkPos( );
+            SwPosition& rPos1 = GetMarkPos();
+            if( !IsExpanded() )
+                return rPos1;
+            SwPosition& rPos2 = GetOtherMarkPos();
+            if ( rPos1 >= rPos2 )
+                return rPos1;
             else
-                return GetOtherMarkPos( );
+                return rPos2;
+        }
+        virtual std::pair<SwPosition&,SwPosition&> GetMarkStartEnd() const
+        {
+            SwPosition& rPos1 = GetMarkPos();
+            if( !IsExpanded() )
+                return {rPos1, rPos1};
+            SwPosition& rPos2 = GetOtherMarkPos();
+            if ( rPos1 < rPos2 )
+                return {rPos1, rPos2};
+            else
+                return {rPos2, rPos1};
         }
 
         bool IsCoveringPosition(const SwPosition& rPos) const;

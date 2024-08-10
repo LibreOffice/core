@@ -144,8 +144,7 @@ namespace
     void lcl_FillBookmark(sw::mark::MarkBase* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         bool const isExpanded = pBkmk->IsExpanded();
-        const SwPosition& rStartPos = pBkmk->GetMarkStart();
-        const SwPosition& rEndPos = pBkmk->GetMarkEnd();
+        auto [/*const SwPosition&*/ rStartPos, rEndPos] = pBkmk->GetMarkStartEnd();
         // A bookmark where the text was deleted becomes collapsed
         bool const hasOther = isExpanded && rStartPos != rEndPos;
         bool const bStartPosInNode = rStartPos.GetNode() == rOwnNode;

@@ -1398,10 +1398,11 @@ namespace sw::mark
             m_vFieldmarks.begin(),
             m_vFieldmarks.end(),
             [&rPos] (::sw::mark::MarkBase const*const pMark) {
-                    return pMark->GetMarkStart() == rPos
+                    auto [/*const SwPosition&*/ rStartPos, rEndPos] = pMark->GetMarkStartEnd();
+                    return rStartPos == rPos
                             // end position includes the CH_TXT_ATR_FIELDEND
-                        || (pMark->GetMarkEnd().GetContentIndex() == rPos.GetContentIndex() + 1
-                            && pMark->GetMarkEnd().GetNode() == rPos.GetNode());
+                        || (rEndPos.GetContentIndex() == rPos.GetContentIndex() + 1
+                            && rEndPos.GetNode() == rPos.GetNode());
                 } );
         return (pFieldmark == m_vFieldmarks.end())
             ? nullptr
@@ -1429,22 +1430,23 @@ namespace sw::mark
             return nullptr;
         // we found our first candidate covering the position ...
         auto pMark = *itCurrent;
-        const SwPosition aMarkStart = pMark->GetMarkStart();
-        SwPosition aMarkEnd = pMark->GetMarkEnd();
+        auto aMarkStartEndPair = pMark->GetMarkStartEnd();
+        const SwPosition* pMarkStart = &aMarkStartEndPair.first;
+        const SwPosition* pMarkEnd = &aMarkStartEndPair.second;
         // ... however we still need to check if there is a smaller/'more inner' one with the same start position
         for(++itCurrent; itCurrent != itEnd; ++itCurrent)
         {
-            if((*itCurrent)->GetMarkStart() < aMarkStart)
+            if((*itCurrent)->GetMarkStart() < *pMarkStart)
                 // any following mark (in reverse order) will have an earlier
                 // start and thus can not be more 'inner' than our previous
                 // match, so we are done.
                 break;
             const SwPosition& rCurrentMarkEnd = (*itCurrent)->GetMarkEnd();
-            if(rPos < rCurrentMarkEnd && rCurrentMarkEnd <= aMarkEnd)
+            if(rPos < rCurrentMarkEnd && rCurrentMarkEnd <= *pMarkEnd)
             {
                 // both covering the position and more inner/smaller => use this one instead
                 pMark = *itCurrent;
-                aMarkEnd = rCurrentMarkEnd;
+                pMarkEnd = &rCurrentMarkEnd;
             }
         }
         return pMark;
@@ -1464,12 +1466,15 @@ namespace sw::mark
         // See if any bookmarks after the first hit are closer to rPos.
         ++it;
 
-        for (; it != m_vBookmarks.end() && (*it)->GetMarkStart() <= rPos; ++it)
+        for (; it != m_vBookmarks.end(); ++it)
         {
             // Find the innermost bookmark.
-            if (rPos < (*it)->GetMarkEnd()
-                && (pBookmark->GetMarkStart() < (*it)->GetMarkStart()
-                    || (*it)->GetMarkEnd() < pBookmark->GetMarkEnd()))
+            auto [/*const SwPosition&*/ rMarkStart, rMarkEnd] = (*it)->GetMarkStartEnd();
+            if (rMarkStart > rPos)
+                break;
+            if (rPos < rMarkEnd
+                && (pBookmark->GetMarkStart() < rMarkStart
+                    || rMarkEnd < pBookmark->GetMarkEnd()))
             {
                 pBookmark = *it;
             }

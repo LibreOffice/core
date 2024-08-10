@@ -253,8 +253,7 @@ namespace sw
         {
             const ::sw::mark::MarkBase* const pMark = *ppMark;
 
-            const SwPosition& rMarkStart = pMark->GetMarkStart();
-            const SwPosition& rMarkEnd = pMark->GetMarkEnd();
+            auto [/*const SwPosition&*/ rMarkStart, rMarkEnd] = pMark->GetMarkStartEnd();
             // only include marks that are in the range and not touching both start and end
             // - not for annotation or checkbox marks.
             bool const isIncludeStart(

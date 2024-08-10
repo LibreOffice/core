@@ -44,6 +44,8 @@ namespace sw::mark {
                 { return const_cast<SwPosition&>(*m_oPos1); }
             virtual SwPosition& GetMarkEnd() const override
                 { return const_cast<SwPosition&>(*m_oPos1); }
+            virtual std::pair<SwPosition&,SwPosition&> GetMarkStartEnd() const override
+                { return { const_cast<SwPosition&>(*m_oPos1), const_cast<SwPosition&>(*m_oPos1) }; }
             virtual bool IsExpanded() const override
                 { return false; }
 
