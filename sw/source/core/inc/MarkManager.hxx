@@ -122,6 +122,7 @@ namespace sw::mark {
             virtual const_iterator_t findFirstAnnotationStartsAfter(const SwPosition& rPos) const override;
 
             virtual void assureSortedMarkContainers() const override;
+            virtual void assureSortedMarkContainers(sal_Int32 nMinIndexModified) const override;
 
             typedef std::vector<sw::mark::MarkBase*> container_t;
 

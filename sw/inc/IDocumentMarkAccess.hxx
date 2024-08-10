@@ -255,6 +255,13 @@ class IDocumentMarkAccess
 
         virtual void assureSortedMarkContainers() const = 0;
 
+        /**
+         * called when we need to sort a sub-range of the container, elements starting
+         * at nMinIndexModified where modified. This is used from ContentIdxStoreImpl::RestoreBkmks,
+         * where we are only modifying a small range at the end of the container.
+         */
+        virtual void assureSortedMarkContainers(sal_Int32 nMinIndexModified) const = 0;
+
         /** returns a STL-like random access iterator to the begin of the sequence of marks.
         */
         virtual const_iterator_t getAllMarksBegin() const =0;
