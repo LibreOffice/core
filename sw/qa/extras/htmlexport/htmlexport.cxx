@@ -3432,6 +3432,22 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_162282)
     CPPUNIT_ASSERT_EQUAL(correctData, emfData);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_162426)
+{
+    // Given a document with an image with style:wrap="none":
+    createSwDoc("tdf162426_image_with_wrap_none.fodt");
+    // Before the fix, an assertion failed in HtmlWriter::attribute when exporting to HTML :
+    ExportToHTML();
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Before the fix, the 'border' attribute was written after the 'img' tag was already closed,
+    // so without the asserion, this would fail with
+    // - In <>, XPath '/html/body/p/img' no attribute 'border' exist
+    assertXPath(pDoc, "/html/body/p/img"_ostr, "border"_ostr, u"0"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
