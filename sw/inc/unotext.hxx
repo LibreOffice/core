@@ -46,6 +46,7 @@ class SwPaM;
 class SwXTextCursor;
 class SwXParagraph;
 class SwXTextRange;
+class SwXTextTable;
 
 class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwXText
     : public css::lang::XTypeProvider
@@ -135,7 +136,7 @@ public:
         SAL_CALL getText() override;
     SW_DLLPUBLIC virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
-    virtual OUString SAL_CALL getString() override;
+    SW_DLLPUBLIC virtual OUString SAL_CALL getString() override;
     SW_DLLPUBLIC virtual void SAL_CALL setString(const OUString& rString) override;
 
     // XSimpleText
@@ -247,6 +248,27 @@ public:
             const css::uno::Reference< css::text::XTextContent>& xSuccessor) override;
     virtual void SAL_CALL removeTextContentAfter(
             const css::uno::Reference< css::text::XTextContent>& xPredecessor) override;
+
+    SW_DLLPUBLIC rtl::Reference< SwXTextTable >
+        convertToSwTable(
+            css::uno::Sequence<
+                css::uno::Sequence<
+                    css::uno::Sequence<
+                        css::uno::Reference<
+                            css::text::XTextRange > > > > const&
+                rTableRanges,
+           css::uno::Sequence<
+                css::uno::Sequence<
+                    css::uno::Sequence<
+                        css::beans::PropertyValue > > > const&
+                rCellProperties,
+           css::uno::Sequence<
+                css::uno::Sequence<
+                    css::beans::PropertyValue > > const&
+                rRowProperties,
+           css::uno::Sequence<
+                css::beans::PropertyValue > const&
+                rTableProperties);
 
 private:
     rtl::Reference< SwXTextCursor > getEndImpl(SolarMutexGuard& rGuard);

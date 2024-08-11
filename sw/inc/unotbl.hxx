@@ -47,6 +47,8 @@ class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
 class SwUnoInternalPaM;
+struct SwXParagraphEnumeration;
+class SwXTableRows;
 class SfxItemPropertySet;
 
 typedef
@@ -136,6 +138,7 @@ public:
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
+    rtl::Reference< SwXParagraphEnumeration > createSwEnumeration();
     SwTableBox* GetTableBox() const { return m_pBox; }
     static rtl::Reference<SwXCell> CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
     SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
@@ -343,6 +346,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    rtl::Reference< SwXTableRows > getSwRows();
+    rtl::Reference< SwXCell > getSwCellByPosition( sal_Int32 nColumn, sal_Int32 nRow );
     rtl::Reference< SwXCell > getSwCellByName( const OUString& aCellName );
 };
 
@@ -434,7 +439,7 @@ public:
     SwXTableRows(SwFrameFormat& rFrameFormat);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
+    SW_DLLPUBLIC virtual sal_Int32 SAL_CALL getCount() override;
     virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XElementAccess

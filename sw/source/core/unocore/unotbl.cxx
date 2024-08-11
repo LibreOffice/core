@@ -1090,9 +1090,14 @@ void SwXCell::removeVetoableChangeListener(const OUString& /*rPropertyName*/, co
 
 uno::Reference<container::XEnumeration> SwXCell::createEnumeration()
 {
+    return createSwEnumeration();
+}
+
+rtl::Reference<SwXParagraphEnumeration> SwXCell::createSwEnumeration()
+{
     SolarMutexGuard aGuard;
     if(!IsValid())
-        return uno::Reference<container::XEnumeration>();
+        return {};
     const SwStartNode* pSttNd = m_pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
@@ -1898,7 +1903,7 @@ public:
 
     const SfxItemPropertySet * m_pPropSet;
 
-    css::uno::WeakReference<css::table::XTableRows> m_xRows;
+    unotools::WeakReference<SwXTableRows> m_xRows;
     css::uno::WeakReference<css::table::XTableColumns> m_xColumns;
 
     bool m_bFirstRowAsLabel;
@@ -2001,12 +2006,20 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC)
 
 uno::Reference<table::XTableRows> SAL_CALL SwXTextTable::getRows()
 {
+    return getSwRows();
+}
+
+rtl::Reference<SwXTableRows> SwXTextTable::getSwRows()
+{
     SolarMutexGuard aGuard;
-    uno::Reference<table::XTableRows> xResult(m_pImpl->m_xRows);
-    if(xResult.is())
+    rtl::Reference<SwXTableRows> xResult(m_pImpl->m_xRows);
+    if(xResult)
         return xResult;
     if(SwFrameFormat* pFormat = GetFrameFormat())
-        m_pImpl->m_xRows = xResult = new SwXTableRows(*pFormat);
+    {
+        xResult = new SwXTableRows(*pFormat);
+        m_pImpl->m_xRows = xResult.get();
+    }
     if(!xResult.is())
         throw uno::RuntimeException();
     return xResult;
@@ -2170,7 +2183,12 @@ void SAL_CALL SwXTextTable::removeEventListener(
     m_pImpl->m_EventListeners.removeInterface(aGuard, xListener);
 }
 
-uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
+uno::Reference<table::XCell> SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
+{
+    return uno::Reference<table::XCell>(getSwCellByPosition(nColumn, nRow));
+}
+
+rtl::Reference<SwXCell>  SwXTextTable::getSwCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat(GetFrameFormat());

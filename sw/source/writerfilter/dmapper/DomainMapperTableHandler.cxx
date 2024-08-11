@@ -56,6 +56,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <officecfg/Office/Writer.hxx>
+#include <unotbl.hxx>
+#include <unoparagraph.hxx>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -86,7 +88,7 @@ using namespace ::com::sun::star;
 #define MAXTABLECELLS 63
 
 DomainMapperTableHandler::DomainMapperTableHandler(
-            css::uno::Reference<css::text::XTextAppendAndConvert> xText,
+            rtl::Reference<SwXText> xText,
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(std::move(xText)),
         m_rDMapper_Impl( rDMapper_Impl )
@@ -1265,10 +1267,9 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
 }
 
 // convert formula range identifier ABOVE, BELOW, LEFT and RIGHT
-static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xTable)
+static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable)
 {
-    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xTableRows(xTable->getRows(), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTableRows> xTableRows(xTable->getSwRows());
     sal_Int32 nRows = xTableRows->getCount();
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
     {
@@ -1276,7 +1277,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
         {
             try
             {
-                uno::Reference<beans::XPropertySet> xCellProperties(xCellRange->getCellByPosition(nCol, nRow), uno::UNO_QUERY_THROW);
+                rtl::Reference<SwXCell> xCellProperties = xTable->getSwCellByPosition(nCol, nRow);
                 uno::Sequence<beans::PropertyValue> aCellGrabBag;
                 xCellProperties->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aCellGrabBag;
                 OUString sFormula;
@@ -1315,17 +1316,15 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                                     sal_Int32 nCell = 0;
                                     while (++nCell)
                                     {
-                                        uno::Reference<beans::XPropertySet> xCell(
-                                                xCellRange->getCellByPosition(nCol + nCell * rRange.m_nCol, nRow + nCell * rRange.m_nRow),
-                                                uno::UNO_QUERY_THROW);
+                                        rtl::Reference<SwXCell> xCell(
+                                                xTable->getSwCellByPosition(nCol + nCell * rRange.m_nCol, nRow + nCell * rRange.m_nRow));
                                         // empty cell or cell with text content is end of the range
-                                        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
                                         sLastCell = xCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
                                         if (sNextCell.isEmpty())
                                             sNextCell = sLastCell;
 
                                         // accept numbers with comma and percent
-                                        OUString sCellText = xText->getString().replace(',', '.');
+                                        OUString sCellText = xCell->getString().replace(',', '.');
                                         if (sCellText.endsWith("%"))
                                             sCellText = sCellText.copy(0, sCellText.getLength()-1);
 
@@ -1366,9 +1365,8 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                         // update formula field
                         if (bReplace)
                         {
-                            uno::Reference<text::XText> xCell(xCellRange->getCellByPosition(nCol, nRow), uno::UNO_QUERY);
-                            uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell, uno::UNO_QUERY);
-                            uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+                            rtl::Reference<SwXCell> xCell(xTable->getSwCellByPosition(nCol, nRow));
+                            rtl::Reference<SwXParagraphEnumeration> xParaEnum = xCell->createSwEnumeration();
                             uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
                             uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
                             while ( xRunEnum->hasMoreElements() )
@@ -1516,12 +1514,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 xEnd = rLastCell[1];
             }
         }
-        uno::Reference<text::XTextTable> xTable;
+        rtl::Reference<SwXTextTable> xTable;
         try
         {
             if (m_xText.is())
             {
-                xTable = m_xText->convertToTable(comphelper::containerToSequence(m_aTableRanges), aCellProperties, aRowProperties, aTableInfo.aTableProperties);
+                xTable = m_xText->convertToSwTable(comphelper::containerToSequence(m_aTableRanges), aCellProperties, aRowProperties, aTableInfo.aTableProperties);
 
                 if (xTable.is())
                 {
@@ -1533,10 +1531,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                         // Perform horizontal merges in reverse order, so the fact that merging changes the position of cells won't cause a problem for us.
                         for (std::vector<HorizontallyMergedCell>::reverse_iterator it = aMerges.rbegin(); it != aMerges.rend(); ++it)
                         {
-                            uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY_THROW);
-                            uno::Reference<beans::XPropertySet> xFirstCell(
-                                xCellRange->getCellByPosition(it->m_nFirstCol, it->m_nFirstRow),
-                                uno::UNO_QUERY_THROW);
+                            rtl::Reference<SwXCell> xFirstCell =
+                                xTable->getSwCellByPosition(it->m_nFirstCol, it->m_nFirstRow);
                             OUString aFirst
                                 = xFirstCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
                             // tdf#105852: Only try to merge if m_nLastCol is set (i.e. there were some merge continuation cells)
@@ -1550,7 +1546,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                         >>= aBorderValues[i];
 
                                 uno::Reference<beans::XPropertySet> xLastCell(
-                                    xCellRange->getCellByPosition(it->m_nLastCol, it->m_nLastRow),
+                                    xTable->getCellByPosition(it->m_nLastCol, it->m_nLastRow),
                                     uno::UNO_QUERY_THROW);
                                 OUString aLast
                                     = xLastCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
@@ -1593,37 +1589,36 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         // If we have a table with a start and an end position, we should make it a floating one.
         if (xTable.is() && xStart.is() && xEnd.is())
         {
-            uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             bool bIsRelative = false;
-            xTableProperties->getPropertyValue(u"IsWidthRelative"_ustr) >>= bIsRelative;
+            xTable->getPropertyValue(u"IsWidthRelative"_ustr) >>= bIsRelative;
             if (!bIsRelative)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "Width";
-                aValue.Value = xTableProperties->getPropertyValue(u"Width"_ustr);
+                aValue.Value = xTable->getPropertyValue(u"Width"_ustr);
                 aFrameProperties.push_back(aValue);
             }
             else
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "FrameWidthPercent";
-                aValue.Value = xTableProperties->getPropertyValue(u"RelativeWidth"_ustr);
+                aValue.Value = xTable->getPropertyValue(u"RelativeWidth"_ustr);
                 aFrameProperties.push_back(aValue);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
-                xTableProperties->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(sal_Int16(100)));
+                xTable->setPropertyValue(u"RelativeWidth"_ustr, uno::Any(sal_Int16(100)));
             }
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
-            xTableProperties->setPropertyValue(u"LeftMargin"_ustr, uno::Any(sal_Int32(0)));
+            xTable->setPropertyValue(u"LeftMargin"_ustr, uno::Any(sal_Int32(0)));
 
             style::BreakType eBreakType{};
-            xTableProperties->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
+            xTable->getPropertyValue(u"BreakType"_ustr) >>= eBreakType;
             if (eBreakType != style::BreakType_NONE)
             {
                 // A break before the table was requested. Reset that break here, since the table
                 // will be at the start of the fly frame, not in the body frame.
-                xTableProperties->setPropertyValue(u"BreakType"_ustr, uno::Any(style::BreakType_NONE));
+                xTable->setPropertyValue(u"BreakType"_ustr, uno::Any(style::BreakType_NONE));
             }
 
             if (nestedTableLevel >= 2 || m_rDMapper_Impl.IsInHeaderFooter())

@@ -2175,6 +2175,19 @@ SwXText::convertToTable(
         rRowProperties,
     const uno::Sequence< beans::PropertyValue >& rTableProperties)
 {
+    return uno::Reference< text::XTextTable >(convertToSwTable(rTableRanges, rCellProperties, rRowProperties, rTableProperties));
+}
+
+rtl::Reference< SwXTextTable >
+SwXText::convertToSwTable(
+    const uno::Sequence< uno::Sequence< uno::Sequence<
+        uno::Reference< text::XTextRange > > > >& rTableRanges,
+    const uno::Sequence< uno::Sequence< uno::Sequence<
+        beans::PropertyValue > > >& rCellProperties,
+    const uno::Sequence< uno::Sequence< beans::PropertyValue > >&
+        rRowProperties,
+    const uno::Sequence< beans::PropertyValue >& rTableProperties)
+{
     SolarMutexGuard aGuard;
 
     if(!IsValid())
@@ -2226,7 +2239,7 @@ SwXText::convertToTable(
     SwTable const*const pTable = m_pDoc->TextToTable( aTableNodes );
 
     if (!pTable)
-        return uno::Reference< text::XTextTable >();
+        return {};
 
     rtl::Reference<SwXTextTable> const xRet =
         SwXTextTable::CreateXTextTable(pTable->GetFrameFormat());
