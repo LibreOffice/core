@@ -5356,7 +5356,7 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
                     && aPoly.GetFlags(j + 2) != PolyFlags::Control)
                 {
                     mpFS->startElementNS(XML_a, XML_cubicBezTo);
-                    for (sal_uInt8 k = 0; k <= 2; ++k)
+                    for (sal_uInt32 k = 0; k <= 2; ++k)
                     {
                         mpFS->singleElementNS(XML_a, XML_pt, XML_x,
                                               OString::number(aPoly[j + k].X() - aPos.X), XML_y,
