@@ -263,7 +263,7 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 SwCollectionBaseClass;
-class SwXTextTables final : public SwCollectionBaseClass,
+class SW_DLLPUBLIC SwXTextTables final : public SwCollectionBaseClass,
     public SwUnoCollection
 {
     virtual ~SwXTextTables() override;
@@ -288,7 +288,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SW_DLLPUBLIC static rtl::Reference<SwXTextTable> GetObject(SwFrameFormat& rFormat);
+    rtl::Reference<SwXTextTable> getTextTableByName(std::u16string_view Name);
+
+    static rtl::Reference<SwXTextTable> GetObject(SwFrameFormat& rFormat);
 };
 
 typedef

@@ -58,7 +58,7 @@ cppu::WeakImplHelper
     css::container::XEnumerationAccess
 >
 SwXCellBaseClass;
-class SwXCell final : public SwXCellBaseClass,
+class SW_DLLPUBLIC SwXCell final : public SwXCellBaseClass,
     public SwXText,
     public SvtListener
 {
@@ -343,6 +343,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
+    rtl::Reference< SwXCell > getSwCellByName( const OUString& aCellName );
 };
 
 class SwXCellRange final : public cppu::WeakImplHelper

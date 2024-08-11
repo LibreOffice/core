@@ -889,25 +889,28 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
 
 uno::Any SwXTextTables::getByName(const OUString& rItemName)
 {
+    return uno::Any(uno::Reference< XTextTable >(getTextTableByName(rItemName)));
+}
+
+rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByName(std::u16string_view rItemName)
+{
     SolarMutexGuard aGuard;
-    uno::Any aRet;
 
     const size_t nCount = GetDoc().GetTableFrameFormatCount(true);
-    uno::Reference< XTextTable >  xTable;
+    rtl::Reference< SwXTextTable >  xTable;
     for( size_t i = 0; i < nCount; ++i)
     {
         SwFrameFormat& rFormat = GetDoc().GetTableFrameFormat(i, true);
         if (rItemName == rFormat.GetName())
         {
             xTable = SwXTextTables::GetObject(rFormat);
-            aRet <<= xTable;
             break;
         }
     }
     if(!xTable.is())
         throw NoSuchElementException();
 
-    return aRet;
+    return xTable;
 }
 
 uno::Sequence< OUString > SwXTextTables::getElementNames()

@@ -1233,6 +1233,11 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections()
 
 Reference< XNameAccess >  SwXTextDocument::getTextTables()
 {
+    return getSwTextTables();
+}
+
+rtl::Reference<SwXTextTables> SwXTextDocument::getSwTextTables()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXTextTables.is())

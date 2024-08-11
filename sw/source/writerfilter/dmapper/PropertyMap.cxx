@@ -70,6 +70,8 @@
 #include <unoxstyle.hxx>
 #include <unostyle.hxx>
 #include <unotext.hxx>
+#include <unotextcursor.hxx>
+#include <unotbl.hxx>
 #include <utility>
 
 #include <frozen/bits/defines.h>
@@ -1459,21 +1461,20 @@ void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, 
 void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
     rtl::Reference<SwXTextDocument> xTextDocument(rDM_Impl.GetTextDocument());
-    uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
+    rtl::Reference<SwXTextTables> xTables = xTextDocument->getSwTextTables();
     for( size_t i = 0; i < rFramedRedlines.size(); i++)
     {
         // skip failed createTextCursorByRange()
         if (redPos[i] == -1)
             continue;
-        uno::Reference<text::XTextTable> xTable(xTables->getByName(redTable[i]), uno::UNO_QUERY);
-        uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i]), uno::UNO_QUERY);
-        uno::Reference<text::XTextCursor> xCrsr = xCell->createTextCursor();
+        rtl::Reference<SwXTextTable> xTable(xTables->getTextTableByName(redTable[i]));
+        rtl::Reference<SwXCell> xCell(xTable->getSwCellByName(redCell[i]));
+        rtl::Reference<SwXTextCursor> xCrsr = xCell->createXTextCursor();
         xCrsr->goRight(redPos[i], false);
         xCrsr->goRight(redLen[i], true);
-        uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
         try
         {
-            xRedline->makeRedline( rFramedRedlines[i].msType, rFramedRedlines[i].maRedlineProperties );
+            xCrsr->makeRedline( rFramedRedlines[i].msType, rFramedRedlines[i].maRedlineProperties );
         }
         catch (const uno::Exception&)
         {

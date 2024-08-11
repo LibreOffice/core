@@ -2027,6 +2027,11 @@ uno::Reference<table::XTableColumns> SAL_CALL SwXTextTable::getColumns()
 
 uno::Reference<table::XCell> SwXTextTable::getCellByName(const OUString& sCellName)
 {
+    return uno::Reference<table::XCell>(getSwCellByName(sCellName));
+}
+
+rtl::Reference<SwXCell> SwXTextTable::getSwCellByName(const OUString& sCellName)
+{
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
     SwTable* pTable = SwTable::FindTable(pFormat);
