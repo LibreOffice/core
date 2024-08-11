@@ -64,18 +64,22 @@ public class XMLParserFactory {
         public DefaultParser() {
             factory = DocumentBuilderFactory.newInstance();
 
-            String[] featuresToDisable = {
-                "http://xml.org/sax/features/external-general-entities",
-                "http://xml.org/sax/features/external-parameter-entities",
-                "http://apache.org/xml/features/nonvalidating/load-external-dtd"
-            };
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            } catch (ParserConfigurationException e) {
+                LogUtils.DEBUG(LogUtils.getTrace(e));
+            }
 
-            for (String feature : featuresToDisable) {
-                try {
-                    factory.setFeature(feature, false);
-                } catch (ParserConfigurationException e) {
-                    LogUtils.DEBUG(LogUtils.getTrace(e));
-                }
+            try {
+                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            } catch (ParserConfigurationException e) {
+                LogUtils.DEBUG(LogUtils.getTrace(e));
+            }
+
+            try {
+                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (ParserConfigurationException e) {
+                LogUtils.DEBUG(LogUtils.getTrace(e));
             }
 
             try {
