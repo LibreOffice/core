@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/fontitem.hxx>
@@ -5278,6 +5279,10 @@ namespace {
         }
 
         if ( !mrTextNode.IsInList() )
+            return;
+
+        // just incredibly slow to do this
+        if (comphelper::IsFuzzing())
             return;
 
         if ( mbUpdateListLevel )

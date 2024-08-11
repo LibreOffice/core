@@ -158,6 +158,10 @@ void SwNumRule::RemoveTextNode( SwTextNode& rTextNode )
 
     maTextNodeList.erase( aIter );
 
+    // just incredibly slow to do this
+    if (comphelper::IsFuzzing())
+        return;
+
     // Just in case we remove a node after we have marked the rule invalid, but before we have validated the tree
     if (mbInvalidRuleFlag)
     {
