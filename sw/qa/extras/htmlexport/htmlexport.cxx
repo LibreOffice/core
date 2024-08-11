@@ -3443,7 +3443,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_162426)
     CPPUNIT_ASSERT(pDoc);
 
     // Before the fix, the 'border' attribute was written after the 'img' tag was already closed,
-    // so without the asserion, this would fail with
+    // so without the assertion, this would fail with
     // - In <>, XPath '/html/body/p/img' no attribute 'border' exist
     assertXPath(pDoc, "/html/body/p/img"_ostr, "border"_ostr, u"0"_ustr);
 }
