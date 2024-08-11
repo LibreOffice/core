@@ -3739,7 +3739,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
     OUString aFace, aId, aStyle, aClass, aLang, aDir;
     Color aColor;
     sal_uLong nFontHeight = 0;  // actual font height to set
-    sal_uInt16 nSize = 0;       // font height in Netscape notation (1-7)
+    sal_uInt32 nSize = 0;       // font height in Netscape notation (1-7)
     bool bColor = false;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -3763,7 +3763,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
                 else if( nSSize > 7 )
                     nSSize = 7;
 
-                nSize = o3tl::narrowing<sal_uInt16>(nSSize);
+                nSize = nSSize;
                 nFontHeight = m_aFontHeights[nSize-1];
             }
             break;
