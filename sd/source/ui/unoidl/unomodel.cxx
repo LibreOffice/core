@@ -22,6 +22,7 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -30,8 +31,14 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XTheme.hpp>
+#include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/animations/AnimationEndSync.hpp>
+#include <com/sun/star/animations/AnimationCalcMode.hpp>
+#include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
+#include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Timing.hpp>
@@ -40,11 +47,16 @@
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/presentation/TextAnimationType.hpp>
 
 
 #include <com/sun/star/embed/Aspects.hpp>
@@ -423,6 +435,54 @@ constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
     { AnimationNodeType::TRANSITIONFILTER, "TransitionFilter" },
 });
 
+constexpr auto constFillToString = mapEnumToString<sal_Int16>({
+    { AnimationFill::DEFAULT, "Default" },
+    { AnimationFill::REMOVE, "Remove" },
+    { AnimationFill::FREEZE, "Freeze" },
+    { AnimationFill::HOLD, "Hold" },
+    { AnimationFill::TRANSITION, "Transition" },
+    { AnimationFill::AUTO, "Auto" },
+});
+
+constexpr auto constRestartToString = mapEnumToString<sal_Int16>({
+    { AnimationRestart::DEFAULT, "Default" },
+    { AnimationRestart::ALWAYS, "Always" },
+    { AnimationRestart::WHEN_NOT_ACTIVE, "WhenNotActive" },
+    { AnimationRestart::NEVER, "Never" },
+});
+
+constexpr auto constEndSyncToString = mapEnumToString<sal_Int16>({
+    { AnimationEndSync::FIRST, "First" },
+    { AnimationEndSync::LAST, "Last" },
+    { AnimationEndSync::ALL, "All" },
+    { AnimationEndSync::MEDIA, "Media" },
+});
+
+constexpr auto constCalcModeToString = mapEnumToString<sal_Int16>({
+    { AnimationCalcMode::DISCRETE, "Discrete" },
+    { AnimationCalcMode::LINEAR, "Linear" },
+    { AnimationCalcMode::PACED, "Paced" },
+    { AnimationCalcMode::SPLINE, "Spline" },
+});
+
+constexpr auto constAdditiveModeToString = mapEnumToString<sal_Int16>({
+    { AnimationAdditiveMode::BASE, "Base" },
+    { AnimationAdditiveMode::SUM, "Sum" },
+    { AnimationAdditiveMode::REPLACE, "Replace" },
+    { AnimationAdditiveMode::MULTIPLY, "Multiply" },
+    { AnimationAdditiveMode::NONE, "None" },
+});
+
+constexpr auto constEffectPresetClassToString = mapEnumToString<sal_Int16>({
+    { EffectPresetClass::CUSTOM, "Custom" },
+    { EffectPresetClass::ENTRANCE, "Entrance" },
+    { EffectPresetClass::EXIT, "Exit" },
+    { EffectPresetClass::EMPHASIS, "Emphasis" },
+    { EffectPresetClass::MOTIONPATH, "MotionPath" },
+    { EffectPresetClass::OLEACTION, "OleAction" },
+    { EffectPresetClass::MEDIACALL, "MediaCall" },
+});
+
 constexpr auto constEffectNodeTypeToString = mapEnumToString<sal_Int16>({
     { EffectNodeType::DEFAULT, "Default" },
     { EffectNodeType::ON_CLICK, "OnClick" },
@@ -450,8 +510,8 @@ constexpr auto constEventTriggerToString = mapEnumToString<sal_Int16>({
 });
 
 constexpr auto constTimingToString = mapEnumToString<Timing>({
-    { Timing_INDEFINITE, "Indefinite" },
-    { Timing_MEDIA, "Media" },
+    { Timing_INDEFINITE, "indefinite" },
+    { Timing_MEDIA, "media" },
 });
 
 constexpr auto constTransformTypeToString = mapEnumToString<sal_Int16>({
@@ -462,6 +522,33 @@ constexpr auto constTransformTypeToString = mapEnumToString<sal_Int16>({
     { AnimationTransformType::SKEWY, "SkewY" },
 });
 
+constexpr auto constSubItemToString = mapEnumToString<sal_Int16>({
+    { ShapeAnimationSubType::AS_WHOLE, "AsWhole" },
+    { ShapeAnimationSubType::ONLY_BACKGROUND, "OnlyBackground" },
+    { ShapeAnimationSubType::ONLY_TEXT, "OnlyText" },
+});
+
+constexpr auto constIterateTypeToString = mapEnumToString<sal_Int16>({
+    { TextAnimationType::BY_PARAGRAPH, "ByParagraph" },
+    { TextAnimationType::BY_WORD, "ByWord" },
+    { TextAnimationType::BY_LETTER, "ByLetter" },
+});
+
+constexpr auto constFillStyleToString = mapEnumToString<drawing::FillStyle>({
+    { drawing::FillStyle_NONE, "None" },
+    { drawing::FillStyle_SOLID, "Solid" },
+    { drawing::FillStyle_BITMAP, "Bitmap" },
+    { drawing::FillStyle_GRADIENT, "Gradient" },
+    { drawing::FillStyle_HATCH, "Hatch" },
+});
+
+constexpr auto constLineStyleToString = mapEnumToString<drawing::LineStyle>({
+    { drawing::LineStyle_NONE, "None" },
+    { drawing::LineStyle_SOLID, "Solid" },
+    { drawing::LineStyle_DASH, "Dash" },
+});
+
+
 constexpr auto constAttributeNameToXMLEnum
     = frozen::make_unordered_map<std::string_view, XMLTokenEnum>({
         { "X", XML_X },
@@ -470,18 +557,21 @@ constexpr auto constAttributeNameToXMLEnum
         { "Height", XML_HEIGHT },
         { "Rotate", XML_ROTATE },
         { "SkewX", XML_SKEWX },
+        { "FillColor", XML_FILL_COLOR },
+        { "FillStyle", XML_FILL },
+        { "LineColor", XML_STROKE_COLOR },
+        { "LineStyle",XML_STROKE  },
+        { "CharColor", XML_COLOR },
+        { "CharRotation", XML_TEXT_ROTATION_ANGLE },
+        { "CharWeight", XML_FONT_WEIGHT },
+        { "CharUnderline", XML_TEXT_UNDERLINE },
+        { "CharFontName", XML_FONT_FAMILY },
+        { "CharHeight", XML_FONT_SIZE },
+        { "CharPosture", XML_FONT_STYLE },
         { "Visibility", XML_VISIBILITY },
         { "Opacity", XML_OPACITY },
-    });
-
-inline OString convertXMLEnumToString(XMLTokenEnum eToken)
-{
-    if (eToken == XML_NODE_TYPE)
-        return "nodeType"_ostr;
-
-    const OUString& rAttrName = GetXMLToken(eToken);
-    return rAttrName.toUtf8();
-}
+        { "DimColor", XML_DIM },
+});
 
 class AnimationsExporter
 {
@@ -500,6 +590,7 @@ private:
 
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
     static void convertTarget(OStringBuffer& sTmp, const Any& rTarget);
+    static Reference<XInterface> getParagraphTarget( const ParagraphTarget& pTarget );
     void convertTiming(OStringBuffer& sTmp, const Any& rValue) const;
 
 private:
@@ -564,21 +655,23 @@ constexpr bool convertEnum(OStringBuffer& rBuffer, EnumT nValue,
                            const frozen::unordered_map<EnumT, std::string_view, N>& rMap)
 {
     auto iterator = rMap.find(nValue);
-    if (iterator == constAnimationNodeTypeToString.end())
+    if (iterator == rMap.end())
         return false;
     rBuffer.append(iterator->second);
     return true;
 }
 
-void convertDouble(OStringBuffer& rBuffer, const Any& rValue)
+void convertDouble(OStringBuffer& rBuffer, double fValue)
 {
-    double fValue = 0;
-    if (rValue >>= fValue)
-    {
         ::rtl::math::doubleToStringBuffer(rBuffer, fValue, rtl_math_StringFormat_Automatic,
                                           rtl_math_DecimalPlaces_Max, '.', true);
-    }
 }
+
+void convertBool(OStringBuffer& rBuffer, bool bValue)
+{
+    rBuffer.append( bValue );
+}
+
 void convertPath(OStringBuffer& sTmp, const Any& rPath)
 {
     OUString aStr;
@@ -591,6 +684,25 @@ void convertColor(OStringBuffer& rBuffer, sal_Int32 nColor)
     OUStringBuffer aUBuffer;
     ::sax::Converter::convertColor(aUBuffer, nColor);
     rBuffer.append(aUBuffer.makeStringAndClear().toUtf8());
+}
+
+void convertColor(OStringBuffer& rBuffer, const Any& rValue)
+{
+    sal_Int32 nColor = 0;
+    if (rValue >>= nColor)
+    {
+        convertColor(rBuffer, nColor);
+    }
+    else
+    {
+        Sequence<double> aHSL;
+        if ((rValue >>= aHSL) && (aHSL.getLength() == 3))
+        {
+            rBuffer.append("hsl(" + OString::number(aHSL[0]) + ","
+                           + OString::number(aHSL[1] * 100.0) + "%,"
+                           + OString::number(aHSL[2] * 100.0) + "%)");
+        }
+    }
 }
 
 bool isValidNode(const Reference<XAnimationNode>& xNode)
@@ -617,7 +729,7 @@ void AnimationsExporter::exportAnimations()
 }
 void AnimationsExporter::exportNode(const Reference<XAnimationNode>& xNode)
 {
-     if (!isValidNode(mxRootNode))
+     if (!isValidNode(xNode))
          return;
      ::tools::ScopedJsonWriterStruct aStruct = mrWriter.startStruct();
      exportNodeImpl(xNode);
@@ -627,6 +739,8 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
 {
     try
     {
+        std::string sId = GetInterfaceHash(xNode);
+        mrWriter.put("id", sId);
         sal_Int16 nNodeType = xNode->getType();
         auto iterator = constAnimationNodeTypeToString.find(nNodeType);
         mrWriter.put("nodeName", iterator->second);
@@ -635,30 +749,29 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
         OStringBuffer sTmp;
         Any aTemp;
         double fTemp = 0;
+        sal_Int16 nTemp;
 
         aTemp = xNode->getBegin();
         if (aTemp.hasValue())
         {
             convertTiming(sTmp, aTemp);
-            mrWriter.put(convertXMLEnumToString(XML_BEGIN), sTmp.makeStringAndClear());
+            mrWriter.put("begin", sTmp.makeStringAndClear());
         }
         aTemp = xNode->getDuration();
         if (aTemp.hasValue())
         {
             if (aTemp >>= fTemp)
             {
-                convertDouble(sTmp, aTemp);
+                convertDouble(sTmp, fTemp);
                 sTmp.append('s');
-                mrWriter.put(convertXMLEnumToString(XML_DUR), sTmp.makeStringAndClear());
+                mrWriter.put("dur", sTmp.makeStringAndClear());
             }
             else
             {
                 Timing eTiming;
                 if (aTemp >>= eTiming)
                 {
-                    mrWriter.put(convertXMLEnumToString(XML_DUR),
-                                 convertXMLEnumToString(
-                                     eTiming == Timing_INDEFINITE ? XML_INDEFINITE : XML_MEDIA));
+                    mrWriter.put("dur", eTiming == Timing_INDEFINITE ? "indefinite" : "media");
                 }
             }
         }
@@ -666,7 +779,83 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
         if (aTemp.hasValue())
         {
             convertTiming(sTmp, aTemp);
-            mrWriter.put(convertXMLEnumToString(XML_END), sTmp.makeStringAndClear());
+            mrWriter.put("end", sTmp.makeStringAndClear());
+        }
+        nTemp = xNode->getFill();
+        if (nTemp != AnimationFill::DEFAULT)
+        {
+            convertEnum(sTmp, nTemp, constFillToString);
+            mrWriter.put("fill", sTmp.makeStringAndClear());
+        }
+        nTemp = xNode->getFillDefault();
+        if (nTemp != AnimationFill::INHERIT)
+        {
+            convertEnum(sTmp, nTemp, constFillToString);
+            mrWriter.put("fillDefault", sTmp.makeStringAndClear());
+        }
+        nTemp = xNode->getRestart();
+        if (nTemp != AnimationRestart::DEFAULT)
+        {
+            convertEnum(sTmp, nTemp, constRestartToString);
+            mrWriter.put("restart", sTmp.makeStringAndClear());
+        }
+        nTemp = xNode->getRestartDefault();
+        if (nTemp != AnimationRestart::INHERIT)
+        {
+            convertEnum(sTmp, nTemp, constRestartToString);
+            mrWriter.put("restartDefault", sTmp.makeStringAndClear());
+        }
+        fTemp = xNode->getAcceleration();
+        if (fTemp != 0.0)
+        {
+            convertDouble(sTmp, fTemp);
+            mrWriter.put("accelerate", sTmp.makeStringAndClear());
+        }
+        fTemp = xNode->getDecelerate();
+        if (fTemp != 0.0)
+        {
+            convertDouble(sTmp, fTemp);
+            mrWriter.put("decelerate", sTmp.makeStringAndClear());
+        }
+        bool bTemp = xNode->getAutoReverse();
+        if (bTemp)
+        {
+            convertBool(sTmp, bTemp);
+            mrWriter.put("autoreverse", sTmp.makeStringAndClear());
+        }
+        aTemp = xNode->getRepeatCount();
+        if (aTemp.hasValue())
+        {
+            Timing eTiming;
+            if ((aTemp >>= eTiming) && (eTiming == Timing_INDEFINITE))
+            {
+                mrWriter.put("repeatCount", "indefinite");
+            }
+            else if (aTemp >>= fTemp)
+            {
+                convertDouble(sTmp, fTemp);
+                mrWriter.put("repeatCount", sTmp.makeStringAndClear());
+            }
+        }
+        aTemp = xNode->getRepeatDuration();
+        if (aTemp.hasValue())
+        {
+            Timing eTiming;
+            if ((aTemp >>= eTiming) && (eTiming == Timing_INDEFINITE))
+            {
+                mrWriter.put("repeatDur", "indefinite");
+            }
+            else if (aTemp >>= fTemp)
+            {
+                convertDouble(sTmp, fTemp);
+                mrWriter.put("repeatDur", sTmp.makeStringAndClear());
+            }
+        }
+        aTemp = xNode->getEndSync();
+        if (aTemp.hasValue() && (aTemp >>= nTemp))
+        {
+            convertEnum(sTmp, nTemp, constEndSyncToString);
+            mrWriter.put("endSync", sTmp.makeStringAndClear());
         }
 
         sal_Int16 nContainerNodeType = EffectNodeType::DEFAULT;
@@ -679,8 +868,56 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
                     && (nContainerNodeType != EffectNodeType::DEFAULT))
                 {
                     convertEnum(sTmp, nContainerNodeType, constEffectNodeTypeToString);
-                    mrWriter.put(convertXMLEnumToString(XML_NODE_TYPE), sTmp.makeStringAndClear());
+                    mrWriter.put("nodeType", sTmp.makeStringAndClear());
                 }
+            }
+            else if (IsXMLToken(rValue.Name, XML_PRESET_ID))
+            {
+                OUString aPresetId;
+                if (rValue.Value >>= aPresetId)
+                {
+                    mrWriter.put("presetId", aPresetId);
+                }
+            }
+            else if (IsXMLToken(rValue.Name, XML_PRESET_SUB_TYPE))
+            {
+                OUString aPresetSubType;
+                if (rValue.Value >>= aPresetSubType)
+                {
+                    mrWriter.put("presetSubType", aPresetSubType);
+                }
+            }
+            else if (IsXMLToken(rValue.Name, XML_PRESET_CLASS))
+            {
+                sal_Int16 nEffectPresetClass = sal_uInt16(0);
+                if (rValue.Value >>= nEffectPresetClass)
+                {
+                    convertEnum(sTmp, nEffectPresetClass, constEffectPresetClassToString);
+                    mrWriter.put("presetClass", sTmp.makeStringAndClear());
+                }
+            }
+            else if (IsXMLToken(rValue.Name, XML_MASTER_ELEMENT))
+            {
+                Reference<XInterface> xMaster;
+                rValue.Value >>= xMaster;
+                if (xMaster.is())
+                {
+                    const std::string& rIdentifier(GetInterfaceHash(xMaster));
+                    if (!rIdentifier.empty())
+                        mrWriter.put("masterElement", rIdentifier);
+                }
+            }
+            else if (IsXMLToken(rValue.Name, XML_GROUP_ID))
+            {
+                sal_Int32 nGroupId = 0;
+                if (rValue.Value >>= nGroupId)
+                    mrWriter.put("groupId", nGroupId);
+            }
+            else
+            {
+                OUString aTmp;
+                if (rValue.Value >>= aTmp)
+                    mrWriter.put(rValue.Name, aTmp);
             }
         }
 
@@ -707,6 +944,16 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
                 exportAnimate(xAnimate);
             }
             break;
+            case AnimationNodeType::AUDIO:
+            {
+                SAL_WARN("sd", "AnimationsExporter::exportNode(): Audio Node not supported.");
+            }
+            break;
+            case AnimationNodeType::COMMAND:
+            {
+                SAL_WARN("sd", "AnimationsExporter::exportNode(): Command Node not supported.");
+            }
+            break;
             default:
             {
                 OSL_FAIL(
@@ -720,13 +967,45 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
     }
 }
 
+Reference<XInterface> AnimationsExporter::getParagraphTarget(const ParagraphTarget& pTarget)
+{
+    try
+    {
+        Reference<XEnumerationAccess> xParaEnumAccess(pTarget.Shape, UNO_QUERY_THROW);
+
+        Reference<XEnumeration> xEnumeration(xParaEnumAccess->createEnumeration(),
+                                             css::uno::UNO_SET_THROW);
+        sal_Int32 nParagraph = pTarget.Paragraph;
+
+        while (xEnumeration->hasMoreElements())
+        {
+            Reference<XInterface> xRef(xEnumeration->nextElement(), UNO_QUERY);
+            if (nParagraph-- == 0)
+                return xRef;
+        }
+    }
+    catch (const RuntimeException&)
+    {
+        TOOLS_WARN_EXCEPTION("sd", "AnimationsExporter::getParagraphTarget");
+    }
+
+    Reference<XInterface> xRef;
+    return xRef;
+}
+
 void AnimationsExporter::convertTarget(OStringBuffer& sTmp, const Any& rTarget)
 {
     if (!rTarget.hasValue())
         return;
 
     Reference<XInterface> xRef;
-    rTarget >>= xRef;
+    if (!(rTarget >>= xRef))
+    {
+        if (auto pt = o3tl::tryAccess<ParagraphTarget>(rTarget))
+        {
+            xRef = getParagraphTarget(*pt);
+        }
+    }
 
     SAL_WARN_IF(!xRef.is(), "sd", "AnimationsExporter::convertTarget(), invalid target type!");
     if (xRef.is())
@@ -872,6 +1151,49 @@ void AnimationsExporter::convertValue(XMLTokenEnum eAttributeName, OStringBuffer
                     sTmp.append(*aValue);
                 }
                 break;
+            case XML_TEXT_ROTATION_ANGLE:
+                if (auto aValue = o3tl::tryAccess<sal_Int16>(rValue))
+                {
+                    // on win and armv7 platforms compiler complains
+                    // that append(sal_Int16) is ambiguous
+                    sTmp.append(static_cast<sal_Int32>(*aValue));
+                }
+                break;
+            case XML_FILL_COLOR:
+            case XML_STROKE_COLOR:
+            case XML_DIM:
+            case XML_COLOR:
+            {
+                convertColor(sTmp, rValue);
+            }
+            break;
+            case XML_FILL:
+                if (auto aValue = o3tl::tryAccess<drawing::FillStyle>(rValue))
+                {
+                    convertEnum(sTmp, *aValue, constFillStyleToString);
+                }
+                break;
+            case XML_STROKE:
+                if (auto aValue = o3tl::tryAccess<drawing::LineStyle>(rValue))
+                {
+                    convertEnum(sTmp, *aValue, constLineStyleToString);
+                }
+                break;
+            case XML_FONTSIZE:
+                if (auto aValue = o3tl::tryAccess<double>(rValue))
+                {
+                    double fValue = *aValue * 100;
+                    fValue += fValue > 0 ? 0.5 : -0.5;
+                    auto nValue = static_cast<sal_Int32>(fValue);
+                    sTmp.append(nValue); // percent
+                }
+                break;
+            case XML_FONT_WEIGHT:
+            case XML_FONT_STYLE:
+            case XML_TEXT_UNDERLINE:
+                SAL_WARN("sd", "AnimationsExporter::convertValue(): value type "
+                                   << GetXMLToken(eAttributeName) << " not supported");
+                break;
             case XML_VISIBILITY:
                 if (auto aValue = o3tl::tryAccess<bool>(rValue))
                 {
@@ -880,7 +1202,7 @@ void AnimationsExporter::convertValue(XMLTokenEnum eAttributeName, OStringBuffer
                 }
                 break;
             default:
-                OSL_FAIL("xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!");
+                OSL_FAIL("unomdel: AnimationsExporter::convertValue(), invalid AttributeName!");
         }
     }
 }
@@ -889,6 +1211,40 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 {
     try
     {
+        const sal_Int32 nNodeType = xContainer->getType();
+
+        if (nNodeType == AnimationNodeType::ITERATE)
+        {
+            OStringBuffer sTmp;
+            Reference<XIterateContainer> xIter(xContainer, UNO_QUERY_THROW);
+
+            Any aTemp(xIter->getTarget());
+            if (aTemp.hasValue())
+            {
+                convertTarget(sTmp, aTemp);
+                mrWriter.put("targetElement", sTmp.makeStringAndClear());
+            }
+            sal_Int16 nTemp = xIter->getSubItem();
+            if (nTemp)
+            {
+                convertEnum(sTmp, nTemp, constSubItemToString);
+                mrWriter.put("subItem", sTmp.makeStringAndClear());
+            }
+            nTemp = xIter->getIterateType();
+            if (nTemp)
+            {
+                convertEnum(sTmp, nTemp, constIterateTypeToString);
+                mrWriter.put("iterateType", sTmp.makeStringAndClear());
+            }
+            double fTemp = xIter->getIterateInterval();
+            if (fTemp != 0)
+            {
+                OUStringBuffer buf;
+                ::sax::Converter::convertDuration(buf, fTemp / (24 * 60 * 60));
+                mrWriter.put("iterateInterval", sTmp.makeStringAndClear());
+            }
+        }
+
         ::tools::ScopedJsonWriterArray anArray = mrWriter.startArray("children");
 
         Reference<XEnumerationAccess> xEnumerationAccess(xContainer, UNO_QUERY_THROW);
@@ -920,7 +1276,13 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         if (aTemp.hasValue())
         {
             convertTarget(sTmp, aTemp);
-            mrWriter.put(convertXMLEnumToString(XML_TARGETELEMENT), sTmp.makeStringAndClear());
+            mrWriter.put("targetElement", sTmp.makeStringAndClear());
+        }
+        nTemp = xAnimate->getSubItem();
+        if (nTemp)
+        {
+            convertEnum(sTmp, nTemp, constSubItemToString);
+            mrWriter.put("subItem", sTmp.makeStringAndClear());
         }
 
         XMLTokenEnum eAttributeName = XML_TOKEN_INVALID;
@@ -949,7 +1311,11 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
                 if (iterator != constAttributeNameToXMLEnum.end())
                 {
                     eAttributeName = iterator->second;
-                    mrWriter.put(convertXMLEnumToString(XML_ATTRIBUTENAME), sTemp);
+                    mrWriter.put("attributeName", sTemp);
+                }
+                else
+                {
+                    mrWriter.put("attributeName", "invalid");
                 }
             }
         }
@@ -959,7 +1325,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         {
             aTemp <<= aValues;
             convertValue(eAttributeName, sTmp, aTemp);
-            mrWriter.put(convertXMLEnumToString(XML_VALUES), sTmp.makeStringAndClear());
+            mrWriter.put("values", sTmp.makeStringAndClear());
         }
         else
         {
@@ -967,21 +1333,85 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
             if (aTemp.hasValue())
             {
                 convertValue(eAttributeName, sTmp, aTemp);
-                mrWriter.put(convertXMLEnumToString(XML_FROM), sTmp.makeStringAndClear());
+                mrWriter.put("from", sTmp.makeStringAndClear());
             }
 
             aTemp = xAnimate->getBy();
             if (aTemp.hasValue())
             {
                 convertValue(eAttributeName, sTmp, aTemp);
-                mrWriter.put(convertXMLEnumToString(XML_BY), sTmp.makeStringAndClear());
+                mrWriter.put("by", sTmp.makeStringAndClear());
             }
 
             aTemp = xAnimate->getTo();
             if (aTemp.hasValue())
             {
                 convertValue(eAttributeName, sTmp, aTemp);
-                mrWriter.put(convertXMLEnumToString(XML_TO), sTmp.makeStringAndClear());
+                mrWriter.put("to", sTmp.makeStringAndClear());
+            }
+        }
+
+        if (nNodeType != AnimationNodeType::SET)
+        {
+            const Sequence<double> aKeyTimes(xAnimate->getKeyTimes());
+            if (aKeyTimes.hasElements())
+            {
+                for (const auto& rKeyTime : aKeyTimes)
+                {
+                    if (!sTmp.isEmpty())
+                        sTmp.append(';');
+
+                    sTmp.append(rKeyTime);
+                }
+                mrWriter.put("keyTimes", sTmp.makeStringAndClear());
+            }
+
+            OUString sTemp(xAnimate->getFormula());
+            if (!sTemp.isEmpty())
+            {
+                mrWriter.put("formula", sTemp);
+            }
+
+            if ((nNodeType != AnimationNodeType::TRANSITIONFILTER)
+                && (nNodeType != AnimationNodeType::AUDIO))
+            {
+                // calcMode  = "discrete | linear | paced | spline"
+                nTemp = xAnimate->getCalcMode();
+                if (((nNodeType == AnimationNodeType::ANIMATEMOTION)
+                     && (nTemp != AnimationCalcMode::PACED))
+                    || ((nNodeType != AnimationNodeType::ANIMATEMOTION)
+                        && (nTemp != AnimationCalcMode::LINEAR)))
+                {
+                    convertEnum(sTmp, nTemp, constCalcModeToString);
+                    mrWriter.put("calcMode", sTmp.makeStringAndClear());
+                }
+
+                bTemp = xAnimate->getAccumulate();
+                if (bTemp)
+                {
+                    mrWriter.put("accumulate", "sum");
+                }
+
+                nTemp = xAnimate->getAdditive();
+                if (nTemp != AnimationAdditiveMode::REPLACE)
+                {
+                    convertEnum(sTmp, nTemp, constAdditiveModeToString);
+                    mrWriter.put("additive", sTmp.makeStringAndClear());
+                }
+            }
+
+            const Sequence<TimeFilterPair> aTimeFilter(xAnimate->getTimeFilter());
+            if (aTimeFilter.hasElements())
+            {
+                for (const auto& rPair : aTimeFilter)
+                {
+                    if (!sTmp.isEmpty())
+                        sTmp.append(';');
+
+                    sTmp.append(OString::number(rPair.Time) + ","
+                                + OString::number(rPair.Progress));
+                }
+                mrWriter.put("keySplines", sTmp.makeStringAndClear());
             }
         }
 
@@ -995,19 +1425,38 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
                 if (aTemp.hasValue())
                 {
                     convertPath(sTmp, aTemp);
-                    mrWriter.put(convertXMLEnumToString(XML_PATH), sTmp.makeStringAndClear());
+                    mrWriter.put("path", sTmp.makeStringAndClear());
                 }
+            }
+            break;
+            case AnimationNodeType::ANIMATEPHYSICS:
+            {
+                SAL_WARN(
+                    "sd",
+                    "unomodel: AnimationsExporter::exportAnimate(): AnimatePhysics not supported");
+            }
+            break;
+            case AnimationNodeType::ANIMATECOLOR:
+            {
+                Reference<XAnimateColor> xAnimateColor(xAnimate, UNO_QUERY_THROW);
+
+                nTemp = xAnimateColor->getColorInterpolation();
+                mrWriter.put("colorInterpolation",
+                             (nTemp == AnimationColorSpace::RGB) ? "rgb" : "hsl");
+
+                bTemp = xAnimateColor->getDirection();
+                mrWriter.put("colorInterpolationDirection",
+                             bTemp ? "clockwise" : "counterClockwise");
             }
             break;
             case AnimationNodeType::ANIMATETRANSFORM:
             {
-                mrWriter.put(convertXMLEnumToString(XML_ATTRIBUTENAME),
-                             convertXMLEnumToString(XML_TRANSFORM));
+                mrWriter.put("attributeName", "transform");
 
                 Reference<XAnimateTransform> xTransform(xAnimate, UNO_QUERY_THROW);
                 nTemp = xTransform->getTransformType();
                 convertEnum(sTmp, nTemp, constTransformTypeToString);
-                mrWriter.put(convertXMLEnumToString(XML_TYPE), sTmp.makeStringAndClear());
+                mrWriter.put("transformType", sTmp.makeStringAndClear());
             }
             break;
             case AnimationNodeType::TRANSITIONFILTER:
@@ -1016,39 +1465,38 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
 
                 sal_Int16 nTransition = xTransitionFilter->getTransition();
                 convertEnum(sTmp, nTransition, constTransitionTypeToString);
-                mrWriter.put(convertXMLEnumToString(XML_TYPE), sTmp.makeStringAndClear());
+                mrWriter.put("transitionType", sTmp.makeStringAndClear());
 
                 sal_Int16 nSubtype = xTransitionFilter->getSubtype();
                 if (nSubtype != TransitionSubType::DEFAULT)
                 {
                     convertEnum(sTmp, nSubtype, constTransitionSubTypeToString);
-                    mrWriter.put(convertXMLEnumToString(XML_SUBTYPE), sTmp.makeStringAndClear());
+                    mrWriter.put("transitionSubType", sTmp.makeStringAndClear());
                 }
 
                 bTemp = xTransitionFilter->getMode();
                 if (!bTemp)
-                    mrWriter.put(convertXMLEnumToString(XML_MODE), convertXMLEnumToString(XML_OUT));
+                    mrWriter.put("transitionMode", "out");
 
                 bTemp = xTransitionFilter->getDirection();
                 if (!bTemp)
-                    mrWriter.put(convertXMLEnumToString(XML_DIRECTION),
-                                 convertXMLEnumToString(XML_REVERSE));
+                    mrWriter.put("transitionDirection", "reverse");
 
                 if ((nTransition == TransitionType::FADE)
                     && ((nSubtype == TransitionSubType::FADETOCOLOR)
                         || (nSubtype == TransitionSubType::FADEFROMCOLOR)))
                 {
-                    nTemp = xTransitionFilter->getFadeColor();
-                    convertColor(sTmp, nTemp);
-                    mrWriter.put(convertXMLEnumToString(XML_FADECOLOR), sTmp.makeStringAndClear());
+                    sal_Int32 nColor = xTransitionFilter->getFadeColor();
+                    convertColor(sTmp, nColor);
+                    mrWriter.put("transitionFadeColor", sTmp.makeStringAndClear());
                 }
             }
             break;
-
             default:
             {
                 SAL_WARN("sd",
-                         "unomodel: AnimationsExporter::exportAnimate: node type: " << nNodeType);
+                         "unomodel: AnimationsExporter::exportAnimate(): not supported node type: "
+                             << nNodeType);
             }
         }
     }
