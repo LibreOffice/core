@@ -516,6 +516,8 @@ public:
 
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, HtmlFrmOpts nFrameOpts);
 
+    void writeFrameSurroundTag(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, HtmlFrmOpts nFrameOpts);
+
     /// Writes the formatting for tables.
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
 

@@ -999,7 +999,11 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             }
         }
     }
+}
 
+void SwHTMLWriter::writeFrameSurroundTag(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat,
+                                         HtmlFrmOpts nFrameOptions)
+{
     if (mbReqIF)
         return;
 
@@ -1011,7 +1015,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     RndStdIds nAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if (RndStdIds::FLY_AT_PARA != nAnchorId && RndStdIds::FLY_AT_CHAR != nAnchorId)
         return;
-    const SwFormatSurround* pSurround = rItemSet.GetItemIfSet( RES_SURROUND );
+    const SwFormatSurround* pSurround = rFrameFormat.GetAttrSet().GetItemIfSet(RES_SURROUND);
     if (!pSurround)
         return;
 
@@ -1455,6 +1459,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     {
         rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
     }
+
+    rWrt.writeFrameSurroundTag(rHtml, rFrameFormat, nFrameOpts);
 
     if (bReplacement)
     {
