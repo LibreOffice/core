@@ -150,7 +150,7 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
     if ( m_aUsersData.empty() )
     {
         sal_Int64 nLength = m_xSeekable->getLength();
-        if ( nLength > SAL_MAX_INT32 )
+        if (nLength > SAL_MAX_INT32 || nLength < 0)
             throw uno::RuntimeException();
 
         uno::Sequence< sal_Int8 > aBuffer( static_cast<sal_Int32>(nLength) );
