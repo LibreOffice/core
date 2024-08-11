@@ -14,7 +14,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdpagv.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
@@ -23,9 +25,23 @@ namespace sd
 {
 namespace
 {
-class SelectObjectRedirector : public sdr::contact::ViewObjectContactRedirector
+struct RedirectorOptions
 {
+    bool mbSkipMainPageObjects = false;
+    bool mbSkipMasterPageObjects = false;
+};
+
+class ObjectRedirector : public sdr::contact::ViewObjectContactRedirector
+{
+protected:
+    RedirectorOptions maOptions;
+
 public:
+    ObjectRedirector(RedirectorOptions const& rOptions)
+        : maOptions(rOptions)
+    {
+    }
+
     virtual void createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
@@ -37,11 +53,14 @@ public:
         if (pObject == nullptr || pPage == nullptr)
         {
             // Not a SdrObject or a object not connected to a page (object with no page)
-
-            //sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-            //    rOriginal, rDisplayInfo, rVisitor);
             return;
         }
+
+        if (maOptions.mbSkipMasterPageObjects && pPage->IsMasterPage())
+            return;
+
+        if (maOptions.mbSkipMainPageObjects && !pPage->IsMasterPage())
+            return;
 
         const bool bDoCreateGeometry(
             pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, true));
@@ -60,43 +79,57 @@ public:
             rOriginal, rDisplayInfo, rVisitor);
     }
 };
+
+bool hasEmptyMaster(SdrPage const& rPage)
+{
+    if (!rPage.TRG_HasMasterPage())
+        return true;
+
+    SdrPage& rMaster = rPage.TRG_GetMasterPage();
+    for (size_t i = 0; i < rMaster.GetObjCount(); i++)
+    {
+        auto pObject = rMaster.GetObj(i);
+        if (!pObject->IsEmptyPresObj())
+            return false;
+    }
+    return true;
 }
 
-SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage* pPage)
-    : mpPage(pPage)
+} // end anonymous namespace
+
+SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
+    : mrPage(rPage)
+    , mrModel(rPage.getSdrModelFromSdrPage())
 {
+    if (!hasEmptyMaster(rPage))
+        maRenderStages.emplace_back(SlideRenderStage::Master);
+    maRenderStages.emplace_back(SlideRenderStage::Slide);
 }
 
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
 {
-    if (!mpPage)
-        return Size();
-
-    double fRatio = double(mpPage->GetHeight()) / mpPage->GetWidth();
+    double fRatio = double(mrPage.GetHeight()) / mrPage.GetWidth();
     Size aSize(rDesiredSizePixel.Width(), ::tools::Long(rDesiredSizePixel.Width() * fRatio));
     maSlideSize = aSize;
 
     return maSlideSize;
 }
 
-bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
+bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJsonMsg)
 {
-    if (bRenderDone)
-        return false;
-
-    if (!mpPage)
-        return false;
-
-    SdrModel& rModel = mpPage->getSdrModelFromSdrPage();
+    SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
+    const EEControlBits nOldControlBits(rOutliner.GetControlWord());
+    EEControlBits nControlBits = nOldControlBits & ~EEControlBits::ONLINESPELLING;
+    rOutliner.SetControlWord(nControlBits);
 
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(maSlideSize, Fraction(2.0), Point(),
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(maSlideSize, Fraction(1.0), Point(),
                                                        pBuffer);
 
     Point aPoint;
-    Size aPageSize(mpPage->GetSize());
+    Size aPageSize(mrPage.GetSize());
 
     MapMode aMapMode(MapUnit::Map100thMM);
     const Fraction aFracX(maSlideSize.Width(), pDevice->LogicToPixel(aPageSize, aMapMode).Width());
@@ -108,7 +141,7 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
 
     pDevice->SetMapMode(aMapMode);
 
-    SdrView aView(rModel, pDevice);
+    SdrView aView(mrModel, pDevice);
 
     aView.SetPageVisible(false);
     aView.SetPageShadowVisible(false);
@@ -117,16 +150,16 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
     aView.SetGridVisible(false);
     aView.SetHlplVisible(false);
     aView.SetGlueVisible(false);
-
-    aView.ShowSdrPage(mpPage);
+    aView.setHideBackground(false);
+    aView.ShowSdrPage(&mrPage);
 
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    SelectObjectRedirector aRedirector;
+    ObjectRedirector aRedirector({ .mbSkipMainPageObjects = true });
     aView.CompleteRedraw(pDevice, aRegion, &aRedirector);
 
     ::tools::JsonWriter aJsonWriter;
-    aJsonWriter.put("group", "DrawPage");
-    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(mpPage)));
+    aJsonWriter.put("group", "MasterPage");
+    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
     aJsonWriter.put("index", 0);
     aJsonWriter.put("type", "bitmap");
     {
@@ -136,7 +169,85 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
     }
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
 
-    bRenderDone = true;
+    rOutliner.SetControlWord(nOldControlBits);
+
+    return true;
+}
+
+bool SlideshowLayerRenderer::renderSlide(unsigned char* pBuffer, OString& rJsonMsg)
+{
+    SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
+    const EEControlBits nOldControlBits(rOutliner.GetControlWord());
+    EEControlBits nControlBits = nOldControlBits & ~EEControlBits::ONLINESPELLING;
+    rOutliner.SetControlWord(nControlBits);
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(maSlideSize, Fraction(1.0), Point(),
+                                                       pBuffer);
+
+    Point aPoint;
+    Size aPageSize(mrPage.GetSize());
+
+    MapMode aMapMode(MapUnit::Map100thMM);
+    const Fraction aFracX(maSlideSize.Width(), pDevice->LogicToPixel(aPageSize, aMapMode).Width());
+    aMapMode.SetScaleX(aFracX);
+
+    const Fraction aFracY(maSlideSize.Height(),
+                          pDevice->LogicToPixel(aPageSize, aMapMode).Height());
+    aMapMode.SetScaleY(aFracY);
+
+    pDevice->SetMapMode(aMapMode);
+
+    SdrView aView(mrModel, pDevice);
+
+    aView.SetPageVisible(false);
+    aView.SetPageShadowVisible(false);
+    aView.SetPageBorderVisible(false);
+    aView.SetBordVisible(false);
+    aView.SetGridVisible(false);
+    aView.SetHlplVisible(false);
+    aView.SetGlueVisible(false);
+    aView.setHideBackground(true);
+    aView.ShowSdrPage(&mrPage);
+
+    vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
+    ObjectRedirector aRedirector({ .mbSkipMasterPageObjects = true });
+    aView.CompleteRedraw(pDevice, aRegion, &aRedirector);
+
+    ::tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("group", "DrawPage");
+    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
+    aJsonWriter.put("index", 0);
+    aJsonWriter.put("type", "bitmap");
+    {
+        ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
+        aJsonWriter.put("type", "%IMAGETYPE%");
+        aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
+    }
+    rJsonMsg = aJsonWriter.finishAndGetAsOString();
+
+    rOutliner.SetControlWord(nOldControlBits);
+
+    return true;
+}
+
+bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
+{
+    if (maRenderStages.empty())
+        return false;
+
+    auto eRenderStage = maRenderStages.front();
+    maRenderStages.pop_front();
+
+    switch (eRenderStage)
+    {
+        case SlideRenderStage::Master:
+            return renderMaster(pBuffer, rJsonMsg);
+        case SlideRenderStage::Slide:
+            return renderSlide(pBuffer, rJsonMsg);
+    };
 
     return true;
 }

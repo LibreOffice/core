@@ -165,6 +165,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbHideChart(false)
     , mbHideDraw(false)
     , mbHideFormControl(false)
+    , mbHideBackground(false)
     , mbPaintTextEdit(true)
     , maGridColor(COL_BLACK)
 {

@@ -4419,7 +4419,7 @@ bool SdXImpressDocument::createSlideRenderer(
         if (!pPage)
             return false;
 
-        mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(pPage));
+        mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(*pPage));
         Size aDesiredSize(nViewWidth, nViewHeight);
         Size aCalculatedSize = mpSlideshowLayerRenderer->calculateAndSetSizePixel(aDesiredSize);
         nViewWidth = aCalculatedSize.Width();
