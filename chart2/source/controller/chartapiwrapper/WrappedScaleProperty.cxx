@@ -297,7 +297,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         {
             TimeIncrement aTimeIncrement;
             rOuterValue >>= aTimeIncrement;
-            aScaleData.TimeIncrement = aTimeIncrement;
+            aScaleData.TimeIncrement = std::move(aTimeIncrement);
             bSetScaleData = true;
             break;
         }

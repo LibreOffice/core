@@ -113,7 +113,7 @@ AlphaMask implcreateAlphaMask(drawinglayer::primitive2d::Primitive2DContainer& r
     }
     const drawinglayer::primitive2d::Primitive2DReference xRef(
         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(rSequence),
-                                                                aBColorModifier));
+                                                                std::move(aBColorModifier)));
     const drawinglayer::primitive2d::Primitive2DContainer xSeq{ xRef };
 
     // render

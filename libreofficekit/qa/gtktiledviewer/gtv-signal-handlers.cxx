@@ -216,11 +216,11 @@ void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
     g_free(pUnoCmd);
 }
 
-static void addToRecentUnoCommands(GtvApplicationWindow* pWindow, const std::string& rUnoCmd, std::string rArgs)
+static void addToRecentUnoCommands(GtvApplicationWindow* pWindow, const std::string& rUnoCmd, std::string aArgs)
 {
     GtvMainToolbar* pToolbar = gtv_application_window_get_main_toolbar(pWindow);
-    rArgs.erase(std::find(rArgs.begin(), rArgs.end(), '\n'));
-    const std::string rUnoCmdStr = rUnoCmd + " | " + rArgs;
+    aArgs.erase(std::find(aArgs.begin(), aArgs.end(), '\n'));
+    const std::string rUnoCmdStr = rUnoCmd + " | " + aArgs;
 
 
     // add to file
@@ -276,7 +276,7 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
         g_info("Generated UNO command: %s %s", sUnoCmd, aArguments.c_str());
 
         lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
-        addToRecentUnoCommands(window, sUnoCmd, aArguments);
+        addToRecentUnoCommands(window, sUnoCmd, std::move(aArguments));
 
         g_free(sUnoCmd);
     }

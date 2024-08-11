@@ -444,7 +444,7 @@ void FilterCache::setItem(      EItemType        eType ,
     // They can't be saved here and must be read on demand later, if they are needed.
     removeStatePropsFromItem(aItem);
 
-    rList[sItem] = aItem;
+    rList[sItem] = std::move(aItem);
 
     impl_addItem2FlushList(eType, sItem);
 }

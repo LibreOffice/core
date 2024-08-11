@@ -224,7 +224,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
         css::lang::Locale current_aRes;
         current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage() );
         current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry() );
-        pRes[i] = current_aRes;
+        pRes[i] = std::move(current_aRes);
     }
 
     return aRes;
@@ -246,7 +246,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
         css::lang::Locale current_aRes;
         current_aRes.Language   = OUString::createFromAscii( gs[i].GetLanguage() );
         current_aRes.Country    = OUString::createFromAscii( gs[i].GetCountry() );
-        pRes[i] = current_aRes;
+        pRes[i] = std::move(current_aRes);
     }
 
     return aRes;

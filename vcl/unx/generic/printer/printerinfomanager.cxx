@@ -450,7 +450,7 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aAlternateFiles = find_it->second.m_aAlternateFiles;
                     aPrinter.m_aAlternateFiles.insert( find_it->second.m_aFile );
                 }
-                m_aPrinters[ aPrinterName ] = aPrinter;
+                m_aPrinters[ aPrinterName ] = std::move(aPrinter);
             }
         }
     }

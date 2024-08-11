@@ -222,14 +222,13 @@ namespace URLEncoder
     }
 }
 
-void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
+void HelpLinker::addBookmark( FILE* pFile_DBHelp,
+        const std::string& thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB)
 {
     HCDBG(std::cerr << "HelpLinker::addBookmark " << thishid << " " <<
         fileB << " " << anchorB << " " << jarfileB << " " << titleB << std::endl);
-
-    thishid = URLEncoder::encode(thishid);
 
     int fileLen = fileB.length();
     if (!anchorB.empty())
@@ -258,7 +257,7 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
     if( pFile_DBHelp != nullptr )
     {
         std::string aValueStr( dataB.begin(), dataB.end() );
-        writeKeyValue_DBHelp( pFile_DBHelp, thishid, aValueStr );
+        writeKeyValue_DBHelp( pFile_DBHelp, URLEncoder::encode(thishid), aValueStr );
     }
 }
 

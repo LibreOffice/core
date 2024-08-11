@@ -4661,7 +4661,7 @@ struct ScDependantsCalculator
             mxGroup->mbPartOfCycle = true;
 
         if (pSuccessfulDependencies && !bHasSelfReferences)
-            *pSuccessfulDependencies = aRangeList;
+            *pSuccessfulDependencies = std::move(aRangeList);
 
         return !bHasSelfReferences;
     }

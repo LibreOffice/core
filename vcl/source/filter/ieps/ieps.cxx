@@ -803,7 +803,7 @@ bool ImportEpsGraphic( SvStream & rStream, Graphic & rGraphic)
                             aGraphic);
                     }
 
-                    GfxLink     aGfxLink( aBuf, GfxLinkType::EpsBuffer ) ;
+                    GfxLink aGfxLink(std::move(aBuf), GfxLinkType::EpsBuffer);
                     aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
                                                                       std::move(aGfxLink), aGraphic.GetGDIMetaFile() ) ) );
                     CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );

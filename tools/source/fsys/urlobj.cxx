@@ -4826,7 +4826,7 @@ void INetURLObject::CutLastName()
     aTemp.clearQuery();
     if (!aTemp.removeSegment(LAST_SEGMENT, false))
         return;
-    *this = aTemp;
+    *this = std::move(aTemp);
 }
 
 OUString INetURLObject::PathToFileName() const

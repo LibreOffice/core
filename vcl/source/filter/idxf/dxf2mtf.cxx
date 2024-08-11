@@ -208,7 +208,7 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
     aFont.SetAlignment(ALIGN_BASELINE);
     aFont.SetOrientation(Degree10(nAngle));
     if (aActFont!=aFont) {
-        aActFont=aFont;
+        aActFont=std::move(aFont);
         pVirDev->SetFont(aActFont);
     }
 

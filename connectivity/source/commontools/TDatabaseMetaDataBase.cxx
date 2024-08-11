@@ -162,7 +162,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
                 }
                 aTypeInfoRows.push_back(aRow);
             }
-            m_aTypeInfoRows = aTypeInfoRows;
+            m_aTypeInfoRows = std::move(aTypeInfoRows);
         }
     }
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);

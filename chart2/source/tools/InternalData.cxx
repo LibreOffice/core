@@ -297,8 +297,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
                 aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
                 m_aData[ std::slice( nCol, m_nRowCount, m_nColumnCount ) ];
 
-        m_aData.resize( nNewSize );
-        m_aData = aNewData;
+        m_aData = std::move(aNewData);
     }
     m_nColumnCount = nNewColumnCount;
     m_nRowCount = nNewRowCount;
@@ -451,8 +450,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     }
 
     m_nRowCount = nNewRowCount;
-    m_aData.resize( nNewSize );
-    m_aData = aNewData;
+    m_aData = std::move(aNewData);
 
     // labels
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))

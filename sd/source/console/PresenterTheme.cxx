@@ -956,7 +956,7 @@ void ViewStyleContainer::ProcessViewStyle(
     PresenterTheme::SharedFontDescriptor pFont (
         ReadContext::ReadFont(xFontNode, PresenterTheme::SharedFontDescriptor()));
     if (pFont)
-        pStyle->mpFont = pFont;
+        pStyle->mpFont = std::move(pFont);
 
     Reference<container::XHierarchicalNameAccess> xBackgroundNode (
         PresenterConfigurationAccess::GetProperty(rxProperties, u"Background"_ustr),
@@ -968,7 +968,7 @@ void ViewStyleContainer::ProcessViewStyle(
         rReadContext.mxCanvas,
         SharedBitmapDescriptor()));
     if (pBackground && pBackground->GetNormalBitmap().is())
-        pStyle->mpBackground = pBackground;
+        pStyle->mpBackground = std::move(pBackground);
 
     mStyles.push_back(pStyle);
 }

@@ -2141,7 +2141,7 @@ public:
         auto* pList = rDestDoc.GetSparklineList(mrDestColumn.GetTab());
         pList->addSparkline(pNewSparkline);
 
-        miDestPosition = mrDestSparkline.set(miDestPosition, nDestRow, new sc::SparklineCell(pNewSparkline));
+        miDestPosition = mrDestSparkline.set(miDestPosition, nDestRow, new sc::SparklineCell(std::move(pNewSparkline)));
     }
 };
 

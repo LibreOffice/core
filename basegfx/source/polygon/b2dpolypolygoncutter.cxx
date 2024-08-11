@@ -1081,7 +1081,7 @@ namespace basegfx::utils
                         if(!aCandidateRange.overlaps(aTargetRange))
                         {
                             aTarget.append(aCandidate);
-                            b = aTarget;
+                            b = std::move(aTarget);
                             bCouldMergeSimple = true;
                             break;
                         }

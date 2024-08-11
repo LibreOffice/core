@@ -1864,7 +1864,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting
         || bPrintAreaReset)
     {
-        pPrintFuncCache.reset(new ScPrintFuncCache(pDocShell, aMark, aStatus, aPrintPageSize,
+        pPrintFuncCache.reset(new ScPrintFuncCache(pDocShell, aMark, std::move(aStatus), aPrintPageSize,
                                                    bPrintPageLandscape, bUsePrintDialogSetting));
     }
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();

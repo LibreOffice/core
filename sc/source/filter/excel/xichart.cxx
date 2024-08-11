@@ -2865,7 +2865,7 @@ void XclImpChTypeGroup::ReadChDataFormat( XclImpStream& rStrm )
     const XclChDataPointPos& rPos = xDataFmt->GetPointPos();
     if( (rPos.mnSeriesIdx == 0) && (rPos.mnPointIdx == 0) &&
             (xDataFmt->GetFormatIdx() == EXC_CHDATAFORMAT_DEFAULT) )
-        mxGroupFmt = xDataFmt;
+        mxGroupFmt = std::move(xDataFmt);
 }
 
 void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChartType,

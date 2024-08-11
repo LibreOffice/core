@@ -529,7 +529,7 @@ void BColorStops::createSpaceAtStart(double fOffset)
                                candidate.getStopColor());
     }
 
-    *this = aNewStops;
+    *this = std::move(aNewStops);
 }
 
 // removeSpaceAtStart removes fOffset space from start by

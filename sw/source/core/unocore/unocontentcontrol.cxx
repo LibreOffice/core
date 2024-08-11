@@ -718,7 +718,7 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             = SwContentControlListItem::ItemsFromAny(rValue);
         if (m_pImpl->m_bIsDescriptor)
         {
-            m_pImpl->m_aListItems = aItems;
+            m_pImpl->m_aListItems = std::move(aItems);
 
             if (!m_pImpl->m_bComboBox && !m_pImpl->m_bDropDown)
             {

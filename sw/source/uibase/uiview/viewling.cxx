@@ -765,7 +765,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                                     // Execute dispatch asynchronously
                                     ExecuteInfo* pExecuteInfo   = new ExecuteInfo;
                                     pExecuteInfo->xDispatch     = xDispatch;
-                                    pExecuteInfo->aTargetURL    = aURL;
+                                    pExecuteInfo->aTargetURL    = std::move(aURL);
                                     Application::PostUserEvent( LINK(nullptr, AsyncExecute , ExecuteHdl_Impl), pExecuteInfo );
                                 }
                             }

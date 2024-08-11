@@ -1028,7 +1028,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
         // Exit the loop when the shell has been successfully created.
         if (aResult.mpShell != nullptr)
         {
-            aResult.mpFactory = pFactory;
+            aResult.mpFactory = std::move(pFactory);
             aResult.mnId = nShellId;
             break;
         }

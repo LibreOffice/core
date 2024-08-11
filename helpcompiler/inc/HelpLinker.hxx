@@ -81,7 +81,8 @@ private:
     /// @throws HelpProcessingException
     /// @throws BasicCodeTagger::TaggerException
     void link();
-    static void addBookmark( FILE* pFile_DBHelp, std::string thishid,
+    static void addBookmark( FILE* pFile_DBHelp,
+        const std::string& thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
 };

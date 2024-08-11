@@ -485,7 +485,7 @@ void HelpCompiler::compile()
             actMod = actMod.substr(0, actMod.find('/'));
         }
     }
-    streamTable.document_module = actMod;
+    streamTable.document_module = std::move(actMod);
     xmlFreeDoc(docResolvedOrg);
 }
 

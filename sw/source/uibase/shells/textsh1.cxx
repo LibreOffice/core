@@ -1095,7 +1095,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
 
                 weld::DialogController::runAsync(pDialogController,
-                    [pAbstractDialog, &rWrtSh] (sal_Int32 nResult) {
+                    [pAbstractDialog=std::move(pAbstractDialog), &rWrtSh] (sal_Int32 nResult) {
                         if( RET_OK == nResult )
                         {
                             sal_uInt16 nKind = pAbstractDialog->GetKind();

@@ -808,7 +808,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
                     }
                 }
                 m_rExport.m_bLinkedTextboxesHelperInitialized = false;
-                m_rExport.m_aLinkedTextboxesHelper[sLinkChainName] = aLinkedTextboxInfo;
+                m_rExport.m_aLinkedTextboxesHelper[sLinkChainName] = std::move(aLinkedTextboxInfo);
             }
         }
         ++linkedTextboxesIter;

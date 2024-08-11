@@ -966,8 +966,7 @@ void SlideView::setClip( const basegfx::B2DPolyPolygon& rClip )
 
     if( aNewClip != maClip )
     {
-        maClip = aNewClip;
-
+        maClip = std::move(aNewClip);
         updateClip();
     }
 }

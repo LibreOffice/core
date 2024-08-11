@@ -445,7 +445,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
         std::vector<std::vector<css::drawing::Position3D>> aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
         ShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
-        aPoly = aClippedPoly;
+        aPoly = std::move(aClippedPoly);
     }
 
     if(!ShapeFactory::hasPolygonAnyLines(aPoly))

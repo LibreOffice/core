@@ -184,7 +184,7 @@ void ImageList::ImplAddImage( std::u16string_view aPrefix, const OUString &aName
     if (!aInsert)
         aInsert = Image( OUString::Concat("private:graphicrepository/") + aPrefix + aName );
 
-    ImageAryData *pImg = new ImageAryData{ aName, nId, aInsert };
+    ImageAryData *pImg = new ImageAryData{ aName, nId, std::move(aInsert) };
     maImages.emplace_back( pImg );
     if( !aName.isEmpty() )
         maNameHash [ aName ] = pImg;

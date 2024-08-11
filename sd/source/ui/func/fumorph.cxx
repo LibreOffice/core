@@ -373,7 +373,7 @@ void FuMorph::ImpInsertPolygons(
     if ( !pPageView )
         return;
 
-    SfxItemSet      aSet( aSet1 );
+    SfxItemSet      aSet( std::move(aSet1) );
     rtl::Reference<SdrObjGroup> xObjGroup(new SdrObjGroup(mpView->getSdrModelFromSdrView()));
     SdrObjList*     pObjList = xObjGroup->GetSubList();
     const size_t    nCount = rPolyPolyList3D.size();

@@ -698,7 +698,7 @@ void OutputDevice::ReMirror( vcl::Region &rRegion ) const
         aMirroredRegion.Union(rectangle);
     }
 
-    rRegion = aMirroredRegion;
+    rRegion = std::move(aMirroredRegion);
 
 }
 

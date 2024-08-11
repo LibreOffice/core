@@ -1965,7 +1965,7 @@ bool Content::exchangeIdentity(
         aGuard.clear();
         if ( exchange( xNewId ) )
         {
-            m_aUri = aNewUri;
+            m_aUri = std::move(aNewUri);
             if ( isFolder() )
             {
                 // Process instantiated children...

@@ -671,7 +671,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
                     else
                         pGroupEffect->setNodeType( presentation::EffectNodeType::AFTER_PREVIOUS );
                 }
-                pLastEffect = pGroupEffect;
+                pLastEffect = std::move(pGroupEffect);
                 nIndex++;
             }
         }

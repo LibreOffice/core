@@ -457,7 +457,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 bAutomaticMark = true;
             }
 
-            ScMarkData aMultiMark( aMark );
+            ScMarkData aMultiMark(std::move(aMark));
             aMultiMark.MarkToMulti();
 
             ScRangeList aRanges;

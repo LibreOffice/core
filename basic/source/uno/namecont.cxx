@@ -623,7 +623,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         if( aExtension == "xlc" )
         {
             meInitMode = CONTAINER_INIT_FILE;
-            INetURLObject aLibPathInetObj( aInitUrlInetObj );
+            INetURLObject aLibPathInetObj( std::move(aInitUrlInetObj) );
             aLibPathInetObj.removeSegment();
             maLibraryPath = aLibPathInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }

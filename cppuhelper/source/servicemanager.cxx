@@ -871,7 +871,7 @@ void cppuhelper::ServiceManager::loadImplementation(
           || implementation->status == Data::Implementation::STATUS_LOADED))
     {
         implementation->status = Data::Implementation::STATUS_LOADED;
-        implementation->constructorFn = ctor;
+        implementation->constructorFn = std::move(ctor);
         implementation->factory1 = f1;
         implementation->factory2 = f2;
     }

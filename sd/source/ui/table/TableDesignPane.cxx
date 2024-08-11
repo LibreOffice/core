@@ -893,7 +893,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 xCellInfo = rStyle[sdr::table::body_style];
             }
 
-            rMatrix[(nCol * nPreviewColumns) + nRow] = xCellInfo;
+            rMatrix[(nCol * nPreviewColumns) + nRow] = std::move(xCellInfo);
         }
     }
 }

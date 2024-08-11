@@ -1204,7 +1204,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
                 {   // there is already a property but it has the wrong type
                     // (integer not string); TODO: can we prevent it
                     // getting added earlier?
-                    (*iter) = aNumberStyleState;
+                    (*iter) = std::move(aNumberStyleState);
                 }
             }
         }

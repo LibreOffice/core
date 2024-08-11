@@ -2296,7 +2296,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         {
             if (HyperlinkData aNewHyperlinkData(xPropSet); aNewHyperlinkData != aHyperlinkData)
             {
-                aHyperlinkData = aNewHyperlinkData;
+                aHyperlinkData = std::move(aNewHyperlinkData);
                 oTextA.reset();
                 if (aHyperlinkData.addHyperlinkAttributes(GetExport()))
                 {

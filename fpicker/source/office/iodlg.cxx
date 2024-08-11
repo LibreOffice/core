@@ -1317,7 +1317,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, std::u16strin
         }
 
         if ( !bIsInvalid )
-            aURLParser = aParent;
+            aURLParser = std::move(aParent);
     }
 
     if ( !bIsInvalid && bIsFolder )

@@ -778,7 +778,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         case SID_LINE_SQUARE_ARROW:
         {
             // connector with arrow end
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), std::move(aArrow)));
             rAttr.Put(XLineEndWidthItem(nWidth));
         }
         break;

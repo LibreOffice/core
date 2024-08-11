@@ -215,7 +215,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             setPrinter( p, true, true );
         else
         {
-            mpPrt = p;
+            mpPrt = std::move(p);
             bDataChanged = true;
         }
     }

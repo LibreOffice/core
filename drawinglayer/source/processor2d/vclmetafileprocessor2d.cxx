@@ -182,7 +182,7 @@ void fillPolyPolygonNeededToBeSplit(basegfx::B2DPolyPolygon& rPolyPolygon)
 
     if (aSplitted.count() != nPolyCount)
     {
-        rPolyPolygon = aSplitted;
+        rPolyPolygon = std::move(aSplitted);
     }
 }
 

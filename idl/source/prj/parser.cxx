@@ -429,7 +429,7 @@ void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
     Read( '(' );
     tools::SvRef<SvMetaType> xT(new SvMetaType() );
     xT->SetRef(rAttr.GetType() );
-    rAttr.aType = xT;
+    rAttr.aType = std::move(xT);
     rAttr.aType->SetType( MetaTypeType::Method );
     if (ReadIf(')'))
         return;
