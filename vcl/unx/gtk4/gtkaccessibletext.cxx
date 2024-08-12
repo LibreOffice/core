@@ -102,7 +102,7 @@ static unsigned int lo_accessible_text_get_caret_position(GtkAccessibleText* sel
     if (!xText.is())
         return 0;
 
-    return std::max<sal_Int32>(0, xText->getCaretPosition());
+    return std::max(sal_Int32(0), xText->getCaretPosition());
 }
 
 static gboolean lo_accessible_text_get_selection(GtkAccessibleText* self, gsize* n_ranges,
