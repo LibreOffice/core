@@ -1545,9 +1545,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                     xFirstCell->getPropertyValue(OUString(aBorderNames[i]))
                                         >>= aBorderValues[i];
 
-                                uno::Reference<beans::XPropertySet> xLastCell(
-                                    xTable->getCellByPosition(it->m_nLastCol, it->m_nLastRow),
-                                    uno::UNO_QUERY_THROW);
+                                rtl::Reference<SwXCell> xLastCell =
+                                    xTable->getSwCellByPosition(it->m_nLastCol, it->m_nLastRow);
                                 OUString aLast
                                     = xLastCell->getPropertyValue(u"CellName"_ustr).get<OUString>();
 
