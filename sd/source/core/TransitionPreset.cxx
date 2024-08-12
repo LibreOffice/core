@@ -219,6 +219,14 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionSubType::HEART
     };
 
+    const std::set<sal_Int16> LOKMiscShapeWipeNonSupportedTransitionSubTypes = {
+            TransitionSubType::DIAMOND,
+            TransitionSubType::HEART,
+            TransitionSubType::CIRCLE,
+            TransitionSubType::VERTICAL,
+            TransitionSubType::TOPLEFT
+    };
+
     try {
         xAnimationNode = implImportEffects( xServiceFactory, aURL );
         Reference< XEnumerationAccess > xEnumerationAccess( xAnimationNode, UNO_QUERY_THROW );
@@ -237,6 +245,12 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                     sal_Int16 eTransitionSubType = pPreset->getSubtype();
                     if( LOKSupportedTransitionTypes.find(eTransitionType) == LOKSupportedTransitionTypes.end()
                             || LOKSupportedTransitionSubTypes.find(eTransitionSubType) == LOKSupportedTransitionSubTypes.end() )
+                    {
+                        continue;
+                    }
+
+                    if( eTransitionType == TransitionType::MISCSHAPEWIPE
+                            && LOKMiscShapeWipeNonSupportedTransitionSubTypes.find(eTransitionSubType) != LOKMiscShapeWipeNonSupportedTransitionSubTypes.end() )
                     {
                         continue;
                     }
