@@ -18,17 +18,15 @@
  */
 
 #include "stdafx.h"
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #include "AccHypertext.h"
 #include "AccHyperLink.h"
 #include "acccommon.h"
 
 #include <vcl/svapp.hxx>
 
-
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
-
 
 /**
    * Get special selection.
@@ -39,10 +37,8 @@ using namespace com::sun::star::uno;
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::addSelection(long startOffset, long endOffset)
 {
-
     return CAccTextBase::get_addSelection(startOffset, endOffset);
 }
-
 
 /**
    * Get special attributes.
@@ -52,9 +48,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::addSelection(long startOffset, 
    * @param textAttributes     Variant to accept attributes.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_attributes(long offset, long* startOffset,
+                                                                long* endOffset,
+                                                                BSTR* textAttributes)
 {
-
     return CAccTextBase::get_attributes(offset, startOffset, endOffset, textAttributes);
 }
 
@@ -63,9 +60,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_attributes(long offset, lon
    * @param offset     Variant to accept caret offset.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_caretOffset(long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_caretOffset(long* offset)
 {
-
     return CAccTextBase::get_caretOffset(offset);
 }
 
@@ -78,9 +74,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_caretOffset(long * offset)
    * @param Height Variant to accept height.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_characterExtents(long offset,
+                                                                      IA2CoordinateType coordType,
+                                                                      long* x, long* y, long* width,
+                                                                      long* height)
 {
-
     return CAccTextBase::get_characterExtents(offset, coordType, x, y, width, height);
 }
 
@@ -89,9 +87,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_characterExtents(long offse
    * @param nSelections Variant to accept selections count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nSelections(long * nSelections)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nSelections(long* nSelections)
 {
-
     return CAccTextBase::get_nSelections(nSelections);
 }
 
@@ -103,7 +100,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nSelections(long * nSelecti
    * @param offset Variant to accept offset.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_offsetAtPoint(long x, long y, IA2CoordinateType coordType, long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_offsetAtPoint(long x, long y,
+                                                                   IA2CoordinateType coordType,
+                                                                   long* offset)
 {
     return CAccTextBase::get_offsetAtPoint(x, y, coordType, offset);
 }
@@ -115,9 +114,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_offsetAtPoint(long x, long 
    * @param endOffset Variant to accept the end offset of special selection.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_selection(long selection, long * startOffset, long * endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_selection(long selection, long* startOffset,
+                                                               long* endOffset)
 {
-
     return CAccTextBase::get_selection(selection, startOffset, endOffset);
 }
 
@@ -128,9 +127,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_selection(long selection, l
    * @param text        Variant to accept the text of special range.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_text(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_text(long startOffset, long endOffset,
+                                                          BSTR* text)
 {
-
     return CAccTextBase::get_text(startOffset, endOffset, text);
 }
 
@@ -143,11 +142,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_text(long startOffset, long
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textBeforeOffset(
+    long offset, IA2TextBoundaryType boundaryType, long* startOffset, long* endOffset, BSTR* text)
 {
-
-    return CAccTextBase::get_textBeforeOffset(offset, boundaryType,
-            startOffset, endOffset, text);
+    return CAccTextBase::get_textBeforeOffset(offset, boundaryType, startOffset, endOffset, text);
 }
 
 /**
@@ -159,11 +157,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textBeforeOffset(long offse
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAfterOffset(
+    long offset, IA2TextBoundaryType boundaryType, long* startOffset, long* endOffset, BSTR* text)
 {
-
-    return CAccTextBase::get_textAfterOffset(offset, boundaryType,
-            startOffset, endOffset, text);
+    return CAccTextBase::get_textAfterOffset(offset, boundaryType, startOffset, endOffset, text);
 }
 
 /**
@@ -175,11 +172,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAfterOffset(long offset
    * @param text        Variant to accept the special text.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAtOffset(long offset,
+                                                                  IA2TextBoundaryType boundaryType,
+                                                                  long* startOffset,
+                                                                  long* endOffset, BSTR* text)
 {
-
-    return CAccTextBase::get_textAtOffset(offset, boundaryType,
-                                          startOffset, endOffset, text);
+    return CAccTextBase::get_textAtOffset(offset, boundaryType, startOffset, endOffset, text);
 }
 
 /**
@@ -190,7 +188,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAtOffset(long offset, I
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::removeSelection(long selectionIndex)
 {
-
     return CAccTextBase::removeSelection(selectionIndex);
 }
 
@@ -202,7 +199,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::removeSelection(long selectionI
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setCaretOffset(long offset)
 {
-
     return CAccTextBase::setCaretOffset(offset);
 }
 
@@ -214,11 +210,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setCaretOffset(long offset)
    * @param success Variant to accept the method called result.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setSelection(long selectionIndex, long startOffset, long endOffset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setSelection(long selectionIndex, long startOffset,
+                                                              long endOffset)
 {
-
-    return CAccTextBase::setSelection(selectionIndex, startOffset,
-                                      endOffset);
+    return CAccTextBase::setSelection(selectionIndex, startOffset, endOffset);
 }
 
 /**
@@ -226,18 +221,17 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setSelection(long selectionInde
    * @param nCharacters Variant to accept the characters count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nCharacters(long * nCharacters)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nCharacters(long* nCharacters)
 {
-
     return CAccTextBase::get_nCharacters(nCharacters);
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_newText( IA2TextSegment *newText)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_newText(IA2TextSegment* newText)
 {
     return CAccTextBase::get_newText(newText);
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_oldText( IA2TextSegment *oldText)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_oldText(IA2TextSegment* oldText)
 {
     return CAccTextBase::get_oldText(oldText);
 }
@@ -248,15 +242,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_oldText( IA2TextSegment *ol
    * @param endIndex   End index of sub string.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::scrollSubstringToPoint(long startIndex, long endIndex,enum IA2CoordinateType coordinateType, long x, long y )
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::scrollSubstringToPoint(
+    long startIndex, long endIndex, enum IA2CoordinateType coordinateType, long x, long y)
 {
-
     return CAccTextBase::scrollSubstringToPoint(startIndex, endIndex, coordinateType, x, y);
 }
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::scrollSubstringTo(long startIndex, long endIndex,enum IA2ScrollType scrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::scrollSubstringTo(long startIndex, long endIndex,
+                                                                   enum IA2ScrollType scrollType)
 {
-
-    return CAccTextBase::scrollSubstringTo(startIndex, endIndex,scrollType);
+    return CAccTextBase::scrollSubstringTo(startIndex, endIndex, scrollType);
 }
 
 /**
@@ -264,24 +258,27 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::scrollSubstringTo(long startInd
    * @param hyperlinkCount Variant to accept hyperlink count.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nHyperlinks(long* hyperlinkCount)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (hyperlinkCount == nullptr)
+            return E_INVALIDARG;
 
-    if(hyperlinkCount == nullptr)
-        return E_INVALIDARG;
+        if (!pHyperText.is())
+        {
+            return E_FAIL;
+        }
 
-    if(!pHyperText.is())
+        *hyperlinkCount = pHyperText->getHyperLinkCount();
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    *hyperlinkCount = pHyperText->getHyperLinkCount();
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -290,45 +287,49 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlink
    * @param hyperlink Variant to accept special hyperlink via index.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hyperlink)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlink(long index,
+                                                               IAccessibleHyperlink** hyperlink)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if(hyperlink == nullptr)
-        return E_INVALIDARG;
-
-    if(!pHyperText.is())
+    try
     {
-        return E_FAIL;
-    }
+        if (hyperlink == nullptr)
+            return E_INVALIDARG;
 
-    Reference<XAccessibleHyperlink> pRLink = pHyperText->getHyperLink(index);
-    if(!pRLink.is())
-    {
-        *hyperlink = nullptr;
-        return E_FAIL;
-    }
-
-    IAccessibleHyperlink* plink = nullptr;
-    HRESULT hr = createInstance<CAccHyperLink>(IID_IAccessibleHyperlink, &plink);
-    if( SUCCEEDED(hr) )
-    {
-        IUNOXWrapper* wrapper = nullptr;
-        plink->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
-        if(wrapper)
+        if (!pHyperText.is())
         {
-            wrapper->put_XSubInterface(reinterpret_cast<hyper>(pRLink.get()));
-            wrapper->Release();
+            return E_FAIL;
         }
-        *hyperlink = plink;
-        return S_OK;
+
+        Reference<XAccessibleHyperlink> pRLink = pHyperText->getHyperLink(index);
+        if (!pRLink.is())
+        {
+            *hyperlink = nullptr;
+            return E_FAIL;
+        }
+
+        IAccessibleHyperlink* plink = nullptr;
+        HRESULT hr = createInstance<CAccHyperLink>(IID_IAccessibleHyperlink, &plink);
+        if (SUCCEEDED(hr))
+        {
+            IUNOXWrapper* wrapper = nullptr;
+            plink->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
+            if (wrapper)
+            {
+                wrapper->put_XSubInterface(reinterpret_cast<hyper>(pRLink.get()));
+                wrapper->Release();
+            }
+            *hyperlink = plink;
+            return S_OK;
+        }
+
+        return E_FAIL;
     }
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -337,24 +338,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAcces
    * @param hyperlinkIndex Variant to accept special hyperlink index.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIndex)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex,
+                                                                    long* hyperlinkIndex)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (hyperlinkIndex == nullptr)
+            return E_INVALIDARG;
 
-    if(hyperlinkIndex == nullptr)
-        return E_INVALIDARG;
+        if (!pHyperText.is())
+        {
+            return E_FAIL;
+        }
 
-    if(!pHyperText.is())
+        *hyperlinkIndex = pHyperText->getHyperLinkIndex(charIndex);
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    *hyperlinkIndex = pHyperText->getHyperLinkIndex(charIndex);
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -366,25 +371,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterfac
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    try {
-
-    CAccTextBase::put_XInterface(pXInterface);
-    //special query.
-    if(pUNOInterface == nullptr)
-        return E_FAIL;
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+    try
+    {
+        CAccTextBase::put_XInterface(pXInterface);
+        //special query.
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleHypertext> pRXI(pRContext, UNO_QUERY);
+        if (!pRXI.is())
+            pHyperText = nullptr;
+        else
+            pHyperText = pRXI.get();
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleHypertext> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
-        pHyperText = nullptr;
-    else
-        pHyperText = pRXI.get();
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
