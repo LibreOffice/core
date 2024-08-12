@@ -459,7 +459,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
                                    : new NotebookBarAddonsItem{})
     , m_sID(std::move(sID))
     , m_sHelpRoot(sUIFile)
-    , m_pStringReplace(Translate::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
     , m_pParserState(new ParserState)
@@ -3195,8 +3194,8 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
 
-                if (m_pStringReplace)
-                    sFinalValue = (*m_pStringReplace)(sFinalValue);
+                if (ResHookProc pStringReplace = Translate::GetReadStringHook())
+                    sFinalValue = (*pStringReplace)(sFinalValue);
 
                 aItems.emplace_back(sFinalValue, sId);
             }
@@ -4004,8 +4003,8 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        if (m_pStringReplace)
-            sFinalValue = (*m_pStringReplace)(sFinalValue);
+        if (ResHookProc pStringReplace = Translate::GetReadStringHook())
+            sFinalValue = (*pStringReplace)(sFinalValue);
         rMap[sProperty] = sFinalValue;
     }
 }

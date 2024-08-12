@@ -298,7 +298,6 @@ private:
 
     OUString    m_sID;
     OUString    m_sHelpRoot;
-    ResHookProc m_pStringReplace;
     VclPtr<vcl::Window> m_pParent;
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
