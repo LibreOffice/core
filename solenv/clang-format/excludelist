@@ -15101,8 +15101,6 @@ winaccessibility/source/UAccCOM/AccActionBase.cxx
 winaccessibility/source/UAccCOM/AccComponent.h
 winaccessibility/source/UAccCOM/AccEditableText.cxx
 winaccessibility/source/UAccCOM/AccEditableText.h
-winaccessibility/source/UAccCOM/AccHyperLink.cxx
-winaccessibility/source/UAccCOM/AccHyperLink.h
 winaccessibility/source/UAccCOM/AccHypertext.cxx
 winaccessibility/source/UAccCOM/AccHypertext.h
 winaccessibility/source/UAccCOM/AccImage.h

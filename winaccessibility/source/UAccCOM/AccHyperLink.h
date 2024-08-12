@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "Resource.h"       // main symbols
+#include "Resource.h" // main symbols
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include "AccActionBase.h"
@@ -28,16 +28,13 @@
 /**
  * CAccHyperLink implements IAccessibleHyperlink interface.
  */
-class ATL_NO_VTABLE CAccHyperLink :
-            public CComObjectRoot,
-            public CComCoClass<CAccHyperLink,&CLSID_AccHyperLink>,
-            public IAccessibleHyperlink,
-            public CAccActionBase
+class ATL_NO_VTABLE CAccHyperLink : public CComObjectRoot,
+                                    public CComCoClass<CAccHyperLink, &CLSID_AccHyperLink>,
+                                    public IAccessibleHyperlink,
+                                    public CAccActionBase
 {
 public:
-    CAccHyperLink()
-    {
-            }
+    CAccHyperLink() {}
 
     BEGIN_COM_MAP(CAccHyperLink)
     COM_INTERFACE_ENTRY(IAccessibleAction)
@@ -54,16 +51,15 @@ public:
 
     DECLARE_NO_REGISTRY()
 
-    static HRESULT WINAPI SmartQI_(void* pv,
-                                   REFIID iid, void** ppvObject, DWORD_PTR)
+    static HRESULT WINAPI SmartQI_(void* pv, REFIID iid, void** ppvObject, DWORD_PTR)
     {
-        return static_cast<CAccHyperLink*>(pv)->SmartQI(iid,ppvObject);
+        return static_cast<CAccHyperLink*>(pv)->SmartQI(iid, ppvObject);
     }
 
     HRESULT SmartQI(REFIID iid, void** ppvObject)
     {
-        if( m_pOuterUnknown )
-            return OuterQueryInterface(iid,ppvObject);
+        if (m_pOuterUnknown)
+            return OuterQueryInterface(iid, ppvObject);
         return E_FAIL;
     }
 
@@ -72,49 +68,52 @@ public:
     // IAccessibleAction
 
     // Returns the number of action.
-    STDMETHOD(nActions)(/*[out,retval]*/long* nActions) override;
+    STDMETHOD(nActions)(/*[out,retval]*/ long* nActions) override;
 
     // Performs specified action on the object.
     STDMETHOD(doAction)(/* [in] */ long actionIndex) override;
 
     // get the action name
-    STDMETHOD(get_name)( long actionIndex, BSTR __RPC_FAR *name) override;
+    STDMETHOD(get_name)(long actionIndex, BSTR __RPC_FAR* name) override;
 
     // get the localized action name
-    STDMETHOD(get_localizedName)( long actionIndex, BSTR __RPC_FAR *localizedName) override;
+    STDMETHOD(get_localizedName)(long actionIndex, BSTR __RPC_FAR* localizedName) override;
 
     // Gets description of specified action.
-    STDMETHOD(get_description)(long actionIndex,BSTR __RPC_FAR *description) override;
+    STDMETHOD(get_description)(long actionIndex, BSTR __RPC_FAR* description) override;
 
     // Returns key binding object (if any) associated with specified action
     // key binding is string.
     // e.g. "alt+d" (like IAccessible::get_accKeyboardShortcut).
-    STDMETHOD(get_keyBinding)(
+    STDMETHOD(get_keyBinding)
+    (
         /* [in] */ long actionIndex,
         /* [in] */ long nMaxBinding,
-        /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
-        /* [retval][out] */ long __RPC_FAR *nBinding) override;
+        /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR* __RPC_FAR* keyBinding,
+        /* [retval][out] */ long __RPC_FAR* nBinding) override;
 
     // IAccessibleHyperlink
 
     // get an object, e.g. BSTR or image object, that is overloaded with link behavior
-    STDMETHOD(get_anchor)(/* [in] */ long index,
-                                     /* [retval][out] */ VARIANT __RPC_FAR *anchor) override;
+    STDMETHOD(get_anchor)
+    (/* [in] */ long index,
+     /* [retval][out] */ VARIANT __RPC_FAR* anchor) override;
 
     // get an object representing the target of the link, usually a BSTR of the URI
-    STDMETHOD(get_anchorTarget)(/* [in] */ long index,
-                                           /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget) override;
+    STDMETHOD(get_anchorTarget)
+    (/* [in] */ long index,
+     /* [retval][out] */ VARIANT __RPC_FAR* anchorTarget) override;
 
     // Returns the index at which the textual representation of the
     // hyperlink (group) starts.
-    STDMETHOD(get_startIndex)(/* [retval][out] */ long __RPC_FAR *index) override;
+    STDMETHOD(get_startIndex)(/* [retval][out] */ long __RPC_FAR* index) override;
 
     // Returns the index at which the textual representation of the
     // hyperlink (group) ends.
-    STDMETHOD(get_endIndex)(/* [retval][out] */ long __RPC_FAR *index) override;
+    STDMETHOD(get_endIndex)(/* [retval][out] */ long __RPC_FAR* index) override;
 
     // Returns whether the document referenced by this links is still valid.
-    STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR *valid) override;
+    STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR* valid) override;
 
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
@@ -123,14 +122,9 @@ public:
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
 private:
-
     css::uno::Reference<css::accessibility::XAccessibleHyperlink> pRXLink;
 
-    css::accessibility::XAccessibleHyperlink* GetXInterface()
-    {
-        return pRXLink.get();
-    }
-
+    css::accessibility::XAccessibleHyperlink* GetXInterface() { return pRXLink.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
