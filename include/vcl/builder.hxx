@@ -77,13 +77,23 @@ protected:
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
+    void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OUString getStyleClass(xmlreader::XmlReader &reader);
 
     bool isLegacy() { return m_bLegacy; }
+    const std::locale& getResLocale() const;
+
+    virtual void resetParserState();
 
 private:
+    struct ParserState
+    {
+        std::locale m_aResLocale;
+    };
+
+    std::unique_ptr<ParserState> m_pParserState;
     bool m_bLegacy;
 };
 
@@ -101,7 +111,7 @@ public:
                = css::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true,
                const NotebookBarAddonsItem* pNotebookBarAddonsItem = nullptr);
-    ~VclBuilder();
+    virtual ~VclBuilder();
     ///releases references and disposes all children.
     void disposeBuilder();
     //sID must exist and be of type T
@@ -255,8 +265,6 @@ private:
 
     struct VclParserState
     {
-        std::locale m_aResLocale;
-
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
 
         std::vector<ComboBoxModelMap> m_aModelMaps;
@@ -304,6 +312,7 @@ private:
     bool        m_bToplevelParentFound;
     std::unique_ptr<VclParserState> m_pVclParserState;
 
+    virtual void resetParserState() override;
     vcl::Window *get_by_name(std::u16string_view sID);
     void        delete_by_name(const OUString& sID);
 
@@ -355,7 +364,6 @@ private:
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem);
 
-    void        handleInterfaceDomain(xmlreader::XmlReader& rReader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;

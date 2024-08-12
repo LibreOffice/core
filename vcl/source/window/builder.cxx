@@ -446,9 +446,18 @@ namespace weld
 }
 
 BuilderBase::BuilderBase(bool bLegacy)
-    : m_bLegacy(bLegacy)
+    : m_pParserState(new ParserState)
+    , m_bLegacy(bLegacy)
 {
 }
+
+const std::locale& BuilderBase::getResLocale() const
+{
+    assert(m_pParserState && "parser state no more valid");
+    return m_pParserState->m_aResLocale;
+}
+
+void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
@@ -770,7 +779,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         elem->create_message_area();
 
     //drop maps, etc. that we don't need again
-    m_pVclParserState.reset();
+    resetParserState();
 
     SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.builder",
         "Requested top level widget \"" << m_sID << "\" not found in " << sUIFile);
@@ -3014,7 +3023,8 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OUString &rID)
                 OUString sFinalValue;
                 if (bTranslated)
                 {
-                    sFinalValue = Translate::get(TranslateId{sContext.getStr(), sValue.getStr()}, m_pVclParserState->m_aResLocale);
+                    sFinalValue = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() },
+                                                 getResLocale());
                 }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
@@ -3185,7 +3195,8 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                 OUString sFinalValue;
                 if (bTranslated)
                 {
-                    sFinalValue = Translate::get(TranslateId{sContext.getStr(), sValue.getStr()}, m_pVclParserState->m_aResLocale);
+                    sFinalValue = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() },
+                                                 getResLocale());
                 }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
@@ -3752,11 +3763,11 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     return pCurrentChild;
 }
 
-void VclBuilder::handleInterfaceDomain(xmlreader::XmlReader& rReader)
+void BuilderBase::handleInterfaceDomain(xmlreader::XmlReader& rReader)
 {
     xmlreader::Span name = rReader.getAttributeValue(false);
     const OString sPrefixName(name.begin, name.length);
-    m_pVclParserState->m_aResLocale = Translate::Create(sPrefixName);
+    m_pParserState->m_aResLocale = Translate::Create(sPrefixName);
 }
 
 void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
@@ -3998,7 +4009,8 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     OUString sFinalValue;
     if (bTranslated)
     {
-        sFinalValue = Translate::get(TranslateId{sContext.getStr(), sValue.getStr()}, m_pVclParserState->m_aResLocale);
+        sFinalValue
+            = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() }, getResLocale());
     }
     else
         sFinalValue = OUString::fromUtf8(sValue);
@@ -4080,6 +4092,12 @@ bool BuilderBase::isToolbarItemClass(std::u16string_view sClass)
 vcl::Window *VclBuilder::get_widget_root()
 {
     return m_aChildren.empty() ? nullptr : m_aChildren[0].m_pWindow.get();
+}
+
+void VclBuilder::resetParserState()
+{
+    m_pVclParserState.reset();
+    BuilderBase::resetParserState();
 }
 
 vcl::Window *VclBuilder::get_by_name(std::u16string_view sID)
