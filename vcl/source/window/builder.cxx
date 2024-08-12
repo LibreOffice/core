@@ -445,10 +445,16 @@ namespace weld
     }
 }
 
+BuilderBase::BuilderBase(bool bLegacy)
+    : m_bLegacy(bLegacy)
+{
+}
+
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
                        bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
-    : m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
+    : BuilderBase(bLegacy)
+    , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
                                    ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
                                    : new NotebookBarAddonsItem{})
     , m_sID(std::move(sID))
@@ -456,7 +462,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     , m_pStringReplace(Translate::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
-    , m_bLegacy(bLegacy)
     , m_pParserState(new ParserState)
     , m_xFrame(std::move(xFrame))
 {
@@ -535,7 +540,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
         if (pOne && pOther)
         {
-            if (m_bLegacy)
+            if (isLegacy())
                 pOne->group(*pOther);
             else
             {
@@ -1732,7 +1737,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         m_pParserState->m_aExpanderWidgets.push_back(pExpander);
         xWindow = pExpander;
     }
-    else if (name == "GtkButton" || (!m_bLegacy && name == "GtkToggleButton"))
+    else if (name == "GtkButton" || (!isLegacy() && name == "GtkToggleButton"))
     {
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
@@ -1740,7 +1745,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             xButton = extractStockAndBuildPushButton(pParent, rMap, name == "GtkToggleButton");
         else
         {
-            assert(m_bLegacy && "use GtkMenuButton");
+            assert(isLegacy() && "use GtkMenuButton");
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         }
@@ -1775,7 +1780,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
     }
-    else if (name == "GtkToggleButton" && m_bLegacy)
+    else if (name == "GtkToggleButton" && isLegacy())
     {
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
@@ -1905,7 +1910,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkTreeView")
     {
-        if (!m_bLegacy)
+        if (!isLegacy())
         {
             assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkTreeView must have a model");
         }
@@ -1918,7 +1923,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         //   everything over to SvHeaderTabListBox/SvTabListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-        if (m_bLegacy)
+        if (isLegacy())
         {
             OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
             if (!sBorder.isEmpty())
@@ -1930,7 +1935,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         }
         //ListBox/SvHeaderTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
-        if (m_bLegacy)
+        if (isLegacy())
         {
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle | WB_SIMPLEMODE);
             xWindowForPackingProps = xWindow;
@@ -1977,7 +1982,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkTreeViewColumn")
     {
-        if (!m_bLegacy)
+        if (!isLegacy())
         {
             SvHeaderTabListBox* pTreeView = dynamic_cast<SvHeaderTabListBox*>(pParent);
             if (HeaderBar* pHeaderBar = pTreeView ? pTreeView->GetHeaderBar() : nullptr)
@@ -2144,7 +2149,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             {
                 nItemId = ToolBoxItemId(pToolBox->GetItemCount() + 1);
                     //TODO: ImplToolItems::size_type -> sal_uInt16!
-                if (aCommand.isEmpty() && !m_bLegacy)
+                if (aCommand.isEmpty() && !isLegacy())
                     aCommand = id;
                 pToolBox->InsertItem(nItemId, extractLabel(rMap), aCommand, nBits);
             }
@@ -3320,7 +3325,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
         {
             name = reader.getAttributeValue(false);
             sID = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-            if (m_bLegacy)
+            if (isLegacy())
             {
                 sal_Int32 nDelim = sID.indexOf(':');
                 if (nDelim != -1)
@@ -3605,7 +3610,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
         {
             name = reader.getAttributeValue(false);
             sID = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-            if (m_bLegacy)
+            if (isLegacy())
             {
                 sal_Int32 nDelim = sID.indexOf(':');
                 if (nDelim != -1)
@@ -4234,7 +4239,7 @@ void VclBuilder::mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt
         sal_uInt16 nEntry = rTarget.InsertEntry(rRow[0]);
         if (rRow.size() > 1)
         {
-            if (m_bLegacy)
+            if (isLegacy())
             {
                 sal_IntPtr nValue = rRow[1].toInt32();
                 rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
@@ -4261,7 +4266,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         sal_uInt16 nEntry = rTarget.InsertEntry(rRow[0]);
         if (rRow.size() > 1)
         {
-            if (m_bLegacy)
+            if (isLegacy())
             {
                 sal_IntPtr nValue = rRow[1].toInt32();
                 rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
@@ -4288,7 +4293,7 @@ void VclBuilder::mungeModel(SvTabListBox& rTarget, const ListStore &rStore, sal_
         auto pEntry = rTarget.InsertEntry(rRow[0]);
         if (rRow.size() > 1)
         {
-            if (m_bLegacy)
+            if (isLegacy())
             {
                 sal_IntPtr nValue = rRow[1].toInt32();
                 pEntry->SetUserData(reinterpret_cast<void*>(nValue));

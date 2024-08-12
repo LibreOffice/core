@@ -71,6 +71,8 @@ public:
     typedef std::map<OUString, std::pair<OUString, OUString>> accelmap;
 
 protected:
+    BuilderBase(bool bLegacy);
+
     static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
@@ -78,6 +80,11 @@ protected:
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OUString getStyleClass(xmlreader::XmlReader &reader);
+
+    bool isLegacy() { return m_bLegacy; }
+
+private:
+    bool m_bLegacy;
 };
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
@@ -296,7 +303,6 @@ private:
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
     bool        m_bToplevelParentFound;
-    bool        m_bLegacy;
     std::unique_ptr<ParserState> m_pParserState;
 
     vcl::Window *get_by_name(std::u16string_view sID);
