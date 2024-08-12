@@ -84,6 +84,8 @@ protected:
 
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
+    OUString finalizeValue(const OString& rContext, const OString& rValue,
+                           const bool bTranslate) const;
 
     virtual void resetParserState();
 

@@ -457,6 +457,24 @@ const std::locale& BuilderBase::getResLocale() const
     return m_pParserState->m_aResLocale;
 }
 
+OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rValue,
+                                    const bool bTranslate) const
+{
+    OUString sFinalValue;
+    if (bTranslate)
+    {
+        sFinalValue
+            = Translate::get(TranslateId{ rContext.getStr(), rValue.getStr() }, getResLocale());
+    }
+    else
+        sFinalValue = OUString::fromUtf8(rValue);
+
+    if (ResHookProc pStringReplace = Translate::GetReadStringHook())
+        sFinalValue = (*pStringReplace)(sFinalValue);
+
+    return sFinalValue;
+}
+
 void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
@@ -3192,18 +3210,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
                 OString sValue(name.begin, name.length);
-                OUString sFinalValue;
-                if (bTranslated)
-                {
-                    sFinalValue = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() },
-                                                 getResLocale());
-                }
-                else
-                    sFinalValue = OUString::fromUtf8(sValue);
-
-                if (ResHookProc pStringReplace = Translate::GetReadStringHook())
-                    sFinalValue = (*pStringReplace)(sFinalValue);
-
+                const OUString sFinalValue = finalizeValue(sContext, sValue, bTranslated);
                 aItems.emplace_back(sFinalValue, sId);
             }
         }
