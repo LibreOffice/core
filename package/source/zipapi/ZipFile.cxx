@@ -1304,15 +1304,13 @@ sal_Int32 ZipFile::readCEN()
         if (nCenLen < nTotal * CENHDR) // prevent overflow with ZIP_MAXENTRIES
             throw ZipException(u"invalid END header (bad entry count)"_ustr );
 
-        if (SAL_MAX_INT32 < nCenLen)
-        {
+        if (nCenLen > SAL_MAX_INT32 || nCenLen < 0)
             throw ZipException(u"central directory too big"_ustr);
-        }
 
         aGrabber.seek(nCenPos);
-        Sequence < sal_Int8 > aCENBuffer ( nCenLen );
+        Sequence<sal_Int8> aCENBuffer(nCenLen);
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
-        if ( static_cast < sal_Int64 > ( nCenLen ) != nRead )
+        if (nCenLen != nRead)
             throw ZipException (u"Error reading CEN into memory buffer!"_ustr );
 
         MemoryByteGrabber aMemGrabber(aCENBuffer);
