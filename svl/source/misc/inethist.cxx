@@ -181,7 +181,7 @@ sal_uInt16 INetURLHistory_Impl::find (sal_uInt32 nHash) const
 
     while ((l < r) && (r < c))
     {
-        sal_uInt16 m = (l + r) / 2;
+        sal_uInt16 m = ((l + r) / 2) & 0xFFFF;
         if (m_pHash[m] == nHash)
             return m;
 
