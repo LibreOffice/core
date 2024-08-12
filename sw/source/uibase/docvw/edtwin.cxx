@@ -1700,7 +1700,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     SwKeyState eKeyState = bIsViewReadOnly ? SwKeyState::CheckDocReadOnlyKeys : SwKeyState::CheckKey;
 
-    // tdf#112932 Pressing enter in read-ony Table of Content doesnt jump to heading
+    // tdf#112932 Pressing enter in read-only Table of Content doesn't jump to heading
     if (!bIsViewReadOnly
         && ((rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN
             || (rKeyCode.GetModifier() | rKeyCode.GetCode()) == (KEY_MOD1 | KEY_RETURN)))
