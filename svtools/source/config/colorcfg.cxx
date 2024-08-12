@@ -441,15 +441,15 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_BLACK,        Color(0xEEEEEE) }, // CALCTEXT
         { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // CALCPROTECTEDBACKGROUND
         { COL_GRAY7,        COL_GRAY7       }, // DRAWGRID
-        { Color(0xFFFF9E),  Color(0x80804f) }, // AUTHOR1
-        { Color(0xD8E8FF),  Color(0x6c7480) }, // AUTHOR2
-        { Color(0xDAF8C1),  Color(0x708063) }, // AUTHOR3
-        { Color(0xE4D2F5),  Color(0x776d80) }, // AUTHOR4
-        { Color(0xFECDD0),  Color(0x806768) }, // AUTHOR5
-        { Color(0xD2F6F6),  Color(0x6c8080) }, // AUTHOR6
-        { Color(0xEDFCA3),  Color(0x788052) }, // AUTHOR7
-        { Color(0xD3DEE8),  Color(0x747a80) }, // AUTHOR8
-        { Color(0xFFE2B9),  Color(0x80715d) }, // AUTHOR9
+        { Color(0xC69200),  Color(0xffffa6) }, // AUTHOR1
+        { Color(0x0646A2),  Color(0xb4c7dc) }, // AUTHOR2
+        { Color(0x579D1C),  Color(0xffa6a6) }, // AUTHOR3
+        { Color(0x692B9D),  Color(0xafd095) }, // AUTHOR4
+        { Color(0xC5000B),  Color(0xffb66c) }, // AUTHOR5
+        { Color(0x008080),  Color(0xbf819e) }, // AUTHOR6
+        { Color(0x8C8400),  Color(0xd4ea6b) }, // AUTHOR7
+        { Color(0x35556B),  Color(0xe8a202) }, // AUTHOR8
+        { Color(0xD17600),  Color(0x5983b0) }, // AUTHOR9
         { COL_WHITE,        Color(0x1C1C1C) }, // BASICEDITOR
         { COL_GREEN,        Color(0xDDE8CB) }, // BASICIDENTIFIER
         { COL_GRAY,         Color(0xEEEEEE) }, // BASICCOMMENT

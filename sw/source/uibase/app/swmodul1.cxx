@@ -429,6 +429,7 @@ void SwModule::ClearRedlineAuthors()
 
 static Color lcl_GetAuthorColor(std::size_t nPos)
 {
+    // same as SwPostItMgr::GetColorAnchor()
     switch (nPos % 9)
     {
         case 0: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR1).nColor;

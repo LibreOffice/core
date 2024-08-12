@@ -2248,53 +2248,48 @@ tools::ULong SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
 
 Color SwPostItMgr::GetColorDark(std::size_t aAuthorIndex)
 {
-    if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        svtools::ColorConfig aColorConfig;
-        switch (aAuthorIndex % 9)
-        {
-            case 0:
-                return aColorConfig.GetColorValue(svtools::AUTHOR1).nColor;
-            case 1:
-                return aColorConfig.GetColorValue(svtools::AUTHOR2).nColor;
-            case 2:
-                return aColorConfig.GetColorValue(svtools::AUTHOR3).nColor;
-            case 3:
-                return aColorConfig.GetColorValue(svtools::AUTHOR4).nColor;
-            case 4:
-                return aColorConfig.GetColorValue(svtools::AUTHOR5).nColor;
-            case 5:
-                return aColorConfig.GetColorValue(svtools::AUTHOR6).nColor;
-            case 6:
-                return aColorConfig.GetColorValue(svtools::AUTHOR7).nColor;
-            case 7:
-                return aColorConfig.GetColorValue(svtools::AUTHOR8).nColor;
-            case 8:
-                return aColorConfig.GetColorValue(svtools::AUTHOR9).nColor;
-        }
-    }
-
-    return COL_WHITE;
+    Color aColor = GetColorAnchor(aAuthorIndex);
+    svtools::ColorConfig aColorConfig;
+    const Color aBgColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    if (aBgColor.IsDark())
+        aColor.DecreaseLuminance(80);
+    else
+        aColor.IncreaseLuminance(150);
+    return aColor;
 }
 
 Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
 {
-    Color aColor = GetColorDark(aAuthorIndex);
-    if (MiscSettings::GetUseDarkMode())
-        aColor.IncreaseLuminance(30);
+    Color aColor = GetColorAnchor(aAuthorIndex);
+    svtools::ColorConfig aColorConfig;
+    const Color aBgColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    if (aBgColor.IsDark())
+        aColor.DecreaseLuminance(130);
     else
-        aColor.DecreaseLuminance(30);
+        aColor.IncreaseLuminance(200);
     return aColor;
 }
 
 Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
 {
-    Color aColor = GetColorDark(aAuthorIndex);
-    if (aColor.IsDark())
-        aColor.IncreaseLuminance(80);
-    else
-        aColor.DecreaseLuminance(80);
-    return aColor;
+    if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    {
+        svtools::ColorConfig aColorConfig;
+        switch (aAuthorIndex % 9)
+        {
+            case 0: return aColorConfig.GetColorValue(svtools::AUTHOR1).nColor;
+            case 1: return aColorConfig.GetColorValue(svtools::AUTHOR2).nColor;
+            case 2: return aColorConfig.GetColorValue(svtools::AUTHOR3).nColor;
+            case 3: return aColorConfig.GetColorValue(svtools::AUTHOR4).nColor;
+            case 4: return aColorConfig.GetColorValue(svtools::AUTHOR5).nColor;
+            case 5: return aColorConfig.GetColorValue(svtools::AUTHOR6).nColor;
+            case 6: return aColorConfig.GetColorValue(svtools::AUTHOR7).nColor;
+            case 7: return aColorConfig.GetColorValue(svtools::AUTHOR8).nColor;
+            case 8: return aColorConfig.GetColorValue(svtools::AUTHOR9).nColor;
+        }
+    }
+
+    return COL_WHITE;
 }
 
 void SwPostItMgr::SetActiveSidebarWin( SwAnnotationWin* p)
