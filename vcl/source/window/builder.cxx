@@ -4005,18 +4005,19 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     }
 
     (void)reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    OString sValue(name.begin, name.length);
-    OUString sFinalValue;
-    if (bTranslated)
-    {
-        sFinalValue
-            = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() }, getResLocale());
-    }
-    else
-        sFinalValue = OUString::fromUtf8(sValue);
 
     if (!sProperty.isEmpty())
     {
+        OString sValue(name.begin, name.length);
+        OUString sFinalValue;
+        if (bTranslated)
+        {
+            sFinalValue
+                = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() }, getResLocale());
+        }
+        else
+            sFinalValue = OUString::fromUtf8(sValue);
+
         sProperty = sProperty.replace('_', '-');
         if (ResHookProc pStringReplace = Translate::GetReadStringHook())
             sFinalValue = (*pStringReplace)(sFinalValue);
