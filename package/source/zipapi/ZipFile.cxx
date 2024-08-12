@@ -573,8 +573,8 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
         if ( nSize > n_ConstDigestDecrypt )
             nSize = n_ConstDigestDecrypt;
 
-        assert(nSize <= n_ConstDigestDecrypt && "silence bogus coverity overflow_sink");
-        Sequence < sal_Int8 > aReadBuffer ( nSize );
+        assert(nSize <= n_ConstDigestDecrypt && nSize >= 0 && "silence bogus coverity overflow_sink");
+        Sequence<sal_Int8> aReadBuffer(nSize);
 
         xStream->readBytes( aReadBuffer, nSize );
 
