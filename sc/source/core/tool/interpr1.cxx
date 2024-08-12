@@ -10441,7 +10441,7 @@ void ScInterpreter::ScExact()
     {
         svl::SharedString s1 = GetString();
         svl::SharedString s2 = GetString();
-        PushInt( int(s1.getData() == s2.getData()) );
+        PushInt(int(s1 == s2));
     }
 }
 
