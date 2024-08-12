@@ -64,10 +64,13 @@ With "-opensource -confirm-license" you agree to the open source license.
 
     git clone https://github.com/allotropia/qt5.git
     cd qt5
-    git checkout v5.15.2+wasm
+    git checkout 5.15.2+wasm
     ./init-repository --module-subset=qtbase
     ./configure -opensource -confirm-license -xplatform wasm-emscripten -feature-thread -prefix <whatever> QMAKE_CFLAGS+=-sSUPPORT_LONGJMP=wasm QMAKE_CXXFLAGS+=-sSUPPORT_LONGJMP=wasm
     make -j<CORES> module-qtbase
+
+Note that `5.15.2+wasm` is a branch that is expected to contain further fixes as they become
+necessary.
 
 Do not include `-fwasm-exceptions` in the above `QMAKE_CXXFLAGS`, see
 <https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop> "Note:
