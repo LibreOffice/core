@@ -253,7 +253,7 @@ private:
     };
 
 
-    struct ParserState
+    struct VclParserState
     {
         std::locale m_aResLocale;
 
@@ -293,7 +293,7 @@ private:
 
         sal_uInt16 m_nLastMenuItemId;
 
-        ParserState();
+        VclParserState();
     };
 
     OUString    m_sID;
@@ -302,7 +302,7 @@ private:
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
     bool        m_bToplevelParentFound;
-    std::unique_ptr<ParserState> m_pParserState;
+    std::unique_ptr<VclParserState> m_pVclParserState;
 
     vcl::Window *get_by_name(std::u16string_view sID);
     void        delete_by_name(const OUString& sID);
