@@ -31,7 +31,7 @@ bool osl_get_system_random_data(char* buffer, size_t desired_len)
         while (desired_len)
         {
             ssize_t nb_read;
-            if ((nb_read = read(fd, buffer, desired_len)) == -1)
+            if ((nb_read = read(fd, buffer, desired_len)) < 0)
             {
                 if (errno != EINTR)
                 {
