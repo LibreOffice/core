@@ -2799,25 +2799,41 @@
      <table:table-cell table:style-name="ce9"/>
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="182">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce6"/>
-     <table:table-cell table:style-name="ce11"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce23" table:formula="of:=EXACT(1;[.L2])" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce24" table:formula="of:=TRUE()" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce6" table:formula="of:=[.A77]=[.B77]" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A77])" office:value-type="string" calcext:value-type="string"/>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell table:style-name="ce9"/>
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce6"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048313">
-     <table:table-cell table:number-columns-repeated="19"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce23" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=EXACT(1;[.L2:.L3])" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce24" table:formula="of:=TRUE()" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce6" table:formula="of:=[.A78]=[.B78]" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A78])" office:value-type="string" calcext:value-type="string"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce9"/>
+     <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="19"/>
+     <table:table-cell table:style-name="ce23" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FALSE()" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce6" table:formula="of:=[.A79]=[.B79]" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A79])" office:value-type="string" calcext:value-type="string"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce9"/>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce23" table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="1" table:formula="of:=EXACT(1;{1})" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce24" table:formula="of:=TRUE()" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce6" table:formula="of:=[.A80]=[.B80]" office:value-type="boolean" calcext:value-type="boolean"/>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A80])" office:value-type="string" calcext:value-type="string"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce9"/>
+     <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
     <calcext:conditional-formats>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C262">
