@@ -107,7 +107,9 @@ public:
             return true;
         }
         auto const rdd = cast<CXXRecordDecl>(rtd->getDecl())->getDefinition();
-        assert(rdd != nullptr);
+        if (rdd == nullptr) {
+            return true;
+        }
         if (getTypeVisibility(rdd) != DefaultVisibility) {
             // Heuristic to find problematic dynamic_cast<T> with hidden type T is: T is defined in
             // include/M1/ while the compilation unit is in module M2/ with M1 != M2.  There are
