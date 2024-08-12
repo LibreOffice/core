@@ -1161,12 +1161,9 @@ inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
 
 inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
 {
-    if ( nMust <= nAct && nAct <= nMax )
-        return true;
-    if ( nAct < nMust )
-        PushParameterExpected();
-    else
-        PushIllegalParameter();
+    if (nAct <= nMax)
+        return MustHaveParamCountMin(nAct, nMust);
+    PushIllegalParameter();
     return false;
 }
 
