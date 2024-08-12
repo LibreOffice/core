@@ -658,7 +658,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode );
         SwPosition aPos( aIdx, aIdx.GetNode().GetContentNode(), m_nSttContent );
 
-        sal_uInt16 nCnt = SwDoc::GetCurTOXMark( aPos, aArr );
+        int nCnt = SwDoc::GetCurTOXMark( aPos, aArr );
         if( nCnt ) {
             if( 1 < nCnt ) {
                 // search for the right one
