@@ -859,6 +859,7 @@ void PrintDialog::setPaperSizes()
         int nRotatedSizeMatch = -1;
         Size aSizeOfPaper = aPrt->GetSizeOfPaper();
         PaperInfo aPaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight());
+        // coverity[swapped_arguments : FALSE] - this is in the correct order
         PaperInfo aRotatedPaperInfo(aSizeOfPaper.getHeight(), aSizeOfPaper.getWidth());
         const LocaleDataWrapper& rLocWrap(Application::GetSettings().GetLocaleDataWrapper());
         o3tl::Length eUnit = o3tl::Length::mm;
