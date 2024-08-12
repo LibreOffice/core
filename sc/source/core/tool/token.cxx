@@ -865,7 +865,7 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    return maName.getData() == r.GetString().getData();
+    return maName == r.GetString();
 }
 
 ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem ) :
