@@ -481,8 +481,9 @@ void OfaTreeOptionsDialog::InitWidgets()
     xTreeLB = m_xBuilder->weld_tree_view("pages");
     xTabBox = m_xBuilder->weld_container("box");
 
-    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35,
-                              xTreeLB->get_height_rows(30));
+    Size aSize(xTreeLB->get_approximate_digit_width() * 100, xTreeLB->get_height_rows(30));
+    xTabBox->set_size_request(aSize.Width(), aSize.Height());
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35, aSize.Height());
 }
 
 // Ctor() with Frame -----------------------------------------------------
