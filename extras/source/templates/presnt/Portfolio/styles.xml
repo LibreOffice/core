@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2">
   <office:font-face-decls>
-    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Noto Sans CJK" svg:font-family="'Noto Sans CJK JP:palt','Noto Sans CJK KR','Noto Sans CJK SC','Noto Sans CJK TC','Noto Sans CJK HK'" style:font-family-generic="swiss" style:font-pitch="variable" />
     <style:font-face style:name="Noto Sans" svg:font-family="Noto Sans" style:font-family-generic="swiss" style:font-pitch="variable" />
   </office:font-face-decls>
@@ -11,13 +11,9 @@
     <draw:gradient draw:name="Filled_20_Green" draw:display-name="Filled Green" draw:style="linear" draw:start-color="#77bc65" draw:end-color="#127622" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
     <draw:gradient draw:name="Filled_20_Red" draw:display-name="Filled Red" draw:style="linear" draw:start-color="#ff6d6d" draw:end-color="#c9211e" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
     <draw:gradient draw:name="Filled_20_Yellow" draw:display-name="Filled Yellow" draw:style="linear" draw:start-color="#ffde59" draw:end-color="#b47804" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
-    <draw:gradient draw:name="Gradient_20_1" draw:display-name="Gradient 1" draw:style="linear" draw:start-color="#3465a4" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
     <draw:gradient draw:name="Gradient_20_10" draw:display-name="Gradient 10" draw:style="linear" draw:start-color="#cccccc" draw:end-color="#333333" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="0%"/>
     <draw:gradient draw:name="Gradient_20_12" draw:display-name="Gradient 12" draw:style="linear" draw:start-color="#333333" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="0%"/>
-    <draw:gradient draw:name="Gradient_20_13" draw:display-name="Gradient 13" draw:style="linear" draw:start-color="#cccccc" draw:end-color="#333333" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="0%"/>
     <draw:gradient draw:name="Gradient_20_16" draw:display-name="Gradient 16" draw:style="axial" draw:start-color="#cccccc" draw:end-color="#111111" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
-    <draw:gradient draw:name="Gradient_20_3" draw:display-name="Gradient 3" draw:style="linear" draw:start-color="#eeeeee" draw:end-color="#111111" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="0%"/>
-    <draw:gradient draw:name="Gradient_20_5" draw:display-name="Gradient 5" draw:style="linear" draw:start-color="#111111" draw:end-color="#eeeeee" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="900" draw:border="0%"/>
     <draw:gradient draw:name="Shapes" draw:style="rectangular" draw:cx="50%" draw:cy="50%" draw:start-color="#cccccc" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
     <draw:hatch draw:name="Hatching_20_1" draw:display-name="Hatching 1" draw:style="single" draw:color="#3465a4" draw:distance="0.02cm" draw:rotation="0"/>
     <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
@@ -75,7 +71,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties svg:stroke-color="#ffffff" draw:fill="none"/>
@@ -85,7 +81,6 @@
     </style:style>
     <style:style style:name="Text" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#cccccc" draw:fill="solid" draw:fill-color="#eeeeee"/>
-      <style:text-properties style:font-name="Noto Sans" fo:font-family="&apos;Noto Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
     </style:style>
     <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
@@ -119,7 +114,7 @@
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
       <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
@@ -134,7 +129,7 @@
     </style:style>
     <style:style style:name="Filled_20_Green" style:display-name="Filled Green" style:family="graphic" style:parent-style-name="Filled">
       <style:graphic-properties draw:fill-gradient-name="Filled_20_Green"/>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Red" style:display-name="Filled Red" style:family="graphic" style:parent-style-name="Filled">
       <style:graphic-properties draw:fill-gradient-name="Filled_20_Red"/>
@@ -172,112 +167,102 @@
     <style:style style:name="Arrow_20_Dashed" style:display-name="Arrow Dashed" style:family="graphic" style:parent-style-name="Lines">
       <style:graphic-properties draw:stroke="dash"/>
     </style:style>
-    <style:style style:name="Accent" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke-dash="Dashed_20__28_var_29__20_2" draw:fill-gradient-name="Gradient_20_1" draw:fill-hatch-name="Hatching_20_1" draw:fill-image-name="Bitmap_20_1"/>
-    </style:style>
-    <style:style style:name="Accent_20_1" style:display-name="Accent 1" style:family="graphic" style:parent-style-name="Accent"/>
-    <style:style style:name="Accent_20_2" style:display-name="Accent 2" style:family="graphic" style:parent-style-name="Accent">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#666666" draw:shadow="hidden"/>
-    </style:style>
-    <style:style style:name="Accent_20_3" style:display-name="Accent 3" style:family="graphic" style:parent-style-name="Accent"/>
-    <style:style style:name="Title-background" style:family="presentation">
+    <style:style style:name="Portfolio-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#000000" style:repeat="stretch"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
-    <style:style style:name="Title-backgroundobjects" style:family="presentation">
-      <style:graphic-properties draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+    <style:style style:name="Portfolio-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
-    <style:style style:name="Title-notes" style:family="presentation">
+    <style:style style:name="Portfolio-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
-    <style:style style:name="Title-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" svg:stroke-color="#3465a4" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true" draw:shadow-color="#000000">
-        <text:list-style style:name="Title-outline1">
-          <text:list-level-style-number text:level="1" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="2" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="75%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="3" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="4" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="75%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="5" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="6" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="7" style:num-format="">
-            <style:list-level-properties/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="8" style:num-format="">
+    <style:style style:name="Portfolio-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" svg:stroke-color="#3465a4" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" draw:shadow-color="#000000">
+        <text:list-style style:name="Portfolio-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+            <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="–">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="–">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="●">
             <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="9" style:num-format="">
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="●">
             <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
-          <text:list-level-style-number text:level="10" style:num-format="">
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="●">
             <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
-            <style:text-properties style:use-window-font-color="true" fo:font-size="45%"/>
-          </text:list-level-style-number>
+            <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+          </text:list-level-style-bullet>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:margin-top="0.5cm" fo:margin-bottom="0cm">
-        <style:tab-stops/>
-      </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:paragraph-properties fo:margin-top="0.5cm" fo:margin-bottom="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
-    <style:style style:name="Title-outline2" style:family="presentation" style:parent-style-name="Title-outline1">
+    <style:style style:name="Portfolio-outline2" style:family="presentation" style:parent-style-name="Portfolio-outline1">
       <style:paragraph-properties fo:margin-top="0.4cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
     </style:style>
-    <style:style style:name="Title-outline3" style:family="presentation" style:parent-style-name="Title-outline2">
+    <style:style style:name="Portfolio-outline3" style:family="presentation" style:parent-style-name="Portfolio-outline2">
       <style:paragraph-properties fo:margin-top="0.3cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
-    <style:style style:name="Title-outline4" style:family="presentation" style:parent-style-name="Title-outline3">
+    <style:style style:name="Portfolio-outline4" style:family="presentation" style:parent-style-name="Portfolio-outline3">
       <style:paragraph-properties fo:margin-top="0.2cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-outline5" style:family="presentation" style:parent-style-name="Title-outline4">
+    <style:style style:name="Portfolio-outline5" style:family="presentation" style:parent-style-name="Portfolio-outline4">
       <style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-outline6" style:family="presentation" style:parent-style-name="Title-outline5">
+    <style:style style:name="Portfolio-outline6" style:family="presentation" style:parent-style-name="Portfolio-outline5">
       <style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-outline7" style:family="presentation" style:parent-style-name="Title-outline6">
+    <style:style style:name="Portfolio-outline7" style:family="presentation" style:parent-style-name="Portfolio-outline6">
       <style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-outline8" style:family="presentation" style:parent-style-name="Title-outline7">
+    <style:style style:name="Portfolio-outline8" style:family="presentation" style:parent-style-name="Portfolio-outline7">
       <style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-outline9" style:family="presentation" style:parent-style-name="Title-outline8">
+    <style:style style:name="Portfolio-outline9" style:family="presentation" style:parent-style-name="Portfolio-outline8">
       <style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
-    <style:style style:name="Title-subtitle" style:family="presentation">
+    <style:style style:name="Portfolio-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
-        <text:list-style style:name="Title-subtitle">
+        <text:list-style style:name="Portfolio-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
             <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
@@ -321,11 +306,11 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
-    <style:style style:name="Title-title" style:family="presentation">
+    <style:style style:name="Portfolio-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
-        <text:list-style style:name="Title-title">
+        <text:list-style style:name="Portfolio-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
             <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
@@ -369,23 +354,23 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="start"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="One_20_Column-background" style:display-name="One Column-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#000000" style:repeat="stretch"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="One_20_Column-backgroundobjects" style:display-name="One Column-backgroundobjects" style:family="presentation">
-      <style:graphic-properties draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:graphic-properties draw:stroke="none" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="One_20_Column-notes" style:display-name="One Column-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="One_20_Column-outline1" style:display-name="One Column-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="One_20_Column-outline1" style:display-name="One Column-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -430,7 +415,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-top="0.5cm" fo:margin-bottom="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="One_20_Column-outline2" style:display-name="One Column-outline2" style:family="presentation" style:parent-style-name="One_20_Column-outline1">
       <style:paragraph-properties fo:margin-top="0.4cm" fo:margin-bottom="0cm"/>
@@ -510,7 +495,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="One_20_Column-title" style:display-name="One Column-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -558,23 +543,23 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="start"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Two_20_columns-background" style:display-name="Two columns-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#000000" style:repeat="stretch"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Two_20_columns-backgroundobjects" style:display-name="Two columns-backgroundobjects" style:family="presentation">
-      <style:graphic-properties draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:graphic-properties draw:stroke="none" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Two_20_columns-notes" style:display-name="Two columns-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Two_20_columns-outline1" style:display-name="Two columns-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Two_20_columns-outline1" style:display-name="Two columns-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -619,7 +604,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-top="0.5cm" fo:margin-bottom="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Two_20_columns-outline2" style:display-name="Two columns-outline2" style:family="presentation" style:parent-style-name="Two_20_columns-outline1">
       <style:paragraph-properties fo:margin-top="0.4cm" fo:margin-bottom="0cm"/>
@@ -699,7 +684,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Two_20_columns-title" style:display-name="Two columns-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -747,7 +732,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="start"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -786,244 +771,48 @@
     </style:style>
     <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="true" draw:auto-grow-width="false" fo:max-height="0cm" fo:min-height="0.712cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_10" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="16.486cm"/>
-    </style:style>
-    <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_13" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="16.828cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_10" draw:auto-grow-height="false"/>
     </style:style>
     <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill-color="#cccccc" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.098cm" fo:min-width="0cm"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#cccccc" draw:auto-grow-height="false"/>
     </style:style>
-    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_12" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="15.255cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_12" draw:auto-grow-height="false"/>
     </style:style>
-    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill-color="#cccccc" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.114cm" fo:min-width="0cm"/>
+    <style:style style:name="Mgr18" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Gradient_20_16" draw:gradient-step-count="0" draw:auto-grow-height="false"/>
     </style:style>
-    <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_13" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="20.231cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr10" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill-color="#cccccc" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.715cm" fo:min-width="0cm"/>
-    </style:style>
-    <style:style style:name="Mgr11" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_10" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="16.486cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr12" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_12" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="15.255cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr13" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#cccccc" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.114cm" fo:min-width="0cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr14" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_12" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="9.833cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr15" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#cccccc" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.715cm" fo:min-width="0cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr16" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_12" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="9.833cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr17" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#cccccc" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.715cm" fo:min-width="0cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mgr18" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
-      <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start="" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end="" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_16" draw:gradient-step-count="0" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="10.022cm" fo:min-width="0cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-    </style:style>
-    <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Title-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Title-backgroundobjects">
+    <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Portfolio-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="One_20_Column-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.086cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="One_20_Column-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="One_20_Column-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Two_20_columns-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.086cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Two_20_columns-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr8" style:family="presentation" style:parent-style-name="Two_20_columns-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="MP1" style:family="paragraph">
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP3" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <style:style style:name="MP5" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties style:writing-mode="lr-tb"/>
-    </style:style>
-    <style:style style:name="MP6" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:paragraph-properties fo:text-align="end"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP7" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:paragraph-properties fo:text-align="center"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
-    <style:style style:name="MP8" style:family="paragraph">
-     <loext:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Gradient_20_10"/>
-     <style:paragraph-properties fo:text-align="center"/>
-    </style:style>
-    <style:style style:name="MP9" style:family="paragraph">
-     <loext:graphic-properties draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_13"/>
-     <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-     <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="MP10" style:family="paragraph">
-     <loext:graphic-properties draw:fill-color="#cccccc"/>
-     <style:paragraph-properties fo:text-align="center"/>
-    </style:style>
-    <style:style style:name="MP11" style:family="paragraph">
-      <loext:graphic-properties draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_12"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="MP12" style:family="paragraph">
-      <loext:graphic-properties draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_10"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="MP13" style:family="paragraph">
-      <loext:graphic-properties draw:fill="solid" draw:fill-color="#cccccc"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="MP14" style:family="paragraph">
-      <loext:graphic-properties draw:fill="gradient" draw:fill-color="#729fcf" draw:fill-gradient-name="Gradient_20_16" draw:gradient-step-count="0"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="MT1" style:family="text">
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
-    </style:style>
-    <text:list-style style:name="ML1">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
-    <text:list-style style:name="ML2">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
-        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
   </office:automatic-styles>
   <office:master-styles>
     <draw:layer-set>
@@ -1042,57 +831,48 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="5.061cm" svg:x="11cm" svg:y="20.894cm"/>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
-              <presentation:header/>
-            </text:span>
+          <text:p>
+            <presentation:header/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
-              <presentation:date-time/>
-            </text:span>
+          <text:p>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
-              <presentation:footer/>
-            </text:span>
+          <text:p>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
-              <text:page-number/>
-            </text:span>
+          <text:p>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
     </style:handout-master>
-    <style:master-page style:name="Title" style:display-name="Portfolio" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:frame presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="25cm" svg:height="1.829cm" svg:x="0.4cm" svg:y="10.8cm" presentation:class="title" presentation:placeholder="true">
+    <style:master-page style:name="Portfolio" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:frame presentation:style-name="Portfolio-title" draw:layer="backgroundobjects" svg:width="25cm" svg:height="1.829cm" svg:x="0.4cm" svg:y="10.8cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Title-outline1" draw:layer="backgroundobjects" svg:width="17.999cm" svg:height="7.219cm" svg:x="4.4cm" svg:y="1.8cm" presentation:class="outline" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Portfolio-outline1" draw:layer="backgroundobjects" svg:width="18cm" svg:height="7.219cm" svg:x="4.4cm" svg:y="1.8cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame draw:style-name="Mgr3" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="12.2cm" svg:height="0.962cm" svg:x="11.4cm" svg:y="13.6cm">
+      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="16cm" svg:height="0.962cm" svg:x="11.4cm" svg:y="13.6cm">
         <draw:text-box>
           <text:p>
-            <text:author-name text:fixed="false"> </text:author-name>
+            <text:author-name text:fixed="false"/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.072cm" svg:y="12.858cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.072cm" svg:y="12.858cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1108,7 +888,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr5" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="17.334cm" svg:height="0.02cm" svg:x="10.72cm" svg:y="14.79cm">
+      <draw:custom-shape draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="17.334cm" svg:height="0.02cm" svg:x="10.72cm" svg:y="14.79cm">
       <text:p/>
       <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
        <draw:equation draw:name="f0" draw:formula="45"/>
@@ -1125,9 +905,8 @@
        <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
       </draw:enhanced-geometry>
      </draw:custom-shape>
-     <draw:custom-shape draw:style-name="Mgr6" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.354cm" svg:x="11.236cm" svg:y="13.736cm">
-      <text:p/>
-      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.354cm" svg:x="11.236cm" svg:y="13.736cm">
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
        <draw:equation draw:name="f0" draw:formula="45"/>
        <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
        <draw:equation draw:name="f2" draw:formula="?f1 *3163/7636"/>
@@ -1141,45 +920,37 @@
        <draw:equation draw:name="f10" draw:formula="right-$0 "/>
        <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
       </draw:enhanced-geometry>
-     </draw:custom-shape>
+      </draw:custom-shape>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Title-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Portfolio-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Portfolio-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+        <draw:frame presentation:style-name="Portfolio-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:header/>
-              </text:span>
+            <text:p>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Portfolio-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <presentation:date-time/>
-              </text:span>
+            <text:p>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:footer/>
-              </text:span>
+            <text:p>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <text:page-number/>
-              </text:span>
+            <text:p>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -1189,38 +960,31 @@
       <draw:frame presentation:style-name="One_20_Column-title" draw:layer="backgroundobjects" svg:width="26.5cm" svg:height="1.8cm" svg:x="0.4cm" svg:y="0.2cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="One_20_Column-outline1" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="9.134cm" svg:x="1.4cm" svg:y="3.685cm" presentation:class="outline" presentation:placeholder="true">
+      <draw:frame presentation:style-name="One_20_Column-outline1" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="9.134cm" svg:x="1.4cm" svg:y="3.685cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="4.6cm" svg:height="1.14cm" svg:x="1.4cm" svg:y="14.6cm" presentation:class="date-time">
+      <draw:frame presentation:style-name="One_20_Column-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="4.6cm" svg:height="1.14cm" svg:x="1.4cm" svg:y="14.6cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
-              <presentation:date-time/>
-            </text:span>
+          <text:p>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="13cm" svg:height="1.14cm" svg:x="7cm" svg:y="14.6cm" presentation:class="footer">
+      <draw:frame presentation:style-name="One_20_Column-backgroundobjects" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="13cm" svg:height="1.14cm" svg:x="7cm" svg:y="14.6cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP6">
-            <text:span text:style-name="MT1">
-              <presentation:footer/>
-            </text:span>
+          <text:p>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="1.14cm" svg:x="21cm" svg:y="14.6cm" presentation:class="page-number">
+      <draw:frame presentation:style-name="One_20_Column-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="1.14cm" svg:x="21cm" svg:y="14.6cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
-              <text:page-number/>
-            </text:span>
+          <text:p>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.058cm" svg:y="1.687cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.058cm" svg:y="1.687cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1236,8 +1000,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="15.761cm" svg:height="0.02cm" svg:x="12.307cm" svg:y="2.336cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="15.761cm" svg:height="0.02cm" svg:x="12.307cm" svg:y="2.336cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1253,8 +1016,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.37cm" svg:x="27.277cm" svg:y="1.318cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.37cm" svg:x="27.277cm" svg:y="1.318cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1270,8 +1032,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="20.737cm" svg:height="0.02cm" svg:x="5.28cm" svg:y="14.458cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="20.737cm" svg:height="0.02cm" svg:x="5.28cm" svg:y="14.458cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1287,8 +1048,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr10" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="25.722cm" svg:y="13.659cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="25.722cm" svg:y="13.659cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1309,39 +1069,31 @@
         <draw:frame presentation:style-name="One_20_Column-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+        <draw:frame presentation:style-name="One_20_Column-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:header/>
-              </text:span>
+            <text:p>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="One_20_Column-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <presentation:date-time/>
-              </text:span>
+            <text:p>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:footer/>
-              </text:span>
+            <text:p>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <text:page-number/>
-              </text:span>
+            <text:p>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -1354,35 +1106,28 @@
       <draw:frame presentation:style-name="Two_20_columns-outline1" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="9.134cm" svg:x="1.4cm" svg:y="3.685cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="4.6cm" svg:height="1.14cm" svg:x="1.4cm" svg:y="14.6cm" presentation:class="date-time">
+      <draw:frame presentation:style-name="Two_20_columns-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="4.6cm" svg:height="1.14cm" svg:x="1.4cm" svg:y="14.6cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP1">
-            <text:span text:style-name="MT1">
-              <presentation:date-time/>
-            </text:span>
+          <text:p>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="13cm" svg:height="1.14cm" svg:x="7cm" svg:y="14.6cm" presentation:class="footer">
+      <draw:frame presentation:style-name="Two_20_columns-backgroundobjects" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="13cm" svg:height="1.14cm" svg:x="7cm" svg:y="14.6cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP6">
-            <text:span text:style-name="MT1">
-              <presentation:footer/>
-            </text:span>
+          <text:p>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="1.14cm" svg:x="21cm" svg:y="14.6cm" presentation:class="page-number">
+      <draw:frame presentation:style-name="Two_20_columns-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="1.14cm" svg:x="21cm" svg:y="14.6cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
-            <text:span text:style-name="MT1">
-              <text:page-number/>
-            </text:span>
+          <text:p>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr11" draw:text-style-name="MP12" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.058cm" svg:y="1.687cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="17cm" svg:height="0.05cm" svg:x="0.058cm" svg:y="1.687cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1398,8 +1143,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr12" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="15.761cm" svg:height="0.02cm" svg:x="12.307cm" svg:y="2.336cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="15.761cm" svg:height="0.02cm" svg:x="12.307cm" svg:y="2.336cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1415,8 +1159,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr13" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.37cm" svg:x="27.277cm" svg:y="1.318cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="1.37cm" svg:x="27.277cm" svg:y="1.318cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1432,8 +1175,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr14" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="10.339cm" svg:height="0.02cm" svg:x="15.678cm" svg:y="14.43cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="10.339cm" svg:height="0.02cm" svg:x="15.678cm" svg:y="14.43cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1449,8 +1191,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr15" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="25.722cm" svg:y="13.659cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="25.722cm" svg:y="13.659cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1466,8 +1207,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr16" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="10.339cm" svg:height="0.02cm" svg:x="2.706cm" svg:y="14.429cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="10.339cm" svg:height="0.02cm" svg:x="2.706cm" svg:y="14.429cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1483,8 +1223,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr17" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="12.75cm" svg:y="13.65cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="0.02cm" svg:height="0.971cm" svg:x="12.75cm" svg:y="13.65cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1500,8 +1239,7 @@
           <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
         </draw:enhanced-geometry>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr18" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="0.03cm" svg:height="10.28cm" svg:x="14.043cm" svg:y="2.881cm">
-        <text:p/>
+      <draw:custom-shape draw:style-name="Mgr18" draw:layer="backgroundobjects" svg:width="0.03cm" svg:height="10.28cm" svg:x="14.043cm" svg:y="2.881cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="10800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
           <draw:equation draw:name="f0" draw:formula="45"/>
           <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
@@ -1522,39 +1260,31 @@
         <draw:frame presentation:style-name="Two_20_columns-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+        <draw:frame presentation:style-name="Two_20_columns-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:header/>
-              </text:span>
+            <text:p>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Two_20_columns-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <presentation:date-time/>
-              </text:span>
+            <text:p>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:footer/>
-              </text:span>
+            <text:p>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <text:page-number/>
-              </text:span>
+            <text:p>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
