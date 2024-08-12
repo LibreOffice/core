@@ -685,7 +685,7 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
 }
 
 // Updates the object members related to solver engine options using aOptions info
-void SolverSettings::SetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions)
+void SolverSettings::SetEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& aOptions)
 {
     sal_Int32 nOptionsSize = aOptions.getLength();
 

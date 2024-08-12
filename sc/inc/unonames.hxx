@@ -48,6 +48,7 @@ inline constexpr OUString SC_UNO_SHEETLINKS           = u"SheetLinks"_ustr;
 inline constexpr OUString SC_UNO_FORBIDDEN            = u"ForbiddenCharacters"_ustr;
 inline constexpr OUString SC_UNO_HASDRAWPAGES         = u"HasDrawPages"_ustr;
 inline constexpr OUString SC_UNO_THEME                = u"Theme"_ustr;
+inline constexpr OUString SC_UNO_SOLVERSETTINGS       = u"SolverSettings"_ustr;
 
 //  CharacterProperties
 inline constexpr OUString SC_UNONAME_CCOLOR           = u"CharColor"_ustr;

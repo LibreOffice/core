@@ -66,6 +66,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
+#include <com/sun/star/sheet/XSolverSettings.hpp>
 
 #include <autoform.hxx>
 #include <cellvalue.hxx>
@@ -138,6 +139,7 @@
 #include <refundo.hxx>
 #include <columnspanset.hxx>
 #include <CommonProperties.hxx>
+#include <solveruno.hxx>
 
 #include <memory>
 
@@ -784,6 +786,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         { SC_UNONAME_TABCOLOR, SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNO_CODENAME,        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNO_NAMEDRANGES, SC_WID_UNO_NAMES, cppu::UnoType<sheet::XNamedRanges>::get(), 0, 0 },
+        { SC_UNO_SOLVERSETTINGS, SC_WID_UNO_SOLVERSETTINGS, cppu::UnoType<sheet::XSolverSettings>::get(), 0, 0 },
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
     return &aSheetPropertySet;
@@ -8202,6 +8205,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry
     else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)
     {
         rAny <<= uno::Reference<sheet::XConditionalFormats>(new ScCondFormatsObj(pDocSh, nTab));
+    }
+    else if (pEntry->nWID == SC_WID_UNO_SOLVERSETTINGS)
+    {
+        rAny <<= uno::Reference<sheet::XSolverSettings>(new ScSolverSettings(pDocSh, this));
     }
     else
         ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

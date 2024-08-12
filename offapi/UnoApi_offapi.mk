@@ -1245,6 +1245,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	SheetRangesQuery \
 	SheetSortDescriptor \
 	SheetSortDescriptor2 \
+	SolverSettings \
 	Spreadsheet \
 	SpreadsheetDocument \
 	SpreadsheetDocumentSettings \
@@ -3457,6 +3458,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	LocalizedName \
 	MemberResult \
 	MemberResultFlags \
+	ModelConstraint \
 	MoveDirection \
 	NamedRangeFlag \
 	NameToken \
@@ -3469,6 +3471,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	SingleReference \
 	SolverConstraint \
 	SolverConstraintOperator \
+	SolverStatus \
+	SolverObjectiveType \
 	SpreadsheetViewObjectsMode \
 	StatusBarFunction \
 	SubTotalColumn \
@@ -3590,6 +3594,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XSheetPastable \
 	XSolver \
 	XSolverDescription \
+	XSolverSettings \
 	XSpreadsheet \
 	XSpreadsheetDocument \
 	XSpreadsheetView \

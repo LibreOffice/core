@@ -295,7 +295,8 @@ public:
     SC_DLLPUBLIC ObjectiveType GetObjectiveType() { return m_eObjType; }
     SC_DLLPUBLIC void SetObjectiveType(ObjectiveType eType);
     SC_DLLPUBLIC void GetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions);
-    SC_DLLPUBLIC void SetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions);
+    SC_DLLPUBLIC void
+    SetEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& aOptions);
     SC_DLLPUBLIC std::vector<ModelConstraint> GetConstraints() { return m_aConstraints; }
     SC_DLLPUBLIC void SetConstraints(std::vector<ModelConstraint> aConstraints);
 

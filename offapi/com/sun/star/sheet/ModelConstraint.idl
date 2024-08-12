@@ -1,0 +1,46 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** This is used to specify a constraint for a solver model.
+ *  In this struct, both sides of the model constraint can be expressed as cell ranges.
+ *  Note that com::sun::star::sheet::SolverConstraint only supports single cell addresses
+ *
+ *  @since LibreOffice 25.2
+ */
+struct ModelConstraint
+{
+    /** The range of cells in the left side of the constraint
+     *  Must be either:
+     *  1) com::sun::star::table::CellRangeAddress
+     *  2) A valid string representing a cell range
+     */
+    any Left;
+
+    /** Constraint operator
+     */
+    SolverConstraintOperator Operator;
+
+    /** The range of cells or numeric value in the right side of the constraint
+     *  Must be either:
+     *  1) com::sun::star::table::CellRangeAddress
+     *  2) A valid string representing a cell range
+     *  3) A numeric value
+     */
+    any Right;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,97 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** Provides access to the solver settings stored in a specific Calc sheet
+ *
+ *  @since LibreOffice 25.2
+ */
+interface XSolverSettings: com::sun::star::uno::XInterface
+{
+    /** Determines the model objective function type
+        Possible values defined in css::sheet::SolverObjectiveType
+     */
+    [attribute] byte ObjectiveType;
+
+    /** Cell pointing to the objective function of the model
+     */
+    [attribute] any ObjectiveCell;
+
+    /** Value or cell address used in the "Value of" field.
+        To set this attribute, the value must be either:
+        1) a numeric value;
+        2) a string representing the address of a single cell or;
+        3) a CellAddress struct instance
+     */
+    [attribute] any GoalValue;
+
+    /** Set the solver engine using its implementation name
+     */
+    [attribute] string Engine;
+
+    /** Returns a sequence of strings containing all available solver implementation names
+     */
+    [attribute, readonly] sequence<string> AvailableEngines;
+
+    /** Variable cells in the model, represented as a sequence of cell ranges
+     */
+    [attribute] sequence<any> VariableCells;
+
+    /** Constraints of the solver model
+     */
+    [attribute] sequence<ModelConstraint> Constraints;
+
+    /** Returns the number of constraints in the solver model
+     */
+    [attribute, readonly] long ConstraintCount;
+
+    /** Solver engine options expressed as a sequence of property values.
+        Each solver engine has its own set of supported properties.
+        Only the options supported by the current solver engine are returned.
+     */
+    [attribute] sequence<com::sun::star::beans::PropertyValue> EngineOptions;
+
+    /** Last reported solver status. This can be used f.i. to check if an
+        error occurred or if a solution was found.
+        Possible values defined in css::sheet::SolverStatus
+     */
+    [attribute, readonly] byte Status;
+
+    /** Stores the last error message reported after calling the "solve()" method
+     */
+    [attribute, readonly] string ErrorMessage;
+
+    /** Set this attrivute to True to suppress dialogs shown the method "solve()"
+     */
+    [attribute] boolean SuppressDialog;
+
+    /** Resets the solver model to its defaults settings
+     */
+    void reset();
+
+    /** Run the solver model
+        Check the values of the Status and ErrorMessage attributes to know
+        what happened after calling this method
+     */
+    void solve();
+
+    /** Save the solver model to the file.
+        The next time the file is loaded, the model will be in the sheet where it was created.
+     */
+    void saveToFile();
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

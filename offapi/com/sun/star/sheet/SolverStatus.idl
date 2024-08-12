@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** Describes the status reported by the solver
+ *  Used in com::sun::star::sheet::XSolverSettings
+ *
+ *  @since LibreOffice 25.2
+ */
+constants SolverStatus
+{
+    /// No status to report. Happens when the solver has not been called.
+    const byte NONE = 0;
+
+    /// The solver finished running and a solution was successfully found
+    const byte SOLUTION_FOUND = 1;
+
+    /// A parse error occurred after running the solver
+    const byte PARSE_ERROR = 2;
+
+    /// An error occurred while loading or running the solver
+    const byte ENGINE_ERROR = 3;
+
+    /// The solver finished running but a solution was not found
+    const byte SOLUTION_NOT_FOUND = 4;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
