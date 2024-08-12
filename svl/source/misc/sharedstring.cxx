@@ -51,18 +51,13 @@ bool SharedString::operator== ( const SharedString& r ) const
     if (mpData == r.mpData)
         return true;
 
-    if (mpData)
-    {
-        if (!r.mpData)
-            return false;
+    if (!mpData || !r.mpData)
+        return false;
 
-        if (mpData->length != r.mpData->length)
-            return false;
+    if (mpData->length != r.mpData->length)
+        return false;
 
-        return rtl_ustr_reverseCompare_WithLength(mpData->buffer, mpData->length, r.mpData->buffer, r.mpData->length) == 0;
-    }
-
-    return !r.mpData;
+    return rtl_ustr_reverseCompare_WithLength(mpData->buffer, mpData->length, r.mpData->buffer, r.mpData->length) == 0;
 }
 
 }
