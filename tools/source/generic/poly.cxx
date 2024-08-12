@@ -1070,7 +1070,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
                 aNewPoly.SetSize( nNewCount );
         }
 
-        *this = aNewPoly;
+        *this = std::move(aNewPoly);
     }
 
     nSize = mpImplPolygon->mnPoints;

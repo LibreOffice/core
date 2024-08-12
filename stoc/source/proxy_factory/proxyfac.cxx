@@ -319,7 +319,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
 
                     UnoInterfaceReference proxy(
                         // ref count initially 1:
-                        new binuno_Proxy( this, proxy_target, oid, pTypeDescr ),
+                        new binuno_Proxy( this, std::move(proxy_target), oid, pTypeDescr ),
                         SAL_NO_ACQUIRE );
                     uno_ExtEnvironment * uno_env =
                         m_factory->m_uno_env.get()->pExtEnv;

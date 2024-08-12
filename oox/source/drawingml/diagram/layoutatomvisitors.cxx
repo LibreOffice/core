@@ -104,7 +104,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                 xCurrParent->addChild(pShape);
                 xCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
-                mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
+                mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = std::move(pShape);
             }
         }
         else

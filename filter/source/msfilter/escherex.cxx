@@ -1754,7 +1754,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 }
                 else if (pGraphicProvider && pPicOutStrm && pShapeBoundRect) // write out embedded graphic
                 {
-                    GraphicObject aGraphicObject(aGraphic);
+                    GraphicObject aGraphicObject(std::move(aGraphic));
                     const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aGraphicObject, nullptr, pGraphicAttr.get()));
 
                     if(nBlibId)

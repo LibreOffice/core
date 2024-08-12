@@ -634,7 +634,7 @@ void OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInf
             // don't pass &aError here, this would overwrite the error which the first switchView call
             // returned in this location.
         if ( _pErrorInfo )
-            *_pErrorInfo = aError;
+            *_pErrorInfo = std::move(aError);
         else
             showError( aError );
     }

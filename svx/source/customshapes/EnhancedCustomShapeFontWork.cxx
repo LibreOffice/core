@@ -1082,7 +1082,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                                 }
 
                                 // write back polygon
-                                rPolyPoly[ i ] = aLocalPoly;
+                                rPolyPoly[i] = std::move(aLocalPoly);
                             }
                         }
                     }

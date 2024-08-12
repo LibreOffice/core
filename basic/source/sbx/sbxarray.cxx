@@ -346,7 +346,7 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 /*nVer*/ )
         if( pVar )
         {
             SbxVariableRef& rRef = GetRef( nIdx );
-            rRef = pVar;
+            rRef = std::move(pVar);
         }
         else
         {

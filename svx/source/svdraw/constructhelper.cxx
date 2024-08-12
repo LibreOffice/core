@@ -145,7 +145,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         case SID_LINE_SQUARE_ARROW:
         {
             // connector with arrow end
-            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), std::move(aArrow)));
             rAttr.Put(XLineEndWidthItem(nWidth));
         }
         break;
@@ -165,7 +165,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         case SID_LINE_CIRCLE_ARROW:
         {
             // circle start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), std::move(aCircle)));
             rAttr.Put(XLineStartWidthItem(nWidth));
         }
         break;
@@ -181,7 +181,7 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         case SID_LINE_SQUARE_ARROW:
         {
             // square start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), std::move(aSquare)));
             rAttr.Put(XLineStartWidthItem(nWidth));
         }
         break;

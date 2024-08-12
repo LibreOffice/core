@@ -335,7 +335,7 @@ void Writer::sendRequest(
         break;
     }
     sendMessage(buf);
-    lastType_ = t;
+    lastType_ = std::move(t);
     lastOid_ = oid;
     lastTid_ = tid;
 }
