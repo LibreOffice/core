@@ -475,8 +475,9 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
     , bNeedsRestart(false)
     , eRestartReason(svtools::RESTART_REASON_NONE)
 {
-    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35,
-                              xTreeLB->get_height_rows(30));
+    Size aSize(xTreeLB->get_approximate_digit_width() * 100, xTreeLB->get_height_rows(30));
+    xTabBox->set_size_request(aSize.Width(), aSize.Height());
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35, aSize.Height());
 
     // Init tree and handler
     xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
