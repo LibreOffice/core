@@ -106,8 +106,6 @@ extra_files_PRESENTATIONS := \
     presnt/Midnightblue/Thumbnails/thumbnail.png \
     presnt/Nature_Illustration/Thumbnails/thumbnail.png \
     presnt/Pencil/Thumbnails/thumbnail.png \
-    presnt/Piano/Pictures/100000000000035400000120266623530F1969D0.png  \
-    presnt/Piano/Pictures/100002010000033A0000006EDD62437E1CC42053.png  \
     presnt/Piano/Thumbnails/thumbnail.png \
     presnt/Portfolio/Thumbnails/thumbnail.png \
     presnt/Progress/Thumbnails/thumbnail.png \
