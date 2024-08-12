@@ -177,17 +177,6 @@ private:
         }
     };
 
-    struct UStringPair
-    {
-        OUString m_sID;
-        OUString m_sValue;
-        UStringPair(OUString sId, OUString sValue)
-            : m_sID(std::move(sId))
-            , m_sValue(std::move(sValue))
-        {
-        }
-    };
-
     typedef StringPair RadioButtonGroupMap;
 
     struct ButtonImageWidgetMap
@@ -203,10 +192,10 @@ private:
         }
     };
 
-    typedef UStringPair TextBufferMap;
-    typedef UStringPair WidgetAdjustmentMap;
-    typedef UStringPair ButtonMenuMap;
-    typedef UStringPair MnemonicWidgetMap;
+    typedef StringPair TextBufferMap;
+    typedef StringPair WidgetAdjustmentMap;
+    typedef StringPair ButtonMenuMap;
+    typedef StringPair MnemonicWidgetMap;
 
     struct ComboBoxModelMap
     {
