@@ -4016,18 +4016,8 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     if (!sProperty.isEmpty())
     {
         OString sValue(name.begin, name.length);
-        OUString sFinalValue;
-        if (bTranslated)
-        {
-            sFinalValue
-                = Translate::get(TranslateId{ sContext.getStr(), sValue.getStr() }, getResLocale());
-        }
-        else
-            sFinalValue = OUString::fromUtf8(sValue);
-
+        const OUString sFinalValue = finalizeValue(sContext, sValue, bTranslated);
         sProperty = sProperty.replace('_', '-');
-        if (ResHookProc pStringReplace = Translate::GetReadStringHook())
-            sFinalValue = (*pStringReplace)(sFinalValue);
         rMap[sProperty] = sFinalValue;
     }
 }
