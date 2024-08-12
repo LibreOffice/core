@@ -3888,7 +3888,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
     }
 }
 
-std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlReader &reader, int &nPriority)
+std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlReader &reader, int &nPriority)
 {
     std::vector<vcl::EnumContext::Context> aContext;
 
@@ -3940,7 +3940,7 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
     return aContext;
 }
 
-OUString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
+OUString BuilderBase::getStyleClass(xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;

@@ -76,6 +76,8 @@ protected:
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
     static bool isToolbarItemClass(std::u16string_view sClass);
+    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
+    static OUString getStyleClass(xmlreader::XmlReader &reader);
 };
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
@@ -349,8 +351,6 @@ private:
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem);
 
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
-    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
-    static OUString getStyleClass(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;
 
