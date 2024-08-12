@@ -46,8 +46,7 @@ constexpr auto DRAWTEXT_FLAGS_ICON =
 
 #define DRAWTEXT_FLAGS_SMALLICON (DrawTextFlags::Left|DrawTextFlags::EndEllipsis|DrawTextFlags::Clip)
 
-#define EVENTID_SHOW_CURSOR             (reinterpret_cast<void*>(1))
-#define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(2))
+#define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(1))
 
 SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SvtIconChoiceCtrl* pCurView,
@@ -1732,10 +1731,6 @@ IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )
     {
         nUserEventAdjustScrBars = nullptr;
         AdjustScrollBars();
-    }
-    else if( nId == EVENTID_SHOW_CURSOR )
-    {
-        ShowCursor( true );
     }
 }
 
