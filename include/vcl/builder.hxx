@@ -77,6 +77,7 @@ protected:
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
+    void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
@@ -368,7 +369,6 @@ private:
 
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
-    void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;
 
     void        insertMenuObject(
                    Menu *pParent,

@@ -3983,7 +3983,7 @@ OUString BuilderBase::getStyleClass(xmlreader::XmlReader &reader)
     return aRet;
 }
 
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) const
+void BuilderBase::collectProperty(xmlreader::XmlReader& reader, stringmap& rMap) const
 {
     xmlreader::Span name;
     int nsId;
