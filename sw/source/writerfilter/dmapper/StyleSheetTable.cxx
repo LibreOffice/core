@@ -56,6 +56,7 @@
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
 #include <unostyle.hxx>
+#include <unosett.hxx>
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
@@ -1167,12 +1168,14 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     else
                     {
                         bInsert = true;
+                        rtl::Reference<SwXStyle> xNewStyle;
                         if (bParaStyle)
-                            xStyle = m_pImpl->m_xTextDocument->createParagraphStyle();
+                            xNewStyle = m_pImpl->m_xTextDocument->createParagraphStyle();
                         else if (bListStyle)
-                            xStyle = m_pImpl->m_xTextDocument->createNumberingStyle();
+                            xNewStyle = m_pImpl->m_xTextDocument->createNumberingStyle();
                         else
-                            xStyle = m_pImpl->m_xTextDocument->createCharacterStyle();
+                            xNewStyle = m_pImpl->m_xTextDocument->createCharacterStyle();
+                        xStyle = xNewStyle;
 
                         // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
                         if (bListStyle)
@@ -1184,17 +1187,14 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             if (pPropertyMap && pPropertyMap->props().GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
-                                uno::Reference<container::XIndexReplace> xNumberingRules;
-                                xStyle->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
-                                uno::Reference<container::XIndexAccess> xIndexAccess(xNumberingRules, uno::UNO_QUERY_THROW);
-                                for (sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i)
+                                rtl::Reference<SwXNumberingRules> xNumberingRules = xNewStyle->getNumberingRules();
+                                for (sal_Int32 i = 0; i < xNumberingRules->getCount(); ++i)
                                 {
                                     uno::Sequence< beans::PropertyValue > aLvlProps{
                                         comphelper::makePropertyValue(
                                             u"NumberingType"_ustr, style::NumberingType::NUMBER_NONE)
                                     };
                                     xNumberingRules->replaceByIndex(i, uno::Any(aLvlProps));
-                                    xStyle->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xNumberingRules));
                                 }
                             }
                         }

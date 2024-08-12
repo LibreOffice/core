@@ -41,6 +41,7 @@ struct SfxItemPropertyMapEntry;
 class SwDoc;
 class SfxItemPropertySet;
 class SwDocShell;
+class SwXNumberingRules;
 
 class SAL_DLLPUBLIC_RTTI SwXStyle
     : public cppu::ImplInheritanceHelper<
@@ -166,6 +167,9 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     //SvtListener
     virtual void Notify(const SfxHint&) override;
+
+    SW_DLLPUBLIC rtl::Reference<SwXNumberingRules> getNumberingRules();
+
     const OUString& GetStyleName() const { return m_sStyleName; }
     SfxStyleFamily GetFamily() const;
 

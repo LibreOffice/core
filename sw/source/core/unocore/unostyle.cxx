@@ -2356,6 +2356,19 @@ uno::Any SwXStyle::GetPropertyValue_Impl(const SfxItemPropertySet* pPropSet, SwS
     return aValue;
 }
 
+rtl::Reference<SwXNumberingRules> SwXStyle::getNumberingRules()
+{
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
+    if(m_pBasePool)
+    {
+        PrepareStyleBase(aBase);
+        const SwNumRule* pRule = aBase.getNewBase()->GetNumRule();
+        assert(pRule && "Where is the NumRule?");
+        return new SwXNumberingRules(*pRule, GetDoc());
+    }
+    return nullptr;
+}
+
 uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;

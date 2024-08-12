@@ -9881,9 +9881,8 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         const OUString aListName = pList->GetStyleName();
         const rtl::Reference< SwXStyleFamilies > xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
         rtl::Reference<SwXStyleFamily> xNumberingStyles = xStyleFamilies->GetNumberingStyles();
-        const rtl::Reference<SwXBaseStyle> xStyle = xNumberingStyles->getStyleByName(aListName);
-        const rtl::Reference<SwXNumberingRules> xNumberingRules =
-            dynamic_cast<SwXNumberingRules*>(xStyle->getPropertyValue(u"NumberingRules"_ustr).get<uno::Reference<uno::XInterface>>().get());
+        const rtl::Reference<SwXStyle> xStyle = dynamic_cast<SwXStyle*>(xNumberingStyles->getStyleByName(aListName).get());
+        const rtl::Reference<SwXNumberingRules> xNumberingRules = xStyle->getNumberingRules();
         if (xNumberingRules.is())
         {
             xNumberingRules->getPropertyByIndex(nNumberingLevel, aProp) >>= nRet;
