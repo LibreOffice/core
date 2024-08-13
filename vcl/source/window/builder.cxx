@@ -457,6 +457,12 @@ const std::locale& BuilderBase::getResLocale() const
     return m_pParserState->m_aResLocale;
 }
 
+const std::vector<BuilderBase::SizeGroup>& BuilderBase::getSizeGroups() const
+{
+    assert(m_pParserState && "parser state no more valid");
+    return m_pParserState->m_aSizeGroups;
+}
+
 OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rValue,
                                     const bool bTranslate) const
 {
@@ -652,7 +658,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     }
 
     //Set size-groups when all widgets have been imported
-    for (auto const& sizeGroup : m_pVclParserState->m_aSizeGroups)
+    for (auto const& sizeGroup : getSizeGroups())
     {
         std::shared_ptr<VclSizeGroup> xGroup(std::make_shared<VclSizeGroup>());
 
@@ -3399,10 +3405,10 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
     insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAtkProperties, aAccelerators);
 }
 
-void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
+void BuilderBase::handleSizeGroup(xmlreader::XmlReader& reader)
 {
-    m_pVclParserState->m_aSizeGroups.emplace_back();
-    SizeGroup &rSizeGroup = m_pVclParserState->m_aSizeGroups.back();
+    m_pParserState->m_aSizeGroups.emplace_back();
+    SizeGroup &rSizeGroup = m_pParserState->m_aSizeGroups.back();
 
     int nLevel = 1;
 

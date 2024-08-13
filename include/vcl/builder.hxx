@@ -79,6 +79,13 @@ protected:
         std::vector<row> m_aEntries;
     };
 
+    struct SizeGroup
+    {
+        std::vector<OUString> m_aWidgets;
+        stringmap m_aProperties;
+        SizeGroup() {}
+    };
+
     static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
@@ -91,12 +98,16 @@ protected:
 
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
+    const std::vector<SizeGroup>& getSizeGroups() const;
+
     OUString finalizeValue(const OString& rContext, const OString& rValue,
                            const bool bTranslate) const;
 
     void handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass);
     void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
     const ListStore* get_model_by_name(const OUString& sID) const;
+
+    void handleSizeGroup(xmlreader::XmlReader& reader);
 
     virtual void resetParserState();
 
@@ -106,6 +117,7 @@ private:
         std::locale m_aResLocale;
 
         std::map<OUString, ListStore> m_aModels;
+        std::vector<SizeGroup> m_aSizeGroups;
     };
 
     std::unique_ptr<ParserState> m_pParserState;
@@ -263,12 +275,6 @@ private:
 
     typedef std::map<OUString, int> ImageSizeMap;
 
-    struct SizeGroup
-    {
-        std::vector<OUString> m_aWidgets;
-        stringmap m_aProperties;
-        SizeGroup() {}
-    };
 
 
     struct VclParserState
@@ -293,8 +299,6 @@ private:
         std::vector<ButtonMenuMap> m_aButtonMenuMaps;
 
         std::map<VclPtr<vcl::Window>, VclPtr<vcl::Window>> m_aRedundantParentWidgets;
-
-        std::vector<SizeGroup> m_aSizeGroups;
 
         std::map<VclPtr<vcl::Window>, stringmap> m_aAtkInfo;
 
@@ -390,8 +394,6 @@ private:
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar);
     std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
-
-    void        handleSizeGroup(xmlreader::XmlReader &reader);
 
     stringmap   handleAtkObject(xmlreader::XmlReader &reader) const;
 
