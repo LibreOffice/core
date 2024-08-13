@@ -1014,7 +1014,11 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
         if ((rEntry.nFlag & 0x08) != 0)
         {
 #if 0
-            if (nLocMethod == STORED) // example: fdo68983.odt has this :(
+            // Unfortunately every encrypted ODF package entry hits this,
+            // because ODF requires deflated entry with value STORED and OOo/LO
+            // has always written compressed streams with data descriptor.
+            // So it is checked later in ZipPackage::checkZipEntriesWithDD()
+            if (nLocMethod == STORED)
             {
                 SAL_INFO("package", "LOC STORED with data descriptor: \"" << rEntry.sPath << "\"");
                 bBroken = true;
@@ -1386,6 +1390,11 @@ sal_Int32 ZipFile::readCEN()
 
             if (o3tl::checked_multiply<sal_Int64>(aEntry.nOffset, -1, aEntry.nOffset))
                 throw ZipException(u"Integer-overflow"_ustr);
+
+            if (aEntry.nMethod == STORED && aEntry.nCompressedSize != aEntry.nSize)
+            {
+                throw ZipException(u"entry STORED with inconsistent size"_ustr);
+            }
 
             aMemGrabber.skipBytes(nCommentLen);
 
