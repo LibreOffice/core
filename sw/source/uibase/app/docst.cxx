@@ -88,6 +88,17 @@
 
 using namespace ::com::sun::star;
 
+static OutlinerView* lcl_GetPostItOutlinerView(SwWrtShell& rShell)
+{
+    SwPostItMgr* pPostItMgr = rShell.GetPostItMgr();
+    if (!pPostItMgr)
+        return nullptr;
+    sw::annotation::SwAnnotationWin* pWin = pPostItMgr->GetActiveSidebarWin();
+    if (!pWin)
+        return nullptr;
+    return pWin->GetOutlinerView();
+}
+
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 {
     SfxWhichIter aIter(rSet);
@@ -133,8 +144,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 }
                 else if (pShell->GetSelectionType() == SelectionType::PostIt)
                 {
-                    auto pStyle = pShell->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->GetStyleSheet();
-                    if (pStyle)
+                    OutlinerView *pOLV = lcl_GetPostItOutlinerView(*pShell);
+                    if (SfxStyleSheetBase* pStyle = pOLV ? pOLV->GetStyleSheet() : nullptr)
                         aName = pStyle->GetName();
                 }
                 else
@@ -164,7 +175,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     OUString aProgName;
                     if (pShell->GetSelectionType() == SelectionType::PostIt)
                     {
-                        if (auto pStyle = pShell->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->GetStyleSheet())
+                        OutlinerView *pOLV = lcl_GetPostItOutlinerView(*pShell);
+                        if (SfxStyleSheetBase* pStyle = pOLV ? pOLV->GetStyleSheet() : nullptr)
                         {
                             aName = pStyle->GetName();
                             aProgName = SwStyleNameMapper::GetProgName(aName, SwGetPoolIdFromName::TxtColl);
@@ -410,8 +422,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     {
                         if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
                         {
-                            auto pOLV = GetWrtShell()->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView();
-                            if (auto pStyle = pOLV->GetStyleSheet())
+                            OutlinerView *pOLV = lcl_GetPostItOutlinerView(*GetWrtShell());
+                            if (SfxStyleSheetBase* pStyle = pOLV ? pOLV->GetStyleSheet() : nullptr)
                                 aParam = pStyle->GetName();
                         }
                         else if (auto pColl = GetWrtShell()->GetCurTextFormatColl())
@@ -1185,10 +1197,8 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
         }
         case SfxStyleFamily::Para:
         {
-            if (pSh->GetPostItMgr() && pSh->GetPostItMgr()->HasActiveSidebarWin())
-            {
-                pSh->GetPostItMgr()->GetActiveSidebarWin()->GetOutlinerView()->SetStyleSheet(rName);
-            }
+            if (OutlinerView *pOLV = lcl_GetPostItOutlinerView(*pSh))
+                pOLV->SetStyleSheet(rName);
             else
             {
                 // When outline-folding is enabled, MakeAllOutlineContentTemporarilyVisible makes
