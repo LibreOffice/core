@@ -933,6 +933,22 @@ rtl::Reference<SwXPageStyle> SwXStyleFamily::getPageStyleByName(const OUString& 
     return xPageStyle;
 }
 
+rtl::Reference<SwXStyle> SwXStyleFamily::getCharacterStyleByName(const OUString& rName)
+{
+    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXStyle> xCharStyle = dynamic_cast<SwXStyle*>(xStyle.get());
+    assert(bool(xStyle) == bool(xCharStyle));
+    return xCharStyle;
+}
+
+rtl::Reference<SwXStyle> SwXStyleFamily::getParagraphStyleByName(const OUString& rName)
+{
+    rtl::Reference<SwXBaseStyle> xStyle = getStyleByName(rName);
+    rtl::Reference<SwXStyle> xCharStyle = dynamic_cast<SwXStyle*>(xStyle.get());
+    assert(bool(xStyle) == bool(xCharStyle));
+    return xCharStyle;
+}
+
 rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
@@ -2382,6 +2398,52 @@ uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     return GetPropertyValue_Impl(pPropSet, aBase, rPropertyName);
+}
+
+void SwXStyle::getToggleAttributes(
+            float& rfCharStyleBold,
+            float& rfCharStyleBoldComplex,
+            css::awt::FontSlant& reCharStylePosture,
+            css::awt::FontSlant& reCharStylePostureComplex,
+            sal_Int16& rnCharStyleCaseMap,
+            sal_Int16& rnCharStyleRelief,
+            bool& rbCharStyleContoured,
+            bool& rbCharStyleShadowed,
+            sal_Int16& rnCharStyleStrikeThrough,
+            bool& rbCharStyleHidden)
+{
+    SolarMutexGuard aGuard;
+    assert(m_pDoc);
+    assert(m_pBasePool || m_bIsDescriptor);
+    sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+    assert(m_pBasePool);
+    PrepareStyleBase(aBase);
+    SfxItemSet& rSet = aBase.GetItemSet();
+
+    uno::Any aResult;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharWeight"_ustr), rSet, aResult);
+    aResult >>= rfCharStyleBold;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharWeightComplex"_ustr), rSet, aResult);
+    aResult >>= rfCharStyleBoldComplex;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharPosture"_ustr), rSet, aResult);
+    aResult >>= reCharStylePosture;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharPostureComplex"_ustr), rSet, aResult);
+    aResult >>= reCharStylePostureComplex;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharCaseMap"_ustr), rSet, aResult);
+    aResult >>= rnCharStyleCaseMap;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharRelief"_ustr), rSet, aResult);
+    aResult >>= rnCharStyleRelief;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharContoured"_ustr), rSet, aResult);
+    aResult >>= rbCharStyleContoured;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharShadowed"_ustr), rSet, aResult);
+    aResult >>= rbCharStyleShadowed;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharStrikeout"_ustr), rSet, aResult);
+    aResult >>= rnCharStyleStrikeThrough;
+    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharHidden"_ustr), rSet, aResult);
+    aResult >>= rbCharStyleHidden;
 }
 
 uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)

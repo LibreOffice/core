@@ -3096,23 +3096,25 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
         sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
         bool bCharStyleHidden = false;
 
-        rtl::Reference<SwXBaseStyle> xCharStylePropertySet = GetCharacterStyles()->getStyleByName(sCharStyleName);
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fCharStyleBold;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fCharStyleBoldComplex;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eCharStylePosture;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eCharStylePostureComplex;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nCharStyleCaseMap;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nCharStyleRelief;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bCharStyleContoured;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bCharStyleShadowed;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nCharStyleStrikeThrough;
-        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bCharStyleHidden;
+        rtl::Reference<SwXStyle> xCharStylePropertySet = GetCharacterStyles()->getCharacterStyleByName(sCharStyleName);
+        xCharStylePropertySet->getToggleAttributes(
+                fCharStyleBold,
+                fCharStyleBoldComplex,
+                eCharStylePosture,
+                eCharStylePostureComplex,
+                nCharStyleCaseMap,
+                nCharStyleRelief,
+                bCharStyleContoured,
+                bCharStyleShadowed,
+                nCharStyleStrikeThrough,
+                bCharStyleHidden);
+
         if (fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
             nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
             nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
         {
-            rtl::Reference<SwXBaseStyle> const xParaStylePropertySet =
-                GetParagraphStyles()->getStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
+            rtl::Reference<SwXStyle> const xParaStylePropertySet =
+                GetParagraphStyles()->getParagraphStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
             float fParaStyleBold = css::awt::FontWeight::NORMAL;
             float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
             css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
@@ -3123,16 +3125,17 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
             bool bParaStyleShadowed = false;
             sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
             bool bParaStyleHidden = false;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fParaStyleBold;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fParaStyleBoldComplex;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eParaStylePosture;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eParaStylePostureComplex;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nParaStyleCaseMap;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nParaStyleRelief;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bParaStyleShadowed;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bParaStyleContoured;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nParaStyleStrikeThrough;
-            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bParaStyleHidden;
+            xParaStylePropertySet->getToggleAttributes(
+                    fParaStyleBold,
+                    fParaStyleBoldComplex,
+                    eParaStylePosture,
+                    eParaStylePostureComplex,
+                    nParaStyleCaseMap,
+                    nParaStyleRelief,
+                    bParaStyleContoured,
+                    bParaStyleShadowed,
+                    nParaStyleStrikeThrough,
+                    bParaStyleHidden);
             if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
             {
                 std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);

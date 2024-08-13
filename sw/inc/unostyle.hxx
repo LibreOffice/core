@@ -454,6 +454,8 @@ public:
 
     rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);
     rtl::Reference<SwXPageStyle> getPageStyleByName(const OUString& rName);
+    rtl::Reference<SwXStyle> getCharacterStyleByName(const OUString& rName);
+    rtl::Reference<SwXStyle> getParagraphStyleByName(const OUString& rName);
     void insertStyleByName(const OUString& Name, const rtl::Reference<SwXStyle>& Element);
 private:
     void insertStyleByNameImpl(const rtl::Reference<SwXStyle>& Element, const OUString& sStyleName);

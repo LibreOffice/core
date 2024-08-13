@@ -21,6 +21,7 @@
 #include <rtl/ref.hxx>
 #include <svl/listener.hxx>
 #include <svl/style.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -196,6 +197,11 @@ public:
     void PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet,
                       const SfxItemPropertyMapEntry& rEntry, const css::uno::Any& rVal,
                       SwStyleBase_Impl& rBaseImpl);
+    SW_DLLPUBLIC void getToggleAttributes(
+        float& rfCharStyleBold, float& rfCharStyleBoldComplex,
+        css::awt::FontSlant& reCharStylePosture, css::awt::FontSlant& reCharStylePostureComplex,
+        sal_Int16& rnCharStyleCaseMap, sal_Int16& rnCharStyleRelief, bool& rbCharStyleContoured,
+        bool& rbCharStyleShadowed, sal_Int16& rnCharStyleStrikeThrough, bool& rbCharStyleHidden);
 };
 
 typedef cppu::ImplInheritanceHelper<SwXStyle, css::document::XEventsSupplier> SwXFrameStyle_Base;
