@@ -103,6 +103,8 @@ protected:
     OUString finalizeValue(const OString& rContext, const OString& rValue,
                            const bool bTranslate) const;
 
+
+    std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader& reader) const;
     void handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass);
     void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
     const ListStore* get_model_by_name(const OUString& sID) const;
@@ -393,7 +395,6 @@ private:
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar);
-    std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
 
     stringmap   handleAtkObject(xmlreader::XmlReader &reader) const;
 

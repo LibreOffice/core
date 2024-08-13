@@ -3168,7 +3168,7 @@ void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProp
     }
 }
 
-std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &reader) const
+std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& reader) const
 {
     int nLevel = 1;
 
