@@ -400,6 +400,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     {
         m_xImpl->m_xCachedSnapshot.clear();
         m_xImpl->m_xPlayerListener.clear();
+        m_xImpl->m_MediaProperties.setFallbackURL( rNewProperties.getFallbackURL() );
         OUString const& url(rNewProperties.getURL());
         if (url.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
         {

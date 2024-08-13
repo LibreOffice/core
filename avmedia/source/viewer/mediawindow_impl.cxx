@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
@@ -251,13 +252,35 @@ void MediaWindowImpl::setURL( const OUString& rURL,
             maFileURL = rURL;
     }
 
-    mxPlayer = createPlayer((!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer, &m_sMimeType );
+    OUString mediaURL;
+    // If the file with the given URL does not exist and a fallback is specified, then use it
+    if ( rURL.startsWith("file:///")
+         && !comphelper::DirectoryHelper::fileExists(maFileURL)
+         && maFallbackFileURL.getLength() > 0 )
+    {
+        mediaURL = maFallbackFileURL;
+    }
+    else
+        mediaURL = (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL;
+
+    mxPlayer = createPlayer(mediaURL, rReferer, &m_sMimeType );
+
     onURLChanged();
 }
 
 const OUString& MediaWindowImpl::getURL() const
 {
     return maFileURL;
+}
+
+void MediaWindowImpl::setFallbackURL( const OUString& rURL )
+{
+    maFallbackFileURL = rURL;
+}
+
+const OUString& MediaWindowImpl::getFallbackURL() const
+{
+    return maFallbackFileURL;
 }
 
 bool MediaWindowImpl::isValid() const
@@ -298,6 +321,7 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
     rItem.setMute( mxPlayer.is() && mxPlayer->isMute() );
     rItem.setVolumeDB( mxPlayer.is() ? mxPlayer->getVolumeDB() : 0 );
     rItem.setZoom( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
+    rItem.setFallbackURL( getFallbackURL() );
     rItem.setURL( getURL(), mTempFileURL, maReferer );
 }
 
@@ -312,6 +336,7 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
     if (nMaskSet & AVMediaSetMask::URL)
     {
         m_sMimeType = rItem.getMimeType();
+        setFallbackURL(rItem.getFallbackURL());
         setURL(rItem.getURL(), rItem.getTempURL(), rItem.getReferer());
     }
 

@@ -55,6 +55,7 @@ struct MediaItem::Impl
 {
     OUString                m_URL;
     OUString                m_TempFileURL;
+    OUString                m_FallbackURL;
     OUString                m_Referer;
     OUString                m_sMimeType;
     AVMediaSetMask          m_nMaskSet;
@@ -107,6 +108,7 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
     MediaItem const& rOther(static_cast< const MediaItem& >(rItem));
     return m_pImpl->m_nMaskSet == rOther.m_pImpl->m_nMaskSet
         && m_pImpl->m_URL == rOther.m_pImpl->m_URL
+        && m_pImpl->m_FallbackURL == rOther.m_pImpl->m_FallbackURL
         && m_pImpl->m_Referer == rOther.m_pImpl->m_Referer
         && m_pImpl->m_sMimeType == rOther.m_pImpl->m_sMimeType
         && m_pImpl->m_aGraphic == rOther.m_pImpl->m_aGraphic
@@ -189,7 +191,11 @@ bool MediaItem::merge(const MediaItem& rMediaItem)
     const AVMediaSetMask nMaskSet = rMediaItem.getMaskSet();
 
     if( AVMediaSetMask::URL & nMaskSet )
+    {
+        bChanged = m_pImpl->m_FallbackURL == rMediaItem.getFallbackURL();
+        m_pImpl->m_FallbackURL = rMediaItem.getFallbackURL();
         bChanged |= setURL(rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer());
+    }
 
     if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         bChanged |= setMimeType(rMediaItem.getMimeType());
@@ -246,6 +252,18 @@ bool MediaItem::setURL(const OUString& rURL, const OUString& rTempURL, const OUS
 const OUString& MediaItem::getURL() const
 {
     return m_pImpl->m_URL;
+}
+
+bool MediaItem::setFallbackURL(const OUString& rURL)
+{
+    bool bChanged = rURL != m_pImpl->m_FallbackURL;
+    if (bChanged)
+        m_pImpl->m_FallbackURL = rURL;
+    return bChanged;
+}
+const OUString& MediaItem::getFallbackURL() const
+{
+    return m_pImpl->m_FallbackURL;
 }
 
 const OUString& MediaItem::getTempURL() const

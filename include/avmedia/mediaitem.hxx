@@ -117,6 +117,9 @@ public:
                                    const OUString& rReferer);
     const OUString&         getURL() const;
 
+    bool                    setFallbackURL(const OUString& rURL);
+    const OUString&         getFallbackURL() const;
+
     bool                    setMimeType(const OUString& rMimeType);
     OUString                getMimeType() const;
     bool setGraphic(const Graphic& rGraphic);

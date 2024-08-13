@@ -87,6 +87,9 @@ public:
 
     const OUString& getURL() const;
 
+    void setFallbackURL(const OUString& rURL);
+    const OUString& getFallbackURL() const;
+
     bool isValid() const;
 
     Size getPreferredSize() const;
@@ -139,6 +142,7 @@ private:
 
     OUString maFileURL;
     OUString mTempFileURL;
+    OUString maFallbackFileURL;
     OUString maReferer;
     OUString m_sMimeType;
     css::uno::Reference<css::media::XPlayer> mxPlayer;
