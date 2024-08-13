@@ -59,6 +59,11 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
     return 0;
 }
 
+const formula::IFunctionDescription* FunctionManager::Get(sal_uInt16 /*nFIndex*/) const
+{
+    return nullptr;
+}
+
 sal_uInt32 FunctionManager::getCount() const
 {
     return m_xMgr->getCount();
@@ -75,7 +80,16 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     return m_aCategoryIndex[_nPos]->second.get();
 }
 
+sal_uInt16 FunctionManager::getFunctionIndex(const formula::IFunctionDescription* /*_pDesc*/) const
+{
+    return 0;
+}
+
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
+{
+}
+
+void FunctionManager::fillFavouriteFunctions(::std::unordered_set<sal_uInt16>& /*rFavouriteFunctions*/) const
 {
 }
 

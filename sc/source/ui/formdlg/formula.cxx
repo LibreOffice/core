@@ -512,6 +512,16 @@ void ScFormulaDlg::insertEntryToLRUList(const formula::IFunctionDescription*    
     const ScFuncDesc* pDesc = dynamic_cast<const ScFuncDesc*>(_pDesc);
     SaveLRUEntry(pDesc);
 }
+
+void ScFormulaDlg::insertOrEraseFavouritesListEntry(const formula::IFunctionDescription* _pDesc, bool bInsert)
+{
+    const ScFuncDesc* pDesc = dynamic_cast<const ScFuncDesc*>(_pDesc);
+    if (pDesc && pDesc->nFIndex != 0)
+    {
+        ScModule::get()->InsertOrEraseFavouritesListEntry(pDesc->nFIndex, bInsert);
+    }
+}
+
 void ScFormulaDlg::showReference(const OUString& _sFormula)
 {
     ShowReference(_sFormula);

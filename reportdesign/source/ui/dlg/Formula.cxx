@@ -126,6 +126,9 @@ void FormulaDialog::doClose(bool _bOk)
 void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc*/)
 {
 }
+void FormulaDialog::insertOrEraseFavouritesListEntry(const IFunctionDescription* /*_pDesc*/, bool)
+{
+}
 void FormulaDialog::showReference(const OUString& /*_sFormula*/)
 {
 }

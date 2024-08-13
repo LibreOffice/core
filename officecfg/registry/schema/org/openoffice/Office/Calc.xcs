@@ -762,6 +762,13 @@
         </constraints>
         <value>224 226 222 223 6</value>
       </prop>
+      <prop oor:name="FavouriteFunctions" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Specifies the favourite functions.</desc>
+          <label>Favourite Functions</label>
+        </info>
+        <value></value>
+      </prop>
       <prop oor:name="AutoInput" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools  Cell Contents  AutoInput -->
         <info>

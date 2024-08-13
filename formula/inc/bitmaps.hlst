@@ -15,5 +15,7 @@ inline constexpr OUString BMP_STR_ERROR = u"formula/res/faperror.png"_ustr;
 inline constexpr OUString RID_BMP_REFBTN1 = u"formula/res/refinp1.png"_ustr;
 inline constexpr OUString RID_BMP_REFBTN2 = u"formula/res/refinp2.png"_ustr;
 inline constexpr OUString BMP_FX = u"formula/res/fx.png"_ustr;
+inline constexpr OUString BMP_STAR_EMPTY = u"sc/res/icon-set-stars-empty.png"_ustr;
+inline constexpr OUString BMP_STAR_FULL = u"sc/res/icon-set-stars-full.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

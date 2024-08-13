@@ -64,6 +64,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , pFuncDesc(nullptr)
 {
     InitLRUList();
+    UpdateFavouritesList();
 
     nArgs=0;
     m_aListHelpId = xFuncList->get_help_id();
@@ -141,6 +142,14 @@ void ScFunctionWin::InitLRUList()
         UpdateFunctionList(u""_ustr);
 }
 
+void ScFunctionWin::UpdateFavouritesList()
+{
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    pFuncMgr->fillFavouriteFunctions(aFavouritesList);
+
+    if (xCatBox->get_active() == 0)
+        UpdateFunctionList(u""_ustr);
+}
 
 /*************************************************************************
 #*  Member:     FillCategoriesMap
@@ -263,16 +272,16 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
 {
     sal_Int32  nSelPos   = xCatBox->get_active();
     sal_Int32  nCategory = ( -1 != nSelPos )
-                            ? (nSelPos-1) : 0;
+                            ? (nSelPos-ALL_CATEGORY) : 0;
 
     xFuncList->clear();
     xFuncList->freeze();
     mCategories.clear();
     sFuncScores.clear();
 
-    bool bCollapse = nCategory == 0;
+    bool bCollapse = nSelPos == ALL_CATEGORY;
     bool bFilter = !rSearchString.isEmpty();
-    if ( nSelPos > 0 )
+    if (nSelPos >= ALL_CATEGORY)
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
@@ -314,7 +323,7 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
                               xScratchIter.get());
         }
     }
-    else // LRU list
+    else if (nSelPos == LRU_CATEGORY) // LRU list
     {
         for (const formula::IFunctionDescription* pDesc : aLRUList)
         {
@@ -325,6 +334,22 @@ void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
 
                 xFuncList->insert(nullptr, -1, &aFunction, &aFuncDescId, nullptr, nullptr,
                         false, xScratchIter.get());
+            }
+        }
+    }
+    else // Favourites List
+    {
+        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+        for (const auto& elem : aFavouritesList)
+        {
+            const formula::IFunctionDescription* pDesc(pFuncMgr->Get(elem));
+            if (pDesc)
+            {
+                OUString aFunction(pDesc->getFunctionName());
+                OUString aFuncDescId(weld::toId(pDesc));
+
+                xFuncList->insert(nullptr, -1, &aFunction, &aFuncDescId, nullptr, nullptr, false,
+                                  xScratchIter.get());
             }
         }
     }
@@ -487,9 +512,9 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
 
 IMPL_LINK_NOARG(ScFunctionWin, ModifyHdl, weld::Entry&, void)
 {
-    if (xCatBox->get_active() == 0)
+    if (xCatBox->get_active() == LRU_CATEGORY || xCatBox->get_active() == FAVOURITES_CATEGORY)
     {
-        xCatBox->set_active(1);
+        xCatBox->set_active(ALL_CATEGORY);
         xHelpButton->set_sensitive(false);
     }
     OUString searchStr = m_xSearchString->get_text();
@@ -591,10 +616,11 @@ IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
 IMPL_LINK_NOARG(ScFunctionWin, SelComboHdl, weld::ComboBox&, void)
 {
-    if (xCatBox->get_active() == 0)
+    if (xCatBox->get_active() == LRU_CATEGORY || xCatBox->get_active() == FAVOURITES_CATEGORY)
         m_xSearchString->set_text(u""_ustr);
-    xHelpButton->set_sensitive(xCatBox->get_active() != 1);
+    xHelpButton->set_sensitive(xCatBox->get_active() != ALL_CATEGORY);
     OUString searchStr = m_xSearchString->get_text();
+    UpdateFavouritesList();
     UpdateFunctionList(searchStr);
     SetDescription();
 }

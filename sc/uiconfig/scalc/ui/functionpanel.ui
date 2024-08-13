@@ -67,6 +67,7 @@
                     <property name="hexpand">True</property>
                     <items>
                       <item translatable="yes" context="functionpanel|category">Last Used</item>
+                      <item translatable="yes" context="functionpanel|category">Favourites</item>
                       <item translatable="yes" context="functionpanel|category">All</item>
                       <item translatable="yes" context="functionpanel|category">Database</item>
                       <item translatable="yes" context="functionpanel|category">Date&amp;Time</item>

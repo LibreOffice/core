@@ -22,11 +22,17 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+
+#define LRU_CATEGORY 0
+#define FAVOURITES_CATEGORY 1
+#define ALL_CATEGORY 2
 
 namespace com::sun::star {
     namespace sheet { struct FormulaToken; }
@@ -57,13 +63,18 @@ namespace formula
             eTableRefOpen,
             eTableRefClose
         };
+
+        virtual const IFunctionDescription* Get(sal_uInt16 nFIndex) const = 0;
         virtual sal_uInt32 getCount() const = 0;
         virtual const IFunctionCategory* getCategory(sal_uInt32 nPos) const = 0;
+        virtual sal_uInt16 getFunctionIndex(const IFunctionDescription* _pDesc) const = 0;
         virtual void fillLastRecentlyUsedFunctions(::std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
+        virtual void fillFavouriteFunctions(::std::unordered_set<sal_uInt16>& rFavouriteFunctions) const = 0;
 
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
 
     protected:
+        bool changeFavouriteList;
         ~IFunctionManager() {}
     };
 
@@ -150,6 +161,7 @@ namespace formula
         virtual void dispatch(bool _bOK, bool _bMatrixChecked) = 0;
         virtual void doClose(bool _bOk) = 0;
         virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
+        virtual void insertOrEraseFavouritesListEntry(const IFunctionDescription* pDesc, bool bInsert) = 0;
         virtual void showReference(const OUString& _sFormula) = 0;
 
     protected:

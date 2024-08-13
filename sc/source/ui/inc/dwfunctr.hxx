@@ -63,9 +63,11 @@ private:
     ::std::set<std::pair<std::pair<sal_Int32, sal_Int32>, std::pair<OUString, const ScFuncDesc*>>>
                      sFuncScores;
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
+    ::std::unordered_set<sal_uInt16> aFavouritesList;
     ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
 
     void            UpdateLRUList();
+    void            UpdateFavouritesList();
     void            DoEnter(bool bDouble_or_Enter = false);
     void            SetDescription();
     weld::TreeIter* FillCategoriesMap(const OUString&, bool);

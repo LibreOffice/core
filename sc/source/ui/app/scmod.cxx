@@ -785,6 +785,21 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
     SetAppOptions(aNewOpts);
 }
 
+void ScModule::InsertOrEraseFavouritesListEntry(sal_uInt16 nFIndex, bool bInsert)
+{
+    const ScAppOptions& rAppOpt = GetAppOptions();
+    std::unordered_set<sal_uInt16> sFavouriteFunctions = rAppOpt.GetFavouritesList();
+
+    if (bInsert)
+        sFavouriteFunctions.insert(nFIndex);
+    else
+        sFavouriteFunctions.erase(nFIndex);
+
+    ScAppOptions aNewOpts(rAppOpt);
+    aNewOpts.SetFavouritesList(sFavouriteFunctions);
+    SetAppOptions(aNewOpts);
+}
+
 void ScModule::SetAppOptions( const ScAppOptions& rOpt )
 {
     if ( !m_pAppCfg )

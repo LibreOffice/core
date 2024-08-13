@@ -26,6 +26,7 @@
 #include <miscuno.hxx>
 #include <vector>
 #include <osl/diagnose.h>
+#include <comphelper/sequence.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -90,6 +91,7 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
     nZoom           = rCpy.nZoom;
     SetLRUFuncList( rCpy.pLRUList.get(), rCpy.nLRUFuncCount );
+    SetFavouritesList(rCpy.sFavouritesList);
     nStatusFunc     = rCpy.nStatusFunc;
     bAutoComplete   = rCpy.bAutoComplete;
     bDetectiveAuto  = rCpy.bDetectiveAuto;
@@ -139,6 +141,11 @@ static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
         rDest <<= Sequence<sal_Int32>(0);   // empty
 }
 
+static void lcl_GetFavouriteFunctions(Any& rDest, const ScAppOptions& rOpt)
+{
+    rDest <<= comphelper::containerToSequence<sal_Int32>(rOpt.GetFavouritesList());
+}
+
 static void lcl_GetSortList( Any& rDest )
 {
     const ScUserList& rUserList = ScGlobal::GetUserList();
@@ -162,8 +169,9 @@ constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
 constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
 
 #define SCINPUTOPT_LASTFUNCS        0
-#define SCINPUTOPT_AUTOINPUT        1
-#define SCINPUTOPT_DET_AUTO         2
+#define SCINPUTOPT_FAVOURITEFUNCS   1
+#define SCINPUTOPT_AUTOINPUT        2
+#define SCINPUTOPT_DET_AUTO         3
 
 constexpr OUStringLiteral CFGPATH_REVISION = u"Office.Calc/Revision/Color";
 
@@ -225,6 +233,7 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
     return {u"LastFunctions"_ustr,            // SCINPUTOPT_LASTFUNCS
+            u"FavouriteFunctions"_ustr,       // SCINPUTOPT_FAVOURITEFUNCS
             u"AutoInput"_ustr,                // SCINPUTOPT_AUTOINPUT
             u"DetectiveAuto"_ustr};           // SCINPUTOPT_DET_AUTO
 }
@@ -361,6 +370,19 @@ void ScAppCfg::ReadInputCfg()
                 pUShorts[i] = aSeq[i];
 
             SetLRUFuncList(pUShorts.data(), nLRUCount);
+        }
+    }
+
+    if (Sequence<sal_Int32> aSeq; aValues[SCINPUTOPT_FAVOURITEFUNCS] >>= aSeq)
+    {
+        sal_Int32 nCount = aSeq.getLength();
+        if (nCount < SAL_MAX_UINT16)
+        {
+            sal_uInt16 nFavouritesCount = nCount;
+            std::unordered_set<sal_uInt16> sFavouriteFunctions;
+            for (sal_uInt16 i = 0; i < nFavouritesCount; ++i)
+                sFavouriteFunctions.insert(aSeq[i]);
+            SetFavouritesList(sFavouriteFunctions);
         }
     }
     SetAutoComplete(ScUnoHelpFunctions::GetBoolFromAny(aValues[SCINPUTOPT_AUTOINPUT]));
@@ -514,6 +536,9 @@ IMPL_LINK_NOARG(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCINPUTOPT_DET_AUTO:
                 pValues[nProp] <<= GetDetectiveAuto();
+                break;
+            case SCINPUTOPT_FAVOURITEFUNCS:
+                lcl_GetFavouriteFunctions(pValues[nProp], *this);
                 break;
         }
     }

@@ -29,5 +29,7 @@
 #define STR_END             NC_("STR_END", "~End")
 #define RID_STR_SHRINK      NC_("RID_STR_SHRINK", "Shrink")
 #define RID_STR_EXPAND      NC_("RID_STR_EXPAND", "Expand")
+#define FAV_ENABLED         NC_("FAV_ENABLED", "Add or remove function from favourites")
+#define FAV_DISABLED        NC_("FAV_DISABLED", "Extention functions can not be added to favourites")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

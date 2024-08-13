@@ -45,9 +45,12 @@ class FunctionManager : public formula::IFunctionManager
 public:
             FunctionManager(css::uno::Reference< css::report::meta::XFunctionManager> _xMgr);
     virtual ~FunctionManager();
+    virtual const formula::IFunctionDescription*    Get(sal_uInt16 nFIndex) const override;
     virtual sal_uInt32                              getCount() const override;
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const override;
+    virtual sal_uInt16                              getFunctionIndex(const formula::IFunctionDescription* _pDesc) const override;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
+    virtual void                                    fillFavouriteFunctions(::std::unordered_set<sal_uInt16>& rFavouriteFunctions) const override;
     virtual sal_Unicode                             getSingleToken(const EToken _eToken) const override;
 
     std::shared_ptr< FunctionDescription >      get(const css::uno::Reference< css::report::meta::XFunctionDescription>& _xFunctionDescription) const;

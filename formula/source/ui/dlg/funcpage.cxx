@@ -40,7 +40,7 @@ IMPL_LINK(FuncPage, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 // tdf#104487 - remember last used function category - set default to All category
-sal_Int32 FuncPage::m_nRememberedFunctionCategory = 1;
+sal_Int32 FuncPage::m_nRememberedFunctionCategory = ALL_CATEGORY;
 
 FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionManager)
     : m_xBuilder(Application::CreateBuilder(pParent, u"formula/ui/functionpage.ui"_ustr))
@@ -56,6 +56,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_aHelpId = m_xLbFunction->get_help_id();
 
     m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
+    m_pFunctionManager->fillFavouriteFunctions(aFavouritesList);
 
     const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
     for (sal_uInt32 j = 0; j < nCategoryCount; ++j)
@@ -100,6 +101,24 @@ weld::TreeIter* FuncPage::FillCategoriesMap(const OUString& aCategory, bool bFil
     return mCategories[aCategory].get();
 }
 
+bool FuncPage::IsFavourite(sal_uInt16 nFIndex) const
+{
+    return aFavouritesList.find(nFIndex) != aFavouritesList.end();
+}
+
+bool FuncPage::UpdateFavouritesList()
+{
+    sal_uInt16 nFIndex = GetFuncIndex();
+    if (nFIndex == 0)
+        return false;
+
+    if (IsFavourite(nFIndex))
+        aFavouritesList.erase(nFIndex);
+    else
+        aFavouritesList.insert(nFIndex);
+    return true;
+}
+
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory, bool bFillCategories)
 {
     weld::TreeIter* pCategoryIter = FillCategoriesMap(_pCategory->getName(), bFillCategories);
@@ -141,17 +160,17 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     sFuncScores.clear();
 
     const sal_Int32 nSelPos = m_xLbCategory->get_active();
-    bool bCollapse = nSelPos == 1;
+    bool bCollapse = nSelPos == ALL_CATEGORY;
     bool bFilter = !aStr.isEmpty();
     // tdf#104487 - remember last used function category
     m_nRememberedFunctionCategory = nSelPos;
 
-    if (!bFilter || nSelPos == 0)
+    if (!bFilter || nSelPos == LRU_CATEGORY || nSelPos == FAVOURITES_CATEGORY)
     {
         const IFunctionCategory* pCategory
             = weld::fromId<const IFunctionCategory*>(m_xLbCategory->get_id(nSelPos));
 
-        if (nSelPos > 0)
+        if (nSelPos >= ALL_CATEGORY)
         {
             if (pCategory == nullptr)
             {
@@ -166,7 +185,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
                 impl_addFunctions(pCategory, false);
             }
         }
-        else // LRU-List
+        else if (nSelPos == LRU_CATEGORY) // LRU-List
         {
             for (auto const& elem : aLRUList)
             {
@@ -177,6 +196,24 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
 
                     m_xLbFunction->insert(nullptr, -1, &aFunction, &sId, nullptr, nullptr, false,
                                           m_xScratchIter.get());
+                }
+            }
+        }
+        else // Favourites-List
+        {
+            for (const auto& elem : aFavouritesList)
+            {
+                if (m_pFunctionManager->Get(elem))
+                {
+                    TFunctionDesc pDesc(m_pFunctionManager->Get(elem));
+                    if (pDesc && !pDesc->isHidden())
+                    {
+                        OUString aFunction(pDesc->getFunctionName());
+                        OUString sId(weld::toId(pDesc));
+
+                        m_xLbFunction->insert(nullptr, -1, &aFunction, &sId, nullptr, nullptr,
+                                              false, m_xScratchIter.get());
+                    }
                 }
             }
         }
@@ -249,11 +286,12 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
 
 IMPL_LINK_NOARG(FuncPage, SelComboBoxHdl, weld::ComboBox&, void)
 {
-    if (m_xLbCategory->get_active() == 0)
+    if (m_xLbCategory->get_active() == LRU_CATEGORY
+        || m_xLbCategory->get_active() == FAVOURITES_CATEGORY)
         m_xLbFunctionSearchString->set_text(u""_ustr);
     m_xHelpButton->set_sensitive(false);
-    OUString searchStr = m_xLbFunctionSearchString->get_text();
     m_xLbFunction->set_help_id(m_aHelpId);
+    OUString searchStr = m_xLbFunctionSearchString->get_text();
     UpdateFunctionList(searchStr);
 }
 
@@ -290,9 +328,10 @@ IMPL_LINK_NOARG(FuncPage, DblClkHdl, weld::TreeView&, bool)
 
 IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::Entry&, void)
 {
-    if (m_xLbCategory->get_active() == 0)
+    if (m_xLbCategory->get_active() == LRU_CATEGORY
+        || m_xLbCategory->get_active() == FAVOURITES_CATEGORY)
     {
-        m_xLbCategory->set_active(1);
+        m_xLbCategory->set_active(ALL_CATEGORY);
         m_xHelpButton->set_sensitive(false);
     }
     OUString searchStr = m_xLbFunctionSearchString->get_text();
@@ -353,6 +392,11 @@ sal_Int32 FuncPage::GetFunction() const { return m_xLbFunction->get_selected_ind
 sal_Int32 FuncPage::GetFunctionEntryCount() const { return m_xLbFunction->n_children(); }
 
 OUString FuncPage::GetSelFunctionName() const { return m_xLbFunction->get_selected_text(); }
+
+sal_uInt16 FuncPage::GetFuncIndex() const
+{
+    return m_pFunctionManager->getFunctionIndex(GetFuncDesc());
+}
 
 const IFunctionDescription* FuncPage::GetFuncDesc() const
 {

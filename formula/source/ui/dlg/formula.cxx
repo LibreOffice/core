@@ -45,11 +45,13 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
+#include <bitmaps.hlst>
 #include <map>
 
 // For tab page
 #define TOKEN_OPEN  0
 #define TOKEN_CLOSE 1
+
 namespace formula
 {
 
@@ -117,6 +119,7 @@ public:
     DECL_LINK( FormulaHdl, weld::TextView&, void);
     DECL_LINK( FormulaCursorHdl, weld::TextView&, void );
     DECL_LINK( BtnHdl, weld::Button&, void );
+    DECL_LINK( FavToggleHdl, weld::Button&, void );
     DECL_LINK( DblClkHdl, FuncPage&, void );
     DECL_LINK( FuncSelHdl, FuncPage&, void );
     DECL_LINK( StructSelHdl, StructPage&, void );
@@ -166,6 +169,8 @@ public:
     std::unique_ptr<weld::Label> m_xFtHeadLine;
     std::unique_ptr<weld::Label> m_xFtFuncName;
     std::unique_ptr<weld::Label> m_xFtFuncDesc;
+
+    std::unique_ptr<weld::Button> m_xBtnFavorites;
 
     std::unique_ptr<weld::Label> m_xFtEditName;
 
@@ -230,6 +235,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     , m_xFtHeadLine(rBuilder.weld_label(u"headline"_ustr))
     , m_xFtFuncName(rBuilder.weld_label(u"funcname"_ustr))
     , m_xFtFuncDesc(rBuilder.weld_label(u"funcdesc"_ustr))
+    , m_xBtnFavorites(rBuilder.weld_button(u"favorites"_ustr))
     , m_xFtEditName(rBuilder.weld_label(u"editname"_ustr))
     , m_xFtResult(rBuilder.weld_label(u"label2"_ustr))
     , m_xWndResult(rBuilder.weld_entry(u"result"_ustr))
@@ -286,6 +292,9 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xTabCtrl->set_current_page(u"functiontab"_ustr);
 
     m_aOldHelp = m_rDialog.get_help_id();                // HelpId from resource always for "Page 1"
+
+    m_xBtnFavorites->connect_clicked(LINK(this, FormulaDlg_Impl, FavToggleHdl));
+    m_xBtnFavorites->hide();
 
     m_xFtResult->set_visible( _bSupportResult );
     m_xWndResult->set_visible( _bSupportResult );
@@ -863,6 +872,7 @@ void FormulaDlg_Impl::FillControls( bool &rbNext, bool &rbPrev)
         const bool bTestFlag = (pOldFuncDesc != m_pFuncDesc);
         if (bTestFlag)
         {
+            m_xBtnFavorites->hide();
             m_xFtHeadLine->hide();
             m_xFtFuncName->hide();
             m_xFtFuncDesc->hide();
@@ -965,6 +975,7 @@ void FormulaDlg_Impl::ClearAllParas()
         m_xParaWinBox->hide();
 
         m_xBtnForward->set_sensitive(true); //@new
+        m_xBtnFavorites->show();
         m_xFtHeadLine->show();
         m_xFtFuncName->show();
         m_xFtFuncDesc->show();
@@ -1056,6 +1067,27 @@ IMPL_LINK(FormulaDlg_Impl, BtnHdl, weld::Button&, rBtn, void)
         m_xBtnForward->set_sensitive(true);
         EditNextFunc( false );
     }
+}
+
+IMPL_LINK_NOARG(FormulaDlg_Impl, FavToggleHdl, weld::Button&, void)
+{
+    const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc();
+    if (!pDesc)
+        return;
+
+    if (m_xFuncPage->IsFavourite(m_xFuncPage->GetFuncIndex()))
+    {
+        m_pHelper->insertOrEraseFavouritesListEntry(pDesc, false);
+        m_xBtnFavorites->set_from_icon_name(BMP_STAR_EMPTY);
+    }
+    else
+    {
+        m_pHelper->insertOrEraseFavouritesListEntry(pDesc, true);
+        m_xBtnFavorites->set_from_icon_name(BMP_STAR_FULL);
+    }
+    m_xFuncPage->UpdateFavouritesList();
+    if (m_xFuncPage->GetCategory() == FAVOURITES_CATEGORY)
+        m_xFuncPage->UpdateFunctionList(u""_ustr);
 }
 
 //                          Functions for 1. Page
@@ -1667,23 +1699,25 @@ IMPL_LINK_NOARG( FormulaDlg_Impl, MatrixHdl, weld::Toggleable&, void)
 
 IMPL_LINK_NOARG( FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
 {
-    if (   (m_xFuncPage->GetFunctionEntryCount() > 0)
-        && (m_xFuncPage->GetFunction() != -1) )
-    {
-        const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc();
+    const IFunctionDescription* pDesc = m_xFuncPage->GetFuncDesc();
+    const sal_uInt16 nFIndex = m_xFuncPage->GetFuncIndex();
 
+    m_xBtnFavorites->set_sensitive(true);
+    if (pDesc)
+    {
         if (pDesc != m_pFuncDesc)
             m_xBtnForward->set_sensitive(true); //new
 
-        if (pDesc)
-        {
-            pDesc->initArgumentInfo();      // full argument info is needed
+        pDesc->initArgumentInfo();      // full argument info is needed
+        OUString aSig = pDesc->getSignature();
+        m_xFtHeadLine->set_label( pDesc->getFunctionName() );
+        m_xFtFuncName->set_label( aSig );
+        m_xFtFuncDesc->set_label( pDesc->getDescription() );
 
-            OUString aSig = pDesc->getSignature();
-            m_xFtHeadLine->set_label( pDesc->getFunctionName() );
-            m_xFtFuncName->set_label( aSig );
-            m_xFtFuncDesc->set_label( pDesc->getDescription() );
-        }
+        if (m_xFuncPage->IsFavourite(nFIndex))
+            m_xBtnFavorites->set_from_icon_name(BMP_STAR_FULL);
+        else
+            m_xBtnFavorites->set_from_icon_name(BMP_STAR_EMPTY);
     }
     else
     {
@@ -1691,6 +1725,12 @@ IMPL_LINK_NOARG( FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
         m_xFtFuncName->set_label( OUString() );
         m_xFtFuncDesc->set_label( OUString() );
     }
+
+    m_xBtnFavorites->set_visible(m_xFtHeadLine->is_visible()
+                                 && m_xFtHeadLine->get_label() != u""_ustr);
+    m_xBtnFavorites->set_sensitive(nFIndex != 0);
+    m_xBtnFavorites->set_tooltip_text(nFIndex == 0 ? ForResId(FAV_DISABLED)
+                                                   : ForResId(FAV_ENABLED));
 }
 
 void FormulaDlg_Impl::UpdateParaWin( const Selection& _rSelection, const OUString& _sRefStr)

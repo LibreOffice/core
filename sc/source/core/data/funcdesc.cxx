@@ -1081,7 +1081,7 @@ ScFunctionMgr::~ScFunctionMgr()
 }
 
 
-const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
+const formula::IFunctionDescription* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {
     const ScFuncDesc* pDesc;
     for (pDesc = First(); pDesc; pDesc = Next())
@@ -1137,6 +1137,12 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     return nullptr;
 }
 
+sal_uInt16 ScFunctionMgr::getFunctionIndex(const formula::IFunctionDescription* _pDesc) const
+{
+    const ScFuncDesc* pDesc = dynamic_cast<const ScFuncDesc*>(_pDesc);
+    return pDesc ? pDesc->nFIndex : 0;
+}
+
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
     const ScAppOptions& rAppOpt = ScModule::get()->GetAppOptions();
@@ -1151,6 +1157,13 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
             _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
         }
     }
+}
+
+void ScFunctionMgr::fillFavouriteFunctions(std::unordered_set<sal_uInt16>& rFavouriteFunctions) const
+{
+    const ScAppOptions& rAppOpt = ScModule::get()->GetAppOptions();
+    rFavouriteFunctions.clear();
+    rFavouriteFunctions = rAppOpt.GetFavouritesList();
 }
 
 OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )

@@ -48,6 +48,8 @@ public:
     sal_uInt16* GetLRUFuncList() const          { return pLRUList.get();      }
     void        SetLRUFuncList( const sal_uInt16* pList,
                                 const sal_uInt16  nCount );
+    std::unordered_set<sal_uInt16> GetFavouritesList() const { return sFavouritesList; }
+    void        SetFavouritesList(const std::unordered_set<sal_uInt16>& rList) { sFavouritesList = rList; }
     void        SetStatusFunc( sal_uInt32 nNew )    { nStatusFunc = nNew;   }
     sal_uInt32      GetStatusFunc() const           { return nStatusFunc;   }
     void        SetAutoComplete( bool bNew )    { bAutoComplete = bNew; }
@@ -87,6 +89,7 @@ private:
     sal_uInt16      nLRUFuncCount;
     std::unique_ptr<sal_uInt16[]>
                     pLRUList;
+    std::unordered_set<sal_uInt16> sFavouritesList;
     SvxZoomType     eZoomType;
     sal_uInt16      nZoom;
     bool            bSynchronizeZoom;

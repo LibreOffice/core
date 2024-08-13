@@ -77,6 +77,7 @@ public:
     virtual std::unique_ptr<formula::FormulaCompiler> createCompiler( formula::FormulaTokenArray& rArray ) const override;
     virtual void doClose(bool _bOk) override;
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) override;
+    virtual void insertOrEraseFavouritesListEntry(const formula::IFunctionDescription*  pDesc, bool bInsert) override;
     virtual void showReference(const OUString& _sFormula) override;
     virtual void dispatch(bool _bOK, bool _bMatrixChecked) override;
     virtual void setDispatcherLock( bool bLock ) override;

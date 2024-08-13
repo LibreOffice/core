@@ -183,7 +183,7 @@
                   </object>
                   <packing>
                     <property name="resize">False</property>
-                    <property name="shrink">True</property>
+                    <property name="shrink">False</property>
                   </packing>
                 </child>
                 <child>
@@ -285,18 +285,55 @@
                         <property name="vexpand">True</property>
                         <property name="row-spacing">12</property>
                         <child>
-                          <object class="GtkLabel" id="headline">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="wrap">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
+                            <property name="vexpand">False</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">2</property>
+                            <child>
+                              <object class="GtkButton" id="favorites">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="formuladialog|favorites|tooltip_text">Add or remove function from favourites</property>
+                                <property name="hexpand">False</property>
+                                <property name="vexpand">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="relief">none</property>
+                                <property name="border-width">6</property>
+                                <property name="focus-on-click">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="headline">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0.5</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="left-attach">0</property>
                             <property name="top-attach">0</property>
                           </packing>

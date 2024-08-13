@@ -93,6 +93,7 @@
         <property name="can-focus">False</property>
         <items>
           <item translatable="yes" context="functionpage|category">Last Used</item>
+          <item translatable="yes" context="functionpage|category">Favourites</item>
           <item translatable="yes" context="functionpage|category">All</item>
         </items>
         <child internal-child="accessible">

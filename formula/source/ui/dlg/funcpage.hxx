@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace formula
 {
@@ -51,6 +52,7 @@ private:
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
+    ::std::unordered_set<sal_uInt16> aFavouritesList;
     ::std::unordered_map<OUString, std::unique_ptr<weld::TreeIter>> mCategories;
     ::std::set<std::pair<std::pair<sal_Int32, sal_Int32>, std::pair<OUString, TFunctionDesc>>>
         sFuncScores;
@@ -69,8 +71,6 @@ private:
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(SelHelpClickHdl, weld::Button&, void);
     DECL_LINK(SimilarityToggleHdl, weld::Toggleable&, void);
-
-    void            UpdateFunctionList(const OUString&);
 
 public:
 
@@ -91,12 +91,18 @@ public:
     sal_Int32       GetFuncPos(const IFunctionDescription* _pDesc);
     const IFunctionDescription* GetFuncDesc() const;
     OUString        GetSelFunctionName() const;
+    sal_uInt16      GetFuncIndex() const;
 
     void            SetDoubleClickHdl( const Link<FuncPage&,void>& rLink ) { aDoubleClickLink = rLink; }
 
     void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
 
     bool            IsVisible() const { return m_xContainer->get_visible(); }
+
+    bool            IsFavourite(sal_uInt16) const;
+
+    bool            UpdateFavouritesList();
+    void            UpdateFunctionList(const OUString&);
 
     void            SearchFunction(const OUString&, const OUString&, TFunctionDesc, const bool);
 };
