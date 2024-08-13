@@ -7,14 +7,14 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #  
-#  ScriptForge Release 24.8
+#  ScriptForge Release 25.2
 #  -----------------------
 #  
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2023-12-25 12:02:38\n"
+"POT-Creation-Date: 2024-08-13 13:35:41\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -883,6 +883,21 @@ msgid  ""
 "The control '%1' in form '%2' is of type '%3'.\n"
 "The property or method '%4' is not applicable on that type of form "
 "controls."
+msgstr ""
+
+#. SF_Writer._ParseRange (textrange)
+#. %1: An identifier
+#. %2: A string
+#. %3: An identifier
+#. %4: A file name
+#, kde-format
+msgctxt "WRITERRANGE"
+msgid  ""
+"The given text range does not correspond with a valid position in "
+"the text.\n"
+"\n"
+"« %1 » = %2\n"
+"« %3 » = %4"
 msgstr ""
 
 #. SF_Dialog creation

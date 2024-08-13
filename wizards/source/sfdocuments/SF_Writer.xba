@@ -26,8 +26,22 @@ Option Explicit
 &apos;&apos;&apos;		the parent methods and properties.
 &apos;&apos;&apos;		They should also duplicate some generic private members as a subset of their own set of members
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The SF_Writer module is focused on :
-&apos;&apos;&apos;			TBD
+&apos;&apos;&apos;		The SF_Writer module is focused on selecting, reading, inserting, modifying texts and values
+&apos;&apos;&apos;		on well-identified and predefined places in the document.
+&apos;&apos;&apos;		Usually such customization of the document starts from a predefined template.
+&apos;&apos;&apos;		Multiple customizations are also known as mail merging.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		As a consequence, focus is not on text formatting, except by the application of styles
+&apos;&apos;&apos;		onto the targeted text fragments.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The positions in the text where customization can take place easily are:
+&apos;&apos;&apos;			- the start and end positions of the text body
+&apos;&apos;&apos;			- the start and end positions of text frames
+&apos;&apos;&apos;			- bookmarks
+&apos;&apos;&apos;			- text fields
+&apos;&apos;&apos;			- the start and end positions of document sections
+&apos;&apos;&apos;			- writer tables and table cells
+&apos;&apos;&apos;			- the area currently selected by the user, i.e. the &quot;visible&quot; selection
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The current module is closely related to the &quot;UI&quot; service of the ScriptForge library
 &apos;&apos;&apos;
@@ -39,12 +53,35 @@ Option Explicit
 &apos;&apos;&apos;				&apos; or Set oDoc = ui.OpenDocument(&quot;C:\Me\MyFile.odt&quot;)
 &apos;&apos;&apos;		2) Directly if the document is already opened
 &apos;&apos;&apos;			Dim oDoc As Object
-&apos;&apos;&apos;			Set oDoc = CreateScriptService(&quot;SFDocuments.Writer&quot;, &quot;Untitled 1&quot;)	&apos;	Default = ActiveWindow
+&apos;&apos;&apos;			Set oDoc = CreateScriptService(&quot;SFDocuments.Writer&quot;, ThisComponent)	&apos;	Default = ActiveWindow
 &apos;&apos;&apos;				&apos; or Set oDoc = CreateScriptService(&quot;SFDocuments.Writer&quot;, &quot;Untitled 1&quot;)	&apos;	Untitled 1 is presumed a Writer document
 &apos;&apos;&apos;			&apos; The substring &quot;SFDocuments.&quot; in the service name is optional
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Definitions: 
-&apos;&apos;&apos;			TBD
+&apos;&apos;&apos;		Definitions:
+&apos;&apos;&apos;			Many methods require a &quot;TextRange&quot; as argument.
+&apos;&apos;&apos;			A textrange is a string describing the scope on which to apply the method.
+&apos;&apos;&apos;			Such a textrange corresponds either with a single insertion point or with a (text) interval between 2 insertion points.
+&apos;&apos;&apos;			Multiple textranges are not supported in this context.
+&apos;&apos;&apos;
+&apos;&apos;&apos;			TextRange: a string containing one of next variants :
+&apos;&apos;&apos;			(names may be surrounded with single or double quotes)
+&apos;&apos;&apos;				&quot;~&quot; or &quot;SELECTION&quot; or &quot;SEL&quot; = current selection (if multiple selections, its 1st component)
+&apos;&apos;&apos;				&quot;BODY&quot; = the main text of the actual document instance
+&apos;&apos;&apos;				&quot;FRAME!name&quot; = the text contained in a text frame
+&apos;&apos;&apos;				&quot;BOOKMARK!name&quot; = the given bookmark, may be zero or more characters long
+&apos;&apos;&apos;				&quot;FIELD!name&quot; = a user text field
+&apos;&apos;&apos;				&quot;SECTION!name&quot; = the text contained in a section
+&apos;&apos;&apos;				&quot;TABLE!name!&quot; = the whole cellrange of a table
+&apos;&apos;&apos;				&quot;TABLE!name!cellrange&quot; = a cell (cellrange = &quot;B3&quot;) or a range of cells (&quot;A2:B3&quot;)
+&apos;&apos;&apos;				&quot;WORD+3&quot; = 3 words after the current selection
+&apos;&apos;&apos;				&quot;SENTENCE-1&quot; = the sentence before the current selection
+&apos;&apos;&apos;				&quot;PARAGRAPH&quot; or &quot;§&quot; = the paragraph containing the current selection (0 is the default)
+&apos;&apos;&apos;			optionally combined with next control character:
+&apos;&apos;&apos;				&quot;|&quot;: start or end of string
+&apos;&apos;&apos;						&quot;|~&quot; = the point immediately before the current visible selection (starting point)
+&apos;&apos;&apos;						&quot;~|&quot; = the point immediately after the current visible selection (ending point)
+&apos;&apos;&apos;						&quot;~&quot;, &quot;|~|&quot; = the full visible selection
+&apos;&apos;&apos;
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_writer.html?DbPAR=BASIC
@@ -54,6 +91,7 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Private Const WRITERFORMNOTFOUNDERROR	=	&quot;WRITERFORMNOTFOUNDERROR&quot;
+Private Const WRITERRANGEERROR			=	&quot;WRITERRANGEERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -65,6 +103,22 @@ Private ServiceName				As String
 
 &apos;	Window component
 Private _Component				As Object		&apos;	com.sun.star.lang.XComponent
+
+&apos;	Text Range
+Type _TextRange
+	RangeString					As String		&apos;	The input string
+	Target						As String		&apos;	Selection or Body or Frame or ...
+	TargetName					As String		&apos;	Name of Frame or Table or ...
+	TargetCell					As String		&apos;	Cell
+	TargetObject				As Object		&apos;	Field, TableCell, Section, ... object
+	Offset						As Long			&apos;	Number of utems to right (+)or to left (-)
+	StartPoint					As Boolean		&apos;	When True, vertical bar before target
+	EndPoint					As Boolean		&apos;	When True, vertical bar after target
+	Anchor						As Object		&apos;	com.sun.star.text.XTextRange
+	Text						As Object		&apos;	com.sun.star.text.XText
+	Cursor						As Object		&apos;	com.sun.star.text.XTextCursor
+	Location					As String		&apos;	BODY or FOOTNOTE or HEADER/FOOTER ...
+End Type
 
 REM ============================================================ MODULE CONSTANTS
 
@@ -95,6 +149,86 @@ Public Function Dispose() As Variant
 End Function	&apos;	SFDocuments.SF_Writer Explicit Destructor
 
 REM ================================================================== PROPERTIES
+
+REM -----------------------------------------------------------------------------
+Property Get Bookmarks() As Variant
+&apos;&apos;&apos;	Return the list of currently available bookmarks as a zero-based array
+	Bookmarks = _PropertyGet(&quot;Bookmarks&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.Bookmarks (get)
+
+REM -----------------------------------------------------------------------------
+Property Get CurrentSelection() As Variant
+&apos;&apos;&apos;	Return the list of currently available CurrentSelection as a zero-based array
+	CurrentSelection = _PropertyGet(&quot;CurrentSelection&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.CurrentSelection (get)
+
+REM -----------------------------------------------------------------------------
+Property Let CurrentSelection(Optional ByVal pvSelection As Variant)
+&apos;&apos;&apos;	Set the selection to a single or a multiple range
+&apos;&apos;&apos;	The argument can be:
+&apos;&apos;&apos;		- a string (a textrange)
+&apos;&apos;&apos;		- a com.sun.star.text.XTextRange object
+&apos;&apos;&apos;		- a collection of com.sun.star.text.XTextRange objects 
+
+Dim vSelection As Variant			&apos;	Alias of pvSelection
+Dim oSelection As Object			&apos;	com.sun.star.text.XTextRange
+Dim sType As String					&apos;	session.UnoObjectType()
+Dim oSess As Object					:	Set oSess = ScriptForge.SF_Session
+Dim i As Long
+
+Const cstThisSub = &quot;SFDocuments.Writer.setCurrentSelection&quot;
+Const cstSubArgs = &quot;Selection&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(pvSelection, &quot;Selection&quot;, Array(V_STRING, ScriptForge.V_Object)) Then GoTo Finally
+	End If
+
+Try:
+	vSelection = pvSelection	&apos;	Necessary to avoid the &quot;Object variable not set&quot; error
+	With _Component.CurrentController
+		If VarType(vSelection)  = V_STRING Then
+			Set oSelection = _ParseRange(vSelection).Cursor
+			If Not IsNull(oSelection) Then .select(oSelection)
+		Else
+			sType = oSess.UnoObjectType(vSelection)
+			Select Case sType
+				Case &quot;SwXTextRanges&quot;					&apos;	Argument is a multiple selection
+					For i = 0 To vSelection.Count - 1
+						If oSess.UnoObjectType(vSelection.getByIndex(i)) &lt;&gt; &quot;SwXTextRange&quot; Then GoTo Catch		&apos;	Do nothing
+					Next i
+					.select(vSelection)
+				Case &quot;SwXTextRange&quot;, &quot;SwXTextCursor&quot;, &quot;SwXTextTableCursor&quot;	&apos;	Argument is a simple selection (anchor/cursor)
+					.select(vSelection)
+				Case Else
+			End Select
+		End If
+	End With
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Property
+Catch:
+	GoTo Finally
+End Property	&apos;	SFDocuments.SF_Writer.CurrentSelection (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Fields() As Variant
+&apos;&apos;&apos;	Return the list of currently available fields as a zero-based array
+&apos;&apos;&apos;	Are considered only next field-types:
+&apos;&apos;&apos;		- user fields:		com.sun.star.text.textfield.User
+&apos;&apos;&apos;		- variable fields:	com.sun.star.text.textfield.SetExpression
+	Fields = _PropertyGet(&quot;Fields&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.Fields (get)
+
+REM -----------------------------------------------------------------------------
+Property Get Frames() As Variant
+&apos;&apos;&apos;	Return the list of currently available frames as a zero-based array
+	Frames = _PropertyGet(&quot;Frames&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.Frames (get)
 
 REM ===================================================================== METHODS
 
@@ -173,12 +307,10 @@ End Function	&apos;	SFDocuments.SF_Writer.Forms
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant _
-								, Optional ObjectName As Variant _
 								) As Variant
 &apos;&apos;&apos;	Return the actual value of the given property
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		PropertyName: the name of the property as a string
-&apos;&apos;&apos;		ObjectName: a sheet or range name
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The actual value of the property
 &apos;&apos;&apos;	Exceptions:
@@ -191,20 +323,16 @@ Const cstSubArgs = &quot;&quot;
 	GetProperty = Null
 
 Check:
-	If IsMissing(ObjectName) Or IsEmpty(ObjectName) Then ObjectName = &quot;&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
-		If Not ScriptForge.SF_Utils._Validate(ObjectName, &quot;ObjectName&quot;, V_STRING) Then GoTo Catch
 	End If
 
 Try:
 	&apos;	Superclass or subclass property ?
 	If ScriptForge.SF_Array.Contains([_Super].Properties(), PropertyName) Then
 		GetProperty = [_Super].GetProperty(PropertyName)
-	ElseIf Len(ObjectName) = 0 Then
-		GetProperty = _PropertyGet(PropertyName)
 	Else
-		GetProperty = _PropertyGet(PropertyName, ObjectName)
+		GetProperty = _PropertyGet(PropertyName)
 	End If
 
 Finally:
@@ -305,12 +433,16 @@ Public Function Properties() As Variant
 &apos;&apos;&apos;	Return the list or properties of the Writer class as an array
 
 	Properties = Array( _
-					&quot;CustomProperties&quot; _
+					&quot;Bookmarks&quot; _
+					, &quot;CurrentSelection&quot; _
+					, &quot;CustomProperties&quot; _
 					, &quot;Description&quot; _
 					, &quot;DocumentProperties&quot; _
 					, &quot;DocumentType&quot; _
 					, &quot;ExportFilters&quot; _
+					, &quot;Fields&quot; _
 					, &quot;FileSystem&quot; _
+					, &quot;Frames&quot; _
 					, &quot;ImportFilters&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
@@ -665,6 +797,310 @@ Finally:
 End Function	&apos;	SFDocuments.SF_Writer._IsStillAlive
 
 REM -----------------------------------------------------------------------------
+Private Function _ParseRange(psTextRange As String) As Object
+&apos;&apos;&apos;	Parse and validate a text range passed as a string
+&apos;&apos;&apos;	Syntax to parse:
+&apos;&apos;&apos;			[|]~ or &quot;SELECTION&quot; or &quot;SEL&quot;[|]
+&apos;&apos;&apos;			[|]BODY[|]
+&apos;&apos;&apos;			[|]FRAME!name[|]
+&apos;&apos;&apos;			BOOKMARK!name
+&apos;&apos;&apos;			FIELD!name
+&apos;&apos;&apos;			[|]SECTION!name[|]
+&apos;&apos;&apos;			TABLE!name!cell
+&apos;&apos;&apos;			[|]WORD±n[|]
+&apos;&apos;&apos;			[|]SENTENCE±n[|]
+&apos;&apos;&apos;			[|]PARAGRAPH±n or §±n[|]
+&apos;&apos;&apos;		A name must be surrounded with single or double quotes when it contains a space or a not alphanumeric character
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		An object of type _TextRange
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		WRITERRANGEERROR		&apos;	Text range could not be parsed to a valid location
+
+Dim oTextRange As Object				&apos;	Return value
+Dim bParsing As Boolean					&apos;	When True, parsing could identify the target
+Dim lSelects As Long					&apos;	Number of items in the current selection
+Dim sTarget As String					&apos;	Alias of _TextRange.Target
+Dim sString As String					&apos;	Work variable
+Dim sLeft1 As String					&apos;	The 1st character of sString
+Dim sSign As String						&apos;	+ or -
+Dim oColl As Object						&apos;	Collection of TargetObjects (bookmarks or frames or ...)
+Dim oItem As Object						&apos;	An item in the oColl collection
+Dim vNames As Variant					&apos;	Array of the available object names within a collection
+Dim oStr As Object						:	Set oStr = ScriptForge.SF_String
+Dim bMove As Boolean					&apos;	Return value of a cursor move
+Dim i As Long
+
+	&apos;	Reinitialize a new _TextRange object
+	Set oTextRange = New _TextRange
+	With oTextRange
+		Set .TargetObject = Nothing
+		.RangeString = &quot;&quot;		:	.Target = &quot;&quot;			:	.TargetName = &quot;&quot;	:	.TargetCell = &quot;&quot;
+		.Offset = 0				:	.StartPoint = False		:	.EndPoint = False
+		Set .Anchor = Nothing	:	Set .Text = Nothing		:	Set .Cursor = Nothing
+		.Location = &quot;&quot;
+	End With
+
+	&apos;	Identify the type of range with adequate regular expressions
+	With oTextRange
+		.RangeString = psTextRange
+		.StartPoint = ( Left(psTextRange, 1) = &quot;|&quot; )
+		.EndPoint = ( Right(psTextRange, 1) = &quot;|&quot; )
+
+		Select Case True
+		&apos;	Parsing is done with regular expressions because names may really contain any character, including &quot;ç&quot;
+
+			&apos;	Selection
+			Case oStr.IsRegex(psTextRange, &quot;\|?\s*(~|SEL|SELECTION)\s*\|?&quot;)
+				.Target = &quot;Selection&quot;
+				If _Component.CurrentSelection.ImplementationName = &quot;SwXTextRanges&quot; Then
+					lSelects = _Component.CurrentSelection.Count
+					If lSelects &gt; 0 Then
+						Set .Anchor = _Component.CurrentSelection.getByIndex(lSelects - 1)
+						If .StartPoint And Not .EndPoint Then
+							Set .Anchor = .Anchor.Start
+						ElseIf Not .StartPoint And .EndPoint Then
+							Set .Anchor = .Anchor.End
+						End If
+						Set .Text = .Anchor.Text
+						Set .Cursor = .Text.createTextCursorByRange(.Anchor)
+					End If
+				End If
+				If IsNull(.Cursor) Then .Location = _Component.CurrentSelection.ImplementationName
+
+			&apos;	WORD, SENTENCE, PARAGRAPH
+			Case oStr.IsRegex(psTextRange, &quot;\|?\s*(PARAGRAPH|§|SENTENCE|WORD)\s*([+-][0-9]+)?\s*\|?&quot;)
+				If InStr(psTextRange, &quot;+&quot;) &gt; 0 Then
+					sSign = &quot;+&quot;
+				ElseIf InStr(psTextRange, &quot;-&quot;) &gt; 0 Then
+					sSign= &quot;-&quot;
+				End If
+				If Len(sSign) &gt; 0 Then sTarget = Split(psTextRange, sSign)(0) Else sTarget = psTextRange
+				If InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;PARAGRAPH&quot;, 1) &gt; 0 Or InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;§&quot;, 1) &gt; 0 Then
+					.Target = &quot;Paragraph&quot;
+				ElseIf InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;SENTENCE&quot;, 1) &gt; 0 Then
+					.Target = &quot;Sentence&quot;
+				ElseIf InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;WORD&quot;, 1) &gt; 0 Then
+					.Target = &quot;Word&quot;
+				End If
+				
+				&apos;	Identify the offset
+				If Len(sSign) = 0 Then
+					.Offset = 0
+				Else
+					sString = Split(psTextRange, sSign)(1)
+					If .EndPoint Then sString = Left(sString, Len(sString) - 1)
+					.Offset = CLng(sString) * Iif(sSign = &quot;+&quot;, 1, -1)
+				End If
+
+				&apos;	Build the cursor pointing at the current selection
+				If _Component.CurrentSelection.ImplementationName = &quot;SwXTextRanges&quot; Then
+					lSelects = _Component.CurrentSelection.Count
+					If lSelects &gt; 0 Then
+						Set .Anchor = _Component.CurrentSelection.getByIndex(lSelects - 1)
+						Set .Text = .Anchor.Text
+						Set .Cursor = .Text.createTextCursorByRange(.Anchor)
+					End If
+				End If
+				If IsNull(.Cursor) Then
+					.Location = _Component.CurrentSelection.ImplementationName
+				Else
+					&apos;	Move the cursor to the requested area
+					With .Cursor
+						Select Case oTextRange.Target
+							Case &quot;Word&quot;
+								bMove = .gotoStartOfWord(False)
+								If bMove Then
+									For i = 1 To Abs(oTextRange.Offset)
+										If sSign = &quot;+&quot; Then bMove = .gotoNextWord(False) Else bMove = .gotoPreviousWord(False)
+										If sSign = &quot;+&quot; Then
+											If Not bMove Then Exit For
+											If .isEndOfSentence() Then i = i - 1	&apos;	Loop to do once more
+										Else
+											bMove = .goLeft(1, False)	&apos;	Additional trial to bypass some locks (tabs, list items, ... ?)
+											If Not bMove Then Exit For
+										End If
+									Next i
+								End If
+								&apos;	Cursor is always at the start of a word, move it when necessary
+								If Not oTextRange.StartPoint And oTextRange.EndPoint Then
+									.gotoEndOfWord(False)
+								ElseIf oTextRange.StartPoint = oTextRange.EndPoint Then
+									.gotoEndOfWord(True)
+								End If
+							Case &quot;Sentence&quot;
+								bMove = .gotoStartOfSentence(False)
+								If bMove Then
+									For i = 1 To Abs(oTextRange.Offset)
+										If sSign = &quot;+&quot; Then bMove = .gotoNextSentence(False) Else bMove = .gotoPreviousSentence(False)
+										If sSign = &quot;+&quot; Then
+											If .isEndOfParagraph() Then bMove = .goRight(1, False)
+										Else
+											bMove = .goLeft(1, False)	&apos;	Additional trial to bypass some locks (tabs, list items, ... ?)
+											If .isStartOfParagraph() Then bMove = .goLeft(1, False)
+										End If
+										If Not bMove Then Exit For
+									Next i
+								End If
+								&apos;	Cursor is always at the start of a sentence, move it when necessary
+								If Not oTextRange.StartPoint And oTextRange.EndPoint Then
+									.gotoEndOfSentence(False)
+								ElseIf oTextRange.StartPoint = oTextRange.EndPoint Then
+									.gotoEndOfSentence(True)
+								End If
+							Case &quot;Paragraph&quot;
+								bMove = .gotoStartOfParagraph(False)
+								If bMove Then
+									For i = 1 To Abs(oTextRange.Offset)
+										If sSign = &quot;+&quot; Then bMove = .gotoNextParagraph(False) Else bMove = .gotoPreviousParagraph(False)
+										If sSign = &quot;+&quot; Then
+											If .isEndOfParagraph() Then bMove = .goRight(1, False)
+										Else
+											bMove = .goLeft(1, False)	&apos;	Additional trial to bypass some locks (tabs, list items, ... ?)
+											If .isStartOfParagraph() Then bMove = .goLeft(1, False)
+										End If
+										If Not bMove Then Exit For
+									Next i
+								End If
+								&apos;	Cursor is always at the start of a Paragraph, move it when necessary
+								If Not oTextRange.StartPoint And oTextRange.EndPoint Then
+									.gotoEndOfParagraph(False)
+								ElseIf oTextRange.StartPoint = oTextRange.EndPoint Then
+									.gotoEndOfParagraph(True)
+								End If
+						End Select
+					End With
+				End If
+
+			&apos;	Bookmarks, Fields, Frames, Sections
+			Case oStr.IsRegex(psTextRange, &quot;\|?\s*(BOOKMARK|FIELD|FRAME|SECTION)!([\w\s]+|&apos;[^&apos;]+&apos;|&quot;&quot;[^&quot;&quot;]+&quot;&quot;)\|?&quot;)
+				sTarget = Split(psTextRange, &quot;!&quot;)(0)
+				If InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;BOOKMARK&quot;, 1) &gt; 0 Then
+					.Target = &quot;Bookmark&quot;
+				ElseIf InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;FIELD&quot;, 1) &gt; 0 Then
+					.Target = &quot;Field&quot;
+				ElseIf InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;FRAME&quot;, 1) &gt; 0 Then
+					.Target = &quot;Frame&quot;
+				ElseIf InStr(Iif(.StartPoint, 2, 1), sTarget, &quot;SECTION&quot;, 1) &gt; 0 Then
+					.Target = &quot;Section&quot;
+				End If
+
+				&apos;	Identify section or frame or bookmark or field by its name
+				sString = Split(psTextRange, &quot;!&quot;)(1)
+				If .EndPoint Then sString = Left(sString, Len(sString) - 1)
+				sLeft1 = Left(sString, 1)
+				If (sLeft1 = &quot;&quot;&quot;&quot; Or sLeft1 = &quot;&apos;&quot;) And Len(sString) &gt; 2 Then .TargetName = Trim(Mid(sString, 2, Len(sString) - 2)) Else .TargetName = Trim(sString)
+				Select Case .Target
+					Case &quot;Bookmark&quot;		:	Set oColl = _Component.getBookmarks()
+					Case &quot;Field&quot;		:	Set oColl = _Component.getTextFieldMasters()
+											.TargetName = &quot;com.sun.star.text.fieldmaster.User.&quot; &amp; .TargetName
+											If Not oColl.hasByName(.TargetName) Then .TargetName = Replace(.TargetName, &quot;.User.&quot;, &quot;.SetExpression.&quot;)
+					Case &quot;Frame&quot;		:	Set oColl = _Component.getTextFrames()
+					Case &quot;Section&quot;		:	Set oColl = _Component.getTextSections()
+				End Select
+				If .Target = &quot;Field&quot; Then vNames = Fields() Else vNames =  oColl.getElementNames()
+				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames) Then GoTo Finally
+				Set .TargetObject = oColl.getByName(.TargetName)
+
+				&apos;	Set text, anchor and cursor: order varies depending on target
+				Select Case .Target
+					Case &quot;Bookmark&quot;, &quot;Field&quot;, &quot;Section&quot;
+						If .Target = &quot;Field&quot; Then Set .Anchor = .TargetObject.DependentTextFields(0).Anchor Else Set .Anchor = .TargetObject.Anchor
+						If .StartPoint And Not .EndPoint Then
+							Set .Anchor = .Anchor.Start
+						ElseIf Not .StartPoint And .EndPoint Then
+							Set .Anchor = .Anchor.End
+						End If
+						Set .Text = .Anchor.Text
+						Set .Cursor = .Text.createTextCursorByRange(.Anchor)
+					Case &quot;Frame&quot;
+						Set .Text = .TargetObject.Start.Text
+						Set .Anchor = .Text.Anchor
+						Set .Cursor = .Text.createTextCursor()
+						If .StartPoint And Not .EndPoint Then
+							.Cursor.gotoStart(False)
+						ElseIf Not .StartPoint And .EndPoint Then
+							.Cursor.gotoEnd(False)
+						Else
+							.Cursor.gotoStart(False)
+							.Cursor.gotoEnd(True)
+						End If
+					Case Else
+				End Select
+
+			&apos;	Body
+			Case oStr.IsRegex(psTextRange, &quot;\|0\s*?BODY\s*\|?&quot;)
+				Set .Text = _Component.Text
+				Set .Anchor = .Text.Start
+				Set .Cursor = .Text.createTextCursor()
+				If .StartPoint And Not .EndPoint Then
+					.Cursor.gotoStart(False)
+				ElseIf Not .StartPoint And .EndPoint Then
+					Set .Anchor = .Text.End
+					.Cursor.gotoEnd(False)
+				Else
+					.Cursor.gotoStart(False)
+					.Cursor.gotoEnd(True)
+				End If
+
+			&apos;	Table cell				
+			Case oStr.IsRegex(psTextRange, &quot;\|?\s*TABLE!([\w\s]+|&apos;[^&apos;]+&apos;|&quot;&quot;[^&quot;&quot;]+&quot;&quot;)![\s]*[A-Za-z]+[1-9][0-9]*\s*\|?&quot;)
+				.Target = &quot;TableCell&quot;
+				&apos;	Identify table by its name
+				sString = Split(psTextRange, &quot;!&quot;)(1)
+				sLeft1 = Left(sString, 1)
+				If (sLeft1 = &quot;&quot;&quot;&quot; Or sLeft1 = &quot;&apos;&quot;) And Len(sString) &gt; 2 Then .TargetName = Trim(Mid(sString, 2, Len(sString) - 2)) Else .TargetName = Trim(sString)
+				Set oColl = _Component.getTextTables()
+				vNames =  oColl.getElementNames()
+				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames) Then GoTo Finally
+				Set oItem = oColl.getByName(.TargetName)
+				.TargetCell = Split(psTextRange, &quot;!&quot;)(2)
+				&apos;	Set text, anchor and cursor
+				Set .TargetObject = oItem.getCellByName(.TargetCell)
+				If IsNull(.TargetObject) Then GoTo CatchRange	&apos;	The given range is out of the scope of the table
+				Set .Text = .TargetObject.Text
+				Set .Anchor = .Text.Start
+				Set .Cursor = .Text.createTextCursor()
+				If .StartPoint And Not .EndPoint Then
+					.Cursor.gotoStart(False)
+				ElseIf Not .StartPoint And .EndPoint Then
+					Set .Anchor = .Text.End
+					.Cursor.gotoEnd(False)
+				Else
+					.Cursor.gotoStart(False)
+					.Cursor.gotoEnd(True)
+				End If
+
+			Case Else
+				GoTo CatchRange
+		End Select
+
+		&apos;	Determine Location if not yet done
+		If .Location = &quot;&quot; And Not IsNull(.Text) Then
+			Select Case .Text.ImplementationName
+				Case &quot;SwXBodyText&quot;		:	.Location = &quot;Body&quot;
+				Case &quot;SwXTextFrame&quot;		:	.Location = &quot;Frame&quot;
+				Case &quot;SwXCell&quot;			:	.Location = &quot;Cell&quot;
+				Case &quot;SwXHeadFootText&quot;	:	.Location = &quot;Header/Footer&quot;
+				Case &quot;SwXFootnote&quot;		:	.Location = &quot;Footnote/Endnote&quot;
+				Case &quot;SwXShape&quot;			:	.Location = &quot;Shape&quot;
+				Case Else				:	.Location = .Text.ImplementationName
+			End Select
+		End If
+
+	End With
+
+Finally:
+	Set _ParseRange = oTextRange
+	Exit Function
+CatchError:
+	ScriptForge.SF_Exception.Clear()
+CatchRange:
+	ScriptForge.SF_Exception.RaiseFatal(WRITERRANGEERROR, &quot;TextRange&quot;, psTextRange _
+				, &quot;Document&quot;, [_Super]._FileIdent())
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Writer._ParseRange
+
+REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String _
 								, Optional ByVal pvArg As Variant _
 								) As Variant
@@ -672,6 +1108,11 @@ Private Function _PropertyGet(Optional ByVal psProperty As String _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psProperty: the name of the property
 
+Dim oFieldMasters As Object		&apos;	SwXTextFieldMasters
+Dim vMasters As Variant			&apos;	Array of SwXTextFieldMasters
+Dim oMaster As Object			&apos;	A single SwXTextFieldMasters
+Dim sField As String			&apos;	A text field full name
+Dim vFieldNames As Variant		&apos;	Array of field names as strings
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -681,7 +1122,29 @@ Const cstSubArgs = &quot;&quot;
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 	If Not _IsStillAlive() Then GoTo Finally
 
-	Select Case psProperty
+	Select Case UCase(psProperty)
+		Case UCase(&quot;Bookmarks&quot;)
+			_PropertyGet = _Component.getBookmarks().getElementNames()
+		Case UCase(&quot;CurrentSelection&quot;)
+			_PropertyGet = _Component.CurrentSelection
+		Case UCase(&quot;Fields&quot;)
+			vFieldNames = Array()
+			Set oFieldMasters = _Component.getTextFieldMasters()
+			vMasters = oFieldMasters.getElementNames()
+			For Each sField In vMasters
+				If ScriptForge.SF_String.StartsWith(sField, &quot;com.sun.star.text.fieldmaster.User&quot;) Then
+					Set oMaster = oFieldMasters.getByName(sField)
+					vFieldNames = ScriptForge.SF_Array.InsertSorted(vFieldNames, oMaster.Name, CaseSensitive := True)
+				ElseIf ScriptForge.SF_String.StartsWith(sField, &quot;com.sun.star.text.fieldmaster.SetExpression&quot;) Then
+					Set oMaster = oFieldMasters.getByName(sField)
+					If oMaster.SubType = com.sun.star.text.SetVariableType.VAR Then
+						vFieldNames = ScriptForge.SF_Array.InsertSorted(vFieldNames, oMaster.Name, CaseSensitive := True)
+					End If
+				End If
+			Next sField
+			_PropertyGet = vFieldNames
+		Case UCase(&quot;Frames&quot;)
+			_PropertyGet = _Component.getTextFrames().getElementNames()
 		Case Else
 			_PropertyGet = Null
 	End Select
