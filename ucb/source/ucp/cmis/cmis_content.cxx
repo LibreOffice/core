@@ -374,7 +374,7 @@ namespace cmis
                     {
                         m_pSession = libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
+                            rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, std::move(oauth2Data) );
 
                         if ( m_pSession == nullptr )
                         {
