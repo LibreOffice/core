@@ -1740,14 +1740,15 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             uno::Reference< beans::XPropertySet > xRangeProperties;
             if ( m_xStartingRange.is() )
             {
-                xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY_THROW );
+                xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY );
             }
             else
             {
                 //set the start value at the beginning of the document
-                xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+                xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY );
             }
-            xRangeProperties->setPropertyValue( getPropertyName( PROP_BREAK_TYPE ), uno::Any( style::BreakType_COLUMN_BEFORE ) );
+            if (xRangeProperties)
+                xRangeProperties->setPropertyValue( getPropertyName( PROP_BREAK_TYPE ), uno::Any( style::BreakType_COLUMN_BEFORE ) );
         }
         catch ( const uno::Exception& ) {}
     }

@@ -779,8 +779,12 @@ static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
             try
             {
                 uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i),
-                                                          uno::UNO_QUERY_THROW);
-                uno::Reference<text::XTextRange> xAnchor(xShape->getAnchor(), uno::UNO_SET_THROW);
+                                                          uno::UNO_QUERY);
+                if (!xShape)
+                    continue;
+                uno::Reference<text::XTextRange> xAnchor(xShape->getAnchor());
+                if (!xAnchor)
+                    continue;
                 if (xCompare->compareRegionStarts(xAnchor, xRange) <= 0
                     && xCompare->compareRegionEnds(xAnchor, xRange) >= 0)
                 {

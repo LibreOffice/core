@@ -199,8 +199,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                                 u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr,
                                 xContext);
 
-        uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );
-        if (xModel)
+        uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY);
+        if (xImporter && xModel)
             xImporter->importProperties(m_pImpl->m_xDocumentStorage,
                                         xModel->getDocumentProperties());
     }
