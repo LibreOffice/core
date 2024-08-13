@@ -2045,11 +2045,13 @@ SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
 }
 void SwXStyle::PrepareStyleBase(SwStyleBase_Impl& rBase)
 {
-    SfxStyleSheetBase* pBase(GetStyleSheetBase());
-    if(!pBase)
-        throw uno::RuntimeException();
     if(!rBase.getNewBase().is())
+    {
+        SfxStyleSheetBase* pBase(GetStyleSheetBase());
+        if(!pBase)
+            throw uno::RuntimeException();
         rBase.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    }
 }
 
 template<>
