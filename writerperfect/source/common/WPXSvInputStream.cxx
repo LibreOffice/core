@@ -369,7 +369,9 @@ Reference<XInputStream> ZipStorageImpl::createStream(const OUString& rPath)
 
     try
     {
-        const Reference<XInputStream> xInputStream(mxContainer->getByName(rPath), UNO_QUERY_THROW);
+        const Reference<XInputStream> xInputStream(mxContainer->getByName(rPath), UNO_QUERY);
+        if (!xInputStream)
+            return xStream;
         const Reference<XSeekable> xSeekable(xInputStream, UNO_QUERY);
 
         if (xSeekable.is())

@@ -90,10 +90,13 @@ ScVbaUserForm::Show(  )
 
     try
     {
-        uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY_THROW );
-        m_xDialog = nullptr;
-        xComp->dispose();
-        mbDispose = false;
+        uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY );
+        if (xComp)
+        {
+            m_xDialog = nullptr;
+            xComp->dispose();
+            mbDispose = false;
+        }
     }
     catch( uno::Exception& )
     {

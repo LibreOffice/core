@@ -301,21 +301,24 @@ ScVbaControl::getControlSource()
 // dependent parts
     OUString sControlSource;
     uno::Reference< form::binding::XBindableValue > xBindable( m_xProps, uno::UNO_QUERY );
-    if ( xBindable.is() )
+    if ( !xBindable )
+        return sControlSource;
+    try
     {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xFac( m_xModel, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellAddressConversion"_ustr ), uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySet > xProps( xBindable->getValueBinding(), uno::UNO_QUERY_THROW );
-            table::CellAddress aAddress;
-            xProps->getPropertyValue( u"BoundCell"_ustr ) >>= aAddress;
-            xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
-            xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sControlSource;
-        }
-        catch(const uno::Exception&)
-        {
-        }
+        uno::Reference< lang::XMultiServiceFactory > xFac( m_xModel, uno::UNO_QUERY_THROW );
+        if ( !xFac )
+            return sControlSource;
+        uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellAddressConversion"_ustr ), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProps( xBindable->getValueBinding(), uno::UNO_QUERY);
+        if ( !xProps )
+            return sControlSource;
+        table::CellAddress aAddress;
+        xProps->getPropertyValue( u"BoundCell"_ustr ) >>= aAddress;
+        xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
+        xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sControlSource;
+    }
+    catch(const uno::Exception&)
+    {
     }
     return sControlSource;
 }
@@ -364,22 +367,25 @@ ScVbaControl::getRowSource()
 {
     OUString sRowSource;
     uno::Reference< form::binding::XListEntrySink > xListSink( m_xProps, uno::UNO_QUERY );
-    if ( xListSink.is() )
+    if ( !xListSink )
+        return sRowSource;
+    try
     {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xFac( m_xModel, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellRangeAddressConversion"_ustr ), uno::UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xFac( m_xModel, uno::UNO_QUERY );
+        if ( !xFac )
+            return sRowSource;
+        uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( u"com.sun.star.table.CellRangeAddressConversion"_ustr ), uno::UNO_QUERY );
 
-            uno::Reference< beans::XPropertySet > xProps( xListSink->getListEntrySource(), uno::UNO_QUERY_THROW );
-            table::CellRangeAddress aAddress;
-            xProps->getPropertyValue( u"CellRange"_ustr ) >>= aAddress;
-            xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
-            xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sRowSource;
-        }
-        catch(const uno::Exception&)
-        {
-        }
+        uno::Reference< beans::XPropertySet > xProps( xListSink->getListEntrySource(), uno::UNO_QUERY );
+        if ( !xProps )
+            return sRowSource;
+        table::CellRangeAddress aAddress;
+        xProps->getPropertyValue( u"CellRange"_ustr ) >>= aAddress;
+        xConvertor->setPropertyValue( u"Address"_ustr , uno::Any( aAddress ) );
+        xConvertor->getPropertyValue( u"XLA1Representation"_ustr ) >>= sRowSource;
+    }
+    catch(const uno::Exception&)
+    {
     }
     return sRowSource;
 }

@@ -142,7 +142,9 @@ bool WpftLoader::impl_load()
         }
 
         const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter,
-                                                                           uno::UNO_QUERY_THROW);
+                                                                           uno::UNO_QUERY);
+        if (!xDetector)
+            return false;
 
         const OUString aTypeName(xDetector->detect(aDescriptor));
         if (aTypeName.isEmpty())

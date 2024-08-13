@@ -59,25 +59,28 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, std::u
     {
         const uno::Reference<sdbc::XResultSet> xResultSet(
             rContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
-        if (xResultSet->first())
+        if (!xResultSet->first())
+            return xInputStream;
+
+        const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY);
+        if (!xContentAccess)
+            return xInputStream;
+        const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY);
+        if (!xRow)
+            return xInputStream;
+        do
         {
-            const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet,
-                                                                     uno::UNO_QUERY_THROW);
-            const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
-            do
+            const OUString aTitle(xRow->getString(1));
+            if (aTitle == rName)
             {
-                const OUString aTitle(xRow->getString(1));
-                if (aTitle == rName)
-                {
-                    const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
-                    ucbhelper::Content aSubContent(xSubContent,
-                                                   uno::Reference<ucb::XCommandEnvironment>(),
-                                                   comphelper::getProcessComponentContext());
-                    xInputStream = aSubContent.openStream();
-                    break;
-                }
-            } while (xResultSet->next());
-        }
+                const uno::Reference<ucb::XContent> xSubContent(xContentAccess->queryContent());
+                ucbhelper::Content aSubContent(xSubContent,
+                                               uno::Reference<ucb::XCommandEnvironment>(),
+                                               comphelper::getProcessComponentContext());
+                xInputStream = aSubContent.openStream();
+                break;
+            }
+        } while (xResultSet->next());
     }
     catch (const uno::RuntimeException&)
     {

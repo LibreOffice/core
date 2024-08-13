@@ -1078,7 +1078,9 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     uno::Reference< XHelperInterface > xIf;
     try
     {
-        uno::Reference< beans::XPropertySet > xDocProps( xModel, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xDocProps( xModel, uno::UNO_QUERY );
+        if (!xDocProps)
+            return xIf;
         OUString aCodeName;
         xDocProps->getPropertyValue( u"CodeName"_ustr ) >>= aCodeName;
         xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );

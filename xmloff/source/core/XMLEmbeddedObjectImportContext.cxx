@@ -123,8 +123,9 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 
     try
     {
-        Reference < XModifiable2 > xModifiable2( rComp, UNO_QUERY_THROW );
-        xModifiable2->disableSetModified();
+        Reference < XModifiable2 > xModifiable2( rComp, UNO_QUERY );
+        if (xModifiable2)
+            xModifiable2->disableSetModified();
     }
     catch( Exception& )
     {
@@ -243,9 +244,12 @@ void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 nElement)
 
     try
     {
-        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
-        xModifiable2->enableSetModified();
-        xModifiable2->setModified( true ); // trigger new replacement image generation
+        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY );
+        if (xModifiable2)
+        {
+            xModifiable2->enableSetModified();
+            xModifiable2->setModified( true ); // trigger new replacement image generation
+        }
     }
     catch( Exception& )
     {

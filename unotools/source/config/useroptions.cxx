@@ -121,8 +121,9 @@ void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource
 {
     try
     {
-        uno::Reference<util::XChangesNotifier> xChgNot(rSource.Source, uno::UNO_QUERY_THROW);
-        xChgNot->removeChangesListener(this);
+        uno::Reference<util::XChangesNotifier> xChgNot(rSource.Source, uno::UNO_QUERY);
+        if (xChgNot)
+            xChgNot->removeChangesListener(this);
     }
     catch (uno::Exception&)
     {
