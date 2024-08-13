@@ -423,7 +423,7 @@ public:
 };
 
 /// UNO API wrapper for SwTableLines.
-class SwXTableRows final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXTableRows final : public cppu::WeakImplHelper
 <
     css::table::XTableRows,
     css::lang::XServiceInfo
