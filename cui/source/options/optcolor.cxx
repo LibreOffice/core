@@ -127,6 +127,7 @@ const vEntryInfo[] =
     { Group_Writer,  IDS_CB(section), std::u16string_view(u"/WriterSectionBoundaries") },
     { Group_Writer,  IDS(hdft), std::u16string_view(u"/WriterHeaderFooterMark") },
     { Group_Writer,  IDS(pagebreak), std::u16string_view(u"/WriterPageBreaks") },
+    { Group_Writer,  IDS(nonprintchars), std::u16string_view(u"/WriterNonPrintChars") },
 
     { Group_Html,    IDS(sgml), std::u16string_view(u"/HTMLSGML") },
     { Group_Html,    IDS(htmlcomment), std::u16string_view(u"/HTMLComment") },

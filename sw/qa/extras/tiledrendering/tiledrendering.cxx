@@ -3029,7 +3029,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
                 // if its color is not white, black or non-printing character color
                 if ( aColor == aColor2 && aColor == aColor3 && aColor == aColor4 &&
                         aColor != COL_WHITE && aColor != COL_BLACK &&
-                        aColor != NON_PRINTING_CHARACTER_COLOR )
+                        aColor != Color(0x268BD2) )
                 {
                     bHasRedlineColor = true;
                     break;

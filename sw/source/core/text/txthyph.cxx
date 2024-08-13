@@ -455,7 +455,7 @@ void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
             aMarkerPor.SetAscent(GetAscent());
 
             Color colorBackup = aInf.GetFont()->GetColor();
-            aInf.GetFont()->SetColor(NON_PRINTING_CHARACTER_COLOR);
+            aInf.GetFont()->SetColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
             aInf.DrawText(aMarkerPor, TextFrameIndex(aMarker.getLength()), true);
             aInf.GetFont()->SetColor(colorBackup);
         }

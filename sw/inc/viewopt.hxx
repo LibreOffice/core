@@ -218,6 +218,7 @@ struct SwViewColors
             && m_aFieldShadingsColor == rOther.m_aFieldShadingsColor
             && m_aSectionBoundColor == rOther.m_aSectionBoundColor
             && m_aPageBreakColor == rOther.m_aPageBreakColor
+            && m_aNonPrintingCharacterColor == rOther.m_aNonPrintingCharacterColor
             && m_aScriptIndicatorColor == rOther.m_aScriptIndicatorColor
             && m_aShadowColor == rOther.m_aShadowColor
             && m_aHeaderFooterMarkColor == rOther.m_aHeaderFooterMarkColor
@@ -239,6 +240,7 @@ struct SwViewColors
     Color m_aFieldShadingsColor;
     Color m_aSectionBoundColor;
     Color m_aPageBreakColor;
+    Color m_aNonPrintingCharacterColor;
     Color m_aScriptIndicatorColor;
     Color m_aShadowColor;
     Color m_aHeaderFooterMarkColor;
@@ -848,6 +850,7 @@ public:
     const Color& GetFieldShadingsColor() const;
     const Color& GetSectionBoundColor() const;
     const Color& GetPageBreakColor() const;
+    const Color& GetNonPrintingCharacterColor() const;
     const Color& GetHeaderFooterMarkColor() const;
 
     bool IsAppearanceFlag(ViewOptFlags nFlag) const;

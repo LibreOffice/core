@@ -684,7 +684,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
                     if ( !lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt ) && bHasHiddenNum )
-                        pNumFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
+                        pNumFnt->SetColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );

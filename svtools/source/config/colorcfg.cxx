@@ -130,6 +130,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/WriterSectionBoundaries")    ,true },
         { std::u16string_view(u"/WriterHeaderFooterMark")    ,false },
         { std::u16string_view(u"/WriterPageBreaks")    ,false },
+        { std::u16string_view(u"/WriterNonPrintChars")    ,false },
         { std::u16string_view(u"/HTMLSGML")        ,false },
         { std::u16string_view(u"/HTMLComment")     ,false },
         { std::u16string_view(u"/HTMLKeyword")     ,false },
@@ -420,6 +421,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTGRAY,    Color(0x666666) }, // WRITERSECTIONBOUNDARIES
         { Color(0x0369a3),  Color(0xB4C7DC) }, // WRITERHEADERFOOTERMARK
         { COL_BLUE,         Color(0x729FCF) }, // WRITERPAGEBREAKS
+        { Color(0x268BD2),  Color(0x268BD2) }, // WRITERNONPRINTCHARS
         { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // HTMLSGML
         { COL_LIGHTGREEN,   COL_LIGHTGREEN  }, // HTMLCOMMENT
         { COL_LIGHTRED,     COL_LIGHTRED    }, // HTMLKEYWORD

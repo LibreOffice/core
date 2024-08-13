@@ -482,7 +482,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=9 -->
+          <!-- n-columns=2 n-rows=10 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -819,6 +819,39 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="nonprintchars">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="yes" context="colorconfigwin|nonprintchars">Non-printable characters</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">nonprintchars_lb</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="nonprintchars_lb">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">end</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+                <property name="label" translatable="no"></property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
           </object>

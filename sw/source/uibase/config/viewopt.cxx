@@ -61,6 +61,7 @@ SwViewColors::SwViewColors() :
     m_aFieldShadingsColor(COL_LIGHTGRAY),
     m_aSectionBoundColor(COL_LIGHTGRAY),
     m_aPageBreakColor(COL_BLUE),
+    m_aNonPrintingCharacterColor(Color(0x268bd2)),
     m_aScriptIndicatorColor(COL_GREEN),
     m_aShadowColor(COL_GRAY),
     m_aHeaderFooterMarkColor(COL_BLUE),
@@ -132,6 +133,9 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     m_aPageBreakColor = aValue.nColor;
+
+    aValue = rConfig.GetColorValue(svtools::WRITERNONPRINTCHARS);
+    m_aNonPrintingCharacterColor = aValue.nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
     m_aHeaderFooterMarkColor = aValue.nColor;
@@ -539,6 +543,11 @@ const Color& SwViewOption::GetSectionBoundColor() const
 const Color& SwViewOption::GetPageBreakColor() const
 {
     return m_aColorConfig.m_aPageBreakColor;
+}
+
+const Color& SwViewOption::GetNonPrintingCharacterColor() const
+{
+    return m_aColorConfig.m_aNonPrintingCharacterColor;
 }
 
 const Color& SwViewOption::GetHeaderFooterMarkColor() const

@@ -206,7 +206,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
 
     if ( pRedlineText )
     {
-        m_pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
+        m_pFnt->SetColor(m_pSh->GetViewOptions()->GetNonPrintingCharacterColor());
         // don't strike out text in Insertions In Margin mode
         if ( !m_pSh->GetViewOptions()->IsShowChangesInMargin2() )
             m_pFnt->SetStrikeout( STRIKEOUT_SINGLE );
@@ -630,7 +630,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                             pFnt->SetUnderline( LINESTYLE_NONE );
                     }
 
-                    pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
+                    pFnt->SetColor(pSh->GetViewOptions()->GetNonPrintingCharacterColor());
                     pFnt->DrawText_( aDrawInf );
                 }
             }

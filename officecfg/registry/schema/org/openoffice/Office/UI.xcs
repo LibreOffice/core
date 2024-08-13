@@ -300,6 +300,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="WriterNonPrintChars">
+        <info>
+          <desc>Specifies the settings for the non-printable characters in Writer.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the non-printable characters.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="HTMLSGML">
         <info>
           <desc>Specifies the settings used for SGML in HTML documents.</desc>

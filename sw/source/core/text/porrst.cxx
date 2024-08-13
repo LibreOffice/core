@@ -102,7 +102,7 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     }
 
-    aFont.SetColor( NON_PRINTING_CHARACTER_COLOR );
+    aFont.SetColor( SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor() );
     aFont.SetStrikeout( STRIKEOUT_NONE );
     aFont.SetUnderline( LINESTYLE_NONE );
     const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
@@ -697,7 +697,7 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     }
 
     rTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
-    rTmpFont.SetColor( NON_PRINTING_CHARACTER_COLOR );
+    rTmpFont.SetColor( SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor() );
     const sal_uInt16 nProp = 40;
     rTmpFont.SetProportion( nProp );  // a smaller font
 

@@ -981,7 +981,7 @@ void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor ) const
     const sal_Unicode cChar = GetTextFrame()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
     const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
 
-    lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
+    lcl_DrawSpecial( *this, rPor, aRect, SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor(), cChar, nOptions );
 }
 
 void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
@@ -1013,13 +1013,13 @@ void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
             aTextRect.AddLeft(30);
         if (eClear == SwLineBreakClear::RIGHT || eClear == SwLineBreakClear::ALL)
             aTextRect.AddRight(-30);
-        lcl_DrawSpecial( *this, rPor, aTextRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
+        lcl_DrawSpecial( *this, rPor, aTextRect, SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor(), cChar, nOptions );
 
         if (eClear != SwLineBreakClear::NONE)
         {
             // Paint indicator if this clear is left/right/all.
             m_pOut->Push(vcl::PushFlags::LINECOLOR);
-            m_pOut->SetLineColor(NON_PRINTING_CHARACTER_COLOR);
+            m_pOut->SetLineColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
             if (eClear != SwLineBreakClear::RIGHT)
                 m_pOut->DrawLine(aRect.BottomLeft(), aRect.TopLeft());
             if (eClear != SwLineBreakClear::LEFT)

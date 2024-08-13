@@ -54,8 +54,6 @@ class SwWrtShell;
 class SwNode;
 class SwFlyAtContentFrame;
 
-#define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
-
 /// a clone of SwInterHyphInfo, but with TextFrameIndex instead of node index
 class SwInterHyphInfoTextFrame
 {
