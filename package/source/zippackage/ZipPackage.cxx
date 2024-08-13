@@ -162,6 +162,31 @@ bool ZipPackage::isLocalFile() const
     return comphelper::isFileUrl(m_aURL);
 }
 
+// note: don't check for StorageFormats::ZIP, it breaks signing!
+void ZipPackage::checkZipEntriesWithDD()
+{
+    if (!m_bForceRecovery)
+    {
+        std::unique_ptr<ZipEnumeration> entries{m_pZipFile->entries()};
+        while (entries->hasMoreElements())
+        {
+            ZipEntry const& rEntry{*entries->nextElement()};
+            if ((rEntry.nFlag & 0x08) != 0 && rEntry.nMethod == STORED)
+            {
+                uno::Reference<XPropertySet> xStream;
+                getByHierarchicalName(rEntry.sPath) >>= xStream;
+                if (!xStream->getPropertyValue("WasEncrypted").get<bool>())
+                {
+                    SAL_INFO("package", "entry STORED with data descriptor but not encrypted: \"" << rEntry.sPath << "\"");
+                    throw ZipIOException(
+                        THROW_WHERE
+                        "entry STORED with data descriptor but not encrypted");
+                }
+            }
+        }
+    }
+}
+
 void ZipPackage::parseManifest()
 {
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
@@ -361,6 +386,8 @@ void ZipPackage::parseManifest()
 
                         bManifestParsed = true;
                     }
+
+                    checkZipEntriesWithDD(); // check before removing entries!
 
                     // now hide the manifest.xml file from user
                     xMetaInfFolder->removeByName( sManifest );
@@ -597,7 +624,10 @@ void ZipPackage::getZipFileContents()
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
         parseManifest();
     else if ( m_nFormat == embed::StorageFormats::OFOPXML )
+    {
         parseContentType();
+        checkZipEntriesWithDD();
+    }
 }
 
 void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
