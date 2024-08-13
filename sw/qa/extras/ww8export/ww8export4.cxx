@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
@@ -440,6 +441,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
     // i.e. the picture has moved from the second column to the first column
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(nFlyLeft), static_cast<double>(nFlyLeftAfter), 2.0);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160301)
+{
+    // Without the fix in place, fields in the test doc are imported as DocInformation
+    // with the content set to the variable name
+    createSwDoc("tdf160301.doc");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // Without the fix in place this fails with
+    // Expected: Jeff Smith
+    // Actual:   FullName
+    CPPUNIT_ASSERT_EQUAL(u"Jeff Smith"_ustr, xField->getPresentation(false));
+    // Without the fix in place this fails with
+    // Expected: User Field FullName = Jeff Smith
+    // Actual:   DocInformation:FullName
+    CPPUNIT_ASSERT_EQUAL(u"User Field FullName = Jeff Smith"_ustr, xField->getPresentation(true));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
