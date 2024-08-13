@@ -442,7 +442,7 @@ private:
     const SwPageDesc* m_pOldPageDesc;
     rtl::Reference<SwDocStyleSheet> m_xNewBase;
     SfxItemSet* m_pItemSet;
-    std::unique_ptr<SfxItemSet> m_pMyItemSet;
+    std::optional<SfxItemSet> m_oMyItemSet;
     OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
 public:
@@ -474,8 +474,8 @@ public:
         assert(m_xNewBase.is());
         if(!m_pItemSet)
         {
-            m_pMyItemSet.reset(new SfxItemSet(m_xNewBase->GetItemSet()));
-            m_pItemSet = m_pMyItemSet.get();
+            m_oMyItemSet.emplace(m_xNewBase->GetItemSet());
+            m_pItemSet = &*m_oMyItemSet;
 
             // set parent style to have the correct XFillStyle setting as XFILL_NONE
             if(!m_pItemSet->GetParent() && m_pParentStyle)
