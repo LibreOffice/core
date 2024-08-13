@@ -2990,7 +2990,7 @@ void BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringma
         rMap[u"role"_ustr] = sProperty;
 }
 
-void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OUString &rID)
+void BuilderBase::handleRow(xmlreader::XmlReader& reader, const OUString& rID)
 {
     int nLevel = 1;
 
@@ -3063,10 +3063,10 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OUString &rID)
             break;
     }
 
-    m_pVclParserState->m_aModels[rID].m_aEntries.push_back(aRow);
+    m_pParserState->m_aModels[rID].m_aEntries.push_back(aRow);
 }
 
-void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OUString &rID, std::u16string_view rClass)
+void BuilderBase::handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass)
 {
     int nLevel = 1;
 
@@ -4225,10 +4225,10 @@ void VclBuilder::set_window_packing_position(const vcl::Window *pWindow, sal_Int
     }
 }
 
-const VclBuilder::ListStore *VclBuilder::get_model_by_name(const OUString& sID) const
+const BuilderBase::ListStore* BuilderBase::get_model_by_name(const OUString& sID) const
 {
-    const auto aI = m_pVclParserState->m_aModels.find(sID);
-    if (aI != m_pVclParserState->m_aModels.end())
+    const auto aI = m_pParserState->m_aModels.find(sID);
+    if (aI != m_pParserState->m_aModels.end())
         return &(aI->second);
     return nullptr;
 }

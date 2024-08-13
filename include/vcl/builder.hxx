@@ -73,6 +73,12 @@ public:
 protected:
     BuilderBase(bool bLegacy);
 
+    struct ListStore
+    {
+        typedef std::vector<OUString> row;
+        std::vector<row> m_aEntries;
+    };
+
     static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
@@ -88,12 +94,18 @@ protected:
     OUString finalizeValue(const OString& rContext, const OString& rValue,
                            const bool bTranslate) const;
 
+    void handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass);
+    void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
+    const ListStore* get_model_by_name(const OUString& sID) const;
+
     virtual void resetParserState();
 
 private:
     struct ParserState
     {
         std::locale m_aResLocale;
+
+        std::map<OUString, ListStore> m_aModels;
     };
 
     std::unique_ptr<ParserState> m_pParserState;
@@ -232,13 +244,6 @@ private:
         }
     };
 
-    struct ListStore
-    {
-        typedef std::vector<OUString> row;
-        std::vector<row> m_aEntries;
-    };
-
-    const ListStore* get_model_by_name(const OUString& sID) const;
     void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
@@ -271,7 +276,6 @@ private:
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
 
         std::vector<ComboBoxModelMap> m_aModelMaps;
-        std::map<OUString, ListStore> m_aModels;
 
         std::vector<TextBufferMap> m_aTextBufferMaps;
         std::map<OUString, TextBuffer> m_aTextBuffers;
@@ -382,8 +386,6 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleListStore(xmlreader::XmlReader &reader, const OUString &rID, std::u16string_view rClass);
-    void        handleRow(xmlreader::XmlReader &reader, const OUString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar);
