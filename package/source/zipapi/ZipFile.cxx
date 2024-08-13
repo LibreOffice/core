@@ -1015,7 +1015,10 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
         if ((rEntry.nFlag & 0x08) != 0)
         {
 #if 0
-            if (nLocMethod == STORED) // example: fdo68983.odt has this :(
+            // Unfortunately every encrypted ODF package entry hits this,
+            // because ODF requires deflated entry with value STORED and OOo/LO
+            // has always written compressed streams with data descriptor.
+            if (nLocMethod == STORED)
             {
                 SAL_INFO("package", "LOC STORED with data descriptor: \"" << rEntry.sPath << "\"");
                 bBroken = true;
