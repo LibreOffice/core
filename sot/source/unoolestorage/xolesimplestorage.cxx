@@ -97,8 +97,9 @@ OLESimpleStorage::OLESimpleStorage(
         {
             try
             {
-                uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
-                xSeek->seek( 0 );
+                uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY );
+                if (xSeek)
+                    xSeek->seek( 0 );
             }
             catch( uno::Exception& )
             {}

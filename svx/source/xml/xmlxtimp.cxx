@@ -476,8 +476,9 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
         try
         {
-            uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
-            xSeek->seek( 0 );
+            uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY );
+            if (xSeek)
+                xSeek->seek( 0 );
         }
         catch (const uno::Exception&)
         {

@@ -1532,8 +1532,9 @@ bool SfxObjectShell::SaveTo_Impl
             OUString aODFVersion;
             try
             {
-                uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
+                uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY );
+                if (xPropSet)
+                    xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
             }
             catch( uno::Exception& )
             {}
@@ -1769,9 +1770,10 @@ bool SfxObjectShell::SaveTo_Impl
 
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue(u"MediaType"_ustr,
-                                            uno::Any( aDataFlavor.MimeType ) );
+                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY );
+                    if (xProps)
+                        xProps->setPropertyValue(u"MediaType"_ustr,
+                                                uno::Any( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -1975,8 +1977,9 @@ bool SfxObjectShell::SaveTo_Impl
                 OUString aVersion;
                 try
                 {
-                    uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
+                    uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY );
+                    if (xPropSet)
+                        xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
@@ -2289,15 +2292,17 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
                 // Get rid of this workaround after issue i113914 is fixed
                 try
                 {
-                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY_THROW );
-                    xBasicLibraries->setRootStorage( xTmpStorage );
+                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY );
+                    if (xBasicLibraries)
+                        xBasicLibraries->setRootStorage( xTmpStorage );
                 }
                 catch( uno::Exception& )
                 {}
                 try
                 {
-                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY_THROW );
-                    xDialogLibraries->setRootStorage( xTmpStorage );
+                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY );
+                    if (xDialogLibraries)
+                        xDialogLibraries->setRootStorage( xTmpStorage );
                 }
                 catch( uno::Exception& )
                 {}
@@ -2453,15 +2458,17 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
         // Get rid of this workaround after issue i113914 is fixed
         try
         {
-            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY_THROW );
-            xBasicLibraries->setRootStorage( xStorage );
+            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY );
+            if (xBasicLibraries)
+                xBasicLibraries->setRootStorage( xStorage );
         }
         catch( uno::Exception& )
         {}
         try
         {
-            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY_THROW );
-            xDialogLibraries->setRootStorage( xStorage );
+            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY );
+            if (xDialogLibraries)
+                xDialogLibraries->setRootStorage( xStorage );
         }
         catch( uno::Exception& )
         {}
@@ -4137,9 +4144,12 @@ bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, const uno::Refer
 
             if (xStream.is() && WriteThumbnail(bEncrypted, xStream))
             {
-                uno::Reference<embed::XTransactedObject> xTransactedObject(xThumbnailStorage, uno::UNO_QUERY_THROW);
-                xTransactedObject->commit();
-                bResult = true;
+                uno::Reference<embed::XTransactedObject> xTransactedObject(xThumbnailStorage, uno::UNO_QUERY);
+                if (xTransactedObject)
+                {
+                    xTransactedObject->commit();
+                    bResult = true;
+                }
             }
         }
     }

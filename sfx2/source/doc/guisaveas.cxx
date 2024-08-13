@@ -225,20 +225,20 @@ public:
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
-            m_xDocumentSettings.set(
-                xDocSettingsSupplier->createInstance( u"com.sun.star.document.Settings"_ustr ),
-                uno::UNO_QUERY_THROW );
-
-            try
+            uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY );
+            if (xModel)
             {
-                OUString aLoadReadonlyString( u"LoadReadonly"_ustr );
-                m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
-                m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::Any( bReadOnly ) );
-                m_bReadOnlySupported = true;
+                m_xDocumentSettings.set(
+                    xDocSettingsSupplier->createInstance( u"com.sun.star.document.Settings"_ustr ),
+                    uno::UNO_QUERY );
+                if (m_xDocumentSettings)
+                {
+                    OUString aLoadReadonlyString( u"LoadReadonly"_ustr );
+                    m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
+                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::Any( bReadOnly ) );
+                    m_bReadOnlySupported = true;
+                }
             }
-            catch( const uno::Exception& )
-            {}
         }
         catch( const uno::Exception& )
         {}

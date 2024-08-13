@@ -98,9 +98,12 @@ bool DocumentSigner::signDocument(uno::Reference<security::XCertificate> const& 
             if (bSuccess)
             {
                 uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStore,
-                                                                   uno::UNO_QUERY_THROW);
-                xTransact->commit();
-                bResult = true;
+                                                                   uno::UNO_QUERY);
+                if (xTransact)
+                {
+                    xTransact->commit();
+                    bResult = true;
+                }
             }
         }
         else

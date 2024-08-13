@@ -242,7 +242,9 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
     {
         try
         {
-            Reference< util::XChangesBatch >( mxConfigurationSettings, UNO_QUERY_THROW )->commitChanges();
+            Reference< util::XChangesBatch > xChanges( mxConfigurationSettings, UNO_QUERY );
+            if (xChanges)
+                xChanges->commitChanges();
         }
         catch ( css::uno::Exception& )
         {
@@ -446,10 +448,11 @@ void SmartTagMgr::RegisterListener()
     {
         Reference<deployment::XExtensionManager> xExtensionManager(
                 deployment::ExtensionManager::get( mxContext ) );
-        Reference< util::XModifyBroadcaster > xMB ( xExtensionManager, UNO_QUERY_THROW );
-
-        Reference< util::XModifyListener > xListener( this );
-        xMB->addModifyListener( xListener );
+        if (xExtensionManager)
+        {
+            Reference< util::XModifyListener > xListener( this );
+            xExtensionManager->addModifyListener( xListener );
+        }
     }
     catch ( uno::Exception& )
     {
@@ -458,9 +461,12 @@ void SmartTagMgr::RegisterListener()
     // register as listener at configuration
     try
     {
-        Reference<util::XChangesNotifier> xCN( mxConfigurationSettings, UNO_QUERY_THROW );
-        Reference< util::XChangesListener > xListener( this );
-        xCN->addChangesListener( xListener );
+        Reference<util::XChangesNotifier> xCN( mxConfigurationSettings, UNO_QUERY );
+        if (xCN)
+        {
+            Reference< util::XChangesListener > xListener( this );
+            xCN->addChangesListener( xListener );
+        }
     }
     catch ( uno::Exception& )
     {

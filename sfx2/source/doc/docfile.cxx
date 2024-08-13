@@ -4676,12 +4676,15 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
         {
             try
             {
-                uno::Reference< io::XTruncate > xTruncate( pImpl->xStream, uno::UNO_QUERY_THROW );
-                xTruncate->truncate();
-                if ( xOptStorage.is() )
-                    xOptStorage->writeAndAttachToStream( pImpl->xStream );
-                pImpl->xStorage = xStorage;
-                bResult = true;
+                uno::Reference< io::XTruncate > xTruncate( pImpl->xStream, uno::UNO_QUERY );
+                if (xTruncate)
+                {
+                    xTruncate->truncate();
+                    if ( xOptStorage.is() )
+                        xOptStorage->writeAndAttachToStream( pImpl->xStream );
+                    pImpl->xStorage = xStorage;
+                    bResult = true;
+                }
             }
             catch( const uno::Exception& )
             {}

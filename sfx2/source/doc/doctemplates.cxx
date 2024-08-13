@@ -674,11 +674,14 @@ void SfxDocTplService::getTitleFromURL( const OUString& rURL, OUString& aTitle, 
         if ( !aDocType.isEmpty() )
             try
             {
-                uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
-                SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
-                aType = aTypeProps.getUnpackedValueOrDefault(
-                            u"MediaType"_ustr,
-                            OUString() );
+                uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY );
+                if (xTypeDetection)
+                {
+                    SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
+                    aType = aTypeProps.getUnpackedValueOrDefault(
+                                u"MediaType"_ustr,
+                                OUString() );
+                }
             }
             catch( uno::Exception& )
             {}

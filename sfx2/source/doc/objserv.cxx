@@ -1839,8 +1839,9 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
                 OUString aVersion;
                 try
                 {
-                    uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
+                    uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY );
+                    if (xPropSet)
+                        xPropSet->getPropertyValue(u"Version"_ustr) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {

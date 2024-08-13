@@ -1294,10 +1294,13 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW );
-
-            xProps->getPropertyValue(u"ImagePreferredDPI"_ustr) >>= nImagePreferredDPI;
+            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY );
+            if (xFac)
+            {
+                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY );
+                if (xProps)
+                    xProps->getPropertyValue(u"ImagePreferredDPI"_ustr) >>= nImagePreferredDPI;
+            }
         }
         catch( uno::Exception& )
         {

@@ -373,12 +373,16 @@ void SvXMLEmbeddedObjectHelper::ImplReadObject(
 
                 // TODO/LATER: what to do when other types of objects are based on substream persistence?
                 // This is an ole object
-                uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue(
-                    u"MediaType"_ustr,
-                    uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
+                uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY );
+                if (xProps)
+                {
+                    xProps->setPropertyValue(
+                        u"MediaType"_ustr,
+                        uno::Any( u"application/vnd.sun.star.oleobject"_ustr ) );
 
-                xStm->getOutputStream()->closeOutput();
+
+                    xStm->getOutputStream()->closeOutput();
+                }
             }
             catch ( uno::Exception& )
             {

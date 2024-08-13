@@ -101,13 +101,16 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                     if (xCellStyles->hasByName(sStyleName))
                     {
                         css::uno::Reference<css::beans::XPropertySet> xStyle(
-                            xCellStyles->getByName(sStyleName), css::uno::UNO_QUERY_THROW);
-                        OUString sName;
-                        xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
-                        if (!sName.isEmpty())
+                            xCellStyles->getByName(sStyleName), css::uno::UNO_QUERY);
+                        if (xStyle)
                         {
-                            m_aDefaultStyles.push_back(
-                                std::pair<OUString, OUString>(sStyleName, sName));
+                            OUString sName;
+                            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= sName;
+                            if (!sName.isEmpty())
+                            {
+                                m_aDefaultStyles.push_back(
+                                    std::pair<OUString, OUString>(sStyleName, sName));
+                            }
                         }
                     }
                 }

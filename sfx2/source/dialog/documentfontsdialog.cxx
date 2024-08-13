@@ -60,14 +60,19 @@ void SfxDocumentFontsPage::Reset( const SfxItemSet* )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW );
-
-            xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= bEmbedFonts;
-            xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= bEmbedUsedFonts;
-            xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= bEmbedLatinScriptFonts;
-            xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= bEmbedAsianScriptFonts;
-            xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScriptFonts;
+            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY );
+            if (xFac)
+            {
+                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+                if (xProps)
+                {
+                    xProps->getPropertyValue(u"EmbedFonts"_ustr) >>= bEmbedFonts;
+                    xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= bEmbedUsedFonts;
+                    xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr) >>= bEmbedLatinScriptFonts;
+                    xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr) >>= bEmbedAsianScriptFonts;
+                    xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= bEmbedComplexScriptFonts;
+                }
+            }
         }
         catch( uno::Exception& )
         {
@@ -95,13 +100,19 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(bEmbedFonts));
-            xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(bEmbedUsedFonts));
-            xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(bEmbedLatinScriptFonts));
-            xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(bEmbedAsianScriptFonts));
-            xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(bEmbedComplexScriptFonts));
+            uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY );
+            if (xFac)
+            {
+                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY );
+                if (xProps)
+                {
+                    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(bEmbedFonts));
+                    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(bEmbedUsedFonts));
+                    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(bEmbedLatinScriptFonts));
+                    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(bEmbedAsianScriptFonts));
+                    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(bEmbedComplexScriptFonts));
+                }
+            }
         }
         catch( uno::Exception& )
         {

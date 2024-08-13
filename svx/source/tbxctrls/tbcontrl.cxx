@@ -2832,8 +2832,9 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
 {
     try
     {
-        Reference< lang::XServiceInfo > xServices(m_xFrame->getController()->getModel(), UNO_QUERY_THROW);
-        m_bIsWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
+        Reference< lang::XServiceInfo > xServices(m_xFrame->getController()->getModel(), UNO_QUERY);
+        if (xServices)
+            m_bIsWriter = xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr);
     }
     catch(const uno::Exception& )
     {
