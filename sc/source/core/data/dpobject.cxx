@@ -314,6 +314,7 @@ ScDPObject::ScDPObject(ScDocument* pDocument)
     , mbAllowMove(false)
     , mbSettingsChanged(false)
     , mbEnableGetPivotData(true)
+    , mbHideHeader(false)
 {
 }
 
@@ -328,6 +329,7 @@ ScDPObject::ScDPObject(const ScDPObject& rOther)
     , mbAllowMove(false)
     , mbSettingsChanged(false)
     , mbEnableGetPivotData(rOther.mbEnableGetPivotData)
+    , mbHideHeader(rOther.mbHideHeader)
 {
     if (rOther.mpSaveData)
         mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
@@ -361,6 +363,7 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& rOther)
         mbAllowMove = false;
         mbSettingsChanged = false;
         mbEnableGetPivotData = rOther.mbEnableGetPivotData;
+        mbHideHeader = rOther.mbHideHeader;
 
         if (rOther.mpSaveData)
             mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
@@ -398,6 +401,8 @@ void ScDPObject::SetHeaderLayout (bool bUseGrid)
 {
     mbHeaderLayout = bUseGrid;
 }
+
+void ScDPObject::SetHideHeader(bool bHideHeader) { mbHideHeader = bHideHeader; }
 
 void ScDPObject::SetOutRange(const ScRange& rRange)
 {
@@ -528,7 +533,7 @@ void ScDPObject::CreateOutput()
     bool bFilterButton = IsSheetData() && mpSaveData && mpSaveData->GetFilterButton();
     bool bExpandCollapse = mpSaveData ? mpSaveData->GetExpandCollapse() : false;
 
-    mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse, *this));
+    mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse, *this, mbHideHeader));
     mpOutput->SetHeaderLayout(mbHeaderLayout);
     if (mpSaveData->hasFormats())
         mpOutput->setFormats(mpSaveData->getFormats());

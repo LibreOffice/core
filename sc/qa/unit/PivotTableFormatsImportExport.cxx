@@ -122,13 +122,13 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertDataFieldInColumn_ColumnLabelColor(ScDocument& rDoc)
 {
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I5"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I4"_ustr));
 
     // Make sure the other cells have the font color or background set to default
     std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr,
-        u"G8"_ustr, u"H8"_ustr, u"I8"_ustr, u"G9"_ustr, u"H9"_ustr, u"I9"_ustr,
+        u"G4"_ustr, u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr,
+        u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"G8"_ustr, u"H8"_ustr, u"I8"_ustr,
     };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
@@ -145,12 +145,12 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertDataFieldInColumn_DataColor(ScDocument& rDoc)
 {
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I9"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H6"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I8"_ustr));
 
     std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr, u"G7"_ustr,
-        u"I7"_ustr, u"G8"_ustr, u"H8"_ustr, u"I8"_ustr, u"G9"_ustr, u"H9"_ustr,
+        u"G4"_ustr, u"H4"_ustr, u"I4"_ustr, u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr,
+        u"I6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"G8"_ustr, u"H8"_ustr,
     };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
@@ -166,17 +166,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertDataFieldInColumnAndTwoRowFields_DataColor(ScDocument& rDoc)
 {
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I8"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I11"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J13"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I10"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J12"_ustr));
 
     std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr,  u"H5"_ustr,  u"I5"_ustr,  u"J5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"I6"_ustr,
-        u"J6"_ustr,  u"G7"_ustr,  u"H7"_ustr,  u"I7"_ustr,  u"J7"_ustr,  u"G8"_ustr,  u"H8"_ustr,
-        u"J8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"I9"_ustr,  u"J9"_ustr,  u"G10"_ustr, u"H10"_ustr,
-        u"I10"_ustr, u"J10"_ustr, u"G11"_ustr, u"H11"_ustr, u"J11"_ustr, u"G12"_ustr, u"H12"_ustr,
-        u"I12"_ustr, u"J12"_ustr, u"G13"_ustr, u"H13"_ustr, u"I13"_ustr, u"G14"_ustr, u"H14"_ustr,
-        u"I14"_ustr, u"J14"_ustr,
+        u"G4"_ustr,  u"H4"_ustr,  u"I4"_ustr,  u"J4"_ustr,  u"G5"_ustr,  u"H5"_ustr,  u"I5"_ustr,
+        u"J5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"I6"_ustr,  u"J6"_ustr,  u"G7"_ustr,  u"H7"_ustr,
+        u"J7"_ustr,  u"G8"_ustr,  u"H8"_ustr,  u"I8"_ustr,  u"J8"_ustr,  u"G9"_ustr,  u"H9"_ustr,
+        u"I9"_ustr,  u"J9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"J10"_ustr, u"G11"_ustr, u"H11"_ustr,
+        u"I11"_ustr, u"J11"_ustr, u"G12"_ustr, u"H12"_ustr, u"I12"_ustr, u"G13"_ustr, u"H13"_ustr,
+        u"I13"_ustr, u"J13"_ustr,
     };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
@@ -251,9 +251,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertMultipleSelections(ScDocument& rDoc)
 {
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I6"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I8"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -363,17 +363,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertTwoRowsDataFieldInColumn_LabelColor(ScDocument& rDoc)
 {
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J5"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I4"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J4"_ustr));
 
     // Make sure the other cells have the font color or background set to default
     std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr,  u"H5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"i6"_ustr,  u"j6"_ustr,  u"G7"_ustr,
-        u"H7"_ustr,  u"i7"_ustr,  u"j7"_ustr,  u"G8"_ustr,  u"H8"_ustr,  u"i8"_ustr,  u"j8"_ustr,
-        u"G9"_ustr,  u"H9"_ustr,  u"i9"_ustr,  u"j9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"i10"_ustr,
-        u"j10"_ustr, u"G11"_ustr, u"H11"_ustr, u"i11"_ustr, u"j11"_ustr, u"G12"_ustr, u"H12"_ustr,
-        u"i12"_ustr, u"j12"_ustr, u"G13"_ustr, u"H13"_ustr, u"i13"_ustr, u"j13"_ustr, u"G14"_ustr,
-        u"H14"_ustr, u"i14"_ustr, u"j14"_ustr,
+        u"G4"_ustr,  u"H4"_ustr,  u"G5"_ustr,  u"H5"_ustr,  u"i5"_ustr,  u"j5"_ustr,  u"G6"_ustr,
+        u"H6"_ustr,  u"i6"_ustr,  u"j6"_ustr,  u"G7"_ustr,  u"H7"_ustr,  u"i7"_ustr,  u"j7"_ustr,
+        u"G8"_ustr,  u"H8"_ustr,  u"i8"_ustr,  u"j8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"i9"_ustr,
+        u"j9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"i10"_ustr, u"j10"_ustr, u"G11"_ustr, u"H11"_ustr,
+        u"i11"_ustr, u"j11"_ustr, u"G12"_ustr, u"H12"_ustr, u"i12"_ustr, u"j12"_ustr, u"G13"_ustr,
+        u"H13"_ustr, u"i13"_ustr, u"j13"_ustr,
     };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
@@ -390,18 +390,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
 static void assertTwoDataFieldColumns_WholeDataColumnSelected(ScDocument& rDoc)
 {
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H2"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H3"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H4"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H5"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H6"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H8"_ustr));
 
     // Make sure the other cells have the font color or background set to default
     std::vector<OUString> aEmptyAddresses{
-        u"F1"_ustr, u"G1"_ustr, u"H1"_ustr, u"F2"_ustr, u"G2"_ustr, u"H2"_ustr,
-        u"F3"_ustr, u"G3"_ustr, u"F4"_ustr, u"G4"_ustr, u"F5"_ustr, u"G5"_ustr,
-        u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
+        u"F1"_ustr, u"G1"_ustr, u"H1"_ustr, u"F2"_ustr, u"G2"_ustr,
+        u"F3"_ustr, u"G3"_ustr, u"F4"_ustr, u"G4"_ustr, u"F5"_ustr,
+        u"G5"_ustr, u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr,
     };
     CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
 }
