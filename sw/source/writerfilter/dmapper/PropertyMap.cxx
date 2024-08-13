@@ -2084,17 +2084,6 @@ void SectionPropertyMap::ApplyProperties_( const rtl::Reference<SwXPageStyle>& x
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
     }
-    for ( size_t i = 0; i < vNames.size(); ++i )
-    {
-        try
-        {
-            xStyle->setPropertyValue( vNames[i], vValues[i] );
-        }
-        catch ( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
-        }
-    }
 }
 
 sal_Int32 SectionPropertyMap::GetPageWidth() const
