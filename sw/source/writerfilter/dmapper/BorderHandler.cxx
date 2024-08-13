@@ -150,7 +150,7 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
         if (!m_aInteropGrabBagName.isEmpty())
         {
             aSavedGrabBag.push_back(getInteropGrabBag(aBorderPos));
-            m_aInteropGrabBag = aSavedGrabBag;
+            m_aInteropGrabBag = std::move(aSavedGrabBag);
         }
     }
     ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,

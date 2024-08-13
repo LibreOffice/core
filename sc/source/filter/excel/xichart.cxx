@@ -2853,7 +2853,7 @@ void XclImpChTypeGroup::ReadChChartLine( XclImpStream& rStrm )
     {
         XclImpChLineFormat aLineFmt;
         aLineFmt.ReadChLineFormat( rStrm );
-        m_ChartLines[ nLineId ] = aLineFmt;
+        m_ChartLines[nLineId] = std::move(aLineFmt);
     }
 }
 

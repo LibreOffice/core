@@ -1634,7 +1634,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         ScMatrixToken aToken(xMat);
         pArray->AddToken(aToken);
 
-        itrCache->mpRangeData = xMat;
+        itrCache->mpRangeData = std::move(xMat);
 
         bFirstTab = false;
     }

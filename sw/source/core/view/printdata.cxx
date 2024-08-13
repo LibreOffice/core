@@ -425,7 +425,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     }
     bChanged = bChanged || (pOut.get() != m_pLast.get());
     if( pOut )
-        m_pLast = pOut;
+        m_pLast = std::move(pOut);
 
     return bChanged;
 }

@@ -308,7 +308,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
             continue;
         if (pDescriptor->HasState(PageDescriptor::ST_Selected))
         {
-            pCurrentPageDescriptor = pDescriptor;
+            pCurrentPageDescriptor = std::move(pDescriptor);
             break;
         }
     }

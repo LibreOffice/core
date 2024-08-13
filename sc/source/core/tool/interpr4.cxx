@@ -1339,7 +1339,7 @@ void ScInterpreter::GetExternalDoubleRef(
         return;
     }
 
-    rArray = pArray;
+    rArray = std::move(pArray);
 }
 
 bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )

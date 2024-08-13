@@ -2777,7 +2777,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 // Bug 61494
                 if( LONG_MAX != nFrameWidth )
                 {
-                    SwFormatFrameSize aAbsSz( aSz );
+                    SwFormatFrameSize aAbsSz(std::move(aSz));
                     aAbsSz.SetWidth( nFrameWidth );
                     GetFrameFormat()->SetFormatAttr( aAbsSz );
                 }

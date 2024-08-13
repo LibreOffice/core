@@ -2543,7 +2543,7 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
                     bChild = m_xTreeView->iter_next(*xChild);
                 }
             }
-            mOutLineNodeMap = aCurrOutLineNodeMap;
+            mOutLineNodeMap = std::move(aCurrOutLineNodeMap);
             return;
         }
         else // content entry

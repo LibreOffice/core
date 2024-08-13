@@ -621,11 +621,11 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
     {
         ScComplexRefData aData;
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, rxToken);
-        SCCOL nCol1 = aData.Ref1.Col() - mnStartCol;
-        SCCOL nCol2 = aData.Ref2.Col() - mnStartCol;
+        auto nCol1 = aData.Ref1.Col() - mnStartCol;
+        auto nCol2 = aData.Ref2.Col() - mnStartCol;
         SCROW nRow1 = aData.Ref1.Row() - mnStartRow;
         SCROW nRow2 = aData.Ref2.Row() - mnStartRow;
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        for (auto nCol = nCol1; nCol <= nCol2; ++nCol)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
                 size_t i = nCol*nRowSize + nRow;
@@ -641,7 +641,7 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 
     bool bGlue = true;
     bool bGlueCols = false;
-    for (SCCOL nCol = 0; bGlue && nCol < nColSize; ++nCol)
+    for (auto nCol = 0; bGlue && nCol < nColSize; ++nCol)
     {
         for (SCROW nRow = 0; bGlue && nRow < nRowSize; ++nRow)
         {

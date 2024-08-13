@@ -371,26 +371,27 @@ IMPL_LINK_NOARG(SwContentControlDlg, RenameHdl, weld::Button&, void)
     aItem->m_aValue = m_xListItems->get_text(nRow, 1);
     SwAbstractDialogFactory& rFact = swui::GetFactory();
     m_xListItemDialog = rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), *aItem);
-    m_xListItemDialog->StartExecuteAsync([this, aItem, nRow](sal_Int32 nResult) {
-        if (nResult == RET_OK)
-        {
-            if (aItem->m_aDisplayText.isEmpty() && aItem->m_aValue.isEmpty())
+    m_xListItemDialog->StartExecuteAsync(
+        [ this, aItem = std::move(aItem), nRow ](sal_Int32 nResult) {
+            if (nResult == RET_OK)
             {
-                // Maintain the invariant that value can't be empty.
-                return;
+                if (aItem->m_aDisplayText.isEmpty() && aItem->m_aValue.isEmpty())
+                {
+                    // Maintain the invariant that value can't be empty.
+                    return;
+                }
+
+                if (aItem->m_aValue.isEmpty())
+                {
+                    aItem->m_aValue = aItem->m_aDisplayText;
+                }
+
+                m_xListItems->set_text(nRow, aItem->m_aDisplayText, 0);
+                m_xListItems->set_text(nRow, aItem->m_aValue, 1);
             }
 
-            if (aItem->m_aValue.isEmpty())
-            {
-                aItem->m_aValue = aItem->m_aDisplayText;
-            }
-
-            m_xListItems->set_text(nRow, aItem->m_aDisplayText, 0);
-            m_xListItems->set_text(nRow, aItem->m_aValue, 1);
-        }
-
-        m_xListItemDialog.disposeAndClear();
-    });
+            m_xListItemDialog.disposeAndClear();
+        });
 }
 
 IMPL_LINK_NOARG(SwContentControlDlg, DeleteHdl, weld::Button&, void)

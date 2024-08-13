@@ -230,7 +230,7 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     auto xSheetInfo = std::make_shared<SheetInfo>( rModel, aIndexName.first, aIndexName.second );
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
-    maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
+    maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = std::move(xSheetInfo);
 }
 
 void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )

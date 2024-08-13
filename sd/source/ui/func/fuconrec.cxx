@@ -833,7 +833,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         case SID_LINE_CIRCLE_ARROW:
         {
             // circle start
-            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), std::move(aCircle)));
             rAttr.Put(XLineStartWidthItem(nWidth));
         }
         break;
