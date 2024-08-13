@@ -70,9 +70,10 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             OUString sName(u"Model 1"_ustr);
             Reference<XModel2> xModel = xforms::Model::create( comphelper::getProcessComponentContext() );
             xModel->setID( sName );
-            Reference<XFormsUIHelper1>( xModel, uno::UNO_QUERY_THROW )->newInstance(
-                u"Instance 1"_ustr,
-                OUString(), true );
+            Reference<XFormsUIHelper1> xHelper( xModel, uno::UNO_QUERY );
+            if (!xHelper)
+                return;
+            xHelper->newInstance(u"Instance 1"_ustr, OUString(), true );
             xModel->initialize();
             mxXForms->insertByName( sName, Any( xModel ) );
             OSL_ENSURE( mxXForms->hasElements(), "can't create XForms model" );

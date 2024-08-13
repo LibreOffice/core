@@ -108,16 +108,18 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
         try
         {
             uno::Reference< awt::XWindow > xWindow = pMTRequest->m_xFrame->getContainerWindow();
-            uno::Reference< awt::XVclWindowPeer > xWinPeer( xWindow, uno::UNO_QUERY_THROW );
+            uno::Reference< awt::XVclWindowPeer > xWinPeer( xWindow, uno::UNO_QUERY );
+            if (xWinPeer)
+            {
+                xWindow->setVisible( false );
 
-            xWindow->setVisible( false );
+                // reparent the window
+                xWinPeer->setProperty( u"PluginParent"_ustr, uno::Any( sal_Int64(0) ) );
 
-            // reparent the window
-            xWinPeer->setProperty( u"PluginParent"_ustr, uno::Any( sal_Int64(0) ) );
-
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if (pWindow)
-                vcl::EndAllDialogs(pWindow);
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+                if (pWindow)
+                    vcl::EndAllDialogs(pWindow);
+            }
         }
         catch( uno::Exception& )
         {
@@ -126,8 +128,9 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
 
         try
         {
-            uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY_THROW );
-            xCloseable->close( true );
+            uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY );
+            if (xCloseable)
+                xCloseable->close( true );
         }
         catch( uno::Exception& )
         {

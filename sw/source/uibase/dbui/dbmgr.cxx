@@ -1887,13 +1887,14 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
     try
     {
         uno::Reference<sdb::XCompletedConnection> xComplConnection(dbtools::getDataSource(rDataSource, xContext), uno::UNO_QUERY);
-        if ( xComplConnection.is() )
-        {
-            rxSource.set(xComplConnection, uno::UNO_QUERY);
-            weld::Window* pWindow = pView ? pView->GetFrameWeld() : nullptr;
-            uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, pWindow ? pWindow->GetXWindow() : nullptr), uno::UNO_QUERY_THROW );
-            xConnection = xComplConnection->connectWithCompletion( xHandler );
-        }
+        if ( !xComplConnection )
+            return xConnection;
+        rxSource.set(xComplConnection, uno::UNO_QUERY);
+        weld::Window* pWindow = pView ? pView->GetFrameWeld() : nullptr;
+        uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, pWindow ? pWindow->GetXWindow() : nullptr) );
+        if (!xHandler)
+            return xConnection;
+        xConnection = xComplConnection->connectWithCompletion( xHandler );
     }
     catch(const uno::Exception&)
     {

@@ -71,8 +71,9 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
             {
                 try
                 {
-                    uno::Reference< util::XModifiable > xModif( xIP->getComponent(), uno::UNO_QUERY_THROW );
-                    xModif->setModified( true );
+                    uno::Reference< util::XModifiable > xModif( xIP->getComponent(), uno::UNO_QUERY );
+                    if (xModif)
+                        xModif->setModified( true );
                 }
                 catch ( uno::Exception& )
                 {

@@ -207,33 +207,34 @@ css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( sal_uI
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( !getResult( nIndex ) )
+        return {};
+
+    css::uno::Reference< css::ucb::XContent > xContent( queryContent( nIndex ) );
+    if ( !xContent )
+        return {};
+
+    try
     {
-        css::uno::Reference< css::ucb::XContent > xContent( queryContent( nIndex ) );
-        if ( xContent.is() )
+        css::uno::Reference< css::ucb::XCommandProcessor > xCmdProc( xContent, css::uno::UNO_QUERY );
+        if ( !xCmdProc )
+            return {};
+        sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
+        css::ucb::Command aCmd;
+        aCmd.Name = "getPropertyValues";
+        aCmd.Handle = -1;
+        aCmd.Argument <<= getResultSet()->getProperties();
+        css::uno::Any aResult( xCmdProc->execute(
+            aCmd, nCmdId, getResultSet()->getEnvironment() ) );
+        css::uno::Reference< css::sdbc::XRow > xRow;
+        if ( aResult >>= xRow )
         {
-            try
-            {
-                css::uno::Reference< css::ucb::XCommandProcessor > xCmdProc(
-                    xContent, css::uno::UNO_QUERY_THROW );
-                sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
-                css::ucb::Command aCmd;
-                aCmd.Name = "getPropertyValues";
-                aCmd.Handle = -1;
-                aCmd.Argument <<= getResultSet()->getProperties();
-                css::uno::Any aResult( xCmdProc->execute(
-                    aCmd, nCmdId, getResultSet()->getEnvironment() ) );
-                css::uno::Reference< css::sdbc::XRow > xRow;
-                if ( aResult >>= xRow )
-                {
-                    maResults[ nIndex ]->xRow = xRow;
-                    return xRow;
-                }
-            }
-            catch ( css::uno::Exception const & )
-            {
-            }
+            maResults[ nIndex ]->xRow = xRow;
+            return xRow;
         }
+    }
+    catch ( css::uno::Exception const & )
+    {
     }
     return css::uno::Reference< css::sdbc::XRow >();
 }

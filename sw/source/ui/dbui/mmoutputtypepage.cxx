@@ -173,11 +173,14 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xTransferableProperties( rAttachment.Data, uno::UNO_QUERY_THROW);
-            OUString sURL;
-            xTransferableProperties->getPropertyValue(u"URL"_ustr) >>= sURL;
-            if(!sURL.isEmpty())
-                SWUnoHelper::UCB_DeleteFile( sURL );
+            uno::Reference< beans::XPropertySet > xTransferableProperties( rAttachment.Data, uno::UNO_QUERY);
+            if (xTransferableProperties)
+            {
+                OUString sURL;
+                xTransferableProperties->getPropertyValue(u"URL"_ustr) >>= sURL;
+                if(!sURL.isEmpty())
+                    SWUnoHelper::UCB_DeleteFile( sURL );
+            }
         }
         catch (const uno::Exception&)
         {

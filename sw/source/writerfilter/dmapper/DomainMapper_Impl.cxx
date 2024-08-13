@@ -5755,7 +5755,9 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     try
     {
         sal_Int32 nKey = 0;
-        uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( static_cast<cppu::OWeakObject*>(m_xTextDocument.get()), uno::UNO_QUERY_THROW );
+        uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( static_cast<cppu::OWeakObject*>(m_xTextDocument.get()), uno::UNO_QUERY );
+        if (!xNumberSupplier)
+            return;
         if( bDetectFormat )
         {
             uno::Reference< util::XNumberFormatter> xFormatter(util::NumberFormatter::create(m_xComponentContext), uno::UNO_QUERY_THROW);

@@ -692,13 +692,19 @@ SwVbaDocument::getFormControls() const
     uno::Reference< container::XNameAccess > xFormControls;
     try
     {
-        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-        uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY );
+        if (!xDrawPageSupplier)
+            return xFormControls;
+        uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY );
+        if (!xFormSupplier)
+            return xFormControls;
+        uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY );
+        if (!xIndexAccess)
+            return xFormControls;
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
-        xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
+        xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
     }
     catch(const uno::Exception&)
     {

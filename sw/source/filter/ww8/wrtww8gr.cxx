@@ -151,14 +151,14 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotSto
                 comphelper::EmbeddedObjectContainer aCnt( m_rDoc.GetDocStorage() );
                 try
                 {
-                    uno::Reference< embed::XEmbedPersist > xPersist(
-                            xObj,
-                            uno::UNO_QUERY_THROW );
-
-                    // it makes no sense to search the object in the container by reference since the object was created
-                    // outside of the container and was not inserted there, only the name makes sense
-                    pGraphicStream =
-                            ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
+                    uno::Reference< embed::XEmbedPersist > xPersist(xObj, uno::UNO_QUERY );
+                    if (xPersist)
+                    {
+                        // it makes no sense to search the object in the container by reference since the object was created
+                        // outside of the container and was not inserted there, only the name makes sense
+                        pGraphicStream =
+                                ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
+                    }
                 }
                 catch( const uno::Exception& )
                 {}

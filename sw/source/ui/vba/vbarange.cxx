@@ -134,8 +134,9 @@ SwVbaRange::setText( const OUString& rText )
         uno::Reference< text::XTextContent > xBookmark = SwVbaRangeHelper::findBookmarkByPosition( mxTextDocument, xRange->getStart() );
         if( xBookmark.is() )
         {
-            uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
-            sName = xNamed->getName();
+            uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY );
+            if (xNamed)
+                sName = xNamed->getName();
         }
     }
     catch (const uno::Exception&)

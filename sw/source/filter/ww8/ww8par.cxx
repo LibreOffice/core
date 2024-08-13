@@ -398,17 +398,18 @@ OUString BasicProjImportHelper::getProjectName() const
 {
     OUString sProjName( u"Standard"_ustr );
     uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );
-    if ( xProps.is() )
+    if ( !xProps )
+        return sProjName;
+    try
     {
-        try
-        {
-            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW  );
-            sProjName = xVBA->getProjectName();
+        uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( u"BasicLibraries"_ustr ), uno::UNO_QUERY  );
+        if ( !xVBA )
+            return sProjName;
+        sProjName = xVBA->getProjectName();
 
-        }
-        catch( const uno::Exception& )
-        {
-        }
+    }
+    catch( const uno::Exception& )
+    {
     }
     return sProjName;
 }

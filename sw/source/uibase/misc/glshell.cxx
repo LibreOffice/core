@@ -252,8 +252,9 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         try
         {
             // set the UI-title
-            uno::Reference< frame::XTitle > xTitle( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
-            xTitle->setTitle( aDocTitle );
+            uno::Reference< frame::XTitle > xTitle( xDocSh->GetModel(), uno::UNO_QUERY );
+            if (xTitle)
+                xTitle->setTitle( aDocTitle );
         }
         catch (const uno::Exception&)
         {

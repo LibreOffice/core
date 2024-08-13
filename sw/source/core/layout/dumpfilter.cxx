@@ -53,8 +53,9 @@ namespace
         try
         {
             uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
-            uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
-            xOut->closeOutput( );
+            uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY );
+            if (xOut)
+                xOut->closeOutput( );
         }
         catch (const uno::Exception&)
         {

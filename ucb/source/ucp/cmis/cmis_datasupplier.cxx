@@ -107,33 +107,33 @@ namespace cmis
             }
         }
 
-        if ( getResult( nIndex ) )
+        if ( !getResult( nIndex ) )
+            return {};
+
+        uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
+        if ( !xContent )
+            return {};
+        try
         {
-            uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
-            if ( xContent.is() )
+            uno::Reference< ucb::XCommandProcessor > xCmdProc( xContent, uno::UNO_QUERY );
+            if ( !xCmdProc )
+                return {};
+            sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
+            ucb::Command aCmd;
+            aCmd.Name = "getPropertyValues";
+            aCmd.Handle = -1;
+            aCmd.Argument <<= getResultSet()->getProperties();
+            uno::Any aResult( xCmdProc->execute(
+                aCmd, nCmdId, getResultSet()->getEnvironment() ) );
+            uno::Reference< sdbc::XRow > xRow;
+            if ( aResult >>= xRow )
             {
-                try
-                {
-                    uno::Reference< ucb::XCommandProcessor > xCmdProc(
-                        xContent, uno::UNO_QUERY_THROW );
-                    sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
-                    ucb::Command aCmd;
-                    aCmd.Name = "getPropertyValues";
-                    aCmd.Handle = -1;
-                    aCmd.Argument <<= getResultSet()->getProperties();
-                    uno::Any aResult( xCmdProc->execute(
-                        aCmd, nCmdId, getResultSet()->getEnvironment() ) );
-                    uno::Reference< sdbc::XRow > xRow;
-                    if ( aResult >>= xRow )
-                    {
-                        maResults[ nIndex ].xRow = xRow;
-                        return xRow;
-                    }
-                }
-                catch ( uno::Exception const & )
-                {
-                }
+                maResults[ nIndex ].xRow = xRow;
+                return xRow;
             }
+        }
+        catch ( uno::Exception const & )
+        {
         }
         return uno::Reference< sdbc::XRow >();
     }

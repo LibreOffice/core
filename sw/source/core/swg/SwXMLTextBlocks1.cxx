@@ -76,14 +76,17 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             OUString sObjReplacements( u"ObjectReplacements"_ustr );
             if ( m_xRoot->hasByName( sObjReplacements ) )
             {
-                uno::Reference< document::XStorageBasedDocument > xDocStor( m_xDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
-                if ( xStr.is() )
+                uno::Reference< document::XStorageBasedDocument > xDocStor( m_xDoc->GetDocShell()->GetModel(), uno::UNO_QUERY );
+                if (xDocStor)
                 {
-                    m_xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
-                    uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
-                    if ( xTrans.is() )
-                        xTrans->commit();
+                    uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
+                    if ( xStr.is() )
+                    {
+                        m_xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
+                        uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
+                        if ( xTrans.is() )
+                            xTrans->commit();
+                    }
                 }
             }
         }
