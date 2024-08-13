@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/any.hxx>
@@ -150,7 +151,7 @@ SfxDispatcher &SwView::GetDispatcher()
 
 void SwView::ImpSetVerb( SelectionType nSelType )
 {
-    bool bResetVerbs = m_bVerbsActive;
+    Sequence<embed::VerbDescriptor> newVerbs;
     if ( !GetViewFrame().GetFrame().IsInPlace() &&
          (SelectionType::Ole|SelectionType::Graphic) & nSelType )
     {
@@ -159,16 +160,21 @@ void SwView::ImpSetVerb( SelectionType nSelType )
         {
             if ( nSelType & SelectionType::Ole )
             {
-                SetVerbs( GetWrtShell().GetOLEObject()->getSupportedVerbs() );
-                m_bVerbsActive = true;
-                bResetVerbs = false;
+                try
+                {
+                    newVerbs = GetWrtShell().GetOLEObject()->getSupportedVerbs();
+                }
+                catch (css::uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("sw.ui", "Failed to retrieve supported verbs");
+                }
             }
         }
     }
-    if ( bResetVerbs )
+    if (m_bVerbsActive || newVerbs.hasElements())
     {
-        SetVerbs( Sequence< embed::VerbDescriptor >() );
-        m_bVerbsActive = false;
+        SetVerbs(newVerbs);
+        m_bVerbsActive = newVerbs.hasElements();
     }
 }
 
