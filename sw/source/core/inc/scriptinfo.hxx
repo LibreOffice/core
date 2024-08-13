@@ -96,7 +96,6 @@ private:
     void ClearKashidaInvalid(size_t nKashPos);
     bool MarkOrClearKashidaInvalid(TextFrameIndex nStt, TextFrameIndex nLen,
             bool bMark, sal_Int32 nMarkCount);
-    bool IsKashidaLine(TextFrameIndex nCharIdx) const;
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise SAL_MAX_SIZE
     size_t HasKana(TextFrameIndex nStart, TextFrameIndex nEnd) const;
@@ -334,6 +333,11 @@ public:
    nLen Number of characters in the line
 */
     void ClearNoKashidaLine(TextFrameIndex nStt, TextFrameIndex nLen);
+
+/** Checks whether the character is on a line excluded from kashida justification.
+   nCharIdx Char index within the paragraph.
+*/
+    bool IsKashidaLine(TextFrameIndex nCharIdx) const;
 
 /** Checks if text is Arabic text.
 

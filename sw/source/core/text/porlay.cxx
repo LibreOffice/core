@@ -2543,7 +2543,7 @@ void SwScriptInfo::ClearNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex 
     size_t i = 0;
     while (i < m_NoKashidaLine.size())
     {
-        if (nStt + nLen >= m_NoKashidaLine[i] && nStt < m_NoKashidaLineEnd[i])
+        if (nStt + nLen > m_NoKashidaLine[i] && nStt < m_NoKashidaLineEnd[i])
         {
             m_NoKashidaLine.erase(m_NoKashidaLine.begin() + i);
             m_NoKashidaLineEnd.erase(m_NoKashidaLineEnd.begin() + i);
