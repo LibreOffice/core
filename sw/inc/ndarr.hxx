@@ -95,7 +95,6 @@ class SwNodes final
     friend class SwStartNode;
     friend class ::sw::DocumentContentOperationsManager;
 
-    SwNodeIndex* m_vIndices; ///< ring of all indices on nodes.
     void RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nLen, bool bDel );
 
     void InsertNode( SwNode* pNode, const SwNodeIndex& rPos );

@@ -60,7 +60,7 @@ static sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
  * @param rDocument TODO: provide documentation
  */
 SwNodes::SwNodes( SwDoc& rDocument )
-    : m_vIndices(nullptr), m_rMyDoc( rDocument )
+    : m_rMyDoc( rDocument )
 {
     m_bInNodesDel = m_bInDelUpdOutline = false;
 
@@ -2390,11 +2390,12 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
     SwNodeOffset nEnd = nDelPos + nSz;
     SwNode* pNew = (*this)[ nEnd ];
 
-    for (SwNodeIndex& rIndex : m_vIndices->GetRingContainer())
+    for (SwNodeOffset nCnt(0); nCnt < nSz; nCnt++)
     {
-        SwNodeOffset const nIdx = rIndex.GetIndex();
-        if (nDelPos <= nIdx && nIdx < nEnd)
-            rIndex = *pNew;
+        SwNode* pNode = (*this)[ nDelPos + nCnt ];
+        // the assignment will de-link the entry from the ring
+        while (pNode->m_vIndices)
+            (*pNode->m_vIndices) = *pNew;
     }
 
     std::vector<BigPtrEntry> aTempEntries;

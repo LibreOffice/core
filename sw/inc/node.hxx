@@ -97,6 +97,7 @@ class SW_DLLPUBLIC SwNode
     : public sw::BorderCacheOwner, private BigPtrEntry
 {
     friend class SwNodes;
+    friend class SwNodeIndex;
 
     SwNodeType m_nNodeType;
 
@@ -105,6 +106,7 @@ class SW_DLLPUBLIC SwNode
     bool m_bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
     mutable sw::AccessibilityCheckStatus m_aAccessibilityCheckStatus;
+    SwNodeIndex* m_vIndices { nullptr }; ///< ring of indices pointing to this node.
 
 public:
     /// sw_redlinehide: redline node merge state
