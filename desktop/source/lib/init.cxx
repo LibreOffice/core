@@ -4028,6 +4028,14 @@ static void doc_iniUnoCommands ()
         u".uno:MoveKeepInsertMode"_ustr,
         u".uno:ToggleSheetGrid"_ustr,
         u".uno:ChangeBezier"_ustr,
+        u".uno:DistributeHorzCenter"_ustr,
+        u".uno:DistributeHorzDistance"_ustr,
+        u".uno:DistributeHorzLeft"_ustr,
+        u".uno:DistributeHorzRight"_ustr,
+        u".uno:DistributeVertBottom"_ustr,
+        u".uno:DistributeVertCenter"_ustr,
+        u".uno:DistributeVertDistance"_ustr,
+        u".uno:DistributeVertTop"_ustr,
     };
 
     util::URL aCommandURL;
