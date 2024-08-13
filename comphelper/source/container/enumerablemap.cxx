@@ -370,7 +370,7 @@ namespace comphelper
     {
         OSL_PRECOND( m_aData.m_pValues && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
         if (!m_aData.m_pValues || !m_aData.m_pValues->empty()){
-            throw IllegalTypeException("EnumerableMap m_aData container is invalid or not empty.", *this);
+            throw RuntimeException("EnumerableMap m_aData container is invalid or not empty.", *this);
         }
         for (auto& mapping : _initialValues)
         {
