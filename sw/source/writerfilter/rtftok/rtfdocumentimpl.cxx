@@ -230,16 +230,6 @@ static RTFSprms lcl_getBookmarkProperties(int nPos, const OUString& rString)
     return aAttributes;
 }
 
-const char* keywordToString(RTFKeyword nKeyword)
-{
-    for (int i = 0; i < nRTFControlWords; i++)
-    {
-        if (nKeyword == aRTFControlWords[i].GetIndex())
-            return aRTFControlWords[i].GetKeyword();
-    }
-    return nullptr;
-}
-
 static util::DateTime lcl_getDateTime(RTFParserState const& aState)
 {
     return { 0 /*100sec*/,
@@ -2081,7 +2071,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         default:
         {
             SAL_INFO("writerfilter.rtf",
-                     "TODO handle toggle '" << keywordToString(nKeyword) << "'");
+                     "TODO handle toggle '" << RTFTokenizer::toString(nKeyword) << "'");
             aSkip.setParsed(false);
         }
         break;

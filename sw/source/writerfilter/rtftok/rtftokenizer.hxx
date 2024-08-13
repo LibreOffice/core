@@ -44,8 +44,10 @@ public:
     void popGroup();
     OUString getPosition();
     std::size_t getGroupStart() const { return m_nGroupStart; }
+
+    static std::string_view toString(RTFKeyword nKeyword);
     /// To look up additional properties of a math symbol.
-    static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
+    static const RTFMathSymbolData* lookupMathKeyword(RTFKeyword nKeyword);
 
 private:
     SvStream& Strm() { return *m_pInStream; }
@@ -55,12 +57,6 @@ private:
     RTFListener& m_rImport;
     SvStream* m_pInStream;
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
-    // This is the same as aRTFControlWords, but mapped by token name for fast lookup
-    static std::unordered_map<OString, RTFSymbol> s_aRTFControlWords;
-    static bool s_bControlWordsInitialised;
-    // This is the same as aRTFMathControlWords, but sorted
-    static std::vector<RTFMathSymbol> s_aRTFMathControlWords;
-    static bool s_bMathControlWordsSorted;
     /// Same as the size of the importer's states, except that this can be negative for invalid input.
     int m_nGroup;
     sal_Int32 m_nLineNumber;

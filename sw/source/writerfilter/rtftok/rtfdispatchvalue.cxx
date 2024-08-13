@@ -25,6 +25,7 @@
 #include "rtffly.hxx"
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
+#include "rtftokenizer.hxx"
 
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
@@ -1895,7 +1896,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         default:
         {
-            SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");
+            SAL_INFO("writerfilter",
+                     "TODO handle value '" << RTFTokenizer::toString(nKeyword) << "'");
             aSkip.setParsed(false);
         }
         break;

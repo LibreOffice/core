@@ -1976,60 +1976,16 @@ enum class RTFKeyword
     FLYHORZ,
     FLYANCHOR
 };
-const char* keywordToString(RTFKeyword nKeyword);
-
-/// Types of an RTF Control Word
-enum class RTFControlType
-{
-    FLAG, // eg \sbknone takes no parameter
-    DESTINATION, // eg \fonttbl, if ignored, the whole group should be skipped
-    SYMBOL, // eg \tab
-    TOGGLE, // eg \b (between on and off)
-    VALUE // eg \fs (requires parameter)
-};
-
-/// Represents an RTF Control Word
-class RTFSymbol
-{
-    const char* m_sKeyword;
-    RTFControlType m_eControlType;
-    RTFKeyword m_nIndex;
-
-    int m_nDefValue; ///< Most of the control words default to 0.
-
-public:
-    RTFSymbol(const char* sKeyword, RTFControlType nControlType, RTFKeyword nIndex, int nDefValue)
-        : m_sKeyword(sKeyword)
-        , m_eControlType(nControlType)
-        , m_nIndex(nIndex)
-        , m_nDefValue(nDefValue)
-    {
-    }
-
-    const char* GetKeyword() const { return m_sKeyword; }
-
-    RTFControlType GetControlType() const { return m_eControlType; }
-
-    RTFKeyword GetIndex() const { return m_nIndex; }
-
-    int GetDefValue() const { return m_nDefValue; }
-};
-
-extern RTFSymbol const aRTFControlWords[];
-extern const int nRTFControlWords;
 
 /// Represents an RTF Math Control Word
-class RTFMathSymbol
+class RTFMathSymbolData
 {
-    RTFKeyword m_eKeyword;
     int m_nToken; ///< This is the OOXML token equivalent.
     Destination m_eDestination;
 
 public:
-    RTFMathSymbol(RTFKeyword eKeyword, int nToken = 0,
-                  Destination eDestination = Destination::NORMAL)
-        : m_eKeyword(eKeyword)
-        , m_nToken(nToken)
+    constexpr RTFMathSymbolData(int nToken, Destination eDestination)
+        : m_nToken(nToken)
         , m_eDestination(eDestination)
     {
     }
@@ -2037,13 +1993,7 @@ public:
     int GetToken() const { return m_nToken; }
 
     Destination GetDestination() const { return m_eDestination; }
-
-    bool operator<(const RTFMathSymbol& rOther) const;
 };
-
-extern RTFMathSymbol const aRTFMathControlWords[];
-extern const int nRTFMathControlWords;
-
 } // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

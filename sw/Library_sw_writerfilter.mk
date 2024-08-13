@@ -65,7 +65,6 @@ $(eval $(call gb_Library_use_externals,sw_writerfilter,\
 
 $(eval $(call gb_Library_add_exception_objects,sw_writerfilter,\
 	sw/source/writerfilter/rtftok/rtfcharsets \
-	sw/source/writerfilter/rtftok/rtfcontrolwords \
 	sw/source/writerfilter/rtftok/rtfdispatchdestination \
 	sw/source/writerfilter/rtftok/rtfdispatchflag \
 	sw/source/writerfilter/rtftok/rtfdispatchsymbol \

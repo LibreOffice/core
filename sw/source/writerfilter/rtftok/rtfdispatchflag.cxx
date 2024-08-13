@@ -27,6 +27,7 @@
 
 #include "rtfsdrimport.hxx"
 #include "rtfskipdestination.hxx"
+#include "rtftokenizer.hxx"
 #include <unotxdoc.hxx>
 #include <unoframe.hxx>
 #include <unodraw.hxx>
@@ -1376,7 +1377,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
         default:
         {
-            SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");
+            SAL_INFO("writerfilter",
+                     "TODO handle flag '" << RTFTokenizer::toString(nKeyword) << "'");
             aSkip.setParsed(false);
         }
         break;

@@ -18,6 +18,7 @@
 
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
+#include "rtftokenizer.hxx"
 
 using namespace com::sun::star;
 
@@ -479,7 +480,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         default:
         {
             SAL_INFO("writerfilter.rtf",
-                     "TODO handle symbol '" << keywordToString(nKeyword) << "'");
+                     "TODO handle symbol '" << RTFTokenizer::toString(nKeyword) << "'");
             aSkip.setParsed(false);
         }
         break;

@@ -656,16 +656,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             default:
             {
                 // Check if it's a math token.
-                RTFMathSymbol aSymbol(nKeyword);
-                if (RTFTokenizer::lookupMathKeyword(aSymbol))
+                if (auto pSymbolData = RTFTokenizer::lookupMathKeyword(nKeyword))
                 {
-                    m_aMathBuffer.appendOpeningTag(aSymbol.GetToken());
-                    m_aStates.top().setDestination(aSymbol.GetDestination());
+                    m_aMathBuffer.appendOpeningTag(pSymbolData->GetToken());
+                    m_aStates.top().setDestination(pSymbolData->GetDestination());
                     return RTFError::OK;
                 }
 
                 SAL_INFO("writerfilter",
-                         "TODO handle destination '" << keywordToString(nKeyword) << "'");
+                         "TODO handle destination '" << RTFTokenizer::toString(nKeyword) << "'");
                 // Make sure we skip destinations (even without \*) till we don't handle them
                 m_aStates.top().setDestination(Destination::SKIP);
                 aSkip.setParsed(false);
