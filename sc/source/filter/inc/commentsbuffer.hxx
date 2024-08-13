@@ -60,6 +60,8 @@ public:
     /** Finalizes the formatted string of the comment. */
     void                finalizeImport();
 
+    OUString getAuthorName();
+
 private:
     CommentModel        maModel;
 };
@@ -78,6 +80,8 @@ public:
 
     /** Finalizes the formatted string of all comments. */
     void                finalizeImport();
+
+    std::vector<OUString> getAuthors() const;
 
 private:
     typedef RefVector< Comment >                CommentVector;
