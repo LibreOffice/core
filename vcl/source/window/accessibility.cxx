@@ -100,8 +100,19 @@ bool Window::ImplIsAccessibleCandidate() const
 
 vcl::Window* Window::GetAccessibleParentWindow() const
 {
-    if (!mpWindowImpl || IsNativeFrame() || IsTopWindow())
+    if (!mpWindowImpl || IsNativeFrame())
         return nullptr;
+
+    if (IsTopWindow())
+    {
+        // if "top-level" has native border window parent, report it;
+        // but don't report parent otherwise (which could e.g. be
+        // a dialog's parent window that's otherwise a separate window and
+        // doesn't consider the top level its a11y child either)
+        if (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->IsNativeFrame())
+            return mpWindowImpl->mpBorderWindow;
+        return nullptr;
+    }
 
     vcl::Window* pParent = mpWindowImpl->mpParent;
     if( GetType() == WindowType::MENUBARWINDOW )
