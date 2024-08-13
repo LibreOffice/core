@@ -2389,10 +2389,6 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
         return false;
     }
 
-    // determine value of attribute 'Follow text flow', because positions aligned
-    // at page areas have to be converted, if it's set.
-    const bool bFollowTextFlow = _rFrameFormat.GetFollowTextFlow().GetValue();
-
     // check, if horizontal and vertical position have to be converted due to
     // the fact, that the object is anchored at a paragraph, which has a "column
     // break before" attribute
@@ -2441,10 +2437,6 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
             {
                 case text::RelOrientation::PAGE_FRAME:
                 case text::RelOrientation::PAGE_PRINT_AREA:
-                {
-                    if ( bConvDueToOrientation || bFollowTextFlow )
-                        eHoriConv = sw::WW8AnchorConv::CONV2PG;
-                }
                 break;
                 case text::RelOrientation::PAGE_LEFT:
                 case text::RelOrientation::PAGE_RIGHT:
@@ -2507,10 +2499,6 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
             {
                 case text::RelOrientation::PAGE_FRAME:
                 case text::RelOrientation::PAGE_PRINT_AREA:
-                {
-                    if ( bConvDueToOrientation || bFollowTextFlow )
-                        eVertConv = sw::WW8AnchorConv::CONV2PG;
-                }
                 break;
                 case text::RelOrientation::FRAME:
                 {

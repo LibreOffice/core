@@ -552,6 +552,13 @@ DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
+
+    // The frame is at the bottom of the text area, not at the bottom of the paper.
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::BOTTOM,
+                         getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf133504_wrapNotBeside, "tdf133504_wrapNotBeside.doc")
@@ -1335,6 +1342,14 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
     pDesc = &pDoc->GetPageDesc( 3 );
     nVA = pDesc->GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
+
+    // The frame is at the left of the text area, not at the left of the paper.
+    uno::Reference<drawing::XShape> xShape = getShape(2);
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+
 }
 
 DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
