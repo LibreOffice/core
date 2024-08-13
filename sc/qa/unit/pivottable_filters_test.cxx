@@ -329,22 +329,22 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedGroupXLSX)
 
     // Check whether right group names are imported for both tables
     // First table
-    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 6, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 6, 0)));
 
     // Second table
-    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 11, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 12, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 13, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 14, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 17, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 10, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport1"_ustr, pDoc->GetString(ScAddress(0, 11, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport2"_ustr, pDoc->GetString(ScAddress(0, 12, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Csoport3"_ustr, pDoc->GetString(ScAddress(0, 13, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"16"_ustr, pDoc->GetString(ScAddress(0, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"17"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"18"_ustr, pDoc->GetString(ScAddress(0, 16, 0)));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -364,22 +364,22 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedDateGroupXLSX)
     auto testThis = [](ScDocument& rDoc) {
         // Check whether right date labels are imported for both tables
         // First table
-        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(0, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 6, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 7, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(0, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 6, 1)));
         // TODO: check why this fails with 2005
-        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,8,1)));
+        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,7,1)));
 
         // Second table
-        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(5, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(5, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(5, 5, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(5, 6, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(5, 7, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDoc.GetString(ScAddress(5, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(5, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(5, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(5, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(5, 6, 1)));
         // TODO: check why this fails with 2005
-        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,8,1)));
+        // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,7,1)));
 
         // There should be exactly 2 pivot tables and 1 cache.
         ScDPCollection* pDPs = rDoc.GetDPCollection();
@@ -405,19 +405,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedNestedDateGrou
         // Check whether right date groups are imported for both tables
         // First table
         // Years, Quarters, 'a' have compact layout so the only header contains a multi-field filter.
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 11, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 18, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 21, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(0, 10, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(0, 17, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(0, 20, 1)));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
 
         // Second table
         // Years, Quarters, 'a' have compact layout so the only row header contains a multi-field filter.
-        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(6, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(6, 11, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(6, 18, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(6, 21, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1965"_ustr, rDoc.GetString(ScAddress(6, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1989"_ustr, rDoc.GetString(ScAddress(6, 10, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2000"_ustr, rDoc.GetString(ScAddress(6, 17, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2004"_ustr, rDoc.GetString(ScAddress(6, 20, 1)));
         // TODO: check why this fails with the empty string
         //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
 
@@ -449,20 +449,20 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableSharedNumGroupXLSX)
 
     // Check whether right number groups are imported for both tables
     // First table
-    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(0, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(0, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(0, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(0, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(0, 7, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(0, 8, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(0, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(0, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(0, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(0, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(0, 6, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(0, 7, 1)));
 
     // Second table
-    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(5, 3, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(5, 4, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(5, 6, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(5, 7, 1)));
-    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(5, 8, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"32674-47673"_ustr, pDoc->GetString(ScAddress(5, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"47674-62673"_ustr, pDoc->GetString(ScAddress(5, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"62674-77673"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"77674-92673"_ustr, pDoc->GetString(ScAddress(5, 6, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"92674-107673"_ustr, pDoc->GetString(ScAddress(5, 7, 1)));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = pDoc->GetDPCollection();
@@ -2712,6 +2712,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
                 "PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithoutCacheData."
                 "xlsx");
     testThis(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
+{
+    // Test that an xlsx pivot table with `firstHeaderRow="0"` is shown and exported correctly
+    createScDoc("xlsx/pivot-table/first_header_row_zero.xlsx");
+    // Check that the text under the table is visible
+    CPPUNIT_ASSERT_EQUAL(OUString("under"), getScDoc()->GetString(ScAddress(2, 6, 1)));
+
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pDoc = parseExport("xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:location"_ostr, "firstHeaderRow"_ostr, "0");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

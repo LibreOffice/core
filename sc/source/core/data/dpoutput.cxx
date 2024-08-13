@@ -486,7 +486,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 } // end anonymous namespace
 
 ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsSupplier> xSource,
-                       const ScAddress& rPosition, bool bFilter, bool bExpandCollapse, ScDPObject& rObject)
+                       const ScAddress& rPosition, bool bFilter, bool bExpandCollapse, ScDPObject& rObject, bool bHideHeader)
     : mpDocument(pDocument)
     , maFormatOutput(rObject)
     , mxSource(std::move(xSource))
@@ -505,6 +505,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
     , mbHeaderLayout(false)
     , mbHasCompactRowField(false)
     , mbExpandCollapse(bExpandCollapse)
+    , mbHideHeader(bHideHeader)
 {
     mnTabStartCol = mnMemberStartCol = mnDataStartCol = mnTabEndCol = 0;
     mnTabStartRow = mnMemberStartRow = mnDataStartRow = mnTabEndRow = 0;
@@ -879,7 +880,9 @@ void ScDPOutput::CalcSizes()
     mnColCount = mnRowCount ? ( pRowAry[0].getLength() ) : 0;
 
     mnHeaderSize = 1;
-    if (GetHeaderLayout() && mpColFields.empty())
+    if (mbHideHeader)
+        mnHeaderSize = 0;
+    else if (GetHeaderLayout() && mpColFields.empty())
         // Insert an extra header row only when there is no column field.
         mnHeaderSize = 2;
 
@@ -1003,10 +1006,13 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
     {
         SCCOL nHeaderCol = mnDataStartCol + SCCOL(nField); //TODO: check for overflow
 
-        if (!mbHasCompactRowField || nNumColFields == 1)
-            FieldCell(nHeaderCol, mnTabStartRow, nTab, mpColFields[nField], true);
-        else if (!nField)
-            MultiFieldCell(nHeaderCol, mnTabStartRow, nTab, false /* bRowField */);
+        if (mnMemberStartRow > mnTabStartRow)
+        {
+            if (!mbHasCompactRowField || nNumColFields == 1)
+                FieldCell(nHeaderCol, mnTabStartRow, nTab, mpColFields[nField], true);
+            else if (!nField)
+                MultiFieldCell(nHeaderCol, mnTabStartRow, nTab, false /* bRowField */);
+        }
 
         SCROW nRowPos = mnMemberStartRow + SCROW(nField); //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rMemberSequence = mpColFields[nField].maResult;
@@ -1060,7 +1066,7 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpColFields[nField].mnSrcNumFmt));
         }
-        if (nField == 0 && mpColFields.size() == 1)
+        if (nField == 0 && mpColFields.size() == 1 && mnMemberStartRow > mnTabStartRow)
             rOutputImpl.OutputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, nRowPos - 1);
     }
 }

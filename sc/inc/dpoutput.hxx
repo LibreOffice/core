@@ -88,6 +88,7 @@ private:
     bool mbHeaderLayout:1;  // true : grid, false : standard
     bool mbHasCompactRowField:1; // true: at least one of the row fields has compact layout.
     bool mbExpandCollapse:1; // true: show expand/collapse buttons
+    bool mbHideHeader : 1;
 
     void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const css::sheet::DataResult& rData );
@@ -120,7 +121,7 @@ public:
     ScDPOutput(ScDocument* pDocument,
                css::uno::Reference<css::sheet::XDimensionsSupplier> xSource,
                const ScAddress& rPosition, bool bFilter, bool bExpandCollapse,
-               ScDPObject& rObject);
+               ScDPObject& rObject, bool bHideHeader);
     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );

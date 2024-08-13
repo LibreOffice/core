@@ -1288,6 +1288,8 @@ void PivotTable::finalizeImport()
         aDescProp.setProperty( PROP_ShowFilterButton, false );
         aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
 
+        mpDPObject->SetHideHeader(maLocationModel.mnFirstHeaderRow == 0);
+
         if (auto* pSaveData = mpDPObject->GetSaveData())
             pSaveData->SetExpandCollapse(maDefModel.mbShowDrill);
 

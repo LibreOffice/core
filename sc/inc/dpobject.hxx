@@ -107,6 +107,7 @@ private:
     bool mbAllowMove : 1;
     bool mbSettingsChanged : 1;
     bool mbEnableGetPivotData : 1;
+    bool mbHideHeader : 1 = false;
 
     void              CreateObjects();
     void              CreateOutput();
@@ -147,6 +148,9 @@ public:
 
     SC_DLLPUBLIC void   SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const { return mbHeaderLayout;}
+
+    SC_DLLPUBLIC void SetHideHeader(bool bHideHeader);
+    bool GetHideHeader() const { return mbHideHeader; }
 
     SC_DLLPUBLIC void   SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
