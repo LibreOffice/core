@@ -177,6 +177,16 @@ namespace drawinglayer::primitive2d
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
+
+        class DRAWINGLAYER_DLLPUBLIC TextHierarchyEmphasisMarkPrimitive2D final : public GroupPrimitive2D
+        {
+        public:
+            /// constructor
+            explicit TextHierarchyEmphasisMarkPrimitive2D(Primitive2DContainer&& aContent);
+
+            /// provide unique ID
+            virtual sal_uInt32 getPrimitive2DID() const override;
+        };
 } // end of namespace drawinglayer::primitive2d
 
 

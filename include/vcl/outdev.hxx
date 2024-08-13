@@ -1232,6 +1232,13 @@ private:
     ///@{
 
 public:
+    /// tooling method to be able to access EmphasisMark data when needed
+    void  createEmphasisMarks(
+        FontEmphasisMark nFontEmphasisMark,
+        tools::Long nEmphasisHeight,
+        SalLayout& rSalLayout,
+        std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
+            bool, const tools::Rectangle&, const tools::Rectangle&)> aCallback) const;
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;

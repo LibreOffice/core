@@ -903,6 +903,13 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
                 static_cast<const primitive2d::ObjectInfoPrimitive2D&>(rCandidate));
             break;
         }
+        case PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D:
+        {
+            // EmphasisMarks are traditionally not added to Metafiles, see
+            // OutputDevice::ImplDrawEmphasisMarks which resets GDIMetaFile*
+            // while painting these, so just ignore these
+            break;
+        }
         default:
         {
             // process recursively

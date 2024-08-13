@@ -22,10 +22,14 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <primitive2d/texteffectprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <primitive2d/textlineprimitive2d.hxx>
 #include <primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
-
+#include <vcl/vcllayout.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -75,8 +79,10 @@ namespace drawinglayer::primitive2d
             const bool bOverlineUsed(TEXT_LINE_NONE != getFontOverline());
             const bool bUnderlineUsed(TEXT_LINE_NONE != getFontUnderline());
             const bool bStrikeoutUsed(TEXT_STRIKEOUT_NONE != getTextStrikeout());
+            const bool bEmphasisMarkUsed(TEXT_FONT_EMPHASIS_MARK_NONE != getTextEmphasisMark()
+                && (getEmphasisMarkAbove() || getEmphasisMarkBelow()));
 
-            if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed))
+            if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed || bEmphasisMarkUsed))
             {
                 // not used, return empty Primitive2DContainer
                 return maBufferedDecorationGeometry;
@@ -88,16 +94,9 @@ namespace drawinglayer::primitive2d
                 return maBufferedDecorationGeometry;
             }
 
-            // common preparations
-            TextLayouterDevice aTextLayouter;
-
-            // TextLayouterDevice is needed to get metrics for text decorations like
-            // underline/strikeout/emphasis marks from it. For setup, the font size is needed
-            aTextLayouter.setFontAttribute(
-                getFontAttribute(),
-                rDecTrans.getScale().getX(),
-                rDecTrans.getScale().getY(),
-                getLocale());
+            // common preparations - create TextLayouterDevice
+            primitive2d::TextLayouterDevice aTextLayouter;
+            createTextLayouter(aTextLayouter);
 
             // get text width
             double fTextWidth(0.0);
@@ -176,7 +175,99 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            // TODO: Handle Font Emphasis Above/Below
+            if (bEmphasisMarkUsed)
+            {
+                // create primitives for EmphasisMark visualization - we need a SalLayout
+                std::unique_ptr<SalLayout> pSalLayout(createSalLayout(aTextLayouter));
+
+                if (pSalLayout)
+                {
+                    // placeholders for repeated content, only created once
+                    Primitive2DReference aShape;
+                    Primitive2DReference aRect1;
+                    Primitive2DReference aRect2;
+
+                    // space to collect primitives for EmphasisMark
+                    Primitive2DContainer aEmphasisContent;
+
+                    // callback collector will produce geometry alraeyd scaled, so
+                    // prepare local transform without FontScale
+                    const basegfx::B2DHomMatrix aObjTransformWithoutScale(
+                        basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+                            rDecTrans.getShearX(), rDecTrans.getRotate(), rDecTrans.getTranslate()));
+
+                    // the callback from OutputDevice::createEmphasisMarks providing the data
+                    // for each EmphasisMark
+                    auto aEmphasisCallback([this, &aShape, &aRect1, &aRect2, &aEmphasisContent, &aObjTransformWithoutScale](
+                        const basegfx::B2DPoint& rOutPoint, const basegfx::B2DPolyPolygon& rShape,
+                        bool isPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2)
+                    {
+                        // prepare complete ObjectTransform
+                        const basegfx::B2DHomMatrix aTransform(
+                            aObjTransformWithoutScale * basegfx::utils::createTranslateB2DHomMatrix(rOutPoint));
+
+                        if (rShape.count())
+                        {
+                            // create PolyPolygon if provided
+                            if (!aShape)
+                            {
+                                if (isPolyLine)
+                                    aShape = new PolyPolygonHairlinePrimitive2D(rShape, getFontColor());
+                                else
+                                    aShape = new PolyPolygonColorPrimitive2D(rShape, getFontColor());
+                            }
+
+                            aEmphasisContent.push_back(
+                                new TransformPrimitive2D(
+                                    aTransform,
+                                    Primitive2DContainer { aShape } ));
+                        }
+
+                        if (!rRect1.IsEmpty())
+                        {
+                            // create Rectangle1 if provided
+                            if (!aRect1)
+                                aRect1 = new FilledRectanglePrimitive2D(
+                                    basegfx::B2DRange(rRect1.Left(), rRect1.Top(), rRect1.Right(), rRect1.Bottom()), getFontColor());
+
+                            aEmphasisContent.push_back(
+                                new TransformPrimitive2D(
+                                    aTransform,
+                                    Primitive2DContainer { aRect1 } ));
+                        }
+
+                        if (!rRect2.IsEmpty())
+                        {
+                            // create Rectangle2 if provided
+                            if (!aRect2)
+                                aRect2 = new FilledRectanglePrimitive2D(
+                                    basegfx::B2DRange(rRect2.Left(), rRect2.Top(), rRect2.Right(), rRect2.Bottom()), getFontColor());
+
+                            aEmphasisContent.push_back(
+                                new TransformPrimitive2D(
+                                    aTransform,
+                                    Primitive2DContainer { aRect2 } ));
+                        }
+                    });
+
+                    // call tooling method in vcl to generate the graphic representations
+                    aTextLayouter.createEmphasisMarks(
+                        *pSalLayout,
+                        getTextEmphasisMark(),
+                        getEmphasisMarkAbove(),
+                        aEmphasisCallback);
+
+                    if (!aEmphasisContent.empty())
+                    {
+                        // if we got graphic representations of EmphasisMark, add
+                        // them to BufferedDecorationGeometry. Also embed them to
+                        // a TextHierarchyEmphasisMarkPrimitive2D GroupPrimitive
+                        // to be able to evtl. handle these in a special way
+                        maBufferedDecorationGeometry.push_back(
+                            new TextHierarchyEmphasisMarkPrimitive2D(std::move(aEmphasisContent)));
+                    }
+                }
+            }
 
             // append local result and return
             return maBufferedDecorationGeometry;

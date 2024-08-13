@@ -365,11 +365,10 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     return aRetval;
 }
 
-std::unique_ptr<SalLayout> TextLayouterDevice::getSalLayout(const OUString& rText,
-                                                            sal_uInt32 nIndex, sal_uInt32 nLength,
-                                                            const basegfx::B2DPoint& rStartPoint,
-                                                            const KernArray& rDXArray,
-                                                            std::span<const sal_Bool> pKashidaAry)
+std::unique_ptr<SalLayout>
+TextLayouterDevice::getSalLayout(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength,
+                                 const basegfx::B2DPoint& rStartPoint, const KernArray& rDXArray,
+                                 std::span<const sal_Bool> pKashidaAry) const
 {
     const SalLayoutGlyphs* pGlyphs(
         SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&mrDevice, rText, nIndex, nLength));
@@ -378,6 +377,42 @@ std::unique_ptr<SalLayout> TextLayouterDevice::getSalLayout(const OUString& rTex
     KernArraySpan aKernArraySpan(rDXArray);
     return mrDevice.ImplLayout(rText, nIndex, nLength, aStartPoint, 0, aKernArraySpan, pKashidaAry,
                                SalLayoutFlags::NONE, nullptr, pGlyphs);
+}
+
+void TextLayouterDevice::createEmphasisMarks(
+    SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
+    std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
+                       const tools::Rectangle&, const tools::Rectangle&)>
+        aCallback) const
+{
+    FontEmphasisMark nEmphasisMark(FontEmphasisMark::NONE);
+    double fEmphasisHeight(getTextHeight() * (250.0 / 1000.0));
+
+    switch (aTextEmphasisMark)
+    {
+        case TEXT_FONT_EMPHASIS_MARK_DOT:
+            nEmphasisMark = FontEmphasisMark::Dot;
+            break;
+        case TEXT_FONT_EMPHASIS_MARK_CIRCLE:
+            nEmphasisMark = FontEmphasisMark::Circle;
+            break;
+        case TEXT_FONT_EMPHASIS_MARK_DISC:
+            nEmphasisMark = FontEmphasisMark::Disc;
+            break;
+        case TEXT_FONT_EMPHASIS_MARK_ACCENT:
+            nEmphasisMark = FontEmphasisMark::Accent;
+            break;
+        default:
+            break;
+    }
+
+    if (bAbove)
+        nEmphasisMark |= FontEmphasisMark::PosAbove;
+    else
+        nEmphasisMark |= FontEmphasisMark::PosBelow;
+
+    mrDevice.createEmphasisMarks(nEmphasisMark, static_cast<tools::Long>(fEmphasisHeight),
+                                 rSalLayout, aCallback);
 }
 
 // helper methods for vcl font handling

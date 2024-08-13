@@ -25,6 +25,9 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <primitive2d/texteffectprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/vcllayout.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/kernarray.hxx>
 #include <utility>
 #include <osl/diagnose.h>
 
@@ -294,6 +297,54 @@ basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
     }
 
     return maB2DRange;
+}
+
+void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextLayouter) const
+{
+    // decompose primitive-local matrix to get local font scaling
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
+
+    // create a TextLayouter to access encapsulated VCL Text/Font related tooling
+    rTextLayouter.setFontAttribute(getFontAttribute(), aDecTrans.getScale().getX(),
+                                   aDecTrans.getScale().getY(), getLocale());
+
+    if (getFontAttribute().getRTL())
+    {
+        vcl::text::ComplexTextLayoutFlags nRTLLayoutMode(
+            rTextLayouter.getLayoutMode() & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+        nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                          | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+        rTextLayouter.setLayoutMode(nRTLLayoutMode);
+    }
+    else
+    {
+        // tdf#101686: This is LTR text, but the output device may have RTL state.
+        vcl::text::ComplexTextLayoutFlags nLTRLayoutMode(rTextLayouter.getLayoutMode());
+        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        rTextLayouter.setLayoutMode(nLTRLayoutMode);
+    }
+}
+
+std::unique_ptr<SalLayout>
+TextSimplePortionPrimitive2D::createSalLayout(TextLayouterDevice& rTextLayouter) const
+{
+    // create integer DXArray. As mentioned above we can act in the
+    // Text's local coordinate system without transformation at all
+    const ::std::vector<double>& rDXArray(getDXArray());
+    KernArray aDXArray;
+
+    if (!rDXArray.empty())
+    {
+        aDXArray.reserve(rDXArray.size());
+        for (auto const& elem : rDXArray)
+            aDXArray.push_back(basegfx::fround(elem));
+    }
+
+    // create SalLayout. No need for a position, as mentioned text can work
+    // without transformations, so start point is always 0,0
+    return rTextLayouter.getSalLayout(getText(), getTextPosition(), getTextLength(),
+                                      basegfx::B2DPoint(0.0, 0.0), aDXArray, getKashidaArray());
 }
 
 // provide unique ID

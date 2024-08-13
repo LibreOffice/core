@@ -22,9 +22,11 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/fontenum.hxx>
 #include <span>
 
 // predefines
@@ -36,6 +38,10 @@ class KernArray;
 namespace vcl
 {
 class Font;
+}
+namespace vcl::font
+{
+class EmphasisMark;
 }
 namespace tools
 {
@@ -118,7 +124,12 @@ public:
                                             sal_uInt32 nLength,
                                             const basegfx::B2DPoint& rStartPoint,
                                             const KernArray& rDXArray,
-                                            std::span<const sal_Bool> pKashidaAry);
+                                            std::span<const sal_Bool> pKashidaAry) const;
+    void
+    createEmphasisMarks(SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
+                        std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
+                                           bool, const tools::Rectangle&, const tools::Rectangle&)>
+                            aCallback) const;
 };
 
 // helper methods for vcl font handling

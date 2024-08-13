@@ -30,7 +30,15 @@
 #include <tools/long.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <memory>
 #include <vector>
+
+namespace drawinglayer::primitive2d
+{
+class TextLayouterDevice;
+}
+
+class SalLayout;
 
 namespace drawinglayer::primitive2d
 {
@@ -134,6 +142,12 @@ protected:
     create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
+    /// helpers to create a TextLayouterDevice and SalLayout, e.g. needed for SDPRs
+    // and decompose. NOTE: the TextLayouterDevice is filled, but should always only
+    // be used temporary (do not try to buffer)
+    void createTextLayouter(TextLayouterDevice& rTextLayouter) const;
+    std::unique_ptr<SalLayout> createSalLayout(TextLayouterDevice& rTextLayouter) const;
+
     /// constructor
     TextSimplePortionPrimitive2D(basegfx::B2DHomMatrix aNewTransform, OUString aText,
                                  sal_Int32 nTextPosition, sal_Int32 nTextLength,

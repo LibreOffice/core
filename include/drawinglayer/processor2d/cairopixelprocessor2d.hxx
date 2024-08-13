@@ -127,7 +127,7 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
         const primitive2d::TextDecoratedPortionPrimitive2D* pDecoratedCandidate);
     void renderTextBackground(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate,
-                              const primitive2d::TextLayouterDevice& rTextLayouter,
+                              double fAscent, double fDescent,
                               const basegfx::B2DHomMatrix& rTransform, double fTextWidth);
     void renderSalLayout(const std::unique_ptr<SalLayout>& rSalLayout,
                          const basegfx::BColor& rTextColor, const basegfx::B2DHomMatrix& rTransform,

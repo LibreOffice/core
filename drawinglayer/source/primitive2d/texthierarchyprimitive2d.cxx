@@ -156,6 +156,18 @@ namespace drawinglayer::primitive2d
             return PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D;
         }
 
+
+        TextHierarchyEmphasisMarkPrimitive2D::TextHierarchyEmphasisMarkPrimitive2D(Primitive2DContainer&& aContent)
+        :   GroupPrimitive2D(std::move(aContent))
+        {
+        }
+
+        // provide unique ID
+        sal_uInt32 TextHierarchyEmphasisMarkPrimitive2D::getPrimitive2DID() const
+        {
+            return PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D;
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
