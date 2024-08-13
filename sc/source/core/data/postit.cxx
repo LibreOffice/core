@@ -502,10 +502,15 @@ void ScPostIt::SetAuthor( const OUString& rAuthor )
     maNoteData.maAuthor = rAuthor;
 }
 
-void ScPostIt::AutoStamp()
+void ScPostIt::AutoStamp(bool bCreate)
 {
-    maNoteData.maDate = ScGlobal::getLocaleData().getDate( Date( Date::SYSTEM ) ) + " " +
-        ScGlobal::getLocaleData().getTime(DateTime(DateTime::SYSTEM), false);
+    if (bCreate)
+    {
+        maNoteData.maDate = ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM)) + " "
+                            + ScGlobal::getLocaleData().getTime(DateTime(DateTime::SYSTEM), false);
+    }
+    if (!maNoteData.maAuthor.isEmpty())
+        return;
     const OUString aAuthor = SvtUserOptions().GetFullName();
     maNoteData.maAuthor = !aAuthor.isEmpty() ? aAuthor : ScResId(STR_CHG_UNKNOWN_AUTHOR);
 }
@@ -854,8 +859,7 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         else
         {
             aBuffer.append(pNote->GetAuthor()
-                + ", "
-                + pNote->GetDate());
+                           + (!pNote->GetDate().isEmpty() ? ", " + pNote->GetDate() : OUString()));
         }
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
@@ -983,17 +987,19 @@ ScPostIt* ScNoteUtil::CreateNoteFromGenerator(
     // simple text now to supply any queries for that which don't require
     // creation of a full Caption
     rInitData.maSimpleText = rInitData.mxGenerator->GetSimpleText();
-
-    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
+    aNoteData.maAuthor = rInitData.mxGenerator->GetAuthorName();
+    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/ false,
+                      0 /*nPostItId*/, false /*bShouldAutoStamp*/);
 }
 
 ScPostIt* ScNoteUtil::InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
-                                 bool bAlwaysCreateCaption, sal_uInt32 nPostItId)
+                                 bool bAlwaysCreateCaption, sal_uInt32 nPostItId,
+                                 bool bShouldAutoStamp)
 {
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(rNoteData), bAlwaysCreateCaption, nPostItId );
-    pNote->AutoStamp();
+    pNote->AutoStamp(bShouldAutoStamp);
     //insert takes ownership
     rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
     return pNote;

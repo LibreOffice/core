@@ -113,7 +113,7 @@ public:
     void SetAuthor( const OUString& rAuthor );
 
     /** Sets date and author from system settings. */
-    void                AutoStamp();
+    void AutoStamp(bool bCreate = true);
 
     /** Returns the pointer to the current outliner object, or null. */
     const OutlinerParaObject* GetOutlinerObject() const;
@@ -179,13 +179,15 @@ class GenerateNoteCaption
 public:
     virtual void Generate(SdrCaptionObj& rCaptionObj) = 0;
     virtual OUString GetSimpleText() const = 0;
+    virtual OUString GetAuthorName() const = 0;
     virtual ~GenerateNoteCaption() {};
 };
 
 class SC_DLLPUBLIC ScNoteUtil
 {
     static ScPostIt* InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
-                                bool bAlwaysCreateCaption, sal_uInt32 nPostItId);
+                                bool bAlwaysCreateCaption, sal_uInt32 nPostItId,
+                                bool bShouldAutoStamp = true);
 
     static ScNoteData CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
                                      const tools::Rectangle& rCaptionRect, bool bShown);
