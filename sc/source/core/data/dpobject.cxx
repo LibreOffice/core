@@ -307,27 +307,29 @@ bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
         aParPass == rOther.aParPass;
 }
 
-ScDPObject::ScDPObject( ScDocument* pD ) :
-    pDoc( pD ),
-    nHeaderRows( 0 ),
-    mbHeaderLayout(false),
-    bAllowMove(false),
-    bSettingsChanged(false),
-    mbEnableGetPivotData(true)
+ScDPObject::ScDPObject(ScDocument* pD)
+    : pDoc(pD)
+    , nHeaderRows(0)
+    , mbHeaderLayout(false)
+    , bAllowMove(false)
+    , bSettingsChanged(false)
+    , mbEnableGetPivotData(true)
+    , mbHideHeader(false)
 {
 }
 
-ScDPObject::ScDPObject(const ScDPObject& r) :
-    pDoc( r.pDoc ),
-    aTableName( r.aTableName ),
-    aTableTag( r.aTableTag ),
-    aOutRange( r.aOutRange ),
-    maInteropGrabBag(r.maInteropGrabBag),
-    nHeaderRows( r.nHeaderRows ),
-    mbHeaderLayout( r.mbHeaderLayout ),
-    bAllowMove(false),
-    bSettingsChanged(false),
-    mbEnableGetPivotData(r.mbEnableGetPivotData)
+ScDPObject::ScDPObject(const ScDPObject& r)
+    : pDoc(r.pDoc)
+    , aTableName(r.aTableName)
+    , aTableTag(r.aTableTag)
+    , aOutRange(r.aOutRange)
+    , maInteropGrabBag(r.maInteropGrabBag)
+    , nHeaderRows(r.nHeaderRows)
+    , mbHeaderLayout(r.mbHeaderLayout)
+    , bAllowMove(false)
+    , bSettingsChanged(false)
+    , mbEnableGetPivotData(r.mbEnableGetPivotData)
+    , mbHideHeader(r.mbHideHeader)
 {
     if (r.pSaveData)
         pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
@@ -361,6 +363,7 @@ ScDPObject& ScDPObject::operator= (const ScDPObject& r)
         bAllowMove = false;
         bSettingsChanged = false;
         mbEnableGetPivotData = r.mbEnableGetPivotData;
+        mbHideHeader = r.mbHideHeader;
 
         if (r.pSaveData)
             pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
@@ -398,6 +401,8 @@ void ScDPObject::SetHeaderLayout (bool bUseGrid)
 {
     mbHeaderLayout = bUseGrid;
 }
+
+void ScDPObject::SetHideHeader(bool bHideHeader) { mbHideHeader = bHideHeader; }
 
 void ScDPObject::SetOutRange(const ScRange& rRange)
 {
@@ -526,7 +531,8 @@ void ScDPObject::CreateOutput()
         return;
 
     bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-    pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton, pSaveData ? pSaveData->GetExpandCollapse() : false ) );
+    pOutput.reset(new ScDPOutput(pDoc, xSource, aOutRange.aStart, bFilterButton,
+                                 pSaveData ? pSaveData->GetExpandCollapse() : false, mbHideHeader));
     pOutput->SetHeaderLayout ( mbHeaderLayout );
 
     sal_Int32 nOldRows = nHeaderRows;

@@ -106,6 +106,7 @@ private:
     bool                    bAllowMove:1;
     bool                    bSettingsChanged:1;
     bool                    mbEnableGetPivotData:1;
+    bool mbHideHeader : 1;
 
     SAL_DLLPRIVATE ScDPTableData*    GetTableData();
     SAL_DLLPRIVATE void              CreateObjects();
@@ -145,6 +146,9 @@ public:
 
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const { return mbHeaderLayout;}
+
+    void SetHideHeader(bool bHideHeader);
+    bool GetHideHeader() const { return mbHideHeader; }
 
     void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
