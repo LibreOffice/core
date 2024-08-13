@@ -3110,7 +3110,7 @@ void BuilderBase::handleListStore(xmlreader::XmlReader& reader, const OUString& 
     }
 }
 
-VclBuilder::stringmap VclBuilder::handleAtkObject(xmlreader::XmlReader &reader) const
+BuilderBase::stringmap BuilderBase::handleAtkObject(xmlreader::XmlReader& reader) const
 {
     int nLevel = 1;
 

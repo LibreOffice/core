@@ -104,6 +104,7 @@ protected:
                            const bool bTranslate) const;
 
 
+    stringmap handleAtkObject(xmlreader::XmlReader& reader) const;
     std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader& reader) const;
     void handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass);
     void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
@@ -395,8 +396,6 @@ private:
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar);
-
-    stringmap   handleAtkObject(xmlreader::XmlReader &reader) const;
 
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties, bool bToolbarItem);
