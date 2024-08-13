@@ -27,7 +27,7 @@
 
 #include <headless/CairoCommon.hxx>
 
-class SvpGraphicsBackend final : public SalGraphicsImpl
+class SAL_DLLPUBLIC_RTTI SvpGraphicsBackend final : public SalGraphicsImpl
 {
     CairoCommon& m_rCairoCommon;
 
