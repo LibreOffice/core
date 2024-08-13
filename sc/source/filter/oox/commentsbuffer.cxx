@@ -154,9 +154,11 @@ namespace
         css::uno::Sequence<OUString> maPropertyNames;  /// import filter Caption object formatting property names
         css::uno::Sequence<css::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
         std::shared_ptr<RichString> mxText;
+        OUString msAuthorName;
 
-        OOXGenerateNoteCaption(std::shared_ptr<RichString>& rText)
+        OOXGenerateNoteCaption(std::shared_ptr<RichString>& rText, const OUString& rAuthorName = "")
             : mxText(rText)
+            , msAuthorName(rAuthorName)
         {
         }
 
@@ -182,6 +184,8 @@ namespace
         {
             return mxText->getStringContent();
         }
+
+        virtual OUString GetAuthorName() const override { return msAuthorName; }
     };
 }
 
@@ -199,7 +203,7 @@ void Comment::finalizeImport()
         rtl::Reference<ScAnnotationsObj> xAnnos = static_cast<ScAnnotationsObj*>(pAnnosSupp->getAnnotations().get());
         ScDocShell* pDocShell = xAnnos->GetDocShell();
 
-        auto xGenerator = std::make_unique<OOXGenerateNoteCaption>(maModel.mxText);
+        auto xGenerator = std::make_unique<OOXGenerateNoteCaption>(maModel.mxText, getAuthorName());
 
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
         // vvv TODO vvv TextFitToSize should be a drawing::TextFitToSizeType not bool
@@ -276,6 +280,13 @@ void Comment::finalizeImport()
     }
 }
 
+OUString Comment::getAuthorName()
+{
+    if (o3tl::make_unsigned(this->maModel.mnAuthorId) < getComments().getAuthors().size())
+        return getComments().getAuthors()[this->maModel.mnAuthorId];
+    return "";
+}
+
 // private --------------------------------------------------------------------
 
 CommentsBuffer::CommentsBuffer( const WorksheetHelper& rHelper ) :
@@ -287,6 +298,8 @@ void CommentsBuffer::appendAuthor( const OUString& rAuthor )
 {
     maAuthors.push_back( rAuthor );
 }
+
+std::vector<OUString> CommentsBuffer::getAuthors() const { return maAuthors; }
 
 CommentRef CommentsBuffer::createComment()
 {
