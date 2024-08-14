@@ -17,6 +17,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
@@ -1095,6 +1096,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
     // This must not crash on save; without the fix, it would fail with
     // "Assertion failed: vector subscript out of range"
     loadAndSave("too_many_styles.odt");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf128460)
+{
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+            xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xField->getPresentation(false));
+        CPPUNIT_ASSERT_EQUAL(u"Input field"_ustr, xField->getPresentation(true));
+
+        xField.set(xFields->nextElement(), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT_EQUAL(u"text"_ustr, xField->getPresentation(false));
+        CPPUNIT_ASSERT_EQUAL(u"Input field"_ustr, xField->getPresentation(true));
+    };
+    createSwDoc("tdf128460.odt");
+    verify();
+
+    saveAndReload(u"Office Open XML Text"_ustr);
+    // Without the fix in place, the third ASSERT fails with
+    // Expected: text
+    // Actual:
+    // i.e. The second Field is blank when it should have the content of `text`
+    verify();
 }
 
 } // end of anonymous namespace
