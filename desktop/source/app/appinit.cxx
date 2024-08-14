@@ -19,6 +19,10 @@
 
 
 #include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 #include <app.hxx>
 #include <dp_shared.hxx>
@@ -47,6 +51,8 @@
 
 #if defined EMSCRIPTEN
 #include <emscripten.h>
+#include <emscripten/threading.h>
+#include <emscripten/val.h>
 #include <bindings_uno.hxx>
 #endif
 
@@ -55,6 +61,48 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ucb;
+
+#if defined EMSCRIPTEN
+
+namespace {
+
+extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
+    assert(urls != nullptr);
+    auto const val = emscripten::val::module_property("uno_scripts");
+    if (!val.isUndefined()) {
+        auto const len = val["length"].as<std::uint32_t>();
+        for (std::uint32_t i = 0; i != len; ++i) {
+            urls->push_back(val[i].as<std::u16string>());
+        }
+    }
+}
+
+EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
+    fetch(UTF16ToString(url)).then(res => {
+        if (!res.ok) {
+            throw Error(
+                "Loading <" + res.url + "> failed with " + res.status + " " + res.statusText);
+        }
+        return res.blob();
+    }).then(blob => blob.text()).then(text => eval(text));
+});
+
+void initUno() {
+    init_unoembind_uno();
+    EM_ASM(Module.uno_init$resolve(););
+    std::vector<std::u16string> urls;
+    emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_VI, getUnoScriptUrls, &urls);
+    for (auto const & url: urls) {
+        if (url.find('\0') != std::u16string::npos) {
+            throw std::invalid_argument("Module.uno_scripts element contains embedded NUL");
+        }
+        runUnoScriptUrl(url.c_str());
+    }
+}
+
+}
+
+#endif
 
 namespace desktop
 {
@@ -89,8 +137,7 @@ void Desktop::InitApplicationServiceManager()
 #endif
     comphelper::setProcessServiceFactory(sm);
 #if defined EMSCRIPTEN
-    init_unoembind_uno();
-    EM_ASM(Module.uno_init$resolve(););
+    initUno();
 #endif
 }
 
