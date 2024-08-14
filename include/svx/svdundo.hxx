@@ -657,12 +657,12 @@ public:
 
 class SdrUndoSetPageNum final : public SdrUndoPage
 {
-    sal_uInt16 nOldPageNum;
-    sal_uInt16 nNewPageNum;
+    sal_uInt16 m_nOldPageNum;
+    sal_uInt16 m_nNewPageNum;
 
 public:
     SdrUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
-    :   SdrUndoPage(rNewPg),nOldPageNum(nOldPageNum1),nNewPageNum(nNewPageNum1) {}
+    :   SdrUndoPage(rNewPg),m_nOldPageNum(nOldPageNum1),m_nNewPageNum(nNewPageNum1) {}
 
     virtual void Undo() override;
     virtual void Redo() override;

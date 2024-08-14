@@ -1559,12 +1559,12 @@ bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
 
 void SdrUndoSetPageNum::Undo()
 {
-    ImpMovePage(nNewPageNum,nOldPageNum);
+    ImpMovePage(m_nNewPageNum,m_nOldPageNum);
 }
 
 void SdrUndoSetPageNum::Redo()
 {
-    ImpMovePage(nOldPageNum,nNewPageNum);
+    ImpMovePage(m_nOldPageNum,m_nNewPageNum);
 }
 
 OUString SdrUndoSetPageNum::GetComment() const
