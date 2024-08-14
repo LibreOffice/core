@@ -626,7 +626,7 @@ void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText,
         aDecl.maStrText = rText;
         aDecl.mbFixed = bFixed;
         aDecl.maStrDateTimeFormat = rDateTimeFormat;
-        maDateTimeDeclsMap[rName] = aDecl;
+        maDateTimeDeclsMap[rName] = std::move(aDecl);
     }
 }
 
