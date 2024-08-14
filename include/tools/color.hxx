@@ -282,6 +282,11 @@ public:
         return sal_uInt8((GetBlue() * 29UL + GetGreen() * 151UL + GetRed() * 76UL) >> 8);
     }
 
+    /** Gets the color luminance following WCAG 2.1.
+      * @return luminance
+      */
+    sal_uInt8 GetWCAGLuminance() const;
+
     /** Increases the color luminance by cLumInc.
       * @param cLumInc
       */
@@ -300,22 +305,12 @@ public:
     /** Comparison with luminance thresholds.
       * @return is dark
       */
-    bool IsDark() const
-    {
-        // tdf#156182, and band aid for follow-up issues
-        if (mValue == 0x729fcf) // COL_DEFAULT_SHAPE_FILLING
-            return GetLuminance() <= 62;
-        else
-            return GetLuminance() <= 156;
-    }
+    bool IsDark() const;
 
     /** Comparison with luminance thresholds.
       * @return is dark
       */
-    bool IsBright() const
-    {
-        return GetLuminance() >= 245;
-    }
+    bool IsBright() const;
 
     /* Color filters */
 

@@ -31,6 +31,37 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+static inline double NormalizeRGB(double nValue)
+{
+    if (nValue < 0.04045)
+        return nValue/12.92;
+    else
+        return pow((nValue+0.055)/1.055, 2.4);
+}
+
+sal_uInt8 Color::GetWCAGLuminance() const
+{
+    // https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
+    const double nRed = NormalizeRGB(R/255.0);
+    const double nGreen = NormalizeRGB(G/255.0);
+    const double nBlue = NormalizeRGB(B/255.0);
+    return (nRed * 0.2126 + nGreen * 0.7152 + nBlue * 0.0722) * 255UL;
+}
+
+bool Color::IsDark() const
+{
+    if (mValue == 0x729fcf) // COL_DEFAULT_SHAPE_FILLING
+        return GetLuminance() <= 62;
+    else
+        return GetWCAGLuminance() <= 87;
+}
+
+bool Color::IsBright() const
+{
+    return !IsDark();
+//    return GetLuminance() >= 245;
+}
+
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
 {
     R = sal_uInt8(std::clamp(R + cLumInc, 0, 255));
