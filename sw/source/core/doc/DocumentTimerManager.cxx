@@ -158,6 +158,8 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
+    SfxCloseVetoLock lock(m_rDoc.GetDocShell());
+
     BlockIdling();
     StopIdling();
 

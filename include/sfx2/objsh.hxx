@@ -834,14 +834,14 @@ public:
         }
     };
 
-class SfxCloseVetoLock
+class SFX2_DLLPUBLIC SfxCloseVetoLock
 {
 public:
-    SfxCloseVetoLock(const SfxObjectShell& rDocShell);
+    SfxCloseVetoLock(const SfxObjectShell* pDocShell);
     ~SfxCloseVetoLock();
 
 private:
-    const SfxObjectShell& m_rDocShell;
+    const SfxObjectShell* mpDocShell;
 };
 
 typedef rtl::Reference<SfxObjectShell> SfxObjectShellRef;
