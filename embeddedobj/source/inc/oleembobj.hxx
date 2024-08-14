@@ -217,7 +217,7 @@ protected:
     css::uno::Reference< css::io::XStream > GetNewFilledTempStream_Impl(
                                     const css::uno::Reference< css::io::XInputStream >& xInStream );
 #ifdef _WIN32
-    void SwitchComponentToRunningState_Impl();
+    void SwitchComponentToRunningState_Impl(osl::ResettableMutexGuard& guard);
 #endif
     void MakeEventListenerNotification_Impl( const OUString& aEventName );
 #ifdef _WIN32
@@ -231,7 +231,7 @@ protected:
                         const css::uno::Sequence< css::embed::VerbDescriptor >& aVerbList );
 #endif
 
-    void Dispose();
+    void Dispose(osl::ResettableMutexGuard* guard = nullptr);
 
     void SwitchOwnPersistence(
                 const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
@@ -242,7 +242,7 @@ protected:
                 const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
                 const OUString& aNewName );
 
-    void GetRidOfComponent();
+    void GetRidOfComponent(osl::ResettableMutexGuard* guard);
 
     /// @throws css::uno::Exception
     void StoreToLocation_Impl(
@@ -272,6 +272,7 @@ protected:
 
     css::uno::Reference< css::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
                     const css::uno::Reference< css::io::XStream >& xStream,
+                    osl::ResettableMutexGuard& rGuard,
                     bool bAllowRepair50 = false )
         noexcept;
 #ifdef _WIN32
