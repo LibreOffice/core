@@ -368,6 +368,7 @@ SlideTransitionPane::SlideTransitionPane(
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mxTransitionsIconView(m_xBuilder->weld_icon_view("transitions_icons")),
         mxTransitionsScrollWindow(m_xBuilder->weld_scrolled_window("transitions_icons_scrolled_window")),
+        mxRepeatAutoFrame(m_xBuilder->weld_frame("repeat_after_frame")),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
@@ -392,6 +393,9 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxRB_ADVANCE_ON_MOUSE = m_xBuilder->weld_radio_button(u"rb_mouse_click"_ustr);
     mxRB_ADVANCE_AUTO = m_xBuilder->weld_radio_button(u"rb_auto_after"_ustr);
     mxMF_ADVANCE_AUTO_AFTER  = m_xBuilder->weld_metric_spin_button(u"auto_after_value"_ustr, FieldUnit::SECOND);
+    mxRB_REPEAT_DISABLED = m_xBuilder->weld_radio_button(u"rb_disabled"_ustr);
+    mxRB_REPEAT_AUTO = m_xBuilder->weld_radio_button(u"rb_auto_repeat"_ustr);
+    mxMF_REPEAT_AUTO_AFTER  = m_xBuilder->weld_metric_spin_button(u"rb_auto_repeat_value"_ustr, FieldUnit::SECOND);
     mxPB_APPLY_TO_ALL = m_xBuilder->weld_button(u"apply_to_all"_ustr);
     mxPB_PLAY = m_xBuilder->weld_button(u"play"_ustr);
     mxCB_AUTO_PREVIEW = m_xBuilder->weld_check_button(u"auto_preview"_ustr);
@@ -401,6 +405,8 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     int nWidthChars = mxMF_ADVANCE_AUTO_AFTER->get_width_chars();
     mxMF_ADVANCE_AUTO_AFTER->set_max(nMax, FieldUnit::SECOND);
     mxMF_ADVANCE_AUTO_AFTER->set_width_chars(nWidthChars);
+    mxMF_REPEAT_AUTO_AFTER->set_max(nMax, FieldUnit::SECOND);
+    mxMF_REPEAT_AUTO_AFTER->set_width_chars(nWidthChars);
     mxCBX_duration->set_width_chars(nWidthChars);
 
     if( pDoc )
@@ -430,8 +436,13 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxRB_ADVANCE_ON_MOUSE->connect_toggled( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
     mxRB_ADVANCE_AUTO->connect_toggled( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
     mxMF_ADVANCE_AUTO_AFTER->connect_value_changed( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
+    mxRB_REPEAT_DISABLED->connect_toggled( LINK( this, SlideTransitionPane, RepeatAfterRadioButtonToggled ));
+    mxRB_REPEAT_AUTO->connect_toggled( LINK( this, SlideTransitionPane, RepeatAfterRadioButtonToggled ));
+    mxMF_REPEAT_AUTO_AFTER->connect_value_changed( LINK( this, SlideTransitionPane, RepeatAfterTimeModified ));
     mxCB_AUTO_PREVIEW->connect_toggled( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
+
+    mxRB_REPEAT_DISABLED->set_active( true );
 
     maLateInitTimer.SetTimeout(200);
     maLateInitTimer.SetInvokeHandler(LINK(this, SlideTransitionPane, LateInitCallback));
@@ -444,6 +455,7 @@ SlideTransitionPane::~SlideTransitionPane()
     removeListener();
     mxTransitionsScrollWindow.reset();
     mxTransitionsIconView.reset();
+    mxRepeatAutoFrame.reset();
     mxLB_VARIANT.reset();
     mxCBX_duration.reset();
     mxFT_SOUND.reset();
@@ -452,6 +464,9 @@ SlideTransitionPane::~SlideTransitionPane()
     mxRB_ADVANCE_ON_MOUSE.reset();
     mxRB_ADVANCE_AUTO.reset();
     mxMF_ADVANCE_AUTO_AFTER.reset();
+    mxRB_REPEAT_DISABLED.reset();
+    mxRB_REPEAT_AUTO.reset();
+    mxMF_REPEAT_AUTO_AFTER.reset();
     mxPB_APPLY_TO_ALL.reset();
     mxPB_PLAY.reset();
     mxCB_AUTO_PREVIEW.reset();
@@ -593,6 +608,20 @@ void SlideTransitionPane::updateControls()
         mxMF_ADVANCE_AUTO_AFTER->set_value(aEffect.mfTime * 100.0, FieldUnit::SECOND);
     }
 
+    sd::PresentationSettings& rSettings = mpDrawDoc->getPresentationSettings();
+
+    if ( !rSettings.mbEndless )
+    {
+        mxRB_REPEAT_DISABLED->set_active( true );
+        mxRB_REPEAT_AUTO->set_active( false );
+    }
+    else
+    {
+        mxRB_REPEAT_DISABLED->set_active( false );
+        mxRB_REPEAT_AUTO->set_active( true );
+        mxMF_REPEAT_AUTO_AFTER->set_value(rSettings.mnPauseTimeout, FieldUnit::SECOND);
+    }
+
     if (comphelper::LibreOfficeKit::isActive())
     {
         mxPB_PLAY->hide();
@@ -604,6 +633,7 @@ void SlideTransitionPane::updateControls()
     }
     else
     {
+        mxRepeatAutoFrame->hide();
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
         mxCB_AUTO_PREVIEW->set_active( pOptions->IsPreviewTransitions() );
     }
@@ -624,6 +654,9 @@ void SlideTransitionPane::updateControlState()
     mxRB_ADVANCE_ON_MOUSE->set_sensitive( mbHasSelection );
     mxRB_ADVANCE_AUTO->set_sensitive( mbHasSelection );
     mxMF_ADVANCE_AUTO_AFTER->set_sensitive( mbHasSelection && mxRB_ADVANCE_AUTO->get_active());
+    mxRB_REPEAT_DISABLED->set_sensitive( mbHasSelection );
+    mxRB_REPEAT_AUTO->set_sensitive( mbHasSelection );
+    mxMF_REPEAT_AUTO_AFTER->set_sensitive( mbHasSelection && mxRB_REPEAT_AUTO->get_active());
 
     mxPB_APPLY_TO_ALL->set_sensitive( mbHasSelection );
     mxPB_PLAY->set_sensitive( mbHasSelection );
@@ -791,6 +824,27 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
 
         aResult.mbPresChangeAmbiguous = false;
+    }
+
+    // transition repeat after
+    if (mxRB_REPEAT_DISABLED->get_sensitive() && mxRB_REPEAT_AUTO->get_sensitive()
+            && (mxRB_REPEAT_DISABLED->get_active() || mxRB_REPEAT_AUTO->get_active()))
+    {
+        sd::PresentationSettings& rSettings = mpDrawDoc->getPresentationSettings();
+
+        if ( mxRB_REPEAT_DISABLED->get_active() )
+        {
+            rSettings.mbEndless = false;
+            rSettings.mnPauseTimeout = 0;
+        }
+        else
+        {
+            if ( mxMF_REPEAT_AUTO_AFTER->get_sensitive() )
+            {
+                rSettings.mbEndless = true;
+                rSettings.mnPauseTimeout = static_cast<sal_uInt32>(mxMF_REPEAT_AUTO_AFTER->get_value(FieldUnit::SECOND));
+            }
+        }
     }
 
     // sound
@@ -1005,7 +1059,18 @@ IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, weld::Toggl
     applyToSelectedPages(false);
 }
 
+IMPL_LINK_NOARG(SlideTransitionPane, RepeatAfterRadioButtonToggled, weld::Toggleable&, void)
+{
+    updateControlState();
+    applyToSelectedPages(false);
+}
+
 IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified, weld::MetricSpinButton&, void)
+{
+    applyToSelectedPages(false);
+}
+
+IMPL_LINK_NOARG(SlideTransitionPane, RepeatAfterTimeModified, weld::MetricSpinButton&, void)
 {
     applyToSelectedPages(false);
 }
