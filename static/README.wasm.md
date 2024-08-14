@@ -241,7 +241,19 @@ Module.uno_init.then(function() {
 });
 ```
 
+If you enter the above examples into the browser console, you need to enter them into the console of
+the first soffice.worker.js thread, which is the LO main thread since we use -sPROXY_TO_PTHREAD, not
+into the console of the browser's main thread.
 
+Alternatively, you can do the following:  Put an example into some file like `example.js` that you
+put next to the `qt_soffice.html` that you serve to the browser (i.e., in
+`workdir/installation/LibreOffice/emscripten/`).  Create another small JS snippet file like
+`include.js` (which is only needed during the build) containing
+```
+Module.uno_scripts = ['./example.js'];
+```
+And rebuild LO configured with an additional
+`EMSCRIPTEN_EXTRA_SOFFICE_POST_JS=/...path-to.../include.js`.
 
 ## Tools for problem diagnosis
 
