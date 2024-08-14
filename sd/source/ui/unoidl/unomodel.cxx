@@ -3874,6 +3874,19 @@ OString SdXImpressDocument::getPresentationInfo() const
                                     bool nTransitionDirection = false;
                                     xPropSet->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
                                     aJsonWriter.put("transitionDirection", nTransitionDirection);
+
+                                    // fade color
+                                    if ((nTransitionType == TransitionType::FADE)
+                                        && ((nTransitionSubtype == TransitionSubType::FADETOCOLOR)
+                                            || (nTransitionSubtype == TransitionSubType::FADEFROMCOLOR)
+                                            || (nTransitionSubtype == TransitionSubType::FADEOVERCOLOR)))
+                                    {
+                                        sal_Int32 nFadeColor = 0;
+                                        xPropSet->getPropertyValue("TransitionFadeColor") >>= nFadeColor;
+                                        OUStringBuffer sTmpBuf;
+                                        ::sax::Converter::convertColor(sTmpBuf, nFadeColor);
+                                        aJsonWriter.put("transitionFadeColor", sTmpBuf.makeStringAndClear());
+                                    }
                                 }
 
                                 double nTransitionDuration(0.0);
