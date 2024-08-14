@@ -79,11 +79,6 @@ void Help::DisableContextHelp()
     ImplGetSVHelpData().mbContextHelp = false;
 }
 
-bool Help::IsContextHelpEnabled()
-{
-    return ImplGetSVHelpData().mbContextHelp;
-}
-
 void Help::EnableExtHelp()
 {
     ImplGetSVHelpData().mbExtHelp = true;

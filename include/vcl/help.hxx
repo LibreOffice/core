@@ -71,7 +71,6 @@ public:
 
     static void         EnableContextHelp();
     static void         DisableContextHelp();
-    static bool         IsContextHelpEnabled();
 
     static void         EnableExtHelp();
     static void         DisableExtHelp();

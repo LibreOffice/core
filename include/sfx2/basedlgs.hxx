@@ -102,7 +102,6 @@ class SFX2_DLLPUBLIC SfxSingleTabDialogController : public SfxOkDialogController
 private:
     std::unique_ptr<SfxItemSet> m_xOutputSet;
     const SfxItemSet* m_pInputSet;
-    bool m_bHideHelpBtn;
 
 public:
     SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet* pOptionsSet,
