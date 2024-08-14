@@ -1743,7 +1743,7 @@ void PDFWriterImpl::endPage()
     aFont.SetFontSize( Size( 0, 12 ) );
 
     m_aCurrentPDFState = m_aGraphicsStack.front();
-    m_aGraphicsStack.front().m_aFont =  aFont;
+    m_aGraphicsStack.front().m_aFont = std::move(aFont);
 
     for (auto & bitmap : m_aBitmaps)
     {

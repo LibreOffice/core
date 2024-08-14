@@ -791,7 +791,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                         *   Yield stack.
                         */
                         ContextMenuEvent* pEv = new ContextMenuEvent;
-                        pEv->pWindow = pChild;
+                        pEv->pWindow = std::move(pChild);
                         pEv->aChildPos = aChildPos;
                         Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                     }

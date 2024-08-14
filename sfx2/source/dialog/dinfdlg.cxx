@@ -1186,7 +1186,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         aURL.SetSmartURL( aFile);
         if ( aURL.GetProtocol() == INetProtocol::File )
         {
-            INetURLObject aPath( aURL );
+            INetURLObject aPath(std::move(aURL));
             aPath.setFinalSlash();
             aPath.removeSegment();
             // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS

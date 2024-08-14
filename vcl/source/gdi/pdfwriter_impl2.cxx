@@ -651,7 +651,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                             aInfo.m_fMiterLimit = 0.0;
                                             break;
                                     }
-                                    aInfo.m_aDashArray = aDashArray;
+                                    aInfo.m_aDashArray = std::move(aDashArray);
 
                                     if(SvtGraphicStroke::joinNone == aStroke.getJoinType()
                                         && fStrokeWidth > 0.0)

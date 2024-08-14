@@ -512,7 +512,7 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aComment         = printQueue.m_aComment;
         aPrinter.m_aInfo.m_aLocation        = printQueue.m_aLocation;
 
-        m_aPrinters[ aPrinterName ] = aPrinter;
+        m_aPrinters[aPrinterName] = std::move(aPrinter);
     }
 }
 

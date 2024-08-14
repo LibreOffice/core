@@ -313,7 +313,7 @@ BitmapChecksum Bitmap::GetChecksum() const
         if (xNewImpBmp->Create(*mxSalBmp, getPixelFormat()))
         {
             Bitmap* pThis = const_cast<Bitmap*>(this);
-            pThis->mxSalBmp = xNewImpBmp;
+            pThis->mxSalBmp = std::move(xNewImpBmp);
             nRet = mxSalBmp->GetChecksum();
         }
     }
@@ -1449,7 +1449,7 @@ bool Bitmap::Dither()
     pWriteAcc.reset();
     const MapMode aMap( maPrefMapMode );
     const Size aPrefSize( maPrefSize );
-    *this = aNewBmp;
+    *this = std::move(aNewBmp);
     maPrefMapMode = aMap;
     maPrefSize = aPrefSize;
     return true;

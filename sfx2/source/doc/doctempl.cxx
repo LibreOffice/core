@@ -867,7 +867,7 @@ bool SfxDocumentTemplates::CopyFrom
 
             if( aTitle.isEmpty() )
             {
-                INetURLObject aURL( aTemplURL );
+                INetURLObject aURL(std::move(aTemplURL));
                 aURL.CutExtension();
                 aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
                                         INetURLObject::DecodeMechanism::WithCharset );
