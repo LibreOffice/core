@@ -370,7 +370,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="rb_auto_repeat">
-                    <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">After Slideshow:</property>
+                    <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">After :</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -419,7 +419,7 @@
               <object class="GtkLabel" id="lable3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">Repeat After</property>
+                <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">Repeat Slideshow</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
