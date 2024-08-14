@@ -345,20 +345,21 @@ SfxObjectShell::~SfxObjectShell()
     }
 }
 
-SfxCloseVetoLock::SfxCloseVetoLock(const SfxObjectShell& rDocShell)
-    : m_rDocShell(rDocShell)
+SfxCloseVetoLock::SfxCloseVetoLock(const SfxObjectShell* pDocShell)
+    : mpDocShell(pDocShell)
 {
-    osl_atomic_increment(&m_rDocShell.Get_Impl()->m_nClosingLockLevel);
+    if (mpDocShell)
+        osl_atomic_increment(&mpDocShell->Get_Impl()->m_nClosingLockLevel);
 }
 
 SfxCloseVetoLock::~SfxCloseVetoLock()
 {
-    if (osl_atomic_decrement(&m_rDocShell.Get_Impl()->m_nClosingLockLevel) == 0)
+    if (mpDocShell && osl_atomic_decrement(&mpDocShell->Get_Impl()->m_nClosingLockLevel) == 0)
     {
-        if (m_rDocShell.Get_Impl()->m_bCloseModelScheduled)
+        if (mpDocShell->Get_Impl()->m_bCloseModelScheduled)
         {
-            m_rDocShell.Get_Impl()->m_bCloseModelScheduled = false; // pass ownership
-            if (rtl::Reference model = static_cast<SfxBaseModel*>(m_rDocShell.GetBaseModel().get()))
+            mpDocShell->Get_Impl()->m_bCloseModelScheduled = false; // pass ownership
+            if (rtl::Reference model = static_cast<SfxBaseModel*>(mpDocShell->GetBaseModel().get()))
             {
                 try
                 {
