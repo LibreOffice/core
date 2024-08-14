@@ -841,7 +841,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             if ( mxMF_REPEAT_AUTO_AFTER->get_sensitive() )
             {
                 rSettings.mbEndless = true;
-                rSettings.mnPauseTimeout = static_cast<sal_uInt32>(mxMF_REPEAT_AUTO_AFTER->get_value(FieldUnit::SECOND));
+                rSettings.mnPauseTimeout = static_cast<sal_uInt32>(mxMF_REPEAT_AUTO_AFTER->get_value(FieldUnit::SECOND) / 100.0) ;
             }
         }
     }
