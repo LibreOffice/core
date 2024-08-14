@@ -190,7 +190,7 @@ namespace drawinglayer::primitive2d
                     // space to collect primitives for EmphasisMark
                     Primitive2DContainer aEmphasisContent;
 
-                    // callback collector will produce geometry alraeyd scaled, so
+                    // callback collector will produce geometry already scaled, so
                     // prepare local transform without FontScale
                     const basegfx::B2DHomMatrix aObjTransformWithoutScale(
                         basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
