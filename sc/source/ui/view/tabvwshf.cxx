@@ -633,6 +633,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         if ( bDoIt && nTab >= nTableCount )     // if necessary append
                             nTab = SC_TAB_APPEND;
                     }
+
+                    if( bDoIt )
+                    {
+                        rReq.Done();        // record, while doc is active
+                        if (bFromContextMenu)
+                            MoveTable(nDoc, nTab, bCpy, &aTabName, true,
+                                    nContextMenuTab);
+                        else
+                            MoveTable( nDoc, nTab, bCpy, &aTabName );
+                    }
                 }
                 else
                 {
@@ -641,7 +651,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                    ScopedVclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
+                    VclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
                         aDefaultName));
 
                     SCTAB nTableCount = rDoc.GetTableCount();
@@ -657,51 +667,67 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     // is selected.
                     pDlg->EnableRenameTable(nTabSelCount == 1);
 
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        nDoc = pDlg->GetSelectedDocument();
-                        nTab = pDlg->GetSelectedTable();
-                        bCpy = pDlg->GetCopyTable();
-                        bool bRna = pDlg->GetRenameTable();
-                        // Leave aTabName string empty, when Rename is FALSE.
-                        if( bRna )
-                        {
-                           pDlg->GetTabNameString( aTabName );
-                        }
-                        bDoIt = true;
+                    std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
 
-                        OUString aFoundDocName;
-                        if ( nDoc != SC_DOC_NEW )
+                    pDlg->StartExecuteAsync([
+                        this,
+                        bFromContextMenu,
+                        nContextMenuTab,
+                        pDlg,
+                        pReq
+                    ](sal_Int32 nResult) {
+                        if ( nResult == RET_OK )
                         {
-                            ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
-                            if (pSh)
+                            sal_uInt16 nDoc = pDlg->GetSelectedDocument();
+                            SCTAB nSelectedTab = pDlg->GetSelectedTable();
+                            bool bCopy = pDlg->GetCopyTable();
+                            bool bRna = pDlg->GetRenameTable();
+                            OUString aNewTabName;
+
+                            // Leave aNewTabName string empty, when Rename is FALSE.
+                            if( bRna )
                             {
-                                aFoundDocName = pSh->GetTitle();
-                                if ( !pSh->GetDocument().IsDocEditable() )
+                                pDlg->GetTabNameString(aNewTabName);
+                            }
+                            bool bDoItAsync = true;
+
+                            OUString aFoundDocName;
+                            if ( nDoc != SC_DOC_NEW )
+                            {
+                                ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
+                                if (pSh)
                                 {
-                                    ErrorMessage(STR_READONLYERR);
-                                    bDoIt = false;
+                                    aFoundDocName = pSh->GetTitle();
+                                    if ( !pSh->GetDocument().IsDocEditable() )
+                                    {
+                                        ErrorMessage(STR_READONLYERR);
+                                        bDoItAsync = false;
+                                    }
                                 }
                             }
+                            pReq->AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
+                            // 1-based table, if not APPEND
+                            SCTAB nBasicTab = ( nSelectedTab <= MAXTAB ) ? (nSelectedTab+1) : nSelectedTab;
+                            pReq->AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
+                            pReq->AppendItem( SfxBoolItem( FN_PARAM_2, bCopy ) );
+
+                            if( bDoItAsync )
+                            {
+                                pReq->Done();
+
+                                if (bFromContextMenu)
+                                    MoveTable(nDoc, nSelectedTab, bCopy, &aNewTabName, true,
+                                              nContextMenuTab);
+                                else
+                                    MoveTable(nDoc, nSelectedTab, bCopy, &aNewTabName);
+                            }
                         }
-                        rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
-                        // 1-based table, if not APPEND
-                        SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
-                        rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
-                        rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
-                    }
+
+                        pDlg->disposeOnce();
+                    });
+                    rReq.Ignore();
                 }
 
-                if( bDoIt )
-                {
-                    rReq.Done();        // record, while doc is active
-
-                    if (bFromContextMenu)
-                        MoveTable(nDoc, nTab, bCpy, &aTabName, true,
-                                  nContextMenuTab);
-                    else
-                        MoveTable( nDoc, nTab, bCpy, &aTabName );
-                }
             }
             break;
 
