@@ -23,7 +23,7 @@
     <string name="action_search">Guetar</string>
     <string name="action_undo">Desfacer</string>
     <string name="page">Páxina</string>
-    <string name="app_name_settings">Configuración del visor del LibreOffice</string>
+    <string name="app_name_settings">Axustes del visor del LibreOffice</string>
     <string name="app_version">Versión: %1$s&lt;br&gt;Identificador de la construción: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
     <string name="app_description">El Visor del LibreOffice ye un visor de documentos basáu nel LibreOffice.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
