@@ -361,6 +361,7 @@ constexpr auto constTransitionTypeToString = mapEnumToString<sal_Int16>({
     { animations::TransitionType::BARNDOORWIPE, "BarnDoorWipe"}, // Split
     { animations::TransitionType::WATERFALLWIPE, "WaterfallWipe"}, // Diagonal
     { animations::TransitionType::MISCSHAPEWIPE, "MiscShapeWipe"},
+    { animations::TransitionType::ZOOM, "Zoom"}
 });
 
 constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
@@ -393,6 +394,17 @@ constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
     { animations::TransitionSubType::HORIZONTALRIGHT, "HorizontalRight"},
     { animations::TransitionSubType::COMBVERTICAL, "CombVertical"},
     { animations::TransitionSubType::COMBHORIZONTAL, "CombHorizontal"},
+    { animations::TransitionSubType::TOPLEFT, "TopLeft"},
+    { animations::TransitionSubType::TOPRIGHT, "TopRight"},
+    { animations::TransitionSubType::BOTTOMRIGHT, "BottomRight"},
+    { animations::TransitionSubType::BOTTOMLEFT, "BottomLeft"},
+    { animations::TransitionSubType::TOPCENTER, "TopCenter"},
+    { animations::TransitionSubType::RIGHTCENTER, "RightCenter"},
+    { animations::TransitionSubType::BOTTOMCENTER, "BottomCenter"},
+    { animations::TransitionSubType::FANOUTHORIZONTAL, "FanOutHorizontal"},
+    { animations::TransitionSubType::CORNERSIN, "CornersIn"},
+    { animations::TransitionSubType::HEART, "Heart"},
+    { animations::TransitionSubType::ROTATEIN, "RotateIn"}
 });
 
 constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
