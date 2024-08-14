@@ -594,6 +594,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
 
 uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
         const uno::Reference< io::XStream >& xStream,
+        osl::ResettableMutexGuard& rGuard,
         bool bAllowToRepair50 )
     noexcept
 {
@@ -697,7 +698,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 
 #ifdef _WIN32
                                     // retry to create the component after recovering
-                                    GetRidOfComponent();
+                                    GetRidOfComponent(&rGuard);
 
                                     try
                                     {
@@ -706,12 +707,12 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                     }
                                     catch( const uno::Exception& )
                                     {
-                                        GetRidOfComponent();
+                                        GetRidOfComponent(&rGuard);
                                     }
 #endif
                                 }
 
-                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream );
+                                xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, rGuard );
                             }
                         }
                     }
@@ -1173,7 +1174,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             // is not changed by StoreTo action
 
             uno::Reference< io::XStream > xTmpCVRepresentation =
-                        TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
+                        TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream, rGuard );
 
             // the locally retrieved representation is always preferable
             if ( xTmpCVRepresentation.is() )
@@ -1204,7 +1205,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( bStoreVis )
         {
             if ( !xCachedVisualRepresentation.is() )
-                xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
+                xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream, rGuard );
 
             SAL_WARN_IF( !xCachedVisualRepresentation.is(), "embeddedobj.ole", "No representation is available!" );
 
@@ -1228,7 +1229,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         {
             // the removed representation could be cached by this method
             if ( !xCachedVisualRepresentation.is() )
-                xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
+                xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream, rGuard );
 
             if (!m_bStreamReadOnly)
                 RemoveVisualCache_Impl(xTargetStream);
@@ -1294,7 +1295,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     // the only exception is object initialized from a stream,
     // the class ID will be detected from the stream
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1378,7 +1379,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             {
                 // TODO/LATER: detect classID of the object if possible
                 // means that the object inprocess server could not be successfully instantiated
-                GetRidOfComponent();
+                GetRidOfComponent(&aGuard);
             }
 
             m_nObjectState = embed::EmbedStates::LOADED;
@@ -1753,14 +1754,14 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
                 InsertVisualCache_Impl( m_xObjectStream, m_xCachedVisualRepresentation );
             else
             {
-                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream, aGuard );
                 SAL_WARN_IF( !m_xCachedVisualRepresentation.is(), "embeddedobj.ole", "No representation is available!" );
             }
         }
         else
         {
             if ( !m_xCachedVisualRepresentation.is() )
-                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream, aGuard );
             RemoveVisualCache_Impl( m_xObjectStream );
         }
 
@@ -1875,7 +1876,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     }
     // end wrapping related part ====================
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1927,7 +1928,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     }
 
     try {
-        GetRidOfComponent();
+        GetRidOfComponent(&aGuard);
     }
     catch (const uno::Exception&)
     {
