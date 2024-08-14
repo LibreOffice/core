@@ -117,7 +117,6 @@ extra_files_PRESENTATIONS := \
     presnt/Portfolio/Thumbnails/thumbnail.png \
     presnt/Progress/Thumbnails/thumbnail.png \
     presnt/Sunset/Thumbnails/thumbnail.png \
-    presnt/Vintage/Pictures/10000000000000580000001F99D2A38C014B254B.png  \
     presnt/Vintage/Pictures/10000201000004B000000337490AE22881331C9B.png  \
     presnt/Vintage/Pictures/10000201000004B00000033776CA70A4BFE2196B.png  \
     presnt/Vintage/Pictures/10000201000004B0000003379D1127938561C230.png  \
