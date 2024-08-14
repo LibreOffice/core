@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 
 #ifdef _WIN32
 
-void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
+void OleEmbeddedObject::SwitchComponentToRunningState_Impl(osl::ResettableMutexGuard& guard)
 {
     if ( !m_pOleComponent )
     {
@@ -78,12 +78,12 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
     }
     catch( const embed::UnreachableStateException& )
     {
-        GetRidOfComponent();
+        GetRidOfComponent(&guard);
         throw;
     }
     catch( const embed::WrongStateException& )
     {
-        GetRidOfComponent();
+        GetRidOfComponent(&guard);
         throw;
     }
 }
@@ -515,7 +515,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     // it can be created during loading to detect type of object
                     CreateOleComponentAndLoad_Impl( m_pOleComponent );
 
-                    SwitchComponentToRunningState_Impl();
+                    SwitchComponentToRunningState_Impl(aGuard);
                     m_nObjectState = embed::EmbedStates::RUNNING;
                     aGuard.clear();
                     StateChangeNotification_Impl( false, nOldState, m_nObjectState );

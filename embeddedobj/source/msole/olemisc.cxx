@@ -221,7 +221,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_In
 }
 #endif
 
-void OleEmbeddedObject::GetRidOfComponent()
+void OleEmbeddedObject::GetRidOfComponent(osl::ResettableMutexGuard* guard)
 {
 #ifdef _WIN32
     if ( m_pOleComponent )
@@ -232,6 +232,9 @@ void OleEmbeddedObject::GetRidOfComponent()
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
         try
         {
+            std::optional<osl::ResettableMutexGuardScopedReleaser> oReleaser;
+            if (guard)
+                oReleaser.emplace(*guard);
             m_pOleComponent->close( false );
         }
         catch( const uno::Exception& )
@@ -245,11 +248,13 @@ void OleEmbeddedObject::GetRidOfComponent()
         m_pOleComponent->disconnectEmbeddedObject();
         m_pOleComponent.clear();
     }
+#else
+    (void)guard;
 #endif
 }
 
 
-void OleEmbeddedObject::Dispose()
+void OleEmbeddedObject::Dispose(osl::ResettableMutexGuard* guard)
 {
     if ( m_pInterfaceContainer )
     {
@@ -266,7 +271,7 @@ void OleEmbeddedObject::Dispose()
 
     if ( m_pOleComponent )
         try {
-            GetRidOfComponent();
+            GetRidOfComponent(guard);
         } catch( const uno::Exception& )
         {
             m_bDisposed = true;
@@ -449,7 +454,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     }
     // end wrapping related part ====================
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -495,7 +500,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
     }
 
-    Dispose();
+    Dispose(&aGuard);
 }
 
 
