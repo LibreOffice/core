@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -2400,6 +2401,21 @@ uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
     return GetPropertyValue_Impl(pPropSet, aBase, rPropertyName);
 }
 
+static void lcl_getTogglePropertyValue( sal_uInt16 nWID, sal_uInt8 nMemberId,
+            const SfxItemSet& rSet, Any& rAny )
+{
+    assert(SfxItemPool::IsWhich(nWID));
+    const SfxPoolItem* pItem = nullptr;
+    SfxItemState eState = rSet.GetItemState( nWID, true, &pItem );
+    if (SfxItemState::SET != eState )
+        pItem = &rSet.GetPool()->GetUserOrPoolDefaultItem(nWID);
+    // return item values as uno::Any
+    if(eState >= SfxItemState::DEFAULT && pItem)
+    {
+        pItem->QueryValue( rAny, nMemberId );
+    }
+}
+
 void SwXStyle::getToggleAttributes(
             float& rfCharStyleBold,
             float& rfCharStyleBoldComplex,
@@ -2414,35 +2430,33 @@ void SwXStyle::getToggleAttributes(
 {
     SolarMutexGuard aGuard;
     assert(m_pDoc);
-    assert(m_pBasePool || m_bIsDescriptor);
-    sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
-    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
-    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     assert(m_pBasePool);
-    PrepareStyleBase(aBase);
-    SfxItemSet& rSet = aBase.GetItemSet();
+    SfxStyleSheetBase* pStyleSheetBase = m_pBasePool->Find(m_sStyleName, m_rEntry.family());
+    assert(pStyleSheetBase);
+    rtl::Reference<SwDocStyleSheet> xDocStyleSheet = new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyleSheetBase));
+    const SfxItemSet& rItemSet(xDocStyleSheet->GetItemSet());
+    assert(rItemSet.GetParent());
 
     uno::Any aResult;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharWeight"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_WEIGHT, MID_WEIGHT, rItemSet, aResult);
     aResult >>= rfCharStyleBold;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharWeightComplex"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CTL_WEIGHT, MID_WEIGHT, rItemSet, aResult);
     aResult >>= rfCharStyleBoldComplex;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharPosture"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_POSTURE, MID_POSTURE, rItemSet, aResult);
     aResult >>= reCharStylePosture;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharPostureComplex"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CTL_POSTURE, MID_POSTURE, rItemSet, aResult);
     aResult >>= reCharStylePostureComplex;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharCaseMap"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CASEMAP, 0, rItemSet, aResult);
     aResult >>= rnCharStyleCaseMap;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharRelief"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_RELIEF, 0, rItemSet, aResult);
     aResult >>= rnCharStyleRelief;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharContoured"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CONTOUR, 0, rItemSet, aResult);
     aResult >>= rbCharStyleContoured;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharShadowed"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_SHADOWED, 0, rItemSet, aResult);
     aResult >>= rbCharStyleShadowed;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharStrikeout"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CROSSEDOUT, MID_CROSS_OUT, rItemSet, aResult);
     aResult >>= rnCharStyleStrikeThrough;
-    SfxItemPropertySet::getPropertyValue(*rMap.getByName(u"CharHidden"_ustr), rSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_HIDDEN, 0, rItemSet, aResult);
     aResult >>= rbCharStyleHidden;
 }
 
