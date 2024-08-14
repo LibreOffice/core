@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
              .toInt32();
     sal_Int32 nFooterBottom
         = getXPath(pXmlDoc, "//page[1]/footer/infos/bounds"_ostr, "bottom"_ostr).toInt32();
-    // the image is above the botom of the footer
+    // the image is above the bottom of the footer
     CPPUNIT_ASSERT(nFooterBottom > nFooterImageBottom); // image is higher footer
 }
 
