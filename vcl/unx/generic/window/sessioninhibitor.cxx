@@ -38,10 +38,6 @@
 #define GSM_DBUS_PATH           "/org/gnome/SessionManager"
 #define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
 
-// Mate <= 1.10 uses org.mate.SessionManager, > 1.10 will use org.gnome.SessionManager
-#define MSM_DBUS_SERVICE        "org.mate.SessionManager"
-#define MSM_DBUS_PATH           "/org/mate/SessionManager"
-#define MSM_DBUS_INTERFACE      "org.mate.SessionManager"
 #endif
 
 #include <sal/log.hxx>
@@ -67,7 +63,6 @@ void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason
     }
 
     inhibitGSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
-    inhibitMSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
 }
 
 #if ENABLE_GIO
@@ -226,37 +221,6 @@ void SessionManagerInhibitor::inhibitGSM( bool bInhibit, const char* appname, co
                                                     G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
                  mnGSMCookie );
-#else
-    (void) this;
-    (void) bInhibit;
-    (void) appname;
-    (void) reason;
-    (void) eType;
-    (void) window_system_id;
-#endif // ENABLE_GIO
-}
-
-void SessionManagerInhibitor::inhibitMSM( bool bInhibit, const char* appname, const char* reason, ApplicationInhibitFlags eType, unsigned int window_system_id )
-{
-#if ENABLE_GIO
-    dbusInhibit( bInhibit,
-                 MSM_DBUS_SERVICE, MSM_DBUS_PATH, MSM_DBUS_INTERFACE,
-                 [appname, reason, eType, window_system_id] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
-                     return g_dbus_proxy_call_sync( proxy, "Inhibit",
-                                                    g_variant_new("(susu)",
-                                                                  appname,
-                                                                  window_system_id,
-                                                                  reason,
-                                                                  eType
-                                                                 ),
-                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
-                 },
-                 [] ( GDBusProxy *proxy, const guint nCookie, GError*& error ) -> GVariant* {
-                     return g_dbus_proxy_call_sync( proxy, "Uninhibit",
-                                                    g_variant_new("(u)", nCookie),
-                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
-                 },
-                 mnMSMCookie );
 #else
     (void) this;
     (void) bInhibit;

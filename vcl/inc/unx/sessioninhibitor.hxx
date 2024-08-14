@@ -37,7 +37,6 @@ private:
     std::optional<unsigned int> mnFDOSSCookie; // FDO ScreenSaver Inhibit
     std::optional<unsigned int> mnFDOPMCookie; // FDO PowerManagement Inhibit
     std::optional<unsigned int> mnGSMCookie;
-    std::optional<unsigned int> mnMSMCookie;
 
     std::optional<int> mnXScreenSaverTimeout;
 
@@ -57,16 +56,12 @@ private:
     // FDSSO: org.freedesktop.ScreenSaver::Inhibit - appears to be supported only by KDE?
     // FDOPM: org.freedesktop.PowerManagement.Inhibit::Inhibit - XFCE, (KDE) ?
     //        (KDE: doesn't inhibit screensaver, but does inhibit PowerManagement)
-    // GSM: org.gnome.SessionManager::Inhibit - gnome 3
-    // MSM: org.mate.Sessionmanager::Inhibit - Mate <= 1.10, is identical to GSM
-    //       (This is replaced by the GSM interface from Mate 1.12 onwards)
+    // GSM: org.gnome.SessionManager::Inhibit - gnome 3, MATE
     //
     // Note: the Uninhibit call has different spelling in FDOSS (UnInhibit) vs GSM (Uninhibit)
     SAL_DLLPRIVATE void inhibitFDOSS(bool bInhibit, const char* appname, const char* reason);
     SAL_DLLPRIVATE void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
     SAL_DLLPRIVATE void inhibitGSM(bool bInhibit, const char* appname, const char* reason,
-                                   ApplicationInhibitFlags eType, unsigned int window_system_id);
-    SAL_DLLPRIVATE void inhibitMSM(bool bInhibit, const char* appname, const char* reason,
                                    ApplicationInhibitFlags eType, unsigned int window_system_id);
 
     SAL_DLLPRIVATE void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
