@@ -290,6 +290,7 @@ InputMessage
 InputTitle
 InterceptValue
 InvalidUrl
+InvertNegative
 IsActive
 IsAdjustHeightEnabled
 IsCaseSensitive

@@ -765,6 +765,11 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if( mrModel.monExplosion.has_value() && mrModel.monExplosion.value() != rSeries.mnExplosion )
             rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.value() );
 
+        // data point invert negative
+        if( mrModel.mbInvertNeg != rSeries.mbInvertNeg ) {
+            aPropSet.setProperty( PROP_InvertNegative, mrModel.mbInvertNeg);
+        }
+
         // point formatting
         if( mrModel.mxShapeProp.is() )
         {
@@ -873,6 +878,8 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     rTypeGroup.convertBarGeometry( aSeriesProp, mrModel.monShape.value_or( rTypeGroup.getModel().mnShape ) );
     // pie explosion (restricted to [0%,100%] in Chart2)
     rTypeGroup.convertPieExplosion( aSeriesProp, mrModel.mnExplosion );
+    // invert if negative
+    aSeriesProp.setProperty(PROP_InvertNegative, mrModel.mbInvertNeg);
 
     // series formatting
     ObjectFormatter& rFormatter = getFormatter();

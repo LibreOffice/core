@@ -217,8 +217,31 @@ void BubbleChart::createShapes()
                     double fLogicY = pSeries->getYValue(nIndex);
                     double fBubbleSize = pSeries->getBubble_Size( nIndex );
 
-                    if( fBubbleSize<0.0 )
-                        continue;
+                    bool bInvertNeg(false);
+                    uno::Reference< beans::XPropertySet > xPointProperties =
+                        pSeries->getPropertiesOfPoint(nIndex);
+
+                    // check point properties, and if none then series
+                    // properties
+                    try {
+                        xPointProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
+                    } catch (const uno::Exception&)
+                    {
+                        uno::Reference< beans::XPropertySet > xSeriesProperties =
+                            pSeries->getPropertiesOfSeries();
+                        try {
+                            xSeriesProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
+                        } catch (const uno::Exception&)
+                        {}
+                    }
+
+                    if( fBubbleSize<0.0 ) {
+                        if (bInvertNeg) {
+                            fBubbleSize = -fBubbleSize;
+                        } else {
+                            continue;
+                        }
+                    }
 
                     if( fBubbleSize == 0.0 || std::isnan(fBubbleSize) )
                         continue;

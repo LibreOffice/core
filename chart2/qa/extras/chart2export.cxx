@@ -1321,6 +1321,47 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)
     CPPUNIT_ASSERT_EQUAL(u"\"LabelName\""_ustr, aLabelString);
 }
 
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testInvertNegative)
+{
+    // Bar chart
+    {
+        loadFromFile(u"xlsx/invertIfNeg_bar.xlsx");
+        // make sure the import was successful
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+        CPPUNIT_ASSERT( xDataSeries.is() );
+
+        Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
+
+        bool bInvertNeg;
+        CPPUNIT_ASSERT(
+            xPropSet->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg);
+        CPPUNIT_ASSERT_EQUAL(true, bInvertNeg);
+    }
+
+    // Bubble chart
+    {
+        loadFromFile(u"xlsx/invertIfNeg_bubble.xlsx");
+        // make sure the import was successful
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+        CPPUNIT_ASSERT( xDataSeries.is() );
+
+        Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
+
+        bool bInvertNeg;
+        CPPUNIT_ASSERT(
+            xPropSet->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg);
+        CPPUNIT_ASSERT_EQUAL(true, bInvertNeg);
+    }
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

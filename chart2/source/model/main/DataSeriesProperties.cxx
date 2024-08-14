@@ -75,6 +75,12 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "InvertNegative",
+                  PROP_DATASERIES_INVERT_NEGATIVE,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }
@@ -87,6 +93,7 @@ void DataSeriesProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_ATTACHED_AXIS_INDEX, sal_Int32(0) );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_LEGEND_ENTRY, true );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES, true );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_INVERT_NEGATIVE, false );
 
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 

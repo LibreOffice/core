@@ -708,6 +708,27 @@ void BarChart::doXSlot(
         if( std::isnan( fLogicBarHeight )) //no value at this category
             continue;
 
+        // Handle "invert negative"
+        {
+            bool bInvertNeg(false);
+            uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint(nPointIndex);
+
+            // check point properties, and if none then series properties
+            try {
+                xPointProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
+            } catch (const uno::Exception&)
+            {
+                uno::Reference< beans::XPropertySet > xSeriesProperties =
+                    pSeries->getPropertiesOfSeries();
+                try {
+                    xSeriesProperties->getPropertyValue(u"InvertNegative"_ustr) >>= bInvertNeg;
+                } catch (const uno::Exception&)
+                {}
+            }
+
+            if (bInvertNeg) fLogicBarHeight = fabs(fLogicBarHeight);
+        }
+
         double fLogicValueForLabeDisplay = fLogicBarHeight;
         fLogicBarHeight-=fBaseValue;
 
