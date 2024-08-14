@@ -142,8 +142,8 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
 
     // Bail out on all backends that do not work (or I didn't test). Opt-out rather than opt-in
     // to make sure new backends fail initially.
-    if (device->GetGraphics()->getRenderBackendName() == "qt5"
-        || device->GetGraphics()->getRenderBackendName() == "qt5svp"
+    if (device->GetGraphics()->getRenderBackendName() == "qt"
+        || device->GetGraphics()->getRenderBackendName() == "qtsvp"
         || device->GetGraphics()->getRenderBackendName() == "gtk3svp"
         || device->GetGraphics()->getRenderBackendName() == "aqua"
         || device->GetGraphics()->getRenderBackendName() == "gen"

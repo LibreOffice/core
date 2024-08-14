@@ -24,7 +24,7 @@
 #include <unordered_map>
 
 #define SHOULD_ASSERT                                                                              \
-    (aOutDevTest.getRenderBackendName() != "qt5" && aOutDevTest.getRenderBackendName() != "qt5svp" \
+    (aOutDevTest.getRenderBackendName() != "qt" && aOutDevTest.getRenderBackendName() != "qtsvp"   \
      && aOutDevTest.getRenderBackendName() != "gtk3svp"                                            \
      && aOutDevTest.getRenderBackendName() != "aqua"                                               \
      && aOutDevTest.getRenderBackendName() != "gen"                                                \
