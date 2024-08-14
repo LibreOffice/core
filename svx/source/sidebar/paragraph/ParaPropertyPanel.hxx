@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <editeng/hyphenzoneitem.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -91,6 +92,8 @@ private:
     std::unique_ptr<ToolbarUnoDispatcher> mxLineSpacingDispatch;
     std::unique_ptr<weld::Toolbar> mxTBxIndent;
     std::unique_ptr<ToolbarUnoDispatcher> mxIndentDispatch;
+    std::unique_ptr<weld::Toolbar> mxTBxHyphenation;
+    std::unique_ptr<ToolbarUnoDispatcher> mxHyphenationDispatch;
 
     //Paragraph spacing
     std::optional<SvxRelativeField> mxTopDist;
@@ -99,19 +102,50 @@ private:
     std::optional<SvxRelativeField> mxRightIndent;
     std::optional<SvxRelativeField> mxFLineIndent;
 
+    // Hyphenation
+    std::unique_ptr<weld::Label> mxHyphenationLabel;
+    std::unique_ptr<weld::Label> mxAtLineEndLabel;
+    std::unique_ptr<weld::Label> mxAtLineBeginLabel;
+    std::unique_ptr<weld::Label> mxConsecutiveLabel;
+    std::unique_ptr<weld::Label> mxCompoundLabel;
+    std::unique_ptr<weld::Label> mxWordLengthLabel;
+    std::unique_ptr<weld::Label> mxZoneLabel;
+    std::optional<SvxRelativeField> mxAtLineEnd;
+    std::optional<SvxRelativeField> mxAtLineBegin;
+    std::optional<SvxRelativeField> mxConsecutive;
+    std::optional<SvxRelativeField> mxCompound;
+    std::optional<SvxRelativeField> mxWordLength;
+    std::optional<SvxRelativeField> mxZone;
+    bool mbUpdatingHyphenateButtons;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateCapsBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateLastWordBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateLastFullLineBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateColumnBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenatePageBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateSpreadBtn;
+    std::unique_ptr<weld::ToggleButton> mxHyphenateBtn;
+
     // Data Member
     tools::Long                maTxtLeft;
     tools::Long                    maUpper;
     tools::Long                    maLower;
+    tools::Long                    maZone;
 
     FieldUnit                       m_eMetricUnit;
     FieldUnit                       m_last_eMetricUnit;
     MapUnit                         m_eLRSpaceUnit;
     MapUnit                         m_eULSpaceUnit;
+    MapUnit                         m_eHyphenZoneUnit;
     // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
+    ::sfx2::sidebar::ControllerItem  m_aAtLineEndControl;
+    ::sfx2::sidebar::ControllerItem  m_aAtLineBeginControl;
+    ::sfx2::sidebar::ControllerItem  m_aConsecutiveControl;
+    ::sfx2::sidebar::ControllerItem  m_aCompoundControl;
+    ::sfx2::sidebar::ControllerItem  m_aWordLengthControl;
+    ::sfx2::sidebar::ControllerItem  m_aZoneControl;
 
     vcl::EnumContext maContext;
     SfxBindings* mpBindings;
@@ -119,14 +153,21 @@ private:
 
     DECL_LINK(ModifyIndentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ULSpaceHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(HyphenationHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(HyphenationToggleButtonHdl_Impl, weld::Toggleable&, void);
 
     void StateChangedIndentImpl( SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState );
+    void StateChangedHyphenationImpl( SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();
+    void set_hyphenation_base_visible(bool bVisible);
+    void set_hyphenation_other_visible(bool bVisible);
+    void fill_hyphenzone(SvxHyphenZoneItem& rHyphen);
     void ReSize();
     void InitToolBoxIndent();
     void InitToolBoxSpacing();
+    void InitToolBoxHyphenation();
     void limitMetricWidths();
 };
 

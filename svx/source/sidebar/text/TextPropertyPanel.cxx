@@ -57,6 +57,8 @@ TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Refe
     , mxResetBarDispatch(new ToolbarUnoDispatcher(*mxResetBar, *m_xBuilder, rxFrame))
     , mxDefaultBar(m_xBuilder->weld_toolbar(u"defaultattr"_ustr))
     , mxDefaultBarDispatch(new ToolbarUnoDispatcher(*mxDefaultBar, *m_xBuilder, rxFrame))
+    , mxHyphenationBar(m_xBuilder->weld_toolbar(u"hyphenation"_ustr))
+    , mxHyphenationBarDispatch(new ToolbarUnoDispatcher(*mxHyphenationBar, *m_xBuilder, rxFrame))
     , mxPositionBar(m_xBuilder->weld_toolbar(u"position"_ustr))
     , mxPositionBarDispatch(new ToolbarUnoDispatcher(*mxPositionBar, *m_xBuilder, rxFrame))
     , mxSpacingBar(m_xBuilder->weld_toolbar(u"spacingbar"_ustr))
@@ -74,6 +76,7 @@ TextPropertyPanel::~TextPropertyPanel()
 {
     mxResetBarDispatch.reset();
     mxDefaultBarDispatch.reset();
+    mxHyphenationBarDispatch.reset();
     mxPositionBarDispatch.reset();
     mxSpacingBarDispatch.reset();
     mxToolBoxFontColorDispatch.reset();
@@ -85,6 +88,7 @@ TextPropertyPanel::~TextPropertyPanel()
 
     mxResetBar.reset();
     mxDefaultBar.reset();
+    mxHyphenationBar.reset();
     mxPositionBar.reset();
     mxSpacingBar.reset();
     mxToolBoxFontColor.reset();
@@ -142,6 +146,8 @@ void TextPropertyPanel::HandleContextChange (
     mxToolBoxBackgroundColor->set_visible(bWriterText || bDrawText);
     mxResetBar->set_visible(bWriterText || bCalcText);
     mxDefaultBar->set_visible(bDrawText);
+    mxHyphenationBar->set_visible(bWriterText);
+    mxSpacingBar->set_item_visible(".uno:NoBreak", bWriterText);
 }
 
 } // end of namespace svx::sidebar

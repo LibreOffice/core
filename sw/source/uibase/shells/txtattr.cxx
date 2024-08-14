@@ -326,6 +326,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     // Get both attributes immediately isn't more expensive!!
     SfxItemSetFixed
         <RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
+        RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE,
         RES_FRAMEDIR, RES_FRAMEDIR>  aSet( GetPool() );
 
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -438,6 +439,18 @@ SET_LINESPACE:
                     // no start or continuation of a list - list style is only changed
                     GetShell().SetCurNumRule( aSetRule, false );
                 }
+            }
+        }
+        break;
+        case SID_ATTR_PARA_HYPHENZONE:
+        {
+            SfxItemSetFixed<RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE> aHyphSet( GetPool() );
+            GetShell().GetCurAttr(aHyphSet);
+            SfxItemState eState = aHyphSet.GetItemState(RES_PARATR_HYPHENZONE, false);
+            if ( eState >= SfxItemState::DEFAULT )
+            {
+                SvxHyphenZoneItem aHyphen( pArgs->Get( RES_PARATR_HYPHENZONE ) );
+                aSet.Put( aHyphen );
             }
         }
         break;

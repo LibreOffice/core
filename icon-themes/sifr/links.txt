@@ -1632,6 +1632,10 @@ cmd/lc_hyphenation.png cmd/lc_hyphenate.png
 
 cmd/sc_hyphenation.png cmd/sc_hyphenate.png
 
+cmd/32/nobreak.png cmd/32/cancel.png
+cmd/lc_nobreak.png cmd/lc_cancel.png
+cmd/sc_nobreak.png cmd/sc_cancel.png
+
 # Currency
 cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
 cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png

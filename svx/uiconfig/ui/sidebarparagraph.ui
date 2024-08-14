@@ -27,6 +27,44 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">1</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment7">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="upper">99</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment10">
+    <property name="lower">4</property>
+    <property name="upper">99</property>
+    <property name="value">4</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment11">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="ParaPropertyPanel">
     <property name="visible">True</property>
@@ -38,7 +76,7 @@
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="border-width">6</property>
-        <property name="row-spacing">3</property>
+        <property name="row-spacing">1</property>
         <property name="column-spacing">6</property>
         <property name="column-homogeneous">True</property>
         <child>
@@ -611,6 +649,340 @@
             <property name="left-attach">0</property>
             <property name="top-attach">2</property>
             <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkBox" id="box5">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">3</property>
+                  <child>
+                    <object class="GtkToolbar" id="hyphenation">
+                      <property name="visible">True</property>
+                      <property name="can-focus">True</property>
+                      <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hyphenation|tooltip_text">Hyphenation</property>
+                      <property name="toolbar-style">icons</property>
+                      <property name="show-arrow">False</property>
+                      <property name="icon_size">2</property>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenateCaps">
+                          <property name="visible">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="use-underline">True</property>
+                          <property name="icon-name">cmd/sc_changecasetoupper.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|caps">Hyphenate CAPS</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenateLastWord">
+                          <property name="visible">True</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_textbodyparastyle.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastword">Hyphenate Last Paragraph Word</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenateLastFullLine">
+                          <property name="visible">True</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_insertfooter.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastfullline">Hyphenate Last Full Paragraph Line</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenateColumn">
+                          <property name="visible">True</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_formatcolumns.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|column">Hyphenate Across Column</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenatePage">
+                          <property name="visible">False</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_showtwopages.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|page">Hyphenate Across Page</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="HyphenateSpread">
+                          <property name="visible">False</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_showmultiplepages.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|spread">Hyphenate Across Spread</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                        </packing>
+                      </child>
+                      <child>
+                        <object class="GtkToggleToolButton" id="Hyphenate">
+                          <property name="visible">True</property>
+                          <property name="use-underline">True</property>
+                          <property name="margin-start">1</property>
+                          <property name="margin-end">1</property>
+                          <property name="icon-name">cmd/sc_hyphenation.png</property>
+                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|hyphenation">Hyphenation</property>
+                        </object>
+                        <packing>
+                          <property name="expand">False</property>
+                          <property name="homogeneous">False</property>
+                          <property name="position">0</property>
+                        </packing>
+                      </child>
+                    </object>
+                    <packing>
+                      <property name="expand">False</property>
+                      <property name="fill">True</property>
+                      <property name="position">0</property>
+                    </packing>
+                  </child>
+                  <child>
+                    <object class="GtkLabel" id="hyphenationlabel">
+                      <property name="visible">True</property>
+                      <property name="can-focus">False</property>
+                      <property name="hexpand">True</property>
+                      <property name="label" translatable="yes" context="sidebarparagraph|hyphenationlabel">_Hyphenation:</property>
+                      <property name="use-underline">True</property>
+                      <property name="mnemonic-widget">hyphenation</property>
+                      <property name="xalign">0</property>
+                    </object>
+                    <packing>
+                      <property name="expand">False</property>
+                      <property name="fill">True</property>
+                      <property name="position">0</property>
+                    </packing>
+                  </child>
+                </object>
+                <packing>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">3</property>
+                </packing>
+              </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lineend_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">At line end:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">lineend</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="linebegin_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">At line begin:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">linebegin</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="compound_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">Compound constituent:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">compound</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="consecutive_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">Consecutive lines:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">consecutive</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="wordlength_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|linebegin_label">Word length:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">wordlength</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="zone_label">
+            <property name="visible">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="yes" context="sidebarparagraph|lineend_label">Hyphenation zone:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">zone</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="lineend">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Characters at Line End</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment6</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="linebegin">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Characters at Line Begin</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment7</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="compound">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Compound Constituent Characters at Line End</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment9</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="consecutive">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Maximum Consecutive Hyphenated Lines</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment8</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="wordlength">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|lineend|tooltip_text">Minimum Word Length</property>
+            <property name="hexpand">True</property>
+            <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment10</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="zone">
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="tooltip-text" translatable="yes" context="sidebarparagraph|linebegin|tooltip_text">Line Break Between Words</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <property name="adjustment">adjustment11</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">10</property>
           </packing>
         </child>
         <child>

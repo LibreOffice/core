@@ -61,6 +61,8 @@ private:
     std::unique_ptr<ToolbarUnoDispatcher> mxResetBarDispatch;
     std::unique_ptr<weld::Toolbar> mxDefaultBar;
     std::unique_ptr<ToolbarUnoDispatcher> mxDefaultBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxHyphenationBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxHyphenationBarDispatch;
     std::unique_ptr<weld::Toolbar> mxPositionBar;
     std::unique_ptr<ToolbarUnoDispatcher> mxPositionBarDispatch;
     std::unique_ptr<weld::Toolbar> mxSpacingBar;
