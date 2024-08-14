@@ -118,6 +118,8 @@ namespace pdfi
 
         virtual void intersectClip(const css::uno::Reference<
                                          css::rendering::XPolyPolygon2D >& rPath) override;
+        virtual void intersectClipToStroke(const css::uno::Reference<
+                                                 css::rendering::XPolyPolygon2D >& rPath) override;
         virtual void intersectEoClip(const css::uno::Reference<
                                            css::rendering::XPolyPolygon2D >& rPath) override;
 

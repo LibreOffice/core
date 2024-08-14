@@ -76,6 +76,7 @@ namespace
 // converter
 enum parseKey {
     CLIPPATH,
+    CLIPTOSTROKEPATH,
     DRAWCHAR,
     DRAWIMAGE,
     DRAWLINK,
@@ -863,6 +864,8 @@ void Parser::parseLine( std::string_view aLine )
     {
         case CLIPPATH:
             m_pSink->intersectClip(lp.readPath()); break;
+        case CLIPTOSTROKEPATH:
+            m_pSink->intersectClipToStroke(lp.readPath()); break;
         case DRAWCHAR:
             lp.readChar(); break;
         case DRAWIMAGE:

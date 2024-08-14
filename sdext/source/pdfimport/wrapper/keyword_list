@@ -6,6 +6,7 @@ struct hash_entry { const char* name; enum parseKey eKey; };
 
 %%
 clipPath,CLIPPATH
+clipToStrokePath,CLIPTOSTROKEPATH
 drawChar,DRAWCHAR
 drawImage,DRAWIMAGE
 drawLink,DRAWLINK	

@@ -340,6 +340,12 @@ namespace
             getCurrentContext().Clip = aNewClip;
         }
 
+        virtual void intersectClipToStroke(const uno::Reference<rendering::XPolyPolygon2D>& /* rPath */) override
+        {
+            // Not copying the contents of this, unlike the other clip functions above
+            // it's too complex to copy in, and I don't think the clip is actually used in the test
+        }
+
         virtual void drawGlyphs( const OUString&             rGlyphs,
                                  const geometry::RealRectangle2D& /*rRect*/,
                                  const geometry::Matrix2D&        /*rFontMatrix*/,

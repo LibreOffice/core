@@ -528,6 +528,20 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
     getCurrentContext().Clip = std::move(aNewClip);
 }
 
+void PDFIProcessor::intersectClipToStroke(const uno::Reference< rendering::XPolyPolygon2D >& rPath)
+{
+    // TODO! Expand the path to the outline of the stroked path
+    // TODO(F3): interpret fill mode
+    basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
+    aNewClip.transform(getCurrentContext().Transformation);
+    basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
+
+    if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
+        aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
+
+    getCurrentContext().Clip = aNewClip;
+}
+
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
                                const OUString&           rURI )
 {
