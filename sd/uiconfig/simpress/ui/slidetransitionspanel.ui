@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -333,6 +333,106 @@
           </packing>
         </child>
         <child>
+          <object class="GtkFrame" id="repeat_after_frame">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=2 n-rows=2 -->
+              <object class="GtkGrid" id="grid3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">3</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkRadioButton" id="rb_disabled">
+                    <property name="label" translatable="yes" context="slidetransitionspanel|rb_disabled">Disabled</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rb_disabled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|rb_disabled">Select to advance to the next slide on a mouse click.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rb_auto_repeat">
+                    <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">After Slideshow:</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">rb_disabled</property>
+                    <accessibility>
+                      <relation type="label-for" target="rb_auto_repeat_value"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rb_auto_repeat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|rb_auto_repeat">Select to advance to the next slide after a number of seconds. Enter the seconds in the numerical field next to the spin button, or click the spin button.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="rb_auto_repeat_value">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="rb_auto_repeat"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rb_auto_repeat_value-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|rb_auto_repeat_value">Select to advance to the next slide after a number of seconds. Enter the seconds in the numerical field next to the spin button, or click the spin button.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="lable3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">Repeat After</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -439,7 +539,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
@@ -461,6 +561,7 @@
       <widget name="sound_label"/>
       <widget name="variant_label"/>
       <widget name="rb_auto_after"/>
+      <widget name="rb_auto_repeat"/>
     </widgets>
   </object>
 </interface>

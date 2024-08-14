@@ -94,7 +94,9 @@ private:
 
     DECL_LINK( TransitionSelected, weld::IconView&, bool );
     DECL_LINK( AdvanceSlideRadioButtonToggled, weld::Toggleable&, void );
+    DECL_LINK( RepeatAfterRadioButtonToggled, weld::Toggleable&, void );
     DECL_LINK( AdvanceTimeModified, weld::MetricSpinButton&, void );
+    DECL_LINK( RepeatAfterTimeModified, weld::MetricSpinButton&, void );
     DECL_LINK( VariantListBoxSelected, weld::ComboBox&, void );
     DECL_LINK( DurationModifiedHdl, weld::MetricSpinButton&, void );
     DECL_LINK( DurationLoseFocusHdl, weld::Widget&, void );
@@ -108,6 +110,7 @@ private:
 
     std::unique_ptr<weld::IconView> mxTransitionsIconView;
     std::unique_ptr<weld::ScrolledWindow> mxTransitionsScrollWindow;
+    std::unique_ptr<weld::Frame> mxRepeatAutoFrame;
     std::unique_ptr<weld::ComboBox> mxLB_VARIANT;
     std::unique_ptr<weld::MetricSpinButton> mxCBX_duration;
     std::unique_ptr<weld::Label> mxFT_SOUND;
@@ -116,6 +119,9 @@ private:
     std::unique_ptr<weld::RadioButton> mxRB_ADVANCE_ON_MOUSE;
     std::unique_ptr<weld::RadioButton> mxRB_ADVANCE_AUTO;
     std::unique_ptr<weld::MetricSpinButton> mxMF_ADVANCE_AUTO_AFTER;
+    std::unique_ptr<weld::RadioButton> mxRB_REPEAT_DISABLED;
+    std::unique_ptr<weld::RadioButton> mxRB_REPEAT_AUTO;
+    std::unique_ptr<weld::MetricSpinButton> mxMF_REPEAT_AUTO_AFTER;
     std::unique_ptr<weld::Button> mxPB_APPLY_TO_ALL;
     std::unique_ptr<weld::Button> mxPB_PLAY;
     std::unique_ptr<weld::CheckButton> mxCB_AUTO_PREVIEW;
