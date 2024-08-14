@@ -1883,6 +1883,7 @@ Check:
 Try:
 	lMin = LBound(Array_1D)
 	lMax = UBound(Array_1D)
+	If lMax &lt; lMin Then GoTo Finally	&apos;	Do nothing if the input array is empty
 	vIndexes() = SF_Array._HeapSort(Array_1D, ( SortOrder = &quot;ASC&quot; ), CaseSensitive)
 
 	&apos;	Load output array
