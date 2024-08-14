@@ -1272,6 +1272,14 @@ public:
     {
         return mpThis->pClass->extractDocumentStructureRequest(mpThis, pFilePath, pFilter);
     }
+
+    /**
+     * Registers a callback that can determine if there are any pending input events.
+     */
+    void registerAnyInputCallback(LibreOfficeKitAnyInputCallback pCallback, void* pData)
+    {
+        return mpThis->pClass->registerAnyInputCallback(mpThis, pCallback, pData);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

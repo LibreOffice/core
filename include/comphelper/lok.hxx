@@ -10,6 +10,8 @@
 #ifndef INCLUDED_COMPHELPER_LOK_HXX
 #define INCLUDED_COMPHELPER_LOK_HXX
 
+#include <functional>
+
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
@@ -131,6 +133,10 @@ COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
 COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
+
+COMPHELPER_DLLPUBLIC void setAnyInputCallback(std::function<bool(void*)> pAnyInputCallback,
+                                              void* pData);
+COMPHELPER_DLLPUBLIC bool anyInput();
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

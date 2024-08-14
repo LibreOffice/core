@@ -154,6 +154,10 @@ struct _LibreOfficeKitClass
      */
     char* (*extractDocumentStructureRequest)(LibreOfficeKit* pThis, const char* pFilePath,
                                              const char* pFilter);
+
+    /// @see lok::Office::registerAnyInputCallback()
+    void (*registerAnyInputCallback)(LibreOfficeKit* pThis,
+                                     LibreOfficeKitAnyInputCallback pCallback, void* pData);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

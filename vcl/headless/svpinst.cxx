@@ -49,6 +49,7 @@
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 #include <tools/debug.hxx>
+#include <comphelper/lok.hxx>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
@@ -392,12 +393,15 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
     if (!bHandleAllCurrentEvents && bWasEvent)
         return true;
 
+    // CheckTimeout() invokes the sal timer, which invokes the scheduler.
     bWasEvent = CheckTimeout() || bWasEvent;
     const bool bMustSleep = bWait && !bWasEvent;
 
     // This is wrong and must be removed!
     // We always want to drop the SolarMutex on yield; that is the whole point of yield.
-    if (!bMustSleep)
+    // If we know the LOK client has pending input events, then don't yet return, so those events
+    // can be processed as well.
+    if (!bMustSleep && !comphelper::LibreOfficeKit::anyInput())
         return bWasEvent;
 
     sal_Int64 nTimeoutMicroS = 0;

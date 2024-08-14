@@ -2584,6 +2584,10 @@ static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData);
 
+static void lo_registerAnyInputCallback(LibreOfficeKit* pThis,
+                       LibreOfficeKitAnyInputCallback pAnyInputCallback,
+                       void* pData);
+
 static void lo_sendDialogEvent(LibreOfficeKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
@@ -2630,6 +2634,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->startThreads = lo_startThreads;
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
         m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
+        m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -7703,6 +7708,14 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
     vcl::lok::unregisterPollCallbacks();
     Application::ReleaseSolarMutex();
 #endif
+}
+
+static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
+                       LibreOfficeKitAnyInputCallback pAnyInputCallback,
+                       void* pData)
+{
+    SolarMutexGuard aGuard;
+    comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData);
 }
 
 static bool bInitialized = false;
