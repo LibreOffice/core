@@ -1683,11 +1683,11 @@ End Function	&apos;	SFDocuments.SF_Calc.Forms
 
 REM -----------------------------------------------------------------------------
 Function GetColumnName(Optional ByVal ColumnNumber As Variant) As String
-&apos;&apos;&apos;	Convert a column number (range 1, 2,..1024) into its letter counterpart (range &apos;A&apos;, &apos;B&apos;,..&apos;AMJ&apos;).
+&apos;&apos;&apos;	Convert a column number (range 1, 2,..16384) into its letter counterpart (range &apos;A&apos;, &apos;B&apos;,..&apos;XFD&apos;).
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		ColumnNumber: the column number, must be in the interval 1 ... 1024
+&apos;&apos;&apos;		ColumnNumber: the column number, must be in the interval 1 ... 16384
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		a string representation of the column name, in range &apos;A&apos;..&apos;AMJ&apos;
+&apos;&apos;&apos;		a string representation of the column name, in range &apos;A&apos;..&apos;XFD&apos;
 &apos;&apos;&apos;		If ColumnNumber is not in the allowed range, returns a zero-length string
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox oDoc.GetColumnName(1022)	&apos;	&quot;AMH&quot;
