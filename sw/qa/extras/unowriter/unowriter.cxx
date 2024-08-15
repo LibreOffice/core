@@ -36,6 +36,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/UnitConversion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1220,6 +1221,24 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
     CPPUNIT_ASSERT_EQUAL(OUString(u"test"), xCursor->getString());
     // This test would fail, too; the text would be "1test":
     CPPUNIT_ASSERT_EQUAL(OUString(u"12test"), xText->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Name", uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+    });
+
+    // Inserting a document with text box attached in a table's second column must not crash
+    dispatchCommand(mxComponent, u".uno:InsertDoc", aPropertyValues);
+
+    auto xTextBox = getShape(1).queryThrow<css::text::XTextContent>();
+    auto xTable = getParagraphOrTable(2).queryThrow<css::text::XTextTable>();
+    auto xAnchorRange = xTextBox->getAnchor();
+    auto xCellText = xTable->getCellByName("B1").queryThrow<css::text::XText>();
+    CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

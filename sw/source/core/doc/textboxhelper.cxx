@@ -8,6 +8,7 @@
  */
 
 #include <textboxhelper.hxx>
+#include <dcontact.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
@@ -64,6 +65,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 {
     assert(pShape);
     assert(pObject);
+    assert(pShape == ::FindFrameFormat(pObject));
 
     // If TextBox wasn't enabled previously
     if (pShape->GetOtherTextBoxFormats() && pShape->GetOtherTextBoxFormats()->GetTextBox(pObject))
@@ -88,11 +90,35 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     uno::Reference<text::XTextContent> xTextFrame(
         SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()),
         uno::UNO_QUERY);
-    uno::Reference<text::XTextDocument> xTextDocument(
-        pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
-                                                                uno::UNO_QUERY);
-    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+
+    uno::Reference<text::XTextRange> xAnchor;
+    uno::Reference<text::XTextContent> xAnchorProvider(pObject->getWeakUnoShape().get(),
+                                                       uno::UNO_QUERY);
+    assert(xAnchorProvider.is());
+    if (xAnchorProvider.is())
+        xAnchor = xAnchorProvider->getAnchor();
+
+    uno::Reference<text::XTextContentAppend> xTextContentAppend;
+    if (xAnchor)
+        xTextContentAppend.set(xAnchor->getText(), uno::UNO_QUERY);
+
+    if (!xTextContentAppend)
+    {
+        uno::Reference<text::XTextDocument> xTextDocument(
+            pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+        xTextContentAppend.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+    }
+
+    if (xAnchor)
+    {
+        // insertTextContentWithProperties would fail if xAnchor is in a different XText
+        assert(xAnchor->getText() == xTextContentAppend);
+        xTextContentAppend->insertTextContentWithProperties(xTextFrame, {}, xAnchor);
+    }
+    else
+    {
+        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+    }
 
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
