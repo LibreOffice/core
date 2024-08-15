@@ -13,4 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libpagemaker,$(PAGEMAKER_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libpagemaker))
 
+$(eval $(call gb_UnpackedTarball_add_patch,libpagemaker,external/libpagemaker/includes.patch.1))
+
 # vim: set noet sw=4 ts=4:
