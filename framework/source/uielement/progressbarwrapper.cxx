@@ -118,6 +118,11 @@ void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
         pStatusBar->SetUpdateMode( true );
     }
     pStatusBar->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
+
+    VclPtr<vcl::Window> pParent = pWindow->GetParent();
+    assert(pParent);
+    if (pParent)
+        pWindow->GetParent()->SetTaskBarState(VclTaskBarStates::Progress);
 }
 
 void ProgressBarWrapper::end()
@@ -144,6 +149,11 @@ void ProgressBarWrapper::end()
             StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
             if ( pStatusBar->IsProgressMode() )
                 pStatusBar->EndProgressMode();
+
+            VclPtr<vcl::Window> pParent = pWindow->GetParent();
+            assert(pParent);
+            if (pParent)
+                pWindow->GetParent()->SetTaskBarState(VclTaskBarStates::Normal);
         }
     }
 }
@@ -226,6 +236,11 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( aText );
             pStatusBar->SetProgressValue( sal_uInt16( nValue ));
+
+            VclPtr<vcl::Window> pParent = pWindow->GetParent();
+            assert(pParent);
+            if (pParent)
+                pWindow->GetParent()->SetTaskBarProgress(nValue);
         }
     }
 }
