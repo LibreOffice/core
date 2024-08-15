@@ -104,6 +104,7 @@ class ZipPackage final : public cppu::WeakImplHelper
 
     bool isLocalFile() const;
 
+    void checkZipEntriesWithDD();
     void parseManifest();
     void parseContentType();
     void getZipFileContents();
