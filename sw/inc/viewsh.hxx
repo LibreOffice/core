@@ -458,7 +458,7 @@ public:
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
-    void LayoutIdle();
+    SW_DLLPUBLIC void LayoutIdle();
 
     const SwViewOption *GetViewOptions() const { return mpOpt.get(); }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );

@@ -84,6 +84,17 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     return pTextDocument;
 }
 
+/// Test callback that works with comphelper::LibreOfficeKit::setAnyInputCallback().
+class AnyInputCallback final
+{
+public:
+    static bool callback(void* /*pData*/) { return true; }
+
+    AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this); }
+
+    ~AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr); }
+};
+
 /// A view callback tracks callbacks invoked on one specific view.
 class ViewCallback final
 {
@@ -303,6 +314,47 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
     CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
     CPPUNIT_ASSERT(!pPage2->IsInvalidContent());
     CPPUNIT_ASSERT(!pPage3->IsInvalidContent());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
+{
+    // Given a document with 3 pages, the first page is visible:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView;
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->InsertPageBreak();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+
+    // When all pages get invalidated:
+    pWrtShell->StartAllAction();
+    pPage1->InvalidateContent();
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    pPage2->InvalidateContent();
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    pPage3->InvalidateContent();
+    pWrtShell->EndAllAction();
+
+    // Then make sure sync layout calculates page 1:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage2->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+
+    // And when doing one idle layout:
+    AnyInputCallback aAnyInput;
+    pWrtShell->LayoutIdle();
+
+    // Then make sure async layout calculates page 2:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(!pPage2->IsInvalidContent());
+    // Without the fix in place, async layout calculated all pages, even if there were pending input
+    // events.
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+    Scheduler::ProcessEventsToIdle();
 }
 }
 
