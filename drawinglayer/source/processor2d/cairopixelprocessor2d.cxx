@@ -3050,7 +3050,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                      != pDecoratedCandidate->getTextEmphasisMark();
     }
 
-    // prepare flags for non-decorated afetr that, these *might* be
+    // prepare flags for non-decorated after that, these *might* be
     // dependent on flags above
     bool bHasOutline(!bHasTextRelief && rTextCandidate.getFontAttribute().getOutline());
 
