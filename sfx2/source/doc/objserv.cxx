@@ -462,7 +462,7 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
     return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
 }
 
-static void sendErrorToLOK(ErrCodeMsg error)
+static void sendErrorToLOK(const ErrCodeMsg& error)
 {
     if (error.GetCode().GetClass() == ErrCodeClass::NONE)
         return;

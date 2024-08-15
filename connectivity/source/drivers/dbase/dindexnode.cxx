@@ -269,7 +269,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         ONDXPagePtr aTempParent = aParent;
         if (IsLeaf())
         {
-            rIndex.m_aCurLeaf = aNewPage;
+            rIndex.m_aCurLeaf = std::move(aNewPage);
             rIndex.m_nCurNode = rIndex.m_aCurLeaf->Count() - 1;
 
             // free not needed pages, there are no references to those on the page

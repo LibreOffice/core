@@ -937,10 +937,9 @@ bool Content::insertNewContent( const OUString& rContentType,
                                         false /* ReplaceExisting */ ) ) );
     aNewContent.m_xImpl->inserted();
 
-    rNewContent = aNewContent;
+    rNewContent = std::move(aNewContent);
     return true;
 }
-
 
 void Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,

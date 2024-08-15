@@ -210,7 +210,7 @@ bool TextSearch::SearchForward( const OUString &rStr,
                 *pStart = aRet.startOffset[ 0 ];
                 *pEnd = aRet.endOffset[ 0 ];
                 if( pRes )
-                    *pRes = aRet;
+                    *pRes = std::move(aRet);
             }
         }
     }

@@ -201,7 +201,7 @@ void ObjectHierarchy::createLegendTree(
         tChildContainer aLegendEntryOIDs;
         lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
 
-        m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
+        m_aChildMap[aLegendOID] = std::move(aLegendEntryOIDs);
     }
 }
 

@@ -1215,7 +1215,7 @@ void ScInterpreter::PopExternalSingleRef(
     if (xNew->GetType() == svError)
         SetError( xNew->GetError());
 
-    rToken = xNew;
+    rToken = std::move(xNew);
     if (pFmt)
         *pFmt = aFmt;
 }

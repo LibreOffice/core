@@ -10515,7 +10515,7 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     }
     else
     {
-        m_aGraphicsStack.front().m_aClipRegion = aRegion;
+        m_aGraphicsStack.front().m_aClipRegion = std::move(aRegion);
         m_aGraphicsStack.front().m_bClipRegion = true;
     }
 }

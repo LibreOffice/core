@@ -2258,7 +2258,7 @@ void VclMetafileProcessor2D::processMaskPrimitive2D(
         else
         {
             // use mask directly
-            maClipPolyPolygon = aMask;
+            maClipPolyPolygon = std::move(aMask);
         }
 
         if (maClipPolyPolygon.count())
@@ -2501,9 +2501,9 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             // VclMetafileProcessor2D anyways to allow to get it
             // completely independent from OutputDevice in the long run
             GDIMetaFile* pMetaFile(mpOutputDevice->GetConnectMetaFile());
-            rtl::Reference<::MetaFloatTransparentAction> pAction(
-                new MetaFloatTransparentAction(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                               aPrimitiveRectangle.GetSize(), aVCLGradient));
+            rtl::Reference<::MetaFloatTransparentAction> pAction(new MetaFloatTransparentAction(
+                aContentMetafile, aPrimitiveRectangle.TopLeft(), aPrimitiveRectangle.GetSize(),
+                std::move(aVCLGradient)));
 
             pAction->addSVGTransparencyColorStops(aSVGTransparencyColorStops);
             pMetaFile->AddAction(pAction);

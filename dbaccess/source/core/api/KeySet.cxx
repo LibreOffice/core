@@ -1419,7 +1419,7 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                     {
                         sName = sRealName;
                     }
-                    o_rColumnNames[sName] = aColDesc;
+                    o_rColumnNames[sName] = std::move(aColDesc);
 
                     break;
                 }

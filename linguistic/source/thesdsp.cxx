@@ -213,7 +213,7 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
         {
             auto pTmpEntry = std::make_shared<LangSvcEntries_Thes>( rSvcImplNames );
             pTmpEntry->aSvcRefs = Sequence< Reference < XThesaurus > >( nLen );
-            aSvcMap[ nLanguage ] = pTmpEntry;
+            aSvcMap[ nLanguage ] = std::move(pTmpEntry);
         }
     }
 }

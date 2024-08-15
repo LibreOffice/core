@@ -227,7 +227,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
 
                 // there's only a template filter that could be found
                 if ( pTemplateFilter )
-                    pFilter = pTemplateFilter;
+                    pFilter = std::move(pTemplateFilter);
 
             }
         }

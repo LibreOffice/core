@@ -454,8 +454,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                             lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }
-                    pImpl->aFilterArr[nData] = lList;
-                    pImpl->aODFArr[nData] = lODFList;
+                    pImpl->aFilterArr[nData] = std::move(lList);
+                    pImpl->aODFArr[nData] = std::move(lODFList);
                 }
             }
             OUString sModule = OfaTreeOptionsDialog::getCurrentFactory_Impl(GetFrame());

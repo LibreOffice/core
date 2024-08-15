@@ -1120,7 +1120,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 cairo_set_source_surface( pCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
                 cairo_paint( pCairo.get() );
 
-                pSurface = pScaledSurface;
+                pSurface = std::move(pScaledSurface);
 
                 aMatrix.xx = aMatrix.yy = 1;
                 cairo_set_matrix( mpCairo.get(), &aMatrix );

@@ -1093,7 +1093,7 @@ Content::queryCreatableContentsInfo()
         = ucb::ContentInfoAttribute::KIND_FOLDER;
 
     uno::Sequence< beans::Property > aFolderProps( 1 );
-    aFolderProps.getArray()[ 0 ] = aProp;
+    aFolderProps.getArray()[0] = std::move(aProp);
     aSeq.getArray()[ 1 ].Properties = aFolderProps;
     return aSeq;
 }

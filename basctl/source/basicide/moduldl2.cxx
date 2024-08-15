@@ -686,7 +686,7 @@ void LibPage::InsertLib()
         xLibDlg->EnableReference(false);
 
     weld::DialogController::runAsync(xLibDlg, [aContExtension, xDlgURLObj=std::move(xDlgURLObj), aExtension,
-                                               aLibExtension, xModURLObj, xLibDlg,
+                                               aLibExtension, xModURLObj=std::move(xModURLObj), xLibDlg,
                                                xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )

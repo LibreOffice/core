@@ -717,7 +717,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 VclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetFrameWeld(), *pCoreSet));
 
-                pDlg->StartExecuteAsync([pDlg, pCoreSet, pSh](sal_uInt32 nResult){
+                pDlg->StartExecuteAsync([pDlg, pCoreSet=std::move(pCoreSet), pSh](sal_uInt32 nResult){
                     if (RET_OK == nResult)
                     {
                         const SvxNumberInfoItem* pNumberFormatItem

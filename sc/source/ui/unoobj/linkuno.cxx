@@ -1564,7 +1564,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
     if (!pTable)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, std::move(pTable), nIndex));
 
     return Any(aSheetCache);
 }

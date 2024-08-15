@@ -174,7 +174,7 @@ namespace sdr::overlay
                 drawinglayer::geometry::ViewInformation2D aViewInformation(maViewInformation2D);
                 aViewInformation.setViewTransformation(maViewTransformation);
                 aViewInformation.setViewport(aViewRange);
-                pThis->maViewInformation2D = aViewInformation;
+                pThis->maViewInformation2D = std::move(aViewInformation);
 
                 pThis->mfDiscreteOne = 0.0;
             }

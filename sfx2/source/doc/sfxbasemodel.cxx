@@ -3824,7 +3824,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
 
     embed::VisualRepresentation aVisualRepresentation;
     aVisualRepresentation.Data = getTransferData( aDataFlavor );
-    aVisualRepresentation.Flavor = aDataFlavor;
+    aVisualRepresentation.Flavor = std::move(aDataFlavor);
 
     return aVisualRepresentation;
 }

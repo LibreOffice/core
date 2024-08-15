@@ -86,7 +86,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
     TNumberedItem aItem;
     aItem.xItem   = css::uno::WeakReference< css::uno::XInterface >(xComponent);
     aItem.nNumber = nFreeNumber;
-    m_lComponents[pComponent] = aItem;
+    m_lComponents[pComponent] = std::move(aItem);
 
     return nFreeNumber;
 

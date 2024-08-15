@@ -213,7 +213,7 @@ void BColorStops::replaceStartColor(const BColor& rStart)
     aNewColorStops.insert(aNewColorStops.end(), a1stNonStartColor, end());
 
     // assign & done
-    *this = aNewColorStops;
+    *this = std::move(aNewColorStops);
 }
 
 /* Tooling method that allows to replace the EndColor in a
@@ -657,7 +657,7 @@ void BColorStops::doApplyAxial()
     }
 
     // apply color stops
-    *this = aNewColorStops;
+    *this = std::move(aNewColorStops);
 }
 
 void BColorStops::doApplySteps(sal_uInt16 nStepCount)

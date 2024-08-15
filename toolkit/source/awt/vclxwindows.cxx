@@ -584,7 +584,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = getXWeak();
                 aEvent.ActionCommand = maActionCommand;
 
-                Callback aCallback = [ this, aEvent ]()
+                Callback aCallback = [ this, aEvent=std::move(aEvent) ]()
                                      { this->maActionListeners.actionPerformed( aEvent ); };
 
                 ImplExecuteAsyncWithoutSolarLock( aCallback );

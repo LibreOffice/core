@@ -110,7 +110,7 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
     Graphic aGraphic;
     rFilter.ImportGraphic(aGraphic, u"import", aStream);
 
-    mrGraphic = aGraphic;
+    mrGraphic = std::move(aGraphic);
     return true;
 }
 

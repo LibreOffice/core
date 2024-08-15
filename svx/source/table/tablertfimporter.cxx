@@ -235,7 +235,7 @@ void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
         {
             RTFCellInfoPtr xLastCell( (*mxLastRow)[mnVMergeIdx] );
             if (xLastCell->mnRowSpan)
-                xCellInfo->mxVMergeCell = xLastCell;
+                xCellInfo->mxVMergeCell = std::move(xLastCell);
             else
                 xCellInfo->mxVMergeCell = xLastCell->mxVMergeCell;
         }

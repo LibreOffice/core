@@ -2009,7 +2009,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
             }
 
             // Update classification based on results.
-            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, xSubject, aResults);
+            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, xSubject, std::move(aResults));
 
             // Get Signatures
             std::map<OUString, SignatureDescr> aSignatures;

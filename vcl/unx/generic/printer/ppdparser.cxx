@@ -1590,7 +1590,7 @@ PPDValue* PPDKey::insertValue(const OUString& rOption, PPDValueType eType, bool 
     aValue.m_bCustomOption = bCustomOption;
     aValue.m_bCustomOptionSetViaApp = false;
     aValue.m_eType = eType;
-    m_aValues[ rOption ] = aValue;
+    m_aValues[rOption] = std::move(aValue);
     PPDValue* pValue = &m_aValues[rOption];
     m_aOrderedValues.push_back( pValue );
     return pValue;

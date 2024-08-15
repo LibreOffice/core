@@ -1304,7 +1304,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, std::u16strin
         bIsInvalid = implIsInvalid( aFallback.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if ( !bIsInvalid )
-            aURLParser = aFallback;
+            aURLParser = std::move(aFallback);
     }
 
     if ( bIsInvalid )

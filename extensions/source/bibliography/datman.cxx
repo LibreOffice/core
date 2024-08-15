@@ -927,7 +927,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
     if(pToolbar)
     {
         aURL.Complete =".uno:Bib/source";
-        aEvent.FeatureURL = aURL;
+        aEvent.FeatureURL = std::move(aURL);
         pToolbar->statusChanged( aEvent );
     }
 

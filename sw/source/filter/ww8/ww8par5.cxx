@@ -3261,7 +3261,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                             SwFormToken aToken(TOKEN_TEXT);
                                             aToken.sText = sDelimiter;
 
-                                            *aIt = aToken;
+                                            *aIt = std::move(aToken);
                                             aForm.SetPattern(nLevel,
                                                              std::move(aPattern));
                                         }

@@ -140,7 +140,7 @@ public:
             // see if is better than original, if so replace
             if (fCandidateFitness > mrDataProvider.calculateFitness(rOriginal.mVariables))
             {
-                maPopulation[x] = aCandidate;
+                maPopulation[x] = std::move(aCandidate);
 
                 if (fCandidateFitness > mfBestFitness)
                 {

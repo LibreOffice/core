@@ -304,7 +304,7 @@ namespace sfx2
         ::std::for_each(
             aFilterClasses.begin(),
             aFilterClasses.end(),
-            ReadLocalFilter( aFilterClassesNode, _rLocalClasses )
+            ReadLocalFilter( std::move(aFilterClassesNode), _rLocalClasses )
         );
     }
 

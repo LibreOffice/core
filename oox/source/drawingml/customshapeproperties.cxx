@@ -248,7 +248,7 @@ void CustomShapeProperties::pushToPropSet(
             aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
             aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
             aAdjustmentVal.Name = maAdjustmentGuideList[ i ].maName;
-            aAdjustmentValuesRange[ i ] = aAdjustmentVal;
+            aAdjustmentValuesRange[i] = std::move(aAdjustmentVal);
         }
         aPropertyMap.setProperty( PROP_AdjustmentValues, aAdjustmentValues);
 

@@ -505,7 +505,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         }
         fileReader.close();
 
-        args = stringList;
+        args = std::move(stringList);
     }
 
     size_t i = 0;

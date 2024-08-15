@@ -1112,7 +1112,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
                 pMed->SetFilter( pFilter );
             }
             else
-                pMed.reset(new SfxMedium(sFileName, StreamMode::READ, pFilter, nullptr));
+                pMed.reset(new SfxMedium(sFileName, StreamMode::READ, std::move(pFilter), nullptr));
         }
         if(!sFilterOptions.isEmpty())
             pMed->GetItemSet().Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );

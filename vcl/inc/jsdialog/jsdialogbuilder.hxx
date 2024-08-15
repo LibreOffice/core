@@ -326,7 +326,7 @@ public:
     static void RemoveWindowWidget(const OUString& nWindowId);
 
     // we need to remember original popup window to close it properly (its handled by vcl)
-    static void RememberPopup(const OUString& nWindowId, VclPtr<vcl::Window> pWidget);
+    static void RememberPopup(const OUString& nWindowId, const VclPtr<vcl::Window>& pWidget);
     static void ForgetPopup(const OUString& nWindowId);
     static vcl::Window* FindPopup(const OUString& nWindowId);
 

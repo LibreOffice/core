@@ -146,7 +146,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
 
     SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
     pExecuteInfo->xDispatch     = xDispatch;
-    pExecuteInfo->aTargetURL    = aTargetURL;
+    pExecuteInfo->aTargetURL    = std::move(aTargetURL);
     pExecuteInfo->aArgs         = {
         comphelper::makePropertyValue(u"Referer"_ustr, u"private:user"_ustr),
         comphelper::makePropertyValue(u"FileName"_ustr, aName)

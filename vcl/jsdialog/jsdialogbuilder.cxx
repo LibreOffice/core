@@ -785,7 +785,7 @@ void JSInstanceBuilder::RemoveWindowWidget(const OUString& nWindowId)
     }
 }
 
-void JSInstanceBuilder::RememberPopup(const OUString& nWindowId, VclPtr<vcl::Window> pWidget)
+void JSInstanceBuilder::RememberPopup(const OUString& nWindowId, const VclPtr<vcl::Window>& pWidget)
 {
     GetLOKPopupsMap()[nWindowId] = pWidget;
 }

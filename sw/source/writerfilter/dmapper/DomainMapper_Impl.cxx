@@ -9673,7 +9673,7 @@ void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )
         m_pParaMarkerRedline = pNew;
     }
     // Newly read data will go into this redline.
-    m_currentRedline = pNew;
+    m_currentRedline = std::move(pNew);
 }
 
 void DomainMapper_Impl::SetCurrentRedlineIsRead()

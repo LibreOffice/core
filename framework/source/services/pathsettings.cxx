@@ -765,7 +765,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                     pPathNew = &aPath;
                     impl_notifyPropListener(sPath, pPathOld, pPathNew);
                 }
-                m_lPaths[sPath] = aPath;
+                m_lPaths[sPath] = std::move(aPath);
              }
              break;
 

@@ -214,7 +214,8 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
         pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet=std::move(pCoreSet), bSel,
-                                 bSelectionPut, bApplyToParagraph, pRequest](sal_Int32 nResult){
+                                 bSelectionPut, bApplyToParagraph,
+                                 pRequest=std::move(pRequest)](sal_Int32 nResult){
             if (nResult == RET_OK)
             {
                 sw_CharDialogResult(pDlg->GetOutputItemSet(), rWrtSh, pCoreSet, bSel, bSelectionPut,

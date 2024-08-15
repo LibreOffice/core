@@ -154,13 +154,9 @@ namespace drawinglayer::processor3d
 
             // set created texture
             if(bTransparence)
-            {
-                mpTransparenceGeoTexSvx = pNewTex;
-            }
+                mpTransparenceGeoTexSvx = std::move(pNewTex);
             else
-            {
-                mpGeoTexSvx = pNewTex;
-            }
+                mpGeoTexSvx = std::move(pNewTex);
 
             // process sub-list
             process(rSubSequence);
