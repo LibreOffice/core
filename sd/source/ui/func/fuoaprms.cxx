@@ -42,6 +42,7 @@
 #include <sdabstdlg.hxx>
 #include <sdresid.hxx>
 #include <tools/helpers.hxx>
+#include <tpaction.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <memory>
 
@@ -73,8 +74,6 @@ rtl::Reference<FuPoor> FuObjectAnimationParameters::Create( ViewShell* pViewSh, 
 
 void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 {
-    SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
-
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
@@ -336,124 +335,175 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     if(!pArgs)
     {
         // fill ItemSet for dialog
-        SfxItemSetFixed<ATTR_ANIMATION_START, ATTR_ACTION_END> aSet(mpDoc->GetPool());
+        std::shared_ptr<SfxItemSet> aSet = std::make_shared<SfxItemSetFixed<ATTR_ANIMATION_START, ATTR_ACTION_END>>(mpDoc->GetPool());
 
         // fill the set
         if (nAnimationSet == ATTR_SET)
-            aSet.Put( SfxBoolItem( ATTR_ANIMATION_ACTIVE, bActive));
+            aSet->Put( SfxBoolItem( ATTR_ANIMATION_ACTIVE, bActive));
         else if (nAnimationSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
+            aSet->InvalidateItem(ATTR_ANIMATION_ACTIVE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
 
         if (nEffectSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, static_cast<sal_uInt16>(eEffect)));
+            aSet->Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, static_cast<sal_uInt16>(eEffect)));
         else if (nEffectSet == ATTR_MIXED)
-            aSet.InvalidateItem( ATTR_ANIMATION_EFFECT );
+            aSet->InvalidateItem( ATTR_ANIMATION_EFFECT );
         else
-            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet->Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nTextEffectSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, static_cast<sal_uInt16>(eTextEffect)));
+            aSet->Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, static_cast<sal_uInt16>(eTextEffect)));
         else if (nTextEffectSet == ATTR_MIXED)
-            aSet.InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
+            aSet->InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
         else
-            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet->Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nSpeedSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ANIMATION_SPEED, static_cast<sal_uInt16>(eSpeed)));
+            aSet->Put(SfxUInt16Item(ATTR_ANIMATION_SPEED, static_cast<sal_uInt16>(eSpeed)));
         else
-            aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
+            aSet->InvalidateItem(ATTR_ANIMATION_SPEED);
 
         if (nFadeOutSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, bFadeOut));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, bFadeOut));
         else if (nFadeOutSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
+            aSet->InvalidateItem(ATTR_ANIMATION_FADEOUT);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
 
         if (nFadeColorSet == ATTR_SET)
-            aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
+            aSet->Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
         else if (nFadeColorSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_COLOR);
+            aSet->InvalidateItem(ATTR_ANIMATION_COLOR);
         else
-            aSet.Put(SvxColorItem(COL_LIGHTGRAY, ATTR_ANIMATION_COLOR));
+            aSet->Put(SvxColorItem(COL_LIGHTGRAY, ATTR_ANIMATION_COLOR));
 
         if (nInvisibleSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, bInvisible));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, bInvisible));
         else if (nInvisibleSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
+            aSet->InvalidateItem(ATTR_ANIMATION_INVISIBLE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, false));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, false));
 
         if (nSoundOnSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
         else if (nSoundOnSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
+            aSet->InvalidateItem(ATTR_ANIMATION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
 
         if (nSoundFileSet == ATTR_SET)
-            aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
+            aSet->Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
         else
-            aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
+            aSet->InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
 
         if (nPlayFullSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
         else if (nPlayFullSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
+            aSet->InvalidateItem(ATTR_ANIMATION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
+            aSet->Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
 
         if (nClickActionSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ACTION, static_cast<sal_uInt16>(eClickAction)));
+            aSet->Put(SfxUInt16Item(ATTR_ACTION, static_cast<sal_uInt16>(eClickAction)));
         else if (nClickActionSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ACTION);
+            aSet->InvalidateItem(ATTR_ACTION);
         else
-            aSet.Put(SfxUInt16Item(ATTR_ACTION, sal_uInt16(presentation::ClickAction_NONE)));
+            aSet->Put(SfxUInt16Item(ATTR_ACTION, sal_uInt16(presentation::ClickAction_NONE)));
 
         if (nBookmarkSet == ATTR_SET)
-            aSet.Put(SfxStringItem(ATTR_ACTION_FILENAME, aBookmark));
+            aSet->Put(SfxStringItem(ATTR_ACTION_FILENAME, aBookmark));
         else
-            aSet.InvalidateItem(ATTR_ACTION_FILENAME);
+            aSet->InvalidateItem(ATTR_ACTION_FILENAME);
 
         if (nSecondEffectSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECT, static_cast<sal_uInt16>(eSecondEffect)));
+            aSet->Put(SfxUInt16Item(ATTR_ACTION_EFFECT, static_cast<sal_uInt16>(eSecondEffect)));
         else if (nSecondEffectSet == ATTR_MIXED)
-            aSet.InvalidateItem( ATTR_ACTION_EFFECT );
+            aSet->InvalidateItem( ATTR_ACTION_EFFECT );
         else
-            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet->Put(SfxUInt16Item(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
 
         if (nSecondSpeedSet == ATTR_SET)
-            aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECTSPEED, static_cast<sal_uInt16>(eSecondSpeed)));
+            aSet->Put(SfxUInt16Item(ATTR_ACTION_EFFECTSPEED, static_cast<sal_uInt16>(eSecondSpeed)));
         else
-            aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
+            aSet->InvalidateItem(ATTR_ACTION_EFFECTSPEED);
 
         if (nSecondSoundOnSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, bSecondSoundOn));
+            aSet->Put(SfxBoolItem(ATTR_ACTION_SOUNDON, bSecondSoundOn));
         else if (nSecondSoundOnSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
+            aSet->InvalidateItem(ATTR_ACTION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
+            aSet->Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
 
         if (nSecondPlayFullSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
+            aSet->Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
         else if (nSecondPlayFullSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
+            aSet->InvalidateItem(ATTR_ACTION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
+            aSet->Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
+
+        std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
+        rReq.Ignore(); // the 'old' request is not relevant any more
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), &aSet, mpView) );
-
-        short nResult = pDlg->Execute();
-
-        if( nResult != RET_OK )
-            return;
-
-        rReq.Done( *( pDlg->GetOutputItemSet() ) );
-        pArgs = rReq.GetArgs();
+        VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), &*aSet, mpView) );
+        rtl::Reference<FuObjectAnimationParameters> xThis( this ); // avoid destruction within async processing
+        pDlg->StartExecuteAsync([pDlg, xThis, xRequest, aSet](sal_Int32 nResult){
+            if (nResult == RET_OK) {
+                xThis->Finish(xRequest, pDlg);
+            }
+            pDlg->disposeOnce();
+        });
     }
+}
+
+void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRequest, const VclPtr<SfxAbstractDialog>& pDlg )
+{
+    SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
+
+    const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
+    const size_t nCount = rMarkList.GetMarkCount();
+
+    short nAnimationSet     = ATTR_MISSING;
+    short nEffectSet        = ATTR_MISSING;
+    short nTextEffectSet    = ATTR_MISSING;
+    short nSpeedSet         = ATTR_MISSING;
+    short nFadeColorSet     = ATTR_MISSING;
+    short nFadeOutSet       = ATTR_MISSING;
+    short nInvisibleSet     = ATTR_MISSING;
+    short nSoundOnSet       = ATTR_MISSING;
+    short nSoundFileSet     = ATTR_MISSING;
+    short nPlayFullSet      = ATTR_MISSING;
+    short nClickActionSet   = ATTR_MISSING;
+    short nBookmarkSet      = ATTR_MISSING;
+
+    short nSecondEffectSet      = ATTR_MISSING;
+    short nSecondSpeedSet       = ATTR_MISSING;
+    short nSecondSoundOnSet     = ATTR_MISSING;
+    short nSecondPlayFullSet    = ATTR_MISSING;
+
+    presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
+    presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
+    presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
+    bool            bActive         = false;
+    bool            bFadeOut        = false;
+    Color           aFadeColor      = COL_LIGHTGRAY;
+    bool            bInvisible      = false;
+    bool            bSoundOn        = false;
+    OUString        aSound;
+    bool            bPlayFull       = false;
+    presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
+    OUString        aBookmark;
+
+    presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
+    presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
+    bool            bSecondSoundOn  = false;
+    bool            bSecondPlayFull = false;
+
+    SdAnimationInfo* pInfo;
+
+    xRequest->Done( *( pDlg->GetOutputItemSet() ) );
+    auto pArgs = xRequest->GetArgs();
 
     // evaluation of the ItemSets
     if (pArgs->GetItemState(ATTR_ANIMATION_ACTIVE) == SfxItemState::SET)
