@@ -231,6 +231,30 @@ bool LocalesAreEqual(const css::lang::Locale& rA, const css::lang::Locale& rB)
     return (rA.Language == rB.Language && rA.Country == rB.Country && rA.Variant == rB.Variant);
 }
 
+bool TextSimplePortionPrimitive2D::hasTextRelief() const
+{
+    // not possible for TextSimplePortionPrimitive2D
+    return false;
+}
+
+bool TextSimplePortionPrimitive2D::hasShadow() const
+{
+    // not possible for TextSimplePortionPrimitive2D
+    return false;
+}
+
+bool TextSimplePortionPrimitive2D::hasTextDecoration() const
+{
+    // not possible for TextSimplePortionPrimitive2D
+    return false;
+}
+
+bool TextSimplePortionPrimitive2D::hasOutline() const
+{
+    // not allowed with TextRelief, else defined in FontAttributes
+    return !hasTextRelief() && getFontAttribute().getOutline();
+}
+
 bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 {
     if (BufferedDecompositionPrimitive2D::operator==(rPrimitive))

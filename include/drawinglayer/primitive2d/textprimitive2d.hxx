@@ -175,6 +175,12 @@ public:
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
 
+    /// helpers for determining various decoration states
+    virtual bool hasTextRelief() const;
+    virtual bool hasShadow() const;
+    virtual bool hasTextDecoration() const;
+    virtual bool hasOutline() const;
+
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 

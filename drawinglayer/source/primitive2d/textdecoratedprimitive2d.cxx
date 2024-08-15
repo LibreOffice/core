@@ -120,6 +120,11 @@ namespace drawinglayer::primitive2d
 
             if(bOverlineUsed)
             {
+                // for Relief we have to manipulate the OverlineColor
+                basegfx::BColor aOverlineColor(getOverlineColor());
+                if (hasTextRelief() && COL_BLACK.getBColor() == aOverlineColor)
+                    aOverlineColor = COL_WHITE.getBColor();
+
                 // create primitive geometry for overline
                 maBufferedDecorationGeometry.push_back(
                     new TextLinePrimitive2D(
@@ -128,11 +133,16 @@ namespace drawinglayer::primitive2d
                         aTextLayouter.getOverlineOffset(),
                         aTextLayouter.getOverlineHeight(),
                         getFontOverline(),
-                        getOverlineColor()));
+                        aOverlineColor));
             }
 
             if(bUnderlineUsed)
             {
+                // for Relief we have to manipulate the TextlineColor
+                basegfx::BColor aTextlineColor(getTextlineColor());
+                if (hasTextRelief() && COL_BLACK.getBColor() == aTextlineColor)
+                    aTextlineColor = COL_WHITE.getBColor();
+
                 // create primitive geometry for underline
                 maBufferedDecorationGeometry.push_back(
                     new TextLinePrimitive2D(
@@ -141,11 +151,16 @@ namespace drawinglayer::primitive2d
                         aTextLayouter.getUnderlineOffset(),
                         aTextLayouter.getUnderlineHeight(),
                         getFontUnderline(),
-                        getTextlineColor()));
+                        aTextlineColor));
             }
 
             if(bStrikeoutUsed)
             {
+                // for Relief we have to manipulate the FontColor
+                basegfx::BColor aFontColor(getFontColor());
+                if (hasTextRelief() && COL_BLACK.getBColor() == aFontColor)
+                    aFontColor = COL_WHITE.getBColor();
+
                 // create primitive geometry for strikeout
                 if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
                 {
@@ -156,7 +171,7 @@ namespace drawinglayer::primitive2d
                         new TextCharacterStrikeoutPrimitive2D(
                             rDecTrans.getB2DHomMatrix(),
                             fTextWidth,
-                            getFontColor(),
+                            aFontColor,
                             aStrikeoutChar,
                             getFontAttribute(),
                             getLocale()));
@@ -168,7 +183,7 @@ namespace drawinglayer::primitive2d
                         new TextGeometryStrikeoutPrimitive2D(
                             rDecTrans.getB2DHomMatrix(),
                             fTextWidth,
-                            getFontColor(),
+                            aFontColor,
                             aTextLayouter.getUnderlineHeight(),
                             aTextLayouter.getStrikeoutOffset(),
                             getTextStrikeout()));
@@ -182,6 +197,11 @@ namespace drawinglayer::primitive2d
 
                 if (pSalLayout)
                 {
+                    // for Relief we have to manipulate the FontColor
+                    basegfx::BColor aFontColor(getFontColor());
+                    if (hasTextRelief() && COL_BLACK.getBColor() == aFontColor)
+                        aFontColor = COL_WHITE.getBColor();
+
                     // placeholders for repeated content, only created once
                     Primitive2DReference aShape;
                     Primitive2DReference aRect1;
@@ -198,7 +218,7 @@ namespace drawinglayer::primitive2d
 
                     // the callback from OutputDevice::createEmphasisMarks providing the data
                     // for each EmphasisMark
-                    auto aEmphasisCallback([this, &aShape, &aRect1, &aRect2, &aEmphasisContent, &aObjTransformWithoutScale](
+                    auto aEmphasisCallback([&aShape, &aRect1, &aRect2, &aEmphasisContent, &aObjTransformWithoutScale, &aFontColor](
                         const basegfx::B2DPoint& rOutPoint, const basegfx::B2DPolyPolygon& rShape,
                         bool isPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2)
                     {
@@ -212,9 +232,9 @@ namespace drawinglayer::primitive2d
                             if (!aShape)
                             {
                                 if (isPolyLine)
-                                    aShape = new PolyPolygonHairlinePrimitive2D(rShape, getFontColor());
+                                    aShape = new PolyPolygonHairlinePrimitive2D(rShape, aFontColor);
                                 else
-                                    aShape = new PolyPolygonColorPrimitive2D(rShape, getFontColor());
+                                    aShape = new PolyPolygonColorPrimitive2D(rShape, aFontColor);
                             }
 
                             aEmphasisContent.push_back(
@@ -228,7 +248,7 @@ namespace drawinglayer::primitive2d
                             // create Rectangle1 if provided
                             if (!aRect1)
                                 aRect1 = new FilledRectanglePrimitive2D(
-                                    basegfx::B2DRange(rRect1.Left(), rRect1.Top(), rRect1.Right(), rRect1.Bottom()), getFontColor());
+                                    basegfx::B2DRange(rRect1.Left(), rRect1.Top(), rRect1.Right(), rRect1.Bottom()), aFontColor);
 
                             aEmphasisContent.push_back(
                                 new TransformPrimitive2D(
@@ -241,7 +261,7 @@ namespace drawinglayer::primitive2d
                             // create Rectangle2 if provided
                             if (!aRect2)
                                 aRect2 = new FilledRectanglePrimitive2D(
-                                    basegfx::B2DRange(rRect2.Left(), rRect2.Top(), rRect2.Right(), rRect2.Bottom()), getFontColor());
+                                    basegfx::B2DRange(rRect2.Left(), rRect2.Top(), rRect2.Right(), rRect2.Bottom()), aFontColor);
 
                             aEmphasisContent.push_back(
                                 new TransformPrimitive2D(
@@ -328,16 +348,11 @@ namespace drawinglayer::primitive2d
             if(aRetval.empty())
                 return nullptr;
 
-            // outline AND shadow depend on NO TextRelief (see dialog)
-            const bool bHasTextRelief(TEXT_RELIEF_NONE != getTextRelief());
-            const bool bHasShadow(!bHasTextRelief && getShadow());
-            const bool bHasOutline(!bHasTextRelief && getFontAttribute().getOutline());
-
-            if(bHasShadow || bHasTextRelief || bHasOutline)
+            if(hasShadow() || hasTextRelief() || hasOutline())
             {
                 Primitive2DReference aShadow;
 
-                if(bHasShadow)
+                if(hasShadow())
                 {
                     // create shadow with current content (in aRetval). Text shadow
                     // is constant, relative to font size, rotated with the text and has a
@@ -364,7 +379,7 @@ namespace drawinglayer::primitive2d
                         Primitive2DContainer(aRetval));
                 }
 
-                if(bHasTextRelief)
+                if(hasTextRelief())
                 {
                     // create emboss using an own helper primitive since this will
                     // be view-dependent
@@ -412,7 +427,7 @@ namespace drawinglayer::primitive2d
                             aTextEffectStyle2D))
                      };
                 }
-                else if(bHasOutline)
+                else if(hasOutline())
                 {
                     // create outline using an own helper primitive since this will
                     // be view-dependent
@@ -488,6 +503,25 @@ namespace drawinglayer::primitive2d
             mbEmphasisMarkBelow(bEmphasisMarkBelow),
             mbShadow(bShadow)
         {
+        }
+
+        bool TextDecoratedPortionPrimitive2D::hasTextRelief() const
+        {
+            return TEXT_RELIEF_NONE != getTextRelief();
+        }
+
+        bool TextDecoratedPortionPrimitive2D::hasShadow() const
+        {
+            // not allowed with TextRelief, else defined in FontAttributes
+            return !hasTextRelief() && getShadow();
+        }
+
+        bool TextDecoratedPortionPrimitive2D::hasTextDecoration() const
+        {
+            return TEXT_LINE_NONE != getFontOverline()
+                || TEXT_LINE_NONE != getFontUnderline()
+                || TEXT_STRIKEOUT_NONE != getTextStrikeout()
+                || TEXT_FONT_EMPHASIS_MARK_NONE != getTextEmphasisMark();
         }
 
         bool TextDecoratedPortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

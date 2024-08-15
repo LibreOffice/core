@@ -129,6 +129,11 @@ namespace drawinglayer::primitive2d
             /// helper for break-up text if needed
             const Primitive2DContainer& getOrCreateBrokenUpText() const;
 
+            /// helpers for determining various decoration states
+            virtual bool hasTextRelief() const override;
+            virtual bool hasShadow() const override;
+            virtual bool hasTextDecoration() const override;
+
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
