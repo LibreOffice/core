@@ -134,19 +134,10 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
             = xSecurityContext->getSecurityEnvironment();
         uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
             = xSecurityEnvironment->getPersonalCertificates();
-        DateTime now(DateTime::SYSTEM);
         for (auto& cert : asNonConstRange(aCertificates))
         {
-            css::util::DateTime aNotValidAfter = cert->getNotValidAfter();
-            css::util::DateTime aNotValidBefore = cert->getNotValidBefore();
-
             // Only try certificates that are already active and not expired
-            if ((now > DateTime(aNotValidAfter)) || (now < DateTime(aNotValidBefore)))
-            {
-                SAL_WARN("xmlsecurity.qa",
-                         "Skipping a certificate that is not yet valid or already not valid");
-            }
-            else
+            if (IsValid(cert, xSecurityEnvironment))
             {
                 bool bSignResult = aDocument.Sign(cert, u"test"_ustr, /*bAdES=*/true);
 #ifdef _WIN32
