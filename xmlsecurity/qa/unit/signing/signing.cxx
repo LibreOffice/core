@@ -747,23 +747,23 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
     xSelectionSupplier->select(uno::Any(xShape));
-    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
-        = mxSecurityContext->getSecurityEnvironment()->getPersonalCertificates();
-    if (!aCertificates.hasElements())
+    auto xEnv = mxSecurityContext->getSecurityEnvironment();
+    auto xCert = GetValidCertificate(xEnv->getPersonalCertificates(), xEnv);
+    if (!xCert)
     {
         return;
     }
     SfxViewShell* pCurrent = SfxViewShell::Current();
     CPPUNIT_ASSERT(pCurrent);
     SdrView* pView = pCurrent->GetDrawView();
-    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificates[0]);
+    svx::SignatureLineHelper::setShapeCertificate(pView, xCert);
 
     // the document is modified now, but Sign function can't show SaveAs dialog
     // in unit test, so just clear the modified
     pObjectShell->SetModified(false);
 
     // When: do the actual signing.
-    pObjectShell->SignDocumentContentUsingCertificate(aCertificates[0]);
+    pObjectShell->SignDocumentContentUsingCertificate(xCert);
 
     // Then: count the # of shapes on the signature widget/annotation.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
