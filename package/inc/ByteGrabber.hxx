@@ -29,8 +29,6 @@ namespace com::sun::star {
 }
 class ByteGrabber final
 {
-    std::mutex m_aMutex;
-
     css::uno::Reference < css::io::XInputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
     css::uno::Sequence < sal_Int8 > aSequence;

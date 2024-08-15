@@ -50,7 +50,6 @@ ByteGrabber::~ByteGrabber()
 
 void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNewStream)
 {
-    std::scoped_lock aGuard( m_aMutex );
     xStream = xNewStream;
     xSeek.set(xNewStream, uno::UNO_QUERY);
 }
@@ -59,14 +58,12 @@ void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNe
 sal_Int32 ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
                                         sal_Int32 nBytesToRead )
 {
-    std::scoped_lock aGuard( m_aMutex );
     return xStream->readBytes(aData, nBytesToRead );
 }
 
 // XSeekable chained...
 void ByteGrabber::seek( sal_Int64 location )
 {
-    std::scoped_lock aGuard( m_aMutex );
     if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
 
@@ -75,7 +72,6 @@ void ByteGrabber::seek( sal_Int64 location )
 
 sal_Int64 ByteGrabber::getPosition(  )
 {
-    std::scoped_lock aGuard( m_aMutex );
     if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
 
@@ -84,7 +80,6 @@ sal_Int64 ByteGrabber::getPosition(  )
 
 sal_Int64 ByteGrabber::getLength(  )
 {
-    std::scoped_lock aGuard( m_aMutex );
     if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
 
@@ -93,8 +88,6 @@ sal_Int64 ByteGrabber::getLength(  )
 
 sal_uInt16 ByteGrabber::ReadUInt16()
 {
-    std::scoped_lock aGuard( m_aMutex );
-
     if (xStream->readBytes(aSequence, 2) != 2)
         return 0;
 
@@ -106,8 +99,6 @@ sal_uInt16 ByteGrabber::ReadUInt16()
 
 sal_uInt32 ByteGrabber::ReadUInt32()
 {
-    std::scoped_lock aGuard( m_aMutex );
-
     if (xStream->readBytes(aSequence, 4) != 4)
         return 0;
 
@@ -121,8 +112,6 @@ sal_uInt32 ByteGrabber::ReadUInt32()
 
 sal_uInt64 ByteGrabber::ReadUInt64()
 {
-    std::scoped_lock aGuard(m_aMutex);
-
     if (xStream->readBytes(aSequence, 8) != 8)
         return 0;
 
