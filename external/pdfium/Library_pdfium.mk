@@ -182,6 +182,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/Korea1/cmaps_korea1 \
     UnpackedTarball/pdfium/core/fpdfapi/cmaps/fpdf_cmaps \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pagecontentgenerator \
+    UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_npagetooneexporter \
+    UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pageexporter \
+    UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_pageorganizer \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cidfont \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_font \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_fontencoding \
@@ -440,11 +443,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapcomposer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapstorer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_dibitmap \
     UnpackedTarball/pdfium/core/fxge/cfx_drawutils \
-    UnpackedTarball/pdfium/core/fxge/dib/cfx_imagerenderer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_imagestretcher \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_imagetransformer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_scanlinecompositor \
@@ -469,7 +470,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitSymbol \
     UnpackedTarball/pdfium/core/fxge/freetype/fx_freetype \
     UnpackedTarball/pdfium/core/fxge/renderdevicedriver_iface \
-    UnpackedTarball/pdfium/core/fxge/agg/fx_agg_driver \
+    UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_bitmapcomposer \
+    UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_devicedriver \
+    UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_imagerenderer \
     UnpackedTarball/pdfium/core/fxge/cfx_cliprgn \
     UnpackedTarball/pdfium/core/fxge/cfx_color \
     UnpackedTarball/pdfium/core/fxge/cfx_glyphcache \
