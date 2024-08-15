@@ -72,6 +72,8 @@
 #include <pagedesc.hxx>
 #include <calc.hxx>
 #include <scriptinfo.hxx>
+#include <rubylist.hxx>
+#include <txatbase.hxx>
 
 #include <tblafmt.hxx>
 #include <unotbl.hxx>
@@ -130,6 +132,7 @@ public:
     void testTdf92308();
     void testTableCellComparison();
     void testTdf156211();
+    void testSetRubyList();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
 
@@ -168,6 +171,7 @@ public:
     CPPUNIT_TEST(testTdf92308);
     CPPUNIT_TEST(testTableCellComparison);
     CPPUNIT_TEST(testTdf156211);
+    CPPUNIT_TEST(testSetRubyList);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1939,6 +1943,128 @@ void SwDocTest::testTdf156211()
     oSI.ClearNoKashidaLine(TextFrameIndex{ 0 }, TextFrameIndex{ 89 });
 
     CPPUNIT_ASSERT(!oSI.IsKashidaLine(TextFrameIndex{ 95 }));
+}
+
+void SwDocTest::testSetRubyList()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+
+    auto& rOps = m_pDoc->getIDocumentContentOperations();
+
+    auto fnAppendJapanese = [&](const OUString& rText)
+    {
+        rOps.AppendTextNode(*aPaM.GetPoint());
+
+        SvxLanguageItem aCJKLangItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE);
+        SvxLanguageItem aWestLangItem(LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE);
+        rOps.InsertPoolItem(aPaM, aCJKLangItem);
+        rOps.InsertPoolItem(aPaM, aWestLangItem);
+
+        rOps.InsertString(aPaM, rText);
+
+        aPaM.SetMark();
+        aPaM.GetPoint()->nContent = 0;
+
+        CPPUNIT_ASSERT_EQUAL(rText, aPaM.GetText());
+    };
+
+    auto fnAppendRuby = [](SwRubyList* rList, OUString aBase, OUString aRuby)
+    {
+        auto pEnt = std::make_unique<SwRubyListEntry>();
+        pEnt->SetText(std::move(aBase));
+        pEnt->SetRubyAttr(SwFormatRuby{ std::move(aRuby) });
+
+        rList->push_back(std::move(pEnt));
+    };
+
+    auto fnGetCombinedString = [&]
+    {
+        OUStringBuffer aTemp;
+
+        auto* pPos = aPaM.GetPoint();
+        const auto* pTNd = pPos->GetNode().GetTextNode();
+        const auto& rText = pTNd->GetText();
+        const auto* pHts = pTNd->GetpSwpHints();
+
+        for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+        {
+            aTemp.append(rText[i]);
+
+            if (pHts)
+            {
+                for (size_t j = 0; j < pHts->Count(); ++j)
+                {
+                    const auto* pHt = pHts->Get(j);
+                    if (pHt->Which() == RES_TXTATR_CJK_RUBY && pHt->GetAnyEnd() == (i + 1))
+                    {
+                        aTemp.append(u"["_ustr + pHt->GetRuby().GetText() + u"]"_ustr);
+                    }
+                }
+            }
+        }
+
+        return aTemp.toString();
+    };
+
+    // Trivial characteristic test
+    {
+        fnAppendJapanese(u"学校"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#141466: Characteristic test from bug
+    {
+        fnAppendJapanese(u"学校に行きます。"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
+        fnAppendRuby(&rList, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr);
+        fnAppendRuby(&rList, u"きます"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"。"_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に行[い]きます。"_ustr, fnGetCombinedString());
+    }
+
+    // Base text deletion
+    {
+        fnAppendJapanese(u"学校に行きます。"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
+        fnAppendRuby(&rList, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr);
+        fnAppendRuby(&rList, u"きます"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"。"_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に行[い]きます。"_ustr, fnGetCombinedString());
+
+        SwRubyList rList2;
+        fnAppendRuby(&rList2, u"学校"_ustr, u"がっこう"_ustr);
+        fnAppendRuby(&rList2, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList2, u""_ustr, u"い"_ustr);
+        fnAppendRuby(&rList2, u"来"_ustr, u"き"_ustr);
+        fnAppendRuby(&rList2, u"ます"_ustr, u""_ustr);
+        fnAppendRuby(&rList2, u"。"_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList2);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に来[き]ます。"_ustr, fnGetCombinedString());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwDocTest);
