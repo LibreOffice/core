@@ -1115,6 +1115,14 @@ namespace
             for (sal_uInt16 i = 0; i <= nRepeat; ++i)
                 if (!pFocusWindow->isDisposed())
                     pFocusWindow->KeyInput(singlePress);
+
+            if (pLOKEv->maKeyEvent.GetKeyCode().GetCode() == KEY_CONTEXTMENU)
+            {
+                // later do use getCaretPosition probably, or get focused obj position, smt like that
+                Point aPos = pFocusWindow->GetPointerPosPixel();
+                CommandEvent aCEvt( aPos, CommandEventId::ContextMenu);
+                pFocusWindow->Command(aCEvt);
+            }
             break;
         }
         case VclEventId::WindowKeyUp:
