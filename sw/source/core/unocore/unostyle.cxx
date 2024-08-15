@@ -2433,7 +2433,15 @@ void SwXStyle::getToggleAttributes(
     assert(m_pBasePool);
     SfxStyleSheetBase* pStyleSheetBase = m_pBasePool->Find(m_sStyleName, m_rEntry.family());
     assert(pStyleSheetBase);
-    rtl::Reference<SwDocStyleSheet> xDocStyleSheet = new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyleSheetBase));
+    rtl::Reference<SwDocStyleSheet> xDocStyleSheet;
+    auto it = maUnoStyleSheets.find(pStyleSheetBase);
+    if (it != maUnoStyleSheets.end())
+        xDocStyleSheet = it->second;
+    else
+    {
+        xDocStyleSheet = new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyleSheetBase));
+        maUnoStyleSheets.insert({pStyleSheetBase, xDocStyleSheet});
+    }
     const SfxItemSet& rItemSet(xDocStyleSheet->GetItemSet());
     assert(rItemSet.GetParent());
 

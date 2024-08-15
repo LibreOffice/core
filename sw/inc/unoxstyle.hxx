@@ -43,6 +43,7 @@ class SwDoc;
 class SfxItemPropertySet;
 class SwDocShell;
 class SwXNumberingRules;
+class SwDocStyleSheet;
 
 class SAL_DLLPUBLIC_RTTI SwXStyle
     : public cppu::ImplInheritanceHelper<
@@ -57,6 +58,8 @@ class SAL_DLLPUBLIC_RTTI SwXStyle
     bool m_bIsDescriptor;
     bool m_bIsConditional;
     OUString m_sParentStyleName;
+    // cache UNO stylesheets
+    std::unordered_map<SfxStyleSheetBase*, rtl::Reference<SwDocStyleSheet>> maUnoStyleSheets;
 
 protected:
     SfxStyleSheetBasePool* m_pBasePool;
