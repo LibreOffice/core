@@ -64,3 +64,16 @@ index 8026a75d5..34c20d62f 100644
  
  constexpr auto kZoomModeMaxParamCount =
      fxcrt::ToArray<const uint8_t>({0, 3, 0, 1, 1, 4, 0, 1, 1});
+--- pdfium/fpdfsdk/fpdf_annot.cpp.orig	2024-08-15 10:01:30.443712200 +0200
++++ pdfium/fpdfsdk/fpdf_annot.cpp	2024-08-15 10:04:41.161274500 +0200
+@@ -1079,8 +1079,8 @@
+   if (appearanceMode < 0 || appearanceMode >= FPDF_ANNOT_APPEARANCEMODE_COUNT)
+     return false;
+ 
+-  static constexpr auto kModeKeyForMode =
+-      fxcrt::ToArray<const char*>({"N", "R", "D"});
++  static constexpr std::array<const char*, 3UL> kModeKeyForMode
++      ({"N", "R", "D"});
+   static_assert(kModeKeyForMode.size() == FPDF_ANNOT_APPEARANCEMODE_COUNT,
+                 "length of kModeKeyForMode should be equal to "
+                 "FPDF_ANNOT_APPEARANCEMODE_COUNT");
