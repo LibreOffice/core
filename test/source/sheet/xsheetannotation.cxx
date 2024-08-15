@@ -47,7 +47,7 @@ void XSheetAnnotation::testGetDate()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aDate = aSheetAnnotation->getDate();
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", u"01/17/2013"_ustr, aDate);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", u"01/17/2013 00:00:00"_ustr, aDate);
 }
 void XSheetAnnotation::testGetIsVisible()
 {
