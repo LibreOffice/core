@@ -163,7 +163,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     UpdateButtonSensitivity();
-    this->EntryFocus(*m_xTreeView);
+    EntryFocus(*m_xTreeView);
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
@@ -311,14 +311,14 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EntryFocus, weld::TreeView&, void)
         if (conditionType == ScConditionMode::Direct) // Formula conditions
         {
             m_xConditionalType->set_active(1);
-            this->ComboHdl(*m_xConditionalType);
+            ComboHdl(*m_xConditionalType);
             m_xConditionalFormula->SetText(
                 conditionEntry->GetExpression(conditionEntry->GetSrcPos(), 0));
         }
         else
         {
             m_xConditionalType->set_active(0);
-            this->ComboHdl(*m_xConditionalType);
+            ComboHdl(*m_xConditionalType);
             m_xConditionalCellValue->set_active(static_cast<int>(conditionType));
         }
     }
@@ -327,7 +327,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EntryFocus, weld::TreeView&, void)
         const ScCondDateFormatEntry* dateEntry = dynamic_cast<const ScCondDateFormatEntry*>(entry);
         auto dateType = dateEntry->GetDateType();
         m_xConditionalType->set_active(2);
-        this->ComboHdl(*m_xConditionalType);
+        ComboHdl(*m_xConditionalType);
         m_xConditionalDate->set_active(dateType);
     }
 }
