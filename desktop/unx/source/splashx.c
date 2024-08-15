@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
+#include <config_vclplug.h>
 #include "splashx.h"
 
-#if defined(ENABLE_QUICKSTART_LIBPNG) && HAVE_FEATURE_UI
+#if defined(ENABLE_QUICKSTART_LIBPNG) && USING_X11
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
