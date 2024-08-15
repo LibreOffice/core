@@ -618,7 +618,7 @@ void SlideTransitionPane::updateControls()
     {
         mxRB_REPEAT_DISABLED->set_active( false );
         mxRB_REPEAT_AUTO->set_active( true );
-        mxMF_REPEAT_AUTO_AFTER->set_value(rSettings.mnPauseTimeout, FieldUnit::SECOND);
+        mxMF_REPEAT_AUTO_AFTER->set_value(rSettings.mnPauseTimeout * 100.0, FieldUnit::SECOND);
     }
 
     if (comphelper::LibreOfficeKit::isActive())
