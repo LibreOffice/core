@@ -57,7 +57,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
 
     // Anchor the shape of the textbox into its own textframe.
     SdrObject* pTextFrameObj = pDrawPage->GetObj(2);
+    CPPUNIT_ASSERT(pTextFrameObj);
     SwFrameFormat* pTextFrameFormat = FindFrameFormat(pTextFrameObj);
+    CPPUNIT_ASSERT(pTextFrameFormat);
     CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, pTextFrameFormat->GetName());
     SwFrameFormat* pDrawShapeFormat = FindFrameFormat(pDrawShape);
     SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetAnchorNode()->GetIndex();
