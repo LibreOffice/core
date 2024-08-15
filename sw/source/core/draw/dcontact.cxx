@@ -119,21 +119,13 @@ void setContextWritingMode(SdrObject* pObj, SwFrame const * pAnchor)
 */
 SwFrameFormat *FindFrameFormat( SdrObject *pObj )
 {
-    SwFrameFormat* pRetval = nullptr;
-
     if (SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
-    {
-       pRetval = pFlyDrawObj->GetFormat();
-    }
-    else
-    {
-        SwContact* pContact = GetUserCall(pObj);
-        if ( pContact )
-        {
-            pRetval = pContact->GetFormat();
-        }
-    }
-    return pRetval;
+       return pFlyDrawObj->GetFormat();
+
+    if (SwContact* pContact = GetUserCall(pObj))
+        return pContact->GetFormat();
+
+    return nullptr;
 }
 
 bool HasWrap( const SdrObject* pObj )
