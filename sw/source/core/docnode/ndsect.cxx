@@ -736,21 +736,25 @@ void sw_DeleteFootnote( SwSectionNode *pNd, SwNodeOffset nStt, SwNodeOffset nEnd
 
     size_t nPos = 0;
     rFootnoteArr.SeekEntry( *pNd, &nPos );
-    SwTextFootnote* pSrch;
 
     // Delete all succeeding Footnotes
-    while( nPos < rFootnoteArr.size() &&
-        SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
+    while (nPos < rFootnoteArr.size())
     {
+        SwTextFootnote* pSrch = rFootnoteArr[nPos];
+        if (SwTextFootnote_GetIndex(pSrch) > nEnd)
+            break;
         // If the Nodes are not deleted, they need to deregister at the Pages
         // (delete Frames) or else they will remain there (Undo does not delete them!)
         pSrch->DelFrames(nullptr);
         ++nPos;
     }
 
-    while( nPos-- &&
-        SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
+    while (nPos > 0)
     {
+        nPos--;
+        SwTextFootnote* pSrch = rFootnoteArr[nPos];
+        if (SwTextFootnote_GetIndex(pSrch) < nStt)
+            break;
         // If the Nodes are not deleted, they need to deregister at the Pages
         // (delete Frames) or else they will remain there (Undo does not delete them!)
         pSrch->DelFrames(nullptr);
