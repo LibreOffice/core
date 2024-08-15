@@ -88,6 +88,12 @@ inline void SwLayAction::CheckIdleEnd()
 {
     if (!IsInterrupt())
         m_bInterrupt = bool(GetInputType()) && Application::AnyInput(GetInputType());
+
+    if (comphelper::LibreOfficeKit::isActive() && !IsInterrupt() && bool(GetInputType()))
+    {
+        // Also check if the LOK client has any pending input events.
+        m_bInterrupt = comphelper::LibreOfficeKit::anyInput();
+    }
 }
 
 void SwLayAction::SetStatBar( bool bNew )
@@ -719,7 +725,12 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // already - the border of the page will never be painted.
         SwPageFrame *pPg = pPage;
         if (lcl_isLayoutLooping()) return;
-        const SwRect &rVis = m_pImp->GetShell()->VisArea();
+        // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
+        // visible area.
+        const SwRect &rVisArea = m_pImp->GetShell()->VisArea();
+        SwRect aLokVisArea(m_pImp->GetShell()->getLOKVisibleArea());
+        bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+        const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
 
         while( pPg && pPg->getFrameArea().Bottom() < rVis.Top() )
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());
