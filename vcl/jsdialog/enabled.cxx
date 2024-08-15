@@ -176,6 +176,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/simpress/ui/customanimationtimingtab.ui"
         || rUIFile == u"modules/simpress/ui/headerfooterdialog.ui"
         || rUIFile == u"modules/simpress/ui/headerfootertab.ui"
+        || rUIFile == u"modules/simpress/ui/interactiondialog.ui"
+        || rUIFile == u"modules/simpress/ui/interactionpage.ui"
         // swriter
         || rUIFile == u"modules/swriter/ui/bulletsandnumbering.ui"
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"

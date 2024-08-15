@@ -38,6 +38,7 @@ class SdDrawDocument;
  */
 class SdActionDlg final : public SfxSingleTabDialogController
 {
+    std::unique_ptr<weld::Container> m_xContent;
 public:
     SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView);
 };

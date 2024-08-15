@@ -1306,6 +1306,7 @@ constexpr auto handlers = frozen::make_unordered_map<std::u16string_view, Payloa
     { u"DistributeVertCenter", EnabledPayload },
     { u"DistributeVertDistance", EnabledPayload },
     { u"DistributeVertTop", EnabledPayload },
+    { u"AnimationEffects", EnabledPayload },
 
     { u"ParaLeftToRight", ParaDirectionPayload },
     { u"ParaRightToLeft", ParaDirectionPayload },
