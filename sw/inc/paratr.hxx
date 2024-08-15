@@ -166,6 +166,9 @@ public:
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwNumRuleItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
+    // Marked as false since the SfxStringItem superclass supports hashing, but
+    // this class has not been checked for safety under hashing yet.
+    virtual bool            supportsHashCode() const override { return false; }
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

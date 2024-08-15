@@ -49,7 +49,7 @@ bool SfxStringItem::PutValue(const css::uno::Any& rVal,
         m_aValue = aTheValue;
         return true;
     }
-    OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");
+    OSL_FAIL("SfxStringItem::PutValue(): Wrong type");
     return false;
 }
 

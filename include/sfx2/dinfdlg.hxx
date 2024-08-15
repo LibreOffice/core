@@ -173,7 +173,10 @@ public:
 
     void        SetCmisProperties(const css::uno::Sequence< css::document::CmisProperty >& cmisProps );
     virtual SfxDocumentInfoItem* Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool        operator==( const SfxPoolItem& ) const override;
+    // Marked as false since the SfxStringItem superclass supports hashing, but
+    // this class has not been checked for safety under hashing yet.
+    virtual bool        supportsHashCode() const override { return false; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

@@ -49,6 +49,9 @@ public:
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;
     virtual NameOrIndex* Clone(SfxItemPool* pPool = nullptr) const override;
+    // Marked as false since the SfxStringItem superclass supports hashing, but
+    // this class has not been checked for safety under hashing yet.
+    virtual bool         supportsHashCode() const override { return false; }
 
             OUString const & GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }
