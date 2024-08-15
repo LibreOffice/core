@@ -1669,8 +1669,11 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
     // BuildFileName delete ../ and convert them to nLevel
     // but addrelation needs ../ instead of nLevel, so we have to convert it back
     OUString sFile = XclExpHyperlink::BuildFileName(nLevel, bRel, maUrl, GetRoot(), true);
-    while (nLevel-- > 0)
+    while (nLevel > 0)
+    {
         sFile = "../" + sFile;
+        --nLevel;
+    }
 
     OUString sId = rStrm.addRelation( pExternalLink->getOutputStream(),
             oox::getRelationship(Relationship::EXTERNALLINKPATH), sFile, true );
