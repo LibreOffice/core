@@ -25,9 +25,8 @@
 
 void OutputDevice::createEmphasisMarks(
     FontEmphasisMark nEmphasisMark, tools::Long nEmphasisHeight, SalLayout& rSalLayout,
-    std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
-                       const tools::Rectangle&, const tools::Rectangle&)>
-        aCallback) const
+    const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
+                             const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const
 {
     // tooling method to create geometry data for EmphasisMarks. It does the same
     // as OutputDevice::ImplDrawEmphasisMarks, but feeds the data into the
@@ -91,7 +90,7 @@ void OutputDevice::createEmphasisMarks(
             aOutPoint.adjustY(aAdjPoint.Y() - nEmphasisHeight2);
 
             // use callback to propagate the data to where it was requested from
-            aCallback(aOutPoint, aShape, aEmphasisMark.IsShapePolyLine(), aEmphasisMark.GetRect1(),
+            rCallback(aOutPoint, aShape, aEmphasisMark.IsShapePolyLine(), aEmphasisMark.GetRect1(),
                       aEmphasisMark.GetRect2());
         }
     }

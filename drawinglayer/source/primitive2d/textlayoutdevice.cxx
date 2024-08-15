@@ -381,9 +381,8 @@ TextLayouterDevice::getSalLayout(const OUString& rText, sal_uInt32 nIndex, sal_u
 
 void TextLayouterDevice::createEmphasisMarks(
     SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
-    std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
-                       const tools::Rectangle&, const tools::Rectangle&)>
-        aCallback) const
+    const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
+                             const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const
 {
     FontEmphasisMark nEmphasisMark(FontEmphasisMark::NONE);
     double fEmphasisHeight(getTextHeight() * (250.0 / 1000.0));
@@ -412,7 +411,7 @@ void TextLayouterDevice::createEmphasisMarks(
         nEmphasisMark |= FontEmphasisMark::PosBelow;
 
     mrDevice.createEmphasisMarks(nEmphasisMark, static_cast<tools::Long>(fEmphasisHeight),
-                                 rSalLayout, aCallback);
+                                 rSalLayout, rCallback);
 }
 
 // helper methods for vcl font handling

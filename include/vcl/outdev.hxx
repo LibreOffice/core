@@ -1237,8 +1237,8 @@ public:
         FontEmphasisMark nFontEmphasisMark,
         tools::Long nEmphasisHeight,
         SalLayout& rSalLayout,
-        std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
-            bool, const tools::Rectangle&, const tools::Rectangle&)> aCallback) const;
+        const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
+            bool, const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const;
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;

@@ -318,7 +318,7 @@ void statusIndicatorFinish()
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
 }
 
-void setAnyInputCallback(std::function<bool(void*)> pAnyInputCallback, void* pData)
+void setAnyInputCallback(const std::function<bool(void*)>& pAnyInputCallback, void* pData)
 {
     g_pAnyInputCallback = pAnyInputCallback;
     g_pAnyInputCallbackData = pData;

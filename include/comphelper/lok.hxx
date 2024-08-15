@@ -134,7 +134,7 @@ COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
 COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
 
-COMPHELPER_DLLPUBLIC void setAnyInputCallback(std::function<bool(void*)> pAnyInputCallback,
+COMPHELPER_DLLPUBLIC void setAnyInputCallback(const std::function<bool(void*)>& pAnyInputCallback,
                                               void* pData);
 COMPHELPER_DLLPUBLIC bool anyInput();
 }

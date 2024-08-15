@@ -125,11 +125,11 @@ public:
                                             const basegfx::B2DPoint& rStartPoint,
                                             const KernArray& rDXArray,
                                             std::span<const sal_Bool> pKashidaAry) const;
-    void
-    createEmphasisMarks(SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
-                        std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
-                                           bool, const tools::Rectangle&, const tools::Rectangle&)>
-                            aCallback) const;
+    void createEmphasisMarks(
+        SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
+        const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
+                                 const tools::Rectangle&, const tools::Rectangle&)>& rCallback)
+        const;
 };
 
 // helper methods for vcl font handling
