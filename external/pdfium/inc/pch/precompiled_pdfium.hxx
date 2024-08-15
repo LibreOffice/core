@@ -37,6 +37,7 @@
 #include <cmath>
 #include <ctype.h>
 #include <functional>
+#include <initializer_list>
 #include <iterator>
 #include <limits.h>
 #include <limits>
@@ -53,7 +54,6 @@
 #include <setjmp.h>
 #include <sstream>
 #include <stack>
-#include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -91,8 +91,11 @@
 #include <core/fpdfapi/cmaps/fpdf_cmaps.h>
 #include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
+#include <core/fpdfapi/edit/cpdf_npagetooneexporter.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentgenerator.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentmanager.h>
+#include <core/fpdfapi/edit/cpdf_pageexporter.h>
+#include <core/fpdfapi/edit/cpdf_pageorganizer.h>
 #include <core/fpdfapi/edit/cpdf_stringarchivestream.h>
 #include <core/fpdfapi/font/cfx_cttgsubtable.h>
 #include <core/fpdfapi/font/cfx_stockfontarray.h>
@@ -368,7 +371,10 @@
 #include <core/fxcrt/xml/cfx_xmlnode.h>
 #include <core/fxcrt/xml/cfx_xmlparser.h>
 #include <core/fxcrt/xml/cfx_xmltext.h>
-#include <core/fxge/agg/fx_agg_driver.h>
+#include <core/fxcrt/zip.h>
+#include <core/fxge/agg/cfx_agg_bitmapcomposer.h>
+#include <core/fxge/agg/cfx_agg_devicedriver.h>
+#include <core/fxge/agg/cfx_agg_imagerenderer.h>
 #include <core/fxge/calculate_pitch.h>
 #include <core/fxge/cfx_cliprgn.h>
 #include <core/fxge/cfx_color.h>
@@ -392,12 +398,10 @@
 #include <core/fxge/cfx_textrenderoptions.h>
 #include <core/fxge/cfx_unicodeencoding.h>
 #include <core/fxge/dib/blend.h>
-#include <core/fxge/dib/cfx_bitmapcomposer.h>
 #include <core/fxge/dib/cfx_bitmapstorer.h>
 #include <core/fxge/dib/cfx_cmyk_to_srgb.h>
 #include <core/fxge/dib/cfx_dibbase.h>
 #include <core/fxge/dib/cfx_dibitmap.h>
-#include <core/fxge/dib/cfx_imagerenderer.h>
 #include <core/fxge/dib/cfx_imagestretcher.h>
 #include <core/fxge/dib/cfx_imagetransformer.h>
 #include <core/fxge/dib/cfx_scanlinecompositor.h>
