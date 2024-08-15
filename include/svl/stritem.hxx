@@ -16,31 +16,47 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SVL_STRITEM_HXX
-#define INCLUDED_SVL_STRITEM_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
-#include <svl/custritm.hxx>
+#include <svl/poolitem.hxx>
+#include <cassert>
+#include <utility>
 
 
-class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
+class SVL_DLLPUBLIC SfxStringItem: public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
 
     SfxStringItem(sal_uInt16 which = 0, SfxItemType eItemType = SfxItemType::SfxStringItemType)
-        : CntUnencodedStringItem(which, eItemType) {}
+        : SfxPoolItem(which, eItemType) {}
 
     SfxStringItem(sal_uInt16 which, const OUString & rValue, SfxItemType eItemType = SfxItemType::SfxStringItemType):
-        CntUnencodedStringItem(which, rValue, eItemType) {}
+        SfxPoolItem(which, eItemType), m_aValue(rValue) {}
+
+    virtual bool operator ==(const SfxPoolItem & rItem) const override;
+
+    virtual bool GetPresentation(SfxItemPresentation,
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper&) const override;
+
+    virtual bool QueryValue(css::uno::Any& rVal,
+                            sal_uInt8 nMemberId = 0) const override;
+
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
     virtual SfxStringItem* Clone(SfxItemPool * = nullptr) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-};
+    const OUString & GetValue() const { return m_aValue; }
 
-#endif // INCLUDED_SVL_STRITEM_HXX
+    void SetValue(const OUString & rTheValue) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_aValue = rTheValue; }
+
+private:
+    OUString m_aValue;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

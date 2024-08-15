@@ -19,6 +19,48 @@
 
 #include <svl/stritem.hxx>
 #include <libxml/xmlwriter.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <osl/diagnose.h>
+#include <unotools/intlwrapper.hxx>
+
+// virtual
+bool SfxStringItem::GetPresentation(SfxItemPresentation, MapUnit,
+                                        MapUnit, OUString & rText,
+                                        const IntlWrapper&) const
+{
+    rText = m_aValue;
+    return true;
+}
+
+// virtual
+bool SfxStringItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
+{
+    rVal <<= m_aValue;
+    return true;
+}
+
+// virtual
+bool SfxStringItem::PutValue(const css::uno::Any& rVal,
+                                         sal_uInt8)
+{
+    OUString aTheValue;
+    if (rVal >>= aTheValue)
+    {
+        m_aValue = aTheValue;
+        return true;
+    }
+    OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");
+    return false;
+}
+
+// virtual
+bool SfxStringItem::operator ==(const SfxPoolItem & rItem) const
+{
+    assert(SfxPoolItem::operator==(rItem));
+    return m_aValue
+            == static_cast< const SfxStringItem * >(&rItem)->
+                m_aValue;
+}
 
 // virtual
 SfxStringItem* SfxStringItem::Clone(SfxItemPool *) const

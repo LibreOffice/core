@@ -111,7 +111,6 @@ enum class SfxItemType : sal_uInt16 {
     CntInt32ItemType,
     CntUInt16ItemType,
     CntUInt32ItemType,
-    CntUnencodedStringItemType,
     DatabaseMapItemType,
     DbuTypeCollectionItemType,
     DriverPoolingSettingsItemType,

@@ -229,31 +229,30 @@
 //        class SvxRsidItem : public SfxUInt32Item
 //        class SdrGrafGamma100Item : public SfxUInt32Item
 //        class SwTableBoxNumFormat : public SfxUInt32Item
-//class CntUnencodedStringItem: public SfxPoolItem
-//    class SfxStringItem: public CntUnencodedStringItem
-//        class SvxPageModelItem : public SfxStringItem
-//        class SfxDocumentInfoItem : public SfxStringItem
-//        class SvxPostItAuthorItem: public SfxStringItem
-//        class SvxPostItDateItem: public SfxStringItem
-//        class SvxPostItTextItem: public SfxStringItem
-//        class SvxPostItIdItem: public SfxStringItem
-//        class SdrMeasureFormatStringItem: public SfxStringItem
-//        class NameOrIndex : public SfxStringItem
-//            class XFillBitmapItem : public NameOrIndex
-//            class XColorItem : public NameOrIndex
-//                class XFillColorItem : public XColorItem
-//                class XFormTextShadowColorItem : public XColorItem
-//                class XLineColorItem : public XColorItem
-//                class XSecondaryFillColorItem : public XColorItem
-//            class XFillGradientItem : public NameOrIndex
-//                class XFillFloatTransparenceItem : public XFillGradientItem
-//            class XFillHatchItem : public NameOrIndex
-//            class XLineDashItem : public NameOrIndex
-//            class XLineEndItem : public NameOrIndex
-//            class XLineStartItem : public NameOrIndex
-//        class SfxScriptOrganizerItem : public SfxStringItem
-//        class SdrLayerNameItem: public SfxStringItem
-//        class SwNumRuleItem : public SfxStringItem
+//class SfxStringItem: public SfxPoolItem
+//    class SvxPageModelItem : public SfxStringItem
+//    class SfxDocumentInfoItem : public SfxStringItem
+//    class SvxPostItAuthorItem: public SfxStringItem
+//    class SvxPostItDateItem: public SfxStringItem
+//    class SvxPostItTextItem: public SfxStringItem
+//    class SvxPostItIdItem: public SfxStringItem
+//    class SdrMeasureFormatStringItem: public SfxStringItem
+//    class NameOrIndex : public SfxStringItem
+//        class XFillBitmapItem : public NameOrIndex
+//        class XColorItem : public NameOrIndex
+//            class XFillColorItem : public XColorItem
+//            class XFormTextShadowColorItem : public XColorItem
+//            class XLineColorItem : public XColorItem
+//            class XSecondaryFillColorItem : public XColorItem
+//        class XFillGradientItem : public NameOrIndex
+//            class XFillFloatTransparenceItem : public XFillGradientItem
+//        class XFillHatchItem : public NameOrIndex
+//        class XLineDashItem : public NameOrIndex
+//        class XLineEndItem : public NameOrIndex
+//        class XLineStartItem : public NameOrIndex
+//    class SfxScriptOrganizerItem : public SfxStringItem
+//    class SdrLayerNameItem: public SfxStringItem
+//    class SwNumRuleItem : public SfxStringItem
 //class SfxBoolItem    : public SfxPoolItem
 //    class SvxAutoKernItem : public SfxBoolItem
 //    class SvxBlinkItem : public SfxBoolItem

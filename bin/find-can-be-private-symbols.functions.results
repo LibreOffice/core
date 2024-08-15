@@ -116,7 +116,6 @@ CntByteItem::Clone(SfxItemPool*) const
 CntInt32Item::Clone(SfxItemPool*) const
 CntUInt16Item::Clone(SfxItemPool*) const
 CntUInt32Item::Clone(SfxItemPool*) const
-CntUnencodedStringItem::Clone(SfxItemPool*) const
 CodeCompleteDataCache::Clear()
 CodeCompleteDataCache::InsertGlobalVar(rtl::OUString const&, rtl::OUString const&)
 CodeCompleteDataCache::InsertLocalVar(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)

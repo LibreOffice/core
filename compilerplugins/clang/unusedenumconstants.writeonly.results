@@ -2508,8 +2508,6 @@ include/svl/poolitem.hxx:113
     enum SfxItemType CntUInt16ItemType
 include/svl/poolitem.hxx:114
     enum SfxItemType CntUInt32ItemType
-include/svl/poolitem.hxx:115
-    enum SfxItemType CntUnencodedStringItemType
 include/svl/poolitem.hxx:116
     enum SfxItemType DatabaseMapItemType
 include/svl/poolitem.hxx:117

@@ -434,7 +434,6 @@
 #include <svl/broadcast.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
-#include <svl/custritm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/hint.hxx>

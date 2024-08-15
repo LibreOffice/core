@@ -229,7 +229,6 @@ CntByteItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUStrin
 CntInt32Item::Clone(SfxItemPool*) const
 CntUInt16Item::Clone(SfxItemPool*) const
 CntUInt32Item::Clone(SfxItemPool*) const
-CntUnencodedStringItem::Clone(SfxItemPool*) const
 CodeCompleteOptions::CodeCompleteOptions()
 CodeCompleteOptions::IsAutoCloseParenthesisOn()
 CodeCompleteOptions::IsAutoCloseQuotesOn()

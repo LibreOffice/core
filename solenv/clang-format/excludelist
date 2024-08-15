@@ -5613,7 +5613,6 @@ include/svl/cenumitm.hxx
 include/svl/cintitem.hxx
 include/svl/cryptosign.hxx
 include/svl/ctloptions.hxx
-include/svl/custritm.hxx
 include/svl/documentlockfile.hxx
 include/svl/eitem.hxx
 include/svl/filenotation.hxx
@@ -10978,7 +10977,6 @@ svl/source/items/IndexedStyleSheets.cxx
 svl/source/items/aeitem.cxx
 svl/source/items/cenumitm.cxx
 svl/source/items/cintitem.cxx
-svl/source/items/custritm.cxx
 svl/source/items/flagitem.cxx
 svl/source/items/globalnameitem.cxx
 svl/source/items/ilstitem.cxx

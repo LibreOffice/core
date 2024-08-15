@@ -371,7 +371,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
-#include <svl/custritm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
