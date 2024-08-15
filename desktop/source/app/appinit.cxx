@@ -84,9 +84,36 @@ EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
     }).then(blob => blob.text()).then(text => eval(text));
 });
 
+EM_JS(void, setupMainChannel, (), {
+    const orig = self.onmessage;
+    self.onmessage = function(e) {
+        if (e.data.cmd === "LOWA-channel") {
+            self.onmessage = orig;
+            Module.uno_mainPort = e.ports[0];
+        } else if (orig) {
+            orig(e);
+        }
+    };
+});
+
+extern "C" void resolveUnoMain() {
+    EM_ASM(
+        let sofficeMain;
+        for (const i in PThread.pthreads) {
+            const worker = PThread.pthreads[i];
+            if (worker.workerID === 1) {
+                sofficeMain = worker;
+                break;
+            }
+        }
+        const channel = new MessageChannel();
+        sofficeMain.postMessage({cmd:"LOWA-channel"}, [channel.port2]);
+        Module.uno_main$resolve(channel.port1);
+    );
+}
+
 void initUno() {
     init_unoembind_uno();
-    EM_ASM(Module.uno_init$resolve(););
     std::vector<std::u16string> urls;
     emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_VI, getUnoScriptUrls, &urls);
     for (auto const & url: urls) {
@@ -95,6 +122,9 @@ void initUno() {
         }
         runUnoScriptUrl(url.c_str());
     }
+    setupMainChannel();
+    EM_ASM(Module.uno_init$resolve(););
+    emscripten_async_run_in_main_runtime_thread(EM_FUNC_SIG_V, resolveUnoMain);
 }
 
 }
