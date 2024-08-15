@@ -827,7 +827,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const int nFontName = 80 + 1;
     std::unique_ptr<char[]> pFontName(new char[nFontName]); // + terminating null
     FPDF_FONT pFontObject = FPDFTextObj_GetFont(pPageObject);
-    int nFontNameChars = FPDFFont_GetFontName(pFontObject, pFontName.get(), nFontName);
+    int nFontNameChars = FPDFFont_GetFamilyName(pFontObject, pFontName.get(), nFontName);
     if (nFontName >= nFontNameChars)
     {
         OUString sFontName = OUString::createFromAscii(pFontName.get());
