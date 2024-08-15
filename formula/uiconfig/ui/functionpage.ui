@@ -158,9 +158,10 @@
         <property name="can-default">True</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes" context="functionpage|help|tooltip_text">Go to Function's Help Page</property>
+        <property name="vexpand">False</property>
       </object>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">6</property>
       </packing>
