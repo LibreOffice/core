@@ -143,7 +143,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
         xItem->mbIsHidden = !xDescriptor->mbIsEnabled;
         xItem->mbIsHiddenByDefault = xItem->mbIsHidden; // the default is the state while creating
 
-        xItem->mxButton->set_sensitive(deck.mbIsEnabled);
+        xItem->mxButton->set_visible(deck.mbIsEnabled);
     }
 
     UpdateButtonIcons();
@@ -371,7 +371,7 @@ void TabBar::UpdateMenus()
         OUString sIdent("select" + OUString::number(nIndex));
         const bool bCurrentDeck = rItem->mxButton->get_item_active(u"toggle"_ustr);
         const bool bActive = !rItem->mbIsHidden;
-        const bool bEnabled = rItem->mxButton->get_sensitive();
+        const bool bEnabled = rItem->mxButton->get_visible();
         mxMainMenu->insert(nIndex, sIdent, sDisplayName, nullptr, nullptr, nullptr, TRISTATE_FALSE);
         mxMainMenu->set_active(sIdent, bCurrentDeck);
         mxMainMenu->set_sensitive(sIdent, bEnabled && bActive);
