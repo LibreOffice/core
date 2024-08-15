@@ -19,6 +19,11 @@ Module.uno_init = new Promise(function (resolve, reject) {
     Module.uno_init$reject = reject;
 });
 
+Module.uno_main = new Promise(function (resolve, reject) {
+    Module.uno_main$resolve = resolve;
+    Module.uno_main$reject = reject;
+});
+
 Module.catchUnoException = function(exception) {
     // Rethrow non-C++ exceptions (non-UNO C++ exceptions are mapped to css.uno.RuntimeException in
     // Module.getUnoExceptionFromCxaException):
