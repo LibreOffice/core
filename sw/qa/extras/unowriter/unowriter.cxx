@@ -1281,6 +1281,24 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf161035)
     CPPUNIT_ASSERT(!xRunEnum->hasMoreElements()); // Empty enumeration for empty selection
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Name", uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+    });
+
+    // Inserting a document with text box attached in a table's second column must not crash
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
+
+    auto xTextBox = getShape(1).queryThrow<css::text::XTextContent>();
+    auto xTable = getParagraphOrTable(2).queryThrow<css::text::XTextTable>();
+    auto xAnchorRange = xTextBox->getAnchor();
+    auto xCellText = xTable->getCellByName("B1").queryThrow<css::text::XText>();
+    CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
