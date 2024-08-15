@@ -5226,8 +5226,23 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 sEntry = static_cast<SwPostItContent*>(pUserData)->GetName();
             break;
             case ContentTypeId::OUTLINE:
+            {
                 assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                sEntry = static_cast<SwOutlineContent*>(pUserData)->GetName();
+                SwOutlineContent* pOutlineContent = static_cast<SwOutlineContent*>(pUserData);
+                SwOutlineNodes::size_type nOutlinePos = pOutlineContent->GetOutlinePos();
+                const SwNodes& rNodes = m_pActiveShell->GetDoc()->GetNodes();
+                const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+                SwNode* pStartNode = rOutlineNodes[nOutlinePos];
+                SwNode* pEndNode = &rNodes.GetEndOfContent();
+                if (nOutlinePos + 1 < rOutlineNodes.size())
+                    pEndNode = rOutlineNodes[nOutlinePos + 1];
+                SwPaM aPaM(*pStartNode, *pEndNode);
+                SwDocStat aDocStat;
+                SwDoc::CountWords(aPaM, aDocStat);
+                sEntry = pOutlineContent->GetName() + "\n" + SwResId(FLD_STAT_WORD) + ": "
+                         + OUString::number(aDocStat.nWord) + "\n" + SwResId(FLD_STAT_CHAR) + ": "
+                         + OUString::number(aDocStat.nChar);
+            }
             break;
             case ContentTypeId::GRAPHIC:
                 assert(dynamic_cast<SwGraphicContent*>(static_cast<SwTypeNumber*>(pUserData)));
