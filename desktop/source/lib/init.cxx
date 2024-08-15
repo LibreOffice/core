@@ -4041,6 +4041,7 @@ static void doc_iniUnoCommands ()
         u".uno:DistributeVertCenter"_ustr,
         u".uno:DistributeVertDistance"_ustr,
         u".uno:DistributeVertTop"_ustr,
+        u".uno:AnimationEffects"_ustr,
     };
 
     util::URL aCommandURL;
