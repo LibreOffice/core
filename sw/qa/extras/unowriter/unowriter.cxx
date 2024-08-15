@@ -36,6 +36,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/UnitConversion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1247,6 +1248,24 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf161035)
     // so the bookmark wasn't processed (expectedly):
     auto xRunEnum = xPara->createEnumeration();
     CPPUNIT_ASSERT(!xRunEnum->hasMoreElements()); // Empty enumeration for empty selection
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Name", uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+    });
+
+    // Inserting a document with text box attached in a table's second column must not crash
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
+
+    auto xTextBox = getShape(1).queryThrow<css::text::XTextContent>();
+    auto xTable = getParagraphOrTable(2).queryThrow<css::text::XTextTable>();
+    auto xAnchorRange = xTextBox->getAnchor();
+    auto xCellText = xTable->getCellByName("B1").queryThrow<css::text::XText>();
+    CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
