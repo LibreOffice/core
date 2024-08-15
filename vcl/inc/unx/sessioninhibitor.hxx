@@ -9,8 +9,12 @@
 
 #pragma once
 
+#include <config_vclplug.h>
+
+#if USING_X11
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
+#endif
 
 #include <vcl/dllapi.h>
 
@@ -27,8 +31,13 @@ class VCL_PLUGIN_PUBLIC SessionManagerInhibitor
 {
 public:
     void inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
+                 unsigned int window_system_id = 0, const char* application_id = nullptr);
+#if USING_X11
+    // calls the above and direct X11-specific API calls in addition
+    void inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
                  unsigned int window_system_id, std::optional<Display*> pDisplay,
                  const char* application_id = nullptr);
+#endif
 
 private:
     // These are all used as guint, however this header may be included
@@ -40,11 +49,15 @@ private:
 
     std::optional<int> mnXScreenSaverTimeout;
 
-#if !defined(__sun)
+#if USING_X11 && !defined(__sun)
     BOOL mbDPMSWasEnabled;
     CARD16 mnDPMSStandbyTimeout;
     CARD16 mnDPMSSuspendTimeout;
     CARD16 mnDPMSOffTimeout;
+
+    SAL_DLLPRIVATE void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
+    SAL_DLLPRIVATE static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);
+    SAL_DLLPRIVATE void inhibitDPMS(bool bInhibit, Display* pDisplay);
 #endif
 
     // There are a bunch of different dbus based inhibition APIs. Some call
@@ -63,10 +76,6 @@ private:
     SAL_DLLPRIVATE void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
     SAL_DLLPRIVATE void inhibitGSM(bool bInhibit, const char* appname, const char* reason,
                                    ApplicationInhibitFlags eType, unsigned int window_system_id);
-
-    SAL_DLLPRIVATE void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
-    SAL_DLLPRIVATE static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);
-    SAL_DLLPRIVATE void inhibitDPMS(bool bInhibit, Display* pDisplay);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

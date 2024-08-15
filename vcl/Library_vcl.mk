@@ -577,7 +577,6 @@ endif
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/desktopdetect/desktopdetector \
-    vcl/unx/generic/window/sessioninhibitor \
     $(if $(ENABLE_CPDB), \
         vcl/unx/generic/printer/cpdmgr \
     ) \
@@ -614,6 +613,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
         vcl/skia/salbmp \
         vcl/skia/zone \
         vcl/skia/gdiimpl \
+    ) \
+    $(if $(filter LINUX SOLARIS %BSD,$(OS)), \
+	vcl/unx/generic/window/sessioninhibitor \
     ) \
 ))
 

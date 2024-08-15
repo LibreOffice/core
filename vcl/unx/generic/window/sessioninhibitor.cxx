@@ -14,11 +14,13 @@
 #include <unx/gensys.h>
 #include <unx/sessioninhibitor.hxx>
 
+#if USING_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
 #if !defined(__sun)
 #include <X11/extensions/dpms.h>
+#endif
 #endif
 
 #include <config_gio.h>
@@ -43,8 +45,7 @@
 #include <sal/log.hxx>
 
 void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
-                                      unsigned int window_system_id, std::optional<Display*> pDisplay,
-                                      const char* application_id)
+                                      unsigned int window_system_id, const char* application_id)
 {
     const char* appname = application_id ? application_id : SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
@@ -55,15 +56,26 @@ void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason
         inhibitFDOPM( bInhibit, appname, aReason.getStr() );
     }
 
+    inhibitGSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
+
+}
+
+
+#if USING_X11
+void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
+                                      unsigned int window_system_id, std::optional<Display*> pDisplay,
+                                      const char* application_id)
+{
+    inhibit(bInhibit, sReason, eType, window_system_id, application_id);
+
     if (eType == APPLICATION_INHIBIT_IDLE && pDisplay)
     {
         inhibitXScreenSaver( bInhibit, *pDisplay );
         inhibitXAutoLock( bInhibit, *pDisplay );
         inhibitDPMS( bInhibit, *pDisplay );
     }
-
-    inhibitGSM(bInhibit, appname, aReason.getStr(), eType, window_system_id);
 }
+#endif
 
 #if ENABLE_GIO
 static void dbusInhibit( bool bInhibit,
@@ -231,6 +243,7 @@ void SessionManagerInhibitor::inhibitGSM( bool bInhibit, const char* appname, co
 #endif // ENABLE_GIO
 }
 
+#if USING_X11
 /**
  * Disable screensavers using the XSetScreenSaver/XGetScreenSaver API.
  *
@@ -330,5 +343,6 @@ void SessionManagerInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
     }
 #endif // !defined(__sun)
 }
+#endif // USING_X11
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
