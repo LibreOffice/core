@@ -33,8 +33,8 @@
 
 #include <QtCore/QObject>
 
-#if CHECK_ANY_QT_USING_X11
 #include <unx/sessioninhibitor.hxx>
+#if CHECK_ANY_QT_USING_X11
 // any better way to get rid of the X11 / Qt type clashes?
 #undef Bool
 #undef CursorShape
@@ -101,8 +101,8 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
 
-#if CHECK_ANY_QT_USING_X11
     SessionManagerInhibitor m_SessionManagerInhibitor;
+#if CHECK_ANY_QT_USING_X11
     ModKeyFlags m_nKeyModifiers;
 #endif
 
