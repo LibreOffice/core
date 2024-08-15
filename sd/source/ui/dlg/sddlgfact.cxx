@@ -546,6 +546,11 @@ void SdAbstractSfxDialog_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
+bool SdAbstractSfxDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const
 {
     return m_xDlg->GetGDIMetaFile();

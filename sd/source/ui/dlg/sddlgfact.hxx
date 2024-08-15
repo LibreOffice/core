@@ -335,15 +335,16 @@ public:
 class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
 private:
-    std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
+    std::shared_ptr<SfxSingleTabDialogController> m_xDlg;
 public:
-    SdAbstractSfxDialog_Impl(std::unique_ptr<SfxSingleTabDialogController> pDlg)
+    SdAbstractSfxDialog_Impl(std::shared_ptr<SfxSingleTabDialogController> pDlg)
         : m_xDlg(std::move(pDlg))
     {
     }
     virtual short   Execute() override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual void    SetText( const OUString& rStr ) override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
 };
 
 class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg

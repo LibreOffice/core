@@ -19,7 +19,10 @@
 
 #pragma once
 
+#include <sfx2/sfxdlg.hxx>
+
 #include "fupoor.hxx"
+#include "tpaction.hxx"
 
 namespace sd {
 
@@ -31,6 +34,7 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
+    void Finish( const std::shared_ptr<SfxRequest>& rReq, const VclPtr<SfxAbstractDialog>& pDlg );
 private:
 
     FuObjectAnimationParameters (
