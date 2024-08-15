@@ -1545,8 +1545,9 @@ bool SvtFileDialog::PrepareExecute()
             if ( 2 == nFilterCount && bHasAll )
             {
                 nPos = nFilterCount;
-                while ( nPos-- )
+                while (nPos)
                 {
+                    --nPos;
                     if ( aAll != GetFilterName( nPos ) )
                         break;
                 }

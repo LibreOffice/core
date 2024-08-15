@@ -766,18 +766,19 @@ void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_Int32 nAbsLeft
 
     // then it must be corrected for the output
     SvxTabStopItem aTStop(*pItem);
-    for ( sal_uInt16 nCnt = 0; nCnt < aTStop.Count(); ++nCnt )
+    sal_uInt16 nCnt = 0;
+    while (nCnt < aTStop.Count())
     {
         SvxTabStop& rTab = const_cast<SvxTabStop&>(aTStop[ nCnt ]);
         if ( SvxTabAdjust::Default != rTab.GetAdjustment() &&
             rTab.GetTabPos() >= nAbsLeft )
         {
             rTab.GetTabPos() -= nAbsLeft;
+            ++nCnt;
         }
         else
         {
-            aTStop.Remove( nCnt );
-            --nCnt;
+            aTStop.Remove(nCnt);
         }
     }
     rSet.Put( aTStop );
