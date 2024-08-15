@@ -3105,7 +3105,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         basegfx::B2DHomMatrix aInvViewTransform;
 
         // discrete offsets defined here to easily allow to change them,
-        // e.g. if more 'fat' outline is wanted, it may be incerased to 1.5
+        // e.g. if more 'fat' outline is wanted, it may be increased to 1.5
         constexpr double fZero(0.0);
         constexpr double fPlus(1.0);
         constexpr double fMinus(-1.0);
