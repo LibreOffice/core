@@ -29,6 +29,7 @@
 #include <editeng/shaditem.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/framelink.hxx>
+#include <svx/svdouno.hxx>
 #include <drawdoc.hxx>
 #include <tgrditem.hxx>
 #include <calbck.hxx>
@@ -73,7 +74,6 @@
 #include <swfont.hxx>
 
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
-#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <DocumentSettingManager.hxx>
@@ -3217,47 +3217,6 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
         pLineSet->insert( rNew );
 }
 
-/**
- * FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
- * --> OD #i76669#
- */
-namespace
-{
-    class SwViewObjectContactRedirector : public sdr::contact::ViewObjectContactRedirector
-    {
-        private:
-            const SwViewShell& mrViewShell;
-
-        public:
-            explicit SwViewObjectContactRedirector( const SwViewShell& rSh )
-                : mrViewShell( rSh )
-            {};
-
-            virtual void createRedirectedPrimitive2DSequence(
-                                    const sdr::contact::ViewObjectContact& rOriginal,
-                                    const sdr::contact::DisplayInfo& rDisplayInfo,
-                                    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
-            {
-                bool bPaint( true );
-
-                SdrObject* pObj = rOriginal.GetViewContact().TryToGetSdrObject();
-                if ( pObj )
-                {
-                    bPaint = SwFlyFrame::IsPaint( pObj, &mrViewShell );
-                }
-
-                if ( !bPaint )
-                {
-                    return;
-                }
-
-                sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-                                                        rOriginal, rDisplayInfo, rVisitor );
-            }
-    };
-
-} // end of anonymous namespace
-// <--
 
 /**
  * Paint once for every visible page which is touched by Rect
@@ -4170,6 +4129,13 @@ bool SwFlyFrame::IsBackgroundTransparent() const
     return bBackgroundTransparent;
 };
 
+static void lcl_PaintReplacement( const SwRect &rRect, const SwViewShell &rSh )
+{
+    const BitmapEx& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(false);
+    vcl::Font aFont(rSh.GetOut()->GetFont() );
+    Graphic::DrawEx(*rSh.GetOut(), OUString(), aFont, rBmp, rRect.Pos(), rRect.SSize());
+}
+
 bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 {
     SdrObjUserCall *pUserCall = GetUserCall(pObj);
@@ -4177,6 +4143,15 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     if ( nullptr == pUserCall )
         return true;
 
+    if ( pSh && ((!pSh->GetViewOptions()->IsDraw()
+             && (dynamic_cast<SdrUnoObj*>(pObj) || dynamic_cast<SdrAttrObj*>(pObj) || dynamic_cast<SwFlyDrawObj*>(pObj)))
+        || (!pSh->GetViewOptions()->IsGraphic() && dynamic_cast<SwVirtFlyDrawObj*>(pObj)) )
+         )
+    {
+        SwRect rBoundRect = GetBoundRectOfAnchoredObj( pObj );
+        lcl_PaintReplacement( rBoundRect, *pSh );
+        return false;
+    }
     assert(pObj);
 
     //Attribute dependent, don't paint for printer or Preview

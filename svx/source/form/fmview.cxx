@@ -437,9 +437,10 @@ SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
 }
 
 
-void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFormLayer )
+void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+        sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
-    E3dView::EndCompleteRedraw( rPaintWindow, bPaintFormLayer );
+    E3dView::EndCompleteRedraw( rPaintWindow, bPaintFormLayer, pRedirector );
     m_pImpl->resumeTabOrderUpdate();
 }
 

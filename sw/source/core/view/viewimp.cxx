@@ -38,6 +38,8 @@
 #include <drawdoc.hxx>
 #include <prevwpage.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 
 void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 {
@@ -524,5 +526,27 @@ void SwViewShellImp::FireAccessibleEvents()
         GetAccessibleMap().FireEvents();
 }
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY
+
+void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+                        const sdr::contact::ViewObjectContact& rOriginal,
+                        const sdr::contact::DisplayInfo& rDisplayInfo,
+                        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
+{
+    bool bPaint( true );
+
+    SdrObject* pObj = rOriginal.GetViewContact().TryToGetSdrObject();
+    if ( pObj )
+    {
+        bPaint = SwFlyFrame::IsPaint( pObj, &mrViewShell );
+    }
+
+    if ( !bPaint )
+    {
+        return;
+    }
+
+    sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+                                            rOriginal, rDisplayInfo, rVisitor );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
