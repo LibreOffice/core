@@ -127,12 +127,19 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
                         }
                     }
 
-                    if( !pEntry->GetText().isEmpty() &&
-                        aCheckEntry.GetText() != pEntry->GetText() )
+                    if (aCheckEntry.GetText() != pEntry->GetText())
                     {
+                        if (pEntry->GetText().isEmpty())
+                        {
+                            ResetAttrs(aPam, true, aDelArr);
+                        }
+
                         // text is changed, so replace the original
-                        getIDocumentContentOperations().ReplaceRange( aPam, pEntry->GetText(), false );
+                        getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(),
+                                                                     false);
+                        std::swap(*aPam.GetMark(), *aPam.GetPoint());
                     }
+
                     aPam.DeleteMark();
                 }
                 else
