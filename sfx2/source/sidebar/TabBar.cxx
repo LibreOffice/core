@@ -307,22 +307,6 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     UpdateMenus();
 }
 
-void TabBar::RestoreHideFlags()
-{
-    for (auto & item : maItems)
-    {
-        if (item->mbIsHidden != item->mbIsHiddenByDefault)
-        {
-            item->mbIsHidden = item->mbIsHiddenByDefault;
-            std::shared_ptr<DeckDescriptor> xDeckDescriptor = mrParentSidebarController.GetResourceManager()->GetDeckDescriptor(item->msDeckId);
-            if (xDeckDescriptor)
-                xDeckDescriptor->mbIsEnabled = !item->mbIsHidden;
-
-        }
-    }
-    UpdateMenus();
-}
-
 void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
 {
     std::vector<weld::Widget*> aButtons;

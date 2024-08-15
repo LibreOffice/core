@@ -1171,10 +1171,6 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, const OUString&, rCurItemId, vo
 
 IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OUString&, rCurItemId, void)
 {
-    if (rCurItemId == "restoredefault")
-        mpTabBar->RestoreHideFlags();
-    else
-    {
         try
         {
             std::u16string_view sNumber;
@@ -1200,7 +1196,6 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OUString&, rCurItemId,
         catch (RuntimeException&)
         {
         }
-    }
 }
 
 

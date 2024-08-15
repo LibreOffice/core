@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image6">
@@ -53,20 +53,6 @@
           <object class="GtkMenu" id="submenu">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <child>
-              <object class="GtkSeparatorMenuItem" id="separator2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="restoredefault">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="tabbar|restoredefault">Restore Default</property>
-                <property name="use-underline">True</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
