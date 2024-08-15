@@ -21,11 +21,12 @@
 #include <sfx2/sfxsids.hrc>
 #include <sorgitm.hxx>
 #include <osl/diagnose.h>
+#include <libxml/xmlwriter.h>
 
 SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 
 
-SfxScriptOrganizerItem::SfxScriptOrganizerItem()
+SfxScriptOrganizerItem::SfxScriptOrganizerItem() : SfxPoolItem(0, SfxItemType::SfxScriptOrganizerItemType)
 {
 }
 
@@ -36,8 +37,8 @@ SfxScriptOrganizerItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 
 bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
-     return SfxStringItem::operator==(rItem) &&
-         aLanguage == static_cast<const SfxScriptOrganizerItem &>(rItem).aLanguage;
+    assert(SfxPoolItem::operator==(rItem));
+    return aLanguage == static_cast<const SfxScriptOrganizerItem &>(rItem).aLanguage;
 }
 
 
@@ -80,6 +81,23 @@ bool SfxScriptOrganizerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMem
     }
 
     return bRet;
+}
+
+// virtual
+bool SfxScriptOrganizerItem::GetPresentation(SfxItemPresentation, MapUnit,
+                                        MapUnit, OUString & rText,
+                                        const IntlWrapper&) const
+{
+    rText = aLanguage;
+    return true;
+}
+
+void SfxScriptOrganizerItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxScriptOrganizerItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(aLanguage.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

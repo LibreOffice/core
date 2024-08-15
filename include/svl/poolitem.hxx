@@ -267,6 +267,7 @@ enum class SfxItemType : sal_uInt16 {
     SfxRangeItemType,
     SfxRectangleItemType,
     SfxRegionItemType,
+    SfxScriptOrganizerItemType,
     SfxSetItemType,
     SfxStringItemType,
     SfxStringListItemType,

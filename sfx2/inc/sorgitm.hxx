@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SFX2_INC_SORGITM_HXX
 #define INCLUDED_SFX2_INC_SORGITM_HXX
 
-#include <svl/stritem.hxx>
+#include <svl/svldllapi.h>
+#include <svl/poolitem.hxx>
 
 // class SfxScriptOrganizerItem ---------------------------------------------
 
-class SfxScriptOrganizerItem final : public SfxStringItem
+class SfxScriptOrganizerItem final : public SfxPoolItem
 {
 private:
     OUString aLanguage;
@@ -34,8 +35,15 @@ public:
 
     virtual SfxScriptOrganizerItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool          operator==( const SfxPoolItem& ) const override;
+    virtual bool supportsHashCode() const override { return true; }
+    virtual size_t hashCode() const override { return aLanguage.hashCode(); }
     virtual bool          QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool          PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool GetPresentation(SfxItemPresentation,
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper&) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     const OUString&       getLanguage() const { return aLanguage; };
 };
 

@@ -250,9 +250,9 @@
 //        class XLineDashItem : public NameOrIndex
 //        class XLineEndItem : public NameOrIndex
 //        class XLineStartItem : public NameOrIndex
-//    class SfxScriptOrganizerItem : public SfxStringItem
 //    class SdrLayerNameItem: public SfxStringItem
 //    class SwNumRuleItem : public SfxStringItem
+//class SfxScriptOrganizerItem : public SfxPoolItem
 //class SfxBoolItem    : public SfxPoolItem
 //    class SvxAutoKernItem : public SfxBoolItem
 //    class SvxBlinkItem : public SfxBoolItem
