@@ -111,7 +111,7 @@ Type _TextRange
 	TargetName					As String		&apos;	Name of Frame or Table or ...
 	TargetCell					As String		&apos;	Cell
 	TargetObject				As Object		&apos;	Field, TableCell, Section, ... object
-	Offset						As Long			&apos;	Number of utems to right (+)or to left (-)
+	Offset						As Long			&apos;	Number of items to right (+) or to left (-)
 	StartPoint					As Boolean		&apos;	When True, vertical bar before target
 	EndPoint					As Boolean		&apos;	When True, vertical bar after target
 	Anchor						As Object		&apos;	com.sun.star.text.XTextRange
