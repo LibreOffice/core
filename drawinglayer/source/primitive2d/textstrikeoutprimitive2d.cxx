@@ -211,11 +211,11 @@ namespace drawinglayer::primitive2d
                 aTransform.rotate(fRotate);
                 aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
-                // add transform primitive
-                xRetval =
-                        new TransformPrimitive2D(
-                            aTransform,
-                            Primitive2DContainer{xRetval});
+                // add original and transform primitive to a GroupPrimitive2D
+                xRetval = new GroupPrimitive2D({
+                    xRetval, new TransformPrimitive2D(
+                        aTransform,
+                        Primitive2DContainer{xRetval}) });
             }
 
             return xRetval;

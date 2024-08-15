@@ -131,14 +131,12 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
                               const basegfx::B2DHomMatrix& rTransform, double fTextWidth);
     void renderSalLayout(const std::unique_ptr<SalLayout>& rSalLayout,
                          const basegfx::BColor& rTextColor, const basegfx::B2DHomMatrix& rTransform,
-                         bool bAntiAliase);
-    void renderShadowTextDecoration(
-        const basegfx::BColor& rShadowColor, const basegfx::B2DHomMatrix& rShadowObjectTransform,
+                         bool bAntiAliase) const;
+    void renderTextDecorationWithOptionalTransformAndColor(
         const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
-        const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans);
-    void
-    renderTextDecoration(const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
-                         const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans);
+        const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
+        const basegfx::B2DHomMatrix* pOptionalObjectTransform = nullptr,
+        const basegfx::BColor* pReplacementColor = nullptr);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

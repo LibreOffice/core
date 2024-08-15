@@ -2932,7 +2932,7 @@ void CairoPixelProcessor2D::renderTextBackground(
 void CairoPixelProcessor2D::renderSalLayout(const std::unique_ptr<SalLayout>& rSalLayout,
                                             const basegfx::BColor& rTextColor,
                                             const basegfx::B2DHomMatrix& rTransform,
-                                            bool bAntiAliase)
+                                            bool bAntiAliase) const
 {
     cairo_save(mpRT);
     cairo_matrix_t aMatrix;
@@ -2943,34 +2943,13 @@ void CairoPixelProcessor2D::renderSalLayout(const std::unique_ptr<SalLayout>& rS
     cairo_restore(mpRT);
 }
 
-void CairoPixelProcessor2D::renderShadowTextDecoration(
-    const basegfx::BColor& rShadowColor, const basegfx::B2DHomMatrix& rShadowObjectTransform,
+void CairoPixelProcessor2D::renderTextDecorationWithOptionalTransformAndColor(
     const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
-    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans)
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
+    const basegfx::B2DHomMatrix* pOptionalObjectTransform, const basegfx::BColor* pReplacementColor)
 {
-    // modify ColorStack as needed
-    maBColorModifierStack.push(std::make_shared<basegfx::BColorModifier_replace>(rShadowColor));
-
-    // modify transformation as needed
-    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
-    geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
-    aViewInformation2D.setObjectTransformation(rShadowObjectTransform);
-    updateViewInformation(aViewInformation2D);
-
-    // render same primitives as for non-shadow, but with mods set above
-    renderTextDecoration(rDecoratedCandidate, rDecTrans);
-
-    // restore mods
-    updateViewInformation(aLastViewInformation2D);
-    maBColorModifierStack.pop();
-}
-
-void CairoPixelProcessor2D::renderTextDecoration(
-    const primitive2d::TextDecoratedPortionPrimitive2D& rDecoratedCandidate,
-    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans)
-{
-    // get decorations from Primitive, guaranteed the same as
-    // a decomposition would create
+    // get decorations from Primitive (using original TextTransform),
+    // guaranteed the same visualization as a decomposition would create
     const primitive2d::Primitive2DContainer& rDecorationGeometryContent(
         rDecoratedCandidate.getOrCreateDecorationGeometryContent(
             rDecTrans, rDecoratedCandidate.getText(), rDecoratedCandidate.getTextPosition(),
@@ -2982,7 +2961,28 @@ void CairoPixelProcessor2D::renderTextDecoration(
         return;
     }
 
+    // modify ColorStack as needed - if needed
+    if (nullptr != pReplacementColor)
+        maBColorModifierStack.push(
+            std::make_shared<basegfx::BColorModifier_replace>(*pReplacementColor));
+
+    // modify transformation as needed - if needed
+    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+    if (nullptr != pOptionalObjectTransform)
+    {
+        geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
+        aViewInformation2D.setObjectTransformation(*pOptionalObjectTransform);
+        updateViewInformation(aViewInformation2D);
+    }
+
+    // render primitives
     process(rDecorationGeometryContent);
+
+    // restore mods
+    if (nullptr != pOptionalObjectTransform)
+        updateViewInformation(aLastViewInformation2D);
+    if (nullptr != pReplacementColor)
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
@@ -3030,9 +3030,9 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                              pSalLayout->GetTextWidth());
     }
 
+    // prepare flags that are only needed if Text is Decorated
     bool bHasTextRelief(false);
     bool bHasShadow(false);
-    bool bHasOutline(false);
     bool bHasTextDecoration(false);
 
     if (nullptr != pDecoratedCandidate)
@@ -3040,7 +3040,6 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         // outline AND shadow depend on NO TextRelief (see dialog)
         bHasTextRelief = primitive2d::TEXT_RELIEF_NONE != pDecoratedCandidate->getTextRelief();
         bHasShadow = !bHasTextRelief && pDecoratedCandidate->getShadow();
-        bHasOutline = !bHasTextRelief && pDecoratedCandidate->getFontAttribute().getOutline();
 
         // check if TextDecoration is needed
         bHasTextDecoration
@@ -3050,6 +3049,10 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
               || primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE
                      != pDecoratedCandidate->getTextEmphasisMark();
     }
+
+    // prepare flags for non-decorated afetr that, these *might* be
+    // dependent on flags above
+    bool bHasOutline(!bHasTextRelief && rTextCandidate.getFontAttribute().getOutline());
 
     if (bHasShadow)
     {
@@ -3064,6 +3067,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         if (aBlack == rTextCandidate.getFontColor()
             || rTextCandidate.getFontColor().luminance() < (8.0 / 255.0))
             aShadowColor = COL_LIGHTGRAY.getBColor();
+        aShadowColor = maBColorModifierStack.getModifiedColor(aShadowColor);
 
         // create shadow offset
         const basegfx::B2DHomMatrix aShadowTransform(
@@ -3082,30 +3086,91 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
 
         if (bHasTextDecoration)
         {
-            // this renders the same as renderTextDecoration, but encapsulated
-            // in temporary ColorStack & transformation modifications
             const basegfx::B2DHomMatrix aTransform(getViewInformation2D().getObjectTransformation()
                                                    * aShadowTransform);
-            renderShadowTextDecoration(aShadowColor, aTransform, *pDecoratedCandidate, aDecTrans);
+            renderTextDecorationWithOptionalTransformAndColor(*pDecoratedCandidate, aDecTrans,
+                                                              &aTransform, &aShadowColor);
         }
     }
 
-    if (bHasOutline)
+    if (bHasTextRelief)
     {
         // todo
     }
-
-    // render text
-    const basegfx::BColor aRGBFontColor(
-        maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
-    renderSalLayout(pSalLayout, aRGBFontColor, aFullTextTransform,
-                    getViewInformation2D().getUseAntiAliasing());
-
-    if (bHasTextDecoration)
+    else if (bHasOutline)
     {
-        // render using same geometry/primitives that a decompose would
-        // create -> safe to get the same visualization for both
-        renderTextDecoration(*pDecoratedCandidate, aDecTrans);
+        // render as outline
+        basegfx::BColor aTextColor(
+            maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+        basegfx::B2DHomMatrix aInvViewTransform;
+
+        // discrete offsets defined here to easily allow to change them,
+        // e.g. if more 'fat' outline is wanted, it may be incerased to 1.5
+        constexpr double fZero(0.0);
+        constexpr double fPlus(1.0);
+        constexpr double fMinus(-1.0);
+
+        constexpr std::array<std::pair<double, double>, 8> offsets{
+            std::pair<double, double>{ fMinus, fMinus }, std::pair<double, double>{ fZero, fMinus },
+            std::pair<double, double>{ fPlus, fMinus },  std::pair<double, double>{ fMinus, fZero },
+            std::pair<double, double>{ fPlus, fZero },   std::pair<double, double>{ fMinus, fPlus },
+            std::pair<double, double>{ fZero, fPlus },   std::pair<double, double>{ fPlus, fPlus }
+        };
+
+        if (bHasTextDecoration)
+        {
+            // to use discrete offset (pixels) we will need the back-transform from
+            // discrete view coordinates to 'world' coordinates (logic view coordinates),
+            // this is the inverse ViewTransformation.
+            // NOTE: Alternatively we could calculate the lengths for fPlus/fMinus in
+            // logic view coordinates, but would need to create another B2DHomMatrix and
+            // to do it correct would need to handle two vectors holding the directions,
+            // else - if ever someone will rotate/shear that transformation - it would
+            // break
+            aInvViewTransform = getViewInformation2D().getViewTransformation();
+            aInvViewTransform.invert();
+        }
+
+        for (const auto& offset : offsets)
+        {
+            const basegfx::B2DHomMatrix aDiscreteOffset(
+                basegfx::utils::createTranslateB2DHomMatrix(offset.first, offset.second));
+            renderSalLayout(pSalLayout, aTextColor, aDiscreteOffset * aFullTextTransform,
+                            getViewInformation2D().getUseAntiAliasing());
+            if (bHasTextDecoration)
+            {
+                const basegfx::B2DHomMatrix aTransform(
+                    aInvViewTransform * aDiscreteOffset
+                    * getViewInformation2D().getObjectToViewTransformation());
+                renderTextDecorationWithOptionalTransformAndColor(*pDecoratedCandidate, aDecTrans,
+                                                                  &aTransform);
+            }
+        }
+
+        // at (center, center) paint in COL_WHITE
+        aTextColor = maBColorModifierStack.getModifiedColor(COL_WHITE.getBColor());
+        renderSalLayout(pSalLayout, aTextColor, aFullTextTransform,
+                        getViewInformation2D().getUseAntiAliasing());
+        if (bHasTextDecoration)
+        {
+            renderTextDecorationWithOptionalTransformAndColor(*pDecoratedCandidate, aDecTrans,
+                                                              nullptr, &aTextColor);
+        }
+    }
+    else
+    {
+        // render text
+        const basegfx::BColor aTextColor(
+            maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+        renderSalLayout(pSalLayout, aTextColor, aFullTextTransform,
+                        getViewInformation2D().getUseAntiAliasing());
+
+        if (bHasTextDecoration)
+        {
+            // render using same geometry/primitives that a decompose would
+            // create -> safe to get the same visualization for both
+            renderTextDecorationWithOptionalTransformAndColor(*pDecoratedCandidate, aDecTrans);
+        }
     }
 }
 
