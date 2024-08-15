@@ -370,7 +370,7 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
         }
         else
         {
-            DBG_ASSERT(false, "Invalid conidtion type selected.");
+            DBG_ASSERT(false, "Invalid condition type selected.");
             return;
         }
 
