@@ -167,7 +167,7 @@
 #define RID_CUISTR_EVENT_SELECTIONCHANGED           NC_("RID_SVXSTR_EVENT_SELECTIONCHANGED", "Selection changed")
 #define RID_CUISTR_EVENT_DOUBLECLICK                NC_("RID_SVXSTR_EVENT_DOUBLECLICK", "Double click")
 #define RID_CUISTR_EVENT_RIGHTCLICK                 NC_("RID_SVXSTR_EVENT_RIGHTCLICK", "Right click")
-#define RID_CUISTR_EVENT_CALCULATE                  NC_("RID_SVXSTR_EVENT_CALCULATE", "Formulas calculated")
+#define RID_CUISTR_EVENT_CALCULATE                  NC_("RID_SVXSTR_EVENT_CALCULATE", "Formulas calculate")
 #define RID_CUISTR_EVENT_CONTENTCHANGED             NC_("RID_SVXSTR_EVENT_CONTENTCHANGED", "Content changed")
 
 #define RID_STR_SEARCH_ANYWHERE                     NC_("RID_STR_SEARCH_ANYWHERE", "anywhere in the field")
