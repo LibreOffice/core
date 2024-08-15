@@ -42,6 +42,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1198,6 +1199,24 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     xCellRange->setPropertyValue(sBackColor, aRefColor);
     aColor = xTableCursor->getPropertyValue(sBackColor);
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Name", uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
+    });
+
+    // Inserting a document with text box attached in a table's second column must not crash
+    dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+
+    uno::Reference<text::XTextContent> xTextBox(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY_THROW);
+    auto xAnchorRange = xTextBox->getAnchor();
+    uno::Reference<text::XText> xCellText(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
