@@ -140,7 +140,8 @@ public:
      void RemoveControlContainer(const css::uno::Reference< css::awt::XControlContainer >& xCC);
 
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) override;
-    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) override;
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
     SVX_DLLPRIVATE bool checkUnMarkAll(const css::uno::Reference< css::uno::XInterface >& _xSource);

@@ -256,7 +256,8 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
         }
 
         // #i74769# use SdrPaintWindow now direct
-        Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
+        SwViewObjectContactRedirector aSwRedirector(*this);
+        Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer, &aSwRedirector);
         mpTargetPaintWindow = nullptr;
     }
 }

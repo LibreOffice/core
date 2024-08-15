@@ -355,7 +355,8 @@ public:
     // This means: the SdrPaintWindow is no longer safe after this closing call.
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
-    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
 
 
     // Used for the other applications basctl/sc/sw which call DrawLayer at PageViews
@@ -365,12 +366,14 @@ public:
 
     // Used when the region passed to BeginDrawLayers needs to be changed
     void UpdateDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg);
-    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
+    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
 
 protected:
 
     // Used to paint the form layer after the PreRender device is flushed (painted) to the window.
-    void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow );
+    void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow,
+        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
 
     static vcl::Region OptimizeDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 

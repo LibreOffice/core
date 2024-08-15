@@ -615,7 +615,8 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Reg
     }
 }
 
-void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+        sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     std::unique_ptr<SdrPaintWindow> pPaintWindow;
     if (comphelper::LibreOfficeKit::isActive() && rPaintWindow.getTemporaryTarget())
@@ -637,7 +638,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // In the LOK case control rendering is performed through LokControlHandler
         if(!comphelper::LibreOfficeKit::isActive() && bPaintFormLayer)
         {
-            ImpFormLayerDrawing(rPaintWindow);
+            ImpFormLayerDrawing(rPaintWindow, pRedirector);
         }
 
         // look for active TextEdit. As long as this cannot be painted to a VDev,
@@ -706,10 +707,11 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const vcl::Reg
     return pPaintWindow;
 }
 
-void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
+void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
+    sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     // #i74769# use EndCompleteRedraw() as common base
-    EndCompleteRedraw(rPaintWindow, bPaintFormLayer);
+    EndCompleteRedraw(rPaintWindow, bPaintFormLayer, pRedirector);
 
     if(mpPageView)
     {
@@ -764,7 +766,8 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(const OutputDevice* pOut, con
 }
 
 
-void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
+void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow,
+        sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     if(!mpPageView)
         return;
@@ -780,7 +783,8 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
         // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
         // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
         mpPageView->setPreparedPageWindow(pKnownTarget);
-        mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
+        mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice(),
+        pRedirector);
         mpPageView->setPreparedPageWindow(nullptr);
     }
 }
