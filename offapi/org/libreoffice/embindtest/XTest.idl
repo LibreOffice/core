@@ -133,6 +133,7 @@ interface XTest {
     void passInterface([in] com::sun::star::uno::XInterface object);
     boolean checkAttributes([in] org::libreoffice::embindtest::XAttributes object);
     [attribute] string StringAttribute;
+    boolean testSolarMutex();
 };
 
 }; }; };

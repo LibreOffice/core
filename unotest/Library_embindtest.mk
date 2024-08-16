@@ -19,6 +19,8 @@ $(eval $(call gb_Library_use_libraries,embindtest, \
     cppu \
     cppuhelper \
     sal \
+    salhelper \
+    vcl \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,embindtest))

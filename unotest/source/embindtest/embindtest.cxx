@@ -35,10 +35,12 @@
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <salhelper/thread.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/environment.h>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
+#include <vcl/svapp.hxx>
 
 namespace com::sun::star::uno
 {
@@ -47,6 +49,24 @@ class XComponentContext;
 
 namespace
 {
+class TestThread : public salhelper::Thread
+{
+public:
+    TestThread()
+        : Thread("embindtest")
+    {
+    }
+
+    bool value = false;
+
+private:
+    void execute() override
+    {
+        SolarMutexGuard g;
+        value = true;
+    }
+};
+
 class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 {
     sal_Bool SAL_CALL getBoolean() override { return true; }
@@ -870,6 +890,15 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     OUString SAL_CALL getStringAttribute() override { return stringAttribute_; }
 
     void SAL_CALL setStringAttribute(OUString const& value) override { stringAttribute_ = value; }
+
+    sal_Bool SAL_CALL testSolarMutex() override
+    {
+        TestThread t;
+        t.launch();
+        t.join();
+        SolarMutexGuard g;
+        return t.value;
+    }
 
     OUString stringAttribute_ = u"hä"_ustr;
 };

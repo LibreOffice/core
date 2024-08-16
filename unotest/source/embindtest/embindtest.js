@@ -901,6 +901,7 @@ Module.uno_init.then(function() {
     console.assert(test.StringAttribute === 'hä');
     test.StringAttribute = 'foo';
     console.assert(test.StringAttribute === 'foo');
+    console.assert(test.testSolarMutex());
 
     const args = new Module.uno_Sequence_any(
         [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);

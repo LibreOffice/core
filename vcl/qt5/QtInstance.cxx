@@ -51,6 +51,7 @@
 #include <dndhelper.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
+#include <o3tl/unreachable.hxx>
 #include <osl/process.h>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
 #include <unx/gstsink.hxx>
@@ -737,7 +738,17 @@ bool QtInstance::DoExecute(int& nExitCode)
 {
     const bool bIsOnSystemEventLoop = Application::IsOnSystemEventLoop();
     if (bIsOnSystemEventLoop)
+    {
+#if defined EMSCRIPTEN
+        // For Emscripten, QApplication::exec() will unwind the stack by throwing a JavaScript
+        // exception, so we need to manually undo the call of AcquireYieldMutex() done in InitVCL:
+        ImplGetSVData()->mpDefInst->ReleaseYieldMutex(false);
+#endif
         nExitCode = QApplication::exec();
+#if defined EMSCRIPTEN
+        O3TL_UNREACHABLE;
+#endif
+    }
     return bIsOnSystemEventLoop;
 }
 

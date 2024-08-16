@@ -142,7 +142,7 @@ SalInstance::~SalInstance() {}
 
 comphelper::SolarMutex* SalInstance::GetYieldMutex() { return m_pYieldMutex.get(); }
 
-sal_uInt32 SalInstance::ReleaseYieldMutexAll() { return m_pYieldMutex->release(true); }
+sal_uInt32 SalInstance::ReleaseYieldMutex(bool all) { return m_pYieldMutex->release(all); }
 
 void SalInstance::AcquireYieldMutex(sal_uInt32 nCount) { m_pYieldMutex->acquire(nCount); }
 

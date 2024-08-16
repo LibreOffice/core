@@ -621,7 +621,7 @@ void DeInitVCL()
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
-        pSVData->mpDefInst->ReleaseYieldMutexAll();
+        pSVData->mpDefInst->ReleaseYieldMutex(true);
         DestroySalInstance( pSVData->mpDefInst );
         pSVData->mpDefInst = nullptr;
     }
