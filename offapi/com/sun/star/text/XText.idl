@@ -38,7 +38,7 @@ published interface XText: com::sun::star::text::XSimpleText
         </p>
 
         @param xRange
-            specifies the position of insertion.
+            specifies the position of insertion. Must belong to this XText.
 
         @param xContent
             the text content to be inserted.
