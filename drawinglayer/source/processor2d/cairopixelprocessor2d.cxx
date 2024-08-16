@@ -3141,7 +3141,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
             aTextColor = COL_WHITE.getBColor();
 
         // relief offset defined here to easily allow to change them
-        // see ::ImplDrawSpecialText and the coment @ 'nOff += mnDPIX/300'
+        // see ::ImplDrawSpecialText and the comment @ 'nOff += mnDPIX/300'
         const bool bEmboss(primitive2d::TEXT_RELIEF_EMBOSSED
                            == pDecoratedCandidate->getTextRelief());
         constexpr double fReliefOffset(1.1);
