@@ -29,6 +29,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <wrtsh.hxx>
+#include <UndoManager.hxx>
 #include <unotxdoc.hxx>
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
@@ -1014,6 +1015,44 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf161741)
+{
+    // Redo of header change causes LO to crash
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+
+    // sanity checks: verify baseline status
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+
+    // Create a header
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", /*header*/ true, /*on*/ true, false);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
+
+    // create an additional non-header undo point
+    pWrtShell->Insert(u"crash_test"_ustr); // three undo points
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rUndoManager.GetUndoActionCount());
+
+    // undo all the changes in one pass
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "Undo", uno::Any(sal_Int32(4)) },
+    }));
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, aPropertyValues); // undo all 4 actions
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+
+    // Crash avoided by clearing the entire redo stack. This redo request will do nothing.
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {}); // redo first (Header) change
+    // Since Redo is "cleared", the redo did nothing, thus the Header remains off
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152964)
