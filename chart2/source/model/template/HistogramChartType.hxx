@@ -25,6 +25,8 @@ public:
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
 
+    void createCalculatedDataSeries() override;
+
 protected:
     explicit HistogramChartType(const HistogramChartType& rOther);
 

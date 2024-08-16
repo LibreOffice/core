@@ -14,6 +14,10 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <AxisIndexDefines.hxx>
+#include <DataSeries.hxx>
+#include <LabeledDataSequence.hxx>
+#include <HistogramDataSequence.hxx>
+#include "HistogramCalculator.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -197,6 +201,87 @@ sal_Bool SAL_CALL HistogramChartType::supportsService(const OUString& rServiceNa
 css::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, "com.sun.star.chart2.ChartType" };
+}
+
+namespace
+{
+void setRoleToTheSequence(uno::Reference<chart2::data::XDataSequence> const& xSequence,
+                          OUString const& rRole)
+{
+    if (!xSequence.is())
+        return;
+    try
+    {
+        uno::Reference<beans::XPropertySet> xProperty(xSequence, uno::UNO_QUERY_THROW);
+        xProperty->setPropertyValue(u"Role"_ustr, uno::Any(rRole));
+    }
+    catch (const uno::Exception&)
+    {
+    }
+}
+}
+
+void HistogramChartType::createCalculatedDataSeries()
+{
+    if (m_aDataSeries.empty())
+        return;
+
+    std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> const& aDataSequences
+        = m_aDataSeries[0]->getDataSequences2();
+
+    if (aDataSequences.empty() || !aDataSequences[0].is())
+        return;
+
+    // Extract raw data from the spreadsheet
+    std::vector<double> rawData;
+    uno::Reference<chart2::data::XDataSequence> xValues = aDataSequences[0]->getValues();
+
+    uno::Sequence<uno::Any> aRawAnyValues = xValues->getData();
+    for (const auto& aAny : aRawAnyValues)
+    {
+        double fValue = 0.0;
+        if (aAny >>= fValue) // Extract double from Any
+        {
+            rawData.push_back(fValue);
+        }
+    }
+
+    // Perform histogram calculations
+    HistogramCalculator aHistogramCalculator;
+    aHistogramCalculator.computeBinFrequencyHistogram(rawData);
+
+    // Get bin ranges and frequencies
+    const auto& binRanges = aHistogramCalculator.getBinRanges();
+    const auto& binFrequencies = aHistogramCalculator.getBinFrequencies();
+
+    // Create labels and values for HistogramDataSequence
+    std::vector<OUString> aLabels;
+    std::vector<double> aValues;
+    for (size_t i = 0; i < binRanges.size(); ++i)
+    {
+        OUString aLabel;
+        if (i == 0)
+        {
+            aLabel = u"["_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
+                     + OUString::number(binRanges[i].second) + u"]"_ustr;
+        }
+        else
+        {
+            aLabel = u"("_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
+                     + OUString::number(binRanges[i].second) + u"]"_ustr;
+        }
+        aLabels.push_back(aLabel);
+        aValues.push_back(static_cast<double>(binFrequencies[i]));
+    }
+
+    rtl::Reference<HistogramDataSequence> aValuesDataSequence = new HistogramDataSequence();
+    aValuesDataSequence->setValues(comphelper::containerToSequence(aValues));
+    aValuesDataSequence->setLabels(comphelper::containerToSequence(aLabels));
+
+    uno::Reference<chart2::data::XDataSequence> aDataSequence = aValuesDataSequence;
+    setRoleToTheSequence(aDataSequence, u"values-y"_ustr);
+
+    m_aDataSeries[0]->addDataSequence(new LabeledDataSequence(aDataSequence));
 }
 
 } //  namespace chart

@@ -27,13 +27,14 @@ namespace chart
 {
 InterpretedData HistogramDataInterpreter::interpretDataSource(
     const uno::Reference<chart2::data::XDataSource>& xSource,
-    const uno::Sequence<beans::PropertyValue>& /*aArguments*/,
-    const std::vector<rtl::Reference<DataSeries>>& /*aSeriesToReUse*/)
+    const uno::Sequence<beans::PropertyValue>& aArguments,
+    const std::vector<rtl::Reference<DataSeries>>& aSeriesToReUse)
 {
     if (!xSource.is())
         return InterpretedData();
 
-    InterpretedData aInterpretedData;
+    InterpretedData aInterpretedData(
+        DataInterpreter::interpretDataSource(xSource, aArguments, aSeriesToReUse));
 
     std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aData
         = DataInterpreter::getDataSequences(xSource);
@@ -42,70 +43,6 @@ InterpretedData HistogramDataInterpreter::interpretDataSource(
         return InterpretedData();
 
     SetRole(aData[0]->getValues(), u"values-y-original"_ustr);
-
-    // Extract raw data from the spreadsheet
-    std::vector<double> rawData;
-    uno::Reference<chart2::data::XDataSequence> xValues = aData[0]->getValues();
-    if (!xValues.is())
-        return InterpretedData();
-
-    uno::Sequence<uno::Any> aRawAnyValues = xValues->getData();
-
-    for (const auto& aAny : aRawAnyValues)
-    {
-        double fValue = 0.0;
-        if (aAny >>= fValue) // Extract double from Any
-        {
-            rawData.push_back(fValue);
-        }
-    }
-
-    // Perform histogram calculations
-    HistogramCalculator aHistogramCalculator;
-    aHistogramCalculator.computeBinFrequencyHistogram(rawData);
-
-    // Get bin ranges and frequencies
-    const auto& binRanges = aHistogramCalculator.getBinRanges();
-    const auto& binFrequencies = aHistogramCalculator.getBinFrequencies();
-
-    // Create labels and values for HistogramDataSequence
-    std::vector<OUString> aLabels;
-    std::vector<double> aValues;
-    for (size_t i = 0; i < binRanges.size(); ++i)
-    {
-        OUString aLabel;
-        if (i == 0)
-        {
-            aLabel = u"["_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
-                     + OUString::number(binRanges[i].second) + u"]"_ustr;
-        }
-        else
-        {
-            aLabel = u"("_ustr + OUString::number(binRanges[i].first) + u"-"_ustr
-                     + OUString::number(binRanges[i].second) + u"]"_ustr;
-        }
-        aLabels.push_back(aLabel);
-        aValues.push_back(static_cast<double>(binFrequencies[i]));
-    }
-
-    rtl::Reference<DataSeries> xSeries = new DataSeries;
-    std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aNewData;
-    aNewData.push_back(aData[0]);
-
-    rtl::Reference<HistogramDataSequence> aValuesDataSequence = new HistogramDataSequence();
-    aValuesDataSequence->setValues(comphelper::containerToSequence(aValues));
-    aValuesDataSequence->setLabels(comphelper::containerToSequence(aLabels));
-
-    uno::Reference<chart2::data::XDataSequence> aDataSequence = aValuesDataSequence;
-    SetRole(aDataSequence, u"values-y"_ustr);
-    aNewData.push_back(new LabeledDataSequence(aDataSequence));
-
-    xSeries->setData(aNewData);
-    std::vector<rtl::Reference<DataSeries>> aSeriesVec;
-    aSeriesVec.push_back(xSeries);
-
-    aInterpretedData.Series.push_back(aSeriesVec);
-    aInterpretedData.Categories = nullptr;
 
     return aInterpretedData;
 }

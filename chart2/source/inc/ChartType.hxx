@@ -109,11 +109,13 @@ public:
         const rtl::Reference< ::chart::DataSeries >& aDataSeries );
     void setDataSeries(
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aDataSeries );
-    const std::vector< rtl::Reference< ::chart::DataSeries > > & getDataSeries2() const { return m_aDataSeries; }
+
+    const std::vector<rtl::Reference<::chart::DataSeries>>& getDataSeries2() const;
 
     virtual rtl::Reference< ::chart::BaseCoordinateSystem >
         createCoordinateSystem2( sal_Int32 DimensionCount );
 
+    virtual void createCalculatedDataSeries();
 protected:
 
     // ____ XModifyListener ____
@@ -147,9 +149,8 @@ private:
     void impl_addDataSeriesWithoutNotification(
         const rtl::Reference< ::chart::DataSeries >& aDataSeries );
 
-private:
-    typedef
-        std::vector< rtl::Reference< ::chart::DataSeries > >  tDataSeriesContainerType;
+protected:
+    typedef std::vector<rtl::Reference<::chart::DataSeries>>  tDataSeriesContainerType;
 
     // --- mutable members: the following members need mutex guard ---
 

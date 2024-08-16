@@ -416,6 +416,11 @@ void DataSeries::setData( const std::vector< uno::Reference< chart2::data::XLabe
     fireModifyEvent();
 }
 
+void DataSeries::addDataSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& rSequence)
+{
+    m_aDataSequences.push_back(rSequence);
+}
+
 // ____ XDataSource ____
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
 {

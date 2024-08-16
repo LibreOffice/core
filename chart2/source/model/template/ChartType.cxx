@@ -183,6 +183,11 @@ Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
     return comphelper::containerToSequence< Reference< chart2::XDataSeries > >( m_aDataSeries );
 }
 
+const std::vector<rtl::Reference<::chart::DataSeries>>& ChartType::getDataSeries2() const
+{
+    return m_aDataSeries;
+}
+
 void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )
 {
     std::vector< rtl::Reference<DataSeries> > aTmp;
@@ -216,6 +221,13 @@ void ChartType::setDataSeries( const std::vector< rtl::Reference< DataSeries > >
     }
     m_bNotifyChanges = true;
     fireModifyEvent();
+
+    createCalculatedDataSeries();
+}
+
+void ChartType::createCalculatedDataSeries()
+{
+
 }
 
 // ____ OPropertySet ____

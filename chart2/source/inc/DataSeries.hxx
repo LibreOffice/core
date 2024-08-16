@@ -136,6 +136,7 @@ public:
 
     void setData( const tDataSequenceContainer& aData );
     const tDataSequenceContainer & getDataSequences2() const { return m_aDataSequences; }
+    void addDataSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& rSequence);
 
     typedef
         std::vector< rtl::Reference< ::chart::RegressionCurveModel > >
