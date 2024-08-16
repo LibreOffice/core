@@ -67,25 +67,25 @@ published service BaseFrameProperties
 
     /** contains the left border of the object.
 
-        @see BaseFrame::com::sun::star::table::BorderLine
+        @see com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine LeftBorder;
 
     /** contains the right border of the object.
 
-        @see BaseFrame::com::sun::star::table::BorderLine
+        @see com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine RightBorder;
 
     /** contains the top border of the object.
 
-        @see BaseFrame::com::sun::star::table::BorderLine
+        @see com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine TopBorder;
 
     /** contains the bottom border of the object.
 
-        @see BaseFrame::com::sun::star::table::BorderLine
+        @see com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine BottomBorder;
 
@@ -160,38 +160,38 @@ published service BaseFrameProperties
     [property] boolean IsSyncHeightToWidth;
     /** determines the horizontal orientation of the object.
 
-        @see BaseFrame::HoriOrientation
+        @see com::sun::star::text::HoriOrientation
      */
     [property] short HoriOrient;
     /** contains the horizontal position of the object (1/100 mm).
-        <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
+        <p> It is only valid if HoriOrient is com::sun::star::text::HoriOrientation::NONE.</p>
      */
     [property] long HoriOrientPosition;
 
     /** determines the environment of the object to which the orientation
         is related.
 
-        @see BaseFrame::RelOrientation
+        @see com::sun::star::text::RelOrientation
      */
     [property] short HoriOrientRelation;
 
     /** determines the vertical orientation of the object.
 
-        @see BaseFrame::VertOrientation
+        @see com::sun::star::text::VertOrientation
      */
     [property] short VertOrient;
 
     /** contains the vertical position of the object (1/100 mm).
 
-        It is only valid if TextEmbeddedObject::VertOrient is
-        VertOrientation::NONE.
+        It is only valid if VertOrient is
+        com::sun::star::text::VertOrientation::NONE.
      */
     [property] long VertOrientPosition;
 
 
     /** determines the environment of the object to which the orientation is related.
 
-        @see BaseFrame::RelOrientation
+        @see com::sun::star::text::RelOrientation
      */
     [property] short VertOrientRelation;
 
