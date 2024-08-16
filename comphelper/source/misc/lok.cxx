@@ -328,7 +328,8 @@ bool anyInput()
 {
     bool bRet = false;
 
-    if (g_pAnyInputCallback && g_pAnyInputCallbackData)
+    // Ignore input events during background save.
+    if (!g_bForkedChild && g_pAnyInputCallback && g_pAnyInputCallbackData)
     {
         bRet = g_pAnyInputCallback(g_pAnyInputCallbackData);
     }
