@@ -499,7 +499,7 @@ bool Application::IsMainThread()
 sal_uInt32 Application::ReleaseSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->ReleaseYieldMutexAll();
+    return pSVData->mpDefInst->ReleaseYieldMutex(true);
 }
 
 void Application::AcquireSolarMutex( sal_uInt32 nCount )

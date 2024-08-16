@@ -137,7 +137,7 @@ public:
 
     // YieldMutex
     comphelper::SolarMutex* GetYieldMutex();
-    sal_uInt32              ReleaseYieldMutexAll();
+    sal_uInt32              ReleaseYieldMutex(bool all);
     void                    AcquireYieldMutex(sal_uInt32 nCount = 1);
 
     // return true, if the current thread is the main thread

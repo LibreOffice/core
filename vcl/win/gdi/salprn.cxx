@@ -382,7 +382,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     sal_uInt32 nMutexCount = 0;
     WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst && pVisibleDlgParent )
-        nMutexCount = pInst->ReleaseYieldMutexAll();
+        nMutexCount = pInst->ReleaseYieldMutex(true);
 
     BYTE* pOutDevMode = reinterpret_cast<BYTE*>(pOutBuffer) + pOutBuffer->mnDriverOffset;
     nRet = DocumentPropertiesW( hWnd, hPrn,
