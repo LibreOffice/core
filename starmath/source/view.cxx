@@ -105,8 +105,21 @@ using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
 
+static OUString GetScrollUIName(const SmViewShell& rShell)
+{
+    const SmDocShell* pShell = rShell.GetDoc();
+    if (pShell && pShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
+    {
+        // This one has no border on the scrolledwindow, to maximize the space
+        // available when in embedded mode and minimize the difference from
+        // the ole preview to give a more seamless embedded editing experience.
+        return "modules/smath/ui/embedwindow.ui";
+    }
+    return "modules/smath/ui/mathwindow.ui";
+}
+
 SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
-    : InterimItemWindow(&rShell.GetViewFrame().GetWindow(), u"modules/smath/ui/mathwindow.ui"_ustr, u"MathWindow"_ustr)
+    : InterimItemWindow(&rShell.GetViewFrame().GetWindow(), GetScrollUIName(rShell), u"MathWindow"_ustr)
     , nLinePixH(GetSettings().GetStyleSettings().GetScrollBarSize())
     , nColumnPixW(nLinePixH)
     , nZoom(100)
