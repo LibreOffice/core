@@ -586,7 +586,12 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
 bool SfxObjectShell::IsHelpDocument() const
 {
-    std::shared_ptr<const SfxFilter> pFilter = GetMedium()->GetFilter();
+    if (!pMedium)
+    {
+        return false;
+    }
+
+    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
     return (pFilter && pFilter->GetFilterName() == "writer_web_HTML_help");
 }
 
