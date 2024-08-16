@@ -569,6 +569,28 @@ sal_Int32 SAL_CALL TempFileFastService::readSomeBytes( css::uno::Sequence< sal_I
     return readBytes(aData, nMaxBytesToRead);
 }
 
+// comphelper::ByteReader
+sal_Int32 TempFileFastService::readSomeBytes( sal_Int8* aData, sal_Int32 nBytesToRead )
+{
+    std::unique_lock aGuard( maMutex );
+    if ( mbInClosed )
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
+
+    checkConnected();
+    checkError();
+
+    if (nBytesToRead < 0)
+        throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
+
+    if (mpStream->eof())
+        return 0;
+
+    sal_uInt32 nRead = mpStream->ReadBytes(aData, nBytesToRead);
+    checkError();
+
+    return nRead;
+}
+
 void SAL_CALL TempFileFastService::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::unique_lock aGuard( maMutex );
@@ -623,6 +645,21 @@ void SAL_CALL TempFileFastService::writeBytes( const css::uno::Sequence< sal_Int
     sal_uInt32 nWritten = mpStream->WriteBytes(aData.getConstArray(), aData.getLength());
     checkError();
     if  ( nWritten != static_cast<sal_uInt32>(aData.getLength()))
+        throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
+}
+
+// comphelper::ByteWriter
+
+void TempFileFastService::writeBytes( const sal_Int8* aData, sal_Int32 nBytesToWrite )
+{
+    std::unique_lock aGuard( maMutex );
+    if ( mbOutClosed )
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
+
+    checkConnected();
+    sal_uInt32 nWritten = mpStream->WriteBytes(aData, nBytesToWrite);
+    checkError();
+    if  ( nWritten != o3tl::make_unsigned(nBytesToWrite) )
         throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
 }
 

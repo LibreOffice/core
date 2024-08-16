@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
 #include <memory>
@@ -196,7 +197,8 @@ typedef ::cppu::WeakImplHelper<
     , css::io::XInputStream
     , css::io::XOutputStream
     , css::io::XTruncate> TempFileFastService_Base;
-class UNOTOOLS_DLLPUBLIC TempFileFastService final : public TempFileFastService_Base
+class UNOTOOLS_DLLPUBLIC TempFileFastService final : public TempFileFastService_Base,
+    public comphelper::ByteReader, public comphelper::ByteWriter
 {
     std::optional<utl::TempFileFast> mpTempFile;
     std::mutex maMutex;
@@ -230,6 +232,11 @@ public:
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
     // XTruncate
     SAL_DLLPRIVATE virtual void SAL_CALL truncate() override;
+
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
+    // comphelper::ByteWriter
+    virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
 
 };
 
