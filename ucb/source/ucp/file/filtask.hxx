@@ -79,7 +79,8 @@ namespace fileaccess
         private:
 
             bool m_bHandled;
-            sal_Int32 m_nErrorCode,m_nMinorCode;
+            TaskHandlerErr m_nErrorCode;
+            sal_Int32 m_nMinorCode;
             css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
             css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
@@ -89,8 +90,8 @@ namespace fileaccess
             explicit TaskHandling(
                 css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv )
                 : m_bHandled( false ),
-                  m_nErrorCode( TASKHANDLER_NO_ERROR ),
-                  m_nMinorCode( TASKHANDLER_NO_ERROR ),
+                  m_nErrorCode( TaskHandlerErr::NO_ERROR ),
+                  m_nMinorCode( 0 ),
                   m_xCommandEnvironment( std::move(xCommandEnv) )
             {
             }
@@ -107,18 +108,18 @@ namespace fileaccess
 
             void clearError()
             {
-                m_nErrorCode = TASKHANDLER_NO_ERROR;
-                m_nMinorCode =  TASKHANDLER_NO_ERROR;
+                m_nErrorCode = TaskHandlerErr::NO_ERROR;
+                m_nMinorCode = 0;
             }
 
-            void installError( sal_Int32 nErrorCode,
+            void installError( TaskHandlerErr nErrorCode,
                                         sal_Int32 nMinorCode )
             {
                 m_nErrorCode = nErrorCode;
                 m_nMinorCode = nMinorCode;
             }
 
-            sal_Int32 getInstalledError() const
+            TaskHandlerErr getInstalledError() const
             {
                 return m_nErrorCode;
             }
@@ -235,11 +236,11 @@ namespace fileaccess
          */
 
         void installError( sal_Int32 CommandId,
-                                    sal_Int32 ErrorCode,
-                                    sal_Int32 minorCode = TASKHANDLER_NO_ERROR );
+                                    TaskHandlerErr ErrorCode,
+                                    sal_Int32 minorCode = 0 );
 
         void retrieveError( sal_Int32 CommandId,
-                                     sal_Int32 &ErrorCode,
+                                     TaskHandlerErr &ErrorCode,
                                      sal_Int32 &minorCode);
 
         /**
@@ -616,7 +617,7 @@ namespace fileaccess
         bool
         ensuredir( sal_Int32 CommandId,
                    const OUString& aDirectoryName,
-                   sal_Int32 errorCode );
+                   TaskHandlerErr errorCode );
 
         // General
         ContentMap  m_aContent;

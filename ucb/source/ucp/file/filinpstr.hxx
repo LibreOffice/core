@@ -25,6 +25,8 @@
 
 #include "filrec.hxx"
 
+enum class TaskHandlerErr;
+
 namespace fileaccess {
 
     class TaskManager;
@@ -42,7 +44,7 @@ namespace fileaccess {
          *  Returns an error code as given by filerror.hxx
          */
 
-        sal_Int32 CtorSuccess() const { return m_nErrorCode;}
+        TaskHandlerErr CtorSuccess() const { return m_nErrorCode;}
         sal_Int32 getMinorError() const { return m_nMinorErrorCode;}
 
         virtual sal_Int32 SAL_CALL
@@ -79,7 +81,7 @@ namespace fileaccess {
 
         ReconnectingFile                                   m_aFile;
 
-        sal_Int32                                          m_nErrorCode;
+        TaskHandlerErr                                     m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
     };
 } // end namespace XInputStream_impl

@@ -236,7 +236,7 @@ namespace fileaccess {
     }
 
     void throw_handler(
-        sal_Int32 errorCode,
+        TaskHandlerErr errorCode,
         sal_Int32 minorCode,
         const Reference< XCommandEnvironment >& xEnv,
         const OUString& aUncPath,
@@ -247,46 +247,46 @@ namespace fileaccess {
         Any aAny;
         IOErrorCode ioErrorCode;
 
-        if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
+        if( errorCode ==  TaskHandlerErr::UNSUPPORTED_COMMAND )
         {
             aAny <<= UnsupportedCommandException( OSL_LOG_PREFIX );
             cancelCommandExecution( aAny,xEnv );
         }
-        else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||
-                 errorCode == TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT ||
-                 errorCode == TASKHANDLING_WRONG_OPEN_ARGUMENT              ||
-                 errorCode == TASKHANDLING_WRONG_DELETE_ARGUMENT            ||
-                 errorCode == TASKHANDLING_WRONG_TRANSFER_ARGUMENT          ||
-                 errorCode == TASKHANDLING_WRONG_INSERT_ARGUMENT            ||
-                 errorCode == TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT )
+        else if( errorCode == TaskHandlerErr::WRONG_SETPROPERTYVALUES_ARGUMENT ||
+                 errorCode == TaskHandlerErr::WRONG_GETPROPERTYVALUES_ARGUMENT ||
+                 errorCode == TaskHandlerErr::WRONG_OPEN_ARGUMENT              ||
+                 errorCode == TaskHandlerErr::WRONG_DELETE_ARGUMENT            ||
+                 errorCode == TaskHandlerErr::WRONG_TRANSFER_ARGUMENT          ||
+                 errorCode == TaskHandlerErr::WRONG_INSERT_ARGUMENT            ||
+                 errorCode == TaskHandlerErr::WRONG_CREATENEWCONTENT_ARGUMENT )
         {
             IllegalArgumentException excep;
             excep.ArgumentPosition = 0;
             cancelCommandExecution(Any(excep), xEnv);
         }
-        else if( errorCode == TASKHANDLING_UNSUPPORTED_OPEN_MODE )
+        else if( errorCode == TaskHandlerErr::UNSUPPORTED_OPEN_MODE )
         {
             UnsupportedOpenModeException excep;
             excep.Mode = sal::static_int_cast< sal_Int16 >(minorCode);
             cancelCommandExecution( Any(excep),xEnv );
         }
-        else if(errorCode == TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND  ||
-                errorCode == TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND ||
-                errorCode == TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND )
+        else if(errorCode == TaskHandlerErr::DELETED_STATE_IN_OPEN_COMMAND  ||
+                errorCode == TaskHandlerErr::INSERTED_STATE_IN_OPEN_COMMAND ||
+                errorCode == TaskHandlerErr::NOFRESHINSERT_IN_INSERT_COMMAND )
         {
             // What to do here?
         }
         else if(
             // error in opening file
-            errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE ||
+            errorCode == TaskHandlerErr::NO_OPEN_FILE_FOR_OVERWRITE ||
             // error in opening file
-            errorCode == TASKHANDLING_NO_OPEN_FILE_FOR_WRITE     ||
+            errorCode == TaskHandlerErr::NO_OPEN_FILE_FOR_WRITE     ||
             // error in opening file
-            errorCode == TASKHANDLING_OPEN_FOR_STREAM            ||
+            errorCode == TaskHandlerErr::OPEN_FOR_STREAM            ||
             // error in opening file
-            errorCode == TASKHANDLING_OPEN_FOR_INPUTSTREAM       ||
+            errorCode == TaskHandlerErr::OPEN_FOR_INPUTSTREAM       ||
             // error in opening file
-            errorCode == TASKHANDLING_OPEN_FILE_FOR_PAGING )
+            errorCode == TaskHandlerErr::OPEN_FILE_FOR_PAGING )
         {
             switch( minorCode )
             {
@@ -368,8 +368,8 @@ namespace fileaccess {
                 u"an error occurred during file opening"_ustr,
                 xComProc);
         }
-        else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
-                 errorCode == TASKHANDLING_OPENDIRECTORY_FOR_REMOVE )
+        else if( errorCode == TaskHandlerErr::OPEN_FOR_DIRECTORYLISTING  ||
+                 errorCode == TaskHandlerErr::OPENDIRECTORY_FOR_REMOVE )
         {
             switch( minorCode )
             {
@@ -421,12 +421,12 @@ namespace fileaccess {
                 u"an error occurred during opening a directory"_ustr,
                 xComProc);
         }
-        else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
-                 errorCode == TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE    ||
-                 errorCode == TASKHANDLING_IOEXCEPTION_FOR_WRITE           ||
-                 errorCode == TASKHANDLING_NOTCONNECTED_FOR_PAGING         ||
-                 errorCode == TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING   ||
-                 errorCode == TASKHANDLING_IOEXCEPTION_FOR_PAGING         )
+        else if( errorCode == TaskHandlerErr::NOTCONNECTED_FOR_WRITE          ||
+                 errorCode == TaskHandlerErr::BUFFERSIZEEXCEEDED_FOR_WRITE    ||
+                 errorCode == TaskHandlerErr::IOEXCEPTION_FOR_WRITE           ||
+                 errorCode == TaskHandlerErr::NOTCONNECTED_FOR_PAGING         ||
+                 errorCode == TaskHandlerErr::BUFFERSIZEEXCEEDED_FOR_PAGING   ||
+                 errorCode == TaskHandlerErr::IOEXCEPTION_FOR_PAGING         )
         {
             ioErrorCode = IOErrorCode_UNKNOWN;
             cancelCommandExecution(
@@ -436,7 +436,7 @@ namespace fileaccess {
                 u"an error occurred writing or reading from a file"_ustr,
                 xComProc );
         }
-        else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
+        else if( errorCode == TaskHandlerErr::FILEIOERROR_FOR_NO_SPACE )
         {
             ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
             cancelCommandExecution(
@@ -446,8 +446,8 @@ namespace fileaccess {
                 u"device full"_ustr,
                 xComProc);
         }
-        else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
-                 errorCode == TASKHANDLING_READING_FILE_FOR_PAGING )
+        else if( errorCode == TaskHandlerErr::FILEIOERROR_FOR_WRITE ||
+                 errorCode == TaskHandlerErr::READING_FILE_FOR_PAGING )
         {
             switch( minorCode )
             {
@@ -498,12 +498,12 @@ namespace fileaccess {
                 u"an error occurred during opening a file"_ustr,
                 xComProc);
         }
-        else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
-                 errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
+        else if( errorCode == TaskHandlerErr::NONAMESET_INSERT_COMMAND ||
+                 errorCode == TaskHandlerErr::NOCONTENTTYPE_INSERT_COMMAND )
         {
             static constexpr OUString sTitle = u"Title"_ustr;
             static constexpr OUString sContentType = u"ContentType"_ustr;
-            Sequence< OUString > aSeq{ (errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND)
+            Sequence< OUString > aSeq{ (errorCode == TaskHandlerErr::NONAMESET_INSERT_COMMAND)
                                            ? sTitle
                                            : sContentType };
 
@@ -513,7 +513,7 @@ namespace fileaccess {
                 aSeq);
             cancelCommandExecution(aAny,xEnv);
         }
-        else if( errorCode == TASKHANDLING_FILESIZE_FOR_WRITE )
+        else if( errorCode == TaskHandlerErr::FILESIZE_FOR_WRITE )
         {
             switch( minorCode )
             {
@@ -535,7 +535,7 @@ namespace fileaccess {
                 u"there were problems with the filesize"_ustr,
                 xComProc);
         }
-        else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
+        else if(errorCode == TaskHandlerErr::INPUTSTREAM_FOR_WRITE)
         {
             aAny <<=
                 MissingInputStreamException(
@@ -543,7 +543,7 @@ namespace fileaccess {
                     xComProc);
             cancelCommandExecution(aAny,xEnv);
         }
-        else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
+        else if( errorCode == TaskHandlerErr::NOREPLACE_FOR_WRITE )
             // Overwrite = false and file exists
         {
             NameClashException excep(u"file exists and overwrite forbidden"_ustr,
@@ -551,7 +551,7 @@ namespace fileaccess {
                                      InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
             cancelCommandExecution( Any(excep), xEnv );
         }
-        else if( errorCode == TASKHANDLING_INVALID_NAME_MKDIR )
+        else if( errorCode == TaskHandlerErr::INVALID_NAME_MKDIR )
         {
             PropertyValue prop;
             prop.Name = "ResourceName";
@@ -576,7 +576,7 @@ namespace fileaccess {
 //                  OUString( "the name contained invalid characters"),
 //                  xComProc );
         }
-        else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
+        else if( errorCode == TaskHandlerErr::FOLDER_EXISTS_MKDIR )
         {
             NameClashException excep(u"folder exists and overwrite forbidden"_ustr, xComProc,
                                      InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
@@ -591,8 +591,8 @@ namespace fileaccess {
 //                  OUString( "the folder exists"),
 //                  xComProc );
         }
-        else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
-                 errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
+        else if( errorCode == TaskHandlerErr::ENSUREDIR_FOR_WRITE  ||
+                 errorCode == TaskHandlerErr::CREATEDIRECTORY_MKDIR )
         {
             switch( minorCode )
             {
@@ -617,9 +617,9 @@ namespace fileaccess {
                 u"a folder could not be created"_ustr,
                 xComProc  );
         }
-        else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
-                 errorCode == TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE       ||
-                 errorCode == TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE )
+        else if( errorCode == TaskHandlerErr::VALIDFILESTATUSWHILE_FOR_REMOVE  ||
+                 errorCode == TaskHandlerErr::VALIDFILESTATUS_FOR_REMOVE       ||
+                 errorCode == TaskHandlerErr::NOSUCHFILEORDIR_FOR_REMOVE )
         {
             switch( minorCode )
             {
@@ -668,8 +668,8 @@ namespace fileaccess {
                 u"a file status object could not be filled"_ustr,
                 xComProc  );
         }
-        else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
-                 errorCode == TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE )
+        else if( errorCode == TaskHandlerErr::DELETEFILE_FOR_REMOVE  ||
+                 errorCode == TaskHandlerErr::DELETEDIRECTORY_FOR_REMOVE )
         {
             switch( minorCode )
             {
@@ -715,23 +715,23 @@ namespace fileaccess {
                 u"a file or directory could not be deleted"_ustr,
                 xComProc );
         }
-        else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
-                 errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT     ||
-                 errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCE         ||
-                 errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT     ||
-                 errorCode == TASKHANDLING_TRANSFER_DESTFILETYPE           ||
-                 errorCode == TASKHANDLING_FILETYPE_FOR_REMOVE             ||
-                 errorCode == TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE   ||
-                 errorCode == TASKHANDLING_TRANSFER_INVALIDURL )
+        else if( errorCode == TaskHandlerErr::TRANSFER_BY_COPY_SOURCE         ||
+                 errorCode == TaskHandlerErr::TRANSFER_BY_COPY_SOURCESTAT     ||
+                 errorCode == TaskHandlerErr::TRANSFER_BY_MOVE_SOURCE         ||
+                 errorCode == TaskHandlerErr::TRANSFER_BY_MOVE_SOURCESTAT     ||
+                 errorCode == TaskHandlerErr::TRANSFER_DESTFILETYPE           ||
+                 errorCode == TaskHandlerErr::FILETYPE_FOR_REMOVE             ||
+                 errorCode == TaskHandlerErr::DIRECTORYEXHAUSTED_FOR_REMOVE   ||
+                 errorCode == TaskHandlerErr::TRANSFER_INVALIDURL )
         {
             OUString aMsg;
             switch( minorCode )
             {
                 case FileBase::E_NOENT:         // No such file or directory
-                    if ( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
-                         errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT     ||
-                         errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCE         ||
-                         errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT )
+                    if ( errorCode == TaskHandlerErr::TRANSFER_BY_COPY_SOURCE         ||
+                         errorCode == TaskHandlerErr::TRANSFER_BY_COPY_SOURCESTAT     ||
+                         errorCode == TaskHandlerErr::TRANSFER_BY_MOVE_SOURCE         ||
+                         errorCode == TaskHandlerErr::TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
                         aMsg = "source file/folder does not exist";
@@ -755,7 +755,7 @@ namespace fileaccess {
                 aMsg,
                 xComProc );
         }
-        else if( errorCode == TASKHANDLING_TRANSFER_ACCESSINGROOT )
+        else if( errorCode == TaskHandlerErr::TRANSFER_ACCESSINGROOT )
         {
             ioErrorCode = IOErrorCode_WRITE_PROTECTED;
             cancelCommandExecution(
@@ -765,23 +765,23 @@ namespace fileaccess {
                 u"accessing the root during transfer"_ustr,
                 xComProc );
         }
-        else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
+        else if( errorCode == TaskHandlerErr::TRANSFER_INVALIDSCHEME )
         {
             aAny <<= InteractiveBadTransferURLException(
                         u"bad transfer url"_ustr,
                         xComProc);
             cancelCommandExecution( aAny,xEnv );
         }
-        else if( errorCode == TASKHANDLING_OVERWRITE_FOR_MOVE      ||
-                 errorCode == TASKHANDLING_OVERWRITE_FOR_COPY      ||
-                 errorCode == TASKHANDLING_NAMECLASHMOVE_FOR_MOVE  ||
-                 errorCode == TASKHANDLING_NAMECLASHMOVE_FOR_COPY  ||
-                 errorCode == TASKHANDLING_KEEPERROR_FOR_MOVE      ||
-                 errorCode == TASKHANDLING_KEEPERROR_FOR_COPY      ||
-                 errorCode == TASKHANDLING_RENAME_FOR_MOVE         ||
-                 errorCode == TASKHANDLING_RENAME_FOR_COPY         ||
-                 errorCode == TASKHANDLING_RENAMEMOVE_FOR_MOVE     ||
-                 errorCode == TASKHANDLING_RENAMEMOVE_FOR_COPY    )
+        else if( errorCode == TaskHandlerErr::OVERWRITE_FOR_MOVE      ||
+                 errorCode == TaskHandlerErr::OVERWRITE_FOR_COPY      ||
+                 errorCode == TaskHandlerErr::NAMECLASHMOVE_FOR_MOVE  ||
+                 errorCode == TaskHandlerErr::NAMECLASHMOVE_FOR_COPY  ||
+                 errorCode == TaskHandlerErr::KEEPERROR_FOR_MOVE      ||
+                 errorCode == TaskHandlerErr::KEEPERROR_FOR_COPY      ||
+                 errorCode == TaskHandlerErr::RENAME_FOR_MOVE         ||
+                 errorCode == TaskHandlerErr::RENAME_FOR_COPY         ||
+                 errorCode == TaskHandlerErr::RENAMEMOVE_FOR_MOVE     ||
+                 errorCode == TaskHandlerErr::RENAMEMOVE_FOR_COPY    )
         {
             OUString aMsg(
                         u"general error during transfer"_ustr);
@@ -824,8 +824,8 @@ namespace fileaccess {
                 aMsg,
                 xComProc );
         }
-        else if( errorCode == TASKHANDLING_NAMECLASH_FOR_COPY   ||
-                 errorCode == TASKHANDLING_NAMECLASH_FOR_MOVE )
+        else if( errorCode == TaskHandlerErr::NAMECLASH_FOR_COPY   ||
+                 errorCode == TaskHandlerErr::NAMECLASH_FOR_MOVE )
         {
             NameClashException excep(u"name clash during copy or move"_ustr,
                                      Reference<XInterface>(xComProc, UNO_QUERY),
@@ -833,8 +833,8 @@ namespace fileaccess {
 
             cancelCommandExecution(Any(excep), xEnv);
         }
-        else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
-                 errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
+        else if( errorCode == TaskHandlerErr::NAMECLASHSUPPORT_FOR_MOVE   ||
+                 errorCode == TaskHandlerErr::NAMECLASHSUPPORT_FOR_COPY )
         {
             UnsupportedNameClashException excep(
                 u"name clash value not supported during copy or move"_ustr,
@@ -844,7 +844,7 @@ namespace fileaccess {
         }
         else
         {
-            // case TASKHANDLER_NO_ERROR:
+            // case TaskHandlerErr::NO_ERROR:
             return;
         }
     }

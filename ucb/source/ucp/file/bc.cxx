@@ -252,7 +252,7 @@ BaseContent::execute( const Command& aCommand,
 
         if( ! ( aCommand.Argument >>= sPropertyValues ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT );
+                                      TaskHandlerErr::WRONG_SETPROPERTYVALUES_ARGUMENT );
         else
             aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
     }
@@ -262,7 +262,7 @@ BaseContent::execute( const Command& aCommand,
 
         if( ! ( aCommand.Argument >>= ListOfRequestedProperties ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT );
+                                      TaskHandlerErr::WRONG_GETPROPERTYVALUES_ARGUMENT );
         else
             aAny <<= getPropertyValues( CommandId,
                                         ListOfRequestedProperties );
@@ -272,7 +272,7 @@ BaseContent::execute( const Command& aCommand,
         OpenCommandArgument2 aOpenArgument;
         if( ! ( aCommand.Argument >>= aOpenArgument ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_OPEN_ARGUMENT );
+                                      TaskHandlerErr::WRONG_OPEN_ARGUMENT );
         else
         {
             Reference< XDynamicResultSet > result = open( CommandId,aOpenArgument );
@@ -284,7 +284,7 @@ BaseContent::execute( const Command& aCommand,
     {
         if( ! aCommand.Argument.has< bool >() )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_DELETE_ARGUMENT );
+                                      TaskHandlerErr::WRONG_DELETE_ARGUMENT );
         else
             deleteContent( CommandId );
     }
@@ -293,7 +293,7 @@ BaseContent::execute( const Command& aCommand,
         TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_TRANSFER_ARGUMENT );
+                                      TaskHandlerErr::WRONG_TRANSFER_ARGUMENT );
         else
             transfer( CommandId, aTransferInfo );
     }
@@ -302,7 +302,7 @@ BaseContent::execute( const Command& aCommand,
         InsertCommandArgument aInsertArgument;
         if( ! ( aCommand.Argument >>= aInsertArgument ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_INSERT_ARGUMENT );
+                                      TaskHandlerErr::WRONG_INSERT_ARGUMENT );
         else
             insert( CommandId,aInsertArgument );
     }
@@ -318,13 +318,13 @@ BaseContent::execute( const Command& aCommand,
         ucb::ContentInfo aArg;
         if ( !( aCommand.Argument >>= aArg ) )
             m_pMyShell->installError( CommandId,
-                                      TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT );
+                                      TaskHandlerErr::WRONG_CREATENEWCONTENT_ARGUMENT );
         else
             aAny <<= createNewContent( aArg );
     }
     else
         m_pMyShell->installError( CommandId,
-                                  TASKHANDLER_UNSUPPORTED_COMMAND );
+                                  TaskHandlerErr::UNSUPPORTED_COMMAND );
 
 
     // This is the only function allowed to throw an exception
@@ -821,12 +821,12 @@ BaseContent::open(
     if( m_nState & Deleted )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND );
+                                  TaskHandlerErr::DELETED_STATE_IN_OPEN_COMMAND );
     }
     else if( m_nState & JustInserted )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND );
+                                  TaskHandlerErr::INSERTED_STATE_IN_OPEN_COMMAND );
     }
     else
     {
@@ -875,11 +875,11 @@ BaseContent::open(
 //                    aCommandArgument.Mode ==
 //                    OpenMode::DOCUMENT_SHARE_DENY_WRITE )
 //              m_pMyShell->installError( nMyCommandIdentifier,
-//                                        TASKHANDLING_UNSUPPORTED_OPEN_MODE,
+//                                        TaskHandlerErr::UNSUPPORTED_OPEN_MODE,
 //                                        aCommandArgument.Mode);
         else
             m_pMyShell->installError( nMyCommandIdentifier,
-                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE,
+                                      TaskHandlerErr::UNSUPPORTED_OPEN_MODE,
                                       aCommandArgument.Mode);
     }
 
@@ -911,7 +911,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( !comphelper::isFileUrl(aTransferInfo.SourceURL) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_TRANSFER_INVALIDSCHEME );
+                                  TaskHandlerErr::TRANSFER_INVALIDSCHEME );
         return;
     }
 
@@ -919,7 +919,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( fileaccess::TaskManager::getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_TRANSFER_INVALIDURL );
+                                  TaskHandlerErr::TRANSFER_INVALIDURL );
         return;
     }
 
@@ -941,7 +941,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( xRow->wasNull() )
     {   // Destination file type could not be determined
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_TRANSFER_DESTFILETYPE );
+                                  TaskHandlerErr::TRANSFER_DESTFILETYPE );
         return;
     }
 
@@ -981,7 +981,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     if( ! ( m_nState & JustInserted ) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND );
+                                  TaskHandlerErr::NOFRESHINSERT_IN_INSERT_COMMAND );
         return;
     }
 
@@ -990,7 +990,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     if( ! (m_nState & NameForInsertionSet) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_NONAMESET_INSERT_COMMAND );
+                                  TaskHandlerErr::NONAMESET_INSERT_COMMAND );
         return;
     }
 
@@ -1016,7 +1016,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     if( ! contentTypeSet )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND );
+                                  TaskHandlerErr::NOCONTENTTYPE_INSERT_COMMAND );
         return;
     }
 

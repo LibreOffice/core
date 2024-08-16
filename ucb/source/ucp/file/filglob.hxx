@@ -26,6 +26,7 @@
 #include <osl/file.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
+enum class TaskHandlerErr;
 
 namespace fileaccess {
 
@@ -82,7 +83,7 @@ namespace fileaccess {
     // This function implements the global exception handler of the file_ucp;
     // It never returns;
 
-    extern void throw_handler( sal_Int32 errorCode,
+    extern void throw_handler( TaskHandlerErr errorCode,
                                sal_Int32 minorCode,
                                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                const OUString& aUncPath,

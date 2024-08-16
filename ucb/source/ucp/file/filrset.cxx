@@ -61,8 +61,8 @@ XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
     , m_aFolder( aUnqPath )
     , m_sProperty( seq )
     , m_sSortingInfo( seqSort )
-    , m_nErrorCode( TASKHANDLER_NO_ERROR )
-    , m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
+    , m_nErrorCode( TaskHandlerErr::NO_ERROR )
+    , m_nMinorErrorCode( 0 )
 {
     osl::FileBase::RC err = m_aFolder.open();
     if(  err != osl::FileBase::E_None )
@@ -70,7 +70,7 @@ XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
         m_nIsOpen = false;
         m_aFolder.close();
 
-        m_nErrorCode = TASKHANDLING_OPEN_FOR_DIRECTORYLISTING;
+        m_nErrorCode = TaskHandlerErr::OPEN_FOR_DIRECTORYLISTING;
         m_nMinorErrorCode = err;
     }
     else

@@ -389,7 +389,7 @@ TaskManager::endTask( sal_Int32 CommandId,
     if( it == m_aTaskMap.end() )
         return;
 
-    sal_Int32 ErrorCode = it->second.getInstalledError();
+    TaskHandlerErr ErrorCode = it->second.getInstalledError();
     sal_Int32 MinorCode = it->second.getMinorErrorCode();
     bool isHandled = it->second.isHandled();
 
@@ -400,7 +400,7 @@ TaskManager::endTask( sal_Int32 CommandId,
 
     aGuard.unlock();
 
-    if( ErrorCode != TASKHANDLER_NO_ERROR )
+    if( ErrorCode != TaskHandlerErr::NO_ERROR )
         throw_handler(
             ErrorCode,
             MinorCode,
@@ -421,7 +421,7 @@ void TaskManager::clearError( sal_Int32 CommandId )
 
 
 void TaskManager::retrieveError( sal_Int32 CommandId,
-                                          sal_Int32 &ErrorCode,
+                                          TaskHandlerErr &ErrorCode,
                                           sal_Int32 &minorCode)
 {
     std::unique_lock aGuard( m_aMutex );
@@ -435,7 +435,7 @@ void TaskManager::retrieveError( sal_Int32 CommandId,
 
 
 void TaskManager::installError( sal_Int32 CommandId,
-                                         sal_Int32 ErrorCode,
+                                         TaskHandlerErr ErrorCode,
                                          sal_Int32 MinorCode )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -631,7 +631,7 @@ void TaskManager::page( sal_Int32 CommandId,
     {
         aFile.close();
         installError( CommandId,
-                      TASKHANDLING_OPEN_FILE_FOR_PAGING,
+                      TaskHandlerErr::OPEN_FILE_FOR_PAGING,
                       err );
         return;
     }
@@ -654,26 +654,26 @@ void TaskManager::page( sal_Int32 CommandId,
             catch (const io::NotConnectedException&)
             {
                 installError( CommandId,
-                              TASKHANDLING_NOTCONNECTED_FOR_PAGING );
+                              TaskHandlerErr::NOTCONNECTED_FOR_PAGING );
                 break;
             }
             catch (const io::BufferSizeExceededException&)
             {
                 installError( CommandId,
-                              TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING );
+                              TaskHandlerErr::BUFFERSIZEEXCEEDED_FOR_PAGING );
                 break;
             }
             catch (const io::IOException&)
             {
                 installError( CommandId,
-                              TASKHANDLING_IOEXCEPTION_FOR_PAGING );
+                              TaskHandlerErr::IOEXCEPTION_FOR_PAGING );
                 break;
             }
         }
         else
         {
             installError( CommandId,
-                          TASKHANDLING_READING_FILE_FOR_PAGING,
+                          TaskHandlerErr::READING_FILE_FOR_PAGING,
                           err );
             break;
         }
@@ -715,9 +715,9 @@ TaskManager::open( sal_Int32 CommandId,
 {
     rtl::Reference<XInputStream_impl> pInputStream(new XInputStream_impl( aUnqPath, bLock )); // from filinpstr.hxx
 
-    sal_Int32 ErrorCode = pInputStream->CtorSuccess();
+    TaskHandlerErr ErrorCode = pInputStream->CtorSuccess();
 
-    if( ErrorCode != TASKHANDLER_NO_ERROR )
+    if( ErrorCode != TaskHandlerErr::NO_ERROR )
     {
         installError( CommandId,
                       ErrorCode,
@@ -747,9 +747,9 @@ TaskManager::open_rw( sal_Int32 CommandId,
 {
     rtl::Reference<XStream_impl> pStream(new XStream_impl( aUnqPath, bLock ));  // from filstr.hxx
 
-    sal_Int32 ErrorCode = pStream->CtorSuccess();
+    TaskHandlerErr ErrorCode = pStream->CtorSuccess();
 
-    if( ErrorCode != TASKHANDLER_NO_ERROR )
+    if( ErrorCode != TaskHandlerErr::NO_ERROR )
     {
         installError( CommandId,
                       ErrorCode,
@@ -780,9 +780,9 @@ TaskManager::ls( sal_Int32 CommandId,
 {
     rtl::Reference<XResultSet_impl> p(new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort ));
 
-    sal_Int32 ErrorCode = p->CtorSuccess();
+    TaskHandlerErr ErrorCode = p->CtorSuccess();
 
-    if( ErrorCode != TASKHANDLER_NO_ERROR )
+    if( ErrorCode != TaskHandlerErr::NO_ERROR )
     {
         installError( CommandId,
                       ErrorCode,
@@ -1082,14 +1082,14 @@ TaskManager::getv( sal_Int32 CommandId,
     osl::FileBase::RC nError1 = osl::DirectoryItem::get( aUnqPath,aDirItem );
     if( nError1 != osl::FileBase::E_None )
         installError(CommandId,
-                     TASKHANDLING_OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
+                     TaskHandlerErr::OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
                      nError1);
 
     osl::FileBase::RC nError2 = aDirItem.getFileStatus( aFileStatus );
     if( nError1 == osl::FileBase::E_None &&
         nError2 != osl::FileBase::E_None )
         installError(CommandId,
-                     TASKHANDLING_OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
+                     TaskHandlerErr::OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
                      nError2);
 
     {
@@ -1152,7 +1152,7 @@ TaskManager::move( sal_Int32 CommandId,
             if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_KEEPERROR_FOR_MOVE,
+                              TaskHandlerErr::KEEPERROR_FOR_MOVE,
                               nError );
                 return;
             }
@@ -1180,7 +1180,7 @@ TaskManager::move( sal_Int32 CommandId,
             if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_OVERWRITE_FOR_MOVE,
+                              TaskHandlerErr::OVERWRITE_FOR_MOVE,
                               nError );
                 return;
             }
@@ -1221,13 +1221,13 @@ TaskManager::move( sal_Int32 CommandId,
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_RENAME_FOR_MOVE );
+                              TaskHandlerErr::RENAME_FOR_MOVE );
                 return;
             }
             else if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_RENAMEMOVE_FOR_MOVE,
+                              TaskHandlerErr::RENAMEMOVE_FOR_MOVE,
                               nError );
                 return;
             }
@@ -1242,13 +1242,13 @@ TaskManager::move( sal_Int32 CommandId,
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASH_FOR_MOVE );
+                              TaskHandlerErr::NAMECLASH_FOR_MOVE );
                 return;
             }
             else if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASHMOVE_FOR_MOVE,
+                              TaskHandlerErr::NAMECLASHMOVE_FOR_MOVE,
                               nError );
                 return;
             }
@@ -1261,7 +1261,7 @@ TaskManager::move( sal_Int32 CommandId,
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE,
+                              TaskHandlerErr::NAMECLASHSUPPORT_FOR_MOVE,
                               NameClash::ASK);
                 return;
             }
@@ -1275,7 +1275,7 @@ TaskManager::move( sal_Int32 CommandId,
     if( nError != osl::FileBase::E_None )
     {
         installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCE,
+                      TaskHandlerErr::TRANSFER_BY_MOVE_SOURCE,
                       nError );
         return;
     }
@@ -1284,7 +1284,7 @@ TaskManager::move( sal_Int32 CommandId,
     if( nError != osl::FileBase::E_None || ! aStatus.isValid( osl_FileStatus_Mask_Type ) )
     {
         installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT,
+                      TaskHandlerErr::TRANSFER_BY_MOVE_SOURCESTAT,
                       nError );
         return;
     }
@@ -1323,13 +1323,13 @@ bool getType(
     assert(item != nullptr && type != nullptr);
     osl::FileBase::RC err = osl::DirectoryItem::get(fileUrl, *item);
     if (err != osl::FileBase::E_None) {
-        task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);
+        task.installError(id, TaskHandlerErr::TRANSFER_BY_COPY_SOURCE, err);
         return false;
     }
     osl::FileStatus stat(osl_FileStatus_Mask_Type);
     err = item->getFileStatus(stat);
     if (err != osl::FileBase::E_None) {
-        task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT, err);
+        task.installError(id, TaskHandlerErr::TRANSFER_BY_COPY_SOURCESTAT, err);
         return false;
     }
     *type = stat.getFileType();
@@ -1364,7 +1364,7 @@ TaskManager::copy(
         nError = item.getFileStatus(stat);
         if (nError != osl::FileBase::E_None) {
             installError(
-                CommandId, TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT, nError);
+                CommandId, TaskHandlerErr::TRANSFER_BY_COPY_SOURCESTAT, nError);
             return;
         }
         rslvdSrcUnqPath = stat.getLinkTargetURL();
@@ -1387,7 +1387,7 @@ TaskManager::copy(
             if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_KEEPERROR_FOR_COPY,
+                              TaskHandlerErr::KEEPERROR_FOR_COPY,
                               nError );
                 return;
             }
@@ -1403,7 +1403,7 @@ TaskManager::copy(
             if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_OVERWRITE_FOR_COPY,
+                              TaskHandlerErr::OVERWRITE_FOR_COPY,
                               nError );
                 return;
             }
@@ -1445,13 +1445,13 @@ TaskManager::copy(
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_RENAME_FOR_COPY );
+                              TaskHandlerErr::RENAME_FOR_COPY );
                 return;
             }
             else if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_RENAMEMOVE_FOR_COPY,
+                              TaskHandlerErr::RENAMEMOVE_FOR_COPY,
                               nError );
                 return;
             }
@@ -1467,13 +1467,13 @@ TaskManager::copy(
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASH_FOR_COPY );
+                              TaskHandlerErr::NAMECLASH_FOR_COPY );
                 return;
             }
             else if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASHMOVE_FOR_COPY,
+                              TaskHandlerErr::NAMECLASHMOVE_FOR_COPY,
                               nError );
                 return;
             }
@@ -1487,7 +1487,7 @@ TaskManager::copy(
             if( nError == osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
-                              TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY,
+                              TaskHandlerErr::NAMECLASHSUPPORT_FOR_COPY,
                               NameClash);
                 return;
             }
@@ -1530,7 +1530,7 @@ TaskManager::remove( sal_Int32 CommandId,
             if (MustExist)
             {
                 installError( CommandId,
-                              TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE,
+                              TaskHandlerErr::NOSUCHFILEORDIR_FOR_REMOVE,
                               nError );
             }
             return (!MustExist);
@@ -1540,8 +1540,8 @@ TaskManager::remove( sal_Int32 CommandId,
         if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
         {
             installError( CommandId,
-                          TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE,
-                          nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
+                          TaskHandlerErr::VALIDFILESTATUS_FOR_REMOVE,
+                          nError != osl::FileBase::E_None ? nError : 0 );
             return false;
         }
 
@@ -1562,7 +1562,7 @@ TaskManager::remove( sal_Int32 CommandId,
             if (MustExist)
             {
                 installError( CommandId,
-                              TASKHANDLING_DELETEFILE_FOR_REMOVE,
+                              TaskHandlerErr::DELETEFILE_FOR_REMOVE,
                               nError );
             }
             return (!MustExist);
@@ -1583,7 +1583,7 @@ TaskManager::remove( sal_Int32 CommandId,
             if (MustExist)
             {
                 installError( CommandId,
-                              TASKHANDLING_OPENDIRECTORY_FOR_REMOVE,
+                              TaskHandlerErr::OPENDIRECTORY_FOR_REMOVE,
                               nError );
             }
             return (!MustExist);
@@ -1600,8 +1600,8 @@ TaskManager::remove( sal_Int32 CommandId,
             if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
             {
                 installError( CommandId,
-                              TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE,
-                              nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
+                              TaskHandlerErr::VALIDFILESTATUSWHILE_FOR_REMOVE,
+                              nError != osl::FileBase::E_None ? nError : 0 );
                 whileSuccess = false;
                 break;
             }
@@ -1629,7 +1629,7 @@ TaskManager::remove( sal_Int32 CommandId,
         if( nError != osl::FileBase::E_NOENT )
         {
             installError( CommandId,
-                          TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE,
+                          TaskHandlerErr::DIRECTORYEXHAUSTED_FOR_REMOVE,
                           nError );
             return false;
         }
@@ -1640,7 +1640,7 @@ TaskManager::remove( sal_Int32 CommandId,
             if (MustExist)
             {
                 installError( CommandId,
-                              TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE,
+                              TaskHandlerErr::DELETEDIRECTORY_FOR_REMOVE,
                               nError );
             }
             return (!MustExist);
@@ -1654,7 +1654,7 @@ TaskManager::remove( sal_Int32 CommandId,
     else   // Don't know what to remove
     {
         installError( CommandId,
-                      TASKHANDLING_FILETYPE_FOR_REMOVE );
+                      TaskHandlerErr::FILETYPE_FOR_REMOVE );
         return false;
     }
 
@@ -1694,7 +1694,7 @@ TaskManager::mkdir( sal_Int32 CommandId,
             if( !OverWrite )
             {
                 installError( CommandId,
-                              TASKHANDLING_FOLDER_EXISTS_MKDIR );
+                              TaskHandlerErr::FOLDER_EXISTS_MKDIR );
                 return false;
             }
             else
@@ -1703,7 +1703,7 @@ TaskManager::mkdir( sal_Int32 CommandId,
         case osl::FileBase::E_INVAL:
         {
             installError(CommandId,
-                         TASKHANDLING_INVALID_NAME_MKDIR);
+                         TaskHandlerErr::INVALID_NAME_MKDIR);
             return false;
         }
         case osl::FileBase::E_None:
@@ -1716,7 +1716,7 @@ TaskManager::mkdir( sal_Int32 CommandId,
             return ensuredir(
                 CommandId,
                 aUnqPath,
-                TASKHANDLING_CREATEDIRECTORY_MKDIR );
+                TaskHandlerErr::CREATEDIRECTORY_MKDIR );
     }
 }
 
@@ -1772,14 +1772,14 @@ TaskManager::write( sal_Int32 CommandId,
     if( ! aInputStream.is() )
     {
         installError( CommandId,
-                      TASKHANDLING_INPUTSTREAM_FOR_WRITE );
+                      TaskHandlerErr::INPUTSTREAM_FOR_WRITE );
         return false;
     }
 
     // Create parent path, if necessary.
     if ( ! ensuredir( CommandId,
                       getParentName( aUnqPath ),
-                      TASKHANDLING_ENSUREDIR_FOR_WRITE ) )
+                      TaskHandlerErr::ENSUREDIR_FOR_WRITE ) )
         return false;
 
     osl::FileBase::RC err;
@@ -1797,7 +1797,7 @@ TaskManager::write( sal_Int32 CommandId,
             if( err != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
+                              TaskHandlerErr::NO_OPEN_FILE_FOR_OVERWRITE,
                               err );
                 return false;
             }
@@ -1809,7 +1809,7 @@ TaskManager::write( sal_Int32 CommandId,
             if( err != osl::FileBase::E_None  )
             {
                 installError( CommandId,
-                              TASKHANDLING_FILESIZE_FOR_WRITE,
+                              TaskHandlerErr::FILESIZE_FOR_WRITE,
                               err );
                 return false;
             }
@@ -1821,7 +1821,7 @@ TaskManager::write( sal_Int32 CommandId,
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
             installError( CommandId,
-                          TASKHANDLING_NOREPLACE_FOR_WRITE,  // Now an exception
+                          TaskHandlerErr::NOREPLACE_FOR_WRITE,  // Now an exception
                           err );
 
             aFile.close();
@@ -1836,7 +1836,7 @@ TaskManager::write( sal_Int32 CommandId,
         {
             aFile.close();
             installError( CommandId,
-                          TASKHANDLING_NO_OPEN_FILE_FOR_WRITE,
+                          TaskHandlerErr::NO_OPEN_FILE_FOR_WRITE,
                           err );
             return false;
         }
@@ -1858,21 +1858,21 @@ TaskManager::write( sal_Int32 CommandId,
         catch( const io::NotConnectedException& )
         {
             installError( CommandId,
-                          TASKHANDLING_NOTCONNECTED_FOR_WRITE );
+                          TaskHandlerErr::NOTCONNECTED_FOR_WRITE );
             bSuccess = false;
             break;
         }
         catch( const io::BufferSizeExceededException& )
         {
             installError( CommandId,
-                          TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
+                          TaskHandlerErr::BUFFERSIZEEXCEEDED_FOR_WRITE );
             bSuccess = false;
             break;
         }
         catch( const io::IOException& )
         {
             installError( CommandId,
-                          TASKHANDLING_IOEXCEPTION_FOR_WRITE );
+                          TaskHandlerErr::IOEXCEPTION_FOR_WRITE );
             bSuccess = false;
             break;
         }
@@ -1888,7 +1888,7 @@ TaskManager::write( sal_Int32 CommandId,
             if( err != osl::FileBase::E_None )
             {
                 installError( CommandId,
-                              TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                              TaskHandlerErr::FILEIOERROR_FOR_WRITE,
                               err );
                 bSuccess = false;
                 break;
@@ -1896,7 +1896,7 @@ TaskManager::write( sal_Int32 CommandId,
             else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
             {
                 installError( CommandId,
-                              TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
+                              TaskHandlerErr::FILEIOERROR_FOR_NO_SPACE );
                 bSuccess = false;
                 break;
             }
@@ -1907,7 +1907,7 @@ TaskManager::write( sal_Int32 CommandId,
     if( err != osl::FileBase::E_None  )
     {
         installError( CommandId,
-                      TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                      TaskHandlerErr::FILEIOERROR_FOR_WRITE,
                       err );
         bSuccess = false;
     }
@@ -2068,7 +2068,7 @@ TaskManager::copy_recursive( const OUString& srcUnqPath,
 
 bool TaskManager::ensuredir( sal_Int32 CommandId,
                                     const OUString& rUnqPath,
-                                    sal_Int32 errorCode )
+                                    TaskHandlerErr errorCode )
 {
     OUString aPath;
 

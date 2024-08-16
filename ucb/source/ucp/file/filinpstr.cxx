@@ -38,8 +38,8 @@ using namespace com::sun::star;
 
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )
     : m_aFile( aUncPath ),
-      m_nErrorCode( TASKHANDLER_NO_ERROR ),
-      m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
+      m_nErrorCode( TaskHandlerErr::NO_ERROR ),
+      m_nMinorErrorCode( 0 )
 {
     sal_uInt32 nFlags = osl_File_OpenFlag_Read;
     if ( !bLock )
@@ -51,7 +51,7 @@ XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )
         m_nIsOpen = false;
         m_aFile.close();
 
-        m_nErrorCode = TASKHANDLING_OPEN_FOR_INPUTSTREAM;
+        m_nErrorCode = TaskHandlerErr::OPEN_FOR_INPUTSTREAM;
         m_nMinorErrorCode = err;
     }
     else
