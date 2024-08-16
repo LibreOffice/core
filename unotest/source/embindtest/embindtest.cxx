@@ -927,85 +927,85 @@ private:
             auto const val = ifcCpp->getBoolean();
             assert(val);
             auto const ok = ifcCpp->isBoolean(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getByte();
             assert(val == -12);
             auto const ok = ifcCpp->isByte(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getShort();
             assert(val == -1234);
             auto const ok = ifcCpp->isShort(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedShort();
             assert(val == 54321);
             auto const ok = ifcCpp->isUnsignedShort(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getLong();
             assert(val == -123456);
             auto const ok = ifcCpp->isLong(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedLong();
             assert(val == 3456789012);
             auto const ok = ifcCpp->isUnsignedLong(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getHyper();
             assert(val == -123456789);
             auto const ok = ifcCpp->isHyper(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedHyper();
             assert(val == 9876543210);
             auto const ok = ifcCpp->isUnsignedHyper(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getFloat();
             assert(val == -10.25);
             auto const ok = ifcCpp->isFloat(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getDouble();
             assert(val == 100.5);
             auto const ok = ifcCpp->isDouble(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getChar();
             assert(val == u'Ö');
             auto const ok = ifcCpp->isChar(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getString();
             assert(val == u"hä"_ustr);
             auto const ok = ifcCpp->isString(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getType();
             assert(val == cppu::UnoType<sal_Int32>::get());
             auto const ok = ifcCpp->isType(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getEnum();
             assert(val == org::libreoffice::embindtest::Enum_E_2);
             auto const ok = ifcCpp->isEnum(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getStruct();
@@ -1034,37 +1034,37 @@ private:
                              { u"barr"_ustr } },
                            ifcCpp }));
             auto const ok = ifcCpp->isStruct(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getStructLong();
             assert(val == org::libreoffice::embindtest::StructLong{ -123456 });
             auto const ok = ifcCpp->isStructLong(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getStructString();
             assert(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
             auto const ok = ifcCpp->isStructString(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getAnyVoid();
             assert(val == css::uno::Any());
             auto const ok = ifcCpp->isAnyVoid(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getSequenceBoolean();
             assert((val == css::uno::Sequence<sal_Bool>{ true, true, false }));
             auto const ok = ifcCpp->isSequenceBoolean(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             auto const val = ifcCpp->getNull();
             assert(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
             auto const ok = ifcCpp->isNull(val);
-            assert(ok == css::uno::Any(true));
+            assert(ok);
         }
         {
             sal_Bool value1;
