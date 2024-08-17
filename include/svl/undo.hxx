@@ -222,9 +222,6 @@ public:
     */
     virtual void            ClearRedo();
 
-    const std::optional<bool>& GetNeedsClearRedo() const;
-    void SetNeedsClearRedo(const std::optional<bool>& oSet);
-
     /** leaves any possible open list action (<member>IsInListAction</member>), and clears both the Undo and the
         Redo stack.
 

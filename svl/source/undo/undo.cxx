@@ -185,7 +185,7 @@ struct SfxUndoManager_Data
     bool            mbDoing;
     bool            mbClearUntilTopLevel;
     bool            mbEmptyActions;
-    std::optional<bool> moNeedsClearRedo;
+    std::optional<bool> moNeedsClearRedo; // holds a requested ClearRedo until safe to clear stack
 
     UndoListeners   aListeners;
 
@@ -477,7 +477,10 @@ void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
 {
     if (IsDoing())
     {
-        SetNeedsClearRedo(i_currentLevel);
+        // cannot clear redo while undo/redo is in process. Delay ClearRedo until safe to clear.
+        // (assuming if TopLevel requests a clear, it should have priority over CurrentLevel)
+        if (!m_xData->moNeedsClearRedo.has_value() || i_currentLevel == TopLevel)
+            m_xData->moNeedsClearRedo = i_currentLevel;
         return;
     }
     UndoManagerGuard aGuard( *m_xData );
@@ -490,16 +493,6 @@ void SfxUndoManager::ClearRedo()
     SAL_WARN_IF( IsInListAction(), "svl",
         "SfxUndoManager::ClearRedo: suspicious call - do you really wish to clear the current level?" );
     ImplClearRedo_NoLock( CurrentLevel );
-}
-
-const std::optional<bool>& SfxUndoManager::GetNeedsClearRedo() const
-{
-    return m_xData->moNeedsClearRedo;
-}
-
-void SfxUndoManager::SetNeedsClearRedo(const std::optional<bool>& oSet)
-{
-    m_xData->moNeedsClearRedo = oSet;
 }
 
 void SfxUndoManager::Reset()
@@ -764,10 +757,10 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     }
 
     m_xData->mbDoing = false;
-    if (GetNeedsClearRedo().has_value())
+    if (m_xData->moNeedsClearRedo.has_value())
     {
-        ImplClearRedo_NoLock(*GetNeedsClearRedo());
-        SetNeedsClearRedo(std::optional<bool>());
+        ImplClearRedo_NoLock(*m_xData->moNeedsClearRedo);
+        m_xData->moNeedsClearRedo.reset();
     }
 
     aGuard.scheduleNotification( &SfxUndoListener::actionUndone, sActionComment );
@@ -883,7 +876,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     }
 
     m_xData->mbDoing = false;
-    assert(!GetNeedsClearRedo().has_value() && "Assuming I don't need to handle it here. What about if thrown?");
+    assert(!m_xData->moNeedsClearRedo.has_value() && "Assuming I don't need to handle it here. What about if thrown?");
     ImplCheckEmptyActions();
     aGuard.scheduleNotification( &SfxUndoListener::actionRedone, sActionComment );
 
