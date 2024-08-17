@@ -1131,6 +1131,17 @@ void SbiRuntime::PushFor()
 
     p->refInc = PopVar();
     p->refEnd = PopVar();
+    if (isVBAEnabled())
+    {
+        // tdf#150458: only calculate these once, coercing to double
+        // tdf#150460: shouldn't we do it in non-VBA / compat mode, too?
+        SbxVariableRef incCopy(new SbxVariable(SbxDOUBLE));
+        *incCopy = *p->refInc;
+        p->refInc = std::move(incCopy);
+        SbxVariableRef endCopy(new SbxVariable(SbxDOUBLE));
+        *endCopy = *p->refEnd;
+        p->refEnd = std::move(endCopy);
+    }
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
     // tdf#85371 - grant explicitly write access to the index variable
