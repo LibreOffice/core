@@ -372,7 +372,7 @@ public:
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( Color nColor );
 void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
-            const vcl::font::PhysicalFontFace*, LOGFONTW& );
+            const vcl::font::PhysicalFontFace*, LOGFONTW&, bool bAntiAliased);
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
 
