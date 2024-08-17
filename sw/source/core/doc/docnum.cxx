@@ -2551,22 +2551,10 @@ std::set<OUString> SwDoc::GetUsedBullets()
 
 SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
 {
-    SwNumRule * pResult = maNumRuleMap[rName];
-
-    if ( !pResult )
-    {
-        for (size_t n = 0; n < mpNumRuleTable->size(); ++n)
-        {
-            if ((*mpNumRuleTable)[n]->GetName() == rName)
-            {
-                pResult = (*mpNumRuleTable)[n];
-
-                break;
-            }
-        }
-    }
-
-    return pResult;
+    auto it = maNumRuleMap.find(rName);
+    if (it == maNumRuleMap.end())
+        return nullptr;
+    return it->second;
 }
 
 void SwDoc::AddNumRule(SwNumRule * pRule)
