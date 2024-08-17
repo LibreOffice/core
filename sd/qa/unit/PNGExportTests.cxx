@@ -941,6 +941,47 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testNoAntiAliasExport)
+{
+#ifdef MACOSX
+// See comment in testTdf155048
+#else
+    loadFromFile(u"svg/tdf162259.svg");
+
+    auto xGraphicExporter = drawing::GraphicExportFilter::create(getComponentContext());
+    CPPUNIT_ASSERT(xGraphicExporter);
+
+    auto xSupplier = mxComponent.queryThrow<css::drawing::XDrawPagesSupplier>();
+    auto xPage = xSupplier->getDrawPages()->getByIndex(0).queryThrow<css::lang::XComponent>();
+    xGraphicExporter->setSourceDocument(xPage);
+
+    // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(101)),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(151)),
+        comphelper::makePropertyValue(u"AntiAliasing"_ustr, false),
+    };
+
+    css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
+    };
+
+    xGraphicExporter->filter(aDescriptor);
+    BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+
+    std::set<Color> colors;
+
+    for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
+        for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
+            colors.insert(bmp.GetPixelColor(x, y));
+
+    // With AntiAliasing = false, the text must be rendered aliased
+    CPPUNIT_ASSERT_EQUAL(size_t(2), colors.size());
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
 {
     // The top X in the SVG, having no skew, used a fast rendering path, and was output much wider

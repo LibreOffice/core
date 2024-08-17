@@ -2265,7 +2265,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
             {
                 LOGFONTW aLogFont;
                 ImplGetLogFontFromFontSelect(pContext->mpFont->GetFontSelectPattern(),
-                                             nullptr, aLogFont);
+                                             nullptr, aLogFont, true);
                 ImmSetCompositionFontW( hIMC, &aLogFont );
                 ImmReleaseContext( pFrame->mhWnd, hIMC );
             }

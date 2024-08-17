@@ -676,7 +676,7 @@ static int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*, const TEXTMETRICW*
 
 void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
                                    const vcl::font::PhysicalFontFace* pFontFace,
-                                   LOGFONTW& rLogFont )
+                                   LOGFONTW& rLogFont, bool bAntiAliased)
 {
     OUString aName;
     if (pFontFace)
@@ -712,7 +712,6 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
     rLogFont.lfEscapement      = rFont.mnOrientation.get();
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
-    rLogFont.lfQuality         = DEFAULT_QUALITY;
     rLogFont.lfOutPrecision    = OUT_TT_PRECIS;
     if ( rFont.mnOrientation )
         rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
@@ -720,7 +719,10 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
     // disable antialiasing if requested
     if ( rFont.mbNonAntialiased )
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
-
+    else if (bAntiAliased || Application::GetSettings().GetStyleSettings().GetUseFontAAFromSystem())
+        rLogFont.lfQuality = DEFAULT_QUALITY;
+    else
+        rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 }
 
 std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont,
@@ -730,7 +732,7 @@ std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::fon
     HFONT hNewFont = nullptr;
 
     LOGFONTW aLogFont;
-    ImplGetLogFontFromFontSelect( i_rFont, i_pFontFace, aLogFont );
+    ImplGetLogFontFromFontSelect( i_rFont, i_pFontFace, aLogFont, getAntiAlias());
 
     bool    bIsCJKVerticalFont = false;
     // select vertical mode for printing if requested and available
