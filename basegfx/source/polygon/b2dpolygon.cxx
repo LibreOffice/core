@@ -683,8 +683,7 @@ public:
     void append(const basegfx::B2DPoint& rPoint)
     {
         mpBufferedData.reset(); // TODO: is this needed?
-        const auto aCoordinate = rPoint;
-        maPoints.append(aCoordinate);
+        maPoints.append(rPoint);
 
         if(moControlVector)
         {
@@ -697,8 +696,7 @@ public:
     {
         assert(nCount > 0);
         mpBufferedData.reset();
-        auto aCoordinate = rPoint;
-        maPoints.insert(nIndex, aCoordinate, nCount);
+        maPoints.insert(nIndex, rPoint, nCount);
 
         if(moControlVector)
         {
