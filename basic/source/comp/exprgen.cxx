@@ -136,12 +136,12 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
                 eOp = SbiOpcode::FIND_STATIC_;
             }
         }
+
+        if (pWithParent_ != nullptr)
+            pWithParent_->Gen(rGen);
+
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
-            if( p == this && pWithParent_ != nullptr )
-            {
-                pWithParent_->Gen(rGen);
-            }
             p->GenElement( rGen, eOp );
             eOp = SbiOpcode::ELEM_;
         }
