@@ -404,18 +404,23 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
         if (bLOKActive)
             break;
 
+        // set bBreak true on last attempt
+        if (nArrangeIndex + 1 == nArrangeAttempts)
+            bBreak = true;
+
         // adjust if necessary
         if (bBreak)
         {
-            if ( (nArrangeAry[nArrangeIndex] == FloatWinPopupFlags::Left)  ||
-                 (nArrangeAry[nArrangeIndex] == FloatWinPopupFlags::Right) )
+            if (aPos.Y() + aSize.Height() > aScreenRect.Bottom())
             {
-                if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
-                {
-                    aPos.setY( devRect.Bottom()-aSize.Height()+1 );
-                    if ( aPos.Y() < aScreenRect.Top() )
-                        aPos.setY( aScreenRect.Top() );
-                }
+                aPos.setY(devRect.Bottom() - aSize.Height() + 1);
+                if (aPos.Y() < aScreenRect.Top())
+                    aPos.setY(aScreenRect.Top());
+                // move to the right or left of the parent if possible
+                if (devRect.Right() + 4 + aSize.Width() < aScreenRect.Right())
+                    aPos.setX(devRect.Right() + 4);
+                else if (devRect.Left() - 4 - aSize.Width() > aScreenRect.Left())
+                    aPos.setX(devRect.Left() - 4 - aSize.Width());
             }
             else
             {
@@ -436,8 +441,6 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
         if ( bBreak )
             break;
     }
-    if (nArrangeIndex >= nArrangeAttempts)
-        nArrangeIndex = nArrangeAttempts - 1;
 
     rArrangeIndex = nArrangeIndex;
 

@@ -223,6 +223,8 @@ private:
     /// Listbox is actually a dropdown (either combobox, or popup window treated as dropdown)
     bool mbIsDropdown : 1;
 
+    Point mnLastPosPixel = Point();
+
     Link<ImplListBoxWindow*,void>  maScrollHdl;
     Link<LinkParamNone*,void>      maSelectHdl;
     Link<LinkParamNone*,void>      maCancelHdl;
@@ -367,6 +369,8 @@ public:
 
     using Control::ImplInitSettings;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+
+    void ResetLastPosPixel() { mnLastPosPixel = Point(); }
 
 private:
     // ISearchableStringList

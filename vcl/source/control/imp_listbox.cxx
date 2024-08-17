@@ -885,6 +885,15 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
     if( !aRect.Contains( rMEvt.GetPosPixel() ) )
         return;
 
+    // prevent initial mouse move event from selecting an entry when the listbox is started
+    if (mnLastPosPixel == Point())
+    {
+        mnLastPosPixel = rMEvt.GetPosPixel();
+        return;
+    }
+    if (mnLastPosPixel == rMEvt.GetPosPixel())
+        return;
+
     if ( IsMouseMoveSelect() )
     {
         sal_Int32 nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
@@ -2937,8 +2946,9 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
             aFloatSz.setWidth( nDesktopWidth );
     }
 
-    if ( aFloatSz.Height() > nMaxHeight )
-        aFloatSz.setHeight( nMaxHeight );
+    tools::Long nDesktopHeight = GetDesktopRectPixel().getOpenHeight();
+    if (aFloatSz.Height() > nDesktopHeight)
+        aFloatSz.setHeight(nDesktopHeight);
 
     // Minimal height, in case height is not set to Float height.
     // The parent of FloatWin must be DropDown-Combo/Listbox.
@@ -3010,20 +3020,19 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
     if( pGrandparent->GetOutDev()->ImplIsAntiparallel() )
         pGrandparentOutDev->ReMirror( aRect );
 
+    mpImplLB->GetMainWindow()->ResetLastPosPixel();
     // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795
     StartPopupMode( aRect, LISTBOX_FLOATWINPOPUPFLAGS );
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         mpImplLB->ShowProminentEntry( nPos );
 
-    if( bStartTracking )
-        mpImplLB->GetMainWindow()->EnableMouseMoveSelect( true );
+    mpImplLB->GetMainWindow()->EnableMouseMoveSelect(bStartTracking);
 
     if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
         mpImplLB->GetMainWindow()->GrabFocus();
 
     mpImplLB->GetMainWindow()->ImplClearLayoutData();
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
