@@ -46,6 +46,10 @@ void CRC32::updateSegment(const Sequence< sal_Int8 > &b, sal_Int32 len)
 {
     nCRC = rtl_crc32(nCRC, b.getConstArray(), len );
 }
+void CRC32::updateSegment(const sal_Int8* b, sal_Int32 len)
+{
+    nCRC = rtl_crc32(nCRC, b, len );
+}
 /** Update CRC32 with specified sequence of bytes
  */
 void CRC32::update(const Sequence< sal_Int8 > &b)

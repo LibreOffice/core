@@ -29,6 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <mutex>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 
 // SwitchablePersistenceStream
@@ -45,7 +46,8 @@ class SwitchablePersistenceStream
                                         css::io::XOutputStream,
                                         css::io::XTruncate,
                                         css::io::XSeekable,
-                                        css::io::XAsyncOutputMonitor >
+                                        css::io::XAsyncOutputMonitor >,
+    public comphelper::ByteReader
 {
     std::mutex    m_aMutex;
 
@@ -96,6 +98,8 @@ public:
 // css::io::XAsyncOutputMonitor
     virtual void SAL_CALL waitForCompletion(  ) override;
 
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 
 #endif // INCLUDED_PACKAGE_SOURCE_XSTOR_SWITCHPERSISTENCESTREAM_HXX

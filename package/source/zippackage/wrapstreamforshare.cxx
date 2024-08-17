@@ -46,6 +46,8 @@ WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInSt
         throw uno::RuntimeException(THROW_WHERE );
     }
     m_xSeekable.set( m_xInStream, uno::UNO_QUERY_THROW );
+    mpByteReader = dynamic_cast<comphelper::ByteReader*>(m_xInStream.get());
+    assert(mpByteReader);
 }
 
 WrapStreamForShare::~WrapStreamForShare()
@@ -74,6 +76,19 @@ sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >&
     m_xSeekable->seek( m_nCurPos );
 
     sal_Int32 nRead = m_xInStream->readSomeBytes( aData, nMaxBytesToRead );
+    m_nCurPos += nRead;
+
+    return nRead;
+}
+
+sal_Int32 WrapStreamForShare::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
+{
+    if ( !m_xInStream.is() )
+        throw io::IOException(THROW_WHERE );
+
+    m_xSeekable->seek( m_nCurPos );
+
+    sal_Int32 nRead = mpByteReader->readSomeBytes( aData, nMaxBytesToRead );
     m_nCurPos += nRead;
 
     return nRead;
@@ -113,6 +128,7 @@ void SAL_CALL WrapStreamForShare::closeInput()
     // m_xInStream->closeInput();
     m_xInStream.clear();
     m_xSeekable.clear();
+    mpByteReader = nullptr;
 }
 
 // XSeekable

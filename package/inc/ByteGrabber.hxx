@@ -21,6 +21,8 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
+#include <comphelper/bytereader.hxx>
+#include <array>
 
 namespace com::sun::star {
     namespace io { class XSeekable; class XInputStream; }
@@ -29,8 +31,8 @@ class ByteGrabber final
 {
     css::uno::Reference < css::io::XInputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
-    css::uno::Sequence < sal_Int8 > aSequence;
-    const sal_Int8 *pSequence;
+    comphelper::ByteReader* mpByteReader;
+    std::array<sal_Int8, 8> maBuffer;
 
 public:
     ByteGrabber (css::uno::Reference < css::io::XInputStream > const & xIstream);
@@ -43,6 +45,7 @@ public:
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
     sal_Int32 readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead );
+    sal_Int32 readBytes( sal_Int8* aData, sal_Int32 nBytesToRead );
     // XSeekable
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException

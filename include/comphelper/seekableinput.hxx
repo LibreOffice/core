@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/bytereader.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <mutex>
 
@@ -37,7 +38,7 @@ class SAL_DLLPUBLIC_TEMPLATE OSeekableInputWrapper_BASE
 {};
 
 class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
-    : public OSeekableInputWrapper_BASE
+    : public OSeekableInputWrapper_BASE, public comphelper::ByteReader
 {
     std::mutex    m_aMutex;
 
@@ -47,6 +48,7 @@ class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
 
     css::uno::Reference< css::io::XInputStream > m_xCopyInput;
     css::uno::Reference< css::io::XSeekable > m_xCopySeek;
+    comphelper::ByteReader* m_pCopyByteReader { nullptr };
 
 private:
     COMPHELPER_DLLPRIVATE void PrepareCopy_Impl();
@@ -74,6 +76,8 @@ public:
     virtual sal_Int64 SAL_CALL getPosition() override;
     virtual sal_Int64 SAL_CALL getLength() override;
 
+// comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 
 }   // namespace comphelper

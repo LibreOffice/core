@@ -55,7 +55,7 @@ namespace {
 
 class UNOMemoryStream :
     public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>,
-    public comphelper::ByteWriter
+    public comphelper::ByteWriter, public comphelper::ByteReader
 {
 public:
     UNOMemoryStream();
@@ -91,6 +91,9 @@ public:
 
     // comphelper::ByteWriter
     virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
+
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 
 private:
     std::vector< sal_Int8, boost::noinit_adaptor<std::allocator<sal_Int8>> > maData;
@@ -146,6 +149,26 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
         sal_Int8* pData = &(*maData.begin());
         sal_Int8* pCursor = &(pData[mnCursor]);
         memcpy( aData.getArray(), pCursor, nBytesToRead );
+
+        mnCursor += nBytesToRead;
+    }
+
+    return nBytesToRead;
+}
+
+// ByteReader
+sal_Int32 UNOMemoryStream::readSomeBytes( sal_Int8* aData, sal_Int32 nBytesToRead )
+{
+    if( nBytesToRead < 0 )
+        throw IOException(u"nBytesToRead < 0"_ustr);
+
+    nBytesToRead = std::min( nBytesToRead, available() );
+
+    if( nBytesToRead )
+    {
+        sal_Int8* pData = &(*maData.begin());
+        sal_Int8* pCursor = &(pData[mnCursor]);
+        memcpy( aData, pCursor, nBytesToRead );
 
         mnCursor += nBytesToRead;
     }

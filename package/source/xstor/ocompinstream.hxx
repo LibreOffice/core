@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/refcountedmutex.hxx>
+#include <comphelper/bytereader.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 
@@ -37,12 +38,14 @@ struct OWriteStream_Impl;
 class OInputCompStream : public cppu::WeakImplHelper < css::io::XInputStream
                                                         ,css::embed::XExtendedStorageStream
                                                         ,css::embed::XRelationshipAccess
-                                                        ,css::beans::XPropertySet >
+                                                        ,css::beans::XPropertySet >,
+                         public comphelper::ByteReader
 {
 protected:
     OWriteStream_Impl* m_pImpl;
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xStream;
+    comphelper::ByteReader* m_pByteReader;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pInterfaceContainer;
     css::uno::Sequence < css::beans::PropertyValue > m_aProperties;
     bool m_bDisposed;
@@ -102,6 +105,8 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 
 #endif

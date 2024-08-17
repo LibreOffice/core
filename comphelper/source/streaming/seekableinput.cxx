@@ -107,7 +107,11 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
             xTempSeek->seek( 0 );
             m_xCopyInput.set( xTempOut, uno::UNO_QUERY );
             if ( m_xCopyInput.is() )
+            {
                 m_xCopySeek = xTempSeek;
+                m_pCopyByteReader = dynamic_cast<comphelper::ByteReader*>(xTempOut.get());
+                assert(m_pCopyByteReader);
+            }
         }
     }
 
@@ -140,6 +144,18 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8
     PrepareCopy_Impl();
 
     return m_xCopyInput->readSomeBytes( aData, nMaxBytesToRead );
+}
+
+sal_Int32 OSeekableInputWrapper::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
+{
+    std::scoped_lock aGuard( m_aMutex );
+
+    if ( !m_xOriginalStream.is() )
+        throw io::NotConnectedException();
+
+    PrepareCopy_Impl();
+
+    return m_pCopyByteReader->readSomeBytes( aData, nMaxBytesToRead );
 }
 
 
@@ -186,6 +202,7 @@ void SAL_CALL OSeekableInputWrapper::closeInput()
     }
 
     m_xCopySeek.clear();
+    m_pCopyByteReader = nullptr;
 }
 
 

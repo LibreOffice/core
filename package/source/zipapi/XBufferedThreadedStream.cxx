@@ -158,6 +158,32 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
     return nAvailableSize;
 }
 
+sal_Int32 XBufferedThreadedStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead )
+{
+    if( !hasBytes() )
+        return 0;
+
+    const sal_Int32 nAvailableSize = static_cast< sal_Int32 > ( std::min< sal_Int64 >( nBytesToRead, remainingSize() ) );
+    sal_Int32 i = 0, nPendingBytes = nAvailableSize;
+
+    while( nPendingBytes )
+    {
+        const Buffer &pBuffer = getNextBlock();
+        if( !pBuffer.hasElements() )
+            return nAvailableSize - nPendingBytes;
+        const sal_Int32 limit = std::min<sal_Int32>( nPendingBytes, pBuffer.getLength() - mnOffset );
+
+        memcpy( &pData[i], &pBuffer[mnOffset], limit );
+
+        nPendingBytes -= limit;
+        mnOffset += limit;
+        mnPos += limit;
+        i += limit;
+    }
+
+    return nAvailableSize;
+}
+
 sal_Int32 SAL_CALL XBufferedThreadedStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes( aData, nMaxBytesToRead );

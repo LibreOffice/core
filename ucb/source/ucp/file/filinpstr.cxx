@@ -99,6 +99,24 @@ XInputStream_impl::readBytes(
     return static_cast<sal_Int32>(nrc);
 }
 
+sal_Int32
+XInputStream_impl::readSomeBytes(
+                 sal_Int8* aData,
+                 sal_Int32 nBytesToRead )
+{
+    if( ! m_nIsOpen ) throw io::IOException( THROW_WHERE );
+
+        //TODO! translate memory exhaustion (if it were detectable...) into
+        // io::BufferSizeExceededException
+
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( aData, sal_uInt64(nBytesToRead),nrc )
+       != osl::FileBase::E_None)
+        throw io::IOException( THROW_WHERE );
+
+    return static_cast<sal_Int32>(nrc);
+}
+
 sal_Int32 SAL_CALL
 XInputStream_impl::readSomeBytes(
     uno::Sequence< sal_Int8 >& aData,

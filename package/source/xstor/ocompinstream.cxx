@@ -38,6 +38,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 : m_pImpl( &aImpl )
 , m_xMutex( m_pImpl->m_xMutex )
 , m_xStream(std::move( xStream ))
+, m_pByteReader( dynamic_cast<comphelper::ByteReader*>(m_xStream.get()) )
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
@@ -47,6 +48,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
         throw uno::RuntimeException(); // just a disaster
 
     assert(m_xStream.is());
+    assert(m_pByteReader);
 }
 
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
@@ -55,11 +57,13 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
 : m_pImpl( nullptr )
 , m_xMutex( new comphelper::RefCountedMutex )
 , m_xStream(std::move( xStream ))
+, m_pByteReader( dynamic_cast<comphelper::ByteReader*>(m_xStream.get()) )
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
 {
     assert(m_xStream.is());
+    assert(m_pByteReader);
 }
 
 OInputCompStream::~OInputCompStream()
@@ -122,6 +126,19 @@ sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
     }
 
     return m_xStream->readSomeBytes( aData, nMaxBytesToRead );
+
+}
+
+sal_Int32 OInputCompStream::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
+{
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
+    if ( m_bDisposed )
+    {
+        SAL_INFO("package.xstor", "Disposed!");
+        throw lang::DisposedException();
+    }
+
+    return m_pByteReader->readSomeBytes( aData, nMaxBytesToRead );
 
 }
 

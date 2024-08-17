@@ -590,7 +590,8 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
 
 namespace {
 
-class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
+class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>,
+                        public comphelper::ByteReader
 {
     std::vector<sal_Int8> maBytes;
     size_t mnPos;
@@ -645,6 +646,22 @@ public:
         sal_Int32 nReadSize = std::min<sal_Int32>(nBytesToRead, remainingSize());
         rData.realloc(nReadSize);
         auto pData = rData.getArray();
+        std::vector<sal_Int8>::const_iterator it = maBytes.cbegin();
+        std::advance(it, mnPos);
+        for (sal_Int32 i = 0; i < nReadSize; ++i, ++it)
+            pData[i] = *it;
+
+        mnPos += nReadSize;
+
+        return nReadSize;
+    }
+
+    virtual sal_Int32 readSomeBytes(sal_Int8* pData, sal_Int32 nBytesToRead) override
+    {
+        if (!hasBytes())
+            return 0;
+
+        sal_Int32 nReadSize = std::min<sal_Int32>(nBytesToRead, remainingSize());
         std::vector<sal_Int8>::const_iterator it = maBytes.cbegin();
         std::advance(it, mnPos);
         for (sal_Int32 i = 0; i < nReadSize; ++i, ++it)
@@ -918,7 +935,12 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     sal_Int64 nPos = -rEntry.nOffset;
 
     aGrabber.seek(nPos);
-    sal_Int32 nTestSig = aGrabber.ReadInt32();
+    std::array<sal_Int8, 30> aHeader;
+    if (aGrabber.readBytes(aHeader.data(), 30) != 30)
+        throw new uno::RuntimeException();
+    MemoryByteGrabber headerMemGrabber(aHeader.data(), 30);
+
+    sal_Int32 nTestSig = headerMemGrabber.ReadInt32();
     if (nTestSig != LOCSIG)
         throw ZipIOException(u"Invalid LOC header (bad signature)"_ustr );
 
@@ -927,18 +949,18 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     // Just verify the path and calculate the data offset and otherwise
     // rely on the central directory info.
 
-    aGrabber.ReadInt16(); // version - ignore any mismatch (Maven created JARs)
-    sal_uInt16 const nLocFlag = aGrabber.ReadUInt16(); // general purpose bit flag
-    sal_uInt16 const nLocMethod = aGrabber.ReadUInt16(); // compression method
+    headerMemGrabber.ReadInt16(); // version - ignore any mismatch (Maven created JARs)
+    sal_uInt16 const nLocFlag = headerMemGrabber.ReadUInt16(); // general purpose bit flag
+    sal_uInt16 const nLocMethod = headerMemGrabber.ReadUInt16(); // compression method
     // Do *not* compare timestamps, since MSO 2010 can produce documents
     // with timestamp difference in the central directory entry and local
     // file header.
-    aGrabber.ReadInt32(); //time
-    sal_uInt32 nLocCrc = aGrabber.ReadUInt32(); //crc
-    sal_uInt64 nLocCompressedSize = aGrabber.ReadUInt32(); //compressed size
-    sal_uInt64 nLocSize = aGrabber.ReadUInt32(); //size
-    sal_Int16 nPathLen = aGrabber.ReadInt16();
-    sal_Int16 nExtraLen = aGrabber.ReadInt16();
+    headerMemGrabber.ReadInt32(); //time
+    sal_uInt32 nLocCrc = headerMemGrabber.ReadUInt32(); //crc
+    sal_uInt64 nLocCompressedSize = headerMemGrabber.ReadUInt32(); //compressed size
+    sal_uInt64 nLocSize = headerMemGrabber.ReadUInt32(); //size
+    sal_Int16 nPathLen = headerMemGrabber.ReadInt16();
+    sal_Int16 nExtraLen = headerMemGrabber.ReadInt16();
 
     if (nPathLen < 0)
     {
@@ -955,13 +977,13 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     {
         // read always in UTF8, some tools seem not to set UTF8 bit
         // coverity[tainted_data] - we've checked negative lens, and up to max short is ok here
-        uno::Sequence<sal_Int8> aNameBuffer(nPathLen);
-        sal_Int32 nRead = aGrabber.readBytes(aNameBuffer, nPathLen);
-        if (nRead < aNameBuffer.getLength())
-            aNameBuffer.realloc(nRead);
+        std::vector<sal_Int8> aNameBuffer(nPathLen);
+        sal_Int32 nRead = aGrabber.readBytes(aNameBuffer.data(), nPathLen);
+        if (nRead < nPathLen)
+            aNameBuffer.resize(nRead);
 
-        OUString sLOCPath( reinterpret_cast<const char *>(aNameBuffer.getConstArray()),
-                           aNameBuffer.getLength(),
+        OUString sLOCPath( reinterpret_cast<const char *>(aNameBuffer.data()),
+                           nRead,
                            RTL_TEXTENCODING_UTF8 );
 
         if ( rEntry.nPathLen == -1 ) // the file was created
@@ -980,9 +1002,9 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
         ::std::optional<sal_uInt64> oOffset64;
         if (nExtraLen != 0)
         {
-            Sequence<sal_Int8> aExtraBuffer;
-            aGrabber.readBytes(aExtraBuffer, nExtraLen);
-            MemoryByteGrabber extraMemGrabber(aExtraBuffer);
+            std::vector<sal_Int8> aExtraBuffer(nExtraLen);
+            aGrabber.readBytes(aExtraBuffer.data(), nExtraLen);
+            MemoryByteGrabber extraMemGrabber(aExtraBuffer.data(), nExtraLen);
 
             isZip64 = readExtraFields(extraMemGrabber, nExtraLen,
                     nLocSize, nLocCompressedSize, oOffset64, &sLOCPath);
@@ -1116,7 +1138,7 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
 std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
 {
     // this method is called in constructor only, no need for mutex
-    Sequence < sal_Int8 > aBuffer;
+    std::vector < sal_Int8 > aBuffer;
     try
     {
         sal_Int64 const nLength = aGrabber.getLength();
@@ -1130,10 +1152,11 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
         aGrabber.seek( nEnd );
 
         auto nSize = nLength - nEnd;
-        if (nSize != aGrabber.readBytes(aBuffer, nSize))
+        aBuffer.reserve(nSize);
+        if (nSize != aGrabber.readBytes(aBuffer.data(), nSize))
             throw ZipException(u"Zip END signature not found!"_ustr );
 
-        const sal_Int8 *pBuffer = aBuffer.getConstArray();
+        const sal_Int8 *pBuffer = aBuffer.data();
 
         sal_Int64 nEndPos = {};
         nPos = nSize - ENDHDR;
@@ -1176,9 +1199,10 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
         if (20 <= nEndPos)
         {
             aGrabber.seek(nEndPos - 20);
-            Sequence<sal_Int8> aZip64EndLocator;
-            aGrabber.readBytes(aZip64EndLocator, 20);
-            MemoryByteGrabber loc64Grabber(aZip64EndLocator);
+            std::array<sal_Int8, 20> aZip64EndLocator;
+            if (20 != aGrabber.readBytes(aZip64EndLocator.data(), 20))
+                throw uno::RuntimeException();
+            MemoryByteGrabber loc64Grabber(aZip64EndLocator.data(), 20);
             if (loc64Grabber.ReadUInt8() == 'P'
                 && loc64Grabber.ReadUInt8() == 'K'
                 && loc64Grabber.ReadUInt8() == 6
@@ -1201,9 +1225,9 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
                     throw ZipException(u"invalid Zip64 end locator (number of disks)"_ustr);
                 }
                 aGrabber.seek(nLoc64End64Offset);
-                Sequence<sal_Int8> aZip64EndDirectory;
-                aGrabber.readBytes(aZip64EndDirectory, nEndPos - 20 - nLoc64End64Offset);
-                MemoryByteGrabber end64Grabber(aZip64EndDirectory);
+                std::vector<sal_Int8> aZip64EndDirectory(nEndPos - 20 - nLoc64End64Offset);
+                aGrabber.readBytes(aZip64EndDirectory.data(), nEndPos - 20 - nLoc64End64Offset);
+                MemoryByteGrabber end64Grabber(aZip64EndDirectory.data(), nEndPos - 20 - nLoc64End64Offset);
                 if (end64Grabber.ReadUInt8() != 'P'
                     || end64Grabber.ReadUInt8() != 'K'
                     || end64Grabber.ReadUInt8() != 6
@@ -1309,12 +1333,12 @@ sal_Int32 ZipFile::readCEN()
             throw ZipException(u"central directory too big"_ustr);
 
         aGrabber.seek(nCenPos);
-        Sequence<sal_Int8> aCENBuffer(nCenLen);
-        sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
+        std::vector<sal_Int8> aCENBuffer(nCenLen);
+        sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer.data(), nCenLen );
         if (nCenLen != nRead)
             throw ZipException (u"Error reading CEN into memory buffer!"_ustr );
 
-        MemoryByteGrabber aMemGrabber(aCENBuffer);
+        MemoryByteGrabber aMemGrabber(aCENBuffer.data(), nCenLen);
 
         ZipEntry aEntry;
         sal_Int16 nCommentLen;
@@ -1590,29 +1614,30 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
                                 RTL_TEXTENCODING_UTF8);
     else
     {
-        Sequence<sal_Int8> aFileName;
+        std::vector<sal_Int8> aFileName(aEntry.nPathLen);
         aGrabber.seek(dataOffset + 30);
-        aGrabber.readBytes(aFileName, aEntry.nPathLen);
-        aEntry.sPath = OUString(reinterpret_cast<const char*>(aFileName.getConstArray()),
-                                aFileName.getLength(), RTL_TEXTENCODING_UTF8);
-        aEntry.nPathLen = static_cast<sal_Int16>(aFileName.getLength());
+        aGrabber.readBytes(aFileName.data(), aEntry.nPathLen);
+        aEntry.sPath = OUString(reinterpret_cast<const char*>(aFileName.data()),
+                                aEntry.nPathLen, RTL_TEXTENCODING_UTF8);
+        aEntry.nPathLen = aEntry.nPathLen;
     }
     aEntry.sPath = aEntry.sPath.replace('\\', '/');
 
     // read 64bit header
     if (aEntry.nExtraLen > 0)
     {
-        Sequence<sal_Int8> aExtraBuffer;
+        std::vector<sal_Int8> aExtraBuffer(aEntry.nExtraLen);
         if (o3tl::make_unsigned(30 + aEntry.nPathLen) + aEntry.nExtraLen <= data.size())
         {
-            aExtraBuffer = Sequence<sal_Int8>(data.data() + 30 + aEntry.nPathLen, aEntry.nExtraLen);
+            auto it = data.begin() + 30 + aEntry.nPathLen;
+            std::copy(it, it + aEntry.nExtraLen, aExtraBuffer.begin());
         }
         else
         {
             aGrabber.seek(dataOffset + 30 + aEntry.nExtraLen);
-            aGrabber.readBytes(aExtraBuffer, aEntry.nExtraLen);
+            aGrabber.readBytes(aExtraBuffer.data(), aEntry.nExtraLen);
         }
-        MemoryByteGrabber aMemGrabberExtra(aExtraBuffer);
+        MemoryByteGrabber aMemGrabberExtra(aExtraBuffer.data(), aEntry.nExtraLen);
         if (aEntry.nExtraLen > 0)
         {
             ::std::optional<sal_uInt64> oOffset64;
@@ -1743,7 +1768,9 @@ void ZipFile::recover()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    Sequence < sal_Int8 > aBuffer;
+    std::vector < sal_Int8 > aBuffer;
+    const sal_Int64 nToRead = 32000;
+    aBuffer.reserve(nToRead);
 
     try
     {
@@ -1753,11 +1780,11 @@ void ZipFile::recover()
 
         aGrabber.seek( 0 );
 
-        const sal_Int64 nToRead = 32000;
-        for( sal_Int64 nGenPos = 0; aGrabber.readBytes( aBuffer, nToRead ) && aBuffer.getLength() > 16; )
+        sal_Int32 nRead;
+        for( sal_Int64 nGenPos = 0; (nRead = aGrabber.readBytes( aBuffer.data(), nToRead )) && nRead > 16; )
         {
-            const sal_Int8 *pBuffer = aBuffer.getConstArray();
-            const sal_Int32 nBufSize = aBuffer.getLength();
+            const sal_Int8 *pBuffer = aBuffer.data();
+            const sal_Int32 nBufSize = nRead;
 
             sal_Int64 nPos = 0;
             // the buffer should contain at least one header,
@@ -1822,17 +1849,18 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int64 nBlockSize = ::std::min(nSize, static_cast< sal_Int64 >(32000));
+    std::vector < sal_Int8 > aBuffer;
+    aBuffer.reserve(nBlockSize);
 
     aGrabber.seek( nOffset );
+    sal_Int32 nRead;
     for (sal_Int64 ind = 0;
-         aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nSize;
+         (nRead = aGrabber.readBytes( aBuffer.data(), nBlockSize )) && ind * nBlockSize < nSize;
          ++ind)
     {
-        sal_Int64 nLen = ::std::min(nBlockSize, nSize - ind * nBlockSize);
-        aCRC.updateSegment(aBuffer, static_cast<sal_Int32>(nLen));
+        aCRC.updateSegment(aBuffer.data(), nRead);
     }
 
     return aCRC.getValue();
@@ -1842,26 +1870,29 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int64 nRealSize = 0;
-    Inflater aInflaterLocal( true );
+    ZipUtils::InflaterBytes aInflaterLocal( true );
     sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
+    std::vector < sal_Int8 > aBuffer(nBlockSize);
+    std::vector< sal_Int8 > aData( nBlockSize );
 
     aGrabber.seek( nOffset );
+    sal_Int32 nRead;
     for ( sal_Int64 ind = 0;
-          !aInflaterLocal.finished() && aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nCompressedSize;
+          !aInflaterLocal.finished()
+          && (nRead = aGrabber.readBytes( aBuffer.data(), nBlockSize ))
+          && ind * nBlockSize < nCompressedSize;
           ind++ )
     {
-        Sequence < sal_Int8 > aData( nBlockSize );
         sal_Int32 nLastInflated = 0;
         sal_Int64 nInBlock = 0;
 
-        aInflaterLocal.setInput( aBuffer );
+        aInflaterLocal.setInput( aBuffer.data(), nRead );
         do
         {
-            nLastInflated = aInflaterLocal.doInflateSegment( aData, 0, nBlockSize );
-            aCRC.updateSegment( aData, nLastInflated );
+            nLastInflated = aInflaterLocal.doInflateSegment( aData.data(), nBlockSize, 0, nBlockSize );
+            aCRC.updateSegment( aData.data(), nLastInflated );
             nInBlock += nLastInflated;
         } while( !aInflater.finished() && nLastInflated );
 

@@ -46,7 +46,7 @@ typedef ::cppu::WeakImplHelper< css::io::XTempFile
     , css::beans::XPropertyAccess
     , css::lang::XServiceInfo> OTempFileBase;
 
-class OTempFileService : public OTempFileBase
+class OTempFileService : public OTempFileBase, public comphelper::ByteReader
 {
     std::optional<utl::TempFileNamed> mpTempFile;
     std::mutex maMutex;
@@ -112,6 +112,7 @@ public:
     virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
     virtual void SAL_CALL setPropertyValues( const ::css::uno::Sequence< ::css::beans::PropertyValue >& aProps ) override;
 
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 
     virtual ~OTempFileService () override;
 };

@@ -134,4 +134,112 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     return 0;
 }
 
+InflaterBytes::InflaterBytes(bool bNoWrap)
+: bFinished(false),
+  bNeedDict(false),
+  nOffset(0),
+  nLength(0),
+  nLastInflateError(0)
+{
+    pStream.reset(new z_stream);
+    /* memset to 0 to set zalloc/opaque etc */
+    memset (pStream.get(), 0, sizeof(*pStream));
+    sal_Int32 nRes;
+    nRes = inflateInit2(pStream.get(), bNoWrap ? -MAX_WBITS : MAX_WBITS);
+    switch (nRes)
+    {
+        case Z_OK:
+            break;
+        case Z_MEM_ERROR:
+            pStream.reset();
+            break;
+        case Z_STREAM_ERROR:
+            pStream.reset();
+            break;
+        default:
+            break;
+    }
+}
+
+InflaterBytes::~InflaterBytes()
+{
+    end();
+}
+
+void InflaterBytes::setInput( const sal_Int8* rBuffer, sal_Int32 nBufLen )
+{
+    sInBuffer = rBuffer;
+    nOffset = 0;
+    nLength = nBufLen;
+}
+
+
+sal_Int32 InflaterBytes::doInflateSegment( sal_Int8* pOutBuffer, sal_Int32 nBufLen, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+{
+    if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > nBufLen)
+    {
+        // do error handling
+    }
+    return doInflateBytes(pOutBuffer, nNewOffset, nNewLength);
+}
+
+void InflaterBytes::end(  )
+{
+    if (pStream)
+    {
+#if !defined Z_PREFIX
+        inflateEnd(pStream.get());
+#else
+        z_inflateEnd(pStream.get());
+#endif
+        pStream.reset();
+    }
+}
+
+sal_Int32 InflaterBytes::doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
+{
+    if ( !pStream )
+    {
+        nLastInflateError = Z_STREAM_ERROR;
+        return 0;
+    }
+
+    nLastInflateError = 0;
+
+    pStream->next_in   = reinterpret_cast<const unsigned char*>( sInBuffer + nOffset );
+    pStream->avail_in  = nLength;
+    pStream->next_out  = reinterpret_cast < unsigned char* > ( pOutBuffer + nNewOffset );
+    pStream->avail_out = nNewLength;
+
+#if !defined Z_PREFIX
+    sal_Int32 nResult = ::inflate(pStream.get(), Z_PARTIAL_FLUSH);
+#else
+    sal_Int32 nResult = ::z_inflate(pStream.get(), Z_PARTIAL_FLUSH);
+#endif
+
+    switch (nResult)
+    {
+        case Z_STREAM_END:
+            bFinished = true;
+            [[fallthrough]];
+        case Z_OK:
+            nOffset += nLength - pStream->avail_in;
+            nLength = pStream->avail_in;
+            return nNewLength - pStream->avail_out;
+
+        case Z_NEED_DICT:
+            bNeedDict = true;
+            nOffset += nLength - pStream->avail_in;
+            nLength = pStream->avail_in;
+            return 0;
+
+        default:
+            // it is no error, if there is no input or no output
+            if ( nLength && nNewLength )
+                nLastInflateError = nResult;
+    }
+
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

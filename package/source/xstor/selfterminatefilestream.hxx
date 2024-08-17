@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
@@ -33,7 +34,8 @@
 struct OWriteStream_Impl;
 
 class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XInputStream,
-                                                               css::io::XSeekable >
+                                                               css::io::XSeekable >,
+                                        public comphelper::ByteReader
 {
     std::optional<utl::TempFileFast> m_oTempFile;
     rtl::Reference< utl::OSeekableInputStreamWrapper > m_xStreamWrapper;
@@ -57,6 +59,8 @@ public:
     virtual sal_Int64 SAL_CALL getPosition() override;
     virtual sal_Int64 SAL_CALL getLength() override;
 
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 
 #endif

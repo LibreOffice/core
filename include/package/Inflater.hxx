@@ -51,6 +51,28 @@ public:
     sal_Int32 getLastInflateError() const { return nLastInflateError; }
 };
 
+class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflaterBytes final
+{
+    typedef struct z_stream_s z_stream;
+
+    bool                    bFinished, bNeedDict;
+    sal_Int32               nOffset, nLength, nLastInflateError;
+    std::unique_ptr<z_stream>  pStream;
+    const sal_Int8*  sInBuffer;
+    sal_Int32   doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+
+public:
+    InflaterBytes(bool bNoWrap);
+    ~InflaterBytes();
+    void setInput( const sal_Int8* pBuffer, sal_Int32 nLen );
+    bool needsDictionary() const { return bNeedDict; }
+    bool finished() const { return bFinished; }
+    sal_Int32 doInflateSegment( sal_Int8* pOutBuffer, sal_Int32 nBufLen, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void end(  );
+
+    sal_Int32 getLastInflateError() const { return nLastInflateError; }
+};
+
 }
 
 #endif

@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-
+#include <comphelper/bytereader.hxx>
 #include "filrec.hxx"
 
 enum class TaskHandlerErr;
@@ -32,7 +32,8 @@ namespace fileaccess {
     class TaskManager;
 
     class XInputStream_impl final
-        : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
+        : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>,
+          public comphelper::ByteReader
     {
     public:
 
@@ -74,6 +75,8 @@ namespace fileaccess {
 
         virtual sal_Int64 SAL_CALL
         getLength() override;
+
+        virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 
     private:
 

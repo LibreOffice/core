@@ -87,7 +87,7 @@ typedef ::cppu::WeakImplHelper < XInputStream, XSeekable > FileInputStreamWrappe
 
 namespace {
 
-class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
+class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base, public comphelper::ByteReader
 {
 protected:
     std::mutex    m_aMutex;
@@ -106,6 +106,8 @@ public:
     virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
     virtual sal_Int32 SAL_CALL available() override;
     virtual void      SAL_CALL closeInput() override;
+
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 
 protected:
     void checkConnected();
@@ -164,6 +166,23 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     return nRead;
 }
 
+sal_Int32 FileStreamWrapper_Impl::readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead)
+{
+    if ( m_aURL.isEmpty() )
+        return 0;
+
+    checkConnected();
+
+    if (nBytesToRead < 0)
+        throw BufferSizeExceededException(OUString(), getXWeak());
+
+    std::scoped_lock aGuard( m_aMutex );
+
+    sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData), nBytesToRead);
+    checkError();
+
+    return nRead;
+}
 
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {

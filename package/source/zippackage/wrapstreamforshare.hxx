@@ -22,15 +22,18 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <comphelper/bytereader.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 class WrapStreamForShare final : public cppu::WeakImplHelper < css::io::XInputStream
-                                                        , css::io::XSeekable >
+                                                        , css::io::XSeekable >,
+                                public comphelper::ByteReader
 {
     rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xInStream;
+    comphelper::ByteReader* mpByteReader;
     css::uno::Reference < css::io::XSeekable > m_xSeekable;
 
     sal_Int64 m_nCurPos;
@@ -52,6 +55,8 @@ public:
     virtual sal_Int64 SAL_CALL getPosition() override;
     virtual sal_Int64 SAL_CALL getLength() override;
 
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 
 #endif

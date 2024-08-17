@@ -12,6 +12,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
@@ -23,7 +24,8 @@
 
 typedef css::uno::Sequence< sal_Int8 > Buffer;
 
-class XBufferedThreadedStream : public cppu::WeakImplHelper< css::io::XInputStream >
+class XBufferedThreadedStream : public cppu::WeakImplHelper< css::io::XInputStream >,
+        public comphelper::ByteReader
 {
 private:
     const css::uno::Reference<XInputStream> mxSrcStream;
@@ -78,6 +80,9 @@ public:
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
+
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 };
 #endif
 

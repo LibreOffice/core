@@ -147,6 +147,21 @@ sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8
     }
     return readBytes(aData, nMaxBytesToRead);
 }
+sal_Int32 OTempFileService::readSomeBytes( sal_Int8* aData, sal_Int32 nBytesToRead )
+{
+    std::unique_lock aGuard( maMutex );
+    if ( mbInClosed )
+        throw css::io::NotConnectedException ( OUString(), getXWeak() );
+
+    checkConnected();
+    if (nBytesToRead < 0)
+        throw css::io::BufferSizeExceededException( OUString(), getXWeak());
+
+    sal_uInt32 nRead = mpStream->ReadBytes(static_cast<void*>(aData), nBytesToRead);
+    checkError();
+
+    return nRead;
+}
 void SAL_CALL OTempFileService::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::unique_lock aGuard( maMutex );

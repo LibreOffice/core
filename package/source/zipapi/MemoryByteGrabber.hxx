@@ -32,6 +32,12 @@ public:
     , mnEnd ( rBuffer.getLength() )
     {
     }
+    MemoryByteGrabber ( const sal_Int8* pBuffer, sal_Int32 nBufLen )
+    : mpBuffer ( pBuffer )
+    , mnCurrent ( 0 )
+    , mnEnd ( nBufLen )
+    {
+    }
     MemoryByteGrabber(css::uno::Sequence<sal_Int8> &&) = delete;
 
     const sal_Int8 * getCurrentPos () const { return mpBuffer + mnCurrent; }

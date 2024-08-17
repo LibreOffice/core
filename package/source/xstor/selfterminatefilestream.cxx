@@ -62,6 +62,11 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_I
     return m_xStreamWrapper->readSomeBytes( aData, nMaxBytesToRead );
 }
 
+sal_Int32 OSelfTerminateFileStream::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
+{
+    return m_xStreamWrapper->readSomeBytes( aData, nMaxBytesToRead );
+}
+
 void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     return m_xStreamWrapper->skipBytes( nBytesToSkip );

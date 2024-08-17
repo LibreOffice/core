@@ -1241,6 +1241,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
 
 void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream )
 {
+    assert(dynamic_cast<comphelper::ByteReader*>(xInStream.get()));
     m_xContentSeek.set( xInStream, uno::UNO_QUERY_THROW );
     m_xContentStream = xInStream;
 

@@ -35,6 +35,7 @@ public:
     sal_Int64 updateStream (css::uno::Reference < css::io::XInputStream > const & xStream);
     /// @throws css::uno::RuntimeException
     void updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
+    void updateSegment(const sal_Int8* b, sal_Int32 len);
     /// @throws css::uno::RuntimeException
     void update(const css::uno::Sequence< sal_Int8 > &b);
     /// @throws css::uno::RuntimeException
