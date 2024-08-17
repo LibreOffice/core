@@ -3037,7 +3037,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
     // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    if(aScale.getX() < 0.0 && aScale.getY() < 0.0)
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));

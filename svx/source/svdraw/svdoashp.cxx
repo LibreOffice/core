@@ -3055,9 +3055,9 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     SetLogicRect(aBaseRect);
 
     // Apply flipping from Matrix, which is a transformation relative to origin
-    if (basegfx::fTools::less(aScale.getX(), 0.0))
+    if (aScale.getX() < 0.0)
         Mirror(Point(0, 0), Point(0, 1000)); // mirror on the y-axis
-    if (basegfx::fTools::less(aScale.getY(), 0.0))
+    if (aScale.getY() < 0.0)
         Mirror(Point(0, 0), Point(1000, 0)); // mirror on the x-axis
 
     // shear?

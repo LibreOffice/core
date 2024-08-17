@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
             // create decompose geometry
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
 
-            if (basegfx::fTools::lessOrEqual(getTransparency(), 0.0))
+            if (getTransparency() <= 0.0)
             {
                 // no transparency
                 return Primitive2DReference {

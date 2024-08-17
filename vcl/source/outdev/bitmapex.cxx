@@ -532,8 +532,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     rTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
     const bool bRotated(!basegfx::fTools::equalZero(fRotate));
     const bool bSheared(!basegfx::fTools::equalZero(fShearX));
-    const bool bMirroredX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirroredY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirroredX(aScale.getX() < 0.0);
+    const bool bMirroredY(aScale.getY() < 0.0);
 
     if(!bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
