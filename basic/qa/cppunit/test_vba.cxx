@@ -90,6 +90,7 @@ void VBATest::testMiscVBAFunctions()
         "gosub_goto.vb",
         "hex.vb",
         "hour.vb",
+        "for.vb",
         "formatnumber.vb",
         "formatpercent.vb",
         "if.vb",
