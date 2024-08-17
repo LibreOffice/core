@@ -1600,7 +1600,7 @@ bool SvtFileDialog::PrepareExecute()
         aFolderURL.removeSegment();
     }
 
-    INetURLObject aObj = aFolderURL;
+    INetURLObject aObj = std::move(aFolderURL);
     if ( aObj.GetProtocol() == INetProtocol::File )
     {
         // set folder as current directory

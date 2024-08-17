@@ -286,7 +286,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     throw uno::RuntimeException("Failed to create ICU BreakIterator: error " + OUString::createFromAscii(u_errorName(status)));
                 }
                 icuBI->mpValue = std::make_shared<BI_ValueData>();
-                icuBI->mpValue->mpBreakIterator = pBI;
+                icuBI->mpValue->mpBreakIterator = std::move(pBI);
                 theBIMap.insert( std::make_pair( aBIMapLocaleTypeKey, icuBI->mpValue));
             } while (false);
         if (!icuBI->mpValue || !icuBI->mpValue->mpBreakIterator) {

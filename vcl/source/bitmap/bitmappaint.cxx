@@ -369,7 +369,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
             pWriteAcc.reset();
         }
 
-        aRotatedBmp = aNewBmp;
+        aRotatedBmp = std::move(aNewBmp);
     }
     else
     {

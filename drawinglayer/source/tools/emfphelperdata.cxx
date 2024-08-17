@@ -1724,7 +1724,7 @@ namespace emfplushelper
                                             std::move(emptyVector),   // EMF-PLUS has no DX-array
                                             {},
                                             std::move(fontAttribute),
-                                            locale,
+                                            std::move(locale),
                                             color.getBColor());
                             }
                             drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);

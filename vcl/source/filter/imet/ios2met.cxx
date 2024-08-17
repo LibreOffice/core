@@ -1336,7 +1336,7 @@ void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
         if( nNumPoints != aBezPoly.GetSize() )
             aBezPoly.SetSize( nNumPoints );
 
-        aPolygon = aBezPoly;
+        aPolygon = std::move(aBezPoly);
     }
 
     aAttr.aCurPos = aPolygon[ nNumPoints - 1 ];

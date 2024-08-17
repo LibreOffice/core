@@ -47,7 +47,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
             }
             else
             {
-                mpPDFDocument = pPDFDocument;
+                mpPDFDocument = std::move(pPDFDocument);
             }
         }
         return mpPDFDocument;

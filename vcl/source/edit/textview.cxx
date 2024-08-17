@@ -270,7 +270,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
             if (aFont.IsTransparent())
                 aColor = COL_TRANSPARENT;
             aFont.SetFillColor(aColor);
-            mpImpl->mpTextEngine->maFont = aFont;
+            mpImpl->mpTextEngine->maFont = std::move(aFont);
         }
     }
 

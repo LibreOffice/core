@@ -236,7 +236,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             {
                 oox::drawingml::Color theColor;
                 theColor.setSrgbClr(colorAttrib.value());
-                mrTextCharacterProperties.maUnderlineColor = theColor;
+                mrTextCharacterProperties.maUnderlineColor = std::move(theColor);
             }
             break;
         }

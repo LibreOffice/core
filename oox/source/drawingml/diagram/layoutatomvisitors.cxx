@@ -83,7 +83,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         {
             pShape->setInternalName(rAtom.getName());
             rAtom.addNodeShape(pShape);
-            mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = pShape;
+            mrDgm.getLayout()->getPresPointShapeMap()[pNewNode] = std::move(pShape);
         }
     }
     else

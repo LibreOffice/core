@@ -1131,7 +1131,7 @@ bool Printer::SetOrientation( Orientation eOrientation )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
             mbNewJobSetup = true;
-            maJobSetup = aJobSetup;
+            maJobSetup = std::move(aJobSetup);
             ImplUpdatePageData();
             ImplUpdateFontList();
             return true;

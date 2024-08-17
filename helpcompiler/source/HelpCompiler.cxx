@@ -384,7 +384,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                     ll.push_back(keyword);
                 }
                 if (!ll.empty())
-                    (*keywords)[anchor] = ll;
+                    (*keywords)[anchor] = std::move(ll);
             }
             else if (branch.compare("contents") == 0)
             {
@@ -410,7 +410,7 @@ void myparser::traverse( xmlNodePtr parentNode )
             if (hidstr != "." && !hidstr.empty())  //simple case of explicitly named target
             {
                 assert(!hidstr.empty());
-                (*helptexts)[hidstr] = text;
+                (*helptexts)[hidstr] = std::move(text);
             }
             else //apply to list of "current" hids determined by recent bookmarks that have hid in their branch
             {

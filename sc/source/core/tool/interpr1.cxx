@@ -7217,14 +7217,14 @@ void ScInterpreter::ScLookup()
                 {
                     ScMatrixRef pTempMat = GetNewMat( 1, nElems, /*bEmpty*/true );
                     pTempMat->PutDoubleVector( vArray, 0, 0);
-                    pDataMat2 = pTempMat;
+                    pDataMat2 = std::move(pTempMat);
                 }
                 else
                 {
                     ScMatrixRef pTempMat = GetNewMat( nElems, 1, /*bEmpty*/true );
                     for (size_t i=0; i < nElems; ++i)
                         pTempMat->PutDouble( vArray[i], i, 0);
-                    pDataMat2 = pTempMat;
+                    pDataMat2 = std::move(pTempMat);
                 }
             }
         }

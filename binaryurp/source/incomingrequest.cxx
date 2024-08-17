@@ -189,7 +189,7 @@ bool IncomingRequest::execute_throw(
                         args.push_back(inArguments_[0].getValue(t));
                     } else {
                         assert(inArguments_.empty());
-                        retType = t;
+                        retType = std::move(t);
                     }
                     break;
                 }

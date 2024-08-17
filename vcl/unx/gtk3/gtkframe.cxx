@@ -6028,7 +6028,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pIMContext, g
     pThis->m_aInputEvent.maText = sText;
     pThis->m_aInputEvent.mnCursorPos = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags = nCursorFlags;
-    pThis->m_aInputFlags = aInputFlags;
+    pThis->m_aInputFlags = std::move(aInputFlags);
     pThis->m_aInputEvent.mpTextAttr = pThis->m_aInputFlags.data();
 
     SolarMutexGuard aGuard;

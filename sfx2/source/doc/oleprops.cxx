@@ -1065,7 +1065,7 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     if( xProp )
     {
         SetError( xProp->Load( rStrm ) );
-        maPropMap[ nPropId ] = xProp;
+        maPropMap[ nPropId ] = std::move(xProp);
     }
 }
 

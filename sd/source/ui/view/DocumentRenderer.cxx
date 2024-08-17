@@ -1950,7 +1950,7 @@ private:
             }
             else
             {
-                rInfo.maMap = aMap;
+                rInfo.maMap = std::move(aMap);
                 PrepareScaledPage(*it, *pPage, ePageKind, rInfo);
             }
         }

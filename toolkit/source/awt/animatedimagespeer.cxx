@@ -338,7 +338,7 @@ namespace toolkit
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
-        maCachedImageSets[ position ] = aImages;
+        maCachedImageSets[ position ] = std::move(aImages);
         updateImageList_nothrow();
     }
 

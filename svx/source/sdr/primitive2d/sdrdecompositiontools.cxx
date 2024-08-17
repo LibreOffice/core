@@ -335,7 +335,7 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
     if(!getBuffered2DDecomposition())
     {
         // remember last Fill
-        const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = aFill;
+        const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = std::move(aFill);
     }
 
     // use parent implementation

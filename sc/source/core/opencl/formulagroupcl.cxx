@@ -2684,7 +2684,7 @@ void DynamicKernel::CreateKernel()
         }
         lastSecondKernelHash = lastOneKernelHash;
         lastSecondProgram = lastOneProgram;
-        lastOneKernelHash = KernelHash;
+        lastOneKernelHash = std::move(KernelHash);
         lastOneProgram = mpProgram;
     }
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);

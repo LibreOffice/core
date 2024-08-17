@@ -1355,11 +1355,11 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     {
         double fVal;
         bool bFlag;
-        ScMatrixRef pMat = pMat1;
+        ScMatrixRef pMat = std::move(pMat1);
         if (!pMat)
         {
             fVal = fVal1;
-            pMat = pMat2;
+            pMat = std::move(pMat2);
             bFlag = true;           // double - Matrix
         }
         else

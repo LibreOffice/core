@@ -350,7 +350,7 @@ void NotebookBar::UpdateDefaultSettings()
     aStyleSet.SetToolTextColor(aTextColor);
 
     aAllSettings.SetStyleSettings(aStyleSet);
-    DefaultSettings = aAllSettings;
+    DefaultSettings = std::move(aAllSettings);
 }
 
 void NotebookBar::UpdatePersonaSettings()

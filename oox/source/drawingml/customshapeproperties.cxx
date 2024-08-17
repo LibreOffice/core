@@ -196,7 +196,7 @@ void CustomShapeProperties::pushToPropSet(
                                         aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentVal.Name = adjustmentGuide.maName;
-                                        aAdjustmentSeqRange[ nAdjustmentIndex ] = aAdjustmentVal;
+                                        aAdjustmentSeqRange[ nAdjustmentIndex ] = std::move(aAdjustmentVal);
                                     }
                                 } else if ( aAdjustmentSeq.hasElements() ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
@@ -205,7 +205,7 @@ void CustomShapeProperties::pushToPropSet(
                                     aAdjustmentVal.Name = adjustmentGuide.maName;
                                     if (nIndex < aAdjustmentSeq.getLength())
                                     {
-                                        aAdjustmentSeqRange[nIndex] = aAdjustmentVal;
+                                        aAdjustmentSeqRange[nIndex] = std::move(aAdjustmentVal);
                                         ++nIndex;
                                     }
                                 }

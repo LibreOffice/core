@@ -386,7 +386,7 @@ void RecentDocsViewItem::OpenDocument()
     // after select!!!
     sfx2::LoadRecentFile *const pLoadRecentFile = new sfx2::LoadRecentFile;
     pLoadRecentFile->xDispatch = xDispatch;
-    pLoadRecentFile->aTargetURL = aTargetURL;
+    pLoadRecentFile->aTargetURL = std::move(aTargetURL);
     pLoadRecentFile->aArgSeq = aArgsList;
     pLoadRecentFile->pView = &mrParentView;
 

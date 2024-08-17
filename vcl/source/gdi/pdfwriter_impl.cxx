@@ -10456,7 +10456,7 @@ void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
     basegfx::B2DPolyPolygon aRegion(rRegion);
 
     aRegion.transform(aCurrentTransform);
-    m_aGraphicsStack.front().m_aClipRegion = aRegion;
+    m_aGraphicsStack.front().m_aClipRegion = std::move(aRegion);
     m_aGraphicsStack.front().m_bClipRegion = true;
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
 }

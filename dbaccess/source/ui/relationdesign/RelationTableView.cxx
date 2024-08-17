@@ -192,7 +192,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
 
     if ( bAskUser || m_pExistingConnection )
-        m_pCurrentlyTabConnData = pTabConnData; // this implies that we ask the user what to do
+        m_pCurrentlyTabConnData = std::move(pTabConnData); // this implies that we ask the user what to do
     else
     {
         try

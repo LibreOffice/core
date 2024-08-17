@@ -896,7 +896,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
                 break;
         if (i == aResult.getLength())
             aResult.realloc(i + 1);
-        aResult.getArray()[i] = aPropVal;
+        aResult.getArray()[i] = std::move(aPropVal);
     }
 
     return aResult;

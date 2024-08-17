@@ -1050,7 +1050,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                 OUStringBuffer aSynAuthority(64);
                 if ( !bHasUser )
                 {
-                    aSynAuthority = aSynUser;
+                    aSynAuthority = std::move(aSynUser);
                 }
                 else
                 {

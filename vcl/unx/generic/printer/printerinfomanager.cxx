@@ -858,7 +858,7 @@ void SystemQueueInfo::run()
                 rParm.pHandler( aLines, aSysPrintQueues, &rParm );
                 std::unique_lock aGuard( m_aMutex );
                 m_bChanged  = true;
-                m_aQueues   = aSysPrintQueues;
+                m_aQueues   = std::move(aSysPrintQueues);
                 m_aCommand  = OUString::createFromAscii( rParm.pPrintCommand );
 #if OSL_DEBUG_LEVEL > 1
                 SAL_INFO("vcl.unx.print", "printing queue command: success.");

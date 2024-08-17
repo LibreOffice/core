@@ -474,7 +474,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 rMtf.ReplaceAction(
                                     new MetaPolyPolygonAction(
-                                        aInputPolyPolygon),
+                                        std::move(aInputPolyPolygon)),
                                     nLastPolygonAction);
                             }
                         }

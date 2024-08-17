@@ -469,7 +469,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
     std::unique_ptr<SfxTabPage> xPage = SvxLinguTabPage::Create(m_xOptionsDlg->get_content_area(), m_xOptionsDlg.get(), xSet.get());
     static_cast<SvxLinguTabPage*>(xPage.get())->HideGroups( GROUP_MODULES );
     m_xOptionsDlg->SetTabPage(std::move(xPage));
-    weld::GenericDialogController::runAsync(m_xOptionsDlg, [this, xSet] (sal_uInt32 nResult) {
+    weld::GenericDialogController::runAsync(m_xOptionsDlg, [this, xSet=std::move(xSet)] (sal_uInt32 nResult) {
         if (RET_OK == nResult)
         {
             InitUserDicts();

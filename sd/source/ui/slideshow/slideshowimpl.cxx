@@ -1564,7 +1564,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
                 continue; // skip all others
             }
 
-            maShapeEventMap[ xShape ] = pEvent;
+            maShapeEventMap[ xShape ] = std::move(pEvent);
 
             if( mxListenerProxy.is() )
                 mxListenerProxy->addShapeEventListener( xShape );
