@@ -65,7 +65,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 {
     assert(pShape);
     assert(pObject);
-    assert(pShape = ::FindFrameFormat(pObject));
+    assert(pShape == ::FindFrameFormat(pObject));
 
     // If TextBox wasn't enabled previously
     if (pShape->GetOtherTextBoxFormats() && pShape->GetOtherTextBoxFormats()->GetTextBox(pObject))
