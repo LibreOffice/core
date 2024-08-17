@@ -364,22 +364,22 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
         Reference< XOutputStream> xOut = pHelper->getOutputStream();
         OSL_ENSURE(xOut.is(),"No output stream!");
 
-        ::sal_Int64 diff = position - nLen;
-        sal_Int32 n;
-        while( diff != 0 )
+        sal_Int64 diff = position - nLen, n;
+        while (diff != 0)
         {
-            if ( BUFFER_SIZE < diff )
+            if (diff > BUFFER_SIZE)
             {
-                n = static_cast<sal_Int32>(BUFFER_SIZE);
+                n = BUFFER_SIZE;
                 diff = diff - BUFFER_SIZE;
             }
             else
             {
-                n = static_cast<sal_Int32>(diff);
+                n = diff;
                 diff = 0;
             }
-            Sequence< ::sal_Int8 > aData(n);
-            memset(aData.getArray(),0,n);
+            assert(n >= 0 && n <= SAL_MAX_INT32 && "this fits in sal_Int32");
+            Sequence<sal_Int8> aData(n);
+            memset(aData.getArray(), 0, n);
             xOut->writeBytes(aData);
         #ifdef HSQLDB_DBG
             aDataLog.write( aData.getConstArray(), n );
