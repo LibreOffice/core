@@ -459,7 +459,7 @@ bool XclImpStream::StartNextRecord()
 
     /*  #i4266# Counter to ignore zero records (id==len==0) (i.e. the application
         "Crystal Report" writes zero records between other records) */
-    std::size_t nZeroRecCount = 5;
+    int nZeroRecCount = 5;
     bool bIsZeroRec = false;
 
     do
