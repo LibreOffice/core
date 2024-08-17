@@ -22,6 +22,9 @@
 #include <memory>
 
 #include <basic/sberrors.hxx>
+#include <basic/sbmod.hxx>
+
+#include <rtl/ustrbuf.hxx>
 
 // Single-line IF and Multiline IF
 
@@ -287,9 +290,43 @@ void SbiParser::With()
 
     pNode->SetType( SbxOBJECT );
 
-    OpenBlock( NIL, aVar.GetExprNode() );
+    // Generate a '{_with_library.module_offset} = aVar.GetExprNode()'
+    // Use the {_with_library.module_offset} in OpenBlock
+    // The name of the variable can't be used by user: a name like [{_with_library.module_offset}]
+    // is valid, but not without the square brackets
+
+    // Create the unique name
+    OUStringBuffer moduleName(aGen.GetModule().GetName());
+    for (auto parent = aGen.GetModule().GetParent(); parent; parent = parent->GetParent())
+        moduleName.insert(0, parent->GetName() + ".");
+
+    OUString uniqueName = "{_with_" + moduleName + "_" + OUString::number(aGen.GetOffset()) + "}";
+    while (pPool->Find(uniqueName) != nullptr)
+    {
+        static sal_Int64 unique_suffix;
+        uniqueName = "{_with_" + moduleName + "_" + OUString::number(aGen.GetOffset()) + "_"
+                     + OUString::number(unique_suffix++) + "}";
+    }
+    SbiSymDef* pWithParentDef = new SbiSymDef(uniqueName);
+    pWithParentDef->SetType(SbxOBJECT);
+    pPool->Add(pWithParentDef);
+
+    // DIM local variable: work with Option Explicit
+    aGen.Gen(SbiOpcode::LOCAL_, pWithParentDef->GetId(), pWithParentDef->GetType());
+
+    // Assignment
+    SbiExpression aWithParent(this, *pWithParentDef);
+    aWithParent.Gen();
+    aVar.Gen();
+    aGen.Gen(SbiOpcode::SET_);
+
+    OpenBlock(NIL, aWithParent.GetExprNode());
     StmntBlock( ENDWITH );
     CloseBlock();
+
+    // Erase {_with_library.module_offset}
+    aWithParent.Gen();
+    aGen.Gen(SbiOpcode::ERASE_);
 }
 
 // LOOP/NEXT/WEND without construct
