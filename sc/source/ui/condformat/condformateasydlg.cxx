@@ -64,6 +64,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mpViewData(pViewData)
     , mpDocument(&mpViewData->GetDocument())
     , mbIsManaged(false)
+    , mnFormatKey(0)
+    , mnEntryIndex(0)
     , mxNumberEntry(m_xBuilder->weld_entry(u"entryNumber"_ustr))
     , mxNumberEntry2(m_xBuilder->weld_entry(u"entryNumber2"_ustr))
     , mxAllInputs(m_xBuilder->weld_container(u"allInputs"_ustr))
