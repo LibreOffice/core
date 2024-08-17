@@ -1,3 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #include <docfunc.hxx>
 #include <condformateasydlg.hxx>
 #include <stlpool.hxx>
@@ -352,23 +361,24 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
                 break;
         }
 
-        ScFormatEntry* pEntry;
+        std::unique_ptr<ScFormatEntry> xEntry;
         if (meMode < ScConditionMode::Formula)
         {
-            pEntry = new ScCondFormatEntry(meMode, sExpression1, sExpression2, *mpDocument,
-                                           maPosition, mxStyles->get_active_text());
+            xEntry.reset(new ScCondFormatEntry(meMode, sExpression1, sExpression2, *mpDocument,
+                                               maPosition, mxStyles->get_active_text()));
         }
         else if (meMode >= ScConditionMode::Today && meMode < ScConditionMode::NONE)
         {
             ScCondDateFormatEntry entry(mpDocument);
             entry.SetDateType(GetScCondFormatDateType(meMode));
             entry.SetStyleName(mxStyles->get_active_text());
-            pEntry = new ScCondDateFormatEntry(mpDocument, entry);
+            xEntry.reset(new ScCondDateFormatEntry(mpDocument, entry));
         }
         else if (meMode == ScConditionMode::Formula)
         {
-            pEntry = new ScCondFormatEntry(ScConditionMode::Direct, msFormula, OUString(),
-                                           *mpDocument, maPosition, mxStyles->get_active_text());
+            xEntry.reset(new ScCondFormatEntry(ScConditionMode::Direct, msFormula, OUString(),
+                                               *mpDocument, maPosition,
+                                               mxStyles->get_active_text()));
         }
         else
         {
@@ -382,7 +392,7 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
                            mpViewData->GetDocument().GetAddressConvention(), maPosition.Tab());
         if ((nFlags & ScRefFlags::VALID) && !aRange.empty())
         {
-            pFormat->AddEntry(pEntry);
+            pFormat->AddEntry(xEntry.release());
             pFormat->SetRange(aRange);
             auto& rRangeList = pFormat->GetRange();
             mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(
@@ -400,3 +410,5 @@ IMPL_LINK_NOARG(ConditionalFormatEasyDialog, StyleSelectHdl, weld::ComboBox&, vo
 }
 
 } // namespace sc
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
