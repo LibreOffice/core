@@ -1275,6 +1275,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
     const ParaPortion* pPPortion = FindParaPortion( rPaM.GetNode() );
     assert(pPPortion);
     sal_Int32 nLine = pPPortion->GetLineNumber( rPaM.GetIndex() );
+    assert(nLine >= 0);
     const EditLine& rLine = pPPortion->GetLines()[nLine];
 
     tools::Long nX;
@@ -1289,6 +1290,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
     EditPaM aNewPaM( rPaM );
     if ( nLine )    // same paragraph
     {
+        assert(nLine >= 1);
         const EditLine& rPrevLine = pPPortion->GetLines()[nLine-1];
         aNewPaM.SetIndex(GetChar(*pPPortion, rPrevLine, nX));
         // If a previous automatically wrapped line, and one has to be exactly
