@@ -463,7 +463,7 @@ void RTFSprms::ensureCopyBeforeWrite()
         for (auto& rSprm : *m_pSprms)
             pClone->push_back(
                 std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
-        m_pSprms = pClone;
+        m_pSprms = std::move(pClone);
     }
 }
 

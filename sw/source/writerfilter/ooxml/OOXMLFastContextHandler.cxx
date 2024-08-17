@@ -1537,7 +1537,7 @@ OOXMLValue::Pointer_t fakeNoBorder()
     OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(0);
     pProps->add(NS_ooxml::LN_CT_Border_val, pVal, OOXMLProperty::ATTRIBUTE);
-    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pProps ));
+    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue(std::move(pProps)));
     return pValue;
 }
 }

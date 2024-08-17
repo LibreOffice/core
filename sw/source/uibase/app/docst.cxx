@@ -1014,7 +1014,7 @@ void SwDocShell::Edit(
 
         pDlg->StartExecuteAsync([bIsDefaultPage, bNew, nFamily, nSlot, nNewStyleUndoId,
                                  pApplyStyleHelper=std::move(pApplyStyleHelper),
-                                 pRequest, xTmp, this](sal_Int32 nResult){
+                                 pRequest=std::move(pRequest), xTmp, this](sal_Int32 nResult){
             if (RET_OK == nResult)
                 pApplyStyleHelper->apply();
 

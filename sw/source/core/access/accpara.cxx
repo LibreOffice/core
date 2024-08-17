@@ -1636,7 +1636,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         rPropVal.Value <<= fRatio;
         rPropVal.Handle = -1;
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
-        pValues[ aValues.getLength() - 1 ] = rPropVal;
+        pValues[ aValues.getLength() - 1 ] = std::move(rPropVal);
     }
 
     return aValues;

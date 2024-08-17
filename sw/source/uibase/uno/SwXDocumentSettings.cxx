@@ -487,7 +487,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 assert (! pPrinter->isDisposed() );
                 // set printer only once; in _postSetValues
                 mpPrinter.disposeAndClear();
-                mpPrinter = pPrinter;
+                mpPrinter = std::move(pPrinter);
             }
 
         }

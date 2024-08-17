@@ -4977,7 +4977,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                                               aTableOptions));
         m_xTable = xCurTable;
 
-        xSaveStruct.reset(new TableSaveStruct(xCurTable));
+        xSaveStruct.reset(new TableSaveStruct(std::move(xCurTable)));
 
         // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( HtmlTokenId::NONE );
