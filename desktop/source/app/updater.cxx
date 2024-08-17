@@ -37,8 +37,6 @@
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
-
-#include <curlinit.hxx>
 #include <comphelper/hash.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -547,8 +545,6 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 
     if (!curl)
         return std::string();
-
-    ::InitCurl_easy(curl.get());
 
     curl_easy_setopt(curl.get(), CURLOPT_URL, rURL.getStr());
     curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, kUserAgent);

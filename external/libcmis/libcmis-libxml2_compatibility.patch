@@ -1,0 +1,14 @@
+# -*- Mode: Diff -*-
+--- a/src/libcmis/oauth2-providers.cxx
++++ b/src/libcmis/oauth2-providers.cxx
+@@ -34,6 +34,10 @@
+ 
+ using namespace std;
+ 
++#if LIBXML_VERSION < 20621
++#define HTML_PARSE_RECOVER 0
++#endif
++
+ namespace {
+ 
+ // Encodes the given data according to the application/x-www-form-urlencoded format, see

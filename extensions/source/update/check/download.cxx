@@ -23,8 +23,6 @@
 
 #include <curl/curl.h>
 
-#include <curlinit.hxx>
-
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.h>
@@ -224,8 +222,6 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
 
     if( nullptr != pCURL )
     {
-        ::InitCurl_easy(pCURL);
-
         out.curl = pCURL;
 
         OString aURL(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));

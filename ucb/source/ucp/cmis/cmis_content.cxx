@@ -57,7 +57,6 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/macros.hxx>
 #include <sax/tools/converter.hxx>
-#include <curlinit.hxx>
 
 #include "auth_provider.hxx"
 #include "certvalidation_handler.hxx"
@@ -335,9 +334,6 @@ namespace cmis
             libcmis::CertValidationHandlerPtr certHandler(
                     new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
             libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
-
-            // init libcurl callback
-            libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);
 
             // Get the auth credentials
             AuthProvider aAuthProvider(xEnv, m_xIdentifier->getContentIdentifier(), m_aURL.getBindingUrl());

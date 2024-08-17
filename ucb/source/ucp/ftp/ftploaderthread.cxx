@@ -25,8 +25,6 @@
 #include "ftploaderthread.hxx"
 #include "curl.hxx"
 
-#include <curlinit.hxx>
-
 using namespace ftp;
 
 
@@ -77,8 +75,6 @@ CURL* FTPLoaderThread::handle() {
     if(!ret) {
         ret = curl_easy_init();
         if (ret != nullptr) {
-            ::InitCurl_easy(ret);
-
             // Make sure curl is not internally using environment variables like
             // "ftp_proxy":
             if (curl_easy_setopt(ret, CURLOPT_PROXY, "") != CURLE_OK) {
