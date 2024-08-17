@@ -64,7 +64,9 @@ namespace slideshow::internal {
         res.append(poly);
     }
 
-    return m_flipOnYAxis ? flipOnYAxis(res) : res;
+    if (m_flipOnYAxis)
+       return flipOnYAxis(res);
+    return res;
 }
 
 }
