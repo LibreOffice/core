@@ -89,17 +89,16 @@ class ScopedWritableGuard
 {
 public:
     ScopedWritableGuard(const SbxVariableRef& rVar, bool bMakeWritable)
-        : m_rVar(rVar)
-        , m_bReset(bMakeWritable && !rVar->CanWrite())
+        : m_rVar(bMakeWritable && !rVar->CanWrite() ? rVar : SbxVariableRef())
     {
-        if (m_bReset)
+        if (m_rVar)
         {
             m_rVar->SetFlag(SbxFlagBits::Write);
         }
     }
     ~ScopedWritableGuard()
     {
-        if (m_bReset)
+        if (m_rVar)
         {
             m_rVar->ResetFlag(SbxFlagBits::Write);
         }
@@ -107,7 +106,6 @@ public:
 
 private:
     SbxVariableRef m_rVar;
-    bool m_bReset;
 };
 }
 
