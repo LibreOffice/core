@@ -667,9 +667,9 @@ VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateD
     return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdTabTemplateDlg>(pParent, pDocShell, rStyleBase, pModel, pView));
 }
 
-VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
+VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(weld::Window* pParent, const SfxItemSet& rAttr, ::sd::View* pView )
 {
-    return VclPtr<SdAbstractSfxDialog_Impl>::Create(std::make_unique<SdActionDlg>(pParent, pAttr, pView));
+    return VclPtr<SdAbstractSfxDialog_Impl>::Create(std::make_unique<SdActionDlg>(pParent, rAttr, pView));
 }
 
 VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)

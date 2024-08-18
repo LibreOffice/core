@@ -407,7 +407,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
     virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg(weld::Window* pParent, ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
-    virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
+    virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet& rAttr, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;

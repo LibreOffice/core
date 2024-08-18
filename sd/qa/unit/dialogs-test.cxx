@@ -473,7 +473,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 17:
         {
-            // CreatSdActionDialog(const SfxItemSet* pAttr, ::sd::View* pView) override;
+            // CreatSdActionDialog(const SfxItemSet& rAttr, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             SfxItemSet aSet(pDrawDoc->GetItemPool(), svl::Items<ATTR_ANIMATION_START, ATTR_ACTION_END>);
@@ -495,7 +495,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
             pRetval = getSdAbstractDialogFactory()->CreatSdActionDialog(
                 getViewShell()->GetFrameWeld(),
-                &aSet,
+                aSet,
                 getDrawView());
             break;
         }

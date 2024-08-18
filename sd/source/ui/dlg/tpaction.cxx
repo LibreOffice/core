@@ -68,12 +68,12 @@ constexpr OUStringLiteral pStarDrawXMLContent( u"content.xml" );
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog
  */
-SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView)
-    : SfxSingleTabDialogController(pParent, pAttr, u"modules/simpress/ui/interactiondialog.ui"_ustr,
+SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet& rAttr, ::sd::View const * pView)
+    : SfxSingleTabDialogController(pParent, &rAttr, u"modules/simpress/ui/interactiondialog.ui"_ustr,
                                    u"InteractionDialog"_ustr)
     , m_xContent(m_xBuilder->weld_container(u"content"_ustr))
 {
-    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(m_xContent.get(), this, *pAttr);
+    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(m_xContent.get(), this, rAttr);
 
     // formerly in PageCreated
     static_cast<SdTPAction*>( xNewPage.get() )->SetView( pView );

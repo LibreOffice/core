@@ -446,7 +446,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         rReq.Ignore(); // the 'old' request is not relevant any more
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), &*aSet, mpView) );
+        VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), *aSet, mpView) );
         rtl::Reference<FuObjectAnimationParameters> xThis( this ); // avoid destruction within async processing
         pDlg->StartExecuteAsync([pDlg, xThis, xRequest=std::move(xRequest), aSet](sal_Int32 nResult){
             if (nResult == RET_OK) {
