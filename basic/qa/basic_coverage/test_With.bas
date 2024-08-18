@@ -45,6 +45,15 @@ Sub test_with
     '  Field values returned n = 0 s = , expected n = 5 s = bar
     TestUtil.AssertEqual(fields, "n = 5 s = bar", "Field values")
 
+    ' Make sure that With works with the original object, modifies it, and does not destroy
+    Dim foo_var As New foo
+    With foo_var
+        .n = 6
+        .s = "baz"
+    End With
+    fields = "n = " & foo_var.n & " s = " & foo_var.s
+    TestUtil.AssertEqual(fields, "n = 6 s = baz", "Field values of foo_var")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("test_with", Err, Error$, Erl)
