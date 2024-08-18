@@ -14,7 +14,7 @@ gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -s SUPPORT_LONGJMP=wasm
 gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 
-# Initial memory size and worker thread pool
+# Initial memory size
 gb_EMSCRIPTEN_LDFLAGS += -s TOTAL_MEMORY=1GB
 
 # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
