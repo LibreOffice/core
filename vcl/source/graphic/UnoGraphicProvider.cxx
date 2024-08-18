@@ -223,17 +223,12 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
-    uno::Reference< beans::XPropertySet > xRet;
-
     OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
 
     for( const auto& rMediaProperty : rMediaProperties )
     {
-        if (xRet.is())
-            break;
-
         const OUString   aName( rMediaProperty.Name );
         const uno::Any          aValue( rMediaProperty.Value );
 
@@ -253,6 +248,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
     SolarMutexGuard g;
 
+    uno::Reference<beans::XPropertySet> xRet;
     if( xIStm.is() )
     {
         rtl::Reference<unographic::GraphicDescriptor> pDescriptor = new unographic::GraphicDescriptor;
@@ -293,7 +289,6 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
 uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
 {
-    uno::Reference< ::graphic::XGraphic >   xRet;
     OUString                                aPath;
 
     uno::Reference< io::XInputStream > xIStm;
@@ -306,17 +301,12 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     for (const auto& rMediaProperty : rMediaProperties)
     {
-        if (xRet.is())
-            break;
-
         const OUString   aName( rMediaProperty.Name );
         const uno::Any          aValue( rMediaProperty.Value );
 
         if (aName == "URL")
         {
-            OUString aURL;
-            aValue >>= aURL;
-            aPath = aURL;
+            aValue >>= aPath;
         }
         else if (aName == "InputStream")
         {
@@ -365,6 +355,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     SolarMutexGuard g;
 
+    uno::Reference<::graphic::XGraphic> xRet;
     std::unique_ptr<SvStream> pIStm;
 
     if( xIStm.is() )
