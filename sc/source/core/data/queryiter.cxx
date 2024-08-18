@@ -952,7 +952,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
             bool bColDiff = nCol != nFoundCol;
             nCol = nFoundCol;
             nRow = nFoundRow;
-            maCurPos = aPosSave;
+            maCurPos = std::move(aPosSave);
             if (maParam.mbRangeLookup)
             {
                 // Verify that the found entry does not only fulfill the range

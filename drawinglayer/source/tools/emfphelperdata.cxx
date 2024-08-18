@@ -2088,7 +2088,7 @@ namespace emfplushelper
                                 case EmfPlusCombineModeComplement:
                                 {
                                     //TODO It is not correct and it should be fixed
-                                    aClippedPolyPolygon = polyPolygon;
+                                    aClippedPolyPolygon = std::move(polyPolygon);
                                     break;
                                 }
                                 case EmfPlusCombineModeExclude:

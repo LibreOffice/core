@@ -475,8 +475,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
             NotebookBarAddonsItem aNotebookBarAddonsItem;
             NotebookbarAddonValues(aImageValues , aExtensionValues);
-            aNotebookBarAddonsItem.aAddonValues = aExtensionValues;
-            aNotebookBarAddonsItem.aImageValues = aImageValues;
+            aNotebookBarAddonsItem.aAddonValues = std::move(aExtensionValues);
+            aNotebookBarAddonsItem.aImageValues = std::move(aImageValues);
 
             if (bIsLOK)
             {

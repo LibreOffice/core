@@ -100,7 +100,7 @@ namespace sd::slidesorter::cache {
     if (sCompactionPolicy == sNone)
         pCompactor.reset(new NoCacheCompaction(rCache,nMaximalCacheSize));
     else // default: "Compress"
-        pCompactor.reset(new CacheCompactionByCompression(rCache,nMaximalCacheSize,pCompressor));
+        pCompactor.reset(new CacheCompactionByCompression(rCache, nMaximalCacheSize, std::move(pCompressor)));
 
     return pCompactor;
 }

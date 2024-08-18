@@ -191,7 +191,9 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     else
         res = calcSnake(t);
 
-    return m_flipOnYAxis ? flipOnYAxis(res) : res;
+    if (m_flipOnYAxis)
+        return flipOnYAxis(res);
+    return res;
 }
 
 ::basegfx::B2DPolyPolygon ParallelSnakesWipe::operator () ( double t )
@@ -227,10 +229,15 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
         aTransform.translate( 0.5, 0.5 );
         half.transform( aTransform );
         res.append( flipOnYAxis(half) );
-        res.append( m_opposite ? flipOnXAxis(half) : half );
+        if (m_opposite)
+            res.append(flipOnXAxis(half));
+        else
+            res.append(half);
     }
 
-    return m_flipOnYAxis ? flipOnYAxis(res) : res;
+    if (m_flipOnYAxis)
+        return flipOnYAxis(res);
+    return res;
 }
 
 }

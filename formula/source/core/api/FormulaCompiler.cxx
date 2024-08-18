@@ -1547,7 +1547,7 @@ bool FormulaCompiler::GetToken()
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
-                mpLastToken = mpToken = pSpacesToken;
+                mpLastToken = mpToken = std::move(pSpacesToken);
                 maArrIterator.StepBack();     // step back from next non-spaces token
                 return true;
             }

@@ -397,7 +397,7 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
     {
         NotifyEvent( EventType::GOT_SELECTION, aSelectedOID );
     }
-    m_aCurrentSelectionOID = aSelectedOID;
+    m_aCurrentSelectionOID = std::move(aSelectedOID);
 }
 
 // XEventListener

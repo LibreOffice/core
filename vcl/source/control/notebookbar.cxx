@@ -369,7 +369,7 @@ void NotebookBar::UpdatePersonaSettings()
     aStyleSet.SetToolTextColor(aTextColor);
 
     aAllSettings.SetStyleSettings(aStyleSet);
-    PersonaSettings = aAllSettings;
+    PersonaSettings = std::move(aAllSettings);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

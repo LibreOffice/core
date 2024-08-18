@@ -766,7 +766,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     DBG_ASSERT( GetMediaDescr().size() == aAcceptedArgs.size(),
                 "Unacceptable parameters are provided in Save request!\n" );
     if ( GetMediaDescr().size() != aAcceptedArgs.size() )
-        GetMediaDescr() = aAcceptedArgs;
+        GetMediaDescr() = std::move(aAcceptedArgs);
 
     // check that the old filter is acceptable
     return CheckFilter( GetDocProps().getUnpackedValueOrDefault(aFilterNameString, OUString()) );

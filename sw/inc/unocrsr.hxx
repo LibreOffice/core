@@ -155,7 +155,7 @@ namespace sw
             }
             explicit operator bool() const
                 { return static_cast<bool>(m_pCursor); }
-            void reset(std::shared_ptr<SwUnoCursor> pNew)
+            void reset(const std::shared_ptr<SwUnoCursor>& pNew)
             {
                 if(pNew)
                     StartListening(pNew->m_aNotifier);

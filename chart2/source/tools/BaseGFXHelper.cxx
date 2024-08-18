@@ -228,7 +228,7 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix )
     B3DTuple aR( GetRotationFromMatrix( rB3DMatrix ) );
     ::basegfx::B3DHomMatrix aRotationMatrix;
     aRotationMatrix.rotate(aR.getX(),aR.getY(),aR.getZ());
-    rB3DMatrix = aRotationMatrix;
+    rB3DMatrix = std::move(aRotationMatrix);
 }
 
 } //  namespace chart::BaseGFXHelper

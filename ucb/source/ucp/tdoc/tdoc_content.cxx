@@ -1075,10 +1075,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = getXWeak();
     aEvent.Further        = false;
-    //    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-    //    aEvent.OldValue       =
-    //    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1297,7 +1294,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= m_aProps.getTitle();
 
-        aChanges.getArray()[ nChanged ] = aEvent;
+        aChanges.getArray()[ nChanged ] = std::move(aEvent);
         nChanged++;
     }
 

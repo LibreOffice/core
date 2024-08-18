@@ -599,7 +599,7 @@ void ImplEventAttacherManager::attach(std::unique_lock<std::mutex>& l, sal_Int32
         aListener.ListenerType = rEvent.ListenerType;
         aListener.EventMethod = rEvent.EventMethod;
         aListener.AddListenerParam = rEvent.AddListenerParam;
-        p[i++] = aListener;
+        p[i++] = std::move(aListener);
     }
 
     try

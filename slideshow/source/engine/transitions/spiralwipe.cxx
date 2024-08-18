@@ -85,7 +85,9 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     ::basegfx::B2DPolyPolygon innerSpiral( calcNegSpiral( 1.0 - t ) );
     innerSpiral.flip();
     res.append(innerSpiral);
-    return m_flipOnYAxis ? flipOnYAxis(res) : res;
+    if (m_flipOnYAxis)
+        return flipOnYAxis(res);
+    return res;
 }
 
 ::basegfx::B2DPolyPolygon BoxSnakesWipe::operator () ( double t )
@@ -112,7 +114,9 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
         res.append( flipOnXAxis(innerSpiral) );
     }
 
-    return m_flipOnYAxis ? flipOnYAxis(res) : res;
+    if (m_flipOnYAxis)
+        return flipOnYAxis(res);
+    return res;
 }
 
 }

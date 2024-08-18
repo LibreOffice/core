@@ -8729,7 +8729,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             aValue >>= titleStr;
                             titleStr += rResult;
                             propertyVal.Value <<= titleStr;
-                            aValues.getArray()[nTitleFoundIndex] = propertyVal;
+                            aValues.getArray()[nTitleFoundIndex] = std::move(propertyVal);
                         }
                         else
                         {

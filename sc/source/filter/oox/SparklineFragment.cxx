@@ -250,7 +250,7 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
                     }
                 }
                 else if (getCurrentElement() == XM_TOKEN(f))
-                    rLastSparkline.m_aInputRange = aRange;
+                    rLastSparkline.m_aInputRange = std::move(aRange);
             }
         }
     }

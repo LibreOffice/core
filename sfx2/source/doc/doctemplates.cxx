@@ -1972,7 +1972,7 @@ sal_Bool SfxDocTplService::addTemplate( const OUString& rGroupName,
     {
         if ( !bDocHasTitle )
         {
-            INetURLObject aNewTmpObj( aNewTemplateTargetObj );
+            INetURLObject aNewTmpObj(std::move(aNewTemplateTargetObj));
             aNewTmpObj.CutExtension();
             bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) == rTemplateName );
         }
