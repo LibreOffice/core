@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
-#include <mutex>
-
 namespace com::sun::star {
     namespace io { class XSeekable; class XInputStream; }
 }
