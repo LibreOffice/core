@@ -102,6 +102,18 @@ Current Qt fails to start the demo webserver: <https://bugreports.qt.io/browse/Q
 
 Use `emrun --serve_after_close` to run Qt WASM demos.
 
+Qt builds some 3rd-party libraries that it brings along (e.g., qt5/qtbase/src/3rdparty/freetype) and
+compiles its own code against the C/C++ include files of those 3rd-party libraries.  But when we
+link LO, we link against our own versions of those libraries' archives (e.g.,
+workdir/UnpackedTarball/freetype/instdir/lib/libfreetype.a), not against the Qt ones (e.g.,
+$QT5DIR/lib/libqtfreetype.a).  This mismatch between the include files that Qt is compiled against,
+vs. the archive actually linked in, seems to not cause issues in practice.  (If it did, we could
+either try to make both Qt and LO link against e.g. -sUSE_FREETYPE from emscripten-ports, or we
+could move Qt from a prequisite to a proper external/qt5 LO module built during the LO build, and
+hack its configuration to build against LO's exernal/freetype etc.  The former approach, building Qt
+with -sUSE_FREETYPE, is even tried in qtbase/src/gui/configure.json, but apparently fails for
+reasons not studied further yet, cf. Qt's config.log.)
+
 ### Setup LO
 
 `autogen.sh` is patched to use emconfigure. That basically sets various
