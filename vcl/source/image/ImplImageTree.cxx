@@ -179,6 +179,12 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     else if (rPath.endsWith(".svg"))
     {
         rParameters.mbWriteImageToCache = true; // We always want to cache a SVG image
+        #ifdef _WIN32
+           // tdf#153421. Do not scale, individual crop handles are created from it using pixel unit.
+           if (rPath.endsWith("cropmarkers.svg"))
+               vcl::bitmap::loadFromSvg(*xStream, rPath, rParameters.mrBitmap, 1.0);
+           else
+        #endif
         vcl::bitmap::loadFromSvg(*xStream, rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
 
         if (bConvertToDarkTheme)
