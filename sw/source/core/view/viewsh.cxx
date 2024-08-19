@@ -1805,15 +1805,10 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         if ( oRegion && aAction.IsBrowseActionStop() )
         {
             //only of interest when something has changed in the visible range
-            bool bStop = true;
-            for ( size_t i = 0; i < oRegion->size(); ++i )
-            {
-                const SwRect &rTmp = (*oRegion)[i];
-                bStop = rTmp.Overlaps( VisArea() );
-                if ( !bStop )
-                    break;
-            }
-            if ( bStop )
+            bool bAllNoOverlap = std::all_of(oRegion->begin(), oRegion->end(), [this](const SwRect &rTmp) {
+                return rTmp.Overlaps( VisArea() );
+            });
+            if ( bAllNoOverlap )
                 oRegion.reset();
         }
 
@@ -1825,8 +1820,8 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             if ( !oRegion->empty() )
             {
                 SwRegionRects aRegion( rRect );
-                for ( size_t i = 0; i < oRegion->size(); ++i )
-                {   const SwRect &rTmp = (*oRegion)[i];
+                for ( const SwRect &rTmp : *oRegion )
+                {
                     if ( !rRect.Contains( rTmp ) )
                     {
                         InvalidateWindows( rTmp );
