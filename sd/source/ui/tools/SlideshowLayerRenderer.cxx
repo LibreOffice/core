@@ -20,24 +20,70 @@
 #include <vcl/virdev.hxx>
 #include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
+#include <editeng/editeng.hxx>
 
 namespace sd
 {
-namespace
+struct RenderOptions
 {
-struct RedirectorOptions
-{
+    bool mbIncludeBackground = true;
     bool mbSkipMainPageObjects = false;
     bool mbSkipMasterPageObjects = false;
 };
 
+struct RenderContext
+{
+    SdrModel& mrModel;
+    SdrPage& mrPage;
+
+    EEControlBits mnSavedControlBits;
+    ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
+
+    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize)
+        : mrModel(rModel)
+        , mrPage(rPage)
+        , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
+    {
+        // Turn of spelling
+        SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
+        mnSavedControlBits = rOutliner.GetControlWord();
+        rOutliner.SetControlWord(mnSavedControlBits & ~EEControlBits::ONLINESPELLING);
+
+        maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, Fraction(1.0),
+                                                                   Point(), pBuffer);
+        Size aPageSize(mrPage.GetSize());
+
+        MapMode aMapMode(MapUnit::Map100thMM);
+        const Fraction aFracX(rSlideSize.Width(),
+                              maVirtualDevice->LogicToPixel(aPageSize, aMapMode).Width());
+        aMapMode.SetScaleX(aFracX);
+
+        const Fraction aFracY(rSlideSize.Height(),
+                              maVirtualDevice->LogicToPixel(aPageSize, aMapMode).Height());
+        aMapMode.SetScaleY(aFracY);
+
+        maVirtualDevice->SetMapMode(aMapMode);
+    }
+
+    ~RenderContext()
+    {
+        // Restore spelling
+        SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
+        rOutliner.SetControlWord(mnSavedControlBits);
+    }
+};
+
+namespace
+{
 class ObjectRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 protected:
-    RedirectorOptions maOptions;
+    RenderOptions maOptions;
 
 public:
-    ObjectRedirector(RedirectorOptions const& rOptions)
+    ObjectRedirector(RenderOptions const& rOptions)
         : maOptions(rOptions)
     {
     }
@@ -115,34 +161,10 @@ Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePi
     return maSlideSize;
 }
 
-bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJsonMsg)
+void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext,
+                                               RenderOptions const& rRenderOptions)
 {
-    SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
-    const EEControlBits nOldControlBits(rOutliner.GetControlWord());
-    EEControlBits nControlBits = nOldControlBits & ~EEControlBits::ONLINESPELLING;
-    rOutliner.SetControlWord(nControlBits);
-
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(maSlideSize, Fraction(1.0), Point(),
-                                                       pBuffer);
-
-    Point aPoint;
-    Size aPageSize(mrPage.GetSize());
-
-    MapMode aMapMode(MapUnit::Map100thMM);
-    const Fraction aFracX(maSlideSize.Width(), pDevice->LogicToPixel(aPageSize, aMapMode).Width());
-    aMapMode.SetScaleX(aFracX);
-
-    const Fraction aFracY(maSlideSize.Height(),
-                          pDevice->LogicToPixel(aPageSize, aMapMode).Height());
-    aMapMode.SetScaleY(aFracY);
-
-    pDevice->SetMapMode(aMapMode);
-
-    SdrView aView(mrModel, pDevice);
-
+    SdrView aView(mrModel, rRenderContext.maVirtualDevice);
     aView.SetPageVisible(false);
     aView.SetPageShadowVisible(false);
     aView.SetPageBorderVisible(false);
@@ -150,12 +172,24 @@ bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJson
     aView.SetGridVisible(false);
     aView.SetHlplVisible(false);
     aView.SetGlueVisible(false);
-    aView.setHideBackground(false);
+    aView.setHideBackground(!rRenderOptions.mbIncludeBackground);
     aView.ShowSdrPage(&mrPage);
 
+    Size aPageSize(mrPage.GetSize());
+    Point aPoint;
+
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    ObjectRedirector aRedirector({ .mbSkipMainPageObjects = true });
-    aView.CompleteRedraw(pDevice, aRegion, &aRedirector);
+    ObjectRedirector aRedirector(rRenderOptions);
+    aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, &aRedirector);
+}
+
+bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJsonMsg)
+{
+    RenderOptions aRenderOptions;
+    aRenderOptions.mbSkipMainPageObjects = true;
+
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
+    createViewAndDraw(aRenderContext, aRenderOptions);
 
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", "MasterPage");
@@ -169,52 +203,16 @@ bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJson
     }
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
 
-    rOutliner.SetControlWord(nOldControlBits);
-
     return true;
 }
 
 bool SlideshowLayerRenderer::renderSlide(unsigned char* pBuffer, OString& rJsonMsg)
 {
-    SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
-    const EEControlBits nOldControlBits(rOutliner.GetControlWord());
-    EEControlBits nControlBits = nOldControlBits & ~EEControlBits::ONLINESPELLING;
-    rOutliner.SetControlWord(nControlBits);
+    RenderOptions aRenderOptions;
+    aRenderOptions.mbSkipMasterPageObjects = true;
 
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(maSlideSize, Fraction(1.0), Point(),
-                                                       pBuffer);
-
-    Point aPoint;
-    Size aPageSize(mrPage.GetSize());
-
-    MapMode aMapMode(MapUnit::Map100thMM);
-    const Fraction aFracX(maSlideSize.Width(), pDevice->LogicToPixel(aPageSize, aMapMode).Width());
-    aMapMode.SetScaleX(aFracX);
-
-    const Fraction aFracY(maSlideSize.Height(),
-                          pDevice->LogicToPixel(aPageSize, aMapMode).Height());
-    aMapMode.SetScaleY(aFracY);
-
-    pDevice->SetMapMode(aMapMode);
-
-    SdrView aView(mrModel, pDevice);
-
-    aView.SetPageVisible(false);
-    aView.SetPageShadowVisible(false);
-    aView.SetPageBorderVisible(false);
-    aView.SetBordVisible(false);
-    aView.SetGridVisible(false);
-    aView.SetHlplVisible(false);
-    aView.SetGlueVisible(false);
-    aView.setHideBackground(true);
-    aView.ShowSdrPage(&mrPage);
-
-    vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    ObjectRedirector aRedirector({ .mbSkipMasterPageObjects = true });
-    aView.CompleteRedraw(pDevice, aRegion, &aRedirector);
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
+    createViewAndDraw(aRenderContext, aRenderOptions);
 
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", "DrawPage");
@@ -227,8 +225,6 @@ bool SlideshowLayerRenderer::renderSlide(unsigned char* pBuffer, OString& rJsonM
         aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
     }
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
-
-    rOutliner.SetControlWord(nOldControlBits);
 
     return true;
 }
