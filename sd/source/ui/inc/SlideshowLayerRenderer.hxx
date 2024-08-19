@@ -21,6 +21,9 @@ class Size;
 
 namespace sd
 {
+struct RenderContext;
+struct RenderOptions;
+
 enum class SlideRenderStage
 {
     Master,
@@ -31,10 +34,13 @@ class SD_DLLPUBLIC SlideshowLayerRenderer
 {
     SdrPage& mrPage;
     SdrModel& mrModel;
-
     Size maSlideSize;
 
     std::deque<SlideRenderStage> maRenderStages;
+
+    void cleanupRendering(RenderContext& rRenderContext);
+    void setupRendering(unsigned char* pBuffer, RenderContext& rRenderContext);
+    void createViewAndDraw(RenderContext& rRenderContext, RenderOptions const& rRenderOptions);
 
 public:
     SlideshowLayerRenderer(SdrPage& rPage);
