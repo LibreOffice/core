@@ -65,8 +65,7 @@ protected:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     static sk_sp<SkTypeface> createDirectWriteTypeface(const WinFontInstance* pWinFont);
     static void initFontInfo();
-    inline static sal::systools::COMReference<IDWriteFontSetBuilder> dwriteFontSetBuilder;
-    inline static sal::systools::COMReference<IDWriteFontCollection1> dwritePrivateCollection;
+    inline static sal::systools::COMReference<IDWriteFontCollection> dwritePrivateCollection;
     inline static sk_sp<SkFontMgr> dwriteFontMgr;
     inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
