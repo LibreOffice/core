@@ -1140,6 +1140,8 @@ SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WindowType::SPLITWINDOW, "vcl::SplitWindow maLayoutIdle" )
 {
     ImplInit( pParent, nStyle );
+    // ensure there is sufficient border reserved to fit the splitter into
+    set_border_width(SPLITWIN_SPLITSIZE);
 }
 
 SplitWindow::~SplitWindow()
