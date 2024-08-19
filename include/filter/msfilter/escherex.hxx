@@ -824,7 +824,8 @@ public:
         // creates all necessary CustomShape properties, this includes also Text-, Shadow-, Fill-, and LineProperties
     void        CreateCustomShapeProperties(
                     const MSO_SPT eShapeType,
-                    const css::uno::Reference< css::drawing::XShape > &
+                    const css::uno::Reference< css::drawing::XShape > &,
+                    bool bOOXML = false
                 );
     bool        IsFontWork() const;
 

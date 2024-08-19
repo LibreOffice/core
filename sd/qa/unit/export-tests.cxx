@@ -14,6 +14,7 @@
 #include <sdpage.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
@@ -30,6 +31,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -197,6 +199,48 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparentBackground)
 
     const SdrTextObj* pObj2 = DynCastSdrTextObj(pPage->GetObj(1));
     checkFontAttributes<Color, SvxColorItem>(pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf162283)
+{
+    createSdImpressDoc("pptx/tdf162283.pptx");
+    saveAndReload(u"MS PowerPoint 97"_ustr);
+
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+
+    CPPUNIT_ASSERT(xPropSet.is());
+    auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    auto aGeomPropVec
+        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
+
+    sal_Int32 nWidth = 0, nHeight = 0, nAdjValue = 0;
+
+    auto aIt1 = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [](const beans::PropertyValue& rValue) { return rValue.Name == u"ViewBox"_ustr; });
+    if (aIt1 != aGeomPropVec.end())
+    {
+        awt::Rectangle aViewBox;
+        aIt1->Value >>= aViewBox;
+        nWidth = aViewBox.Width;
+        nHeight = aViewBox.Height;
+    }
+
+    auto aIt2 = std::find_if(
+        aGeomPropVec.begin(), aGeomPropVec.end(),
+        [](const beans::PropertyValue& rValue) { return rValue.Name == u"AdjustmentValues"_ustr; });
+    if (aIt2 != aGeomPropVec.end())
+    {
+        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
+        aIt2->Value >>= aAdjustment;
+        aAdjustment[0].Value >>= nAdjValue;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), nWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), nHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6688), nAdjValue);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testDecorative)

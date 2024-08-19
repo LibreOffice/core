@@ -2578,7 +2578,7 @@ bool EscherPropertyContainer::GetAdjustmentValue( const drawing::EnhancedCustomS
     return true;
 }
 
-void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeType, const uno::Reference< drawing::XShape > & rXShape )
+void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeType, const uno::Reference< drawing::XShape > & rXShape, bool bOOXML )
 {
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( !aXPropSet.is() )
@@ -2618,6 +2618,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             rSdrObjCustomShape,
             eShapeType));
 
+    bool bUseDefaultObject = false;
+    if (bOOXML)
+    {
+        const mso_CustomShape* pDefCustomShape = GetCustomShapeContent(eShapeType);
+        if(pDefCustomShape)
+            bUseDefaultObject = true;
+    }
+
     // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
     std::vector< EnhancedCustomShapeEquation >  aEquations;
     std::vector< sal_Int32 >                    aEquationOrder;
@@ -2632,7 +2640,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
         if ( rProp.Name == sViewBox )
         {
-            if ( !bIsDefaultObject )
+            if (!bIsDefaultObject && !bUseDefaultObject)
             {
                 awt::Rectangle aViewBox;
                 if ( rProp.Value >>= aViewBox )
@@ -2949,7 +2957,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         }
         else if ( rProp.Name == sEquations )
         {
-            if ( !bIsDefaultObject )
+            if (!bIsDefaultObject && !bUseDefaultObject)
             {
                 sal_uInt16 nElements = static_cast<sal_uInt16>(aEquations.size());
                 if ( nElements )
@@ -3039,7 +3047,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "Coordinates" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             aPathCoordinatesProp = rrProp.Value;
                             bPathCoordinatesProp = true;
@@ -3047,7 +3055,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "GluePoints" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                             if ( rrProp.Value >>= aGluePoints )
@@ -3087,7 +3095,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "Segments" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
                             if ( rrProp.Value >>= aSegments )
@@ -3207,7 +3215,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "StretchX" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             sal_Int32 nStretchX = 0;
                             if ( rrProp.Value >>= nStretchX )
@@ -3216,7 +3224,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "StretchY" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             sal_Int32 nStretchY = 0;
                             if ( rrProp.Value >>= nStretchY )
@@ -3225,7 +3233,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                     else if ( rrProp.Name == "TextFrames" )
                     {
-                        if ( !bIsDefaultObject )
+                        if (!bIsDefaultObject && !bUseDefaultObject)
                         {
                             uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
                             if ( rrProp.Value >>= aPathTextFrames )
@@ -3470,7 +3478,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         }
         else if ( rProp.Name == sHandles )
         {
-            if ( !bIsDefaultObject )
+            if (!bIsDefaultObject && !bUseDefaultObject)
             {
                 bPredefinedHandlesUsed = false;
                 if ( rProp.Value >>= aHandlesPropSeq )
@@ -3657,7 +3665,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
             for ( k = 0; k < nAdjustmentValues; k++ )
                 if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
+                {
+                    if (bUseDefaultObject)
+                        nValue = 21600 * (nValue / 100000.00);
+
                     AddOpt( static_cast<sal_uInt16>( DFF_Prop_adjustValue + k ), static_cast<sal_uInt32>(nValue) );
+                }
         }
     }
     if( !bPathCoordinatesProp )
