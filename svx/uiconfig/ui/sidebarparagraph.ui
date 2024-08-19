@@ -794,8 +794,9 @@
                   </child>
                 </object>
                 <packing>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">3</property>
+                  <property name="expand">False</property>
+                  <property name="fill">True</property>
+                  <property name="position">0</property>
                 </packing>
               </child>
           </object>
