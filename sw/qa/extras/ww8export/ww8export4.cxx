@@ -560,6 +560,49 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(nFlyLeft), static_cast<double>(nFlyLeftAfter), 2.0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf56738)
+{
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+        // make sure we get to the correct field to test
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<text::XTextField> xField;
+        xField.set(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xField->getPresentation(false));
+
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        xField.set(xFields->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xField->getPresentation(false));
+
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        xField.set(xFields->nextElement(), uno::UNO_QUERY_THROW);
+        OUString sExpComment1(u"Como eu vou saber se é a USG é anterior a 20s????"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sExpComment1, getProperty<OUString>(xField, u"Content"_ustr));
+
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        xField.set(xFields->nextElement(), uno::UNO_QUERY_THROW);
+
+        OUString sExpComment(u"Não sei se é relevante esta pergunta. O que eu queria saber é se o médico ate\
+nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
+
+        // Without the fix in place this fails with
+        // Expected: Não sei se é relevante esta pergunta. O que eu queria saber é
+        //           se o médico atende muito parto na água. Tb posso fazer porcentagem de atendimento...
+        // Actual:   N縊 sei se �relevante esta pergunta. O que eu queria saber �
+        //           se o m馘ico atende muito parto na 疊ua. Tb posso fazer porcentagem de atendimento...
+        // i.e. the display characters of the second comment were getting re-intrepeted from Latin-1 to Shift-Js
+        CPPUNIT_ASSERT_EQUAL(sExpComment, getProperty<OUString>(xField, u"Content"_ustr));
+    };
+
+    // make sure everything survives roundtrip
+    createSwDoc("tdf56738.doc");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
