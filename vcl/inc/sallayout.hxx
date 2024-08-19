@@ -90,6 +90,8 @@ public:
 
     SAL_DLLPRIVATE virtual         ~MultiSalLayout() override;
 
+    virtual void drawSalLayout(void* /*pSurface*/, const basegfx::BColor& /*rTextColor*/, bool /*bAntiAliased*/) const override;
+
 private:
                     MultiSalLayout( const MultiSalLayout& ) = delete;
                     MultiSalLayout& operator=( const MultiSalLayout& ) = delete;

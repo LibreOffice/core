@@ -1277,4 +1277,12 @@ SalLayoutGlyphs MultiSalLayout::GetGlyphs() const
     return glyphs;
 }
 
+void MultiSalLayout::drawSalLayout(void* pSurface, const basegfx::BColor& rTextColor, bool bAntiAliased) const
+{
+    for( int i = mnLevel; --i >= 0; )
+    {
+        Application::GetDefaultDevice()->GetGraphics()->DrawSalLayout(*mpLayouts[ i ], pSurface, rTextColor, bAntiAliased);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
