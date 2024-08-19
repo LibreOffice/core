@@ -93,7 +93,6 @@ private:
     std::unique_ptr<weld::Toolbar> mxTBxIndent;
     std::unique_ptr<ToolbarUnoDispatcher> mxIndentDispatch;
     std::unique_ptr<weld::Toolbar> mxTBxHyphenation;
-    std::unique_ptr<ToolbarUnoDispatcher> mxHyphenationDispatch;
 
     //Paragraph spacing
     std::optional<SvxRelativeField> mxTopDist;
@@ -117,13 +116,6 @@ private:
     std::optional<SvxRelativeField> mxWordLength;
     std::optional<SvxRelativeField> mxZone;
     bool mbUpdatingHyphenateButtons;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateCapsBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateLastWordBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateLastFullLineBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateColumnBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenatePageBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateSpreadBtn;
-    std::unique_ptr<weld::ToggleButton> mxHyphenateBtn;
 
     // Data Member
     tools::Long                maTxtLeft;
@@ -154,7 +146,7 @@ private:
     DECL_LINK(ModifyIndentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ULSpaceHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(HyphenationHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(HyphenationToggleButtonHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(HyphenationToggleButtonHdl_Impl, const OUString&, void);
 
     void StateChangedIndentImpl( SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState );

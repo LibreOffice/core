@@ -211,21 +211,6 @@ void ParaPropertyPanel::InitToolBoxHyphenation()
     mxWordLength->connect_value_changed(aLink);
     mxZone->connect_value_changed(aLink);
     m_eHyphenZoneUnit = m_aZoneControl.GetCoreMetric();
-    Link<weld::Toggleable&,void> aLinkToggled = LINK( this, ParaPropertyPanel, HyphenationToggleButtonHdl_Impl );
-    if ( mxHyphenateCapsBtn )
-        mxHyphenateCapsBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenateLastWordBtn )
-        mxHyphenateLastWordBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenateLastFullLineBtn )
-         mxHyphenateLastFullLineBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenateColumnBtn )
-        mxHyphenateColumnBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenatePageBtn )
-        mxHyphenatePageBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenateSpreadBtn )
-        mxHyphenateSpreadBtn->connect_toggled(aLinkToggled);
-    if ( mxHyphenateBtn )
-        mxHyphenateBtn->connect_toggled(aLinkToggled);
 }
 
 void ParaPropertyPanel::initial()
@@ -295,7 +280,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, HyphenationHdl_Impl, weld::MetricSpinButton&
 }
 
 // for hyphenation toggle buttons
-IMPL_LINK( ParaPropertyPanel, HyphenationToggleButtonHdl_Impl, weld::Toggleable&, rBtn, void)
+IMPL_LINK( ParaPropertyPanel, HyphenationToggleButtonHdl_Impl, const OUString&, rBtn, void)
 {
     if ( mbUpdatingHyphenateButtons )
         return;
@@ -307,22 +292,22 @@ IMPL_LINK( ParaPropertyPanel, HyphenationToggleButtonHdl_Impl, weld::Toggleable&
     sal_Int16 nButton = 0;
     bool bEnabled = false;
     // get the correct getKeepType(), if clicked on one of the Hyphenate Across icons
-    if( &rBtn == mxHyphenateSpreadBtn.get() )
+    if(  rBtn == "HyphenateSpread" )
     {
         nButton = 4;
         bEnabled = mxTBxHyphenation->get_item_active("HyphenateSpread");
     }
-    else if( &rBtn == mxHyphenatePageBtn.get() )
+    else if( rBtn == "HyphenatePage" )
     {
         nButton = 3;
         bEnabled = mxTBxHyphenation->get_item_active("HyphenatePage");
     }
-    else if( &rBtn == mxHyphenateColumnBtn.get() )
+    else if( rBtn == "HyphenateColumn" )
     {
         nButton = 2;
         bEnabled = mxTBxHyphenation->get_item_active("HyphenateColumn");
     }
-    else if( &rBtn == mxHyphenateLastFullLineBtn.get() )
+    else if( rBtn == "HyphenateLastFullLine" )
     {
         nButton = 1;
         bEnabled = mxTBxHyphenation->get_item_active("HyphenateLastFullLine");
@@ -601,7 +586,6 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       mxIndentDispatch(new ToolbarUnoDispatcher(*mxTBxIndent, *m_xBuilder, rxFrame)),
       //Hyphenation
       mxTBxHyphenation(m_xBuilder->weld_toolbar(u"hyphenation"_ustr)),
-      mxHyphenationDispatch(new ToolbarUnoDispatcher(*mxTBxHyphenation, *m_xBuilder, rxFrame)),
       //Paragraph spacing
       mxTopDist(m_xBuilder->weld_metric_spin_button(u"aboveparaspacing"_ustr, FieldUnit::CM)),
       mxBottomDist(m_xBuilder->weld_metric_spin_button(u"belowparaspacing"_ustr, FieldUnit::CM)),
@@ -622,13 +606,6 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       mxWordLength(m_xBuilder->weld_metric_spin_button(u"wordlength"_ustr, FieldUnit::CHAR)),
       mxZone(m_xBuilder->weld_metric_spin_button(u"zone"_ustr, FieldUnit::CM)),
       mbUpdatingHyphenateButtons(false),
-      mxHyphenateCapsBtn(m_xBuilder->weld_toggle_button(u"HyphenateCaps"_ustr)),
-      mxHyphenateLastWordBtn(m_xBuilder->weld_toggle_button(u"HyphenateLastWord"_ustr)),
-      mxHyphenateLastFullLineBtn(m_xBuilder->weld_toggle_button(u"HyphenateLastFullLine"_ustr)),
-      mxHyphenateColumnBtn(m_xBuilder->weld_toggle_button(u"HyphenateColumn"_ustr)),
-      mxHyphenatePageBtn(m_xBuilder->weld_toggle_button(u"HyphenatePage"_ustr)),
-      mxHyphenateSpreadBtn(m_xBuilder->weld_toggle_button(u"HyphenateSpread"_ustr)),
-      mxHyphenateBtn(m_xBuilder->weld_toggle_button(u"Hyphenate"_ustr)),
       maTxtLeft (0),
       maUpper (0),
       maLower (0),
@@ -650,6 +627,7 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       mpBindings(pBindings),
       mxSidebar(std::move(xSidebar))
 {
+    mxTBxHyphenation->connect_clicked(LINK( this, ParaPropertyPanel, HyphenationToggleButtonHdl_Impl));
     // tdf#130197 We want to give this toolbar a width as if it had 5 entries
     // (the parent grid has homogeneous width set so both columns will have the
     // same width).  This ParaPropertyPanel is a default panel in writer, so
@@ -695,7 +673,6 @@ ParaPropertyPanel::~ParaPropertyPanel()
     mxIndentDispatch.reset();
     mxTBxIndent.reset();
 
-    mxHyphenationDispatch.reset();
     mxTBxHyphenation.reset();
 
     mxTopDist.reset();
