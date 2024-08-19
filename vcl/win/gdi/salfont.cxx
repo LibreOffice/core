@@ -719,10 +719,10 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
     // disable antialiasing if requested
     if ( rFont.mbNonAntialiased )
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
-    else if (bAntiAliased || Application::GetSettings().GetStyleSettings().GetUseFontAAFromSystem())
-        rLogFont.lfQuality = DEFAULT_QUALITY;
+    else if (Application::GetSettings().GetStyleSettings().GetUseFontAAFromSystem())
+        rLogFont.lfQuality = DEFAULT_QUALITY; // for display on screen
     else
-        rLogFont.lfQuality = NONANTIALIASED_QUALITY;
+        rLogFont.lfQuality = bAntiAliased ? ANTIALIASED_QUALITY : NONANTIALIASED_QUALITY;
 }
 
 std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont,
