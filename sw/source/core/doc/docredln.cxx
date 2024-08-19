@@ -614,16 +614,14 @@ std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<S
 static void lcl_setRowNotTracked(SwNode& rNode)
 {
     SwDoc& rDoc = rNode.GetDoc();
-    if ( rDoc.GetIDocumentUndoRedo().DoesUndo() && rNode.GetTableBox() )
+    const SwTableBox* pTableBox = rNode.GetTableBox();
+    if ( rDoc.GetIDocumentUndoRedo().DoesUndo() && pTableBox )
     {
         SvxPrintItem aSetTracking(RES_PRINT, false);
-        if (const SwTableBox* pTableBox = rNode.GetTableBox())
-        {
-            SwNodeIndex aInsPos( *(pTableBox->GetSttNd()), 1);
-            SwCursor aCursor( SwPosition(aInsPos), nullptr );
-            ::sw::UndoGuard const undoGuard(rNode.GetDoc().GetIDocumentUndoRedo());
-            rDoc.SetRowNotTracked( aCursor, aSetTracking );
-        }
+        SwNodeIndex aInsPos( *(pTableBox->GetSttNd()), 1);
+        SwCursor aCursor( SwPosition(aInsPos), nullptr );
+        ::sw::UndoGuard const undoGuard(rNode.GetDoc().GetIDocumentUndoRedo());
+        rDoc.SetRowNotTracked( aCursor, aSetTracking );
     }
 }
 
