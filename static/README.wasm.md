@@ -110,7 +110,7 @@ $QT5DIR/lib/libqtfreetype.a).  This mismatch between the include files that Qt i
 vs. the archive actually linked in, seems to not cause issues in practice.  (If it did, we could
 either try to make both Qt and LO link against e.g. -sUSE_FREETYPE from emscripten-ports, or we
 could move Qt from a prequisite to a proper external/qt5 LO module built during the LO build, and
-hack its configuration to build against LO's exernal/freetype etc.  The former approach, building Qt
+hack its configuration to build against LO's external/freetype etc.  The former approach, building Qt
 with -sUSE_FREETYPE, is even tried in qtbase/src/gui/configure.json, but apparently fails for
 reasons not studied further yet, cf. Qt's config.log.)
 
