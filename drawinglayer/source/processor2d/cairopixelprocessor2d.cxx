@@ -329,12 +329,12 @@ void checkAndDoPixelSnap(cairo_t* pRT,
                 // transform to discrete pixels
                 cairo_user_to_device(pRT, pX, pY);
 
-                // round them, also subtract 0.5 which will be as transform in
+                // round them, also add 0.5 which will be as transform in
                 // the paint method to move to 'inside' pixels when AA used.
                 // remember: this is only done when AA is active (see bPixelSnap
-                // above)
-                *pX = basegfx::fround(*pX) - 0.5;
-                *pY = basegfx::fround(*pY) - 0.5;
+                // above) and moves the hairline to full-pixel position
+                *pX = trunc(*pX) + 0.5;
+                *pY = trunc(*pY) + 0.5;
 
                 // transform back to former transformed state
                 cairo_device_to_user(pRT, pX, pY);
