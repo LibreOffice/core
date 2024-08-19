@@ -1738,7 +1738,30 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ShapeFlag nMirrorFlags;
                 OUString sCustomShapeType;
-                MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
+                bool bOOXML = false;
+                css::uno::Any aAny;
+                if (GetPropertyValue(aAny, mXPropSet, u"CustomShapeGeometry"_ustr, true))
+                {
+                    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+                    if (aAny >>= aGeoPropSeq)
+                    {
+                        sal_Int32 i, nCount = aGeoPropSeq.getLength();
+                        for (i = 0; i < nCount; ++i)
+                        {
+                            const beans::PropertyValue& rProp = aGeoPropSeq[i];
+                            if (rProp.Name == "Type")
+                            {
+                                if (rProp.Value >>= sCustomShapeType)
+                                {
+                                    if (sCustomShapeType.startsWith("ooxml"))
+                                        bOOXML = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType, bOOXML );
                 if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame,
@@ -1763,7 +1786,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     ImplCreateShape( eShapeType,
                                      nMirrorFlags | ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                      aSolverContainer );
-                    aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape );
+                    aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape, bOOXML );
                     aPropOpt.CreateFillProperties( mXPropSet, true, mXShape);
                     if ( ImplGetText() )
                     {
