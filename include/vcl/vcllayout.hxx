@@ -46,7 +46,6 @@ class GlyphItem;
 // For instance, I *think* the important virtual functions in the
 // layout engines are called in this order:
 
-// * InitFont()
 // * LayoutText()
 // * AdjustLayout(), any number of times (but presumably
 // usually not at all or just once)
@@ -79,7 +78,6 @@ public:
 
     virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( vcl::text::ImplLayoutArgs& );    // adjusting after fallback etc.
-    virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
 
     Degree10        GetOrientation() const                  { return mnOrientation; }

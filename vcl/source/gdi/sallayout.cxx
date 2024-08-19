@@ -1042,12 +1042,6 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
     mpLayouts[0]->Simplify( true );
 }
 
-void MultiSalLayout::InitFont() const
-{
-    if( mnLevel > 0 )
-        mpLayouts[0]->InitFont();
-}
-
 void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 {
     for( int i = mnLevel; --i >= 0; )
@@ -1055,7 +1049,6 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
         SalLayout& rLayout = *mpLayouts[ i ];
         rLayout.DrawBase() += maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
-        rLayout.InitFont();
         rLayout.DrawText( rGraphics );
         rLayout.DrawOffset() -= maDrawOffset;
         rLayout.DrawBase() -= maDrawBase;
@@ -1223,7 +1216,6 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     for(; nLevel < mnLevel; ++nLevel, nStart=0 )
     {
         GenericSalLayout& rLayout = *mpLayouts[ nLevel ];
-        rLayout.InitFont();
         if (rLayout.GetNextGlyph(pGlyph, rPos, nStart, ppGlyphFont))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
@@ -1234,8 +1226,6 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         }
     }
 
-    // #111016# reset to base level font when done
-    mpLayouts[0]->InitFont();
     return false;
 }
 
@@ -1248,7 +1238,6 @@ bool MultiSalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rPPV) const
         SalLayout& rLayout = *mpLayouts[ i ];
         rLayout.DrawBase() = maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
-        rLayout.InitFont();
         bRet |= rLayout.GetOutline(rPPV);
         rLayout.DrawOffset() -= maDrawOffset;
     }

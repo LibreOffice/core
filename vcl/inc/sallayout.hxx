@@ -79,7 +79,6 @@ public:
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>  ReleaseBaseLayout();
     SAL_DLLPRIVATE bool            LayoutText(vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl*) override;
     SAL_DLLPRIVATE void            AdjustLayout(vcl::text::ImplLayoutArgs&) override;
-    SAL_DLLPRIVATE void            InitFont() const override;
 
     SAL_DLLPRIVATE void SetIncomplete(bool bIncomplete);
 
