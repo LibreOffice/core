@@ -556,7 +556,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 {
     assert(!is_double_buffered_window());
 
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    if( (nLen < 0) || (nIndex + nLen > rStr.getLength()))
     {
         nLen = rStr.getLength() - nIndex;
     }
