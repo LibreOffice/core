@@ -113,7 +113,7 @@ published service GenericDrawPage
         They will be saved to and restored from automatic styles inside xml files.
 
         @see com::sun::star::xml::AttributeContainer
-    */
+     */
     [optional, property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 
 

@@ -146,11 +146,9 @@ published service PageProperties
      */
     [optional , property] com::sun::star::text::XTextColumns TextColumns;
 
-    /** contains user defined  attributes.
+    /** contains user defined attributes.
 
-        <p>This com::sun::star::container::XNameContainer
-        supports the service
-        com::sun::star::xml::AttributeContainer.</p>
+        @see com::sun::star::xml::AttributeContainer
      */
     [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 

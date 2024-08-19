@@ -26,6 +26,8 @@ module com {  module sun {  module star {  module frame {
 published interface XFrame2
 {
     /** contains user defined attributes.
+
+        @see com::sun::star::xml::AttributeContainer
      */
     [attribute, readonly] com::sun::star::container::XNameContainer UserDefinedAttributes;
 

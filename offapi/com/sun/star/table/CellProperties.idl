@@ -166,7 +166,9 @@ published service CellProperties
 
         <p>This property is used i.e. by the XML filters to load and
         restore unknown attributes.</p>
-        */
+
+        @see com::sun::star::xml::AttributeContainer
+     */
     [optional, property] com::sun::star::container::XNameContainer
         UserDefinedAttributes;
 
