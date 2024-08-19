@@ -13503,7 +13503,7 @@ then
         fi
     fi
 
-    QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    QT5_CFLAGS="-I$qt5_incdir -DQT_NO_VERSION_TAGGING"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
     if test "$_os" = "Emscripten"; then
@@ -13632,7 +13632,7 @@ then
         fi
     fi
 
-    QT6_CFLAGS="-I$qt6_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    QT6_CFLAGS="-I$qt6_incdir -DQT_NO_VERSION_TAGGING"
     QT6_CFLAGS=$(printf '%s' "$QT6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT6_LIBS="-L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
     if test "$_os" = "Emscripten"; then
@@ -13745,7 +13745,7 @@ then
         AC_MSG_ERROR([KF5 libraries not found.  Please specify the root of your KF5 installation by exporting KF5DIR before running "configure".])
     fi
 
-    KF5_CFLAGS="-I$kf5_incdir -I$kf5_incdir/KCoreAddons -I$kf5_incdir/KI18n -I$kf5_incdir/KConfigCore -I$kf5_incdir/KWindowSystem -I$kf5_incdir/KIOCore -I$kf5_incdir/KIOWidgets -I$kf5_incdir/KIOFileWidgets -I$qt5_incdir -I$qt5_incdir/QtCore -I$qt5_incdir/QtGui -I$qt5_incdir/QtWidgets -I$qt5_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    KF5_CFLAGS="-I$kf5_incdir -I$kf5_incdir/KCoreAddons -I$kf5_incdir/KI18n -I$kf5_incdir/KConfigCore -I$kf5_incdir/KWindowSystem -I$kf5_incdir/KIOCore -I$kf5_incdir/KIOWidgets -I$kf5_incdir/KIOFileWidgets -I$qt5_incdir -I$qt5_incdir/QtCore -I$qt5_incdir/QtGui -I$qt5_incdir/QtWidgets -I$qt5_incdir/QtNetwork -DQT_NO_VERSION_TAGGING"
     KF5_LIBS="-L$kf5_libdir -lKF5CoreAddons -lKF5I18n -lKF5ConfigCore -lKF5WindowSystem -lKF5KIOCore -lKF5KIOWidgets -lKF5KIOFileWidgets -L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
     KF5_CFLAGS=$(printf '%s' "$KF5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
@@ -13824,7 +13824,7 @@ then
         AC_MSG_ERROR([KF6 libraries not found.  Please specify the root of your KF6 installation by exporting KF6DIR before running "configure".])
     fi
 
-    KF6_CFLAGS="-I$kf6_incdir -I$kf6_incdir/KCoreAddons -I$kf6_incdir/KI18n -I$kf6_incdir/KConfig -I$kf6_incdir/KConfigCore -I$kf6_incdir/KWindowSystem -I$kf6_incdir/KIO -I$kf6_incdir/KIOCore -I$kf6_incdir/KIOWidgets -I$kf6_incdir/KIOFileWidgets -I$qt6_incdir -I$qt6_incdir/QtCore -I$qt6_incdir/QtGui -I$qt6_incdir/QtWidgets -I$qt6_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    KF6_CFLAGS="-I$kf6_incdir -I$kf6_incdir/KCoreAddons -I$kf6_incdir/KI18n -I$kf6_incdir/KConfig -I$kf6_incdir/KConfigCore -I$kf6_incdir/KWindowSystem -I$kf6_incdir/KIO -I$kf6_incdir/KIOCore -I$kf6_incdir/KIOWidgets -I$kf6_incdir/KIOFileWidgets -I$qt6_incdir -I$qt6_incdir/QtCore -I$qt6_incdir/QtGui -I$qt6_incdir/QtWidgets -I$qt6_incdir/QtNetwork -DQT_NO_VERSION_TAGGING"
     KF6_LIBS="-L$kf6_libdir -lKF6CoreAddons -lKF6I18n -lKF6ConfigCore -lKF6WindowSystem -lKF6KIOCore -lKF6KIOWidgets -lKF6KIOFileWidgets -L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
     KF6_CFLAGS=$(printf '%s' "$KF6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
