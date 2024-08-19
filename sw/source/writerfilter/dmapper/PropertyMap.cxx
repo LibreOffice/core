@@ -1062,9 +1062,9 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
     uno::Sequence<uno::Any> aValues = {
         uno::Any(bPreviousHasHeader || bHasHeader),
         uno::Any(bPreviousHasFooter || bHasFooter),
-        uno::Any(false),
-        uno::Any(false),
-        uno::Any(false),
+        uno::Any(!bEvenAndOdd),
+        uno::Any(!bEvenAndOdd),
+        uno::Any(!bTitlePage),
     };
     xStyle->setPropertyValues(aNames, aValues);
 
@@ -1087,23 +1087,6 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
         if (bCopyFirstFooter && bTitlePage)
             copyHeaderFooterTextProperty(xPreviousStyle, xStyle, PROP_FOOTER_TEXT_FIRST);
     }
-
-    // Set all properties at once after the copy, to avoid needless SwPageDesc copying.
-    aNames = {
-        sHeaderIsOn,
-        sFooterIsOn,
-        sHeaderIsShared,
-        sFooterIsShared,
-        sFirstIsShared,
-    };
-    aValues = {
-        uno::Any(bPreviousHasHeader || bHasHeader),
-        uno::Any(bPreviousHasFooter || bHasFooter),
-        uno::Any(!bEvenAndOdd),
-        uno::Any(!bEvenAndOdd),
-        uno::Any(!bTitlePage),
-    };
-    xStyle->setPropertyValues(aNames, aValues);
 }
 
 } // end anonymous namespace
