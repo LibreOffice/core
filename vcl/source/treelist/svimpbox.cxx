@@ -1938,7 +1938,11 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     SvTreeListEntry* pEntry = GetEntry(aPos);
     // the entry can still be invalid!
     if( !pEntry || !m_pView->GetViewData( pEntry ))
+    {
+        if (!rMEvt.GetModifier() && rMEvt.IsLeft())
+            SelAllDestrAnch(false); // deselect all
         return;
+    }
 
     tools::Long nY = GetEntryLine( pEntry );
     // Node-Button?
