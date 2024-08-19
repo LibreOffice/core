@@ -1000,6 +1000,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(101)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(151)),
+        comphelper::makePropertyValue(u"AntiAliasing"_ustr, true),
     };
 
     css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
