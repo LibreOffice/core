@@ -85,7 +85,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	listglyphs \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
 	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), gtktiledviewer) \
-    $(if $(filter EMSCRIPTEN,$(OS)),wasm-qt5-mandelbrot) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \

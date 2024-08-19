@@ -22,10 +22,6 @@ $(eval $(call gb_Module_add_targets,static,\
     Package_favicon \
     Package_unoembind \
     StaticLibrary_unoembind \
-    $(if $(ENABLE_QT5), \
-        CustomTarget_wasm-qt5-mandelbrot_moc \
-        Executable_wasm-qt5-mandelbrot \
-    ) \
 ))
 endif
 
