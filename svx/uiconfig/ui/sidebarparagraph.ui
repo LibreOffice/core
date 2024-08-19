@@ -663,142 +663,142 @@
                 <property name="can-focus">False</property>
                 <property name="orientation">horizontal</property>
                 <property name="spacing">3</property>
-                  <child>
-                    <object class="GtkToolbar" id="hyphenation">
-                      <property name="visible">True</property>
-                      <property name="can-focus">True</property>
-                      <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hyphenation|tooltip_text">Hyphenation</property>
-                      <property name="toolbar-style">icons</property>
-                      <property name="show-arrow">False</property>
-                      <property name="icon_size">2</property>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenateCaps">
-                          <property name="visible">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="use-underline">True</property>
-                          <property name="icon-name">cmd/sc_changecasetoupper.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|caps">Hyphenate CAPS</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenateLastWord">
-                          <property name="visible">True</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_textbodyparastyle.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastword">Hyphenate Last Paragraph Word</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenateLastFullLine">
-                          <property name="visible">True</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_insertfooter.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastfullline">Hyphenate Last Full Paragraph Line</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenateColumn">
-                          <property name="visible">True</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_formatcolumns.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|column">Hyphenate Across Column</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenatePage">
-                          <property name="visible">False</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_showtwopages.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|page">Hyphenate Across Page</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="HyphenateSpread">
-                          <property name="visible">False</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_showmultiplepages.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|spread">Hyphenate Across Spread</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                      <child>
-                        <object class="GtkToggleToolButton" id="Hyphenate">
-                          <property name="visible">True</property>
-                          <property name="use-underline">True</property>
-                          <property name="margin-start">1</property>
-                          <property name="margin-end">1</property>
-                          <property name="icon-name">cmd/sc_hyphenation.png</property>
-                          <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|hyphenation">Hyphenation</property>
-                        </object>
-                        <packing>
-                          <property name="expand">False</property>
-                          <property name="homogeneous">False</property>
-                        </packing>
-                      </child>
-                    </object>
-                    <packing>
-                      <property name="expand">False</property>
-                      <property name="fill">True</property>
-                      <property name="position">0</property>
-                    </packing>
-                  </child>
-                  <child>
-                    <object class="GtkLabel" id="hyphenationlabel">
-                      <property name="visible">True</property>
-                      <property name="can-focus">False</property>
-                      <property name="hexpand">True</property>
-                      <property name="label" translatable="yes" context="sidebarparagraph|hyphenationlabel">_Hyphenation:</property>
-                      <property name="use-underline">True</property>
-                      <property name="mnemonic-widget">hyphenation</property>
-                      <property name="xalign">0</property>
-                    </object>
-                    <packing>
-                      <property name="expand">False</property>
-                      <property name="fill">True</property>
-                      <property name="position">0</property>
-                    </packing>
-                  </child>
-                </object>
-                <packing>
-                  <property name="expand">False</property>
-                  <property name="fill">True</property>
-                  <property name="position">0</property>
-                </packing>
-              </child>
+                <child>
+                  <object class="GtkToolbar" id="hyphenation">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hyphenation|tooltip_text">Hyphenation</property>
+                    <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
+                    <property name="icon_size">2</property>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateCaps">
+                        <property name="visible">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/sc_changecasetoupper.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|caps">Hyphenate CAPS</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateLastWord">
+                        <property name="visible">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_textbodyparastyle.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastword">Hyphenate Last Paragraph Word</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateLastFullLine">
+                        <property name="visible">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_insertfooter.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|lastfullline">Hyphenate Last Full Paragraph Line</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateColumn">
+                        <property name="visible">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_formatcolumns.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|column">Hyphenate Across Column</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenatePage">
+                        <property name="visible">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_showtwopages.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|page">Hyphenate Across Page</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="HyphenateSpread">
+                        <property name="visible">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_showmultiplepages.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|spread">Hyphenate Across Spread</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="Hyphenate">
+                        <property name="visible">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="margin-start">1</property>
+                        <property name="margin-end">1</property>
+                        <property name="icon-name">cmd/sc_hyphenation.png</property>
+                        <property name="label" translatable="yes" context="sidebarparagraph|hyphenation|hyphenation">Hyphenation</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="hyphenationlabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="sidebarparagraph|hyphenationlabel">_Hyphenation:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">hyphenation</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
