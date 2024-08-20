@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <editeng/boxitem.hxx>
@@ -278,6 +279,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
     uno::Reference<text::XTextRange> xParagraph(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     //before change was incorrect, Loren ipsum , doconsectetur ...
     CPPUNIT_ASSERT(xParagraph->getString().startsWith("Lorem ipsum , consectetur adipiscing elit."));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160301)
+{
+    // Without the fix in place, fields in the test doc are imported as DocInformation
+    // with the content set to the variable name
+    createSwDoc("tdf160301.doc");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // Without the fix in place this fails with
+    // Expected: Jeff Smith
+    // Actual:   FullName
+    CPPUNIT_ASSERT_EQUAL(u"Jeff Smith"_ustr, xField->getPresentation(false));
+    // Without the fix in place this fails with
+    // Expected: User Field FullName = Jeff Smith
+    // Actual:   DocInformation:FullName
+    CPPUNIT_ASSERT_EQUAL(u"User Field FullName = Jeff Smith"_ustr, xField->getPresentation(true));
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
