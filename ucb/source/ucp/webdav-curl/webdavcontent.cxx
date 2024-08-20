@@ -4077,7 +4077,7 @@ void Content::getResourceOptions(
                     // not same as not found, this instead happens when the server doesn't exist or doesn't answer at all
                     // probably a new bit stating 'timed out' should be added to opts var?
                     // in any case abort the command
-                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_" << (e.getError() == DAVException::DAV_HTTP_TIMEOUT ? "TIMEOUT" : "CONNECT") << " for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     // cache the internal unofficial status code
 
                     aDAVOptions.setHttpResponseStatusCode(e.getError() == DAVException::DAV_HTTP_CONNECT ? USC_CONNECT_FAILED : USC_CONNECTION_TIMED_OUT);
