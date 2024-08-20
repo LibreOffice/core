@@ -603,6 +603,22 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
     saveAndReload(mpFilter);
     verify();
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf120629)
+{
+    createSwDoc("tdf120629.odt");
+
+    sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(56), numFormat);
+
+    saveAndReload("MS Word 97");
+    sal_Int16 numFormat_after = getNumberingTypeOfParagraph(1);
+    // Without the fix in place this fails with
+    // Expected: 56
+    // Actual:   4
+    // i.e. numbering type gets changed to ARABIC, should stay the same
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(56), numFormat_after);
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
