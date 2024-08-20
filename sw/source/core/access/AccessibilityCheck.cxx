@@ -677,9 +677,9 @@ double calculateRelativeLuminance(Color const& rColor)
     double b = aBColor.getBlue();
 
     // Calculate the values according to the described algorithm
-    r = (r <= 0.03928) ? r / 12.92 : std::pow((r + 0.055) / 1.055, 2.4);
-    g = (g <= 0.03928) ? g / 12.92 : std::pow((g + 0.055) / 1.055, 2.4);
-    b = (b <= 0.03928) ? b / 12.92 : std::pow((b + 0.055) / 1.055, 2.4);
+    r = (r <= 0.04045) ? r / 12.92 : std::pow((r + 0.055) / 1.055, 2.4);
+    g = (g <= 0.04045) ? g / 12.92 : std::pow((g + 0.055) / 1.055, 2.4);
+    b = (b <= 0.04045) ? b / 12.92 : std::pow((b + 0.055) / 1.055, 2.4);
 
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
