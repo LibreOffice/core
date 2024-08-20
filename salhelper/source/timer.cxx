@@ -215,6 +215,10 @@ TimerManager::TimerManager() :
 TimerManager::~TimerManager() {
     {
         std::scoped_lock g(m_Lock);
+        // Sometimes, the TimerManager thread gets killed before the static's destruction;
+        // in that case, notify_all could hang in unit tests
+        if (!isRunning())
+            return;
         m_terminate = true;
     }
     m_notEmpty.notify_all();
