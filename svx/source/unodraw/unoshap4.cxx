@@ -30,7 +30,6 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -823,17 +822,6 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             if( rValue >>= aURL )
             {
                 bOk = true;
-                if ( aURL.startsWith("file:///") && !comphelper::DirectoryHelper::fileExists(aURL) )
-                {
-                    comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
-                    auto fileDirectoryEndIdx = pPersist->getDocumentBaseURL().lastIndexOf("/");
-                    auto fileNameStartIdx = aURL.lastIndexOf("/");
-                    if (fileDirectoryEndIdx != -1 && fileNameStartIdx != -1)
-                    {
-                        aURL = OUString::Concat(pPersist->getDocumentBaseURL().subView(0, fileDirectoryEndIdx + 1))
-                            + aURL.subView(fileNameStartIdx + 1);
-                    }
-                }
                 aItem.setURL( aURL, u""_ustr, referer_ );
             }
         }
