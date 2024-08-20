@@ -1124,7 +1124,7 @@ namespace wmfemfhelper
                     rText,
                     nTextStart,
                     nTextLength,
-                    std::move(rDXArray),
+                    std::vector(rDXArray),
                     std::move(rKashidaArray),
                     aFontAttribute,
                     aLocale,
@@ -1170,7 +1170,7 @@ namespace wmfemfhelper
             // get text width
             double fTextWidth(0.0);
 
-            if(rDXArray.empty())
+            if (rDXArray.empty())
             {
                 fTextWidth = aTextLayouterDevice.getTextWidth(rText, nTextStart, nTextLength);
             }
