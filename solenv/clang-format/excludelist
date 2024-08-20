@@ -15100,8 +15100,6 @@ winaccessibility/source/UAccCOM/AccComponent.h
 winaccessibility/source/UAccCOM/AccEditableText.cxx
 winaccessibility/source/UAccCOM/AccEditableText.h
 winaccessibility/source/UAccCOM/AccImage.h
-winaccessibility/source/UAccCOM/AccRelation.cxx
-winaccessibility/source/UAccCOM/AccRelation.h
 winaccessibility/source/UAccCOM/AccTable.cxx
 winaccessibility/source/UAccCOM/AccTable.h
 winaccessibility/source/UAccCOM/AccText.cxx
