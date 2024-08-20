@@ -233,7 +233,7 @@ short AccEventListener::GetRole()
     {
         return xContext->getAccessibleRole();
     }
-    return -1;
+    return AccessibleRole::UNKNOWN;
 }
 
 /**
