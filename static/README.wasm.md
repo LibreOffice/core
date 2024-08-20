@@ -264,7 +264,7 @@ put next to the `qt_soffice.html` that you serve to the browser (i.e., in
 Module.uno_scripts = ['./example.js'];
 ```
 And rebuild LO configured with an additional
-`EMSCRIPTEN_EXTRA_SOFFICE_POST_JS=/...path-to.../include.js`.
+`EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS=/...path-to.../include.js`.
 
 ## Tools for problem diagnosis
 
