@@ -1081,7 +1081,7 @@ namespace cmis
         try
         {
             pDoc = pPwc->checkIn( rArg.MajorVersion, OUSTR_TO_STDSTR( rArg.VersionComment ), newProperties,
-                                  pOut, OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
+                                  std::move(pOut), OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
         }
         catch ( const libcmis::Exception& e )
         {
@@ -1356,7 +1356,7 @@ namespace cmis
                 copyData( xInputStream, xOutput );
                 try
                 {
-                    document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), std::string( ), bReplaceExisting );
+                    document->setContentStream( std::move(pOut), OUSTR_TO_STDSTR( rMimeType ), std::string( ), bReplaceExisting );
                 }
                 catch ( const libcmis::Exception& )
                 {

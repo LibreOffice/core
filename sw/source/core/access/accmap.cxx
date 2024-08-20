@@ -2302,7 +2302,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
         {
             SwAccessibleEvent_Impl aEvent(
                 SwAccessibleEvent_Impl::POS_CHANGED, xAccImpl.get(),
-                aFrameOrObj, rOldBox );
+                std::move(aFrameOrObj), rOldBox );
             AppendEvent( aEvent );
         }
         else

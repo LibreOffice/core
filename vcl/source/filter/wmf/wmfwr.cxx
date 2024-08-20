@@ -1768,7 +1768,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     aFont.SetCharSet(RTL_TEXTENCODING_MS_1252);
     aFont.SetColor( COL_WHITE );
     aFont.SetAlignment( ALIGN_BASELINE );
-    aDstFont = aSrcFont = aFont;
+    aDstFont = aSrcFont = std::move(aFont);
     CreateSelectDeleteFont(aDstFont);
 
     eDstTextAlign = eSrcTextAlign = ALIGN_BASELINE;
