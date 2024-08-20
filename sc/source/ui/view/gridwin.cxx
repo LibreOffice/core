@@ -1536,7 +1536,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
     const ScValidationData* pData = nIndex ? rDoc.GetValidationEntry(nIndex) : nullptr;
 
     bool bEmpty = false;
-    ScTypedCaseStrSet aStrings; // case sensitive
+    std::vector<ScTypedStrData> aStrings; // case sensitive
     // Fill List
     rDoc.GetDataEntries(nCol, nRow, nTab, aStrings, true /* bValidation */);
 

@@ -2276,7 +2276,7 @@ public:
                                             ScFilterEntries& rFilterEntries );
 
     void              GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                      ScTypedCaseStrSet& rStrings, bool bValidation = false );
+                                      std::vector<ScTypedStrData>& rStrings, bool bValidation = false );
     void              GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
     bool               HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );

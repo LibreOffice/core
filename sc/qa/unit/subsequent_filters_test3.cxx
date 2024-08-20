@@ -1531,12 +1531,11 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310)
         CPPUNIT_ASSERT(pData);
 
         // Make sure the list is correct.
-        ScTypedCaseStrSet aList;
+        std::vector<ScTypedStrData> aList;
         pData->FillSelectionList(aList, ScAddress(0, 1, 0));
         CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
-        auto it = aList.begin();
-        for (size_t i = 0; i < 5; ++i, ++it)
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), it->GetValue(), 1e-8);
+        for (size_t i = 0; i < 5; ++i)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), aList[i].GetValue(), 1e-8);
     }
 
     // 2. Test x12ac extension
@@ -1548,15 +1547,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310)
         CPPUNIT_ASSERT(pData);
 
         // Make sure the list is correct.
-        ScTypedCaseStrSet aList;
+        std::vector<ScTypedStrData> aList;
         pData->FillSelectionList(aList, ScAddress(0, 1, 0));
         CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
-        auto it = aList.begin();
-        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, it->GetString());
-        ++it;
-        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, it->GetString());
-        ++it;
-        CPPUNIT_ASSERT_EQUAL(u"2,3"_ustr, it->GetString());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aList[0].GetString());
+        CPPUNIT_ASSERT_EQUAL(u"2,3"_ustr, aList[1].GetString());
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, aList[2].GetString());
     }
 }
 

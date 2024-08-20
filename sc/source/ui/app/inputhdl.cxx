@@ -2068,8 +2068,11 @@ void ScInputHandler::GetColData()
     else
         pColumnData.reset( new ScTypedCaseStrSet );
 
+    std::vector<ScTypedStrData> aEntries;
     rDoc.GetDataEntries(
-        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), *pColumnData);
+        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aEntries);
+    if (!aEntries.empty())
+        pColumnData->insert(aEntries.begin(), aEntries.end());
 
     miAutoPosColumn = pColumnData->end();
 }

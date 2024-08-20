@@ -4211,7 +4211,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
 {
     struct {
 
-        bool checkList( ScTypedCaseStrSet& rList )
+        bool checkList( std::vector<ScTypedStrData>& rList )
         {
             double aExpected[] = { 1.0, 2.0, 3.0 }; // must be sorted.
             size_t nCheckSize = SAL_N_ELEMENTS(aExpected);
@@ -4222,13 +4222,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
                 return false;
             }
 
-            auto it = rList.begin();
-            for (size_t i = 0; i < nCheckSize; ++i, ++it)
+            std::sort(rList.begin(), rList.end(), ScTypedStrData::LessCaseSensitive());
+
+            for (size_t i = 0; i < nCheckSize; ++i)
             {
-                if (aExpected[i] != it->GetValue())
+                if (aExpected[i] != rList[i].GetValue())
                 {
                     cerr << "Incorrect value at position " << i
-                        << ": expected=" << aExpected[i] << ", actual=" << it->GetValue() << endl;
+                        << ": expected=" << aExpected[i] << ", actual=" << rList[i].GetValue() << endl;
                     return false;
                 }
             }
@@ -4265,7 +4266,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
     CPPUNIT_ASSERT(pData);
 
     // Make sure the list is correct.
-    ScTypedCaseStrSet aList;
+    std::vector<ScTypedStrData> aList;
     pData->FillSelectionList(aList, ScAddress(0,1,0));
     bool bGood = aCheck.checkList(aList);
     CPPUNIT_ASSERT_MESSAGE("Initial list is incorrect.", bGood);

@@ -605,7 +605,7 @@ public:
 
     void GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries );
 
-    bool GetDataEntries( SCROW nRow, ScTypedCaseStrSet& rStrings) const;
+    bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings) const;
 
     void UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable) const;

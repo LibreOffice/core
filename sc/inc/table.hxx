@@ -1031,7 +1031,7 @@ public:
     void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries, bool bFiltering = false);
     void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries, bool bFiltering );
     [[nodiscard]]
-    bool GetDataEntries(SCCOL nCol, SCROW nRow, ScTypedCaseStrSet& rStrings);
+    bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings);
 
     bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
     bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
