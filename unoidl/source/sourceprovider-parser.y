@@ -2360,7 +2360,7 @@ singleInterfaceBasedServiceDefn:
               }
               ctors.push_back(
                   unoidl::SingleInterfaceBasedServiceEntity::Constructor(
-                      i.name, std::vector(parms), std::vector(i.exceptions), std::vector(i.annotations)));
+                      i.name, std::move(parms), std::vector(i.exceptions), std::vector(i.annotations)));
           }
       } else {
           assert(pad->constructors.empty());

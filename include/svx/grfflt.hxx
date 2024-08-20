@@ -32,7 +32,7 @@ public:
 
     /// this will execute a dialog and then call function f with the output of the filtering operation
     static void     ExecuteGrfFilterSlot( SfxRequest const & rReq, const GraphicObject& rInputObject,
-                        const std::function<void(const GraphicObject&)>& f);
+                        const std::function<void(const Graphic&)>& f);
     static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 

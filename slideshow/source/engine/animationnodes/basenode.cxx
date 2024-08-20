@@ -538,7 +538,6 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         // if anim base node has no activity, this is called to schedule deactivation,
         // but what if it does not schedule anything?
 
-        auto self(mpSelf);
         if (mxAnimationNode->getEnd().hasValue())
         {
             // TODO: We may need to calculate the duration if the end value is numeric.
@@ -547,7 +546,7 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
             // until we find a test case.
             mpCurrentEvent = generateEvent(
                 mxAnimationNode->getEnd(),
-                [self] () { self->deactivate(); },
+                [self=mpSelf] () { self->deactivate(); },
                 maContext, 0.0 );
 
         }
@@ -555,7 +554,7 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         {
             mpCurrentEvent = generateEvent(
                 mxAnimationNode->getDuration(),
-                [self] () { self->deactivate(); },
+                [self=mpSelf] () { self->deactivate(); },
                 maContext, 0.0 );
         }
     }

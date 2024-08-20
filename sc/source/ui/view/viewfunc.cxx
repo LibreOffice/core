@@ -663,7 +663,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             bool bMatrixExpand )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScMarkData rMark(GetViewData().GetMarkData());
+    ScMarkData aMark(GetViewData().GetMarkData());
     bool bRecord = rDoc.IsUndoEnabled();
     SCTAB i;
 
@@ -671,7 +671,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDocFunc &rFunc = GetViewData().GetDocFunc();
     std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(*pDocSh);
 
-    ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, rMark );
+    ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, aMark );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -722,23 +722,25 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     bool bNumFmtChanged = false;
     if ( bFormula )
     {   // formula, compile with autoCorrection
-        i = rMark.GetFirstSelected();
-        auto aPosPtr = std::make_shared<ScAddress>(nCol, nRow, i);
-        auto aCompPtr = std::make_shared<ScCompiler>(rDoc, *aPosPtr, rDoc.GetGrammar(), true, false);
+        i = aMark.GetFirstSelected();
+        auto xPosPtr = std::make_shared<ScAddress>(nCol, nRow, i);
+        auto xCompPtr = std::make_shared<ScCompiler>(rDoc, *xPosPtr, rDoc.GetGrammar(), true, false);
 
         //2do: enable/disable autoCorrection via calcoptions
-        aCompPtr->SetAutoCorrection( true );
+        xCompPtr->SetAutoCorrection( true );
         if ( rString[0] == '+' || rString[0] == '-' )
         {
-            aCompPtr->SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
+            xCompPtr->SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
         }
 
         OUString aFormula( rString );
 
         FormulaProcessingContext context_instance{
-            aPosPtr, aCompPtr, xModificator,  nullptr,        nullptr,        pData,
-            rMark,   *this,    OUString(),    aFormula,       rString,        nCol,
-            nRow,    nTab,     bMatrixExpand, bNumFmtChanged, bRecord
+            std::move(xPosPtr), std::move(xCompPtr), std::move(xModificator), nullptr,
+            nullptr,            pData,               std::move(aMark),        *this,
+            OUString(),         aFormula,            rString,                 nCol,
+            nRow,               nTab,                bMatrixExpand,           bNumFmtChanged,
+            bRecord
         };
 
         parseAndCorrectFormula(std::make_shared<FormulaProcessingContext>(context_instance));
@@ -746,7 +748,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     else
     {
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
-        for (const auto& rTab : rMark)
+        for (const auto& rTab : aMark)
         {
             bool bNumFmtSet = false;
             const ScAddress aScAddress(nCol, nRow, rTab);
@@ -770,7 +772,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 bNumFmtChanged = true;
             }
         }
-        performAutoFormatAndUpdate(rString, rMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);
+        performAutoFormatAndUpdate(rString, aMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);
     }
 }
 

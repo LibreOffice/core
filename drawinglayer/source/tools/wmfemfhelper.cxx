@@ -1154,7 +1154,7 @@ namespace wmfemfhelper
                     nTextStart,
                     nTextLength,
                     std::vector(rDXArray),
-                    std::vector(rKashidaArray),
+                    std::move(rKashidaArray),
                     std::move(aFontAttribute),
                     std::move(aLocale),
                     aFontColor);

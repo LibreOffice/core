@@ -661,9 +661,9 @@ void ImplStyleData::SetStandardStyles()
     maFieldFont                 = aStdFont;
     maIconFont                  = aStdFont;
     maTabFont                   = aStdFont;
+
     aStdFont.SetWeight( WEIGHT_BOLD );
-    maFloatTitleFont            = aStdFont;
-    maTitleFont                 = aStdFont;
+    maFloatTitleFont = maTitleFont = std::move(aStdFont);
 
     maFaceColor                 = COL_LIGHTGRAY;
     maCheckedColor              = Color( 0xCC, 0xCC, 0xCC );

@@ -35,11 +35,11 @@
 
 static void handleGraphicFilterDialog(const VclPtr<AbstractGraphicFilterDialog>& pDlg,
         const Graphic& aInputGraphic,
-        const std::function<void(const GraphicObject&)>& f);
+        const std::function<void(const Graphic&)>& f);
 
 void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
                         const GraphicObject& rInputObject,
-                        const std::function<void(const GraphicObject&)>& f)
+                        const std::function<void(const Graphic&)>& f)
 {
     Graphic aInputGraphic = rInputObject.GetGraphic();
 
@@ -260,7 +260,7 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
 
 static void handleGraphicFilterDialog(const VclPtr<AbstractGraphicFilterDialog>& pDlg,
         const Graphic& aInputGraphic,
-        const std::function<void(const GraphicObject&)>& f)
+        const std::function<void(const Graphic&)>& f)
 {
     pDlg->StartExecuteAsync(
         [pDlg, aInputGraphic, f] (sal_Int32 nResult)->void

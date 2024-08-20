@@ -126,13 +126,13 @@ bool DiagramData::removeNode(const OUString& rNodeId)
 
     // remove connections
     std::erase_if(maConnections,
-                                       [aIdsToRemove](const Connection& rCxn) {
+                                       [&aIdsToRemove](const Connection& rCxn) {
                                            return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
                                        });
 
     // remove data and presentation nodes
     std::erase_if(maPoints,
-                                  [aIdsToRemove](const Point& rPoint) {
+                                  [&aIdsToRemove](const Point& rPoint) {
                                       return aIdsToRemove.count(rPoint.msModelId);
                                   });
 
