@@ -194,7 +194,8 @@ ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
 
 void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
 {
-    if (!SfxViewShell::Current())
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
         return;
 
     auto id = m_xConditionalType->get_active();
@@ -207,7 +208,7 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
         {
             SfxInt16Item FormatRule(FN_PARAM_1,
                                     m_xConditionalCellValue->get_active_id().toUInt32());
-            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+            pViewShell->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
                 { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
         }
@@ -216,7 +217,7 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
         {
             SfxInt16Item FormatRule(FN_PARAM_1, static_cast<sal_Int16>(ScConditionMode::Formula));
             SfxStringItem Formula(FN_PARAM_5, m_xConditionalFormula->GetText());
-            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+            pViewShell->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
                 { &FormatRule, &IsManaged, &FormatKey, &EntryIndex, &Formula });
         }
@@ -224,7 +225,7 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
         case 2: // Date
         {
             SfxInt16Item FormatRule(FN_PARAM_1, m_xConditionalDate->get_active_id().toUInt32());
-            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
+            pViewShell->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
                 { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
         }
