@@ -261,9 +261,15 @@ void BubbleChart::createShapes()
                         rPosHelper.transformLogicToScene(fLogicX, fLogicY, fLogicZ, false));
 
                     //better performance for big data
+                    uno::Reference< beans::XPropertySet > xProps(pSeries->getPropertiesOfPoint( nIndex ));
+                    sal_Int16 nFillTransparency(0);
+                    xProps->getPropertyValue(u"FillTransparence"_ustr) >>= nFillTransparency;
+                    const bool bIsTransparent(nFillTransparency != 0);
+
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries.get()] );
                     rPosHelper.setCoordinateSystemResolution(m_aCoordinateSystemResolution);
                     if (!pSeries->isAttributedDataPoint(nIndex)
+                        && !bIsTransparent  // don't short-cut if there's transparency
                         && rPosHelper.isSameForGivenResolution(
                                aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ,
                                aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY,
