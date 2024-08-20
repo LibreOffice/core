@@ -825,6 +825,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
         cairo_set_antialias(pRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
                                                                        : CAIRO_ANTIALIAS_NONE);
         cairo_set_fill_rule(pRT, CAIRO_FILL_RULE_EVEN_ODD);
+        cairo_set_operator(pRT, CAIRO_OPERATOR_OVER);
         setRenderTarget(pRT);
     }
 }
@@ -955,10 +956,18 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     // insert a ARGB image, zoom to the borders. Seems to be half
     // a pixel. Very good to demonstrate: 8x1 pixel, some
     // transparent.
+    // Also errors with images 1 pixel wide/high, e.g. insert
+    // RGBA 8x1, 1x8 to see (and deactivate fix below). It also
+    // depends on the used filter, see commnet below at
+    // cairo_pattern_set_filter. Found also errors with more
+    // than one pixel, so cannot use as criteria.
     // This effect is also visible in the left/right/bottom/top
     // page shadows, these DO use 8x1/1x8 images which led me to
-    // that problem. I see two solutions:
+    // that problem. I double-checked that these *are* correctly
+    // defined, that is not the problem.
+    // I see two solutions:
     static bool bRenderMasked(true);
+
     if (bRenderMasked)
     {
         // Consequence is that these need clipping. That again is
@@ -988,6 +997,22 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
             cairo_matrix_scale(&aMatrix, nWidth, nHeight);
         }
     }
+
+    // The error/effect described above also is connected to the
+    // filter used, so I checked the filter modes available
+    // in Cairo:
+    //
+    // CAIRO_FILTER_FAST: okay, small errors, sometimes stretching some pixels
+    // CAIRO_FILTER_GOOD: stretching error
+    // CAIRO_FILTER_BEST: okay, small errors
+    // CAIRO_FILTER_NEAREST: similar to CAIRO_FILTER_FAST
+    // CAIRO_FILTER_BILINEAR: similar to CAIRO_FILTER_GOOD
+    // CAIRO_FILTER_GAUSSIAN: same as CAIRO_FILTER_GOOD/CAIRO_FILTER_BILINEAR, should
+    //   not be used anyways (see docs)
+    //
+    // CAIRO_FILTER_GOOD seems to be the default anyways, but set it
+    // to be on the safe side
+    cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_GOOD);
 
     cairo_pattern_set_matrix(sourcepattern, &aMatrix);
 
@@ -1969,6 +1994,10 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     // set source pattern transform & activate pattern repeat
     cairo_pattern_set_matrix(sourcepattern, &aMatrix);
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
+
+    // CAIRO_FILTER_GOOD seems to be the default anyways, but set it
+    // to be on the safe side
+    cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_GOOD);
 
     // paint
     if (rFillGraphicPrimitive2D.hasTransparency())
