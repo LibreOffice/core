@@ -164,14 +164,12 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         Reference<css::accessibility::XAccessible> xAccessible
             = pAccessibleContext->getAccessibleChild(i);
 
-        css::accessibility::XAccessible* mpAccessible = xAccessible.get();
-        if(mpAccessible != nullptr)
+        if (xAccessible.is())
         {
             Reference<css::accessibility::XAccessibleContext> xAccessibleContext
-                = mpAccessible->getAccessibleContext();
-            css::accessibility::XAccessibleContext* mpContext = xAccessibleContext.get();
-            if(mpContext != nullptr)
-                AddAllListeners( mpAccessible, pAccessible, pWND);
+                = xAccessible->getAccessibleContext();
+            if (xAccessibleContext.is())
+                AddAllListeners(xAccessible.get(), pAccessible, pWND);
         }
     }
 }
