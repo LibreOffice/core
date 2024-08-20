@@ -153,6 +153,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/validationhelptabpage.ui"
         || rUIFile == u"modules/scalc/ui/warnautocorrect.ui"
         || rUIFile == u"modules/scalc/ui/ztestdialog.ui"
+        || rUIFile == u"modules/scalc/ui/definedatabaserangedialog.ui"
         // schart
         || rUIFile == u"modules/schart/ui/attributedialog.ui"
         || rUIFile == u"modules/schart/ui/charttypedialog.ui"
