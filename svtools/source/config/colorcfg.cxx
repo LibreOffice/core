@@ -405,7 +405,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTGRAY,    Color(0x808080) }, // DOCBOUNDARIES
         { Color(0xDFDFDE),  Color(0x333333) }, // APPBACKGROUND
         { COL_LIGHTGRAY,    Color(0x808080) }, // OBJECTBOUNDARIES
-        { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // TABLEBOUNDARIES
+        { COL_LIGHTGRAY,    Color(0x808080) }, // TABLEBOUNDARIES
         { COL_BLACK,        COL_BLACK       }, // FONTCOLOR
         { COL_BLUE,         Color(0x1D99F3) }, // LINKS
         { Color(0x0000cc),  Color(0x9B59B6) }, // LINKSVISITED
@@ -418,7 +418,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // WRITERIDXSHADINGS
         { COL_BLACK,        COL_BLACK       }, // WRITERDIRECTCURSOR
         { COL_GREEN,        Color(0x1E6A39) }, // WRITERSCRIPTINDICATOR
-        { COL_LIGHTGRAY,    Color(0x666666) }, // WRITERSECTIONBOUNDARIES
+        { COL_LIGHTGRAY,    Color(0x808080) }, // WRITERSECTIONBOUNDARIES
         { Color(0x0369a3),  Color(0xB4C7DC) }, // WRITERHEADERFOOTERMARK
         { COL_BLUE,         Color(0x729FCF) }, // WRITERPAGEBREAKS
         { Color(0x268BD2),  Color(0x268BD2) }, // WRITERNONPRINTCHARS
