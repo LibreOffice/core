@@ -17,6 +17,15 @@ $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
 	external/freetype/freetype-fd-hack.patch.0 \
 ))
 
+# Enable FreeType's FT_DEBUG_LOGGING at least in --enable-dbgutil builds (and see
+# workdir/UnpackedTarball/freetype/docs/DEBUG for how to actually make use of that by setting an
+# FT2_DEBUG environment variable at runtime):
+ifeq ($(ENABLE_DBGUTIL),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,freetype, \
+    external/freetype/logging.patch.0 \
+))
+endif
+
 $(eval $(call gb_UnpackedTarball_set_patchlevel,freetype,0))
 
 # vim: set noet sw=4 ts=4:
