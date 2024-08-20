@@ -70,7 +70,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
         pRet->AddRef();
         return S_OK;
     }
-    else if(pRAcc.is())
+    else
     {
         Reference<XAccessible> pxTable(pRXTable, UNO_QUERY);
 
