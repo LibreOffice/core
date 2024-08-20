@@ -893,19 +893,6 @@ void  AccObjectWinManager::UpdateValue( XAccessible* pXAcc )
 }
 
 /**
-   * Set corresponding com object's name via XAccessible interface and new name.
-   * @param pXAcc XAccessible interface.
-   * @param newName new name
-   * @return
-   */
-void  AccObjectWinManager::SetAccName( XAccessible* pXAcc, Any newName)
-{
-    AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    if( pAccObj )
-        pAccObj->SetName( newName );
-}
-
-/**
    * Judge if a XAccessible object is a container object.
    * @param pAccessible XAccessible interface.
    * @return If XAccessible object is container.

@@ -88,8 +88,7 @@ public:
     virtual void HandleColumnChangedEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
-    //for name changed event
-    virtual void HandleNameChangedEvent(css::uno::Any name) override;
+    virtual void HandleNameChangedEvent() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

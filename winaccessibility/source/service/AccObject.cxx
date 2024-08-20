@@ -546,19 +546,6 @@ OUString AccObject::GetMAccessibleValueFromAny(Any pAny)
 
     return strValue;
 }
-/**
-   * Set name property via pAny.
-   * @param pAny New accessible name.
-   * @return
-   */
-void  AccObject::SetName( Any pAny)
-{
-    if( nullptr == m_pIMAcc )
-        return ;
-
-    m_pIMAcc->Put_XAccName( o3tl::toW(GetMAccessibleValueFromAny(pAny).getStr()) );
-
-}
 
 /**
 * Get role property via pAny

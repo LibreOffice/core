@@ -473,7 +473,7 @@ void AccContainerEventListener::HandleColumnChangedEvent(const Any& /*oldValue*/
     m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::COLUMN_CHANGED);
 }
 
-void  AccContainerEventListener::HandleNameChangedEvent( Any name )
+void AccContainerEventListener::HandleNameChangedEvent()
 {
     if (GetRole() == AccessibleRole::COMBO_BOX)
     {
@@ -487,12 +487,12 @@ void  AccContainerEventListener::HandleNameChangedEvent( Any name )
                 short childrole = mxChildContext->getAccessibleRole();
                 if (childrole == AccessibleRole::TEXT)
                 {
-                    m_rObjManager.SetAccName(mxChild.get(), name);
+                    m_rObjManager.UpdateAccName(mxChild.get());
                 }
             }
         }
     }
-    AccEventListener::HandleNameChangedEvent(name);
+    AccEventListener::HandleNameChangedEvent();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

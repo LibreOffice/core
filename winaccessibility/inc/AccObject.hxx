@@ -103,7 +103,6 @@ public:
     void  DecreaseState( sal_Int64 xState );//call COM interface DecreaseState method
     void  IncreaseState( sal_Int64 xState );//call COM interface IncreaseState method
 
-    void  SetName( css::uno::Any newName);
     void  SetValue( css::uno::Any pAny );
 
     short GetRole() const;

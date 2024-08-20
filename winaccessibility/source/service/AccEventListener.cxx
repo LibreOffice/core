@@ -63,7 +63,7 @@ void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObje
             HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
             break;
         case AccessibleEventId::NAME_CHANGED:
-            HandleNameChangedEvent(aEvent.NewValue);
+            HandleNameChangedEvent();
             break;
         case AccessibleEventId::DESCRIPTION_CHANGED:
             HandleDescriptionChangedEvent();
@@ -78,9 +78,8 @@ void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObje
 
 /**
  *  handle the NAME_CHANGED event
- *  @param  name        the new name with changed.
  */
-void AccEventListener::HandleNameChangedEvent(Any name)
+void AccEventListener::HandleNameChangedEvent()
 {
     if (m_rObjManager.IsTopWinAcc(m_xAccessible.get()))
     {
@@ -92,7 +91,7 @@ void AccEventListener::HandleNameChangedEvent(Any name)
         }
     }
 
-    m_rObjManager.SetAccName(m_xAccessible.get(), name);
+    m_rObjManager.UpdateAccName(m_xAccessible.get());
     m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
 }
 
