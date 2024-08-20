@@ -1634,7 +1634,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
         // This check can be true only if Lokit is active and view is readonly.
         if (pSlot && bCheckForCommentCommands)
-            bReadOnly = IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
+            bReadOnly = !IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
 
         if ( pSlot && pSlot->nDisableFlags != SfxDisableFlags::NONE &&
              ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )

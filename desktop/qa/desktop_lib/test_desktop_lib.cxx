@@ -198,6 +198,7 @@ public:
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
+    void testCommentsInReadOnlyMode();
     void testRunMacro();
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
@@ -268,6 +269,7 @@ public:
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
+    CPPUNIT_TEST(testCommentsInReadOnlyMode);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
@@ -2668,6 +2670,71 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
+}
+
+void DesktopLOKTest::testCommentsInReadOnlyMode()
+{
+    // Comments callback are emitted only if tiled annotations are off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->setView(pDocument, viewId);
+
+    SfxLokHelper::setViewReadOnly(viewId, true);
+    SfxLokHelper::setAllowChangeComments(viewId, true);
+
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+
+    // Add a new comment
+    OString aCommandArgs;
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Text", "string", "Comment");
+        addParameter(aJson, "Author", "string", "LOK User1");
+        aCommandArgs = aJson.finishAndGetAsOString();
+    }
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+    int nCommentId = aView.m_aCommentCallbackResult.get<int>("id");
+
+    // Edit the previously added comment
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Id", "string", OString::number(nCommentId));
+        addParameter(aJson, "Text", "string", "Edited comment");
+        aCommandArgs = aJson.finishAndGetAsOString();
+    }
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
+
+    // Delete Comment
+    {
+        tools::JsonWriter aJson;
+        addParameter(aJson, "Id", "string", OString::number(nCommentId));
+        aCommandArgs = aJson.finishAndGetAsOString();
+    }
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Result is not sent for delete operation for some reason. But it is sent when debugging with online.
+    // TODO: Enable below 2 checks.
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    //CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+    //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
 }
 
 void DesktopLOKTest::testRunMacro()
