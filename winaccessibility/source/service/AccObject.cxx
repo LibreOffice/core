@@ -368,8 +368,6 @@ void  AccObject::UpdateName( )
         return;
     }
 
-    if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=nullptr )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
-        m_pIMAcc->Put_XAccName( o3tl::toW(m_pParentObj->m_xAccContextRef->getAccessibleName().getStr()) );
     //IAccessibility2 Implementation 2009-----
     if (m_accRole == AccessibleRole::PARAGRAPH || m_accRole == AccessibleRole::BLOCK_QUOTE)
     {
