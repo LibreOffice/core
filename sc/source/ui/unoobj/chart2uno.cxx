@@ -625,8 +625,8 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
         auto nCol2 = aData.Ref2.Col() - mnStartCol;
         SCROW nRow1 = aData.Ref1.Row() - mnStartRow;
         SCROW nRow2 = aData.Ref2.Row() - mnStartRow;
-        for (auto nCol = nCol1; nCol <= nCol2; ++nCol)
-            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        for (SCCOLROW nCol = nCol1; nCol <= nCol2 && nCol >= 0; ++nCol)
+            for (SCCOLROW nRow = nRow1; nRow <= nRow2 && nRow >= 0; ++nRow)
             {
                 size_t i = nCol*nRowSize + nRow;
                 aCellStates[i] = Occupied;
