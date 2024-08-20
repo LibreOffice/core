@@ -1487,7 +1487,20 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                             + "\", "
                             "\"description\": \""
                             + escapeJSON(ppFDesc->getDescription())
-                            + "\"}, ");
+                            + "\", \"namedRange\": false }, ");
+                    }
+                    else
+                    {
+                        aPayload.append("{"
+                            "\"index\": "
+                            + OString::number(static_cast<sal_Int64>(nCurIndex))
+                            + ", "
+                                "\"signature\": \""
+                            + escapeJSON(aFuncNameStr)
+                            + "\", "
+                                "\"description\": \""
+                            + escapeJSON(OUString())
+                            + "\", \"namedRange\": true }, ");
                     }
                 }
                 ++nCurIndex;
@@ -1495,8 +1508,15 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                     nCurIndex = 0;
             }
             sal_Int32 nLen = aPayload.getLength();
-            aPayload[nLen - 2] = ' ';
-            aPayload[nLen - 1] = ']';
+            if (nLen <= 2)
+            {
+                aPayload[nLen - 1] = ']';
+            }
+            else
+            {
+                aPayload[nLen - 2] = ' ';
+                aPayload[nLen - 1] = ']';
+            }
 
             OString s = aPayload.makeStringAndClear();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s);
