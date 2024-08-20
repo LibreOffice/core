@@ -58,17 +58,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_relationType(BSTR* relationT
 }
 
 // Gets what the type of localized relation is.
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR*)
-{
-    try
-    {
-        return S_OK;
-    }
-    catch (...)
-    {
-        return E_FAIL;
-    }
-}
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR*) { return S_OK; }
 
 /**
    * Get targets length.
