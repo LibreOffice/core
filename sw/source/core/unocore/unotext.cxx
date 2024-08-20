@@ -1338,8 +1338,7 @@ SwXText::appendTextPortion(
 {
     SolarMutexGuard aGuard;
     rtl::Reference< SwXTextCursor > xInsertPosition = getEndImpl(aGuard);
-    rtl::Reference<SwXTextCursor> xTextCursor = createXTextCursorByRange(xInsertPosition);
-    rtl::Reference< SwXTextRange > xRange = insertTextPortionImpl(aGuard, rText, rCharacterAndParagraphProperties, xTextCursor);
+    rtl::Reference< SwXTextRange > xRange = insertTextPortionImpl(aGuard, rText, rCharacterAndParagraphProperties, xInsertPosition);
     return xRange;
 }
 
