@@ -33,6 +33,7 @@
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <boost/property_tree/json_parser/error.hpp>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
@@ -388,9 +389,16 @@ void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
         if (!aFilterData.hasElements() && !aFilterOptions.isEmpty())
         {
             // Allow setting filter data keys from the cmdline.
-            std::vector<PropertyValue> aData
-                = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
-            aFilterData = comphelper::containerToSequence(aData);
+            try
+            {
+                std::vector<PropertyValue> aData
+                    = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+                aFilterData = comphelper::containerToSequence(aData);
+            }
+            catch (const boost::property_tree::json_parser::json_parser_error&)
+            {
+                // This wasn't a valid json; maybe came from import filter (tdf#162528)
+            }
             if (aFilterData.hasElements())
             {
                 aMap[u"FilterData"_ustr] <<= aFilterData;
