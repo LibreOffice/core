@@ -343,7 +343,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eNotesLayout,
                     bIsPageBack,
                     bIsPageObj,
-                    nInsertPosition);
+                    pInsertPos ? (pInsertPos->GetValue()*2)+1 : nInsertPosition);
             break;
 
         case SID_DUPLICATE_PAGE:
