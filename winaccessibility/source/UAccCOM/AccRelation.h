@@ -53,7 +53,6 @@ public:
 #pragma clang diagnostic pop
 #endif
 
-    // IAccessibleRelation
 public:
     // IAccessibleRelation
 
@@ -75,7 +74,6 @@ public:
     // Override of IUNOXWrapper.
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
-    //static OLECHAR* getRelationTypeOLECHAR(int type);
     static BSTR getRelationTypeBSTR(int type);
 
 private:
