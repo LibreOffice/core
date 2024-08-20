@@ -171,6 +171,9 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     //SvtListener
     virtual void Notify(const SfxHint&) override;
+    //SfxListener
+    /// Used to avoid cost of dynamic_cast in SwXStyleFamily::FindStyle
+    virtual bool IsSwXStyle() const override final { return true; }
 
     SW_DLLPUBLIC rtl::Reference<SwXNumberingRules> getNumberingRules();
 

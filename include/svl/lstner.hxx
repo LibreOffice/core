@@ -71,6 +71,8 @@ public:
 
     /// Used to avoid cost of dynamic_cast in SdrViewIter::ImpFindView
     virtual bool        IsSdrView() const { return false; }
+    /// Used to avoid cost of dynamic_cast in SwXStyleFamily::FindStyle
+    virtual bool        IsSwXStyle() const { return false; }
 };
 
 #endif

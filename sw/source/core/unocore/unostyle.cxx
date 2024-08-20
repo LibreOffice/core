@@ -1190,7 +1190,9 @@ SwXStyle* SwXStyleFamily::FindStyle(std::u16string_view rStyleName) const
     m_pBasePool->ForAllListeners(
         [this, &pFoundStyle, &rStyleName] (SfxListener* pListener)
         {
-            SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>(pListener);
+            if (!pListener->IsSwXStyle())
+                return false;
+            SwXStyle* pTempStyle = static_cast<SwXStyle*>(pListener);
             if(pTempStyle && pTempStyle->GetFamily() == m_rEntry.family() && pTempStyle->GetStyleName() == rStyleName)
             {
                 pFoundStyle = pTempStyle;
