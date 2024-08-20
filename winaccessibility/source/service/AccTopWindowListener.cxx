@@ -132,11 +132,6 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
     {
         return;
     }
-    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
-    if(pAccessibleContext == nullptr)
-    {
-        return;
-    }
 
     m_aAccObjectManager.InsertAccObj(pAccessible, pParentXAcc, pWND);
 
@@ -146,7 +141,7 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
     }
 
 
-    short role = pAccessibleContext->getAccessibleRole();
+    short role = xContext->getAccessibleRole();
     if(css::accessibility::AccessibleRole::DOCUMENT == role ||
             css::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
             css::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
@@ -158,11 +153,11 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         }
     }
 
-    sal_Int64 nCount = pAccessibleContext->getAccessibleChildCount();
+    sal_Int64 nCount = xContext->getAccessibleChildCount();
     for (sal_Int64 i = 0; i < nCount; i++)
     {
         Reference<css::accessibility::XAccessible> xAccessible
-            = pAccessibleContext->getAccessibleChild(i);
+            = xContext->getAccessibleChild(i);
 
         if (xAccessible.is())
             AddAllListeners(xAccessible.get(), pAccessible, pWND);
