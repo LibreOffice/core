@@ -108,7 +108,6 @@ public:
     short GetRole() const;
 
     void  UpdateState();
-    void  UpdateName();
     void  UpdateValue();
     void  UpdateAction();
     void  UpdateValidWindow();

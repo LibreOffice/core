@@ -357,19 +357,6 @@ void AccObject::ImplInitializeCreateObj()
 }
 
 /**
-   * Update name property to com object.
-   * @param
-   * @return
-   */
-void  AccObject::UpdateName( )
-{
-    if (!m_pIMAcc)
-        return;
-
-    m_pIMAcc->Put_XAccName(o3tl::toW(m_xAccContextRef->getAccessibleName().getStr()));
-}
-
-/**
    * Update default action property to com object.
    * @param
    * @return
@@ -998,8 +985,6 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
         assert(false);
         return false;
     }
-
-    UpdateName();
 
     UpdateValue();
 

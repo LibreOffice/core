@@ -847,19 +847,6 @@ void  AccObjectWinManager::UpdateState( css::accessibility::XAccessible* pXAcc )
         pAccObj->UpdateState( );
 }
 
-/**
-   * Set corresponding com object's accessible name via XAccessible interface and new
-   * name
-   * @param pXAcc XAccessible interface.
-   * @return
-   */
-void  AccObjectWinManager::UpdateAccName( XAccessible* pXAcc )
-{
-    AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    if( pAccObj )
-        pAccObj->UpdateName();
-}
-
 void  AccObjectWinManager::UpdateAction( XAccessible* pXAcc )
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );

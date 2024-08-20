@@ -85,13 +85,9 @@ void AccEventListener::HandleNameChangedEvent()
     {
         XAccessible* pAccDoc = m_rObjManager.GetAccDocByAccTopWin(m_xAccessible.get());
         if (pAccDoc)
-        {
-            m_rObjManager.UpdateAccName(pAccDoc);
             m_rObjManager.NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
-        }
     }
 
-    m_rObjManager.UpdateAccName(m_xAccessible.get());
     m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
 }
 

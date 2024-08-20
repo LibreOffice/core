@@ -135,7 +135,6 @@ public:
     // These methods are provided for UNO management system.
     // The UNO management system use these methods to put Accessibility
     // information to COM.
-    STDMETHOD(Put_XAccName)(const OLECHAR __RPC_FAR *pszName) override;
     STDMETHOD(Put_XAccRole)(unsigned short pRole) override;
     STDMETHOD(DecreaseState)(DWORD pXSate) override;
     STDMETHOD(IncreaseState)(DWORD pXSate) override;
@@ -153,7 +152,6 @@ public:
     STDMETHOD(SetXAccessible)(hyper) override;
 
 private:
-    BSTR m_pszName;
     BSTR m_pszValue;
     BSTR m_pszActionDescription;
     unsigned short m_iRole;

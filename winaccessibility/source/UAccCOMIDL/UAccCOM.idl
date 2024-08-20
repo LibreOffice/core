@@ -32,7 +32,6 @@ import "defines.idl";
     ]
     interface IMAccessible : IAccessible2
     {
-        [id(1), helpstring("method Put_XAccName")] HRESULT Put_XAccName(const OLECHAR* pszName);
         [id(2), helpstring("method Put_XAccRole")] HRESULT Put_XAccRole(unsigned short pRole);
         [id(3), helpstring("method DecreaseState")] HRESULT DecreaseState(DWORD pXSate);
         [id(4), helpstring("method IncreaseState")] HRESULT IncreaseState(DWORD pXSate);

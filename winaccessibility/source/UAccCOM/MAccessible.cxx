@@ -192,7 +192,6 @@ void lcl_addIA2State(AccessibleStates& rStates, sal_Int64 nUnoState, sal_Int16 n
 AccObjectWinManager* CMAccessible::g_pAccObjectManager = nullptr;
 
 CMAccessible::CMAccessible():
-m_pszName(nullptr),
 m_pszValue(nullptr),
 m_pszActionDescription(nullptr),
 m_iRole(0x00),
@@ -211,10 +210,6 @@ CMAccessible::~CMAccessible()
 {
     SolarMutexGuard g;
 
-    if(m_pszName!=nullptr)
-    {
-        SysFreeString(std::exchange(m_pszName, nullptr));
-    }
     if(m_pszValue!=nullptr)
     {
         SysFreeString(std::exchange(m_pszValue, nullptr));
@@ -374,8 +369,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
         {
             if(varChild.lVal==CHILDID_SELF)
             {
+                if (!m_xAccessible.is())
+                    return S_FALSE;
+
+                Reference<XAccessibleContext> xContext = m_xAccessible->getAccessibleContext();
+                if (!xContext.is())
+                    return S_FALSE;
+
+                const OUString sName = xContext->getAccessibleName();
                 SysFreeString(*pszName);
-                *pszName = SysAllocString(m_pszName);
+                *pszName = SysAllocString(o3tl::toW(sName.getStr()));
                 return S_OK;
             }
 
@@ -1069,32 +1072,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
             return pChild->put_accValue(varChild,szValue);
         }
         return E_FAIL;
-
-        } catch(...) { return E_FAIL; }
-}
-
-/**
-* Set the accessible name of the current COM object self from UNO.
-* @param    pszName, the name value used to set the name of the current object.
-* @return   S_OK if successful and E_FAIL if failure.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
-{
-    // internal IMAccessible - no mutex meeded
-
-    try {
-        if (m_isDestroy) return S_FALSE;
-
-        if(pszName == nullptr)
-        {
-            return E_INVALIDARG;
-        }
-
-        SysFreeString(m_pszName);
-        m_pszName = SysAllocString(pszName);
-        if(m_pszName==nullptr)
-            return E_FAIL;
-        return S_OK;
 
         } catch(...) { return E_FAIL; }
 }
