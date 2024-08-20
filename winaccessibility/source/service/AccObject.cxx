@@ -364,20 +364,9 @@ void AccObject::ImplInitializeCreateObj()
 void  AccObject::UpdateName( )
 {
     if (!m_pIMAcc)
-    {
         return;
-    }
 
-    //IAccessibility2 Implementation 2009-----
-    if (m_accRole == AccessibleRole::PARAGRAPH || m_accRole == AccessibleRole::BLOCK_QUOTE)
-    {
-        m_pIMAcc->Put_XAccName(L"");
-    }
-    //-----IAccessibility2 Implementation 2009
-    else
-        m_pIMAcc->Put_XAccName(o3tl::toW(m_xAccContextRef->getAccessibleName().getStr()));
-
-    return ;
+    m_pIMAcc->Put_XAccName(o3tl::toW(m_xAccContextRef->getAccessibleName().getStr()));
 }
 
 /**
