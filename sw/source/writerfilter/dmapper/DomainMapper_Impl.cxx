@@ -3469,7 +3469,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 xOLE->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderProps));
                 xOLE->setPropertyValue(u"BottomBorder"_ustr, uno::Any(aBorderProps));
             }
-            OUString pProperties[] = {
+            constexpr OUString pProperties[] = {
                 u"AnchorType"_ustr,
                 u"Surround"_ustr,
                 u"SurroundContour"_ustr,
@@ -6336,7 +6336,7 @@ typedef std::multimap < sal_Int32, OUString > TOCStyleMap;
 
 static ww::eField GetWW8FieldId(OUString const& rType)
 {
-    std::unordered_map<OUString, ww::eField> mapID
+    static const std::unordered_map<OUString, ww::eField> mapID
     {
         {"ADDRESSBLOCK",    ww::eADDRESSBLOCK},
         {"ADVANCE",         ww::eADVANCE},
