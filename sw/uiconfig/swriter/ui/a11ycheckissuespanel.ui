@@ -18,12 +18,9 @@
           <object class="GtkLabel" id="lbOptions">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="halign">start</property>
             <property name="hexpand">True</property>
-            <property name="label" translatable="yes" context="optsecuritypage|lbOptions">Adjust accessibility check options.</property>
-            <property name="wrap">True</property>
-            <property name="width-chars">56</property>
-            <property name="max-width-chars">56</property>
-            <property name="xalign">0</property>
+            <property name="label" translatable="yes" context="optsecuritypage|lbOptions">Adjust accessibility check options</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -36,7 +33,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="halign">end</property>
             <property name="valign">center</property>
+            <property name="hexpand">True</property>
             <property name="use-underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="bOptions-atkobject">
