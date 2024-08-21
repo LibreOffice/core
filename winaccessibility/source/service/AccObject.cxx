@@ -265,7 +265,7 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
         m_pListener (pListener),
         m_xAccRef( pAcc )
 {
-    ImplInitializeCreateObj();
+    assert(m_pIMAcc);
 
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
     m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
@@ -344,16 +344,6 @@ void AccObject::UpdateValidWindow()
 {
     if(m_pIMAcc)
         m_pIMAcc->Put_XAccWindowHandle(m_pParantID);
-}
-
-/**
-   * Translate all UNO basic information into MSAA com information.
-   * @param
-   * @return If the method is correctly processed.
-   */
-void AccObject::ImplInitializeCreateObj()
-{
-    assert(m_pIMAcc);
 }
 
 /**

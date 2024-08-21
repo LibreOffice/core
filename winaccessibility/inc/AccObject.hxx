@@ -59,8 +59,6 @@ private:
     css::uno::Reference < css::accessibility::XAccessibleAction > m_xAccActionRef;
     css::uno::Reference < css::accessibility::XAccessibleContext > m_xAccContextRef;
 
-    void ImplInitializeCreateObj();//create COM object
-
     void UpdateActionDesc();
     void UpdateRole();
 
