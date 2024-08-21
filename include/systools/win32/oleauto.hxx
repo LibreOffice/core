@@ -35,24 +35,23 @@ namespace sal::systools
 class BStr
 {
 public:
+    static BSTR newBSTR(std::u16string_view sv)
+    {
+        return ::SysAllocStringLen(o3tl::toW(sv.data()), sv.size());
+    }
     BStr() = default;
     BStr(std::u16string_view sv)
-        : m_Str(::SysAllocStringLen(o3tl::toW(sv.data()), sv.length()))
+        : m_Str(newBSTR(sv))
     {
     }
-    BStr(const BStr& src)
-        : BStr(std::u16string_view(src))
-    {
-    }
-    BStr(BStr&& src)
-        : m_Str(std::exchange(src.m_Str, nullptr))
+    BStr(BStr&& src) noexcept
+        : m_Str(src.release())
     {
     }
     ~BStr() { ::SysFreeString(m_Str); }
     BStr& operator=(std::u16string_view sv)
     {
-        ::SysFreeString(
-            std::exchange(m_Str, ::SysAllocStringLen(o3tl::toW(sv.data()), sv.length())));
+        ::SysFreeString(std::exchange(m_Str, newBSTR(sv)));
         return *this;
     }
     BStr& operator=(const BStr& src)
@@ -61,9 +60,9 @@ public:
             operator=(std::u16string_view(src));
         return *this;
     }
-    BStr& operator=(BStr&& src)
+    BStr& operator=(BStr&& src) noexcept
     {
-        ::SysFreeString(std::exchange(m_Str, std::exchange(src.m_Str, nullptr)));
+        ::SysFreeString(std::exchange(m_Str, src.release()));
         return *this;
     }
     operator std::u16string_view() const { return { o3tl::toU(m_Str), length() }; }
@@ -74,6 +73,8 @@ public:
         return &m_Str;
     }
     UINT length() const { return ::SysStringLen(m_Str); }
+    // similar to std::unique_ptr::release
+    BSTR release() { return std::exchange(m_Str, nullptr); }
 
 private:
     BSTR m_Str = nullptr;

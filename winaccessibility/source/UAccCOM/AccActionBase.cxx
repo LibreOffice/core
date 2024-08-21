@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include "acccommon.h"
 
@@ -116,7 +117,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionInd
     OUString ouStr = pRXAct->getAccessibleActionDescription(actionIndex);
 
     SysFreeString(*description);
-    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
+    *description = sal::systools::BStr::newBSTR(ouStr);
 
     return S_OK;
 
@@ -176,7 +177,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
         auto const wString = comphelper::GetkeyBindingStrByXkeyBinding(
             binding->getAccessibleKeyBinding(index));
 
-        (*keyBinding)[index] = SysAllocString(o3tl::toW(wString.getStr()));
+        (*keyBinding)[index] = sal::systools::BStr::newBSTR(wString);
     }
 
     *nBinding = nCount;

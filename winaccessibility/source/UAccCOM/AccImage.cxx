@@ -23,6 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -48,7 +49,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
 
         OUString ouStr = GetXInterface()->getAccessibleImageDescription();
         SysFreeString(*description);
-        *description = SysAllocString(o3tl::toW(ouStr.getStr()));
+        *description = sal::systools::BStr::newBSTR(ouStr);
 
         return S_OK;
     }

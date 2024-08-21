@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "MAccessible.h"
@@ -125,7 +126,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnDescription(long column, 
     const OUString& ouStr = pRXTable->getAccessibleColumnDescription(column);
 
     SysFreeString(*description);
-    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
+    *description = sal::systools::BStr::newBSTR(ouStr);
     if (*description==nullptr)
         return E_FAIL;
     return S_OK;
@@ -323,7 +324,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR *
     const OUString& ouStr = pRXTable->getAccessibleRowDescription(row);
 
     SysFreeString(*description);
-    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
+    *description = sal::systools::BStr::newBSTR(ouStr);
     if (*description==nullptr)
         return E_FAIL;
     return S_OK;

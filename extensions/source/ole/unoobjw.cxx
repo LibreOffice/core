@@ -87,6 +87,7 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/safeint.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include "comifaces.hxx"
 #include "jscriptclasses.hxx"
@@ -119,7 +120,7 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     {
         pInfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
         pInfo->bstrSource = SysAllocString(L"[automation bridge] ");
-        pInfo->bstrDescription = SysAllocString(o3tl::toW(message.getStr()));
+        pInfo->bstrDescription = sal::systools::BStr::newBSTR(message);
     }
 }
 
@@ -811,7 +812,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
         return E_INVALIDARG;
 
     SAL_INFO("extensions.olebridge", "..." << this << "@CXTypeInfo::GetNames(" << memid << "): " << aMethods[memid + 2]->getName());
-    rgBstrNames[0] = SysAllocString(reinterpret_cast<LPOLESTR>(aMethods[memid + 2]->getName().pData->buffer));
+    rgBstrNames[0] = sal::systools::BStr::newBSTR(aMethods[memid + 2]->getName());
     *pcNames = 1;
 
     return S_OK;
@@ -887,7 +888,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
     {
         if (memid == MEMBERID_NIL)
         {
-            *pBstrName = SysAllocString(o3tl::toW(msImplementationName.getStr()));
+            *pBstrName = sal::systools::BStr::newBSTR(msImplementationName);
         }
         else if (memid == DISPID_VALUE)
         {
@@ -897,7 +898,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
         else
         {
             // FIXME: Shouldn't we be able to know the names of the members of UNO interfaces?
-            *pBstrName = SysAllocString(o3tl::toW(OUString("UnknownNameOfMember#" + OUString::number(memid)).getStr()));
+            *pBstrName = sal::systools::BStr::newBSTR(Concat2View("UnknownNameOfMember#" + OUString::number(memid)));
         }
     }
     if (pBstrDocString)

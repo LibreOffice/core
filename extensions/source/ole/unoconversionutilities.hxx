@@ -36,6 +36,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include "ole2uno.hxx"
 #include <cppuhelper/weakref.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include "unotypewrapper.hxx"
 #include <unordered_map>
@@ -849,7 +850,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             if (rAny >>= value)
             {
                 pVariant->vt = VT_BSTR;
-                pVariant->bstrVal = SysAllocString(o3tl::toW(value.getStr()));
+                pVariant->bstrVal = sal::systools::BStr::newBSTR(value);
             }
             else
             {

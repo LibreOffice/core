@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -378,7 +379,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
 
                 const OUString sName = xContext->getAccessibleName();
                 SysFreeString(*pszName);
-                *pszName = SysAllocString(o3tl::toW(sName.getStr()));
+                *pszName = sal::systools::BStr::newBSTR(sName);
                 return S_OK;
             }
 
@@ -470,7 +471,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
 
                 const OUString sDescription = xContext->getAccessibleDescription();
                 SysFreeString(*pszDescription);
-                *pszDescription = SysAllocString(o3tl::toW(sDescription.getStr()));
+                *pszDescription = sal::systools::BStr::newBSTR(sDescription);
                 return S_OK;
             }
 
@@ -763,7 +764,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                     }
 
                     SysFreeString(*pszKeyboardShortcut);
-                    *pszKeyboardShortcut = SysAllocString(o3tl::toW(wString.getStr()));
+                    *pszKeyboardShortcut = sal::systools::BStr::newBSTR(wString);
 
                     return S_OK;
                 }
@@ -2488,7 +2489,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                 pvData->vt = VT_BSTR;
                 OUString val;
                 rAnyVal >>= val;
-                pvData->bstrVal = SysAllocString(o3tl::toW(val.getStr()));
+                pvData->bstrVal = sal::systools::BStr::newBSTR(val);
                 break;
             }
 
@@ -2540,7 +2541,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass::TypeClass_MAKE_FIXED_SIZE:
             // Output the type string, if there is other uno value type.
             pvData->vt = VT_BSTR;
-            pvData->bstrVal = SysAllocString(o3tl::toW(rAnyVal.getValueTypeName().getStr()));
+            pvData->bstrVal = sal::systools::BStr::newBSTR(rAnyVal.getValueTypeName());
             break;
 
         default:
@@ -2638,9 +2639,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_locale( IA2Locale __RPC_FAR 
             return E_FAIL;
 
         css::lang::Locale unoLoc = m_xContext->getLocale();
-        locale->language = SysAllocString(o3tl::toW(unoLoc.Language.getStr()));
-        locale->country = SysAllocString(o3tl::toW(unoLoc.Country.getStr()));
-        locale->variant = SysAllocString(o3tl::toW(unoLoc.Variant.getStr()));
+        locale->language = sal::systools::BStr::newBSTR(unoLoc.Language);
+        locale->country = sal::systools::BStr::newBSTR(unoLoc.Country);
+        locale->variant = sal::systools::BStr::newBSTR(unoLoc.Variant);
 
         return S_OK;
 
@@ -2657,7 +2658,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appName(BSTR __RPC_FAR *name
             return E_INVALIDARG;
 
         static const OUString sAppName = utl::ConfigManager::getProductName();
-        *name = SysAllocString(o3tl::toW(sAppName.getStr()));
+        *name = sal::systools::BStr::newBSTR(sAppName);
         return S_OK;
     } catch(...) { return E_FAIL; }
 }
@@ -2670,7 +2671,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appVersion(BSTR __RPC_FAR *v
         if(version == nullptr)
             return E_INVALIDARG;
         static const OUString sVersion = utl::ConfigManager::getProductVersion();
-        *version=SysAllocString(o3tl::toW(sVersion.getStr()));
+        *version = sal::systools::BStr::newBSTR(sVersion);
         return S_OK;
     } catch(...) { return E_FAIL; }
 }
@@ -2734,7 +2735,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
 
         if (*pAttr)
             SysFreeString(*pAttr);
-        *pAttr = SysAllocString(o3tl::toW(sAttributes.getStr()));
+        *pAttr = sal::systools::BStr::newBSTR(sAttributes);
 
         return S_OK;
     } catch(...) { return E_FAIL; }
