@@ -50,6 +50,7 @@
 #include <editeng/memberids.h>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -877,6 +878,7 @@ sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
 
 void SvxTabStopItem::SetDefaultDistance(sal_Int32 nDefaultDistance)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     mnDefaultDistance = nDefaultDistance;
 }
 
@@ -933,6 +935,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -1059,6 +1062,15 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
+size_t SvxTabStopItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, Which());
+    o3tl::hash_combine(seed, mnDefaultDistance);
+    o3tl::hash_combine(seed, maTabStops.size());
+    return seed;
+}
+
 SvxTabStopItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 {
     return new SvxTabStopItem( *this );
@@ -1098,6 +1110,7 @@ bool SvxTabStopItem::GetPresentation
 
 bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     sal_uInt16 nTabPos = GetPos(rTab);
     if(SVX_TAB_NOTFOUND != nTabPos )
         Remove(nTabPos);
@@ -1106,6 +1119,7 @@ bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
 
 void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     for( sal_uInt16 i = 0; i < pTabs->Count(); i++ )
     {
         const SvxTabStop& rTab = (*pTabs)[i];
