@@ -280,7 +280,7 @@ struct StyleSheetTable_Impl
     rtl::Reference<SwXTextDocument>         m_xTextDocument;
     rtl::Reference<SwXTextDefaults>         m_xTextDefaults;
     std::vector< StyleSheetEntryPtr >       m_aStyleSheetEntries;
-    std::map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
+    std::unordered_map< OUString, StyleSheetEntryPtr > m_aStyleSheetEntriesMap;
     std::map<OUString, OUString>            m_ClonedTOCStylesMap;
     StyleSheetEntryPtr                      m_pCurrentEntry;
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
