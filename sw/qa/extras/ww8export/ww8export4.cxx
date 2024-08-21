@@ -191,6 +191,29 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
     CPPUNIT_ASSERT(getProperty<bool>(xShape2, u"IsFollowingTextFlow"_ustr));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapThrough.doc")
+{
+    // given cell B2 with a char-oriented-left wrapThrough image that is NOT layoutInCell
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nShapeLeft
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    sal_Int32 nPara6Left
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    CPPUNIT_ASSERT(nShapeLeft > nPara6Left); // nShapeLeft starts after the word "anchor"
+
+    // sal_Int32 nShapeTop
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+    //                "top"_ostr)
+    //           .toInt32();
+    // sal_Int32 nPara1Top
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // nShapeTop starts at the cell margin"
+
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
 {
     // Given a document, endnotes at collected at section end:

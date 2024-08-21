@@ -2463,13 +2463,13 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
     }
 
     // if the object is anchored inside a table cell, is horizontal aligned
-    // at frame|character and has wrap through, but its attribute
+    // at frame and has wrap through, but its attribute
     // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
     // #i84783# - use new method <IsObjectLayoutInTableCell()>
     const bool bIsObjectLayoutInTableCell
         = m_nInTable && IsObjectLayoutInTableCell(rRecord.nGroupShapeBooleanProperties);
     if (!bIsObjectLayoutInTableCell && m_nInTable &&
-            (eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR) &&
+            (eHoriRel == text::RelOrientation::FRAME) &&
             rFSPA.nwr == 3)
     {
         eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
