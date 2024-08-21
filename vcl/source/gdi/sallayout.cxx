@@ -143,9 +143,8 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 
 basegfx::B2DPoint SalLayout::GetDrawPosition(const basegfx::B2DPoint& rRelative) const
 {
-    basegfx::B2DPoint aPos(maDrawBase);
-    basegfx::B2DPoint aOfs(rRelative.getX() + maDrawOffset.X(),
-                     rRelative.getY() + maDrawOffset.Y());
+    basegfx::B2DPoint aPos{maDrawBase};
+    basegfx::B2DPoint aOfs = rRelative + maDrawOffset;
 
     if( mnOrientation == 0_deg10 )
         aPos += aOfs;
@@ -1220,8 +1219,7 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
-            rPos.adjustX(maDrawBase.getX() + maDrawOffset.X());
-            rPos.adjustY(maDrawBase.getY() + maDrawOffset.Y());
+            rPos += maDrawBase + maDrawOffset;
             return true;
         }
     }

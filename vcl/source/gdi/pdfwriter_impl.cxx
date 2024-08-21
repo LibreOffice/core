@@ -6520,11 +6520,13 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
     if( eRelief == FontRelief::Engraved )
         nOff = -nOff;
 
-    rLayout.DrawOffset() += Point( nOff, nOff );
+    auto aPrevOffset = rLayout.DrawOffset();
+    rLayout.DrawOffset()
+        += basegfx::B2DPoint{ static_cast<double>(nOff), static_cast<double>(nOff) };
     updateGraphicsState();
     drawLayout( rLayout, rText, bTextLines );
 
-    rLayout.DrawOffset() -= Point( nOff, nOff );
+    rLayout.DrawOffset() = aPrevOffset;
     setTextLineColor( aTextLineColor );
     setOverlineColor( aOverlineColor );
     aSetFont.SetColor( aTextColor );

@@ -214,7 +214,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     tools::Rectangle aBoundRect;
     rSalLayout.DrawBase() = basegfx::B2DPoint( 0, 0 );
-    rSalLayout.DrawOffset() = Point( 0, 0 );
+    rSalLayout.DrawOffset() = basegfx::B2DPoint{ 0, 0 };
     if (basegfx::B2DRectangle r; rSalLayout.GetBoundRect(r))
     {
         aBoundRect = SalLayout::BoundRect2Rectangle(r);
@@ -368,9 +368,12 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( eRelief == FontRelief::Engraved )
             nOff = -nOff;
-        rSalLayout.DrawOffset() += Point( nOff, nOff);
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
-        rSalLayout.DrawOffset() -= Point( nOff, nOff);
+
+        auto aPrevOffset = rSalLayout.DrawOffset();
+        rSalLayout.DrawOffset()
+            += basegfx::B2DPoint{ static_cast<double>(nOff), static_cast<double>(nOff) };
+        ImplDrawTextDirect(rSalLayout, mbTextLines);
+        rSalLayout.DrawOffset() = aPrevOffset;
 
         SetTextLineColor( aTextLineColor );
         SetOverlineColor( aOverlineColor );

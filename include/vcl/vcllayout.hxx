@@ -72,8 +72,8 @@ public:
     // used by upper layers
     basegfx::B2DPoint& DrawBase()                           { return maDrawBase; }
     const basegfx::B2DPoint& DrawBase() const               { return maDrawBase; }
-    Point&          DrawOffset()                            { return maDrawOffset; }
-    const Point&    DrawOffset() const                      { return maDrawOffset; }
+    basegfx::B2DPoint& DrawOffset() { return maDrawOffset; }
+    const basegfx::B2DPoint& DrawOffset() const { return maDrawOffset; }
     basegfx::B2DPoint GetDrawPosition( const basegfx::B2DPoint& rRelative = basegfx::B2DPoint(0,0) ) const;
 
     virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
@@ -136,7 +136,7 @@ protected:
 
     Degree10        mnOrientation;
 
-    mutable Point   maDrawOffset;
+    basegfx::B2DPoint maDrawOffset;
     basegfx::B2DPoint maDrawBase;
 
     bool            mbSubpixelPositioning;

@@ -436,7 +436,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     double nYScale = 0;
     GetFont().GetScale(&nXScale, &nYScale);
 
-    basegfx::B2DPoint aCurrPos(0, 0);
+    hb_position_t nCurrX = 0;
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -683,7 +683,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
                     nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
 
-                double nAdvance, nXOffset, nYOffset;
+                hb_position_t nAdvance;
+                double nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
@@ -712,19 +713,19 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     nYOffset = -pHbPositions[i].y_offset;
                 }
 
-                nAdvance = nAdvance * nXScale;
+                double nScaledAdvance = nAdvance * nXScale;
                 nXOffset = nXOffset * nXScale;
                 nYOffset = nYOffset * nYScale;
                 if (!GetSubpixelPositioning())
                 {
-                    nAdvance = std::round(nAdvance);
+                    nScaledAdvance = std::round(nScaledAdvance);
                     nXOffset = std::round(nXOffset);
                     nYOffset = std::round(nYOffset);
                 }
 
-                basegfx::B2DPoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
+                basegfx::B2DPoint aNewPos(nCurrX * nXScale + nXOffset, nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset, nYOffset, nOrigCharPos);
+                                    nScaledAdvance, nXOffset, nYOffset, nOrigCharPos);
 
                 if (aGI.origCharPos() >= rArgs.mnDrawMinCharPos
                     && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
@@ -735,7 +736,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (aGI.origCharPos() >= rArgs.mnDrawOriginCluster
                     && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
                 {
-                    aCurrPos.adjustX(nAdvance);
+                    nCurrX += nAdvance;
                 }
             }
         }
