@@ -357,7 +357,7 @@ void  AccObject::UpdateAction()
     {
         if( m_xAccActionRef->getAccessibleActionCount() > 0 )
         {
-            UpdateDefaultAction( );
+            UpdateActionDesc();
             m_pIMAcc->SetDefaultAction(
                     reinterpret_cast<hyper>(m_xAccActionRef.get()));
         }
@@ -385,33 +385,6 @@ void AccObject::UpdateValue()
     }
 
     SetValue( pAny );
-}
-
-/**
-   * Set special default action description string via UNO role.
-   * @param Role UNO role
-   * @return
-   */
-void AccObject::UpdateDefaultAction( )
-{
-    if(!m_xAccActionRef.is())
-        return ;
-
-    switch(m_accRole)
-    {
-    case PUSH_BUTTON:
-    case TOGGLE_BUTTON:
-    case RADIO_BUTTON:
-    case MENU_ITEM:
-    case RADIO_MENU_ITEM:
-    case CHECK_MENU_ITEM:
-    case LIST_ITEM:
-    case CHECK_BOX:
-    case TREE_ITEM:
-    case BUTTON_DROPDOWN:
-        m_pIMAcc->Put_ActionDescription( o3tl::toW(m_xAccActionRef->getAccessibleActionDescription(sal_Int32(0)).getStr()) );
-        return;
-    }
 }
 
 /**
@@ -732,6 +705,7 @@ AccObject* AccObject::NextChild()
         return  *pInd;
     return nullptr;
 }
+
 /**
    * update action description desc
    * @param
@@ -742,34 +716,13 @@ void AccObject::UpdateActionDesc()
     if (!m_pIMAcc)
         return;
 
-    long Role = m_accRole;
+    if (!m_xAccActionRef.is() || m_xAccActionRef->getAccessibleActionCount() <= 0)
+        return;
 
-    if(  Role == PUSH_BUTTON || Role == RADIO_BUTTON || Role == MENU_ITEM ||
-            Role == LIST_ITEM || Role == CHECK_BOX || Role == TREE_ITEM ||
-            Role == CHECK_MENU_ITEM || Role == RADIO_MENU_ITEM )
-    {
-        UpdateDefaultAction(  );
-    }
-    else
-    {
-
-        if( m_xAccActionRef.is() )
-        {
-            if( m_xAccActionRef->getAccessibleActionCount() > 0 )
-            {
-                if (!(Role == SPIN_BOX || Role == COMBO_BOX || Role == DATE_EDITOR ||
-                      Role == EDIT_BAR || Role == PASSWORD_TEXT || Role == TEXT))
-                {
-                    const OUString sActionDesc = m_xAccActionRef->getAccessibleActionDescription(0);
-                    // if string is non-empty, action is set.
-                    if (!sActionDesc.isEmpty())
-                        m_pIMAcc->Put_ActionDescription(o3tl::toW(sActionDesc.getStr()));
-                }
-            }
-        }
-    }
-
+    const OUString sActionDesc = m_xAccActionRef->getAccessibleActionDescription(0);
+    m_pIMAcc->Put_ActionDescription(o3tl::toW(sActionDesc.getStr()));
 }
+
 /**
    * update role information from uno to com
    * @param

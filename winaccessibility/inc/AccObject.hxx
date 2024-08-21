@@ -59,7 +59,6 @@ private:
     css::uno::Reference < css::accessibility::XAccessibleAction > m_xAccActionRef;
     css::uno::Reference < css::accessibility::XAccessibleContext > m_xAccContextRef;
 
-    void UpdateActionDesc();
     void UpdateRole();
 
     DWORD GetMSAAStateFromUNO(sal_Int64 xState);//translate state from UNO to MSAA value
@@ -74,7 +73,7 @@ public:
     virtual ~AccObject();
 
     bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
-    void UpdateDefaultAction();
+    void UpdateActionDesc();
 
     IMAccessible*  GetIMAccessible();   //return COM interface in acc object
     css::uno::Reference<css::accessibility::XAccessible> const& GetXAccessible();
