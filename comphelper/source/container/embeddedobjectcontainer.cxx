@@ -156,8 +156,9 @@ bool EmbeddedObjectContainer::CommitImageSubStorage()
         } // if ( xSet.is() )
         if ( !bReadOnlyMode )
         {
-            uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
-            xTransact->commit();
+            uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY );
+            if (xTransact)
+                xTransact->commit();
         }
     }
     catch (const uno::Exception&)
@@ -684,8 +685,9 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     OUString aOrigName;
     try
     {
-        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY_THROW );
-        aOrigName = xPersist->getEntryName();
+        uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+        if (xPersist)
+            aOrigName = xPersist->getEntryName();
     }
     catch (const uno::Exception&)
     {
@@ -1071,14 +1073,16 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
         ::comphelper::OStorageHelper::CopyInputToOutput( rStream, xOutStream );
         xOutStream->flush();
 
-        uno::Reference< beans::XPropertySet > xPropSet( xGraphicStream, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPropSet( xGraphicStream, uno::UNO_QUERY );
+        if (xPropSet)
+        {
+            xPropSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr,
+                                        uno::Any( true ) );
+            xPropSet->setPropertyValue(u"MediaType"_ustr, uno::Any(rMediaType) );
 
-        xPropSet->setPropertyValue(u"UseCommonStoragePasswordEncryption"_ustr,
-                                    uno::Any( true ) );
-        xPropSet->setPropertyValue(u"MediaType"_ustr, uno::Any(rMediaType) );
-
-        xPropSet->setPropertyValue(u"Compressed"_ustr,
-                                    uno::Any( true ) );
+            xPropSet->setPropertyValue(u"Compressed"_ustr,
+                                        uno::Any( true ) );
+        }
     }
     catch (const uno::Exception&)
     {
@@ -1481,8 +1485,8 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                 // if this method is used as part of SaveCompleted the object must stay unmodified after execution
                 try
                 {
-                    uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
-                    if ( xModif->isModified() )
+                    uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xModif && xModif->isModified() )
                         xModif->setModified( false );
                 }
                 catch (const uno::Exception&)

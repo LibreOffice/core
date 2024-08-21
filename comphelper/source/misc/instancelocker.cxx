@@ -241,8 +241,9 @@ void OLockListener::Dispose()
     {
         try
         {
-            uno::Reference< frame::XDesktop > xDesktop( xInstance, uno::UNO_QUERY_THROW );
-            xDesktop->removeTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
+            uno::Reference< frame::XDesktop > xDesktop( xInstance, uno::UNO_QUERY );
+            if (xDesktop)
+                xDesktop->removeTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
         }
         catch( uno::Exception& )
         {}

@@ -719,8 +719,9 @@ OUString OStorageHelper::GetODFVersionFromStorage(const uno::Reference<embed::XS
     OUString aODFVersion;
     try
     {
-        uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
+        uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY);
+        if (xPropSet)
+            xPropSet->getPropertyValue(u"Version"_ustr) >>= aODFVersion;
     }
     catch (uno::Exception&)
     {
