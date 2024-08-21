@@ -28,7 +28,6 @@ using namespace osl;
 
 BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
     StreamSocket( aSocket ),
-    aRet( 0 ),
     aRead( 0 ),
     mSocket( 0 ),
     usingCSocket( false )
@@ -36,7 +35,6 @@ BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
 }
 
 BufferedStreamSocket::BufferedStreamSocket( int aSocket ):
-    aRet( 0 ),
     aRead( 0 ),
     mSocket( aSocket ),
     usingCSocket( true )
@@ -106,25 +104,25 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 
         // Then try and receive if nothing present
         aBuffer.resize( aRead + 100 );
-        if ( !usingCSocket)
-            aRet = StreamSocket::recv( &aBuffer[aRead], 100 );
-        else
-            aRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
 
-        SAL_INFO( "sdremote.bluetooth", "recv " << aRet << " aBuffer len " << aBuffer.size() );
-        if ( aRet <= 0 )
-        {
+        sal_Int32 nRet;
+        if (!usingCSocket)
+            nRet = StreamSocket::recv( &aBuffer[aRead], 100 );
+        else
+            nRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
+
+        SAL_INFO( "sdremote.bluetooth", "recv " << nRet << " aBuffer len " << aBuffer.size() );
+        if (nRet <= 0)
             return 0;
-        }
+
         // Prevent buffer from growing massively large.
         if ( aRead > MAX_LINE_LENGTH )
         {
             aBuffer.clear();
             return 0;
         }
-        aRead += aRet;
+        aRead += nRet;
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

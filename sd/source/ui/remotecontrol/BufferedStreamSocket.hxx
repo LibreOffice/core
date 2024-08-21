@@ -56,7 +56,7 @@ namespace sd
 
             void getPeerAddr(osl::SocketAddr&);
         private:
-            sal_Int32 aRet, aRead;
+            sal_Int32 aRead;
             std::vector<char> aBuffer;
             int mSocket;
             bool usingCSocket;
