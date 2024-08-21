@@ -104,8 +104,22 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_target(long targetIndex, IUn
         if (targetIndex >= nCount)
             return E_FAIL;
 
-        Reference<XAccessible> xRAcc = xTargets[targetIndex];
-        IAccessible* pRet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get());
+        Reference<XAccessible> xTarget = xTargets[targetIndex];
+        if (!xTarget.is())
+            return E_FAIL;
+
+        IAccessible* pRet = CMAccessible::get_IAccessibleFromXAccessible(xTarget.get());
+        if (!pRet)
+        {
+            Reference<XAccessibleContext> xTargetContext = xTarget->getAccessibleContext();
+            if (!xTargetContext.is())
+                return E_FAIL;
+
+            Reference<XAccessible> xParent = xTargetContext->getAccessibleParent();
+            CMAccessible::g_pAccObjectManager->InsertAccObj(xTarget.get(), xParent.get());
+            pRet = CMAccessible::get_IAccessibleFromXAccessible(xTarget.get());
+        }
+
         if (pRet)
         {
             *target = pRet;
