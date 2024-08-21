@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
@@ -48,7 +48,7 @@ class OOXMLStreamImpl : public OOXMLStream
     OUString msTarget;
 
     /// Cache holding an Id <-> Target map of external relations.
-    std::map<OUString, OUString> maIdCache;
+    std::unordered_map<OUString, OUString> maIdCache;
 
     bool lcl_getTarget(const css::uno::Reference<css::embed::XRelationshipAccess>& xRelationshipAccess,
                        StreamType_t nStreamType,
