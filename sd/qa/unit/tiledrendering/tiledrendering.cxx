@@ -3171,12 +3171,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
 {
     // Check rendering of slideshow layers (as in the document):
-    // - background layer
     // - master slide layer
     // - main slide layer
-    // The doucment has nothing set for the background, so it should be application color = white
-    // On the master slide there is a (blue) rectangle on the right side - top-left should be transparent
-    // On the main slide there is a (green) rectanlge on the top-left size - right side should be transparent
 
     const bool bOutputPNG = false; // Control layer output to PNG files
 
@@ -3253,6 +3249,118 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         OUString rJsonMsg;
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
     }
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFields)
+{
+    // Check rendering of slideshow layers (as in the document):
+    // - master slide layer
+    // - main slide layer
+
+    const bool bOutputPNG = false; // Control layer output to PNG files
+
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_WithFields.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+
+    const Color aTransparentColor(ColorAlpha, 0x00000000);
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+        // TODO - check JSON content
+        // printf ("1 %s\n\n", rJsonMsg.toUtf8().getStr());
+
+        BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
+        if (bOutputPNG)
+        {
+            SvFileStream aStream("/home/quikee/XXX_01.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PngImageWriter aPNGWriter(aStream);
+            aPNGWriter.write(aBitmapEx);
+        }
+
+        // top-left corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(20, 20));
+
+        // bottom-left corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(20, nViewHeight - 20));
+
+        // bottom-right corner
+        CPPUNIT_ASSERT_EQUAL(Color(0xff, 0xd0, 0x40), aBitmapEx.GetPixelColor(nViewWidth - 20, nViewHeight - 20));
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+        // TODO - check JSON content
+        // printf ("2 %s\n\n", rJsonMsg.toUtf8().getStr());
+
+        BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
+        if (bOutputPNG)
+        {
+            SvFileStream aStream("/home/quikee/XXX_02.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PngImageWriter aPNGWriter(aStream);
+            aPNGWriter.write(aBitmapEx);
+        }
+
+        // top-left corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(20, 20));
+
+        // bottom-left corner
+        CPPUNIT_ASSERT_EQUAL(Color(0x90, 0x80, 0xff), aBitmapEx.GetPixelColor(20, nViewHeight - 20));
+
+        // bottom-right corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nViewWidth - 20, nViewHeight - 20));
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+        // TODO - check JSON content
+        // printf ("3 %s\n\n", rJsonMsg.toUtf8().getStr());
+
+        BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
+        if (bOutputPNG)
+        {
+            SvFileStream aStream("/home/quikee/XXX_03.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PngImageWriter aPNGWriter(aStream);
+            aPNGWriter.write(aBitmapEx);
+        }
+
+        // top-left corner
+        CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x50, 0x90), aBitmapEx.GetPixelColor(20, 20));
+
+        // bottom-left corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(20, nViewHeight - 20));
+
+        // bottom-right corner
+        CPPUNIT_ASSERT_EQUAL(aTransparentColor, aBitmapEx.GetPixelColor(nViewWidth - 20, nViewHeight - 20));
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
     pXImpressDocument->postSlideshowCleanup();
 }
 

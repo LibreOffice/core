@@ -24,13 +24,6 @@
 
 namespace sd
 {
-struct RenderOptions
-{
-    bool mbIncludeBackground = true;
-    bool mbSkipMainPageObjects = false;
-    bool mbSkipMasterPageObjects = false;
-};
-
 struct RenderContext
 {
     SdrModel& mrModel;
@@ -44,7 +37,7 @@ struct RenderContext
         , mrPage(rPage)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
-        // Turn of spelling
+        // Turn off spelling
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
         mnSavedControlBits = rOutliner.GetControlWord();
         rOutliner.SetControlWord(mnSavedControlBits & ~EEControlBits::ONLINESPELLING);
@@ -77,14 +70,31 @@ struct RenderContext
 
 namespace
 {
+bool hasFields(SdrObject* pObject)
+{
+    auto* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
+    if (!pTextObject)
+        return false;
+
+    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    if (pOutlinerParagraphObject)
+    {
+        const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
+        if (rEditText.IsFieldObject())
+            return true;
+    }
+    return false;
+}
+
+/** VOC redirector to control which object should be rendered and which not */
 class ObjectRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 protected:
-    RenderOptions maOptions;
+    RenderState& mrRenderState;
 
 public:
-    ObjectRedirector(RenderOptions const& rOptions)
-        : maOptions(rOptions)
+    ObjectRedirector(RenderState& rRenderState)
+        : mrRenderState(rRenderState)
     {
     }
 
@@ -93,36 +103,62 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
     {
+        if (mrRenderState.mbSkipAllInThisPass)
+            return;
+
         SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-        SdrPage* pPage = pObject ? pObject->getSdrPageFromSdrObject() : nullptr;
+        // Check if we are rendering an object that is valid to render (exists, and not empty)
+        if (pObject == nullptr || pObject->IsEmptyPresObj())
+            return;
 
-        if (pObject == nullptr || pPage == nullptr)
+        SdrPage* pPage = pObject->getSdrPageFromSdrObject();
+        // Does the object have a page
+        if (pPage == nullptr)
+            return;
+
+        // is the object visible and not hidden by any option
+        const bool bVisible
+            = pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, true);
+
+        if (!bVisible)
+            return;
+
+        // Check if we have already rendered the object
+        if (mrRenderState.isObjectAlreadyRendered(pObject))
+            return;
+
+        // Check if we are in correct stage
+        if (mrRenderState.meStage == RenderStage::Master && !pPage->IsMasterPage())
         {
-            // Not a SdrObject or a object not connected to a page (object with no page)
+            if (mrRenderState.mbFirstObjectInPass)
+            {
+                // if this is the first object - change from master to slide
+                // means we are done with rendering of master layers
+                mrRenderState.meStage = RenderStage::Slide;
+            }
+            else
+            {
+                // if not, we have to stop rendering all further objects
+                mrRenderState.mbSkipAllInThisPass = true;
+                return;
+            }
+        }
+
+        if (mrRenderState.meStage == RenderStage::Master && hasFields(pObject)
+            && mrRenderState.mbStopRenderingWhenField && !mrRenderState.mbFirstObjectInPass)
+        {
+            mrRenderState.mbStopRenderingWhenField = false;
+            mrRenderState.mbSkipAllInThisPass = true;
             return;
         }
 
-        if (maOptions.mbSkipMasterPageObjects && pPage->IsMasterPage())
-            return;
-
-        if (maOptions.mbSkipMainPageObjects && !pPage->IsMasterPage())
-            return;
-
-        const bool bDoCreateGeometry(
-            pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, true));
-
-        if (!bDoCreateGeometry
-            && (pObject->GetObjInventor() != SdrInventor::Default
-                || pObject->GetObjIdentifier() != SdrObjKind::Page))
-        {
-            return;
-        }
-
-        if (pObject->IsEmptyPresObj())
-            return;
-
+        // render the object
         sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
             rOriginal, rDisplayInfo, rVisitor);
+
+        mrRenderState.mbFirstObjectInPass = false;
+        mrRenderState.maObjectsDone.insert(pObject);
+        mrRenderState.mbPassHasOutput = true;
     }
 };
 
@@ -148,8 +184,9 @@ SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
     , mrModel(rPage.getSdrModelFromSdrPage())
 {
     if (!hasEmptyMaster(rPage))
-        maRenderStages.emplace_back(SlideRenderStage::Master);
-    maRenderStages.emplace_back(SlideRenderStage::Slide);
+        maRenderState.meStage = RenderStage::Master;
+    else
+        maRenderState.meStage = RenderStage::Slide;
 }
 
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
@@ -161,8 +198,7 @@ Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePi
     return maSlideSize;
 }
 
-void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext,
-                                               RenderOptions const& rRenderOptions)
+void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext)
 {
     SdrView aView(mrModel, rRenderContext.maVirtualDevice);
     aView.SetPageVisible(false);
@@ -172,29 +208,24 @@ void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext,
     aView.SetGridVisible(false);
     aView.SetHlplVisible(false);
     aView.SetGlueVisible(false);
-    aView.setHideBackground(!rRenderOptions.mbIncludeBackground);
+    aView.setHideBackground(!maRenderState.includeBackground());
     aView.ShowSdrPage(&mrPage);
 
     Size aPageSize(mrPage.GetSize());
     Point aPoint;
 
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    ObjectRedirector aRedirector(rRenderOptions);
+    ObjectRedirector aRedirector(maRenderState);
     aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, &aRedirector);
 }
 
-bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJsonMsg)
+void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
 {
-    RenderOptions aRenderOptions;
-    aRenderOptions.mbSkipMainPageObjects = true;
-
-    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
-    createViewAndDraw(aRenderContext, aRenderOptions);
-
     ::tools::JsonWriter aJsonWriter;
-    aJsonWriter.put("group", "MasterPage");
+    aJsonWriter.put("group", maRenderState.stageString());
+    aJsonWriter.put("index", maRenderState.currentIndex());
     aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
-    aJsonWriter.put("index", 0);
+
     aJsonWriter.put("type", "bitmap");
     {
         ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
@@ -203,47 +234,24 @@ bool SlideshowLayerRenderer::renderMaster(unsigned char* pBuffer, OString& rJson
     }
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
 
-    return true;
-}
-
-bool SlideshowLayerRenderer::renderSlide(unsigned char* pBuffer, OString& rJsonMsg)
-{
-    RenderOptions aRenderOptions;
-    aRenderOptions.mbSkipMasterPageObjects = true;
-
-    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
-    createViewAndDraw(aRenderContext, aRenderOptions);
-
-    ::tools::JsonWriter aJsonWriter;
-    aJsonWriter.put("group", "DrawPage");
-    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
-    aJsonWriter.put("index", 0);
-    aJsonWriter.put("type", "bitmap");
-    {
-        ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
-        aJsonWriter.put("type", "%IMAGETYPE%");
-        aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
-    }
-    rJsonMsg = aJsonWriter.finishAndGetAsOString();
-
-    return true;
+    maRenderState.incrementIndex();
 }
 
 bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
 {
-    if (maRenderStages.empty())
+    // Reset state
+    maRenderState.resetPass();
+
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
+    createViewAndDraw(aRenderContext);
+
+    // Check if we are done rendering all passes
+    if (maRenderState.noMoreOutput())
         return false;
 
-    auto eRenderStage = maRenderStages.front();
-    maRenderStages.pop_front();
+    writeJSON(rJsonMsg);
 
-    switch (eRenderStage)
-    {
-        case SlideRenderStage::Master:
-            return renderMaster(pBuffer, rJsonMsg);
-        case SlideRenderStage::Slide:
-            return renderSlide(pBuffer, rJsonMsg);
-    };
+    maRenderState.mnCurrentPass++;
 
     return true;
 }
