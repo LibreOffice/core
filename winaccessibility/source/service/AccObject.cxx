@@ -270,12 +270,10 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
     m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
     m_accRole = m_xAccContextRef -> getAccessibleRole();
-    if( m_pIMAcc )
-    {
-        m_pIMAcc->SetXAccessible(reinterpret_cast<hyper>(m_xAccRef.get()));
-        m_pIMAcc->Put_XAccObjectManager(reinterpret_cast<hyper>(pManager));
-        m_pIMAcc->SetDefaultAction(reinterpret_cast<hyper>(m_xAccActionRef.get()));
-    }
+
+    m_pIMAcc->SetXAccessible(reinterpret_cast<hyper>(m_xAccRef.get()));
+    m_pIMAcc->Put_XAccObjectManager(reinterpret_cast<hyper>(pManager));
+    m_pIMAcc->SetDefaultAction(reinterpret_cast<hyper>(m_xAccActionRef.get()));
 }
 /**
    * Destructor.
