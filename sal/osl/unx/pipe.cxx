@@ -478,10 +478,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_writePipe: invalid pipe"); // osl_sendPipe detects invalid pipe
     while (BytesToSend > 0)
     {
-        sal_Int32 RetVal;
-
-        RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
-
+        sal_Int32 RetVal = osl_sendPipe(pPipe, pBuffer, BytesToSend);
         /* error occurred? */
         if (RetVal <= 0)
             break;
