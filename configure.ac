@@ -3606,93 +3606,6 @@ fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
 
 dnl ===================================================================
-dnl .NET support
-dnl ===================================================================
-
-AC_MSG_CHECKING([whether to build with .NET support])
-if test "$with_dotnet" != no; then
-    if test "$DISABLE_SCRIPTING" = TRUE; then
-        AC_MSG_RESULT([no, overridden by --disable-scripting])
-        with_dotnet=no
-        ENABLE_DOTNET=""
-    else
-        AC_MSG_RESULT([yes])
-        ENABLE_DOTNET=TRUE
-    fi
-else
-    AC_MSG_RESULT([no])
-    ENABLE_DOTNET=""
-fi
-
-if test "$ENABLE_DOTNET" = TRUE; then
-    if test -n "$with_dotnet" && test "$with_dotnet" != yes; then
-        dnl the user explicitly asks for a particular dotnet executable here
-
-        AC_MSG_CHECKING([for dotnet])
-        PathFormat "$with_dotnet"
-        DOTNET="$formatted_path_unix"
-
-        if test -f "$DOTNET"; then
-            dnl the user provided dotnet is valid
-            AC_MSG_RESULT([$formatted_path])
-        else
-            dnl since the user wants to use a particular dotnet executable,
-            dnl error out and let them correct the path instead of silently disabling.
-
-            AC_MSG_ERROR([$DOTNET is not a valid dotnet executable])
-            ENABLE_DOTNET=""
-        fi
-    else
-        dnl no specific path to dotnet provided, try looking in $PATH
-
-        AC_PATH_PROGS(DOTNET, [dotnet dotnet.exe])
-        PathFormat "$DOTNET"
-        DOTNET="$formatted_path_unix"
-
-        if test -z "$DOTNET"; then
-            dnl since the user does not specify any particular dotnet
-            dnl silently disable here instead of erroring out, to prevent
-            dnl breaking their build, as --with-dotnet is enabled by default.
-
-            AC_MSG_WARN([dotnet not found, disabling .NET support])
-            ENABLE_DOTNET=""
-        fi
-    fi
-
-    if test -n "$DOTNET"; then
-        dnl the dotnet executable was found, but no guarantees on whether
-        dnl it contains SDK version 8 or higher unless we check.
-
-        AC_MSG_CHECKING([for .NET SDK 8 or higher])
-        dotnet_sdk_ver_major=`"$DOTNET" --version | "$AWK" -F. '{ print $1 }'`
-        if test "$dotnet_sdk_ver_major" -ge 8; then
-            dnl the SDK seems valid, get the root directory
-
-            dotnet_sdk_ver=`"$DOTNET" --version | "$SED" 's/\r//g'`
-            dotnet_sdk_dir=`"$DOTNET" --list-sdks | "$AWK" -F [[]][[]] "/^$dotnet_sdk_ver/"'{ print $2 }' | "$SED" 's/\r//g'`
-            PathFormat "$dotnet_sdk_dir"
-            DOTNET_ROOT=`dirname "$formatted_path_unix"`
-
-            AC_MSG_RESULT([yes])
-        else
-            dnl silently disable for same reason as before
-
-            AC_MSG_RESULT([no, disabling .NET support])
-            ENABLE_DOTNET=""
-        fi
-    fi
-fi
-
-if test "$ENABLE_DOTNET" != TRUE; then
-    DOTNET=""
-    DOTNET_ROOT=""
-fi
-
-AC_SUBST(ENABLE_DOTNET)
-AC_SUBST(DOTNET)
-AC_SUBST(DOTNET_ROOT)
-
-dnl ===================================================================
 dnl Java support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with Java support])
@@ -5726,6 +5639,98 @@ emscripten*)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
 esac
+
+dnl ===================================================================
+dnl .NET support
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to build with .NET support])
+if test "$with_dotnet" != no; then
+    if test "$DISABLE_SCRIPTING" = TRUE; then
+        AC_MSG_RESULT([no, overridden by --disable-scripting])
+        with_dotnet=no
+        ENABLE_DOTNET=""
+    else
+        AC_MSG_RESULT([yes])
+        ENABLE_DOTNET=TRUE
+    fi
+else
+    AC_MSG_RESULT([no])
+    ENABLE_DOTNET=""
+fi
+
+if test "$ENABLE_DOTNET" = TRUE; then
+    if test -n "$with_dotnet" && test "$with_dotnet" != yes; then
+        dnl the user explicitly asks for a particular dotnet executable here
+
+        AC_MSG_CHECKING([for dotnet])
+        PathFormat "$with_dotnet"
+        DOTNET="$formatted_path_unix"
+
+        if test -f "$DOTNET"; then
+            dnl the user provided dotnet is valid
+            AC_MSG_RESULT([$formatted_path])
+        else
+            dnl since the user wants to use a particular dotnet executable,
+            dnl error out and let them correct the path instead of silently disabling.
+
+            AC_MSG_ERROR([$DOTNET is not a valid dotnet executable])
+            ENABLE_DOTNET=""
+        fi
+    else
+        dnl no specific path to dotnet provided, try looking in $PATH
+
+        if test "$OS" = WNT
+        then
+                AC_PATH_PROGS(DOTNET, [dotnet.exe])
+        else
+                AC_PATH_PROGS(DOTNET, [dotnet])
+        fi
+        PathFormat "$DOTNET"
+        DOTNET="$formatted_path_unix"
+
+        if test -z "$DOTNET"; then
+            dnl since the user does not specify any particular dotnet
+            dnl silently disable here instead of erroring out, to prevent
+            dnl breaking their build, as --with-dotnet is enabled by default.
+
+            AC_MSG_WARN([dotnet not found, disabling .NET support])
+            ENABLE_DOTNET=""
+        fi
+    fi
+
+    if test -n "$DOTNET"; then
+        dnl the dotnet executable was found, but no guarantees on whether
+        dnl it contains SDK version 8 or higher unless we check.
+
+        AC_MSG_CHECKING([for .NET SDK 8 or higher])
+        dotnet_sdk_ver_major=`"$DOTNET" --version | "$AWK" -F. '{ print $1 }'`
+        if test "$dotnet_sdk_ver_major" -ge 8; then
+            dnl the SDK seems valid, get the root directory
+
+            dotnet_sdk_ver=`"$DOTNET" --version | "$SED" 's/\r//g'`
+            dotnet_sdk_dir=`"$DOTNET" --list-sdks | "$AWK" -F [[]][[]] "/^$dotnet_sdk_ver/"'{ print $2 }' | "$SED" 's/\r//g'`
+            PathFormat "$dotnet_sdk_dir"
+            DOTNET_ROOT=`dirname "$formatted_path_unix"`
+
+            AC_MSG_RESULT([yes])
+        else
+            dnl silently disable for same reason as before
+
+            AC_MSG_RESULT([no, disabling .NET support])
+            ENABLE_DOTNET=""
+        fi
+    fi
+fi
+
+if test "$ENABLE_DOTNET" != TRUE; then
+    DOTNET=""
+    DOTNET_ROOT=""
+fi
+
+AC_SUBST(ENABLE_DOTNET)
+AC_SUBST(DOTNET)
+AC_SUBST(DOTNET_ROOT)
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
