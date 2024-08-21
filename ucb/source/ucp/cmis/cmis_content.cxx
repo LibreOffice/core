@@ -1395,7 +1395,7 @@ namespace cmis
                 copyData( xInputStream, xOutput );
                 try
                 {
-                    pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), std::string() );
+                    pFolder->createDocument( m_pObjectProps, std::move(pOut), OUSTR_TO_STDSTR( rMimeType ), std::string() );
                     sNewPath = STD_TO_OUSTR( newPath );
                 }
                 catch ( const libcmis::Exception& )
