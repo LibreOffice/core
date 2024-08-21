@@ -1446,6 +1446,9 @@ if test "$_os" = "Emscripten"; then
         AS_IF([test -z "$EMSDK"],
               [AC_MSG_ERROR([No \$EMSDK environment variable.])])
         EMSCRIPTEN_VERSION_H=$EMSDK/upstream/emscripten/cache/sysroot/include/emscripten/version.h
+        if test ! -f "$EMSCRIPTEN_VERSION_H"; then
+            EMSCRIPTEN_VERSION_H=$EMSDK/emscripten/main/cache/sysroot/include/emscripten/version.h
+        fi
     fi
     if test -f "$EMSCRIPTEN_VERSION_H"; then
         EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_major__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
