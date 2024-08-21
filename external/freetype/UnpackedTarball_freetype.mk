@@ -17,10 +17,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
 	external/freetype/freetype-fd-hack.patch.0 \
 ))
 
-# Enable FreeType's FT_DEBUG_LOGGING at least in --enable-dbgutil builds (and see
+# Enable FreeType's FT_DEBUG_LOGGING at least in --enable-dbgutil DISABLE_DYNLOADING builds (in
+# non-DISABLE_DYNLOADING builds, this would not work, as libfreetype.a contains a global variable
+# ft_trace_levels that is initialized in ft_debug_init, but various of our shared libraries each
+# include libfreetype.a, so each have their own ft_trace_levels instance, but only one ft_debug_init
+# is called, so only one of those instances is initailized while the others remain nullptrs; and see
 # workdir/UnpackedTarball/freetype/docs/DEBUG for how to actually make use of that by setting an
 # FT2_DEBUG environment variable at runtime):
-ifeq ($(ENABLE_DBGUTIL),TRUE)
+ifeq ($(ENABLE_DBGUTIL)-$(DISABLE_DYNLOADING),TRUE-TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,freetype, \
     external/freetype/logging.patch.0 \
 ))
