@@ -36,7 +36,7 @@ static char const* GetCABundleFile()
         }
     }
 
-    throw css::uno::RuntimeException("no OpenSSL CA certificate bundle found");
+    return nullptr;
 }
 #endif
 

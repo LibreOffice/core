@@ -34,10 +34,21 @@ static void InitCurl_easy(CURL* const pCURL)
 
 #if defined(LO_CURL_NEEDS_CA_BUNDLE)
     char const* const path = GetCABundleFile();
-    rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
-    if (rc != CURLE_OK) // only if OOM?
+    if (path == nullptr)
     {
-        throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
+#if defined EMSCRIPTEN
+        SAL_WARN("ucb.ucp.webdav.curl", "no OpenSSL CA certificate bundle found");
+#else
+        throw css::uno::RuntimeException("no OpenSSL CA certificate bundle found");
+#endif
+    }
+    else
+    {
+        rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
+        if (rc != CURLE_OK) // only if OOM?
+        {
+            throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
+        }
     }
 #endif
 
