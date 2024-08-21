@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "stdafx.h"
+
 //for MAccessible.cxx
 struct ltComp
 {
