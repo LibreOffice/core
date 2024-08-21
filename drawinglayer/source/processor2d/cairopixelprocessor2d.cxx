@@ -958,7 +958,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     // transparent.
     // Also errors with images 1 pixel wide/high, e.g. insert
     // RGBA 8x1, 1x8 to see (and deactivate fix below). It also
-    // depends on the used filter, see commnet below at
+    // depends on the used filter, see comment below at
     // cairo_pattern_set_filter. Found also errors with more
     // than one pixel, so cannot use as criteria.
     // This effect is also visible in the left/right/bottom/top
