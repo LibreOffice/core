@@ -73,7 +73,6 @@ public:
     virtual ~AccObject();
 
     bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
-    void UpdateActionDesc();
 
     IMAccessible*  GetIMAccessible();   //return COM interface in acc object
     css::uno::Reference<css::accessibility::XAccessible> const& GetXAccessible();

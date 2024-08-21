@@ -357,7 +357,6 @@ void  AccObject::UpdateAction()
     {
         if( m_xAccActionRef->getAccessibleActionCount() > 0 )
         {
-            UpdateActionDesc();
             m_pIMAcc->SetDefaultAction(
                     reinterpret_cast<hyper>(m_xAccActionRef.get()));
         }
@@ -707,23 +706,6 @@ AccObject* AccObject::NextChild()
 }
 
 /**
-   * update action description desc
-   * @param
-   * @return
-   */
-void AccObject::UpdateActionDesc()
-{
-    if (!m_pIMAcc)
-        return;
-
-    if (!m_xAccActionRef.is() || m_xAccActionRef->getAccessibleActionCount() <= 0)
-        return;
-
-    const OUString sActionDesc = m_xAccActionRef->getAccessibleActionDescription(0);
-    m_pIMAcc->Put_ActionDescription(o3tl::toW(sActionDesc.getStr()));
-}
-
-/**
    * update role information from uno to com
    * @param
    * @return
@@ -928,8 +910,6 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
     }
 
     UpdateValue();
-
-    UpdateActionDesc();
 
     UpdateRole();
 

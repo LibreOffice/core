@@ -194,7 +194,6 @@ AccObjectWinManager* CMAccessible::g_pAccObjectManager = nullptr;
 
 CMAccessible::CMAccessible():
 m_pszValue(nullptr),
-m_pszActionDescription(nullptr),
 m_iRole(0x00),
 m_dState(0x00),
 m_pIParent(nullptr),
@@ -214,11 +213,6 @@ CMAccessible::~CMAccessible()
     if(m_pszValue!=nullptr)
     {
         SysFreeString(std::exchange(m_pszValue, nullptr));
-    }
-
-    if(m_pszActionDescription!=nullptr)
-    {
-        SysFreeString(std::exchange(m_pszActionDescription, nullptr));
     }
 
     if(m_pIParent)
@@ -2201,10 +2195,12 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                if (!m_xAction.is())
-                    return DISP_E_MEMBERNOTFOUND;
+                if (!m_xAction.is() || m_xAction->getAccessibleActionCount() < 1)
+                    return S_FALSE;
+
+                const OUString sActionDescription = m_xAction->getAccessibleActionDescription(0);
                 SysFreeString(*pszDefaultAction);
-                *pszDefaultAction = SysAllocString(m_pszActionDescription);
+                *pszDefaultAction = SysAllocString(o3tl::toW(sActionDescription.getStr()));
                 return S_OK;
             }
 
@@ -2253,29 +2249,6 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
         return pChild->accDoDefaultAction( varChild );
 
     } catch(...) { return E_FAIL; }
-}
-
-/**
-* UNO set description information for action to COM.
-* @param szAction, the action description of the current object.
-* @return S_OK if successful.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLECHAR* szAction)
-{
-    // internal IMAccessible - no mutex meeded
-
-    try {
-        if (m_isDestroy) return S_FALSE;
-
-        if(szAction == nullptr)
-        {
-            return E_INVALIDARG;
-        }
-        SysFreeString(m_pszActionDescription );
-        m_pszActionDescription = SysAllocString( szAction );
-        return S_OK;
-
-        } catch(...) { return E_FAIL; }
 }
 
 bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, XInterfaceType eType)

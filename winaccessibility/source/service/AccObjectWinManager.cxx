@@ -176,7 +176,6 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent
     case UnoMSAAEvent::STATE_FOCUSED:
         {
             UpdateAccFocus(pXAcc);
-            selfAccObj->UpdateActionDesc();
             UpdateValue(pXAcc);
             NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
             break;

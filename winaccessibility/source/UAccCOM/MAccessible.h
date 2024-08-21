@@ -146,7 +146,6 @@ public:
     STDMETHOD(Put_XAccChildID)(long dChildID) override;
     STDMETHOD(Put_XAccObjectManager)(hyper pManager) override;
     STDMETHOD(NotifyDestroy)() override;
-    STDMETHOD(Put_ActionDescription)( const OLECHAR* szAction) override;
     STDMETHOD(SetDefaultAction)(hyper pAction) override;
     STDMETHOD(GetUNOInterface)(hyper*) override;
     STDMETHOD(SetXAccessible)(hyper) override;
