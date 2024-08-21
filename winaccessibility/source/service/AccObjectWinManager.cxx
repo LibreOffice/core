@@ -628,8 +628,6 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     }
 
     AccObject pObj(pXAcc, this);
-    if( pObj.GetIMAccessible() == nullptr )
-        return false;
     pObj.SetResID( this->ImpleGenerateResID());
     pObj.SetParentHWND( pWnd );
 
