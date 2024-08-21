@@ -56,7 +56,6 @@ private:
     ::rtl::Reference<AccEventListener>  m_pListener;
 
     css::uno::Reference < css::accessibility::XAccessible > m_xAccRef;
-    css::uno::Reference < css::accessibility::XAccessibleAction > m_xAccActionRef;
     css::uno::Reference < css::accessibility::XAccessibleContext > m_xAccContextRef;
 
     void UpdateRole();
@@ -105,7 +104,6 @@ public:
 
     void  UpdateState();
     void  UpdateValue();
-    void  UpdateAction();
     void  UpdateValidWindow();
 
     void  setFocus();

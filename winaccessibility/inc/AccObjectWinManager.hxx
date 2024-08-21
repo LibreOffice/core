@@ -114,7 +114,6 @@ public:
     void  UpdateValue( css::accessibility::XAccessible* pXAcc );
 
     void  UpdateAccFocus( css::accessibility::XAccessible* newFocus );
-    void  UpdateAction( css::accessibility::XAccessible* pXAcc );
 
     static bool IsContainer( css::accessibility::XAccessible* pAccessible );
 

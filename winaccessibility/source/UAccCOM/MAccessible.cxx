@@ -2161,19 +2161,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 }
 
 /**
-* Helper method for Implementation of get_accDefaultAction
-* @param pAction, the default action point of the current object.
-* @return S_OK if successful.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
-{
-    // internal IMAccessible - no mutex meeded
-
-    m_xAction = reinterpret_cast<XAccessibleAction*>(pAction);
-    return S_OK;
-}
-
-/**
 * This method is called when AT open some UI elements initially
 * the UI element takes the default action defined here
 * @param varChild, the child id of the defaultaction.
@@ -2195,10 +2182,11 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                if (!m_xAction.is() || m_xAction->getAccessibleActionCount() < 1)
+                Reference<XAccessibleAction> xAction(m_xContext, UNO_QUERY);
+                if (!xAction.is() || xAction->getAccessibleActionCount() < 1)
                     return S_FALSE;
 
-                const OUString sActionDescription = m_xAction->getAccessibleActionDescription(0);
+                const OUString sActionDescription = xAction->getAccessibleActionDescription(0);
                 SysFreeString(*pszDefaultAction);
                 *pszDefaultAction = SysAllocString(o3tl::toW(sActionDescription.getStr()));
                 return S_OK;
@@ -2232,10 +2220,11 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
 
         if (varChild.lVal == CHILDID_SELF)
         {
-            if (!m_xAction.is() || m_xAction->getAccessibleActionCount() < 1)
+            Reference<XAccessibleAction> xAction(m_xContext, UNO_QUERY);
+            if (!xAction.is() || xAction->getAccessibleActionCount() < 1)
                 return S_FALSE;
 
-            m_xAction->doAccessibleAction(0);
+            xAction->doAccessibleAction(0);
             return S_OK;
         }
 

@@ -146,7 +146,6 @@ public:
     STDMETHOD(Put_XAccChildID)(long dChildID) override;
     STDMETHOD(Put_XAccObjectManager)(hyper pManager) override;
     STDMETHOD(NotifyDestroy)() override;
-    STDMETHOD(SetDefaultAction)(hyper pAction) override;
     STDMETHOD(GetUNOInterface)(hyper*) override;
     STDMETHOD(SetXAccessible)(hyper) override;
 
@@ -174,9 +173,6 @@ private:
     bool m_isDestroy;
 
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
-    // initially m_xAction and m_xContext are the same object
-    // but they may be different once AccObject::UpdateAction() is called?
-    css::uno::Reference<css::accessibility::XAccessibleAction>  m_xAction;
     css::uno::Reference<css::accessibility::XAccessibleContext> m_xContext;
 
 private:

@@ -101,7 +101,6 @@ void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
  */
 void AccComponentEventListener::HandleActionChangedEvent()
 {
-    m_rObjManager.UpdateAction(m_xAccessible.get());
     m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DEFACTIONCHANGE);
 }
 
@@ -228,7 +227,6 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::CHECKED:
         case AccessibleStateType::INDETERMINATE:
             m_rObjManager.IncreaseState(m_xAccessible.get(), state);
-            m_rObjManager.UpdateAction(m_xAccessible.get());
             if (bPressedInsteadOfChecked)
                 m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             else
@@ -267,7 +265,6 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::CHECKED:
         case AccessibleStateType::INDETERMINATE:
             m_rObjManager.DecreaseState(m_xAccessible.get(), state);
-            m_rObjManager.UpdateAction(m_xAccessible.get());
             if (bPressedInsteadOfChecked)
                 m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             else

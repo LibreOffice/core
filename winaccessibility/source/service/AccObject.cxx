@@ -268,12 +268,10 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
     assert(m_pIMAcc);
 
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
-    m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
     m_accRole = m_xAccContextRef -> getAccessibleRole();
 
     m_pIMAcc->SetXAccessible(reinterpret_cast<hyper>(m_xAccRef.get()));
     m_pIMAcc->Put_XAccObjectManager(reinterpret_cast<hyper>(pManager));
-    m_pIMAcc->SetDefaultAction(reinterpret_cast<hyper>(m_xAccActionRef.get()));
 }
 /**
    * Destructor.
@@ -283,7 +281,6 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
 AccObject::~AccObject()
 {
     m_xAccRef = nullptr;
-    m_xAccActionRef = nullptr;
     m_xAccContextRef = nullptr;
 }
 
@@ -342,25 +339,6 @@ void AccObject::UpdateValidWindow()
 {
     if(m_pIMAcc)
         m_pIMAcc->Put_XAccWindowHandle(m_pParantID);
-}
-
-/**
-   * Update default action property to com object.
-   * @param
-   * @return
-   */
-void  AccObject::UpdateAction()
-{
-    m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
-
-    if( m_xAccActionRef.is() && m_pIMAcc )
-    {
-        if( m_xAccActionRef->getAccessibleActionCount() > 0 )
-        {
-            m_pIMAcc->SetDefaultAction(
-                    reinterpret_cast<hyper>(m_xAccActionRef.get()));
-        }
-    }
 }
 
 /**
