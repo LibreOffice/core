@@ -201,17 +201,16 @@ int ImplSVMain()
         OUString temp;
         if (osl_getEnvironment(name.pData, &temp.pData) == osl_Process_E_NotFound)
         {
-            try // to point bundled OpenSSL to some system certificate file
-            {   // ... this only works if the client actually calls
-                // SSL_CTX_set_default_verify_paths() or similar; e.g. python ssl.
-                char const*const path = GetCABundleFile();
+            // Try to point bundled OpenSSL to some system certificate file
+            // ... this only works if the client actually calls
+            // SSL_CTX_set_default_verify_paths() or similar; e.g. python ssl.
+            char const*const path = GetCABundleFile();
+            if (path == nullptr) {
+                SAL_WARN("vcl", "no OpenSSL CA certificate bundle found");
+            } else {
                 OUString const filepath(::rtl::OStringToOUString(
                     ::std::string_view(path), osl_getThreadTextEncoding()));
                 osl_setEnvironment(name.pData, filepath.pData);
-            }
-            catch (uno::RuntimeException const& e)
-            {
-                SAL_WARN("vcl", e.Message);
             }
         }
     }

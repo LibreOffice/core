@@ -3204,7 +3204,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_libcmis=no
     enable_coinmp=no
     enable_cups=no
-    test "$_os" = Emscripten && enable_curl=no
     enable_database_connectivity=no
     enable_dbus=no
     enable_dconf=no
@@ -3239,10 +3238,9 @@ if test "$enable_wasm_strip" = "yes"; then
     test_libqxp=no
     test_libvisio=no
     test_libzmf=no
-    test_webdav=no
     with_galleries=no
+    with_gssapi=no
     with_templates=no
-    with_webdav=no
     with_x=no
 
     test "${with_fonts+set}" = set || with_fonts=yes

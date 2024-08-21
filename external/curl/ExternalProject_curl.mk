@@ -20,7 +20,11 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 
 ifneq ($(OS),WNT)
 
+ifeq ($(OS),EMSCRIPTEN)
+curl_CPPFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
+else
 curl_CPPFLAGS :=
+endif
 curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN)
 
 ifneq ($(OS),ANDROID)

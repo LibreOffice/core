@@ -94,7 +94,7 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData)
     }
 }
 
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#if HAVE_FEATURE_CURL
 void TranslateDocument(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig)
 {
     bool bCancel = false;
@@ -212,5 +212,5 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
     if (xStatusIndicator.is())
         xStatusIndicator->end();
 }
-#endif // HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#endif // HAVE_FEATURE_CURL
 }
