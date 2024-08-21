@@ -1332,14 +1332,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         return nullptr;
     }
 
-    IMAccessible* pCurChild = nullptr;
-    union {
-        XAccessible* pChildXAcc;
-        hyper nHyper = 0;
-    };
     Reference<XAccessible> pRChildXAcc;
-    XAccessibleContext* pChildContext = nullptr;
-    sal_Int64 index = 0, delta = 0;
     switch(flags)
     {
     case DM_FIRSTCHILD:
@@ -1350,31 +1343,37 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         break;
     case DM_NEXTCHILD:
     case DM_PREVCHILD:
-        pCurChild = GetChildInterface(varCur.lVal);
+    {
+        IMAccessible* pCurChild = GetChildInterface(varCur.lVal);
         if(pCurChild==nullptr)
         {
             return nullptr;
         }
+        union {
+            XAccessible* pChildXAcc;
+            hyper nHyper = 0;
+        };
         pCurChild->GetUNOInterface(&nHyper);
         if(pChildXAcc==nullptr)
         {
             return nullptr;
         }
-        pChildContext = GetContextByXAcc(pChildXAcc);
+        XAccessibleContext* pChildContext = GetContextByXAcc(pChildXAcc);
         if(pChildContext == nullptr)
         {
             return nullptr;
         }
-        delta = (flags==DM_NEXTCHILD)?1:-1;
+        const sal_Int64 delta = (flags == DM_NEXTCHILD) ? 1 : -1;
         //currently, getAccessibleIndexInParent is error in UNO for
         //some kind of List,such as ValueSet, the index will be less 1 than
         //what should be, need to fix UNO code
-        index = pChildContext->getAccessibleIndexInParent()+delta;
+        const sal_Int64 index = pChildContext->getAccessibleIndexInParent() + delta;
         if((index>=0)&&(index<=count-1))
         {
             pRChildXAcc = pXContext->getAccessibleChild(index);
         }
         break;
+    }
     default:
         break;
     }
@@ -1383,9 +1382,8 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
     {
         return nullptr;
     }
-    pChildXAcc = pRChildXAcc.get();
-    g_pAccObjectManager->InsertAccObj(pChildXAcc, m_xAccessible.get());
-    return g_pAccObjectManager->GetIAccessibleFromXAccessible(pChildXAcc);
+    g_pAccObjectManager->InsertAccObj(pRChildXAcc.get(), m_xAccessible.get());
+    return g_pAccObjectManager->GetIAccessibleFromXAccessible(pRChildXAcc.get());
 }
 
 /**
