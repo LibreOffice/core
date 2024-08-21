@@ -67,8 +67,8 @@ public:
     { other._pMapping = nullptr; }
     inline ~Mapping();
     inline Mapping & operator = ( uno_Mapping * pMapping );
-    Mapping & operator = ( const Mapping & rMapping )
-        { return operator = ( rMapping._pMapping ); }
+    // move variant is sufficient
+    Mapping & operator = ( const Mapping & rMapping ) = delete;
     Mapping & operator =(Mapping && other) noexcept {
         if (_pMapping != nullptr) {
             (*_pMapping->release)(_pMapping);
@@ -554,10 +554,10 @@ static Mapping getMediateMapping(
         }
         else
         {
-            aUno2To = aAnUno2Uno;
+            aUno2To = std::move(aAnUno2Uno);
             // : ano_uno <-> to (i.e., uno)
         }
-        aUno = aAnUno;
+        aUno = std::move(aAnUno);
     }
 
     Mapping aFrom2Uno( getDirectMapping( rFrom, aUno ) );
