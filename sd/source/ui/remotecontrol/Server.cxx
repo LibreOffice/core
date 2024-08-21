@@ -97,8 +97,7 @@ void IPRemoteServer::execute()
         if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
         {
             SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
-            spServer = nullptr;
-            return; // Closed, or other issue.
+            break; // Closed, or other issue.
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
         handleAcceptedConnection( pSocket );
