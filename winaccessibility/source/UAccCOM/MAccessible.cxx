@@ -2229,15 +2229,13 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
         if (m_isDestroy) return S_FALSE;
         if( varChild.vt != VT_I4 )
             return E_INVALIDARG;
-        if (!m_xAction.is())
-            return E_FAIL;
-        if (m_xAction->getAccessibleActionCount() == 0)
-            return E_FAIL;
 
-        if(varChild.lVal==CHILDID_SELF)
+        if (varChild.lVal == CHILDID_SELF)
         {
-            if (m_xAction->getAccessibleActionCount() > 0)
-                m_xAction->doAccessibleAction(0);
+            if (!m_xAction.is() || m_xAction->getAccessibleActionCount() < 1)
+                return S_FALSE;
+
+            m_xAction->doAccessibleAction(0);
             return S_OK;
         }
 
