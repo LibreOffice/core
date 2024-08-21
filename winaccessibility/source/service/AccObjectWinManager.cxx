@@ -589,7 +589,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
         return false;
 
     {
-        short nCurRole = GetRole(pXAcc);
+        short nCurRole = pRContext->getAccessibleRole();
 
         std::scoped_lock l(m_Mutex);
 
@@ -1032,17 +1032,6 @@ void AccObjectWinManager::UpdateChildState(css::accessibility::XAccessible* pAcc
             }
         }
     }
-}
-
-short AccObjectWinManager::GetRole(css::accessibility::XAccessible* pXAcc)
-{
-    assert(pXAcc != nullptr);
-    Reference<css::accessibility::XAccessibleContext> xContext = pXAcc->getAccessibleContext();
-    if(xContext.is())
-    {
-        return xContext->getAccessibleRole();
-    }
-    return -1;
 }
 
 XAccessible* AccObjectWinManager::GetAccDocByHWND(HWND pWnd)
