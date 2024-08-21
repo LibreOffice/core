@@ -1069,11 +1069,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136814)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79186_noLayoutInCell)
 {
+    // given a native ODT file with a paragraph-oriented textbox anchored/located in cell B2
+
+    // Note: there is no direct equivalent layout for this in MSO format,
+    // so there has to be some give and take as the most suitable choice is selected.
+
     loadAndReload("tdf79186_noLayoutInCell.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+    // Although setting "Follow Text Flow" significantly changes this doc's layout during ODF->DOC
+    // it preserves orienting the frame in the proper column.
+    // (While this example looked perfect in a LO round-trip without FTF,
+    // in MS Word the textbox was contained in column A instead of the original column B.)
+    // Thus the "perfect look" simply proves that LO is doing the layout wrong.
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr)); // tdf#157637
+    CPPUNIT_ASSERT_EQUAL(isExported(), getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nShapeLeft
+        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    sal_Int32 nColumnBLeft
+        = getXPath(pDump, "//page[1]/body/tab/row[1]/cell[2]/infos/bounds"_ostr,
+                   "left"_ostr).toInt32();
+    // The textbox's horizontal placement is of primary concern. It must remain in cell B2
+    CPPUNIT_ASSERT(nShapeLeft > nColumnBLeft);
+
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"SurroundContour"_ustr)); // tdf#140508
 }
 

@@ -2566,13 +2566,6 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
     const RndStdIds eAnchor = rFormat.GetAnchor().GetAnchorId();
     mbInline = (eAnchor == RndStdIds::FLY_AS_CHAR);
 
-    mnGroupShapeBooleanProperties = 0;
-    if (!rFormat.GetFollowTextFlow().GetValue())
-    {
-        // bit32: fUseLayoutInCell, bit16: fLayoutInCell
-        mnGroupShapeBooleanProperties |= 0x80000000;
-    }
-
     SwFormatHoriOrient rHoriOri = rFormat.GetHoriOrient();
     SwFormatVertOrient rVertOri = rFormat.GetVertOrient();
 
@@ -2700,6 +2693,31 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
         case text::RelOrientation::FRAME_RIGHT: //nonsense
             mnYRelTo = 3;
             break;
+    }
+
+    mnGroupShapeBooleanProperties = 0;
+    // LayoutInCell is hugely problematic if the value is false,
+    // so much so that Microsoft, since DOCX compat15, ignores it and always does a layoutInCell.
+
+    // LO (currently) does the obvious thing of always orienting a fly from the cell paragraph,
+    // while MSO orients a non-layoutInCell-fly from the paragraph that contains the entire table.
+    // Thus, during ODF->MSO, ONLY a non-paragraph-oriented-fly can be marked as layoutInCell=false.
+
+    // FOR DOCX and DOC, the absence of the fLayoutInCell property means true - layout in cell,
+    // so do nothing unless "Follow text flow" is disabled (which is the default in native LO).
+    bool bLayoutInCell = rFormat.GetFollowTextFlow().GetValue();
+
+    // If this is already MSO format, then we need to round-trip a false FollowingTextFlow value
+    const bool bIsMSOLayout = rFormat.getIDocumentSettingAccess().get(
+        DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+
+    // For native LO: if !FollowingTextFlow and the fly is oriented to the pageMargin(0) or page(1),
+    // we must write layoutInCell(false), but paragraph-oriented flies match layoutInCell placement.
+    if (!bLayoutInCell && (bIsMSOLayout || mnYRelTo != 2 || mnXRelTo != 2))
+    {
+        // indicate layoutInCell = false
+        // bit32: fUseLayoutInCell, bit16: fLayoutInCell
+        mnGroupShapeBooleanProperties |= 0x80000000;
     }
 }
 
