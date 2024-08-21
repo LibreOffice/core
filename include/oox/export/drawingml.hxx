@@ -339,6 +339,7 @@ protected:
     bool IsFontworkShape(const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteTextGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,

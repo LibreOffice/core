@@ -2943,6 +2943,21 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_GLOW_TEXT_COLOR
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_GLOW_TEXT_RADIUS
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_GLOW_TEXT_TRANSPARENCY
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
     SID_ATTR_SOFTEDGE_RADIUS
     [
         ExecMethod = FuTemporary;

@@ -21,6 +21,7 @@
 
 #include <sdr/attribute/sdreffectstextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowtextattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 
@@ -40,6 +41,7 @@ namespace drawinglayer::attribute
                 const SdrShadowAttribute& rShadow,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow,
+                const SdrGlowTextAttribute& rGlowText,
                 sal_Int32 nSoftEdgeRadius);
             SdrLineEffectsTextAttribute();
             SdrLineEffectsTextAttribute(const SdrLineEffectsTextAttribute& rCandidate);

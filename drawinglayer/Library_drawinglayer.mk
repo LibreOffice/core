@@ -94,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/sdrfillattribute \
     drawinglayer/source/attribute/sdrfillgraphicattribute \
     drawinglayer/source/attribute/sdrglowattribute \
+    drawinglayer/source/attribute/sdrglowtextattribute \
     drawinglayer/source/attribute/sdrlightattribute3d \
     drawinglayer/source/attribute/sdrlightingattribute3d \
     drawinglayer/source/attribute/sdrlineattribute \

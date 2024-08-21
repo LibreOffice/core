@@ -27,6 +27,7 @@
 #include "fontwork/FontworkPropertyPanel.hxx"
 #include "shadow/ShadowPropertyPanel.hxx"
 #include "effect/EffectPropertyPanel.hxx"
+#include "effect/TextEffectPropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
@@ -152,6 +153,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/EffectPropertyPanel"))
     {
         xControl = EffectPropertyPanel::Create(pParent, pBindings);
+    }
+    else if (rsResourceURL.endsWith("/TextEffectPropertyPanel"))
+    {
+        xControl = TextEffectPropertyPanel::Create(pParent, pBindings);
     }
     else if (rsResourceURL.endsWith("/GraphicPropertyPanel"))
     {

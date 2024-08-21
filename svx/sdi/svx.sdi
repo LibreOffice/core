@@ -12698,6 +12698,57 @@ SdrPercentItem GlowTransparency SID_ATTR_GLOW_TRANSPARENCY
     GroupId = SfxGroupId::Document;
 ]
 
+XColorItem GlowTextColor SID_ATTR_GLOW_TEXT_COLOR
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
+
+SdrMetricItem GlowTextRadius SID_ATTR_GLOW_TEXT_RADIUS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
+
+SdrPercentItem GlowTextTransparency SID_ATTR_GLOW_TEXT_TRANSPARENCY
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
+
 SdrMetricItem SoftEdgeRadius SID_ATTR_SOFTEDGE_RADIUS
 
 [

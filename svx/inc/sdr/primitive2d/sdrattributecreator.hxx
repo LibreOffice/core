@@ -26,12 +26,14 @@
 // predefines
 class SfxItemSet;
 class SdrText;
+class SvxFontHeightItem;
 
 namespace drawinglayer::attribute {
     class SdrLineAttribute;
     class SdrLineStartEndAttribute;
     class SdrShadowAttribute;
     class SdrGlowAttribute;
+    class SdrGlowTextAttribute;
     class SdrFillAttribute;
     class SdrTextAttribute;
     class FillGradientAttribute;

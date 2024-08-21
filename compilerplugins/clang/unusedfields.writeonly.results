@@ -1046,6 +1046,12 @@ svx/source/sidebar/effect/EffectPropertyPanel.hxx:37
     svx::sidebar::EffectPropertyPanel maGlowTransparencyController sfx2::sidebar::ControllerItem
 svx/source/sidebar/effect/EffectPropertyPanel.hxx:39
     svx::sidebar::EffectPropertyPanel maSoftEdgeRadiusController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/TextEffectPropertyPanel.hxx:35
+    svx::sidebar::TextEffectPropertyPanel maTGlowColorController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/TextEffectPropertyPanel.hxx:36
+    svx::sidebar::TextEffectPropertyPanel maTGlowRadiusController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/TextEffectPropertyPanel.hxx:37
+    svx::sidebar::TextEffectPropertyPanel maTGlowTransparencyController sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:79
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:80

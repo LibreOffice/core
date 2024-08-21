@@ -44,12 +44,20 @@ namespace drawinglayer::primitive2d
                                                           getSdrSTAttribute().getSoftEdgeRadius());
             }
 
+            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
+            if (!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrSTAttribute().getGlow());
+            }
+
             // add text
             if(!getSdrSTAttribute().getText().isDefault())
             {
                 const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
-                aRetval.push_back(
+                Primitive2DContainer aTempContentText;
+                aTempContentText.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTextBox(),
@@ -57,13 +65,14 @@ namespace drawinglayer::primitive2d
                         attribute::SdrLineAttribute(),
                         false,
                         getWordWrap()));
-            }
 
-            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
-            {
-                // glow
-                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrSTAttribute().getGlow());
+                // put text glow before, shape glow and shadow
+                if (!aTempContentText.empty() && !getSdrSTAttribute().getGlowText().isDefault())
+                {
+                    // add text glow
+                    aTempContentText = createEmbeddedTextGlowPrimitive(std::move(aTempContentText), getSdrSTAttribute().getGlowText());
+                }
+                aRetval.append(std::move(aTempContentText));
             }
 
             // add shadow

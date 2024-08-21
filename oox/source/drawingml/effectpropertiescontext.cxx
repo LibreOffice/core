@@ -8,7 +8,7 @@
  */
 
 #include <drawingml/effectpropertiescontext.hxx>
-#include "effectproperties.hxx"
+#include <oox/drawingml/effectproperties.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

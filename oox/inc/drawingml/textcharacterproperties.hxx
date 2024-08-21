@@ -23,7 +23,9 @@
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/drawingml/color.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textfont.hxx>
+#include <oox/drawingml/effectproperties.hxx>
 
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>
@@ -32,6 +34,7 @@ namespace oox { class PropertySet; }
 
 namespace oox::drawingml {
 
+struct EffectProperties;
 
 struct TextCharacterProperties
 {
@@ -69,6 +72,8 @@ struct TextCharacterProperties
     /// In that case we use the default paragraph properties from the
     /// <c:txPr><a:p><a:pPr><a:defRPr>...</a:defRPr>
     bool mbHasEmptyParaProperties;
+    /// For text effect properties in shapes
+    EffectPropertiesPtr mpEffectPropertiesPtr;
 
     std::vector<css::beans::PropertyValue> maTextEffectsProperties;
 
@@ -90,7 +95,10 @@ struct TextCharacterProperties
                             PropertySet& rPropSet,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
-    TextCharacterProperties() : mbHasVisualRunProperties(false), mbHasEmptyParaProperties(false) {}
+    /** Get effect properties. */
+    EffectProperties& getEffectProperties() const { return *mpEffectPropertiesPtr; }
+
+    TextCharacterProperties() : mbHasVisualRunProperties(false), mbHasEmptyParaProperties(false), mpEffectPropertiesPtr(std::make_shared<EffectProperties>()) {}
 };
 
 

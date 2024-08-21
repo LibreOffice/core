@@ -54,6 +54,7 @@ namespace sdr::properties
                 svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                SDRATTR_GLOW_TEXT_FIRST, SDRATTR_GLOW_TEXT_LAST,
                 SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
 
                 // range from SdrTextObj

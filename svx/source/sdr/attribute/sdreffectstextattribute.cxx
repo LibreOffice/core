@@ -28,10 +28,12 @@ namespace drawinglayer::attribute
             SdrShadowAttribute aShadow,
             SdrTextAttribute aTextAttribute,
             SdrGlowAttribute aGlow,
+            SdrGlowTextAttribute aGlowText,
             sal_Int32 nSoftEdgeRadius)
         :   maShadow(std::move(aShadow)),
             maTextAttribute(std::move(aTextAttribute)),
             maGlow(std::move(aGlow)),
+            maGlowText(std::move(aGlowText)),
             mnSoftEdgeRadius(nSoftEdgeRadius)
         {
         }
@@ -44,6 +46,7 @@ namespace drawinglayer::attribute
         :   maShadow(rCandidate.getShadow()),
             maTextAttribute(rCandidate.getText()),
             maGlow(rCandidate.maGlow),
+            maGlowText(rCandidate.maGlowText),
             mnSoftEdgeRadius(rCandidate.mnSoftEdgeRadius)
         {
         }
@@ -53,6 +56,7 @@ namespace drawinglayer::attribute
             maShadow = rCandidate.getShadow();
             maTextAttribute = rCandidate.getText();
             maGlow = rCandidate.maGlow;
+            maGlowText = rCandidate.maGlowText;
             mnSoftEdgeRadius = rCandidate.mnSoftEdgeRadius;
 
             return *this;
@@ -61,7 +65,8 @@ namespace drawinglayer::attribute
         bool SdrEffectsTextAttribute::isDefault() const
         {
             return (getShadow().isDefault()
-                && getText().isDefault() && maGlow.isDefault() && getSoftEdgeRadius() == 0);
+                && getText().isDefault() && maGlow.isDefault()
+                && maGlowText.isDefault() && getSoftEdgeRadius() == 0);
         }
 
         bool SdrEffectsTextAttribute::operator==(const SdrEffectsTextAttribute& rCandidate) const
@@ -69,6 +74,7 @@ namespace drawinglayer::attribute
             return (getShadow() == rCandidate.getShadow()
                 && getText() == rCandidate.getText()
                 && getGlow() == rCandidate.getGlow()
+                && getGlowText() == rCandidate.getGlowText()
                 && getSoftEdgeRadius() == rCandidate.getSoftEdgeRadius());
         }
 

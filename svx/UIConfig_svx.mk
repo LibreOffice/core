@@ -123,6 +123,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/sidebararea \
 	svx/uiconfig/ui/sidebarempty \
 	svx/uiconfig/ui/sidebareffect \
+	svx/uiconfig/ui/sidebartexteffect \
 	svx/uiconfig/ui/sidebarfontwork \
 	svx/uiconfig/ui/sidebarshadow \
 	svx/uiconfig/ui/sidebargallery \

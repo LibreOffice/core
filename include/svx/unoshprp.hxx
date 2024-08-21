@@ -225,6 +225,11 @@
 #define SOFTEDGE_PROPERTIES \
     { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE_RADIUS,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},
 
+#define GLOW_TEXT_PROPERTIES \
+    { u"GlowTextEffectRadius"_ustr,      SDRATTR_GLOW_TEXT_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"GlowTextEffectColor"_ustr,       SDRATTR_GLOW_TEXT_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { u"GlowTextEffectTransparency"_ustr,SDRATTR_GLOW_TEXT_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0},
+
 #define SHADOW_PROPERTIES \
     { UNO_NAME_SHADOW,            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
     { UNO_NAME_SHADOWCOLOR,       SDRATTR_SHADOWCOLOR,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \

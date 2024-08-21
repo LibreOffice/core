@@ -41,6 +41,7 @@ namespace drawinglayer::attribute
                 FillGradientAttribute aFillFloatTransGradient,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow,
+                const SdrGlowTextAttribute& rGlowText,
                 sal_Int32 nSoftEdgeRadius);
             SdrLineFillEffectsTextAttribute();
             SdrLineFillEffectsTextAttribute(const SdrLineFillEffectsTextAttribute& rCandidate);

@@ -71,7 +71,7 @@ namespace sdr::properties
                     // Graphic attributes, 3D properties, CustomShape
                     // properties:
                     SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                    SDRATTR_GLOW_FIRST, SDRATTR_SOFTEDGE_LAST,
+                    SDRATTR_GLOW_FIRST, SDRATTR_GLOW_TEXT_LAST,
                     SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
                     SDRATTR_WRITINGMODE2, SDRATTR_WRITINGMODE2,
                     // Range from SdrTextObj:

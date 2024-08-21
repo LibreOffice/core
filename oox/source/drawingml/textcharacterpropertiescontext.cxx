@@ -21,6 +21,7 @@
 
 #include <oox/helper/attributelist.hxx>
 #include <drawingml/colorchoicecontext.hxx>
+#include <drawingml/effectpropertiescontext.hxx>
 #include <drawingml/linepropertiescontext.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/textcharacterproperties.hxx>
@@ -129,6 +130,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         // EG_EffectProperties
         case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
         case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26
+            return new EffectPropertiesContext(*this, mrTextCharacterProperties.getEffectProperties());
         break;
         case A_TOKEN( highlight ):  // CT_Color
             return new ColorContext(*this, mrTextCharacterProperties.maHighlightColor);

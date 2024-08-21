@@ -896,8 +896,11 @@ gcd
 generator
 geq
 glow-radius
+glow-text-radius
 glow-color
+glow-text-color
 glow-transparency
+glow-text-transparency
 gouraud
 gradient
 angle

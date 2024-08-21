@@ -437,10 +437,17 @@ class XFillGradientItem;
 #define SID_ATTR_TRANSFORM_HORI_MIRROR                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 317 )
 #define SID_ATTR_TRANSFORM_ANCHOR                       TypedWhichId<SfxInt16Item>( SID_SVX_START + 318 )
 #define SID_ATTR_TRANSFORM_VERT_ORIENT                  TypedWhichId<SfxInt16Item>( SID_SVX_START + 319 )
+
 #define SID_ATTR_GLOW_RADIUS                            ( SID_SVX_START + 320 )
 #define SID_ATTR_GLOW_COLOR                             ( SID_SVX_START + 321 )
 #define SID_ATTR_GLOW_TRANSPARENCY                      ( SID_SVX_START + 322 )
-#define SID_ATTR_SOFTEDGE_RADIUS                        ( SID_SVX_START + 323 )
+
+#define SID_ATTR_GLOW_TEXT_RADIUS                       ( SID_SVX_START + 323 )
+#define SID_ATTR_GLOW_TEXT_COLOR                        ( SID_SVX_START + 324 )
+#define SID_ATTR_GLOW_TEXT_TRANSPARENCY                 ( SID_SVX_START + 325 )
+
+#define SID_ATTR_SOFTEDGE_RADIUS                        ( SID_SVX_START + 326 )
+
 #define SID_SCAN                                        ( SID_SVX_START + 330 )
 #define SID_TWAIN_SELECT                                ( SID_SVX_START + 331 )
 #define SID_TWAIN_TRANSFER                              ( SID_SVX_START + 332 )

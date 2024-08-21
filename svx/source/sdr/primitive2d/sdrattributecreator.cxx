@@ -72,6 +72,9 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xflbmsli.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/editobj.hxx>
 #include <osl/diagnose.h>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -80,11 +83,14 @@
 #include <sdr/attribute/sdrformtextattribute.hxx>
 #include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowtextattribute.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+
+#include <math.h>
 
 using namespace com::sun::star;
 
@@ -187,15 +193,67 @@ namespace drawinglayer
         attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
         {
             sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RADIUS).GetValue();
+
             if (!nRadius)
                 return attribute::SdrGlowAttribute();
+
             Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
+
             sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
             if (nTransparency)
                 aColor.SetAlpha(255 - std::round(nTransparency / 100.0 * 255.0));
 
             attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
             return glowAttr;
+        }
+
+        attribute::SdrGlowTextAttribute createNewSdrGlowTextAttribute(const SfxItemSet& rSet, const SdrTextObj& rTextObj)
+        {
+            sal_Int32 nTextRadius = rSet.Get(SDRATTR_GLOW_TEXT_RADIUS).GetValue();
+
+            if (!nTextRadius)
+                return attribute::SdrGlowTextAttribute();
+
+            Color aTextColor(rSet.Get(SDRATTR_GLOW_TEXT_COLOR).GetColorValue());
+
+            sal_uInt16 nTextTransparency(rSet.Get(SDRATTR_GLOW_TEXT_TRANSPARENCY).GetValue());
+            if (nTextTransparency)
+                aTextColor.SetAlpha(255 - std::round(nTextTransparency / 100.0 * 255.0));
+
+            // calculate rendering text glow radius from biggest Char size for the full text in shape
+            double nRadius = 0.0;
+            const SvxFontHeightItem& rItem = *rSet.GetItemIfSet(EE_CHAR_FONTHEIGHT);
+            sal_uInt32 nFontSize = rItem.GetHeight();
+
+            if (rTextObj.GetOutlinerParaObject())
+            {
+                const EditTextObject& aEdit = rTextObj.GetOutlinerParaObject()->GetTextObject();
+                for (sal_Int32 i = 0; i < aEdit.GetParagraphCount(); i++)
+                {
+                    std::vector<EECharAttrib> aAttribs;
+                    aEdit.GetCharAttribs(i, aAttribs);
+                    for (const auto& attrib : aAttribs)
+                    {
+                        if (const SvxFontHeightItem* pFontHeight = dynamic_cast<const SvxFontHeightItem*>(attrib.pAttr))
+                        {
+                            if (nFontSize < pFontHeight->GetHeight())
+                                nFontSize = pFontHeight->GetHeight();
+                        }
+                    }
+                }
+            }
+
+            if (nFontSize)
+            {
+                // Rendering_glow_size = Original_glow_size / (154.39 * FontSize ^ -0,621)
+                // This is an approximate calculation similar to MSO text glow size which is
+                // depending on font size
+                nRadius = nTextRadius / (154.39 * pow(nFontSize, -0.621));
+                nTextRadius = std::round(nRadius);
+            }
+
+            attribute::SdrGlowTextAttribute glowTextAttr{ nTextRadius, aTextColor };
+            return glowTextAttr;
         }
 
         sal_Int32 getSoftEdgeRadius(const SfxItemSet& rSet)
@@ -749,10 +807,11 @@ namespace drawinglayer::primitive2d
             // try shadow
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
             const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
+            const attribute::SdrGlowTextAttribute aGlowText(createNewSdrGlowTextAttribute(rSet, pText->GetObject()));
             const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
             return attribute::SdrEffectsTextAttribute(aShadow, std::move(aText),
-                                                      aGlow, nSoftEdgeRadius);
+                                                      aGlow, aGlowText, nSoftEdgeRadius);
         }
 
         attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(
@@ -796,13 +855,15 @@ namespace drawinglayer::primitive2d
                 // try shadow
                 attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
                 attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
+                attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pText->GetObject());
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
                 return attribute::SdrLineEffectsTextAttribute(std::move(aLine),
                                                               std::move(aLineStartEnd),
                                                               std::move(aShadow),
                                                               std::move(aText),
-                                                              std::move(aGlow), nSoftEdgeRadius);
+                                                              std::move(aGlow),
+                                                              std::move(aGlowText), nSoftEdgeRadius);
             }
 
             return attribute::SdrLineEffectsTextAttribute();
@@ -868,11 +929,14 @@ namespace drawinglayer::primitive2d
                 // glow
                 const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
+                // text glow
+                const attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pText->GetObject());
+
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
                 return attribute::SdrLineFillEffectsTextAttribute(aLine, std::move(aFill), aLineStartEnd,
                                                                   aShadow, std::move(aFillFloatTransGradient),
-                                                                  aText, aGlow, nSoftEdgeRadius);
+                                                                  aText, aGlow, aGlowText, nSoftEdgeRadius);
             }
 
             return attribute::SdrLineFillEffectsTextAttribute();

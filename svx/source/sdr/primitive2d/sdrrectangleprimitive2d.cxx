@@ -92,7 +92,8 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                Primitive2DContainer aTempContentText;
+                aTempContentText.push_back(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),
@@ -100,6 +101,14 @@ namespace drawinglayer::primitive2d
                         getSdrLFSTAttribute().getLine(),
                         false,
                         false));
+
+                // put text glow before, shape glow and shadow
+                if (!aTempContentText.empty() && !getSdrLFSTAttribute().getGlowText().isDefault())
+                {
+                    // add text glow
+                    aTempContentText = createEmbeddedTextGlowPrimitive(std::move(aTempContentText), getSdrLFSTAttribute().getGlowText());
+                }
+                aRetval.append(std::move(aTempContentText));
             }
 
             // add shadow

@@ -381,6 +381,7 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/mediaplayback.ui"
         || rUIFile == u"svx/ui/sidebararea.ui"
         || rUIFile == u"svx/ui/sidebareffect.ui"
+        || rUIFile == u"svx/ui/sidebartexteffect.ui"
         || rUIFile == u"svx/ui/sidebarempty.ui"
         || rUIFile == u"svx/ui/sidebarfontwork.ui"
         || rUIFile == u"svx/ui/sidebargallery.ui"

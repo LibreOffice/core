@@ -30,8 +30,9 @@ namespace drawinglayer::attribute
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow,
+            const SdrGlowTextAttribute& rGlowText,
             sal_Int32 nSoftEdgeRadius)
-        :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow, nSoftEdgeRadius),
+        :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow, rGlowText, nSoftEdgeRadius),
             maLine(std::move(aLine)),
             maLineStartEnd(std::move(aLineStartEnd))
         {

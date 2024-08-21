@@ -235,6 +235,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/area/AreaPropertyPanelBase \
     svx/source/sidebar/area/AreaTransparencyGradientPopup \
     svx/source/sidebar/effect/EffectPropertyPanel \
+    svx/source/sidebar/effect/TextEffectPropertyPanel \
     svx/source/sidebar/fontwork/FontworkPropertyPanel \
     svx/source/sidebar/shadow/ShadowPropertyPanel \
     svx/source/sidebar/graphic/GraphicPropertyPanel \

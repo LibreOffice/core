@@ -52,6 +52,7 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowtextattribute.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 #include <osl/diagnose.h>
 
@@ -928,6 +929,20 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             Primitive2DContainer aRetval(2);
             aRetval[0] = new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), Primitive2DContainer(rContent));
             aRetval[1] = new GroupPrimitive2D(Primitive2DContainer(std::move(rContent)));
+            return aRetval;
+        }
+
+        Primitive2DContainer createEmbeddedTextGlowPrimitive(
+            Primitive2DContainer&& rContent,
+            const attribute::SdrGlowTextAttribute& rGlow)
+        {
+            if (rContent.empty())
+                return std::move(rContent);
+
+            Primitive2DContainer aRetval(2);
+            aRetval[0] = new GlowPrimitive2D(rGlow.getTextColor(), rGlow.getTextRadius(), Primitive2DContainer(rContent));
+            aRetval[1] = new GroupPrimitive2D(Primitive2DContainer(std::move(rContent)));
+
             return aRetval;
         }
 

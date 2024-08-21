@@ -474,6 +474,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeGlowEffect)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeTextGlowEffect)
+{
+    createSdImpressDoc("pptx/shape-text-glow-effect.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    sal_Int32 nRadius = -1;
+    xShape->getPropertyValue(u"GlowTextEffectRadius"_ustr) >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(706), nRadius); // 20 pt = 706 mm/100
+    Color nColor;
+    xShape->getPropertyValue(u"GlowTextEffectColor"_ustr) >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x4EA72E), nColor);
+    sal_Int16 nTransparency;
+    xShape->getPropertyValue(u"GlowTextEffectTransparency"_ustr) >>= nTransparency;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), nTransparency);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testUnderline)
 {
     createSdImpressDoc("underline.fodp");

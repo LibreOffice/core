@@ -70,6 +70,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     assignIfUsed( moTextOutlineProperties, rSourceProps.moTextOutlineProperties);
 
     maTextEffectsProperties = rSourceProps.maTextEffectsProperties;
+    mpEffectPropertiesPtr->assignUsed(*rSourceProps.mpEffectPropertiesPtr);
     maFillProperties.assignUsed( rSourceProps.maFillProperties );
 }
 

@@ -21,6 +21,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <drawinglayer/attribute/sdrglowtextattribute.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 #include <svx/svxdllapi.h>
@@ -77,6 +78,10 @@ namespace drawinglayer::primitive2d
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedGlowPrimitive(
             Primitive2DContainer&& rContent,
             const attribute::SdrGlowAttribute& rGlow);
+
+        Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedTextGlowPrimitive(
+            Primitive2DContainer&& rContent,
+            const attribute::SdrGlowTextAttribute& rGlow);
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedSoftEdgePrimitive(
             Primitive2DContainer&& aContent,

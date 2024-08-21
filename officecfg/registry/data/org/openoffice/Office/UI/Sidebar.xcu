@@ -724,6 +724,35 @@
         </prop>
       </node>
 
+      <node oor:name="TextEffectPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Text Effect</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>TextEffectPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Calc,           Draw,       hidden  ;
+            Calc,           TextObject, hidden  ;
+            DrawImpress,    Draw,       hidden  ;
+            DrawImpress,    TextObject, hidden  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/TextEffectPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>350</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
       <node oor:name="ShadowPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Shadow</value>

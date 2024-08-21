@@ -29,7 +29,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <drawingml/shape3dproperties.hxx>
 #include <drawingml/scene3dhelper.hxx>
-#include "effectproperties.hxx"
+#include <oox/drawingml/effectproperties.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
@@ -2160,6 +2160,50 @@ Reference< XShape > const & Shape::createAndInsert(
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue(
                 u"SoftEdgeRadius"_ustr, Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.value())));
+        }
+
+        // Set text glow effect for shapes
+        if (mpTextBody && (!bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty()))
+        {
+            const TextParagraphVector& rParagraphs = mpTextBody->getParagraphs();
+            if (!rParagraphs.empty())
+            {
+                EffectProperties aTextEffectProperties;
+                for (TextParagraphVector::const_iterator aPIt = rParagraphs.begin(), aPEnd = rParagraphs.end(); aPIt != aPEnd; ++aPIt)
+                {
+                    const TextParagraph& rTextPara = **aPIt;
+                    const TextCharacterProperties & rParaProps = rTextPara.getProperties().getTextCharacterProperties();
+                    if (rParaProps.getEffectProperties().maGlow.moGlowRad.has_value())
+                    {
+                        aTextEffectProperties.assignUsed(rParaProps.getEffectProperties());
+                        goto found;
+                    }
+                    else
+                    {
+                        for (TextRunVector::const_iterator aRIt = rTextPara.getRuns().begin(), aREnd = rTextPara.getRuns().end(); aRIt != aREnd; ++aRIt)
+                        {
+                            const TextRun& rTextRun = **aRIt;
+                            const TextCharacterProperties& rRunrops = rTextRun.getTextCharacterProperties();
+                            if (rRunrops.getEffectProperties().maGlow.moGlowRad.has_value())
+                            {
+                                aTextEffectProperties.assignUsed(rRunrops.getEffectProperties());
+                                goto found;
+                            }
+                        }
+                    }
+                }
+
+            found:
+                if (aTextEffectProperties.maGlow.moGlowRad.has_value())
+                {
+                    xSet->setPropertyValue(u"GlowTextEffectRadius"_ustr,
+                        uno::Any(convertEmuToHmm(aTextEffectProperties.maGlow.moGlowRad.value())));
+                    xSet->setPropertyValue(u"GlowTextEffectColor"_ustr,
+                        uno::Any(aTextEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
+                    xSet->setPropertyValue(u"GlowTextEffectTransparency"_ustr,
+                        uno::Any(aTextEffectProperties.maGlow.moGlowColor.getTransparency()));
+                }
+            }
         }
 
         // Set the stroke and fill-color properties of the OLE shape

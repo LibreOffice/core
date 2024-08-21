@@ -12420,6 +12420,7 @@ drawinglayer::attribute::SdrFillGraphicAttribute::getTiling() const
 drawinglayer::attribute::SdrFillGraphicAttribute::operator=(drawinglayer::attribute::SdrFillGraphicAttribute const&)
 drawinglayer::attribute::SdrFillGraphicAttribute::operator==(drawinglayer::attribute::SdrFillGraphicAttribute const&) const
 drawinglayer::attribute::SdrGlowAttribute::operator=(drawinglayer::attribute::SdrGlowAttribute&&)
+drawinglayer::attribute::SdrGlowTextAttribute::operator=(drawinglayer::attribute::SdrGlowTextAttribute&&)
 drawinglayer::attribute::SdrLightingAttribute::SdrLightingAttribute(drawinglayer::attribute::SdrLightingAttribute&&)
 drawinglayer::attribute::SdrLightingAttribute::getAmbientLightColor() const
 drawinglayer::attribute::SdrLightingAttribute::operator=(drawinglayer::attribute::SdrLightingAttribute const&)
@@ -12720,6 +12721,7 @@ drawinglayer::primitive2d::WrongSpellPrimitive2D::getPrimitive2DID() const
 drawinglayer::primitive2d::WrongSpellPrimitive2D::operator==(drawinglayer::primitive2d::BasePrimitive2D const&) const
 drawinglayer::primitive2d::arePrimitive2DReferencesEqual(rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> const&, rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> const&)
 drawinglayer::primitive2d::createEmbeddedGlowPrimitive(drawinglayer::primitive2d::Primitive2DContainer&&, drawinglayer::attribute::SdrGlowAttribute const&)
+drawinglayer::primitive2d::createEmbeddedTextGlowPrimitive(drawinglayer::primitive2d::Primitive2DContainer&&, drawinglayer::attribute::SdrGlowTextAttribute const&)
 drawinglayer::primitive2d::createEmbeddedShadowPrimitive(drawinglayer::primitive2d::Primitive2DContainer&&, drawinglayer::attribute::SdrShadowAttribute const&, basegfx::B2DHomMatrix const&, drawinglayer::primitive2d::Primitive2DContainer const*)
 drawinglayer::primitive2d::createEmbeddedSoftEdgePrimitive(drawinglayer::primitive2d::Primitive2DContainer&&, int)
 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(bool, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)

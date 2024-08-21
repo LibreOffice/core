@@ -2761,6 +2761,13 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 else
                     WriteSolidFill(COL_BLACK);
             }
+
+            if (rXShapePropSet.is() && GetDocumentType() != DOCUMENT_DOCX)
+            {
+                mpFS->startElementNS(XML_a, XML_effectLst);
+                WriteTextGlowEffect(rXShapePropSet);
+                mpFS->endElementNS(XML_a, XML_effectLst);
+            }
         }
     }
 
@@ -5573,7 +5580,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
         nEffectToken = FSNS( XML_a, XML_innerShdw );
         bContainsColor = true;
     }
-    else if( sName == u"glow" )
+    else if( sName == u"glow" || sName == u"glowtext" )
     {
         nEffectToken = FSNS( XML_a, XML_glow );
         bContainsColor = true;
@@ -5914,6 +5921,30 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect(u"glow", aGlowProps);
+}
+
+void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
+{
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"GlowTextEffectRadius"_ustr))
+    {
+        return;
+    }
+
+    sal_Int32 nRad = 0;
+    rXPropSet->getPropertyValue(u"GlowTextEffectRadius"_ustr) >>= nRad;
+    if (!nRad)
+        return;
+
+    Sequence< PropertyValue > aGlowAttribs{ comphelper::makePropertyValue(
+        u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
+    Sequence< PropertyValue > aGlowProps{
+        comphelper::makePropertyValue(u"Attribs"_ustr, aGlowAttribs),
+        comphelper::makePropertyValue(u"RgbClr"_ustr, rXPropSet->getPropertyValue(u"GlowTextEffectColor"_ustr)),
+        comphelper::makePropertyValue(u"RgbClrTransparency"_ustr, rXPropSet->getPropertyValue(u"GlowTextEffectTransparency"_ustr))
+    };
+    // TODO other stuff like saturation or luminance
+
+    WriteShapeEffect(u"glowtext", aGlowProps);
 }
 
 void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)

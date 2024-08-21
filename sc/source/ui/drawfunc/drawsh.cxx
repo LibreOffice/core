@@ -400,6 +400,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:
+        case SID_ATTR_GLOW_TEXT_COLOR:
+        case SID_ATTR_GLOW_TEXT_RADIUS:
+        case SID_ATTR_GLOW_TEXT_TRANSPARENCY:
         case SID_ATTR_SOFTEDGE_RADIUS:
         case SID_ATTR_TEXTCOLUMNS_NUMBER:
         case SID_ATTR_TEXTCOLUMNS_SPACING:

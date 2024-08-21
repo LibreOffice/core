@@ -1534,6 +1534,47 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlow)
         "glow-transparency"_ostr, u"60%"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
+{
+    createSdImpressDoc("odp/shape-text-glow-effect.odp");
+    saveAndReload(u"impress8"_ustr);
+
+    uno::Reference<drawing::XDrawPage> xDP(getPage(0));
+    uno::Reference<beans::XPropertySet> xShape(xDP->getByIndex(0), uno::UNO_QUERY);
+
+    // Check glow text properties in shapes
+    sal_Int32 nGlowEffectRad = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"GlowTextEffectRadius"_ustr) >>= nGlowEffectRad);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(706), nGlowEffectRad); // 20 pt = 706 mm/100
+    Color nGlowEffectColor;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"GlowTextEffectColor"_ustr) >>= nGlowEffectColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4EA72E), nGlowEffectColor);
+    sal_Int16 nGlowEffectTransparency = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"GlowTextEffectTransparency"_ustr)
+                   >>= nGlowEffectTransparency);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), nGlowEffectTransparency);
+
+    // Test ODF element
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    // check that we actually test graphic style
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]"_ostr,
+                "family"_ostr, u"graphic"_ustr);
+    // check loext graphic attributes for th
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "glow-text-radius"_ostr, u"0.706cm"_ustr);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "glow-text-color"_ostr, u"#4ea72e"_ustr);
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "glow-text-transparency"_ostr, u"5%"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
 {
     createSdDrawDoc("odg/softedges.odg");

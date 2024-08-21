@@ -26,7 +26,7 @@
 #include <drawingml/textcharacterproperties.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/helper/attributelist.hxx>
-#include "effectproperties.hxx"
+#include <oox/drawingml/effectproperties.hxx>
 #include <drawingml/effectpropertiescontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

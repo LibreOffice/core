@@ -432,20 +432,26 @@ constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LA
 constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1245
 constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1245
 
-constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_SOFTEDGE_LAST+1);       // 1246
-constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1246
-constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1247
-constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1247
+constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1246
+constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1246
+constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_TEXT_COLOR(SDRATTR_GLOW_TEXT_FIRST+1);       // 1247
+constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TEXT_TRANSPARENCY(SDRATTR_GLOW_TEXT_FIRST+2);// 1248
+constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_LAST(SDRATTR_GLOW_TEXT_TRANSPARENCY);   // 1248
 
-constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1248
-constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1248
-constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1248
+constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_GLOW_TEXT_LAST+1);      // 1249
+constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1249
+constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1250
+constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1250
 
-constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1249
-constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1249
-constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1249
+constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1251
+constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1251
+constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1251
 
-constexpr sal_uInt16 SDRATTR_END (SDRATTR_EDGEOOXMLCURVE_LAST);      // 1249
+constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1252
+constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1252
+constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1252
+
+constexpr sal_uInt16 SDRATTR_END (SDRATTR_EDGEOOXMLCURVE_LAST);      // 1252
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 
