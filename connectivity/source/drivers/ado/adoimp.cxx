@@ -68,7 +68,7 @@ const IID ADOS::IID_ADOUSER_25              =   MYADOID(0x00000619);
 const CLSID ADOS::CLSID_ADOVIEW_25          =   MYADOID(0x00000612);
 const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
 
-sal::systools::BStr& ADOS::GetKeyStr()
+BSTR ADOS::GetKeyStr()
 {
     static sal::systools::BStr sKeyStr(u"gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz");
     return sKeyStr;

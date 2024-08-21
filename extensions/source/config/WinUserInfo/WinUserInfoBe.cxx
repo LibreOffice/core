@@ -157,13 +157,12 @@ private:
     }
     static OUString Str(IADsUser* pUser, const wchar_t* property)
     {
-        sal::systools::BStr sBstrProp{ o3tl::toU(property) };
         struct AutoVariant : public VARIANT
         {
             AutoVariant() { VariantInit(this); }
             ~AutoVariant() { VariantClear(this); }
         } varArr;
-        if (FAILED(pUser->GetEx(sBstrProp, &varArr)))
+        if (FAILED(pUser->GetEx(sal::systools::BStr(o3tl::toU(property)), &varArr)))
             return "";
         SAFEARRAY* sa = V_ARRAY(&varArr);
         LONG nStart, nEnd;

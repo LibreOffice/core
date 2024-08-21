@@ -509,8 +509,7 @@ OUString WpADOCatalog::GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum
     OLEVariant _rVar;
     _rVar.setNoArg();
     sal::systools::BStr aBSTR;
-    sal::systools::BStr sStr1(_rName);
-    pInterface->GetObjectOwner(sStr1, _eNum, _rVar, &aBSTR);
+    pInterface->GetObjectOwner(sal::systools::BStr(_rName), _eNum, _rVar, &aBSTR);
     return OUString(aBSTR);
 }
 
