@@ -493,7 +493,7 @@ TextEffectsHandler::~TextEffectsHandler()
 }
 
 
-void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
+void TextEffectsHandler::lcl_attribute(Id aName, const Value& aValue)
 {
     if (mpGrabBagStack->getCurrentName() != constAttributesSequenceName)
         mpGrabBagStack->push(constAttributesSequenceName);

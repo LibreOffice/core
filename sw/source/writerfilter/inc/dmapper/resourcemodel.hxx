@@ -122,7 +122,7 @@ public:
        @param name     name of the attribute
        @param val      value of the attribute
      */
-    virtual void attribute(Id name, Value& val) = 0;
+    virtual void attribute(Id name, const Value& val) = 0;
 
     /**
        Receives a SPRM.
@@ -356,12 +356,12 @@ public:
     /**
        Returns properties of this value.
      */
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() = 0;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() const = 0;
 
     /**
        Returns binary object  of this value.
      */
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() = 0;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() const = 0;
 
     /**
        Returns string representation of this value.
@@ -386,9 +386,9 @@ public:
     virtual sal_uInt32 getId() const = 0;
 
     /**
-       Returns value of the SPRM.
+       Returns value of the SPRM. Returns nullptr if the internal value is nullptr.
      */
-    virtual Value::Pointer_t getValue() = 0;
+    virtual const Value* getValue() const = 0;
 
     /**
        Returns reference to properties contained in the SPRM.

@@ -121,7 +121,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     {
         bRet = true;
         sal_uInt32 nSprmId = rSprm.getId();
-        Value::Pointer_t pValue = rSprm.getValue();
+        const Value* pValue = rSprm.getValue();
         sal_Int32 nIntValue = (pValue ? pValue->getInt() : 0);
         switch ( nSprmId )
         {

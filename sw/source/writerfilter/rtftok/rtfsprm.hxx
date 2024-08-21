@@ -86,7 +86,7 @@ class RTFSprm : public Sprm
 public:
     RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
     sal_uInt32 getId() const override;
-    Value::Pointer_t getValue() override;
+    virtual const RTFValue* getValue() const override { return m_pValue.get(); }
     writerfilter::Reference<Properties>::Pointer_t getProps() override;
 #ifdef DBG_UTIL
     std::string getName() const override;

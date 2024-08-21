@@ -138,12 +138,12 @@ RTFPicture& RTFValue::getPicture() const
     return *m_pPicture;
 }
 
-writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
+writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties() const
 {
     return new RTFReferenceProperties(getAttributes(), getSprms());
 }
 
-writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
+writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary() const
 {
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }

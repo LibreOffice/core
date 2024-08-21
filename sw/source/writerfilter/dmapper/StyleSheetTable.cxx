@@ -418,7 +418,7 @@ PropertyMapPtr const & StyleSheetTable::GetDefaultCharProps() const
     return m_pImpl->m_pDefaultCharProps;
 }
 
-void StyleSheetTable::lcl_attribute(Id Name, Value & val)
+void StyleSheetTable::lcl_attribute(Id Name, const Value & val)
 {
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->m_pCurrentEntry)
@@ -547,7 +547,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
 void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
-    Value::Pointer_t pValue = rSprm.getValue();
+    const Value* pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
     OUString sStringValue = pValue ? pValue->getString() : OUString();
 

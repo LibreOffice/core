@@ -21,7 +21,7 @@ LatentStyleHandler::LatentStyleHandler()
 
 LatentStyleHandler::~LatentStyleHandler() = default;
 
-void LatentStyleHandler::lcl_attribute(Id nId, Value& rVal)
+void LatentStyleHandler::lcl_attribute(Id nId, const Value& rVal)
 {
     beans::PropertyValue aValue;
     bool bFound = true;

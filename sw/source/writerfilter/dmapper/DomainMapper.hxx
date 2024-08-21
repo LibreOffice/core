@@ -175,7 +175,7 @@ private:
     virtual void lcl_checkId(const sal_Int32 nId) override;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table

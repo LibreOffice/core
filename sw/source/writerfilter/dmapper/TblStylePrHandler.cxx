@@ -65,7 +65,7 @@ OUString TblStylePrHandler::getTypeString() const
     return OUString();
 }
 
-void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
+void TblStylePrHandler::lcl_attribute(Id rName, const Value & rVal)
 {
 
     switch ( rName )

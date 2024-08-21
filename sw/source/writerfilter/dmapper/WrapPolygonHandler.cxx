@@ -170,7 +170,7 @@ WrapPolygonHandler::~WrapPolygonHandler()
 {
 }
 
-void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
+void WrapPolygonHandler::lcl_attribute(Id Name, const Value & val)
 {
     sal_Int32 nIntValue = val.getInt();
 

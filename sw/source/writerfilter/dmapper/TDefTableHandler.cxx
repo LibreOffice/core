@@ -329,7 +329,7 @@ model::ThemeColorUsage TDefTableHandler::getThemeColorUsage(sal_Int32 nType)
     return model::ThemeColorUsage::Unknown;
 }
 
-void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
+void TDefTableHandler::lcl_attribute(Id rName, const Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )

@@ -47,7 +47,7 @@ public:
                     const rtl::Reference<SwXTextDocument>& xTextDocument);
     ~SmartTagHandler() override;
 
-    void lcl_attribute(Id nId, Value& rValue) override;
+    void lcl_attribute(Id nId, const Value& rValue) override;
     void lcl_sprm(Sprm& rSprm) override;
 
     void setURI(const OUString& rURI);

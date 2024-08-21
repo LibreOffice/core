@@ -56,7 +56,7 @@ FontTable::~FontTable()
 {
 }
 
-void FontTable::lcl_attribute(Id Name, Value & val)
+void FontTable::lcl_attribute(Id Name, const Value & val)
 {
     SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper", "current entry has to be set here" );
     if(!m_pImpl->pCurrentEntry)
@@ -137,7 +137,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             break;
         case NS_ooxml::LN_CT_Font_family:
         {
-            Value::Pointer_t pValue = rSprm.getValue();
+            const Value* pValue = rSprm.getValue();
             sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
             // Map OOXML's ST_FontFamily to UNO's awt::FontFamily.
             switch (nIntValue)
@@ -310,7 +310,7 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
     m_inputStream->closeInput();
 }
 
-void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
+void EmbeddedFontHandler::lcl_attribute( Id name, const Value& val )
 {
     switch( name )
     {

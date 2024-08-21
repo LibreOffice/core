@@ -183,7 +183,7 @@ SettingsTable::~SettingsTable()
 {
 }
 
-void SettingsTable::lcl_attribute(Id nName, Value & val)
+void SettingsTable::lcl_attribute(Id nName, const Value & val)
 {
     int nIntValue = val.getInt();
     OUString sStringValue = val.getString();
@@ -254,7 +254,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
 
-    Value::Pointer_t pValue = rSprm.getValue();
+    const Value* pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
 
     switch(nSprmId)

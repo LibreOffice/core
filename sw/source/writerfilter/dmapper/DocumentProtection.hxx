@@ -66,7 +66,7 @@ private:
     OUString m_sHash;
     OUString m_sSalt;
 
-    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_attribute(Id Name, const Value& val) override;
     virtual void lcl_sprm(Sprm& sprm) override;
 
     bool enabled() const { return !isNone(); }

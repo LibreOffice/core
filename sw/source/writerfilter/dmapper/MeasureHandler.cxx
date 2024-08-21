@@ -42,7 +42,7 @@ MeasureHandler::~MeasureHandler()
 }
 
 
-void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
+void MeasureHandler::lcl_attribute(Id rName, const Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )

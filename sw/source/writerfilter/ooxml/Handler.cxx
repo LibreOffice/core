@@ -37,7 +37,7 @@ OOXMLFootnoteHandler::~OOXMLFootnoteHandler()
 {
 }
 
-void OOXMLFootnoteHandler::attribute(Id name, Value & val)
+void OOXMLFootnoteHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -65,7 +65,7 @@ OOXMLEndnoteHandler::~OOXMLEndnoteHandler()
 {
 }
 
-void OOXMLEndnoteHandler::attribute(Id name, Value & val)
+void OOXMLEndnoteHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -93,7 +93,7 @@ OOXMLCommentHandler::~OOXMLCommentHandler()
 {
 }
 
-void OOXMLCommentHandler::attribute(Id name, Value & val)
+void OOXMLCommentHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -121,7 +121,7 @@ OOXMLOLEHandler::~OOXMLOLEHandler()
 {
 }
 
-void OOXMLOLEHandler::attribute(Id name, Value & val)
+void OOXMLOLEHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -153,7 +153,7 @@ OOXMLEmbeddedFontHandler::~OOXMLEmbeddedFontHandler()
 {
 }
 
-void OOXMLEmbeddedFontHandler::attribute(Id name, Value & val)
+void OOXMLEmbeddedFontHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -182,7 +182,7 @@ void OOXMLFooterHandler::finalize()
     mpFastContext->resolveFooter(mnType, msStreamId);
 }
 
-void OOXMLFooterHandler::attribute(Id name, Value & val)
+void OOXMLFooterHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -214,7 +214,7 @@ void OOXMLHeaderHandler::finalize()
     mpFastContext->resolveHeader(mnType, msStreamId);
 }
 
-void OOXMLHeaderHandler::attribute(Id name, Value & val)
+void OOXMLHeaderHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -268,7 +268,7 @@ OOXMLBreakHandler::~OOXMLBreakHandler()
     mrStream.text(&tmpBreak[0], 1);
 }
 
-void OOXMLBreakHandler::attribute(Id name, Value & val)
+void OOXMLBreakHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -298,7 +298,7 @@ OOXMLPictureHandler::~OOXMLPictureHandler()
 {
 }
 
-void OOXMLPictureHandler::attribute(Id name, Value & val)
+void OOXMLPictureHandler::attribute(Id name, const Value & val)
 {
     if (name == NS_ooxml::LN_AG_Blob_r_embed)
         mpFastContext->resolvePicture(val.getString());
@@ -339,7 +339,7 @@ void OOXMLHyperlinkHandler::writetext()
     mpFastContext->text(sReturn);
 }
 
-void OOXMLHyperlinkHandler::attribute(Id name, Value & val)
+void OOXMLHyperlinkHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -389,7 +389,7 @@ OOXMLHyperlinkURLHandler::~OOXMLHyperlinkURLHandler()
     mpFastContext->newProperty(NS_ooxml::LN_CT_Hyperlink_URL, OOXMLValue::Pointer_t(new OOXMLStringValue(mURL)));
 }
 
-void OOXMLHyperlinkURLHandler::attribute(Id name, Value & val)
+void OOXMLHyperlinkURLHandler::attribute(Id name, const Value & val)
 {
     switch (name)
     {
@@ -417,7 +417,7 @@ OOXMLAltChunkHandler::~OOXMLAltChunkHandler()
                                OOXMLValue::Pointer_t(new OOXMLStringValue(m_aStreamName)));
 }
 
-void OOXMLAltChunkHandler::attribute(Id nName, Value& rValue)
+void OOXMLAltChunkHandler::attribute(Id nName, const Value& rValue)
 {
     switch (nName)
     {

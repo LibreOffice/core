@@ -62,7 +62,7 @@ class OLEHandler : public LoggedProperties
     DomainMapper& m_rDomainMapper;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
 public:

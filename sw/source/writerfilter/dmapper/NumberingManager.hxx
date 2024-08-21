@@ -224,7 +224,7 @@ private:
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 
     // Properties
-    virtual void lcl_attribute( Id nName, Value & rVal ) override;
+    virtual void lcl_attribute( Id nName, const Value & rVal ) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
     // Table

@@ -37,7 +37,7 @@ SectionColumnHandler::SectionColumnHandler()
 
 SectionColumnHandler::~SectionColumnHandler() {}
 
-void SectionColumnHandler::lcl_attribute(Id rName, Value& rVal)
+void SectionColumnHandler::lcl_attribute(Id rName, const Value& rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     switch (rName)

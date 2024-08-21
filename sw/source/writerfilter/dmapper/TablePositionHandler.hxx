@@ -33,7 +33,7 @@ class TablePositionHandler : public LoggedProperties
     Id m_nTableOverlap = 0;
 
     // Properties
-    void lcl_attribute(Id nId, Value& rVal) override;
+    void lcl_attribute(Id nId, const Value& rVal) override;
     void lcl_sprm(Sprm& sprm) override;
 
 public:

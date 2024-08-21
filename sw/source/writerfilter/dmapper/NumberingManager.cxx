@@ -692,7 +692,7 @@ void ListsManager::DisposeNumPicBullets( )
     }
 }
 
-void ListsManager::lcl_attribute( Id nName, Value& rVal )
+void ListsManager::lcl_attribute( Id nName, const Value& rVal )
 {
     ListLevel::Pointer pCurrentLvl;
 
@@ -826,7 +826,8 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         return;
 
     static bool bIsStartVisited = false;
-    sal_Int32 nIntValue = rSprm.getValue()->getInt();
+    const Value* pValue = rSprm.getValue();
+    sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
     switch( nSprmId )
     {
         case NS_ooxml::LN_CT_Numbering_abstractNum:

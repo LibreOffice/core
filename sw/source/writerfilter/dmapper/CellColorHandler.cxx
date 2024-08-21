@@ -96,7 +96,7 @@ static uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
     return uno::Any(aRet);
 }
 
-void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
+void CellColorHandler::lcl_attribute(Id rName, const Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )

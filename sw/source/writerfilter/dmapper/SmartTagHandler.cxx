@@ -48,7 +48,7 @@ SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xCompone
 
 SmartTagHandler::~SmartTagHandler() = default;
 
-void SmartTagHandler::lcl_attribute(Id nId, Value& rValue)
+void SmartTagHandler::lcl_attribute(Id nId, const Value& rValue)
 {
     switch (nId)
     {

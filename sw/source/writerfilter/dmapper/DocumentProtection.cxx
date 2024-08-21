@@ -45,7 +45,7 @@ DocumentProtection::DocumentProtection()
 
 DocumentProtection::~DocumentProtection() {}
 
-void DocumentProtection::lcl_attribute(Id nName, Value& val)
+void DocumentProtection::lcl_attribute(Id nName, const Value& val)
 {
     int nIntValue = val.getInt();
     OUString sStringValue = val.getString();

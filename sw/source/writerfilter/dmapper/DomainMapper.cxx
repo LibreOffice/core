@@ -280,7 +280,7 @@ DomainMapper::~DomainMapper()
 #endif
 }
 
-void DomainMapper::lcl_attribute(Id nName, Value & val)
+void DomainMapper::lcl_attribute(Id nName, const Value & val)
 {
     if (m_pImpl->hasTableManager() && m_pImpl->getTableManager().attribute(nName, val))
         return;
@@ -1492,7 +1492,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     sal_uInt32 nSprmId = rSprm.getId();
     //needed for page properties
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-    Value::Pointer_t pValue = rSprm.getValue();
+    const Value* pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     const OUString sStringValue = pValue->getString();
 

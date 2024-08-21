@@ -638,7 +638,7 @@ void GraphicImport::lcl_expandRectangleByEffectExtent(awt::Point& rLeftTop, awt:
     rSize.Height += nEffectExtent;
 }
 
-void GraphicImport::lcl_attribute(Id nName, Value& rValue)
+void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
 {
     sal_Int32 nIntValue = rValue.getInt();
     switch( nName )

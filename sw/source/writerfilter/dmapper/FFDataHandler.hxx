@@ -92,7 +92,7 @@ private:
     void lcl_sprm(Sprm& r_sprm) override;
 
     // attribute
-    void lcl_attribute(Id name, Value& val) override;
+    void lcl_attribute(Id name, const Value& val) override;
 };
 }
 

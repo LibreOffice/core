@@ -63,7 +63,7 @@ OLEHandler::~OLEHandler()
 }
 
 
-void OLEHandler::lcl_attribute(Id rName, Value & rVal)
+void OLEHandler::lcl_attribute(Id rName, const Value & rVal)
 {
     OUString sStringValue = rVal.getString();
     switch( rName )

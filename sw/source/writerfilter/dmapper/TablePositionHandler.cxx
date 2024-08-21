@@ -27,7 +27,7 @@ TablePositionHandler::TablePositionHandler()
 
 TablePositionHandler::~TablePositionHandler() = default;
 
-void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
+void TablePositionHandler::lcl_attribute(Id nId, const Value& rVal)
 {
     switch (nId)
     {

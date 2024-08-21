@@ -113,11 +113,11 @@ public:
     explicit LoggedProperties(const std::string& sPrefix);
     virtual ~LoggedProperties() override;
 
-    void attribute(Id name, Value& val) override;
+    void attribute(Id name, const Value& val) override;
     void sprm(Sprm& sprm) override;
 
 protected:
-    virtual void lcl_attribute(Id name, Value& val) = 0;
+    virtual void lcl_attribute(Id name, const Value& val) = 0;
     virtual void lcl_sprm(Sprm& sprm) = 0;
 
 private:

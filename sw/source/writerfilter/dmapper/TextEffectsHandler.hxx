@@ -61,7 +61,7 @@ public:
     static sal_uInt8 GetTextFillSolidFillAlpha(const css::beans::PropertyValue& rValue);
 
     // LoggedProperties
-    virtual void lcl_attribute(Id aName, Value& aValue) override;
+    virtual void lcl_attribute(Id aName, const Value& aValue) override;
     virtual void lcl_sprm(Sprm& sprm) override;
 };
 }

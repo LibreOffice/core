@@ -38,7 +38,7 @@ public:
     bool GetPageToggle() const { return m_bPageToggle; }
 
 private:
-    virtual void lcl_attribute(Id aName, Value& rVal) override;
+    virtual void lcl_attribute(Id aName, const Value& rVal) override;
     virtual void lcl_sprm(Sprm& rSprm) override;
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
@@ -57,7 +57,7 @@ public:
     css::text::WrapTextMode getWrapMode() const;
 
 private:
-    virtual void lcl_attribute(Id aName, Value& rVal) override;
+    virtual void lcl_attribute(Id aName, const Value& rVal) override;
     virtual void lcl_sprm(Sprm& rSprm) override;
 
     sal_Int32 m_nType;
@@ -73,7 +73,7 @@ public:
     explicit ExtentHandler();
     virtual ~ExtentHandler() override;
 
-    virtual void attribute(Id nName, Value& rValue) override;
+    virtual void attribute(Id nName, const Value& rValue) override;
     virtual void sprm(Sprm& rSprm) override;
     css::awt::Size getExtent() const { return m_Extent; }
 };

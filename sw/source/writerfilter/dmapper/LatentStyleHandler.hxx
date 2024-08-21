@@ -20,7 +20,7 @@ class LatentStyleHandler : public LoggedProperties
     std::vector<css::beans::PropertyValue> m_aAttributes;
 
     // Properties
-    void lcl_attribute(Id nId, Value& rVal) override;
+    void lcl_attribute(Id nId, const Value& rVal) override;
     void lcl_sprm(Sprm& sprm) override;
 
 public:

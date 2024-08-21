@@ -37,7 +37,7 @@ WriteProtection::WriteProtection()
 
 WriteProtection::~WriteProtection() {}
 
-void WriteProtection::lcl_attribute(Id nName, Value& val)
+void WriteProtection::lcl_attribute(Id nName, const Value& val)
 {
     int nIntValue = val.getInt();
     OUString sStringValue = val.getString();

@@ -163,7 +163,7 @@ void FFDataHandler::resolveSprm(Sprm & r_Sprm)
         pProperties->resolve(*this);
 }
 
-void FFDataHandler::lcl_attribute(Id name, Value & val)
+void FFDataHandler::lcl_attribute(Id name, const Value & val)
 {
     switch (name)
     {

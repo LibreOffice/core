@@ -42,7 +42,7 @@ PageBordersHandler::~PageBordersHandler( )
 {
 }
 
-void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
+void PageBordersHandler::lcl_attribute( Id eName, const Value& rVal )
 {
     int nIntValue = rVal.getInt( );
     switch ( eName )

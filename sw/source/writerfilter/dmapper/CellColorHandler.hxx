@@ -53,7 +53,7 @@ private:
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
     void createGrabBag(const OUString& aName, const css::uno::Any& rValue);

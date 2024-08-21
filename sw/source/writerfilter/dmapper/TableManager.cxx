@@ -260,7 +260,7 @@ bool TableManager::sprm(Sprm& rSprm)
     {
         case NS_ooxml::LN_tblDepth:
         {
-            Value::Pointer_t pValue = rSprm.getValue();
+            const Value* pValue = rSprm.getValue();
 
             cellDepth(pValue->getInt());
         }

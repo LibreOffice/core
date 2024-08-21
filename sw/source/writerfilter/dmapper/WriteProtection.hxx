@@ -42,7 +42,7 @@ private:
     OUString m_sSalt;
     bool m_bRecommended;
 
-    virtual void lcl_attribute(Id Name, Value& val) override;
+    virtual void lcl_attribute(Id Name, const Value& val) override;
     virtual void lcl_sprm(Sprm& sprm) override;
 
 public:

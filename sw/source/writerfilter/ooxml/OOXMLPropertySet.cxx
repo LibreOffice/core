@@ -46,18 +46,6 @@ sal_uInt32 OOXMLProperty::getId() const
     return mId;
 }
 
-Value::Pointer_t OOXMLProperty::getValue()
-{
-    Value::Pointer_t pResult;
-
-    if (mpValue)
-        pResult = Value::Pointer_t(mpValue->clone());
-    else
-        pResult = Value::Pointer_t(new OOXMLValue());
-
-    return pResult;
-}
-
 writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
@@ -146,12 +134,12 @@ uno::Any OOXMLValue::getAny() const
     return uno::Any();
 }
 
-writerfilter::Reference<Properties>::Pointer_t OOXMLValue::getProperties()
+writerfilter::Reference<Properties>::Pointer_t OOXMLValue::getProperties() const
 {
     return writerfilter::Reference<Properties>::Pointer_t();
 }
 
-writerfilter::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary()
+writerfilter::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary() const
 {
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
@@ -181,7 +169,7 @@ OOXMLBinaryValue::~OOXMLBinaryValue()
 {
 }
 
-writerfilter::Reference<BinaryObj>::Pointer_t OOXMLBinaryValue::getBinary()
+writerfilter::Reference<BinaryObj>::Pointer_t OOXMLBinaryValue::getBinary() const
 {
     return mpBinaryObj;
 }
@@ -439,7 +427,7 @@ OOXMLPropertySetValue::~OOXMLPropertySetValue()
 {
 }
 
-writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getProperties()
+writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getProperties() const
 {
     return writerfilter::Reference<Properties>::Pointer_t
         (mpPropertySet->clone());
@@ -792,7 +780,7 @@ void OOXMLPropertySetEntryToString::sprm(Sprm & /*rSprm*/)
 {
 }
 
-void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
+void OOXMLPropertySetEntryToString::attribute(Id nId, const Value & rValue)
 {
     if (nId == mnId)
         mStr = rValue.getString();
@@ -815,7 +803,7 @@ void OOXMLPropertySetEntryToInteger::sprm(Sprm & /*rSprm*/)
 {
 }
 
-void OOXMLPropertySetEntryToInteger::attribute(Id nId, Value & rValue)
+void OOXMLPropertySetEntryToInteger::attribute(Id nId, const Value & rValue)
 {
     if (nId == mnId)
         mnValue = rValue.getInt();
@@ -833,7 +821,7 @@ OOXMLPropertySetEntryToBool::~OOXMLPropertySetEntryToBool() {}
 
 void OOXMLPropertySetEntryToBool::sprm(Sprm & /*rSprm*/) {}
 
-void OOXMLPropertySetEntryToBool::attribute(Id nId, Value & rValue)
+void OOXMLPropertySetEntryToBool::attribute(Id nId, const Value & rValue)
 {
     if (nId == mnId)
         mValue = (rValue.getInt() != 0);

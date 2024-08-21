@@ -24,8 +24,6 @@ RTFSprm::RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue)
 
 sal_uInt32 RTFSprm::getId() const { return m_nKeyword; }
 
-Value::Pointer_t RTFSprm::getValue() { return Value::Pointer_t(m_pValue->Clone()); }
-
 writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
 {
     return m_pValue->getProperties();

@@ -48,7 +48,7 @@ private:
     std::vector<PgBorder> m_aBorders;
 
     // Properties
-    virtual void lcl_attribute(Id eName, Value& rVal) override;
+    virtual void lcl_attribute(Id eName, const Value& rVal) override;
     virtual void lcl_sprm(Sprm& rSprm) override;
 
 public:

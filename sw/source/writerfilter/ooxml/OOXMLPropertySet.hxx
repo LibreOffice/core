@@ -41,8 +41,8 @@ public:
     ;
     virtual OUString getString() const override;
     virtual css::uno::Any getAny() const override;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() const override;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
@@ -70,7 +70,7 @@ public:
     virtual ~OOXMLProperty() override;
 
     sal_uInt32 getId() const override;
-    Value::Pointer_t getValue() override;
+    const OOXMLValue* getValue() const override { return mpValue.get(); }
     writerfilter::Reference<Properties>::Pointer_t getProps() override;
 #ifdef DBG_UTIL
     std::string getName() const override;
@@ -87,7 +87,7 @@ public:
     explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
     virtual ~OOXMLBinaryValue() override;
 
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
@@ -228,7 +228,7 @@ public:
     OOXMLPropertySetValue& operator=(OOXMLPropertySetValue&&)
         = delete; // due to const mpPropertySet
 
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() const override;
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
@@ -376,7 +376,7 @@ public:
     virtual ~OOXMLPropertySetEntryToString() override;
 
     virtual void sprm(Sprm& rSprm) override;
-    virtual void attribute(Id nId, Value& rValue) override;
+    virtual void attribute(Id nId, const Value& rValue) override;
 
     const OUString& getString() const { return mStr; }
 };
@@ -391,7 +391,7 @@ public:
     virtual ~OOXMLPropertySetEntryToInteger() override;
 
     virtual void sprm(Sprm& rSprm) override;
-    virtual void attribute(Id nId, Value& rValue) override;
+    virtual void attribute(Id nId, const Value& rValue) override;
 
     int getValue() const { return mnValue; }
 };
@@ -406,7 +406,7 @@ public:
     virtual ~OOXMLPropertySetEntryToBool() override;
 
     virtual void sprm(Sprm& rSprm) override;
-    virtual void attribute(Id nId, Value& rValue) override;
+    virtual void attribute(Id nId, const Value& rValue) override;
 
     bool getValue() const { return mValue; }
 };

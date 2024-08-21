@@ -54,7 +54,7 @@ PositionHandler::~PositionHandler( )
 {
 }
 
-void PositionHandler::lcl_attribute( Id aName, Value& rVal )
+void PositionHandler::lcl_attribute( Id aName, const Value& rVal )
 {
     sal_Int32 nIntValue = rVal.getInt( );
     switch ( aName )
@@ -214,7 +214,7 @@ WrapHandler::~WrapHandler( )
 {
 }
 
-void WrapHandler::lcl_attribute( Id aName, Value& rVal )
+void WrapHandler::lcl_attribute( Id aName, const Value& rVal )
 {
     switch ( aName )
     {
@@ -390,7 +390,7 @@ ExtentHandler::~ExtentHandler()
 {
 }
 
-void ExtentHandler::attribute(Id nName, Value & rValue)
+void ExtentHandler::attribute(Id nName, const Value & rValue)
 {
     sal_Int32 nIntValue = rValue.getInt();
     switch (nName)

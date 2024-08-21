@@ -61,7 +61,7 @@ class TDefTableHandler : public LoggedProperties
     void localResolve(Id Name, const writerfilter::Reference<Properties>::Pointer_t& pProperties);
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
 
 public:

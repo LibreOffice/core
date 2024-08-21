@@ -62,7 +62,7 @@ class FontTable : public LoggedProperties, public LoggedTable
 
  private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_attribute(Id Name, const Value & val) override;
     virtual void lcl_sprm(Sprm & sprm) override;
     void resolveSprm(Sprm & r_sprm);
 
@@ -96,7 +96,7 @@ public:
     EmbeddedFontHandler(FontTable& rFontTable, OUString fontName, std::u16string_view style);
     virtual ~EmbeddedFontHandler() override;
 private:
-    virtual void lcl_attribute( Id name, Value& val ) override;
+    virtual void lcl_attribute( Id name, const Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
     FontTable& m_fontTable;
     OUString m_fontName;

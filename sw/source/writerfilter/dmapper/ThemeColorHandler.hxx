@@ -38,7 +38,7 @@ public:
     {
     }
 
-    virtual void lcl_attribute(Id aName, Value& rValue) override
+    virtual void lcl_attribute(Id aName, const Value& rValue) override
     {
         sal_Int32 nIntValue = rValue.getInt();
 

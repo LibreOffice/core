@@ -342,7 +342,7 @@ LoggedProperties::LoggedProperties(
 
 LoggedProperties::~LoggedProperties() {}
 
-void LoggedProperties::attribute(Id name, Value& val)
+void LoggedProperties::attribute(Id name, const Value& val)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("attribute");

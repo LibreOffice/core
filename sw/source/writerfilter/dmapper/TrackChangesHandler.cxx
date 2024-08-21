@@ -33,7 +33,7 @@ TrackChangesHandler::~TrackChangesHandler()
 }
 
 
-void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
+void TrackChangesHandler::lcl_attribute(Id rName, const Value & rVal)
 {
     OUString sStringValue = rVal.getString();
     switch( rName )
