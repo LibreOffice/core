@@ -1349,15 +1349,12 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         {
             return nullptr;
         }
-        union {
-            XAccessible* pChildXAcc;
-            hyper nHyper = 0;
-        };
-        pCurChild->GetUNOInterface(&nHyper);
-        if(pChildXAcc==nullptr)
-        {
+
+        CMAccessible* pChildCMAcc = static_cast<CMAccessible*>(pCurChild);
+        XAccessible* pChildXAcc = pChildCMAcc->m_xAccessible.get();
+        if (!pChildXAcc)
             return nullptr;
-        }
+
         XAccessibleContext* pChildContext = GetContextByXAcc(pChildXAcc);
         if(pChildContext == nullptr)
         {
@@ -2088,16 +2085,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
 
         if( flagsSelect&SELFLAG_TAKEFOCUS )
         {
-            union {
-                XAccessible* pTempUNO;
-                hyper nHyper = 0;
-            };
-            pSelectAcc->GetUNOInterface(&nHyper);
-
-            if( pTempUNO == nullptr )
+            CMAccessible* pSelectCMAcc = static_cast<CMAccessible*>(pSelectAcc);
+            Reference<XAccessible> xSelectAcc = pSelectCMAcc->m_xAccessible;
+            if (!xSelectAcc.is())
                 return 0;
 
-            Reference<XAccessibleContext> pRContext = pTempUNO->getAccessibleContext();
+            Reference<XAccessibleContext> pRContext = xSelectAcc->getAccessibleContext();
             Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
             Reference< XAccessible > pRParentXAcc = pRContext->getAccessibleParent();
             Reference< XAccessibleContext > pRParentContext = pRParentXAcc->getAccessibleContext();
@@ -2140,22 +2133,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
         return S_OK;
 
     } catch(...) { return E_FAIL; }
-}
-
-/**
-* Return XAccessible interface pointer when needed
-* @param pXAcc, [in, out] the Uno interface of the current object.
-* @return S_OK if successful.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
-{
-    // internal IMAccessible - no mutex meeded
-
-    if(pXAcc == nullptr)
-        return E_INVALIDARG;
-
-    *pXAcc = reinterpret_cast<hyper>(m_xAccessible.get());
-    return S_OK;
 }
 
 /**
