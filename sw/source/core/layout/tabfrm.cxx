@@ -2262,7 +2262,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
-    if (IsHiddenNow())
+    bool const isHiddenNow(IsHiddenNow());
+    if (isHiddenNow)
         MakeValidZeroHeight();
 
     int nUnSplitted = 5; // Just another loop control :-(
@@ -2299,7 +2300,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         pLayout->GetBrowseWidthByTabFrame( *this ) );
                 }
 
-                setFramePrintAreaValid(false);
+                if (!isHiddenNow)
+                {
+                    setFramePrintAreaValid(false);
+                }
                 aNotify.SetLowersComplete( false );
             }
             SwFrame *pPre;
@@ -2402,7 +2406,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                 pHTMLLayout->GetBrowseWidthByTabFrame( *this ) );
                         }
 
-                        setFramePrintAreaValid(false);
+                        if (!isHiddenNow)
+                        {
+                            setFramePrintAreaValid(false);
+                        }
 
                         if (!oAccess)
                         {
