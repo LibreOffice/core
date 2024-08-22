@@ -255,11 +255,13 @@ void SAL_CALL GalleryTheme::update(  )
                 if (pOrigPage && pOrigModel)
                 {
                     FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
+                    // tdf#162555: xDrawing should be created before pNewPage, because it controls
+                    // the lifetime of pTmpModel used by the latter
+                    rtl::Reference< GalleryDrawingModel > xDrawing( new GalleryDrawingModel( pTmpModel ) );
                     // Clone to new target SdrModel
                     rtl::Reference<SdrPage> pNewPage = pOrigPage->CloneSdrPage(*pTmpModel);
                     pTmpModel->InsertPage(pNewPage.get(), 0);
 
-                    rtl::Reference< GalleryDrawingModel > xDrawing( new GalleryDrawingModel( pTmpModel ) );
                     pTmpModel->setUnoModel( xDrawing );
 
                     nRet = insertDrawingByIndex( xDrawing, nIndex );
