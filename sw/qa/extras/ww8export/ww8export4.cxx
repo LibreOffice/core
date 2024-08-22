@@ -191,6 +191,26 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
     CPPUNIT_ASSERT(getProperty<bool>(xShape2, u"IsFollowingTextFlow"_ustr));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf162541, "tdf162541_notLayoutInCell_paraLeft.doc")
+{
+    // Note: this file looks very strange in MS Word. The image splits the table into two...
+
+    // given cell B2 with a para-left para-fromTop image that is NOT layoutInCell
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nShapeLeft
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    sal_Int32 nParaLeft
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nTableLeft
+        = getXPath(pDump, "//tab/infos/bounds"_ostr, "left"_ostr).toInt32();
+    // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
+    CPPUNIT_ASSERT(nShapeLeft < nParaLeft); // shape is located in column A, not column B
+    CPPUNIT_ASSERT_EQUAL(nTableLeft, nShapeLeft);
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapThrough.doc")
 {
     // given cell B2 with a char-oriented-left wrapThrough image that is NOT layoutInCell

@@ -2463,7 +2463,9 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
              && eHoriRel == text::RelOrientation::FRAME)
     {
         // relative left/right honors paragraph margins, but not with center or none/absolute offset
-        eHoriRel = text::RelOrientation::PRINT_AREA;
+
+        if (bIsObjectLayoutInTableCell || !m_nInTable)
+            eHoriRel = text::RelOrientation::PRINT_AREA;
     }
 
     // #i24255# - position of floating screen objects in
@@ -2481,12 +2483,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
         }
     }
 
-    // if the object is anchored inside a table cell, is horizontal aligned
-    // at frame and has wrap through, but its attribute
-    // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
-    if (!bIsObjectLayoutInTableCell && m_nInTable &&
-            (eHoriRel == text::RelOrientation::FRAME) &&
-            rFSPA.nwr == 3)
+    // if the object is anchored inside a table cell, is horizontally aligned to the paragraph,
+    // but it is not being forced to 'layout in table cell',
+    // then convert its horizontal alignment to page text area
+    // because MSO strangely doesn't orient the object to the cell paragraph it is anchored to
+    // but to the paragraph that contains the entire table (which is equivalent to page margins).
+    if (!bIsObjectLayoutInTableCell && m_nInTable && eHoriRel == text::RelOrientation::FRAME)
     {
         eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
     }
