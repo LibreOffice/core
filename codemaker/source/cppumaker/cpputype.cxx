@@ -1954,8 +1954,8 @@ void PlainStructType::dumpHppFile(
     out << indent() << "return ";
     bFirst = true;
     if (!base.isEmpty()) {
-        out << "operator==( static_cast< " << codemaker::cpp::scopedCppName(u2b(base))
-            << ">(the_lhs), static_cast< " << codemaker::cpp::scopedCppName(u2b(base)) << ">(the_rhs) )\n";
+        out << "operator==( static_cast<const " << codemaker::cpp::scopedCppName(u2b(base))
+            << "&>(the_lhs), static_cast<const " << codemaker::cpp::scopedCppName(u2b(base)) << "&>(the_rhs) )\n";
         bFirst = false;
     }
     for (const unoidl::PlainStructTypeEntity::Member& member : entity_->getDirectMembers()) {
