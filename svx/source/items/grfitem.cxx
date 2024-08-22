@@ -53,6 +53,15 @@ bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
            m_nBottom  == rCrop.GetBottom();
 }
 
+size_t SvxGrfCrop::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, m_nLeft);
+    o3tl::hash_combine(seed, m_nRight);
+    o3tl::hash_combine(seed, m_nTop);
+    o3tl::hash_combine(seed, m_nBottom);
+    return seed;
+}
 
 bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
