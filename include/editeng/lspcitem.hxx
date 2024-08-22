@@ -51,6 +51,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool            supportsHashCode() const override { return true; }
+    virtual size_t          hashCode() const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -65,6 +67,7 @@ public:
     short GetInterLineSpace() const { return nInterLineSpace; }
     void SetInterLineSpace( const short nSpace )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         nInterLineSpace = nSpace;
         eInterLineSpaceRule = SvxInterLineSpaceRule::Fix;
     }
@@ -73,6 +76,7 @@ public:
     sal_uInt16 GetLineHeight() const { return nLineHeight; }
     void SetLineHeight( const sal_uInt16 nHeight )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         nLineHeight = nHeight;
         eLineSpaceRule = SvxLineSpaceRule::Min;
     }
@@ -81,14 +85,15 @@ public:
     sal_uInt16 GetPropLineSpace() const { return nPropLineSpace; }
     void SetPropLineSpace( const sal_uInt16 nProp )
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         nPropLineSpace = nProp;
         eInterLineSpaceRule = SvxInterLineSpaceRule::Prop;
     }
 
-    void SetLineSpaceRule(SvxLineSpaceRule e) { eLineSpaceRule = e; }
+    void SetLineSpaceRule(SvxLineSpaceRule e) { ASSERT_CHANGE_REFCOUNTED_ITEM; eLineSpaceRule = e; }
     SvxLineSpaceRule GetLineSpaceRule() const { return eLineSpaceRule; }
 
-    void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { eInterLineSpaceRule = e; }
+    void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { ASSERT_CHANGE_REFCOUNTED_ITEM; eInterLineSpaceRule = e; }
     SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
 
     virtual sal_uInt16      GetValueCount() const override;

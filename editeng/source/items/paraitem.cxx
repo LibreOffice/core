@@ -110,6 +110,17 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
                 && (nInterLineSpace == rLineSpace.nInterLineSpace)));
 }
 
+size_t SvxLineSpacingItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, eLineSpaceRule);
+    o3tl::hash_combine(seed, nLineHeight);
+    o3tl::hash_combine(seed, eInterLineSpaceRule);
+    o3tl::hash_combine(seed, nPropLineSpace);
+    o3tl::hash_combine(seed, nInterLineSpace);
+    return seed;
+}
+
 /* Who does still know why the LineSpacingItem is so complicated?
    We can not use it for UNO since there are only two values:
       - a sal_uInt16 for the mode
@@ -162,6 +173,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -329,6 +341,7 @@ sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
 
 void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     switch ( static_cast<SvxSpecialLineSpace>(nVal) )
     {
         case SvxSpecialLineSpace::OneLine:           nPropLineSpace = 100; break;
