@@ -830,6 +830,21 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                 rValue.getAny( ) >>= xShape;
                 if ( xShape.is( ) )
                 {
+                    if (!m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable()
+                        && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+                    {
+                        // Microsoft apparently forces layoutInCell behaviour
+                        // if either horizontal orientation is based on character
+                        // or vertical orientation is based on line
+                        // so make it explicit instead of trying to hack in tons of adjustments.
+                        if (m_pImpl->m_nVertRelation == text::RelOrientation::TEXT_LINE
+                            || m_pImpl->m_nHoriRelation == text::RelOrientation::CHAR)
+                        {
+                            m_pImpl->m_bLayoutInCell = true;
+                            m_pImpl->m_bCompatForcedLayoutInCell = true;
+                        }
+                    }
+
                     if (m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable())
                     {
                         // Microsoft is buggy and inconsistent in how they handle layoutInCell.

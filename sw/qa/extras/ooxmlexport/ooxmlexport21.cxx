@@ -676,6 +676,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     CPPUNIT_ASSERT(nTableLeft > nRectLeft);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_fromTop.docx")
+{
+    // given cell B2 with a para-fromTop, char-left image that is NOT layoutInCell
+    // (but Microsoft sees the CHAR orientation and triggers a layoutInCell anyway)
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nShapeTop
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // sal_Int32 nPara1Top
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nCellTop
+        = getXPath(pDump, "//tab/row[2]/cell[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The image is limited by the cell boundaries (should be limited to cell margin actually)
+    CPPUNIT_ASSERT(nCellTop <= nShapeTop);
+    // CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // tdf#162539
+
+    // since in fact layoutInCell is supposed to be applied, we mark (and export) as layoutInCell
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
 {
     loadFromFile(u"tdf159207_footerFramePrBorder.docx"); // re-imports as editeng Frame/Shape

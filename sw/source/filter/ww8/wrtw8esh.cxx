@@ -2707,6 +2707,10 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
     // so do nothing unless "Follow text flow" is disabled (which is the default in native LO).
     bool bLayoutInCell = rFormat.GetFollowTextFlow().GetValue();
 
+    // Microsoft will treat any orientation to CHAR or TEXT_LINE as if it had to layoutInCell
+    if (!bLayoutInCell)
+        bLayoutInCell = mnYRelTo == 3 || mnXRelTo == 3;
+
     // If this is already MSO format, then we need to round-trip a false FollowingTextFlow value
     const bool bIsMSOLayout = rFormat.getIDocumentSettingAccess().get(
         DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);

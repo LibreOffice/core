@@ -2312,6 +2312,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
                                               SfxItemSet &rFlySet)
 {
     bool bCurSectionVertical = m_aSectionManager.CurrentSectionIsVertical();
+    bool bIsObjectLayoutInTableCell
+        = m_nInTable && IsObjectLayoutInTableCell(rRecord.nGroupShapeBooleanProperties);
 
     if (!rRecord.nXRelTo)
     {
@@ -2417,6 +2419,20 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
         text::RelOrientation::TEXT_LINE   // 3 is relative to line
     };
 
+    if (!bIsObjectLayoutInTableCell && m_nInTable && eAnchor == RndStdIds::FLY_AT_CHAR)
+    {
+        // Microsoft apparently forces layoutInCell behaviour
+        // if either horizontal orientation is based on character
+        // or vertical orientation is based on line
+        // so make it explicit instead of trying to hack in tons of adjustments.
+        if (aVertRelOriTab[nYRelTo] == text::RelOrientation::TEXT_LINE
+            || aHoriRelOriTab[nXRelTo] == text::RelOrientation::CHAR)
+        {
+            bIsObjectLayoutInTableCell = true;
+            rFlySet.Put(SwFormatFollowTextFlow(true));
+        }
+    }
+
     // If the image is inline, then the relative orientation means nothing,
     // so set it up so that if the user changes it into an anchor, it positions usefully.
     sal_Int16 eHoriOri
@@ -2468,9 +2484,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
     // if the object is anchored inside a table cell, is horizontal aligned
     // at frame and has wrap through, but its attribute
     // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
-    // #i84783# - use new method <IsObjectLayoutInTableCell()>
-    const bool bIsObjectLayoutInTableCell
-        = m_nInTable && IsObjectLayoutInTableCell(rRecord.nGroupShapeBooleanProperties);
     if (!bIsObjectLayoutInTableCell && m_nInTable &&
             (eHoriRel == text::RelOrientation::FRAME) &&
             rFSPA.nwr == 3)
@@ -2536,6 +2549,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
 }
 
 // #i84783#
+// Return whether the fly specifies layoutInCell.
+// (NOTE: there are circumstances where layoutInCell is implemented even when set to false)
 bool SwWW8ImplReader::IsObjectLayoutInTableCell(const sal_uInt32 nGroupShapeBooleanProperties) const
 {
     bool bIsObjectLayoutInTableCell = false;

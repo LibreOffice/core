@@ -203,15 +203,18 @@ DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapTh
         = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/infos/bounds"_ostr, "left"_ostr).toInt32();
     CPPUNIT_ASSERT(nShapeLeft > nPara6Left); // nShapeLeft starts after the word "anchor"
 
-    // sal_Int32 nShapeTop
-    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-    //                "top"_ostr)
-    //           .toInt32();
-    // sal_Int32 nPara1Top
-    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
-    // CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // nShapeTop starts at the cell margin"
+    // tdf#162551: The top is oriented to the top of the page - but MSO treats it as layoutInCell
+    sal_Int32 nShapeTop
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    sal_Int32 nPara1Top
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // layoutInCell uses the cell margin as the top-most point, not the cell edge
+    CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // nShapeTop starts at the cell margin"
 
-    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+    // since in fact layoutInCell is supposed to be applied, we mark (and export) as layoutInCell
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr)); // tdf#162551
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
