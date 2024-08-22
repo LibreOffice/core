@@ -101,7 +101,6 @@ public:
     STDMETHOD(get_accParent)( IDispatch **ppdispParent) override;
 
     // methods which are defined only in the IAccessible2
-    // These methods only declare here, and their implementation bodies are empty now.
     STDMETHOD(get_nRelations)( long __RPC_FAR *nRelations) override;
     STDMETHOD(get_relation)( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation) override;
     STDMETHOD(get_relations)( long maxRelations, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations) override;
