@@ -154,7 +154,8 @@ OleEmbeddedObject::~OleEmbeddedObject()
 }
 
 
-void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEventName )
+void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEventName,
+                                                      osl::ResettableMutexGuard& guard )
 {
     if ( !m_pInterfaceContainer )
         return;
@@ -165,59 +166,59 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
     if ( pContainer == nullptr )
         return;
 
-    document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
-    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
-    while (pIterator.hasMoreElements())
+    auto proc = [&guard, aEvent = document::EventObject(getXWeak(), aEventName)](
+                    const uno::Reference<document::XEventListener>& xListener)
     {
         try
         {
-            static_cast<document::XEventListener*>(pIterator.next())->notifyEvent( aEvent );
+            osl::ResettableMutexGuardScopedReleaser area(guard);
+            xListener->notifyEvent(aEvent);
         }
-        catch( const uno::RuntimeException& )
+        catch (const lang::DisposedException&)
+        {
+            throw; // forEach handles this
+        }
+        catch (const uno::RuntimeException&)
         {
         }
-    }
+    };
+    pContainer->forEach<document::XEventListener>(proc);
 }
 #ifdef _WIN32
 
-void OleEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
+void OleEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,
+                                                      osl::ResettableMutexGuard& guard )
 {
-    if ( m_pInterfaceContainer )
-    {
-        comphelper::OInterfaceContainerHelper2* pContainer = m_pInterfaceContainer->getContainer(
-                            cppu::UnoType<embed::XStateChangeListener>::get());
-        if ( pContainer != nullptr )
-        {
-            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-            comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
+    if (!m_pInterfaceContainer)
+        return;
 
-            while (pIterator.hasMoreElements())
-            {
-                if ( bBeforeChange )
-                {
-                    try
-                    {
-                        static_cast<embed::XStateChangeListener*>(pIterator.next())->changingState( aSource, nOldState, nNewState );
-                    }
-                    catch( const uno::Exception& )
-                    {
-                        // even if the listener complains ignore it for now
-                    }
-                }
-                else
-                {
-                       try
-                    {
-                        static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
-                    }
-                    catch( const uno::Exception& )
-                    {
-                        // if anything happened it is problem of listener, ignore it
-                    }
-                }
-            }
+    comphelper::OInterfaceContainerHelper2* pContainer = m_pInterfaceContainer->getContainer(
+                        cppu::UnoType<embed::XStateChangeListener>::get());
+    if (!pContainer)
+        return;
+
+    auto proc
+        = [bBeforeChange, nOldState, nNewState, &guard, aSource = lang::EventObject(getXWeak())](
+              const uno::Reference<embed::XStateChangeListener>& xListener)
+    {
+        try
+        {
+            osl::ResettableMutexGuardScopedReleaser area(guard);
+            if (bBeforeChange)
+                xListener->changingState(aSource, nOldState, nNewState);
+            else
+                xListener->stateChanged(aSource, nOldState, nNewState);
         }
-    }
+        catch (const lang::DisposedException&)
+        {
+            throw; // forEach handles this
+        }
+        catch (const uno::Exception&)
+        {
+            // even if the listener complains ignore it for now
+        }
+    };
+    pContainer->forEach<embed::XStateChangeListener>(proc);
 }
 #endif
 
