@@ -3427,12 +3427,13 @@ Size SdXImpressDocument::getDocumentSize()
 void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
 {
     auto commentsNode = rJsonWriter.startNode("comments");
+    if (!mpDoc)
+        return;
     // Return annotations on master pages too ?
     const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-    SdrPage* pPage;
     for (sal_uInt16 nPage = 0; nPage < nMaxPages; ++nPage)
     {
-        pPage = mpDoc->GetPage(nPage);
+        SdrPage* pPage = mpDoc->GetPage(nPage);
 
         for (auto const& xAnnotation : pPage->getAnnotations())
         {
