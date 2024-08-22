@@ -812,6 +812,12 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
         nPaperWidth -= ( rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT) +
                          rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) ) * 100 / nZoom;
 
+    if (nPaperWidth <= 0)
+    {
+        SAL_WARN("sc.ui", "Header/Footer unreasonably narrow width of: " << nPaperWidth << ", cannot calculate height");
+        return;
+    }
+
     pEditEngine->SetPaperSize( Size( nPaperWidth, 10000 ) );
 
     tools::Long nMaxHeight = 0;
