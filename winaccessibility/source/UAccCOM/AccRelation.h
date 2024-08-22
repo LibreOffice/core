@@ -74,7 +74,7 @@ public:
     // Override of IUNOXWrapper.
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
-    static BSTR getRelationTypeBSTR(int type);
+    static const wchar_t* mapToIA2RelationType(sal_Int16 nUnoRelationType);
 
 private:
     css::accessibility::AccessibleRelation relation;

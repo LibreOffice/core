@@ -45,10 +45,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_relationType(BSTR* relationT
         if (relationType == nullptr)
             return E_INVALIDARG;
 
-        int type = relation.RelationType;
         SysFreeString(*relationType);
-
-        *relationType = getRelationTypeBSTR(type);
+        *relationType = SysAllocString(mapToIA2RelationType(relation.RelationType));
         return S_OK;
     }
     catch (...)
@@ -194,31 +192,36 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInt
     return S_OK;
 }
 
-/**
-   * Get relation type string by type.
-   * @param type Relation type.
-   * @return relation type string.
-*/
-BSTR CAccRelation::getRelationTypeBSTR(int type)
+const wchar_t* CAccRelation::mapToIA2RelationType(sal_Int16 nUnoRelationType)
 {
-    static LPCWSTR map[] = {
-        L"INVALID", // AccessibleRelationType::INVALID
-        IA2_RELATION_FLOWS_FROM, // AccessibleRelationType::CONTENT_FLOWS_FROM
-        IA2_RELATION_FLOWS_TO, // AccessibleRelationType::CONTENT_FLOWS_TO
-        IA2_RELATION_CONTROLLED_BY, // AccessibleRelationType::CONTROLLED_BY
-        IA2_RELATION_CONTROLLER_FOR, // AccessibleRelationType::CONTROLLER_FOR
-        IA2_RELATION_LABEL_FOR, // AccessibleRelationType::LABEL_FOR
-        IA2_RELATION_LABELED_BY, // AccessibleRelationType::LABELED_BY
-        IA2_RELATION_MEMBER_OF, // AccessibleRelationType::MEMBER_OF
-        IA2_RELATION_SUBWINDOW_OF, // AccessibleRelationType::SUB_WINDOW_OF
-        IA2_RELATION_NODE_CHILD_OF, // AccessibleRelationType::NODE_CHILD_OF
-        IA2_RELATION_DESCRIBED_BY // AccessibleRelationType::DESCRIBED_BY
-    };
-
-    return ::SysAllocString(
-        (type >= AccessibleRelationType::INVALID && type <= AccessibleRelationType::DESCRIBED_BY)
-            ? map[type]
-            : L"");
+    switch (nUnoRelationType)
+    {
+        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+            return IA2_RELATION_FLOWS_FROM;
+        case AccessibleRelationType::CONTENT_FLOWS_TO:
+            return IA2_RELATION_FLOWS_TO;
+        case AccessibleRelationType::CONTROLLED_BY:
+            return IA2_RELATION_CONTROLLED_BY;
+        case AccessibleRelationType::CONTROLLER_FOR:
+            return IA2_RELATION_CONTROLLER_FOR;
+        case AccessibleRelationType::LABEL_FOR:
+            return IA2_RELATION_LABEL_FOR;
+        case AccessibleRelationType::LABELED_BY:
+            return IA2_RELATION_LABELED_BY;
+        case AccessibleRelationType::MEMBER_OF:
+            return IA2_RELATION_MEMBER_OF;
+        case AccessibleRelationType::SUB_WINDOW_OF:
+            return IA2_RELATION_SUBWINDOW_OF;
+        case AccessibleRelationType::NODE_CHILD_OF:
+            return IA2_RELATION_NODE_CHILD_OF;
+        case AccessibleRelationType::DESCRIBED_BY:
+            return IA2_RELATION_DESCRIBED_BY;
+        case AccessibleRelationType::INVALID:
+            return L"INVALID";
+        default:
+            assert(false && "unhandled AccessibleRelationType");
+            return L"";
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
