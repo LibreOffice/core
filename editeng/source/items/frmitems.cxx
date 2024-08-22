@@ -532,6 +532,7 @@ void SvxTextLeftMarginItem::SetLeft(SvxFirstLineIndentItem const& rFirstLine,
 
 void SvxTextLeftMarginItem::SetTextLeft(const tools::Long nL, const sal_uInt16 nProp)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nTextLeftMargin = (nL * nProp) / 100;
     m_nPropLeftMargin = nProp;
 }
@@ -784,6 +785,7 @@ bool SvxTextLeftMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) cons
 
 bool SvxTextLeftMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -829,6 +831,15 @@ bool SvxTextLeftMarginItem::operator==(const SfxPoolItem& rAttr) const
     return (m_nTextLeftMargin == rOther.GetTextLeft()
         && m_nPropLeftMargin == rOther.GetPropLeft());
 }
+
+size_t SvxTextLeftMarginItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, m_nTextLeftMargin);
+    o3tl::hash_combine(seed, m_nPropLeftMargin);
+    return seed;
+}
+
 
 SvxTextLeftMarginItem* SvxTextLeftMarginItem::Clone(SfxItemPool *) const
 {
@@ -881,6 +892,7 @@ bool SvxTextLeftMarginItem::GetPresentation
 
 void SvxTextLeftMarginItem::ScaleMetrics(tools::Long const nMult, tools::Long const nDiv)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nTextLeftMargin = BigInt::Scale(m_nTextLeftMargin, nMult, nDiv);
 }
 
