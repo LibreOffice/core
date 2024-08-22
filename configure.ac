@@ -2091,6 +2091,15 @@ AC_ARG_WITH(main-module,
         Default value is 'writer'.]),
 ,)
 
+if test "$_os" = Emscripten; then
+    AC_ARG_ENABLE(emscripten-proxy-posix-sockets,
+        AS_HELP_STRING([--enable-emscripten-proxy-posix-sockets],
+            [Enable experimental Emscripten support for full POSIX sockets over WebSocket proxy
+             server (-sPROXY_POSIX_SOCKETS).]))
+else
+    enable_emscripten_proxy_posix_sockets=
+fi
+
 AC_ARG_ENABLE(xmlhelp,
     AS_HELP_STRING([--disable-xmlhelp],
         [Disable XML help support]),
@@ -4040,6 +4049,14 @@ AC_SUBST(CROSS_COMPILING)
 AC_SUBST(ENABLE_WASM_STRIP)
 AC_SUBST(ENABLE_WASM_STRIP_WRITER)
 AC_SUBST(ENABLE_WASM_STRIP_CALC)
+
+if test "$enable_emscripten_proxy_posix_sockets" = yes; then
+    ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS=TRUE
+    AC_DEFINE(HAVE_EMSCRIPTEN_PROXY_POSIX_SOCKETS)
+else
+    ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS=
+fi
+AC_SUBST(ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS)
 
 # Use -isystem (gcc) if possible, to avoid warnings in 3rd party headers.
 # NOTE: must _not_ be used for bundled external libraries!
@@ -15176,6 +15193,7 @@ AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_rgba.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
+AC_CONFIG_HEADERS([config_host/config_emscripten.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_feature_desktop.h])
 AC_CONFIG_HEADERS([config_host/config_feature_opencl.h])

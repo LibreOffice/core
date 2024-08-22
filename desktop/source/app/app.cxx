@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <config_emscripten.h>
 #include <config_features.h>
 #include <config_feature_desktop.h>
 #include <config_feature_opencl.h>
@@ -146,6 +147,15 @@
 #else
 #include <unistd.h>
 #define GETPID getpid
+#endif
+
+#if HAVE_EMSCRIPTEN_PROXY_POSIX_SOCKETS
+#include <stdexcept>
+#include <string>
+#include <emscripten/posix_socket.h>
+#include <emscripten/threading.h>
+#include <emscripten/val.h>
+#include <emscripten/websocket.h>
 #endif
 
 #include <strings.hxx>
@@ -539,6 +549,35 @@ void Desktop::Init()
         RequestHandler::Disable();
     }
     pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
+
+#if HAVE_EMSCRIPTEN_PROXY_POSIX_SOCKETS
+    {
+        auto const val = emscripten::val::module_property("uno_websocket_to_posix_socket_url");
+        if (val.isUndefined()) {
+            throw std::runtime_error("Module.uno_websocket_to_posix_socket_url is undefined");
+        } else {
+            auto const url = val.as<std::string>();
+            if (url.find('\0') != std::string::npos) {
+                throw std::runtime_error(
+                    "Module.uno_websocket_to_posix_socket_url contains embedded NUL");
+            }
+            SAL_INFO("desktop.app", "connecting to <" << url << ">");
+            static auto const socket = emscripten_init_websocket_to_posix_socket_bridge(
+                url.c_str());
+            // 0 is CONNECTING, 1 is OPEN, see
+            // <https://websockets.spec.whatwg.org/#websocket-ready-state>:
+            unsigned short readyState = 0;
+            do {
+                emscripten_websocket_get_ready_state(socket, &readyState);
+                emscripten_thread_sleep(100);
+            } while (readyState == 0);
+            if (readyState != 1) {
+                throw std::runtime_error("could not connect to <" + url + ">");
+            }
+            SAL_INFO("desktop.app", "connected to <" << url << ">");
+        }
+    }
+#endif
 }
 
 void Desktop::InitFinished()
