@@ -85,6 +85,67 @@ void PdfExportTest2::load(std::u16string_view rFile, vcl::filter::PDFDocument& r
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
+{
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf159895.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObj = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObj)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "XObject")
+        {
+            auto pFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->Lookup("Filter"_ostr));
+            CPPUNIT_ASSERT(pFilter);
+
+            vcl::filter::PDFStreamElement* pStream = pObj->GetStream();
+            CPPUNIT_ASSERT(pStream);
+            SvMemoryStream& rObjectStream = pStream->GetMemory();
+            // Uncompress it.
+            SvMemoryStream aUncompressed;
+            ZCodec aZCodec;
+            aZCodec.BeginCompression();
+            rObjectStream.Seek(0);
+            aZCodec.Decompress(rObjectStream, aUncompressed);
+            CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+            auto pStart = static_cast<const char*>(aUncompressed.GetData());
+            const char* const pEnd = pStart + aUncompressed.GetSize();
+
+            OString sText;
+            while (true)
+            {
+                auto const pLine = ::std::find(pStart, pEnd, '\n');
+                if (pLine == pEnd)
+                    break;
+
+                std::string_view const line(pStart, pLine - pStart);
+                pStart = pLine + 1;
+                if (!line.empty() && line[0] != '%')
+                {
+                    sText += line + "\n"_ostr;
+                }
+            }
+            CPPUNIT_ASSERT_EQUAL("/Tx BMC\nEMC\n"_ostr, sText);
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124272)
 {
     // Import the bugdoc and export as PDF.

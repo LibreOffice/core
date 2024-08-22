@@ -4364,19 +4364,11 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
     sal_Int32 nBest = getSystemFont( aFont );
 
-    beginRedirect( pListBoxStream, rBox.m_aRect );
-
     setLineColor( COL_TRANSPARENT );
     setFillColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) );
     drawRectangle( rBox.m_aRect );
 
-    // empty appearance, see createDefaultEditAppearance for reference
-    writeBuffer( "/Tx BMC\nEMC\n" );
-
-    endRedirect();
     pop();
-
-    rBox.m_aAppearances[ "N"_ostr ][ "Standard"_ostr ] = pListBoxStream;
 
     // prepare DA string
     OStringBuffer aDA( 256 );
@@ -4394,6 +4386,13 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
+
+    beginRedirect(pListBoxStream, rBox.m_aRect);
+    // empty appearance, see createDefaultEditAppearance for reference
+    writeBuffer("/Tx BMC\nEMC\n");
+    endRedirect();
+
+    rBox.m_aAppearances["N"_ostr]["Standard"_ostr] = pListBoxStream;
     rBox.m_aDAString = aDA.makeStringAndClear();
 }
 
