@@ -3329,6 +3329,11 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
 
 void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
+    if (!getFramePrintArea().HasArea())
+    {
+        return; // do not paint hidden frame
+    }
+
     // #i16816# tagged pdf support
     Frame_Info aFrameInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, &aFrameInfo, nullptr, rRenderContext );
@@ -4142,6 +4147,10 @@ void SwFlyFrame::PaintDecorators() const
 
 void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
+    if (!getFramePrintArea().HasArea())
+    {
+        return; // do not paint hidden frame
+    }
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
     {
