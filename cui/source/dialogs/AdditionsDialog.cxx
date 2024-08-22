@@ -475,6 +475,10 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
         {
             sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_PALETTES);
         }
+        else if (sAdditionsTag == "Themes")
+        {
+            sDialogTitle = CuiResId(RID_CUISTR_ADDITIONS_THEMES);
+        }
         this->set_title(sDialogTitle);
     }
     else

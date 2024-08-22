@@ -382,6 +382,7 @@
 #define RID_CUISTR_ADDITIONS_GALLERY                NC_("RID_SVXSTR_ADDITIONS_GALLERY", "Extensions: Gallery")
 #define RID_CUISTR_ADDITIONS_ICONS                  NC_("RID_SVXSTR_ADDITIONS_ICONS", "Extensions: Icons")
 #define RID_CUISTR_ADDITIONS_PALETTES               NC_("RID_SVXSTR_ADDITIONS_PALETTES", "Extensions: Color Palette")
+#define RID_CUISTR_ADDITIONS_THEMES                 NC_("RID_SVXSTR_ADDITIONS_THEMES", "Extensions: Color Themes")
 #define RID_CUISTR_ADDITIONS_TEMPLATES              NC_("RID_SVXSTR_ADDITIONS_TEMPLATES", "Extensions: Templates")
 
 #define RID_CUISTR_UI_APPLYALL                      NC_("RID_SVXSTR_UI_APPLYALL", "Apply to %MODULE")
