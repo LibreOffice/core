@@ -1713,6 +1713,7 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
@@ -1785,6 +1786,17 @@ bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
              nPropLower == rSpaceItem.nPropLower );
 }
 
+size_t SvxULSpaceItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, nUpper);
+    o3tl::hash_combine(seed, nLower);
+    o3tl::hash_combine(seed, bContext);
+    o3tl::hash_combine(seed, nPropUpper);
+    o3tl::hash_combine(seed, nPropLower);
+    return seed;
+}
+
 SvxULSpaceItem* SvxULSpaceItem::Clone( SfxItemPool* ) const
 {
     return new SvxULSpaceItem( *this );
@@ -1854,6 +1866,7 @@ bool SvxULSpaceItem::GetPresentation
 
 void SvxULSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nUpper = static_cast<sal_uInt16>(BigInt::Scale( nUpper, nMult, nDiv ));
     nLower = static_cast<sal_uInt16>(BigInt::Scale( nLower, nMult, nDiv ));
 }
