@@ -82,6 +82,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool            supportsHashCode() const override { return true; }
+    virtual size_t          hashCode() const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -114,18 +116,22 @@ public:
 
     editeng::SvxBorderLine* GetTop()
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         return mpTopBorderLine.get();
     }
     editeng::SvxBorderLine* GetBottom()
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         return mpBottomBorderLine.get();
     }
     editeng::SvxBorderLine* GetLeft()
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         return mpLeftBorderLine.get();
     }
     editeng::SvxBorderLine* GetRight()
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         return mpRightBorderLine.get();
     }
 
@@ -142,10 +148,11 @@ public:
     void    SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine );
     void SetAllDistances(sal_Int16 nNew)
     {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
         mnTopDistance = mnBottomDistance = mnLeftDistance = mnRightDistance = nNew;
     }
 
-    void SetRemoveAdjacentCellBorder( bool bSet ) { mbRemoveAdjCellBorder = bSet; }
+    void SetRemoveAdjacentCellBorder( bool bSet ) { ASSERT_CHANGE_REFCOUNTED_ITEM; mbRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
     // bEvenIfNoLine = TRUE -> Also return distance, when no Line is set

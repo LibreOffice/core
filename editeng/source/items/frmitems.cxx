@@ -2377,6 +2377,15 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
         CompareBorderLine(mpRightBorderLine, rBoxItem.GetRight()));
 }
 
+size_t SvxBoxItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, mnTopDistance);
+    o3tl::hash_combine(seed, mnBottomDistance);
+    o3tl::hash_combine(seed, mnLeftDistance);
+    o3tl::hash_combine(seed, mnRightDistance);
+    return seed;
+}
 
 table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bConvert)
 {
@@ -2617,6 +2626,7 @@ lcl_setLine(const uno::Any& rAny, Item& rItem, Line nLine, const bool bConvert)
 
 bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     SvxBoxItemLine nLine = SvxBoxItemLine::TOP;
     bool bDistMember = false;
@@ -3009,6 +3019,7 @@ bool SvxBoxItem::GetPresentation
 
 void SvxBoxItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if (mpTopBorderLine)
         mpTopBorderLine->ScaleMetrics( nMult, nDiv );
     if (mpBottomBorderLine)
@@ -3060,6 +3071,7 @@ const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
 
 void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     std::unique_ptr<SvxBorderLine> pTmp( pNew ? new SvxBorderLine( *pNew ) : nullptr );
 
     switch ( nLine )
@@ -3128,6 +3140,7 @@ sal_Int16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine, bool bAllowNegative ) c
 
 void SvxBoxItem::SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
@@ -3218,6 +3231,7 @@ sal_Int16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine, b
 
 void SvxBoxItem::tryMigrateComplexColor(SvxBoxItemLine eLine)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if (!GetLine(eLine))
         return;
 
