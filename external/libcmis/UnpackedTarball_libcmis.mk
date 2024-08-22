@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libcmis,\
 	external/libcmis/0001-cppcheck-operatorEqVarError-in-src-libcmis-http-sess.patch \
 	external/libcmis/0001-Take-into-account-m_CurlInitProtocolsFunction-in-cop.patch \
 	external/libcmis/initprotocols.patch.1 \
+	external/libcmis/boost-1.86.0.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
