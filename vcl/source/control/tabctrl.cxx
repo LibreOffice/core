@@ -2375,7 +2375,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
     }
 
     // we always have only one line of tabs
-    lcl_AdjustSingleLineTabs(nMaxWidth, mpTabCtrlData.get());
+    // tdf#127610 subtract width of shortcuts from width available for tab items
+    lcl_AdjustSingleLineTabs(nMaxWidth - nShortcutsWidth, mpTabCtrlData.get());
 
     // position the shortcutbox
     if (m_pShortcuts)
