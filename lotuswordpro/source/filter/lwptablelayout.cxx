@@ -800,8 +800,9 @@ void LwpTableLayout::ParseTable()
     {
         sal_uInt16 nStartHeadRow;
         sal_uInt16 nEndHeadRow;
-        pTableHeading->GetStartEndRow(nStartHeadRow,nEndHeadRow);
-        if (nStartHeadRow == 0)
+        pTableHeading->GetStartEndRow(nStartHeadRow, nEndHeadRow);
+        SAL_WARN_IF(nEndHeadRow == SAL_MAX_UINT16, "lwp", "invalid End Head Row of: " << nEndHeadRow);
+        if (nStartHeadRow == 0 && nEndHeadRow != SAL_MAX_UINT16)
         {
             if (comphelper::IsFuzzing() && nEndHeadRow - nStartHeadRow > 128)
             {
