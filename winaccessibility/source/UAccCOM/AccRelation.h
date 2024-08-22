@@ -75,6 +75,7 @@ public:
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
     static const wchar_t* mapToIA2RelationType(sal_Int16 nUnoRelationType);
+    static sal_Int16 mapToUnoRelationType(const BSTR aIA2RelationType);
 
 private:
     css::accessibility::AccessibleRelation relation;

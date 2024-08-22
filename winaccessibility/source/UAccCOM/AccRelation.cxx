@@ -224,4 +224,31 @@ const wchar_t* CAccRelation::mapToIA2RelationType(sal_Int16 nUnoRelationType)
     }
 }
 
+sal_Int16 CAccRelation::mapToUnoRelationType(const BSTR aIA2RelationType)
+{
+    if (wcscmp(aIA2RelationType, IA2_RELATION_FLOWS_FROM) == 0)
+        return AccessibleRelationType::CONTENT_FLOWS_FROM;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_FLOWS_TO) == 0)
+        return AccessibleRelationType::CONTENT_FLOWS_TO;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_CONTROLLED_BY) == 0)
+        return AccessibleRelationType::CONTROLLED_BY;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_CONTROLLER_FOR) == 0)
+        return AccessibleRelationType::CONTROLLER_FOR;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_LABEL_FOR) == 0)
+        return AccessibleRelationType::LABEL_FOR;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_LABELED_BY) == 0)
+        return AccessibleRelationType::LABELED_BY;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_MEMBER_OF) == 0)
+        return AccessibleRelationType::MEMBER_OF;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_SUBWINDOW_OF) == 0)
+        return AccessibleRelationType::SUB_WINDOW_OF;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_NODE_CHILD_OF) == 0)
+        return AccessibleRelationType::NODE_CHILD_OF;
+    if (wcscmp(aIA2RelationType, IA2_RELATION_DESCRIBED_BY) == 0)
+        return AccessibleRelationType::DESCRIBED_BY;
+
+    // not all IAccessible2 relation types have a UNO equivalent
+    return AccessibleRelationType::INVALID;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2687,9 +2687,73 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accessibleWithCaret(IUnknown
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relationTargetsOfType(BSTR, long, IUnknown***, long*)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relationTargetsOfType(BSTR type,
+                                                                          long maxTargets,
+                                                                          IUnknown*** targets,
+                                                                          long* nTargets)
 {
-    return E_NOTIMPL;
+    SolarMutexGuard g;
+
+    if (!type || !targets || !nTargets || maxTargets <= 0)
+        return E_INVALIDARG;
+
+    if (m_isDestroy)
+        return S_FALSE;
+
+    if (!m_xContext.is())
+        return E_FAIL;
+
+    try
+    {
+        Reference<XAccessibleRelationSet> xRelationSet = m_xContext->getAccessibleRelationSet();
+        if (!xRelationSet.is())
+            return S_FALSE;
+
+        const sal_Int16 nUnoRelationType = CAccRelation::mapToUnoRelationType(type);
+        if (nUnoRelationType == AccessibleRelationType::INVALID)
+            return S_FALSE;
+
+        AccessibleRelation aRelation = xRelationSet->getRelationByType(nUnoRelationType);
+        if (aRelation.RelationType != nUnoRelationType || !aRelation.TargetSet.hasElements())
+            return S_FALSE;
+
+        const sal_Int32 nRetCount
+            = std::min(sal_Int32(maxTargets), aRelation.TargetSet.getLength());
+        *targets = static_cast<IUnknown**>(CoTaskMemAlloc(nRetCount * sizeof(IUnknown*)));
+        assert(*targets && "Failed to allocate memory for relation targets");
+
+        for (sal_Int32 i = 0; i < nRetCount; i++)
+        {
+            Reference<XAccessible> xTarget = aRelation.TargetSet[i];
+            assert(xTarget.is());
+
+            IAccessible* pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xTarget.get());
+            if (!pIAccessible)
+            {
+                Reference<XAccessibleContext> xTargetContext = xTarget->getAccessibleContext();
+                if (!xTargetContext.is())
+                {
+                    SAL_WARN("iacc2", "Relation target doesn't have an accessible context");
+                    CoTaskMemFree(*targets);
+                    return E_FAIL;
+                }
+                Reference<XAccessible> xParent = xTargetContext->getAccessibleParent();
+                CMAccessible::g_pAccObjectManager->InsertAccObj(xTarget.get(), xParent.get());
+                pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xTarget.get());
+            }
+            assert(pIAccessible && "Couldn't retrieve IAccessible object for relation target.");
+
+            pIAccessible->AddRef();
+            (*targets)[i] = pIAccessible;
+        }
+
+        *nTargets = nRetCount;
+        return S_OK;
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
