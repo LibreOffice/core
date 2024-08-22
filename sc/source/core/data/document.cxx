@@ -5278,7 +5278,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nCol > 0 )
     {
-        const SvxBorderLine* pOther = GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER )->GetRight();
+        const SvxBorderLine* pOther = GetEffItem( o3tl::sanitizing_dec(nCol), nRow, nTab, ATTR_BORDER )->GetRight();
         if ( ScHasPriority( pOther, pLeftLine ) )
             pLeftLine = pOther;
     }
@@ -5290,7 +5290,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
     if ( nCol < MaxCol() )
     {
-        const SvxBorderLine* pOther = GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER )->GetLeft();
+        const SvxBorderLine* pOther = GetEffItem( o3tl::sanitizing_inc(nCol), nRow, nTab, ATTR_BORDER )->GetLeft();
         if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }

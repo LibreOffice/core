@@ -262,7 +262,8 @@ ONDXKey* OIndexIterator::GetNextKey()
                 sal_uInt16 nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
                 { // page found
-                    pPage = (*pParentPage)[nPos + 1].GetChild(m_xIndex.get(), pParentPage);
+                    pPage = (*pParentPage)[o3tl::sanitizing_inc(nPos)].GetChild(m_xIndex.get(),
+                                                                                pParentPage);
                     break;
                 }
             }

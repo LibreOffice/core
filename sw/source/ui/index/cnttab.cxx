@@ -2809,7 +2809,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     if(m_nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
     {
         // #i21237#
-        SwFormTokens aPattern = m_pForm->GetPattern(m_nLevel + 1);
+        SwFormTokens aPattern = m_pForm->GetPattern(o3tl::sanitizing_inc(m_nLevel));
         bool bLastWasText = false; //assure alternating text - code - text
 
         SwTOXWidget* pSetActiveControl = nullptr;

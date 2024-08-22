@@ -24,6 +24,7 @@
 #if defined LIBO_USE_SOURCE_LOCATION
 // expected-error@o3tl/runtimetooustring.hxx:* {{read s [loplugin:writeonlyvars]}}
 // expected-error@o3tl/runtimetooustring.hxx:* {{write s [loplugin:writeonlyvars]}}
+// expected-error@o3tl/safeint.hxx:* {{read res [loplugin:writeonlyvars]}}
 #if !defined NDEBUG
 // expected-error@o3tl/runtimetooustring.hxx:* {{read ok [loplugin:writeonlyvars]}}
 #endif
