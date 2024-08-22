@@ -822,7 +822,7 @@ bool OleEmbeddedObject::SaveObject_Impl()
 
 bool OleEmbeddedObject::OnShowWindow_Impl( bool bShow )
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     bool bResult = false;
 
@@ -838,21 +838,19 @@ bool OleEmbeddedObject::OnShowWindow_Impl( bool bShow )
         m_nObjectState = embed::EmbedStates::ACTIVE;
         m_aVerbExecutionController.ObjectIsActive();
 
-        aGuard.clear();
-        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
     }
     else if ( !bShow && m_nObjectState == embed::EmbedStates::ACTIVE )
     {
         m_nObjectState = embed::EmbedStates::RUNNING;
-        aGuard.clear();
-        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
     }
 
     if ( m_xClientSite.is() )
     {
         try
         {
-            m_xClientSite->visibilityChanged( bShow );
+            ExecUnlocked([p = m_xClientSite, bShow] { p->visibilityChanged(bShow); }, aGuard);
             bResult = true;
         }
         catch( const uno::Exception& )
@@ -873,6 +871,7 @@ void OleEmbeddedObject::OnIconChanged_Impl()
 
 void OleEmbeddedObject::OnViewChanged_Impl()
 {
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException();
 
@@ -896,7 +895,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         // The view is changed while the object is in running state, save the new object
         m_xCachedVisualRepresentation.clear();
         SaveObject_Impl();
-        MakeEventListenerNotification_Impl( "OnVisAreaChanged" );
+        MakeEventListenerNotification_Impl( "OnVisAreaChanged", aGuard );
     }
 
 }
@@ -904,6 +903,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
 
 void OleEmbeddedObject::OnClosed_Impl()
 {
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException();
 
@@ -911,7 +911,7 @@ void OleEmbeddedObject::OnClosed_Impl()
     {
         sal_Int32 nOldState = m_nObjectState;
         m_nObjectState = embed::EmbedStates::LOADED;
-        StateChangeNotification_Impl( false, nOldState, m_nObjectState );
+        StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
     }
 }
 
@@ -1114,7 +1114,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 #ifdef _WIN32
         // if the object was NOT modified after storing it can be just copied
         // as if it was in loaded state
-        || (m_pOleComponent && !ExecUnlocked([this] { return m_pOleComponent->IsDirty(); }, rGuard))
+        || (m_pOleComponent && !ExecUnlocked([p = m_pOleComponent] { return p->IsDirty(); }, rGuard))
 #endif
     )
     {
@@ -1537,7 +1537,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
     // end wrapping related part ====================
 
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1606,16 +1606,15 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         {}
     }
 
-    aGuard.clear();
     if ( bUseNew )
     {
-        MakeEventListenerNotification_Impl( "OnSaveAsDone");
+        MakeEventListenerNotification_Impl( "OnSaveAsDone", aGuard);
 
         // the object can be changed only on windows
         // the notification should be done only if the object is not in loaded state
         if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
         {
-            MakeEventListenerNotification_Impl( "OnVisAreaChanged");
+            MakeEventListenerNotification_Impl( "OnVisAreaChanged", aGuard);
         }
     }
 }
@@ -1721,7 +1720,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     bool bStoreLoaded = true;
 
 #ifdef _WIN32
-    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && ExecUnlocked([this] { return m_pOleComponent->IsDirty(); }, aGuard) )
+    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && ExecUnlocked([p = m_pOleComponent] { return p->IsDirty(); }, aGuard) )
     {
         bStoreLoaded = false;
 
@@ -1782,14 +1781,12 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         {}
     }
 
-    aGuard.clear();
-
-    MakeEventListenerNotification_Impl( "OnSaveDone");
+    MakeEventListenerNotification_Impl( "OnSaveDone", aGuard);
 
     // the object can be changed only on Windows
     // the notification should be done only if the object is not in loaded state
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
-        MakeEventListenerNotification_Impl( "OnVisAreaChanged");
+        MakeEventListenerNotification_Impl( "OnVisAreaChanged", aGuard);
 }
 
 
