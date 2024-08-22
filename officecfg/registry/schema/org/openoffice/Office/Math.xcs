@@ -301,7 +301,7 @@
         <info>
           <desc>Enables inline (visual) editing mode.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
         <info>
