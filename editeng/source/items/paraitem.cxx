@@ -1065,9 +1065,12 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 size_t SvxTabStopItem::hashCode() const
 {
     std::size_t seed(0);
-    o3tl::hash_combine(seed, Which());
     o3tl::hash_combine(seed, mnDefaultDistance);
-    o3tl::hash_combine(seed, maTabStops.size());
+    for (const SvxTabStop & rStop : maTabStops)
+    {
+        o3tl::hash_combine(seed, rStop.GetTabPos());
+        o3tl::hash_combine(seed, rStop. GetAdjustment());
+    }
     return seed;
 }
 
