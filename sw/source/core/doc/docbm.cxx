@@ -1261,6 +1261,7 @@ namespace sw::mark
 
                         m_vFieldmarks.erase(ppFieldmark);
                         ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
+                        pMark = nullptr;
                     }
                     else
                     {
@@ -1293,14 +1294,14 @@ namespace sw::mark
         if (pDdeBookmark)
         {
             ret.reset(new LazyDdeBookmarkDeleter(pDdeBookmark, m_rDoc));
+            pMark = nullptr;
         }
 
         m_vAllMarks.erase(aI);
-        // If we don't have a lazy deleter
-        if (!ret)
-            // delete after we remove from the list, because the destructor can
-            // recursively call into this method.
-            delete pMark;
+        // delete after we remove from the list, because the destructor can
+        // recursively call into this method.
+        delete pMark; // If we have a lazy deleter, pMark was null-ed
+
         return ret;
     }
 
