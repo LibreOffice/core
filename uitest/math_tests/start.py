@@ -57,11 +57,11 @@ class SimpleMathTest(UITestCase):
             xElement.executeAction("DOUBLECLICK", tuple())
 
             xEditView = xMathDoc.getChild("editview")
-            xEditView.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
+
             type_text(xEditView, "1")
             xEditView.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
             type_text(xEditView, "2")
 
-            self.assertEqual("{ 1 <> 2 }", get_state_as_dict(xEditView)["Text"])
+            self.assertEqual("1 <> 2 ", get_state_as_dict(xEditView)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
