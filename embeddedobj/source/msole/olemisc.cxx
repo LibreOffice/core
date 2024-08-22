@@ -230,23 +230,26 @@ void OleEmbeddedObject::GetRidOfComponent(osl::ResettableMutexGuard* guard)
             SaveObject_Impl();
 
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
+        // When releasing the guard below, avoid a case when two threads are doing the same;
+        // store the reference on stack and clear m_pOleComponent in advance
+        rtl::Reference<OleComponent> pOleComponent(std::move(m_pOleComponent));
         try
         {
             std::optional<osl::ResettableMutexGuardScopedReleaser> oReleaser;
             if (guard)
                 oReleaser.emplace(*guard);
-            m_pOleComponent->close( false );
+            pOleComponent->close(false);
         }
         catch( const uno::Exception& )
         {
+            m_pOleComponent = std::move(pOleComponent);
             // TODO: there should be a special listener to wait for component closing
             //       and to notify object, may be object itself can be such a listener
             m_pOleComponent->addCloseListener( m_xClosePreventer );
             throw;
         }
 
-        m_pOleComponent->disconnectEmbeddedObject();
-        m_pOleComponent.clear();
+        pOleComponent->disconnectEmbeddedObject();
     }
 #else
     (void)guard;
