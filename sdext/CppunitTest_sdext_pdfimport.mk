@@ -29,7 +29,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
+    drawinglayer \
     sal \
+    salhelper \
     test \
     unotest \
     tl \

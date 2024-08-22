@@ -27,9 +27,12 @@ $(eval $(call gb_Executable_use_libraries,pdf2xml,\
     vcl \
     comphelper \
     cppu \
+    drawinglayercore \
+    drawinglayer \
     unotest \
     cppuhelper \
     sal \
+    salhelper \
     tl \
     xo \
     i18nutil \

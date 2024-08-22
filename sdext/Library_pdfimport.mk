@@ -23,10 +23,13 @@ $(eval $(call gb_Library_set_include,pdfimport,\
 $(eval $(call gb_Library_use_libraries,pdfimport,\
     basegfx \
     comphelper \
+    drawinglayercore \
+    drawinglayer \
     vcl \
     cppu \
     cppuhelper \
     sal \
+    salhelper \
     tl \
     xo \
     i18nutil \

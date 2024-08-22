@@ -26,7 +26,10 @@ $(eval $(call gb_Executable_use_libraries,pdfunzip,\
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
+    drawinglayer \
     sal \
+    salhelper \
     vcl \
     tl \
     xo \
