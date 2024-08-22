@@ -2163,7 +2163,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
 
                 const OUString sActionDescription = xAction->getAccessibleActionDescription(0);
                 SysFreeString(*pszDefaultAction);
-                *pszDefaultAction = SysAllocString(o3tl::toW(sActionDescription.getStr()));
+                *pszDefaultAction = sal::systools::BStr::newBSTR(sActionDescription);
                 return S_OK;
             }
 
