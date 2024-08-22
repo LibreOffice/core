@@ -219,9 +219,9 @@ protected:
 #ifdef _WIN32
     void SwitchComponentToRunningState_Impl(osl::ResettableMutexGuard& guard);
 #endif
-    void MakeEventListenerNotification_Impl( const OUString& aEventName );
+    void MakeEventListenerNotification_Impl( const OUString& aEventName, osl::ResettableMutexGuard& guard );
 #ifdef _WIN32
-    void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
+    void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState, osl::ResettableMutexGuard& guard );
     css::uno::Reference< css::io::XOutputStream > GetStreamForSaving();
 
 

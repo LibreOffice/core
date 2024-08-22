@@ -478,9 +478,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         //       will behave after activation
 
         sal_Int32 nOldState = m_nObjectState;
-        aGuard.clear();
-        StateChangeNotification_Impl( true, nOldState, nNewState );
-        aGuard.reset();
+        StateChangeNotification_Impl( true, nOldState, nNewState, aGuard );
 
         try
         {
@@ -495,14 +493,12 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 // the loaded state must be set before, because of notifications!
                 m_nObjectState = nNewState;
 
-                aGuard.clear();
                 {
                     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
-                    m_pOleComponent->CloseObject();
+                    ExecUnlocked([p = m_pOleComponent] { p->CloseObject(); }, aGuard);
                 }
 
-                StateChangeNotification_Impl( false, nOldState, m_nObjectState );
-                aGuard.reset();
+                StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
             }
             else if ( nNewState == embed::EmbedStates::RUNNING || nNewState == embed::EmbedStates::ACTIVE )
             {
@@ -517,19 +513,17 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
                     SwitchComponentToRunningState_Impl(aGuard);
                     m_nObjectState = embed::EmbedStates::RUNNING;
-                    aGuard.clear();
-                    StateChangeNotification_Impl( false, nOldState, m_nObjectState );
-                    aGuard.reset();
+                    StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
 
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
-                        aGuard.clear();
                         try {
-                            m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
+                            ExecUnlocked([p = m_pOleComponent, s = m_aSizeToSet,
+                                          a = m_nAspectToSet]() { p->SetExtent(s, a); },
+                                         aGuard);
                             m_bHasSizeToSet = false;
                         }
                         catch( const uno::Exception& ) {}
-                        aGuard.reset();
                     }
 
                     if ( m_nObjectState == nNewState )
@@ -541,30 +535,33 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
                 {
                     // execute OPEN verb, if object does not reach active state it is an object's problem
-                    aGuard.clear();
-                    m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
-                    aGuard.reset();
+                    ExecUnlocked([p = m_pOleComponent]()
+                                 { p->ExecuteVerb(embed::EmbedVerbs::MS_OLEVERB_OPEN); },
+                                 aGuard);
 
                     // some objects do not allow to set the size even in running state
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
-                        aGuard.clear();
                         try {
-                            m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
+                            ExecUnlocked([p = m_pOleComponent, s = m_aSizeToSet,
+                                          a = m_nAspectToSet]() { p->SetExtent(s, a); },
+                                         aGuard);
                             m_bHasSizeToSet = false;
                         }
                         catch( uno::Exception& ) {}
-                        aGuard.reset();
                     }
 
                     m_nObjectState = nNewState;
                 }
                 else if ( m_nObjectState == embed::EmbedStates::ACTIVE && nNewState == embed::EmbedStates::RUNNING )
                 {
-                    aGuard.clear();
-                    m_pOleComponent->CloseObject();
-                    m_pOleComponent->RunObject(); // Should not fail, the object already was active
-                    aGuard.reset();
+                    ExecUnlocked(
+                        [p = m_pOleComponent]()
+                        {
+                            p->CloseObject();
+                            p->RunObject(); // Should not fail, the object already was active
+                        },
+                        aGuard);
                     m_nObjectState = nNewState;
                 }
                 else
@@ -577,8 +574,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         }
         catch( uno::Exception& )
         {
-            aGuard.clear();
-            StateChangeNotification_Impl( false, nOldState, m_nObjectState );
+            StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
             throw;
         }
     }
@@ -854,9 +850,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         {
             // if the target object is in loaded state
             // it must be switched to running state to execute verb
-            aGuard.clear();
-            changeState( embed::EmbedStates::RUNNING );
-            aGuard.reset();
+            ExecUnlocked([this]() { changeState(embed::EmbedStates::RUNNING); }, aGuard);
         }
 
         try {
@@ -866,11 +860,13 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();
 
-            {
-                ClearedMutexArea clearedMutex(aGuard);
-                m_pOleComponent->ExecuteVerb(nVerbID);
-                m_pOleComponent->SetHostName(m_aContainerName);
-            }
+            ExecUnlocked(
+                [nVerbID, p = m_pOleComponent, name = m_aContainerName]()
+                {
+                    p->ExecuteVerb(nVerbID);
+                    p->SetHostName(name);
+                },
+                aGuard);
 
             // ==== the STAMPIT related solution =============================
             bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
@@ -886,9 +882,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.EndControlExecution_WasModified();
 
-
-            aGuard.clear();
-            StateChangeNotification_Impl( false, nOldState, m_nObjectState );
+            StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
             throw;
         }
 
@@ -1151,10 +1145,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
         nResult = m_nStatus;
     else if ( m_pOleComponent )
     {
-        {
-            ClearedMutexArea clearedMutex(aGuard);
-            m_nStatus = m_pOleComponent->GetMiscStatus(nAspect);
-        }
+        m_nStatus = ExecUnlocked([p = m_pOleComponent, nAspect] { return p->GetMiscStatus(nAspect); }, aGuard);
         m_nStatusAspect = nAspect;
         m_bGotStatus = true;
         nResult = m_nStatus;
