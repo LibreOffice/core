@@ -809,7 +809,7 @@ void LwpTableLayout::ParseTable()
                 SAL_WARN("lwp", "truncating HeadingRow for fuzzing performance");
                 nEndHeadRow = nStartHeadRow + 128;
             }
-            nContentRow = ConvertHeadingRow(m_pXFTable,nStartHeadRow,nEndHeadRow+1);
+            nContentRow = ConvertHeadingRow(m_pXFTable, nStartHeadRow, o3tl::sanitizing_inc(nEndHeadRow));
         }
     }
 

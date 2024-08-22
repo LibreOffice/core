@@ -231,6 +231,42 @@ template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
     return std::min(a, b);
 }
 
+// To sanitize in/de-crementing value where the result is known by the caller to be guaranteed to fit in
+// the source type range without over/under-flow
+[[nodiscard]] inline unsigned short sanitizing_inc(unsigned short value)
+{
+    int res = value + 1;
+    assert(res <= std::numeric_limits<unsigned short>::max() &&
+           "nValue was supposed to be incrementable without overflow");
+    return static_cast<unsigned short>(res);
+}
+
+[[nodiscard]] inline unsigned short sanitizing_dec(unsigned short value)
+{
+    int res = value - 1;
+    assert(res >= 0 &&
+           "nValue was supposed to be decrementable without underflow");
+    return static_cast<unsigned short>(res);
+}
+
+[[nodiscard]] inline short sanitizing_inc(short value)
+{
+    int res = value + 1;
+    assert(res >= std::numeric_limits<short>::min() &&
+           res <= std::numeric_limits<short>::max() &&
+           "nValue was supposed to be incrementable without overflow");
+    return static_cast<short>(res);
+}
+
+[[nodiscard]] inline short sanitizing_dec(short value)
+{
+    int res = value - 1;
+    assert(res >= std::numeric_limits<short>::min() &&
+           res <= std::numeric_limits<short>::max() &&
+           "nValue was supposed to be decrementable without underflow");
+    return static_cast<short>(res);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
