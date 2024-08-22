@@ -544,7 +544,8 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
     {
         try {
             sal_Int64 nIndex = obj->mpContext->getAccessibleIndexInParent();
-            if (nIndex > std::numeric_limits<gint>::max())
+            if (nIndex > std::numeric_limits<gint>::max() ||
+                nIndex < std::numeric_limits<gint>::min())
             {
                 // use -2 when the child index is too large to fit into 32 bit to neither use the
                 // valid index of another child nor -1, which would e.g. make Orca interpret the
