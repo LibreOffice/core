@@ -100,7 +100,6 @@ namespace drawinglayer::primitive2d
             /// how to spread
             SpreadMethod                maSpreadMethod;
 
-            bool                        mbPreconditionsChecked : 1;
             bool                        mbCreatesContent : 1;
             bool                        mbSingleEntry : 1;
             bool                        mbFullyOpaque : 1;
@@ -137,13 +136,14 @@ namespace drawinglayer::primitive2d
                 Primitive2DContainer aTargetOpacity,
                 const basegfx::B2DHomMatrix& rUnitGradientToObject,
                 bool bInvert = false) const;
-            bool getCreatesContent() const { return mbCreatesContent; }
-            bool getSingleEntry() const { return mbSingleEntry; }
+
             void setSingleEntry() { mbSingleEntry = true; }
-            bool getPreconditionsChecked() const { return mbPreconditionsChecked; }
             bool getFullyOpaque() const { return mbFullyOpaque; }
 
         public:
+            bool getCreatesContent() const { return mbCreatesContent; }
+            bool getSingleEntry() const { return mbSingleEntry; }
+
             /// constructor
             SvgGradientHelper(
                 basegfx::B2DHomMatrix aGradientTransform,
@@ -164,6 +164,9 @@ namespace drawinglayer::primitive2d
 
             /// compare operator
             bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
+
+            /// create transformation from UnitGrandient to ObjectTransform
+            virtual basegfx::B2DHomMatrix createUnitGradientToObjectTransformation() const = 0;
         };
 
         /// the basic linear gradient primitive
@@ -209,6 +212,9 @@ namespace drawinglayer::primitive2d
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
+
+            /// create transformation from UnitGrandient to ObjectTransform
+            virtual basegfx::B2DHomMatrix createUnitGradientToObjectTransformation() const override;
         };
 
         /// the basic radial gradient primitive
@@ -220,10 +226,7 @@ namespace drawinglayer::primitive2d
 
             /// Focal only used when focal is set at all, see constructors
             basegfx::B2DPoint                       maFocal;
-            basegfx::B2DVector                      maFocalVector;
             double                                  maFocalLength;
-
-            bool                                    mbFocalSet : 1;
 
             /// local helpers
             virtual void createAtom(
@@ -254,7 +257,7 @@ namespace drawinglayer::primitive2d
             /// data read access
             double getRadius() const { return mfRadius; }
             const basegfx::B2DPoint& getFocal() const { return maFocal; }
-            bool isFocalSet() const { return mbFocalSet; }
+            bool isFocalSet() const { return !maFocal.equal(getStart()); }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -264,6 +267,9 @@ namespace drawinglayer::primitive2d
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
+
+            /// create transformation from UnitGrandient to ObjectTransform
+            virtual basegfx::B2DHomMatrix createUnitGradientToObjectTransformation() const override;
         };
 
         // SvgLinearAtomPrimitive2D class

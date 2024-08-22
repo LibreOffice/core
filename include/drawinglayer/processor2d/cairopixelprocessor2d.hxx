@@ -43,6 +43,9 @@ class BitmapAlphaPrimitive2D;
 class TextSimplePortionPrimitive2D;
 class TextDecoratedPortionPrimitive2D;
 class TextLayouterDevice;
+class SvgLinearGradientPrimitive2D;
+class SvgRadialGradientPrimitive2D;
+class SvgGradientHelper;
 }
 
 namespace basegfx
@@ -137,6 +140,13 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
         const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
         const basegfx::B2DHomMatrix* pOptionalObjectTransform = nullptr,
         const basegfx::BColor* pReplacementColor = nullptr);
+
+    // support for SVG gradients
+    void processSvgLinearGradientPrimitive2D(
+        const primitive2d::SvgLinearGradientPrimitive2D& rCandidate);
+    void processSvgRadialGradientPrimitive2D(
+        const primitive2d::SvgRadialGradientPrimitive2D& rCandidate);
+    bool handleSvgGradientHelper(const primitive2d::SvgGradientHelper& rCandidate);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation

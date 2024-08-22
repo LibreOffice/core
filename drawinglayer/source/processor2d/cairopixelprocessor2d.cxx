@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -3213,6 +3214,216 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
     }
 }
 
+bool CairoPixelProcessor2D::handleSvgGradientHelper(
+    const primitive2d::SvgGradientHelper& rCandidate)
+{
+    // check PolyPolygon to be filled
+    const basegfx::B2DPolyPolygon& rPolyPolygon(rCandidate.getPolyPolygon());
+
+    if (!rPolyPolygon.count())
+    {
+        // no PolyPolygon, done
+        return true;
+    }
+
+    // calculate visible range
+    basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());
+    aPolyPolygonRange.transform(getViewInformation2D().getObjectToViewTransformation());
+    if (!getDiscreteViewRange(mpRT).overlaps(aPolyPolygonRange))
+    {
+        // not visible, done
+        return true;
+    }
+
+    if (!rCandidate.getCreatesContent())
+    {
+        // creates no content, done
+        return true;
+    }
+
+    if (rCandidate.getSingleEntry())
+    {
+        // only one color entry, fill with last existing color, done
+        primitive2d::SvgGradientEntryVector::const_reference aEntry(
+            rCandidate.getGradientEntries().back());
+        paintPolyPoylgonRGBA(rCandidate.getPolyPolygon(), aEntry.getColor(),
+                             1.0 - aEntry.getOpacity());
+
+        return true;
+    }
+
+    return false;
+}
+
+void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
+    const primitive2d::SvgLinearGradientPrimitive2D& rCandidate)
+{
+    // check for simple cases, returns if all necesary is already done
+    if (handleSvgGradientHelper(rCandidate))
+    {
+        // simple case, handled, done
+        return;
+    }
+
+    cairo_save(mpRT);
+
+    // set ObjectToView as regular transformation at CairoContext
+    const basegfx::B2DHomMatrix aTrans(getViewInformation2D().getObjectToViewTransformation());
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, aTrans.a(), aTrans.b(), aTrans.c(), aTrans.d(), aTrans.e(),
+                      aTrans.f());
+    cairo_set_matrix(mpRT, &aMatrix);
+
+    // create pattern using unit coordinates. Unit coordinates here means that
+    // the transformation provided by the primitive maps the linear gradient
+    // to (0,0) -> (1,0) at the unified object coordinates, along the unified
+    // X-Axis
+    cairo_pattern_t* pPattern(cairo_pattern_create_linear(0, 0, 1, 0));
+
+    // get pre-defined UnitGradientToObject transformation from primitive
+    // and invert to get ObjectToUnitGradient transform
+    basegfx::B2DHomMatrix aObjectToUnitGradient(
+        rCandidate.createUnitGradientToObjectTransformation());
+    aObjectToUnitGradient.invert();
+
+    // set ObjectToUnitGradient as transformation at gradient - patterns
+    // need the inverted transformation, see cairo documentation
+    cairo_matrix_init(&aMatrix, aObjectToUnitGradient.a(), aObjectToUnitGradient.b(),
+                      aObjectToUnitGradient.c(), aObjectToUnitGradient.d(),
+                      aObjectToUnitGradient.e(), aObjectToUnitGradient.f());
+    cairo_pattern_set_matrix(pPattern, &aMatrix);
+
+    // add color stops
+    const primitive2d::SvgGradientEntryVector& rGradientEntries(rCandidate.getGradientEntries());
+
+    for (const auto& entry : rGradientEntries)
+    {
+        const basegfx::BColor& rColor(entry.getColor());
+        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), rColor.getRed(),
+                                          rColor.getGreen(), rColor.getBlue(), entry.getOpacity());
+    }
+
+    // set SpreadMethod. Note that we have no SpreadMethod::None because the
+    // source is SVG and SVG does also not have that (checked that)
+    switch (rCandidate.getSpreadMethod())
+    {
+        case primitive2d::SpreadMethod::Pad:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_PAD);
+            break;
+        case primitive2d::SpreadMethod::Reflect:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_REFLECT);
+            break;
+        case primitive2d::SpreadMethod::Repeat:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_REPEAT);
+            break;
+    }
+
+    // get PathGeometry & paint it filed with gradient
+    cairo_new_path(mpRT);
+    getOrCreateFillGeometry(mpRT, rCandidate.getPolyPolygon());
+    cairo_set_source(mpRT, pPattern);
+    cairo_fill(mpRT);
+
+    // cleanup
+    cairo_pattern_destroy(pPattern);
+    cairo_restore(mpRT);
+}
+
+void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
+    const primitive2d::SvgRadialGradientPrimitive2D& rCandidate)
+{
+    // check for simple cases, returns if all necesary is already done
+    if (handleSvgGradientHelper(rCandidate))
+    {
+        // simple case, handled, done
+        return;
+    }
+
+    cairo_save(mpRT);
+
+    // set ObjectToView as regular transformation at CairoContext
+    const basegfx::B2DHomMatrix aTrans(getViewInformation2D().getObjectToViewTransformation());
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, aTrans.a(), aTrans.b(), aTrans.c(), aTrans.d(), aTrans.e(),
+                      aTrans.f());
+    cairo_set_matrix(mpRT, &aMatrix);
+
+    // get pre-defined UnitGradientToObject transformation from primitive
+    // and invert to get ObjectToUnitGradient transform
+    basegfx::B2DHomMatrix aObjectToUnitGradient(
+        rCandidate.createUnitGradientToObjectTransformation());
+    aObjectToUnitGradient.invert();
+
+    // prepare empty FocalVector
+    basegfx::B2DVector aFocalVector(0.0, 0.0);
+
+    if (rCandidate.isFocalSet())
+    {
+        // FocalPoint is used, create ObjectTransform based on polygon range
+        const basegfx::B2DRange aPolyRange(rCandidate.getPolyPolygon().getB2DRange());
+        const double fPolyWidth(aPolyRange.getWidth());
+        const double fPolyHeight(aPolyRange.getHeight());
+        const basegfx::B2DHomMatrix aObjectTransform(
+            basegfx::utils::createScaleTranslateB2DHomMatrix(
+                fPolyWidth, fPolyHeight, aPolyRange.getMinX(), aPolyRange.getMinY()));
+
+        // get vector, then transform to object coordinates, then to
+        // UnitGradient coordinates to be in the needed coordinate system
+        aFocalVector = basegfx::B2DVector(rCandidate.getStart() - rCandidate.getFocal());
+        aFocalVector *= aObjectTransform;
+        aFocalVector *= aObjectToUnitGradient;
+    }
+
+    // create pattern using unit coordinates. Unit coordinates here means that
+    // the transformation provided by the primitive maps the radial gradient
+    // to (0,0) as center, 1.0 as radius - which is the unit circle. The
+    // FocalPoint (if used) has to be relative to that, so - since unified
+    // center is at (0, 0), handling as vector is sufficient
+    cairo_pattern_t* pPattern(
+        cairo_pattern_create_radial(0, 0, 0, aFocalVector.getX(), aFocalVector.getY(), 1));
+
+    // set ObjectToUnitGradient as transformation at gradient - patterns
+    // need the inverted transformation, see cairo documentation
+    cairo_matrix_init(&aMatrix, aObjectToUnitGradient.a(), aObjectToUnitGradient.b(),
+                      aObjectToUnitGradient.c(), aObjectToUnitGradient.d(),
+                      aObjectToUnitGradient.e(), aObjectToUnitGradient.f());
+    cairo_pattern_set_matrix(pPattern, &aMatrix);
+
+    // add color stops
+    const primitive2d::SvgGradientEntryVector& rGradientEntries(rCandidate.getGradientEntries());
+
+    for (const auto& entry : rGradientEntries)
+    {
+        const basegfx::BColor& rColor(entry.getColor());
+        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), rColor.getRed(),
+                                          rColor.getGreen(), rColor.getBlue(), entry.getOpacity());
+    }
+
+    // set SpreadMethod
+    switch (rCandidate.getSpreadMethod())
+    {
+        case primitive2d::SpreadMethod::Pad:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_PAD);
+            break;
+        case primitive2d::SpreadMethod::Reflect:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_REFLECT);
+            break;
+        case primitive2d::SpreadMethod::Repeat:
+            cairo_pattern_set_extend(pPattern, CAIRO_EXTEND_REPEAT);
+            break;
+    }
+
+    // get PathGeometry & paint it filed with gradient
+    cairo_new_path(mpRT);
+    getOrCreateFillGeometry(mpRT, rCandidate.getPolyPolygon());
+    cairo_set_source(mpRT, pPattern);
+    cairo_fill(mpRT);
+
+    // cleanup
+    cairo_pattern_destroy(pPattern);
+    cairo_restore(mpRT);
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     switch (rCandidate.getPrimitive2DID())
@@ -3357,6 +3568,18 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processTextDecoratedPortionPrimitive2D(
                 static_cast<const primitive2d::TextDecoratedPortionPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
+        {
+            processSvgLinearGradientPrimitive2D(
+                static_cast<const primitive2d::SvgLinearGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
+        {
+            processSvgRadialGradientPrimitive2D(
+                static_cast<const primitive2d::SvgRadialGradientPrimitive2D&>(rCandidate));
             break;
         }
 
