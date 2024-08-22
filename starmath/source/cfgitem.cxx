@@ -72,8 +72,8 @@ static Sequence<OUString> lcl_GetOtherPropertyNames()
     return Sequence<OUString>{ "LoadSave/IsSaveOnlyUsedSymbols",
                                "Misc/AutoCloseBrackets",
                                "Misc/DefaultSmSyntaxVersion",
-                               "Misc/IgnoreSpacesRight",
                                "Misc/InlineEditEnable",
+                               "Misc/IgnoreSpacesRight",
                                "Misc/SmEditWindowZoomFactor",
                                "Print/FormulaText",
                                "Print/Frame",
@@ -168,7 +168,7 @@ SmCfgOther::SmCfgOther()
     , bPrintFrame(true)
     , bIsSaveOnlyUsedSymbols(true)
     , bIsAutoCloseBrackets(true)
-    , bInlineEditEnable(true)
+    , bInlineEditEnable(false)
     , bIgnoreSpacesRight(true)
     , bToolboxVisible(true)
     , bAutoRedraw(true)
@@ -1424,8 +1424,8 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
     {   bVal = pRedrawItem->GetValue();
         SetAutoRedraw( bVal );
     }
-    if (const SfxBoolItem* pSpacesItem = rSet.GetItemIfSet(SID_INLINE_EDIT_ENABLE))
-    {   bVal = pSpacesItem->GetValue();
+    if (const SfxBoolItem* pInlineEditItem = rSet.GetItemIfSet(SID_INLINE_EDIT_ENABLE))
+    {   bVal = pInlineEditItem->GetValue();
         SetInlineEditEnable( bVal );
     }
     if (const SfxBoolItem* pSpacesItem = rSet.GetItemIfSet(SID_NO_RIGHT_SPACES))
