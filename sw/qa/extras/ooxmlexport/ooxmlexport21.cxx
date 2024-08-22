@@ -676,6 +676,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     CPPUNIT_ASSERT(nTableLeft > nRectLeft);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf162541, "tdf162541_notLayoutInCell_paraLeft.docx")
+{
+    // given cell B2 with a para-left para-fromTop image that is NOT layoutInCell
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nShapeLeft
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    sal_Int32 nParaLeft
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nTableLeft = getXPath(pDump, "//tab/infos/bounds"_ostr, "left"_ostr).toInt32();
+    // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
+    CPPUNIT_ASSERT(nShapeLeft < nParaLeft); // shape is located in column A, not column B
+    CPPUNIT_ASSERT_EQUAL(nTableLeft, nShapeLeft);
+
+    // sal_Int32 nShapeBottom
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds"_ostr,
+    //                "bottom"_ostr)
+    //           .toInt32();
+    // sal_Int32 nPara8Top
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
+    // CPPUNIT_ASSERT(nShapeBottom < nPara8Top); // shape is located at the top of the table para // tdf#133522
+
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_fromTop.docx")
 {
     // given cell B2 with a para-fromTop, char-left image that is NOT layoutInCell

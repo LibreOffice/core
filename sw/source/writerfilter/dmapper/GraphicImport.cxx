@@ -857,7 +857,21 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                         if (m_pImpl->m_nVertOrient != text::VertOrientation::NONE)
                             m_pImpl->m_nVertOrient = text::VertOrientation::TOP;
                     }
-
+                    else if (!m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable())
+                    {
+                        // if the object is horizontally aligned to the paragraph,
+                        // Microsoft strangely doesn't orient the object
+                        // to the cell paragraph it is anchored to
+                        // but to the paragraph that contains the entire table
+                        // (which is equivalent to page margins).
+                        // Amazingly, a VERT orientation to "line" can pin the horizontal alignment
+                        // back to the cell paragraph.
+                        if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
+                            && m_pImpl->m_nVertRelation != text::RelOrientation::TEXT_LINE)
+                        {
+                            m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                        }
+                    }
                     // Is it a graphic image
                     bool bUseShape = true;
                     try
