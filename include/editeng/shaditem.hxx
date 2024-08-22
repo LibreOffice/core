@@ -49,6 +49,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool             operator==( const SfxPoolItem& ) const override;
+    virtual bool             supportsHashCode() const override { return true; }
+    virtual size_t           hashCode() const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
@@ -62,13 +64,13 @@ public:
     virtual bool             HasMetrics() const override;
 
     const Color& GetColor() const { return aShadowColor;}
-    void SetColor( const Color &rNew ) { aShadowColor = rNew; }
+    void SetColor( const Color &rNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; aShadowColor = rNew; }
 
     sal_uInt16 GetWidth() const { return nWidth; }
     SvxShadowLocation GetLocation() const { return eLocation; }
 
-    void SetWidth( sal_uInt16 nNew ) { nWidth = nNew; }
-    void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
+    void SetWidth( sal_uInt16 nNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nWidth = nNew; }
+    void SetLocation( SvxShadowLocation eNew ) { ASSERT_CHANGE_REFCOUNTED_ITEM; eLocation = eNew; }
 
     // Calculate width of the shadow on the page.
     sal_uInt16 CalcShadowSpace( SvxShadowItemSide nShadow ) const;

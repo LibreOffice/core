@@ -142,16 +142,16 @@ private:
 
 public:
     bool IsAutoFirst()  const { return m_bAutoFirst; }
-    void SetAutoFirst(const bool bNew) { m_bAutoFirst = bNew; }
+    void SetAutoFirst(const bool bNew) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_bAutoFirst = bNew; }
 
     void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short GetTextFirstLineOffset() const { return m_nFirstLineOffset; }
     void SetPropTextFirstLineOffset(const sal_uInt16 nProp)
-                    { m_nPropFirstLineOffset = nProp; }
+                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return m_nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue(const short nValue)
-                    { m_nFirstLineOffset = nValue; }
+                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nFirstLineOffset = nValue; }
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
     SvxFirstLineIndentItem(const short nOffset, const sal_uInt16 nId);
@@ -159,6 +159,8 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
+    virtual bool supportsHashCode() const override { return true; }
+    virtual size_t hashCode() const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

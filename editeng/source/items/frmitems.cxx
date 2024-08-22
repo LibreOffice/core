@@ -497,6 +497,7 @@ void SvxLRSpaceItem::SetRight(const tools::Long nR, const sal_uInt16 nProp)
 void SvxFirstLineIndentItem::SetTextFirstLineOffset(
     const short nF, const sal_uInt16 nProp)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
     m_nPropFirstLineOffset = nProp;
 }
@@ -967,6 +968,7 @@ bool SvxFirstLineIndentItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) con
 
 bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1016,6 +1018,15 @@ bool SvxFirstLineIndentItem::operator==(const SfxPoolItem& rAttr) const
     return (m_nFirstLineOffset == rOther.GetTextFirstLineOffset()
         && m_nPropFirstLineOffset == rOther.GetPropTextFirstLineOffset()
         && m_bAutoFirst == rOther.IsAutoFirst());
+}
+
+size_t SvxFirstLineIndentItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, m_nFirstLineOffset);
+    o3tl::hash_combine(seed, m_nPropFirstLineOffset);
+    o3tl::hash_combine(seed, m_bAutoFirst);
+    return seed;
 }
 
 SvxFirstLineIndentItem* SvxFirstLineIndentItem::Clone(SfxItemPool *) const
@@ -1070,6 +1081,7 @@ bool SvxFirstLineIndentItem::GetPresentation
 
 void SvxFirstLineIndentItem::ScaleMetrics(tools::Long const nMult, tools::Long const nDiv)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nFirstLineOffset = static_cast<short>(BigInt::Scale(m_nFirstLineOffset, nMult, nDiv));
 }
 
@@ -2108,6 +2120,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2176,6 +2189,15 @@ bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
     return ( ( aShadowColor == rItem.aShadowColor ) &&
              ( nWidth    == rItem.GetWidth() ) &&
              ( eLocation == rItem.GetLocation() ) );
+}
+
+size_t SvxShadowItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, sal_Int32(aShadowColor));
+    o3tl::hash_combine(seed, nWidth);
+    o3tl::hash_combine(seed, static_cast<int>(eLocation));
+    return seed;
 }
 
 SvxShadowItem* SvxShadowItem::Clone( SfxItemPool* ) const
@@ -2277,6 +2299,7 @@ bool SvxShadowItem::GetPresentation
 
 void SvxShadowItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nWidth = static_cast<sal_uInt16>(BigInt::Scale( nWidth, nMult, nDiv ));
 }
 
