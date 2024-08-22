@@ -2333,8 +2333,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
 
     const sal_uInt32 nCntRelTo  = 4;
 
-    sal_uInt32 nXAlign = nCntXAlign > rRecord.nXAlign ? rRecord.nXAlign : 1;
-    sal_uInt32 nYAlign = nCntYAlign > rRecord.nYAlign ? rRecord.nYAlign : 1;
+    const sal_uInt32 nXAlign = nCntXAlign > rRecord.nXAlign ? rRecord.nXAlign : 1;
+    const sal_uInt32 nYAlign = nCntYAlign > rRecord.nYAlign ? rRecord.nYAlign : 1;
 
     // #i52565# - try to handle special case for objects in tables regarding its X Rel
 
@@ -2347,10 +2347,13 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
             rRecord.nYRelTo = sal_uInt32(rFSPA.nby);
     }
 
-    sal_uInt32 nXRelTo = (rRecord.nXRelTo && nCntRelTo > rRecord.nXRelTo) ? *rRecord.nXRelTo : 1;
-    sal_uInt32 nYRelTo = (rRecord.nYRelTo && nCntRelTo > rRecord.nYRelTo) ? *rRecord.nYRelTo : 1;
+    const sal_uInt32 nXRelTo
+        = (rRecord.nXRelTo && nCntRelTo > rRecord.nXRelTo) ? *rRecord.nXRelTo : 1;
+    const sal_uInt32 nYRelTo
+        = (rRecord.nYRelTo && nCntRelTo > rRecord.nYRelTo) ? *rRecord.nYRelTo : 1;
 
-    RndStdIds eAnchor = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
+    const RndStdIds eAnchor
+        = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
 
     SwFormatAnchor aAnchor( eAnchor );
     aAnchor.SetAnchor( m_pPaM->GetPoint() );
