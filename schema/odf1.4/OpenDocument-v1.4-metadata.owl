@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Open Document Format for Office Applications (OpenDocument) Version 1.4
+     OASIS Standard
+     11 March 2024
+     Copyright (c) OASIS Open 2024. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.4/csd01/schemas/
+     Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part1-introduction.html
+     TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+
+        Open Document Format for Office Applications (OpenDocument) Version 1.4
+        OWL Schema Metadata Manifest Description
+        OpenDocument-v1.4-metadata.owl
+-->
+
+<!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
+
+<rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:odf="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/01/rdf-schema#">
+
+<owl:Ontology rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#">
+	<owl:imports rdf:resource="http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-package-metadata.owl"/>
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<dc:title xml:lang="en">Open Document Schema Metadata Manifest Ontology</dc:title>
+	<label xml:lang="en">ODF Schema Metadata Manifest</label>
+</owl:Ontology>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#ContentFile">
+	<label xml:lang="en">The OpenDocument Content File</label>
+	<comment xml:lang="en">The unique content.xml from the root path of the document</comment>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+</owl:Class>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#StylesFile">
+	<label xml:lang="en">The OpenDocument Styles File</label>
+	<comment xml:lang="en">The unique styles.xml from the root path of the document</comment>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File"/>
+</owl:Class>
+
+<owl:Class rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#Element">
+	<label xml:lang="en">OpenDocument Package ODF XML Element</label>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Element"/>
+</owl:Class>
+
+<owl:Class rdf:about="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field">
+	<label xml:lang="en">OpenDocument Meta field Element</label>
+	<subClassOf rdf:resource="http://docs.oasis-open.org/ns/office/1.2/meta/odf#Element"/>
+</owl:Class>
+
+<owl:DatatypeProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#prefix">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<domain rdf:resource="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field"/>
+	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
+	<label xml:lang="en">has prefix</label>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#suffix">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<domain rdf:resource="urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field"/>
+	<range rdf:resource="http://www.w3.org/2001/XMLSchema-datatypes#string"/>
+	<label xml:lang="en">has suffix</label>
+</owl:DatatypeProperty>
+</rdf:RDF>
