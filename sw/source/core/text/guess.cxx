@@ -544,12 +544,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // We have to switch the current language if we have a script
         // change at nCutPos. Otherwise LATIN punctuation would never
         // be allowed to be hanging punctuation.
-        // NEVER call GetLang if the string has been modified!!!
+        // NEVER call GetLangOfChar if the string has been modified!!!
         LanguageType aLang = rInf.GetFont()->GetLanguage();
 
         // If we are inside a field portion, we use a temporary string which
         // differs from the string at the textnode. Therefore we are not allowed
-        // to call the GetLang function.
+        // to call the GetLangOfChar function.
         if ( m_nCutPos && ! rPor.InFieldGrp() )
         {
             const CharClass& rCC = GetAppCharClass();
