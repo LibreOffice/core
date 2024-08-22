@@ -30,7 +30,7 @@ import "defines.idl";
         helpstring("IMAccessible Interface"),
         pointer_default(unique)
     ]
-    interface IMAccessible : IAccessible2
+    interface IMAccessible : IAccessible2_2
     {
         [id(2), helpstring("method Put_XAccRole")] HRESULT Put_XAccRole(unsigned short pRole);
         [id(3), helpstring("method DecreaseState")] HRESULT DecreaseState(DWORD pXSate);

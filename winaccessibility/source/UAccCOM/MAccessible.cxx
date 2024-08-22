@@ -2676,4 +2676,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
     } catch(...) { return E_FAIL; }
 }
 
+// IAccessible2_2 methods
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attribute(BSTR, VARIANT*)
+{
+    return E_NOTIMPL;
+}
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accessibleWithCaret(IUnknown**, long*)
+{
+    return E_NOTIMPL;
+}
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relationTargetsOfType(BSTR, long, IUnknown***, long*)
+{
+    return E_NOTIMPL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

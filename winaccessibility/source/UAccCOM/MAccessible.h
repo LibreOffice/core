@@ -64,6 +64,7 @@ public:
     COM_INTERFACE_ENTRY(IMAccessible)
     COM_INTERFACE_ENTRY(IAccessible)
     COM_INTERFACE_ENTRY(IAccessible2)
+    COM_INTERFACE_ENTRY(IAccessible2_2)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IAccessibleApplication)
     COM_INTERFACE_ENTRY(IServiceProvider)
@@ -120,6 +121,11 @@ public:
     STDMETHOD(get_indexInParent)( long __RPC_FAR *accParentIndex ) override;
     STDMETHOD(get_locale)( IA2Locale __RPC_FAR *locale ) override;
     STDMETHOD(get_attributes)(/*[out]*/ BSTR *pAttr) override;
+
+    // IAccessible2_2 methods
+    STDMETHOD(get_attribute)(BSTR name, VARIANT* attribute) override;
+    STDMETHOD(get_accessibleWithCaret)(IUnknown** accessible, long* caretOffset) override;
+    STDMETHOD(get_relationTargetsOfType)(BSTR type, long maxTargets, IUnknown*** targets, long* nTargets) override;
 
     //IServiceProvider.
     STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void** ppvObject) override;
