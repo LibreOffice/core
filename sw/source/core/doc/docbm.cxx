@@ -1215,7 +1215,7 @@ namespace sw::mark
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(*ppMark));
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<sw::mark::Bookmark*>(pMark));
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
                         Bookmark* pBookmark = *ppBookmark;
@@ -1235,7 +1235,7 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 {
-                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(*ppMark));
+                    auto const ppBookmark = lcl_FindMark(m_vBookmarks, static_cast<Bookmark*>(pMark));
                     if ( ppBookmark != m_vBookmarks.end() )
                     {
                         m_vBookmarks.erase(ppBookmark);
@@ -1253,14 +1253,14 @@ namespace sw::mark
             case IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK:
             case IDocumentMarkAccess::MarkType::DATE_FIELDMARK:
                 {
-                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(*ppMark));
+                    auto const ppFieldmark = lcl_FindMark(m_vFieldmarks, static_cast<Fieldmark*>(pMark));
                     if ( ppFieldmark != m_vFieldmarks.end() )
                     {
                         if(m_pLastActiveFieldmark == *ppFieldmark)
                             ClearFieldActivation();
 
                         m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(dynamic_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
+                        ret.reset(new LazyFieldmarkDeleter(static_cast<Fieldmark*>(pMark), m_rDoc, isMoveNodes));
                     }
                     else
                     {
@@ -1272,7 +1272,7 @@ namespace sw::mark
 
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 {
-                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, static_cast<AnnotationMark*>(*ppMark));
+                    auto const ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, static_cast<AnnotationMark*>(pMark));
                     assert(ppAnnotationMark != m_vAnnotationMarks.end() &&
                         "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
                     m_vAnnotationMarks.erase(ppAnnotationMark);
