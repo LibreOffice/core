@@ -1660,10 +1660,13 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
             return false;
         }
         ++nStringsCnt;
-        for (size_t i = nStringsCnt; i > nPos; --i)
+        sal_uInt16 i = nStringsCnt;
+        while (i > nPos)
         {
-            nTypeArray[i] = nTypeArray[i-1];
-            sStrArray[i] = sStrArray[i-1];
+            sal_uInt16 nexti = o3tl::sanitizing_dec(i);
+            nTypeArray[i] = nTypeArray[nexti];
+            sStrArray[i] = sStrArray[nexti];
+            i = nexti;
         }
     }
     ++nResultStringsCnt;
