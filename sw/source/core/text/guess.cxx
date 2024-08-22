@@ -582,12 +582,28 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         m_nBreakStart = m_nBreakPos;
 
-        bHyph = BreakType::HYPHENATION == aResult.breakType &&
+        bHyph = BreakType::HYPHENATION == aResult.breakType;
+        if (bHyph)
+        {
+            LanguageType aNoHyphLang;
+            if (rPor.InFieldGrp())
+            {
+                // If we are inside a field portion, we use a temporary string which
+                // differs from the string at the textnode. Therefore we are not allowed
+                // to call the GetLangOfChar function.
+                aNoHyphLang = LANGUAGE_DONTKNOW;
+            }
+            else
+            {
                 // allow hyphenation of the word only if it's not disabled by character formatting
-                LANGUAGE_NONE != rInf.GetTextFrame()->GetLangOfChar(
-                        TextFrameIndex( sal_Int32(m_nBreakPos) +
-                                aResult.rHyphenatedWord->getHyphenationPos() ),
-                        1, true, /*bNoneIfNoHyphenation=*/true );
+                aNoHyphLang = rInf.GetTextFrame()->GetLangOfChar(
+                                  TextFrameIndex( sal_Int32(m_nBreakPos) +
+                                            aResult.rHyphenatedWord->getHyphenationPos() ),
+                                    1, true, /*bNoneIfNoHyphenation=*/true );
+            }
+            // allow hyphenation of the word only if it's not disabled by character formatting
+            bHyph = aNoHyphLang != LANGUAGE_NONE;
+        }
 
         if (bHyph && m_nBreakPos != TextFrameIndex(COMPLETE_STRING))
         {
