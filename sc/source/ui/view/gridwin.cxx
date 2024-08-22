@@ -6623,17 +6623,11 @@ void ScGridWindow::UpdateCursorOverlay()
             tools::Long nSizeYPix;
             mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-            // tdf#143733 Make cell outline wider than the cell
-            const double fZoom(mrViewData.GetZoomX());
-            const sal_uInt16 nAdjustBorder(2 + fZoom / 2);
-            aScrPos.AdjustX(-nAdjustBorder);
-            aScrPos.AdjustY(-nAdjustBorder);
-
             if (bLayoutRTL)
                 aScrPos.AdjustX( -(nSizeXPix - 2) );       // move instead of mirroring
 
             // show the cursor as 4 (thin) rectangles
-            tools::Rectangle aRect(aScrPos, Size(nSizeXPix + 2*nAdjustBorder, nSizeYPix + 2*nAdjustBorder));
+            tools::Rectangle aRect(aScrPos, Size(nSizeXPix, nSizeYPix));
 
             float fScaleFactor = GetDPIScaleFactor();
 
@@ -6944,10 +6938,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     tools::Long nSizeYPix;
     mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-    // tdf#161234 Make AutoFill handle follow cell outline. This happens only when the
-    // autofill handle is in the same cell as the outline. Note that nAdjustBorder needs
-    // to be calculated the same way as in ScGridWindow::UpdateCursorOverlay()
-    double nAdjustBorder(0);
+    // Consider the case of merged cells to determine where to place the AutoFill handle
     SCCOL nX2 = mrViewData.GetCurX();
     SCCOL nY2 = mrViewData.GetCurY();
     const ScMergeAttr* pMerge = rDoc.GetAttr(nX2, nY2, nTab, ATTR_MERGE);
@@ -6956,15 +6947,13 @@ void ScGridWindow::UpdateAutoFillOverlay()
         nX2 += pMerge->GetColMerge() - 1;
         nY2 += pMerge->GetRowMerge() - 1;
     }
-    if (nX == nX2 && nY == nY2)
-        nAdjustBorder = std::round(2 + static_cast<double>(mrViewData.GetZoomX()) / 2);
 
     if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
-        aFillPos.AdjustX( -(nSizeXPix + nAdjustBorder + (aFillHandleSize.Width() / 2)) );
+        aFillPos.AdjustX( -(nSizeXPix + (aFillHandleSize.Width() / 2)) );
     else
-        aFillPos.AdjustX(nSizeXPix + nAdjustBorder - (aFillHandleSize.Width() / 2) );
+        aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
 
-    aFillPos.AdjustY(nSizeYPix + nAdjustBorder);
+    aFillPos.AdjustY(nSizeYPix);
     aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
 
     tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
