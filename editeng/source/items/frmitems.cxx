@@ -480,6 +480,7 @@ void SvxLRSpaceItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
 
 void SvxRightMarginItem::SetRight(const tools::Long nR, const sal_uInt16 nProp)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nRightMargin = (nR * nProp) / 100;
     m_nPropRightMargin = nProp;
 }
@@ -1163,6 +1164,7 @@ bool SvxRightMarginItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
 
 bool SvxRightMarginItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1207,6 +1209,14 @@ bool SvxRightMarginItem::operator==(const SfxPoolItem& rAttr) const
 
     return (m_nRightMargin == rOther.GetRight()
         && m_nPropRightMargin == rOther.GetPropRight());
+}
+
+size_t SvxRightMarginItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, m_nRightMargin);
+    o3tl::hash_combine(seed, m_nPropRightMargin);
+    return seed;
 }
 
 SvxRightMarginItem* SvxRightMarginItem::Clone(SfxItemPool *) const
@@ -1261,6 +1271,7 @@ bool SvxRightMarginItem::GetPresentation
 
 void SvxRightMarginItem::ScaleMetrics(tools::Long const nMult, tools::Long const nDiv)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nRightMargin = BigInt::Scale(m_nRightMargin, nMult, nDiv);
 }
 
