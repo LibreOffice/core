@@ -1006,7 +1006,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             {
                 // create a DropCap attribute
                 SwFormatDrop aDrop( pColl->GetDrop() );
-                aDrop.GetChars() = 1;
+                aDrop.SetChars( 1 );
 
                 // set the attributes of the DropCap attribute
                 if( Css1ScriptFlags::AllMask == nScript )
@@ -1484,12 +1484,12 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
     if( nLines<=1 )
         return;
 
-    rDrop.GetLines() = nLines;
+    rDrop.SetLines(nLines);
 
     // a right border becomes the spacing to text!
     if (const SvxRightMarginItem *const pRightMargin = rItemSet.GetItemIfSet(RES_MARGIN_RIGHT, false))
     {
-        rDrop.GetDistance() = static_cast<sal_uInt16>(pRightMargin->GetRight());
+        rDrop.SetDistance(static_cast<sal_uInt16>(pRightMargin->GetRight()));
         rItemSet.ClearItem(RES_MARGIN_RIGHT);
     }
     rItemSet.ClearItem(RES_MARGIN_FIRSTLINE);
@@ -2238,7 +2238,7 @@ void SwHTMLParser::EndContextAttrs( HTMLAttrContext *pContext )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )
                 nChars = MAX_DROPCAP_CHARS;
-            static_cast<SwFormatDrop&>(pAttr->GetItem()).GetChars() = static_cast<sal_uInt8>(nChars);
+            static_cast<SwFormatDrop&>(pAttr->GetItem()).SetChars(static_cast<sal_uInt8>(nChars));
         }
 
         EndAttr( pAttr );

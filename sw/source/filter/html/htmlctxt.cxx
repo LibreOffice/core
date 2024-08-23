@@ -540,7 +540,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         SvxAdjust::Left == rPropInfo.m_eFloat )
     {
         SwFormatDrop aDrop;
-        aDrop.GetChars() = 1;
+        aDrop.SetChars(1);
 
         m_pCSS1Parser->FillDropCap( aDrop, rItemSet );
 

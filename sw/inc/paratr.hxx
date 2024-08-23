@@ -98,6 +98,8 @@ public:
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool            supportsHashCode() const override { return true; }
+    virtual size_t          hashCode() const override;
     virtual SwFormatDrop*   Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -108,16 +110,16 @@ public:
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     sal_uInt8 GetLines() const { return m_nLines; }
-    sal_uInt8 &GetLines() { return m_nLines; }
+    void SetLines(sal_uInt8 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nLines = n; }
 
     sal_uInt8 GetChars() const { return m_nChars; }
-    sal_uInt8 &GetChars() { return m_nChars; }
+    void SetChars(sal_uInt8 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nChars = n; }
 
     bool GetWholeWord() const { return m_bWholeWord; }
-    bool &GetWholeWord() { return m_bWholeWord; }
+    void SetWholeWord(bool b) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_bWholeWord = b; }
 
     sal_uInt16 GetDistance() const { return m_nDistance; }
-    sal_uInt16 &GetDistance() { return m_nDistance; }
+    void SetDistance(sal_uInt16 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nDistance = n; }
 
     const SwCharFormat *GetCharFormat() const { return static_cast<const SwCharFormat*>(GetRegisteredIn()); }
     SwCharFormat *GetCharFormat()       { return static_cast<SwCharFormat*>(GetRegisteredIn()); }

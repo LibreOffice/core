@@ -4131,11 +4131,11 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                 const SwFormatDrop* defaultDrop = GetFormatAttr(RES_PARATR_DROP);
                 SwFormatDrop aDrop(*defaultDrop);
 
-                aDrop.GetLines() = nDropLines;
-                aDrop.GetDistance() = nDistance;
-                aDrop.GetChars() = writer_cast<sal_uInt8>(nDropCapLen);
+                aDrop.SetLines(nDropLines);
+                aDrop.SetDistance(nDistance);
+                aDrop.SetChars(writer_cast<sal_uInt8>(nDropCapLen));
                 // Word has no concept of a "whole word dropcap"
-                aDrop.GetWholeWord() = false;
+                aDrop.SetWholeWord(false);
 
                 if (pFormat)
                     aDrop.SetCharFormat(const_cast<SwCharFormat*>(pFormat));

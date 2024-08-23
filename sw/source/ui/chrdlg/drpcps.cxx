@@ -718,10 +718,10 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
     if (bOn)
     {
         // quantity, lines, gap
-        aFormat.GetChars()     = static_cast<sal_uInt8>(m_xDropCapsField->get_value());
-        aFormat.GetLines()     = static_cast<sal_uInt8>(m_xLinesField->get_value());
-        aFormat.GetDistance()  = o3tl::narrowing<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)));
-        aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
+        aFormat.SetChars(     static_cast<sal_uInt8>(m_xDropCapsField->get_value()) );
+        aFormat.SetLines(     static_cast<sal_uInt8>(m_xLinesField->get_value())  );
+        aFormat.SetDistance(  o3tl::narrowing<sal_uInt16>(m_xDistanceField->denormalize(m_xDistanceField->get_value(FieldUnit::TWIP)))  );
+        aFormat.SetWholeWord( m_xWholeWordCB->get_active() );
 
         // template
         if (SwView* pView = GetActiveView())
@@ -730,9 +730,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
     }
     else
     {
-        aFormat.GetChars()    = 1;
-        aFormat.GetLines()    = 1;
-        aFormat.GetDistance() = 0;
+        aFormat.SetChars(1);
+        aFormat.SetLines(1);
+        aFormat.SetDistance(0);
     }
 
     // set attributes
