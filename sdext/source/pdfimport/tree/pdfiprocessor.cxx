@@ -463,6 +463,13 @@ void PDFIProcessor::fillPath( const uno::Reference< rendering::XPolyPolygon2D >&
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
     aPoly.transform(getCurrentContext().Transformation);
 
+    basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
+    if( aCurClip.count() ) {
+        aPoly = basegfx::utils::clipPolyPolygonOnPolyPolygon( aPoly, aCurClip,
+                    true, /* bInside, keep parts inside the clip */
+                    false /* bStroke, filled not stroked */ );
+    }
+
     PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
         getGCId(getCurrentContext()),
@@ -477,6 +484,13 @@ void PDFIProcessor::eoFillPath( const uno::Reference< rendering::XPolyPolygon2D 
 {
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
     aPoly.transform(getCurrentContext().Transformation);
+
+    basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
+    if( aCurClip.count() ) {
+        aPoly = basegfx::utils::clipPolyPolygonOnPolyPolygon( aPoly, aCurClip,
+                    true, /* bInside, keep parts inside the clip */
+                    false /* bStroke, filled not stroked */ );
+    }
 
     PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
