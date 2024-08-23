@@ -377,6 +377,16 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
            bLastBlock == rItem.bLastBlock;
 }
 
+size_t SvxAdjustItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, GetAdjust());
+    o3tl::hash_combine(seed, bOneBlock);
+    o3tl::hash_combine(seed, bLastCenter);
+    o3tl::hash_combine(seed, bLastBlock);
+    return seed;
+}
+
 bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
