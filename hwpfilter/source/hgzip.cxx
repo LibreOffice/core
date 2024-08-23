@@ -31,9 +31,9 @@
 #define ALLOC(size) malloc(size)
 #define TRYFREE(p) {if (p) free(p);}
 
-static int get_byte(gz_stream * s);
+static unsigned char get_byte(gz_stream * s);
 static int destroy(gz_stream * s);
-static uLong getLong(gz_stream * s);
+static bool getLongEquals(gz_stream* s, uLong value);
 
 /* ===========================================================================
    Opens a gzip (.gz) file for reading or writing. The mode parameter
@@ -91,14 +91,14 @@ gz_stream *gz_open(HStream & _stream)
 
 
 /* ===========================================================================
-     Read a byte from a gz_stream; update next_in and avail_in. Return EOF
-   for end of file.
+   Read a byte from a gz_stream; update next_in and avail_in. EOF is flagged
+   by setting z_eof.
    IN assertion: the stream s has been successfully opened for reading.
 */
-static int get_byte(gz_stream * s)
+static unsigned char get_byte(gz_stream * s)
 {
     if (s->z_eof)
-        return EOF;
+        return 0xFF;
     if (s->stream.avail_in == 0)
     {
         errno = 0;
@@ -107,7 +107,7 @@ static int get_byte(gz_stream * s)
         if (s->stream.avail_in == 0)
         {
             s->z_eof = 1;
-            return EOF;
+            return 0xFF;
         }
         s->stream.next_in = s->inbuf;
     }
@@ -189,7 +189,7 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
             s->crc = crc32(s->crc, start, static_cast<uInt>(s->stream.next_out - start));
             start = s->stream.next_out;
 
-            if (getLong(s) != s->crc || getLong(s) != s->stream.total_out)
+            if (!getLongEquals(s, s->crc) || !getLongEquals(s, s->stream.total_out))
             {
                 s->z_err = Z_DATA_ERROR;
             }
@@ -254,20 +254,21 @@ int gz_flush(gz_stream * file, int flush)
 
 
 /* ===========================================================================
-   Reads a long in LSB order from the given gz_stream. Sets
+   Reads a long in LSB order from the given gz_stream and compares for equality
+   to val.
 */
-static uLong getLong(gz_stream * s)
+static bool getLongEquals(gz_stream* s, uLong val)
 {
-    uLong x = static_cast<unsigned char>(get_byte(s));
-
-    x += static_cast<unsigned char>(get_byte(s)) << 8;
-    x += static_cast<unsigned char>(get_byte(s)) << 16;
-    x += static_cast<unsigned char>(get_byte(s)) << 24;
+    uLong x = get_byte(s);
+    x += get_byte(s) << 8;
+    x += get_byte(s) << 16;
+    x += get_byte(s) << 24;
     if (s->z_eof)
     {
         s->z_err = Z_DATA_ERROR;
+        return false;
     }
-    return x;
+    return x == val;
 }
 
 
