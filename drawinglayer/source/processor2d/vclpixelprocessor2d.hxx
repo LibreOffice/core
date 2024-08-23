@@ -72,8 +72,6 @@ class VclPixelProcessor2D final : public VclProcessor2D
     bool tryDrawPolygonStrokePrimitive2DDirect(const primitive2d::PolygonStrokePrimitive2D& rSource,
                                                double fTransparency);
 
-    void
-    processWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive);
     void processTextSimplePortionPrimitive2D(
         const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
     void processTextDecoratedPortionPrimitive2D(

@@ -19,7 +19,6 @@
 
 #include "vclpixelprocessor2d.hxx"
 #include "vclhelperbufferdevice.hxx"
-#include "helperwrongspellrenderer.hxx"
 #include <comphelper/lok.hxx>
 
 #include <sal/log.hxx>
@@ -46,7 +45,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
-#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
@@ -197,12 +195,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
 {
     switch (rCandidate.getPrimitive2DID())
     {
-        case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D:
-        {
-            processWrongSpellPrimitive2D(
-                static_cast<const primitive2d::WrongSpellPrimitive2D&>(rCandidate));
-            break;
-        }
         case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
         {
             processTextSimplePortionPrimitive2D(
@@ -386,17 +378,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
             process(rCandidate);
             break;
         }
-    }
-}
-
-void VclPixelProcessor2D::processWrongSpellPrimitive2D(
-    const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive)
-{
-    if (!renderWrongSpellPrimitive2D(rWrongSpellPrimitive, *mpOutputDevice, maCurrentTransformation,
-                                     maBColorModifierStack))
-    {
-        // fallback to decomposition (MetaFile)
-        process(rWrongSpellPrimitive);
     }
 }
 

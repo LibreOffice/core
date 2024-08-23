@@ -194,7 +194,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/processor2dtools \
     drawinglayer/source/processor2d/contourextractor2d \
     drawinglayer/source/processor2d/getdigitlanguage \
-    drawinglayer/source/processor2d/helperwrongspellrenderer \
     drawinglayer/source/processor2d/hittestprocessor2d \
     drawinglayer/source/processor2d/linegeometryextractor2d \
     drawinglayer/source/processor2d/objectinfoextractor2d \
