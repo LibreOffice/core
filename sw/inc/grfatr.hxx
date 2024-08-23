@@ -197,6 +197,8 @@ public:
     // pure virtual methods from SfxEnumItem
     virtual SwGammaGrf*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual bool            supportsHashCode() const override { return true; }
+    virtual size_t          hashCode() const override { return static_cast<size_t>(m_nValue); }
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

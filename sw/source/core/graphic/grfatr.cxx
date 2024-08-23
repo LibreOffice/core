@@ -255,6 +255,7 @@ bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 
 bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     return rVal >>= m_nValue;
 }
 
