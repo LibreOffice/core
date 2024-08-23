@@ -75,13 +75,7 @@ extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
 }
 
 EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
-    fetch(UTF16ToString(url)).then(res => {
-        if (!res.ok) {
-            throw Error(
-                "Loading <" + res.url + "> failed with " + res.status + " " + res.statusText);
-        }
-        return res.blob();
-    }).then(blob => blob.text()).then(text => eval(text));
+    importScripts(UTF16ToString(url));
 });
 
 EM_JS(void, setupMainChannel, (), {
