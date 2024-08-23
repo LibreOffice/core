@@ -2183,140 +2183,137 @@ SwFlyAtContentFrame* SwFlyFrame::DynCastFlyAtContentFrame()
 
 SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
 {
+    if (!Lower() || IsColLocked() || HasFixSize())
+        return 0;
+
     SwRectFnSet aRectFnSet(this);
-    if ( Lower() && !IsColLocked() && !HasFixSize() )
-    {
-        SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
-        if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
-            nDist = LONG_MAX - nSize;
+    SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
+    if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
+        nDist = LONG_MAX - nSize;
 
-        if ( nDist <= 0 )
-            return 0;
+    if ( nDist <= 0 )
+        return 0;
 
-        if ( Lower()->IsColumnFrame() )
-        {   // If it's a Column Frame, the Format takes control of the
-            // resizing (due to the adjustment).
-            if ( !bTst )
-            {
-                // #i28701# - unlock position of Writer fly frame
-                UnlockPosition();
-                InvalidatePos_();
-                InvalidateSize();
-            }
-            return 0;
-        }
-
+    if ( Lower()->IsColumnFrame() )
+    {   // If it's a Column Frame, the Format takes control of the
+        // resizing (due to the adjustment).
         if ( !bTst )
         {
-            const SwRect aOld( GetObjRectWithSpaces() );
-            InvalidateSize_();
-            const bool bOldLock = m_bLocked;
-            Unlock();
-            if ( IsFlyFreeFrame() )
-            {
-                // #i37068# - no format of position here
-                // and prevent move in method <CheckClip(..)>.
-                // This is needed to prevent layout loop caused by nested
-                // Writer fly frames - inner Writer fly frames format its
-                // anchor, which grows/shrinks the outer Writer fly frame.
-                // Note: position will be invalidated below.
-                setFrameAreaPositionValid(true);
-
-                // #i55416#
-                // Suppress format of width for autowidth frame, because the
-                // format of the width would call <SwTextFrame::CalcFitToContent()>
-                // for the lower frame, which initiated this grow.
-                const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
-                const SwFormatFrameSize& rFrameSz = GetFormat()->GetFrameSize();
-                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
-                {
-                    m_bFormatHeightOnly = true;
-                }
-                SwViewShell* pSh = getRootFrame()->GetCurrShell();
-                if (pSh)
-                {
-                    static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( true );
-                    static_cast<SwFlyFreeFrame*>(this)->SwFlyFreeFrame::MakeAll(pSh->GetOut());
-                    static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
-                }
-                // #i55416#
-                if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
-                {
-                    m_bFormatHeightOnly = bOldFormatHeightOnly;
-                }
-            }
-            else
-                MakeAll(getRootFrame()->GetCurrShell()->GetOut());
-            InvalidateSize_();
-            InvalidatePos();
-            if ( bOldLock )
-                Lock();
-            SwRect aNew(GetObjRectWithSpaces());
-            if (IsFlySplitAllowed() && aNew.Height() - aOld.Height() < nDist)
-            {
-                // We are allowed to split and the actual growth is less than the requested growth.
-                const SwFrame* pAnchor = GetAnchorFrame();
-                if (SwFrame* pAnchorChar = FindAnchorCharFrame())
-                {
-                    pAnchor = pAnchorChar;
-                }
-                if (pAnchor)
-                {
-                    SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
-                    SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
-                    SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
-                    SwTwips nMaxGrow = nDeadline - nBottom;
-                    if (nDist > nMaxGrow)
-                    {
-                        // The requested growth is more than what we can provide, limit it.
-                        nDist = nMaxGrow;
-                    }
-                    // Grow & invalidate the size.
-                    SwTwips nRemaining = nDist - (aNew.Height() - aOld.Height());
-                    {
-                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                        aRectFnSet.AddBottom(aFrm, nRemaining);
-                    }
-                    InvalidateObjRectWithSpaces();
-                    {
-                        // Margins are unchanged, so increase the print height similar to the frame
-                        // height.
-                        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                        aRectFnSet.AddBottom(aPrt, nRemaining );
-                    }
-                    aNew = GetObjRectWithSpaces();
-                }
-            }
-            if ( aOld != aNew )
-                ::Notify( this, FindPageFrame(), aOld );
-            return aRectFnSet.GetHeight(aNew)-aRectFnSet.GetHeight(aOld);
+            // #i28701# - unlock position of Writer fly frame
+            UnlockPosition();
+            InvalidatePos_();
+            InvalidateSize();
         }
-        else
+        return 0;
+    }
+
+    if (bTst)
+    {
+        // We're in test mode. Don't promise infinite growth for split flys, rather limit the
+        // max size to the bottom of the upper.
+        const SwFrame* pAnchor = GetAnchorFrame();
+        if (SwFrame* pAnchorChar = FindAnchorCharFrame())
         {
-            // We're in test mode. Don't promise infinite growth for split flys, rather limit the
-            // max size to the bottom of the upper.
-            const SwFrame* pAnchor = GetAnchorFrame();
-            if (SwFrame* pAnchorChar = FindAnchorCharFrame())
+            pAnchor = pAnchorChar;
+        }
+        if (pAnchor && IsFlySplitAllowed())
+        {
+            SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
+            SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+            SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
+            // Calculate max grow and compare to the requested growth, adding to nDist may
+            // overflow when it's LONG_MAX.
+            SwTwips nMaxGrow = nDeadline - nBottom;
+            if (nDist > nMaxGrow)
             {
-                pAnchor = pAnchorChar;
-            }
-            if (pAnchor && IsFlySplitAllowed())
-            {
-                SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
-                SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
-                SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
-                // Calculate max grow and compare to the requested growth, adding to nDist may
-                // overflow when it's LONG_MAX.
-                SwTwips nMaxGrow = nDeadline - nBottom;
-                if (nDist > nMaxGrow)
-                {
-                    nDist = nMaxGrow;
-                }
+                nDist = nMaxGrow;
             }
         }
         return nDist;
     }
-    return 0;
+
+    const SwRect aOld( GetObjRectWithSpaces() );
+    InvalidateSize_();
+    const bool bOldLock = m_bLocked;
+    Unlock();
+    if ( IsFlyFreeFrame() )
+    {
+        // #i37068# - no format of position here
+        // and prevent move in method <CheckClip(..)>.
+        // This is needed to prevent layout loop caused by nested
+        // Writer fly frames - inner Writer fly frames format its
+        // anchor, which grows/shrinks the outer Writer fly frame.
+        // Note: position will be invalidated below.
+        setFrameAreaPositionValid(true);
+
+        // #i55416#
+        // Suppress format of width for autowidth frame, because the
+        // format of the width would call <SwTextFrame::CalcFitToContent()>
+        // for the lower frame, which initiated this grow.
+        const bool bOldFormatHeightOnly = m_bFormatHeightOnly;
+        const SwFormatFrameSize& rFrameSz = GetFormat()->GetFrameSize();
+        if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
+        {
+            m_bFormatHeightOnly = true;
+        }
+        SwViewShell* pSh = getRootFrame()->GetCurrShell();
+        if (pSh)
+        {
+            static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( true );
+            static_cast<SwFlyFreeFrame*>(this)->SwFlyFreeFrame::MakeAll(pSh->GetOut());
+            static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
+        }
+        // #i55416#
+        if ( rFrameSz.GetWidthSizeType() != SwFrameSize::Fixed )
+        {
+            m_bFormatHeightOnly = bOldFormatHeightOnly;
+        }
+    }
+    else
+        MakeAll(getRootFrame()->GetCurrShell()->GetOut());
+    InvalidateSize_();
+    InvalidatePos();
+    if ( bOldLock )
+        Lock();
+    SwRect aNew(GetObjRectWithSpaces());
+    if (IsFlySplitAllowed() && aNew.Height() - aOld.Height() < nDist)
+    {
+        // We are allowed to split and the actual growth is less than the requested growth.
+        const SwFrame* pAnchor = GetAnchorFrame();
+        if (SwFrame* pAnchorChar = FindAnchorCharFrame())
+        {
+            pAnchor = pAnchorChar;
+        }
+        if (pAnchor)
+        {
+            SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
+            SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+            SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
+            SwTwips nMaxGrow = nDeadline - nBottom;
+            if (nDist > nMaxGrow)
+            {
+                // The requested growth is more than what we can provide, limit it.
+                nDist = nMaxGrow;
+            }
+            // Grow & invalidate the size.
+            SwTwips nRemaining = nDist - (aNew.Height() - aOld.Height());
+            {
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                aRectFnSet.AddBottom(aFrm, nRemaining);
+            }
+            InvalidateObjRectWithSpaces();
+            {
+                // Margins are unchanged, so increase the print height similar to the frame
+                // height.
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+                aRectFnSet.AddBottom(aPrt, nRemaining );
+            }
+            aNew = GetObjRectWithSpaces();
+        }
+    }
+    if ( aOld != aNew )
+        ::Notify( this, FindPageFrame(), aOld );
+    return aRectFnSet.GetHeight(aNew)-aRectFnSet.GetHeight(aOld);
 }
 
 SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
