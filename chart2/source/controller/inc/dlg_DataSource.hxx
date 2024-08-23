@@ -44,9 +44,6 @@ public:
         const rtl::Reference<::chart::ChartModel> & xChartDocument );
     virtual ~DataSourceDialog() override;
 
-    // from GenericDialogController base
-    virtual short run() override;
-
     // TabPageNotifiable
     virtual void setInvalidPage( BuilderPage * pTabPage ) override;
     virtual void setValidPage( BuilderPage * pTabPage ) override;
@@ -54,6 +51,8 @@ public:
 private:
     DECL_LINK(ActivatePageHdl, const OUString&, void);
     DECL_LINK(DeactivatePageHdl, const OUString&, bool);
+    DECL_LINK(OkHdl, weld::Button&, void);
+    void commitPages();
 
     std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
     std::unique_ptr< DialogModel >                m_apDialogModel;

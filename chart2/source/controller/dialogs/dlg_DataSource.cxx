@@ -94,6 +94,7 @@ DataSourceDialog::DataSourceDialog(weld::Window * pParent,
                                     m_apDocTemplateProvider.get(), true /* bHideDescription */ );
     m_xTabControl->connect_enter_page(LINK(this, DataSourceDialog, ActivatePageHdl));
     m_xTabControl->connect_leave_page(LINK(this, DataSourceDialog, DeactivatePageHdl));
+    m_xBtnOK->connect_clicked(LINK(this, DataSourceDialog, OkHdl));
     ActivatePageHdl(m_xTabControl->get_current_page_ident());
     if (m_nLastPageId != 0)
     {
@@ -109,17 +110,18 @@ DataSourceDialog::~DataSourceDialog()
     m_nLastPageId = m_xTabControl->get_current_page();
 }
 
-short DataSourceDialog::run()
+void DataSourceDialog::commitPages()
 {
-    short nResult = GenericDialogController::run();
-    if( nResult == RET_OK )
-    {
-        if( m_xRangeChooserTabPage )
-            m_xRangeChooserTabPage->commitPage();
-        if( m_xDataSourceTabPage )
-            m_xDataSourceTabPage->commitPage();
-    }
-    return nResult;
+   if (m_xRangeChooserTabPage)
+       m_xRangeChooserTabPage->commitPage();
+   if (m_xDataSourceTabPage)
+       m_xDataSourceTabPage->commitPage();
+}
+
+IMPL_LINK_NOARG(DataSourceDialog, OkHdl, weld::Button&, void)
+{
+    commitPages();
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK(DataSourceDialog, ActivatePageHdl, const OUString&, rPage, void)
