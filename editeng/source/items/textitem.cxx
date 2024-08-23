@@ -1507,6 +1507,14 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
            maComplexColor == rColorItem.maComplexColor;
 }
 
+size_t SvxColorItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(mColor));
+    o3tl::hash_combine(seed, maComplexColor);
+    return seed;
+}
+
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
