@@ -86,6 +86,7 @@ EM_JS(void, setupMainChannel, (), {
         if (e.data.cmd === "LOWA-channel") {
             self.onmessage = orig;
             Module.uno_mainPort = e.ports[0];
+            Module.uno_init$resolve();
         } else if (orig) {
             orig(e);
         }
@@ -119,7 +120,6 @@ void initUno() {
         runUnoScriptUrl(url.getStr());
     }
     setupMainChannel();
-    EM_ASM(Module.uno_init$resolve(););
     emscripten_async_run_in_main_runtime_thread(EM_FUNC_SIG_V, resolveUnoMain);
 }
 
