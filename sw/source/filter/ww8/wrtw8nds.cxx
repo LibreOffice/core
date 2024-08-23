@@ -501,15 +501,13 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     {
         if (const SfxGrabBagItem *pCharFmtGrabBag = aExportSet.GetItem<SfxGrabBagItem>(RES_CHRATR_GRABBAG, false))
         {
-            std::unique_ptr<SfxGrabBagItem> pNewCharFmtGrabBag(pCharFmtGrabBag->Clone());
-            assert(pNewCharFmtGrabBag);
-            auto & rNewFmtMap = pNewCharFmtGrabBag->GetGrabBag();
+            std::map<OUString, css::uno::Any> aNewGrabBagMap = pCharFmtGrabBag->GetGrabBag();
             for (auto const & item : pAutoFmtGrabBag->GetGrabBag())
             {
                 if (item.second.hasValue())
-                    rNewFmtMap.erase(item.first);
+                    aNewGrabBagMap.erase(item.first);
             }
-            aExportSet.Put(std::move(pNewCharFmtGrabBag));
+            aExportSet.Put(std::make_unique<SfxGrabBagItem>(RES_CHRATR_GRABBAG, std::move(aNewGrabBagMap)));
         }
     }
 
@@ -3488,8 +3486,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
             {"ooxml:CT_SdtPr_docPartObj", uno::Any(aDocPropertyValues)},
         }));
 
-        SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
-        aGrabBag.GetGrabBag()[u"SdtPr"_ustr] <<= aSdtPrPropertyValues;
+        SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
+            std::map<OUString, css::uno::Any>{{ u"SdtPr"_ustr, uno::Any(aSdtPrPropertyValues) }});
 
         // create temp attr set
         SwAttrSet aSet(pNode->GetSwAttrSet());
@@ -3508,8 +3506,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         const SwContentNode* pNodeAfterToc = rEndTocNextNode.GetContentNode();
         if (pNodeAfterToc)
         {
-            SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
-            aGrabBag.GetGrabBag()[u"ParaSdtEndBefore"_ustr] <<= true;
+            SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
+                std::map<OUString, css::uno::Any>{{u"ParaSdtEndBefore"_ustr, uno::Any(true)}});
 
             // create temp attr set
             SwAttrSet aSet(pNodeAfterToc->GetSwAttrSet());

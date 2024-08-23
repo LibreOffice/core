@@ -951,19 +951,13 @@ void SwDocShell::Edit(
         rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
-        std::optional<SfxGrabBagItem> oGrabBag;
+        std::map<OUString, css::uno::Any> aGrabBagMap;
         if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
-        {
-            oGrabBag.emplace(*pItem);
-        }
-        else
-        {
-            oGrabBag.emplace(SID_ATTR_CHAR_GRABBAG);
-        }
+            aGrabBagMap = pItem->GetGrabBag();
         bool bGutterAtTop
             = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
-        oGrabBag->GetGrabBag()[u"GutterAtTop"_ustr] <<= bGutterAtTop;
-        rSet.Put(*oGrabBag);
+        aGrabBagMap[u"GutterAtTop"_ustr] <<= bGutterAtTop;
+        rSet.Put(SfxGrabBagItem(SID_ATTR_CHAR_GRABBAG, std::move(aGrabBagMap)));
     }
 
     SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;

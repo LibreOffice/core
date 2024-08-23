@@ -663,32 +663,31 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     if (rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
     {
         // Set gutter position.
-        SfxGrabBagItem aGrabBagItem(rOldSet.Get(SID_ATTR_CHAR_GRABBAG));
+        const SfxGrabBagItem& rOldGrabBagItem = rOldSet.Get(SID_ATTR_CHAR_GRABBAG);
+        std::map<OUString, css::uno::Any> aGrabBagMap = rOldGrabBagItem.GetGrabBag();
         if (m_xGutterPositionLB->get_value_changed_from_saved())
         {
             bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
-            aGrabBagItem.GetGrabBag()[u"GutterAtTop"_ustr] <<= bGutterAtTop;
+            aGrabBagMap[u"GutterAtTop"_ustr] <<= bGutterAtTop;
             bModified = true;
         }
         if (m_xRtlGutterCB->get_state_changed_from_saved())
         {
             bool const bRtlGutter(m_xRtlGutterCB->get_active());
-            aGrabBagItem.GetGrabBag()[u"RtlGutter"_ustr] <<= bRtlGutter;
+            aGrabBagMap[u"RtlGutter"_ustr] <<= bRtlGutter;
             bModified = true;
         }
         if (m_xBackgroundFullSizeCB->get_state_changed_from_saved())
         {
             bool const isBackgroundFullSize(m_xBackgroundFullSizeCB->get_active());
-            aGrabBagItem.GetGrabBag()[u"BackgroundFullSize"_ustr] <<= isBackgroundFullSize;
+            aGrabBagMap[u"BackgroundFullSize"_ustr] <<= isBackgroundFullSize;
             bModified = true;
         }
 
         if (bModified)
         {
-            pOld = rOldSet.GetItem(SID_ATTR_CHAR_GRABBAG);
-
-            if (!pOld || static_cast<const SfxGrabBagItem&>(*pOld) != aGrabBagItem)
-                rSet->Put(aGrabBagItem);
+            if (rOldGrabBagItem.GetGrabBag() != aGrabBagMap)
+                rSet->Put(SfxGrabBagItem(SID_ATTR_CHAR_GRABBAG, std::move(aGrabBagMap)));
             else
                 bModified = false;
         }

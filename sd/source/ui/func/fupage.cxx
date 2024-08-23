@@ -257,8 +257,8 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     bool bFullSize = mpPage->IsMasterPage() ?
         mpPage->IsBackgroundFullSize() : static_cast<SdPage&>(mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
-    SfxGrabBagItem grabBag(SID_ATTR_CHAR_GRABBAG);
-    grabBag.GetGrabBag()[u"BackgroundFullSize"_ustr] <<= bFullSize;
+    SfxGrabBagItem grabBag(SID_ATTR_CHAR_GRABBAG,
+        std::map<OUString, css::uno::Any>{{u"BackgroundFullSize"_ustr, uno::Any(bFullSize)}});
 
     aNewAttr->Put(grabBag);
 

@@ -24,6 +24,7 @@ private:
 public:
     SfxGrabBagItem();
     SfxGrabBagItem(sal_uInt16 nWhich);
+    SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, css::uno::Any> aMap);
     ~SfxGrabBagItem() override;
 
     SfxGrabBagItem(SfxGrabBagItem const&) = default;
@@ -33,9 +34,9 @@ public:
 
     const std::map<OUString, css::uno::Any>& GetGrabBag() const { return m_aMap; }
 
-    std::map<OUString, css::uno::Any>& GetGrabBag() { return m_aMap; }
-
     bool operator==(const SfxPoolItem& rItem) const override;
+    virtual bool supportsHashCode() const override { return true; }
+    virtual size_t hashCode() const override;
     SfxGrabBagItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

@@ -127,8 +127,8 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     // tdf#126684: We use RES_PARATR_GRABBAG, because RES_CHRATR_GRABBAG may be overwritten later in
     // SwDocStyleSheet::GetItemSet when applying attributes from char format
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
-    SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
-    aGrabBag.GetGrabBag()[u"DialogUseCharAttr"_ustr] <<= true;
+    std::map<OUString, css::uno::Any> aGrabBagMap;
+    aGrabBagMap[u"DialogUseCharAttr"_ustr] <<= true;
     // Store initial ranges to allow restoring later
     uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2 + 1);
     int i = 0;
@@ -138,9 +138,9 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
         aOrigRanges.getArray()[i++] = rPair.second;
     }
     aOrigRanges.getArray()[i++] = 0;
-    aGrabBag.GetGrabBag()[u"OrigItemSetRanges"_ustr] <<= aOrigRanges;
+    aGrabBagMap[u"OrigItemSetRanges"_ustr] <<= aOrigRanges;
     rSet.MergeRange(RES_PARATR_GRABBAG, RES_PARATR_GRABBAG);
-    rSet.Put(aGrabBag);
+    rSet.Put(SfxGrabBagItem(RES_PARATR_GRABBAG, std::move(aGrabBagMap)));
 }
 
 void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIsPara)
@@ -155,14 +155,12 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         // Remove shading marker
         if (const SfxGrabBagItem* pGrabBagItem = rOrigSet.GetItemIfSet(RES_CHRATR_GRABBAG, false))
         {
-            SfxGrabBagItem aGrabBag(*pGrabBagItem);
-            std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-            auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
-            if( aIterator != rMap.end() )
+            if( pGrabBagItem->GetGrabBag().count(u"CharShadingMarker"_ustr) )
             {
-                aIterator->second <<= false;
+                std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
+                aGrabBagMap[u"CharShadingMarker"_ustr] <<= false;
+                rSet.Put( SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)) );
             }
-            rSet.Put( aGrabBag );
         }
     }
 
@@ -173,8 +171,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
 
     if (const SfxGrabBagItem* pGrabBagItem = rOrigSet.GetItemIfSet(RES_PARATR_GRABBAG, false))
     {
-        SfxGrabBagItem aGrabBag(*pGrabBagItem);
-        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        const std::map<OUString, css::uno::Any>& rMap = pGrabBagItem->GetGrabBag();
         auto aIterator = rMap.find(u"OrigItemSetRanges"_ustr);
         if (aIterator != rMap.end())
         {
@@ -213,14 +210,12 @@ void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor cons
     // Remove shading marker
     if (const SfxGrabBagItem* pGrabBagItem = aCoreSet.GetItemIfSet(RES_CHRATR_GRABBAG, false))
     {
-        SfxGrabBagItem aGrabBag(*pGrabBagItem);
-        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-        auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
-        if (aIterator != rMap.end())
+        if (pGrabBagItem->GetGrabBag().count(u"CharShadingMarker"_ustr))
         {
-            aIterator->second <<= false;
+            std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag();
+            aGrabBagMap[u"CharShadingMarker"_ustr] <<= false;
+            rShell.SetAttrItem(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
         }
-        rShell.SetAttrItem(aGrabBag);
     }
 
     rShell.EndUndo(SwUndoId::INSATTR);
@@ -617,31 +612,25 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     if(pCol)
         rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName()));
 
-    std::optional<SfxGrabBagItem> oGrabBag;
+    std::map<OUString, css::uno::Any> aGrabBagMap;
     if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
-    {
-        oGrabBag.emplace(*pItem);
-    }
-    else
-    {
-        oGrabBag.emplace(SID_ATTR_CHAR_GRABBAG);
-    }
-    oGrabBag->GetGrabBag()[u"BackgroundFullSize"_ustr] <<=
+        aGrabBagMap = pItem->GetGrabBag();
+    aGrabBagMap[u"BackgroundFullSize"_ustr] <<=
         rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
 
     if (IsOwnFormat(*rMaster.GetDoc()))
     {
-        oGrabBag->GetGrabBag()[u"RtlGutter"_ustr]
+        aGrabBagMap[u"RtlGutter"_ustr]
             <<= rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
     }
 
     const IDocumentSettingAccess& rIDSA = rMaster.getIDocumentSettingAccess();
     if (rIDSA.get(DocumentSettingId::CONTINUOUS_ENDNOTES))
     {
-        oGrabBag->GetGrabBag()[u"ContinuousEndnotes"_ustr] <<= true;
+        aGrabBagMap[u"ContinuousEndnotes"_ustr] <<= true;
     }
 
-    rSet.Put(*oGrabBag);
+    rSet.Put(SfxGrabBagItem(SID_ATTR_CHAR_GRABBAG, std::move(aGrabBagMap)));
 }
 
 // Set DefaultTabs

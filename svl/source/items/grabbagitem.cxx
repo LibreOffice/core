@@ -13,6 +13,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace com::sun::star;
 
@@ -26,12 +27,26 @@ SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
 {
 }
 
+SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, css::uno::Any> aMap)
+    : SfxPoolItem(nWhich, SfxItemType::SfxGrabBagItemType)
+    , m_aMap(std::move(aMap))
+{
+}
+
 SfxGrabBagItem::~SfxGrabBagItem() = default;
 
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
     return SfxPoolItem::operator==(rItem)
            && m_aMap == static_cast<const SfxGrabBagItem*>(&rItem)->m_aMap;
+}
+
+size_t SfxGrabBagItem::hashCode() const
+{
+    std::size_t seed(0);
+    for (const auto& rPair : m_aMap)
+        o3tl::hash_combine(seed, rPair.first.hashCode());
+    return seed;
 }
 
 SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
@@ -41,6 +56,7 @@ SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
 
 bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     uno::Sequence<beans::PropertyValue> aValue;
     if (rVal >>= aValue)
     {

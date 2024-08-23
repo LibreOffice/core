@@ -4188,10 +4188,10 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
         NewAttr( SvxBrushItem( aSh.m_aColor, RES_CHRATR_BACKGROUND ));
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
-        SfxGrabBagItem aGrabBag = *GetFormatAttr(RES_CHRATR_GRABBAG);
-        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-        rMap.insert(std::pair<OUString, css::uno::Any>("CharShadingMarker",uno::Any(true)));
-        NewAttr(aGrabBag);
+        const SfxGrabBagItem* pGrabBag = GetFormatAttr(RES_CHRATR_GRABBAG);
+        std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
+        aGrabBagMap["CharShadingMarker"] <<= true;
+        NewAttr(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
     }
 }
 
@@ -4210,10 +4210,10 @@ void SwWW8ImplReader::Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, sho
         NewAttr(SvxBrushItem(aColour, RES_CHRATR_BACKGROUND));
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
-        SfxGrabBagItem aGrabBag = *GetFormatAttr(RES_CHRATR_GRABBAG);
-        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-        rMap.insert(std::pair<OUString, css::uno::Any>("CharShadingMarker",uno::Any(true)));
-        NewAttr(aGrabBag);
+        const SfxGrabBagItem* pGrabBag = GetFormatAttr(RES_CHRATR_GRABBAG);
+        std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBag->GetGrabBag();
+        aGrabBagMap[u"CharShadingMarker"_ustr] <<= true;
+        NewAttr(SfxGrabBagItem(RES_CHRATR_GRABBAG, std::move(aGrabBagMap)));
     }
 }
 

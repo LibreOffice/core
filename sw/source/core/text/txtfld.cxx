@@ -384,7 +384,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             if (pCleanedSet->HasItem(RES_CHRATR_GRABBAG))
             {
                 SfxGrabBagItem aGrabBag = pCleanedSet->Get(RES_CHRATR_GRABBAG, /*bSrchInParent=*/false);
-                std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                const std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
                 auto aIterator = rMap.find(u"CharShadingMarker"_ustr);
                 if (aIterator != rMap.end())
                     aIterator->second >>= bShadingWasImported;

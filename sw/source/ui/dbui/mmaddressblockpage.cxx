@@ -1130,7 +1130,6 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     //set attributes to all address tokens
 
     sal_Int32 nSequence(0);
-    SfxGrabBagItem aProtectAttr(EE_CHAR_GRABBAG);
     const sal_uInt32 nParaCount = m_xEditEngine->GetParagraphCount();
     for(sal_uInt32 nPara = 0; nPara < nParaCount; ++nPara)
     {
@@ -1153,8 +1152,9 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
             SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
             // make each one different, so they are not collapsed together
             // as one attribute
-            aProtectAttr.GetGrabBag()[u"Index"_ustr] <<= nSequence++;
-            aSet.Put(aProtectAttr);
+            std::map<OUString, css::uno::Any> aGrabBagMap;
+            aGrabBagMap[u"Index"_ustr] <<= nSequence++;
+            aSet.Put(SfxGrabBagItem(EE_CHAR_GRABBAG, std::move(aGrabBagMap)));
             m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, nStart, nPara, nEnd + 1));
         }
 

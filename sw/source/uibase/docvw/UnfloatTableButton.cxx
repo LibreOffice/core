@@ -136,11 +136,13 @@ IMPL_LINK_NOARG(UnfloatTableButton, ClickHdl, weld::Button&, void)
     assert(pTableFormat);
     if (const SfxGrabBagItem* pGrabBagItem = pTableFormat->GetAttrSet().GetItem(RES_FRMATR_GRABBAG))
     {
-        SfxGrabBagItem aGrabBagItem(*pGrabBagItem); // Editable copy
-        if (aGrabBagItem.GetGrabBag().erase(u"TablePosition"_ustr))
+        std::map<OUString, css::uno::Any> aGrabBagMap = pGrabBagItem->GetGrabBag(); // Editable copy
+        if (aGrabBagMap.erase(u"TablePosition"_ustr))
         {
+            SfxGrabBagItem aNewGrabBagItem(RES_FRMATR_GRABBAG, std::move(aGrabBagMap));
             css::uno::Any aVal;
-            aGrabBagItem.QueryValue(aVal);
+            aNewGrabBagItem.QueryValue(aVal);
+            pTableFormat->SetFormatAttr(aNewGrabBagItem);
             const rtl::Reference<SwXTextTable> xTable
                 = SwXTextTable::CreateXTextTable(pTableFormat);
             xTable->setPropertyValue(UNO_NAME_TABLE_INTEROP_GRAB_BAG, aVal);
