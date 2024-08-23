@@ -36,6 +36,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -63,13 +64,14 @@ using namespace ::com::sun::star::ucb;
 
 namespace {
 
-extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
+extern "C" void getUnoScriptUrls(std::vector<OUString> * urls) {
     assert(urls != nullptr);
+    OUString const base(emscripten::val::global("document")["baseURI"].as<std::u16string>());
     auto const val = emscripten::val::module_property("uno_scripts");
     if (!val.isUndefined()) {
         auto const len = val["length"].as<std::uint32_t>();
         for (std::uint32_t i = 0; i != len; ++i) {
-            urls->push_back(val[i].as<std::u16string>());
+            urls->push_back(rtl::Uri::convertRelToAbs(base, OUString(val[i].as<std::u16string>())));
         }
     }
 }
@@ -108,13 +110,13 @@ extern "C" void resolveUnoMain() {
 
 void initUno() {
     init_unoembind_uno();
-    std::vector<std::u16string> urls;
+    std::vector<OUString> urls;
     emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_VI, getUnoScriptUrls, &urls);
     for (auto const & url: urls) {
-        if (url.find('\0') != std::u16string::npos) {
+        if (url.indexOf('\0') != -1) {
             throw std::invalid_argument("Module.uno_scripts element contains embedded NUL");
         }
-        runUnoScriptUrl(url.c_str());
+        runUnoScriptUrl(url.getStr());
     }
     setupMainChannel();
     EM_ASM(Module.uno_init$resolve(););
