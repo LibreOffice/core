@@ -430,7 +430,6 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 */
 {
     short nLine = -1;  // so that the first window cab set nline to 0
-    sal_uInt16 nL;
     sal_uInt16 nPos = 0;
     bool bNewLine = true;
     bool bSaveConfig = false;
@@ -457,6 +456,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             if ( bNewLine && !pFoundDock )
             {
                 // Not known until now in which real line it is located
+                sal_uInt16 nL = 0;
                 [[maybe_unused]] auto const ok = GetWindowPos( rDock.pWin, nL, nPos );
                 assert(ok);
                 nLine = static_cast<short>(nL);
@@ -545,7 +545,8 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
 */
 
 {
-    sal_uInt16 nL, nP;
+    sal_uInt16 nL = 0;
+    sal_uInt16 nP = 0;
     [[maybe_unused]] auto const ok = GetWindowPos( pDockWin, nL, nP );
     assert(ok);
 
