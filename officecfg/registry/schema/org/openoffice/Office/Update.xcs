@@ -20,10 +20,10 @@
         <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
             <info>
                 <desc>Determines if the automatic Updater is enabled
-                or disabled. Defaults to false, as long as this is
-                regarded experimental.</desc>
+                or disabled. Defaults to true, only active in binary
+                if compiled with MAR updater support.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
         </prop>
         <prop oor:name="Mode" oor:type="xs:int" oor:nillable="false">
             <info>
