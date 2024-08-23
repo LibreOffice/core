@@ -2188,6 +2188,14 @@ libo_FUZZ_ARG_WITH(fonts,
          known to be available on the system then you should use this option.]),
 ,)
 
+libo_FUZZ_ARG_WITH(docrepair-fonts,
+    AS_HELP_STRING([--with-docrepair-fonts],
+        [LibreOffice optionally includes fonts from 'The DocRepair Project' that
+         provide metrically equivalent fallback fonts for a variety of common fonts
+         seen in Office Open XML documents. See https://github.com/docrepair-fonts
+         for more details. This option has no effect when --without-fonts is used.]),
+,)
+
 AC_ARG_ENABLE(noto-font,
     AS_HELP_STRING([--enable-noto-font],
         [Add more Google Noto fonts.]),
@@ -13669,18 +13677,25 @@ AC_SUBST(FONTFORGE)
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
+WITH_FONTS=
+WITH_DOCREPAIR_FONTS=
 AC_MSG_CHECKING([whether to include third-party fonts])
 if test "$with_fonts" != "no"; then
     AC_MSG_RESULT([yes])
     WITH_FONTS=TRUE
     BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
     AC_DEFINE(HAVE_MORE_FONTS)
+    AC_MSG_CHECKING([whether to include 'docrepair' fonts])
+    if test "$with_docrepair_fonts" = "yes"; then
+        AC_MSG_RESULT([yes])
+        WITH_DOCREPAIR_FONTS=TRUE
+    fi
 else
     AC_MSG_RESULT([no])
-    WITH_FONTS=
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
 fi
 AC_SUBST(WITH_FONTS)
+AC_SUBST(WITH_DOCREPAIR_FONTS)
 
 dnl Test whether to include more Google Noto fonts
 dnl ===================================================================

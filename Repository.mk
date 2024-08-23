@@ -1073,13 +1073,13 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_reem \
 		fonts_sourcesans \
 		fonts_scheherazade \
-		fonts_agdasima \
-		fonts_bacasime_antique \
-		fonts_belanosima \
-		fonts_caprasimo \
-		fonts_lugrasimo \
-		fonts_lumanosimo \
-		fonts_lunasima \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_agdasima,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_bacasime_antique,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_belanosima,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_caprasimo,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lugrasimo,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lumanosimo,) \
+		$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lunasima,) \
 	) \
 	$(call gb_Helper_optional,NOTO_FONT,\
 		fonts_notomore \
