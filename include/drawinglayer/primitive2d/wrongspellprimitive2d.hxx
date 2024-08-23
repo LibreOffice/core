@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
             The geometric definition defines a line on the X-Axis (no Y-coordinates)
             which will when transformed by Transformation, create the coordinate data.
          */
-        class DRAWINGLAYER_DLLPUBLIC WrongSpellPrimitive2D final : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC WrongSpellPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// geometry definition
