@@ -166,6 +166,7 @@
       <object class="GtkComboBoxText" id="cbMoreTypes">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">False</property>
         <items>
           <item translatable="yes" context="descriptioninfopage|type_contributor">Contributor</item>
           <item translatable="yes" context="descriptioninfopage|type_coverage">Coverage</item>
