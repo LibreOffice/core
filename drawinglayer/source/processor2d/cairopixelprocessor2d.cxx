@@ -3258,7 +3258,7 @@ bool CairoPixelProcessor2D::handleSvgGradientHelper(
 void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
     const primitive2d::SvgLinearGradientPrimitive2D& rCandidate)
 {
-    // check for simple cases, returns if all necesary is already done
+    // check for simple cases, returns if all necessary is already done
     if (handleSvgGradientHelper(rCandidate))
     {
         // simple case, handled, done
@@ -3332,7 +3332,7 @@ void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
 void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
     const primitive2d::SvgRadialGradientPrimitive2D& rCandidate)
 {
-    // check for simple cases, returns if all necesary is already done
+    // check for simple cases, returns if all necessary is already done
     if (handleSvgGradientHelper(rCandidate))
     {
         // simple case, handled, done
