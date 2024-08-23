@@ -672,7 +672,7 @@ SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
 {
     if (SfxPoolItem::areSame(*this, rCpy))
         return *this;
-
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
     m_oNumOffset = rCpy.m_oNumOffset;
@@ -694,6 +694,15 @@ bool SwFormatPageDesc::operator==( const SfxPoolItem& rAttr ) const
     return  ( m_pDefinedIn == static_cast<const SwFormatPageDesc&>(rAttr).m_pDefinedIn ) &&
             ( m_oNumOffset == static_cast<const SwFormatPageDesc&>(rAttr).m_oNumOffset ) &&
             ( GetPageDesc() == static_cast<const SwFormatPageDesc&>(rAttr).GetPageDesc() );
+}
+
+size_t SwFormatPageDesc::hashCode() const
+{
+    std::size_t seed(0);
+    // note that we cannot include m_pDefinedIn in the hash because that is updated in SwAttrSet::SetModifyAtAttr
+    o3tl::hash_combine(seed, m_oNumOffset);
+    o3tl::hash_combine(seed, GetPageDesc());
+    return seed;
 }
 
 SwFormatPageDesc* SwFormatPageDesc::Clone( SfxItemPool* ) const
@@ -789,6 +798,7 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SwFormatPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     // here we convert always!
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
