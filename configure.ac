@@ -1932,8 +1932,9 @@ libo_FUZZ_ARG_ENABLE(online-update,
 
 libo_FUZZ_ARG_ENABLE(online-update-mar,
     AS_HELP_STRING([--enable-online-update-mar],
-        [Enable the experimental Mozilla-like online update service that will
-         check for new versions of LibreOffice. Disabled by default.]),
+        [Enable the Mozilla-like online update service that will
+         check for new versions of LibreOffice. Currently only works for
+         Windows and Linux. Disabled by default.]),
 ,)
 
 libo_FUZZ_ARG_WITH(online-update-mar-baseurl,
