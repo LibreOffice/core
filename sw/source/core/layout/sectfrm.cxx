@@ -2256,129 +2256,62 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
         return 0;
     }
 
-    if ( !IsColLocked() && !HasFixSize() )
+    if (IsColLocked() || HasFixSize())
     {
-        SwRectFnSet aRectFnSet(this);
-        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
-        if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
-            nDist = LONG_MAX - nFrameHeight;
+        return 0;
+    }
 
-        if ( nDist <= 0 )
-            return 0;
+    SwRectFnSet aRectFnSet(this);
+    tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+    if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
+        nDist = LONG_MAX - nFrameHeight;
 
-        bool bInCalcContent = GetUpper() && IsInFly() && FindFlyFrame()->IsLocked();
-        // OD 2004-03-15 #116561# - allow grow in online layout
-        bool bGrow = !Lower() || !Lower()->IsColumnFrame() || !Lower()->GetNext();
-        if (!bGrow)
+    if ( nDist <= 0 )
+        return 0;
+
+    bool bInCalcContent = GetUpper() && IsInFly() && FindFlyFrame()->IsLocked();
+    // OD 2004-03-15 #116561# - allow grow in online layout
+    bool bGrow = !Lower() || !Lower()->IsColumnFrame() || !Lower()->GetNext();
+    if (!bGrow)
+    {
+        SwSection* pSection = GetSection();
+        bGrow = pSection && pSection->GetFormat()->GetBalancedColumns().GetValue();
+    }
+    if( !bGrow )
+    {
+         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
+         bGrow = pSh && pSh->GetViewOptions()->getBrowseMode();
+    }
+    if (!bGrow)
+    {
+        if (!bTst)
         {
-            SwSection* pSection = GetSection();
-            bGrow = pSection && pSection->GetFormat()->GetBalancedColumns().GetValue();
-        }
-        if( !bGrow )
-        {
-             const SwViewShell *pSh = getRootFrame()->GetCurrShell();
-             bGrow = pSh && pSh->GetViewOptions()->getBrowseMode();
-        }
-        if( bGrow )
-        {
-            SwTwips nGrow;
-            if( IsInFootnote() )
-                nGrow = 0;
+            if (bInCalcContent)
+                InvalidateSize_();
             else
-            {
-                nGrow = lcl_DeadLine( this );
-                nGrow = aRectFnSet.YDiff( nGrow, aRectFnSet.GetBottom(getFrameArea()) );
-            }
-            SwTwips nSpace = nGrow;
-            if( !bInCalcContent && nGrow < nDist && GetUpper() )
-                nGrow = o3tl::saturating_add(
-                    nGrow, GetUpper()->Grow( LONG_MAX, true ));
-
-            if( nGrow > nDist )
-                nGrow = nDist;
-            if( nGrow <= 0 )
-            {
-                nGrow = 0;
-                if (!bTst)
-                {
-                    if( bInCalcContent )
-                        InvalidateSize_();
-                    else
-                        InvalidateSize();
-                }
-            }
-            else if( !bTst )
-            {
-                if( bInCalcContent )
-                    InvalidateSize_();
-                else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
-                         Grow( nGrow - nSpace ) )
-                    InvalidateSize();
-                else
-                {
-                    const SvxGraphicPosition ePos =
-                        GetAttrSet()->GetBackground().GetGraphicPos();
-                    if ( GPOS_RT < ePos && GPOS_TILED != ePos )
-                    {
-                        SetCompletePaint();
-                        InvalidatePage();
-                    }
-                    if( GetUpper() && GetUpper()->IsHeaderFrame() )
-                        GetUpper()->InvalidateSize();
-                }
-
-                {
-                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aRectFnSet.AddBottom( aFrm, nGrow );
-                }
-
-                {
-                    const tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) + nGrow;
-                    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                    aRectFnSet.SetHeight( aPrt, nPrtHeight );
-                }
-
-                if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
-                {
-                    SwFrame* pTmp = Lower();
-                    do
-                    {
-                        pTmp->InvalidateSize_();
-                        pTmp = pTmp->GetNext();
-                    } while ( pTmp );
-                    InvalidateSize_();
-                }
-                if( GetNext() )
-                {
-                    // Own height changed, need to invalidate the position of
-                    // next frames.
-                    SwFrame *pFrame = GetNext();
-                    while( pFrame && pFrame->IsSctFrame() && !static_cast<SwSectionFrame*>(pFrame)->GetSection() )
-                    {
-                        // Invalidate all in-between frames, otherwise position
-                        // calculation (which only looks back to one relative
-                        // frame) will have an incorrect result.
-                        InvalidateFramePos(pFrame, bInCalcContent);
-                        pFrame = pFrame->GetNext();
-                    }
-                    if( pFrame )
-                    {
-                        InvalidateFramePos(pFrame, bInCalcContent);
-                    }
-                }
-                // #i28701# - Due to the new object positioning
-                // the frame on the next page/column can flow backward (e.g. it
-                // was moved forward due to the positioning of its objects ).
-                // Thus, invalivate this next frame, if document compatibility
-                // option 'Consider wrapping style influence on object positioning' is ON.
-                else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
-                {
-                    InvalidateNextPos();
-                }
-            }
-            return nGrow;
+                InvalidateSize();
         }
-        if ( !bTst )
+        return 0;
+    }
+    SwTwips nGrow;
+    if( IsInFootnote() )
+        nGrow = 0;
+    else
+    {
+        nGrow = lcl_DeadLine( this );
+        nGrow = aRectFnSet.YDiff( nGrow, aRectFnSet.GetBottom(getFrameArea()) );
+    }
+    SwTwips nSpace = nGrow;
+    if( !bInCalcContent && nGrow < nDist && GetUpper() )
+        nGrow = o3tl::saturating_add(
+            nGrow, GetUpper()->Grow( LONG_MAX, true ));
+
+    if( nGrow > nDist )
+        nGrow = nDist;
+    if( nGrow <= 0 )
+    {
+        nGrow = 0;
+        if (!bTst)
         {
             if( bInCalcContent )
                 InvalidateSize_();
@@ -2386,7 +2319,76 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                 InvalidateSize();
         }
     }
-    return 0;
+    else if( !bTst )
+    {
+        if( bInCalcContent )
+            InvalidateSize_();
+        else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
+                 Grow( nGrow - nSpace ) )
+            InvalidateSize();
+        else
+        {
+            const SvxGraphicPosition ePos =
+                GetAttrSet()->GetBackground().GetGraphicPos();
+            if ( GPOS_RT < ePos && GPOS_TILED != ePos )
+            {
+                SetCompletePaint();
+                InvalidatePage();
+            }
+            if( GetUpper() && GetUpper()->IsHeaderFrame() )
+                GetUpper()->InvalidateSize();
+        }
+
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aRectFnSet.AddBottom( aFrm, nGrow );
+        }
+
+        {
+            const tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) + nGrow;
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetHeight( aPrt, nPrtHeight );
+        }
+
+        if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
+        {
+            SwFrame* pTmp = Lower();
+            do
+            {
+                pTmp->InvalidateSize_();
+                pTmp = pTmp->GetNext();
+            } while ( pTmp );
+            InvalidateSize_();
+        }
+        if( GetNext() )
+        {
+            // Own height changed, need to invalidate the position of
+            // next frames.
+            SwFrame *pFrame = GetNext();
+            while( pFrame && pFrame->IsSctFrame() && !static_cast<SwSectionFrame*>(pFrame)->GetSection() )
+            {
+                // Invalidate all in-between frames, otherwise position
+                // calculation (which only looks back to one relative
+                // frame) will have an incorrect result.
+                InvalidateFramePos(pFrame, bInCalcContent);
+                pFrame = pFrame->GetNext();
+            }
+            if( pFrame )
+            {
+                InvalidateFramePos(pFrame, bInCalcContent);
+            }
+        }
+        // #i28701# - Due to the new object positioning
+        // the frame on the next page/column can flow backward (e.g. it
+        // was moved forward due to the positioning of its objects ).
+        // Thus, invalivate this next frame, if document compatibility
+        // option 'Consider wrapping style influence on object positioning' is ON.
+        else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        {
+            InvalidateNextPos();
+        }
+    }
+    return nGrow;
 }
 
 SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
