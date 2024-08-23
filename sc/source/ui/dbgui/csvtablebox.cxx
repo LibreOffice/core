@@ -28,8 +28,9 @@ ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     , mxGridWeld(new weld::CustomWeld(rBuilder, u"csvgrid"_ustr, *mxGrid))
     , maEndScrollIdle("ScCsvTableBox maEndScrollIdle")
 {
-    Size aSize(mxScroll->get_approximate_digit_width() * 67,
-               mxScroll->get_text_height() * 10);
+    const OutputDevice& rRefDev = mxGrid->GetDrawingArea()->get_ref_device();
+    Size aSize(rRefDev.approximate_digit_width() * 67,
+               rRefDev.GetTextHeight() * 10);
     // this needs to be larger than the ScCsvGrid initial size to get it
     // to stretch to fit, see ScCsvGrid::SetDrawingArea
     mxScroll->set_size_request(aSize.Width(), aSize.Height());
