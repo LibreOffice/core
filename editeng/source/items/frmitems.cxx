@@ -4255,6 +4255,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
+    ASSERT_CHANGE_REFCOUNTED_ITEM;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
@@ -4460,6 +4461,23 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     }
 
     return bEqual;
+}
+
+size_t SvxBrushItem::hashCode() const
+{
+    std::size_t seed(0);
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(aColor));
+    o3tl::hash_combine(seed, maComplexColor);
+    o3tl::hash_combine(seed, static_cast<sal_Int32>(aFilterColor));
+    o3tl::hash_combine(seed, eGraphicPos);
+    o3tl::hash_combine(seed, nGraphicTransparency);
+    if ( GPOS_NONE != eGraphicPos )
+    {
+        o3tl::hash_combine(seed, maStrLink);
+        o3tl::hash_combine(seed, maStrFilter);
+    }
+    o3tl::hash_combine(seed, nShadingValue);
+    return seed;
 }
 
 SvxBrushItem* SvxBrushItem::Clone( SfxItemPool* ) const
