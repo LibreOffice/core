@@ -1959,6 +1959,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint3)
     saveAsPDF(u"flowframe_null_ptr_deref.sample");
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf162586)
+{
+    // Without the fix in place, this test would have crashed
+    saveAsPDF(u"tdf162586.odt");
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf84283)
 {
     // Without the fix in place, this test would have crashed

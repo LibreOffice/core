@@ -769,8 +769,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             if (vcl::PDFWriter::Figure == eType)
             {
                 const SwFrame* pKeyFrame = static_cast<const SwFlyFrame&>(*pFrame).GetAnchorFrame();
-                if (pKeyFrame->GetUpper()->GetType() == SwFrameType::Body)
-                    bIsFigureInline = true;
+                if (const SwLayoutFrame* pUpperFrame = pKeyFrame->GetUpper())
+                    if (pUpperFrame->GetType() == SwFrameType::Body)
+                        bIsFigureInline = true;
             }
 
             eVal = vcl::PDFWriter::TableHeader == eType || vcl::PDFWriter::TableData == eType
