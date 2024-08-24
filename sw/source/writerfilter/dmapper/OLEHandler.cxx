@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 
 OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
 LoggedProperties("OLEHandler"),
-    m_nWrapMode(text::WrapTextMode_THROUGHT),
+    m_nWrapMode(text::WrapTextMode_THROUGH),
     m_rDomainMapper(rDomainMapper)
 {
 }

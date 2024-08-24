@@ -1209,8 +1209,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // XML_anchor has exact one of types wrapNone, wrapSquare, wrapTight, wrapThrough and
     // WrapTopAndBottom. Map our own types to them as far as possible.
 
-    if (rSurround.GetValue() == css::text::WrapTextMode_THROUGH
-        || rSurround.GetValue() == css::text::WrapTextMode_THROUGHT)
+    if (rSurround.GetValue() == css::text::WrapTextMode_THROUGH)
     {
         m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
         return;
