@@ -32,7 +32,7 @@ namespace drawinglayer::primitive2d
         {
             // This *was* a view-independent primitive before (see before this commit),
             // but was never really used, but handled in various processors anyways.
-            // Since the current VCL primitve renderer and it's functions used in
+            // Since the current VCL primitive renderer and it's functions used in
             // VCL do render this always in one discrete pixel size I decided to
             // adapt this primitive to do that, too, but - due to being a primitive -
             // with the correct invalidate/hit-ranges etc.
