@@ -40,6 +40,7 @@ public:
     void SetKeep( const bool bNew ) { m_bKeep = bNew; }
 
     bool IsInside( SwTextMargin const &rLine ) const;
+    bool IsInside(SwTextMargin const& rLine, SwResizeLimitReason&) const;
 
     // In order to be able to handle special cases with Footnote.
     // SetRstHeight sets the rest height for SwTextFrameBreak. This is needed
@@ -78,6 +79,11 @@ public:
         return false;
     }
 };
+
+inline bool SwTextFrameBreak::IsInside(SwTextMargin const& rLine) const
+{
+    return IsInside(rLine, o3tl::temporary(SwResizeLimitReason()));
+}
 
 namespace sw {
 
