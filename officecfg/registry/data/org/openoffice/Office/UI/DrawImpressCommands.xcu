@@ -1842,11 +1842,6 @@
           <value xml:lang="en-US">~Slide Show</value>
         </prop>
       </node>
-      <node oor:name=".uno:GroupMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Group</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SendMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sen~d</value>
