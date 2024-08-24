@@ -866,8 +866,7 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
         std::vector<sc::NoteEntry>& rNotes ) const
 {
     std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
-    sc::CellNoteStoreType::const_iterator it = aPos.first;
-    if (it == maCellNotes.end())
+    if (aPos.first == maCellNotes.end())
         // Invalid row number.
         return;
 
@@ -875,7 +874,7 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
         maCellNotes.position(nEndRow);
     sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
 
-    std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
+    std::for_each(aPos.first, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
 bool ScColumn::HasCellNote(SCROW nStartRow, SCROW nEndRow) const
