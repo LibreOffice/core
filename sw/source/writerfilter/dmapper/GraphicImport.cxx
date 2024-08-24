@@ -871,6 +871,13 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                         {
                             m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
                         }
+
+                        // Microsoft strangely ignores all wrapping for not-layoutInCell objects
+                        if (m_pImpl->m_nWrap != text::WrapTextMode_THROUGH
+                            && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+                        {
+                            m_pImpl->m_nWrap = text::WrapTextMode_THROUGH;
+                        }
                     }
                     // Is it a graphic image
                     bool bUseShape = true;

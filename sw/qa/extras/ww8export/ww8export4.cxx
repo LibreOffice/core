@@ -209,6 +209,13 @@ DECLARE_WW8EXPORT_TEST(testTdf162541, "tdf162541_notLayoutInCell_paraLeft.doc")
     CPPUNIT_ASSERT(nShapeLeft < nParaLeft); // shape is located in column A, not column B
     CPPUNIT_ASSERT_EQUAL(nTableLeft, nShapeLeft);
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+
+    // tdf#162612
+    // Note that this round-trip will "fix" the weird splitting table around the image...
+
+    // image should be wrapThrough, not PARALLEL (despite being wrapTight on largest side)
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,
+                         getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapThrough.doc")
