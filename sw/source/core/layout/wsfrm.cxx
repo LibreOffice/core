@@ -1552,42 +1552,38 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
 
     PROTOCOL_ENTER( this, bTst ? PROT::GrowTest : PROT::Grow, DbgAction::NONE, &nDist )
 
-    if ( nDist )
+    if ( !nDist )
+        return 0;
+    if ( IsFlyFrame() )
+        return static_cast<SwFlyFrame*>(this)->Grow_( nDist, bTst );
+    if ( IsSctFrame() )
+        return static_cast<SwSectionFrame*>(this)->Grow_( nDist, bTst );
+    if (IsCellFrame())
     {
-        SwRectFnSet aRectFnSet(this);
+        const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
+        const SwTabFrame* pTab = FindTabFrame();
 
-        SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
-        if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
-            nDist = LONG_MAX - nPrtHeight;
-
-        if ( IsFlyFrame() )
-            return static_cast<SwFlyFrame*>(this)->Grow_( nDist, bTst );
-        else if( IsSctFrame() )
-            return static_cast<SwSectionFrame*>(this)->Grow_( nDist, bTst );
-        else
-        {
-            if (IsCellFrame())
-            {
-                const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
-                const SwTabFrame* pTab = FindTabFrame();
-
-                // NEW TABLES
-                if ( pTab->IsVertical() != IsVertical() ||
-                     pThisCell->GetLayoutRowSpan() < 1 )
-                    return 0;
-            }
-            const SwTwips nReal = GrowFrame( nDist, bTst, bInfo );
-            if( !bTst )
-            {
-                nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
-
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetHeight( aPrt, nPrtHeight + ( IsContentFrame() ? nDist : nReal ) );
-            }
-            return nReal;
-        }
+        // NEW TABLES
+        if ( pTab->IsVertical() != IsVertical() ||
+             pThisCell->GetLayoutRowSpan() < 1 )
+            return 0;
     }
-    return 0;
+
+    SwRectFnSet aRectFnSet(this);
+
+    SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+    if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
+        nDist = LONG_MAX - nPrtHeight;
+
+    const SwTwips nReal = GrowFrame( nDist, bTst, bInfo );
+    if( !bTst )
+    {
+        nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+        aRectFnSet.SetHeight( aPrt, nPrtHeight + ( IsContentFrame() ? nDist : nReal ) );
+    }
+    return nReal;
 }
 
 SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
