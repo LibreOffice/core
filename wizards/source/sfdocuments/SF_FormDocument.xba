@@ -502,6 +502,13 @@ Public Function Activate() As Boolean
 End Function    &apos;   SFDocuments.SF_FormDocument.Activate
 
 REM -----------------------------------------------------------------------------
+Public Function ContextMenus(Optional ByVal ContextMenuName As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Variant
+	ContextMenus = [_Super].ContextMenus(ContextMenuName, SubmenuChar)
+End Function	&apos;	SFDocuments.SF_FormDocument.ContextMenus
+
+REM -----------------------------------------------------------------------------
 Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
 								, Optional ByVal Before As Variant _
 								, Optional ByVal SubmenuChar As Variant _

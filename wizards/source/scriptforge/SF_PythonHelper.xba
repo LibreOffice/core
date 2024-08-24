@@ -784,12 +784,14 @@ Try:
 							If Script = &quot;SetTableData&quot; Then	vReturn = vBasicObject.SetTableData(vArgs(0), vArgs(1), vArgs(2))
 						Case &quot;SFDocuments.Document&quot;
 							Select Case Script
+								Case &quot;ContextMenus&quot;		:	vReturn = vBasicObject.ContextMenus(vArgs(0), vArgs(1))
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
 								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select
 						Case &quot;SFDocuments.Base&quot;
 							Select Case Script
+								Case &quot;ContextMenus&quot;		:	vReturn = vBasicObject.ContextMenus(vArgs(0), vArgs(1))
 								Case &quot;FormDocuments&quot;	:	vReturn = vBasicObject.FormDocuments()
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
@@ -797,6 +799,7 @@ Try:
 						Case &quot;SFDocuments.Calc&quot;
 							Select Case Script
 								Case &quot;Charts&quot;			:	vReturn = vBasicObject.Charts(vArgs(0), vArgs(1))
+								Case &quot;ContextMenus&quot;		:	vReturn = vBasicObject.ContextMenus(vArgs(0), vArgs(1))
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
 								Case &quot;GetFormula&quot;		:	vReturn = vBasicObject.GetFormula(vArgs(0))
 								Case &quot;GetValue&quot;			:	vReturn = vBasicObject.GetValue(vArgs(0))
@@ -815,11 +818,13 @@ Try:
 							If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
 						Case &quot;SFDocuments.FormDocument&quot;
 							Select Case Script
+								Case &quot;ContextMenus&quot;		:	vReturn = vBasicObject.ContextMenus(vArgs(0), vArgs(1))
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select
 						Case &quot;SFDocuments.Writer&quot;
 							Select Case Script
+								Case &quot;ContextMenus&quot;		:	vReturn = vBasicObject.ContextMenus(vArgs(0), vArgs(1))
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
 								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))

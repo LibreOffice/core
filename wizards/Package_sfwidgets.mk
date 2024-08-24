@@ -22,6 +22,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvsfwidgets,$(SRCDIR)/wizards/sou
 $(eval $(call gb_Package_add_files,wizards_basicsrvsfwidgets,$(LIBO_SHARE_FOLDER)/basic/SFWidgets,\
 	SF_Menu.xba \
 	SF_MenuListener.xba \
+	SF_ContextMenu.xba \
 	SF_PopupMenu.xba \
 	SF_Register.xba \
 	SF_Toolbar.xba \

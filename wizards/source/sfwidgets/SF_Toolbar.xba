@@ -48,6 +48,12 @@ Option Explicit
 &apos;&apos;&apos;				Dim oCalc As Object, oToolbar As Object
 &apos;&apos;&apos;				Set oCalc = CreateScriptService(&quot;Calc&quot;, &quot;myFile.ods&quot;)
 &apos;&apos;&apos;				Set oToolbar = oCalc.Toolbars(&quot;findbar&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/toolbar.html?DbPAR=BASIC
+&apos;&apos;&apos;
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS
 

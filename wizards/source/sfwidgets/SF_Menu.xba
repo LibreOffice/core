@@ -13,7 +13,7 @@ Option Explicit
 
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_Menu
-&apos;&apos;&apos;	============
+&apos;&apos;&apos;	=======
 &apos;&apos;&apos;		Display a menu in the menubar of a document or a form document.
 &apos;&apos;&apos;		After use, the menu will not be saved neither in the application settings, nor in the document.
 &apos;&apos;&apos;
@@ -69,8 +69,9 @@ Option Explicit
 &apos;&apos;&apos;				Set oDoc = ui.GetDocument(ThisComponent)
 &apos;&apos;&apos;				Set myMenu = oDoc.CreateMenu(&quot;My own menu&quot;)
 &apos;&apos;&apos;
+&apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
-&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/SF_Menu.html?DbPAR=BASIC
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_menu.html?DbPAR=BASIC
 &apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 

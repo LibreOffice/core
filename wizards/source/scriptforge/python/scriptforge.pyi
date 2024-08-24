@@ -86,6 +86,7 @@ FORMDOCUMENT = SFDocuments.SF_FormDocument
 WRITER = SFDocuments.SF_Writer
 #   SFWidgets
 MENU = SFWidgets.SF_Menu
+CONTEXTMENU = SFWidgets.SF_ContextMenu
 POPUPMENU = SFWidgets.SF_PopupMenu
 TOOLBAR = SFWidgets.SF_Toolbar
 TOOLBARBUTTON = SFWidgets.SF_ToolbarButton
@@ -95,7 +96,7 @@ SERVICE = Union[ARRAY, BASIC, DICTIONARY, EXCEPTION, FILESYSTEM, L10N, PLATFORM,
                 DATABASE, DATASET, DATASHEET,
                 DIALOG, DIALOGCONTROL,
                 DOCUMENT, BASE, CALC, CALCREFERENCE, CHART, FORM, FORMCONTROL, FORMDOCUMENT, WRITER,
-                MENU, POPUPMENU, TOOLBAR, TOOLBARBUTTON]
+                MENU, CONTEXTMENU, POPUPMENU, TOOLBAR, TOOLBARBUTTON]
 #   UNO
 UNO = TypeVar('UNO')
 #   Other
@@ -4486,12 +4487,28 @@ class SFDocuments:
                 """
             ...
 
+        def ContextMenus(self, contextmenuname: str = ..., submenuchar: str = ...
+                         ) -> Union[CONTEXTMENU, Tuple[str, ...]]:
+            """
+                Returns either a list of the available ContextMenu names in the actual document
+                or a ``SFWidgets.SF_ContextMenu`` object instance.
+                    Args
+                        ``contextmenuname``: the usual name of one of the available context menus.
+
+                        ``submenuchar``: the delimiter used to create menu trees when calling
+                        the ``AddItem()`` method from the ``ContextMenu`` service. The default value is ">".
+                    Returns
+                        The list of available context menu names as a tuple of strings when ``contextmenuname``
+                        is absent, a ``ContextMenu`` class instance otherwise.
+                """
+            ...
+
         def CreateMenu(self, menuheader: str, before: Union[str, int] = ..., submenuchar: str = ...
                        ) -> MENU:
             """
                 Creates a new menu entry in the menubar of a given document window.
 
-                The menu created is only available during the current LibreOffice session and is not saved neither
+                The created menu is only available during the current LibreOffice session and is not saved neither
                 in the document nor in the global application settings.
                 Hence, closing the document window will make the menu disappear.
                 It will only reappear when the macro that creates the menu is executed again.
@@ -6864,7 +6881,97 @@ class SFWidgets:
             ...
 
     # #########################################################################
-    # SF_Menu CLASS
+    # SF_ContextMenu CLASS
+    # #########################################################################
+    class SF_ContextMenu(SFServices):
+        """
+            Complete a predefined context menu with new items.
+
+            A context menu is obtained by a right-click on several areas of a document.
+            Each area determines its own context menu.
+            (Consider right-clicking on a cell or on a sheet tab in a Calc document).
+            Each component model has its own set of context menus.
+
+            A context menu is usually predefined at LibreOffice installation.
+            Customization is done statically with the Tools + Customize dialog.
+            The actual service provides a mean to make temporary additions at
+            the bottom of a context menu in an active document. Those changes are lost when the document is closed.
+
+            The name of a context menu is the last component of the resource URL:
+            "private:resource/popupmenu/the-name-here"
+
+            Context menu items are either usual items or line separators. Checkboxes or radio buttons are not supported.
+            """
+
+        ShortcutCharacter: str
+        """ Character used to define the access key of a menu item. The default character is "~" (tilde). """
+        SubmenuCharacter: str
+        """ Character or string that defines how menu items are nested. The default character is ">".
+
+		Example
+			``oMenu.AddItem("Item A")``
+
+			``oMenu.AddItem("Item B>Item B.1")``
+
+			``oMenu.AddItem("Item B>Item B.2")``
+
+			``oMenu.AddItem("---")``
+
+			``oMenu.AddItem("Item C>Item C.1>Item C.1.1")``
+
+			``oMenu.AddItem("Item C>Item C.1>Item C.1.2")``
+
+			``oMenu.AddItem("Item C>Item C.2>Item C.2.1")``
+
+			``oMenu.AddItem("Item C>Item C.2>Item C.2.2")``
+
+			``oMenu.AddItem("Item C>Item C.2>---")``
+
+			``oMenu.AddItem("Item C>Item C.2>Item C.2.3")``
+
+			``oMenu.AddItem("Item C>Item C.2>Item C.2.4")``
+		"""
+
+        def Activate(self, enable: bool = ...) -> None:
+            """
+                Make the added items of the context menu available for execution, or, at the opposite,
+                disable them, depending on the argument.
+                    Args
+                        ``enable``: when ``True`` (default), the new items of the context menu are made visible.
+                        When ``False``, they are suppressed.
+                    Returns
+                        None
+                """
+            ...
+
+        def AddItem(self,
+                    menuitem: str,
+                    command: str = ...,
+                    script: str = ...,
+                    ) -> None:
+            """
+                Inserts a labeled entry or a line separator in the menu.
+                    Args
+                        ``menuitem``: defines the text to be displayed in the menu.
+                        This argument also defines the hierarchy of the item inside the menu by using the submenu
+                        character. If the last component is equal to "---", a line separator is inserted
+                        and all other arguments are ignored.
+
+                        ``command``: a menu command like ".uno:About". The validity of the command is not checked.
+
+                        ``script``: a Basic or Python script (determined by its URI notation) to be run when
+                        the item is clicked.
+                        Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
+                        No argument will be passed to the called script.
+                    Note
+                        Arguments ``Command`` and ``Script`` are mutually exclusive.
+                    Returns
+                        None
+                """
+            ...
+
+    # #########################################################################
+    # SF_PopupMenu CLASS
     # #########################################################################
     class SF_PopupMenu(SFServices):
         """
@@ -6948,11 +7055,12 @@ class SFWidgets:
                     tooltip: str = ...,
                     ) -> int:
             """
-                Inserts a label entry in the menu.
+                Inserts a labeled entry or a line separator in the menu.
                     Args
                         ``menuitem``: defines the text to be displayed in the menu.
                         This argument also defines the hierarchy of the item inside the menu by using the submenu
-                        character.
+                        character. If the last component is equal to "---", a line separator is inserted
+                        and all other arguments are ignored.
 
                         ``name``: the string value used to identify the menu item.
                         By default, the last component of the menu hierarchy is used.

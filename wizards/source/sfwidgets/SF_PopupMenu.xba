@@ -378,8 +378,8 @@ Public Function Execute(Optional ByVal ReturnId As Variant) As Variant
 &apos;&apos;&apos;		Set myMenu = CreateScriptService(&quot;SFWidgets.PopupMenu&quot;, poMouseEvent)
 &apos;&apos;&apos;		With myMenu
 &apos;&apos;&apos;			.AddCheckBox(&quot;View&gt;Toolbars&gt;Dialog&quot;)
-&apos;&apos;&apos;			.AddCheckBox(&quot;View&gt;Toolbars&gt;Find&quot;, STatus := True)
-&apos;&apos;&apos;			.AddCheckBox(&quot;View&gt;Status Bar&quot;, STatus := True)
+&apos;&apos;&apos;			.AddCheckBox(&quot;View&gt;Toolbars&gt;Find&quot;, Status := True)
+&apos;&apos;&apos;			.AddCheckBox(&quot;View&gt;Status Bar&quot;, Status := True)
 &apos;&apos;&apos;			.AddItem(&quot;View&gt;Full Screen&quot;, Name := &quot;FULLSCREEN&quot;)
 &apos;&apos;&apos;			vChoice = .Execute(False)	&apos;	When 1st checkbox is clicked, return &quot;Dialog&quot;
 &apos;&apos;&apos;										&apos;	When last item is clicked, return &quot;FULLSCREEN&quot;
@@ -531,7 +531,7 @@ Public Function _AddItem(ByVal MenuItem As String _
 &apos;&apos;&apos;			Example: &quot;cmd/sc_cut.png&quot;
 &apos;&apos;&apos;		Tooltip: The help text to be displayed as a tooltip
 &apos;&apos;&apos;		Command: only for menubar menus
-&apos;&apos;&apos;			Either a uo command like &quot;.uno:About&quot;
+&apos;&apos;&apos;			Either a UNO command like &quot;.uno:About&quot;
 &apos;&apos;&apos;			or a script to be run: script URI ::: string argument to be passed to the script
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The numeric identification of the newly inserted item
@@ -655,7 +655,7 @@ Private Function _GetPopupMenu(ByVal psSubmenu As String) As Object
 &apos;&apos;&apos;			- the popup menu corresponding with &quot;A&gt;B&gt;C&gt;D&quot; should be returned
 
 Dim oPopup As Object				&apos;	Return value
-Dim vSplit As Variant				&apos;	An array as returned by _SplitMenuItem()
+Dim vSplit As Variant				&apos;	An array as returned by Split()
 Dim sMenu As String					&apos;	The left part of psSubmenu
 Dim oMenu As Object					&apos;	com.sun.star.awt.XpopupMenu
 Dim oLastMenu As Object				&apos;	com.sun.star.awt.XpopupMenu

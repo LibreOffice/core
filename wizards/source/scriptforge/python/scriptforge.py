@@ -2293,6 +2293,9 @@ class SFDocuments:
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
+        def ContextMenus(self, contextmenuname = '', submenuchar = '>'):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ContextMenus', contextmenuname, submenuchar)
+
         def CreateMenu(self, menuheader, before = '', submenuchar = '>'):
             return self.ExecMethod(self.vbMethod, 'CreateMenu', menuheader, before, submenuchar)
 
@@ -2895,6 +2898,32 @@ class SFWidgets:
                                    command, script)
 
     # #########################################################################
+    # SF_ContextMenu CLASS
+    # #########################################################################
+    class SF_ContextMenu(SFServices):
+        """
+            A context menu is obtained by a right-click on several areas of a document.
+            Each component model has its own set of context menus.
+
+            A context menu is usually predefined at LibreOffice installation.
+            Customization is done statically with the Tools + Customize dialog.
+            The actual service provides a mean to make temporary additions at
+            the bottom of a context menu. Those changes are lost when the document is closed.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFWidgets.ContextMenu'
+        servicesynonyms = ('contextmenu', 'sfwidgets.contextmenu')
+        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+
+        def Activate(self, enable = True):
+            return self.ExecMethod(self.vbMethod, 'Activate', enable)
+
+        def AddItem(self, menuitem, command = '', script = ''):
+            return self.ExecMethod(self.vbMethod, 'AddItem', menuitem, command, script)
+
+
+    # #########################################################################
     # SF_PopupMenu CLASS
     # #########################################################################
     class SF_PopupMenu(SFServices):
@@ -3082,6 +3111,7 @@ FORMDOCUMENT = SFDocuments.SF_FormDocument
 WRITER = SFDocuments.SF_Writer
 #   SFWidgets
 MENU = SFWidgets.SF_Menu
+CONTEXTMENU = SFWidgets.SF_ContextMenu
 POPUPMENU = SFWidgets.SF_PopupMenu
 TOOLBAR = SFWidgets.SF_Toolbar
 TOOLBARBUTTON = SFWidgets.SF_ToolbarButton

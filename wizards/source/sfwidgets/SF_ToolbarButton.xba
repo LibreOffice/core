@@ -34,6 +34,12 @@ Option Explicit
 &apos;&apos;&apos;				Set oCalc = CreateScriptService(&quot;Calc&quot;, &quot;myFile.ods&quot;)
 &apos;&apos;&apos;				Set oToolbar = oCalc.Toolbars(&quot;findbar&quot;)
 &apos;&apos;&apos;				Set oToolbarButton = oToolbar.ToolbarButtons(&quot;Find Next&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/toolbarcontrol.html?DbPAR=BASIC
+&apos;&apos;&apos;
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
 REM ================================================================== EXCEPTIONS
 

@@ -3729,6 +3729,13 @@ Public Function CloseDocument(Optional ByVal SaveAsk As Variant) As Boolean
 End Function   &apos;   SFDocuments.SF_Calc.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function ContextMenus(Optional ByVal ContextMenuName As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Variant
+	ContextMenus = [_Super].ContextMenus(ContextMenuName, SubmenuChar)
+End Function	&apos;	SFDocuments.SF_Calc.ContextMenus
+
+REM -----------------------------------------------------------------------------
 Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
 								, Optional ByVal Before As Variant _
 								, Optional ByVal SubmenuChar As Variant _

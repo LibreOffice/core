@@ -86,6 +86,9 @@ Private _CustomProperties		As Object		&apos;	Dictionary of custom properties
 &apos;	Cache for static toolbar descriptions
 Private _Toolbars				As Object		&apos;	SF_Dictionary instance to hold toolbars stored in application or in document
 
+&apos;	List of standard context menus
+Private _ContextMenus			As Variant		&apos;	Array of ResourceURL strings
+
 &apos;	Style descriptor
 Type StyleDescriptor
 	Family						As Object
@@ -123,6 +126,7 @@ Private Sub Class_Initialize()
 	Set _DocumentProperties = Nothing
 	Set _CustomProperties = Nothing
 	Set _Toolbars = Nothing
+	_ContextMenus = Array()
 	_StyleFamilies = Array()
 End Sub		&apos;	SFDocuments.SF_Document Constructor
 
@@ -531,6 +535,57 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Document.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function ContextMenus(Optional ByVal ContextMenuName As Variant _
+								, Optional ByVal SubmenuChar As Variant _
+								) As Variant
+&apos;&apos;&apos;	Returns either a list of the available ContextMenu names in the actual document
+&apos;&apos;&apos;	or a SFWidgets.ContextMenu object instance.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ContextMenuName: the usual name of one of the available ContextMenus
+&apos;&apos;&apos;		SubmenuChar: Delimiter used in menu trees
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-based array of ContextMenu names when there is no argument,
+&apos;&apos;&apos;		or a new ContextMenu object instance from the SFWidgets library.
+
+Const cstThisSub = &quot;SFDocuments.Document.ContextMenus&quot;
+Const cstSubArgs = &quot;[ContextMenuName=&quot;&quot;&quot;&quot;], [SubmenuChar=&quot;&quot;&gt;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(ContextMenuName) Or IsEmpty(ContextMenuName) Then ContextMenuName = &quot;&quot;
+	If IsMissing(SubmenuChar) Or IsEmpty(SubmenuChar) Then SubmenuChar = &quot;&gt;&quot;
+	If UBound(_ContextMenus) &lt; 0 Then _ContextMenus = _ListContextMenus()
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If VarType(ContextMenuName) = V_STRING Then
+			If Len(ContextMenuName) &gt; 0 Then
+				If Not ScriptForge.SF_Utils._Validate(ContextMenuName, &quot;ContextMenuName&quot;, V_STRING, _ContextMenus) Then GoTo Finally
+			End If
+		Else
+			If Not ScriptForge.SF_Utils._Validate(ContextMenuName, &quot;ContextMenuName&quot;, V_STRING) Then GoTo Finally	&apos;	Manage here the VarType error
+		End If
+		If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	If Len(ContextMenuName) = 0 Then
+		ContextMenus = _ContextMenus
+	Else
+		ContextMenus = CreateScriptService(&quot;SFWidgets.ContextMenu&quot; _
+						, _Component _
+						, &quot;private:resource/popupmenu/&quot; &amp; LCase(ContextMenuName) _
+						, SubmenuChar)
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document.ContextMenus
+
+REM -----------------------------------------------------------------------------
 Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
 								, Optional ByVal Before As Variant _
 								, Optional ByVal SubmenuChar As Variant _
@@ -855,6 +910,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;ContextMenus&quot; _
 					, &quot;CreateMenu&quot; _
 					, &quot;Echo&quot; _
 					, &quot;DeleteStyles&quot; _
@@ -1999,6 +2055,43 @@ CatchReadonly:
 	If pbError Then ScriptForge.SF_Exception.RaiseFatal(DOCUMENTREADONLYERROR, &quot;Document&quot;, _FileIdent())
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Document._IsStillAlive
+
+REM -----------------------------------------------------------------------------
+Private Function _ListContextMenus() As Variant
+&apos;&apos;&apos;	Returns an array of the usual names of the context menus available in the current document
+
+Dim vMenus As Variant			&apos;	Return value
+Dim vMenusObj As Variant		&apos;	Array of arrays of property values
+Dim oSupplier As Object			&apos;	/singletons/com.sun.star.ui.theModuleUIConfigurationManagerSupplier
+Dim sComponentType As String	&apos;	Argument to determine the system config manager, ex. &quot;com.sun.star.text.TextDocument&quot;
+Dim oUIConf As Object			&apos;	com.sun.star.ui.XUIConfigurationManager
+Dim i As Long
+
+	On Local Error GoTo Catch
+	vMenus = Array()
+
+Try:
+	Set oSupplier = ScriptForge.SF_Utils._GetUNOService(&quot;ModuleUIConfigurationManagerSupplier&quot;)
+	sComponentType = ScriptForge.SF_UI._GetConfigurationManager(_Component)
+	Set oUIConf = oSupplier.getUIConfigurationManager(sComponentType)
+
+	&apos;	Discard menubar, statusbar, ...
+	vMenusObj = oUIConf.getUIElementsInfo(com.sun.star.ui.UIElementType.POPUPMENU)
+
+	&apos;	Extract and sort the names
+	ReDim vMenus(0 To UBound(vMenusObj))
+	For i = 0 To UBound(vMenusObj)
+		vMenus(i) = Mid(vMenusObj(i)(0).Value, Len(&quot;private:resource/popupmenu/&quot;) + 1)
+	Next i
+	vMenus = ScriptForge.SF_Array.Unique(vMenus, CaseSensitive := True)
+
+Finally:
+	_ListContextMenus = vMenus
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document._ListContextMenus
 
 REM -----------------------------------------------------------------------------
 Private Sub _LoadDocumentProperties()

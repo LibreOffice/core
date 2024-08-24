@@ -134,7 +134,7 @@ Try:
 														sLibrary = &quot;SFDialogs&quot;
 			Case &quot;database&quot;, &quot;datasheet&quot;			:	sLibrary = &quot;SFDatabases&quot;
 			Case &quot;unittest&quot;							:	sLibrary = &quot;SFUnitTests&quot;
-			Case &quot;menu&quot;, &quot;popupmenu&quot;, &quot;toolbar&quot;, &quot;toolbarbutton&quot;
+			Case &quot;contextmenu&quot;, &quot;menu&quot;, &quot;popupmenu&quot;, &quot;toolbar&quot;, &quot;toolbarbutton&quot;
 														sLibrary = &quot;SFWidgets&quot;
 			Case Else
 		End Select

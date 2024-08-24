@@ -1256,6 +1256,53 @@ Public Sub _CloseProgressBar(Optional ByRef poEvent As Object)
 End Sub			&apos;	ScriptForge.SF_UI._CloseProgressBar
 
 REM -----------------------------------------------------------------------------
+Function _GetConfigurationManager(ByRef poComponent) As String
+&apos;&apos;&apos;	Derives the argument to be passed to a configuration manager
+&apos;&apos;&apos;	(managing the user interface elements like menus, toolbars, ...)
+&apos;&apos;&apos;	from the nature of the component
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poComponent: any component in desktop, typically a document but not only
+
+Dim sConfigurationManager As String			&apos;	Return value
+Dim oWindow As Object						&apos;	Window type
+
+Check:
+&apos;	On Local Error GoTo Catch
+	If IsNull(poComponent) Then GoTo Catch
+
+Try:
+	Set oWindow = _IdentifyWindow(poComponent)
+
+	&apos;		Derive the name of the UI configuration manager from the component type
+	With oWindow
+		Select Case .WindowName
+			Case BASICIDE		:	sConfigurationManager = &quot;com.sun.star.script.BasicIDE&quot;
+			Case WELCOMESCREEN	:	sConfigurationManager = &quot;com.sun.star.frame.StartModule&quot;
+			Case Else
+				Select Case .DocumentType
+					Case BASEDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sdb.OfficeDatabaseDocument&quot;
+					Case CALCDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;
+					Case DRAWDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.drawing.DrawingDocument&quot;
+					Case FORMDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sdb.FormDesign&quot;
+					Case IMPRESSDOCUMENT	:	sConfigurationManager = &quot;com.sun.star.presentation.PresentationDocument&quot;
+					Case MATHDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.formula.FormulaProperties&quot;
+					Case WRITERDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.text.TextDocument&quot;
+					Case TABLEDATA, QUERYDATA, SQLDATA
+												sConfigurationManager = &quot;com.sun.star.sdb.DataSourceBrowser&quot;
+					Case Else				:	sConfigurationManager = &quot;&quot;
+				End Select
+		End Select
+	End With
+
+Finally:
+	_GetConfigurationManager = sConfigurationManager
+	Exit Function
+Catch:
+	On Local Error GoTo 0
+	GoTo Finally
+End Function		&apos;	ScriptForge.SF_UI._GetConfigurationManager
+
+REM -----------------------------------------------------------------------------
 Public Function _IdentifyWindow(ByRef poComponent As Object) As Object
 &apos;&apos;&apos;	Return a Window object (definition on top of module) based on component given as argument
 &apos;&apos;&apos;	Is a shortcut to explore the most relevant properties or objects bound to a UNO component
@@ -1362,7 +1409,6 @@ Public Function _ListToolbars(ByRef poComponent As Object) As Object
 &apos;&apos;&apos;		poComponent: any component in desktop, typically a document but not only
 
 Dim oToolbarsDict As Object					&apos;	Return value
-Dim oWindow As Object						&apos;	Window type
 Dim oConfigMgr As Object					&apos;	com.sun.star.ui.ModuleUIConfigurationManagerSupplier
 Dim sConfigurationManager As String			&apos;	Derived from the component&apos;s type
 Dim oUIConfigMgr As Object					&apos;	com.sun.star.comp.framework.ModuleUIConfigurationManager
@@ -1382,30 +1428,12 @@ Check:
 
 Try:
 	Set oToolbarsDict = CreateScriptService(&quot;Dictionary&quot;)
-	Set oWindow = _IdentifyWindow(poComponent)
 
 	&apos;	1. Collect all builtin and custom toolbars stored in the LibreOffice configuration files
 
 	&apos;		Derive the name of the UI configuration manager from the component type
-	With oWindow
-		Select Case .WindowName
-			Case BASICIDE		:	sConfigurationManager = &quot;com.sun.star.script.BasicIDE&quot;
-			Case WELCOMESCREEN	:	sConfigurationManager = &quot;com.sun.star.frame.StartModule&quot;
-			Case Else
-				Select Case .DocumentType
-					Case BASEDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sdb.OfficeDatabaseDocument&quot;
-					Case CALCDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;
-					Case DRAWDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.drawing.DrawingDocument&quot;
-					Case FORMDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.sdb.FormDesign&quot;
-					Case IMPRESSDOCUMENT	:	sConfigurationManager = &quot;com.sun.star.presentation.PresentationDocument&quot;
-					Case MATHDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.formula.FormulaProperties&quot;
-					Case WRITERDOCUMENT		:	sConfigurationManager = &quot;com.sun.star.text.TextDocument&quot;
-					Case TABLEDATA, QUERYDATA, SQLDATA
-												sConfigurationManager = &quot;com.sun.star.sdb.DataSourceBrowser&quot;
-					Case Else				:	sConfigurationManager = &quot;&quot;
-				End Select
-		End Select
-	End With
+	sConfigurationManager = _GetConfigurationManager(poComponent)
+
 	Set oConfigMgr = SF_Utils._GetUNOService(&quot;ModuleUIConfigurationManagerSupplier&quot;)
 	Set oUIConfigMgr = oConfigMgr.getUIConfigurationManager(sConfigurationManager)
 	vCommandBars = oUIConfigMgr.getUIElementsInfo(com.sun.star.ui.UIElementType.TOOLBAR)
