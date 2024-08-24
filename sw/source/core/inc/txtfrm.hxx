@@ -511,6 +511,7 @@ public:
 
     /// Test grow
     inline SwTwips GrowTst( const SwTwips nGrow );
+    inline SwTwips GrowTst( const SwTwips nGrow, SwResizeLimitReason& );
 
     SwParaPortion *GetPara();
     inline const SwParaPortion *GetPara() const;
@@ -855,7 +856,11 @@ inline bool SwTextFrame::HasPara() const
 
 inline SwTwips SwTextFrame::GrowTst( const SwTwips nGrow )
 {
-    return Grow( nGrow, true );
+    return GrowTst(nGrow, o3tl::temporary(SwResizeLimitReason()));
+}
+inline SwTwips SwTextFrame::GrowTst(const SwTwips nGrow, SwResizeLimitReason& reason)
+{
+    return Grow(nGrow, reason, true, false);
 }
 
 inline bool SwTextFrame::IsInside(TextFrameIndex const nPos) const

@@ -2249,18 +2249,22 @@ bool SwSectionFrame::Growable() const
     return ( GetUpper() && const_cast<SwFrame*>(static_cast<SwFrame const *>(GetUpper()))->Grow( LONG_MAX, true ) );
 }
 
-SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
+SwTwips SwSectionFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
 {
     if (GetSection()->CalcHiddenFlag())
     {
+        reason = SwResizeLimitReason::Unspecified;
         return 0;
     }
 
     if (IsColLocked() || HasFixSize())
     {
+        reason = HasFixSize() ? SwResizeLimitReason::FixedSizeFrame : SwResizeLimitReason::Unspecified;
         return 0;
     }
 
+    const auto nOrigDist = nDist;
+    reason = SwResizeLimitReason::Unspecified;
     SwRectFnSet aRectFnSet(this);
     tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
@@ -2276,6 +2280,8 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
     {
         SwSection* pSection = GetSection();
         bGrow = pSection && pSection->GetFormat()->GetBalancedColumns().GetValue();
+        if (!bGrow && nOrigDist)
+            reason = SwResizeLimitReason::BalancedColumns;
     }
     if( !bGrow )
     {
@@ -2293,6 +2299,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
         }
         return 0;
     }
+    reason = SwResizeLimitReason::Unspecified; // reset what maybe was set in balanced columns check
     SwTwips nGrow;
     if( IsInFootnote() )
         nGrow = 0;
@@ -2324,7 +2331,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
         if( bInCalcContent )
             InvalidateSize_();
         else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
-                 Grow( nGrow - nSpace ) )
+                 Grow(nGrow - nSpace, reason, false, false))
             InvalidateSize();
         else
         {

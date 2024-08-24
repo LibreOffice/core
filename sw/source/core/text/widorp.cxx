@@ -105,7 +105,7 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
  * be done until the Follow is formatted. Unfortunately this is crucial
  * to decide if the whole paragraph goes to the next page or not.
  */
-bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
+bool SwTextFrameBreak::IsInside(SwTextMargin const& rLine, SwResizeLimitReason& reason) const
 {
     bool bFit = false;
 
@@ -206,7 +206,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
             // The LineHeight exceeds the current Frame height.
             // Call a test Grow to detect if the Frame could
             // grow the requested area.
-            nHeight += m_pFrame->GrowTst( LONG_MAX );
+            nHeight += m_pFrame->GrowTst(LONG_MAX, reason);
 
             // The Grow() returns the height by which the Upper of the TextFrame
             // would let the TextFrame grow.
@@ -221,10 +221,11 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
 bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
 {
     SwSwapIfSwapped swap(m_pFrame);
+    SwResizeLimitReason reason = SwResizeLimitReason::Unspecified;
 
     // bKeep is stronger than IsBreakNow()
     // Is there enough space ?
-    if( m_bKeep || IsInside( rLine ) )
+    if (m_bKeep || IsInside(rLine, reason))
         m_bBreak = false;
     else
     {
@@ -258,6 +259,11 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
             SwLayoutFrame* pTmp = m_pFrame->FindFootnoteBossFrame()->FindBodyCont();
             if( !pTmp || !pTmp->Lower() )
                 m_bBreak = false;
+        }
+        else if (reason == SwResizeLimitReason::FixedSizeFrame)
+        {
+            // The content is in a clipping frame - no need to break at all
+            m_bBreak = false;
         }
     }
 

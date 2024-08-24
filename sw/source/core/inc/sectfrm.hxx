@@ -119,6 +119,7 @@ public:
     bool Growable() const;
     SwTwips Shrink_( SwTwips, bool bTst );
     SwTwips Grow_  ( SwTwips, bool bTst );
+    SwTwips Grow_(SwTwips, SwResizeLimitReason&, bool bTst);
 
     /**
      * A sectionfrm has to maximize, if he has a follow or a ftncontainer at
@@ -188,6 +189,10 @@ inline SwSectionFrame *SwSectionFrame::GetFollow()
 inline const SwContentFrame *SwSectionFrame::FindLastContent() const
 {
     return const_cast<SwSectionFrame*>(this)->FindLastContent();
+}
+inline SwTwips SwSectionFrame::Grow_(SwTwips nDist, bool bTst)
+{
+    return Grow_(nDist, o3tl::temporary(SwResizeLimitReason()), bTst);
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

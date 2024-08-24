@@ -364,12 +364,15 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     setFrameAreaSizeValid(true);
 }
 
-SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
+SwTwips SwFootnoteContFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool)
 {
     // No check if FixSize since FootnoteContainer are variable up to their max. height.
     // If the max. height is LONG_MAX, take as much space as needed.
     // If the page is a special footnote page, take also as much as possible.
     assert(GetUpper() && GetUpper()->IsFootnoteBossFrame());
+
+    const auto nOrigDist = std::max(nDist, SwTwips(0));
+    reason = SwResizeLimitReason::Unspecified;
 
     SwRectFnSet aRectFnSet(this);
     if( aRectFnSet.GetHeight(getFrameArea()) > 0 &&
@@ -387,6 +390,8 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             pSect->ToMaximize( false ) && pSect->Growable() )
         {
             pSect->InvalidateSize();
+            if (nOrigDist)
+                reason = SwResizeLimitReason::FlowToFollow;
             return 0;
         }
     }
@@ -400,21 +405,33 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             nDist = std::min( nDist,
                         SwTwips(pBoss->GetMaxFootnoteHeight() - aRectFnSet.GetHeight(getFrameArea())) );
             if ( nDist <= 0 )
+            {
+                if (nOrigDist)
+                    reason = SwResizeLimitReason::FlowToFollow;
                 return 0;
+            }
         }
         // FootnoteBoss also influences the max value
         if( !IsInSct() )
         {
             const SwTwips nMax = pBoss->GetVarSpace();
             if ( nDist > nMax )
+            {
                 nDist = nMax;
+                if (nOrigDist)
+                    reason = SwResizeLimitReason::FlowToFollow;
+            }
             if ( nDist <= 0 )
                 return 0;
         }
     }
     else if( nDist > aRectFnSet.GetHeight(GetPrev()->getFrameArea()) )
+    {
         // do not use more space than the body has
         nDist = aRectFnSet.GetHeight(GetPrev()->getFrameArea());
+        if (nOrigDist)
+            reason = SwResizeLimitReason::FlowToFollow;
+    }
 
     tools::Long nAvail = 0;
     if ( bBrowseMode )
@@ -462,7 +479,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
                     }
                 }
             }
-            nReal += pBoss->Grow( nGrow - nReal, bTst );
+            nReal += pBoss->Grow(nGrow - nReal, reason, bTst, false);
             if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
                   && nReal < nGrow )
                 nReal += AdjustNeighbourhood( nGrow - nReal, bTst );
@@ -495,6 +512,8 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             InvalidatePage( pPage );
         }
     }
+    if (nOrigDist > nReal && reason == SwResizeLimitReason::Unspecified)
+        reason = SwResizeLimitReason::FlowToFollow;
     return nReal;
 }
 
