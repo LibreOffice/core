@@ -2145,11 +2145,8 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     }
 
     SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
-    SwFrame *pFrame = GetUpper()->Lower();
-    while( pFrame && nReal > 0 )
-    {   nReal -= aRectFnSet.GetHeight(pFrame->getFrameArea());
-        pFrame = pFrame->GetNext();
-    }
+    for (SwFrame* pFrame = GetUpper()->Lower(); pFrame && nReal > 0; pFrame = pFrame->GetNext())
+        nReal -= aRectFnSet.GetHeight(pFrame->getFrameArea());
 
     if ( !bTst )
     {
@@ -2186,8 +2183,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if( GetUpper() )
         {
             if( bTst || !GetUpper()->IsFooterFrame() )
-                nReal = GetUpper()->Grow( nDist - std::max<tools::Long>(nReal, 0),
-                                          bTst, bInfo );
+                nReal = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), bTst, bInfo);
             else
             {
                 nReal = 0;
@@ -2647,11 +2643,8 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     SwTwips nMin = 0;
     if ( GetUpper() && !IsCellFrame() )
     {
-        SwFrame *pFrame = GetUpper()->Lower();
-        while( pFrame )
-        {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
-            pFrame = pFrame->GetNext();
-        }
+        for (SwFrame* pFrame = GetUpper()->Lower(); pFrame; pFrame = pFrame->GetNext())
+            nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
         nMin = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) - nMin;
         if ( nMin < 0 )
             nMin = 0;
@@ -2690,7 +2683,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                     nReal += AdjustNeighbourhood( nReal, bTst );
 
                 SwTwips nGrow = 0;
-                if( 0 < nReal )
+                if( nReal > 0 )
                 {
                     SwFrame* pToGrow = GetUpper();
                     // NEW TABLES

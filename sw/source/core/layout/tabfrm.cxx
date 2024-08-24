@@ -3379,16 +3379,13 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         //The upper only grows as far as needed. nReal provides the distance
         //which is already available.
         SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
-        SwFrame *pFrame = GetUpper()->Lower();
-        while ( pFrame && GetFollow() != pFrame )
-        {
+        for (SwFrame* pFrame = GetUpper()->Lower(); pFrame && GetFollow() != pFrame;
+             pFrame = pFrame->GetNext())
             nReal -= aRectFnSet.GetHeight(pFrame->getFrameArea());
-            pFrame = pFrame->GetNext();
-        }
 
         if ( nReal < nDist )
         {
-            tools::Long nTmp = GetUpper()->Grow( nDist - std::max<tools::Long>(nReal, 0), bTst, bInfo );
+            tools::Long nTmp = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), bTst, bInfo);
 
             if ( IsRestrictTableGrowth() )
             {
