@@ -1468,14 +1468,14 @@ sw::sidebarwindows::SidebarPosition SwPageFrame::SidebarPosition() const
     }
 }
 
-SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
+SwTwips SwRootFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool)
 {
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.AddHeight(nDist );
     }
-
+    reason = SwResizeLimitReason::Unspecified;
     return nDist;
 }
 

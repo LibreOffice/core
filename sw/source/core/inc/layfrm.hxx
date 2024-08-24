@@ -54,7 +54,7 @@ protected:
     std::vector<SwAnchoredObject*> m_VertPosOrientFramesFor;
 
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrame(SwTwips, SwResizeLimitReason&, bool bTst, bool bInfo) override;
 
     tools::Long CalcRel( const SwFormatFrameSize &rSz ) const;
 

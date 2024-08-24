@@ -3364,12 +3364,14 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         Grow( -nDiff );
 }
 
-SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwTabFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
     SwRectFnSet aRectFnSet(this);
     SwTwips nHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nHeight > 0 && nDist > ( LONG_MAX - nHeight ) )
         nDist = LONG_MAX - nHeight;
+
+    reason = SwResizeLimitReason::Unspecified;
 
     if ( bTst && !IsRestrictTableGrowth() )
         return nDist;
@@ -3385,7 +3387,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if ( nReal < nDist )
         {
-            tools::Long nTmp = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), bTst, bInfo);
+            tools::Long nTmp = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), reason, bTst, bInfo);
 
             if ( IsRestrictTableGrowth() )
             {
@@ -4861,8 +4863,9 @@ void SwRowFrame::Cut()
     SwLayoutFrame::Cut();
 }
 
-SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwRowFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
+    const auto nOrigDist = nDist;
     SwTwips nReal = 0;
 
     SwTabFrame* pTab = FindTabFrame();
@@ -4911,7 +4914,7 @@ SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         pTab->SetFollowFlowLine( false );
     }
 
-    nReal += SwLayoutFrame::GrowFrame( nDist, bTst, bInfo);
+    nReal += SwLayoutFrame::GrowFrame(nDist, reason, bTst, bInfo);
 
     pTab->SetRestrictTableGrowth( false );
     pTab->SetFollowFlowLine( bHasFollowFlowLine );
@@ -4924,7 +4927,8 @@ SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if ( nReal )
             SetCompletePaint();
     }
-
+    if (reason == SwResizeLimitReason::Unspecified && nReal < nOrigDist && IsInSplit())
+        reason = SwResizeLimitReason::FlowToFollow;
     return nReal;
 }
 

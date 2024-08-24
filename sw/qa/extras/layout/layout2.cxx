@@ -2989,6 +2989,126 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTdf161348)
     assertXPath(pXml, "/root/page[1]/body/txt[2]/anchored/fly/tab", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTdf162614)
+{
+    // Given a table inside another table, having a fixed-height last row, with a merged cell
+    // spanning two rows, with a text (having a spacing below) wrapping inside that merged cell,
+    // positioned so that the first line of the text in on the first page, and the second line
+    // flows onto the second page:
+    createSwDoc("tdf162614.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Make sure that all the tables have the correct positions and sizes
+    // I find the clang-formatted version of the following awful (it is already ugly enough)
+    // clang-format off
+
+    assertXPath(pXmlDoc, "//page", 2);
+    // One top-level table on page 1 (Table1), with a single row and a single cell
+    assertXPath(pXmlDoc, "//page[1]/body/tab", 1);
+    OUString sTable1PrecedeId = getXPath(pXmlDoc, "//page[1]/body/tab", "id");
+    OUString sTable1FollowId = getXPath(pXmlDoc, "//page[1]/body/tab", "follow");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/infos/bounds", "top", "2261");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/infos/bounds", "height", "810");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell", 1);
+    OUString sTable1A1PrecedeId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell", "id");
+    OUString sTable1A1FollowId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell", "follow");
+    // One sub-table inside it (Table2):
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab", 1);
+    OUString sTable2PrecedeId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab", "id");
+    OUString sTable2FollowId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab", "follow");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/infos/bounds", "top", u"2508");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/infos/bounds", "height", u"543");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell", 2);
+    // A1
+    assertXPathNoAttribute(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[1]", "follow");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[1]", "rowspan", u"1");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[1]/txt/SwParaPortion/SwLineLayout/*", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[1]/txt/SwParaPortion/SwLineLayout/*[1]", "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[1]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", "Table2.A1");
+    // B1
+    OUString sTable2B1PrecedeId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]", "id");
+    OUString sTable2B1FollowId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]", "follow");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]", "rowspan", "2");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/infos/bounds", "height", "523");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/infos/prtBounds", "height", "503");
+    OUString sTable2B1TextPrecedeId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt", "id");
+    OUString sTable2B1TextFollowId = getXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt", "follow");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/infos/bounds", "height", "276");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/infos/prtBounds", "height", "276");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*", 2);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "type", "PortionType::Text");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", "Table2.B1       ");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell[2]/txt/SwParaPortion/SwLineLayout/*[2]", "type", "PortionType::Hole");
+
+    // Two top-level tables on page 2
+    assertXPath(pXmlDoc, "//page[2]/body/tab", 2);
+    // Table1 (follow)
+    CPPUNIT_ASSERT_EQUAL(sTable1FollowId, getXPath(pXmlDoc, "//page[2]/body/tab[1]", "id"));
+    CPPUNIT_ASSERT_EQUAL(sTable1PrecedeId, getXPath(pXmlDoc, "//page[2]/body/tab[1]", "precede"));
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/infos/bounds", "top", "3403");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/infos/bounds", "height", "514");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell", 1);
+    CPPUNIT_ASSERT_EQUAL(sTable1A1FollowId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell", "id"));
+    CPPUNIT_ASSERT_EQUAL(sTable1A1PrecedeId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell", "precede"));
+    // Table2 (follow)
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab", 1);
+    CPPUNIT_ASSERT_EQUAL(sTable2FollowId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab", "id"));
+    CPPUNIT_ASSERT_EQUAL(sTable2PrecedeId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab", "precede"));
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/infos/bounds", "top", "3423");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/infos/bounds", "height", "474");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row", 2);
+    // Table2 row 1 (continued)
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell", 2);
+    // Placeholder for the cell in column 1
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[1]/infos/bounds", "height", "0");
+    // B1 (follow)
+    CPPUNIT_ASSERT_EQUAL(sTable2B1FollowId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]", "id"));
+    CPPUNIT_ASSERT_EQUAL(sTable2B1PrecedeId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]", "precede"));
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]", "rowspan", "2");
+    // Without the fix, this failed with
+    // - Expected: 1
+    // - Actual  : 2
+    // - In <>, XPath '//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt' number of nodes is incorrect
+    CPPUNIT_ASSERT_EQUAL(sTable2B1TextFollowId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt", "id"));
+    CPPUNIT_ASSERT_EQUAL(sTable2B1TextPrecedeId, getXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt", "precede"));
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt/SwParaPortion/SwLineLayout/*", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[1]/cell[2]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", "(contd.)");
+    // Table2 row 2
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[2]/cell", 2);
+    // A2
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/*", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/*[1]", "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", "Table2.A2");
+    // B2 (covered cell)
+    assertXPath(pXmlDoc, "//page[2]/body/tab[1]/row/cell/tab/row[2]/cell[2]", "rowspan", "-1");
+
+    // Table3 (must not be collapsed)
+    assertXPath(pXmlDoc, "//page[2]/body/tab[2]/infos/bounds", "top", "4696");
+    // Without the fix, this failed with
+    // - Expected: 770
+    // - Actual  : 267
+    assertXPath(pXmlDoc, "//page[2]/body/tab[2]/infos/bounds", "height", "770");
+
+    // Now a test for a case that took me some time to fix when creating the patch.
+    // It is the greatly simplified tdf124795-5.
+
+    createSwDoc("C4_must_start_on_p1.fodt");
+    pXmlDoc = parseLayoutDump();
+
+    // The first line of C4 text must start on the first page - the initial version of the fix
+    // moved it to page 2.
+
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[4]/cell[3]/txt/SwParaPortion/SwLineLayout/*", 1);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[4]/cell[3]/txt/SwParaPortion/SwLineLayout/*[1]", "type", "PortionType::Para");
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row[4]/cell[3]/txt/SwParaPortion/SwLineLayout/*[1]", "portion", "C4_xxxxxxxxxxxxxxxxxxxx");
+
+    // clang-format on
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -437,17 +437,18 @@ void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderA
     }
 }
 
-SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo )
 {
     SwTwips nResult;
 
     if ( IsColLocked() )
     {
         nResult = 0;
+        reason = SwResizeLimitReason::Unspecified;
     }
     else if (!GetEatSpacing())
     {
-        nResult = SwLayoutFrame::GrowFrame(nDist, bTst, bInfo);
+        nResult = SwLayoutFrame::GrowFrame(nDist, reason, bTst, bInfo);
     }
     else
     {
@@ -514,15 +515,16 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if (nDist - nEat > 0)
         {
-            const SwTwips nFrameGrow =
-                SwLayoutFrame::GrowFrame( nDist - nEat, bTst, bInfo );
+            const SwTwips nFrameGrow = SwLayoutFrame::GrowFrame(nDist - nEat, reason, bTst, bInfo);
 
             nResult += nFrameGrow;
-            if ( nFrameGrow > 0 )
+            if (nFrameGrow > 0)
             {
                 bNotifyFlys = false;
             }
         }
+        else
+            reason = SwResizeLimitReason::Unspecified;
 
         // notify fly frames, if necessary and triggered.
         if ( ( nResult > 0 ) && bNotifyFlys )

@@ -27,6 +27,7 @@
 #include <swrect.hxx>
 #include <calbck.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -304,6 +305,15 @@ namespace o3tl {
     template<> struct typed_flags<SwFrameInvFlags> : is_typed_flags<SwFrameInvFlags, 0x003f> {};
 }
 
+// Possible reasons why SwFrame::Grow[Frame] failed to provide the requested growth
+enum class SwResizeLimitReason
+{
+    Unspecified, // no specific reason
+    FixedSizeFrame, // e.g., fixed-height table row; children must be clipped
+    FlowToFollow, // content must flow to a follow; includes next page, column, linked frames
+    BalancedColumns, // resize is performed by Format*, not by Grow*
+};
+
 /**
  * Base class of the Writer layout elements.
  *
@@ -469,7 +479,8 @@ protected:
 
     // change only frame size not the size of PrtArea
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
-    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
+    virtual SwTwips GrowFrame(SwTwips, SwResizeLimitReason&, bool bTst, bool bInfo) = 0;
+    SwTwips GrowFrame(SwTwips, bool bTst = false, bool bInfo = false);
 
     /// use these so we can grep for SwFrame's GetRegisteredIn accesses
     /// beware that SwTextFrame may return sw::WriterMultiListener
@@ -525,6 +536,7 @@ public:
     // change PrtArea size and FrameSize
     SwTwips Shrink( SwTwips, bool bTst = false, bool bInfo = false );
     SwTwips Grow  ( SwTwips, bool bTst = false, bool bInfo = false );
+    SwTwips Grow(SwTwips nDist, SwResizeLimitReason&, bool bTst, bool bInfo);
 
     // different methods for inserting in layout tree (for performance reasons)
 
@@ -1250,6 +1262,14 @@ inline bool SwFrame::IsRetoucheFrame() const
 inline bool SwFrame::IsAccessibleFrame() const
 {
     return bool(GetType() & FRM_ACCESSIBLE);
+}
+inline SwTwips SwFrame::Grow(SwTwips nDist, bool bTst, bool bInfo)
+{
+    return Grow(nDist, o3tl::temporary(SwResizeLimitReason()), bTst, bInfo);
+}
+inline SwTwips SwFrame::GrowFrame(SwTwips nDist, bool bTst, bool bInfo)
+{
+    return GrowFrame(nDist, o3tl::temporary(SwResizeLimitReason()), bTst, bInfo);
 }
 
 //use this to protect a SwFrame for a given scope from getting deleted

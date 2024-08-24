@@ -1508,18 +1508,21 @@ void SwLayoutFrame::Cut()
     }
 }
 
-SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwFrame::Grow(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
     OSL_ENSURE( nDist >= 0, "Negative growth?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT::GrowTest : PROT::Grow, DbgAction::NONE, &nDist )
 
     if ( !nDist )
+    {
+        reason = SwResizeLimitReason::Unspecified;
         return 0;
+    }
     if ( IsFlyFrame() )
-        return static_cast<SwFlyFrame*>(this)->Grow_( nDist, bTst );
+        return static_cast<SwFlyFrame*>(this)->Grow_(nDist, reason, bTst);
     if ( IsSctFrame() )
-        return static_cast<SwSectionFrame*>(this)->Grow_( nDist, bTst );
+        return static_cast<SwSectionFrame*>(this)->Grow_(nDist, reason, bTst);
     if (IsCellFrame())
     {
         const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(this);
@@ -1528,7 +1531,10 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
         // NEW TABLES
         if ( pTab->IsVertical() != IsVertical() ||
              pThisCell->GetLayoutRowSpan() < 1 )
+        {
+            reason = SwResizeLimitReason::FixedSizeFrame;
             return 0;
+        }
     }
 
     SwRectFnSet aRectFnSet(this);
@@ -1537,7 +1543,7 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
     if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
         nDist = LONG_MAX - nPrtHeight;
 
-    const SwTwips nReal = GrowFrame( nDist, bTst, bInfo );
+    const SwTwips nReal = GrowFrame(nDist, reason, bTst, bInfo);
     if( !bTst )
     {
         nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
@@ -2099,7 +2105,7 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
     }
 }
 
-SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
     SwRectFnSet aRectFnSet(this);
 
@@ -2141,9 +2147,18 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 InvalidateNextPos();
             }
         }
+        if (!nDist)
+            reason = SwResizeLimitReason::Unspecified;
+        else if (GetUpper()->IsBodyFrame() // Page / column body
+                 || (GetUpper()->IsFlyFrame()
+                     && static_cast<SwFlyFrame*>(GetUpper())->GetNextLink()))
+            reason = SwResizeLimitReason::FlowToFollow;
+        else
+            reason = SwResizeLimitReason::FixedSizeFrame;
         return 0;
     }
 
+    reason = SwResizeLimitReason::Unspecified;
     SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
     for (SwFrame* pFrame = GetUpper()->Lower(); pFrame && nReal > 0; pFrame = pFrame->GetNext())
         nReal -= aRectFnSet.GetHeight(pFrame->getFrameArea());
@@ -2183,7 +2198,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if( GetUpper() )
         {
             if( bTst || !GetUpper()->IsFooterFrame() )
-                nReal = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), bTst, bInfo);
+                nReal = GetUpper()->Grow(nDist - std::max(nReal, SwTwips(0)), reason, bTst, bInfo);
             else
             {
                 nReal = 0;
@@ -2623,7 +2638,7 @@ SwTwips SwLayoutFrame::InnerHeight() const
     return nRet;
 }
 
-SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
+SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bool bTst, bool bInfo)
 {
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -2631,7 +2646,14 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     if (bBrowse)
         nTmpType |= SwFrameType::Body;
     if( !(GetType() & nTmpType) && HasFixSize() )
+    {
+        if (nDist <= 0)
+            reason = SwResizeLimitReason::Unspecified;
+        else
+            reason = IsBodyFrame() ? SwResizeLimitReason::FlowToFollow // Page / column body
+                                   : SwResizeLimitReason::FixedSizeFrame;
         return 0;
+    }
 
     SwRectFnSet aRectFnSet(this);
     const SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
@@ -2667,6 +2689,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         bMoveAccFrame = true;
     }
 
+    reason = SwResizeLimitReason::Unspecified;
     SwTwips nReal = nDist - nMin;
     if ( nReal > 0 )
     {
@@ -2699,10 +2722,13 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                             if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
                                 pToGrow = rEndCell.GetUpper();
                             else
+                            {
                                 pToGrow = nullptr;
+                                reason = SwResizeLimitReason::FlowToFollow;
+                            }
                         }
                     }
-                    nGrow = pToGrow ? pToGrow->Grow( nReal, bTst, bInfo ) : 0;
+                    nGrow = pToGrow ? pToGrow->Grow(nReal, reason, bTst, bInfo) : 0;
                 }
 
                 if( SwNeighbourAdjust::GrowAdjust == nAdjust && nGrow < nReal )
@@ -2800,6 +2826,9 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     (void)bMoveAccFrame;
     (void)aOldFrame;
 #endif
+
+    if (reason == SwResizeLimitReason::Unspecified && nReal < nDist && IsBodyFrame()) // Page / column body
+        reason = SwResizeLimitReason::FlowToFollow;
 
     return nReal;
 }

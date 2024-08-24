@@ -79,7 +79,8 @@ protected:
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    using SwFrame::GrowFrame;
+    virtual SwTwips GrowFrame(SwTwips, SwResizeLimitReason&, bool bTst, bool bInfo) override;
 
     SwContentFrame( SwContentNode * const, SwFrame* );
 

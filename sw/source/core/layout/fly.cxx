@@ -1958,10 +1958,22 @@ void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
     rMngr.SetUnfloatTableButton(this, bShow,  aTopRightPixel);
 }
 
-SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
+SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
 {
-    if (!Lower() || IsColLocked() || HasFixSize())
+    if (!Lower())
+    {
+        reason = SwResizeLimitReason::Unspecified; // refusing because we have no content?
         return 0;
+    }
+    if (IsColLocked() || HasFixSize())
+    {
+        if (nDist <= 0 || !HasFixSize())
+            reason = SwResizeLimitReason::Unspecified;
+        else
+            reason = GetNextLink() ? SwResizeLimitReason::FlowToFollow
+                                   : SwResizeLimitReason::FixedSizeFrame;
+        return 0;
+    }
 
     SwRectFnSet aRectFnSet(this);
     SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
@@ -1969,7 +1981,10 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
         nDist = LONG_MAX - nSize;
 
     if ( nDist <= 0 )
+    {
+        reason = SwResizeLimitReason::Unspecified;
         return 0;
+    }
 
     if ( Lower()->IsColumnFrame() )
     {   // If it's a Column Frame, the Format takes control of the
@@ -1981,8 +1996,11 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
             InvalidatePos_();
             InvalidateSize();
         }
+        reason = SwResizeLimitReason::BalancedColumns;
         return 0;
     }
+
+    reason = SwResizeLimitReason::Unspecified;
 
     if (bTst)
         return nDist;
