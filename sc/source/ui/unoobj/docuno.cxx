@@ -1337,7 +1337,8 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     aInputOptions.SetTextWysiwyg(true);
     aInputOptions.SetReplaceCellsWarn(false);
     SC_MOD()->SetInputOptions(aInputOptions);
-    pDocShell->CalcOutputFactor();
+    if (pDocShell)
+        pDocShell->CalcOutputFactor();
 
     // when the "This document may contain formatting or content that cannot
     // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
