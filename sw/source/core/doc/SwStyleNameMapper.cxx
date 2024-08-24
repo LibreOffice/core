@@ -472,17 +472,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
         u"Signature"_ustr,
         u"List Indent"_ustr, // RES_POOLCOLL_CONFRONTATION
         u"Marginalia"_ustr,
-        u"Heading"_ustr,
-        u"Heading 1"_ustr,
-        u"Heading 2"_ustr,
-        u"Heading 3"_ustr,
-        u"Heading 4"_ustr,
-        u"Heading 5"_ustr,
-        u"Heading 6"_ustr,
-        u"Heading 7"_ustr,
-        u"Heading 8"_ustr,
-        u"Heading 9"_ustr,
-        u"Heading 10"_ustr, // RES_POOLCOLL_TEXT_END
+        // RES_POOLCOLL_TEXT_END
     };
     return s_aTextProgNameArray;
 }
@@ -612,6 +602,18 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
         u"Title"_ustr, // STR_POCO_PRGM_DOC_TITLE
         u"Subtitle"_ustr,
         u"Appendix"_ustr,
+        u"Heading"_ustr,
+        u"Heading 1"_ustr,
+        u"Heading 2"_ustr,
+        u"Heading 3"_ustr,
+        u"Heading 4"_ustr,
+        u"Heading 5"_ustr,
+        u"Heading 6"_ustr,
+        u"Heading 7"_ustr,
+        u"Heading 8"_ustr,
+        u"Heading 9"_ustr,
+        u"Heading 10"_ustr,
+        // RES_POOLCOLL_DOC_END
     };
     return s_aDocProgNameArray;
 }

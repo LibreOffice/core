@@ -257,19 +257,6 @@ RES_POOLCOLL_SIGNATURE,                                 ///< Signature.
 RES_POOLCOLL_CONFRONTATION,                             ///< List indent.
 RES_POOLCOLL_MARGINAL,                                  ///< Marginalia.
 
-/// Subgroup headings.
-RES_POOLCOLL_HEADLINE_BASE,                             ///< Base heading.
-RES_POOLCOLL_HEADLINE1,                                 ///< Heading 1.
-RES_POOLCOLL_HEADLINE2,                                 ///< Heading 2.
-RES_POOLCOLL_HEADLINE3,                                 ///< Heading 3.
-RES_POOLCOLL_HEADLINE4,                                 ///< Heading 4.
-RES_POOLCOLL_HEADLINE5,                                 ///< Heading 5.
-RES_POOLCOLL_HEADLINE6,                                 ///< Heading 6.
-RES_POOLCOLL_HEADLINE7,                                 ///< Heading 7.
-RES_POOLCOLL_HEADLINE8,                                 ///< Heading 8.
-RES_POOLCOLL_HEADLINE9,                                 ///< Heading 9.
-RES_POOLCOLL_HEADLINE10,                                ///< Heading 10.
-
 RES_POOLCOLL_TEXT_END,
 
 /// Group lists.
@@ -425,6 +412,19 @@ RES_POOLCOLL_DOC_BEGIN = COLL_DOC_BITS,
 RES_POOLCOLL_DOC_TITLE = RES_POOLCOLL_DOC_BEGIN,        ///< Doc. title.
 RES_POOLCOLL_DOC_SUBTITLE,                              ///< Doc. subtitle.
 RES_POOLCOLL_DOC_APPENDIX,                              ///< Doc. appendix.
+
+/// Subgroup headings.
+RES_POOLCOLL_HEADLINE_BASE, ///< Base heading.
+RES_POOLCOLL_HEADLINE1, ///< Heading 1.
+RES_POOLCOLL_HEADLINE2, ///< Heading 2.
+RES_POOLCOLL_HEADLINE3, ///< Heading 3.
+RES_POOLCOLL_HEADLINE4, ///< Heading 4.
+RES_POOLCOLL_HEADLINE5, ///< Heading 5.
+RES_POOLCOLL_HEADLINE6, ///< Heading 6.
+RES_POOLCOLL_HEADLINE7, ///< Heading 7.
+RES_POOLCOLL_HEADLINE8, ///< Heading 8.
+RES_POOLCOLL_HEADLINE9, ///< Heading 9.
+RES_POOLCOLL_HEADLINE10, ///< Heading 10.
 
 RES_POOLCOLL_DOC_END,
 

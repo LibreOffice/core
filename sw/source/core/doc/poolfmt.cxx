@@ -201,20 +201,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_TEXT:
             case RES_POOLCOLL_GREETING:
             case RES_POOLCOLL_SIGNATURE:
-            case RES_POOLCOLL_HEADLINE_BASE:
                     nRet = RES_POOLCOLL_STANDARD;               break;
-
-            case RES_POOLCOLL_HEADLINE1:
-            case RES_POOLCOLL_HEADLINE2:
-            case RES_POOLCOLL_HEADLINE3:
-            case RES_POOLCOLL_HEADLINE4:
-            case RES_POOLCOLL_HEADLINE5:
-            case RES_POOLCOLL_HEADLINE6:
-            case RES_POOLCOLL_HEADLINE7:
-            case RES_POOLCOLL_HEADLINE8:
-            case RES_POOLCOLL_HEADLINE9:
-            case RES_POOLCOLL_HEADLINE10:
-                    nRet = RES_POOLCOLL_HEADLINE_BASE;          break;
             }
             break;
 
@@ -288,7 +275,15 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             break;
 
         case COLL_DOC_BITS:
-            nRet = RES_POOLCOLL_HEADLINE_BASE;
+            switch (nId)
+            {
+                case RES_POOLCOLL_HEADLINE_BASE:
+                    nRet = RES_POOLCOLL_STANDARD;
+                    break;
+                default:
+                    nRet = RES_POOLCOLL_HEADLINE_BASE;
+                    break;
+            }
             break;
 
         case COLL_HTML_BITS:
