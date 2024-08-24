@@ -240,9 +240,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
             {
-                TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::Any( pValue->getString() ));
-                insertTableProps(pPropMap);
+                if (pValue)
+                {
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                    pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::Any( pValue->getString() ));
+                    insertTableProps(pPropMap);
+                }
             }
             break;
             case NS_ooxml::LN_CT_TblGridBase_gridCol:
