@@ -5292,7 +5292,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         }
     }
 
-    if ( !aString.isEmpty() )
+    const sal_uInt32 nStringLen = aString.getLength();
+    if (nStringLen)
     {
         sal_uInt32  nCharCount;
         bool        bTextPropAtom = false;
@@ -5304,7 +5305,6 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         sal_uInt32 nCurrentPara = 0;
         size_t i = 1;                   // points to the next element to process
         sal_uInt32 nCurrentSpecMarker = aSpecMarkerList.empty() ? 0 : aSpecMarkerList[0];
-        sal_uInt32 nStringLen = aString.getLength();
 
         while ( nCharReadCnt < nStringLen )
         {
