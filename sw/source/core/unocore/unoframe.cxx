@@ -3310,32 +3310,36 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
 
 rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition)
 {
+    SwFrameFormat* pFormat = GetFrameFormat();
+    if (!pFormat)
+        throw uno::RuntimeException();
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
         throw uno::RuntimeException();
-    return createXTextCursorByRangeImpl(aPam);
+    return createXTextCursorByRangeImpl(*pFormat, aPam);
 }
 
 rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRange(
     const rtl::Reference< SwXTextCursor > & aTextPosition)
 {
-    SwUnoInternalPaM aPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
-        throw uno::RuntimeException();
-    return createXTextCursorByRangeImpl(aPam);
-}
-
-rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRangeImpl(
-        SwUnoInternalPaM& rPam)
-{
     SwFrameFormat* pFormat = GetFrameFormat();
     if (!pFormat)
         throw uno::RuntimeException();
+    SwUnoInternalPaM aPam(*GetDoc());
+    if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
+        throw uno::RuntimeException();
+    return createXTextCursorByRangeImpl(*pFormat, aPam);
+}
+
+rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRangeImpl(
+        SwFrameFormat& rFormat,
+        SwUnoInternalPaM& rPam)
+{
     rtl::Reference< SwXTextCursor > xRef;
-    SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
+    SwNode& rNode = rFormat.GetContent().GetContentIdx()->GetNode();
     if(rPam.GetPointNode().FindFlyStartNode() == rNode.FindFlyStartNode())
     {
-        xRef = new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
+        xRef = new SwXTextCursor(*rFormat.GetDoc(), this, CursorType::Frame,
                     *rPam.GetPoint(), rPam.GetMark());
     }
     return xRef;

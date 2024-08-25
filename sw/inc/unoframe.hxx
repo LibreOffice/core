@@ -236,7 +236,7 @@ public:
     virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     using SwXFrame::setPropertyValue;
 private:
-    rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwUnoInternalPaM& rPam);
+    rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwFrameFormat& rFormat, SwUnoInternalPaM& rPam);
 };
 
 typedef cppu::ImplInheritanceHelper
