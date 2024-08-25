@@ -1501,9 +1501,11 @@ void GalleryBrowser1::FillThemeEntries()
             sal_uInt32 nObjectCount = pTheme->GetObjectCount();
             for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
             {
-                std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject);
-                OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
-                maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
+                if (std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject))
+                {
+                    OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
+                    maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
+                }
             }
             mpGallery->ReleaseTheme(pTheme, maLocalListner);
         }
