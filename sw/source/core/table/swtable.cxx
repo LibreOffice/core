@@ -981,14 +981,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
     }
 
 #ifdef DBG_UTIL
-    {
-        // do some checking for correct table widths
-        SwTwips nSize = GetFrameFormat()->GetFrameSize().GetWidth();
-        for (size_t n = 0; n < m_aLines.size(); ++n)
-        {
-            CheckBoxWidth( *m_aLines[ n ], nSize );
-        }
-    }
+    CheckBoxWidth(GetTabLines(), *GetFrameFormat());
 #endif
 }
 

@@ -38,8 +38,9 @@ class SwFormatFrameSize;
 
 void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 
-#ifdef DBG_UTIL
-void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
+#if defined DBG_UTIL
+void CheckTableLayout(const SwTableLines& rLines);
+SwTwips CheckBoxWidth(const SwTableLines& rLines, const SwFrameFormat& rFrameFormat );
 #endif
 
 void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,

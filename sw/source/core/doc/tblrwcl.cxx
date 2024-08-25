@@ -131,39 +131,6 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
 typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool );
 
-#ifdef DBG_UTIL
-
-#define CHECKBOXWIDTH                                           \
-    {                                                           \
-        SwTwips nSize = GetFrameFormat()->GetFrameSize().GetWidth();   \
-        for (size_t nTmp = 0; nTmp < m_aLines.size(); ++nTmp)   \
-            ::CheckBoxWidth( *m_aLines[ nTmp ], nSize );         \
-    }
-
-#define CHECKTABLELAYOUT                                            \
-    {                                                               \
-        for ( size_t i = 0; i < GetTabLines().size(); ++i )        \
-        {                                                           \
-            SwFrameFormat* pFormat = GetTabLines()[i]->GetFrameFormat();  \
-            SwIterator<SwRowFrame,SwFormat> aIter( *pFormat );              \
-            for (SwRowFrame* pFrame=aIter.First(); pFrame; pFrame=aIter.Next())\
-            {                                                       \
-                if ( pFrame->GetTabLine() == GetTabLines()[i] )       \
-                {                                               \
-                    OSL_ENSURE( pFrame->GetUpper()->IsTabFrame(),       \
-                                "Table layout does not match table structure" );       \
-                }                                               \
-            }                                                       \
-        }                                                           \
-    }
-
-#else
-
-#define CHECKBOXWIDTH
-#define CHECKTABLELAYOUT
-
-#endif // DBG_UTIL
-
 namespace {
 
 struct CR_SetLineHeight
@@ -497,8 +464,11 @@ bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         // Update Layout
         aFndBox.MakeFrames( *this );
 
-        CHECKBOXWIDTH;
-        CHECKTABLELAYOUT;
+#if defined DBG_UTIL
+        CheckBoxWidth(GetTabLines(), *GetFrameFormat());;
+        CheckTableLayout(GetTabLines());
+#endif
+
         bRes = true;
     }
 
@@ -628,8 +598,10 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             aFndBox.MakeNewFrames( *this, nCnt, bBehind );
     }
 
-    CHECKBOXWIDTH;
-    CHECKTABLELAYOUT;
+#if defined DBG_UTIL
+    CheckBoxWidth(GetTabLines(), *GetFrameFormat());;
+    CheckTableLayout(GetTabLines());
+#endif
 
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
@@ -1032,7 +1004,9 @@ bool SwTable::DeleteSel(
     // TL_CHART2: now inform chart that sth has changed
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
-    CHECKTABLELAYOUT;
+#if defined DBG_UTIL
+    CheckTableLayout(GetTabLines());
+#endif
     CHECK_TABLE( *this );
 
     return true;
@@ -1176,8 +1150,10 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
     aFndBox.MakeFrames( *this );
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
+#if defined DBG_UTIL
+    CheckBoxWidth(GetTabLines(), *GetFrameFormat());;
+    CheckTableLayout(GetTabLines());
+#endif
     return true;
 }
 
@@ -1285,8 +1261,10 @@ bool SwTable::SplitCol(SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt)
     // Update Layout
     aFndBox.MakeFrames( *this );
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
+#if defined DBG_UTIL
+    CheckBoxWidth(GetTabLines(), *GetFrameFormat());;
+    CheckTableLayout(GetTabLines());
+#endif
     return true;
 }
 
@@ -1665,8 +1643,10 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     aFndBox.MakeFrames( *this );
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
+#if defined DBG_UTIL
+    CheckBoxWidth(GetTabLines(), *GetFrameFormat());;
+    CheckTableLayout(GetTabLines());
+#endif
 
     return true;
 }
@@ -2208,7 +2188,9 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     pTableNd->MakeOwnFrames();  // re-generate the Frames
 
-    CHECKTABLELAYOUT
+#if defined DBG_UTIL
+    CheckTableLayout(GetTabLines());
+#endif
 
     return true;
 }
@@ -2588,27 +2570,46 @@ static void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     }
 }
 
-#ifdef DBG_UTIL
-void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
+#if defined DBG_UTIL
+void CheckTableLayout(const SwTableLines& rLines)
 {
-    const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
-
-    SwTwips nCurrentSize = 0;
-    // See if the tables have a correct width
-    for (const SwTableBox* pBox : rBoxes)
+    for (auto pLn : rLines)
     {
-        const SwTwips nBoxW = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
-        nCurrentSize += nBoxW;
+        SwFrameFormat* pFormat = pLn->GetFrameFormat();
+        SwIterator<SwRowFrame,SwFormat> aIter( *pFormat );
+        for (SwRowFrame* pFrame=aIter.First(); pFrame; pFrame=aIter.Next())
+        {
+            if ( pFrame->GetTabLine() == pLn )
+            {
+                OSL_ENSURE( pFrame->GetUpper()->IsTabFrame(),
+                            "Table layout does not match table structure" );
+            }
+        }
+    }
+}
 
-        for( auto pLn : pBox->GetTabLines() )
-            CheckBoxWidth( *pLn, nBoxW );
+SwTwips CheckBoxWidth(const SwTableLines& rLines, const SwFrameFormat& rFrameFormat )
+{
+    SwTwips nSize = rFrameFormat.GetFrameSize().GetWidth();
+    for (auto pLn : rLines)
+    {
+        const SwTableBoxes& rBoxes = pLn->GetTabBoxes();
+
+        SwTwips nCurrentSize = 0;
+        // See if the tables have a correct width
+        for (const SwTableBox* pBox : rBoxes)
+        {
+            nCurrentSize += CheckBoxWidth( pBox->GetTabLines(), *pBox->GetFrameFormat() );
+        }
+
+        if (sal::static_int_cast< tools::ULong >(std::abs(nCurrentSize - nSize)) >
+            (COLFUZZY * rBoxes.size()))
+        {
+            OSL_FAIL( "Line's Boxes are too small or too large" );
+        }
     }
 
-    if (sal::static_int_cast< tools::ULong >(std::abs(nCurrentSize - nSize)) >
-        (COLFUZZY * rBoxes.size()))
-    {
-        OSL_FAIL( "Line's Boxes are too small or too large" );
-    }
+    return nSize;
 }
 #endif
 
@@ -2921,8 +2922,8 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
 #if defined DBG_UTIL
     if( bRet )
     {
-        CHECKBOXWIDTH
-        CHECKTABLELAYOUT
+        CheckBoxWidth(GetTabLines(), *GetFrameFormat());
+        CheckTableLayout(GetTabLines());
     }
 #endif
 
@@ -3192,7 +3193,9 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
         default: break;
     }
 
-    CHECKTABLELAYOUT
+#if defined DBG_UTIL
+    CheckTableLayout(GetTabLines());
+#endif
 
     return bRet;
 }
