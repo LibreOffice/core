@@ -297,9 +297,9 @@ void OOXMLFastContextHandler::setStream(Stream * pStream)
     mpStream = pStream;
 }
 
-OOXMLValue::Pointer_t OOXMLFastContextHandler::getValue() const
+OOXMLValue OOXMLFastContextHandler::getValue() const
 {
-    return OOXMLValue::Pointer_t();
+    return OOXMLValue();
 }
 
 void OOXMLFastContextHandler::attributes
@@ -351,11 +351,11 @@ void OOXMLFastContextHandler::sendTableDepth() const
 
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
         pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
     }
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+        OOXMLValue pVal = OOXMLValue::createInteger(1);
         pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
     }
 
@@ -437,7 +437,7 @@ void OOXMLFastContextHandler::startParagraphGroup()
         pPropSet->resolve(aHandler);
         if (const OUString& sText = aHandler.getString(); !sText.isEmpty())
         {
-            OOXMLStringValue::Pointer_t pVal = new OOXMLStringValue(sText);
+            OOXMLValue pVal = OOXMLValue::createString(sText);
             OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
             pPropertySet->add(NS_ooxml::LN_AG_Parids_paraId, pVal, OOXMLProperty::ATTRIBUTE);
             mpStream->props(pPropertySet.get());
@@ -463,7 +463,7 @@ void OOXMLFastContextHandler::endParagraphGroup()
 void OOXMLFastContextHandler::startSdt()
 {
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    OOXMLValue pVal = OOXMLValue::createInteger(1);
     pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLProperty::ATTRIBUTE);
     mpStream->props(pProps.get());
 }
@@ -471,7 +471,7 @@ void OOXMLFastContextHandler::startSdt()
 void OOXMLFastContextHandler::endSdt()
 {
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    OOXMLValue pVal = OOXMLValue::createInteger(1);
     pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE);
     mpStream->props(pProps.get());
 }
@@ -479,7 +479,7 @@ void OOXMLFastContextHandler::endSdt()
 void OOXMLFastContextHandler::startSdtRun()
 {
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    OOXMLValue pVal = OOXMLValue::createInteger(1);
     pProps->add(NS_ooxml::LN_CT_SdtRun_sdtContent, pVal, OOXMLProperty::ATTRIBUTE);
     mpStream->props(pProps.get());
 }
@@ -487,7 +487,7 @@ void OOXMLFastContextHandler::startSdtRun()
 void OOXMLFastContextHandler::endSdtRun()
 {
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    OOXMLValue pVal = OOXMLValue::createInteger(1);
     pProps->add(NS_ooxml::LN_CT_SdtRun_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE);
     mpStream->props(pProps.get());
 }
@@ -535,7 +535,7 @@ void OOXMLFastContextHandler::setLastSectionGroup()
 }
 
 void OOXMLFastContextHandler::newProperty
-(Id /*nId*/, const OOXMLValue::Pointer_t& /*pVal*/)
+(Id /*nId*/, const OOXMLValue& /*pVal*/)
 {
 }
 
@@ -801,7 +801,7 @@ void OOXMLFastContextHandler::clearTableProps()
 
 void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
 {
-    OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
+    OOXMLValue pValue(OOXMLValue::createPropertySet(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
     pPropertySet->add(nId, pValue, OOXMLProperty::SPRM);
@@ -854,9 +854,9 @@ void OOXMLFastContextHandler::setXNoteId(const sal_Int32 nId)
     mpParserState->setXNoteId(nId);
 }
 
-void OOXMLFastContextHandler::setXNoteId(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandler::setXNoteId(const OOXMLValue& pValue)
 {
-    mpParserState->setXNoteId(sal_Int32(pValue->getInt()));
+    mpParserState->setXNoteId(sal_Int32(pValue.getInt()));
 }
 
 sal_Int32 OOXMLFastContextHandler::getXNoteId() const
@@ -910,7 +910,7 @@ void OOXMLFastContextHandler::resolveData(const OUString & rId)
     uno::Reference<io::XInputStream> xInputStream
         (objDocument->getInputStreamForId(rId));
 
-    OOXMLValue::Pointer_t aValue(new OOXMLInputStreamValue(xInputStream));
+    OOXMLValue aValue(OOXMLValue::createInputStream(xInputStream));
 
     newProperty(NS_ooxml::LN_inputstream, aValue);
 }
@@ -948,8 +948,7 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
 
     if (pProps)
     {
-        OOXMLValue::Pointer_t pValue
-            (new OOXMLPropertySetValue(getPropertySet()));
+        OOXMLValue pValue(OOXMLValue::createPropertySet(getPropertySet()));
 
         pParentProps->add(getId(), pValue, OOXMLProperty::SPRM);
 
@@ -983,7 +982,7 @@ OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
 }
 
 void OOXMLFastContextHandlerStream::newProperty(Id nId,
-                                                const OOXMLValue::Pointer_t& pVal)
+                                                const OOXMLValue& pVal)
 {
     if (nId != 0x0)
     {
@@ -1063,13 +1062,13 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
     }
 }
 
-OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
+OOXMLValue OOXMLFastContextHandlerProperties::getValue() const
 {
-    return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
+    return OOXMLValue::createPropertySet(mpPropertySet);
 }
 
 void OOXMLFastContextHandlerProperties::newProperty
-(Id nId, const OOXMLValue::Pointer_t& pVal)
+(Id nId, const OOXMLValue& pVal)
 {
     if (nId != 0x0)
     {
@@ -1204,8 +1203,7 @@ OOXMLFastContextHandlerPropertyTable::~OOXMLFastContextHandlerPropertyTable()
 void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
 (Token_t /*Element*/)
 {
-    OOXMLTable::ValuePointer_t pTmpVal
-        (new OOXMLPropertySetValue(mpPropertySet->clone()));
+    OOXMLValue pTmpVal(OOXMLValue::createPropertySet(mpPropertySet->clone()));
 
     mTable.add(pTmpVal);
 
@@ -1230,14 +1228,14 @@ OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
 {
 }
 
-void OOXMLFastContextHandlerValue::setValue(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerValue::setValue(const OOXMLValue& pValue)
 {
-    mpValue = pValue;
+    maValue = pValue;
 }
 
-OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
+OOXMLValue OOXMLFastContextHandlerValue::getValue() const
 {
-    return mpValue;
+    return maValue;
 }
 
 void OOXMLFastContextHandlerValue::lcl_endFastElement
@@ -1250,36 +1248,36 @@ void OOXMLFastContextHandlerValue::lcl_endFastElement
 
 void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
-    if (!mpValue)
+    if (!maValue.hasValue())
     {
-        OOXMLValue::Pointer_t pValue = OOXMLBooleanValue::Create(true);
+        OOXMLValue pValue = OOXMLValue::createBoolean(true);
         setValue(pValue);
     }
 }
 
 void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
-    if (!mpValue)
+    if (!maValue.hasValue())
     {
-        OOXMLValue::Pointer_t pValue = OOXMLIntegerValue::Create(0);
+        OOXMLValue pValue = OOXMLValue::createInteger(0);
         setValue(pValue);
     }
 }
 
 void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
-    if (!mpValue)
+    if (!maValue.hasValue())
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(sal_uInt32(0)));
+        OOXMLValue pValue(OOXMLValue::createHex(sal_uInt32(0)));
         setValue(pValue);
     }
 }
 
 void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
-    if (!mpValue)
+    if (!maValue.hasValue())
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
+        OOXMLValue pValue(OOXMLValue::createString(OUString()));
         setValue(pValue);
     }
 }
@@ -1288,7 +1286,7 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
 void OOXMLFastContextHandlerValue::pushBiDiEmbedLevel()
 {
     const bool bRtl
-        = mpValue && mpValue->getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
+        = maValue.hasValue() && maValue.getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
     OOXMLFactory::characters(this, bRtl ? u"\u202B"_ustr : u"\u202A"_ustr); // RLE / LRE
 }
 
@@ -1299,7 +1297,7 @@ void OOXMLFastContextHandlerValue::popBiDiEmbedLevel()
 
 void OOXMLFastContextHandlerValue::handleGridAfter()
 {
-    if (!getValue())
+    if (!getValue().hasValue())
         return;
 
     if (OOXMLFastContextHandler* pTableRowProperties = getParent())
@@ -1354,12 +1352,11 @@ void OOXMLFastContextHandlerTable::addCurrentChild()
     OOXMLFastContextHandler * pHandler = dynamic_cast<OOXMLFastContextHandler*>(mCurrentChild.get());
     if (pHandler != nullptr)
     {
-        OOXMLValue::Pointer_t pValue(pHandler->getValue());
+        OOXMLValue pValue(pHandler->getValue());
 
-        if (pValue)
+        if (pValue.hasValue())
         {
-            OOXMLTable::ValuePointer_t pTmpVal(pValue->clone());
-            mTable.add(pTmpVal);
+            mTable.add(pValue);
         }
     }
 }
@@ -1408,15 +1405,15 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
     setForwardEvents(mbForwardEventsSaved);
 }
 
-void OOXMLFastContextHandlerXNote::checkId(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerXNote::checkId(const OOXMLValue& pValue)
 {
-    mnMyXNoteId = sal_Int32(pValue->getInt());
+    mnMyXNoteId = sal_Int32(pValue.getInt());
     mpStream->checkId(mnMyXNoteId);
 }
 
-void OOXMLFastContextHandlerXNote::checkType(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerXNote::checkType(const OOXMLValue& pValue)
 {
-    mnMyXNoteType = pValue->getInt();
+    mnMyXNoteType = pValue.getInt();
 }
 
 /*
@@ -1439,7 +1436,7 @@ void OOXMLFastContextHandlerTextTableCell::startCell()
     {
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
-            OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+            OOXMLValue pVal = OOXMLValue::createBoolean(mnTableDepth > 0);
             pProps->add(NS_ooxml::LN_tcStart, pVal, OOXMLProperty::SPRM);
         }
 
@@ -1454,19 +1451,19 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
 
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
         pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
     }
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+        OOXMLValue pVal = OOXMLValue::createInteger(1);
         pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
     }
     {
-        OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+        OOXMLValue pVal = OOXMLValue::createBoolean(mnTableDepth > 0);
         pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
     }
     {
-        OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+        OOXMLValue pVal = OOXMLValue::createBoolean(mnTableDepth > 0);
         pProps->add(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM);
     }
 
@@ -1493,12 +1490,12 @@ void OOXMLFastContextHandlerTextTableRow::startRow()
 
 void OOXMLFastContextHandlerTextTableRow::endRow()
 {
-    if (mpGridAfter)
+    if (maGridAfter.hasValue())
     {
         // Grid after is the same as grid before, the empty cells are just
         // inserted after the real ones, not before.
-        handleGridBefore(mpGridAfter);
-        mpGridAfter = nullptr;
+        handleGridBefore(maGridAfter);
+        maGridAfter = OOXMLValue();
     }
 
     startParagraphGroup();
@@ -1507,15 +1504,15 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
     {
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+            OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
             pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
         }
         {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+            OOXMLValue pVal = OOXMLValue::createInteger(1);
             pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
         }
         {
-            OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+            OOXMLValue pVal = OOXMLValue::createInteger(1);
             pProps->add(NS_ooxml::LN_tblRow, pVal, OOXMLProperty::SPRM);
         }
 
@@ -1532,25 +1529,25 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 }
 
 namespace {
-OOXMLValue::Pointer_t fakeNoBorder()
+OOXMLValue fakeNoBorder()
 {
     OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(0);
+    OOXMLValue pVal = OOXMLValue::createInteger(0);
     pProps->add(NS_ooxml::LN_CT_Border_val, pVal, OOXMLProperty::ATTRIBUTE);
-    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue(std::move(pProps)));
+    OOXMLValue pValue( OOXMLValue::createPropertySet(std::move(pProps)));
     return pValue;
 }
 }
 
 // Handle w:gridBefore here by faking necessary input that'll fake cells. I'm apparently
 // not insane enough to find out how to add cells in dmapper.
-void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Pointer_t& val )
+void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue& val )
 {
     // start removing: disable for w:gridBefore
-    if (!mpGridAfter)
+    if (!maGridAfter.hasValue())
         return;
 
-    int count = val->getInt();
+    int count = val.getInt();
     for( int i = 0;
          i < count;
          ++i )
@@ -1562,15 +1559,15 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
             // This whole part is OOXMLFastContextHandlerTextTableCell::endCell() .
             OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
             {
-                OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+                OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
                 pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
             }
             {
-                OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+                OOXMLValue pVal = OOXMLValue::createInteger(1);
                 pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
             }
             {
-                OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
+                OOXMLValue pVal = OOXMLValue::createBoolean(mnTableDepth > 0);
                 pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
             }
 
@@ -1584,7 +1581,7 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for(sal_uInt32 border : borders)
                     pBorderProps->add(border, fakeNoBorder(), OOXMLProperty::SPRM);
-                OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue(std::move(pBorderProps)) );
+                OOXMLValue pValue( OOXMLValue::createPropertySet(std::move(pBorderProps)) );
                 pCellProps->add(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLProperty::SPRM);
                 mpParserState->setCellProperties(pCellProps);
             }
@@ -1629,7 +1626,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
 
     OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
         pProps->add(NS_ooxml::LN_tblStart, pVal, OOXMLProperty::SPRM);
     }
     mpParserState->setCharacterProperties(pProps);
@@ -1644,7 +1641,7 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 
     OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     {
-        OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
+        OOXMLValue pVal = OOXMLValue::createInteger(mnTableDepth);
         pProps->add(NS_ooxml::LN_tblEnd, pVal, OOXMLProperty::SPRM);
     }
     mpParserState->setCharacterProperties(pProps);
@@ -1815,8 +1812,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
     if (!xShape.is())
         return;
 
-    OOXMLValue::Pointer_t
-        pValue(new OOXMLShapeValue(xShape));
+    OOXMLValue pValue(OOXMLValue::createShape(xShape));
     newProperty(NS_ooxml::LN_shape, pValue);
 
     bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
@@ -2141,7 +2137,7 @@ OOXMLFastContextHandlerWrapper::getFastContextHandler() const
 }
 
 void OOXMLFastContextHandlerWrapper::newProperty
-(Id nId, const OOXMLValue::Pointer_t& pVal)
+(Id nId, const OOXMLValue& pVal)
 {
     if (mxWrappedContext.is())
     {
@@ -2315,7 +2311,7 @@ void OOXMLFastContextHandlerMath::process()
         return;
 
     OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
-    OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
+    OOXMLValue pVal( OOXMLValue::createStarMath( ref ));
     if (mbIsMathPara)
     {
         switch (mnMathJcVal)
@@ -2352,20 +2348,20 @@ void OOXMLFastContextHandlerCommentEx::lcl_endFastElement(Token_t /*Element*/)
     mpStream->commentProps(m_sParaId, { m_bDone, m_sParentId });
 }
 
-void OOXMLFastContextHandlerCommentEx::att_paraId(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerCommentEx::att_paraId(const OOXMLValue& pValue)
 {
-    m_sParaId = pValue->getString();
+    m_sParaId = pValue.getString();
 }
 
-void OOXMLFastContextHandlerCommentEx::att_done(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerCommentEx::att_done(const OOXMLValue& pValue)
 {
-    if (pValue->getInt())
+    if (pValue.getInt())
         m_bDone = true;
 }
 
-void OOXMLFastContextHandlerCommentEx::att_paraIdParent(const OOXMLValue::Pointer_t& pValue)
+void OOXMLFastContextHandlerCommentEx::att_paraIdParent(const OOXMLValue& pValue)
 {
-    m_sParentId = pValue->getString();
+    m_sParentId = pValue.getString();
 }
 
 }

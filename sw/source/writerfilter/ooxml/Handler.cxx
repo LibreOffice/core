@@ -386,7 +386,7 @@ OOXMLHyperlinkURLHandler::OOXMLHyperlinkURLHandler(OOXMLFastContextHandler * pCo
 OOXMLHyperlinkURLHandler::~OOXMLHyperlinkURLHandler()
 {
     mpFastContext->clearProps();
-    mpFastContext->newProperty(NS_ooxml::LN_CT_Hyperlink_URL, OOXMLValue::Pointer_t(new OOXMLStringValue(mURL)));
+    mpFastContext->newProperty(NS_ooxml::LN_CT_Hyperlink_URL, OOXMLValue::createString(mURL));
 }
 
 void OOXMLHyperlinkURLHandler::attribute(Id name, const Value & val)
@@ -414,7 +414,7 @@ OOXMLAltChunkHandler::~OOXMLAltChunkHandler()
 {
     mpFastContext->clearProps();
     mpFastContext->newProperty(NS_ooxml::LN_CT_AltChunk,
-                               OOXMLValue::Pointer_t(new OOXMLStringValue(m_aStreamName)));
+                               OOXMLValue::createString(m_aStreamName));
 }
 
 void OOXMLAltChunkHandler::attribute(Id nName, const Value& rValue)

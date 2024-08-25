@@ -343,13 +343,13 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     writerfilter::Reference<BinaryObj>::Pointer_t xPicture
         (new OOXMLBinaryObjectReference(std::move(xStream)));
 
-    OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(std::move(xPicture)));
+    OOXMLValue pPayloadValue(OOXMLValue::createBinary(std::move(xPicture)));
 
     OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySet);
 
     pBlipSet->add(NS_ooxml::LN_payload, pPayloadValue, OOXMLProperty::ATTRIBUTE);
 
-    OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(std::move(pBlipSet)));
+    OOXMLValue pBlipValue(OOXMLValue::createPropertySet(std::move(pBlipSet)));
 
     OOXMLPropertySet * pProps = new OOXMLPropertySet;
 

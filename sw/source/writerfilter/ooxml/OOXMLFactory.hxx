@@ -68,7 +68,7 @@ public:
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
     virtual void endAction(OOXMLFastContextHandler * pHandler);
-    virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, const OOXMLValue::Pointer_t& pValue);
+    virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, const OOXMLValue& pValue);
 
 protected:
     virtual ~OOXMLFactory_ns() override;

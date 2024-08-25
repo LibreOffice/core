@@ -393,7 +393,7 @@ def charactersActionForValues(nsNode, refNode):
         ret.append("    // %s" % defineNode.getAttribute("name"))
         for dataNode in getChildrenByName(defineNode, "data"):
             if dataNode.getAttribute("type") == "int":
-                ret.append("    OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(sText));")
+                ret.append("    OOXMLValue pValue(OOXMLValue::createInteger(sText));")
                 ret.append("    pValueHandler->setValue(pValue);")
         ret.append("    }")
 
@@ -417,34 +417,35 @@ def factoryChooseAction(actionNode):
         ret.append("        {")
         extra_space = "        "
 
-    if actionNode.getAttribute("action") in ("handleXNotes", "handleHdrFtr", "handleComment", "handlePicture", "handleBreak", "handleOutOfOrderBreak", "handleOLE", "handleFontRel", "handleHyperlinkURL", "handleAltChunk"):
+    act = actionNode.getAttribute("action")
+    if act in ("handleXNotes", "handleHdrFtr", "handleComment", "handlePicture", "handleBreak", "handleOutOfOrderBreak", "handleOLE", "handleFontRel", "handleHyperlinkURL", "handleAltChunk"):
         ret.append("    %sif (OOXMLFastContextHandlerProperties* pProperties = dynamic_cast<OOXMLFastContextHandlerProperties*>(pHandler))" % extra_space)
         ret.append("    %s    pProperties->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") == "propagateCharacterPropertiesAsSet":
+    elif act == "propagateCharacterPropertiesAsSet":
         ret.append("    %spHandler->propagateCharacterPropertiesAsSet(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
-    elif actionNode.getAttribute("action") in ("startCell", "endCell"):
+    elif act in ("startCell", "endCell"):
         ret.append("    %sif (OOXMLFastContextHandlerTextTableCell* pTextTableCell = dynamic_cast<OOXMLFastContextHandlerTextTableCell*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTableCell->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") in ("startRow", "endRow"):
+    elif act in ("startRow", "endRow"):
         ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") == "handleGridAfter":
+    elif act == "handleGridAfter":
         ret.append("    %sif (OOXMLFastContextHandlerValue* pValueHandler = dynamic_cast<OOXMLFastContextHandlerValue*>(pHandler))" % extra_space)
         ret.append("    %s    pValueHandler->%s();" % (extra_space, actionNode.getAttribute("action")))
     # tdf#111550
-    elif actionNode.getAttribute("action") in ("start_P_Tbl"):
+    elif act in ("start_P_Tbl"):
         ret.append("    %sif (OOXMLFastContextHandlerTextTable* pTextTable = dynamic_cast<OOXMLFastContextHandlerTextTable*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTable->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") in ("sendProperty", "handleHyperlink"):
+    elif act in ("sendProperty", "handleHyperlink"):
         ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
         ret.append("    %s    pStream->%s();" % (extra_space, actionNode.getAttribute("action")))
-    elif actionNode.getAttribute("action") == "fieldstart":
+    elif act == "fieldstart":
         ret.append("    %spHandler->startField();" % (extra_space))
-    elif actionNode.getAttribute("action") == "fieldsep":
+    elif act == "fieldsep":
         ret.append("    %spHandler->fieldSeparator();" % (extra_space))
-    elif actionNode.getAttribute("action") == "fieldend":
+    elif act == "fieldend":
         ret.append("    %spHandler->endField();" % (extra_space))
-    elif actionNode.getAttribute("action") == "fieldlock":
+    elif act == "fieldlock":
         ret.append("    %s{" % (extra_space))
         ret.append("        %sOOXMLPropertySetEntryToBool aHandler(NS_ooxml::LN_CT_FldChar_fldLock);" % (extra_space))
         ret.append("        %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % (extra_space))
@@ -452,7 +453,7 @@ def factoryChooseAction(actionNode):
         ret.append("        %sif (aHandler.getValue())" % (extra_space))
         ret.append("            %spHandler->lockField();" % (extra_space))
         ret.append("    %s}" % (extra_space))
-    elif actionNode.getAttribute("action") == "fieldlock_simple":
+    elif act == "fieldlock_simple":
         ret.append("    %s{" % (extra_space))
         ret.append("        %sOOXMLPropertySetEntryToBool aHandler(NS_ooxml::LN_CT_SimpleField_fldLock);" % (extra_space))
         ret.append("        %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % (extra_space))
@@ -460,23 +461,23 @@ def factoryChooseAction(actionNode):
         ret.append("        %sif (aHandler.getValue())" % (extra_space))
         ret.append("            %spHandler->lockField();" % (extra_space))
         ret.append("    %s}" % (extra_space))
-    elif actionNode.getAttribute("action") == "printproperty":
+    elif act == "printproperty":
         ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
         ret.append("    %s    pStream->sendProperty(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
-    elif actionNode.getAttribute("action") == "sendPropertiesWithId":
+    elif act == "sendPropertiesWithId":
         ret.append("    %spHandler->sendPropertiesWithId(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
-    elif actionNode.getAttribute("action") == "text":
+    elif act == "text":
         ret.append("    %spHandler->text(sText);" % (extra_space))
-    elif actionNode.getAttribute("action") == "positionOffset":
+    elif act == "positionOffset":
         ret.append("    %spHandler->positionOffset(sText);" % (extra_space))
-    elif actionNode.getAttribute("action") == "positivePercentage":
+    elif act == "positivePercentage":
         ret.append("    %spHandler->positivePercentage(sText);" % (extra_space))
-    elif actionNode.getAttribute("action") == "alignH":
+    elif act == "alignH":
         ret.append("    %spHandler->alignH(sText);" % (extra_space))
-    elif actionNode.getAttribute("action") == "alignV":
+    elif act == "alignV":
         ret.append("    %spHandler->alignV(sText);" % (extra_space))
-    elif actionNode.getAttribute("action") == "tokenproperty":
-        ret.append("    %sOOXMLFastHelper<OOXMLIntegerValue>::newProperty(pHandler, %s, pHandler->getToken());" % (extra_space, idToLabel("ooxml:token")))
+    elif act == "tokenproperty":
+        ret.append("    %snewIntegerProperty(pHandler, %s, pHandler->getToken());" % (extra_space, idToLabel("ooxml:token")))
     else:
         ret.append("    %spHandler->%s();" % (extra_space, actionNode.getAttribute("action")))
 
@@ -675,7 +676,7 @@ def factoryAttributeAction(nsNode):
     nsLabel = nsToLabel(nsNode)
     inner = factoryAttributeActionInner(nsNode)
     if len(inner):
-        print("""void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler* _pHandler, Token_t nToken, const OOXMLValue::Pointer_t& pValue)
+        print("""void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler* _pHandler, Token_t nToken, const OOXMLValue& pValue)
 {
     switch (_pHandler->getDefine())
     {""" % nsLabel)
@@ -686,7 +687,7 @@ def factoryAttributeAction(nsNode):
         print("}")
         print()
     else:
-        print("void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler*, Token_t, const OOXMLValue::Pointer_t&)" % nsLabel)
+        print("void OOXMLFactory_%s::attributeAction(OOXMLFastContextHandler*, Token_t, const OOXMLValue&)" % nsLabel)
         print("{")
         print("}")
         print()

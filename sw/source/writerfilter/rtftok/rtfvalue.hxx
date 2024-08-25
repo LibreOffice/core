@@ -33,7 +33,7 @@ class RTFSprms;
 class RTFShape;
 class RTFPicture;
 /// Value of an RTF keyword
-class RTFValue : public Value
+class RTFValue : public Value, public virtual SvRefBase
 {
     RTFValue(int nValue, OUString sValue, const RTFSprms* pAttributes, const RTFSprms* pSprms,
              css::uno::Reference<css::drawing::XShape> xShape,

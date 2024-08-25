@@ -330,14 +330,9 @@ protected:
    makes no sense for a certain value, e.g. the integer value of a
    string.
  */
-class Value : public virtual SvRefBase
+class Value
 {
 public:
-    /**
-       Pointer to a value.
-     */
-    typedef tools::SvRef<Value> Pointer_t;
-
     /**
        Returns integer representation of the value.
      */

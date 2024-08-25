@@ -51,7 +51,7 @@ public:
         print("    void %sAction(OOXMLFastContextHandler* pHandler);" % action)
 
     print("""virtual void charactersAction(OOXMLFastContextHandler* pHandler, const OUString & sText);
-    virtual void attributeAction(OOXMLFastContextHandler* pHandler, Token_t nToken, const OOXMLValue::Pointer_t& pValue);
+    virtual void attributeAction(OOXMLFastContextHandler* pHandler, Token_t nToken, const OOXMLValue& pValue);
 
     virtual ~OOXMLFactory_%s();
 

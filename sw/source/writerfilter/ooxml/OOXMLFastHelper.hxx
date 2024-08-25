@@ -29,9 +29,6 @@ class OOXMLFastHelper
 public:
     static rtl::Reference<OOXMLFastContextHandler> createAndSetParentAndDefine
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine);
-
-    static void newProperty(OOXMLFastContextHandler * pHandler,
-                            Id nId, sal_Int32 nValue);
 };
 
 template <class T>
@@ -46,15 +43,15 @@ rtl::Reference<OOXMLFastContextHandler> OOXMLFastHelper<T>::createAndSetParentAn
     return pTmp;
 }
 
-template <class T>
-void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
+inline void newIntegerProperty(OOXMLFastContextHandler * pHandler,
                                      Id nId,
                                      sal_Int32 nVal)
 {
-    OOXMLValue::Pointer_t pVal(T::Create(nVal));
+    OOXMLValue pVal(OOXMLValue::createInteger(nVal));
 
     pHandler->newProperty(nId, pVal);
 }
+
 
 }
 
