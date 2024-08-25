@@ -16,15 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_STYLEPOOL_HXX
-#define INCLUDED_SVL_STYLEPOOL_HXX
+#pragma once
 
-#include <memory>
 #include <rtl/ustring.hxx>
 #include <svl/itemset.hxx>
+#include <memory>
+#include <vector>
+#include <unordered_map>
 
 class StylePoolImpl;
-class IStylePoolIteratorAccess;
 
 class SVL_DLLPUBLIC StylePool final
 {
@@ -32,6 +32,7 @@ private:
     std::unique_ptr<StylePoolImpl> pImpl;
 public:
     explicit StylePool( SfxItemSet const * pIgnorableItems = nullptr );
+    ~StylePool();
 
     /** Insert a SfxItemSet into the style pool.
 
@@ -48,41 +49,12 @@ public:
     */
     std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet, const OUString* pParentName = nullptr );
 
-    /** Create an iterator
+    void populateCacheMap(std::unordered_map< OUString, std::shared_ptr<SfxItemSet> >& rCacheMap);
 
-        The iterator walks through the StylePool
-        OD 2008-03-07 #i86923#
-        introduce optional parameter to control, if unused SfxItemsSet are skipped or not
-        introduce optional parameter to control, if ignorable items are skipped or not
-
-        @attention every change, e.g. destruction, of the StylePool could cause undefined effects.
-
-        @param bSkipUnusedItemSets
-        input parameter - boolean, indicating if unused SfxItemSets are skipped or not
-
-        @param bSkipIgnorableItems
-        input parameter - boolean, indicating if ignorable items are skipped or not
-
-        @postcond the iterator "points before the first" SfxItemSet of the pool.
-        The first StylePoolIterator::getNext() call will deliver the first SfxItemSet.
-    */
-    std::unique_ptr<IStylePoolIteratorAccess> createIterator( const bool bSkipUnusedItemSets = false,
-                                                      const bool bSkipIgnorableItems = false );
-
-    ~StylePool();
+    // skips unused and ignorable items
+    void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles );
 
     static OUString nameOf( const std::shared_ptr<SfxItemSet>& pSet );
 };
-
-class SVL_DLLPUBLIC IStylePoolIteratorAccess
-{
-public:
-    /** Delivers a shared pointer to the next SfxItemSet of the pool
-        If there is no more SfxItemSet, the delivered share_pointer is empty.
-    */
-    virtual std::shared_ptr<SfxItemSet> getNext() = 0;
-    virtual ~IStylePoolIteratorAccess() {};
-};
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

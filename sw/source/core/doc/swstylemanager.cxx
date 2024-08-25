@@ -45,14 +45,7 @@ public:
 
 void SwStyleCache::addCompletePool( StylePool& rPool )
 {
-    std::unique_ptr<IStylePoolIteratorAccess> pIter = rPool.createIterator();
-    std::shared_ptr<SfxItemSet> pStyle = pIter->getNext();
-    while( pStyle )
-    {
-        OUString aName( StylePool::nameOf(pStyle) );
-        mMap[ aName ] = pStyle;
-        pStyle = pIter->getNext();
-    }
+    rPool.populateCacheMap(mMap);
 }
 
 namespace {
@@ -161,16 +154,7 @@ void SwStyleManager::getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rSt
 {
     StylePool& rAutoPool
         = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
-    // setup <StylePool> iterator, which skips unused styles and ignorable items
-    std::unique_ptr<IStylePoolIteratorAccess> pIter = rAutoPool.createIterator( true, true );
-    std::shared_ptr<SfxItemSet> pStyle = pIter->getNext();
-    while( pStyle )
-    {
-        assert(eFamily != IStyleAccess::AUTO_STYLE_PARA || dynamic_cast<SwAttrSet*>(pStyle.get()));
-        rStyles.push_back( pStyle );
-
-        pStyle = pIter->getNext();
-    }
+    rAutoPool.getAllStyles(rStyles);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

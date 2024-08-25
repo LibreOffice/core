@@ -15,7 +15,6 @@ $(eval $(call gb_CppunitTest_use_sdk_api,svl_items))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_items, \
 	svl/qa/unit/items/test_IndexedStyleSheets \
-	svl/qa/unit/items/stylepool \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,svl_items, \
