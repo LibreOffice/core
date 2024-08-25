@@ -164,6 +164,7 @@ IMPL_LINK_NOARG(Comment, OnFocusOut, weld::Widget&, void)
 IMPL_LINK_NOARG(Comment, ResolveClicked, weld::Toggleable&, void)
 {
     mrCommentsPanel.ToggleResolved(this);
+    mrCommentsPanel.ShowResolvedHdl(mrCommentsPanel.getShowResolved());
 }
 
 IMPL_LINK_NOARG(Comment, ReplyClicked, weld::Button&, void) { mrCommentsPanel.ReplyComment(this); }
@@ -204,6 +205,8 @@ CommentsPanel::CommentsPanel(weld::Widget* pParent)
     mxFilterAuthor->connect_changed(LINK(this, CommentsPanel, FilterByAuthor));
     mxFilterDate->connect_activated(LINK(this, CommentsPanel, FilterByDate));
     mxResetDate->connect_clicked(LINK(this, CommentsPanel, ResetDate));
+    mxShowTime->connect_toggled(LINK(this, CommentsPanel, ShowTimeHdl));
+    mxShowResolved->connect_toggled(LINK(this, CommentsPanel, ShowResolvedHdl));
     mxSortbyPosition->connect_toggled(LINK(this, CommentsPanel, SortHdl));
     mxSortbyTime->connect_toggled(LINK(this, CommentsPanel, SortHdl));
 
@@ -717,6 +720,27 @@ IMPL_LINK_NOARG(CommentsPanel, ResetDate, weld::Button&, void)
     mbResetDate = true;
     FilterByAuthor(*mxFilterAuthor);
     mbResetDate = false;
+}
+
+IMPL_LINK_NOARG(CommentsPanel, ShowTimeHdl, weld::Toggleable&, void)
+{
+    bool bShowTime = mxShowTime->get_active();
+    for (auto & [ rId, pComment ] : mpCommentsMap)
+    {
+        pComment->mxTime->set_visible(bShowTime);
+    }
+}
+
+IMPL_LINK_NOARG(CommentsPanel, ShowResolvedHdl, weld::Toggleable&, void)
+{
+    bool bShowResolved = mxShowResolved->get_active();
+    for (auto & [ rId, pComment ] : mpCommentsMap)
+    {
+        if (pComment->mxResolve->get_active())
+        {
+            pComment->get_widget()->set_visible(bShowResolved);
+        }
+    }
 }
 
 CommentsPanel::~CommentsPanel() {}

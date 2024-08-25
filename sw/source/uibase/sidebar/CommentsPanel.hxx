@@ -142,11 +142,15 @@ public:
     DECL_LINK(FilterByAuthor, weld::ComboBox&, void);
     DECL_LINK(FilterByDate, SvtCalendarBox&, void);
     DECL_LINK(ResetDate, weld::Button&, void);
+    DECL_LINK(ShowTimeHdl, weld::Toggleable&, void);
+    DECL_LINK(ShowResolvedHdl, weld::Toggleable&, void);
     DECL_LINK(SortHdl, weld::Toggleable&, void);
 
     // utility functions
     static OUString FormatDate(Date& rDate);
     static OUString FormatTime(tools::Time& rTime);
+
+    weld::Toggleable& getShowResolved() { return *mxShowResolved; }
 
 private:
     SwDoc* mpDoc;
