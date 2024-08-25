@@ -37,7 +37,7 @@ private:
     weld::Builder* m_pBuilder;
     bool m_bSideBar;
 
-    DECL_DLLPRIVATE_LINK(SelectHdl, const OUString&, void);
+    DECL_LINK(SelectHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ToggleMenuHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
 
@@ -61,6 +61,8 @@ public:
 
     void dispose();
     ~ToolbarUnoDispatcher();
+
+    void Select(const OUString& rCommand) { SelectHdl(rCommand); }
 };
 
 #endif

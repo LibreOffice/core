@@ -80,6 +80,7 @@ private:
     DECL_LINK(SearchFindsListRowActivatedHandler, weld::TreeView&, bool);
     DECL_LINK(SearchFindsListMousePressHandler, const MouseEvent&, bool);
     DECL_LINK(SearchOptionsToolbarClickedHandler, const OUString&, void);
+    DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
 
     void FillSearchFindsList();
 };

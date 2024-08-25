@@ -130,6 +130,9 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xSearchOptionsToolbar->connect_clicked(
         LINK(this, QuickFindPanel, SearchOptionsToolbarClickedHandler));
 
+    m_xFindAndReplaceToolbar->connect_clicked(
+        LINK(this, QuickFindPanel, FindAndReplaceToolbarClickedHandler));
+
     m_xSearchFindsList->connect_custom_get_size(
         LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
     m_xSearchFindsList->connect_custom_render(LINK(this, QuickFindPanel, SearchFindsListRender));
@@ -172,6 +175,24 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUStri
         }
         FillSearchFindsList();
     }
+}
+
+// tdf#162580 related: When upgrading from Find toolbar search to advanced Find and Replace
+// search dialog, inherit (pre-fill) search field's term from current value of find bar's
+// focused search entry
+IMPL_LINK(QuickFindPanel, FindAndReplaceToolbarClickedHandler, const OUString&, rCommand, void)
+{
+    if (!SwView::GetSearchDialog())
+    {
+        SvxSearchItem* pSearchItem = SwView::GetSearchItem();
+        if (!pSearchItem)
+        {
+            pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
+            SwView::SetSearchItem(pSearchItem);
+        }
+        pSearchItem->SetSearchString(m_xSearchFindEntry->get_text());
+    }
+    m_xFindAndReplaceToolbarDispatch->Select(rCommand);
 }
 
 QuickFindPanel::~QuickFindPanel()
