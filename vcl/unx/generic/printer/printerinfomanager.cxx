@@ -18,12 +18,16 @@
  */
 
 #include <config_cpdb.h>
+#include <config_cups.h>
 
 #if ENABLE_CPDB
 #include <unx/cpdmgr.hxx>
 #endif
 
+#if ENABLE_CUPS
 #include <unx/cupsmgr.hxx>
+#endif
+
 #include <unx/gendata.hxx>
 #include <unx/helper.hxx>
 
@@ -89,8 +93,10 @@ PrinterInfoManager& PrinterInfoManager::get()
 #if ENABLE_CPDB
     pPIM = CPDManager::tryLoadCPD();
 #endif
+#if ENABLE_CUPS
     if (!pPIM)
         pPIM = CUPSManager::tryLoadCUPS();
+#endif
     if (!pPIM)
         pPIM = new PrinterInfoManager();
     pSalData->m_pPrinterInfoManager.reset(pPIM);

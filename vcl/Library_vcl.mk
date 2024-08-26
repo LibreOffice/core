@@ -634,6 +634,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     $(if $(USE_HEADLESS_CODE), \
         $(if $(ENABLE_CUPS), \
             vcl/unx/generic/printer/cupsmgr \
+	) \
+	$(if $(filter TRUE,$(ENABLE_CPDB) $(ENABLE_CUPS)),\
             vcl/unx/generic/printer/printerinfomanager \
         , \
             vcl/null/printerinfomanager \
