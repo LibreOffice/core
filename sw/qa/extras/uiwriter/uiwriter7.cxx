@@ -2431,10 +2431,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf88986)
     // Create the item set that is normally passed to the insert frame dialog.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
-    SfxItemSet aSet = aShell.CreateInsertFrameItemSet(aMgr);
+    auto xSet = aShell.CreateInsertFrameItemSet(aMgr);
 
     // This was missing along with the gradient and other tables.
-    CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
+    CPPUNIT_ASSERT(xSet->HasItem(SID_COLOR_TABLE));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf78150)
