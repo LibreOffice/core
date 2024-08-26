@@ -416,12 +416,17 @@ void ImageMap::ImpReadNCSALine( std::string_view rLine )
     }
     else if ( aToken == "poly" )
     {
-        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, ',') - 1;
+        const sal_Int32 nTokenCount = comphelper::string::getTokenCount(aStr, ',');
         const OUString aURL( ImpReadNCSAURL( &pStr ) );
-        tools::Polygon aPoly( nCount );
+        tools::Polygon aPoly;
+        if (nTokenCount > 0)
+        {
+            const sal_uInt16 nCount = nTokenCount - 1;
+            aPoly.SetSize(nCount);
 
-        for ( sal_uInt16 i = 0; i < nCount; i++ )
-            aPoly[ i ] = ImpReadNCSACoords( &pStr );
+            for (sal_uInt16 i = 0; i < nCount; ++i)
+                aPoly[ i ] = ImpReadNCSACoords( &pStr );
+        }
 
         maList.emplace_back( new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() ) );
     }
