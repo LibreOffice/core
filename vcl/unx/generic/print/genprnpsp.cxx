@@ -1023,10 +1023,8 @@ namespace {
 class PrinterUpdate
 {
     static Idle*  pPrinterUpdateIdle;
-    static int    nActiveJobs;
 
     static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, Timer*, void );
 public:
     static void update(SalGenericInstance const &rInstance);
     static void jobEnded();
@@ -1035,7 +1033,6 @@ public:
 }
 
 Idle* PrinterUpdate::pPrinterUpdateIdle = nullptr;
-int PrinterUpdate::nActiveJobs = 0;
 
 void PrinterUpdate::doUpdate()
 {
@@ -1043,18 +1040,6 @@ void PrinterUpdate::doUpdate()
     SalGenericInstance *pInst = GetGenericInstance();
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
-}
-
-IMPL_STATIC_LINK_NOARG( PrinterUpdate, UpdateTimerHdl, Timer*, void )
-{
-    if( nActiveJobs < 1 )
-    {
-        doUpdate();
-        delete pPrinterUpdateIdle;
-        pPrinterUpdateIdle = nullptr;
-    }
-    else
-        pPrinterUpdateIdle->Start();
 }
 
 void PrinterUpdate::update(SalGenericInstance const &rInstance)
@@ -1069,15 +1054,7 @@ void PrinterUpdate::update(SalGenericInstance const &rInstance)
         return;
     }
 
-    if( nActiveJobs < 1 )
-        doUpdate();
-    else if( ! pPrinterUpdateIdle )
-    {
-        pPrinterUpdateIdle = new Idle("PrinterUpdateTimer");
-        pPrinterUpdateIdle->SetPriority( TaskPriority::LOWEST );
-        pPrinterUpdateIdle->SetInvokeHandler( LINK( nullptr, PrinterUpdate, UpdateTimerHdl ) );
-        pPrinterUpdateIdle->Start();
-    }
+    doUpdate();
 }
 
 void SalGenericInstance::updatePrinterUpdate()
@@ -1087,16 +1064,12 @@ void SalGenericInstance::updatePrinterUpdate()
 
 void PrinterUpdate::jobEnded()
 {
-    nActiveJobs--;
-    if( nActiveJobs < 1 )
+    if( pPrinterUpdateIdle )
     {
-        if( pPrinterUpdateIdle )
-        {
-            pPrinterUpdateIdle->Stop();
-            delete pPrinterUpdateIdle;
-            pPrinterUpdateIdle = nullptr;
-            doUpdate();
-        }
+        pPrinterUpdateIdle->Stop();
+        delete pPrinterUpdateIdle;
+        pPrinterUpdateIdle = nullptr;
+        doUpdate();
     }
 }
 
