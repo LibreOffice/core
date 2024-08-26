@@ -2003,7 +2003,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     SCROW nStartRow = rParam.nRow1 + 1;     // Header
     SCCOL nEndCol   = rParam.nCol2;
     SCROW nEndRow    = rParam.nRow2;        // will change
-    sal_uInt16 i;
 
     //  Remove empty rows at the end
     //  so that all exceeding (rDocument.MaxRow()) can be found by InsertRow (#35180#)
@@ -2013,11 +2012,13 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     sal_uInt16 nLevelCount = 0;             // Number of levels
     bool bDoThis = true;
-    for (i=0; i<MAXSUBTOTAL && bDoThis; i++)
+    for (sal_uInt16 i = 0; i < MAXSUBTOTAL && bDoThis; ++i)
+    {
         if (rParam.bGroupActive[i])
-            nLevelCount = i+1;
+            nLevelCount = o3tl::sanitizing_inc(i);
         else
             bDoThis = false;
+    }
 
     if (nLevelCount==0)                 // do nothing
         return true;
@@ -2059,7 +2060,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
         if (nResCount > 0)                                      // otherwise only sort
         {
-            for (i=0; i<=aRowEntry.nGroupNo; i++)
+            for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo; ++i)
             {
                 aSubString = GetString( nGroupCol[i], nStartRow );
                 if ( bIgnoreCase )
@@ -2079,7 +2080,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 {
                     bChanged = false;
                     OUString aString;
-                    for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
+                    for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo && !bChanged; ++i)
                     {
                         aString = GetString( nGroupCol[i], nRow );
                         if (bIgnoreCase)
@@ -2139,7 +2140,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         ++nRow;
                         ++nEndRow;
                         aRowEntry.nSubStartRow = nRow;
-                        for (i=0; i<=aRowEntry.nGroupNo; i++)
+                        for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo; ++i)
                         {
                             aSubString = GetString( nGroupCol[i], nRow );
                             if ( bIgnoreCase )
