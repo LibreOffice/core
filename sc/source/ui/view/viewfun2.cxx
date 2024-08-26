@@ -1283,7 +1283,8 @@ void ScViewFunc::MergeCells( bool bApi, bool bDoContents, bool bCenter,
 
             SfxViewShell* pViewShell = GetViewData().GetViewShell();
 
-            weld::DialogController::runAsync(pBox, [=](sal_Int32 nRetVal) {
+            weld::DialogController::runAsync(pBox, [pBox, bDoContents, bEmptyMergedCells, pViewShell,
+                                                    nSlot, bApi, doMerge=std::move(doMerge)](sal_Int32 nRetVal) {
                 if (nRetVal == RET_OK)
                 {
                     bool bRealDoContents = bDoContents;
