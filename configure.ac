@@ -6421,6 +6421,7 @@ if test "$test_cups" = yes -a "$enable_cups" != no; then
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -o "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcups2-dev or cups-devel.])
     fi
+    AC_DEFINE([ENABLE_CUPS],[1])
 else
     AC_MSG_RESULT([no])
 fi
@@ -15722,6 +15723,7 @@ AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_cpdb.h])
 AC_CONFIG_HEADERS([config_host/config_crypto.h])
+AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extensions.h])

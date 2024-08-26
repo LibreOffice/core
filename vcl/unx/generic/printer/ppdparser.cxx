@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <config_cpdb.h>
+#include <config_cups.h>
 
 #include <stdlib.h>
 
@@ -55,7 +56,7 @@
 #include <mutex>
 #include <unordered_map>
 
-#ifdef ENABLE_CUPS
+#if ENABLE_CUPS
 #include <cups/cups.h>
 #endif
 
@@ -568,7 +569,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
         PrinterInfoManager& rMgr = PrinterInfoManager::get();
         if( rMgr.getType() == PrinterInfoManager::Type::CUPS )
         {
-#ifdef ENABLE_CUPS
+#if ENABLE_CUPS
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
 #endif
         } else if ( rMgr.getType() == PrinterInfoManager::Type::CPD )
@@ -617,7 +618,7 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     if ( pKey ) {
         std::unique_ptr<PPDKey> pImageableAreas(new PPDKey(u"ImageableArea"_ustr));
         std::unique_ptr<PPDKey> pPaperDimensions(new PPDKey(u"PaperDimension"_ustr));
-#ifdef ENABLE_CUPS
+#if ENABLE_CUPS
         for (int i = 0; i < pKey->countValues(); i++) {
             const PPDValue* pValue = pKey -> getValue(i);
             OUString aValueName = pValue -> m_aOption;
