@@ -681,13 +681,13 @@ PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInfo
     basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rViewInformation));
 
     // if WaveHeight, grow by it
-    if (basegfx::fTools::more(getWaveHeight(), 0.0))
+    if (getWaveHeight() > 0.0)
     {
         aRetval.grow(getWaveHeight());
     }
 
     // if line width, grow by it
-    if (basegfx::fTools::more(getLineAttribute().getWidth(), 0.0))
+    if (getLineAttribute().getWidth() > 0.0)
     {
         aRetval.grow(getLineAttribute().getWidth() * 0.5);
     }
