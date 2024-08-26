@@ -117,7 +117,7 @@ namespace drawinglayer::primitive2d
 
             // create & return primitive
             return new PolygonHairlinePrimitive2D(
-                aWave,
+                std::move(aWave),
                 getColor());
         }
 
