@@ -513,7 +513,9 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
     if( !nEventId )
         return;
 
+    std::unique_lock aGuard(m_aMutex);
     ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+    aGuard.unlock();
     accessibility::AccessibleEventObject aEvtObject;
 
     aEvtObject.EventId = nEventId;
