@@ -99,6 +99,7 @@ private:
     virtual void impl_setPopupMenu() override;
     void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
+    void executeEntryImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nIndex);
 
     std::vector<std::pair<OUString, bool>>   m_aRecentFilesItems;
     bool                      m_bDisabled : 1;
@@ -330,7 +331,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     }
 }
 
-void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
+void RecentFilesMenuController::executeEntryImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nIndex)
 {
     if (( nIndex < 0 ) ||
         ( nIndex >= sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
@@ -350,7 +351,13 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList.realloc(aArgsList.size()+1);
         aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue(u"ReadOnly"_ustr, true);
     }
-    dispatchCommand(m_aRecentFilesItems[nIndex].first, aArgsList, u"_default"_ustr);
+    dispatchCommandImpl(rGuard, m_aRecentFilesItems[nIndex].first, aArgsList, u"_default"_ustr);
+}
+
+void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
+{
+    std::unique_lock aLock(m_aMutex);
+    executeEntryImpl(aLock, nIndex);
 }
 
 // XEventListener
@@ -477,7 +484,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
         aEntryArg = aURL.Complete.subView( nEntryPos, nAddArgs-nEntryPos );
 
     sal_Int32 nEntry = o3tl::toInt32(aEntryArg);
-    executeEntry( nEntry );
+    executeEntryImpl(aLock, nEntry);
 }
 
 }
