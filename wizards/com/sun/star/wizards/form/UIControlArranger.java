@@ -242,9 +242,8 @@ public class UIControlArranger
             m_aButtonList.setShowButtons(false);      // shows a button line at ''wrong'' position like |<| 1..4/4 |>|
             m_aButtonList.setRenderer(new LayoutRenderer());
             m_aButtonList.setGap(new Size(3, 3));
-//            m_aButtonList.scaleImages = Boolean.FALSE;
             m_aButtonList.tabIndex = curtabindex++;
-            m_aButtonList.helpURL = 34453 + (formindex * 4);
+            m_aButtonList.setHelpURL(34453 + (formindex * 4));
 
             m_aButtonList.setListModel(model);
             m_aButtonList.create(CurUnoDialog);

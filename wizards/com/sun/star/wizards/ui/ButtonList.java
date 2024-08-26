@@ -61,7 +61,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private String m_aControlName = "il";
     private int m_nCurrentSelection = -1;
     private int pageStart = 0;
-    public int helpURL = 0;
+    private int helpURL = 0;
     private IRenderer renderer;
     private ListModel listModel;
     private IRenderer counterRenderer = new SimpleCounterRenderer();
@@ -70,6 +70,11 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     public void setName(String _sName)
     {
         m_aControlName = _sName;
+    }
+
+    public void setHelpURL(int _helpURL)
+    {
+        helpURL = _helpURL;
     }
 
     /** Setter for property m_aButtonSize.
