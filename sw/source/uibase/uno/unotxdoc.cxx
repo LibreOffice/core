@@ -235,8 +235,9 @@ static std::unique_ptr<SwPrintUIOptions> lcl_GetPrintUIOptions(
     {
         sal_uInt16 nMax = nCurrentPage;
         const SwPageFrame *pPage = dynamic_cast<const SwPageFrame*>(pFrame->Lower());
-        while (pPage && nMax-- > 0)
+        while (pPage && nMax > 0)
         {
+            nMax--;
             if (pPage->getFrameArea().Height() == 0)
                 nCurrentPage--;
             pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
