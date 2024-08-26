@@ -1018,43 +1018,21 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     return true;
 }
 
-namespace {
-
-class PrinterUpdate
-{
-    static void doUpdate();
-public:
-    static void update(SalGenericInstance const &rInstance);
-};
-
-}
-
-void PrinterUpdate::doUpdate()
-{
-    ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    SalGenericInstance *pInst = GetGenericInstance();
-    if( pInst && rManager.checkPrintersChanged( false ) )
-        pInst->PostPrintersChanged();
-}
-
-void PrinterUpdate::update(SalGenericInstance const &rInstance)
+void SalGenericInstance::updatePrinterUpdate()
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    if( ! rInstance.isPrinterInit() )
+    if (!isPrinterInit())
     {
         // #i45389# start background printer detection
         psp::PrinterInfoManager::get();
         return;
     }
 
-    doUpdate();
-}
-
-void SalGenericInstance::updatePrinterUpdate()
-{
-    PrinterUpdate::update(*this);
+    ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
+    if (rManager.checkPrintersChanged(false))
+        PostPrintersChanged();
 }
 
 void SalGenericInstance::jobEndedPrinterUpdate()
