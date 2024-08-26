@@ -971,10 +971,10 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     if (IsMacroObj()) {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos=pOut->LogicToPixel(rMousePos);
-        aHitRec.nTol=nMacroTol;
-        aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
-        aHitRec.pPageView=pMacroPV;
-        return pMacroObj->GetMacroPointer(aHitRec);
+        aHitRec.nTol=m_nMacroTol;
+        aHitRec.pVisiLayer=&m_pMacroPV->GetVisibleLayers();
+        aHitRec.pPageView=m_pMacroPV;
+        return m_pMacroObj->GetMacroPointer(aHitRec);
     }
 
     // TextEdit, ObjEdit, Macro

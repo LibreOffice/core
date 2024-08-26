@@ -94,17 +94,17 @@ protected:
     OutlinerView* mpTextEditOutlinerView; // current view of the outliners
     VclPtr<vcl::Window> mpTextEditWin; // matching window to pTextEditOutlinerView
 
-    vcl::Cursor*                pTextEditCursorBuffer; // to restore the cursor in each window
-    SdrObject*                  pMacroObj;
-    SdrPageView*                pMacroPV;
-    VclPtr<vcl::Window>         pMacroWin;
+    vcl::Cursor*                m_pTextEditCursorBuffer; // to restore the cursor in each window
+    SdrObject*                  m_pMacroObj;
+    SdrPageView*                m_pMacroPV;
+    VclPtr<vcl::Window>         m_pMacroWin;
 
-    tools::Rectangle            aTextEditArea;
-    tools::Rectangle            aMinTextEditArea;
-    Link<EditFieldInfo*,void>   aOldCalcFieldValueLink; // for call the old handler
-    Point                       aMacroDownPos;
+    tools::Rectangle            m_aTextEditArea;
+    tools::Rectangle            m_aMinTextEditArea;
+    Link<EditFieldInfo*,void>   m_aOldCalcFieldValueLink; // for call the old handler
+    Point                       m_aMacroDownPos;
 
-    sal_uInt16                  nMacroTol;
+    sal_uInt16                  m_nMacroTol;
 
     bool mbTextEditDontDelete : 1;  // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
     bool mbTextEditOnlyOneView : 1; // a single OutlinerView (f. spellchecking)
@@ -300,7 +300,7 @@ public:
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
     bool EndMacroObj();
-    bool IsMacroObj() const { return pMacroObj!=nullptr; }
+    bool IsMacroObj() const { return m_pMacroObj!=nullptr; }
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */

@@ -80,15 +80,15 @@ SdrObjEditView::SdrObjEditView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mpTextEditPV(nullptr)
     , mpTextEditOutlinerView(nullptr)
     , mpTextEditWin(nullptr)
-    , pTextEditCursorBuffer(nullptr)
-    , pMacroObj(nullptr)
-    , pMacroPV(nullptr)
-    , pMacroWin(nullptr)
-    , aTextEditArea()
-    , aMinTextEditArea()
-    , aOldCalcFieldValueLink()
-    , aMacroDownPos()
-    , nMacroTol(0)
+    , m_pTextEditCursorBuffer(nullptr)
+    , m_pMacroObj(nullptr)
+    , m_pMacroPV(nullptr)
+    , m_pMacroWin(nullptr)
+    , m_aTextEditArea()
+    , m_aMinTextEditArea()
+    , m_aOldCalcFieldValueLink()
+    , m_aMacroDownPos()
+    , m_nMacroTol(0)
     , mbTextEditDontDelete(false)
     , mbTextEditOnlyOneView(false)
     , mbTextEditNewObj(false)
@@ -284,7 +284,7 @@ void SdrObjEditView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if (IsMacroObj())
     {
-        rRect = pMacroObj->GetCurrentBoundRect();
+        rRect = m_pMacroObj->GetCurrentBoundRect();
     }
     else
     {
@@ -332,8 +332,8 @@ void SdrObjEditView::ModelHasChanged()
         bool bColorChg = false;
         bool bContourFrame = pTextObj->IsContourTextFrame();
         EEAnchorMode eNewAnchor(EEAnchorMode::VCenterHCenter);
-        tools::Rectangle aOldArea(aMinTextEditArea);
-        aOldArea.Union(aTextEditArea);
+        tools::Rectangle aOldArea(m_aMinTextEditArea);
+        aOldArea.Union(m_aTextEditArea);
         Color aNewColor;
         { // check area
             Size aPaperMin1;
@@ -359,12 +359,13 @@ void SdrObjEditView::ModelHasChanged()
             tools::Rectangle aNewArea(aMinArea1);
             aNewArea.Union(aEditArea1);
 
-            if (aNewArea != aOldArea || aEditArea1 != aTextEditArea || aMinArea1 != aMinTextEditArea
+            if (aNewArea != aOldArea || aEditArea1 != m_aTextEditArea
+                || aMinArea1 != m_aMinTextEditArea
                 || mpTextEditOutliner->GetMinAutoPaperSize() != aPaperMin1
                 || mpTextEditOutliner->GetMaxAutoPaperSize() != aPaperMax1)
             {
-                aTextEditArea = aEditArea1;
-                aMinTextEditArea = aMinArea1;
+                m_aTextEditArea = aEditArea1;
+                m_aMinTextEditArea = aMinArea1;
 
                 const bool bPrevUpdateLayout = mpTextEditOutliner->SetUpdateLayout(false);
                 mpTextEditOutliner->SetMinAutoPaperSize(aPaperMin1);
@@ -453,7 +454,7 @@ void SdrObjEditView::ModelHasChanged()
                 bool bWasCoursorVisible = pOLV->IsCursorVisible();
                 vcl::Cursor* pOldCursor = pWin->GetCursor();
                 pOLV->SetOutputArea(
-                    aTextEditArea); // because otherwise, we're not re-anchoring correctly
+                    m_aTextEditArea); // because otherwise, we're not re-anchoring correctly
                 ImpInvalidateOutlinerView(*pOLV);
                 // Undo SetOutputArea setting and showing the cursor
                 if (!bWasCoursorVisible)
@@ -848,7 +849,7 @@ void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&)
 
     // MinTextRange may have changed. Forward it, too
     const basegfx::B2DRange aMinTextRange
-        = vcl::unotools::b2DRectangleFromRectangle(aMinTextEditArea);
+        = vcl::unotools::b2DRectangleFromRectangle(m_aMinTextEditArea);
 
     for (sal_uInt32 a(0); a < maTEOverlayGroup.count(); a++)
     {
@@ -975,7 +976,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     bool bFitToSize(mpTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
     bool bModified(mpTextEditOutliner->IsModified());
     tools::Rectangle aBlankRect(rOutlView.GetOutputArea());
-    aBlankRect.Union(aMinTextEditArea);
+    aBlankRect.Union(m_aMinTextEditArea);
     tools::Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
 
     // in the tiled rendering case, the setup is incomplete, and we very
@@ -1037,7 +1038,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const& rOutlView) co
         return;
 
     tools::Rectangle aBlankRect(rOutlView.GetOutputArea());
-    aBlankRect.Union(aMinTextEditArea);
+    aBlankRect.Union(m_aMinTextEditArea);
     tools::Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
     sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
 
@@ -1129,7 +1130,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
     }
     // do update before setting output area so that aTextEditArea can be recalculated
     mpTextEditOutliner->SetUpdateLayout(true);
-    pOutlView->SetOutputArea(aTextEditArea);
+    pOutlView->SetOutputArea(m_aTextEditArea);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
 }
@@ -1288,7 +1289,7 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
     }
     if (!bOk)
     {
-        aOldCalcFieldValueLink.Call(pFI);
+        m_aOldCalcFieldValueLink.Call(pFI);
     }
 }
 
@@ -1391,7 +1392,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
         }
 
-        aOldCalcFieldValueLink = mpTextEditOutliner->GetCalcFieldValueHdl();
+        m_aOldCalcFieldValueLink = mpTextEditOutliner->GetCalcFieldValueHdl();
         // FieldHdl has to be set by SdrBeginTextEdit, because this call an UpdateFields
         mpTextEditOutliner->SetCalcFieldValueHdl(
             LINK(this, SdrObjEditView, ImpOutlinerCalcFieldValueHdl));
@@ -1418,7 +1419,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             // Determine EditArea via TakeTextEditArea.
             // TODO: This could theoretically be left out, because TakeTextRect() calculates the aTextEditArea,
             // but aMinTextEditArea has to happen, too (therefore leaving this in right now)
-            pTextObj->TakeTextEditArea(nullptr, nullptr, &aTextEditArea, &aMinTextEditArea);
+            pTextObj->TakeTextEditArea(nullptr, nullptr, &m_aTextEditArea, &m_aMinTextEditArea);
 
             tools::Rectangle aTextRect;
             tools::Rectangle aAnchorRect;
@@ -1432,7 +1433,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                     aTextRect = aAnchorRect;
             }
 
-            aTextEditArea = aTextRect;
+            m_aTextEditArea = aTextRect;
 
             // add possible GridOffset to up-to-now view-independent EditAreas
             basegfx::B2DVector aGridOffset(0.0, 0.0);
@@ -1441,14 +1442,14 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 const Point aOffset(basegfx::fround<tools::Long>(aGridOffset.getX()),
                                     basegfx::fround<tools::Long>(aGridOffset.getY()));
 
-                aTextEditArea += aOffset;
-                aMinTextEditArea += aOffset;
+                m_aTextEditArea += aOffset;
+                m_aMinTextEditArea += aOffset;
             }
 
             Point aPvOfs(pTextObj->GetTextEditOffset());
-            aTextEditArea.Move(aPvOfs.X(), aPvOfs.Y());
-            aMinTextEditArea.Move(aPvOfs.X(), aPvOfs.Y());
-            pTextEditCursorBuffer = pWin->GetCursor();
+            m_aTextEditArea.Move(aPvOfs.X(), aPvOfs.Y());
+            m_aMinTextEditArea.Move(aPvOfs.X(), aPvOfs.Y());
+            m_pTextEditCursorBuffer = pWin->GetCursor();
 
             maHdlList.SetMoveOutside(true);
 
@@ -1578,7 +1579,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             if (pTextObj->IsFitToSize())
             {
-                pWin->Invalidate(aTextEditArea);
+                pWin->Invalidate(m_aTextEditArea);
             }
 
             SdrHint aHint(SdrHintKind::BeginEdit, *pTextObj);
@@ -1620,7 +1621,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
         }
         else
         {
-            mpTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
+            mpTextEditOutliner->SetCalcFieldValueHdl(m_aOldCalcFieldValueLink);
             mpTextEditOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
             mpTextEditOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
         }
@@ -1660,7 +1661,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     rtl::Reference<SdrTextObj> pTEObj = mxWeakTextEditObj.get();
     vcl::Window* pTEWin = mpTextEditWin;
     OutlinerView* pTEOutlinerView = mpTextEditOutlinerView;
-    vcl::Cursor* pTECursorBuffer = pTextEditCursorBuffer;
+    vcl::Cursor* pTECursorBuffer = m_pTextEditCursorBuffer;
     SdrUndoManager* pUndoEditUndoManager = nullptr;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
@@ -1739,8 +1740,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     mpTextEditPV = nullptr;
     mpTextEditWin = nullptr;
     mpTextEditOutlinerView = nullptr;
-    pTextEditCursorBuffer = nullptr;
-    aTextEditArea = tools::Rectangle();
+    m_pTextEditCursorBuffer = nullptr;
+    m_aTextEditArea = tools::Rectangle();
 
     if (SdrOutliner* pTEOutliner = mpTextEditOutliner.release())
     {
@@ -1772,7 +1773,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                        "svx::SdrObjEditView::EndTextEdit(), could not create undo action!");
             // Set old CalcFieldValue-Handler again, this
             // has to happen before Obj::EndTextEdit(), as this does UpdateFields().
-            pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
+            pTEOutliner->SetCalcFieldValueHdl(m_aOldCalcFieldValueLink);
             pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
             pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
 
@@ -1877,8 +1878,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 // may not own the zeroth one
                 delete pOLV;
             }
-            aRect.Union(aTextEditArea);
-            aRect.Union(aMinTextEditArea);
+            aRect.Union(m_aTextEditArea);
+            aRect.Union(m_aMinTextEditArea);
             aRect = pWin->LogicToPixel(aRect);
             aRect.AdjustLeft(-nMorePix);
             aRect.AdjustTop(-nMorePix);
@@ -2004,7 +2005,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
             if (pText != nullptr && pText->IsTextFrame() && pWin != nullptr)
             {
                 sal_uInt16 nPixSiz = pOLV->GetInvalidateMore();
-                tools::Rectangle aEditArea(aMinTextEditArea);
+                tools::Rectangle aEditArea(m_aMinTextEditArea);
                 aEditArea.Union(pOLV->GetOutputArea());
                 if (!aEditArea.Contains(rHit))
                 {
@@ -2632,55 +2633,55 @@ void SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj,
     if (pObj != nullptr && pPV != nullptr && pWin != nullptr && pObj->HasMacro())
     {
         nTol = ImpGetHitTolLogic(nTol, nullptr);
-        pMacroObj = pObj;
-        pMacroPV = pPV;
-        pMacroWin = pWin;
+        m_pMacroObj = pObj;
+        m_pMacroPV = pPV;
+        m_pMacroWin = pWin;
         mbMacroDown = false;
-        nMacroTol = sal_uInt16(nTol);
-        aMacroDownPos = rPnt;
+        m_nMacroTol = sal_uInt16(nTol);
+        m_aMacroDownPos = rPnt;
         MovMacroObj(rPnt);
     }
 }
 
 void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
 {
-    if (pMacroObj != nullptr && mbMacroDown)
+    if (m_pMacroObj != nullptr && mbMacroDown)
     {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos = rUpPos;
-        aHitRec.nTol = nMacroTol;
-        aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
-        aHitRec.pPageView = pMacroPV;
-        pMacroObj->PaintMacro(*pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
+        aHitRec.nTol = m_nMacroTol;
+        aHitRec.pVisiLayer = &m_pMacroPV->GetVisibleLayers();
+        aHitRec.pPageView = m_pMacroPV;
+        m_pMacroObj->PaintMacro(*m_pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
         mbMacroDown = false;
     }
 }
 
 void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
 {
-    if (pMacroObj != nullptr && !mbMacroDown)
+    if (m_pMacroObj != nullptr && !mbMacroDown)
     {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos = rDownPos;
-        aHitRec.nTol = nMacroTol;
-        aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
-        aHitRec.pPageView = pMacroPV;
-        pMacroObj->PaintMacro(*pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
+        aHitRec.nTol = m_nMacroTol;
+        aHitRec.pVisiLayer = &m_pMacroPV->GetVisibleLayers();
+        aHitRec.pPageView = m_pMacroPV;
+        m_pMacroObj->PaintMacro(*m_pMacroWin->GetOutDev(), tools::Rectangle(), aHitRec);
         mbMacroDown = true;
     }
 }
 
 void SdrObjEditView::MovMacroObj(const Point& rPnt)
 {
-    if (pMacroObj == nullptr)
+    if (m_pMacroObj == nullptr)
         return;
 
     SdrObjMacroHitRec aHitRec;
     aHitRec.aPos = rPnt;
-    aHitRec.nTol = nMacroTol;
-    aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
-    aHitRec.pPageView = pMacroPV;
-    bool bDown = pMacroObj->IsMacroHit(aHitRec);
+    aHitRec.nTol = m_nMacroTol;
+    aHitRec.pVisiLayer = &m_pMacroPV->GetVisibleLayers();
+    aHitRec.pPageView = m_pMacroPV;
+    bool bDown = m_pMacroObj->IsMacroHit(aHitRec);
     if (bDown)
         ImpMacroDown(rPnt);
     else
@@ -2689,29 +2690,29 @@ void SdrObjEditView::MovMacroObj(const Point& rPnt)
 
 void SdrObjEditView::BrkMacroObj()
 {
-    if (pMacroObj != nullptr)
+    if (m_pMacroObj != nullptr)
     {
-        ImpMacroUp(aMacroDownPos);
-        pMacroObj = nullptr;
-        pMacroPV = nullptr;
-        pMacroWin = nullptr;
+        ImpMacroUp(m_aMacroDownPos);
+        m_pMacroObj = nullptr;
+        m_pMacroPV = nullptr;
+        m_pMacroWin = nullptr;
     }
 }
 
 bool SdrObjEditView::EndMacroObj()
 {
-    if (pMacroObj != nullptr && mbMacroDown)
+    if (m_pMacroObj != nullptr && mbMacroDown)
     {
-        ImpMacroUp(aMacroDownPos);
+        ImpMacroUp(m_aMacroDownPos);
         SdrObjMacroHitRec aHitRec;
-        aHitRec.aPos = aMacroDownPos;
-        aHitRec.nTol = nMacroTol;
-        aHitRec.pVisiLayer = &pMacroPV->GetVisibleLayers();
-        aHitRec.pPageView = pMacroPV;
-        bool bRet = pMacroObj->DoMacro(aHitRec);
-        pMacroObj = nullptr;
-        pMacroPV = nullptr;
-        pMacroWin = nullptr;
+        aHitRec.aPos = m_aMacroDownPos;
+        aHitRec.nTol = m_nMacroTol;
+        aHitRec.pVisiLayer = &m_pMacroPV->GetVisibleLayers();
+        aHitRec.pPageView = m_pMacroPV;
+        bool bRet = m_pMacroObj->DoMacro(aHitRec);
+        m_pMacroObj = nullptr;
+        m_pMacroPV = nullptr;
+        m_pMacroWin = nullptr;
         return bRet;
     }
     else
