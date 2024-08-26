@@ -383,7 +383,11 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
             if ( !ImplCallPreNotify( aNEvt ) && !xWindow->isDisposed() )
                 CompatGetFocus();
             if( !xWindow->isDisposed() )
-                ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->isDisposed()) ? pOldFocusWindow : nullptr );
+            {
+                if (pOldFocusWindow && pOldFocusWindow->isDisposed())
+                    pOldFocusWindow = nullptr;
+                ImplCallActivateListeners(pOldFocusWindow);
+            }
             if( !xWindow->isDisposed() )
             {
                 mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
