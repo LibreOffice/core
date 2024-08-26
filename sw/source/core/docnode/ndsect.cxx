@@ -1416,8 +1416,14 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
             {
                 // Calculate the Number and reset the Flag
                 nNum = o3tl::toInt32(rNm.subView( aName.getLength() ));
-                if( nNum-- && nNum < mpSectionFormatTable->size() )
-                    pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+                if (nNum)
+                {
+                    --nNum;
+                    if (nNum < mpSectionFormatTable->size())
+                    {
+                        pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+                    }
+                }
             }
             if( pChkStr && *pChkStr==rNm )
                 pChkStr = nullptr;
