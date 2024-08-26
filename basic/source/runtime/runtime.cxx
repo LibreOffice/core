@@ -1960,7 +1960,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                             const DimAsNewRecoverItem& rItem = it->second;
                             if( rItem.m_pClassModule != nullptr )
                             {
-                                SbClassModuleObject* pNewObj = new SbClassModuleObject( rItem.m_pClassModule );
+                                SbClassModuleObject* pNewObj = new SbClassModuleObject(*rItem.m_pClassModule);
                                 pNewObj->SetName( rItem.m_aObjName );
                                 pNewObj->SetParent( rItem.m_pObjParent );
                                 refVar->PutObject( pNewObj );
@@ -1990,9 +1990,9 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                             SbClassModuleObject* pClassModuleObj = dynamic_cast<SbClassModuleObject*>( pValObjBase );
                             if( pClassModuleObj != nullptr )
                             {
-                                SbModule* pClassModule = pClassModuleObj->getClassModule();
+                                SbModule& rClassModule = pClassModuleObj->getClassModule();
                                 gaDimAsNewRecoverHash[refVar.get()] =
-                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
+                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), &rClassModule );
                             }
                             else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                             {

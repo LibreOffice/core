@@ -1523,7 +1523,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
 
     SbModule* pActiveModule = StarBASIC::GetActiveModule();
     if (SbClassModuleObject* pCMO = dynamic_cast<SbClassModuleObject*>(pActiveModule))
-        pActiveModule = pCMO->getClassModule();
+        pActiveModule = &pCMO->getClassModule();
 
     DBG_ASSERT( pActiveModule, "No active module in ErrorHdl!?" );
     if ( pActiveModule )

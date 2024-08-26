@@ -604,23 +604,23 @@ SbxObjectRef createUserTypeImpl( const OUString& rClassName )
     return pRetObj;
 }
 
-SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
-    : SbModule( pClassModule->GetName() )
-    , mpClassModule( pClassModule )
+SbClassModuleObject::SbClassModuleObject(SbModule& rClassModule)
+    : SbModule(rClassModule.GetName())
+    , mrClassModule(rClassModule)
     , mbInitializeEventDone( false )
 {
-    aOUSource = pClassModule->aOUSource;
-    aComment = pClassModule->aComment;
-    pImage = pClassModule->pImage;
-    pBreaks = pClassModule->pBreaks;
+    aOUSource = rClassModule.aOUSource;
+    aComment = rClassModule.aComment;
+    pImage = rClassModule.pImage;
+    pBreaks = rClassModule.pBreaks;
 
-    SetClassName( pClassModule->GetName() );
+    SetClassName(rClassModule.GetName());
 
     // Allow search only internally
     ResetFlag( SbxFlagBits::GlobalSearch );
 
     // Copy the methods from original class module
-    SbxArray* pClassMethods = pClassModule->GetMethods().get();
+    SbxArray* pClassMethods = rClassModule.GetMethods().get();
     sal_uInt32 nMethodCount = pClassMethods->Count();
     sal_uInt32 i;
     for( i = 0 ; i < nMethodCount ; i++ )
@@ -678,7 +678,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     }
 
     // Copy the properties from original class module
-    SbxArray* pClassProps = pClassModule->GetProperties();
+    SbxArray* pClassProps = rClassModule.GetProperties();
     sal_uInt32 nPropertyCount = pClassProps->Count();
     for( i = 0 ; i < nPropertyCount ; i++ )
     {
@@ -719,17 +719,17 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                         SbClassModuleObject* pClassModuleObj = dynamic_cast<SbClassModuleObject*>( pObjBase );
                         if( pClassModuleObj != nullptr )
                         {
-                            SbModule* pLclClassModule = pClassModuleObj->getClassModule();
-                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pLclClassModule );
+                            SbModule& rLclClassModule = pClassModuleObj->getClassModule();
+                            SbClassModuleObject* pNewObj = new SbClassModuleObject(rLclClassModule);
                             pNewObj->SetName( pProp->GetName() );
-                            pNewObj->SetParent( pLclClassModule->pParent );
+                            pNewObj->SetParent(rLclClassModule.pParent);
                             pNewProp->PutObject( pNewObj );
                         }
                         else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                         {
                             BasicCollection* pNewCollection = new BasicCollection( u"Collection"_ustr );
                             pNewCollection->SetName( pProp->GetName() );
-                            pNewCollection->SetParent( pClassModule->pParent );
+                            pNewCollection->SetParent(rClassModule.pParent);
                             pNewProp->PutObject( pNewCollection );
                         }
                     }
@@ -743,7 +743,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
     SetModuleType( ModuleType::CLASS );
-    mbVBASupport = pClassModule->mbVBASupport;
+    mbVBASupport = rClassModule.mbVBASupport;
 }
 
 SbClassModuleObject::~SbClassModuleObject()
@@ -874,7 +874,7 @@ SbxObjectRef SbClassFactory::CreateObject( const OUString& rClassName )
     if( pVar )
     {
         SbModule* pVarMod = static_cast<SbModule*>(pVar);
-        pRet = new SbClassModuleObject( pVarMod );
+        pRet = new SbClassModuleObject(*pVarMod);
     }
     return pRet;
 }

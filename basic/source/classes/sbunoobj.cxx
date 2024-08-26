@@ -995,8 +995,8 @@ static Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmall
             if( auto pClassModuleObj = dynamic_cast<SbClassModuleObject*>( xObj.get() ) )
             {
                 Any aRetAny;
-                SbModule* pClassModule = pClassModuleObj->getClassModule();
-                if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
+                SbModule& rClassModule = pClassModuleObj->getClassModule();
+                if (rClassModule.createCOMWrapperForIface(aRetAny, pClassModuleObj))
                     return aRetAny;
             }
             if( dynamic_cast<const SbUnoObject*>( xObj.get() ) == nullptr )

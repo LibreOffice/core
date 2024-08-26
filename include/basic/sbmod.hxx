@@ -144,11 +144,11 @@ typedef std::vector<SbModuleRef> SbModules;
 // Object class for instances of class modules
 class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbClassModuleObject final : public SbModule
 {
-    SbModule*   mpClassModule;
+    SbModule&   mrClassModule;
     bool        mbInitializeEventDone;
 
 public:
-    SbClassModuleObject( SbModule* pClassModule );
+    SbClassModuleObject(SbModule& rClassModule);
     virtual ~SbClassModuleObject() override;
 
     // Overridden to support NameAccess etc.
@@ -156,8 +156,10 @@ public:
 
     virtual void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
-    SbModule* getClassModule()
-        { return mpClassModule; }
+    SbModule& getClassModule()
+    {
+        return mrClassModule;
+    }
 
     void triggerInitializeEvent();
     void triggerTerminateEvent();
