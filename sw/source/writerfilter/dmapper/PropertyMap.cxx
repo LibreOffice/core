@@ -293,7 +293,7 @@ std::optional< PropertyMap::Property > PropertyMap::getProperty( PropertyIds eId
 
 bool PropertyMap::isSet( PropertyIds eId) const
 {
-    return m_vMap.find( eId ) != m_vMap.end();
+    return m_vMap.contains( eId );
 }
 
 bool PropertyMap::isDocDefault( PropertyIds eId ) const
