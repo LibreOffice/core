@@ -213,7 +213,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
         bool bSkipInvalidate = false;
 
         const bool bKit = comphelper::LibreOfficeKit::isActive();
-        if (bKit && p == m_pColorConfig.get())
+        if (bKit)
         {
             SfxViewShell* pSfxViewShell = SfxViewShell::Current();
             ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
