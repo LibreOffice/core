@@ -182,6 +182,18 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
     rOutl.EnableAutoColor( mbUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
                 mpDoc->GetEditTextDirection( nTab ) );
+    Color aOldOutlinerBackgroundColor = rOutl.GetBackgroundColor();
+    const ScTabViewShell* pTabViewShellBg = mbUseStyleColor ? ScTabViewShell::GetActiveViewShell() : nullptr;
+    if (pTabViewShellBg)
+    {
+        // Similar to writer's SwViewShellImp::PaintLayer set the default
+        // background of the Outliner for the AutoColor cases where there is no
+        // explicit background known.  But like elsewhere in calc, take
+        // mbUseStyleColor of false as ScAutoFontColorMode::Print for print
+        // output, so don't set a default outliner background then.
+        const ScViewRenderingOptions& rViewRenderingOptions = pTabViewShellBg->GetViewRenderingData();
+        rOutl.SetBackgroundColor(rViewRenderingOptions.GetDocColor());
+    }
 
     //  #i69767# The hyphenator must be set (used to be before drawing a text shape with hyphenation).
     //  LinguMgr::GetHyphenator (EditEngine) uses a wrapper now that creates the real hyphenator on demand,
@@ -266,6 +278,9 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
             }
         }
     }
+
+    if (pTabViewShellBg)
+        rOutl.SetBackgroundColor(aOldOutlinerBackgroundColor);
 
     mpDev->SetDrawMode(nOldDrawMode);
 }
