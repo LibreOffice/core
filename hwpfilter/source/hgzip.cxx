@@ -19,6 +19,7 @@
 
 #include "precompile.h"
 
+#include <sal/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -260,9 +261,9 @@ int gz_flush(gz_stream * file, int flush)
 static bool getLongEquals(gz_stream* s, uLong val)
 {
     uLong x = get_byte(s);
-    x += get_byte(s) << 8;
-    x += get_byte(s) << 16;
-    x += get_byte(s) << 24;
+    x += static_cast<sal_uInt32>(get_byte(s)) << 8;
+    x += static_cast<sal_uInt32>(get_byte(s)) << 16;
+    x += static_cast<sal_uInt32>(get_byte(s)) << 24;
     if (s->z_eof)
     {
         s->z_err = Z_DATA_ERROR;
