@@ -429,8 +429,7 @@ OOXMLPropertySetValue::~OOXMLPropertySetValue()
 
 writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getProperties() const
 {
-    return writerfilter::Reference<Properties>::Pointer_t
-        (mpPropertySet->clone());
+    return writerfilter::Reference<Properties>::Pointer_t(mpPropertySet.get());
 }
 
 #ifdef DBG_UTIL
