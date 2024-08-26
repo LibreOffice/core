@@ -454,7 +454,7 @@ namespace
 {
     void setOutlinerBgFromPage(::Outliner& rOutl, SdrPageView& rPgView, bool bScreenDisplay)
     {
-        SdPage* pPage = static_cast<SdPage*>(rPgView.GetPage());
+        SdrPage* pPage = rPgView.GetPage();
         if (pPage)
         {
             // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
