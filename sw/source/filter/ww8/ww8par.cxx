@@ -1197,14 +1197,17 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
     if (m_rReader.m_xPlcxMan && m_rReader.m_xPlcxMan->GetDoingDrawTextBox())
     {
         size_t nCnt = size();
-        for (size_t i=0; i < nCnt; ++i)
+        size_t i = 0;
+        while (i < nCnt)
         {
             SwFltStackEntry& rEntry = (*this)[i];
             if (nAttrId == rEntry.m_pAttr->Which())
             {
-                DeleteAndDestroy(i--);
+                DeleteAndDestroy(i);
                 --nCnt;
+                break;
             }
+            ++i;
         }
     }
     else // Normal case, set the attribute into the document
