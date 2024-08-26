@@ -41,7 +41,7 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/"
 xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
 xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
 >
-  <rng:include href="../odf1.3/OpenDocument-v1.3-schema.rng">
+  <rng:include href="../odf1.4/OpenDocument-v1.4-schema.rng">
 
     <rng:define name="office-document-common-attrs">
       <rng:interleave>
@@ -2927,8 +2927,268 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- TODO no proposal -->
-  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+  <!-- FIXME: tdf#162690 -->
+  <rng:define name="draw-enhanced-geometry-attlist" combine="choice">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="draw:type">
+          <rng:ref name="custom-shape-type"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="svg:viewBox">
+          <rng:list>
+            <rng:ref name="integer"/>
+            <rng:ref name="integer"/>
+            <rng:ref name="integer"/>
+            <rng:ref name="integer"/>
+          </rng:list>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:mirror-vertical">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:mirror-horizontal">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-rotate-angle">
+          <rng:ref name="angle"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-allowed">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-path-allowed">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:concentric-gradient-fill-allowed">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-brightness">
+          <rng:ref name="zeroToHundredPercent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-depth">
+          <rng:list>
+            <rng:ref name="length"/>
+            <rng:ref name="double"/>
+          </rng:list>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-diffusion">
+          <rng:ref name="percent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-number-of-line-segments">
+          <rng:ref name="integer"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-light-face">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-first-light-harsh">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-second-light-harsh">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-first-light-level">
+          <rng:ref name="zeroToHundredPercent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-second-light-level">
+          <rng:ref name="zeroToHundredPercent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-first-light-direction">
+          <rng:ref name="vector3D"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-second-light-direction">
+          <rng:ref name="vector3D"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-metal">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <!-- https://issues.oasis-open.org/browse/OFFICE-4123 -->
+      <rng:optional>
+       <rng:attribute name="draw:extrusion-metal-type">
+          <rng:ref name="namespacedToken"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="dr3d:shade-mode">
+          <rng:choice>
+            <rng:value>flat</rng:value>
+            <rng:value>phong</rng:value>
+            <rng:value>gouraud</rng:value>
+            <rng:value>draft</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-rotation-angle">
+          <rng:list>
+            <rng:ref name="angle"/>
+            <rng:ref name="angle"/>
+          </rng:list>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-rotation-center">
+          <rng:ref name="vector3D"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-shininess">
+          <rng:ref name="zeroToHundredPercent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-skew">
+          <rng:list>
+            <rng:ref name="double"/>
+            <rng:ref name="angle"/>
+          </rng:list>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-specularity">
+          <rng:ref name="zeroToHundredPercent"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="dr3d:projection">
+          <rng:choice>
+            <rng:value>parallel</rng:value>
+            <rng:value>perspective</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-viewpoint">
+          <rng:ref name="point3D"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-origin">
+          <rng:list>
+            <rng:ref name="extrusionOrigin"/>
+            <rng:ref name="extrusionOrigin"/>
+          </rng:list>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:extrusion-color">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:enhanced-path">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:path-stretchpoint-x">
+          <rng:ref name="double"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:path-stretchpoint-y">
+          <rng:ref name="double"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-areas">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:glue-points">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:glue-point-type">
+          <rng:choice>
+            <rng:value>none</rng:value>
+            <rng:value>segments</rng:value>
+            <rng:value>rectangle</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:glue-point-leaving-directions">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-path">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-path-mode">
+          <rng:choice>
+            <rng:value>normal</rng:value>
+            <rng:value>path</rng:value>
+            <rng:value>shape</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-path-scale">
+          <rng:choice>
+            <rng:value>path</rng:value>
+            <rng:value>shape</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:text-path-same-letter-heights">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:modifiers">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+
+    <!-- TODO no proposal -->
     <rng:optional>
       <rng:attribute name="drawooo:sub-view-size">
         <rng:ref name="string"/>
@@ -2939,24 +3199,22 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="string"/>
         </rng:attribute>
     </rng:optional>
-  </rng:define>
 
-  <!-- https://issues.oasis-open.org/browse/OFFICE-4123 -->
-  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+  <!-- FIXME: tdf#162686 -->
     <rng:optional>
       <rng:attribute name="loext:extrusion-metal-type">
         <rng:ref name="namespacedToken"/>
       </rng:attribute>
     </rng:optional>
-  </rng:define>
 
-  <!-- https://issues.oasis-open.org/browse/OFFICE-4122 -->
-  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
+  <!-- FIXME: tdf#162686 -->
     <rng:optional>
       <rng:attribute name="loext:extrusion-specularity-loext">
         <rng:ref name="percent"/>
       </rng:attribute>
     </rng:optional>
+
+    </rng:interleave>
   </rng:define>
 
   <!-- TODO no proposal -->
@@ -3557,6 +3815,74 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="cellRangeAddress"/>
       </rng:attribute>
     </rng:optional>
+  </rng:define>
+
+  <!-- FIXME: tdf#131862 -->
+  <rng:define name="chart-plot-area-attlist" combine="interleave">
+      <rng:optional>
+        <rng:attribute name="table:cell-range-address">
+          <rng:ref name="cellRangeAddressList"/>
+        </rng:attribute>
+      </rng:optional>
+  </rng:define>
+
+  <!-- FIXME: tdf#162691 Copied from OpenDocument-v1.3-schema.rng -->
+  <rng:define name="draw-handle-attlist" combine="choice">
+    <rng:interleave>
+      <rng:optional>
+        <rng:attribute name="draw:handle-mirror-vertical">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-mirror-horizontal">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-switched">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:attribute name="draw:handle-position">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="draw:handle-range-x-minimum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-range-x-maximum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-range-y-minimum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-range-y-maximum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-polar">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-radius-range-minimum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="draw:handle-radius-range-maximum">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:interleave>
   </rng:define>
 
   <!-- TODO no proposal -->
