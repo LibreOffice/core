@@ -474,6 +474,12 @@ wrapper_get_n_children( AtkObject *atk_obj )
                                     "returning max gint.");
                 nChildCount = std::numeric_limits<gint>::max();
             }
+            else if (nChildCount < std::numeric_limits<gint>::min())
+            {
+                SAL_WARN("vcl.gtk", "wrapper_get_n_children: Child count exceeds minimum gint value, "
+                                    "returning min gint.");
+                nChildCount = std::numeric_limits<gint>::min();
+            }
             n = nChildCount;
         }
         catch(const uno::Exception&) {
