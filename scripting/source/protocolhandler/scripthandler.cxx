@@ -225,7 +225,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
                     if ( !inArgs.hasElements() )
                         // no chance to retry if we can't strip more in-args
-                        std::rethrow_exception(aFirstCaughtException);
+                        std::rethrow_exception(std::move(aFirstCaughtException));
 
                     // strip one argument, then retry
                     inArgs.realloc( inArgs.getLength() - 1 );
