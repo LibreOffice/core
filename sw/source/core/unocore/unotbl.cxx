@@ -3277,21 +3277,21 @@ SwXCellRange::getCellRangeByPosition(
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // set cursor in the upper-left cell of the range
-                auto pUnoCursor(pFormat->GetDoc()->CreateUnoCursor(aPos, true));
-                pUnoCursor->Move( fnMoveForward, GoInNode );
-                pUnoCursor->SetRemainInSection( false );
+                std::shared_ptr<SwUnoCursor> xUnoCursor(pFormat->GetDoc()->CreateUnoCursor(aPos, true));
+                xUnoCursor->Move( fnMoveForward, GoInNode );
+                xUnoCursor->SetRemainInSection( false );
                 const SwTableBox* pBRBox = pTable->GetTableBox( sBRName );
                 if(pBRBox)
                 {
-                    pUnoCursor->SetMark();
-                    pUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
-                    pUnoCursor->Move( fnMoveForward, GoInNode );
-                    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
+                    xUnoCursor->SetMark();
+                    xUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
+                    xUnoCursor->Move( fnMoveForward, GoInNode );
+                    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*xUnoCursor);
                     // HACK: remove pending actions for selecting old style tables
                     UnoActionRemoveContext aRemoveContext(rCursor);
                     rCursor.MakeBoxSels();
-                    // pUnoCursor will be provided and will not be deleted
-                    aRet = SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, aNewDesc).get();
+                    // xUnoCursor will be provided and will not be deleted
+                    aRet = SwXCellRange::CreateXCellRange(std::move(xUnoCursor), *pFormat, aNewDesc).get();
                 }
             }
         }

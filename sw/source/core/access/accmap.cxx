@@ -2369,7 +2369,7 @@ so run here: save the parent's SwFrame not the accessible object parent,
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    pParent, aFrameOrObj, rOldBox );
+                    pParent, std::move(aFrameOrObj), rOldBox );
                 AppendEvent( aEvent );
             }
             else

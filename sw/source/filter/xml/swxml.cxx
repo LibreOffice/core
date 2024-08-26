@@ -861,7 +861,15 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     else if ( rDoc.IsOLEPrtNotifyPending() )
         rDoc.PrtOLENotify( true );
 
-    nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
+    if (!nRet)
+    {
+        if (nWarn)
+            nRet = nWarn;
+        else if (nWarn2)
+            nRet = nWarn2;
+        else
+            nRet = nWarnRDF;
+    }
 
     ::svx::DropUnusedNamedItems(xModelComp);
 
