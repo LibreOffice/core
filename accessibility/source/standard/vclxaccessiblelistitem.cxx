@@ -480,12 +480,17 @@ OUString SAL_CALL VCLXAccessibleListItem::getText()
     return m_sEntryText;
 }
 
+OUString VCLXAccessibleListItem::getTextRangeImpl(std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+{
+    return OCommonAccessibleText::implGetTextRange(m_sEntryText, nStartIndex, nEndIndex);
+}
+
 OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( m_aMutex );
 
-    return OCommonAccessibleText::implGetTextRange( m_sEntryText, nStartIndex, nEndIndex );
+    return getTextRangeImpl(aGuard, nStartIndex, nEndIndex);
 }
 
 css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
@@ -527,7 +532,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pListBoxHelper->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText(getTextRangeImpl(aGuard, nStartIndex, nEndIndex));
             rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
