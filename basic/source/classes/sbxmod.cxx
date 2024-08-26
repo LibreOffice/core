@@ -417,8 +417,8 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 // could be found from other module.
 
 SbModule::SbModule( const OUString& rName, bool bVBASupport )
-         : SbxObject( u"StarBASICModule"_ustr ),
-           pBreaks(nullptr), mbVBASupport(bVBASupport), mbCompat(bVBASupport), bIsProxyModule(false)
+    : SbxObject( u"StarBASICModule"_ustr )
+    , mbVBASupport(bVBASupport), mbCompat(bVBASupport), bIsProxyModule(false)
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -436,7 +436,7 @@ SbModule::~SbModule()
 {
     SAL_INFO("basic","Module named " << GetName() << " is destructing");
     pImage.reset();
-    delete pBreaks;
+    pBreaks.reset();
     pClassData.reset();
     mxWrapper = nullptr;
 }
@@ -1525,7 +1525,7 @@ bool SbModule::SetBP( sal_uInt16 nLine )
     if( !IsBreakable( nLine ) )
         return false;
     if( !pBreaks )
-        pBreaks = new SbiBreakpoints;
+        pBreaks.reset(new SbiBreakpoints);
     auto it = std::find_if(pBreaks->begin(), pBreaks->end(),
         [&nLine](const sal_uInt16 b) { return b <= nLine; });
     if (it != pBreaks->end() && *it == nLine)
@@ -1548,22 +1548,16 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
             [&nLine](const sal_uInt16 b) { return b <= nLine; });
         bRes = (it != pBreaks->end()) && (*it == nLine);
         if (bRes)
-        {
             pBreaks->erase(it);
-        }
-        if( pBreaks->empty() )
-        {
-            delete pBreaks;
-            pBreaks = nullptr;
-        }
+        if (pBreaks->empty())
+            pBreaks.reset();
     }
     return bRes;
 }
 
 void SbModule::ClearAllBP()
 {
-    delete pBreaks;
-    pBreaks = nullptr;
+    pBreaks.reset();
 }
 
 void

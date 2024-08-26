@@ -612,7 +612,6 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
     pImage = pClassModule->pImage;
-    // see comment in destructor about this
     pBreaks = pClassModule->pBreaks;
 
     SetClassName( pClassModule->GetName() );
@@ -755,10 +754,6 @@ SbClassModuleObject::~SbClassModuleObject()
             if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
                 if( !pDocBasicItem->isDocClosed() )
                     triggerTerminateEvent();
-
-    // prevent the base class destructor from deleting this because
-    // we do not actually own it
-    pBreaks = nullptr;
 }
 
 void SbClassModuleObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

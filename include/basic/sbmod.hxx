@@ -64,7 +64,7 @@ protected:
     OUString            aOUSource;
     OUString            aComment;
     std::shared_ptr<SbiImage> pImage;  // the Image
-    SbiBreakpoints*     pBreaks;       // Breakpoints
+    std::shared_ptr<SbiBreakpoints> pBreaks; // Breakpoints
     std::unique_ptr<SbClassData> pClassData;
     bool mbVBASupport; // Option VBASupport
     bool mbCompat; // Option Compatible
