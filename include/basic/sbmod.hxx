@@ -63,7 +63,7 @@ protected:
     css::uno::Reference< css::script::XInvocation > mxWrapper;
     OUString            aOUSource;
     OUString            aComment;
-    std::unique_ptr<SbiImage> pImage;        // the Image
+    std::shared_ptr<SbiImage> pImage;  // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     std::unique_ptr<SbClassData> pClassData;
     bool mbVBASupport; // Option VBASupport

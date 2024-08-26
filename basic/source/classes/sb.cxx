@@ -604,7 +604,6 @@ SbxObjectRef createUserTypeImpl( const OUString& rClassName )
     return pRetObj;
 }
 
-
 SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     : SbModule( pClassModule->GetName() )
     , mpClassModule( pClassModule )
@@ -612,8 +611,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 {
     aOUSource = pClassModule->aOUSource;
     aComment = pClassModule->aComment;
-    // see comment in destructor about these two
-    pImage.reset(pClassModule->pImage.get());
+    pImage = pClassModule->pImage;
+    // see comment in destructor about this
     pBreaks = pClassModule->pBreaks;
 
     SetClassName( pClassModule->GetName() );
@@ -757,9 +756,8 @@ SbClassModuleObject::~SbClassModuleObject()
                 if( !pDocBasicItem->isDocClosed() )
                     triggerTerminateEvent();
 
-    // prevent the base class destructor from deleting this because:
-    // coverity[leaked_storage] - we do not actually own it
-    pImage.release();
+    // prevent the base class destructor from deleting this because
+    // we do not actually own it
     pBreaks = nullptr;
 }
 
