@@ -432,7 +432,7 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
         xContentControlProps->getPropertyValue(UNO_NAME_CONTENT_CONTROL_TYPE) >>= iType;
         SwContentControlType aType = static_cast<SwContentControlType>(iType);
 
-        bool bShowingPlaceHolder;
+        bool bShowingPlaceHolder = false;
         xContentControlProps->getPropertyValue(UNO_NAME_SHOWING_PLACE_HOLDER)
             >>= bShowingPlaceHolder;
         OUString aContent;
