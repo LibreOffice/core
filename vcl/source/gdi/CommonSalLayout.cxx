@@ -436,7 +436,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     double nYScale = 0;
     GetFont().GetScale(&nXScale, &nYScale);
 
-    hb_position_t nCurrX = 0;
+    double nCurrX = 0.0;
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -683,8 +683,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
                     nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
 
-                hb_position_t nAdvance;
-                double nXOffset, nYOffset;
+                double nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphFlags |= GlyphItemFlags::IS_VERTICAL;
@@ -713,19 +712,19 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     nYOffset = -pHbPositions[i].y_offset;
                 }
 
-                double nScaledAdvance = nAdvance * nXScale;
+                nAdvance = nAdvance * nXScale;
                 nXOffset = nXOffset * nXScale;
                 nYOffset = nYOffset * nYScale;
                 if (!GetSubpixelPositioning())
                 {
-                    nScaledAdvance = std::round(nScaledAdvance);
+                    nAdvance = std::round(nAdvance);
                     nXOffset = std::round(nXOffset);
                     nYOffset = std::round(nYOffset);
                 }
 
-                basegfx::B2DPoint aNewPos(nCurrX * nXScale + nXOffset, nYOffset);
+                basegfx::B2DPoint aNewPos(nCurrX + nXOffset, nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nScaledAdvance, nXOffset, nYOffset, nOrigCharPos);
+                                    nAdvance, nXOffset, nYOffset, nOrigCharPos);
 
                 if (aGI.origCharPos() >= rArgs.mnDrawMinCharPos
                     && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
