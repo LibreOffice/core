@@ -929,8 +929,8 @@ void GenericSalLayout::ApplyJustificationData(const JustificationData& rstJustif
 
             // Adjust the X position of the rest of the glyphs in the cluster.
             // We iterate backwards since this is an RTL glyph.
-            for (int j = i - 1; j >= 0 && m_GlyphItems[j].IsInCluster(); j--)
-                m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
+            for (size_t j = i; j >= 1 && m_GlyphItems[j - 1].IsInCluster(); --j)
+                m_GlyphItems[j - 1].adjustLinearPosX(nDelta + nDiff);
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
             // will be inserted below.

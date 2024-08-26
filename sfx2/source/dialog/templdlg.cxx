@@ -295,8 +295,9 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, ReadResource_Hdl, StyleList&, rStyleList
     if(nCount > 4)
         ReplaceUpdateButtonByMenu();
 
-    for( ; nCount--; )
+    while (nCount)
     {
+        --nCount;
         const SfxStyleFamilyItem &rItem = rStyleList.GetFamilyItemByIndex( nCount );
         sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( rItem.GetFamily() );
         InsertFamilyItem(nId, rItem);

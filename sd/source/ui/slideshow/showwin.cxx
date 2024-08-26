@@ -593,8 +593,11 @@ void ShowWindow::DeleteWindowFromPaintView()
         mpViewShell->GetView()->DeleteDeviceFromPaintView( *GetOutDev() );
 
     sal_uInt16 nChild = GetChildCount();
-    while( nChild-- )
-        GetChild( nChild )->Show( false );
+    while (nChild)
+    {
+        --nChild;
+        GetChild(nChild)->Show( false );
+    }
 }
 
 void ShowWindow::AddWindowToPaintView()
@@ -603,8 +606,11 @@ void ShowWindow::AddWindowToPaintView()
         mpViewShell->GetView()->AddDeviceToPaintView( *GetOutDev(), nullptr );
 
     sal_uInt16 nChild = GetChildCount();
-    while( nChild-- )
-        GetChild( nChild )->Show();
+    while (nChild)
+    {
+        --nChild;
+        GetChild(nChild)->Show();
+    }
 }
 
 // Override the sd::Window's CreateAccessible to create a different accessible object
