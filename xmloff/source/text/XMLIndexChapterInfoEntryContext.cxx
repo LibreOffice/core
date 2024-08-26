@@ -101,7 +101,7 @@ void XMLIndexChapterInfoEntryContext::startFastElement(
             case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 0, SAL_MAX_UINT16))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 0, SAL_MAX_INT16))
                 {
 //control on range is carried out in the UNO level
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);
