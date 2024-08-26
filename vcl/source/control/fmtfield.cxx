@@ -1359,7 +1359,6 @@ void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     {
         // weld::TimeFormatter uses h24 format
         rJsonWriter.put("type", "time");
-        rJsonWriter.put("hasTimeFormatter", true);
     }
     rJsonWriter.put("min", rFormatter.GetMinValue());
     rJsonWriter.put("max", rFormatter.GetMaxValue());
