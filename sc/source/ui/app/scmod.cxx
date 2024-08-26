@@ -208,34 +208,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
             }
         }
 
-        bool bSkipInvalidate = false;
-
         const bool bKit = comphelper::LibreOfficeKit::isActive();
-        if (bKit && p == m_pColorConfig.get())
-        {
-            SfxViewShell* pSfxViewShell = SfxViewShell::Current();
-            ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(pSfxViewShell);
-
-            if (pViewShell)
-            {
-                ScViewRenderingOptions aViewRenderingOptions(pViewShell->GetViewRenderingData());
-                Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
-                aViewRenderingOptions.SetDocColor(aFillColor);
-                aViewRenderingOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
-                const bool bUnchanged(aViewRenderingOptions == pViewShell->GetViewRenderingData());
-                if (!bUnchanged)
-                    pViewShell->SetViewRenderingData(aViewRenderingOptions);
-                ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(SfxObjectShell::Current()->GetModel());
-                SfxLokHelper::notifyViewRenderState(SfxViewShell::Current(), pScModelObj);
-                // In Online, the document color is the one used for the background, contrary to
-                // Writer and Draw that use the application background color.
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
-                        aFillColor.AsRGBHexString().toUtf8());
-
-                // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
-                bSkipInvalidate = bUnchanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
-            }
-        }
 
         //invalidate only the current view in tiled rendering mode, or all views otherwise
         SfxViewShell* pViewShell = bKit ? SfxViewShell::Current() : SfxViewShell::GetFirst();
@@ -243,6 +216,26 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
         {
             if (ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(pViewShell))
             {
+                ScViewRenderingOptions aViewRenderingOptions(pViewSh->GetViewRenderingData());
+                Color aFillColor(m_pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor);
+                aViewRenderingOptions.SetDocColor(aFillColor);
+                aViewRenderingOptions.SetColorSchemeName(svtools::ColorConfig::GetCurrentSchemeName());
+                const bool bUnchanged(aViewRenderingOptions == pViewSh->GetViewRenderingData());
+                if (!bUnchanged)
+                    pViewSh->SetViewRenderingData(aViewRenderingOptions);
+
+                if (SfxObjectShell* pKitCurrentObjSh = bKit ? SfxObjectShell::Current() : nullptr)
+                {
+                    ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(pKitCurrentObjSh->GetModel());
+                    SfxLokHelper::notifyViewRenderState(pViewSh, pScModelObj);
+                    // In Online, the document color is the one used for the background, contrary to
+                    // Writer and Draw that use the application background color.
+                    pViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                            aFillColor.AsRGBHexString().toUtf8());
+                }
+
+                // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
+                const bool bSkipInvalidate = bUnchanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
                 if (!bSkipInvalidate)
                 {
                     pViewSh->PaintGrid();
