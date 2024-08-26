@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 Module.unoTagSymbol = Symbol('unoTag');
 
 Module.uno_init = new Promise(function (resolve, reject) {

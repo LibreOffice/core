@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 Module.uno_init.then(function() {
     console.log('Running embindtest');
     let css = Module.uno.com.sun.star;
