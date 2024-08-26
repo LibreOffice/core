@@ -225,7 +225,7 @@ void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
     if (!rRange.IsValid())
         return;
 
-    auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
     sc::StartListeningContext aStartCxt(*this, pPosSet);
     sc::EndListeningContext aEndCxt(*this, pPosSet);
 
@@ -409,7 +409,7 @@ void ScDocument::EnableDelayStartListeningFormulaCells( ScColumn* column, bool d
         {
             if( it->second.first != -1 )
             {
-                auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+                const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
                 sc::StartListeningContext aStartCxt(*this, pPosSet);
                 sc::EndListeningContext aEndCxt(*this, pPosSet);
                 column->StartListeningFormulaCells(aStartCxt, aEndCxt, it->second.first, it->second.second);
@@ -563,7 +563,7 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
     if (IsClipOrUndo() || GetNoListening())
         return;
 
-    auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
     sc::StartListeningContext aStartCxt(*this, pPosSet);
     sc::EndListeningContext aEndCxt(*this, pPosSet);
 

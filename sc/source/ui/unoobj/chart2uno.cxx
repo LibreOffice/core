@@ -925,7 +925,7 @@ private:
             return false;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        svl::SharedString aTabName = bExternal ? pToken->GetString() : svl::SharedString::getEmptyString();
+        const svl::SharedString aTabName = bExternal ? pToken->GetString() : svl::SharedString::getEmptyString();
 
         // In saving to XML, we don't prepend address with '$'.
         setRelative(aData.Ref1);

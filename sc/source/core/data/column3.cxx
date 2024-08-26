@@ -437,7 +437,7 @@ void ScColumn::StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows 
     if (rNewSharedRows.empty() || rDoc.IsDelayedFormulaGrouping())
         return;
 
-    auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDoc);
+    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDoc);
     sc::StartListeningContext aStartCxt(rDoc, pPosSet);
     sc::EndListeningContext aEndCxt(rDoc, pPosSet);
     if (rNewSharedRows.size() >= 2)
@@ -708,7 +708,7 @@ void ScColumn::AttachNewFormulaCell(
     {
         case sc::ConvertToGroupListening:
         {
-            auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
+            const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
             sc::StartListeningContext aStartCxt(rDocument, pPosSet);
             sc::EndListeningContext aEndCxt(rDocument, pPosSet);
             SCROW nStartRow, nEndRow;

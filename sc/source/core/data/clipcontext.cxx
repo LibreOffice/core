@@ -151,7 +151,7 @@ public:
 
 void CopyFromClipContext::startListeningFormulas()
 {
-    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(mrDestDoc);
+    const auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(mrDestDoc);
     sc::StartListeningContext aStartCxt(mrDestDoc, pSet);
     sc::EndListeningContext aEndCxt(mrDestDoc, pSet, nullptr);
 

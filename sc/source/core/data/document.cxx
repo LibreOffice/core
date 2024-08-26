@@ -2627,8 +2627,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
     if (!(nInsFlag & InsertDeleteFlags::CONTENTS))
         return;
 
-    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
-
+    const auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
     sc::StartListeningContext aStartCxt(*this, pSet);
     sc::EndListeningContext aEndCxt(*this, pSet, nullptr);
 
