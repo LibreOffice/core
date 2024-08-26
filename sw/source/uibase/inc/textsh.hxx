@@ -83,7 +83,7 @@ public:
              SwTextShell(SwView &rView);
     virtual ~SwTextShell() override;
     /// Create item set for the insert frame dialog.
-    SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
+    std::shared_ptr<SfxItemSet> CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };
 
 #endif
