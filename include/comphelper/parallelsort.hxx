@@ -300,6 +300,7 @@ void s3sort(const RandItr aBegin, const RandItr aEnd, Compare aComp = Compare(),
     auto pOut = std::make_unique<ValueType[]>(nLen);
 
     const size_t nBins = lcl_round_down_pow2(nThreadCount);
+    assert(nBins >= 1);
     const size_t nOverSamplingFactor = std::max(1.0, std::sqrt(static_cast<double>(nLen) / 64));
     const size_t nSamples = nOverSamplingFactor * nBins;
     auto aSamples = std::make_unique<ValueType[]>(nSamples);
