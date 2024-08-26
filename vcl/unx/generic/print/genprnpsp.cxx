@@ -1022,17 +1022,12 @@ namespace {
 
 class PrinterUpdate
 {
-    static Idle*  pPrinterUpdateIdle;
-
     static void doUpdate();
 public:
     static void update(SalGenericInstance const &rInstance);
-    static void jobEnded();
 };
 
 }
-
-Idle* PrinterUpdate::pPrinterUpdateIdle = nullptr;
 
 void PrinterUpdate::doUpdate()
 {
@@ -1062,20 +1057,8 @@ void SalGenericInstance::updatePrinterUpdate()
     PrinterUpdate::update(*this);
 }
 
-void PrinterUpdate::jobEnded()
-{
-    if( pPrinterUpdateIdle )
-    {
-        pPrinterUpdateIdle->Stop();
-        delete pPrinterUpdateIdle;
-        pPrinterUpdateIdle = nullptr;
-        doUpdate();
-    }
-}
-
 void SalGenericInstance::jobEndedPrinterUpdate()
 {
-    PrinterUpdate::jobEnded();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
