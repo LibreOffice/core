@@ -26,17 +26,22 @@
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <jobdata.hxx>
 #include <ppdparser.hxx>
+#include <printerinfomanager.hxx>
 #include <strhelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <unx/helper.hxx>
-#include <unx/cupsmgr.hxx>
 
 #if ENABLE_CPDB
 #include <unx/cpdmgr.hxx>
+#endif
+
+#if ENABLE_CUPS
+#include <unx/cupsmgr.hxx>
 #endif
 
 #include <tools/urlobj.hxx>

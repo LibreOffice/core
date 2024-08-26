@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cups/cups.h>
 #include <cups/http.h>
 #include <cups/ipp.h>
 #include <cups/ppd.h>
@@ -616,10 +615,11 @@ struct less_ppd_key
 
 }
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions )
+void CUPSManager::getOptionsFromDocumentSetup(const JobData& rJob, bool bBanner, int& rNumOptions,
+                                              cups_option_t** ppOptions)
 {
     rNumOptions = 0;
-    *rOptions = nullptr;
+    *ppOptions = nullptr;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -648,7 +648,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
             {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
-                rNumOptions = cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
+                rNumOptions = cupsAddOption(aKey.getStr(), aValue.getStr(), rNumOptions, ppOptions);
             }
         }
     }
@@ -656,13 +656,13 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     if( rJob.m_nCopies > 1 )
     {
         OString aVal( OString::number( rJob.m_nCopies ) );
-        rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
+        rNumOptions = cupsAddOption("copies", aVal.getStr(), rNumOptions, ppOptions);
         aVal = OString::boolean(rJob.m_bCollate);
-        rNumOptions = cupsAddOption( "collate", aVal.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
+        rNumOptions = cupsAddOption("collate", aVal.getStr(), rNumOptions, ppOptions);
     }
     if( ! bBanner )
     {
-        rNumOptions = cupsAddOption( "job-sheets", "none", rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
+        rNumOptions = cupsAddOption("job-sheets", "none", rNumOptions, ppOptions);
     }
 }
 
@@ -808,8 +808,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = nullptr;
-        auto ppOptions = reinterpret_cast<void**>(&pOptions);
-        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, ppOptions );
+        getOptionsFromDocumentSetup(rDocumentJobData, bBanner, nNumOptions, &pOptions);
 
         PrinterInfo aInfo(getPrinterInfo(rPrintername));
         if (!aInfo.m_aAuthInfoRequired.isEmpty())

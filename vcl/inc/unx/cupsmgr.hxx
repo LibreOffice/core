@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <cups/cups.h>
+
 #include <printerinfomanager.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
@@ -63,7 +65,8 @@ class CUPSManager final : public PrinterInfoManager
 
     virtual void initialize() override;
 
-    static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions );
+    static void getOptionsFromDocumentSetup(const JobData& rJob, bool bBanner, int& rNumOptions,
+                                            cups_option_t** rOptions);
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
 public:
