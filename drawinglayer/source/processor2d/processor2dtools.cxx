@@ -27,6 +27,7 @@
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
 #elif USE_HEADLESS_CODE
 #include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
+#include <officecfg/Office/Common.hxx>
 #endif
 
 namespace drawinglayer::processor2d
@@ -35,10 +36,23 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     OutputDevice& rTargetOutDev,
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
 {
-    static const bool bTestSystemPrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
-    if(bTestSystemPrimitiveRenderer)
+    static bool bUsePrimitiveRenderer(
+#if defined(_WIN32)
+        // Windows: make still dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
+        nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER")
+#elif USE_HEADLESS_CODE
+        // Linux/Cairo: make dependent on ExperimentalMode now
+        officecfg::Office::Common::Misc::ExperimentalMode::get()
+#else
+        // all others: do not use, not (yet) supported
+        false
+#endif
+    );
+
+    if(bUsePrimitiveRenderer)
     {
         drawinglayer::geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
+
         // if mnOutOffX/mnOutOffY is set (a 'hack' to get a cheap additional offset), apply it additionally
         if(0 != rTargetOutDev.GetOutOffXPixel() || 0 != rTargetOutDev.GetOutOffYPixel())
         {
@@ -46,6 +60,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             aTransform.translate(rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel());
             aViewInformation2D.setViewTransformation(aTransform);
         }
+
 #if defined(_WIN32)
         SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
         std::unique_ptr<D2DPixelProcessor2D> aRetval(
@@ -61,7 +76,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
 #endif
     }
 
-    // create Pixel Vcl-Processor
+    // default: create Pixel Vcl-Processor
     return std::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
 }
 
