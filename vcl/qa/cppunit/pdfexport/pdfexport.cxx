@@ -4013,8 +4013,14 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
         SvMemoryStream& rObjectStream = pStream->GetMemory();
         rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
 
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
         // Just check that the size of the page stream is what is expected.
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(230), rObjectStream.remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(1236), aUncompressed.Tell());
     }
 
     { // embedded PDF page 2
@@ -4041,8 +4047,14 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
         SvMemoryStream& rObjectStream = pStream->GetMemory();
         rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Just check that the size of the page stream is what is expected
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(309), rObjectStream.remainingSize());
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+        // Just check that the size of the page stream is what is expected.
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(3911), aUncompressed.Tell());
     }
 
     { // embedded PDF page 3
@@ -4069,8 +4081,14 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
         SvMemoryStream& rObjectStream = pStream->GetMemory();
         rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Just check that the size of the page stream is what is expected
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(193), rObjectStream.remainingSize());
+        SvMemoryStream aUncompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        aZCodec.Decompress(rObjectStream, aUncompressed);
+        CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+        // Just check that the size of the page stream is what is expected.
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(373), aUncompressed.Tell());
     }
 #endif
 }
