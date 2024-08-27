@@ -289,9 +289,9 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             // At this moment the controller may not yet been set at model
             // or ViewShellBase.  Take it from the view shell passed with
             // the event.
-            if (mrBase.GetMainViewShell() != nullptr)
+            if (auto pMainViewShell = mrBase.GetMainViewShell().get())
             {
-                if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
+                if( pMainViewShell->GetShellType() == ViewShell::ST_IMPRESS )
                 {
                     mxView = mrBase.GetDrawController();
                     onSelectionChanged();

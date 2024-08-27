@@ -1763,8 +1763,9 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
 
         if (pOverridingViewShell)
         {
-            getViewShellBase()->GetMainViewShell()->GetParentWindow()->GrabFocus();
-            getViewShellBase()->GetMainViewShell()->GetContentWindow()->GrabFocus();
+            auto pMainViewShell = getViewShellBase()->GetMainViewShell().get();
+            pMainViewShell->GetParentWindow()->GrabFocus();
+            pMainViewShell->GetContentWindow()->GrabFocus();
             bGrabFocus = true;
         }
 

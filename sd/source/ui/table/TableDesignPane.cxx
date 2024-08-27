@@ -416,18 +416,24 @@ void TableDesignWidget::EditStyle(const OUString& rCommand)
 
 static SfxBindings* getBindings( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
-        return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
-    else
+    auto pViewShell = rBase.GetMainViewShell().get();
+    if( !pViewShell )
         return nullptr;
+    auto pViewFrame = pViewShell->GetViewFrame();
+    if( !pViewFrame )
+        return nullptr;
+    return &pViewFrame->GetBindings();
 }
 
 static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
-        return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
-    else
+    auto pViewShell = rBase.GetMainViewShell().get();
+    if( !pViewShell )
         return nullptr;
+    auto pViewFrame = pViewShell->GetViewFrame();
+    if( !pViewFrame )
+        return nullptr;
+    return pViewFrame->GetDispatcher();
 }
 
 IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)

@@ -1256,7 +1256,7 @@ public:
         assert(pDocument!=nullptr);
 
         std::shared_ptr<DrawViewShell> pDrawViewShell(
-            std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+            std::dynamic_pointer_cast<DrawViewShell>(pViewShell));
 
         if (!mpPrintView)
             mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, nullptr));
