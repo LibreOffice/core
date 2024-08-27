@@ -931,6 +931,16 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
 sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
+    std::vector<sal_Int8> aNameBuffer;
+    std::vector<sal_Int8> aExtraBuffer;
+    return readLOC_Impl(rEntry, aNameBuffer, aExtraBuffer);
+}
+
+// Pass in a shared name buffer to reduce the number of allocations
+// we do when reading the CEN.
+sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameBuffer, std::vector<sal_Int8>& rExtraBuffer)
+{
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     sal_Int64 nPos = -rEntry.nOffset;
 
@@ -977,9 +987,9 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     {
         // read always in UTF8, some tools seem not to set UTF8 bit
         // coverity[tainted_data] - we've checked negative lens, and up to max short is ok here
-        std::vector<sal_Int8> aNameBuffer(nPathLen);
-        sal_Int32 nRead = aGrabber.readBytes(aNameBuffer.data(), nPathLen);
-        std::string_view aNameView(reinterpret_cast<const char *>(aNameBuffer.data()), nRead);
+        rNameBuffer.reserve(nPathLen);
+        sal_Int32 nRead = aGrabber.readBytes(rNameBuffer.data(), nPathLen);
+        std::string_view aNameView(reinterpret_cast<const char *>(rNameBuffer.data()), nRead);
 
         OUString sLOCPath( aNameView.data(), aNameView.size(), RTL_TEXTENCODING_UTF8 );
 
@@ -999,9 +1009,9 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
         ::std::optional<sal_uInt64> oOffset64;
         if (nExtraLen != 0)
         {
-            std::vector<sal_Int8> aExtraBuffer(nExtraLen);
-            aGrabber.readBytes(aExtraBuffer.data(), nExtraLen);
-            MemoryByteGrabber extraMemGrabber(aExtraBuffer.data(), nExtraLen);
+            rExtraBuffer.reserve(nExtraLen);
+            aGrabber.readBytes(rExtraBuffer.data(), nExtraLen);
+            MemoryByteGrabber extraMemGrabber(rExtraBuffer.data(), nExtraLen);
 
             isZip64 = readExtraFields(extraMemGrabber, nExtraLen,
                     nLocSize, nLocCompressedSize, oOffset64, &aNameView);
@@ -1330,7 +1340,8 @@ sal_Int32 ZipFile::readCEN()
             throw ZipException(u"central directory too big"_ustr);
 
         aGrabber.seek(nCenPos);
-        std::vector<sal_Int8> aCENBuffer(nCenLen);
+        std::vector<sal_Int8> aCENBuffer;
+        aCENBuffer.reserve(nCenLen);
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer.data(), nCenLen );
         if (nCenLen != nRead)
             throw ZipException (u"Error reading CEN into memory buffer!"_ustr );
@@ -1343,6 +1354,8 @@ sal_Int32 ZipFile::readCEN()
 
         aEntries.reserve(nTotal);
         sal_Int64 nCount;
+        std::vector<sal_Int8> aTempNameBuffer;
+        std::vector<sal_Int8> aTempExtraBuffer;
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
             sal_Int32 nTestSig = aMemGrabber.ReadInt32();
@@ -1420,7 +1433,7 @@ sal_Int32 ZipFile::readCEN()
             // unfortunately readLOC is required now to check the consistency
             assert(aEntry.nOffset <= 0);
             sal_uInt64 const nStart{ o3tl::make_unsigned(-aEntry.nOffset) };
-            sal_uInt64 const nEnd = readLOC(aEntry);
+            sal_uInt64 const nEnd = readLOC_Impl(aEntry, aTempNameBuffer, aTempExtraBuffer);
             assert(nStart < nEnd);
             for (auto it = unallocated.begin(); ; ++it)
             {

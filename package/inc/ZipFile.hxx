@@ -93,6 +93,7 @@ private:
     void getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC );
 
     sal_uInt64 readLOC(ZipEntry &rEntry);
+    sal_uInt64 readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameBuffer, std::vector<sal_Int8>& rExtraBuffer);
     sal_Int32 readCEN();
     std::tuple<sal_Int64, sal_Int64, sal_Int64> findCentralDirectory();
     void HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize);
