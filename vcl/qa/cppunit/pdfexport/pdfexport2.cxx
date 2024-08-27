@@ -295,6 +295,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf161346)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
 {
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        // if the Quality is too high (like 90) then the image will be a DIB,
+        // not a JPEG! 80 works currently but set it lower to be sure...
+        { "Quality", uno::Any(sal_Int32(50)) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
     vcl::filter::PDFDocument aDocument;
     load(u"tdf129085.docx", aDocument);
 
