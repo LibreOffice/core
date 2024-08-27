@@ -979,12 +979,9 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
         // coverity[tainted_data] - we've checked negative lens, and up to max short is ok here
         std::vector<sal_Int8> aNameBuffer(nPathLen);
         sal_Int32 nRead = aGrabber.readBytes(aNameBuffer.data(), nPathLen);
-        if (nRead < nPathLen)
-            aNameBuffer.resize(nRead);
+        std::string_view aNameView(reinterpret_cast<const char *>(aNameBuffer.data()), nRead);
 
-        OUString sLOCPath( reinterpret_cast<const char *>(aNameBuffer.data()),
-                           nRead,
-                           RTL_TEXTENCODING_UTF8 );
+        OUString sLOCPath( aNameView.data(), aNameView.size(), RTL_TEXTENCODING_UTF8 );
 
         if ( rEntry.nPathLen == -1 ) // the file was created
         {
@@ -1007,7 +1004,7 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
             MemoryByteGrabber extraMemGrabber(aExtraBuffer.data(), nExtraLen);
 
             isZip64 = readExtraFields(extraMemGrabber, nExtraLen,
-                    nLocSize, nLocCompressedSize, oOffset64, &sLOCPath);
+                    nLocSize, nLocCompressedSize, oOffset64, &aNameView);
         }
 
         // Just plain ignore bits 1 & 2 of the flag field - they are either
@@ -1389,9 +1386,8 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException(u"name too long"_ustr);
 
             // read always in UTF8, some tools seem not to set UTF8 bit
-            aEntry.sPath = OUString( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
-                                     aEntry.nPathLen,
-                                     RTL_TEXTENCODING_UTF8 );
+            std::string_view aPathView(reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()), aEntry.nPathLen);
+            aEntry.sPath = OUString( aPathView.data(), aPathView.size(), RTL_TEXTENCODING_UTF8 );
 
             if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
                 throw ZipException(u"Zip entry has an invalid name."_ustr );
@@ -1401,7 +1397,7 @@ sal_Int32 ZipFile::readCEN()
             if (aEntry.nExtraLen>0)
             {
                 ::std::optional<sal_uInt64> oOffset64;
-                readExtraFields(aMemGrabber, aEntry.nExtraLen, nSize, nCompressedSize, oOffset64, &aEntry.sPath);
+                readExtraFields(aMemGrabber, aEntry.nExtraLen, nSize, nCompressedSize, oOffset64, &aPathView);
                 if (oOffset64)
                 {
                     nOffset = *oOffset64;
@@ -1515,7 +1511,7 @@ sal_Int32 ZipFile::readCEN()
 bool ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
         sal_uInt64& nSize, sal_uInt64& nCompressedSize,
         std::optional<sal_uInt64> & roOffset,
-        OUString const*const pCENFilenameToCheck)
+        std::string_view const * pCENFilenameToCheck)
 {
     bool isZip64{false};
     while (nExtraLen > 0) // Extensible data fields
@@ -1562,8 +1558,8 @@ bool ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
             // is already converted to UTF-16 here)
             (void) aMemGrabber.ReadUInt32();
             // this is required to be UTF-8
-            OUString const unicodePath(reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
-                    dataSize - 5, RTL_TEXTENCODING_UTF8);
+            std::string_view unicodePath(reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
+                    dataSize - 5);
             aMemGrabber.skipBytes(dataSize - 5);
             if (unicodePath != *pCENFilenameToCheck)
             {

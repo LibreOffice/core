@@ -101,7 +101,7 @@ private:
     static bool readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
                                 sal_uInt64& nSize, sal_uInt64& nCompressedSize,
                                 ::std::optional<sal_uInt64> & roOffset,
-                                OUString const* pCENFilenameToCheck);
+                                std::string_view const * pCENFilenameToCheck);
 
 public:
 
