@@ -1121,7 +1121,8 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 
 ::Color ViewShellBase::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
 {
-    if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(GetMainViewShell().get()))
+    auto pViewShell = GetMainViewShell().get();
+    if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pViewShell))
     {
         const SdViewOptions& rViewOptions = pCurrentDrawShell->GetViewOptions();
         switch (nColorType)
@@ -1138,7 +1139,7 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
         }
     }
     // IASS: also need to handle OutlineViewShell
-    else if (nullptr != dynamic_cast<OutlineViewShell*>(GetMainViewShell().get()))
+    else if (nullptr != dynamic_cast<OutlineViewShell*>(pViewShell))
     {
         switch (nColorType)
         {
