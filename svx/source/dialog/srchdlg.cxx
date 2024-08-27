@@ -317,7 +317,6 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xSearchTmplLB->make_sorted();
     m_xSearchAttrText->hide();
 
-    m_xSearchLabel->set_font_color(Color(0x00, 0x47, 0x85));
     this->SetSearchLabel(u""_ustr); // hide the message but keep the box height
     m_xSearchIcon->set_size_request(24, 24); // vcl/res/infobar.png is 32x32 - too large here
 
@@ -564,7 +563,11 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
     {
         m_xSearchLabel->show();
         m_xSearchIcon->show();
-        m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        if (rStyleSettings.GetDialogColor().IsDark())
+            m_xSearchBox->set_background(Color(0x00, 0x56, 0x80));
+        else
+            m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
     }
     else
     {

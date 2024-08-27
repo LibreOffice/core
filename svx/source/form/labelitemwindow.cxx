@@ -8,6 +8,7 @@
  */
 
 #include <svx/labelitemwindow.hxx>
+#include <vcl/svapp.hxx>
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
     : InterimItemWindow(pParent, u"svx/ui/labelbox.ui"_ustr, u"LabelBox"_ustr)
@@ -47,8 +48,11 @@ void LabelItemWindow::set_label(const OUString& rLabel, const LabelItemWindowTyp
     else if (eType == LabelItemWindowType::Info)
     {
         m_xImage->show();
-        m_xLabel->set_font_color(Color(0x00, 0x47, 0x85));
-        m_xBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        if (rStyleSettings.GetDialogColor().IsDark())
+            m_xBox->set_background(Color(0x00, 0x56, 0x80));
+        else
+            m_xBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
     }
     m_xLabel->set_visible(
         true); // always show and not just if !rLabel.isEmpty() to not make the chevron appear
