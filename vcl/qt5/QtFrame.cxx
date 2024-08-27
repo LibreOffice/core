@@ -321,15 +321,18 @@ QScreen* QtFrame::screen() const { return asChild()->screen(); }
 bool QtFrame::GetUseDarkMode() const
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-    const QStyleHints* pStyleHints = QApplication::styleHints();
-    return pStyleHints->colorScheme() == Qt::ColorScheme::Dark;
-#else
+    const Qt::ColorScheme eColorScheme = QApplication::styleHints()->colorScheme();
+    if (eColorScheme == Qt::ColorScheme::Dark)
+        return true;
+    if (eColorScheme == Qt::ColorScheme::Light)
+        return false;
+#endif
+
     // use same mechanism for determining dark mode preference as xdg-desktop-portal-kde, s.
     // https://invent.kde.org/plasma/xdg-desktop-portal-kde/-/blob/0a4237549debf9518f8cfbaf531456850c0729bd/src/settings.cpp#L213-227
     const QPalette aPalette = QApplication::palette();
     const int nWindowBackGroundGray = qGray(aPalette.window().color().rgb());
     return nWindowBackGroundGray < 192;
-#endif
 }
 
 bool QtFrame::isMinimized() const { return asChild()->isMinimized(); }
