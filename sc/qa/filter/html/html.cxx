@@ -85,6 +85,21 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsText)
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, eCellType);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testPasteBadJson)
+{
+    createScDoc();
+
+    // Just care we don't crash on not-well-formed JSON:
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"bad-json.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsBools)
 {
     // Given an empty document:
