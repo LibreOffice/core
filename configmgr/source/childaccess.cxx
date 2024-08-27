@@ -245,7 +245,7 @@ css::uno::Any ChildAccess::asValue()
                 return child.is() ? child->asValue() : css::uno::Any();
             }
         }
-        value <<= css::uno::Reference(getXWeak());
+        value <<= css::uno::Reference< css::uno::XInterface >(getXWeak());
     }
     return value;
 }
