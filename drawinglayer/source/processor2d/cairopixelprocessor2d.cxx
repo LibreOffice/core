@@ -759,13 +759,64 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
 
     unsigned char* mask_surface_data(cairo_image_surface_get_data(pMask));
 
-    // include/basegfx/color/bcolormodifier.hxx
-    constexpr double nRedMul(0.2125 / 255.0);
-    constexpr double nGreenMul(0.7154 / 255.0);
-    constexpr double nBlueMul(0.0721 / 255.0);
+    // change to unsigned 16bit and shifting. This is not much
+    // faster on modern processors due to nowadays good double/
+    // float HW, but may also be used on smaller HW (ARM, ...).
+    // Since source is sal_uInt8 integer using double (see version
+    // before) is not required numerically either.
+    // scaling values are now put to a 256 entry lookup for R, G and B
+    // thus 768 bytes, so no multiplications have to happen. The values
+    // used to create these are (54+183+18 == 255):
+    //    sal_uInt16 nR(0.2125 * 256.0); // -> 54.4
+    //    sal_uInt16 nG(0.7154 * 256.0); // -> 183.1424
+    //    sal_uInt16 nB(0.0721 * 256.0); // -> 18.4576
+    // and the short loop (for nR, nG and nB resp.) like:
+    //    for(unsigned short a(0); a < 256; a++)
+    //        std::cout << ((a * nR) / 255) << ", ";
+    constexpr std::array<sal_uInt8, 256> nRArray
+        = { 0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  3,  3,  3,  3,  4,  4,  4,
+            4,  4,  5,  5,  5,  5,  5,  6,  6,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  8,  8,  9,
+            9,  9,  9,  9,  10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 13, 13, 13, 13,
+            13, 14, 14, 14, 14, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18,
+            18, 18, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 22, 23,
+            23, 23, 23, 23, 24, 24, 24, 24, 24, 25, 25, 25, 25, 26, 26, 26, 26, 26, 27, 27, 27, 27,
+            27, 28, 28, 28, 28, 29, 29, 29, 29, 29, 30, 30, 30, 30, 30, 31, 31, 31, 31, 31, 32, 32,
+            32, 32, 33, 33, 33, 33, 33, 34, 34, 34, 34, 34, 35, 35, 35, 35, 36, 36, 36, 36, 36, 37,
+            37, 37, 37, 37, 38, 38, 38, 38, 38, 39, 39, 39, 39, 40, 40, 40, 40, 40, 41, 41, 41, 41,
+            41, 42, 42, 42, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 44, 45, 45, 45, 45, 45, 46, 46,
+            46, 46, 47, 47, 47, 47, 47, 48, 48, 48, 48, 48, 49, 49, 49, 49, 49, 50, 50, 50, 50, 51,
+            51, 51, 51, 51, 52, 52, 52, 52, 52, 53, 53, 53, 53, 54 };
+    constexpr std::array<sal_uInt8, 256> nGArray
+        = { 0,   0,   1,   2,   2,   3,   4,   5,   5,   6,   7,   7,   8,   9,   10,  10,
+            11,  12,  12,  13,  14,  15,  15,  16,  17,  17,  18,  19,  20,  20,  21,  22,
+            22,  23,  24,  25,  25,  26,  27,  27,  28,  29,  30,  30,  31,  32,  33,  33,
+            34,  35,  35,  36,  37,  38,  38,  39,  40,  40,  41,  42,  43,  43,  44,  45,
+            45,  46,  47,  48,  48,  49,  50,  50,  51,  52,  53,  53,  54,  55,  55,  56,
+            57,  58,  58,  59,  60,  61,  61,  62,  63,  63,  64,  65,  66,  66,  67,  68,
+            68,  69,  70,  71,  71,  72,  73,  73,  74,  75,  76,  76,  77,  78,  78,  79,
+            80,  81,  81,  82,  83,  83,  84,  85,  86,  86,  87,  88,  88,  89,  90,  91,
+            91,  92,  93,  94,  94,  95,  96,  96,  97,  98,  99,  99,  100, 101, 101, 102,
+            103, 104, 104, 105, 106, 106, 107, 108, 109, 109, 110, 111, 111, 112, 113, 114,
+            114, 115, 116, 116, 117, 118, 119, 119, 120, 121, 122, 122, 123, 124, 124, 125,
+            126, 127, 127, 128, 129, 129, 130, 131, 132, 132, 133, 134, 134, 135, 136, 137,
+            137, 138, 139, 139, 140, 141, 142, 142, 143, 144, 144, 145, 146, 147, 147, 148,
+            149, 149, 150, 151, 152, 152, 153, 154, 155, 155, 156, 157, 157, 158, 159, 160,
+            160, 161, 162, 162, 163, 164, 165, 165, 166, 167, 167, 168, 169, 170, 170, 171,
+            172, 172, 173, 174, 175, 175, 176, 177, 177, 178, 179, 180, 180, 181, 182, 183 };
+    constexpr std::array<sal_uInt8, 256> nBArray
+        = { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,
+            1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,
+            3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+            4,  4,  4,  4,  4,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  6,  6,  6,
+            6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
+            7,  7,  7,  7,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  9,  9,  9,  9,
+            9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+            10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12,
+            12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+            13, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15,
+            15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17,
+            17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18 };
 
-    // Only this alpha channel is taken into account by cairo_mask_surface
-    // so reuse this surface for the alpha result
     for (sal_uInt32 y(0); y < nHeight; ++y)
     {
         unsigned char* pMaskPixelData = mask_surface_data + (nStride * y);
@@ -777,17 +828,21 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
 
             if (0 != nAlpha)
             {
-                const double fLuminance = pMaskPixelData[SVP_CAIRO_RED] * nRedMul
-                                          + pMaskPixelData[SVP_CAIRO_GREEN] * nGreenMul
-                                          + pMaskPixelData[SVP_CAIRO_BLUE] * nBlueMul;
+                // get Luminance in range [0..255]
+                const sal_uInt8 nLum(nRArray[pMaskPixelData[SVP_CAIRO_RED]]
+                                     + nGArray[pMaskPixelData[SVP_CAIRO_GREEN]]
+                                     + nBArray[pMaskPixelData[SVP_CAIRO_BLUE]]);
 
                 if (255 != nAlpha)
-                    nAlpha = fLuminance / nAlpha;
+                    // remove pre-multiplied alpha (use existing VCL tooling)
+                    nAlpha = vcl::bitmap::unpremultiply(nLum, nAlpha);
                 else
-                    nAlpha = 255.0 * fLuminance;
+                    // already what we need
+                    nAlpha = nLum;
+
+                pMaskPixelData[SVP_CAIRO_ALPHA] = 255 - nAlpha;
             }
 
-            pMaskPixelData[SVP_CAIRO_ALPHA] = 255 - nAlpha;
             pMaskPixelData += 4;
         }
     }
