@@ -1166,6 +1166,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
     // With the fix in place word/embeddings/Microsoft_Excel-munkalap11.xlsx contains data
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(9041), pStream->remainingSize());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf89731)
+{
+    // Without the fix in place this crashes on opening
+    loadAndSave("tdf89731.docx");
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
