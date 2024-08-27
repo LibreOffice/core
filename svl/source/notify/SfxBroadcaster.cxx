@@ -131,7 +131,7 @@ void SfxBroadcaster::RemoveListener(SfxListener& rListener)
     m_RemovedPositions.push_back(positionOfRemovedElement);
 }
 
-void SfxBroadcaster::ForAllListeners(std::function<bool(SfxListener*)> f) const
+void SfxBroadcaster::ForAllListeners(const std::function<bool(SfxListener*)>& f) const
 {
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {

@@ -1186,21 +1186,28 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyNam
 
 SwXStyle* SwXStyleFamily::FindStyle(std::u16string_view rStyleName) const
 {
-    SwXStyle* pFoundStyle = nullptr;
+    // put params for lambda into struct, so that the lambda does not allocate memory on the heap.
+    struct MyParams {
+        const StyleFamilyEntry& m_rEntry;
+        SwXStyle* pFoundStyle;
+        std::u16string_view aStyleName;
+    } aParams { m_rEntry, nullptr, rStyleName };
     m_pBasePool->ForAllListeners(
-        [this, &pFoundStyle, &rStyleName] (SfxListener* pListener)
+        [&aParams] (SfxListener* pListener)
         {
             if (!pListener->IsSwXStyle())
                 return false;
             SwXStyle* pTempStyle = static_cast<SwXStyle*>(pListener);
-            if(pTempStyle && pTempStyle->GetFamily() == m_rEntry.family() && pTempStyle->GetStyleName() == rStyleName)
+            if(pTempStyle
+                && pTempStyle->GetFamily() == aParams.m_rEntry.family()
+                && pTempStyle->GetStyleName() == aParams.aStyleName)
             {
-                pFoundStyle = pTempStyle;
+                aParams.pFoundStyle = pTempStyle;
                 return true; // break
             }
             return false;
         });
-    return pFoundStyle;
+    return aParams.pFoundStyle;
 }
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)

@@ -55,7 +55,7 @@ public:
 
     /** Iterate over all the listeners and call the passed function.
         return true to break the loop.  */
-    void  ForAllListeners(std::function<bool(SfxListener*)> f) const;
+    void  ForAllListeners(const std::function<bool(SfxListener*)>& f) const;
 
     /** used to avoid dynamic_cast cost */
     virtual bool IsSfxStyleSheet() const;
