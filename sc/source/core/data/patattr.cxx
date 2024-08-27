@@ -805,7 +805,17 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         }
 
-        aColor = aSysTextColor;
+        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+        {
+            if (aBackColor.IsDark())
+                aColor = COL_WHITE;
+            else
+                aColor = COL_BLACK;
+        }
+        else
+        {
+            aColor = aSysTextColor;
+        }
     }
     aComplexColor.setFinalColor(aColor);
     rComplexColor = std::move(aComplexColor);
