@@ -114,7 +114,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     if (mpCharacterProps)
     {
         rStream.props(mpCharacterProps.get());
-        mpCharacterProps = new OOXMLPropertySet;
+        mpCharacterProps = nullptr;
     }
 }
 
