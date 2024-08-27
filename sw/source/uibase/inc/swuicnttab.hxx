@@ -133,6 +133,7 @@ class SwTOXSelectTabPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xTypeFT;
     std::unique_ptr<weld::ComboBox> m_xTypeLB;
     std::unique_ptr<weld::CheckButton> m_xReadOnlyCB;
+    std::unique_ptr<weld::CheckButton> m_xTitleToggleCB;
 
     std::unique_ptr<weld::Widget> m_xAreaFrame;
     std::unique_ptr<weld::ComboBox> m_xAreaLB;

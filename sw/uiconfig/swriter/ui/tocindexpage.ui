@@ -87,38 +87,6 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="mainstyleft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="tocindexpage|mainstyleft">_Title:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">title</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="title">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="title-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|title">Enter a title for the selected index.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="typeft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -176,6 +144,44 @@
                     <property name="left-attach">0</property>
                     <property name="top-attach">2</property>
                     <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="usetitle">
+                    <property name="label" translatable="yes" context="tocindexpage|readonly">Title:</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usetitle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|readonly">Prevents the contents of the index from being changed.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="title">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="title-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|title">Enter a title for the selected index.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -372,10 +378,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|tooltip_text|indexmarks">Choose this option to include any index entries inserted in the document for the selected index “Type”.</property>
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
-                        <property name="tooltip_text" translatable="yes" context="tocindexpage|tooltip_text|indexmarks">Choose this option to include any index entries inserted in the document for the selected index “Type”.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="indexmarks-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|indexmarks">Choose this option to include any index entries inserted in the document for the selected index “Type”. Use “Insert - Table of Contents and Index - Index Entry” to insert index entries in the document.</property>
@@ -469,10 +475,10 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|uselevel|tooltip_text">Assign index level according to the outline level of the heading immediately prior to the object.</property>
                         <property name="margin-start">12</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
-                        <property name="tooltip-text" translatable="yes" context="tocindexpage|uselevel|tooltip_text">Assign index level according to the outline level of the heading immediately prior to the object.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="uselevel-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|uselevel">Assign index level to table, graphic, frame, and OLE objects according to the outline level of the heading immediately prior to the object. For example, if “Tables” is selected, then each table in the document is assigned an index level that corresponds to the outline level of the first heading before the table (i.e., a table is assigned index level 3 if it follows a heading with outline level 3). With default settings, larger index levels are indented more in the Table of Contents. Use the “Entries” tab to customize the formatting and indentation for each index level.</property>

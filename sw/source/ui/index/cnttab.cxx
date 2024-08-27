@@ -761,6 +761,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     , m_xTypeFT(m_xBuilder->weld_label(u"typeft"_ustr))
     , m_xTypeLB(m_xBuilder->weld_combo_box(u"type"_ustr))
     , m_xReadOnlyCB(m_xBuilder->weld_check_button(u"readonly"_ustr))
+    , m_xTitleToggleCB(m_xBuilder->weld_check_button(u"usetitle"_ustr))
     , m_xAreaFrame(m_xBuilder->weld_widget(u"areaframe"_ustr))
     , m_xAreaLB(m_xBuilder->weld_combo_box(u"scope"_ustr))
     , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
@@ -848,6 +849,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     m_xInitialCapsCB->connect_toggled(aLk);
     m_xKeyAsEntryCB->connect_toggled(aLk);
     m_xParaStyleCB->connect_toggled(aLk);
+    m_xTitleToggleCB->connect_toggled(aLk);
 
     m_xTitleED->connect_changed(LINK(this, SwTOXSelectTabPage, ModifyEntryHdl));
     m_xLevelNF->connect_value_changed(LINK(this, SwTOXSelectTabPage, ModifySpinHdl));
@@ -957,7 +959,6 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-
     m_xReadOnlyCB->set_active(rDesc.IsReadonly());
     if (!m_xTitleED->get_value_changed_from_saved())
     {
@@ -967,6 +968,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
             m_xTitleED->set_text(OUString());
         m_xTitleED->save_value();
     }
+    m_xTitleToggleCB->set_active( !m_xTitleED->get_text().isEmpty() ); // if no title, toggle off
 
     m_xAreaLB->set_active(rDesc.IsFromChapter() ? 1 : 0);
 
@@ -1109,7 +1111,15 @@ void SwTOXSelectTabPage::FillTOXDescription()
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
     CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-    rDesc.SetTitle(m_xTitleED->get_text());
+    if (m_xTitleToggleCB->get_active())
+    {
+        rDesc.SetTitle(m_xTitleED->get_text());
+    }
+    else
+    {
+        rDesc.SetTitle(OUString());
+    }
+    m_xTitleED->set_sensitive(m_xTitleToggleCB->get_active());
     rDesc.SetFromChapter(1 == m_xAreaLB->get_active());
     SwTOXElement nContentOptions = SwTOXElement::NONE;
     if (m_xTOXMarksCB->get_visible() && m_xTOXMarksCB->get_active())
