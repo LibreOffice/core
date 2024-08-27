@@ -593,7 +593,7 @@ nde muito parto na água. Tb posso fazer porcentagem de atendimento..."_ustr);
         //           se o médico atende muito parto na água. Tb posso fazer porcentagem de atendimento...
         // Actual:   N縊 sei se �relevante esta pergunta. O que eu queria saber �
         //           se o m馘ico atende muito parto na 疊ua. Tb posso fazer porcentagem de atendimento...
-        // i.e. the display characters of the second comment were getting re-intrepeted from Latin-1 to Shift-Js
+        // i.e. the display characters of the second comment were getting re-interpreted from Latin-1 to Shift-Js
         CPPUNIT_ASSERT_EQUAL(sExpComment, getProperty<OUString>(xField, u"Content"_ustr));
     };
 
