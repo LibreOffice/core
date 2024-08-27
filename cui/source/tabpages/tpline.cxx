@@ -182,7 +182,6 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
 
     // Symbols on a line (eg star charts), MB-handler set
     m_xSymbolMB->connect_selected(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
-    m_xSymbolMB->connect_toggled(LINK(this, SvxLineTabPage, MenuCreateHdl_Impl));
     m_xSymbolWidthMF->connect_value_changed(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_xSymbolHeightMF->connect_value_changed(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_xSymbolRatioCB->connect_toggled(LINK(this, SvxLineTabPage, RatioHdl_Impl));
@@ -216,6 +215,7 @@ SvxLineTabPage::~SvxLineTabPage()
 void SvxLineTabPage::Construct()
 {
     FillListboxes();
+    PopulateMenus();
 }
 
 void SvxLineTabPage::FillListboxes()
@@ -1377,9 +1377,7 @@ void SvxLineTabPage::FillUserData()
 }
 
 // #58425# Symbols on a list (e.g. StarChart)
-// Handler for the symbol selection's popup menu (NumMenueButton)
-// The following link originates from SvxNumOptionsTabPage
-IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::Toggleable&, void)
+void SvxLineTabPage::PopulateMenus()
 {
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
@@ -1682,7 +1680,6 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
-    Construct();
 
     if(pSdrObjListItem) //symbols
     {
@@ -1693,6 +1690,8 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
         if(pGraphicItem)
             m_aAutoSymbolGraphic = pGraphicItem->GetGraphic();
     }
+
+    Construct();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

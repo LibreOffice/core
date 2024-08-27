@@ -172,7 +172,6 @@ private:
     // handler for gallery popup menu button + size
     DECL_LINK(GraphicHdl_Impl, const OUString&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(MenuCreateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
 
     DECL_LINK(ClickInvisibleHdl_Impl, weld::ComboBox&, void);
@@ -196,6 +195,7 @@ private:
     void FillXLSet_Impl();
 
     void FillListboxes();
+    void PopulateMenus();
 public:
 
     void ShowSymbolControls(bool bOn);
