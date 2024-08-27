@@ -24,6 +24,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/pdf/PDFNote.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -531,7 +532,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbSinglePageSheets      ( false ),
     mbExportNDests          ( false ),
     mnPage                  ( -1 ),
-    mnCompressionQuality    ( 90 ),
+    mnCompressionQuality    ( DefaultPDFJPEGQuality ),
     mpGlobalSyncData        ( new GlobalSyncData() )
 {
     mpPageSyncData.reset( new PageSyncData( mpGlobalSyncData.get() ) );

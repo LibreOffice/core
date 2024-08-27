@@ -14,6 +14,9 @@
 
 #include <optional>
 
+const sal_Int32 DefaultPDFJPEGQuality = 90;
+const sal_Int32 DefaultPDFImageDPI = 300;
+
 // Info class for all supported file formats
 enum class GraphicFileFormat
 {

@@ -27,6 +27,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/graphic/GraphicMetadata.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -88,8 +89,8 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbUseLosslessCompression    ( false ),
     mbReduceImageResolution     ( true ),
     mbSkipEmptyPages            ( true ),
-    mnMaxImageResolution        ( 300 ),
-    mnQuality                   ( 80 ),
+    mnMaxImageResolution        ( DefaultPDFImageDPI ),
+    mnQuality                   ( DefaultPDFJPEGQuality ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( false ),
 

@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
@@ -64,9 +65,9 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbSelectionPresent( false ),
     mbUseCTLFont( false ),
     mbUseLosslessCompression( true ),
-    mnQuality( 90 ),
+    mnQuality( DefaultPDFJPEGQuality ),
     mbReduceImageResolution( false ),
-    mnMaxImageResolution( 300 ),
+    mnMaxImageResolution( DefaultPDFImageDPI ),
     mbUseTaggedPDF( false ),
     mbUseTaggedPDFUserSelection( false ),
     mbExportNotes( true ),
@@ -180,9 +181,9 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbUseCTLFont = maConfigI18N.ReadBool( u"CTLFont"_ustr, false );
 
     mbUseLosslessCompression = maConfigItem.ReadBool( u"UseLosslessCompression"_ustr, false );
-    mnQuality = maConfigItem.ReadInt32( u"Quality"_ustr, 90 );
+    mnQuality = maConfigItem.ReadInt32(u"Quality"_ustr, DefaultPDFJPEGQuality);
     mbReduceImageResolution = maConfigItem.ReadBool( u"ReduceImageResolution"_ustr, false );
-    mnMaxImageResolution = maConfigItem.ReadInt32( u"MaxImageResolution"_ustr, 300 );
+    mnMaxImageResolution = maConfigItem.ReadInt32(u"MaxImageResolution"_ustr, DefaultPDFImageDPI);
 
     // this is always the user selection, independent from the PDF/A forced selection
     mbUseTaggedPDF = maConfigItem.ReadBool( u"UseTaggedPDF"_ustr, false );

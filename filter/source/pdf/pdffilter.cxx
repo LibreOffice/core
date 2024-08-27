@@ -27,6 +27,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/glyphitemcache.hxx>
+#include <vcl/graphic/GraphicMetadata.hxx>
 #include <memory>
 
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -97,9 +98,9 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         FilterConfigItem aCfgItem( u"Office.Common/Filter/PDF/Export/" );
         aCfgItem.ReadBool(  u"UseLosslessCompression"_ustr, false );
-        aCfgItem.ReadInt32( u"Quality"_ustr, 90 );
+        aCfgItem.ReadInt32( u"Quality"_ustr, DefaultPDFJPEGQuality );
         aCfgItem.ReadBool(  u"ReduceImageResolution"_ustr, false );
-        aCfgItem.ReadInt32( u"MaxImageResolution"_ustr, 300 );
+        aCfgItem.ReadInt32( u"MaxImageResolution"_ustr, DefaultPDFImageDPI );
         aCfgItem.ReadBool(  u"UseTaggedPDF"_ustr, false );
         aCfgItem.ReadInt32( u"SelectPdfVersion"_ustr, 0 );
         aCfgItem.ReadBool(u"PDFUACompliance"_ustr, false);
