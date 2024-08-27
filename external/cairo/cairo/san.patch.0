@@ -102,3 +102,13 @@
  
      return surface;
  }
+--- src/cairo-boxes.c
++++ src/cairo-boxes.c
+@@ -41,6 +41,7 @@
+ _cairo_boxes_init (cairo_boxes_t *boxes)
+ {
+     boxes->status = CAIRO_STATUS_SUCCESS;
++    boxes->limits = NULL;
+     boxes->num_limits = 0;
+     boxes->num_boxes = 0;
+ 
