@@ -218,6 +218,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
                 try
                 {
                     (*pItem)->maDeckActivationFunctor((*pItem)->msDeckId);
+                    GrabFocusToDocument();
                 }
                 catch(const css::uno::Exception&) {};
                 return true;
