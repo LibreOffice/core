@@ -197,7 +197,13 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     if (officecfg::Office::Common::Misc::ShowDonation::get())
     {
         mxExtensionsButton->set_from_icon_name(BMP_DONATE); // icon first needed on gtk3 to apply the label
-        mxExtensionsButton->set_label(SfxResId(STR_DONATE_BUTTON));
+        OUString sDonate(SfxResId(STR_DONATE_BUTTON));
+        if (sDonate.getLength() > 8)
+        {
+            mxExtensionsButton->set_tooltip_text(sDonate);
+            sDonate = OUString::Concat(sDonate.subView(0, 7)) + "...";
+        }
+        mxExtensionsButton->set_label(sDonate);
     }
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
