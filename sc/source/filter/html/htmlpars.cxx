@@ -81,7 +81,15 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUStri
     const char* pEncodedOption = aEncodedOption.getStr();
     std::stringstream aStream(pEncodedOption);
     boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
+    try
+    {
+        boost::property_tree::read_json(aStream, aTree);
+    }
+    catch (const std::exception&)
+    {
+        SAL_WARN("sc", "ParseDataSheetsValue: not well-formed json");
+        return;
+    }
     // The "1" key describes the original data type.
     auto it = aTree.find("1");
     if (it != aTree.not_found())
