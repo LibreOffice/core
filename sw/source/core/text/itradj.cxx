@@ -161,7 +161,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
     {
-        rItr.SeekAndChgAttrIter( nIdx, rInf.GetOut() );
+        rItr.SeekAndChgAttrIter(nIdx, rInf.GetRefDev());
         TextFrameIndex nNext = rItr.GetNextAttr();
 
         // is there also a script change before?
@@ -184,7 +184,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
         if (nKashidasInAttr > 0)
         {
             // Kashida glyph looks suspicious, skip Kashida justification
-            if ( rInf.GetOut()->GetMinKashida() <= 0 )
+            if (rInf.GetRefDev()->GetMinKashida() <= 0)
             {
                 return false;
             }
@@ -197,15 +197,16 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
             }
             else
             {
-                vcl::text::ComplexTextLayoutFlags nOldLayout = rInf.GetOut()->GetLayoutMode();
-                rInf.GetOut()->SetLayoutMode ( nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl );
-                nKashidasDropped = rInf.GetOut()->ValidateKashidas(
+                vcl::text::ComplexTextLayoutFlags nOldLayout = rInf.GetRefDev()->GetLayoutMode();
+                rInf.GetRefDev()->SetLayoutMode(nOldLayout
+                                                | vcl::text::ComplexTextLayoutFlags::BiDiRtl);
+                nKashidasDropped = rInf.GetRefDev()->ValidateKashidas(
                     rInf.GetText(), /*nIdx=*/sal_Int32{ nIdx },
                     /*nLen=*/sal_Int32{ nWholeNext - nIdx },
                     /*nPartIdx=*/sal_Int32{ nIdx }, /*nPartLen=*/sal_Int32{ nNext - nIdx },
                     std::span(aKashidaPos).subspan(nKashidaIdx, nKashidasInAttr),
                     &aKashidaPosDropped);
-                rInf.GetOut()->SetLayoutMode ( nOldLayout );
+                rInf.GetRefDev()->SetLayoutMode(nOldLayout);
                 if ( nKashidasDropped )
                 {
                     aCastKashidaPosDropped.clear();
@@ -239,7 +240,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
         TextFrameIndex nEnd = rItr.GetEnd();
         while ( nIdx < nEnd )
         {
-            rItr.SeekAndChgAttrIter( nIdx, rInf.GetOut() );
+            rItr.SeekAndChgAttrIter(nIdx, rInf.GetRefDev());
             TextFrameIndex nNext = rItr.GetNextAttr();
 
             // is there also a script change before?
@@ -252,7 +253,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
                 nNext = nEnd;
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify(nullptr, nullptr, nIdx, nNext - nIdx);
 
-            tools::Long nFontMinKashida = rInf.GetOut()->GetMinKashida();
+            tools::Long nFontMinKashida = rInf.GetRefDev()->GetMinKashida();
             if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
                 sal_Int32 nKashidasDropped = 0;
