@@ -197,7 +197,13 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     if (officecfg::Office::Common::Misc::ShowDonation::get())
     {
         mxExtensionsButton->set_from_icon_name(BMP_DONATE);
-        mxExtensionsButton->set_label(SfxResId(STR_DONATE_BUTTON));
+        OUString sDonate(SfxResId(STR_DONATE_BUTTON));
+        if (sDonate.getLength() > 8)
+        {
+            mxExtensionsButton->set_tooltip_text(sDonate);
+            sDonate = OUString::Concat(sDonate.subView(0, 7)) + "...";
+        }
+        mxExtensionsButton->set_label(sDonate);
     }
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
@@ -544,9 +550,15 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton,void)
 
     try
     {
-        OUString sURL(officecfg::Office::Common::Menus::ExtensionsURL::get() +
-            "?LOvers=" + utl::ConfigManager::getProductVersion() +
-            "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
+        OUString sURL;
+        if (officecfg::Office::Common::Misc::ShowDonation::get())
+            sURL = officecfg::Office::Common::Menus::DonationURL::get() +
+                "?BCP47=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() +
+                "&LOlang=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+        else
+            sURL = officecfg::Office::Common::Menus::ExtensionsURL::get() +
+                "?LOvers=" + utl::ConfigManager::getProductVersion() +
+                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
 
         Reference<css::system::XSystemShellExecute> const
             xSystemShellExecute(

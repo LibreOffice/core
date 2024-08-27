@@ -259,6 +259,7 @@
 #define STR_GET_INVOLVED_TEXT                   NC_("STR_GET_INVOLVED_TEXT", "Help us make %PRODUCTNAME even better!")
 #define STR_GET_INVOLVED_BUTTON                 NC_("STR_GET_INVOLVED_BUTTON", "Get involved")
 #define STR_DONATE_TEXT                         NC_("STR_DONATE_TEXT", "Your donations support our worldwide community.")
+// Translators: text will be abbreviated at >8 characters, eg. "Please D..."
 #define STR_DONATE_BUTTON                       NC_("STR_DONATE_BUTTON", "Donate")
 #define STR_WHATSNEW_TEXT                       NC_("STR_WHATSNEW", "You are running version %PRODUCTVERSION of %PRODUCTNAME for the first time. Do you want to learn what's new?")
 #define STR_WHATSNEW_BUTTON                     NC_("STR_WHATSNEW_BUTTON", "Release Notes")
