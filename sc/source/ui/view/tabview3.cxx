@@ -2296,9 +2296,10 @@ void ScTabView::KillEditView( bool bNoPaint )
 
             pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
 
+            const tools::Rectangle& rInvRect = aRectangle[i];
+
             if (comphelper::LibreOfficeKit::isActive())
             {
-                const tools::Rectangle& rInvRect = aRectangle[i];
                 pGridWin[i]->LogicInvalidatePart(&rInvRect, nTab);
 
                 // invalidate other views
@@ -2315,10 +2316,26 @@ void ScTabView::KillEditView( bool bNoPaint )
                 SfxLokHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
             }
             // #i73567# the cell still has to be repainted
-            else if (bExtended || ( bAtCursor && !bNoPaint ))
+            else
             {
-                pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, ScUpdateMode::All );
-                pGridWin[i]->UpdateSelectionOverlay();
+                const bool bDoPaint = bExtended || (bAtCursor && !bNoPaint);
+                const bool bDoInvalidate = !bDoPaint && bAtCursor;
+                if (bDoPaint)
+                {
+                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, ScUpdateMode::All );
+                    pGridWin[i]->UpdateSelectionOverlay();
+                }
+                else if (bDoInvalidate)
+                {
+                    // tdf#162651 even if !bNoPaint is set, and there will be a
+                    // follow up Draw of the next content, the area blanked out
+                    // by the editview which is being removed still needs to be
+                    // invalidated. The follow-up Draw of the content may be
+                    // optimized to only redraw the area of cells where content
+                    // has changed and will be unaware of what bounds this
+                    // editview grew to during its editing cycle.
+                    pGridWin[i]->Invalidate(rInvRect);
+                }
             }
         }
     }
