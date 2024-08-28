@@ -4955,10 +4955,13 @@ Color ImpEditEngine::GetAutoColor() const
 {
     Color aColor;
 
-    SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+    const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
-        if (GetBackgroundColor().IsDark() )
+        Color aBackgroundColor = GetBackgroundColor();
+        if (aBackgroundColor == COL_AUTO)
+            aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
+        if (aBackgroundColor.IsDark())
             aColor = COL_WHITE;
         else
             aColor = COL_BLACK;
