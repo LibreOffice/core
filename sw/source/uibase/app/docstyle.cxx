@@ -1442,7 +1442,7 @@ std::optional<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
 {
     if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Pseudo == nFamily || SfxStyleFamily::Table == nFamily)
     {
-        SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
+        SAL_INFO("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
         return std::optional<SfxItemSet>();
     }
     if (!m_bPhysical)
