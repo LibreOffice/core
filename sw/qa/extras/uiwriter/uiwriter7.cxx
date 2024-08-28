@@ -2405,8 +2405,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL(sOriginalDocString, sDocString);
 
-    constexpr OUString sWithCombiningSMPName = u"xyzU+e0101"_ustr;
-    constexpr OUString sWithCombiningSMP = u"xyz\U000e0101"_ustr;
+    constexpr OUString sWithCombiningSMPName = u"xyzU+4faeU+e0101"_ustr;
+    constexpr OUString sWithCombiningSMP = u"xyz\U00004fae\U000e0101"_ustr;
     pWrtShell->SplitNode();
     pWrtShell->Insert2(sWithCombiningSMPName);
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
@@ -2416,9 +2416,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     // Before tdf#162656 fix, this failed with
-    // - Expected: xyzU+e0101
-    // - Actual  : xyU+e0101
+    // - Expected: xyzU+4faeU+e0101
+    // - Actual  : xyxU+e0101
     // i.e., one codepoint to the left of the combining codepoint was removed
+    // Before tdf#162657 fix, this failed with
+    // - Expected: xyzU+4faeU+e0101
+    // - Actual  : xyz侮U+e0101
+    // i.e., one codepoint to the left of the combining codepoint was not converted
     CPPUNIT_ASSERT_EQUAL(sWithCombiningSMPName, sDocString);
 }
 
