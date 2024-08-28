@@ -52,6 +52,7 @@
 #include <flyfrms.hxx>
 #include <frmtool.hxx>
 #include <layouter.hxx>
+#include <fmtsrnd.hxx>
 
 // Tolerance in formatting and text output
 #define SLOPPY_TWIPS    5
@@ -1134,6 +1135,57 @@ static bool isReallyEmptyMaster(const SwTextFrame* pFrame)
     return pFrame->IsEmptyMaster() && (!pFrame->GetDrawObjs() || !pFrame->GetDrawObjs()->size());
 }
 
+namespace
+{
+/// Determines if pFrame has at least one anchored object which is positioned against the page frame
+/// and uses all space available for body text.
+bool HasFullPageFly(const SwTextFrame* pFrame)
+{
+    const SwFrame* pBodyFrame = pFrame->FindBodyFrame();
+    if (!pBodyFrame)
+    {
+        // Inside a fly frame, not interesting.
+        return false;
+    }
+
+    const SwRect& rBodyFrameArea = pBodyFrame->getFrameArea();
+    const SwSortedObjs* pDrawObjs = pFrame->GetDrawObjs();
+    if (!pDrawObjs)
+    {
+        return false;
+    }
+
+    for (SwAnchoredObject* pDrawObj : *pDrawObjs)
+    {
+        SwFrameFormat* pFrameFormat = pDrawObj->GetFrameFormat();
+        if (pFrameFormat->GetHoriOrient().GetRelationOrient() != text::RelOrientation::PAGE_FRAME)
+        {
+            continue;
+        }
+
+        if (pFrameFormat->GetVertOrient().GetRelationOrient() != text::RelOrientation::PAGE_FRAME)
+        {
+            continue;
+        }
+
+        if (pFrameFormat->GetSurround().GetValue() != text::WrapTextMode::WrapTextMode_NONE)
+        {
+            // Not a case where the request is to wrap the content around the object, ignore.
+            continue;
+        }
+
+        if (pDrawObj->GetObjRectWithSpaces().Contains(rBodyFrameArea))
+        {
+            // Wrap is requested, but the object uses all available space: this is a full page
+            // object.
+            return true;
+        }
+    }
+
+    return false;
+}
+}
+
 void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                              WidowsAndOrphans &rFrameBreak,
                              TextFrameIndex const nStrLen,
@@ -1212,6 +1264,14 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 && !hasFly(this) && !hasAtPageFly(pBodyFrame))
                 nNew = 0;
         }
+    }
+
+    if (nNew && HasFullPageFly(this) && nEnd == TextFrameIndex(0) && !bEmptyWithSplitFly)
+    {
+        // We intended to split at start, due to an anchored object which would use all space on the
+        // current page. It makes no sense to split & move all text of the frame forward: the
+        // current page would be empty and we would move back later anyway.
+        nNew = 0;
     }
 
     if ( nNew )
