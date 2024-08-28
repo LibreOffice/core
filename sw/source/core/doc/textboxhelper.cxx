@@ -1362,15 +1362,25 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             tools::Rectangle aRect
                 = getRelativeTextRectangle(pObj ? pObj : pShape->FindRealSdrObject());
 
-            // Get the left spacing of the text area of the shape
-            auto nLeftSpace = pShape->GetLRSpace().GetLeft();
-
             // Set the textbox position at the X-axis:
             SwFormatHoriOrient aNewHOri(pFormat->GetHoriOrient());
             if (bIsGroupObj && aNewHOri.GetHoriOrient() != text::HoriOrientation::NONE)
                 aNewHOri.SetHoriOrient(text::HoriOrientation::NONE);
-            aNewHOri.SetPos(aRect.Left() + nLeftSpace
-                            + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+
+            // tdf#152142: For RTL, positioning is relative to the right
+            if (pShape->GetLayoutDir() == SwFrameFormat::HORI_R2L)
+            {
+                auto nRightSpace = pShape->GetLRSpace().GetRight();
+                aNewHOri.SetPos(aRect.Right() + nRightSpace
+                                + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+            }
+            else
+            {
+                auto nLeftSpace = pShape->GetLRSpace().GetLeft();
+                aNewHOri.SetPos(aRect.Left() + nLeftSpace
+                                + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+            }
+
             SwFormatVertOrient aNewVOri(pFormat->GetVertOrient());
 
             // Special handling of group textboxes
