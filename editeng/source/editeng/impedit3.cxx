@@ -4958,9 +4958,7 @@ Color ImpEditEngine::GetAutoColor() const
     SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
-        // Get document background color from current view instead
-        aColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
-        if (aColor.IsDark())
+        if (GetBackgroundColor().IsDark() )
             aColor = COL_WHITE;
         else
             aColor = COL_BLACK;
