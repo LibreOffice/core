@@ -139,7 +139,8 @@ InflaterBytes::InflaterBytes(bool bNoWrap)
   bNeedDict(false),
   nOffset(0),
   nLength(0),
-  nLastInflateError(0)
+  nLastInflateError(0),
+  sInBuffer(nullptr)
 {
     pStream.reset(new z_stream);
     /* memset to 0 to set zalloc/opaque etc */
