@@ -37,6 +37,7 @@ $(call gb_MoTarget_get_clean_target,%) :
 $(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
 	$(call gb_Output_announce,$*,$(true),MO ,2)
 	$(call gb_Trace_StartRange,$*,MO )
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@)) && \
 	$(call gb_Helper_wsl_path,$(WSL) /bin/sh -c "$(MSGUNIQ) --force-po $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@")
 	$(call gb_Trace_EndRange,$*,MO )
 
