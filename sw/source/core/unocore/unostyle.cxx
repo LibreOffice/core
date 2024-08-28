@@ -2451,29 +2451,38 @@ void SwXStyle::getToggleAttributes(
         xDocStyleSheet = new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyleSheetBase));
         maUnoStyleSheets.insert({pStyleSheetBase, xDocStyleSheet});
     }
-    const SfxItemSet& rItemSet(xDocStyleSheet->GetItemSet());
-    assert(rItemSet.GetParent());
+    std::optional<SfxItemSet> oTempItemSet;
+    const SfxItemSet* pItemSet;
+    if (xDocStyleSheet->GetItemSet().GetParent())
+        pItemSet = &xDocStyleSheet->GetItemSet();
+    else
+    {
+        // set parent style to have the correct XFillStyle setting as XFILL_NONE
+        oTempItemSet.emplace(xDocStyleSheet->GetItemSet());
+        oTempItemSet->SetParent(&m_pDoc->GetDfltTextFormatColl()->GetAttrSet());
+        pItemSet = &*oTempItemSet;
+    }
 
     uno::Any aResult;
-    lcl_getTogglePropertyValue(RES_CHRATR_WEIGHT, MID_WEIGHT, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_WEIGHT, MID_WEIGHT, *pItemSet, aResult);
     aResult >>= rfCharStyleBold;
-    lcl_getTogglePropertyValue(RES_CHRATR_CTL_WEIGHT, MID_WEIGHT, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CTL_WEIGHT, MID_WEIGHT, *pItemSet, aResult);
     aResult >>= rfCharStyleBoldComplex;
-    lcl_getTogglePropertyValue(RES_CHRATR_POSTURE, MID_POSTURE, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_POSTURE, MID_POSTURE, *pItemSet, aResult);
     aResult >>= reCharStylePosture;
-    lcl_getTogglePropertyValue(RES_CHRATR_CTL_POSTURE, MID_POSTURE, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CTL_POSTURE, MID_POSTURE, *pItemSet, aResult);
     aResult >>= reCharStylePostureComplex;
-    lcl_getTogglePropertyValue(RES_CHRATR_CASEMAP, 0, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CASEMAP, 0, *pItemSet, aResult);
     aResult >>= rnCharStyleCaseMap;
-    lcl_getTogglePropertyValue(RES_CHRATR_RELIEF, 0, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_RELIEF, 0, *pItemSet, aResult);
     aResult >>= rnCharStyleRelief;
-    lcl_getTogglePropertyValue(RES_CHRATR_CONTOUR, 0, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CONTOUR, 0, *pItemSet, aResult);
     aResult >>= rbCharStyleContoured;
-    lcl_getTogglePropertyValue(RES_CHRATR_SHADOWED, 0, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_SHADOWED, 0, *pItemSet, aResult);
     aResult >>= rbCharStyleShadowed;
-    lcl_getTogglePropertyValue(RES_CHRATR_CROSSEDOUT, MID_CROSS_OUT, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_CROSSEDOUT, MID_CROSS_OUT, *pItemSet, aResult);
     aResult >>= rnCharStyleStrikeThrough;
-    lcl_getTogglePropertyValue(RES_CHRATR_HIDDEN, 0, rItemSet, aResult);
+    lcl_getTogglePropertyValue(RES_CHRATR_HIDDEN, 0, *pItemSet, aResult);
     aResult >>= rbCharStyleHidden;
 }
 
