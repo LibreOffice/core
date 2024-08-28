@@ -3273,6 +3273,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf162614)
     // clang-format on
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf152142)
+{
+    // Regression test for textbox positioning when anchored as-char in RTL context.
+    createSwDoc("tdf152142.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page"_ostr, 1);
+
+    SwTwips nTextBoxBegin
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/txt/infos/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    SwTwips nTextBoxEnd
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/txt/infos/bounds"_ostr,
+                   "right"_ostr)
+              .toInt32();
+
+    SwTwips nShapeBegin
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "left"_ostr)
+              .toInt32();
+    SwTwips nShapeEnd
+        = getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "right"_ostr)
+              .toInt32();
+
+    CPPUNIT_ASSERT_GREATER(nShapeBegin, nTextBoxBegin);
+    CPPUNIT_ASSERT_LESS(nShapeEnd, nTextBoxEnd);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
