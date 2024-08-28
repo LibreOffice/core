@@ -548,7 +548,8 @@ void PDFIProcessor::intersectClipToStroke(const uno::Reference< rendering::XPoly
     // thickness etc is set.  PolyPolygonStrokePrimitive2D::create2DDecomposition does most
     // of the work.
     const basegfx::BColor aBlack(0.0, 0.0, 0.0);
-    drawinglayer::attribute::LineAttribute aLineAttribute(aBlack, rGC.LineWidth * nScale /*, aJoin */);
+    drawinglayer::attribute::LineAttribute aLineAttribute(aBlack, rGC.LineWidth * nScale,
+                                                          rGC.LineJoin);
     rtl::Reference<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D> aStrokePrimitive(
         new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(aNewClip, aLineAttribute));
     drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
