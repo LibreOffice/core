@@ -6198,7 +6198,7 @@ bool SwContentTree::IsDeletable(const SwContent* pContent)
     // table
     if (eContentTypeId == ContentTypeId::TABLE)
     {
-        bool bFull;
+        bool bFull = false;
         m_pActiveShell->HasTableAnyProtection(&pContent->GetName(), &bFull);
         return !bFull;
     }
