@@ -606,7 +606,6 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer4"/>
                           <attributes>
-                            <attribute name="sensitive">6</attribute>
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>
