@@ -102,11 +102,11 @@ private:
 
 public:
     /**
-    Build an input string of valid UTF16 units to toggle.
+    Build an input string of valid UTF16/UCS4 units to toggle.
         -do not call the other functions until the input process is complete
         -build string from Right to Left.  (Start from the character to the left of the cursor: move left.)
     */
-    bool AllowMoreInput(sal_Unicode uChar);
+    bool AllowMoreInput(sal_uInt32 uChar);
 
     /**
     Validates (and potentially modifies) the input string.

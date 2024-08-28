@@ -1068,7 +1068,7 @@ OUString unicode::formatPercent(double dNumber,
     return aRet;
 }
 
-bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
+bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
 {
     //arbitrarily chosen maximum length allowed - normal max usage would be around 30.
     if( maInput.getLength() > 255 )
@@ -1092,12 +1092,20 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
 
             if( rtl::isLowSurrogate(uChar) && maUtf16.isEmpty() && maInput.isEmpty()  )
             {
-                maUtf16.append(uChar);
+                maUtf16.append(sal_Unicode(uChar));
                 return true;
             }
             if( rtl::isHighSurrogate(uChar) && maInput.isEmpty() )
-                maUtf16.insert(0, uChar );
-            //end of hex strings, or unexpected order of high/low, so don't accept more
+                maUtf16.insert(0, sal_Unicode(uChar));
+            if (maUtf16.getLength() == 2)
+            {
+                assert(rtl::isHighSurrogate(maUtf16[0]) && rtl::isLowSurrogate(maUtf16[1]));
+                // The resulting codepoint may itself be combining, so may allow more
+                sal_uInt32 nUCS4 = rtl::combineSurrogates(maUtf16[0], maUtf16[1]);
+                maUtf16.setLength(0);
+                return AllowMoreInput(nUCS4);
+            }
+            // unexpected order of high/low, so don't accept more
             if( !maUtf16.isEmpty() )
                 maInput.append(maUtf16);
             if( !maCombining.isEmpty() )
@@ -1122,7 +1130,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
                 mbAllowMoreChars = false;
                 return false;
             }
-            maCombining.insert(0, uChar);
+            maCombining.insertUtf32(0, uChar);
             break;
 
         default:
@@ -1138,7 +1146,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
 
             if( !maCombining.isEmpty() )
             {
-                maCombining.insert(0, uChar);
+                maCombining.insertUtf32(0, uChar);
                 maInput = maCombining;
                 mbAllowMoreChars = false;
                 return false;
