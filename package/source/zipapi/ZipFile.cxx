@@ -1625,10 +1625,9 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
     {
         std::vector<sal_Int8> aFileName(aEntry.nPathLen);
         aGrabber.seek(dataOffset + 30);
-        aGrabber.readBytes(aFileName.data(), aEntry.nPathLen);
+        aEntry.nPathLen = aGrabber.readBytes(aFileName.data(), aEntry.nPathLen);
         aEntry.sPath = OUString(reinterpret_cast<const char*>(aFileName.data()),
                                 aEntry.nPathLen, RTL_TEXTENCODING_UTF8);
-        aEntry.nPathLen = aEntry.nPathLen;
     }
     aEntry.sPath = aEntry.sPath.replace('\\', '/');
 
