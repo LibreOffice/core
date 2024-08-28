@@ -20,11 +20,10 @@ populated with just the relevant files from `instdir`.
 
 The build generates a Writer-only LO build. You should be able to run either
 
-    $ emrun --serve_after_close workdir/installation/LibreOffice/emscripten/qt_soffice.html
-    $ emrun --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
+    $ emrun --hostname 127.0.0.1 --serve_after_close workdir/installation/LibreOffice/emscripten/qt_soffice.html
+    $ emrun --hostname 127.0.0.1 --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
 
 REMINDER: Always start new tabs in the browser, reload might fail / cache!
-INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
 ## Setup for the LO WASM build (with Qt)
 
