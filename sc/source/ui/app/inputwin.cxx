@@ -1759,6 +1759,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                 if (pHdl)
                     pHdl->InputCommand(rCEvt);
             }
+            SC_MOD()->InputChanged( m_xEditView.get() );
         }
         else if ( nCommand == CommandEventId::CursorPos )
         {
