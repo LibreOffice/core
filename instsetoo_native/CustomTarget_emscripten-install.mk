@@ -14,15 +14,17 @@ $(if $(or $(gb_not $(filter emscripten,$(PKGFORMAT))),$(filter-out emscripten,$(
 
 emscripten_install_files := \
     favicon.ico \
-    qt_soffice.html \
-    qtloader.js \
-    qtlogo.svg \
     soffice.data \
     soffice.data.js.metadata \
     soffice.js \
     soffice.wasm \
     soffice.worker.js \
     $(if $(ENABLE_SYMBOLS_FOR),soffice.wasm.dwp) \
+    $(if $(DISABLE_GUI), \
+        soffice.html, \
+        qt_soffice.html \
+        qtloader.js \
+        qtlogo.svg) \
 
 .PHONY: $(call gb_CustomTarget_get_target,instsetoo_native/emscripten-install)
 $(call gb_CustomTarget_get_target,instsetoo_native/emscripten-install): \

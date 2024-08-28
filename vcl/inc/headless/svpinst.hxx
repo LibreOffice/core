@@ -100,13 +100,19 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
 
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
-    SAL_DLLPRIVATE bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
+
+#if defined EMSCRIPTEN
+    bool DoExecute(int &nExitCode) override;
+    void DoQuit() override;
+#endif
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
 
     SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~SvpSalInstance() override;
+
+    SAL_DLLPRIVATE bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
 
     SAL_DLLPRIVATE void     CloseWakeupPipe();
     SAL_DLLPRIVATE void     Wakeup(SvpRequest request = SvpRequest::NONE);
