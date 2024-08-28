@@ -115,12 +115,6 @@ public:
     */
     OUString StringToReplace();
     OUString ReplacementString();
-
-    /**
-    While sInput.getLength() returns the number of utf16 units to delete,
-        this function returns the number of "characters" to delete - potentially a smaller number
-    */
-    sal_uInt32 CharsToDelete();
 };
 
 #endif

@@ -1270,19 +1270,6 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     return maInput.toString();
 }
 
-sal_uInt32 ToggleUnicodeCodepoint::CharsToDelete()
-{
-    OUString sIn = StringToReplace();
-    sal_Int32 nPos = 0;
-    sal_uInt32 counter = 0;
-    while( nPos < sIn.getLength() )
-    {
-        sIn.iterateCodePoints(&nPos);
-        ++counter;
-    }
-    return counter;
-}
-
 OUString ToggleUnicodeCodepoint::ReplacementString()
 {
     OUString sIn = StringToReplace();
