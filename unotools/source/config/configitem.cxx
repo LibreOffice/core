@@ -40,6 +40,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 
@@ -169,20 +170,22 @@ void ConfigItem::CallNotify( const css::uno::Sequence<OUString>& rPropertyNames 
         Notify(rPropertyNames);
 }
 
-void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   lInNames    ,
-                                                const   Sequence< Any >&        lInValues   ,
-                                                        Sequence< Any >&        lOutValues  )
+// In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
+// These methods are helper to convert given lists of names and Any-values.
+// format:  PropertyValue.Name  = <locale as ISO string>
+//          PropertyValue.Value = <value; type depends from cfg entry!>
+// e.g.
+//          LOCALIZED NODE
+//          "UIName"
+//                      LOCALE      VALUE
+//                      "de"        "Mein Name"
+//                      "en-US"     "my name"
+
+static void impl_packLocalizedProperties(  const   Sequence< OUString >&   lInNames    ,
+                                           const   Sequence< Any >&        lInValues   ,
+                                                   Sequence< Any >&        lOutValues  )
 {
     // This method should be called for special AllLocales ConfigItem-mode only!
-
-    sal_Int32                   nSourceCounter;      // used to step during input lists
-    sal_Int32                   nSourceSize;         // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter; // actual position in output lists
-    sal_Int32                   nPropertyCounter;    // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize;     // marks end of inner loop
-    Sequence< OUString >        lPropertyNames;      // list of all locales for localized entry
-    Sequence< PropertyValue >   lProperties;         // localized values of a configuration entry packed for return
-    Reference< XInterface >     xLocalizedNode;      // if cfg entry is localized ... lInValues contains an XInterface!
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
@@ -191,9 +194,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     //  ... Why? If a localized value exist - the any is filled with an XInterface object (is a SetNode-service).
     //      We read all his child nodes and pack it into Sequence< PropertyValue >.
     //      The result list we pack into the return any. We never change size of lists!
-    nSourceSize = lInNames.getLength();
-    lOutValues.realloc( nSourceSize );
-    auto plOutValues = lOutValues.getArray();
+    lOutValues.realloc(lInNames.getLength());
 
     // Algorithm:
     // Copy all names and values from in to out lists.
@@ -201,45 +202,35 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     // Use this XInterface-object to read all localized values and pack it into Sequence< PropertyValue >.
     // Add this list to out lists then.
 
-    nDestinationCounter = 0;
-    for( nSourceCounter=0; nSourceCounter<nSourceSize; ++nSourceCounter )
+    std::transform(lInValues.begin(), lInValues.end(), lOutValues.getArray(), [](const Any& value)
     {
-        // If item a special localized one ... convert and pack it ...
-        if( lInValues[nSourceCounter].getValueTypeName() == "com.sun.star.uno.XInterface" )
+        // If item is a special localized one ... convert and pack it ...
+        if (value.getValueTypeName() == "com.sun.star.uno.XInterface")
         {
-            lInValues[nSourceCounter] >>= xLocalizedNode;
-            Reference< XNameContainer > xSetAccess( xLocalizedNode, UNO_QUERY );
-            if( xSetAccess.is() )
+            if (auto xSetAccess = value.query<XNameContainer>())
             {
-                lPropertyNames  =   xSetAccess->getElementNames();
-                nPropertiesSize =   lPropertyNames.getLength();
-                lProperties.realloc( nPropertiesSize );
-                auto plProperties = lProperties.getArray();
+                // list of all locales for localized entry
+                Sequence<OUString> locales = xSetAccess->getElementNames();
+                // localized values of a configuration entry packed for return
+                Sequence<PropertyValue> lProperties(locales.getLength());
 
-                for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
-                {
-                    plProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter];
-                    OUString sLocaleValue;
-                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue;
-                    plProperties[nPropertyCounter].Value <<= sLocaleValue;
-                }
+                std::transform(
+                    locales.begin(), locales.end(), lProperties.getArray(),
+                    [&xSetAccess](const OUString& s)
+                    { return comphelper::makePropertyValue(s, xSetAccess->getByName(s)); });
 
-                plOutValues[nDestinationCounter] <<= lProperties;
+                return Any(lProperties);
             }
         }
         // ... or copy normal items to return lists directly.
-        else
-        {
-            plOutValues[nDestinationCounter] = lInValues[nSourceCounter];
-        }
-        ++nDestinationCounter;
-    }
+        return value;
+    });
 }
 
-void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >&   lInNames    ,
-                                                    const   Sequence< Any >&        lInValues   ,
-                                                            Sequence< OUString >&   lOutNames   ,
-                                                            Sequence< Any >&        lOutValues)
+static void impl_unpackLocalizedProperties(    const   Sequence< OUString >&   lInNames    ,
+                                               const   Sequence< Any >&        lInValues   ,
+                                                       Sequence< OUString >&   lOutNames   ,
+                                                       Sequence< Any >&        lOutValues)
 {
     // This method should be called for special AllLocales ConfigItem-mode only!
 

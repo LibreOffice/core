@@ -83,25 +83,6 @@ namespace utl
             void                    CallNotify(
                                 const css::uno::Sequence<OUString>& aPropertyNames);
 
-            // In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
-            // These methods are helper to convert given lists of names and Any-values.
-            // format:  PropertyValue.Name  = <locale as ISO string>
-            //          PropertyValue.Value = <value; type depends from cfg entry!>
-            // e.g.
-            //          LOCALIZED NODE
-            //          "UIName"
-            //                      LOCALE      VALUE
-            //                      "de"        "Mein Name"
-            //                      "en-US"     "my name"
-            static void impl_packLocalizedProperties   (   const   css::uno::Sequence< OUString >&                  lInNames    ,
-                                                    const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
-                                                            css::uno::Sequence< css::uno::Any >&  lOutValues  );
-            static void impl_unpackLocalizedProperties (
-                        const   css::uno::Sequence< OUString >&                  lInNames    ,
-                        const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
-                                css::uno::Sequence< OUString >&                  lOutNames   ,
-                                css::uno::Sequence< css::uno::Any >&  lOutValues);
-
             css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         GetTree();
             /** writes the changed values into the sub tree.
