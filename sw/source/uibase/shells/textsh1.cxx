@@ -822,8 +822,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.InfoReadOnlyDialog(false);
                     break;
                 }
+                OUString stringToReplace = aToggle.StringToReplace();
                 SwRewriter aRewriter;
-                aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
+                aRewriter.AddRule( UndoArg1, stringToReplace );
                 aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(SwUndoId::REPLACE, &aRewriter);
@@ -832,9 +833,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.ClearMark();
                 if( rWrtSh.IsInSelect() )  // cancel any in-progress keyboard selection as well
                     rWrtSh.EndSelect();
-
-                for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
-                    rWrtSh.DelLeft();
+                // Select exactly what was chosen for replacement
+                rWrtSh.GetCursor()->SetMark();
+                rWrtSh.GetCursor()->GetPoint()->AdjustContent(-stringToReplace.getLength());
+                rWrtSh.DelLeft();
                 rWrtSh.Insert2( sReplacement );
                 rWrtSh.EndUndo(SwUndoId::REPLACE, &aRewriter);
             }
