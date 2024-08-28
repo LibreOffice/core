@@ -43,7 +43,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="applystyle-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="fontstyletoolbox|applystyle">Font style</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="fontstyletoolbox|applystyle">Paragraph style</property>
                       </object>
                     </child>
                   </object>
