@@ -345,7 +345,7 @@ CheckReadOnlyTaskTerminateListener::notifyTermination(const css::lang::EventObje
     mCond.notify_one();
 }
 
-/// Temporary file wrapper to handle tmp file lifecyle
+/// Temporary file wrapper to handle tmp file lifecycle
 /// for lok fork a background saving worker issues.
 class MediumTempFile : public ::utl::TempFileNamed
 {
