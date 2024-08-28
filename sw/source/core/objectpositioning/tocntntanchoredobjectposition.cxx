@@ -457,7 +457,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                             *(pOrientFrame->GetUpper()) );
                 const bool bCheckBottom = !DoesObjFollowsTextFlow();
                 nRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
-                                              rVertEnvironLayFrame, nRelPosY,
+                                              rVertEnvironLayFrame, aVert, nRelPosY,
                                               DoesObjFollowsTextFlow(),
                                               bCheckBottom );
             }
@@ -680,7 +680,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 // anchored object has to follow the text flow.
                 const bool bCheckBottom = !DoesObjFollowsTextFlow();
                 nRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
-                                              rVertEnvironLayFrame, nRelPosY,
+                                              rVertEnvironLayFrame, aVert, nRelPosY,
                                               !bIgnoreVertLayoutInCell && DoesObjFollowsTextFlow(),
                                               bCheckBottom );
                 if ( aRectFnSet.IsVert() )
@@ -720,7 +720,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         // frame, if anchored object has to follow the text flow.
                         const bool bCheckBottom = !DoesObjFollowsTextFlow();
                         nTmpRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
-                                                         rVertEnvironLayFrame,
+                                                         rVertEnvironLayFrame, aVert,
                                                          nTmpRelPosY,
                                                          DoesObjFollowsTextFlow(),
                                                          bCheckBottom );
@@ -811,7 +811,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                             const SwFrame& rVertEnvironLayFrame =
                                 aEnvOfObj.GetVertEnvironmentLayoutFrame( *pUpperOfOrientFrame );
                             nRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
-                                                          rVertEnvironLayFrame,
+                                                          rVertEnvironLayFrame, aVert,
                                                           nRelPosY,
                                                           DoesObjFollowsTextFlow() );
                             if( aRectFnSet.IsVert() )
@@ -938,7 +938,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     const SwLayoutFrame& rVertEnvironLayFrame =
                         aEnvOfObj.GetVertEnvironmentLayoutFrame( *pUpperOfOrientFrame );
                     nTmpRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
-                                                     rVertEnvironLayFrame,
+                                                     rVertEnvironLayFrame, aVert,
                                                      nTmpRelPosY,
                                                      DoesObjFollowsTextFlow(),
                                                      false );

@@ -18,9 +18,11 @@
  */
 
 #include <anchoredobjectposition.hxx>
+#include <bodyfrm.hxx>
 #include <environmentofanchoredobject.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
+#include <formatflysplit.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <frmatr.hxx>
@@ -433,6 +435,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bVert,
                                                          const bool bVertL2R,
                                                          const SwFrame& rPageAlignLayFrame,
+                                                         const SwFormatVertOrient& rVertOrient,
                                                          const SwTwips nProposedRelPosY,
                                                          const bool bFollowTextFlow,
                                                          const bool bCheckBottom ) const
@@ -471,7 +474,31 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrame()->IsInTab() ) )
         {
-            aPgAlignArea = rPageAlignLayFrame.FindPageFrame()->getFrameArea();
+            const SwPageFrame& rPageFrame = *rPageAlignLayFrame.FindPageFrame();
+            aPgAlignArea = rPageFrame.getFrameArea();
+
+            // re-using existing compat option to determine old (<=compat14) behaviour
+            const bool bCompat15 = !rIDSA.get(DocumentSettingId::ADD_FLY_OFFSETS);
+
+            // Instead of using the top of the page as the vertical limit,
+            // DOCX compatibilityMode 15 started to use the text body as the vertical limit
+            // for most paragraph or line-oriented anchored non-wrapthrough objects.
+            // Floating tables are an exception.
+            const bool bIsFloatingTable = mpFrameFormat->GetFlySplit().GetValue();
+            // FramePr paragraph-defined textboxes are another exception.
+            // bVert is also untouched to avoid issues: who knows what should happen in that case.
+            if (!bVert && bCompat15 && !bWrapThrough && !bIsFloatingTable
+                && rPageAlignLayFrame.IsPageFrame()
+                && rVertOrient.GetRelationOrient() != text::RelOrientation::PAGE_FRAME
+                && rVertOrient.GetRelationOrient() != text::RelOrientation::PAGE_PRINT_AREA
+                && !SwTextBoxHelper::TextBoxIsFramePr(*mpFrameFormat))
+            {
+                const SwBodyFrame* pBodyFrame = mpAnchorFrame->FindBodyFrame();
+                while (pBodyFrame && !pBodyFrame->IsPageBodyFrame())
+                    pBodyFrame = pBodyFrame->GetUpper()->FindBodyFrame();
+                if (pBodyFrame)
+                    aPgAlignArea = pBodyFrame->getFrameArea();
+            }
         }
         else
         {

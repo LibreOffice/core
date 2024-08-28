@@ -721,6 +721,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
+
+    // tdf#143899: framePr textbox not affected by compat15's aversion to vertical page margin
+    // The textbox requests to be 0.72inch above its anchor paragraph (the first paragraph)
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getXPathContent(pDump, "//fly[2]/txt"_ostr));
+    sal_Int32 nShapeBottom = getXPath(pDump, "//fly[2]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+    sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The framePr textbox is NOT vertically limited like other shapes to the page margins
+    CPPUNIT_ASSERT(nBodyTop > nShapeBottom); // textbox is fully above the text body area
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")

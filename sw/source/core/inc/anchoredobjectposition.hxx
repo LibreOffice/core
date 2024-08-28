@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ANCHOREDOBJECTPOSITION_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ANCHOREDOBJECTPOSITION_HXX
 
+#include <fmtornt.hxx>
 #include <swtypes.hxx>
 #include "frame.hxx"
 #include <nodeoffset.hxx>
@@ -72,6 +73,7 @@ namespace objectpositioning
                                        const bool bVert,
                                        const bool bVertL2R,
                                        const SwFrame&  rPageAlignLayFrame,
+                                       const SwFormatVertOrient& rVertOrient,
                                        const SwTwips nProposedRelPosY,
                                        const bool bFollowTextFlow,
                                        const bool bCheckBottom ) const;
@@ -184,6 +186,7 @@ namespace objectpositioning
                                           const bool bVert,
                                           const bool bVertL2R,
                                           const SwFrame& rPageAlignLayFrame,
+                                          const SwFormatVertOrient& rVertOrient,
                                           const SwTwips nProposedRelPosY,
                                           const bool bFollowTextFlow,
                                           const bool bCheckBottom = true ) const
@@ -191,6 +194,7 @@ namespace objectpositioning
             return !mbDoNotCaptureAnchoredObj
                    ? ImplAdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
                                             rPageAlignLayFrame,
+                                            rVertOrient,
                                             nProposedRelPosY,
                                             bFollowTextFlow,
                                             bCheckBottom )

@@ -1459,6 +1459,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60351)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(316), aPolygon[4].Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[5].X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[5].Y);
+
+    // tdf143899: image affected by compat15's aversion to vertical page margin.
+    // although the image is set to -0.3cm above the first paragraph, it can't move up at all.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nImageTop = getXPath(pDump, "//fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The image (like most floating objects) is vertically limited to the page margins
+    CPPUNIT_ASSERT_EQUAL(nBodyTop, nImageTop);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf95970)
