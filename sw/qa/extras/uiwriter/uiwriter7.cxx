@@ -2399,11 +2399,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
     sExpectedString = "u+";
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT_EQUAL(sDocString, sExpectedString);
+    CPPUNIT_ASSERT_EQUAL(sExpectedString, sDocString);
 
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT_EQUAL(sDocString, sOriginalDocString);
+    CPPUNIT_ASSERT_EQUAL(sOriginalDocString, sDocString);
+
+    constexpr OUString sWithCombiningSMPName = u"xyzU+e0101"_ustr;
+    constexpr OUString sWithCombiningSMP = u"xyz\U000e0101"_ustr;
+    pWrtShell->SplitNode();
+    pWrtShell->Insert2(sWithCombiningSMPName);
+    dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
+    sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(sWithCombiningSMP, sDocString);
+
+    dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
+    sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
+    // Before tdf#162656 fix, this failed with
+    // - Expected: xyzU+e0101
+    // - Actual  : xyU+e0101
+    // i.e., one codepoint to the left of the combining codepoint was removed
+    CPPUNIT_ASSERT_EQUAL(sWithCombiningSMPName, sDocString);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf34957)
