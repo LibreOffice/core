@@ -774,7 +774,7 @@ bool QtInstance::DoExecute(int& nExitCode)
 #if defined EMSCRIPTEN
         // For Emscripten, QApplication::exec() will unwind the stack by throwing a JavaScript
         // exception, so we need to manually undo the call of AcquireYieldMutex() done in InitVCL:
-        ImplGetSVData()->mpDefInst->ReleaseYieldMutex(false);
+        ReleaseYieldMutex(false);
 #endif
         nExitCode = QApplication::exec();
 #if defined EMSCRIPTEN
