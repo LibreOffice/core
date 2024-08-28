@@ -163,7 +163,7 @@ Check:
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 	End If
 	If Not IsLoaded(FormDocument) Then GoTo Finally
 
@@ -258,7 +258,7 @@ Check:
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormDocuments = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
 	End If
 	If Not IsLoaded(FormDocument) Then GoTo CatchClosed
@@ -273,7 +273,7 @@ Try:
 		Forms = vFormNames
 	Else
 		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
-			If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+			If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 			Set oXForm = oForms.getByName(Form)
 		Else								&apos;	Find the form by index
 			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
@@ -420,7 +420,7 @@ Check:
 		If Not _IsStillAlive() Then GoTo Finally
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 	End If
 
 Try:
@@ -488,7 +488,7 @@ Check:
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 
@@ -546,7 +546,7 @@ Check:
 	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
 	vQueries = GetDatabase().Queries	&apos;	Includes _IsStillAlive()
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, vQueries) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, vQueries, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 
@@ -599,7 +599,7 @@ Check:
 	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
 	vTables = GetDatabase().Tables
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, vTables) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, vTables, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
 
@@ -660,7 +660,7 @@ Check:
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Copies, &quot;Copies&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	End If
@@ -741,7 +741,7 @@ Check:
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
 		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormDocuments = Split(_CollectFormDocuments(_FormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments, True) Then GoTo Finally
 	End If
 	If Not IsLoaded(FormDocument) Then GoTo CatchClosed
 

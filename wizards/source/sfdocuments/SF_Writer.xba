@@ -1005,7 +1005,7 @@ Dim i As Long
 					Case &quot;Section&quot;		:	Set oColl = _Component.getTextSections()
 				End Select
 				If .Target = &quot;Field&quot; Then vNames = Fields() Else vNames =  oColl.getElementNames()
-				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames) Then GoTo Finally
+				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames, True) Then GoTo Finally
 				Set .TargetObject = oColl.getByName(.TargetName)
 
 				&apos;	Set text, anchor and cursor: order varies depending on target
@@ -1058,7 +1058,7 @@ Dim i As Long
 				If (sLeft1 = &quot;&quot;&quot;&quot; Or sLeft1 = &quot;&apos;&quot;) And Len(sString) &gt; 2 Then .TargetName = Trim(Mid(sString, 2, Len(sString) - 2)) Else .TargetName = Trim(sString)
 				Set oColl = _Component.getTextTables()
 				vNames =  oColl.getElementNames()
-				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames) Then GoTo Finally
+				If Not ScriptForge.SF_Utils._Validate(.TargetName, .Target, V_STRING, vNames, True) Then GoTo Finally
 				Set oItem = oColl.getByName(.TargetName)
 				.TargetCell = Split(psTextRange, &quot;!&quot;)(2)
 				&apos;	Set text, anchor and cursor

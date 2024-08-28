@@ -709,7 +709,7 @@ Const cstSubArgs = &quot;Extension&quot;
 Check:
 	If IsEmpty(vExtensions) Then vExtensions = SF_Platform.Extensions
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not SF_Utils._Validate(Extension, &quot;Extension&quot;, V_STRING, vExtensions) Then GoTo Finally
+		If Not SF_Utils._Validate(Extension, &quot;Extension&quot;, V_STRING, vExtensions, True) Then GoTo Finally
 	End If
 
 Try:
@@ -1634,7 +1634,7 @@ Check:
 Try:
 	&apos; Derive numeric equivalent of the Mode argument: https://api.libreoffice.org/docs/idl/ref/TemplateDescription_8idl.html
 	With com.sun.star.ui.dialogs.TemplateDescription
-		If Mode = &quot;OPEN&quot; Then iMode = .FILEOPEN_SIMPLE Else iMode = .FILESAVE_AUTOEXTENSION
+		If UCase(Mode) = &quot;OPEN&quot; Then iMode = .FILEOPEN_SIMPLE Else iMode = .FILESAVE_AUTOEXTENSION
 	End With
 
 	&apos; Activate the filepicker dialog

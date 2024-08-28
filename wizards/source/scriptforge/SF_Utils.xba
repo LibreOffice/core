@@ -728,7 +728,7 @@ Public Function _Validate(Optional ByRef pvArgument As Variant _
 							, ByVal psName As String _
 							, Optional ByVal pvTypes As Variant _
 							, Optional ByVal pvValues As Variant _
-							, Optional ByVal pvRegex As Variant _
+							, Optional ByVal pvCaseSensitive As Variant _
 							, Optional ByVal pvObjectType As Variant _
 							) As Boolean
 &apos;&apos;&apos;	Validate the arguments set by user scripts
@@ -739,7 +739,7 @@ Public Function _Validate(Optional ByRef pvArgument As Variant _
 &apos;&apos;&apos;		psName: the documented name of the argument (can be inserted in an error message)
 &apos;&apos;&apos;		pvTypes: array of allowed VarTypes
 &apos;&apos;&apos;		pvValues: array of allowed values
-&apos;&apos;&apos;		pvRegex: regular expression to comply with
+&apos;&apos;&apos;		pvCaseSensitive: when True the comparison between strings is done case-sensitively
 &apos;&apos;&apos;		pvObjectType: mandatory Basic class
 &apos;&apos;&apos;	Return: True if validation OK
 &apos;&apos;&apos;			Otherwise an error is raised
@@ -759,7 +759,7 @@ Const cstMaxValues = 10		&apos;	Maximum number of allowed items to list in an er
 Try:
 	bValid = True
 	If IsMissing(pvArgument) Then GoTo CatchMissing
-	If IsMissing(pvRegex) Or IsEmpty(pvRegex) Then pvRegex = &quot;&quot;
+	If IsMissing(pvCaseSensitive) Or IsEmpty(pvCaseSensitive) Then pvCaseSensitive = False
 	If IsMissing(pvObjectType) Or IsEmpty(pvObjectType) Then pvObjectType = &quot;&quot;
 	iVarType = SF_Utils._VarTypeExt(pvArgument)
 
@@ -776,11 +776,7 @@ Try:
 		&apos;	Check if argument&apos;s value is valid
 		If bValid And Not IsMissing(pvValues) Then
 			If Not IsArray(pvValues) Then pvValues = Array(pvValues)
-			bValid = SF_Array.Contains(pvValues, pvArgument, CaseSensitive := False)
-		End If
-		&apos;	Check regular expression
-		If bValid And Len(pvRegex) &gt; 0 And iVarType = V_STRING Then
-			If Len(pvArgument) &gt; 0 Then bValid = SF_String.IsRegex(pvArgument, pvRegex, CaseSensitive := False)
+			bValid = SF_Array.Contains(pvValues, pvArgument, CaseSensitive := pvCaseSensitive)
 		End If
 		&apos;	Check instance types
 		If bValid And Len(pvObjectType) &gt; 0 And iVarType = V_OBJECT Then
@@ -802,7 +798,7 @@ Try:
 		&apos;&apos;&apos;		Actual value:	&quot;Ascending&quot;
 		SF_Exception.RaiseFatal(ARGUMENTERROR _
 				, SF_Utils._Repr(pvArgument, cstMaxLength), psName, SF_Utils._TypeNames(pvTypes) _
-				, SF_Utils._ReprValues(pvValues, cstMaxValues), pvRegex, pvObjectType _
+				, SF_Utils._ReprValues(pvValues, cstMaxValues), pvCaseSensitive, pvObjectType _
 				)
 	End If
 

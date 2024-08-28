@@ -532,7 +532,7 @@ Try:
 
 	&apos;	Raise error when chart not found
 	If Len(ChartName) &gt; 0 And IsNull(oChart) Then
-		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING, vCharts) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING, vCharts, True) Then GoTo Finally
 	End If
 
 Finally:
@@ -1332,7 +1332,7 @@ Try:
 	For i = 0 To UBound(vRows)
 		sField = vRows(i)
 		If Len(sField) &gt; 0 Then
-			If Not ScriptForge.SF_Utils._Validate(sField, &quot;RowFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;RowFields&quot;, V_STRING, vHeaders, True) Then GoTo Finally
 			Set oField = oFields.getByName(sField)
 			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.ROW
 		End If
@@ -1342,7 +1342,7 @@ Try:
 	For i = 0 To UBound(vColumns)
 		sField = vColumns(i)
 		If Len(sField) &gt; 0 Then
-			If Not ScriptForge.SF_Utils._Validate(sField, &quot;ColumnFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;ColumnFields&quot;, V_STRING, vHeaders, True) Then GoTo Finally
 			Set oField = oFields.getByName(sField)
 			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.COLUMN
 		End If
@@ -1358,7 +1358,7 @@ Try:
 		If UBound(vDataField) &gt; 0 Then sFunction = vDataField(1) Else sFunction = &quot;&quot;
 		&apos;	Define field properties
 		If Len(sField) &gt; 0 Then
-			If Not ScriptForge.SF_Utils._Validate(sField, &quot;DataFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;DataFields&quot;, V_STRING, vHeaders, True) Then GoTo Finally
 			Set oField = oFields.getByName(sField)
 			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.DATA
 			&apos;	Associate the correct function
@@ -1654,7 +1654,7 @@ Try:
 		Forms = vFormNames
 	Else
 		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
-		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 			Set oXForm = oForms.getByName(Form)
 		Else								&apos;	Find the form by index
 			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
@@ -2891,7 +2891,7 @@ Check:
 		&apos;	Check that the given style really exists
 		Set oStyleFamilies = _Component.StyleFamilies
 		If oStyleFamilies.hasByName(cstStyle) Then vStyles = oStyleFamilies.getByName(cstStyle).getElementNames() Else vStyles = Array()
-		If Not ScriptForge.SF_Utils._Validate(Style, &quot;Style&quot;, V_STRING, vStyles) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Style, &quot;Style&quot;, V_STRING, vStyles, True) Then GoTo Finally
 		&apos;	Filter formula
 		If Not ScriptForge.SF_Utils._Validate(FilterFormula, &quot;FilterFormula&quot;, V_STRING) Then GoTo Finally
 		If Len(FilterFormula) &gt; 0 Then

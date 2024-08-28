@@ -324,7 +324,7 @@ Check:
 	End If
 
 Try:
-	bContains = SF_Array._FindItem(Array_1D, ToFind, CaseSensitive, SortOrder)(0)
+	bContains = SF_Array._FindItem(Array_1D, ToFind, CaseSensitive, UCase(SortOrder))(0)
 
 Finally:
 	Contains = bContains
@@ -1034,7 +1034,7 @@ Check:
 	End If
 
 Try:
-	vFindItem = SF_Array._FindItem(Array_1D, ToFind, CaseSensitive, SortOrder)
+	vFindItem = SF_Array._FindItem(Array_1D, ToFind, CaseSensitive, UCase(SortOrder))
 	If vFindItem(0) = True Then lIndex = vFindItem(1) Else lIndex = LBound(Array_1D) - 1
 
 Finally:
@@ -1160,7 +1160,7 @@ Check:
 Try:
 	lMin = LBound(Array_1D)
 	lMax = UBound(Array_1D)
-	lIndex = SF_Array._FindItem(Array_1D, Item, CaseSensitive, SortOrder)(1)
+	lIndex = SF_Array._FindItem(Array_1D, Item, CaseSensitive, UCase(SortOrder))(1)
 	vSorted = SF_Array.Insert(Array_1D, lIndex, Item)
 
 Finally:
@@ -1884,7 +1884,7 @@ Try:
 	lMin = LBound(Array_1D)
 	lMax = UBound(Array_1D)
 	If lMax &lt; lMin Then GoTo Finally	&apos;	Do nothing if the input array is empty
-	vIndexes() = SF_Array._HeapSort(Array_1D, ( SortOrder = &quot;ASC&quot; ), CaseSensitive)
+	vIndexes() = SF_Array._HeapSort(Array_1D, ( UCase(SortOrder) = &quot;ASC&quot; ), CaseSensitive)
 
 	&apos;	Load output array
 	ReDim vSort(lMin To lMax)
@@ -1955,7 +1955,7 @@ Try:
 	&apos;	Extract and sort the RowIndex-th row
 	vRow = SF_Array.ExtractRow(Array_2D, RowIndex)
 	If Not SF_Utils._ValidateArray(vRow, &quot;Row #&quot; &amp; CStr(RowIndex), 1, 0) Then GoTo Finally
-	vIndexes() = SF_Array._HeapSort(vRow, ( SortOrder = &quot;ASC&quot; ), CaseSensitive)
+	vIndexes() = SF_Array._HeapSort(vRow, ( UCase(SortOrder) = &quot;ASC&quot; ), CaseSensitive)
 
 	&apos;	Load output array
 	ReDim vSort(lMin1 To lMax1, lMin2 To lMax2)
@@ -2032,7 +2032,7 @@ Try:
 	&apos;	Extract and sort the ColumnIndex-th column
 	vCol = SF_Array.ExtractColumn(Array_2D, ColumnIndex)
 	If Not SF_Utils._ValidateArray(vCol, &quot;Column #&quot; &amp; CStr(ColumnIndex), 1, 0) Then GoTo Finally
-	vIndexes() = SF_Array._HeapSort(vCol, ( SortOrder = &quot;ASC&quot; ), CaseSensitive)
+	vIndexes() = SF_Array._HeapSort(vCol, ( UCase(SortOrder) = &quot;ASC&quot; ), CaseSensitive)
 
 	&apos;	Load output array
 	ReDim vSort(lMin1 To lMax1, lMin2 To lMax2)

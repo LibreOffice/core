@@ -603,7 +603,7 @@ Check:
 
 	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place := Null) Then GoTo Finally
 
-	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_String, _DialogModel.getElementNames()) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_String, _DialogModel.getElementNames(), True) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 
@@ -691,7 +691,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotFound:
-	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _DialogModel.getElementNames())
+	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _DialogModel.getElementNames(), True)
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Dialog.Controls
 

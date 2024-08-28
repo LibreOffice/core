@@ -1432,7 +1432,7 @@ Check:
 	If VarType(Printer) = V_STRING Then
 		vPrinters = ScriptForge.SF_Platform.Printers
 		If Len(Printer) &gt; 0 Then
-			If Not ScriptForge.SF_Utils._Validate(Printer, &quot;Printer&quot;, V_STRING, vPrinters) Then GoTo Finally
+			If Not ScriptForge.SF_Utils._Validate(Printer, &quot;Printer&quot;, V_STRING, vPrinters, True) Then GoTo Finally
 		End If
 	Else
 		If Not ScriptForge.SF_Utils._Validate(Printer, &quot;Printer&quot;, V_STRING) Then GoTo Finally	&apos;	Manage here the VarType error

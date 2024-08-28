@@ -747,7 +747,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotFound:
-	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _ControlModel.getElementNames())
+	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _ControlModel.getElementNames(), True)
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_FormControl.Controls
 
@@ -1660,7 +1660,7 @@ Const cstSubArgs = &quot;Value&quot;
 										,	.TABLEFIELDS
 									Set oDatabase = _ParentForm.GetDatabase()
 									If _ControlModel.ListSourceType = .QUERY Then vList = oDatabase.Queries Else vList = oDatabase.Tables
-									If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING, vList) Then Goto Finally
+									If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING, vList, True) Then Goto Finally
 									If _ControlType = CTLCOMBOBOX Then _ControlModel.ListSource = pvValue Else _ControlModel.ListSource = Array(pvValue)
 									_ControlModel.refresh()
 								Case .SQL
@@ -1777,7 +1777,7 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLCOMBOBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;Text&quot;) And oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) Then
 						If pvValue &lt;&gt; &quot;&quot; Then
-							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, V_STRING, _ControlModel.StringItemList) Then Goto Finally
+							If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, V_STRING, _ControlModel.StringItemList, True) Then Goto Finally
 						End If
 						_ControlModel.Text = pvValue
 					End If

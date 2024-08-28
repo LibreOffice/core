@@ -809,14 +809,13 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEMISSING&quot;, pvArgs(0))
-			Case ARGUMENTERROR		&apos;	SF_Utils._Validate(Value, Name, Types, Values, Regex, Class)
+			Case ARGUMENTERROR		&apos;	SF_Utils._Validate(Value, Name, Types, Values, CaseSensitive, Class)
 				pvArgs(1) = _RightCase(pvArgs(1))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(1)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATIONRULES&quot;)
 				If Len(pvArgs(2)) &gt; 0 Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATETYPES&quot;, pvArgs(1), pvArgs(2))
 				If Len(pvArgs(3)) &gt; 0 Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEVALUES&quot;, pvArgs(1), pvArgs(3))
-				If Len(pvArgs(4)) &gt; 0 Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEREGEX&quot;, pvArgs(1), pvArgs(4))
 				If Len(pvArgs(5)) &gt; 0 Then sMessage = sMessage &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATECLASS&quot;, pvArgs(1), pvArgs(5))
 				sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEACTUAL&quot;, pvArgs(1), pvArgs(0))
 			Case ARRAYERROR	&apos;	SF_Utils._ValidateArray(Value, Name, Dimensions, Types, NotNull)

@@ -444,7 +444,7 @@ Const cstSubArgs = &quot;FieldName, FileName, [Overwrite=False]&quot;
 Check:
 	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields, True) Then GoTo Catch
 		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 	End If
@@ -657,7 +657,7 @@ Const cstSubArgs = &quot;FieldName&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(FieldName, &quot;FieldName&quot;, V_STRING, _Fields, True) Then GoTo Catch
 	End If
 
 	With _RowSet
@@ -747,7 +747,7 @@ Check:
 		sSubArgs = cstSubArgs2			&apos;	Arguments list case
 		ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs)
 		For i = 0 To UBound(pvArgs) Step 2
-			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields) Then GoTo Catch
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields, True) Then GoTo Catch
 		Next i
 	End If
 
@@ -772,7 +772,7 @@ Try:
 					If lColIndex &gt;= 0 Then
 						_SetColumnValue(lColIndex, .Item(sKey))
 					Else	&apos;	To force an error
-						If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields) Then GoTo Catch
+						If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
 					End If
 				Next sKey
 			End With
@@ -782,7 +782,7 @@ Try:
 				If lColIndex &gt;= 0 Then
 					If i &lt; UBound(pvArgs) Then _SetColumnValue(lColIndex, pvArgs(i + 1))
 				Else	&apos;	To force an error
-					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields) Then GoTo Catch
+					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
 				End If
 			Next i
 		End If
@@ -1176,7 +1176,7 @@ Check:
 		sSubArgs = cstSubArgs2			&apos;	Arguments list case
 		ScriptForge.SF_Utils._EnterFunction(cstThisSub, sSubArgs)
 		For i = 0 To UBound(pvArgs) Step 2
-			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields) Then GoTo Catch
+			If Not ScriptForge.SF_Utils._Validate(pvArgs(i), &quot;FieldName&quot; &amp; i, V_STRING, _UpdatableFields, True) Then GoTo Catch
 		Next i
 	End If
 
@@ -1194,7 +1194,7 @@ Try:
 				If lColIndex &gt;= 0 Then
 					_SetColumnValue(lColIndex, .Item(sKey))
 				Else	&apos;	To force an error
-					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields) Then GoTo Catch
+					If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
 				End If
 			Next sKey
 		End With
@@ -1204,7 +1204,7 @@ Try:
 			If lColIndex &gt;= 0 Then
 				If i &lt; UBound(pvArgs) Then _SetColumnValue(lColIndex, pvArgs(i + 1))
 			Else	&apos;	To force an error
-				If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields) Then GoTo Catch
+				If Not ScriptForge.SF_Utils._Validate(sKey, &quot;FieldName&quot;, V_STRING, _UpdatableFields, True) Then GoTo Catch
 			End If
 		Next i
 	End If

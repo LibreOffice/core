@@ -652,7 +652,7 @@ Finally:
 Catch:
 	GoTo Finally
 CatchNotFound:
-	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _Form.getElementNames())
+	ScriptForge.SF_Utils._Validate(ControlName, &quot;ControlName&quot;, V_STRING, _Form.getElementNames(), True)
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Form.Controls
 

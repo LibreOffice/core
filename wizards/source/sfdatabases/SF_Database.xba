@@ -597,7 +597,7 @@ Check:
 
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		vFormNames = Split(_CollectFormDocuments(oFormDocuments), cstToken)
-		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames, True) Then GoTo Finally
 	End If
 
 Try:
@@ -641,7 +641,7 @@ Const cstSubArgs = &quot;QueryName&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, Queries) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(QueryName, &quot;QueryName&quot;, V_STRING, Queries, True) Then GoTo Finally
 	End If
 
 Try:
@@ -718,7 +718,7 @@ Const cstSubArgs = &quot;TableName&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, Tables) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TableName, &quot;TableName&quot;, V_STRING, Tables, True) Then GoTo Finally
 	End If
 
 Try:
@@ -1140,7 +1140,7 @@ Check:
 	If IsMissing(pvOrderClause) Or IsEmpty(pvOrderClause) Then pvOrderClause = &quot;&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not ScriptForge.SF_Utils._Validate(pvExpression, &quot;Expression&quot;, V_STRING) Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(pvTableName, &quot;TableName&quot;, V_STRING, Tables) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(pvTableName, &quot;TableName&quot;, V_STRING, Tables, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(pvCriteria, &quot;Criteria&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(pvOrderClause, &quot;OrderClause&quot;, V_STRING) Then GoTo Finally
 	End If

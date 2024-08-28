@@ -396,12 +396,6 @@ Try:
 									&amp;	&quot;%1: Wrong argument name\n&quot; _
 									&amp;	&quot;%2: Comma separated list of allowed values&quot; _
 					)
-			.AddText(	Context := &quot;VALIDATEREGEX&quot; _
-						, MsgId := &quot;\t\t« %1 » must match next regular expression : %2&quot; _
-						, Comment :=	&quot;SF_Utils._Validate error message\n&quot; _
-									&amp;	&quot;%1: Wrong argument name\n&quot; _
-									&amp;	&quot;%2: A regular expression&quot; _
-					)
 			.AddText(	Context := &quot;VALIDATECLASS&quot; _
 						, MsgId := &quot;\t\t« %1 » must be a Basic object of class : %2&quot; _
 						, Comment :=	&quot;SF_Utils._Validate error message\n&quot; _
