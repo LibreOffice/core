@@ -18,6 +18,8 @@
       <column type="gint"/>
       <!-- column-name sensitive1 -->
       <column type="gboolean"/>
+      <!-- column-name sensitive2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="OptCaptionPage">
@@ -612,6 +614,7 @@
                               <object class="GtkCellRendererToggle" id="cellrenderer2"/>
                               <attributes>
                                 <attribute name="active">0</attribute>
+                                <attribute name="sensitive">6</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -625,7 +628,7 @@
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
-                                <attribute name="sensitive">6</attribute>
+                                <attribute name="sensitive">7</attribute>
                                 <attribute name="text">1</attribute>
                               </attributes>
                             </child>
