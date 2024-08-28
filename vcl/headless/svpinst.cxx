@@ -53,6 +53,11 @@
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/unreachable.hxx>
+
+#if defined EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
@@ -97,6 +102,9 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
         s_pDefaultInstance = this;
 #if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
     pthread_atfork(nullptr, nullptr, atfork_child);
+#endif
+#if defined EMSCRIPTEN
+    ImplGetSVData()->maAppData.m_bUseSystemLoop = true;
 #endif
 }
 
@@ -274,6 +282,30 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
     pMutex->m_NonMainWaitingYieldCond.set();
 }
+
+#if defined EMSCRIPTEN
+
+static void loop(void * arg) {
+    SolarMutexGuard g;
+    static_cast<SvpSalInstance *>(arg)->ImplYield(false, false);
+}
+
+bool SvpSalInstance::DoExecute(int &) {
+    assert(Application::IsOnSystemEventLoop());
+    // emscripten_set_main_loop will unwind the stack by throwing a JavaScript exception, so we need
+    // to manually undo the call of AcquireYieldMutex() done in InitVCL:
+    ReleaseYieldMutex(false);
+    // Somewhat randomly use an fps=100 argument so the loop callback is called 100 times per
+    // second:
+    emscripten_set_main_loop_arg(loop, this, 100, 1);
+    O3TL_UNREACHABLE;
+}
+
+void SvpSalInstance::DoQuit() {
+    assert(Application::IsOnSystemEventLoop());
+}
+
+#endif
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
