@@ -801,7 +801,15 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
     {
         SkPaint paint = makeLinePaint(fTransparency);
         paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
+#ifdef MACOSX
+        // tdf#162646 set extra drawing constraints when scaling
+        // Previously, setting stroke width and cap was only done when running
+        // unit tests. But the same drawing constraints are necessary when
+        // running with a Retina display on macOS and antialiasing is disabled.
+        if (mScaling != 1 && (isUnitTestRunning() || !paint.isAntiAlias()))
+#else
         if (mScaling != 1 && isUnitTestRunning())
+#endif
         {
             // On HiDPI displays, do not draw just a hairline but instead a full-width "pixel" when running unittests,
             // since tests often require precise pixel drawing.
