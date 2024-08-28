@@ -209,8 +209,6 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         // CompileEnglish _before_ OpCodeMap!
         if (mxOpCodeMap && mbEnglish != bOldEnglish)
         {
-            ScDocument& rDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( rDoc, ScAddress(), rDoc.GetGrammar());
             mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
 
@@ -228,8 +226,6 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         // had been set for CONV_XL_OOX.
         if (mxOpCodeMap && mbEnglish != bOldEnglish)
         {
-            ScDocument& rDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( rDoc, ScAddress(), rDoc.GetGrammar());
             mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
     }
@@ -242,8 +238,6 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         if (!(aValue >>= maOpCodeMapping))
             throw lang::IllegalArgumentException();
 
-        ScDocument& rDoc = mpDocShell->GetDocument();
-        ScCompiler aCompiler(rDoc, ScAddress(), rDoc.GetGrammar());
         mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
 
     }
