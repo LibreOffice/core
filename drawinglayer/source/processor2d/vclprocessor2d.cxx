@@ -722,27 +722,14 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
     const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
     const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
 
-    if (nOffsetX == 0 && nOffsetY == 0)
+    // if the tile is a single pixel big, just flood fill with that pixel color
+    if (nOffsetX == 0 && nOffsetY == 0 && aNeededBitmapSizePixel.getWidth() == 1
+        && aNeededBitmapSizePixel.getHeight() == 1)
     {
-        if (!bPreScaled)
-            aBitmapEx.Scale(aNeededBitmapSizePixel);
-
-        // if the tile is a single pixel big, just flood fill with that pixel color
-        if (aNeededBitmapSizePixel.getWidth() == 1 && aNeededBitmapSizePixel.getHeight() == 1)
-        {
-            Color col = aBitmapEx.GetPixelColor(0, 0);
-            mpOutputDevice->SetLineColor(col);
-            mpOutputDevice->SetFillColor(col);
-            mpOutputDevice->DrawRect(aVisiblePixel);
-        }
-        else
-        {
-            // TODO vcl does not have an optimised path here, it should be passing some kind of fill/tile
-            // operation down to the cairo/skia layers
-            Wallpaper aWallpaper(aBitmapEx);
-            aWallpaper.SetColor(COL_TRANSPARENT);
-            mpOutputDevice->DrawWallpaper(aVisiblePixel, aWallpaper);
-        }
+        Color col = aBitmapEx.GetPixelColor(0, 0);
+        mpOutputDevice->SetLineColor(col);
+        mpOutputDevice->SetFillColor(col);
+        mpOutputDevice->DrawRect(aVisiblePixel);
     }
     else if (nOffsetX)
     {
