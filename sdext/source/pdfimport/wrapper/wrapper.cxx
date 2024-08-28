@@ -40,7 +40,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
@@ -52,6 +51,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
@@ -431,13 +431,13 @@ void LineParser::readLineDash()
 
 void LineParser::readLineJoin()
 {
-    sal_Int8 nJoin(rendering::PathJoinType::MITER);
+    basegfx::B2DLineJoin nJoin(basegfx::B2DLineJoin::Miter);
     switch( readInt32() )
     {
         default:
-        case 0: nJoin = rendering::PathJoinType::MITER; break;
-        case 1: nJoin = rendering::PathJoinType::ROUND; break;
-        case 2: nJoin = rendering::PathJoinType::BEVEL; break;
+        case 0: nJoin = basegfx::B2DLineJoin::Miter; break;
+        case 1: nJoin = basegfx::B2DLineJoin::Round; break;
+        case 2: nJoin = basegfx::B2DLineJoin::Bevel; break;
     }
     m_parser.m_pSink->setLineJoin(nJoin);
 }

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
 
+#include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/ARGBColor.hpp>
@@ -117,7 +118,7 @@ namespace pdfi
         virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) = 0;
         virtual void setLineDash( const css::uno::Sequence<double>& dashes,
                                   double                                         start ) = 0;
-        virtual void setLineJoin( sal_Int8 lineJoin ) = 0;
+        virtual void setLineJoin( basegfx::B2DLineJoin lineJoin ) = 0;
         virtual void setLineCap( sal_Int8 lineCap ) = 0;
         virtual void setMiterLimit(double) = 0;
         virtual void setLineWidth(double) = 0;

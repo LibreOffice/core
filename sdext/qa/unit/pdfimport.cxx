@@ -170,7 +170,7 @@ namespace
             getCurrentContext().Flatness = nFlatness;
         }
 
-        virtual void setLineJoin(sal_Int8 nJoin) override
+        virtual void setLineJoin(basegfx::B2DLineJoin nJoin) override
         {
             getCurrentContext().LineJoin = nJoin;
         }
@@ -261,7 +261,7 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Blend mode is normal",
                                     rendering::BlendMode::NORMAL, rContext.BlendMode );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Join type is round",
-                                    rendering::PathJoinType::ROUND, rContext.LineJoin );
+                                    basegfx::B2DLineJoin::Round, rContext.LineJoin );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Cap type is butt",
                                     rendering::PathCapType::BUTT, rContext.LineCap );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line miter limit is 10",

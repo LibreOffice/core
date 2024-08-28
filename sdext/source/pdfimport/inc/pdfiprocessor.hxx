@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_PDFIPROCESSOR_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_PDFIPROCESSOR_HXX
 
+#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -100,7 +101,7 @@ namespace pdfi
         virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) override;
         virtual void setLineDash( const css::uno::Sequence<double>& dashes,
                                   double                                         start ) override;
-        virtual void setLineJoin(sal_Int8) override;
+        virtual void setLineJoin(basegfx::B2DLineJoin) override;
         virtual void setLineCap(sal_Int8) override;
         virtual void setMiterLimit(double) override;
         virtual void setLineWidth(double) override;

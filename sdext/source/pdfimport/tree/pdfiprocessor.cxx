@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <i18nutil/unicode.hxx>
 #include <o3tl/string_view.hxx>
@@ -114,7 +115,7 @@ void PDFIProcessor::setLineDash( const uno::Sequence<double>& dashes,
     comphelper::sequenceToContainer(rContext.DashArray,dashes);
 }
 
-void PDFIProcessor::setLineJoin(sal_Int8 nJoin)
+void PDFIProcessor::setLineJoin(basegfx::B2DLineJoin nJoin)
 {
     getCurrentContext().LineJoin = nJoin;
 }
