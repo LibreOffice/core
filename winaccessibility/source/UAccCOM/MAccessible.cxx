@@ -45,6 +45,7 @@
 #include <systools/win32/oleauto.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
@@ -2666,6 +2667,17 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
             sal_Int32 nEndOffset = 0;
             sAttributes += AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
                 xText, IA2AttributeType::ObjectAttributes, 0, nStartOffset, nEndOffset);
+        }
+
+        // report accessible ID via "id" object attribute
+        // (pending PR suggesting to add that attribute to the IAccessible2 spec:
+        // https://github.com/LinuxA11y/IAccessible2/pull/31 )
+        Reference<XAccessibleContext2> xContext2(pRContext, UNO_QUERY);
+        if (xContext2.is())
+        {
+            const OUString sId = xContext2->getAccessibleId();
+            if (!sId.isEmpty())
+                sAttributes += "id:" + sId + ";";
         }
 
         if (*pAttr)
