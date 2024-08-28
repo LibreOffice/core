@@ -866,7 +866,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         if (nWarn)
             nRet = nWarn;
         else if (nWarn2)
-            nRet = nWarn2;
+            nRet = std::move(nWarn2);
         else
             nRet = nWarnRDF;
     }

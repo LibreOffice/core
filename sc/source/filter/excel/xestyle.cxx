@@ -3021,18 +3021,20 @@ void XclExpXFBuffer::InsertDefaultRecords()
     maBuiltInMap[ EXC_XF_DEFAULTCELL ].mbPredefined = true;
 
     // index 16-20: other built-in styles
-    XclExpDefaultXF aFormatStyle( GetRoot(), false );
-    aFormatStyle.SetFont( 1 );
-    aFormatStyle.SetNumFmt( 43 );
-    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA );
-    aFormatStyle.SetNumFmt( 41 );
-    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA_0 );
-    aFormatStyle.SetNumFmt( 44 );
-    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY );
-    aFormatStyle.SetNumFmt( 42 );
-    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY_0 );
-    aFormatStyle.SetNumFmt( 9 );
-    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_PERCENT );
+    {
+        XclExpDefaultXF aFormatStyle( GetRoot(), false );
+        aFormatStyle.SetFont( 1 );
+        aFormatStyle.SetNumFmt( 43 );
+        AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA );
+        aFormatStyle.SetNumFmt( 41 );
+        AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA_0 );
+        aFormatStyle.SetNumFmt( 44 );
+        AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY );
+        aFormatStyle.SetNumFmt( 42 );
+        AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY_0 );
+        aFormatStyle.SetNumFmt( 9 );
+        AppendBuiltInXFWithStyle( new XclExpDefaultXF( std::move(aFormatStyle) ), EXC_STYLE_PERCENT );
+    }
 
     // other built-in style XF records (i.e. Hyperlink styles) are created on demand
 
