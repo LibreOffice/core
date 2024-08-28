@@ -23,6 +23,7 @@
 #include <atomic>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <string_view>
 #include <unordered_set>
 
@@ -2822,7 +2823,22 @@ LanguageType LanguageTag::convertToLanguageType( const css::lang::Locale& rLocal
     if (rLocale.Language.isEmpty() && !bResolveSystem)
         return LANGUAGE_SYSTEM;
 
-    return LanguageTag( rLocale).getLanguageType( bResolveSystem);
+    if (!bResolveSystem)
+    {
+        // single-item cache
+        static std::mutex gMutex;
+        static std::optional<lang::Locale> moCacheKey;
+        static std::optional<LanguageType> moCacheValue;
+        std::unique_lock l(gMutex);
+        if (!moCacheKey || *moCacheKey != rLocale)
+        {
+            moCacheValue = LanguageTag(rLocale).getLanguageType(false);
+            moCacheKey = rLocale;
+        }
+        return *moCacheValue;
+    }
+    else
+        return LanguageTag( rLocale).getLanguageType( bResolveSystem);
 }
 
 
