@@ -28,10 +28,6 @@
       <column type="gboolean"/>
       <!-- column-name weight1 -->
       <column type="gint"/>
-      <!-- column-name weight2 -->
-      <column type="gint"/>
-      <!-- column-name weight3 -->
-      <column type="gint"/>
       <!-- column-name sensitive1 -->
       <column type="gboolean"/>
       <!-- column-name sensitive2 -->
@@ -96,7 +92,7 @@
                         <child>
                           <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                           <attributes>
-                            <attribute name="sensitive">14</attribute>
+                            <attribute name="sensitive">12</attribute>
                             <attribute name="visible">5</attribute>
                             <attribute name="active">0</attribute>
                           </attributes>
@@ -104,7 +100,7 @@
                         <child>
                           <object class="GtkCellRendererToggle" id="cellrenderer8"/>
                           <attributes>
-                            <attribute name="sensitive">15</attribute>
+                            <attribute name="sensitive">13</attribute>
                             <attribute name="visible">6</attribute>
                             <attribute name="active">1</attribute>
                           </attributes>
@@ -120,7 +116,7 @@
                         <child>
                           <object class="GtkCellRendererToggle" id="cellrenderer7"/>
                           <attributes>
-                            <attribute name="sensitive">16</attribute>
+                            <attribute name="sensitive">14</attribute>
                             <attribute name="visible">7</attribute>
                             <attribute name="active">2</attribute>
                           </attributes>

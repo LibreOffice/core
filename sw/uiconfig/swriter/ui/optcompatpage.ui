@@ -18,6 +18,8 @@
       <column type="gint"/>
       <!-- column-name sensitive1 -->
       <column type="gboolean"/>
+      <!-- column-name sensitive2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="OptCompatPage">
@@ -75,6 +77,7 @@
                             <attribute name="visible">3</attribute>
                             <attribute name="active">0</attribute>
                             <attribute name="inconsistent">4</attribute>
+                            <attribute name="sensitive">7</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -86,7 +89,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer4"/>
                           <attributes>
-                            <attribute name="sensitive">6</attribute>
+                            <attribute name="sensitive">7</attribute>
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>
