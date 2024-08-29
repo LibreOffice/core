@@ -45,24 +45,9 @@ void SwTextAdjuster::FormatBlock( )
     const SwLinePortion *pFly = nullptr;
 
     bool bSkip = !IsLastBlock() &&
+        // don't skip, if the last paragraph line needs space shrinking
+        m_pCurr->ExtraShrunkWidth() <= m_pCurr->Width() &&
         m_nStart + m_pCurr->GetLen() >= TextFrameIndex(GetInfo().GetText().getLength());
-
-    // tdf#162109 if the last line is longer, than the paragraph width,
-    // it contains shrinking spaces: don't skip block format here
-    if( bSkip )
-    {
-        // sum width of the text portions to calculate the line width without shrinking
-        tools::Long nBreakWidth = 0;
-        const SwLinePortion *pPos = m_pCurr->GetNextPortion();
-        while( pPos && bSkip )
-        {
-            if( !pPos->InGlueGrp() )
-                nBreakWidth += pPos->Width();
-            if( nBreakWidth > m_pCurr->Width() )
-                bSkip = false;
-            pPos = pPos->GetNextPortion();
-        }
-    }
 
     // Multi-line fields are tricky, because we need to check whether there are
     // any other text portions in the paragraph.
@@ -408,6 +393,9 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 if( nGluePortion )
                 {
                     tools::Long nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
+                    // shrink, if not shrunk line width exceed the set line width
+                    if ( pCurrent->ExtraShrunkWidth() > 0 )
+                        nBreakWidth = pCurrent->ExtraShrunkWidth();
                     // shrink, if portions exceed the line width
                     tools::Long nSpaceSub = ( nBreakWidth > pCurrent->Width() )
                         ? (nBreakWidth - pCurrent->Width()) * SPACING_PRECISION_FACTOR /

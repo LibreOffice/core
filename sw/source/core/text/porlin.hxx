@@ -49,6 +49,8 @@ private:
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
     SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
+    SwTwips m_nExtraShrunkWidth = 0;   // width of not shrunk line
+
     std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
 
     void Truncate_();
@@ -72,6 +74,8 @@ public:
     void SubPrtWidth( const SwTwips nNew ) { Width( Width() - nNew ); }
     SwTwips ExtraBlankWidth() const { return m_nExtraBlankWidth; }
     void ExtraBlankWidth(const SwTwips nNew) { m_nExtraBlankWidth = nNew; }
+    SwTwips ExtraShrunkWidth() const { return m_nExtraShrunkWidth; }
+    void ExtraShrunkWidth(const SwTwips nNew) { m_nExtraShrunkWidth = nNew; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
     std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
@@ -185,6 +189,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_bJoinBorderWithPrev = rPortion.m_bJoinBorderWithPrev;
     m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
     m_nExtraBlankWidth = rPortion.m_nExtraBlankWidth;
+    m_nExtraShrunkWidth = rPortion.m_nExtraShrunkWidth;
     m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
 }
@@ -199,6 +204,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
     m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext ),
     m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth),
+    m_nExtraShrunkWidth(rPortion.m_nExtraShrunkWidth),
     m_nLayoutContext(rPortion.m_nLayoutContext)
 {
 }

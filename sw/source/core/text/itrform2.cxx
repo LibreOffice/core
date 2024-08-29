@@ -2135,6 +2135,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
                 m_pCurr->SetLen(TextFrameIndex(0));
                 m_pCurr->Width(0);
+                m_pCurr->ExtraShrunkWidth(0);
                 m_pCurr->Truncate();
             }
         }
