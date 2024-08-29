@@ -487,19 +487,19 @@ class SFServices(object):
                 2. Getting a property value for the first time is always done via a Basic call
                 3. Next occurrences are fetched from the Python dictionary of the instance if the property
                    is read-only, otherwise via a Basic call
-                4. Read-only properties may be modified or deleted exceptionally by the class
-                   when self.internal == True. The latter must immediately be reset after use
 
             Each subclass must define its interface with the user scripts:
             1.  The properties
                 Property names are proper-cased
                 Conventionally, camel-cased and lower-cased synonyms are supported where relevant
-                    a dictionary named 'serviceproperties' with keys = (proper-cased) property names and value = boolean
-                        True = editable, False = read-only
-                When
-                    forceGetProperty = False    # Standard behaviour
-                read-only serviceproperties are buffered in Python after their 1st get request to Basic
-                Otherwise set it to True to force a recomputation at each property getter invocation
+                Properties are grouped in a dictionary named 'serviceproperties'
+                with keys = (proper-cased) property names and value = int
+                    0 = read-only, fetch value locally
+                    1 = read-only, fetch value from UNO/Basic because value might have been changed by user
+                    2 = editable, fetch value locally
+                    3 = editable, fetch value from UNO/Basic because value might have been changed by user
+                Properties that may be fetched locally are buffered in Python after their 1st get request to Basic
+                or after their update.
                 If there is a need to handle a specific property in a specific manner:
                     @property
                     def myProperty(self):
@@ -509,7 +509,7 @@ class SFServices(object):
                     def myMethod(self, arg1, arg2 = ''):
                         return self.Execute(self.vbMethod, 'myMethod', arg1, arg2)
                 Method names are proper-cased, arguments are lower-cased
-                Conventionally, camel-cased and lower-cased homonyms are supported where relevant
+                Conventionally, camel-cased and lower-cased homonyms are supported in method names where relevant
                 All arguments must be present and initialized before the call to Basic, if any
         """
     # Python-Basic protocol constants and flags
@@ -526,13 +526,11 @@ class SFServices(object):
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
-    # Define the default behaviour for read-only properties: buffer their values in Python
-    forceGetProperty = False
     # Empty dictionary for lower/camelcased homonyms or properties
     propertysynonyms = {}
     # To operate dynamic property getting/setting it is necessary to
     # enumerate all types of properties and adapt __getattr__() and __setattr__() according to their type
-    internal_attributes = ('objectreference', 'objecttype', 'name', 'internal', 'servicename',
+    internal_attributes = ('objectreference', 'objecttype', 'name', 'servicename',
                            'serviceimplementation', 'classmodule', 'EXEC', 'SIMPLEEXEC')
     # Shortcuts to script provider interfaces
     SIMPLEEXEC = ScriptForge.InvokeSimpleScript
@@ -547,7 +545,6 @@ class SFServices(object):
         self.objecttype = objtype  # ('SF_String', 'TIMER', ...)
         self.classmodule = classmodule  # Module (1), Class instance (2)
         self.name = name  # '' when no name
-        self.internal = False  # True to exceptionally allow assigning a new value to a read-only property
 
     def __getattr__(self, name):
         """
@@ -559,11 +556,10 @@ class SFServices(object):
         if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
             name = self.propertysynonyms[name]
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms',
-                        'forceGetProperty'):
+            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms'):
                 pass
             elif name in self.serviceproperties:
-                if self.forceGetProperty is False and self.serviceproperties[name] is False:  # False = read-only
+                if self.serviceproperties[name] in (0, 2):  # value may be fetched from the instance's local __dict__
                     if name in self.__dict__:
                         return self.__dict__[name]
                     else:
@@ -583,17 +579,14 @@ class SFServices(object):
             Management of __dict__ is automatically done in the final usual object.__setattr__ method
             """
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms',
-                        'forceGetProperty'):
+            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms'):
                 pass
             elif name[0:2] == '__' or name in self.internal_attributes:
                 pass
             elif name in self.serviceproperties or name in self.propertysynonyms:
                 if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
                     name = self.propertysynonyms[name]
-                if self.internal:  # internal = True forces property local setting even if property is read-only
-                    pass
-                elif self.serviceproperties[name] is True:  # True == Editable
+                if self.serviceproperties[name] in (2, 3):  # Editable
                     self.SetProperty(name, value)
                     return
                 else:
@@ -1148,11 +1141,9 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.FileSystem'
         servicesynonyms = ('filesystem', 'scriptforge.filesystem')
-        serviceproperties = dict(FileNaming = True, ConfigFolder = False, ExtensionsFolder = False, HomeFolder = False,
-                                 InstallFolder = False, TemplatesFolder = False, TemporaryFolder = False,
-                                 UserTemplatesFolder = False)
-        # Force for each property to get its value from Basic - due to FileNaming updatability
-        forceGetProperty = True
+        serviceproperties = dict(FileNaming = 3, ConfigFolder = 1, ExtensionsFolder = 1, HomeFolder = 1,
+                                 InstallFolder = 1, TemplatesFolder = 1, TemporaryFolder = 1,
+                                 UserTemplatesFolder = 1) # 1 because FileNaming determines every time the folder format
         # Open TextStream constants
         ForReading, ForWriting, ForAppending = 1, 2, 8
 
@@ -1274,7 +1265,7 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.L10N'
         servicesynonyms = ('l10n', 'scriptforge.l10n')
-        serviceproperties = dict(Folder = False, Languages = False, Locale = False)
+        serviceproperties = dict(Folder = 0, Languages = 0, Locale = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, foldername = '', locale = '', encoding = 'UTF-8',
@@ -1317,12 +1308,12 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Platform'
         servicesynonyms = ('platform', 'scriptforge.platform')
-        serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
-                                 Extensions = False, FilterNames = False, Fonts = False, FormatLocale = False,
-                                 Locale = False, Machine = False, OfficeLocale = False, OfficeVersion = False,
-                                 OSName = False, OSPlatform = False, OSRelease = False, OSVersion = False,
-                                 Printers = False, Processor = False, PythonVersion = False, SystemLocale = False,
-                                 UserData = False)
+        serviceproperties = dict(Architecture = 0, ComputerName = 0, CPUCount = 0, CurrentUser = 0,
+                                 Extensions = 0, FilterNames = 0, Fonts = 0, FormatLocale = 0,
+                                 Locale = 0, Machine = 0, OfficeLocale = 0, OfficeVersion = 0,
+                                 OSName = 0, OSPlatform = 0, OSRelease = 0, OSVersion = 0,
+                                 Printers = 0, Processor = 0, PythonVersion = 0, SystemLocale = 0,
+                                 UserData = 0)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
@@ -1612,8 +1603,8 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.TextStream'
         servicesynonyms = ()
-        serviceproperties = dict(AtEndOfStream = False, Encoding = False, FileName = False, IOMode = False,
-                                 Line = False, NewLine = True)
+        serviceproperties = dict(AtEndOfStream = 1, Encoding = 0, FileName = 0, IOMode = 0,
+                                 Line = 1, NewLine = 2)
 
         @property
         def AtEndOfStream(self):
@@ -1656,10 +1647,8 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Timer'
         servicesynonyms = ('timer', 'scriptforge.timer')
-        serviceproperties = dict(Duration = False, IsStarted = False, IsSuspended = False,
-                                 SuspendDuration = False, TotalDuration = False)
-        # Force for each property to get its value from Basic
-        forceGetProperty = True
+        serviceproperties = dict(Duration = 1, IsStarted = 1, IsSuspended = 1,
+                                 SuspendDuration = 1, TotalDuration = 1)
 
         @classmethod
         def ReviewServiceArgs(cls, start = False):
@@ -1700,7 +1689,7 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.UI'
         servicesynonyms = ('ui', 'scriptforge.ui')
-        serviceproperties = dict(ActiveWindow = False, Height = False, Width = False, X = False, Y = False)
+        serviceproperties = dict(ActiveWindow = 1, Height = 1, Width = 1, X = 1, Y = 1)
 
         # Class constants
         MACROEXECALWAYS, MACROEXECNEVER, MACROEXECNORMAL = 2, 1, 0
@@ -1790,7 +1779,7 @@ class SFDatabases:
         serviceimplementation = 'basic'
         servicename = 'SFDatabases.Database'
         servicesynonyms = ('database', 'sfdatabases.database')
-        serviceproperties = dict(Queries = False, Tables = False, XConnection = False, XMetaData = False)
+        serviceproperties = dict(Queries = 0, Tables = 0, XConnection = 0, XMetaData = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, filename = '', registrationname = '', readonly = True, user = '', password = ''):
@@ -1865,11 +1854,10 @@ class SFDatabases:
         serviceimplementation = 'basic'
         servicename = 'SFDatabases.Dataset'
         servicesynonyms = ()    # CreateScriptService is not applicable here
-        serviceproperties = dict(BOF = True, DefaultValues = False, EOF = True, Fields = False, Filter = False,
-                                 OrderBy = False, ParentDatabase = False, RowCount = False, RowNumber = False,
-                                 Source = False, SourceType = False, UpdatableFields = False, Values = False,
-                                 XRowSet = False)
-        forceGetProperty = True
+        serviceproperties = dict(BOF = 3, DefaultValues = 0, EOF = 3, Fields = 0, Filter = 0,
+                                 OrderBy = 0, ParentDatabase = 0, RowCount = 1, RowNumber = 1,
+                                 Source = 0, SourceType = 0, UpdatableFields = 0, Values = 1,
+                                 XRowSet = 0)
 
         @classmethod
         def _dictargs(cls, args, kwargs):
@@ -1944,10 +1932,10 @@ class SFDatabases:
         serviceimplementation = 'basic'
         servicename = 'SFDatabases.Datasheet'
         servicesynonyms = ('datasheet', 'sfdatabases.datasheet')
-        serviceproperties = dict(ColumnHeaders = False, CurrentColumn = False, CurrentRow = False,
-                                 DatabaseFileName = False, Filter = True, LastRow = False, OrderBy = True,
-                                 ParentDatabase = False, Source = False, SourceType = False, XComponent = False,
-                                 XControlModel = False, XTabControllerModel = False)
+        serviceproperties = dict(ColumnHeaders = 0, CurrentColumn = 1, CurrentRow = 1,
+                                 DatabaseFileName = 0, Filter = 2, LastRow = 0, OrderBy = 2,
+                                 ParentDatabase = 0, Source = 0, SourceType = 0, XComponent = 0,
+                                 XControlModel = 0, XTabControllerModel = 0)
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
@@ -2003,12 +1991,12 @@ class SFDialogs:
         serviceimplementation = 'basic'
         servicename = 'SFDialogs.Dialog'
         servicesynonyms = ('dialog', 'sfdialogs.dialog')
-        serviceproperties = dict(Caption = True, Height = True, Modal = False, Name = False,
-                                 OnFocusGained = True, OnFocusLost = True, OnKeyPressed = True,
-                                 OnKeyReleased = True, OnMouseDragged = True, OnMouseEntered = True,
-                                 OnMouseExited = True, OnMouseMoved = True, OnMousePressed = True,
-                                 OnMouseReleased = True,
-                                 Page = True, Visible = True, Width = True, XDialogModel = False, XDialogView = False)
+        serviceproperties = dict(Caption = 2, Height = 2, Modal = 0, Name = 0,
+                                 OnFocusGained = 2, OnFocusLost = 2, OnKeyPressed = 2,
+                                 OnKeyReleased = 2, OnMouseDragged = 2, OnMouseEntered = 2,
+                                 OnMouseExited = 2, OnMouseMoved = 2, OnMousePressed = 2,
+                                 OnMouseReleased = 2,
+                                 Page = 2, Visible = 2, Width = 2, XDialogModel = 0, XDialogView = 0)
         # Class constants used together with the Execute() method
         OKBUTTON, CANCELBUTTON = 1, 0
 
@@ -2016,7 +2004,7 @@ class SFDialogs:
         def ReviewServiceArgs(cls, container = '', library = 'Standard', dialogname = ''):
             """
                 Transform positional and keyword arguments into positional only
-                Add the XComponentContext as last argument
+                Add the XComfile:///home/jean-pierre/.config/libreoffice/4/user/Scripts/python/QA/scriptforge.pyponentContext as last argument
                 """
             return container, library, dialogname, ScriptForge.componentcontext
 
@@ -2197,19 +2185,19 @@ class SFDialogs:
         serviceimplementation = 'basic'
         servicename = 'SFDialogs.DialogControl'
         servicesynonyms = ()
-        serviceproperties = dict(Border = True, Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
-                                 Default = True, Enabled = True, Format = True, Height = True, ListCount = False,
-                                 ListIndex = True, Locked = True, MultiSelect = True, Name = False,
-                                 OnActionPerformed = True, OnAdjustmentValueChanged = True, OnFocusGained = True,
-                                 OnFocusLost = True, OnItemStateChanged = True, OnKeyPressed = True,
-                                 OnKeyReleased = True, OnMouseDragged = True, OnMouseEntered = True,
-                                 OnMouseExited = True, OnMouseMoved = True, OnMousePressed = True,
-                                 OnMouseReleased = True, OnNodeExpanded = True, OnNodeSelected = True,
-                                 OnTextChanged = True, Page = True, Parent = False, Picture = True,
-                                 RootNode = False, RowSource = True, TabIndex = True, Text = False, TipText = True,
-                                 TripleState = True, URL = True, Value = True, Visible = True, Width = True,
-                                 X = True, Y = True, XControlModel = False, XControlView = False,
-                                 XGridColumnModel = False, XGridDataModel = False, XTreeDataModel = False)
+        serviceproperties = dict(Border = 2, Cancel = 2, Caption = 2, ControlType = 0, CurrentNode = 3,
+                                 Default = 2, Enabled = 2, Format = 2, Height = 2, ListCount = 0,
+                                 ListIndex = 3, Locked = 2, MultiSelect = 2, Name = 0,
+                                 OnActionPerformed = 2, OnAdjustmentValueChanged = 2, OnFocusGained = 2,
+                                 OnFocusLost = 2, OnItemStateChanged = 2, OnKeyPressed = 2,
+                                 OnKeyReleased = 2, OnMouseDragged = 2, OnMouseEntered = 2,
+                                 OnMouseExited = 2, OnMouseMoved = 2, OnMousePressed = 2,
+                                 OnMouseReleased = 2, OnNodeExpanded = 2, OnNodeSelected = 2,
+                                 OnTextChanged = 2, Page = 2, Parent = 0, Picture = 2,
+                                 RootNode = 0, RowSource = 2, TabIndex = 2, Text = 0, TipText = 2,
+                                 TripleState = 2, URL = 2, Value = 3, Visible = 2, Width = 2,
+                                 X = 2, Y = 2, XControlModel = 0, XControlView = 0,
+                                 XGridColumnModel = 0, XGridDataModel = 0, XTreeDataModel = 0)
 
         # Root related properties do not start with X and, nevertheless, return a UNO object
         @property
@@ -2271,14 +2259,12 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Document'
         servicesynonyms = ('document', 'sfdocuments.document')
-        serviceproperties = dict(CustomProperties = True, Description = True, DocumentProperties = False,
-                                 DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
-                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
-                                 XDocumentSettings = False)
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty = True
+        serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
+                                 DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
+                                 IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
+                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
+                                 StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
+                                 XDocumentSettings = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2370,9 +2356,9 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Base'
         servicesynonyms = ('base', 'scriptforge.base')
-        serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, XComponent = False)
+        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsBase = 0, IsCalc = 0,
+                                 IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
+                                 IsWriter = 0, XComponent = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2427,15 +2413,13 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Calc'
         servicesynonyms = ('calc', 'sfdocuments.calc')
-        serviceproperties = dict(CurrentSelection = True, CustomProperties = True, Description = True,
-                                 DocumentProperties = False, DocumentType = False, ExportFilters = False,
-                                 FileSystem = False, ImportFilters = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Keywords = True, Readonly = False, Sheets = False,
-                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
-                                 XDocumentSettings = False)
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty = True
+        serviceproperties = dict(CurrentSelection = 3, CustomProperties = 3, Description = 3,
+                                 DocumentProperties = 1, DocumentType = 0, ExportFilters = 0,
+                                 FileSystem = 0, ImportFilters = 0, IsBase = 0, IsCalc = 0,
+                                 IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
+                                 IsWriter = 0, Keywords = 3, Readonly = 1, Sheets = 1,
+                                 StyleFamilies = 0, Subject = 3, Title = 3, XComponent = 0,
+                                 XDocumentSettings = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2672,10 +2656,10 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Chart'
         servicesynonyms = ()
-        serviceproperties = dict(ChartType = True, Deep = True, Dim3D = True, Exploded = True, Filled = True,
-                                 Legend = True, Percent = True, Stacked = True, Title = True,
-                                 XChartObj = False, XDiagram = False, XShape = False, XTableChart = False,
-                                 XTitle = True, YTitle = True)
+        serviceproperties = dict(ChartType = 2, Deep = 2, Dim3D = 2, Exploded = 2, Filled = 2,
+                                 Legend = 2, Percent = 2, Stacked = 2, Title = 2,
+                                 XChartObj = 0, XDiagram = 0, XShape = 0, XTableChart = 0,
+                                 XTitle = 2, YTitle = 2)
 
         def ExportToFile(self, filename, imagetype = 'png', overwrite = False):
             return self.ExecMethod(self.vbMethod, 'ExportToFile', filename, imagetype, overwrite)
@@ -2698,14 +2682,14 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Form'
         servicesynonyms = ()
-        serviceproperties = dict(AllowDeletes = True, AllowInserts = True, AllowUpdates = True, BaseForm = False,
-                                 Bookmark = True, CurrentRecord = True, Filter = True, LinkChildFields = False,
-                                 LinkParentFields = False, Name = False,
-                                 OnApproveCursorMove = True, OnApproveParameter = True, OnApproveReset = True,
-                                 OnApproveRowChange = True, OnApproveSubmit = True, OnConfirmDelete = True,
-                                 OnCursorMoved = True, OnErrorOccurred = True, OnLoaded = True, OnReloaded = True,
-                                 OnReloading = True, OnResetted = True, OnRowChanged = True, OnUnloaded = True,
-                                 OnUnloading = True, OrderBy = True, Parent = False, RecordSource = True, XForm = False)
+        serviceproperties = dict(AllowDeletes = 2, AllowInserts = 2, AllowUpdates = 2, BaseForm = 0,
+                                 Bookmark = 3, CurrentRecord = 3, Filter = 3, LinkChildFields = 0,
+                                 LinkParentFields = 0, Name = 0,
+                                 OnApproveCursorMove = 2, OnApproveParameter = 2, OnApproveReset = 2,
+                                 OnApproveRowChange = 2, OnApproveSubmit = 2, OnConfirmDelete = 2,
+                                 OnCursorMoved = 2, OnErrorOccurred = 2, OnLoaded = 2, OnReloaded = 2,
+                                 OnReloading = 2, OnResetted = 2, OnRowChanged = 2, OnUnloaded = 2,
+                                 OnUnloading = 2, OrderBy = 3, Parent = 0, RecordSource = 2, XForm = 0)
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
@@ -2754,19 +2738,19 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.FormControl'
         servicesynonyms = ()
-        serviceproperties = dict(Action = True, Caption = True, ControlSource = False, ControlType = False,
-                                 Default = True, DefaultValue = True, Enabled = True, Format = True,
-                                 ListCount = False, ListIndex = True, ListSource = True, ListSourceType = True,
-                                 Locked = True, MultiSelect = True, Name = False,
-                                 OnActionPerformed = True, OnAdjustmentValueChanged = True,
-                                 OnApproveAction = True, OnApproveReset = True, OnApproveUpdate = True,
-                                 OnChanged = True, OnErrorOccurred = True, OnFocusGained = True, OnFocusLost = True,
-                                 OnItemStateChanged = True, OnKeyPressed = True, OnKeyReleased = True,
-                                 OnMouseDragged = True, OnMouseEntered = True, OnMouseExited = True,
-                                 OnMouseMoved = True, OnMousePressed = True, OnMouseReleased = True, OnResetted = True,
-                                 OnTextChanged = True, OnUpdated = True, Parent = False, Picture = True,
-                                 Required = True, Text = False, TipText = True, TripleState = True, Value = True,
-                                 Visible = True, XControlModel = False, XControlView = False)
+        serviceproperties = dict(Action = 2, Caption = 2, ControlSource = 0, ControlType = 0,
+                                 Default = 2, DefaultValue = 2, Enabled = 2, Format = 2,
+                                 ListCount = 0, ListIndex = 3, ListSource = 2, ListSourceType = 2,
+                                 Locked = 2, MultiSelect = 2, Name = 0,
+                                 OnActionPerformed = 2, OnAdjustmentValueChanged = 2,
+                                 OnApproveAction = 2, OnApproveReset = 2, OnApproveUpdate = 2,
+                                 OnChanged = 2, OnErrorOccurred = 2, OnFocusGained = 2, OnFocusLost = 2,
+                                 OnItemStateChanged = 2, OnKeyPressed = 2, OnKeyReleased = 2,
+                                 OnMouseDragged = 2, OnMouseEntered = 2, OnMouseExited = 2,
+                                 OnMouseMoved = 2, OnMousePressed = 2, OnMouseReleased = 2, OnResetted = 2,
+                                 OnTextChanged = 2, OnUpdated = 2, Parent = 0, Picture = 2,
+                                 Required = 2, Text = 0, TipText = 2, TripleState = 2, Value = 3,
+                                 Visible = 2, XControlModel = 0, XControlView = 0)
 
         def Controls(self, controlname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
@@ -2789,10 +2773,10 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.FormDocument'
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
-        serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Readonly = False, StyleFamilies = False, XComponent = False,
-                                 XDocumentSettings = False)
+        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsBase = 0, IsCalc = 0,
+                                 IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
+                                 IsWriter = 0, Readonly = 0, StyleFamilies = 0, XComponent = 0,
+                                 XDocumentSettings = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2827,14 +2811,12 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Writer'
         servicesynonyms = ('writer', 'sfdocuments.writer')
-        serviceproperties = dict(CustomProperties = True, Description = True, DocumentProperties = False,
-                                 DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
-                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
-                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
-                                 XDocumentSettings = False)
-        # Force for each property to get its value from Basic - due to intense interactivity with user
-        forceGetProperty = True
+        serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
+                                 DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
+                                 IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
+                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
+                                 StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
+                                 XDocumentSettings = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2882,7 +2864,7 @@ class SFWidgets:
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.Menu'
         servicesynonyms = ('menu', 'sfwidgets.menu')
-        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+        serviceproperties = dict(ShortcutCharacter = 0, SubmenuCharacter = 0)
 
         def AddCheckBox(self, menuitem, name = '', status = False, icon = '', tooltip = '',
                         command = '', script = ''):
@@ -2914,7 +2896,7 @@ class SFWidgets:
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.ContextMenu'
         servicesynonyms = ('contextmenu', 'sfwidgets.contextmenu')
-        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+        serviceproperties = dict(ShortcutCharacter = 0, SubmenuCharacter = 0)
 
         def Activate(self, enable = True):
             return self.ExecMethod(self.vbMethod, 'Activate', enable)
@@ -2940,7 +2922,7 @@ class SFWidgets:
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.PopupMenu'
         servicesynonyms = ('popupmenu', 'sfwidgets.popupmenu')
-        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+        serviceproperties = dict(ShortcutCharacter = 0, SubmenuCharacter = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, event = None, x = 0, y = 0, submenuchar = ''):
@@ -2976,8 +2958,8 @@ class SFWidgets:
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.Toolbar'
         servicesynonyms = ('toolbar', 'sfwidgets.toolbar')
-        serviceproperties = dict(BuiltIn = False, Docked = False, HasGlobalScope = False, Name = False,
-                                 ResourceURL = False, Visible = True, XUIElement = False)
+        serviceproperties = dict(BuiltIn = 0, Docked = 1, HasGlobalScope = 0, Name = 0,
+                                 ResourceURL = 0, Visible = 3, XUIElement = 0)
 
         def ToolbarButtons(self, buttonname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ToolbarButtons', buttonname)
@@ -2995,8 +2977,8 @@ class SFWidgets:
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.ToolbarButton'
         servicesynonyms = ('toolbarbutton', 'sfwidgets.toolbarbutton')
-        serviceproperties = dict(Caption = False, Height = False, Index = False, OnClick = True, Parent = False,
-                                 TipText = True, Visible = True, Width = False, X = False, Y = False)
+        serviceproperties = dict(Caption = 0, Height = 0, Index = 0, OnClick = 2, Parent = 0,
+                                 TipText = 2, Visible = 2, Width = 0, X = 0, Y = 0)
 
         def Execute(self):
             return self.ExecMethod(self.vbMethod, 'Execute')
