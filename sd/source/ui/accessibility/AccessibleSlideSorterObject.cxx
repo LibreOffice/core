@@ -251,10 +251,13 @@ void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
 {
     ThrowIfDisposed();
-    if (!(rxListener.is() && mnClientId))
+    if (!rxListener.is())
         return;
 
     const std::unique_lock aGuard(m_aMutex);
+
+    if (!mnClientId)
+        return;
 
     sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
     if ( !nListenerCount )
