@@ -1506,7 +1506,9 @@ void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uIn
                 getFields().size());
         }
         else
-            ++_nColumnPosition; // within the list
+        {
+            _nColumnPosition = static_cast<sal_uInt16>(_nColumnPosition + 1); // within the list
+        }
         nColumnId = GetColumnId(_nColumnPosition);
         pEntry->SetColumnId( nColumnId );
         getFields()[ _nColumnPosition - 1] = pEntry;
