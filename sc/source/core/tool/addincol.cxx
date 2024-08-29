@@ -185,8 +185,7 @@ bool ScUnoAddInFuncData::GetExcelName( const LanguageTag& rDestLang, OUString& r
         {
             for (const auto& rCompName : rCompNames)
             {
-                // We checked already the full tag, start with second.
-                ::std::vector< OUString > aFallbackLocales( LanguageTag( rCompName.maLocale).getFallbackStrings( false));
+                ::std::vector< OUString > aFallbackLocales( LanguageTag( rCompName.maLocale).getFallbackStrings(true));
                 if (std::find(aFallbackLocales.begin(), aFallbackLocales.end(), rSearch) != aFallbackLocales.end())
                 {
                     rRetExcelName = rCompName.maName;
