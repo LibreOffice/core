@@ -1743,6 +1743,93 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionPageDescs)
+{
+    createSwDoc("hidden-sections-with-pagestyles.odt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[1]"_ostr, "formatName"_ostr, "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]"_ostr, "formatName"_ostr,
+                    u"Verfügung"_ustr);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]"_ostr, "formatName"_ostr,
+                    u"Verfügung"_ustr);
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]"_ostr, "formatName"_ostr,
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds"_ostr, "height"_ostr, "0");
+        assertXPath(pXmlDoc, "/root/page[2]"_ostr, "formatName"_ostr, "Folgeseite");
+    }
+
+    // toggle one section hidden and other visible
+    executeMacro(
+        u"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page"_ostr, 3);
+        assertXPath(pXmlDoc, "/root/page[1]"_ostr, "formatName"_ostr, "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]"_ostr, "formatName"_ostr,
+                    u"Verfügung"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[2]"_ostr, "formatName"_ostr,
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]"_ostr, "formatName"_ostr, "Empty Page");
+        assertXPath(pXmlDoc, "/root/page[3]/body/section"_ostr, 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]"_ostr, "formatName"_ostr,
+                    "Rueckantwort");
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[3]"_ostr, "formatName"_ostr, "RueckantwortRechts");
+    }
+
+    // toggle one section hidden and other visible
+    executeMacro(
+        u"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[1]"_ostr, "formatName"_ostr, "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]"_ostr, "formatName"_ostr,
+                    u"Verfügung"_ustr);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]"_ostr, "formatName"_ostr,
+                    u"Verfügung"_ustr);
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds"_ostr, "height"_ostr,
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]"_ostr, "formatName"_ostr,
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds"_ostr, "height"_ostr, "0");
+        assertXPath(pXmlDoc, "/root/page[2]"_ostr, "formatName"_ostr, "Folgeseite");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156725)
 {
     createSwDoc("tdf156725.fodt");

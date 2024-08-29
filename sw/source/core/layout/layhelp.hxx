@@ -129,7 +129,8 @@ public:
     sal_uLong CalcPageCount();
     bool CheckInsert( SwNodeOffset nNodeIndex );
 
-    bool CheckInsertPage();
+    static bool CheckInsertPage(SwPageFrame *& rpPage, SwLayoutFrame *& rpLay,
+        SwFrame *& rpFrame, bool & rIsBreakAfter, bool const isForceBreak);
 
     /// Look for fresh text frames at this (new) page and set them to the right
     /// position, if they are in the fly cache.

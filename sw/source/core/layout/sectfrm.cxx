@@ -39,6 +39,7 @@
 #include <colfrm.hxx>
 #include <tabfrm.hxx>
 #include <ftnfrm.hxx>
+#include "layhelp.hxx"
 #include <layouter.hxx>
 #include <dbg_lay.hxx>
 #include <viewopt.hxx>
@@ -2744,6 +2745,65 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         {
             pLowerFrame->InvalidateAll();
             pLowerFrame->InvalidateObjs(false);
+        }
+        // Check if any page-breaks have been unhidden, create the new pages.
+        // Call IsHiddenNow() because a parent section could still hide.
+        if (!IsFollow() && IsInDocBody() && !IsInTab() && !IsHiddenNow())
+        {
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
+            SwViewShell *const pViewShell(getRootFrame()->GetCurrShell());
+            // no notification if SwViewShell is in construction
+            if (pViewShell && !pViewShell->IsInConstructor()
+                && pViewShell->GetLayout()
+                && pViewShell->GetLayout()->IsAnyShellAccessible())
+            {
+                auto pNext = FindNextCnt(true);
+                auto pPrev = FindPrevCnt();
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                    pNext ? pNext->DynCastTextFrame() : nullptr,
+                    pPrev ? pPrev->DynCastTextFrame() : nullptr );
+            }
+#endif
+            SwSectionFrame * pFollow{this};
+            SwPageFrame * pPage{FindPageFrame()};
+            SwLayoutFrame * pLay{nullptr};
+            bool isBreakAfter{false};
+            SwFrame * pFirstOnPage{pPage->FindFirstBodyContent()};
+            while (pFirstOnPage->GetUpper()->IsInTab())
+            {
+                pFirstOnPage = pFirstOnPage->GetUpper();
+            }
+            assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
+            for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
+            {
+                if (pLowerFrame == pFirstOnPage)
+                {
+                    continue;
+                }
+                assert(pLowerFrame->IsContentFrame() || pLowerFrame->IsTabFrame());
+                if (SwLayHelper::CheckInsertPage(pPage, pLay, pLowerFrame, isBreakAfter, false))
+                {
+                    if (pLowerFrame == Lower())
+                    {   // move the whole section
+                        assert(pFollow == this);
+                        MoveSubTree(pLay, nullptr);
+                    }
+                    else
+                    {
+                        if (GetNext())
+                        {
+                            assert(GetNext()->IsFlowFrame());
+                            SwFlowFrame::CastFlowFrame(GetNext())->MoveSubTree(pLay, nullptr);
+                        }
+                        pFollow = new SwSectionFrame(*pFollow, false);
+                        SimpleFormat();
+                        pFollow->InsertBehind(pLay, nullptr);
+                        pFollow->Init();
+                        SwFlowFrame::CastFlowFrame(pLowerFrame)->MoveSubTree(pFollow, nullptr);
+                    }
+                }
+            }
+            CheckPageDescs(FindPageFrame());
         }
     }
     else
