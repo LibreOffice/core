@@ -230,10 +230,13 @@ void SAL_CALL SvtRulerAccessible::addAccessibleEventListener( const uno::Referen
 
 void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-    if (!(xListener.is() && mnClientId))
+    if (!xListener.is())
         return;
 
     std::unique_lock aGuard( m_aMutex );
+
+    if (!mnClientId)
+        return;
 
     sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
     if ( !nListenerCount )
