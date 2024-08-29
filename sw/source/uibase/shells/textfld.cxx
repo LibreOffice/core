@@ -114,6 +114,23 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
     return sTitle + SwResId(pResId);
 }
 
+static bool lcl_canUserModifyAnnotation(const SwView& rView, std::u16string_view sAuthor)
+{
+    return !comphelper::LibreOfficeKit::isActive() || !rView.IsLokReadOnlyView()
+           || sAuthor == rView.GetRedlineAuthor();
+}
+
+static bool lcl_canUserModifyAnnotation(const SwView& rView,
+                                        const sw::annotation::SwAnnotationWin* pAnnotationWin)
+{
+    return lcl_canUserModifyAnnotation(rView, pAnnotationWin->GetAuthor());
+}
+
+static bool lcl_canUserModifyAnnotation(const SwView& rView, sal_uInt32 nPostItId)
+{
+    return lcl_canUserModifyAnnotation(rView, rView.GetPostItMgr()->GetAnnotationWin(nPostItId));
+}
+
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -397,12 +414,17 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
-                GetView().GetPostItMgr()->Delete(pIdItem->GetValue().toUInt32());
+                sal_uInt32 nPostItId = pIdItem->GetValue().toUInt32();
+                if (lcl_canUserModifyAnnotation(GetView(), nPostItId))
+                    GetView().GetPostItMgr()->Delete(nPostItId);
             }
             else if ( GetView().GetPostItMgr() &&
                       GetView().GetPostItMgr()->HasActiveSidebarWin() )
             {
-                GetView().GetPostItMgr()->DeleteActiveSidebarWin();
+                sw::annotation::SwAnnotationWin* pAnnotationWin
+                    = GetView().GetPostItMgr()->GetActiveSidebarWin();
+                if (lcl_canUserModifyAnnotation(GetView(), pAnnotationWin))
+                    GetView().GetPostItMgr()->DeleteActiveSidebarWin();
             }
             break;
         }
@@ -411,12 +433,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
-                GetView().GetPostItMgr()->DeleteCommentThread(pIdItem->GetValue().toUInt32());
+                sal_uInt32 nPostItId = pIdItem->GetValue().toUInt32();
+                if (lcl_canUserModifyAnnotation(GetView(), nPostItId))
+                    GetView().GetPostItMgr()->DeleteCommentThread(nPostItId);
             }
-            else if ( GetView().GetPostItMgr() &&
-                        GetView().GetPostItMgr()->HasActiveSidebarWin() )
+            else if (GetView().GetPostItMgr() && GetView().GetPostItMgr()->HasActiveSidebarWin())
             {
-                GetView().GetPostItMgr()->DeleteActiveSidebarWin();
+                sw::annotation::SwAnnotationWin* pAnnotationWin
+                    = GetView().GetPostItMgr()->GetActiveSidebarWin();
+                if (lcl_canUserModifyAnnotation(GetView(), pAnnotationWin))
+                    GetView().GetPostItMgr()->DeleteActiveSidebarWin();
             }
             break;
         }
@@ -452,8 +478,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         case FN_DELETE_NOTE_AUTHOR:
         {
             const SfxStringItem* pNoteItem = rReq.GetArg<SfxStringItem>(nSlot);
-            if ( pNoteItem && GetView().GetPostItMgr() )
-                GetView().GetPostItMgr()->Delete( pNoteItem->GetValue() );
+            if (pNoteItem && GetView().GetPostItMgr()
+                && lcl_canUserModifyAnnotation(GetView(), pNoteItem->GetValue()))
+                GetView().GetPostItMgr()->Delete(pNoteItem->GetValue());
         }
         break;
         case FN_HIDE_NOTE:
@@ -524,7 +551,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sText = pTextItem->GetValue();
 
                 sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
-                if (pAnnotationWin)
+                if (pAnnotationWin && lcl_canUserModifyAnnotation(GetView(), pAnnotationWin))
                 {
                     pAnnotationWin->UpdateText(sText);
 
