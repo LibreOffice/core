@@ -692,9 +692,11 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
              ( !nWhich || ( pAttr->GetItem()->Which() == nWhich ) ) )
         {
             pNode->GetCharAttribs().Remove(nAttr);
-            nAttr--;
         }
-        nAttr++;
+        else
+        {
+            nAttr++;
+        }
         pAttr = GetAttrib(rAttrs, nAttr);
     }
 
