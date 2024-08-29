@@ -50,6 +50,9 @@ protected:
     void CheckRedlineCharAttributesHidden();
 
     SwDoc* createDoc(const char* pName = nullptr);
+
+    uno::Any executeMacro(const OUString& rScriptURL,
+                          const uno::Sequence<uno::Any>& rParams = {});
 };
 
 SwDoc* SwLayoutWriter::createDoc(const char* pName)
@@ -62,6 +65,20 @@ SwDoc* SwLayoutWriter::createDoc(const char* pName)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     return pTextDoc->GetDocShell()->GetDoc();
+}
+
+uno::Any SwLayoutWriter::executeMacro(const OUString& rScriptURL,
+                                  const uno::Sequence<uno::Any>& rParams)
+{
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+
+    ErrCode result = SfxObjectShell::CallXScript(mxComponent, rScriptURL, rParams, aRet,
+                                                 aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    return aRet;
 }
 
 static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
@@ -4479,6 +4496,106 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf160958_orphans)
     assertXPath(pExportDump, "//page[2]/body/section/txt[3]/LineBreak", 7);
     assertXPath(pExportDump, "//page[2]/body/txt", 1);
     assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHiddenSectionPageDescs)
+{
+    createDoc("hidden-sections-with-pagestyles.odt");
+
+    // hide these just so that the height of the section is what is expected;
+    // otherwise height depends on which tests run previously
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]", "formatName", "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]", "formatName",
+                    u"Verfügung");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]", "formatName",
+                    u"Verfügung");
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "height",
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "height",
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]", "formatName",
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "height", "0");
+        assertXPath(pXmlDoc, "/root/page[2]", "formatName", "Folgeseite");
+        discardDumpedLayout();
+    }
+
+    // toggle one section hidden and other visible
+    executeMacro(
+        "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document");
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 3);
+        assertXPath(pXmlDoc, "/root/page[1]", "formatName", "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]", "formatName",
+                    u"Verfügung");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[2]", "formatName",
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]", "formatName", "Empty Page");
+        assertXPath(pXmlDoc, "/root/page[3]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]", "formatName",
+                    "Rueckantwort");
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/infos/bounds", "height",
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/infos/bounds", "height",
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[3]", "formatName", "RueckantwortRechts");
+        discardDumpedLayout();
+    }
+
+    // toggle one section hidden and other visible
+    executeMacro(
+        "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document");
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]", "formatName", "Hotti");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]", "formatName",
+                    u"Verfügung");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]", "formatName",
+                    u"Verfügung");
+        // should be > 0, no idea why it's different on Windows
+#ifdef _WIN32
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "height",
+                    "552");
+#else
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "height",
+                    "532");
+#endif
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]", "formatName",
+                    "Rueckantwort");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "height", "0");
+        assertXPath(pXmlDoc, "/root/page[2]", "formatName", "Folgeseite");
+        discardDumpedLayout();
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
