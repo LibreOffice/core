@@ -14,12 +14,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_culmus,$(LIBO_SHARE_FO
 	DavidCLM-BoldItalic.otf \
 	DavidCLM-Medium.otf \
 	DavidCLM-MediumItalic.otf \
-	FrankRuehlCLM-Bold.ttf \
-	FrankRuehlCLM-BoldOblique.ttf \
-	FrankRuehlCLM-Medium.ttf \
-	FrankRuehlCLM-MediumOblique.ttf \
-	MiriamCLM-Bold.ttf \
-	MiriamCLM-Book.ttf \
+	FrankRuehlCLM-Bold.otf \
+	FrankRuehlCLM-BoldOblique.otf \
+	FrankRuehlCLM-Medium.otf \
+	FrankRuehlCLM-MediumOblique.otf \
+	MiriamCLM-Bold.otf \
+	MiriamCLM-Book.otf \
 	MiriamMonoCLM-Bold.ttf \
 	MiriamMonoCLM-BoldOblique.ttf \
 	MiriamMonoCLM-Book.ttf \
