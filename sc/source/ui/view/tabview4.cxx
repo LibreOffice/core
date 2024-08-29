@@ -28,6 +28,8 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <inputhdl.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor
 
@@ -310,6 +312,30 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         nTipAlign = nAlign;
         sTipString = aHelpStr;
         sTopParent = pWin;
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            double nPPTX = aViewData.GetPPTX();
+            double nPPTY = aViewData.GetPPTY();
+
+            OString sRectangleString = "EMPTY"_ostr;
+            if (!aTipRectangle.IsEmpty())
+            {
+                // selection start handle
+                tools::Rectangle aLogicRectangle(
+                    aTipRectangle.Left() / nPPTX, aTipRectangle.Top() / nPPTY,
+                    aTipRectangle.Right() / nPPTX, aTipRectangle.Bottom() / nPPTY);
+                sRectangleString = aLogicRectangle.toString();
+            }
+
+            tools::JsonWriter writer;
+            writer.put("type", "autofillpreviewtooltip");
+            writer.put("text", sTipString);
+            writer.put("location", sRectangleString);
+            OString sPayloadString = writer.finishAndGetAsOString();
+            ScTabViewShell* pViewShell = aViewData.GetViewShell();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
+        }
     }
 }
 
