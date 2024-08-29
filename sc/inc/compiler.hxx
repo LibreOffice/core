@@ -515,6 +515,7 @@ private:
     virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const override;
     virtual void fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const override;
     virtual void fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const override;
+    virtual void fillFromAddInCollectionExcelName( const NonConstOpCodeMapPtr& xMap ) const override;
     virtual void fillFromAddInMap( const NonConstOpCodeMapPtr& xMap, formula::FormulaGrammar::Grammar _eGrammar ) const override;
     virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
 

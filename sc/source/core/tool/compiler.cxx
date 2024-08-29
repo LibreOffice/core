@@ -187,6 +187,25 @@ void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr&
     }
 }
 
+void ScCompiler::fillFromAddInCollectionExcelName( const NonConstOpCodeMapPtr& xMap ) const
+{
+    const LanguageTag aDestLang(LANGUAGE_ENGLISH_US);
+    ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
+    tools::Long nCount = pColl->GetFuncCount();
+    for (tools::Long i=0; i < nCount; ++i)
+    {
+        OUString aExcelName;
+        const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
+        if (pFuncData && pFuncData->GetExcelName( aDestLang, aExcelName, true))
+        {
+            // Note that function names not defined in OOXML but implemented by
+            // Excel should have the "_xlfn." prefix. We have no way to check
+            // though what an Add-In actually implements.
+            xMap->putExternalSoftly( GetCharClassEnglish()->uppercase(aExcelName), pFuncData->GetOriginalName());
+        }
+    }
+}
+
 static std::mutex gCharClassMutex;
 
 void ScCompiler::DeInit()
@@ -4487,7 +4506,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
     bool bAsciiNonAlnum;    // operators, separators, ...
     if ( cSymbol[0] < 128 )
     {
-        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
+        bMayBeFuncName = rtl::isAsciiAlpha(cSymbol[0])
+            || (cSymbol[0] == '_' && mxSymbols->isOOXML() && rtl::isAsciiAlpha(cSymbol[1]));
         if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !comphelper::IsFuzzing())
         {
             bMayBeFuncName = officecfg::Office::Common::Misc::ExperimentalMode::get();
