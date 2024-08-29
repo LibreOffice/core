@@ -1109,7 +1109,7 @@ void SvtFileView::SetConfigString(std::u16string_view rCfgStr)
 
     while ( nIdx != -1 )
     {
-        sal_uInt16 nItemId = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rCfgStr, 0, ';', nIdx )));
+        int nItemId = o3tl::toInt32(o3tl::getToken(rCfgStr, 0, ';', nIdx ));
 
         int nWidth = o3tl::toInt32(o3tl::getToken(rCfgStr, 0, ';', nIdx ));
 
