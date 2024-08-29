@@ -602,6 +602,18 @@ void WorkbookGlobals::initialize()
     mxEditEngine->EnableUndo( false );
     mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
+    // Initialize a final ODFF OpCodeMap once in case none was created yet, so
+    // the subsequent XFormulaOpCodeMapper::getAvailableMappings() via
+    // OpCodeProviderImpl::fillEntrySeq() do not have to recreate temporary
+    // mappings over and over again.
+    // Same for OOXML mapping that is accessed by some base class
+    // formula::FormulaCompiler::GetOpCodeMap() calls.
+    {
+        ScCompiler aCompiler( rDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF);
+        aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ODFF);
+        aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::OOXML);
+    }
+
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
     {
