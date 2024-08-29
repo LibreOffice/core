@@ -258,6 +258,7 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     {
         SetLen( TextFrameIndex(0) );
         Width( 0 );
+        ExtraShrunkWidth( 0 );
     }
 }
 
@@ -266,6 +267,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     Truncate();
     Height( 0 );
     Width( 0 );
+    ExtraShrunkWidth( 0 );
     SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
@@ -301,6 +303,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         return bFull;
     }
 
+    ExtraShrunkWidth( 0 );
     std::unique_ptr<SwTextGuess> pGuess(new SwTextGuess());
     bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
@@ -339,8 +342,12 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
         if ( nSpacesInLine > 0 )
         {
+            SwTwips nOldWidth = pGuess->BreakWidth();
             pGuess.reset(new SwTextGuess());
             bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine );
+
+            if ( pGuess->BreakWidth() > nOldWidth )
+                ExtraShrunkWidth( pGuess->BreakWidth() );
         }
     }
 
@@ -486,6 +493,7 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
     {
         Height( 0 );
         Width( 0 );
+        ExtraShrunkWidth( 0 );
         SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetNextPortion( nullptr );  // ????
