@@ -103,7 +103,8 @@ namespace basegfx::utils
 
                         if(bInside)
                         {
-                            if(!aRun.count() || !aRun.getB2DPoint(aRun.count() - 1).equal(aEdge.getStartPoint()))
+                            const sal_uInt16 nRunCount = aRun.count();
+                            if (!nRunCount || !aRun.getB2DPoint(nRunCount - 1).equal(aEdge.getStartPoint()))
                             {
                                 aRun.append(aEdge.getStartPoint());
                             }
