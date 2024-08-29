@@ -3910,7 +3910,8 @@ void SalInstanceTreeView::columns_autosize()
     if (aWidths.size() > 2)
     {
         std::vector<int> aColWidths;
-        for (size_t i = 1; i < aWidths.size() - 1; ++i)
+        aColWidths.push_back(aWidths[1] + aWidths[0]);
+        for (size_t i = 2; i < aWidths.size() - 1; ++i)
             aColWidths.push_back(aWidths[i] - aWidths[i - 1]);
         set_column_fixed_widths(aColWidths);
     }

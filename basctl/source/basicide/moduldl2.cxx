@@ -1229,6 +1229,8 @@ void LibPage::SetCurLib()
     if (nEntry_ == -1 && m_xLibBox->n_children())
         nEntry_ = 0;
     m_xLibBox->set_cursor(nEntry_);
+
+    m_xLibBox->columns_autosize();
 }
 
 void LibPage::ImpInsertLibEntry( const OUString& rLibName, int nPos )

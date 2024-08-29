@@ -112,17 +112,18 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
-                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
                     <property name="search-column">1</property>
-                    <property name="enable-tree-lines">True</property>
+                    <property name="show-expanders">False</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="libpage|treeviewcolumn1">Name</property>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                           <attributes>
                             <attribute name="pixbuf">0</attribute>
                           </attributes>
@@ -138,8 +139,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                         <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="libpage|treeviewcolumn2">Location</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext3"/>
                           <attributes>
