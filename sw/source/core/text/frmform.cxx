@@ -1266,7 +1266,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         }
     }
 
-    if (nNew && HasFullPageFly(this) && nEnd == TextFrameIndex(0) && !bEmptyWithSplitFly)
+    if (nNew && nEnd == TextFrameIndex(0) && !bEmptyWithSplitFly && HasFullPageFly(this))
     {
         // We intended to split at start, due to an anchored object which would use all space on the
         // current page. It makes no sense to split & move all text of the frame forward: the
