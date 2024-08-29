@@ -533,6 +533,7 @@ private:
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const formula::FormulaToken* pToken ) const override;
     virtual void LocalizeString( OUString& rName ) const override;   // modify rName - input: exact name
+    virtual bool GetExcelName( OUString& rName ) const override;    // modify rName - input: exact name
 
     virtual formula::ParamClass GetForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const override;
 

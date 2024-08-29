@@ -2699,11 +2699,20 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
                 if (!bMapped && mxSymbols->hasExternals())
                 {
-                    ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap().find( aAddIn);
-                    if (iLook != mxSymbols->getReverseExternalHashMap().end())
+                    if (mxSymbols->isOOXML())
                     {
-                        aAddIn = (*iLook).second;
-                        bMapped = true;
+                        // Write compatibility name, if any.
+                        if (GetExcelName( aAddIn))
+                            bMapped = true;
+                    }
+                    if (!bMapped)
+                    {
+                        ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap().find( aAddIn);
+                        if (iLook != mxSymbols->getReverseExternalHashMap().end())
+                        {
+                            aAddIn = (*iLook).second;
+                            bMapped = true;
+                        }
                     }
                 }
                 if (!bMapped && !mxSymbols->isEnglish())
@@ -3000,6 +3009,11 @@ void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, con
 
 void FormulaCompiler::LocalizeString( OUString& /*rName*/ ) const
 {
+}
+
+bool FormulaCompiler::GetExcelName( OUString& /*rName*/ ) const
+{
+    return false;
 }
 
 formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken* /*pToken*/, sal_uInt16 /*nParam*/ ) const

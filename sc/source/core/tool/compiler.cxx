@@ -5599,6 +5599,11 @@ void ScCompiler::LocalizeString( OUString& rName ) const
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
 
+bool ScCompiler::GetExcelName( OUString& rName ) const
+{
+    return ScGlobal::GetAddInCollection()->GetExcelName( rName, LANGUAGE_ENGLISH_US, rName);
+}
+
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 )
 {
     return extendRangeReference( rDoc.GetSheetLimits(), rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
