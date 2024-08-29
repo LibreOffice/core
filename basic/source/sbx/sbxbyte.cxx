@@ -24,7 +24,6 @@
 //#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
-#include <rtlproto.hxx>
 
 #include <rtl/math.hxx>
 
@@ -166,7 +165,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, !LibreOffice6FloatingPointMode() ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( d > SbxMAXBYTE )
                 {

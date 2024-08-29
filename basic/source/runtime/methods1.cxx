@@ -61,8 +61,6 @@
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
-#include <officecfg/Office/Scripting.hxx>
-
 #include <memory>
 
 using namespace comphelper;
@@ -2930,13 +2928,6 @@ void SbRtl_Me(StarBASIC *, SbxArray & rPar, bool)
 }
 
 #endif
-
-bool LibreOffice6FloatingPointMode()
-{
-    static bool bMode = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
-
-    return bMode || officecfg::Office::Scripting::Basic::Compatibility::UseLibreOffice6FloatingPointConversion::get();
-}
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay )
 {

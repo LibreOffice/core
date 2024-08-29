@@ -64,6 +64,9 @@ extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreStrin
 extern ErrCode ImpScan
     ( const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
       bool bOnlyIntntl );
+// A version that uses defaults / compatibility settings for bOnlyIntntl
+extern ErrCode ImpScan
+    ( const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen );
 
 // with advanced evaluation (International, "TRUE"/"FALSE")
 extern bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType );

@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstdlib>
 #include <string_view>
 
 #include <config_features.h>
@@ -26,7 +27,6 @@
 #include <comphelper/errcode.hxx>
 #include <unotools/resmgr.hxx>
 #include "sbxconv.hxx"
-#include <rtlproto.hxx>
 
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
@@ -49,6 +49,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Scripting.hxx>
 
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt )
@@ -262,6 +263,15 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     return ERRCODE_NONE;
 }
 
+ErrCode ImpScan(const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen)
+{
+    using namespace officecfg::Office::Scripting;
+    static const bool bEnv = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
+    bool bMode = bEnv || Basic::Compatibility::UseLibreOffice6FloatingPointConversion::get();
+
+    return ImpScan(rSrc, nVal, rType, pLen, !bMode);
+}
+
 // port for CDbl in the Basic
 ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
@@ -403,7 +413,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     {
         double n;
         SbxDataType t;
-        eRes = ImpScan( rSrc, n, t, pLen, !LibreOffice6FloatingPointMode() );
+        eRes = ImpScan( rSrc, n, t, pLen );
         if( eRes == ERRCODE_NONE )
         {
             if( !IsFixed() )

@@ -21,7 +21,6 @@
 
 #include <comphelper/errcode.hxx>
 #include "sbxconv.hxx"
-#include <rtlproto.hxx>
 #include <runtime.hxx>
 
 double ImpGetDouble( const SbxValues* p )
@@ -79,7 +78,7 @@ double ImpGetDouble( const SbxValues* p )
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr, !LibreOffice6FloatingPointMode() ) != ERRCODE_NONE )
+                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                 {
                     nRes = 0;
 #if HAVE_FEATURE_SCRIPTING
