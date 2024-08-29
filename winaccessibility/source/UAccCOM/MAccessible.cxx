@@ -2669,9 +2669,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
                 xText, IA2AttributeType::ObjectAttributes, 0, nStartOffset, nEndOffset);
         }
 
-        // report accessible ID via "id" object attribute
-        // (pending PR suggesting to add that attribute to the IAccessible2 spec:
-        // https://github.com/LinuxA11y/IAccessible2/pull/31 )
+        // report accessible ID as "id" object attribute as specified in the
+        // IAccessible2 object attribute spec
         Reference<XAccessibleContext2> xContext2(pRContext, UNO_QUERY);
         if (xContext2.is())
         {
