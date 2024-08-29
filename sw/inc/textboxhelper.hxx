@@ -187,6 +187,9 @@ public:
 
     // Compares the anchor of the first and second given formats, and decides whether sync needed.
     static bool isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFrameFormat* pSecond);
+
+    /// Was the textbox created from a Microsoft import by a paragraph frame property (framePr)
+    static bool TextBoxIsFramePr(const SwFrameFormat& rFrameFormat);
 };
 
 /// Textboxes are basically textframe + shape pairs. This means one shape has one frame.

@@ -1723,6 +1723,32 @@ bool SwTextBoxHelper::isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFr
     return false;
 }
 
+bool SwTextBoxHelper::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
+{
+    SdrObject* pSdrObj = const_cast<SdrObject*>(rFrameFormat.FindRealSdrObject());
+    if (!pSdrObj)
+        return false;
+
+    uno::Reference<beans::XPropertySet> xPropertySet(pSdrObj->getUnoShape(), uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return false;
+
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo(xPropertySet->getPropertySetInfo());
+    if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
+        return false;
+
+    bool bRet = false;
+    uno::Sequence<beans::PropertyValue> propList;
+    xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
+    auto pProp = std::find_if(
+        std::cbegin(propList), std::cend(propList),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
+    if (pProp != std::cend(propList))
+        pProp->Value >>= bRet;
+
+    return bRet;
+}
+
 SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
 {
     assert(pOwnerShape);

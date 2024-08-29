@@ -1100,31 +1100,6 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     m_pSerializer->singleElementNS( XML_w, XML_framePr, attrList );
 }
 
-bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
-{
-    SdrObject* pSdrObj = const_cast<SdrObject*>(rFrameFormat.FindRealSdrObject());
-    if (!pSdrObj)
-        return false;
-
-    uno::Reference<beans::XPropertySet> xPropertySet(pSdrObj->getUnoShape(), uno::UNO_QUERY);
-    if (!xPropertySet.is())
-        return false;
-
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo(xPropertySet->getPropertySetInfo());
-    if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
-        return false;
-
-    bool bRet = false;
-    uno::Sequence<beans::PropertyValue> propList;
-    xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
-    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
-        [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
-    if (pProp != std::cend(propList))
-        pProp->Value >>= bRet;
-
-    return bRet;
-}
-
 void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointer_t& pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -1148,7 +1123,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
             ww8::Frame aFrame = m_aFramesOfParagraph.top()[nIndex];
             const SwFrameFormat& rFrameFormat = aFrame.GetFrameFormat();
 
-            if (!m_bWritingHeaderFooter && TextBoxIsFramePr(rFrameFormat))
+            if (!m_bWritingHeaderFooter && SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat))
             {
                 std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
                 aFramePrTextbox.push_back(pFramePr);
@@ -1666,7 +1641,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     if (!m_bWritingHeaderFooter && m_aFramePr.Frame())
     {
         const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
-        assert(TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
+        assert(SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
 
         const Size aSize = m_aFramePr.Frame()->GetSize();
         PopulateFrameProperties(&rFrameFormat, aSize);

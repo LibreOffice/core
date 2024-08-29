@@ -505,7 +505,6 @@ private:
     void EndTable();
     void SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, sal_Int32 nCell, sal_uInt32 nRow);
     void PopulateFrameProperties(const SwFrameFormat* pFrameFormat, const Size& rSize);
-    static bool TextBoxIsFramePr(const SwFrameFormat& rFrameFormat);
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, bool bForceEmptyParagraph = false );
 
