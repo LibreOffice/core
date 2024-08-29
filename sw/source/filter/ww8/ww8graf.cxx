@@ -3322,12 +3322,12 @@ void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrameFormat *pForm
 void SwWW8FltAnchorStack::Flush()
 {
     size_t nCnt = size();
-    for (size_t i=0; i < nCnt; ++i)
+    while (nCnt)
     {
-        SwFltStackEntry &rEntry = (*this)[i];
+        SwFltStackEntry &rEntry = (*this)[0];
         SwPosition aDummy(rEntry.m_aMkPos.m_nNode);
         SetAttrInDoc(aDummy, rEntry);
-        DeleteAndDestroy(i--);
+        DeleteAndDestroy(0);
         --nCnt;
     }
 }
