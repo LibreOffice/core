@@ -516,10 +516,10 @@ static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
     memmove(pBuffer, pNext, nNotProcessed);
 
     /* read data */
-    nRead = read(child_info_get_status_fd(info),
-                  pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed);
+    ssize_t nThisRead = read(child_info_get_status_fd(info),
+                             pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed);
 
-    if (nRead < 0)
+    if (nThisRead < 0)
     {
         if (errno == EINTR)
             return ProgressContinue;
@@ -527,7 +527,7 @@ static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
         return ProgressExit;
     }
 
-    nRead += nNotProcessed;
+    nRead = nThisRead + nNotProcessed;
     pBuffer[nRead] = '\0';
 
     /* skip old data */
