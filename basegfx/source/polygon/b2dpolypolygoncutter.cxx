@@ -435,7 +435,6 @@ namespace basegfx
 
                 // handle common nodes
                 const sal_uInt32 nNodeCount(maSNV.size());
-                sal_uInt32 a(0);
 
                 // snap unsharp-equal points
                 if(nNodeCount)
@@ -465,16 +464,16 @@ namespace basegfx
 
                         pLast = pCurrent;
                     }
-                }
 
-                for(a = 0; a < nNodeCount - 1; a++)
-                {
-                    // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
-                    PN& rPNb = *(maSNV[a].mpPN);
-
-                    for(sal_uInt32 b(a + 1); b < nNodeCount && rPNb.maPoint.equal(maSNV[b].mpPN->maPoint); b++)
+                    for (sal_uInt32 a = 0; a < nNodeCount - 1; a++)
                     {
-                        impHandleCommon(rPNb, *maSNV[b].mpPN);
+                        // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
+                        PN& rPNb = *(maSNV[a].mpPN);
+
+                        for(sal_uInt32 b(a + 1); b < nNodeCount && rPNb.maPoint.equal(maSNV[b].mpPN->maPoint); b++)
+                        {
+                            impHandleCommon(rPNb, *maSNV[b].mpPN);
+                        }
                     }
                 }
             }
