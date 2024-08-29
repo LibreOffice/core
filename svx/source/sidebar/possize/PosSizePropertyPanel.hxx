@@ -161,6 +161,12 @@ private:
     bool                                    mbAutoHeight : 1;
     bool                                    mbAdjustEnabled : 1;
 
+    bool                                    mbMtrPosXBlanked : 1;
+    bool                                    mbMtrPosYBlanked : 1;
+    bool                                    mbMtrWidthBlanked : 1;
+    bool                                    mbMtrHeightBlanked : 1;
+    bool                                    mbMtrAngleBlanked : 1;
+
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK( ChangePosXHdl, weld::MetricSpinButton&, void );

@@ -119,6 +119,11 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbAutoWidth(false),
     mbAutoHeight(false),
     mbAdjustEnabled(false),
+    mbMtrPosXBlanked(false),
+    mbMtrPosYBlanked(false),
+    mbMtrWidthBlanked(false),
+    mbMtrHeightBlanked(false),
+    mbMtrAngleBlanked(false),
     mxSidebar(std::move(xSidebar))
 {
     Initialize();
@@ -539,11 +544,17 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     limitWidth(*mxMtrWidth);
                     mlOldWidth = lOldWidth1;
                     mxMtrWidth->save_value();
+                    if (mbMtrWidthBlanked)
+                    {
+                        mxMtrWidth->reformat();
+                        mbMtrWidthBlanked = false;
+                    }
                     break;
                 }
             }
 
-            mxMtrWidth->set_text( u""_ustr );
+            mxMtrWidth->set_text(u""_ustr);
+            mbMtrWidthBlanked = true;
             break;
 
         case SID_ATTR_TRANSFORM_HEIGHT:
@@ -559,6 +570,11 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     limitWidth(*mxMtrHeight);
                     mlOldHeight = nTmp;
                     mxMtrHeight->save_value();
+                    if (mbMtrHeightBlanked)
+                    {
+                        mxMtrHeight->reformat();
+                        mbMtrHeightBlanked = false;
+                    }
                     break;
                 }
             }
@@ -578,11 +594,17 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     SetMetricValue( *mxMtrPosX, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosX);
                     mxMtrPosX->save_value();
+                    if (mbMtrPosXBlanked)
+                    {
+                        mxMtrPosX->reformat();
+                        mbMtrPosXBlanked = false;
+                    }
                     break;
                 }
             }
 
-            mxMtrPosX->set_text( u""_ustr );
+            mxMtrPosX->set_text(u""_ustr);
+            mbMtrPosXBlanked = true;
             break;
 
         case SID_ATTR_TRANSFORM_POS_Y:
@@ -597,11 +619,17 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     SetMetricValue( *mxMtrPosY, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosY);
                     mxMtrPosY->save_value();
+                    if (mbMtrPosYBlanked)
+                    {
+                        mxMtrPosY->reformat();
+                        mbMtrPosYBlanked = false;
+                    }
                     break;
                 }
             }
 
-            mxMtrPosY->set_text( u""_ustr );
+            mxMtrPosY->set_text(u""_ustr);
+            mbMtrPosYBlanked = true;
             break;
 
         case SID_ATTR_TRANSFORM_ROT_X:
@@ -698,11 +726,18 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     mxMtrAngle->set_value(nTmp.get(), FieldUnit::DEGREE);
                     mxCtrlDial->SetRotation(nTmp);
 
+                    if (mbMtrAngleBlanked)
+                    {
+                        mxMtrAngle->reformat();
+                        mbMtrAngleBlanked = false;
+                    }
+
                     break;
                 }
             }
 
-            mxMtrAngle->set_text( u""_ustr );
+            mxMtrAngle->set_text(u""_ustr);
+            mbMtrAngleBlanked = true;
             mxCtrlDial->SetRotation( 0_deg100 );
             break;
 
@@ -898,28 +933,40 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     if (mxMtrPosX->get_text().isEmpty())
         bPosXBlank = true;
     SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
-    if(bPosXBlank)
-        mxMtrPosX->set_text(OUString());
+    if (bPosXBlank)
+    {
+        mxMtrPosX->set_text(u""_ustr);
+        mbMtrPosXBlanked = true;
+    }
 
     if (mxMtrPosY->get_text().isEmpty())
         bPosYBlank = true;
     SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
-    if(bPosYBlank)
-        mxMtrPosY->set_text(OUString());
+    if (bPosYBlank)
+    {
+        mxMtrPosY->set_text(u""_ustr);
+        mbMtrPosYBlanked = true;
+    }
 
     SetPosSizeMinMax(rUIScale);
 
     if (mxMtrWidth->get_text().isEmpty())
         bWidthBlank = true;
     SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
-    if(bWidthBlank)
-        mxMtrWidth->set_text(OUString());
+    if (bWidthBlank)
+    {
+        mxMtrWidth->set_text(u""_ustr);
+        mbMtrWidthBlanked = true;
+    }
 
     if (mxMtrHeight->get_text().isEmpty())
         bHeightBlank = true;
     SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
-    if(bHeightBlank)
-        mxMtrHeight->set_text(OUString());
+    if (bHeightBlank)
+    {
+        mxMtrHeight->set_text(u""_ustr);
+        mbMtrHeightBlanked = true;
+    }
 }
 
 
