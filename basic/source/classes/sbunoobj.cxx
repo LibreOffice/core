@@ -1185,6 +1185,15 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
     }
 
     TypeClass eType = rType.getTypeClass();
+
+    // tdf#162431 - check for missing parameters
+    if (eType != TypeClass_ANY && eType != TypeClass_VOID && pVar->GetType() == SbxERROR)
+    {
+        SbxVariable* paSbxVariable = dynamic_cast<SbxVariable*>(const_cast<SbxValue*>(pVar));
+        if (paSbxVariable && SbiRuntime::IsMissing(paSbxVariable, 1))
+            StarBASIC::Error(ERRCODE_BASIC_NOT_OPTIONAL);
+    }
+
     switch( eType )
     {
         case TypeClass_INTERFACE:
