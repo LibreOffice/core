@@ -357,6 +357,7 @@ protected:
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
+    virtual bool GetExcelName( OUString& rName ) const;     // modify rName - input: exact name
 
     bool   GetToken();
     OpCode NextToken();
