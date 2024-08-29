@@ -1158,6 +1158,11 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
             // PricingFunctions AddIn or any user supplied AddIn.
             fillFromAddInCollectionEnglishName( rxMap);
         }
+        else if (FormulaGrammar::GRAM_OOXML == eGrammar)
+        {
+            // Add specified Add-In compatibility name.
+            fillFromAddInCollectionExcelName( rxMap);
+        }
     }
 }
 
@@ -1166,6 +1171,10 @@ void FormulaCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapP
 }
 
 void FormulaCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& /*xMap */) const
+{
+}
+
+void FormulaCompiler::fillFromAddInCollectionExcelName( const NonConstOpCodeMapPtr& /*xMap */) const
 {
 }
 
