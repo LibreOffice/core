@@ -633,20 +633,25 @@ sal_uLong SwLayHelper::CalcPageCount()
  * The break after flag is set, if the actual content
  * wants a break after.
  */
-bool SwLayHelper::CheckInsertPage()
+bool SwLayHelper::CheckInsertPage(
+    SwPageFrame *& rpPage,
+    SwLayoutFrame *& rpLay,
+    SwFrame *& rpFrame,
+    bool & rIsBreakAfter,
+    bool const isForceBreak)
 {
-    bool bEnd = nullptr == mrpPage->GetNext();
-    const SvxFormatBreakItem& rBrk = mrpFrame->GetBreakItem();
-    const SwFormatPageDesc& rDesc = mrpFrame->GetPageDescItem();
+    bool bEnd = nullptr == rpPage->GetNext();
+    const SvxFormatBreakItem& rBrk = rpFrame->GetBreakItem();
+    const SwFormatPageDesc& rDesc = rpFrame->GetPageDescItem();
     // #118195# Do not evaluate page description if frame
     // is a follow frame!
-    const SwPageDesc* pDesc = mrpFrame->IsFlowFrame() &&
-                              SwFlowFrame::CastFlowFrame( mrpFrame )->IsFollow() ?
-                              nullptr :
-                              rDesc.GetPageDesc();
+    const SwPageDesc* pDesc = rpFrame->IsFlowFrame()
+                            && SwFlowFrame::CastFlowFrame(rpFrame)->IsFollow()
+                          ? nullptr
+                          : rDesc.GetPageDesc();
 
-    bool bBrk = mnParagraphCnt > mnMaxParaPerPage || mbBreakAfter;
-    mbBreakAfter = rBrk.GetBreak() == SvxBreak::PageAfter ||
+    bool bBrk = isForceBreak || rIsBreakAfter;
+    rIsBreakAfter = rBrk.GetBreak() == SvxBreak::PageAfter ||
                    rBrk.GetBreak() == SvxBreak::PageBoth;
     if ( !bBrk )
         bBrk = rBrk.GetBreak() == SvxBreak::PageBefore ||
@@ -657,47 +662,48 @@ bool SwLayHelper::CheckInsertPage()
         ::std::optional<sal_uInt16> oPgNum;
         if ( !pDesc )
         {
-            pDesc = mrpPage->GetPageDesc()->GetFollow();
+            pDesc = rpPage->GetPageDesc()->GetFollow();
         }
         else
         {
             oPgNum = rDesc.GetNumOffset();
             if ( oPgNum )
-                static_cast<SwRootFrame*>(mrpPage->GetUpper())->SetVirtPageNum(true);
+                static_cast<SwRootFrame*>(rpPage->GetUpper())->SetVirtPageNum(true);
         }
-        bool bNextPageRight = !mrpPage->OnRightPage();
+        bool bNextPageRight = !rpPage->OnRightPage();
         bool bInsertEmpty = false;
-        assert(mrpPage->GetUpper()->GetLower());
+        assert(rpPage->GetUpper()->GetLower());
         if (oPgNum && bNextPageRight != IsRightPageByNumber(
-                    *static_cast<SwRootFrame*>(mrpPage->GetUpper()), *oPgNum))
+                    *static_cast<SwRootFrame*>(rpPage->GetUpper()), *oPgNum))
         {
             bNextPageRight = !bNextPageRight;
             bInsertEmpty = true;
         }
         // If the page style is changing, we'll have a first page.
-        bool bNextPageFirst = pDesc != mrpPage->GetPageDesc();
-        ::InsertNewPage( const_cast<SwPageDesc&>(*pDesc), mrpPage->GetUpper(),
-             bNextPageRight, bNextPageFirst, bInsertEmpty, false, mrpPage->GetNext());
+        bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
+        ::InsertNewPage( const_cast<SwPageDesc&>(*pDesc), rpPage->GetUpper(),
+             bNextPageRight, bNextPageFirst, bInsertEmpty, false, rpPage->GetNext());
         if ( bEnd )
         {
-            OSL_ENSURE( mrpPage->GetNext(), "No new page?" );
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
             do
-            {   mrpPage = static_cast<SwPageFrame*>(mrpPage->GetNext());
-            } while ( mrpPage->GetNext() );
+            {
+                rpPage = static_cast<SwPageFrame*>(rpPage->GetNext());
+            } while (rpPage->GetNext());
         }
         else
         {
-            OSL_ENSURE( mrpPage->GetNext(), "No new page?" );
-            mrpPage = static_cast<SwPageFrame*>(mrpPage->GetNext());
-            if ( mrpPage->IsEmptyPage() )
+            OSL_ENSURE( rpPage->GetNext(), "No new page?" );
+            rpPage = static_cast<SwPageFrame*>(rpPage->GetNext());
+            if (rpPage->IsEmptyPage())
             {
-                OSL_ENSURE( mrpPage->GetNext(), "No new page?" );
-                mrpPage = static_cast<SwPageFrame*>(mrpPage->GetNext());
+                OSL_ENSURE( rpPage->GetNext(), "No new page?" );
+                rpPage = static_cast<SwPageFrame*>(rpPage->GetNext());
             }
         }
-        mrpLay = mrpPage->FindBodyCont();
-        while( mrpLay->Lower() )
-            mrpLay = static_cast<SwLayoutFrame*>(mrpLay->Lower());
+        rpLay = rpPage->FindBodyCont();
+        while (rpLay->Lower())
+            rpLay = static_cast<SwLayoutFrame*>(rpLay->Lower());
         return true;
     }
     return false;
@@ -883,7 +889,7 @@ bool SwLayHelper::CheckInsert( SwNodeOffset nNodeIndex )
             }
 
             SwPageFrame* pLastPage = mrpPage;
-            if( CheckInsertPage() )
+            if (CheckInsertPage(mrpPage, mrpLay, mrpFrame, mbBreakAfter, mnMaxParaPerPage < mnParagraphCnt))
             {
                 CheckFlyCache_( pLastPage );
                 if( mrpPrv && mrpPrv->IsTextFrame() && !mrpPrv->isFrameAreaSizeValid() )
