@@ -2677,10 +2677,11 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    OString aUserName("LOK User1"_ostr);
+    OString aArguments = "{\".uno:Author\":{\"type\":\"string\",\"value\":\"" + aUserName + "\"}}";
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, aArguments.getStr());
 
-    int viewId = pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->setView(pDocument, viewId);
+    int viewId = pDocument->m_pDocumentClass->getView(pDocument);
 
     SfxLokHelper::setViewReadOnly(viewId, true);
     SfxLokHelper::setAllowChangeComments(viewId, true);
@@ -2694,7 +2695,7 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
     {
         tools::JsonWriter aJson;
         addParameter(aJson, "Text", "string", "Comment");
-        addParameter(aJson, "Author", "string", "LOK User1");
+        addParameter(aJson, "Author", "string", aUserName);
         aCommandArgs = aJson.finishAndGetAsOString();
     }
 
