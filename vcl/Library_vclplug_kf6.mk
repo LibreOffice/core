@@ -26,7 +26,7 @@ $(eval $(call gb_Library_use_custom_headers,vclplug_kf6,vcl/unx/kf6))
 $(eval $(call gb_Library_set_include,vclplug_kf6,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/qt5 \
+    -I$(SRCDIR)/vcl/inc/qt6 \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_kf6,\
