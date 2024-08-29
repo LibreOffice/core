@@ -900,7 +900,7 @@ void ScInputBarGroup::SetBackgrounds()
     SetBackground(rStyleSettings.GetFaceColor());
     // match to bg used in ScTextWnd::SetDrawingArea to the margin area is drawn with the
     // same desired bg
-    mxBackground->set_background(rStyleSettings.GetWindowColor());
+    mxBackground->set_background(rStyleSettings.GetFieldColor());
 }
 
 void ScInputBarGroup::DataChanged(const DataChangedEvent& rDCEvt)
@@ -1314,7 +1314,7 @@ IMPL_LINK_NOARG(ScTextWndGroup, Impl_ScrollHdl, weld::ScrolledWindow&, void)
 void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = rStyleSettings.GetFieldColor();
     rRenderContext.SetBackground(aBgColor);
 
     // tdf#137713 we rely on GetEditView creating it if it doesn't already exist so
@@ -1593,7 +1593,7 @@ void ScTextWnd::InitEditEngine()
     m_xEditView->SetInsertMode(bIsInsertMode);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = rStyleSettings.GetFieldColor();
     m_xEditView->SetBackgroundColor(aBgColor);
 
     if (pAcc)
@@ -2129,7 +2129,7 @@ void ScTextWnd::MakeDialogEditView()
     m_xEditView->setEditViewCallbacks(this);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = rStyleSettings.GetFieldColor();
     m_xEditView->SetBackgroundColor(aBgColor);
 
     if (pAcc)
@@ -2158,7 +2158,7 @@ void ScTextWnd::ImplInitSettings()
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    Color aBgColor= rStyleSettings.GetWindowColor();
+    Color aBgColor= rStyleSettings.GetFieldColor();
     Color aTxtColor= rStyleSettings.GetWindowTextColor();
 
     aTextFont.SetFillColor   ( aBgColor );
@@ -2198,7 +2198,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = rStyleSettings.GetFieldColor();
     Color aTxtColor = rStyleSettings.GetWindowTextColor();
 
     aTextFont.SetTransparent(true);
