@@ -69,6 +69,7 @@ public:
     void testBookmarkDeleteTdf90816();
     void testControlShapeGrouping();
     void testTdf151846();
+    void testTdf162431();
     void testFdo55289();
     void testFdo68983();
     void testFdo87530();
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testBookmarkDeleteTdf90816);
     CPPUNIT_TEST(testControlShapeGrouping);
     CPPUNIT_TEST(testTdf151846);
+    CPPUNIT_TEST(testTdf162431);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
     CPPUNIT_TEST(testFdo87530);
@@ -355,6 +357,18 @@ void SwMacrosTest::testTdf151846()
 
     // Check number of embedded objects.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
+}
+
+void SwMacrosTest::testTdf162431()
+{
+    loadFromFile(u"odt/tdf162431.odt");
+
+    uno::Any aRet = executeMacro(
+        u"vnd.sun.Star.script:Standard.Module1.TestIsMissingUnoParameter?language=Basic&location=document"_ustr);
+
+    OUString aStringRes;
+    CPPUNIT_ASSERT(aRet >>= aStringRes);
+    CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
 }
 
 void SwMacrosTest::testFdo55289()
