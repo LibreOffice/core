@@ -246,6 +246,7 @@ namespace vcl
         sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
         if (nCurrentStatePathIndex < 0)
             return;
+        assert(nCurrentStatePathIndex >= 0 && o3tl::make_unsigned(nCurrentStatePathIndex) < rActivePath.size());
 
         // determine up to which index (in the new path) we have to display the items
         RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
@@ -335,6 +336,7 @@ namespace vcl
         sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
         if (nCurrentStatePathIndex < 0)
             return;
+        assert(nCurrentStatePathIndex >= 0 && o3tl::make_unsigned(nCurrentStatePathIndex) < rActivePath.size());
 
         // determine up to which index (in the new path) we have to display the items
         RoadmapTypes::ItemIndex nUpperStepBoundary = static_cast<RoadmapTypes::ItemIndex>(rActivePath.size());
@@ -439,8 +441,9 @@ namespace vcl
             nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( _nCurrentState, aActivePathPos->second );
 
         DBG_ASSERT( nCurrentStatePathIndex != -1, "RoadmapWizard::determineNextState: ehm - how can we travel if there is no (valid) active path?" );
-        if ( nCurrentStatePathIndex == -1 )
+        if (nCurrentStatePathIndex < 0)
             return WZS_INVALID_STATE;
+        assert(nCurrentStatePathIndex >= 0 && o3tl::make_unsigned(nCurrentStatePathIndex) < aActivePathPos->second.size());
 
         sal_Int32 nNextStateIndex = nCurrentStatePathIndex + 1;
 
@@ -467,8 +470,9 @@ namespace vcl
             nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( _nCurrentState, aActivePathPos->second );
 
         DBG_ASSERT( nCurrentStatePathIndex != -1, "RoadmapWizard::determineNextState: ehm - how can we travel if there is no (valid) active path?" );
-        if ( nCurrentStatePathIndex == -1 )
+        if (nCurrentStatePathIndex < 0)
             return WZS_INVALID_STATE;
+        assert(nCurrentStatePathIndex >= 0 && o3tl::make_unsigned(nCurrentStatePathIndex) < aActivePathPos->second.size());
 
         sal_Int32 nNextStateIndex = nCurrentStatePathIndex + 1;
 
