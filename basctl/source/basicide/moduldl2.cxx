@@ -902,7 +902,9 @@ void LibPage::InsertLib()
                     }
 
                     // insert listbox entry
+                    m_xLibBox->make_unsorted();
                     ImpInsertLibEntry( aLibName, m_xLibBox->n_children() );
+                    m_xLibBox->make_sorted();
                     m_xLibBox->set_cursor( m_xLibBox->find_text(aLibName) );
                     bChanges = true;
                 }
