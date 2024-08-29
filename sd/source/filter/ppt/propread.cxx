@@ -322,8 +322,9 @@ void Section::Read( SotStorageStream *pStrm )
         nSecSize = nStrmSize;
     }
 
-    while (nPropCount--)
+    while (nPropCount > 0)
     {
+        --nPropCount;
         sal_uInt32 nPropId(0), nPropOfs(0);
         pStrm->ReadUInt32(nPropId).ReadUInt32(nPropOfs);
         if (!pStrm->good())
