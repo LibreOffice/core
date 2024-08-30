@@ -282,11 +282,16 @@ void ImageMap::ImpReadCERNLine( std::string_view rLine  )
     }
     else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
     {
-        const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr, '(') - 1;
-        tools::Polygon aPoly( nCount );
+        const sal_Int32 nTokenCount = comphelper::string::getTokenCount(aStr, '(');
+        tools::Polygon aPoly;
+        if (nTokenCount > 0)
+        {
+            const sal_uInt16 nCount = nTokenCount - 1;
+            aPoly.SetSize(nCount);
 
-        for ( sal_uInt16 i = 0; i < nCount; i++ )
-            aPoly[ i ] = ImpReadCERNCoords( &pStr );
+            for (sal_uInt16 i = 0; i < nCount; ++i)
+                aPoly[ i ] = ImpReadCERNCoords( &pStr );
+        }
 
         const OUString aURL = ImpReadCERNURL( &pStr );
 
