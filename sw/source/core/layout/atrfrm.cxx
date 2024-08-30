@@ -596,6 +596,20 @@ SwFormatFooter* SwFormatFooter::Clone( SfxItemPool* ) const
     return new SwFormatFooter( *this );
 }
 
+void SwFormatFooter::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatFooter"));
+    SfxPoolItem::dumpAsXml(pWriter);
+
+    const SwFrameFormat* pFooterFormat = GetFooterFormat();
+    if (pFooterFormat)
+    {
+        pFooterFormat->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
     : SfxPoolItem( RES_CNTNT, SfxItemType::SwFormatContentType )
