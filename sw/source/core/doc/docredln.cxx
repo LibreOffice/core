@@ -778,11 +778,14 @@ SwRedlineTable::size_type SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, size
 
         ++nSttPos;
         while( nSttPos > nEnd )
-            if( nSeqNo == operator[]( --nSttPos )->GetSeqNo() )
+        {
+            --nSttPos;
+            if( nSeqNo == operator[](nSttPos)->GetSeqNo() )
             {
                 nRet = nSttPos;
                 break;
             }
+        }
     }
     return nRet;
 }

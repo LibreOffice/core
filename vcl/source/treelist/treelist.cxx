@@ -431,6 +431,7 @@ sal_uInt32 SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListE
         pParent = NextVisible( pView, pParent, &nActDepth );
         nCount++;
     } while( pParent && nRefDepth < nActDepth );
+    assert(nCount >= 1 && "given do...while");
     nCount--;
     return nCount;
 }
