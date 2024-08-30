@@ -506,9 +506,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_readPipe: invalid pipe"); // osl_receivePipe detects invalid pipe
     while (BytesToRead > 0)
     {
-        sal_Int32 RetVal;
-        RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
-
+        sal_Int32 RetVal = osl_receivePipe(pPipe, pBuffer, BytesToRead);
         /* error occurred? */
         if (RetVal <= 0)
             break;
