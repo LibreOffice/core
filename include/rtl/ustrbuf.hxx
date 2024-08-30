@@ -114,11 +114,7 @@ public:
     explicit OUStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
         : OUStringBuffer(static_cast<sal_Int32>(length))
     {
-        assert(
-            length >= 0
-            && static_cast<std::make_unsigned_t<T>>(length)
-                <= static_cast<std::make_unsigned_t<sal_Int32>>(
-                    std::numeric_limits<sal_Int32>::max()));
+        assert(libreoffice_internal::IsValidStrLen(length));
     }
     // avoid (obvious) bugs
     explicit OUStringBuffer(bool) = delete;
@@ -144,11 +140,8 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     OUStringBuffer(std::u16string_view sv)
         : pData(nullptr)
-        , nCapacity( sv.length() + 16 )
+        , nCapacity(libreoffice_internal::ThrowIfInvalidStrLen(sv.length(), 16) + 16)
     {
-        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
-            throw std::bad_alloc();
-        }
         rtl_uStringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
 #else
@@ -245,10 +238,8 @@ public:
     */
     template< std::size_t N >
     OUStringBuffer( OUStringNumber< N >&& n )
-        : pData(NULL)
-        , nCapacity( n.length + 16 )
+        : OUStringBuffer(std::u16string_view(n))
     {
-        rtl_uStringbuffer_newFromStr_WithLength( &pData, n.buf, n.length );
     }
 #endif
 
@@ -349,21 +340,9 @@ public:
     typename libreoffice_internal::ConstCharArrayDetector<
         T, OUStringBuffer &>::TypeUtf16
     operator =(T & literal) {
-        sal_Int32 const n
-            = libreoffice_internal::ConstCharArrayDetector<T>::length;
-        if (n >= nCapacity) {
-            ensureCapacity(n + 16); //TODO: check for overflow
-        }
-        // For OUStringChar, which is covered by this template's ConstCharArrayDetector TypeUtf16
-        // check, toPointer does not return a NUL-terminated string, so we can't just memcpy n+1
-        // elements but rather need to add the terminating NUL manually:
-        std::memcpy(
-            pData->buffer,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            n * sizeof (sal_Unicode));
-        pData->buffer[n] = '\0';
-        pData->length = n;
-        return *this;
+        return operator=(
+            std::u16string_view(libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+                                libreoffice_internal::ConstCharArrayDetector<T>::length));
     }
 #endif
 
@@ -969,10 +948,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     OUStringBuffer & insert(sal_Int32 offset, std::u16string_view str)
     {
-        if (str.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
-            throw std::bad_alloc();
-        }
-        return insert( offset, str.data(), str.length() );
+        return insert(offset, str.data(), libreoffice_internal::ThrowIfInvalidStrLen(str.length()));
     }
 #else
     OUStringBuffer & insert(sal_Int32 offset, const OUString & str)
@@ -1148,8 +1124,7 @@ public:
      */
     OUStringBuffer & insert(sal_Int32 offset, char c)
     {
-        sal_Unicode u = c;
-        return insert( offset, &u, 1 );
+        return insert(offset, sal_Unicode(c));
     }
 
     /**
@@ -1491,12 +1466,10 @@ public:
     typename
         libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
     indexOf(T & literal, sal_Int32 fromIndex = 0) const {
-        assert(fromIndex >= 0);
-        auto n = rtl_ustr_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return n < 0 ? n : n + fromIndex;
+        return indexOf(
+            std::u16string_view(libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+                                libreoffice_internal::ConstCharArrayDetector<T>::length),
+            fromIndex);
     }
 #endif
 
@@ -1588,10 +1561,9 @@ public:
     typename
         libreoffice_internal::ConstCharArrayDetector<T, sal_Int32>::TypeUtf16
     lastIndexOf(T & literal) const {
-        return rtl_ustr_lastIndexOfStr_WithLength(
-            pData->buffer, pData->length,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return lastIndexOf(
+            std::u16string_view(libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+                                libreoffice_internal::ConstCharArrayDetector<T>::length));
     }
 #endif
 

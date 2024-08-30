@@ -112,11 +112,7 @@ public:
     explicit OStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
         : OStringBuffer(static_cast<sal_Int32>(length))
     {
-        assert(
-            length >= 0
-            && static_cast<std::make_unsigned_t<T>>(length)
-                <= static_cast<std::make_unsigned_t<sal_Int32>>(
-                    std::numeric_limits<sal_Int32>::max()));
+        assert(libreoffice_internal::IsValidStrLen(length));
     }
     // avoid (obvious) bugs
     explicit OStringBuffer(bool) = delete;
@@ -142,11 +138,8 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     OStringBuffer(std::string_view sv)
         : pData(nullptr)
-        , nCapacity( sv.length() + 16 )
+        , nCapacity(libreoffice_internal::ThrowIfInvalidStrLen(sv.length(), 16) + 16)
     {
-        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
-            throw std::bad_alloc();
-        }
         rtl_stringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
 #else

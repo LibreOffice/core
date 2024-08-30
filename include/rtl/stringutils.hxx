@@ -20,6 +20,8 @@
 #include <cstddef>
 
 #if defined LIBO_INTERNAL_ONLY
+#include <limits>
+#include <new>
 #include <type_traits>
 #endif
 
@@ -115,6 +117,23 @@ using OUStringChar = OUStringChar_ const;
 
 namespace libreoffice_internal
 {
+#if defined LIBO_INTERNAL_ONLY
+template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+constexpr bool IsValidStrLen(I i, sal_Int32 margin = 0)
+{
+    assert(margin >= 0);
+    constexpr sal_uInt32 maxLen = std::numeric_limits<sal_Int32>::max();
+    return i >= 0 && static_cast<std::make_unsigned_t<I>>(i) <= maxLen - margin;
+}
+template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+sal_Int32 ThrowIfInvalidStrLen(I i, sal_Int32 margin = 0)
+{
+    if (!IsValidStrLen(i, margin))
+        throw std::bad_alloc();
+    return i;
+}
+#endif
+
 /*
 These templates use SFINAE (Substitution failure is not an error) to help distinguish the various
 plain C string types: char*, const char*, char[N], const char[N], char[] and const char[].
