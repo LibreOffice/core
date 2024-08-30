@@ -411,8 +411,8 @@ void ONDXPage::Delete(sal_uInt16 nNodePos)
         else
         {
             // merge with right neighbour
-            Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
-            nParentNodePos++;
+            nParentNodePos = o3tl::sanitizing_inc(nParentNodePos);
+            Merge(nParentNodePos,((*aParent)[nParentNodePos].GetChild(&rIndex,aParent)));
         }
         if (HasParent() && !(*aParent)[nParentNodePos].HasChild())
             aParent->Delete(nParentNodePos);
