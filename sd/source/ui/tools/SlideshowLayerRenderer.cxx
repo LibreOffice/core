@@ -22,6 +22,18 @@
 #include <tools/json_writer.hxx>
 #include <editeng/editeng.hxx>
 
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+
+#include <animations/animationnodehelper.hxx>
+#include <sdpage.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <svx/unoshape.hxx>
+
+using namespace ::com::sun::star;
+
 namespace sd
 {
 struct RenderContext
@@ -144,6 +156,11 @@ public:
             }
         }
 
+        if (mrRenderState.isObjectInAnimation(pObject))
+        {
+            mrRenderState.mbSkipAllInThisPass = true;
+        }
+
         if (mrRenderState.meStage == RenderStage::Master && hasFields(pObject)
             && mrRenderState.mbStopRenderingWhenField && !mrRenderState.mbFirstObjectInPass)
         {
@@ -187,6 +204,68 @@ SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
         maRenderState.meStage = RenderStage::Master;
     else
         maRenderState.meStage = RenderStage::Slide;
+
+    setupAnimations();
+}
+
+void SlideshowLayerRenderer::setupAnimations()
+{
+    auto* pSdPage = dynamic_cast<SdPage*>(&mrPage);
+
+    if (!pSdPage)
+        return;
+
+    std::vector<uno::Reference<animations::XAnimationNode>> aAnimationVector;
+    anim::create_deep_vector(pSdPage->getAnimationNode(), aAnimationVector);
+
+    for (uno::Reference<animations::XAnimationNode> const& rNode : aAnimationVector)
+    {
+        switch (rNode->getType())
+        {
+            // filter out the most obvious
+            case animations::AnimationNodeType::CUSTOM:
+            case animations::AnimationNodeType::ANIMATE:
+            case animations::AnimationNodeType::SET:
+            case animations::AnimationNodeType::ANIMATEMOTION:
+            case animations::AnimationNodeType::ANIMATECOLOR:
+            case animations::AnimationNodeType::ANIMATETRANSFORM:
+            case animations::AnimationNodeType::TRANSITIONFILTER:
+            case animations::AnimationNodeType::ANIMATEPHYSICS:
+            {
+                uno::Reference<animations::XAnimate> xAnimate(rNode, uno::UNO_QUERY);
+                if (xAnimate.is())
+                {
+                    uno::Any aAny = xAnimate->getTarget();
+
+                    uno::Reference<drawing::XShape> xShape;
+                    if ((aAny >>= xShape) && xShape.is())
+                    {
+                        SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
+                        if (pShape)
+                        {
+                            maRenderState.maInAnimation.insert(pShape->GetSdrObject());
+                        }
+                    }
+                    else // if target is not a shape
+                    {
+                        presentation::ParagraphTarget aParagraphTarget;
+                        if ((aAny >>= aParagraphTarget) && aParagraphTarget.Shape.is())
+                        {
+                            //sal_Int32 nParagraph = aParagraphTarget.Paragraph;
+
+                            xShape = aParagraphTarget.Shape;
+
+                            SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
+                            if (pShape)
+                            {
+                                maRenderState.maInAnimation.insert(pShape->GetSdrObject());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)

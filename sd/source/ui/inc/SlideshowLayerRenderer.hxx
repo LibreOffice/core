@@ -40,6 +40,7 @@ struct RenderState
     bool mbStopRenderingWhenField = true;
 
     std::unordered_set<SdrObject*> maObjectsDone;
+    std::unordered_set<SdrObject*> maInAnimation;
     sal_Int32 mnIndex = 0;
 
     bool mbFirstObjectInPass = true;
@@ -99,6 +100,11 @@ struct RenderState
     {
         return maObjectsDone.find(pObject) != maObjectsDone.end();
     }
+
+    bool isObjectInAnimation(SdrObject* pObject)
+    {
+        return maInAnimation.find(pObject) != maInAnimation.end();
+    }
 };
 
 /** Renders a slide */
@@ -112,6 +118,7 @@ private:
 
     void createViewAndDraw(RenderContext& rRenderContext);
     void writeJSON(OString& rJsonMsg);
+    void setupAnimations();
 
 public:
     SlideshowLayerRenderer(SdrPage& rPage);
