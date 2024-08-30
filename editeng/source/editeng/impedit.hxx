@@ -719,7 +719,8 @@ private:
 
     bool                ImplHasText() const;
 
-    void                ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, std::vector<sal_Int32>& rArray );
+    void ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd,
+                         std::vector<sal_Int32>& rArray, sal_Int32 nRemainingSpace);
 
     void                InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 nPos);
     EditPaM             SplitContent( sal_Int32 nNode, sal_Int32 nSepPos );

@@ -2295,17 +2295,16 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
     std::vector<sal_Int32> aPositions;
 
     // Kashidas ?
-    ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
+    ImpFindKashidas(pNode, nFirstChar, nLastChar, aPositions, nRemainingSpace);
     auto nKashidas = aPositions.size();
 
     sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
     for ( sal_Int32 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
         EditPaM aPaM( pNode, nChar+1 );
-        LanguageType eLang = GetLanguage(aPaM).nLang;
         sal_uInt16 nScript = GetI18NScriptType(aPaM);
         // Arabic script is handled above, but if no Kashida positions are found, use blanks.
-        if (MsLangId::getPrimaryLanguage(eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY && nKashidas)
+        if (nKashidas)
             continue;
 
         if ( pNode->GetChar(nChar) == ' ' )
@@ -2337,8 +2336,7 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
     // If the last character is a blank, it is rejected!
     // The width must be distributed to the blockers in front...
     // But not if it is the only one.
-    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.size() > 1 ) &&
-         ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ).nLang ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
+    if ((pNode->GetChar(nLastChar) == ' ') && (aPositions.size() > 1) && (!nKashidas))
     {
         aPositions.pop_back();
         sal_Int32 nPortionStart, nPortion;
@@ -2416,13 +2414,16 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
 }
 
 // For Kashidas from sw/source/core/text/porlay.cxx
-void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, std::vector<sal_Int32>& rArray )
+void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd,
+                                    std::vector<sal_Int32>& rArray, sal_Int32 nRemainingSpace)
 {
     // Kashida glyph looks suspicious, skip Kashida justification
     if (GetRefDevice()->GetMinKashida() <= 0)
         return;
 
     std::vector<sal_Int32> aKashidaArray;
+    std::vector<sal_Int32> aMinKashidaArray;
+    sal_Int32 nTotalMinKashida = 0U;
 
     // the search has to be performed on a per word base
 
@@ -2431,6 +2432,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
     if ( aWordSel.Min().GetIndex() < nStart )
        aWordSel.Min().SetIndex( nStart );
 
+    SvxFont aTmpFont(pNode->GetCharAttribs().GetDefFont());
     while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
     {
         const sal_Int32 nSavPos = aWordSel.Max().GetIndex();
@@ -2588,12 +2590,34 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
             ++nIdx;
         } // end of current word
 
-        if ( nKashidaPos>=0 )
-            aKashidaArray.push_back( nKashidaPos );
+        if (nKashidaPos >= 0)
+        {
+            SeekCursor(pNode, nKashidaPos + 1, aTmpFont);
+            aTmpFont.SetPhysFont(*GetRefDevice());
+
+            auto nMinKashidaWidth = GetRefDevice()->GetMinKashida();
+            nTotalMinKashida += nMinKashidaWidth;
+            aMinKashidaArray.push_back(nMinKashidaWidth);
+
+            aKashidaArray.push_back(nKashidaPos);
+        }
 
         aWordSel = WordRight( aWordSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
         aWordSel = SelectWord( aWordSel, css::i18n::WordType::DICTIONARY_WORD );
     }
+
+    // Greedily reject kashida positions from start-to-end until there is enough room.
+    // This will push kashida justification away from the start of the line.
+    std::reverse(aKashidaArray.begin(), aKashidaArray.end());
+    std::reverse(aMinKashidaArray.begin(), aMinKashidaArray.end());
+    while (!aKashidaArray.empty() && nTotalMinKashida > nRemainingSpace)
+    {
+        nTotalMinKashida -= aMinKashidaArray.back();
+        aMinKashidaArray.pop_back();
+        aKashidaArray.pop_back();
+    }
+
+    std::reverse(aKashidaArray.begin(), aKashidaArray.end());
 
     // Validate
     std::vector<sal_Int32> aDropped;
