@@ -79,7 +79,7 @@ Module.unoObject = function(interfaces, obj) {
             const bases = Module.uno.com.sun.star.reflection.XInterfaceTypeDescription2.query(td)
                   .getBaseTypes();
             for (let i = 0; i !== bases.size(); ++i) {
-                walk(bases.get(i), impl)
+                walk(bases.get(i), impl);
             }
             bases.delete();
         }
