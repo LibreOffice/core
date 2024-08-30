@@ -1112,6 +1112,8 @@ IMPL_LINK_NOARG(ScTabView, EndScrollHdl, const MouseEvent&, bool)
 
 void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
 {
+    bool bUpdateHorizontalScrollbars = false;
+
     bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
     tools::Long nViewPos;
     if ( bHoriz )
@@ -1289,7 +1291,22 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                     // slower than they are used to. If that becomes an
                     // issue for enough users, the reduction factor may
                     // need to be lowered to find a good balance point.
-                    static const sal_uInt16 nHScrollReductionFactor = 8;
+                    static const tools::Long nHScrollReductionFactor = 8;
+
+                    // tdf#161945 increase sensitivity for negative horizontal deltas
+                    // A side effect of the anti-jitter code is that it tends
+                    // to reduce the sensitivity of horizontal scroll events
+                    // towards the first column. It is particularly noticeable
+                    // with horizontal scroll events from a scrollwheel when
+                    // the view position is in column B or C. This results in
+                    // a very small delta from the anti-jitter code.
+                    // So, to balance things out, apply a constant adjustment
+                    // factor to increase the sensitivity more for small deltas
+                    // than for large deltas.
+                    static const tools::Long nHScrollNegativeDeltaAdjustmentFactor = -1;
+                    if ( nDelta < 0 )
+                        nDelta += nHScrollNegativeDeltaAdjustmentFactor;
+
                     if ( pScroll == aHScrollLeft.get() )
                     {
                         mnPendingaHScrollLeftDelta += nDelta;
@@ -1300,7 +1317,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                             mnPendingaHScrollLeftDelta = mnPendingaHScrollLeftDelta % nHScrollReductionFactor;
                         }
                     }
-                    else if ( pScroll == aHScrollRight.get() )
+                    else
                     {
                         mnPendingaHScrollRightDelta += nDelta;
                         nDelta = 0;
@@ -1310,6 +1327,8 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                             mnPendingaHScrollRightDelta = mnPendingaHScrollRightDelta % nHScrollReductionFactor;
                         }
                     }
+
+                    bUpdateHorizontalScrollbars = true;
                 }
 
                 nPrevDragPos = nScrollPos;
@@ -1325,6 +1344,15 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
         else
             ScrollY( nDelta, (pScroll == aVScrollTop.get()) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
     }
+
+    // tdf#161945 update horizontal scrollbar position to match tab view
+    // While the fix for tdf#135478 reduces the horizontal scroll delta
+    // applied to the tab view, the horizontal scrollbar is set before
+    // that with the original delta. As a result, the horizontal scrollbar
+    // is now mispositioned so update the horizontal scrollbar position
+    // to match the position of the tab view's visible columns.
+    if ( bUpdateHorizontalScrollbars )
+        UpdateScrollBars( COLUMN_HEADER );
 }
 
 void ScTabView::ScrollX( tools::Long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
