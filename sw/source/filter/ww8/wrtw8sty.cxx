@@ -320,7 +320,22 @@ void MSWordStyles::BuildStylesTable()
     const SwCharFormats& rArr = *m_rExport.m_rDoc.GetCharFormats();       // first CharFormat
     // the default character style ( 0 ) will not be outputted !
     for (size_t n = 1; n < rArr.size() && m_aStyles.size() < MSWORD_MAX_STYLES_LIMIT; ++n)
+    {
+        if (m_rExport.GetExportFormat() == MSWordExportBase::DOCX
+            && rArr[n]->GetName().startsWith("ListLabel"))
+        {
+            // tdf#92335 don't export redundant DOCX import style "ListLabel"
+            continue;
+        }
+
         m_aStyles.emplace_back(rArr[n]);
+    }
+
+    if (m_aStyles.size() == MSWORD_MAX_STYLES_LIMIT)
+    {
+        SAL_WARN("sw.ww8", "MSWordStyles::BuildStylesTable: too many styles, have "
+                               << rArr.size() << " char styles");
+    }
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_rDoc.GetTextFormatColls();   // then TextFormatColls
     // the default paragraph style ( 0 ) will not be outputted !
@@ -699,13 +714,6 @@ void MSWordStyles::OutputStyle(sal_uInt16 nSlot)
         sal_uInt16 nWwLink = 0x0FFF;
 
         GetStyleData(entry.format, bFormatColl, nBase, nWwNext, nWwLink);
-
-        if (!bFormatColl && m_rExport.GetExportFormat() == MSWordExportBase::DOCX &&
-                        entry.style_id.startsWith("ListLabel"))
-        {
-            // tdf#92335 don't export redundant DOCX import style "ListLabel"
-            return;
-        }
 
         m_rExport.AttrOutput().StartStyle(entry.ww_name, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, nWwLink, m_aStyles[nSlot].ww_id, nSlot,

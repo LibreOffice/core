@@ -700,6 +700,21 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79968_sldx)
         u"PowerPoint.Slide.12"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLostFooterStyle)
+{
+    // Given a document with many numberings and a Footer para style:
+    loadAndSave("lost-footer-style.docx");
+
+    // When saving that to DOCX and checking the Footer style:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed, the Footer style was
+    // lost on export due to the many ListLabel char styles.
+    OUString aType = getXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Footer']"_ostr, "type"_ostr);
+
+    // Then make sure we have a Footer para style:
+    CPPUNIT_ASSERT_EQUAL(u"paragraph"_ustr, aType);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
