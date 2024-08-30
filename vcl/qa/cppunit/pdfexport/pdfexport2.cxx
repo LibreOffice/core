@@ -5564,6 +5564,66 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160786)
     CPPUNIT_ASSERT_LESS(aRect.at(3).getMaxX() + aRect.at(3).getWidth(), aRect.at(4).getMinX());
 }
 
+// tdf#151748 - Textboxes should validate kashida positions
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
+{
+    saveAsPDF(u"tdf151748.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_EQUAL(21, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(17, nTextObjectCount);
+
+    // Box 1: Not enough room for kashida
+    CPPUNIT_ASSERT_EQUAL(u"خط تخوردگی و"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(1).trim());
+
+    // Box 2: One kashida toward end
+    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim()); // Kashida
+    CPPUNIT_ASSERT_EQUAL(u"خط تخ"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(5).trim());
+
+    // Box 3: Two kashida
+    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(6).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(7).trim()); // Kashida
+    CPPUNIT_ASSERT_EQUAL(u"ط تخ"_ustr, aText.at(8).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(9).trim()); // Kashida
+    CPPUNIT_ASSERT_EQUAL(u"خ"_ustr, aText.at(10).trim());
+    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(11).trim());
+
+    // Box 4: One kashida (text size change)
+    CPPUNIT_ASSERT_EQUAL(u"خط"_ustr, aText.at(12).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(13).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(14).trim()); // Kashida
+    CPPUNIT_ASSERT_EQUAL(u"تخ"_ustr, aText.at(15).trim());
+    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(16).trim());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
