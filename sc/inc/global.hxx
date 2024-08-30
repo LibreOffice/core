@@ -39,6 +39,7 @@
 #include <memory>
 #include <optional>
 #include <string_view>
+#include <unordered_map>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -517,8 +518,8 @@ class ScGlobal
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
     static std::unique_ptr<SvxBrushItem> xButtonBrushItem;
 
-    static std::unique_ptr<ScFunctionList> xStarCalcFunctionList;
-    static std::unique_ptr<ScFunctionMgr> xStarCalcFunctionMgr;
+    static std::unordered_map<OUString, std::unique_ptr<ScFunctionList>> xStarCalcFunctionList;
+    static std::unordered_map<OUString, std::unique_ptr<ScFunctionMgr>> xStarCalcFunctionMgr;
 
     static std::atomic<ScUnitConverter*> pUnitConverter;
 
@@ -536,7 +537,7 @@ class ScGlobal
 
     static std::atomic<sc::SharedStringPoolPurge*> pSharedStringPoolPurge;
 
-    static InputHandlerFunctionNames maInputHandlerFunctionNames;
+    static std::unordered_map<OUString, InputHandlerFunctionNames> maInputHandlerFunctionNames;
 
     static void                 InitPPT();
 

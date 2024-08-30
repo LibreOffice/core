@@ -96,8 +96,8 @@ OUString        ScGlobal::aStrClipDocName;
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
 
-std::unique_ptr<ScFunctionList> ScGlobal::xStarCalcFunctionList;
-std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
+std::unordered_map<OUString, std::unique_ptr<ScFunctionList>> ScGlobal::xStarCalcFunctionList;
+std::unordered_map<OUString, std::unique_ptr<ScFunctionMgr>> ScGlobal::xStarCalcFunctionMgr;
 
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 std::unique_ptr<SvNumberFormatter> ScGlobal::xEnglishFormatter;
@@ -119,8 +119,7 @@ sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
 bool ScGlobal::bThreadedGroupCalcInProgress = false;
 
-InputHandlerFunctionNames ScGlobal::maInputHandlerFunctionNames;
-
+std::unordered_map<OUString, InputHandlerFunctionNames> ScGlobal::maInputHandlerFunctionNames;
 
 // Static functions
 
@@ -551,8 +550,9 @@ void ScGlobal::Clear()
     delete pLegacyFuncCollection.exchange(nullptr);
     delete pAddInCollection.exchange(nullptr);
     xUserList.reset();
-    xStarCalcFunctionList.reset(); // Destroy before ResMgr!
-    xStarCalcFunctionMgr.reset();
+    xStarCalcFunctionList.clear(); // Destroy before ResMgr!
+    xStarCalcFunctionMgr.clear();
+    maInputHandlerFunctionNames.clear();
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
     ScInterpreter::GlobalExit(); // Delete static Stack
@@ -628,39 +628,59 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
-    return bool(xStarCalcFunctionList);
+    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    auto list = xStarCalcFunctionList.find(lang);
+    return list != xStarCalcFunctionList.end();
 }
 
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !xStarCalcFunctionList )
-        xStarCalcFunctionList.reset( new ScFunctionList( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()));
-
-    return xStarCalcFunctionList.get();
+    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    if (auto list = xStarCalcFunctionList.find(lang); list != xStarCalcFunctionList.end())
+    {
+        return xStarCalcFunctionList[lang].get();
+    }
+    xStarCalcFunctionList.emplace(
+        lang, new ScFunctionList(SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()));
+    return xStarCalcFunctionList[lang].get();
 }
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !xStarCalcFunctionMgr )
-        xStarCalcFunctionMgr.reset(new ScFunctionMgr);
+    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    if (auto list = xStarCalcFunctionMgr.find(lang); list != xStarCalcFunctionMgr.end())
+    {
+        return xStarCalcFunctionMgr[lang].get();
+    }
+    xStarCalcFunctionMgr.emplace(lang, new ScFunctionMgr);
 
-    return xStarCalcFunctionMgr.get();
+    return xStarCalcFunctionMgr[lang].get();
 }
 
 void ScGlobal::ResetFunctionList()
 {
     // FunctionMgr has pointers into FunctionList, must also be updated
-    xStarCalcFunctionMgr.reset();
-    xStarCalcFunctionList.reset();
+    xStarCalcFunctionMgr.clear();
+    xStarCalcFunctionList.clear();
     // Building new names also needs InputHandler data to be refreshed.
-    maInputHandlerFunctionNames = InputHandlerFunctionNames();
+    maInputHandlerFunctionNames.clear();
+    maInputHandlerFunctionNames.emplace(Translate::getLanguage(SC_MOD()->GetResLocale()),
+                                        InputHandlerFunctionNames());
 }
 
 const InputHandlerFunctionNames& ScGlobal::GetInputHandlerFunctionNames()
 {
-    if (maInputHandlerFunctionNames.maFunctionData.empty())
+    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    if (maInputHandlerFunctionNames.find(lang) == maInputHandlerFunctionNames.end())
+    {
+        maInputHandlerFunctionNames.emplace(lang, InputHandlerFunctionNames());
+    }
+
+    InputHandlerFunctionNames& currentInputHandlerFunctionNames = maInputHandlerFunctionNames[lang];
+
+    if (currentInputHandlerFunctionNames.maFunctionData.empty())
     {
         const OUString aParenthesesReplacement( cParenthesesReplacement);
         const ScFunctionList* pFuncList = GetStarCalcFunctionList();
@@ -676,18 +696,18 @@ const InputHandlerFunctionNames& ScGlobal::GetInputHandlerFunctionNames()
                 OUString aFuncName(pCharClass->uppercase(*(pDesc->mxFuncName)));
                 // fdo#75264 fill maFormulaChar with all characters used in formula names
                 for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
-                    maInputHandlerFunctionNames.maFunctionChar.insert(aFuncName[j]);
-                maInputHandlerFunctionNames.maFunctionData.insert(
-                        ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
-                            ScTypedStrData::Standard));
+                    currentInputHandlerFunctionNames.maFunctionChar.insert(aFuncName[j]);
+                currentInputHandlerFunctionNames.maFunctionData.insert(
+                    ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
+                                   ScTypedStrData::Standard));
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();
-                maInputHandlerFunctionNames.maFunctionDataPara.insert(
-                        ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
+                currentInputHandlerFunctionNames.maFunctionDataPara.insert(
+                    ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
             }
         }
     }
-    return maInputHandlerFunctionNames;
+    return currentInputHandlerFunctionNames;
 }
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
