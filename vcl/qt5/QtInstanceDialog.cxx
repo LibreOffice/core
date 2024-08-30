@@ -15,6 +15,13 @@ QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
 {
 }
 
+QtInstanceDialog::~QtInstanceDialog()
+{
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    pQtInstance->RunInMainThread([&] { m_pDialog.reset(); });
+}
+
 bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const&,
                                 const std::function<void(sal_Int32)>&)
 {
