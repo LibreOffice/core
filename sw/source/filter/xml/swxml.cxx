@@ -591,6 +591,8 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"SourceStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(),
           css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"IsInPaste"_ustr, 0, cppu::UnoType<bool>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(
@@ -639,6 +641,8 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     beans::NamedValue aLateInitSettings( u"LateInitSettings"_ustr, Any( xLateInitSettings ) );
 
     xInfoSet->setPropertyValue( u"SourceStorage"_ustr, Any( xStorage ) );
+
+    xInfoSet->setPropertyValue(u"IsInPaste"_ustr, Any(IsInPaste()));
 
     // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs{  Any(xInfoSet),

@@ -2358,6 +2358,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
     {
         SwPaM &rPAM = *rSh.GetCursor();
         SwReader aReader(xStore, OUString(), rPAM);
+        aReader.SetInPaste(true);
         if( ! aReader.Read( *pRead ).IsError() )
             bRet = true;
         else if( bMsg )
