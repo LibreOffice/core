@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 
 public abstract class ScriptEditorBase implements ScriptEditor {
-    public XScriptContext context;
+    protected XScriptContext context;
 
     public void setContext(XScriptContext context) {
         this.context = context;
