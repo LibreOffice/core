@@ -169,20 +169,28 @@ Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, c
         }
         break;
         case TypeClass_SHORT:       // sal_Int16
+        {   // it's a real int16 property
+            sal_Int32 nValue(0);
+            bool const bSuccess =
+                ::sax::Converter::convertNumber(nValue, _rReadCharacters,
+                                                SAL_MIN_INT16, SAL_MAX_INT16);
+            SAL_WARN_IF(!bSuccess, "dbaccess",
+                "OXMLDataSourceSetting::convertString: could not convert \""
+                << _rReadCharacters << "\" into a sal_Int16!");
+            aReturn <<= static_cast<sal_Int16>(nValue);
+            break;
+        }
         case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
-                sal_Int32 nValue(0);
-                bool const bSuccess =
-                    ::sax::Converter::convertNumber(nValue, _rReadCharacters);
-                SAL_WARN_IF(!bSuccess, "dbaccess",
-                    "OXMLDataSourceSetting::convertString: could not convert \""
-                    << _rReadCharacters << "\" into an integer!");
-                if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= static_cast<sal_Int16>(nValue);
-                else
-                    aReturn <<= nValue;
-                break;
-            }
+        {   // it's a real int32 property
+            sal_Int32 nValue(0);
+            bool const bSuccess =
+                ::sax::Converter::convertNumber(nValue, _rReadCharacters);
+            SAL_WARN_IF(!bSuccess, "dbaccess",
+                "OXMLDataSourceSetting::convertString: could not convert \""
+                << _rReadCharacters << "\" into a sal_Int32!");
+            aReturn <<= nValue;
+            break;
+        }
         case TypeClass_HYPER:
         {
             OSL_FAIL("OXMLDataSourceSetting::convertString: 64-bit integers not implemented yet!");

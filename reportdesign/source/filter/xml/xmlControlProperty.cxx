@@ -194,21 +194,30 @@ Any OXMLControlProperty::convertString(const css::uno::Type& _rExpectedType, con
         }
         break;
         case TypeClass_SHORT:       // sal_Int16
+        {   // it's a real int16 property
+            sal_Int32 nValue(0);
+            bool bSuccess =
+                ::sax::Converter::convertNumber(nValue, _rReadCharacters,
+                                                SAL_MIN_INT16, SAL_MAX_INT16);
+            OSL_ENSURE(bSuccess,
+                    OStringBuffer("OXMLControlProperty::convertString: could not convert \"" +
+                    OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                    "\" into a sal_Int16!").getStr());
+            aReturn <<= static_cast<sal_Int16>(nValue);
+            break;
+        }
         case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
-                sal_Int32 nValue(0);
-                bool bSuccess =
-                    ::sax::Converter::convertNumber(nValue, _rReadCharacters);
-                OSL_ENSURE(bSuccess,
-                        OStringBuffer("OXMLControlProperty::convertString: could not convert \"" +
-                        OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
-                        "\" into an integer!").getStr());
-                if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= static_cast<sal_Int16>(nValue);
-                else
-                    aReturn <<= nValue;
-                break;
-            }
+        {   // it's a real int32 property
+            sal_Int32 nValue(0);
+            bool bSuccess =
+                ::sax::Converter::convertNumber(nValue, _rReadCharacters);
+            OSL_ENSURE(bSuccess,
+                    OStringBuffer("OXMLControlProperty::convertString: could not convert \"" +
+                    OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US) +
+                    "\" into a sal_Int32!").getStr());
+            aReturn <<= nValue;
+            break;
+        }
         case TypeClass_HYPER:
         {
             OSL_FAIL("OXMLControlProperty::convertString: 64-bit integers not implemented yet!");
