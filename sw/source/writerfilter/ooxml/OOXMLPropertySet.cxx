@@ -271,14 +271,14 @@ OOXMLValue OOXMLValue::createHexColor(std::string_view pValue)
     const sal_Int32 nLen = pValue.size();
     if ( !aValue && nLen > 1 && pValue[0] == '#' )
     {
-        sal_Int32 nColor(COL_AUTO);
+        Color aColor(COL_AUTO);
         // Word appears to require strict 6 digit length, else it ignores it
         if ( nLen == 7 )
         {
             const OUString sHashColor(pValue.data(), nLen, RTL_TEXTENCODING_ASCII_US);
-            sax::Converter::convertColor( nColor, sHashColor );
+            sax::Converter::convertColor(aColor, sHashColor);
         }
-        aValue = nColor;
+        aValue = sal_uInt32(aColor);
     }
     return OOXMLValue(VariantType(std::in_place_index_t<5>(), aValue));
 }
