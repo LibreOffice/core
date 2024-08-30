@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -29,6 +30,8 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <PageMasterPropMapper.hxx>
+
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <utility>
@@ -685,6 +688,26 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::cr
 {
     if (nElement ==  XML_ELEMENT(LO_EXT, XML_THEME))
     {
+        if (auto xImportInfo = GetImport().getImportInfo())
+        {
+            try
+            {
+                if (auto xPropertySetInfo = xImportInfo->getPropertySetInfo())
+                {
+                    if (xPropertySetInfo->hasPropertyByName(u"IsInPaste"_ustr))
+                    {
+                        css::uno::Any value = xImportInfo->getPropertyValue(u"IsInPaste"_ustr);
+                        if (bool b; (value >>= b) && b)
+                            return nullptr; // do not import themes in paste mode
+                    }
+                }
+            }
+            catch (const css::uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("xmloff");
+            }
+        }
+
         uno::Reference<uno::XInterface> xObject(GetImport().GetModel(), uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPageSupplier> const xDrawPageSupplier(GetImport().GetModel(), uno::UNO_QUERY);
         if (xDrawPageSupplier.is())

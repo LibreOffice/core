@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_theme, \
     docmodel \
     sal \
     sfx \
+    sot \
     subsequenttest \
     sw \
     swqahelper \

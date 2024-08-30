@@ -97,6 +97,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     po->m_xStorage  = mxStg;
     po->m_bInsertMode = nullptr != mpCursor;
     po->m_bSkipImages = mbSkipImages;
+    po->SetInPaste(IsInPaste());
 
     // if a Medium is selected, get its Stream
     if( nullptr != (po->m_pMedium = mpMedium ) &&
@@ -407,6 +408,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     po->SetBlockMode( false );
     po->SetOrganizerMode( false );
     po->SetIgnoreHTMLComments( false );
+    po->SetInPaste(false);
 
     return nError;
 }
