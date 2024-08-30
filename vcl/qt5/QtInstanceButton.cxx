@@ -20,6 +20,14 @@ QtInstanceButton::QtInstanceButton(QPushButton* pButton)
 
 void QtInstanceButton::set_label(const OUString& rText)
 {
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        pQtInstance->RunInMainThread([&] { set_label(rText); });
+        return;
+    }
+
     assert(m_pButton);
     m_pButton->setText(toQString(rText));
 }
@@ -41,6 +49,15 @@ void QtInstanceButton::set_from_icon_name(const OUString& /*rIconName*/)
 
 OUString QtInstanceButton::get_label() const
 {
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        OUString sLabel;
+        pQtInstance->RunInMainThread([&] { sLabel = get_label(); });
+        return sLabel;
+    }
+
     assert(m_pButton);
     return toOUString(m_pButton->text());
 }

@@ -801,6 +801,16 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
                                                      VclButtonsType eButtonsType,
                                                      const OUString& rPrimaryMessage)
 {
+    SolarMutexGuard g;
+    if (!IsMainThread())
+    {
+        weld::MessageDialog* pDialog;
+        RunInMainThread([&] {
+            pDialog = CreateMessageDialog(pParent, eMessageType, eButtonsType, rPrimaryMessage);
+        });
+        return pDialog;
+    }
+
     if (QtData::noWeldedWidgets())
     {
         return SalInstance::CreateMessageDialog(pParent, eMessageType, eButtonsType,
