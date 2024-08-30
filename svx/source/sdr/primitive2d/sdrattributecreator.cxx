@@ -222,8 +222,9 @@ namespace drawinglayer
 
             // calculate rendering text glow radius from biggest Char size for the full text in shape
             double nRadius = 0.0;
-            const SvxFontHeightItem& rItem = *rSet.GetItemIfSet(EE_CHAR_FONTHEIGHT);
-            sal_uInt32 nFontSize = rItem.GetHeight();
+            sal_uInt32 nFontSize = 0;
+            if (const SvxFontHeightItem* pItem = rSet.GetItemIfSet(EE_CHAR_FONTHEIGHT))
+                nFontSize = pItem->GetHeight();
 
             if (rTextObj.GetOutlinerParaObject())
             {
