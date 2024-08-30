@@ -950,12 +950,9 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
             // correctly initialized local ViewInformation
             basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
 
-            rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> xTemp(
-                new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
-                                                             aModifiedColor));
+            // draw directly, done
+            paintPolyPoylgonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor, fTransparency);
 
-            // draw as Polygon, done
-            processPolyPolygonColorPrimitive2D(*xTemp);
             return;
         }
     }
@@ -1969,23 +1966,9 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
             // local primitive, that is not part of DisplayInfo yet
             aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
 
-            if (rFillGraphicPrimitive2D.hasTransparency())
-            {
-                rtl::Reference<primitive2d::PolyPolygonRGBAPrimitive2D> aTemp(
-                    new primitive2d::PolyPolygonRGBAPrimitive2D(
-                        basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
-                        rFillGraphicPrimitive2D.getTransparency()));
-                // draw as colored and transparent Polygon, done
-                processPolyPolygonRGBAPrimitive2D(*aTemp);
-            }
-            else
-            {
-                rtl::Reference<primitive2d::PolyPolygonColorPrimitive2D> aTemp(
-                    new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon),
-                                                                 aModifiedColor));
-                // draw as colored Polygon, done
-                processPolyPolygonColorPrimitive2D(*aTemp);
-            }
+            // draw directly
+            paintPolyPoylgonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
+                                 rFillGraphicPrimitive2D.getTransparency());
 
             return;
         }
@@ -2542,7 +2525,6 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_square_rect(
     }
 
     // cleanup
-    // cairo_pattern_destroy(pPattern);
     cairo_restore(mpRT);
 }
 
