@@ -256,13 +256,12 @@ short lcl_mapToIAccessible2Role(sal_Int16 nUnoRole)
    * @param listener listener that registers in UNO system.
    * @return.
    */
-AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
-                     AccEventListener* pListener) :
+AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager) :
         m_resID     (0),
         m_pParantID (nullptr),
         m_pIMAcc    (UAccCOMCreateInstance()),
         m_pParentObj(nullptr),
-        m_pListener (pListener),
+        m_pListener (nullptr),
         m_xAccRef( pAcc )
 {
     assert(m_pIMAcc);

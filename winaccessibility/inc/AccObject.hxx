@@ -67,8 +67,7 @@ private:
 
 public:
 
-    AccObject(css::accessibility::XAccessible* pXAcc = nullptr, AccObjectWinManager* pManager = nullptr,
-              AccEventListener* accListener=nullptr);
+    AccObject(css::accessibility::XAccessible* pXAcc = nullptr, AccObjectWinManager* pManager = nullptr);
     virtual ~AccObject();
 
     bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
