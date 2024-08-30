@@ -215,14 +215,15 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     {
         return maName;
     }
-    sal_Unicode cType = ' ';
     OUStringBuffer aTmp( maName );
-    // short type? Then fetch it, possible this is 0.
-    SbxDataType et = GetType();
     if( t == SbxNameType::ShortTypes )
     {
+        sal_Unicode cType = ' ';
+        // short type? Then fetch it, possible this is 0.
+        SbxDataType et = GetType();
         if( et <= SbxSTRING )
         {
+            assert(et >= 0 && size_t(et) < std::size(cSuffixes) - 1);
             cType = cSuffixes[ et ];
         }
         if( cType != ' ' )
@@ -249,7 +250,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
             aTmp.append( GetSbxRes( StringId::ByRef ) );
         }
         aTmp.append( i->aName );
-        cType = ' ';
+        sal_Unicode cType = ' ';
         // short type? Then fetch it, possible this is 0.
         if( t == SbxNameType::ShortTypes )
         {
