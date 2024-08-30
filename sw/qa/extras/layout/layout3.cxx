@@ -1781,6 +1781,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
 
+    // hide these just so that the height of the section is what is expected;
+    // otherwise height depends on which tests run previously
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page"_ostr, 2);
