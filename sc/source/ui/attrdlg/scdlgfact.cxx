@@ -1040,6 +1040,11 @@ const SfxItemSet* ScAsyncTabController_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
+bool AbstractScSelEntryDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 // =========================Factories  for createdialog ===================
 VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg(weld::Window* pParent,
                                                     const OUString& aDatName,
