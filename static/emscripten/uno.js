@@ -46,7 +46,10 @@ Module.unoObject = function(interfaces, obj) {
                         obj.impl_interfaces[obj.impl_typemap[i]]));
             }
         }
-        return new Module.uno_Any(Module.uno_Type.Void(), undefined);
+        const ty = Module.uno_Type.Void();
+        const ret = new Module.uno_Any(ty, undefined);
+        ty.delete();
+        return ret;
     };
     obj.acquire = function() { ++obj.impl_refcount; };
     obj.release = function() {
@@ -59,7 +62,9 @@ Module.unoObject = function(interfaces, obj) {
     obj.getTypes = function() {
         const types = new Module.uno_Sequence_type(interfaces.length, Module.uno_Sequence.FromSize);
         for (let i = 0; i !== interfaces.length; ++i) {
-            types.set(i, Module.uno_Type.Interface(interfaces[i]));
+            const type = Module.uno_Type.Interface(interfaces[i]);
+            types.set(i, type);
+            type.delete();
         }
         return types;
     };
@@ -76,23 +81,32 @@ Module.unoObject = function(interfaces, obj) {
                 throw new Error('not a UNO interface type: ' + name);
             }
             obj.impl_typemap[name] = impl;
-            const bases = Module.uno.com.sun.star.reflection.XInterfaceTypeDescription2.query(td)
-                  .getBaseTypes();
+            const itd = Module.uno.com.sun.star.reflection.XInterfaceTypeDescription2.query(td);
+            const bases = itd.getBaseTypes();
+            itd.delete();
             for (let i = 0; i !== bases.size(); ++i) {
                 walk(bases.get(i), impl);
             }
             bases.delete();
         }
+        td.delete();
     };
-    const tdmAny = Module.getUnoComponentContext().getValueByName(
+    const ctx = Module.getUnoComponentContext();
+    const tdmAny = ctx.getValueByName(
         '/singletons/com.sun.star.reflection.theTypeDescriptionManager');
-    const tdm = Module.uno.com.sun.star.container.XHierarchicalNameAccess.query(tdmAny.get());
+    ctx.delete();
+    const ifc = tdmAny.get();
+    tdmAny.delete();
+    const tdm = Module.uno.com.sun.star.container.XHierarchicalNameAccess.query(ifc);
+    ifc.delete();
     interfaces.forEach((i) => {
         const td = tdm.getByHierarchicalName(i);
-        walk(Module.uno.com.sun.star.reflection.XTypeDescription.query(td.get()), i);
+        const ifc = td.get();
         td.delete();
+        walk(Module.uno.com.sun.star.reflection.XTypeDescription.query(ifc), i);
+        ifc.delete();
     })
-    tdmAny.delete();
+    tdm.delete();
     return Module.uno.com.sun.star.uno.XInterface.reference(
         obj.impl_interfaces[obj.impl_typemap['com.sun.star.uno.XInterface']]);
 };
