@@ -70,6 +70,7 @@ namespace Translate
 {
     UNOTOOLS_DLLPUBLIC std::locale Create(std::string_view aPrefixName, const LanguageTag& rLocale = SvtSysLocale().GetUILanguageTag());
     UNOTOOLS_DLLPUBLIC OUString get(TranslateId sContextAndId, const std::locale &loc);
+    UNOTOOLS_DLLPUBLIC OUString getLanguage(const std::locale& loc);
     UNOTOOLS_DLLPUBLIC OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC void SetReadStringHook( ResHookProc pProc );
     UNOTOOLS_DLLPUBLIC ResHookProc GetReadStringHook();

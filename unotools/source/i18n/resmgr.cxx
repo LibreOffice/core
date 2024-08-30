@@ -233,6 +233,13 @@ namespace Translate
         return result;
     }
 
+    OUString getLanguage(const std::locale& loc)
+    {
+        std::string lang = std::use_facet<boost::locale::info>(loc).name(); // en_US.UTF-8
+        lang = lang.substr(0, lang.find('.')); // en_US
+        return createFromUtf8(lang.data(), lang.size());
+    }
+
     OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc)
     {
         //if it's a key id locale, generate it here
