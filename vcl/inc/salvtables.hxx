@@ -183,7 +183,7 @@ public:
 
 class SalFlashAttention;
 
-class SalInstanceWidget : public virtual weld::Widget
+class VCL_DLLPUBLIC SalInstanceWidget : public virtual weld::Widget
 {
 protected:
     VclPtr<vcl::Window> m_xWidget;

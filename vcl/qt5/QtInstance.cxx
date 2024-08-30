@@ -39,6 +39,7 @@
 #include <QtInstanceMessageDialog.hxx>
 
 #include <headless/svpvd.hxx>
+#include <salvtables.hxx>
 
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QLibraryInfo>
@@ -816,8 +817,15 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
             }
             else
             {
-                // the parent is not welded/not a native Qt widget; fall back to currently active window
-                pQtParent = QApplication::activeWindow();
+                // the parent is not welded/not a native Qt widget; get QWidget via frame
+                if (SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pParent))
+                {
+                    if (vcl::Window* pWindow = pSalWidget->getWidget())
+                    {
+                        if (QtFrame* pFrame = static_cast<QtFrame*>(pWindow->ImplGetFrame()))
+                            pQtParent = pFrame->GetQWidget();
+                    }
+                }
             }
         }
 
