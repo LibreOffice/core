@@ -523,6 +523,13 @@ void QtFrame::SetDefaultSize()
 void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                          sal_uInt16 nFlags)
 {
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        pQtInstance->RunInMainThread([&] { SetPosSize(nX, nY, nWidth, nHeight, nFlags); });
+    }
+
     if (!isWindow() || isChild(true, false))
         return;
 
