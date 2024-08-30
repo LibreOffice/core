@@ -19,6 +19,11 @@
             <property name="truncate-multiline">True</property>
           </object>
         </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="fontsizecombobox-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="fontsizebox|fontsizecombobox|accessible_name">Font Size</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
