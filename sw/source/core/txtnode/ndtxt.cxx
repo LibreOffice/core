@@ -1266,7 +1266,7 @@ void SwTextNode::Update(
     assert(rPos.GetContentNode() == this);
     SetAutoCompleteWordDirty( true );
 
-    std::unique_ptr<SwpHts> pCollector;
+    SwpHts aCollector;
     const sal_Int32 nChangePos = rPos.GetIndex();
 
     if ( HasHints() )
@@ -1389,22 +1389,18 @@ void SwTextNode::Update(
                         }
                         else if( bNoExp )
                         {
-                            if (!pCollector)
-                            {
-                               pCollector.reset( new SwpHts );
-                            }
-                            auto it = std::find_if(pCollector->begin(), pCollector->end(),
+                            auto it = std::find_if(aCollector.begin(), aCollector.end(),
                                 [nWhich](const SwTextAttr *pTmp) { return nWhich == pTmp->Which(); });
-                            if (it != pCollector->end())
+                            if (it != aCollector.end())
                             {
                                 SwTextAttr *pTmp = *it;
-                                pCollector->erase( it );
+                                aCollector.erase( it );
                                 SwTextAttr::Destroy( pTmp );
                             }
                             SwTextAttr * const pTmp =
                             MakeTextAttr( GetDoc(),
                                 pHint->GetAttr(), nChangePos, nChangePos + nChangeLen);
-                            pCollector->push_back( pTmp );
+                            aCollector.push_back( pTmp );
                         }
                         else
                         {
@@ -1594,13 +1590,9 @@ void SwTextNode::Update(
     // base class
     SwContentIndexReg::Update(rPos, nChangeLen, eMode);
 
-    if (pCollector)
+    for ( SwTextAttr* pAttr : aCollector )
     {
-        const size_t nCount = pCollector->size();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            m_pSwpHints->TryInsertHint( (*pCollector)[ i ], *this );
-        }
+        m_pSwpHints->TryInsertHint( pAttr, *this );
     }
 
     aTmpIdxReg.MoveTo( *this );
