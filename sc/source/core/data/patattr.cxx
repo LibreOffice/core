@@ -535,15 +535,20 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         }
 
-        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+        //  select the resulting color
+        if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
         {
-            if (aBackColor.IsDark())
-                aColor = COL_WHITE;
-            else
-                aColor = COL_BLACK;
+            //  use white instead of dark on dark
+            aColor = COL_WHITE;
+        }
+        else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
+        {
+            //  use black instead of bright on bright
+            aColor = COL_BLACK;
         }
         else
         {
+            //  use aSysTextColor (black for ScAutoFontColorMode::Print, from style settings otherwise)
             aColor = aSysTextColor;
         }
     }

@@ -4729,13 +4729,13 @@ Color ImpEditEngine::GetAutoColor() const
     }
     else
     {
-        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
+        aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
-        if ( aColor == COL_AUTO )
+        if ( GetBackgroundColor() != COL_AUTO )
         {
-            if ( GetBackgroundColor().IsDark()  )
+            if ( GetBackgroundColor().IsDark() && aColor.IsDark() )
                 aColor = COL_WHITE;
-            else
+            else if ( GetBackgroundColor().IsBright() && aColor.IsBright() )
                 aColor = COL_BLACK;
         }
     }
