@@ -17,6 +17,7 @@ class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
 
 public:
     QtInstanceDialog(QDialog* pDialog);
+    ~QtInstanceDialog();
 
     virtual bool runAsync(std::shared_ptr<Dialog> const&,
                           const std::function<void(sal_Int32)>&) override;
