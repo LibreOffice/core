@@ -12,7 +12,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,frozen))
 $(eval $(call gb_UnpackedTarball_set_tarball,frozen,$(FROZEN_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,frozen,\
-	external/frozen/defines_h_constexpr_string.patch.0 \
 	external/frozen/cid1532449_use_move_ctor.0 \
 	external/frozen/cid1586676_use_move_ctor.0 \
 	external/frozen/cid1538304_reference_ctor.0 \

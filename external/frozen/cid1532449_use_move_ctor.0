@@ -7,7 +7,7 @@
 -  constexpr unordered_map(container_type items,
 +  constexpr unordered_map(container_type&& items,
 +                          Hash const &hash, KeyEqual const &equal)
-+      : equal_{equal}
++      : KeyEqual{equal}
 +      , items_(std::move(items))
 +      , tables_{
 +            bits::make_pmh_tables<storage_size>(
@@ -17,7 +17,7 @@
 +
 +  constexpr unordered_map(const container_type& items,
                            Hash const &hash, KeyEqual const &equal)
-       : equal_{equal}
+       : KeyEqual{equal}
        , items_{items}
        , tables_{
              bits::make_pmh_tables<storage_size>(

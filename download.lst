@@ -307,8 +307,8 @@ FREETYPE_TARBALL := freetype-2.13.3.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FROZEN_SHA256SUM := f7c7075750e8fceeac081e9ef01944f221b36d9725beac8681cbd2838d26be45
-FROZEN_TARBALL := frozen-1.1.1.tar.gz
+FROZEN_SHA256SUM := ed8339c017d7c5fe019ac2c642477f435278f0dc643c1d69d3f3b1e95915e823
+FROZEN_TARBALL := frozen-1.2.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

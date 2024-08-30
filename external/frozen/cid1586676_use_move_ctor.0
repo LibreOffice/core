@@ -1,19 +1,19 @@
 --- include/frozen/unordered_set.h	2024-01-22 10:42:57.125966099 +0000
 +++ include/frozen/unordered_set.h	2024-01-22 10:46:07.701159961 +0000
-@@ -74,13 +74,19 @@
+@@ -73,13 +73,19 @@
  public:
    /* constructors */
    unordered_set(unordered_set const &) = default;
 -  constexpr unordered_set(container_type keys, Hash const &hash,
 +  constexpr unordered_set(container_type&& keys, Hash const &hash,
 +                          KeyEqual const &equal)
-+      : equal_{equal}
++      : KeyEqual{equal}
 +      , keys_{std::move(keys)}
 +      , tables_{bits::make_pmh_tables<storage_size>(
 +            keys_, hash, bits::Get{}, default_prg_t{})} {}
 +  constexpr unordered_set(const container_type& keys, Hash const &hash,
                            KeyEqual const &equal)
-       : equal_{equal}
+       : KeyEqual{equal}
        , keys_{keys}
        , tables_{bits::make_pmh_tables<storage_size>(
              keys_, hash, bits::Get{}, default_prg_t{})} {}
