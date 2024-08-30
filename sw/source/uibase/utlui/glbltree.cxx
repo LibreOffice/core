@@ -197,8 +197,10 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
             // Get data
             FileList aFileList;
             aData.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList );
-            for ( size_t n = aFileList.Count(); n--; )
+            size_t n = aFileList.Count();
+            while (n)
             {
+                --n;
                 sFileName = aFileList.GetFile(n);
                 m_rTreeView.InsertRegion(pCnt, &sFileName);
                 // The list of contents must be newly fetched after inserting,
