@@ -84,7 +84,6 @@ public:
     HWND GetParentHWND();
 
     ::rtl::Reference<AccEventListener> SetListener(::rtl::Reference<AccEventListener> const& pListener);
-    AccEventListener* getListener();
 
     void SetParentObj(AccObject* pParentAccObj);
     AccObject* GetParentObj();

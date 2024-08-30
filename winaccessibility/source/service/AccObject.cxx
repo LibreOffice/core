@@ -996,11 +996,6 @@ rtl::Reference<AccEventListener> AccObject::SetListener(rtl::Reference<AccEventL
     return pRet;
 }
 
-AccEventListener* AccObject::getListener()
-{
-    return m_pListener.get();
-}
-
 long AccObject::GetResID()
 {
     return m_resID;
