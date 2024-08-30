@@ -766,14 +766,23 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg(pTabViewShell->GetFrameWeld(), aList));
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            OUString aName = pDlg->GetSelectedEntry();
-                            pTabViewShell->GotoDBArea( aName );
-                            rReq.AppendItem( SfxStringItem( SID_SELECT_DB, aName ) );
-                            rReq.Done();
-                        }
+                        VclPtr<AbstractScSelEntryDlg> pDlg(
+                            pFact->CreateScSelEntryDlg(pTabViewShell->GetFrameWeld(), aList));
+                        pDlg->StartExecuteAsync(
+                            [pTabViewShell, pDlg](sal_Int32 nResult)
+                            {
+                                if (nResult == RET_OK)
+                                {
+                                    OUString aName = pDlg->GetSelectedEntry();
+                                    pTabViewShell->GotoDBArea(aName);
+                                    SfxRequest aRequest(pTabViewShell->GetViewFrame(),
+                                                        SID_SELECT_DB);
+                                    aRequest.AppendItem(SfxStringItem(SID_SELECT_DB, aName));
+                                    aRequest.Done();
+                                }
+
+                                pDlg->disposeOnce();
+                            });
                     }
                 }
             }
