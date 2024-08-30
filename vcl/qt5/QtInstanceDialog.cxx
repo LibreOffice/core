@@ -35,15 +35,50 @@ void QtInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOff
 {
 }
 
-int QtInstanceDialog::run() { return qtResponseTypeToVclResponseType(m_pDialog->exec()); }
+int QtInstanceDialog::run()
+{
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        int nResult = 0;
+        pQtInstance->RunInMainThread([&] { nResult = run(); });
+        return nResult;
+    }
+
+    return qtResponseTypeToVclResponseType(m_pDialog->exec());
+}
 
 void QtInstanceDialog::response(int) {}
 
 void QtInstanceDialog::add_button(const OUString&, int, const OUString&) {}
 
-void QtInstanceDialog::set_modal(bool bModal) { m_pDialog->setModal(bModal); }
+void QtInstanceDialog::set_modal(bool bModal)
+{
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        pQtInstance->RunInMainThread([&] { set_modal(bModal); });
+        return;
+    }
 
-bool QtInstanceDialog::get_modal() const { return m_pDialog->isModal(); }
+    m_pDialog->setModal(bModal);
+}
+
+bool QtInstanceDialog::get_modal() const
+{
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    if (!pQtInstance->IsMainThread())
+    {
+        bool bModal = false;
+        pQtInstance->RunInMainThread([&] { bModal = get_modal(); });
+        return bModal;
+    }
+
+    return m_pDialog->isModal();
+}
 
 weld::Button* QtInstanceDialog::weld_widget_for_response(int) { return nullptr; }
 
