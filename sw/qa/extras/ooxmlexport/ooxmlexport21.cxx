@@ -715,13 +715,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_from
         = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
                    "top"_ostr)
               .toInt32();
-    // sal_Int32 nPara1Top
-    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nCellTop
-        = getXPath(pDump, "//tab/row[2]/cell[2]/infos/bounds"_ostr, "top"_ostr).toInt32();
-    // The image is limited by the cell boundaries (should be limited to cell margin actually)
-    CPPUNIT_ASSERT(nCellTop <= nShapeTop);
-    // CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // tdf#162539
+    sal_Int32 nPara1Top
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
+    // The image is limited by the cell margin
+    CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // tdf#162539
 
     // since in fact layoutInCell is supposed to be applied, we mark (and export) as layoutInCell
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));

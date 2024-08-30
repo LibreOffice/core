@@ -37,6 +37,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
+#include <rowfrm.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -456,9 +457,17 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     // to its environment (e.g. page header/footer).
     SwRect aPgAlignArea;
     {
+        const IDocumentSettingAccess& rIDSA = mpFrameFormat->getIDocumentSettingAccess();
+        const bool bMSOLayout = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+        const SwFormatSurround& rSurround = mpFrameFormat->GetSurround();
+        bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
+        // If the frame format is a TextBox of a draw shape, then use the
+        // surround of the original shape.
+        SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapThrough);
+
         // #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
-        if ( GetFrameFormat().getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+        if (bMSOLayout &&
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrame()->IsInTab() ) )
         {
@@ -467,6 +476,17 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         else
         {
             aPgAlignArea = rPageAlignLayFrame.getFrameArea();
+
+            // When Microsoft follows text flow,
+            // it prevents vertical movement beyond the cell margin (unless wrap-through).
+            // Don't touch bVert to avoid issues: who knows what should happen in that case
+            if (bMSOLayout && bFollowTextFlow && rPageAlignLayFrame.IsCellFrame() && !bWrapThrough
+                && !bVert)
+            {
+                const auto pRow = const_cast<SwFrame&>(rPageAlignLayFrame).FindRowFrame();
+                assert(pRow);
+                aPgAlignArea.AddTop(pRow->GetTopMarginForLowers()); //reduces size and lowers
+            }
         }
     }
 
