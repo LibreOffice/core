@@ -207,7 +207,7 @@ namespace drawinglayer
             return glowAttr;
         }
 
-        attribute::SdrGlowTextAttribute createNewSdrGlowTextAttribute(const SfxItemSet& rSet, const SdrTextObj& rTextObj)
+        attribute::SdrGlowTextAttribute createNewSdrGlowTextAttribute(const SfxItemSet& rSet, const OutlinerParaObject* pOutliner)
         {
             sal_Int32 nTextRadius = rSet.Get(SDRATTR_GLOW_TEXT_RADIUS).GetValue();
 
@@ -226,9 +226,9 @@ namespace drawinglayer
             if (const SvxFontHeightItem* pItem = rSet.GetItemIfSet(EE_CHAR_FONTHEIGHT))
                 nFontSize = pItem->GetHeight();
 
-            if (rTextObj.GetOutlinerParaObject())
+            if (pOutliner)
             {
-                const EditTextObject& aEdit = rTextObj.GetOutlinerParaObject()->GetTextObject();
+                const EditTextObject& aEdit = pOutliner->GetTextObject();
                 for (sal_Int32 i = 0; i < aEdit.GetParagraphCount(); i++)
                 {
                     std::vector<EECharAttrib> aAttribs;
@@ -808,7 +808,8 @@ namespace drawinglayer::primitive2d
             // try shadow
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
             const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
-            const attribute::SdrGlowTextAttribute aGlowText(createNewSdrGlowTextAttribute(rSet, pText->GetObject()));
+            const OutlinerParaObject* pOutliner = pText ? pText->GetObject().GetOutlinerParaObject() : nullptr;
+            const attribute::SdrGlowTextAttribute aGlowText(createNewSdrGlowTextAttribute(rSet, pOutliner));
             const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
             return attribute::SdrEffectsTextAttribute(aShadow, std::move(aText),
@@ -856,7 +857,8 @@ namespace drawinglayer::primitive2d
                 // try shadow
                 attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
                 attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
-                attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pText->GetObject());
+                const OutlinerParaObject* pOutliner = pText ? pText->GetObject().GetOutlinerParaObject() : nullptr;
+                attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pOutliner);
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
                 return attribute::SdrLineEffectsTextAttribute(std::move(aLine),
@@ -931,7 +933,8 @@ namespace drawinglayer::primitive2d
                 const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
                 // text glow
-                const attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pText->GetObject());
+                const OutlinerParaObject* pOutliner = pText ? pText->GetObject().GetOutlinerParaObject() : nullptr;
+                const attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pOutliner);
 
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
