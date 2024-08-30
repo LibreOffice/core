@@ -2019,9 +2019,11 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSLnWdt: {
             sal_uInt8 nbyte(0);
-            pOS2MET->ReadUChar( nbyte );
-            if (nbyte==0) aAttr.nLinWidth=aDefAttr.nLinWidth;
-            else aAttr.nLinWidth=static_cast<sal_uInt16>(nbyte)-1;
+            pOS2MET->ReadUChar(nbyte);
+            if (nbyte > 0)
+                aAttr.nLinWidth = static_cast<sal_uInt16>(nbyte)-1;
+            else
+                aAttr.nLinWidth = aDefAttr.nLinWidth;
             break;
         }
         case GOrdPFrLWd: PushAttr(nOrderID);
