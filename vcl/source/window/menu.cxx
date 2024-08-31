@@ -2185,7 +2185,8 @@ Menu* Menu::ImplFindMenu( sal_uInt16 nItemId )
 
 void Menu::RemoveDisabledEntries( bool bRemoveEmptyPopups )
 {
-    for ( sal_uInt16 n = 0; n < GetItemCount(); n++ )
+    sal_uInt16 n = 0;
+    while (n < GetItemCount())
     {
         bool bRemove = false;
         MenuItemData* pItem = pItemList->GetDataFromPos( n );
@@ -2204,8 +2205,10 @@ void Menu::RemoveDisabledEntries( bool bRemoveEmptyPopups )
                 bRemove = true;
         }
 
-        if ( bRemove )
-            RemoveItem( n-- );
+        if (bRemove)
+            RemoveItem(n);
+        else
+            ++n;
     }
 
     if ( GetItemCount() )
