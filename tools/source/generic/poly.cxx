@@ -81,7 +81,14 @@ ImplPolygon::ImplPolygon( const ImplPolygon& rImpPoly )
         }
     }
 
-    mnPoints   = rImpPoly.mnPoints;
+    mnPoints = rImpPoly.mnPoints;
+}
+
+ImplPolygon::ImplPolygon(ImplPolygon&& rImpPoly)
+{
+    mxPointAry = std::move(rImpPoly.mxPointAry);
+    mxFlagAry = std::move(rImpPoly.mxFlagAry);
+    mnPoints = rImpPoly.mnPoints;
 }
 
 ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, const Point* pInitAry, const PolyFlags* pInitFlags )

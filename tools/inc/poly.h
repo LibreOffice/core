@@ -34,6 +34,7 @@ public:
                     ImplPolygon( sal_uInt16 nInitSize );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
+                    ImplPolygon( ImplPolygon&& rImplPoly );
                     ImplPolygon( const tools::Rectangle& rRect );
                     ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound);
                     ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY );
