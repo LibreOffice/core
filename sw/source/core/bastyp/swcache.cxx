@@ -301,17 +301,18 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         // Shrink if possible.To do so we need enough free positions.
         // Unpleasant side effect: positions will be moved and the owner of
         // these might not find them afterwards
-        for ( size_t i = 0; i < m_aCacheObjects.size(); ++i )
+        size_t i = 0;
+        while (i < m_aCacheObjects.size())
         {
             SwCacheObj *pTmpObj = m_aCacheObjects[i].get();
             if ( !pTmpObj )
             {
                 m_aCacheObjects.erase( m_aCacheObjects.begin() + i );
-                --i;
             }
             else
             {
                 pTmpObj->SetCachePos( i );
+                ++i;
             }
         }
         m_aFreePositions.clear();
