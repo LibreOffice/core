@@ -35,19 +35,10 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
     if (!pWriteAcc)
         return BitmapEx();
 
-    BitmapColor aGrey(sal_uInt8(0));
     const sal_Int32 nWidth = pWriteAcc->Width();
     const sal_Int32 nHeight = pWriteAcc->Height();
-    const double fAzim = toRadians(mnAzimuthAngle);
-    const double fElev = toRadians(mnElevationAngle);
     std::vector<sal_Int32> pHMap(nWidth + 2);
     std::vector<sal_Int32> pVMap(nHeight + 2);
-    const double nLx = cos(fAzim) * cos(fElev) * 255.0;
-    const double nLy = sin(fAzim) * cos(fElev) * 255.0;
-    const double nLz = sin(fElev) * 255.0;
-    const double nNz = 6 * 255.0 / 4;
-    const double nNzLz = nNz * nLz;
-    const sal_uInt8 cLz = basegfx::fround<sal_uInt8>(nLz);
 
     // fill mapping tables
     pHMap[0] = 0;
@@ -68,6 +59,15 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 
     pVMap[nHeight + 1] = nHeight - 1;
 
+    const double fAzim = toRadians(mnAzimuthAngle);
+    const double fElev = toRadians(mnElevationAngle);
+    const double nLx = cos(fAzim) * cos(fElev) * 255.0;
+    const double nLy = sin(fAzim) * cos(fElev) * 255.0;
+    const double nLz = sin(fElev) * 255.0;
+    const double nNz = 6 * 255.0 / 4;
+    const double nNzLz = nNz * nLz;
+    const sal_uInt8 cLz = basegfx::fround<sal_uInt8>(nLz);
+
     for (sal_Int32 nY = 0; nY < nHeight; nY++)
     {
         sal_Int32 nGrey11 = pReadAcc->GetPixel(pVMap[nY], pHMap[0]).GetIndex();
@@ -81,6 +81,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
         sal_Int32 nGrey33 = pReadAcc->GetPixel(pVMap[nY + 2], pHMap[2]).GetIndex();
 
         Scanline pScanline = pWriteAcc->GetScanline(nY);
+        BitmapColor aGrey(sal_uInt8(0));
+
         for (sal_Int32 nX = 0; nX < nWidth; nX++)
         {
             const sal_Int32 nNx = nGrey11 + nGrey21 + nGrey31 - nGrey13 - nGrey23 - nGrey33;
