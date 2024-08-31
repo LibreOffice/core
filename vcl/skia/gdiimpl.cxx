@@ -927,6 +927,14 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     // So if AA is enabled, avoid this fixup for rectangular areas.
     if (!useAA || !hasOnlyOrthogonal)
     {
+#ifdef MACOSX
+        // tdf#162646 don't move orthogonal polypolygons when scaling
+        // Previously, polypolygons would be moved slightly but this causes
+        // misdrawing of orthogonal polypolygons (i.e. polypolygons with only
+        // vertical and horizontal lines) when using a Retina display on
+        // macOS and antialiasing is disabled.
+        if ((!isUnitTestRunning() && (useAA || !hasOnlyOrthogonal)) || getWindowScaling() == 1)
+#else
         // We normally use pixel at their center positions, but slightly off (see toSkX/Y()).
         // With AA lines that "slightly off" causes tiny changes of color, making some tests
         // fail. Since moving AA-ed line slightly to a side doesn't cause any real visual
@@ -934,6 +942,7 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
         // When running on macOS with a Retina display, one BackendTest unit
         // test will fail if the position is adjusted.
         if (!isUnitTestRunning() || getWindowScaling() == 1)
+#endif
         {
             const SkScalar posFix = useAA ? toSkXYFix : 0;
             polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
