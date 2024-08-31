@@ -244,23 +244,18 @@ void stackBlurHorizontal(BlurSharedData const& rShared, sal_Int32 nStart, sal_In
     sal_uInt8* pStack = aArrays.maStackBuffer.data();
     sal_uInt8* pStackPtr;
 
-    sal_Int32 nWidth = pReadAccess->Width();
-    sal_Int32 nLastIndexX = nWidth - 1;
+    const sal_Int32 nWidth = pReadAccess->Width();
+    const sal_Int32 nLastIndexX = nWidth - 1;
 
-    sal_Int32 nMultiplyValue = aArrays.getMultiplyValue();
-    sal_Int32 nShiftValue = aArrays.getShiftValue();
+    const sal_Int32 nMultiplyValue = aArrays.getMultiplyValue();
+    const sal_Int32 nShiftValue = aArrays.getShiftValue();
 
-    sal_Int32 nRadius = rShared.mnRadius;
-    sal_Int32 nComponentWidth = rShared.mnComponentWidth;
-    sal_Int32 nDiv = rShared.mnDiv;
+    const sal_Int32 nRadius = rShared.mnRadius;
+    const sal_Int32 nComponentWidth = rShared.mnComponentWidth;
+    const sal_Int32 nDiv = rShared.mnDiv;
 
     Scanline pSourcePointer;
     Scanline pDestinationPointer;
-
-    sal_Int32 nXPosition;
-    sal_Int32 nStackIndex;
-    sal_Int32 nStackIndexStart;
-    sal_Int32 nWeight;
 
     aArrays.initializeWeightAndPositions(nLastIndexX);
 
@@ -291,9 +286,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, sal_Int32 nStart, sal_In
 
             SumFunction::assignPtr(pStackPtr, pSourcePointer);
 
-            nWeight = pWeightPointer[i];
-
-            SumFunction::add(nSum, pSourcePointer[0] * nWeight);
+            SumFunction::add(nSum, pSourcePointer[0] * pWeightPointer[i]);
 
             if (i - nRadius > 0)
             {
@@ -305,8 +298,8 @@ void stackBlurHorizontal(BlurSharedData const& rShared, sal_Int32 nStart, sal_In
             }
         }
 
-        nStackIndex = nRadius;
-        nXPosition = std::min(nRadius, nLastIndexX);
+        sal_Int32 nStackIndex = nRadius;
+        sal_Int32 nXPosition = std::min(nRadius, nLastIndexX);
 
         pSourcePointer = pReadAccess->GetScanline(y) + nComponentWidth * nXPosition;
 
@@ -318,7 +311,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, sal_Int32 nStart, sal_In
 
             SumFunction::sub(nSum, nOutSum);
 
-            nStackIndexStart = nStackIndex + nDiv - nRadius;
+            sal_Int32 nStackIndexStart = nStackIndex + nDiv - nRadius;
             if (nStackIndexStart >= nDiv)
             {
                 nStackIndexStart -= nDiv;
@@ -377,11 +370,6 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
     Scanline pSourcePointer;
     Scanline pDestinationPointer;
 
-    sal_Int32 nYPosition;
-    sal_Int32 nStackIndex;
-    sal_Int32 nStackIndexStart;
-    sal_Int32 nWeight;
-
     aArrays.initializeWeightAndPositions(nLastIndexY);
 
     sal_Int32* nSum = aArrays.mnSumVector.data();
@@ -410,9 +398,7 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
 
             SumFunction::assignPtr(pStackPtr, pSourcePointer);
 
-            nWeight = pWeightPointer[i];
-
-            SumFunction::add(nSum, pSourcePointer[0] * nWeight);
+            SumFunction::add(nSum, pSourcePointer[0] * pWeightPointer[i]);
 
             if (i - nRadius > 0)
             {
@@ -424,8 +410,8 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
             }
         }
 
-        nStackIndex = nRadius;
-        nYPosition = std::min(nRadius, nLastIndexY);
+        sal_Int32 nStackIndex = nRadius;
+        sal_Int32 nYPosition = std::min(nRadius, nLastIndexY);
 
         pSourcePointer = pReadAccess->GetScanline(nYPosition) + nComponentWidth * x;
 
@@ -437,11 +423,11 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
 
             SumFunction::sub(nSum, nOutSum);
 
-            nStackIndexStart = nStackIndex + nDiv - nRadius;
+            sal_Int32 nStackIndexStart = nStackIndex + nDiv - nRadius;
+
             if (nStackIndexStart >= nDiv)
-            {
                 nStackIndexStart -= nDiv;
-            }
+
             pStackPtr = &pStack[nComponentWidth * nStackIndexStart];
 
             SumFunction::sub(nOutSum, pStackPtr);
@@ -458,9 +444,7 @@ void stackBlurVertical(BlurSharedData const& rShared, sal_Int32 nStart, sal_Int3
 
             nStackIndex++;
             if (nStackIndex >= nDiv)
-            {
                 nStackIndex = 0;
-            }
 
             pStackPtr = &pStack[nStackIndex * nComponentWidth];
 
