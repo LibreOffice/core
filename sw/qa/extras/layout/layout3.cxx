@@ -338,6 +338,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(156), aPosition.GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162109)
+{
+    createSwDoc("tdf162109.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // There was no SwGluePortion, because of missing justification of the last paragraph line,
+    // despite it is a full line with shrunk spaces
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion"_ostr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162220)
+{
+    createSwDoc("tdf162220.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // There was no SwGluePortion, because of missing justification of the last paragraph line,
+    // despite it is a full line with shrunk spaces
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion"_ostr);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
