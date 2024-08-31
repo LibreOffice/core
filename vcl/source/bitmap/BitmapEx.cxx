@@ -253,125 +253,114 @@ BitmapChecksum BitmapEx::GetChecksum() const
 
 bool BitmapEx::Invert()
 {
-    bool bRet = false;
-
     if (!maBitmap.IsEmpty())
-        bRet = maBitmap.Invert();
+        return maBitmap.Invert();
 
-    return bRet;
+    return false;
 }
 
-bool BitmapEx::Mirror( BmpMirrorFlags nMirrorFlags )
+bool BitmapEx::Mirror(BmpMirrorFlags nMirrorFlags)
 {
-    bool bRet = false;
+    if (maBitmap.IsEmpty())
+        return false;
 
-    if( !maBitmap.IsEmpty() )
-    {
-        bRet = maBitmap.Mirror( nMirrorFlags );
+    bool bRet = maBitmap.Mirror( nMirrorFlags );
 
-        if( bRet && !maAlphaMask.IsEmpty() )
-            maAlphaMask.Mirror( nMirrorFlags );
-    }
+    if (bRet && !maAlphaMask.IsEmpty())
+        maAlphaMask.Mirror(nMirrorFlags);
 
     return bRet;
 }
 
 bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    bool bRet = false;
 
-    if( !maBitmap.IsEmpty() )
-    {
-        bRet = maBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
+    if (maBitmap.IsEmpty())
+        return false;
 
-        if( bRet && !maAlphaMask.IsEmpty() )
-        {
-            maAlphaMask.Scale( rScaleX, rScaleY, nScaleFlag );
-        }
+    bool bRet = maBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
 
-        maBitmapSize = maBitmap.GetSizePixel();
+    if (bRet && !maAlphaMask.IsEmpty())
+        maAlphaMask.Scale(rScaleX, rScaleY, nScaleFlag);
 
-        SAL_WARN_IF( !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
-    }
+    maBitmapSize = maBitmap.GetSizePixel();
+
+    SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
+                "BitmapEx::Scale(): size mismatch for bitmap and alpha mask.");
 
     return bRet;
+}
+
+static bool lcl_ShouldScale(Size const& rOrigSize, Size const& rNewSize)
+{
+    return rOrigSize.Width() && rOrigSize.Height()
+            && (rNewSize.Width() != rOrigSize.Width() || rNewSize.Height() != rOrigSize.Height());
 }
 
 bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
-    bool bRet;
-
-    if (GetSizePixel().Width() && GetSizePixel().Height()
-            && (rNewSize.Width()  != GetSizePixel().Width()
-                    || rNewSize.Height() != GetSizePixel().Height() ) )
+    if (lcl_ShouldScale(GetSizePixel(), rNewSize))
     {
-        bRet = Scale( static_cast<double>(rNewSize.Width()) / GetSizePixel().Width(),
-                      static_cast<double>(rNewSize.Height()) / GetSizePixel().Height(),
-                      nScaleFlag );
-    }
-    else
-    {
-        bRet = true;
+        return Scale(static_cast<double>(rNewSize.Width()) / GetSizePixel().Width(),
+                 static_cast<double>(rNewSize.Height()) / GetSizePixel().Height(),
+                 nScaleFlag);
     }
 
-    return bRet;
+    return true;
 }
 
 bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
 {
+    if (maBitmap.IsEmpty())
+        return false;
+
+    const bool bTransRotate = ( COL_TRANSPARENT == rFillColor );
+
     bool bRet = false;
 
-    if( !maBitmap.IsEmpty() )
+    if (bTransRotate)
     {
-        const bool bTransRotate = ( COL_TRANSPARENT == rFillColor );
+        bRet = maBitmap.Rotate(nAngle10, COL_BLACK);
 
-        if( bTransRotate )
+        if (maAlphaMask.IsEmpty())
         {
-            bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
-
-            if( maAlphaMask.IsEmpty() )
-            {
-                maAlphaMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                maAlphaMask.Erase( 0 );
-            }
-
-            if( bRet && !maAlphaMask.IsEmpty() )
-                maAlphaMask.Rotate( nAngle10, COL_ALPHA_TRANSPARENT );
-        }
-        else
-        {
-            bRet = maBitmap.Rotate( nAngle10, rFillColor );
-
-            if( bRet && !maAlphaMask.IsEmpty() )
-                maAlphaMask.Rotate( nAngle10, COL_ALPHA_TRANSPARENT );
+            maAlphaMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+            maAlphaMask.Erase( 0 );
         }
 
-        maBitmapSize = maBitmap.GetSizePixel();
-
-        SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask.");
+        if (bRet && !maAlphaMask.IsEmpty())
+            maAlphaMask.Rotate(nAngle10, COL_ALPHA_TRANSPARENT);
     }
+    else
+    {
+        bRet = maBitmap.Rotate( nAngle10, rFillColor );
+
+        if (bRet && !maAlphaMask.IsEmpty())
+            maAlphaMask.Rotate(nAngle10, COL_ALPHA_TRANSPARENT);
+    }
+
+    maBitmapSize = maBitmap.GetSizePixel();
+
+    SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
+                "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask.");
 
     return bRet;
 }
 
 bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
 {
-    bool bRet = false;
+    if (maBitmap.IsEmpty())
+        return false;
 
-    if( !maBitmap.IsEmpty() )
-    {
-        bRet = maBitmap.Crop( rRectPixel );
+    bool bRet = maBitmap.Crop(rRectPixel);
 
-        if( bRet && !maAlphaMask.IsEmpty() )
-            maAlphaMask.Crop( rRectPixel );
+    if (bRet && !maAlphaMask.IsEmpty())
+        maAlphaMask.Crop(rRectPixel);
 
-        maBitmapSize = maBitmap.GetSizePixel();
+    maBitmapSize = maBitmap.GetSizePixel();
 
-        SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Crop(): size mismatch for bitmap and alpha mask.");
-    }
+    SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
+                "BitmapEx::Crop(): size mismatch for bitmap and alpha mask.");
 
     return bRet;
 }
@@ -381,16 +370,14 @@ bool BitmapEx::Convert( BmpConversion eConversion )
     return !maBitmap.IsEmpty() && maBitmap.Convert( eConversion );
 }
 
-void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
+void BitmapEx::Expand(sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent)
 {
-    bool bRet = false;
-
-    if( maBitmap.IsEmpty() )
+    if (maBitmap.IsEmpty())
         return;
 
-    bRet = maBitmap.Expand( nDX, nDY );
+    bool bRet = maBitmap.Expand( nDX, nDY );
 
-    if( bRet && !maAlphaMask.IsEmpty() )
+    if ( bRet && !maAlphaMask.IsEmpty() )
     {
         Color aColor( bExpandTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
         maAlphaMask.Expand( nDX, nDY, &aColor );
@@ -436,23 +423,22 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
 
 bool BitmapEx::Erase( const Color& rFillColor )
 {
-    bool bRet = false;
+    if (maBitmap.IsEmpty())
+        return false;
 
-    if( !maBitmap.IsEmpty() )
+    if (!maBitmap.Erase(rFillColor))
+        return false;
+
+    if (!maAlphaMask.IsEmpty())
     {
-        bRet = maBitmap.Erase( rFillColor );
-
-        if( bRet && !maAlphaMask.IsEmpty() )
-        {
-            // Respect transparency on fill color
-            if( rFillColor.IsTransparent() )
-                maAlphaMask.Erase( 255 - rFillColor.GetAlpha() );
-            else
-                maAlphaMask.Erase( 0 );
-        }
+        // Respect transparency on fill color
+        if (rFillColor.IsTransparent())
+            maAlphaMask.Erase(255 - rFillColor.GetAlpha());
+        else
+            maAlphaMask.Erase(0);
     }
 
-    return bRet;
+    return true;
 }
 
 void BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
@@ -487,7 +473,7 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
 }
 
-BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long aStandardSize)
+BitmapEx BitmapEx::AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long aStandardSize)
 {
     Point aEmptyPoint(0,0);
     double imgposX = 0;
@@ -761,16 +747,14 @@ BitmapEx BitmapEx::getTransformed(
     const basegfx::B2DRange& rVisibleRange,
     double fMaximumArea) const
 {
-    BitmapEx aRetval;
-
-    if(IsEmpty())
-        return aRetval;
+    if (IsEmpty())
+        return BitmapEx();
 
     const sal_uInt32 nSourceWidth(GetSizePixel().Width());
     const sal_uInt32 nSourceHeight(GetSizePixel().Height());
 
-    if(!nSourceWidth || !nSourceHeight)
-        return aRetval;
+    if (!nSourceWidth || !nSourceHeight)
+        return BitmapEx();
 
     // Get aOutlineRange
     basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
@@ -789,10 +773,8 @@ BitmapEx BitmapEx::getTransformed(
     double fWidth(aVisibleRange.getWidth());
     double fHeight(aVisibleRange.getHeight());
 
-    if(fWidth < 1.0 || fHeight < 1.0)
-    {
-        return aRetval;
-    }
+    if (fWidth < 1.0 || fHeight < 1.0)
+        return BitmapEx();
 
     // test if discrete size (pixel) maybe too big and limit it
     const double fArea(fWidth * fHeight);
@@ -832,9 +814,7 @@ BitmapEx BitmapEx::getTransformed(
     aTransform.invert();
 
     // create bitmap using source, destination and linear back-transformation
-    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform);
-
-    return aRetval;
+    return TransformBitmapEx(fWidth, fHeight, aTransform);
 }
 
 namespace
@@ -1314,7 +1294,6 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
                                     const tools::Rectangle* pWorkRectPixel )
 {
     Bitmap aWorkBmp;
-    tools::Polygon aRetPoly;
     tools::Rectangle   aWorkRect( Point(), maBitmap.GetSizePixel() );
 
     if( pWorkRectPixel )
@@ -1322,90 +1301,95 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 
     aWorkRect.Normalize();
 
-    if( ( aWorkRect.GetWidth() > 4 ) && ( aWorkRect.GetHeight() > 4 ) )
+    if ((aWorkRect.GetWidth() <= 4) || (aWorkRect.GetHeight() <= 4))
+        return tools::Polygon();
+
+    // if the flag is set, we need to detect edges
+    if( bContourEdgeDetect )
+        aWorkBmp = DetectEdges( maBitmap );
+    else
+        aWorkBmp = maBitmap;
+
+    BitmapScopedReadAccess pAcc(aWorkBmp);
+
+    const tools::Long nWidth = pAcc ? pAcc->Width() : 0;
+    const tools::Long nHeight = pAcc ? pAcc->Height() : 0;
+
+    if (!pAcc || !nWidth || !nHeight)
+        return tools::Polygon();
+
+    const tools::Long          nStartX1 = aWorkRect.Left() + 1;
+    const tools::Long          nEndX1 = aWorkRect.Right();
+    const tools::Long          nStartX2 = nEndX1 - 1;
+    const tools::Long          nStartY1 = aWorkRect.Top() + 1;
+    const tools::Long          nEndY1 = aWorkRect.Bottom();
+
+    sal_uInt16              nPolyPos = 0;
+
+    // tdf#161833 treat semi-transparent pixels as opaque
+    // Limiting the contour wrapping polygon to only opaque pixels
+    // causes clipping of any shadows or other semi-transparent
+    // areas in the image. So, instead of testing for fully opaque
+    // pixels, treat pixels that are not fully transparent as opaque.
+    // tdf#162062 only apply fix for tdf#161833 if there is a palette
+    const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( pAcc->HasPalette() ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
+
+    std::unique_ptr<Point[]> pPoints1;
+    std::unique_ptr<Point[]> pPoints2;
+
+    pPoints1.reset(new Point[ nHeight ]);
+    pPoints2.reset(new Point[ nHeight ]);
+
+    for (tools::Long nY = nStartY1; nY < nEndY1; nY++ )
     {
-        // if the flag is set, we need to detect edges
-        if( bContourEdgeDetect )
-            aWorkBmp = DetectEdges( maBitmap );
-        else
-            aWorkBmp = maBitmap;
+        tools::Long nX = nStartX1;
+        Scanline pScanline = pAcc->GetScanline( nY );
 
-        BitmapScopedReadAccess pAcc(aWorkBmp);
-
-        const tools::Long nWidth = pAcc ? pAcc->Width() : 0;
-        const tools::Long nHeight = pAcc ? pAcc->Height() : 0;
-
-        if (pAcc && nWidth && nHeight)
+        // scan row from left to right
+        while( nX < nEndX1 )
         {
-            const Size&         rPrefSize = aWorkBmp.GetPrefSize();
-            const double        fFactorX = static_cast<double>(rPrefSize.Width()) / nWidth;
-            const double        fFactorY = static_cast<double>(rPrefSize.Height()) / nHeight;
-            const tools::Long          nStartX1 = aWorkRect.Left() + 1;
-            const tools::Long          nEndX1 = aWorkRect.Right();
-            const tools::Long          nStartX2 = nEndX1 - 1;
-            const tools::Long          nStartY1 = aWorkRect.Top() + 1;
-            const tools::Long          nEndY1 = aWorkRect.Bottom();
-            std::unique_ptr<Point[]> pPoints1;
-            std::unique_ptr<Point[]> pPoints2;
-            tools::Long                nX, nY;
-            sal_uInt16              nPolyPos = 0;
-            // tdf#161833 treat semi-transparent pixels as opaque
-            // Limiting the contour wrapping polygon to only opaque pixels
-            // causes clipping of any shadows or other semi-transparent
-            // areas in the image. So, instead of testing for fully opaque
-            // pixels, treat pixels that are not fully transparent as opaque.
-            // tdf#162062 only apply fix for tdf#161833 if there is a palette
-            const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( pAcc->HasPalette() ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
-
-            pPoints1.reset(new Point[ nHeight ]);
-            pPoints2.reset(new Point[ nHeight ]);
-
-            for ( nY = nStartY1; nY < nEndY1; nY++ )
+            if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
             {
-                nX = nStartX1;
-                Scanline pScanline = pAcc->GetScanline( nY );
+                pPoints1[ nPolyPos ] = Point( nX, nY );
+                nX = nStartX2;
 
-                // scan row from left to right
-                while( nX < nEndX1 )
+                // this loop always breaks eventually as there is at least one pixel
+                while( true )
                 {
                     if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
                     {
-                        pPoints1[ nPolyPos ] = Point( nX, nY );
-                        nX = nStartX2;
-
-                        // this loop always breaks eventually as there is at least one pixel
-                        while( true )
-                        {
-                            if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
-                            {
-                                pPoints2[ nPolyPos ] = Point( nX, nY );
-                                break;
-                            }
-
-                            nX--;
-                        }
-
-                        nPolyPos++;
+                        pPoints2[ nPolyPos ] = Point( nX, nY );
                         break;
                     }
 
-                    nX++;
+                    nX--;
                 }
+
+                nPolyPos++;
+                break;
             }
 
-            const sal_uInt16 nNewSize1 = nPolyPos << 1;
-
-            aRetPoly = tools::Polygon( nPolyPos, pPoints1.get() );
-            aRetPoly.SetSize( nNewSize1 + 1 );
-            aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
-
-            for( sal_uInt16 j = nPolyPos; nPolyPos < nNewSize1; )
-                aRetPoly[ nPolyPos++ ] = pPoints2[ --j ];
-
-            if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
-                aRetPoly.Scale( fFactorX, fFactorY );
+            nX++;
         }
     }
+
+    const sal_uInt16 nNewSize1 = nPolyPos << 1;
+
+    tools::Polygon aRetPoly(nPolyPos, pPoints1.get());
+    aRetPoly.SetSize( nNewSize1 + 1 );
+    aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
+
+    for( sal_uInt16 j = nPolyPos; nPolyPos < nNewSize1; )
+    {
+        aRetPoly[ nPolyPos++ ] = pPoints2[ --j ];
+    }
+
+    Size const& rPrefSize = aWorkBmp.GetPrefSize();
+    const double fFactorX = static_cast<double>(rPrefSize.Width()) / nWidth;
+    const double fFactorY = static_cast<double>(rPrefSize.Height()) / nHeight;
+
+    if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
+        aRetPoly.Scale( fFactorX, fFactorY );
 
     return aRetPoly;
 }
