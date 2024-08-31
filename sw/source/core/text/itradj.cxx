@@ -49,6 +49,30 @@ void SwTextAdjuster::FormatBlock( )
         m_pCurr->ExtraShrunkWidth() <= m_pCurr->Width() &&
         m_nStart + m_pCurr->GetLen() >= TextFrameIndex(GetInfo().GetText().getLength());
 
+    // tdf#162725 if the last line is longer, than the paragraph width,
+    // it contains shrinking spaces: don't skip block format here
+    if( bSkip )
+    {
+        // sum width of the text portions to calculate the line width without shrinking
+        tools::Long nBreakWidth = 0;
+        const SwLinePortion *pPos = m_pCurr->GetNextPortion();
+        while( pPos && bSkip )
+        {
+            if( !pPos->InGlueGrp() &&
+                // don't calculate with the terminating space,
+                // otherwise it would result justified line mistakenly
+                ( pPos->GetNextPortion() || !pPos->IsHolePortion() ) )
+            {
+                nBreakWidth += pPos->Width();
+            }
+
+            if( nBreakWidth > m_pCurr->Width() )
+                bSkip = false;
+
+            pPos = pPos->GetNextPortion();
+        }
+    }
+
     // Multi-line fields are tricky, because we need to check whether there are
     // any other text portions in the paragraph.
     if( bSkip )
