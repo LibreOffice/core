@@ -165,59 +165,57 @@ BitmapChecksum Animation::GetChecksum() const
 bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDestSz,
                       tools::Long nRendererId, OutputDevice* pFirstFrameOutDev)
 {
-    bool bRet = false;
+    if (maFrames.empty())
+        return false;
 
-    if (!maFrames.empty())
+    if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
+        && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnFrameIndex]->mnWait))
     {
-        if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
-            && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnFrameIndex]->mnWait))
+        bool differs = true;
+
+        auto itAnimView = std::find_if(
+            maRenderers.begin(), maRenderers.end(),
+            [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+                return pRenderer->matches(&rOut, nRendererId);
+            });
+
+        if (itAnimView != maRenderers.end())
         {
-            bool differs = true;
-
-            auto itAnimView = std::find_if(
-                maRenderers.begin(), maRenderers.end(),
-                [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
-                    return pRenderer->matches(&rOut, nRendererId);
-                });
-
-            if (itAnimView != maRenderers.end())
+            if ((*itAnimView)->getOriginPosition() == rDestPt
+                && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
             {
-                if ((*itAnimView)->getOriginPosition() == rDestPt
-                    && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
-                {
-                    (*itAnimView)->repaint();
-                    differs = false;
-                }
-                else
-                {
-                    maRenderers.erase(itAnimView);
-                }
+                (*itAnimView)->repaint();
+                differs = false;
             }
-
-            if (maRenderers.empty())
+            else
             {
-                maTimer.Stop();
-                mbIsInAnimation = false;
-                mnFrameIndex = 0;
-            }
-
-            if (differs)
-                maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
-                                                               nRendererId, pFirstFrameOutDev));
-
-            if (!mbIsInAnimation)
-            {
-                ImplRestartTimer(maFrames[mnFrameIndex]->mnWait);
-                mbIsInAnimation = true;
+                maRenderers.erase(itAnimView);
             }
         }
-        else
-            Draw(rOut, rDestPt, rDestSz);
 
-        bRet = true;
+        if (maRenderers.empty())
+        {
+            maTimer.Stop();
+            mbIsInAnimation = false;
+            mnFrameIndex = 0;
+        }
+
+        if (differs)
+            maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
+                                                           nRendererId, pFirstFrameOutDev));
+
+        if (!mbIsInAnimation)
+        {
+            ImplRestartTimer(maFrames[mnFrameIndex]->mnWait);
+            mbIsInAnimation = true;
+        }
+    }
+    else
+    {
+        Draw(rOut, rDestPt, rDestSz);
     }
 
-    return bRet;
+    return true;
 }
 
 void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
@@ -377,52 +375,47 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
 
-    if (nAnimCount)
-    {
-        bool bIsAnyRendererActive = true;
-
-        if (maNotifyLink.IsSet())
-        {
-            maNotifyLink.Call(this);
-            PopulateRenderers();
-            PruneMarkedRenderers();
-            bIsAnyRendererActive = IsAnyRendererActive();
-        }
-
-        if (maRenderers.empty())
-            Stop();
-        else if (!bIsAnyRendererActive)
-            ImplRestartTimer(10);
-        else
-            RenderNextFrameInAllRenderers();
-    }
-    else
+    if (!nAnimCount)
     {
         Stop();
+        return;
     }
+
+    bool bIsAnyRendererActive = true;
+
+    if (maNotifyLink.IsSet())
+    {
+        maNotifyLink.Call(this);
+        PopulateRenderers();
+        PruneMarkedRenderers();
+        bIsAnyRendererActive = IsAnyRendererActive();
+    }
+
+    if (maRenderers.empty())
+        Stop();
+    else if (!bIsAnyRendererActive)
+        ImplRestartTimer(10);
+    else
+        RenderNextFrameInAllRenderers();
 }
 
 bool Animation::Insert(const AnimationFrame& rStepBmp)
 {
-    bool bRet = false;
+    if (IsInAnimation())
+        return false;
 
-    if (!IsInAnimation())
-    {
-        tools::Rectangle aGlobalRect(Point(), maGlobalSize);
+    tools::Rectangle aGlobalRect(Point(), maGlobalSize);
 
-        maGlobalSize
-            = aGlobalRect.Union(tools::Rectangle(rStepBmp.maPositionPixel, rStepBmp.maSizePixel))
-                  .GetSize();
-        maFrames.emplace_back(new AnimationFrame(rStepBmp));
+    maGlobalSize
+        = aGlobalRect.Union(tools::Rectangle(rStepBmp.maPositionPixel, rStepBmp.maSizePixel))
+              .GetSize();
+    maFrames.emplace_back(new AnimationFrame(rStepBmp));
 
-        // As a start, we make the first BitmapEx the replacement BitmapEx
-        if (maFrames.size() == 1)
-            maBitmapEx = rStepBmp.maBitmapEx;
+    // As a start, we make the first BitmapEx the replacement BitmapEx
+    if (maFrames.size() == 1)
+        maBitmapEx = rStepBmp.maBitmapEx;
 
-        bRet = true;
-    }
-
-    return bRet;
+    return true;
 }
 
 const AnimationFrame& Animation::Get(sal_uInt16 nAnimation) const
@@ -462,41 +455,35 @@ void Animation::Convert(BmpConversion eConversion)
 {
     SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
+    if (IsInAnimation() || maFrames.empty())
+        return;
 
-    if (!IsInAnimation() && !maFrames.empty())
+    bool bRet = true;
+
+    for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = true;
-
-        for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
-            bRet = maFrames[i]->maBitmapEx.Convert(eConversion);
-
-        maBitmapEx.Convert(eConversion);
+        bRet = maFrames[i]->maBitmapEx.Convert(eConversion);
     }
+
+    maBitmapEx.Convert(eConversion);
 }
 
 bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
 {
     SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
+    if (IsInAnimation() || maFrames.empty())
+        return false;
 
-    if (!IsInAnimation() && !maFrames.empty())
+    bool bRet = true;
+
+    for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = true;
-
-        for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
-        {
-            bRet = BitmapFilter::Filter(maFrames[i]->maBitmapEx,
-                                        BitmapColorQuantizationFilter(nNewColorCount));
-        }
-
-        BitmapFilter::Filter(maBitmapEx, BitmapColorQuantizationFilter(nNewColorCount));
+        bRet = BitmapFilter::Filter(maFrames[i]->maBitmapEx,
+                                    BitmapColorQuantizationFilter(nNewColorCount));
     }
-    else
-    {
-        bRet = false;
-    }
+
+    BitmapFilter::Filter(maBitmapEx, BitmapColorQuantizationFilter(nNewColorCount));
 
     return bRet;
 }
@@ -505,19 +492,17 @@ bool Animation::Invert()
 {
     SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
+    if (IsInAnimation() || maFrames.empty())
+        return false;
 
-    if (!IsInAnimation() && !maFrames.empty())
+    bool bRet = true;
+
+    for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = true;
-
-        for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
-            bRet = maFrames[i]->maBitmapEx.Invert();
-
-        maBitmapEx.Invert();
+        bRet = maFrames[i]->maBitmapEx.Invert();
     }
-    else
-        bRet = false;
+
+    maBitmapEx.Invert();
 
     return bRet;
 }
@@ -526,15 +511,13 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
 {
     SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
-
     if (IsInAnimation() || maFrames.empty())
         return;
 
-    bRet = true;
-
     if (nMirrorFlags == BmpMirrorFlags::NONE)
         return;
+
+    bool bRet = true;
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
@@ -562,12 +545,10 @@ void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nC
 {
     SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
-
     if (IsInAnimation() || maFrames.empty())
         return;
 
-    bRet = true;
+    bool bRet = true;
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
@@ -583,43 +564,43 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 {
     const sal_uInt16 nCount = rAnimation.Count();
 
-    if (nCount)
+    if (!nCount)
+        return rOStm;
+
+    const sal_uInt32 nDummy32 = 0;
+
+    // If no BitmapEx was set we write the first Bitmap of
+    // the Animation
+    if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
+        WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
+    else
+        WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
+
+    // Write identifier ( SDANIMA1 )
+    rOStm.WriteUInt32(0x5344414e).WriteUInt32(0x494d4931);
+
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        const sal_uInt32 nDummy32 = 0;
+        const AnimationFrame& rAnimationFrame = rAnimation.Get(i);
+        const sal_uInt16 nRest = nCount - i - 1;
 
-        // If no BitmapEx was set we write the first Bitmap of
-        // the Animation
-        if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
-            WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
-        else
-            WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
-
-        // Write identifier ( SDANIMA1 )
-        rOStm.WriteUInt32(0x5344414e).WriteUInt32(0x494d4931);
-
-        for (sal_uInt16 i = 0; i < nCount; i++)
-        {
-            const AnimationFrame& rAnimationFrame = rAnimation.Get(i);
-            const sal_uInt16 nRest = nCount - i - 1;
-
-            // Write AnimationFrame
-            WriteDIBBitmapEx(rAnimationFrame.maBitmapEx, rOStm);
-            tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writePoint(rAnimationFrame.maPositionPixel);
-            aSerializer.writeSize(rAnimationFrame.maSizePixel);
-            aSerializer.writeSize(rAnimation.maGlobalSize);
-            rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationFrame.mnWait)
-                                  ? 65535
-                                  : rAnimationFrame.mnWait);
-            rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationFrame.meDisposal));
-            rOStm.WriteBool(rAnimationFrame.mbUserInput);
-            rOStm.WriteUInt32(rAnimation.mnLoopCount);
-            rOStm.WriteUInt32(nDummy32); // Unused
-            rOStm.WriteUInt32(nDummy32); // Unused
-            rOStm.WriteUInt32(nDummy32); // Unused
-            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); // dummy
-            rOStm.WriteUInt16(nRest); // Count of remaining structures
-        }
+        // Write AnimationFrame
+        WriteDIBBitmapEx(rAnimationFrame.maBitmapEx, rOStm);
+        tools::GenericTypeSerializer aSerializer(rOStm);
+        aSerializer.writePoint(rAnimationFrame.maPositionPixel);
+        aSerializer.writeSize(rAnimationFrame.maSizePixel);
+        aSerializer.writeSize(rAnimation.maGlobalSize);
+        rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationFrame.mnWait)
+                              ? 65535
+                              : rAnimationFrame.mnWait);
+        rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationFrame.meDisposal));
+        rOStm.WriteBool(rAnimationFrame.mbUserInput);
+        rOStm.WriteUInt32(rAnimation.mnLoopCount);
+        rOStm.WriteUInt32(nDummy32); // Unused
+        rOStm.WriteUInt32(nDummy32); // Unused
+        rOStm.WriteUInt32(nDummy32); // Unused
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); // dummy
+        rOStm.WriteUInt16(nRest); // Count of remaining structures
     }
 
     return rOStm;
@@ -641,7 +622,9 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     // If the BitmapEx at the beginning have already been read (by Graphic)
     // we can start reading the AnimationFrames right away
     if ((nAnimMagic1 == 0x5344414e) && (nAnimMagic2 == 0x494d4931) && !rIStm.GetError())
+    {
         bReadAnimations = true;
+    }
     // Else, we try reading the Bitmap(-Ex)
     else
     {
