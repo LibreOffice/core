@@ -29,6 +29,9 @@ Sub verify_testCCur
     TestUtil.AssertEqual(CCur("$100"), 100, "CCur($100)")
     TestUtil.AssertEqual(CCur("$1.50"), 1.5, "CCur($1.50)")
 
+    ' tdf#162724 - CStr must create strings that allow CCur round-trip
+    TestUtil.AssertEqual(CCur(CStr(CCur(75.50))), 75.5, "CCur(CStr(CCur(75.50)))")
+
     verify_testCCurUnderflow
     verify_testCCurOverflow
     verify_testCCurInvalidFormat

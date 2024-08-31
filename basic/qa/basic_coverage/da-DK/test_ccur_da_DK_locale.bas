@@ -18,8 +18,10 @@ Sub verify_testCCurDaDKLocale
     On Error GoTo errorHandler
 
     ' tdf#141050 - characteristic test for CCur() with the da_DK locale
-    TestUtil.AssertEqual(CCur("75,50"), 75.5, "CCur(75,50)")
-    TestUtil.AssertEqual(CCur("75,50 kr."), 75.5, "CCur(75,50 kr.)")
+    TestUtil.AssertEqual(CCur("75,50"), 75.5, "CCur(""75,50"")")
+    TestUtil.AssertEqual(CCur("75,50 kr."), 75.5, "CCur(""75,50 kr."")")
+    ' tdf#162724 - CStr must create strings that allow CCur round-trip
+    TestUtil.AssertEqual(CCur(CStr(CCur(75.50))), 75.5, "CCur(CStr(CCur(75.50)))")
 
     Exit Sub
 errorHandler:
