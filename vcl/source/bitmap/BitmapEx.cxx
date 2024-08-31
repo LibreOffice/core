@@ -133,7 +133,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     else
     {
         // convert to alpha bitmap
-        SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
+        SAL_WARN("vcl", "BitmapEx: forced mask to monochrome");
         BitmapEx aMaskEx(rMask);
         BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
         aMaskEx.Invert();
@@ -142,7 +142,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
 
     if (!maBitmap.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
-        OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
+        SAL_WARN("vcl", "Mask size differs from Bitmap size, corrected Mask (!)");
         maAlphaMask.Scale(maBitmap.GetSizePixel(), BmpScaleFlag::Fast);
     }
 }
@@ -154,7 +154,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
 {
     if (!maBitmap.IsEmpty() && !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
-        OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
+        SAL_WARN("vcl", "Alpha size differs from Bitmap size, corrected Mask (!)");
         maAlphaMask.Scale(rBmp.GetSizePixel(), BmpScaleFlag::Fast);
     }
 }
@@ -925,7 +925,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             // determined and used -> this may be different from what is wanted here.
             // Better create a new bitmap with the needed color explicitly.
             BitmapScopedReadAccess xReadAccess(aChangedBitmap);
-            OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
+            SAL_WARN_IF(!xReadAccess, "vcl", "Got no Bitmap ReadAccess ?!?");
 
             if(xReadAccess)
             {
