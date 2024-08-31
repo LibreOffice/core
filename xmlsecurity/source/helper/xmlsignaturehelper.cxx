@@ -632,10 +632,10 @@ static auto CheckX509Data(
     chain.emplace_back(*start);
 
     // second, check that there is a chain, no tree or cycle...
-    for (size_t i = 0; i < certs.size(); ++i)
+    for (size_t i = 0, certs_size = certs.size(); i < certs_size; ++i)
     {
         assert(chain.size() == i + 1);
-        for (size_t j = 0; j < certs.size(); ++j)
+        for (size_t j = 0; j < certs_size; ++j)
         {
             if (chain[i] != j)
             {
@@ -651,7 +651,7 @@ static auto CheckX509Data(
                 }
             }
         }
-        if (i == certs.size() - 1)
+        if (i == certs_size - 1)
         {   // last one: must be a leaf
             if (chain.size() != i + 1)
             {
