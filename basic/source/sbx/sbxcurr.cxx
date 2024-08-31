@@ -32,63 +32,39 @@
 
 static OUString ImpCurrencyToString( sal_Int64 rVal )
 {
-    bool isNeg = ( rVal < 0 );
-    sal_Int64 absVal = isNeg ? -rVal : rVal;
-
     sal_Unicode cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy;
     ImpGetIntntlSep(cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy);
 
-    OUString aAbsStr = OUString::number( absVal );
-
-    sal_Int32 initialLen = aAbsStr.getLength();
-
-    bool bLessThanOne = false;
-    if ( initialLen  <= 4 )  // if less the 1
-        bLessThanOne = true;
-
-    sal_Int32 nCapacity = 6; // minimum e.g. 0.0000
-
-    if ( !bLessThanOne )
+    OUStringBuffer aBuf(22);
+    if (rVal < 0)
     {
-        nCapacity = initialLen + 1;
+        aBuf.append('-');
+        rVal = -rVal;
     }
+    OUString aAbsStr = OUString::number(rVal);
+    sal_Int32 hasFractDigits = std::min(aAbsStr.getLength(), sal_Int32(4));
+    sal_Int32 hasWholeDigits = aAbsStr.getLength() - hasFractDigits;
 
-    if ( isNeg )
-        ++nCapacity;
+    if (hasWholeDigits > 0)
+        aBuf.append(aAbsStr.subView(0, hasWholeDigits));
+    else
+        aBuf.append('0');
+    aBuf.append(cDecimalSep);
+    // Handle leading 0's to right of decimal separator
+    // Note: in VBA the stringification is a little more complex
+    // but more natural as only the necessary digits
+    // to the right of the decimal places are displayed
+    // It would be great to conditionally be able to display like that too
 
-    OUStringBuffer aBuf( nCapacity );
-    aBuf.setLength( nCapacity );
+    // Val   OOo (Cur)  VBA (Cur)
+    // ---   ---------  ---------
+    // 0     0.0000     0
+    // 0.1   0.1000     0.1
+    for (sal_Int32 i = 4; i > hasFractDigits; --i)
+        aBuf.append('0');
+    aBuf.append(aAbsStr.subView(aAbsStr.getLength() - hasFractDigits, hasFractDigits));
 
-
-    sal_Int32 nDigitCount = 0;
-    sal_Int32 nInsertIndex = nCapacity - 1;
-    sal_Int32 nEndIndex = isNeg ? 1 : 0;
-
-    for ( sal_Int32 charCpyIndex = aAbsStr.getLength() - 1; nInsertIndex >= nEndIndex;  ++nDigitCount )
-    {
-        if ( nDigitCount == 4 )
-            aBuf[nInsertIndex--] = cDecimalSep;
-        if ( nDigitCount < initialLen )
-            aBuf[nInsertIndex--] = aAbsStr[ charCpyIndex-- ];
-        else
-        // Handle leading 0's to right of decimal separator
-        // Note: in VBA the stringification is a little more complex
-        // but more natural as only the necessary digits
-        // to the right of the decimal places are displayed
-        // It would be great to conditionally be able to display like that too
-
-        // Val   OOo (Cur)  VBA (Cur)
-        // ---   ---------  ---------
-        // 0     0.0000     0
-        // 0.1   0.1000     0.1
-
-            aBuf[nInsertIndex--] = '0';
-    }
-    if ( isNeg )
-            aBuf[nInsertIndex] = '-';
-
-    aAbsStr = aBuf.makeStringAndClear();
-    return aAbsStr;
+    return aBuf.makeStringAndClear();
 }
 
 static sal_Int64 ImpStringToCurrency(const rtl::OUString& rStr)
