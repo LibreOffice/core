@@ -15,162 +15,162 @@
 
 BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
 {
+    if (!(mnTileWidth > 1 || mnTileHeight > 1))
+        return BitmapEx();
+
     Bitmap aBitmap(rBitmapEx.GetBitmap());
+
+    std::optional<Bitmap> pNewBmp;
+    BitmapScopedReadAccess pReadAcc;
+    BitmapScopedWriteAccess pWriteAcc;
+
+    if (!isPalettePixelFormat(aBitmap.getPixelFormat()))
+    {
+        pReadAcc = aBitmap;
+        pWriteAcc = aBitmap;
+    }
+    else
+    {
+        pNewBmp.emplace(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
+        pReadAcc = aBitmap;
+        pWriteAcc = *pNewBmp;
+    }
+
+    bool bConditionsMet = false;
+    sal_Int32 nWidth(0);
+    sal_Int32 nHeight(0);
+    if (pReadAcc && pWriteAcc)
+    {
+        nWidth = pReadAcc->Width();
+        nHeight = pReadAcc->Height();
+        bConditionsMet = (nWidth > 0 && nHeight > 0);
+    }
 
     bool bRet = false;
 
-    if (mnTileWidth > 1 || mnTileHeight > 1)
+    if (bConditionsMet)
     {
-        std::optional<Bitmap> pNewBmp;
-        BitmapScopedReadAccess pReadAcc;
-        BitmapScopedWriteAccess pWriteAcc;
+        BitmapColor aCol;
+        sal_Int32 nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
+        double fArea_1;
 
-        if (!isPalettePixelFormat(aBitmap.getPixelFormat()))
-        {
-            pReadAcc = aBitmap;
-            pWriteAcc = aBitmap;
-        }
-        else
-        {
-            pNewBmp.emplace(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
-            pReadAcc = aBitmap;
-            pWriteAcc = *pNewBmp;
-        }
+        nY1 = 0;
+        nY2 = mnTileHeight - 1;
 
-        bool bConditionsMet = false;
-        sal_Int32 nWidth(0);
-        sal_Int32 nHeight(0);
-        if (pReadAcc && pWriteAcc)
-        {
-            nWidth = pReadAcc->Width();
-            nHeight = pReadAcc->Height();
-            bConditionsMet = (nWidth > 0 && nHeight > 0);
-        }
+        if (nY2 >= nHeight)
+            nY2 = nHeight - 1;
 
-        if (bConditionsMet)
+        do
         {
-            BitmapColor aCol;
-            sal_Int32 nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
-            double fArea_1;
+            nX1 = 0;
+            nX2 = mnTileWidth - 1;
 
-            nY1 = 0;
-            nY2 = mnTileHeight - 1;
+            if (nX2 >= nWidth)
+                nX2 = nWidth - 1;
+
+            fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
+
+            if (!pNewBmp)
+            {
+                do
+                {
+                    for (nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++)
+                    {
+                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+                        for (nX = nX1; nX <= nX2; nX++)
+                        {
+                            aCol = pReadAcc->GetPixelFromData(pScanlineRead, nX);
+                            nSumR += aCol.GetRed();
+                            nSumG += aCol.GetGreen();
+                            nSumB += aCol.GetBlue();
+                        }
+                    }
+
+                    aCol.SetRed(static_cast<sal_uInt8>(nSumR * fArea_1));
+                    aCol.SetGreen(static_cast<sal_uInt8>(nSumG * fArea_1));
+                    aCol.SetBlue(static_cast<sal_uInt8>(nSumB * fArea_1));
+
+                    for (nY = nY1; nY <= nY2; nY++)
+                    {
+                        Scanline pScanline = pWriteAcc->GetScanline(nY);
+                        for (nX = nX1; nX <= nX2; nX++)
+                            pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
+                    }
+
+                    nX1 += mnTileWidth;
+                    nX2 += mnTileWidth;
+
+                    if (nX2 >= nWidth)
+                    {
+                        nX2 = nWidth - 1;
+                        fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
+                    }
+                } while (nX1 < nWidth);
+            }
+            else
+            {
+                do
+                {
+                    for (nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++)
+                    {
+                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+                        for (nX = nX1; nX <= nX2; nX++)
+                        {
+                            const BitmapColor& rCol = pReadAcc->GetPaletteColor(
+                                pReadAcc->GetIndexFromData(pScanlineRead, nX));
+                            nSumR += rCol.GetRed();
+                            nSumG += rCol.GetGreen();
+                            nSumB += rCol.GetBlue();
+                        }
+                    }
+
+                    aCol.SetRed(static_cast<sal_uInt8>(nSumR * fArea_1));
+                    aCol.SetGreen(static_cast<sal_uInt8>(nSumG * fArea_1));
+                    aCol.SetBlue(static_cast<sal_uInt8>(nSumB * fArea_1));
+
+                    for (nY = nY1; nY <= nY2; nY++)
+                    {
+                        Scanline pScanline = pWriteAcc->GetScanline(nY);
+                        for (nX = nX1; nX <= nX2; nX++)
+                            pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
+                    }
+
+                    nX1 += mnTileWidth;
+                    nX2 += mnTileWidth;
+
+                    if (nX2 >= nWidth)
+                    {
+                        nX2 = nWidth - 1;
+                        fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
+                    }
+                } while (nX1 < nWidth);
+            }
+
+            nY1 += mnTileHeight;
+            nY2 += mnTileHeight;
 
             if (nY2 >= nHeight)
                 nY2 = nHeight - 1;
 
-            do
-            {
-                nX1 = 0;
-                nX2 = mnTileWidth - 1;
+        } while (nY1 < nHeight);
 
-                if (nX2 >= nWidth)
-                    nX2 = nWidth - 1;
+        bRet = true;
+    }
 
-                fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
+    pReadAcc.reset();
+    pWriteAcc.reset();
 
-                if (!pNewBmp)
-                {
-                    do
-                    {
-                        for (nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++)
-                        {
-                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                            for (nX = nX1; nX <= nX2; nX++)
-                            {
-                                aCol = pReadAcc->GetPixelFromData(pScanlineRead, nX);
-                                nSumR += aCol.GetRed();
-                                nSumG += aCol.GetGreen();
-                                nSumB += aCol.GetBlue();
-                            }
-                        }
-
-                        aCol.SetRed(static_cast<sal_uInt8>(nSumR * fArea_1));
-                        aCol.SetGreen(static_cast<sal_uInt8>(nSumG * fArea_1));
-                        aCol.SetBlue(static_cast<sal_uInt8>(nSumB * fArea_1));
-
-                        for (nY = nY1; nY <= nY2; nY++)
-                        {
-                            Scanline pScanline = pWriteAcc->GetScanline(nY);
-                            for (nX = nX1; nX <= nX2; nX++)
-                                pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
-                        }
-
-                        nX1 += mnTileWidth;
-                        nX2 += mnTileWidth;
-
-                        if (nX2 >= nWidth)
-                        {
-                            nX2 = nWidth - 1;
-                            fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
-                        }
-                    } while (nX1 < nWidth);
-                }
-                else
-                {
-                    do
-                    {
-                        for (nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++)
-                        {
-                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                            for (nX = nX1; nX <= nX2; nX++)
-                            {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor(
-                                    pReadAcc->GetIndexFromData(pScanlineRead, nX));
-                                nSumR += rCol.GetRed();
-                                nSumG += rCol.GetGreen();
-                                nSumB += rCol.GetBlue();
-                            }
-                        }
-
-                        aCol.SetRed(static_cast<sal_uInt8>(nSumR * fArea_1));
-                        aCol.SetGreen(static_cast<sal_uInt8>(nSumG * fArea_1));
-                        aCol.SetBlue(static_cast<sal_uInt8>(nSumB * fArea_1));
-
-                        for (nY = nY1; nY <= nY2; nY++)
-                        {
-                            Scanline pScanline = pWriteAcc->GetScanline(nY);
-                            for (nX = nX1; nX <= nX2; nX++)
-                                pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
-                        }
-
-                        nX1 += mnTileWidth;
-                        nX2 += mnTileWidth;
-
-                        if (nX2 >= nWidth)
-                        {
-                            nX2 = nWidth - 1;
-                            fArea_1 = 1.0 / ((nX2 - nX1 + 1) * (nY2 - nY1 + 1));
-                        }
-                    } while (nX1 < nWidth);
-                }
-
-                nY1 += mnTileHeight;
-                nY2 += mnTileHeight;
-
-                if (nY2 >= nHeight)
-                    nY2 = nHeight - 1;
-
-            } while (nY1 < nHeight);
-
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-        pWriteAcc.reset();
-
-        if (pNewBmp)
+    if (pNewBmp)
+    {
+        if (bRet)
         {
-            if (bRet)
-            {
-                const MapMode aMap(aBitmap.GetPrefMapMode());
-                const Size aPrefSize(aBitmap.GetPrefSize());
+            const MapMode aMap(aBitmap.GetPrefMapMode());
+            const Size aPrefSize(aBitmap.GetPrefSize());
 
-                aBitmap = *pNewBmp;
+            aBitmap = *pNewBmp;
 
-                aBitmap.SetPrefMapMode(aMap);
-                aBitmap.SetPrefSize(aPrefSize);
-            }
+            aBitmap.SetPrefMapMode(aMap);
+            aBitmap.SetPrefSize(aPrefSize);
         }
     }
 
