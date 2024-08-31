@@ -26,7 +26,6 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aGrey(aSize, ePixelFormat, pPal);
     BitmapScopedWriteAccess pGrey(aGrey);
 
-    BitmapEx aReturnBitmap;
     Bitmap aReadBitmap(rBitmapEx.GetBitmap());
     BitmapScopedReadAccess pRead(aReadBitmap);
     if (pRead && pGrey)
@@ -48,13 +47,9 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     }
 
     if (rBitmapEx.IsAlpha())
-    {
-        aReturnBitmap = BitmapEx(aGrey, rBitmapEx.GetAlphaMask());
-    }
-    else
-        aReturnBitmap = BitmapEx(aGrey);
+        return BitmapEx(aGrey, rBitmapEx.GetAlphaMask());
 
-    return aReturnBitmap;
+    return BitmapEx(aGrey);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
