@@ -18,79 +18,72 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    bool bRet = isPalettePixelFormat(aBitmap.getPixelFormat())
-                || aBitmap.Convert(BmpConversion::N8BitColors);
+    bool bConvert = isPalettePixelFormat(aBitmap.getPixelFormat())
+                    || aBitmap.Convert(BmpConversion::N8BitColors);
 
-    if (bRet)
+    if (!bConvert)
+        return BitmapEx();
+
+    BitmapScopedWriteAccess pWriteAcc(aBitmap);
+
+    if (!pWriteAcc)
+        return BitmapEx();
+
+    const sal_Int32 nWidth = pWriteAcc->Width();
+    const sal_Int32 nHeight = pWriteAcc->Height();
+    const sal_uInt16 nEntryCount = 1 << pWriteAcc->GetBitCount();
+    sal_uInt16 n = 0;
+    std::vector<PopArtEntry> aPopArtTable(nEntryCount);
+
+    for (n = 0; n < nEntryCount; n++)
     {
-        bRet = false;
+        PopArtEntry& rEntry = aPopArtTable[n];
+        rEntry.mnIndex = n;
+        rEntry.mnCount = 0;
+    }
 
-        BitmapScopedWriteAccess pWriteAcc(aBitmap);
-
-        if (pWriteAcc)
+    // get pixel count for each palette entry
+    for (sal_Int32 nY = 0; nY < nHeight; nY++)
+    {
+        Scanline pScanline = pWriteAcc->GetScanline(nY);
+        for (sal_Int32 nX = 0; nX < nWidth; nX++)
         {
-            const sal_Int32 nWidth = pWriteAcc->Width();
-            const sal_Int32 nHeight = pWriteAcc->Height();
-            const sal_uInt16 nEntryCount = 1 << pWriteAcc->GetBitCount();
-            sal_uInt16 n = 0;
-            std::vector<PopArtEntry> aPopArtTable(nEntryCount);
-
-            for (n = 0; n < nEntryCount; n++)
-            {
-                PopArtEntry& rEntry = aPopArtTable[n];
-                rEntry.mnIndex = n;
-                rEntry.mnCount = 0;
-            }
-
-            // get pixel count for each palette entry
-            for (sal_Int32 nY = 0; nY < nHeight; nY++)
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for (sal_Int32 nX = 0; nX < nWidth; nX++)
-                {
-                    aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
-                    assert(aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount != 0);
-                }
-            }
-
-            // sort table
-            std::sort(aPopArtTable.begin(), aPopArtTable.end(),
-                      [](const PopArtEntry& lhs, const PopArtEntry& rhs) {
-                          return lhs.mnCount > rhs.mnCount;
-                      });
-
-            // get last used entry
-            sal_uInt16 nFirstEntry;
-            sal_uInt16 nLastEntry = 0;
-
-            for (n = 0; n < nEntryCount; n++)
-            {
-                if (aPopArtTable[n].mnCount)
-                    nLastEntry = n;
-            }
-
-            // rotate palette (one entry)
-            const BitmapColor aFirstCol(pWriteAcc->GetPaletteColor(aPopArtTable[0].mnIndex));
-
-            for (nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++)
-            {
-                pWriteAcc->SetPaletteColor(
-                    aPopArtTable[nFirstEntry].mnIndex,
-                    pWriteAcc->GetPaletteColor(aPopArtTable[nFirstEntry + 1].mnIndex));
-            }
-
-            pWriteAcc->SetPaletteColor(aPopArtTable[nLastEntry].mnIndex, aFirstCol);
-
-            // cleanup
-            pWriteAcc.reset();
-            bRet = true;
+            aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
+            assert(aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount != 0);
         }
     }
 
-    if (bRet)
-        return BitmapEx(aBitmap);
+    // sort table
+    std::sort(
+        aPopArtTable.begin(), aPopArtTable.end(),
+        [](const PopArtEntry& lhs, const PopArtEntry& rhs) { return lhs.mnCount > rhs.mnCount; });
 
-    return BitmapEx();
+    // get last used entry
+    sal_uInt16 nFirstEntry;
+    sal_uInt16 nLastEntry = 0;
+
+    for (n = 0; n < nEntryCount; n++)
+    {
+        if (aPopArtTable[n].mnCount)
+            nLastEntry = n;
+    }
+
+    // rotate palette (one entry)
+    const BitmapColor aFirstCol(pWriteAcc->GetPaletteColor(aPopArtTable[0].mnIndex));
+
+    for (nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++)
+    {
+        pWriteAcc->SetPaletteColor(
+            aPopArtTable[nFirstEntry].mnIndex,
+            pWriteAcc->GetPaletteColor(aPopArtTable[nFirstEntry + 1].mnIndex));
+    }
+
+    pWriteAcc->SetPaletteColor(aPopArtTable[nLastEntry].mnIndex, aFirstCol);
+
+    // cleanup
+    pWriteAcc.reset();
+
+    return BitmapEx(aBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
