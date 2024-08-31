@@ -196,7 +196,8 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(std::string_view sID
         if (sID.substr(0, SC_CHANGE_ID_PREFIX.getLength()) == SC_CHANGE_ID_PREFIX)
         {
             sal_Int32 nValue;
-            ::sax::Converter::convertNumber(nValue, sID.substr(SC_CHANGE_ID_PREFIX.getLength()));
+            ::sax::Converter::convertNumber(nValue, sID.substr(SC_CHANGE_ID_PREFIX.getLength()),
+                                            0, SAL_MAX_INT32);
             OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }
