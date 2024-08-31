@@ -35,7 +35,8 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
-    sal_Unicode const cDecimalSep = '.';
+    sal_Unicode cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy;
+    ImpGetIntntlSep(cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy);
 
     OUString aAbsStr = OUString::number( absVal );
 
@@ -70,7 +71,7 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
         if ( nDigitCount < initialLen )
             aBuf[nInsertIndex--] = aAbsStr[ charCpyIndex-- ];
         else
-        // Handle leading 0's to right of decimal point
+        // Handle leading 0's to right of decimal separator
         // Note: in VBA the stringification is a little more complex
         // but more natural as only the necessary digits
         // to the right of the decimal places are displayed

@@ -20,6 +20,8 @@ Sub verify_testCCurZhCNLocale
     ' tdf#141050 - characteristic test for CCur() with the zh_CN locale
     TestUtil.AssertEqual(CCur("75.50"), 75.5, "CCur(75.50)")
     TestUtil.AssertEqual(CCur("￥75.50"), 75.5, "CCur(￥75.50)")
+    ' tdf#162724 - CStr must create strings that allow CCur round-trip
+    TestUtil.AssertEqual(CCur(CStr(CCur(75.50))), 75.5, "CCur(CStr(CCur(75.50)))")
 
     Exit Sub
 errorHandler:
