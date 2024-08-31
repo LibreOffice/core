@@ -572,7 +572,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOLROW co
             return false;
     }
 
-    auto aIndexer(maParam.bByRow ? MakeBinarySearchIndexer(&pCol->maCells, nRow, maParam.nRow2) :
+    const auto& aIndexer(maParam.bByRow ? MakeBinarySearchIndexer(&pCol->maCells, nRow, maParam.nRow2) :
         MakeBinarySearchIndexer(nullptr, nCol, maParam.nCol2));
 
     if (!aIndexer.isValid())
